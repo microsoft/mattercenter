@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CheckIn_Message" xml:space="preserve">
+    <value>We are working on your changes</value>
+    <comment>Loading message that gets displayed for Check in functionality</comment>
+  </data>
+  <data name="CheckIn_Success" xml:space="preserve">
+    <value>Your document has been checked in</value>
+    <comment>Success message that gets displayed when check in operation is completed</comment>
+  </data>
+  <data name="Checkout_Failure" xml:space="preserve">
+    <value>Check out failed</value>
+    <comment>Failure message for check out functionality</comment>
+  </data>
+  <data name="Checkout_Message" xml:space="preserve">
+    <value>We are checking out your file</value>
+    <comment>Loading message that gets displayed for check out functionality</comment>
+  </data>
+  <data name="CheckOut_Partial_Message" xml:space="preserve">
+    <value>You already have the document(s) checked out in the Matter Center Beta</value>
+    <comment>Message that gets displayed when some of documents are not checked out from Matter Center Beta</comment>
+  </data>
+  <data name="Checkout_Success" xml:space="preserve">
+    <value>Your document has been checked out in the Matter Center Beta</value>
+    <comment>Success message that gets displayed when Check Out action is completed</comment>
+  </data>
+  <data name="Detach_Document_Failure" xml:space="preserve">
+    <value>Failed to detach document</value>
+    <comment>Failure message that gets displayed when unknown failure occurs for Detach functionality in One Drive</comment>
+  </data>
+  <data name="Detach_Document_Message" xml:space="preserve">
+    <value>We are detaching your file from Matter Center Beta</value>
+    <comment>Loading message for Detach document functionality in One Drive</comment>
+  </data>
+  <data name="Detach_Document_Question" xml:space="preserve">
+    <value>You are about to detach this file’s connection to Matter Center Beta where it will no longer be able to receive updates or perform actions related to Matter Center Beta. </value>
+    <comment>Question that is asked to the user whenever the user selects detach from Matter Center Beta as action in One Drive</comment>
+  </data>
+  <data name="Detach_Document_Success" xml:space="preserve">
+    <value>Your file has been detached</value>
+    <comment>Message that gets displayed when all the documents are detached successfully</comment>
+  </data>
+  <data name="Generic_Failure_Message" xml:space="preserve">
+    <value>Failed!</value>
+    <comment>Failed message</comment>
+  </data>
+  <data name="Generic_Success_Message" xml:space="preserve">
+    <value>Success!</value>
+    <comment>Success message</comment>
+  </data>
+  <data name="Relax_Message" xml:space="preserve">
+    <value>Sit back and Relax!</value>
+    <comment>Relax message that gets displayed while action is in progress</comment>
+  </data>
+  <data name="Update_Copy_Message" xml:space="preserve">
+    <value>We are updating your document</value>
+    <comment>Loading message for Update Copy functionality</comment>
+  </data>
+  <data name="Update_Document_Failure" xml:space="preserve">
+    <value>Failed to update document</value>
+    <comment>Failure message for update document functionality</comment>
+  </data>
+  <data name="Update_Document_Success" xml:space="preserve">
+    <value>Your document has been updated</value>
+    <comment>Success message that gets displayed when all the documents have been updated</comment>
+  </data>
+  <data name="Not_Supported_Message" xml:space="preserve">
+    <value>You can only perform these actions on documents from the Matter Center Beta</value>
+    <comment>Message that gets displayed when any normal document is selected for Legal Briefcase functionality</comment>
+  </data>
+  <data name="CheckIn_Partial" xml:space="preserve">
+    <value>Some of the document(s) were checked in successfully</value>
+    <comment>Message that gets displayed when some of the documents were checked in from One Drive</comment>
+  </data>
+  <data name="Detach_Partial" xml:space="preserve">
+    <value>Detach was successful for some document(s)</value>
+    <comment>Message that gets displayed when some of the documents are detached and some are not</comment>
+  </data>
+  <data name="Update_Document_Partial" xml:space="preserve">
+    <value>Some document(s) were updated successfully</value>
+    <comment>Message that gets displayed when some of the documents were not updated</comment>
+  </data>
+  <data name="Good_News_Message" xml:space="preserve">
+    <value>Good News!</value>
+    <comment>Good News message</comment>
+  </data>
+  <data name="Version_Info_Failed" xml:space="preserve">
+    <value>Error occurred while retrieving version information</value>
+    <comment>Error message that gets displayed when unknown error occurs while retrieving version information for the documents</comment>
+  </data>
+  <data name="Legal_Briefcase_Folder_Name" xml:space="preserve">
+    <value>My Legal Briefcase</value>
+    <comment>Name of the legal briefcase folder in user's OneDrive</comment>
+  </data>
+  <data name="Update_Document_Question" xml:space="preserve">
+    <value>Updating your copy will overwrite your current OneDrive version and any changes you may have made. </value>
+    <comment>Question asked to user before performing update copy operation on One Drive</comment>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Do you wish to continue?</value>
+    <comment>Message to ask user if he wants to perform a certain action</comment>
+  </data>
+  <data name="CheckIn_Already_Checkout" xml:space="preserve">
+    <value>Some of the document(s) are checked out to different user</value>
+    <comment>Error message to be displayed when user clicks on check in and some of the documents are checked out to different users</comment>
+  </data>
+</root>

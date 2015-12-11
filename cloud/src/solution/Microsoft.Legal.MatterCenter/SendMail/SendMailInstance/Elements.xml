@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <ListInstance Title="SendMail" OnQuickLaunch="TRUE" TemplateType="100" Url="Lists/SendMail" Description="List consists of item which will be used to Send mail upon creation of matter"></ListInstance>
+</Elements>

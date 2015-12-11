@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
+<App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest"
+     Name="MatterCenterOneDriveBulkActions"
+     ProductID="[Product ID or GUID]"
+     Version="1.0.0.0"
+     SharePointMinVersion="16.0.0.0"
+>
+  <Properties>
+    <Title>Matter Center OneDrive Bulk Actions</Title>
+    <StartPage>[Enter URL of briefcase operations page. e.g. https://[SITENAME].azurewebsite.net/Pages/BriefcaseOperations.aspx?{StandardTokens}]</StartPage>
+    <SupportedLocales>
+      <SupportedLocale CultureName="en-US" />
+    </SupportedLocales>
+  </Properties>
+
+  <AppPrincipal>
+    <RemoteWebApplication ClientId="[Enter Client ID specific to environment, e.g. 4e55c7b2-eb66a-753e7-2679ac37be8b08]" />
+  </AppPrincipal> 
+</App>

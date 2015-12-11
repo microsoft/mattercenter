@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction Id="6f4987b5-4694-4700-bb60-f87cf8dedd51.Sync"
+                RegistrationType="List"
+                RegistrationId="700"
+                Location="EditControlBlock"
+                Sequence="101"
+                Title="Update Copy" HostWebDialog="TRUE" HostWebDialogHeight="240" HostWebDialogWidth="600">
+    <!-- 
+    Update the Url below to the page you want the custom action to use.
+    Start the URL with the token ~remoteAppUrl if the page is in the
+    associated web project, use ~appWebUrl if page is in the app project.
+    -->
+    <UrlAction Url="[Enter azure website URL for UI site, e.g. https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?ItemID={ItemId}&amp;ItemURL={ItemUrl}&amp;ListId={ListId}&amp;Operation=UpdateCopy]" />
+  </CustomAction>
+</Elements>

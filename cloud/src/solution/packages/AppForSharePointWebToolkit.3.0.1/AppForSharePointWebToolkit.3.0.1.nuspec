@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>AppForSharePointWebToolkit</id>
+    <version>3.0.1</version>
+    <title>App for SharePoint Web Toolkit</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://go.microsoft.com/fwlink/?LinkID=267589&amp;clcid=0x409</licenseUrl>
+    <projectUrl>http://go.microsoft.com/fwlink/?LinkID=267590&amp;clcid=0x409</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This package adds SharePoint client object model assembly references and token helper code to the web project. These items make it easier to develop the web project if the web project needs to access data from the app for SharePoint.</description>
+    <summary>This package adds SharePoint client object model assembly references and token helper code to the web project.</summary>
+    <language>en</language>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Configuration" targetFramework="" />
+      <frameworkAssembly assemblyName="System.IdentityModel" targetFramework="" />
+      <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Web" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Web.Extensions" targetFramework="" />
+      <frameworkAssembly assemblyName="Microsoft.IdentityModel" targetFramework="" />
+      <frameworkAssembly assemblyName="Microsoft.IdentityModel.Extensions" targetFramework="" />
+      <frameworkAssembly assemblyName="Microsoft.SharePoint.Client, Version=15.0.0.0" targetFramework="" />
+      <frameworkAssembly assemblyName="Microsoft.SharePoint.Client.Runtime, Version=15.0.0.0" targetFramework="" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

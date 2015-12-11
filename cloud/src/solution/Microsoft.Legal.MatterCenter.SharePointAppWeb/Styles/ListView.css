@@ -1,0 +1,303 @@
+﻿body {
+    font-size: 16px;
+    height: 100%;
+}
+
+#listViewContainer {
+    height: 350px;
+    position: relative;
+    overflow: auto;
+}
+
+    #listViewContainer #listViewContainer_Grid {
+        position: relative;
+        border-collapse: collapse;
+    }
+
+.jsonGridHeader, .gridCell {
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    font-size: 0.875em;
+}
+
+    .jsonGridHeader .ms-Icon--caretDown {
+        float: right;
+        margin: 5px 5px 0 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+#Checkbox {
+    padding-left: 0;
+    overflow: visible;
+}
+
+.jsonGridHeader {
+    padding-top: 15px;
+    font-weight: 600;
+}
+
+.gridCell, .docTypeIcon {
+    display: inline-block;
+    padding: 5px;
+}
+
+    .gridCell:not(.checkBox) {
+        width: 95%;
+    }
+
+.jsonGridRow .checkbox {
+    padding-left: 0;
+}
+
+/*This is to give an additional 10px padding to the left of document type icon*/
+.docTypeIcon {
+    padding-left: 15px;
+}
+
+/*This is to give an additional 10px padding to the left of document type icon header*/
+.docTypeIconHeader {
+    padding-left: 15px;
+    padding-right: 10px;
+}
+
+.docTypeIcon, .docTypeIconHeader {
+    cursor: default;
+}
+
+#listViewContent {
+    position: relative;
+}
+
+.nameColumn {
+    font-family: 'Segoe UI';
+    font-weight: 400;
+}
+
+.content {
+    float: left;
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    color: #2b579a;
+    width: 100%;
+}
+
+span[class*='dataColumn'], .nameColumn {
+    padding-top: 5px;
+    padding-right: 5px;
+}
+
+.ellipsis {
+    cursor: pointer;
+    color: #333;
+    font-size: 12px;
+    padding-top: 5px;
+    width: 20px;
+}
+
+.hide {
+    display: none;
+}
+
+.invisible{
+    visibility: collapse;
+}
+
+.clear {
+    clear: both;
+}
+
+#ECBControl {
+    position: absolute;
+    z-index: 96;
+}
+
+    #ECBControl .ms-ContextualMenu {
+        width: 180px;
+    }
+
+        #ECBControl .ms-ContextualMenu .ContextualMenuWrapper .ms-ContextualMenu-item .ECBItem {
+            padding-right: 0;
+            height: 40px;
+            border: none;
+        }
+
+        #ECBControl .ms-ContextualMenu .ContextualMenuWrapper .removeECBItem {
+            display: none;
+            height: 0;
+        }
+
+        #ECBControl .ms-ContextualMenu .ContextualMenuWrapper .ms-ContextualMenu-item .ECBItem:hover:not(.is-disabled) {
+            background-color: #cde6f7;
+            font-family: "Segoe UI Semibold","Segoe UI Web Semibold";
+            color: #333;
+        }
+
+#listViewContainer_Grid .lazyLoading {
+    position: absolute;
+    background-color: transparent;
+    color: #6c6c6c;
+    font-weight: lighter;
+    height: 30px;
+    left: 50%;
+    text-align: center;
+    vertical-align: middle;
+    width: 30px;
+    bottom: -30px; /* Provided negative bottom for alignment of loading image for lazy loading implementation */
+}
+
+.ms-ContextualMenu-link {
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.ContextualMenuWrapper {
+    min-height: 120px; /*Each item in contextual menu wrapper has 40px height so change value accordingly  */
+}
+
+    .ContextualMenuWrapper .mattersiteloading {
+        margin-left: 40%;
+        margin-top: 30%;
+    }
+
+.ms-ContextualMenu {
+    width: 180px;
+}
+
+    .ms-ContextualMenu .ms-ContextualMenu-item {
+        height: 40px;
+    }
+
+#ECBControl .is-open.ms-ContextualMenu, #ECBControl .ms-ContextualMenu-item {
+    list-style: none;
+}
+
+#listView {
+    position: relative;
+}
+
+#listViewContainer .noResultsText {
+    color: #333;
+    font-weight: 200;
+    line-height: 1.5;
+    padding-left: 5px;
+    padding-right: 30px;
+}
+
+#loadingImageContainer {
+    position: absolute;
+    left: 40%;
+    top: 50%;
+}
+
+.AppContent {
+    position: relative;
+}
+
+#listViewContainer_Grid thead {
+    position: fixed;
+    background: #fff;
+    z-index: 70;
+    padding-bottom: 10px;
+    overflow: hidden;
+}
+
+#listViewContainer_Grid tbody {
+    float: left;
+    margin-top: 42px;
+}
+
+.checkBoxImage {
+    height: 30px;
+    width: 20px;
+}
+
+.checkboxImageContainer {
+    background: url(../Images/checkedIcon.PNG) no-repeat;
+}
+
+.checkboxHoverImageContainer {
+    background: url(../Images/checkedHover.png) no-repeat;
+}
+
+.sort {
+    padding-left: 7px;
+}
+
+.filterValueLabels, .ms-ChoiceField-field, .clearFilterText, .jsonGridHeader {
+    cursor: pointer;
+}
+
+.headerTitle, .sort, .ms-Icon--filter {
+    float: left;
+}
+
+.firstCaretIcon {
+    margin-right: 5px !important;
+}
+
+.lastCaretIcon {
+    margin-right: 35px !important;
+}
+
+.GridRow:hover, .GridRowAlternate:hover {
+    background-color: #e6f2fb;
+}
+
+.GridRow, .GridRowAlternate {
+    height: 30px;
+}
+
+.ellipsisHoverBackground {
+    background-color: #bcd9ed;
+}
+
+.is-selectedRow {
+    background-color: #cde6f7;
+}
+
+.ellipsisBackground {
+    background-color: #92c0e0;
+}
+
+.MasterPageContent { /*override master page css to solve bottom padding issue*/
+    padding-bottom: 0;
+}
+
+.AppHeader {
+    min-width: 310px;
+}
+
+_::-moz-svg-foreign-content, :root .AppHeader {
+    min-width: 315px;
+}
+
+.ms-ChoiceField .ms-ChoiceField-field {
+    height: 18px;
+    width: 18px;
+}
+
+@media (min-height: 0px) and (max-height: 160px) {
+    #listViewContainer_Grid thead {
+        position: relative;
+        float: left;
+    }
+
+    #listViewContainer_Grid tbody {
+        margin: 0 !important;
+    }
+}
+
+.disableHeader {
+    cursor:none;
+    pointer-events:none;
+}

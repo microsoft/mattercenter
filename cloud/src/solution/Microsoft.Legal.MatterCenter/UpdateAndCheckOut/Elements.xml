@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction Id="f5e8687f-a7a0-4f75-94a2-73430efe710c.UpdateAndCheckOut"
+                RegistrationType="List"
+                RegistrationId="700"
+                Location="EditControlBlock"
+                Sequence="103"
+                Title="Matter Check Out" HostWebDialog="TRUE" HostWebDialogHeight="240" HostWebDialogWidth="600">
+    <!-- 
+    Update the Url below to the page you want the custom action to use.
+    Start the URL with the token ~remoteAppUrl if the page is in the
+    associated web project, use ~appWebUrl if page is in the app project.
+    -->
+    <UrlAction Url="[Enter azure website URL for UI site, e.g. https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?ItemID={ItemId}&amp;ItemURL={ItemUrl}&amp;ListId={ListId}&amp;Operation=DMSCheckOut" />
+  </CustomAction>
+</Elements>

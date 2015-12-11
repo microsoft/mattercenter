@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Microsoft.Office.js</id>
+    <version>1.0.1</version>
+    <title>Office Javascript API</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <licenseUrl>http://go.microsoft.com/fwlink/?LinkId=266419</licenseUrl>
+    <projectUrl>http://go.microsoft.com/fwlink/?LinkId=264037</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>The Office JavaScript API includes objects, methods, properties, events, and enumerations that can be used from apps for Office to interact with Microsoft Office 2013 documents or mail items content.</description>
+    <summary>The Office JavaScript API enables developers to create apps for Office that interact with Microsoft Office 2013 document or mailbox content.</summary>
+  </metadata>
+</package>

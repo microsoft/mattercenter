@@ -1,0 +1,259 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Microsoft.Legal.MatterCenter.SendMailWorkflow.Workflow" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Microsoft.Legal.MatterCenter.SendMailWorkflow.Workflow_1"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:msdad="clr-namespace:Microsoft.SharePoint.DesignTime.Activities.Design;assembly=Microsoft.SharePoint.DesignTime.Activities.Design"
+ xmlns:p="http://schemas.microsoft.com/workflow/2012/07/xaml/activities"
+ xmlns:p1="wf://workflow.windows.net/$Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Microsoft.Activities</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.SharePoint.DesignTime.Activities</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.Legal.MatterCenter</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="p:DynamicValue" Name="ListItem">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="p:DynamicValue">""</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="p:DynamicValue" Name="MailList">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="p:DynamicValue">""</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:String" Name="Title">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:String" Value="" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:String" Name="Description">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:String" Value="" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:String" Name="URL">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:String" Value="" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="MailListCount" />
+      <Variable x:TypeArguments="sco:Collection(x:String)" Name="ToList" />
+      <Variable x:TypeArguments="x:String" Name="MailBody">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:String" Value="" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:String" Name="MailSubject">
+        <Variable.Default>
+          <Literal x:TypeArguments="x:String" Value="" />
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
+    <p1:LookupSPListItem ItemGuid="{x:Null}" Properties="{x:Null}" sap2010:WorkflowViewState.IdRef="LookupSPListItem_1">
+      <p1:LookupSPListItem.ItemId>
+        <InArgument x:TypeArguments="x:Int32">
+          <p:ExpressionContainerValue x:TypeArguments="x:Int32">
+            <p1:GetCurrentItemId />
+          </p:ExpressionContainerValue>
+        </InArgument>
+      </p1:LookupSPListItem.ItemId>
+      <p1:LookupSPListItem.ListId>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">System.Guid.Parse("{$ListId:Lists/SendMail;}")</mca:CSharpValue>
+        </InArgument>
+      </p1:LookupSPListItem.ListId>
+      <p1:LookupSPListItem.Result>
+        <OutArgument x:TypeArguments="p:DynamicValue">
+          <mca:CSharpReference x:TypeArguments="p:DynamicValue">ListItem</mca:CSharpReference>
+        </OutArgument>
+      </p1:LookupSPListItem.Result>
+    </p1:LookupSPListItem>
+    <p:GetODataProperties DisplayName="GetDynamicValueProperties" sap2010:WorkflowViewState.IdRef="GetODataProperties_1">
+      <p:GetODataProperties.Source>
+        <InArgument x:TypeArguments="p:DynamicValue">
+          <mca:CSharpValue x:TypeArguments="p:DynamicValue">ListItem</mca:CSharpValue>
+        </InArgument>
+      </p:GetODataProperties.Source>
+      <scg:Dictionary x:TypeArguments="x:String, OutArgument">
+        <OutArgument x:TypeArguments="x:String" x:Key="Title">
+          <mca:CSharpReference x:TypeArguments="x:String">Title</mca:CSharpReference>
+        </OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="MatterPath/Description">
+          <mca:CSharpReference x:TypeArguments="x:String">Description</mca:CSharpReference>
+        </OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="MatterPath/Url">
+          <mca:CSharpReference x:TypeArguments="x:String">URL</mca:CSharpReference>
+        </OutArgument>
+        <OutArgument x:TypeArguments="p:DynamicValue" x:Key="MailListId/results">
+          <mca:CSharpReference x:TypeArguments="p:DynamicValue">MailList</mca:CSharpReference>
+        </OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="MailSubject">
+          <mca:CSharpReference x:TypeArguments="x:String">MailSubject</mca:CSharpReference>
+        </OutArgument>
+        <OutArgument x:TypeArguments="x:String" x:Key="MailBody">
+          <mca:CSharpReference x:TypeArguments="x:String">MailBody</mca:CSharpReference>
+        </OutArgument>
+      </scg:Dictionary>
+    </p:GetODataProperties>
+    <p:CountDynamicValueItems sap2010:WorkflowViewState.IdRef="CountDynamicValueItems_1">
+      <p:CountDynamicValueItems.Result>
+        <OutArgument x:TypeArguments="x:Int32">
+          <mca:CSharpReference x:TypeArguments="x:Int32">MailListCount</mca:CSharpReference>
+        </OutArgument>
+      </p:CountDynamicValueItems.Result>
+      <InArgument x:TypeArguments="p:DynamicValue">
+        <mca:CSharpValue x:TypeArguments="p:DynamicValue">MailList</mca:CSharpValue>
+      </InArgument>
+    </p:CountDynamicValueItems>
+    <ForEach x:TypeArguments="p:DynamicValue" DisplayName="ForEach&lt;DynamicValue&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
+      <ForEach.Values>
+        <InArgument x:TypeArguments="scg:IEnumerable(p:DynamicValue)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(p:DynamicValue)">MailList</mca:CSharpValue>
+        </InArgument>
+      </ForEach.Values>
+      <ActivityAction x:TypeArguments="p:DynamicValue">
+        <ActivityAction.Argument>
+          <DelegateInArgument x:TypeArguments="p:DynamicValue" Name="item" />
+        </ActivityAction.Argument>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <p:BuildCollection x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="BuildCollection`1_1">
+            <p:BuildCollection.Collection>
+              <InArgument x:TypeArguments="scg:IEnumerable(x:String)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">ToList</mca:CSharpValue>
+              </InArgument>
+            </p:BuildCollection.Collection>
+            <p:BuildCollection.Result>
+              <OutArgument x:TypeArguments="sco:Collection(x:String)">
+                <mca:CSharpReference x:TypeArguments="sco:Collection(x:String)">ToList</mca:CSharpReference>
+              </OutArgument>
+            </p:BuildCollection.Result>
+          </p:BuildCollection>
+          <AddToCollection x:TypeArguments="x:String" DisplayName="AddToCollection&lt;String&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1">
+            <AddToCollection.Item>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">item.ToString()</mca:CSharpValue>
+              </InArgument>
+            </AddToCollection.Item>
+            <InArgument x:TypeArguments="scg:ICollection(x:String)">
+              <mca:CSharpValue x:TypeArguments="scg:ICollection(x:String)">ToList</mca:CSharpValue>
+            </InArgument>
+          </AddToCollection>
+        </Sequence>
+      </ActivityAction>
+    </ForEach>
+    <p1:Email AdditionalHeaders="{x:Null}" BCC="{x:Null}" CC="{x:Null}" sap2010:WorkflowViewState.IdRef="Email_1">
+      <p1:Email.Body>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">MailBody</mca:CSharpValue>
+        </InArgument>
+      </p1:Email.Body>
+      <p1:Email.Subject>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">MailSubject</mca:CSharpValue>
+        </InArgument>
+      </p1:Email.Subject>
+      <p1:Email.To>
+        <InArgument x:TypeArguments="sco:Collection(x:String)">
+          <mca:CSharpValue x:TypeArguments="sco:Collection(x:String)">ToList</mca:CSharpValue>
+        </InArgument>
+      </p1:Email.To>
+    </p1:Email>
+    <p1:DeleteListItem ItemGuid="{x:Null}" sap2010:WorkflowViewState.IdRef="DeleteListItem_1">
+      <p1:DeleteListItem.ItemId>
+        <InArgument x:TypeArguments="x:Int32">
+          <p:ExpressionContainerValue x:TypeArguments="x:Int32">
+            <p1:GetCurrentItemId />
+          </p:ExpressionContainerValue>
+        </InArgument>
+      </p1:DeleteListItem.ItemId>
+      <p1:DeleteListItem.ListId>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">System.Guid.Parse("{$ListId:Lists/SendMail;}")</mca:CSharpValue>
+        </InArgument>
+      </p1:DeleteListItem.ListId>
+    </p1:DeleteListItem>
+    <sads:DebugSymbol.Symbol>d4EBRDpcVEZTIFByb2plY3RzXExDQSBETVNcRGV2ZWxvcG1lbnRcQ29kZVxNaWNyb3NvZnQuTGVnYWwuTWF0dGVyQ2VudGVyXE1pY3Jvc29mdC5MZWdhbC5NYXR0ZXJDZW50ZXJcU2VuZE1haWxXb3JrZmxvd1xXb3JrZmxvdy54YW1sKisDzwEOAgEBLwsvUQIBEjQLNFECAQg5Czk6AgEHPgs+OgIBBkMLQzoCAQVGM0Y2AgEESgtKOgIBA08LTzoCAQJTBWUbAwHdAWYFgAEcAwGWAYEBBYoBIAMBgQGLAQWuAQ8CAUevAQW/ARACASjAAQXNARkCARxdC111AwHpAWILYl8DAd8BVgtYKAMB3gF0C3RUAwHTAX0LfVkDAckBcQtxXAMBvwFpC2lXAwG1AW4LblYDAasBdwt3XwMBoQF6C3pcAwGXAYQBC4QBXQMBjAGIAQmIAVUDAYIBjgELjgFoAgF3lQEJrAEUAgFIvAELvAFfAgE9sgELsgFRAgEztwELtwFUAgEpygELygF1AgEewwELxQEoAgEdVw1XJAQB3gEBlgELoQEfAgFgogELqwEdAgFJxAENxAEkAwEdAZ4BEZ4BbQIBbJkBEZkBZgIBYakBD6kBZAIBVaUBEaUBXgIBSg==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LookupSPListItem_1" sap:VirtualizedContainerService.HintSize="287,89">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <scg:Dictionary x:TypeArguments="x:String, msdad:ViewStateNameValue" x:Key="SPLocalizedDisplayNames">
+              <msdad:ViewStateNameValue x:Key="ItemId" DisplayName="(current item)" Value="$CurrentItemId" />
+              <msdad:ViewStateNameValue x:Key="ListId" DisplayName="SendMail" Value="Lists/SendMail" />
+            </scg:Dictionary>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="GetODataProperties_1" sap:VirtualizedContainerService.HintSize="287,92">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:String x:Key="Properties.SelectedEntityType">Lists/SendMail</x:String>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CountDynamicValueItems_1" sap:VirtualizedContainerService.HintSize="287,22" />
+      <sap2010:ViewStateData Id="BuildCollection`1_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="287,358" />
+      <sap2010:ViewStateData Id="Email_1" sap:VirtualizedContainerService.HintSize="287,68" />
+      <sap2010:ViewStateData Id="DeleteListItem_1" sap:VirtualizedContainerService.HintSize="287,68">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <scg:Dictionary x:TypeArguments="x:String, msdad:ViewStateNameValue" x:Key="SPLocalizedDisplayNames">
+              <msdad:ViewStateNameValue x:Key="ItemId" DisplayName="(current item)" Value="$CurrentItemId" />
+              <msdad:ViewStateNameValue x:Key="ListId" DisplayName="SendMail" Value="Lists/SendMail" />
+            </scg:Dictionary>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="309,1021">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Microsoft.Legal.MatterCenter.SendMailWorkflow.Workflow_1" sap:VirtualizedContainerService.HintSize="349,1101" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

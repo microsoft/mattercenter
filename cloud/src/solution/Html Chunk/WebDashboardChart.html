@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="/sites/catalog/SiteAssets/Matter%20Center%20Assets/Web%20Dashboard%20Assets/Styles/Charts.css?ver=1.0.0.0">
+
+<style type="text/css">
+    #footerPage {
+        width: 100%;
+        height: 60px;
+        margin-top: -10px;
+    }
+
+    #MSOZoneCell_WebPartWPQ4, #MSOZoneCell_WebPartWPQ3 {
+        margin-bottom: 0px;
+    }
+</style>
+
+<div id="chartContentDiv">
+    <div class="Charts">
+        <div id="MAQBubbleChart"></div>
+        <div id="MAQDonutChart"></div>
+        <div id="MAQHalfBowtieChart"></div>
+        <div id="MAQStackedBarChart"></div>
+    </div>
+    <div id="BingMap"></div>
+    <div class="LineChart"><span id="LineChartHeading">Open invoice trend</span><img src="/sites/catalog/SiteAssets/Matter%20Center%20Assets/Web%20Dashboard%20Assets/Images/icon-combobox.png" alt="LC" class="LineChartExpandCollapseImg" /></div>
+    <div id="MAQLineChart"></div>
+</div>
+
+<script type="text/javascript" src="/sites/catalog/SiteAssets/Matter%20Center%20Assets/Web%20Dashboard%20Assets/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/sites/catalog/SiteAssets/Matter%20Center%20Assets/Web%20Dashboard%20Assets/Scripts/jquery-ui-1.10.3.custom.js"></script>
+
+<script type="text/javascript">
+    function clearDivs(arrID) {
+        var iArrLength = arrID.length;
+        var iCounter = 0
+        for (iCounter = 0; iCounter < iArrLength; iCounter++) {
+            var oCurrentID = $("#" + arrID[iCounter]);
+            if (oCurrentID.length) {
+                $(oCurrentID).html("");
+            }
+        }
+    }
+    $(document).ready(function () {
+        var arrIDList = ["MAQBubbleChart", "MAQDonutChart", "MAQHalfBowtieChart", "MAQStackedBarChart", "MAQLineChart"];
+        clearDivs(arrIDList);
+    });
+</script>
+<script type="text/javascript" src="https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&amp;s=1"></script>
+
+
+<script src="/sites/catalog/SiteAssets/Matter%20Center%20Assets/Web%20Dashboard%20Assets/Scripts/MAQCharts.js?ver=1.0.0.0"></script>
+<script src="/sites/catalog/SiteAssets/Matter%20Center%20Assets/Web%20Dashboard%20Assets/Scripts/LineChart.js?ver=1.0.0.0"></script>
+<script src="/sites/catalog/SiteAssets/Matter%20Center%20Assets/Web%20Dashboard%20Assets/Scripts/BingMap.js?ver=1.0.0.0"></script>
+<script type="text/javascript">
+    GetMap();
+
+    // JavaScript source code
+    $(".LineChartExpandCollapseImg").click(function () {
+        $("#MAQLineChart").slideToggle("slow");
+    });
+</script>

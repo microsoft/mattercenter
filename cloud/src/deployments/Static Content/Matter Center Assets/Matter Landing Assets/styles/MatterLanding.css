@@ -1,0 +1,729 @@
+body {
+    font-family: "Segoe UI";
+    font-size: 14px;
+    height: 100%;
+}
+
+.PropertyTitle {
+    display: inline-block;
+    font-weight: 700;
+    position: relative;
+}
+
+#s4-titlerow, #sideNavBox, #titleAreaRow, .ms-pagebreadcrumb {
+    display: none !important;
+}
+
+#OuterLeftCell {
+    padding-right: 43px;
+    vertical-align: top !important;
+    width: 750px;
+}
+
+#s4-bodyContainer {
+    padding-bottom: 0 !important;
+}
+
+#MiddleZoneTable {
+    padding: 0 0 2%;
+}
+
+#MSOZoneCell_WebPartWPQ8 {
+    margin-top: -9px;
+}
+
+#MSOZoneCell_WebPartWPQ5 {
+    min-width: 750px;
+}
+
+#MSOZoneCell_WebPartWPQ10 {
+    margin: 0;
+}
+
+#MSOZoneCell_WebPartWPQ9 {
+    margin: 0;
+    padding-top: 0;
+}
+
+#MSOZoneCell_WebPartWPQ4 {
+    margin: 0;
+}
+
+#WebPartWPQ4 {
+    overflow: hidden !important;
+}
+
+#contentRow {
+    padding-top: 9px;
+}
+
+#s4-titlerow {
+    display: none !important;
+}
+
+#contentBox {
+    margin-left: auto !important;
+    margin-right: auto;
+    width: 1150px;
+}
+
+#MiddleLeftCell .ms-webpart-chrome, #MiddleLeftCell .ms-webpart-chrome #WebPartWPQ4 {
+    width: 0 !important;
+}
+
+#EditLinks > a {
+    color: #2b579a;
+}
+
+#EditLinks {
+    margin-top: 10px;
+}
+
+#OuterRightCell {
+    margin-left: 15px;
+    padding-top: 56px;
+    width: 350px;
+}
+
+#matterCenterHeader {
+    background-color: #0072c6;
+    height: 60px;
+    margin-top: 8px;
+    min-width: 1150px;
+    width: auto;
+}
+
+    #matterCenterHeader a, #matterInfo a {
+        text-decoration: none;
+    }
+
+#taskPane a, #calendarPane a, #taskPane a:visited, #calendarPane a:visited {
+    color: #2b579a;
+}
+
+#menu {
+    float: left;
+    height: 60px;
+    width: 60px;
+}
+
+.searchZone {
+    height: 45px;
+}
+
+#mcIcon {
+    float: left;
+    height: 45px;
+    margin-left: 20px;
+    margin-top: 10px;
+    width: 45px;
+}
+
+.searchIcon {
+    float: right;
+    padding: 2px 3px 0 0;
+}
+
+.iconText {
+    float: left;
+    height: 45px;
+    margin-left: 5px;
+    margin-top: 7px;
+}
+
+.subText {
+    color: #fff;
+    font: 13px "Segoe UI";
+    height: 15px;
+}
+
+.searchBox {
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+    float: right;
+    height: 25px;
+    margin: 15px 0 0;
+    padding-bottom: 3px;
+    width: 400px;
+}
+
+#searchText {
+    border: none;
+    font-family: "Segoe UI";
+    font-style: italic;
+    height: 20px;
+    margin-top: 2px;
+    padding-left: 10px;
+    width: 360px;
+}
+
+#calendarPane, #taskPane {
+    width: 350px;
+    margin-bottom: 16px;
+    margin-top: 23px;
+}
+
+#calendarPane {
+    margin-bottom: 11px;
+}
+
+#rssPane {
+    margin-top: 28px;
+}
+
+.userIcon {
+    float: right;
+    height: 60px;
+    width: 60px;
+}
+
+.taskHeading, .calenderHeading {
+    border-bottom: 1px solid #c8c8c8;
+    height: 37px;
+}
+
+.eventBoard, .taskBoard {
+    max-width: 345px;
+}
+
+.calenderHeading {
+    margin-bottom: 15px;
+}
+
+.headingText {
+    color: #333;
+    float: left;
+    font: 20px "Segoe UI Regular","Segoe UI";
+}
+
+.taskOption, .calenderOption {
+    color: #2b579a;
+    float: right;
+    font: 14px "Segoe UI Regular","Segoe UI";
+    padding-top: 7px;
+}
+
+.clear {
+    clear: both;
+}
+
+.taskTitle {
+    color: #2b579a;
+    font: 16px "Segoe UI";    
+    margin-top: 10px;
+    width: 340px;
+}
+
+.eventBody {
+    color: #2b579a;
+    font: 16px "Segoe UI";    
+}
+
+    .eventBody a {
+        height: 21px;
+        width: 290px;
+        margin-top: -10px;
+    }
+
+.taskDescription, .eventDescription {
+    color: #333;
+    font: 14px "Segoe UI Regular","Segoe UI";
+    overflow: hidden;
+}
+
+
+.taskDescription {
+    max-height: 60px;
+}
+
+.eventDescription {
+    margin-left: 50px;
+    max-height: 60px;
+}
+
+.eventDuration {
+    color: #2b579a;
+    font: 14px "Segoe UI Regular","Segoe UI";
+    margin-top: -4px;
+}
+
+.eventItem {
+    margin-top: 11px;
+}
+
+.eventImage {
+    background-color: #2b579a;
+    color: #fff;
+    float: left;
+    height: 42px;
+    margin-right: 10px;
+    width: 42px;
+}
+
+.eventTitle {
+    color: #2b579a;
+    font: 14px "Segoe UI semibold","Segoe UI";
+}
+
+.eventDate {
+    font: 14px "Segoe UI semibold","Segoe UI";
+    padding-left: 12px;
+}
+
+.eventMonth {
+    font: 14px "Segoe UI semibold","Segoe UI";
+    padding-left: 8px;
+}
+
+.bodyHeight {
+    height: 0;
+}
+
+.matterName {
+    color: #333;
+    font: 24px "Segoe UI Semi Light", "segoe UI";
+    font-weight: 400;
+    margin: 5px 0;
+    width: 750px;
+}
+
+.matterLink {
+    margin-bottom: 26px;
+    width: 750px;
+}
+
+    .matterLink a {
+        color: #2b579a;
+        font: 14px "Segoe UI Regular", "segoe UI";
+        min-width: 720px;
+    }
+
+.matterAction {
+    border-bottom: 1px solid #c8c8c8;
+    height: 30px;
+    min-width: 720px;
+}
+
+.matterDescriptionTitle, .matterProfileTitle {
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+    border-bottom: none;
+    color: #2b579a;
+    float: left;
+    font: 16px "Segoe UI Regular", "segoe UI";
+    height: 22px;
+    padding: 4px 10px;
+    position: absolute;
+}
+
+.matterDescriptionTitle {
+    margin-left: 120px;
+    width: 135px;
+}
+
+.oneNoteIcon, .pinIcon {
+    float: right;
+    margin-left: 15px;
+}
+
+.matterDescriptionBody, .matterProfileBody {
+    height: 65px;
+}
+
+.matterDescriptionBody {
+    font: 14px "Segoe UI Regular", "Segoe UI";
+    max-height: 55px;
+    overflow: hidden;
+    padding: 3px 10px 7px 10px;
+    margin-bottom: 5px;
+    width: 730px;
+}
+
+
+.changeSection {
+    border: none;
+    color: #333;
+}
+
+.hide {
+    display: none !important;
+}
+
+.popupBackground, .errorPopupBackground {
+    background-color: #000;
+    height: 100%;
+    width: 100%;
+    min-width: 1156px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    opacity: 0.4;
+    position: absolute;
+    top: 0;
+    z-index: 100;
+}
+
+.closeIcon {
+    height: 65px;
+    position: absolute;
+    top: 20px;
+    width: 65px;
+    z-index: 101;
+}
+
+.menuFlyout {
+    background-color: #fff;
+    height: 150px;
+    padding: 10px;
+    position: absolute;
+    top: 80px;
+    width: 1130px;
+    z-index: 101;
+}
+
+.menuFlyoutColumn {
+    float: left;
+    height: 200px;
+    width: 200px;
+}
+
+.flyoutColumnData {
+    color: #2b579a;
+    display: block;
+    font: 22px "Segoe UI Semi Light","Segoe UI";
+    font-weight: 400;
+    margin: 12px 10px 17px 8px;
+}
+
+.teamFlyout {
+    background-color: #fff;
+    height: 100%;
+    margin-left: 830px;
+    position: absolute;
+    top: 81px;
+    width: 320px;
+    z-index: 101;
+}
+
+.selectedUserIcon {
+    height: 60px;
+    margin-left: 1090px;
+    position: absolute;
+    top: 20px;
+    width: 60px;
+    z-index: 101;
+}
+
+.teamSection, .blockedUserSection {
+    background-color: rgba(198,198,198,1);
+    color: #333;
+    float: left;
+    font: 14px "Segoe UI Semi Light","Segoe UI";
+    font-weight: 400;
+    height: 15px;
+    padding: 20px;
+    width: 70px;
+}
+
+.blockedUserSection {
+    width: 170px;
+}
+
+.userNumber {
+    color: #2b579a;
+    font: 16px "Segoe UI Semi Bold","Segoe UI";
+    padding-left: 2px;
+}
+
+.selectedSection {
+    background-color: #fff;
+}
+
+.teamFlyoutData, .blockedFlyoutData {
+    margin-top: 65px;
+    max-height: 80%;
+    overflow: auto;
+    padding-left: 10px;
+}
+
+.teamFlyoutDataRow {
+    color: #333;
+    display: block;
+    font: 14px "Segoe UI Regular","Segoe UI";
+    padding: 5px 10px;
+}
+
+.manageUsers {
+    color: #2b579a;
+    font: 18px "Segoe UI Regular","Segoe UI";
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.matterDetailsColumn {
+    float: left;
+    padding: 0 10px 0 0;
+    width: 148px;
+}
+
+.matterDetails {
+    width: 750px;
+}
+
+.matterDetailTitle {
+    color: #333;
+    font: 14px "Segoe UI Semi Bold","Segoe UI";
+    font-weight: 600;
+    height: 20px;
+    padding: 5px 5px 5px 0;
+}
+
+.matterDetailText div {
+    color: #666;
+    font: 14px "Segoe UI Regular","Segoe UI";
+}
+
+.matterDetailText {
+    height: 40px;
+    overflow: hidden;
+}
+
+.openDateTitle {
+    float: left;
+}
+
+.openDateText {
+    padding-top: 5px;
+}
+
+#menu, .errorPopUpCloseIcon, .userIcon, .matterLink, .matterDescriptionTitle, .matterProfileTitle, .flyoutColumnData, .teamSection, .blockedUserSection, .selectedUserIcon, .unPinImg, .pinImg, .searchIcon, .closeIcon {
+    cursor: pointer;
+}
+
+#documentLibraryTitle {
+    border-top: 1px solid #c8c8c8;
+    color: #333;
+    font: 24px "Segoe UI Semi Light","Segoe UI";
+    font-weight: 300;
+    margin-top: 31px;
+    padding-top: 7px;
+    width: 750px;
+}
+
+.loadingIcon {
+    margin-left: 45%;
+    margin-top: 20px;
+}
+
+.emptyItems {
+    margin-top: 20px;
+}
+
+#WebPartWPQ2, #WebPartWPQ3, #WebPartWPQ10, #WebPartWPQ4, #WebPartWPQ9, #WebPartWPQ7 {
+    overflow: hidden !important;
+    width: auto !important;
+}
+
+.pinIcon .loadingIcon {
+    height: 30px;
+    margin: 0;
+}
+
+.pinImg, .unPinImg, .loadingIcon {
+    display: inline;
+}
+
+#OneNote, .pinIcon {
+    float: right;
+    margin-left: 15px;
+}
+
+#oneNotePane img {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+#oneNotePane, #oneNotePane a, #oneNotePane a:visited {
+    color: #2b579a;
+}
+
+#oneNotePane {
+    font: 20px "Segoe UI Regular","Segoe UI";
+    margin-top: 33px;
+}
+
+    #oneNotePane a, #oneNotePane a:visited {
+        text-decoration: none;
+        vertical-align: middle;
+    }
+
+.errorPopUpHolder {
+    color: #333;
+    font-size: .875em;
+}
+
+
+
+
+.errorPopUpContainer {
+    background-color: #fff;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    z-index: 1000;
+}
+
+.errorPopUpCenter {
+    margin: auto;
+    max-height: 300px;
+    min-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.errorPopUpMessage {
+    font-size: 20px;
+    margin-top: 90px;
+    width: 400px;
+    margin: auto;
+    margin-top: 90px;
+}
+
+.popUpFloatRight {
+    float: right;
+}
+
+.errorPopUpCloseIcon {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+#errorMessage {
+    font-size: 16px;
+    margin-left: 15px;
+    float: left;
+    width: 400px;
+    text-align: left;
+}
+
+#expandCollapse {
+    font-size: 18px;
+    float: left;
+    margin-left: -5px;
+}
+
+.inlineElement {
+    display: inline-block;
+    width: 20px;
+    cursor: pointer;
+    float: left;
+}
+
+#genericMessage {
+    float: left;
+}
+
+#noVersionMessage {
+    width: 300px;
+    margin: auto;
+}
+
+#MSOZoneCell_WebPartWPQ2, #MSOZoneCell_WebPartWPQ7 {
+    margin: 0;
+}
+
+.clientName {
+    padding-left: 10px;
+    width: 140px;
+}
+
+.clientMatterID {
+    width: 127px;
+}
+
+.practiceGroup {
+    width: 135px;
+}
+
+.areaOfLaw {
+    width: 143px;
+}
+
+.responsibleAttorney {
+    padding: 0;
+    width: 155px;
+}
+
+.arrowHolder {
+    display: inline-block;
+    height: 16px;
+    margin: 0 5px;
+    overflow: hidden;
+    position: relative;
+    width: 16px;
+}
+
+.arrowImg {
+    position: absolute;
+    left: -197px !important;
+    top: -229px !important;
+}
+
+.link-item, .link-item a, .link-item a:link, .groupheader {
+    font-family: 'Segoe UI';
+    font-size: 12px;
+}
+
+    .groupheader a, .groupheader a:visited {
+        color: #333;
+        font-size: 18px;
+    }
+
+.item {
+    margin-left: 0;
+}
+
+.taskOption a:visited, .taskTitle a:visited, .eventBody a:visited, #matterCenterHeader a:visited, #matterInfo a:visited, #taskPane a:visited, #calendarPane a:visited, .footerLink a:visited {
+    color: #2b579a;
+    text-decoration: none;
+}
+
+.teamFlyoutDataRow a, .teamFlyoutDataRow a:visited, #documentLibraryTitle a, #documentLibraryTitle a:visited, .hierarchyItems a, .hierarchyItems a:hover, .hierarchyItems a:visited, .hierarchyItems {
+    text-decoration: none;
+}
+
+    .teamFlyoutDataRow a, .teamFlyoutDataRow a:visited {
+        color: #000 !important;
+    }
+
+    #documentLibraryTitle a, #documentLibraryTitle a:visited, .hierarchyItems a, .hierarchyItems a:hover, .hierarchyItems a:visited, .hierarchyItems {
+        color: #333;
+    }
+
+.matterDetails .loadingIcon {
+    margin-left: 50%;
+}
+
+.footerLogo, .footerLink {
+    padding-right: 10px;
+}
+
+.taskTitle, .eventBody a, .matterName, .matterLink, #documentLibraryTitle {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    word-wrap: normal;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+}
+
+@media all and (max-width:1160px) {
+    #matterCenterFooter, #footerContainer {
+        width: 1156px !important;
+    }
+}

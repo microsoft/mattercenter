@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Edit_Matter_Allowed_Permission_Level" xml:space="preserve">
+    <value>Full Control</value>
+    <comment>Minimum permission required on matter to manage permission</comment>
+  </data>
+  <data name="Encryption_Vector" xml:space="preserve">
+    <value>AS3FFCR7G2F8RC1F</value>
+    <comment>Initialization vector for encryption. It is used to generate the AES encryption/decryption object with the help of KEY. The encryption/decryption object is used to encrypt/decrypt the refresh token.</comment>
+  </data>
+  <data name="Error_Empty_File" xml:space="preserve">
+    <value>We can't upload folders or empty files</value>
+    <comment>This message is displayed if file being uploaded is empty</comment>
+  </data>
+  <data name="File_Already_Exist_Message" xml:space="preserve">
+    <value>&lt;span&gt;The file &lt;a class="overWriteContent" id="fileName" href="{1}" target="_blank"&gt;{0}&lt;/a&gt; already exists in the folder. Do you want to overwrite it?&lt;/span&gt;</value>
+    <comment>Message to be displayed when the file being uploaded is already present in the selected folder</comment>
+  </data>
+  <data name="Folder_Structure_Modified" xml:space="preserve">
+    <value>The folder &lt;span class="overWriteContent"&gt;{0}&lt;/span&gt; no longer exists in the Matter Library. Reload the pop up to refresh the folder structure.</value>
+    <comment>Message to be displayed if folder structure is modified during upload</comment>
+  </data>
+  <data name="Get_All_Files_In_Folder_Query" xml:space="preserve">
+    <value>&lt;View Scope='RecursiveAll'&gt;&lt;Query&gt;&lt;Where&gt;&lt;Eq&gt;&lt;FieldRef Name='FileRef' /&gt;&lt;Value Type='File'&gt;{0}&lt;/Value&gt;&lt;/Eq&gt;&lt;/Where&gt;&lt;/Query&gt;&lt;/View&gt;</value>
+    <comment>Query to get list of all the items in a folder</comment>
+  </data>
+  <data name="Search_Email_Attachments" xml:space="preserve">
+    <value>DMS_Attachments</value>
+    <comment>Name of the custom site column  to store mail attachments</comment>
+  </data>
+  <data name="Search_Email_Categories" xml:space="preserve">
+    <value>EmailCategories</value>
+    <comment>Name of the custom site column to store email categories</comment>
+  </data>
+  <data name="Search_Email_CC" xml:space="preserve">
+    <value>DMS_Cc</value>
+    <comment>Name of the custom site column  to store mail Cc</comment>
+  </data>
+  <data name="Search_Email_ConversationId" xml:space="preserve">
+    <value>ConversationId</value>
+    <comment>Name of the custom site column to store Conversation Id</comment>
+  </data>
+  <data name="Search_Email_ConversationTopic" xml:space="preserve">
+    <value>ConversationTopic</value>
+    <comment>Name of the custom site column to store the Conversation Topic</comment>
+  </data>
+  <data name="Search_Email_From" xml:space="preserve">
+    <value>DMS_From</value>
+    <comment>Name of the custom site column to store mail sender</comment>
+  </data>
+  <data name="Search_Email_From_Mailbox" xml:space="preserve">
+    <value>DMS_From_MailBox</value>
+    <comment>Name of the custom site column  to store Mailbox for the mail</comment>
+  </data>
+  <data name="Search_Email_HasAttachments" xml:space="preserve">
+    <value>HasAttachments</value>
+    <comment>Name of the custom site column to store the Has Attachments</comment>
+  </data>
+  <data name="Search_Email_Importance" xml:space="preserve">
+    <value>DMS_Mail_Importance</value>
+    <comment>Name of the custom site column to store email importance</comment>
+  </data>
+  <data name="Search_Email_ReceivedDate" xml:space="preserve">
+    <value>ReceivedDate</value>
+    <comment>Name of the custom site column to store mail received date</comment>
+  </data>
+  <data name="Search_Email_Sensitivity" xml:space="preserve">
+    <value>Sensitivity</value>
+    <comment>Name of the custom site column to store sensitivity</comment>
+  </data>
+  <data name="Search_Email_SentDate" xml:space="preserve">
+    <value>SentDate</value>
+    <comment>Name of the custom site column to store the email sent date</comment>
+  </data>
+  <data name="Search_Email_Subject" xml:space="preserve">
+    <value>DMS_Subject</value>
+    <comment>Name of the custom site column  to store mail subject</comment>
+  </data>
+  <data name="Search_Email_To" xml:space="preserve">
+    <value>DMS_To</value>
+    <comment>Name of the custom site column  to store mail receivers</comment>
+  </data>
+  <data name="Special_Character_Expression_Content_Type" xml:space="preserve">
+    <value>[@\\/:*?#%&lt;&gt;{}|~&amp;\"]</value>
+    <comment>Regular Expression for validating Content Type name</comment>
+  </data>
+  <data name="Special_Character_Expression_Matter_Description" xml:space="preserve">
+    <value>[A-Za-z0-9_]+[-A-Za-z0-9_, .]*</value>
+    <comment>Regular Expression for validating matter description</comment>
+  </data>
+  <data name="Special_Character_Expression_Matter_Id" xml:space="preserve">
+    <value>[A-Za-z0-9_]+[-A-Za-z0-9_, ]*</value>
+    <comment>Regular Expression for validating matter id and matter description</comment>
+  </data>
+  <data name="Special_Character_Expression_Matter_Title" xml:space="preserve">
+    <value>[A-Za-z0-9-_]+[A-Za-z0-9-_ ]*</value>
+    <comment>Regular Expression for validating matter title</comment>
+  </data>
+  <data name="Found_Identical_Content_Message" xml:space="preserve">
+    <value>The document you are trying to upload has identical content and the same file name as an existing file.</value>
+    <comment>Message to be shown if identical content was found after performing content check.</comment>
+  </data>
+  <data name="Found_Non_Identical_Content_Message" xml:space="preserve">
+    <value>The two documents do not have identical content.</value>
+    <comment>Message to be shown if non identical content was found after performing content check.</comment>
+  </data>
+  <data name="File_Potential_Duplicate_Message" xml:space="preserve">
+    <value>&lt;span&gt;The file &lt;a class="overWriteContent" id="fileName" href="{1}" target="_blank"&gt; {0} &lt;/a&gt; might be a duplicate of a similar existing document in the folder. You can run a content check for a full text comparison, save the file without a comparison, or cancel the upload.&lt;br/&gt;
+Note: Depending on the file size, a content check may take some time and you can't navigate away from this screen until the check is complete.&lt;/span&gt;</value>
+    <comment>Message to be displayed when a potential duplicate exists in the selected folder for the file being uploaded</comment>
+  </data>
+  <data name="Search_Email_FileSize" xml:space="preserve">
+    <value>File_x0020_Size</value>
+    <comment>Name of the custom site column  to store mail file size</comment>
+  </data>
+  <data name="Content_Check_Failed" xml:space="preserve">
+    <value>Unable to perform content check</value>
+    <comment>Message to be displayed if content check failed</comment>
+  </data>
+  <data name="Sent_Date_Tolerance" xml:space="preserve">
+    <value>2</value>
+    <comment>Provides the tolerable limit for difference between uploaded files, in minutes</comment>
+  </data>
+  <data name="Search_Email_OriginalName" xml:space="preserve">
+    <value>OriginalName</value>
+    <comment>Name of the site column to store original name of uploaded file</comment>
+  </data>
+  <data name="Redis_Cache_Connection_String" xml:space="preserve">
+    <value>{0},ssl=true,password={1}</value>
+    <comment>Connection string used for Redis cache</comment>
+  </data>
+  <data name="Provision_Matter_App_URL" xml:space="preserve">
+    <value>[Enter App web URL where Send Mail list is located on SharePoint, e.g. https://[TENANTNAME].sharepoint.com/sites/catalog/MatterCenter]</value>
+    <comment>App web URL where Send Mail list is located on SharePoint</comment>
+  </data>
+  <data name="Send_Mail_List_Name" xml:space="preserve">
+    <value>SendMail</value>
+    <comment>Name of the list where details for sending share matter mail are stored</comment>
+  </data>
+  <data name="TokenRequestFailedErrorCode" xml:space="preserve">
+    <value>-900000011</value>
+    <comment>Error code in case of Token Request Failed exception</comment>
+  </data>
+  <data name="TokenRequestFailedErrorMessage" xml:space="preserve">
+    <value>Token request failed</value>
+    <comment>Error message in case of Token Request Failed exception</comment>
+  </data>
+</root>

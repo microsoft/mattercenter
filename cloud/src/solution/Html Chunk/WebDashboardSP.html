@@ -1,0 +1,142 @@
+<style>
+    /*Top Ribbon*/
+    #s4-titlerow {
+        display: none !important;
+    }
+    /*Left Navigation*/
+    #sideNavBox {
+        display: none;
+    }
+
+    #contentRow {
+        padding-top: 0;
+    }
+
+    #contentBox {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    #s4-bodyContainer {
+        height: 100%;
+    }
+
+    #webDashboardPage {
+        width: 100%;
+        min-height: 500px;
+    }
+
+    .ms-pagebreadcrumb, #OuterRightCell {
+        display: none;
+    }
+
+    #OuterLeftCell {
+        width: 100%;
+        min-width: 345px;
+    }
+
+    #chartContentDiv {
+        display: block;
+    }
+
+    @media (max-width: 1226px) {
+        #chartContentDiv {
+            display: none;
+        }
+    }
+
+    @media (min-width:746px) {
+        #webDashboardPage {
+            height: 1060px;
+        }
+    }
+
+    @media (min-width: 355px) and (max-width: 746px) {
+        #webDashboardPage {
+            height: 915px;
+        }
+
+        #contentBox {
+            min-width: auto;
+        }
+    }
+
+    @media (max-width: 355px) {
+        #webDashboardPage {
+            height: 915px;
+        }
+
+        #contentBox {
+            min-width: 100px;
+        }
+    }
+</style>
+<script type="text/javascript">
+    window.appInsights = { queue: [], applicationInsightsId: null, accountId: null, appUserId: null, configUrl: null, start: function (n) { function u(n, t) { n[t] = function () { var i = arguments; n.queue.push(function () { n[t].apply(n, i) }) } } function f(n) { var t = document.createElement("script"); return t.type = "text/javascript", t.src = n, t.async = !0, t } function r() { i.appendChild(f("//az416426.vo.msecnd.net/scripts/ai.0.js")) } var i, t; this.applicationInsightsId = n; u(this, "logEvent"); u(this, "logPageView"); i = document.getElementsByTagName("script")[0].parentNode; this.configUrl === null ? r() : (t = f(this.configUrl), t.onload = r, t.onerror = r, i.appendChild(t)); this.start = function () { } } };
+    appInsights.start("03378453-381d-4299-ad6c-6f2f3c7d16bf");
+    appInsights.logPageView();
+    appInsights.logEvent("WebdashBoard");
+
+    var oWebDashboardSPGlobal = {
+        iFrame: [],
+        clientContext: [],
+        rootWeb: []
+    }
+
+    ExecuteOrDelayUntilScriptLoaded(function () {
+        oWebDashboardSPGlobal.iFrame = document.getElementById("webDashboardPage");
+        document.ondomcontentready = preLoad();
+    }, "sp.js");
+    function preLoad() {
+        oWebDashboardSPGlobal.clientContext = SP.ClientContext.get_current();
+        oWebDashboardSPGlobal.rootWeb = oWebDashboardSPGlobal.clientContext.get_site().get_rootWeb();
+        oWebDashboardSPGlobal.clientContext.load(oWebDashboardSPGlobal.rootWeb);
+        oWebDashboardSPGlobal.clientContext.executeQueryAsync(Function.createDelegate(this, onSuccess), Function.createDelegate(this, onFailure));
+    }
+
+    function onSuccess() {
+        var sCurrentLocation = oWebDashboardSPGlobal.rootWeb.get_url();
+        var sClientName = "";
+        oWebDashboardSPGlobal.iFrame.src = "<URL of the Webdashboard page from Azure Website>";
+        if (null !== oWebDashboardSPGlobal.iFrame) {
+            if (7 < sCurrentLocation.lastIndexOf('/')) {
+                sClientName = sCurrentLocation.substring(sCurrentLocation.lastIndexOf('/') + 1);
+                oWebDashboardSPGlobal.iFrame.src = oWebDashboardSPGlobal.iFrame.src + "?clientparameters=" + sClientName + "$|$" + sCurrentLocation + "&";
+            } else {
+                oWebDashboardSPGlobal.iFrame.src = oWebDashboardSPGlobal.iFrame.src + "?clientparameters=" + "tenantCall&"; //tenantCall string is just to verify this is tenant call, no significance or check on actual string
+            }
+        }
+    }
+
+    function onFailure() {
+        alert("Unable to load context");
+    }
+
+    // Dynamically update height of iFrame
+    (function () {
+        function receiveMessage(event) {
+            var iValidIframeUrl = $("iframe[id=webDashboardPage]").attr("src"); // URL of Web Dashboard i-Frame
+            var anchorElement = document.createElement('a');                      //Temporary element to get the host name
+            iValidIframeUrl = (iValidIframeUrl) ? iValidIframeUrl.split("?")[0] : "";
+            anchorElement.href = iValidIframeUrl;
+            iValidIframeHost = anchorElement.protocol + '//' + anchorElement.hostname;
+
+            if (event.origin !== iValidIframeHost)
+                return;
+
+            if (event.data) {
+                var iframeHeight = event.data;
+                oWebDashboardSPGlobal.iFrame.style.height = iframeHeight;
+            }
+        }
+
+        window.onload = function () {
+            if ('addEventListener' in window) {
+                window.addEventListener('message', receiveMessage, true);
+            } else if ('attachEvent' in window) { //IE
+                window.attachEvent('onmessage', receiveMessage);
+            }
+        };
+    })();
+</script>
+<iframe id="webDashboardPage"></iframe>

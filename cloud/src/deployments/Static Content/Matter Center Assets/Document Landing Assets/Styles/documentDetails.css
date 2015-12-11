@@ -1,0 +1,438 @@
+﻿body {
+    font-family: 'Segoe UI';
+}
+
+#s4-titlerow, #sideNavBox, #s4-titlerow, #titleAreaRow, .ms-pagebreadcrumb {
+    display: none !important;
+}
+
+#contentBox {
+    margin: auto !important;
+    width: 1150px !important;
+}
+
+.ms-rte-layoutszone-inner {
+    border: none !important;
+    margin: 0 !important;
+}
+
+#layoutsTable td:first-child {
+    padding: 0 !important;
+}
+
+#s4-bodyContainer, #contentRow {
+    padding: 0 !important;
+}
+
+#documentLandingMainContainer .WACRibbonPanel {
+    display: none !important;
+}
+
+#s4-bodyContainer {
+    position: relative !important;
+}
+
+.clear {
+    clear: both;
+}
+
+#documentLandingMainContainer .hide, .hide, #expandCollapse .hide {
+    display: none;
+}
+
+#leftSection {
+    float: left;
+    height: 1050px;
+    padding-right: 50px;
+}
+
+#rightSection {
+    float: right;
+    height: 1050px;
+    width: 350px;
+}
+
+    #rightSection #metadataMainContainer #metadataProperties, #rightSection #metadataMainContainer #documentMetadata {
+        margin: 0;
+        padding: 0;
+    }
+
+#metadataProperties li, #documentMetadata li {
+    margin-top: 1px;
+}
+
+#actionBarMainContainer #actionBar #checkOutDocument .actionText, #actionBarMainContainer #actionBar #unpinDocument .actionText {
+    margin-right: 5px;
+}
+
+#metadataMainContainer .separtor {
+    border-top: 1px solid #c8c8c8;
+    margin: 7px 0 10px 0;
+    width: 350px;
+}
+
+#documentLandingMainContainer {
+    width: 1150px;
+}
+
+    #documentLandingMainContainer #actionBar a {
+        color: #FFF;
+        text-decoration: none;
+    }
+
+    #documentLandingMainContainer li {
+        list-style: none;
+        margin-bottom: -7px;
+    }
+
+    ::-moz-svg-foreign-content, #documentLandingMainContainer li {
+        margin-bottom: 0;
+    }
+
+#checkOutUserValue, #authorValue {
+    width: 210px;
+}
+
+#documentPreviewContainer {
+    height: 800px;
+    width: 750px;
+}
+
+    #documentPreviewContainer #documentPreviewSource {
+        border: none;
+        height: 100%;
+        width: 100%;
+    }
+
+    #documentPreviewContainer #documentPreviewNotSupported {
+        height: 800px;
+    }
+
+#actionBarMainContainer #gotoAllDocuments a, #matterCenterFooter a {
+    color: #2b579a;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+#actionBarMainContainer #actionBar {
+    background-color: #000;
+    color: #fff;
+    font-family: "Segoe UI Semilight", "Segoe UI";
+    font-size: 18px;
+    height: 35px;
+    margin: 25px 0 20px;
+    padding: 5px 0 0 10px;
+    width: 740px;
+    font-weight: 400;
+}
+
+    #actionBarMainContainer #actionBar .documentAction {
+        color: #fff;
+        cursor: pointer;
+    }
+
+        #actionBarMainContainer #actionBar .documentAction .actionText {
+            margin-right: 5px;
+            vertical-align: super;
+        }
+
+#documentName, #previewUnsupportedText {
+    color: #333;
+    font-family: "Segoe UI Semilight", "Segoe UI";
+    font-weight: 400;
+    font-size: 24px;
+}
+
+#documentName {
+    display: inline-block;
+    width: 749px;
+}
+
+#gotoAllDocuments, #filePropertiesTitle, #versionHistoryTitle, #viewMoreFileProperties, #viewMoreVersions, .propertyValue, #documentMetadata {
+    font-family: "Segoe UI";
+}
+
+.propertyName, #versionHeader {
+    font-family: "Segoe UI Semibold", "Segoe UI";
+    font-weight: 600;
+}
+
+#gotoAllDocuments {
+    color: #2b579a;
+    font-size: 16px;
+    margin-top: 3px;
+}
+
+#filePropertiesTitle, #versionHistoryTitle {
+    color: #333;
+    font-size: 20px;
+}
+
+#viewMoreFileProperties, #viewMoreVersions, #accessValue {
+    color: #2b579a;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.propertyName, .propertyValue, #versionHeader, #documentMetadata {
+    color: #333;
+    font-size: 14px;
+}
+
+.propertyName, .propertyValue, .versionHeaders, .versionNumber, .modifiedDate, .modifiedBy {
+    vertical-align: super;
+}
+
+.propertyName {
+    display: inline-block;
+    width: 115px;
+}
+
+.propertyValue {
+    display: inline-block;
+    width: 235px;
+}
+
+.ellipsis {
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -ms-word-wrap: normal;
+    word-wrap: normal; /* For ellipsis to work on IE 10 */
+}
+
+.toggleFileSection, .toggleVersionSection {
+    cursor: pointer;
+    margin-left: -8px;
+    vertical-align: top;
+}
+
+#metadataVersion {
+    margin-top: 35px;
+}
+
+.viewMoreSection {
+    cursor: pointer;
+    float: right;
+    margin-top: 5px;
+}
+
+.loadingImageContainer, .previewContainer {
+    display: block;
+    position: relative;
+}
+
+    .loadingImageContainer .loadingImage {
+        left: 45%;
+        position: absolute;
+        top: 32%;
+    }
+
+.previewContainer {
+    height: 100%;
+}
+
+.previewImage {
+    left: 42%;
+    position: absolute;
+    top: 318px;
+}
+
+#loadingFileProperties {
+    height: 342px;
+}
+
+#loadingVersion {
+    height: 100px;
+}
+
+#loadingActionBar {
+    height: 130px;
+}
+
+#loadingDocumentPreview {
+    height: 796px;
+}
+
+#previewUnsupportedText {
+    left: 24%;
+    position: absolute;
+    top: 418px;
+}
+
+#documentPreviewNotSupported {
+    border: 2px solid red;
+}
+
+.versionHeaders, .versionNumber, .modifiedDate, .modifiedBy {
+    display: inline-block;
+}
+
+    .versionHeaders:nth-child(1), .versionNumber {
+        width: 50px;
+    }
+
+    .versionHeaders:nth-child(2), .modifiedDate {
+        margin-left: 6px;
+        width: 140px;
+    }
+
+    .versionHeaders:nth-child(3), .modifiedBy {
+        margin-left: 3px;
+        width: 130px;
+    }
+
+    .versionHeaders:nth-child(3) {
+        margin: 0;
+    }
+
+#versionHeader {
+    margin-bottom: 0;
+}
+
+#closeHamburger {
+    position: absolute;
+    z-index: 10;
+}
+
+.buffer {
+    margin-left: -4px;
+}
+
+#viewSharedProperties a {
+    color: #2b579a;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.userIcon {
+    display: none;
+}
+
+.searchBox {
+    margin-right: 20px;
+}
+
+#matterCenterHeader {
+    margin-bottom: 12px;
+    margin-top: 20px;
+}
+
+#matterCenterFooter {
+    bottom: 0;
+}
+
+#checkOutLyncIndicator, #authorLyncIndicator {
+    margin-left: -3px;
+}
+
+    #checkOutLyncIndicator .ms-verticalAlignTop, #authorLyncIndicator .ms-verticalAlignTop, #documentMetadata .ms-verticalAlignTop {
+        display: inline-block;
+    }
+
+#documentLandingMainContainer #matterCenterFooter #footerContainer {
+    width: 1130px;
+    padding: 0 10px;
+}
+
+.errorPopUpHolder {
+    color: #333;
+    font-size: .875em;
+}
+
+.errorPopupBackground, .flyoutPopupBackground, .popupBackground {
+    background-color: #333;
+    height: 1165px;
+    left: 0;
+    opacity: 0.4;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 5;
+}
+
+.errorPopUpContainer {
+    background-color: #fff;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    z-index: 6;
+    width: 300px;
+}
+
+.errorPopUpCenter {
+    max-height: 300px;
+    min-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+    top: 200px;
+}
+
+.errorPopUpMessage {
+    font-size: 20px;
+    width: 300px;
+    margin: auto;
+    margin-top: 90px;
+}
+
+.popUpFloatRight {
+    float: right;
+}
+
+.errorPopUpCloseIcon {
+    cursor: pointer;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+#errorMessage {
+    font-size: 16px;
+    margin-left: 15px;
+    float: left;
+    width: 400px;
+    text-align: left;
+}
+
+#expandCollapse {
+    font-size: 18px;
+    float: left;
+    margin-left: -5px;
+}
+
+.inlineElement {
+    display: inline-block;
+    width: 20px;
+    cursor: pointer;
+    float: left;
+}
+
+#genericMessage {
+    float: left;
+}
+
+#noVersionMessage {
+    width: 300px;
+    margin: auto;
+}
+
+.ms-webpart-zone {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.welcome {
+    padding: 0 !important;
+}
+
+/* Styling to adjust according to query */
+
+@media (min-width: 0) and (max-width: 1200px) {
+    .errorPopupBackground, .flyoutPopupBackground, .popupBackground, .errorPopUpCenter {
+        width: 1200px;
+    }
+}

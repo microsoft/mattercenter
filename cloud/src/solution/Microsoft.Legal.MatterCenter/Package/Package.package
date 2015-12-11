@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="56c63f8a-2e57-47eb-8370-2b5a5e83783e" solutionId="56c63f8a-2e57-47eb-8370-2b5a5e83783e" resetWebServer="false" sharePointProductVersion="15.0" name="Microsoft.Legal.MatterCenter" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="fe5c874f-1438-4ce6-90d3-4b1098427d38" />
+  </features>
+</package>

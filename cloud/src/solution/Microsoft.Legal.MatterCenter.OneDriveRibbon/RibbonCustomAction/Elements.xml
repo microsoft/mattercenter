@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction Id="0b52cc27-d15d-4624-b3c1-14f4a0105c80.RibbonCustomAction"
+                RegistrationType="List"
+                RegistrationId="700"
+                Location="CommandUI.Ribbon"
+                Sequence="10001"
+                Title="Matter Center Action" HostWebDialog="TRUE" HostWebDialogHeight="240" HostWebDialogWidth="600">
+    <CommandUIExtension>
+      <!-- 
+      Update the UI definitions below with the controls and the command actions
+      that you want to enable for the custom action.
+      -->
+      <CommandUIDefinitions>
+           <CommandUIDefinition Location="Ribbon.Documents.Manage.Controls._children">
+             <FlyoutAnchor
+            Id="Ribbon.Flyoutanchor"
+            Sequence="0"
+            Alt="Ribbon.Flyoutanchor.Controls.CPFlyout_ALT"
+            LabelText="Matter Center Action"
+            PopulateDynamically="false"
+            PopulateOnlyOnce="true"
+            TemplateAlias="o1"
+            Image16by16="/_layouts/images/siteicon_16x16.png"
+            Image32by32="/_layouts/15/1033/images/formatmap32x32.png"
+            ToolTipTitle="Matter Center Action"
+            ToolTipDescription="You can only perform these actions on documents from the Matter Center Beta."
+            Image32by32Top="-375"
+            Image32by32Left="-171"
+            >
+            <Menu Id="Ribbon.Flyoutanchor.Menu">
+              <MenuSection Id="Ribbon.Flyoutanchor.Menu.MenuSection" DisplayMode="Menu16">
+                <Controls Id="Ribbon.Flyoutanchor.Menu.MenuSection.Controls">
+                  <Button
+                   Id="Ribbon.Flyoutanchor.Menu.MenuSection.Controls.Button1"
+                   Alt="Matter Center Sync"
+                   Sequence="0"
+                   Command="Matter_Sync"
+                   Image32by32="/_layouts/images/lg_ICEML.gif"
+                   Image16by16="/_layouts/15/1033/images/formatmap16x16.png"
+                   Image16by16Left="-290"
+                   Image16by16Top="-199"
+                   ToolTipTitle="Update Copy"
+                   ToolTipDescription="Click this button to sync Matter Center Beta document."
+                   LabelText="Update Copy"
+                   TemplateAlias="o1" />
+                  <Button
+                   Id="Ribbon.Flyoutanchor.Menu.MenuSection.Controls.Button2"
+                   Alt="Matter Check In"
+                   Sequence="0"
+                   Command="Matter_Check_IN"
+                   Image32by32="/_layouts/images/menudownload.gif"
+                   Image16by16="/_layouts/15/1033/images/formatmap16x16.png"
+                   Image16by16Left="-277"
+                   Image16by16Top="-55"
+                   ToolTipTitle="Matter Check In"
+                   ToolTipDescription="Click this button to check in Matter Center Beta document."
+                   LabelText="Matter Check In"
+                   TemplateAlias="o1"  />
+                  <Button
+                   Id="Ribbon.Flyoutanchor.Menu.MenuSection.Controls.Button3"
+                   Alt="Matter Check Out"
+                   Sequence="0"
+                   Command="Matter_Check_Out"
+                   Image32by32="/_layouts/images/lg_ICEML.gif"
+                   Image16by16="/_layouts/15/1033/images/formatmap16x16.png"
+                   Image16by16Left="-141"
+                   ToolTipTitle="Matter Check Out"
+                   ToolTipDescription="Click this button to check out Matter Center Beta document."
+                   LabelText="Matter Check Out"
+                   TemplateAlias="o1" />
+                  <Button
+                  Id="Ribbon.Flyoutanchor.Menu.MenuSection.Controls.Button4"
+                  Alt="Matter Break Link"
+                  Sequence="0"
+                  Command="Matter_Break_Link"
+                  Image32by32="/_layouts/images/lg_ICEML.gif"
+                  Image16by16="/_layouts/15/1033/images/formatmap16x16.png"
+                  Image16by16Left="-271"
+                  Image16by16Top="-162"
+                  ToolTipTitle="Detach From Matter Center Beta"
+                  ToolTipDescription="Click this button to break link between Matter Center Beta document."
+                  LabelText="Detach From Matter Center Beta"
+                  TemplateAlias="o1" />
+                </Controls>
+              </MenuSection>
+            </Menu>
+          </FlyoutAnchor>
+        </CommandUIDefinition>
+      </CommandUIDefinitions>
+      <CommandUIHandlers>
+        <CommandUIHandler Command="Matter_Sync"  CommandAction="https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=UpdateCopy"
+          
+                          EnabledScript="javascript:function moreThanOneEnabled(){   
+                          
+                            var items = SP.ListOperation.Selection.getSelectedItems();
+                            var ci = CountDictionary(items);     
+                           return (ci > 0);
+                          }                                                                  
+                          moreThanOneEnabled();" >
+        </CommandUIHandler>
+        <CommandUIHandler Command="Matter_Check_IN"  CommandAction="https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=DMSCheckIn"
+        
+                          EnabledScript="javascript:function moreThanOneEnabled(){   
+                            var items = SP.ListOperation.Selection.getSelectedItems();
+                            var ci = CountDictionary(items);     
+                           return (ci > 0);
+                          }
+                          moreThanOneEnabled();" >
+        </CommandUIHandler>
+        <CommandUIHandler Command="Matter_Check_Out"  CommandAction="https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=DMSCheckOut"
+                          EnabledScript="javascript:function moreThanOneEnabled(){   
+                            var items = SP.ListOperation.Selection.getSelectedItems();
+                            var ci = CountDictionary(items);     
+                           return (ci > 0);
+                          }
+                          moreThanOneEnabled();" >
+        </CommandUIHandler>
+        <CommandUIHandler Command="Matter_Break_Link"  CommandAction="https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=DetachFromDMS"
+        
+                          EnabledScript="javascript:function moreThanOneEnabled(){   
+                            var items = SP.ListOperation.Selection.getSelectedItems();
+                            var ci = CountDictionary(items);     
+                           return (ci > 0);
+                          }
+                          moreThanOneEnabled();" >
+        </CommandUIHandler>
+        </CommandUIHandlers>
+    </CommandUIExtension >
+  
+  </CustomAction>
+</Elements>

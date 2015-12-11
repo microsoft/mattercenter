@@ -1,0 +1,295 @@
+﻿body {
+    font: 14px 'Segoe UI', Calibri, 'Times New Roman';
+    color: #333;
+}
+
+.hide {
+    display: none;
+}
+
+.clear {
+    clear: both;
+}
+
+#editpermissionContainer {
+    min-width: 753px;
+    max-width: 765px;
+    padding: 15px 0 20px 20px;
+    overflow-y: auto;
+    position: absolute;
+    left: -20px; /*For adjusting container in SharePoint popup*/
+}
+
+#closeIcon {
+    float: right;
+}
+
+.addUsers {
+    font: 18px 'Segoe UI Semilight', Calibri, 'Times New Roman';
+}
+
+#addMoreLink {
+    font: 12px 'Segoe UI Regular', Calibri, 'Times New Roman';
+    color: #2b579a;
+    float: right;
+    padding: 6px 200px 10px 0;
+}
+
+#addMorePermissions, #closeIcon, .roleInput, .dropdownIcon, .deleteIcon {
+    cursor: pointer;
+}
+
+.gutter {
+    height: 1px;
+    width: 15px;
+}
+
+.entryLabels {
+    font: 14px 'Segoe UI Semibold', Calibri, 'Times New Roman';
+}
+
+.entryLabels, .gutter {
+    float: left;
+}
+
+.mandatory {
+    color: #ec1c24;
+    margin: 0 5px 0 0;
+}
+
+.medium {
+    max-width: 272px;
+    min-width: 272px;
+}
+
+.small {
+    max-width: 200px;
+    min-width: 200px;
+}
+
+#permissionContainer {
+    clear: both;
+}
+
+.inputContent {
+    color: #666;
+    border: 1px solid #c8c8c8;
+    height: 30px;
+    padding: 2px 10px;
+    background-color: #fff;
+    -webkit-text-fill-color: #555;
+}
+
+.roleInput, .usernameInput, .permissionInput {
+    float: left;
+}
+
+.roleInput, .permissionInput {
+    position: relative;
+}
+
+.dropdownIcon {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+}
+
+.assignNewPermission {
+    padding: 7.5px 0; /*For adjusting 15px using padding top and padding bottom*/
+}
+
+.deleteIcon {
+    margin: 0 0 0 10px;
+}
+
+#closeIcon, .dropdownIcon, .deleteIcon {
+    opacity: 0.665;
+}
+
+    #closeIcon:hover, .dropdownIcon:hover, .deleteIcon:hover {
+        opacity: 1;
+    }
+
+:-ms-input-placeholder {
+    color: #666;
+    font-size: 0.875em;
+    font-style: italic;
+}
+
+.ddlRoleAssignList, .ddlPermAssignList {
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+    z-index: 1;
+    line-height: 14pt;
+}
+
+.ddlRoleAssignList, .ddlPermAssignList {
+    max-width: 198px;
+    min-width: 198px;
+    width: 198px; /*Added explicitly for IE*/
+    position: absolute;
+    clear: both;
+    max-height: 100px;
+    overflow-y: scroll;
+}
+
+.ddListOnHover {
+    background-color: #eaeaea;
+    color: #666;
+}
+
+#ddlClient, #popUpPG, .ddlClientListItem, .popUpOptions, .roleValue, .permValue, .assignRole, .assignPermission {
+    cursor: pointer;
+}
+
+#ddlClient, #popUpPG, .assignRoleField, .assignPermField {
+    background-color: #fff;
+    padding: 0 10px;
+}
+
+.ddlClientListItem, .popUpOptions, .roleValue, .permValue {
+    padding: 2px 10px 3px;
+    font-size: .875em;
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    border-radius: 0 !important;
+}
+
+.usernameInput.ui-autocomplete-loading {
+    background-image: url(../Images/loadingcirclests16.gif);
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+.loadingImage {
+    text-align: center;
+    font: 36px "Segoe UI", Calibri, "Times New Roman";
+    font-weight: 300;
+    color: #328ed1;
+    margin-left: 33%;
+    margin-top: 4%;
+}
+
+.loadingIcon {
+    margin-top: 10px;
+    float: left;
+}
+
+.loadingText {
+    padding-left: 25px;
+    float: left;
+}
+
+.save {
+    margin-top: 200px;
+}
+
+.button {
+    background-color: #0072c6;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Segoe UI', 'Calibri', 'Times New Roman';
+    font-size: 0.875em;
+    font-weight: 600;
+    height: 30px;
+    line-height: 1.16em;
+    min-height: 30px;
+    width: 80px;
+    float: right;
+    margin-right: 10px;
+}
+
+.hide {
+    display: none;
+}
+
+.errorPopUp {
+    height: 50px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 100;
+}
+
+.errTriangle {
+    border: 12px solid transparent;
+    border-top: 12px solid red;
+    height: 0;
+    left: 45px;
+    position: absolute;
+    top: 122%;
+    top: calc(50% - -36px);
+    width: 0;
+}
+
+.errTriangleBorder {
+    border: 12px solid transparent;
+    border-top: 12px solid #fff;
+    height: 0;
+    left: 45px;
+    position: absolute;
+    top: 120%;
+    top: calc(50% - -35px);
+    width: 0;
+}
+
+.errText {
+    background-color: #fff;
+    border: 1px solid red;
+    color: #333;
+    font-size: .75em;
+    min-height: 50px;
+    padding: 10px 10px 0;
+    text-align: left;
+    width: 241px;
+}
+
+.errClose {
+    color: #fff;
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+}
+
+.loading {
+    margin-left: 90px;
+    position: absolute;
+    clear: both;
+    float: right;
+}
+
+.footer {
+    clear: both;
+    margin: 0 160px 20px 0;
+    float: right;
+}
+
+.popupWait {
+    background-color: #000;
+    height: 100%;
+    opacity: 0.4;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+}
+
+
+.button[disabled] {
+    background-color: #ECECEC;
+    color: #666;
+}
+::-moz-svg-foreign-content, .ddlRoleAssignList, .ddlPermAssignList { /*Safari*/
+    -webkit-margin-start: 1%;
+}
+::-moz-svg-foreign-content, #addMoreLink{
+    padding:6px 188px 10px 0;
+}

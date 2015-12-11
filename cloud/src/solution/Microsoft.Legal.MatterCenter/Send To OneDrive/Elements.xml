@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction Id="6de78a5b-e296-487a-aea7-47eaf5d65ea3.Send To OneDrive"
+                RegistrationType="ContentType"
+                RegistrationId="0x01010003B664B5AF4E24438B8B98F468818315"
+                Location="EditControlBlock"
+                Sequence="10001"
+                Title="Send To OneDrive" HostWebDialog="TRUE" HostWebDialogHeight="240" HostWebDialogWidth="600">
+    <!-- 
+    Update the Url below to the page you want the custom action to use.
+    Start the URL with the token ~remoteAppUrl if the page is in the
+    associated web project, use ~appWebUrl if page is in the app project.
+    -->
+    <UrlAction Url="[Enter azure website URL for UI site, e.g. https://[SITENAME].azurewebsites.net/pages/SendToOneDrive.aspx?SPListItemId={ItemId}&amp;SPListId={ListId}]" />
+  </CustomAction>
+</Elements>

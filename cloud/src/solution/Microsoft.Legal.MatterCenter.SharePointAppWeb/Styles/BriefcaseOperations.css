@@ -1,0 +1,149 @@
+﻿body {
+    font-family: 'Segoe UI';
+    overflow-x: hidden;
+}
+
+.UnSupportedList {
+    text-align: left;
+}
+
+
+.BigMessage, .Question {
+    width: 420px;
+}
+
+.BigMessage {
+    font-weight: 300;
+}
+
+.Container {
+    color: #666;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 30px 0 0 90px;
+}
+
+.Question {
+    margin-top: 30px;
+}
+
+.Button {
+    background-color: #FFF;
+    border: solid 1px #ababab;
+    color: #939393;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    margin-right: 10px;
+    padding: 7px;
+    text-align: center;
+    width: 50px;
+}
+
+    .Button:hover {
+        background-color: #e6f2fa;
+    }
+
+
+.ButtonContainer, .NotSupportedButton {
+    height: 40px;
+    margin: 20px 0 0;
+}
+
+.NotSupportedButton {
+    margin-left: 40%;
+    margin-top: 20px;
+}
+
+.loadingImage {
+    height: 37px;
+    width: 37px;
+    position: absolute;
+    margin-top: 10px;
+}
+
+.CheckInContainer {
+    display: table;
+    padding: 5px;
+    width: 700px;
+}
+
+.CheckInRow {
+    display: table-row;
+    margin: 30px 0 0;
+}
+
+.CheckInColumn {
+    color: #444;
+    display: table-cell;
+    font-size: 13px;
+    padding: 10px;
+}
+
+.FirstColumn {
+    width: 200px;
+}
+
+.SecondColumn {
+    width: 375px;
+}
+
+.CheckInButtonContainer {
+    position: absolute;
+    right: 177px;
+}
+
+.RowHeaders {
+    color: #262626;
+    display: table-cell;
+    font-size: 14px;
+    height: 30px;
+    margin-top: 30px;
+    padding: 10px 10px 0;
+    vertical-align: bottom;
+}
+
+#CheckInComments {
+    font-family: "Segoe UI";
+    margin-left: 10px;
+}
+
+.CheckInOptions, .RetainOptions, .ConvenienceOptions {
+    margin-top: 5px;
+}
+
+.LoadingBigMessage {
+    font-size: 32px;
+    text-align: center;
+}
+
+.LoadingQuestion {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#ConvenienceCopy {
+    display: table-cell;
+    width: 300px;
+}
+
+.AdditionalMargin {
+    margin: 20px 0 0 135px;
+}
+
+
+.Button, .FirstColumn, .SecondColumn, .CheckInOptions, .RetainOptions, .ConvenienceOptions, #CheckInComments, #ConvenienceCopy, .CheckInSecondCloumnHeader, .MinorVersion, .MajorVersion, .OverwriteVersion, .CheckInSecondCloumnHeader, .RetainValues, .confirmConvenienceValues, .commentsDiv, #RetainOptionYes, .ConvenienceCopyCloumnHeader {
+    float: left;
+}
+
+.MinorVersion, .MajorVersion, .OverwriteVersion, .RetainValues, .confirmConvenienceValues {
+    margin-top: 5px;
+}
+
+.VersionDiv, .Container, .ButtonContainer, .NotSupportedButton, .LoadingImage {
+    display: none;
+}
+
+#RetainOptionsTrue, #confirmConvenienceTrue, #ConvenienceCopy, #CheckInComments, .RowHeaders, .CheckInOptions {
+    clear: both;
+}
