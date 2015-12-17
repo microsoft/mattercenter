@@ -48,7 +48,7 @@ Have feedback? Notice a bug? Submit through the Matter Center page on [User Voic
 #Contribution
 This project was originated by the Microsoft Matter Center Engineering team. We wanted to build a solution to help our own legal professionals improve their productivity. Based on our conversations with many people in the industry, we decided to open source the project so others can use and enhance this solution.
  
-We’re looking forward to mature the project with your help.
+We look forward to maturing the project with your help.
 
 ### Priorities
 We have been working on this code for some time and know its many limitations. We created an initial six (6) months list of [priorities](https://github.com/Microsoft/mattercenter/blob/master/PRIORITIES.md) that include architectural changes we’d love your help with. Together, we are excited to see these priorities realized and to continue adding to this list. 
