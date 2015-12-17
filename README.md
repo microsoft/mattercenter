@@ -83,7 +83,7 @@ Additional committers will be added later based on interest and deep technical i
 # Pull Request Checklist
 Pull Requests need to adhere to the checklist below. The committers may ask you to make changes before accepting your changes.
 *	Coding guidelines
-Please follow the project [coding guidelines](https://github.com/Microsoft/mattercenter/blob/sunnymistry-codingguidelines/codingguidelines.md). 
+Please follow the project [coding guidelines](https://github.com/Microsoft/mattercenter/tree/master/cloud/docs/Matter Center Coding guidelines.docx). 
 *	Third party libraries 
 External libraries for the project are located in folders:
 ["\Main\Microsoft.Legal.MatterCenter\packages"] (https://github.com/Microsoft/mattercenter/tree/master/cloud/src/solution/packages) - this folder contains main third party libraries used in this project. Some libraries are licensed in a way that prevents us from shipping them. Your pull request may be declined should that happen. If your contribution changes require adding or modifying a new third party library, please contact the mailing list first and get approval from the committers. 
