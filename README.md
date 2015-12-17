@@ -86,7 +86,7 @@ Pull Requests need to adhere to the checklist below. The committers may ask you 
 Please follow the project [coding guidelines](https://github.com/Microsoft/mattercenter/tree/master/cloud/docs/Matter Center Coding guidelines.docx). 
 *	Third party libraries 
 External libraries for the project are located in folders:
-["\Main\Microsoft.Legal.MatterCenter\packages"] (https://github.com/Microsoft/mattercenter/tree/master/cloud/src/solution/packages) - this folder contains main third party libraries used in this project. Some libraries are licensed in a way that prevents us from shipping them. Your pull request may be declined should that happen. If your contribution changes require adding or modifying a new third party library, please contact the mailing list first and get approval from the committers. 
+["\Main\Microsoft.Legal.MatterCenter\packages"] (https://github.com/Microsoft/mattercenter/tree/master/tree/master/cloud/src/solution/packages) - this folder contains main third party libraries used in this project. Some libraries are licensed in a way that prevents us from shipping them. Your pull request may be declined should that happen. If your contribution changes require adding or modifying a new third party library, please contact the mailing list first and get approval from the committers. 
 *	Security and privacy review requirements
 We believe security and privacy are extremely important. Therefore, please place a lot of attention on this area. We will be asking members of the Microsoft IT security team to review the code to provide feedback on common security and privacy issues. 
 *	Licensing requirements
