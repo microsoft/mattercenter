@@ -81,21 +81,26 @@ There are currently three (3) [committers](https://github.com/Microsoft/matterce
 Additional committers will be added later based on interest and deep technical involvement with the project.
 
 # Pull Request Checklist
-Pull Requests need to adhere to the checklist below. The committers may ask you to make changes before accepting your changes.
-*	Coding guidelines
-Please follow the project [coding guidelines](https://github.com/Microsoft/mattercenter/blob/master/tree/master/cloud/docs/Matter Center Coding guidelines.docx). 
-*	Third party libraries 
-External libraries for the project are located in folders:
+Pull Requests need to adhere to the checklist below. The committers may ask you to make changes before accepting your changes
+* <b>Coding guidelines</b>
+
+  Please follow the project [coding guidelines](https://github.com/Microsoft/mattercenter/blob/master/tree/master/cloud/docs/Matter Center Coding guidelines.docx). 
+*	<b>Third party libraries</b>
+
+  External libraries for the project are located in folders:
 ["\Main\Microsoft.Legal.MatterCenter\packages"] (https://github.com/Microsoft/mattercenter/tree/master/tree/master/cloud/src/solution/packages) - this folder contains main third party libraries used in this project. Some libraries are licensed in a way that prevents us from shipping them. Your pull request may be declined should that happen. If your contribution changes require adding or modifying a new third party library, please contact the mailing list first and get approval from the committers. 
-*	Security and privacy review requirements
-We believe security and privacy are extremely important. Therefore, please place a lot of attention on this area. We will be asking members of the Microsoft IT security team to review the code to provide feedback on common security and privacy issues. 
-*	Licensing requirements
-The code you submit should be licensed under the MIT license as is already done in the rest of the repo. If you use code that you did not author (like from Stack Overflow), you need to ensure correct attributions and license statements are made for those code blocks. Please work with the committers or the mailing list if you have any questions. 
-*	Description of the changes
-Please include detailed descriptions of the changes:
- *	Purpose of the change(s)
- *	Description of functionality that was changed; and 
- *	Bugs and/or issues detail, if the pull request fixes it. 
+*	<b>Security and privacy review requirements</b>
+
+ We believe security and privacy are extremely important. Therefore, please place a lot of attention on this area. We will be asking members of the Microsoft IT security team to review the code to provide feedback on common security and privacy issues. 
+*	<b>Licensing requirements</b>
+
+ The code you submit should be licensed under the MIT license as is already done in the rest of the repo. If you use code that you did not author (like from Stack Overflow), you need to ensure correct attributions and license statements are made for those code blocks. Please work with the committers or the mailing list if you have any questions. 
+*	<b>Description of the changes</b>
+
+ Please include detailed descriptions of the changes:
+  *	Purpose of the change(s)
+  *	Description of functionality that was changed; and 
+  *	Bugs and/or issues detail, if the pull request fixes it. 
  
 We’re looking forward to amazing contributions!
 
