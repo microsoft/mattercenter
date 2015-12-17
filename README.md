@@ -36,8 +36,8 @@ Please note the following software must be installed before you can open and dep
 
 Please find links to our additional resources:
 
- 1.	[Matter Center Technical Specifications and System Architecture] (https://github.com/Microsoft/mattercenter/tree/master/cloud/docs/Matter%20Center%20Technical%20Specification.docx)
- 2.	[Matter Center Build and Deployment Guide (+ prerequisites)] (https://github.com/Microsoft/mattercenter/tree/master/cloud/docs/Matter%20Center%20Build%20and%20Deployment%20Guide.docx)
+ 1.	[Matter Center Technical Specifications and System Architecture] (https://github.com/Microsoft/mattercenter/blob/master/tree/master/cloud/docs/Matter%20Center%20Technical%20Specification.docx)
+ 2.	[Matter Center Build and Deployment Guide (+ prerequisites)] (https://github.com/Microsoft/mattercenter/blob/master/tree/master/cloud/docs/Matter%20Center%20Build%20and%20Deployment%20Guide.docx)
 
 
 #Questions, Issues and Feeback
@@ -83,7 +83,7 @@ Additional committers will be added later based on interest and deep technical i
 # Pull Request Checklist
 Pull Requests need to adhere to the checklist below. The committers may ask you to make changes before accepting your changes.
 *	Coding guidelines
-Please follow the project [coding guidelines](https://github.com/Microsoft/mattercenter/tree/master/cloud/docs/Matter Center Coding guidelines.docx). 
+Please follow the project [coding guidelines](https://github.com/Microsoft/mattercenter/blob/master/tree/master/cloud/docs/Matter Center Coding guidelines.docx). 
 *	Third party libraries 
 External libraries for the project are located in folders:
 ["\Main\Microsoft.Legal.MatterCenter\packages"] (https://github.com/Microsoft/mattercenter/tree/master/tree/master/cloud/src/solution/packages) - this folder contains main third party libraries used in this project. Some libraries are licensed in a way that prevents us from shipping them. Your pull request may be declined should that happen. If your contribution changes require adding or modifying a new third party library, please contact the mailing list first and get approval from the committers. 
