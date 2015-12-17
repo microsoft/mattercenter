@@ -1,6 +1,6 @@
+# Matter Center for Office 365
 Microsoft’s Corporate, External, and Legal Affairs (CELA) group, in partnership with the Office extensibility team, developed Matter Center for Office 365 -- a document management and collaboration solution built using the Office app development model, Azure and Sharepoint.
 
-# Matter Center for Office 365
 Learn more about [Matter Center for Office 365](http://www.microsoft.com/en-us/legal/productivity/mattercenter.aspx). 
 
 # Intro
