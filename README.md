@@ -3,9 +3,9 @@ Matter Center is a solution that helps legal professionals improve productivity 
 
 #Intro
 
-#Status
+#Roadmap
 
-#Installation
+#Installation and build
 * Prerequisites
   * Technical Specifications
 * Steps
@@ -20,12 +20,13 @@ Matter Center is a solution that helps legal professionals improve productivity 
 * Wiki?
 * User Voice
 
+#Questions, Issues and Feedback 
+
 #Contribution
 * Forks/Commits
 * Extending and deep integrations
 
-#Help and Support
 
-#Acknowledgements
+
 
 #License
