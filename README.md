@@ -1,10 +1,10 @@
-Microsoft’s Corporate External and Legal Affairs (CELA) group, in partnership with the Office extensibility team, developed Matter Center for Office 365 -- a document management and collaboration solution built using the office app development model, Azure and Sharepoint.
+Microsoft’s Corporate, External, and Legal Affairs (CELA) group, in partnership with the Office extensibility team, developed Matter Center for Office 365 -- a document management and collaboration solution built using the office app development model, Azure and Sharepoint.
 
 # Matter Center for Office 365
 Learn more about [Matter Center for Office 365](http://www.microsoft.com/en-us/legal/productivity/mattercenter.aspx). 
 
 # Intro
-Microsoft’s Corporate External and Legal Affairs (CELA) group, in partnership with the Office extensibility team, developed Matter Center for Office 365 -- a document management and collaboration solution built using the office app development model, Azure and Sharepoint. It takes advantage of the enterprise content management capabilities of the SharePoint platform, and offers many additional benefits through Add-ins in Outlook and Office (e.g., Word, PowerPoint). This allows the solution to quickly create, find, and store documents on predefined projects or matter sites. Matter Center takes advantage of the enterprise-grade cloud platform of Office 365 and Azure, so these productivity gains are realized while also reducing risk and cost. 
+Microsoft’s Corporate, External, and Legal Affairs (CELA) group, in partnership with the Office extensibility team, developed Matter Center for Office 365 -- a document management and collaboration solution built using the office app development model, Azure and Sharepoint. It takes advantage of the enterprise content management capabilities of the SharePoint platform, and offers many additional benefits through Add-ins in Outlook and Office (e.g., Word, PowerPoint). This allows the solution to quickly create, find, and store documents on predefined projects or matter sites. Matter Center takes advantage of the enterprise-grade cloud platform of Office 365 and Azure, so these productivity gains are realized while also reducing risk and cost. 
 
 # Roadmap
 Where is Matter Center going in the future? 
