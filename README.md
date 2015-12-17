@@ -1,6 +1,6 @@
 Microsoft’s Corporate External and Legal Affairs (CELA) group, in partnership with the Office extensibility team, developed Matter Center for Office 365 -- a document management and collaboration solution built using the office app development model, Azure and Sharepoint.
 
-# mattercenter
+# Matter Center for Office 365
 Learn more about [Matter Center for Office 365](http://www.microsoft.com/en-us/legal/productivity/mattercenter.aspx). 
 
 # Intro
@@ -51,7 +51,7 @@ This project was originated by the Microsoft Matter Center Engineering team. We 
 We’re looking forward to mature the project with your help.
 
 ### Priorities
-We have been working on this code for some time and know its many limitations. We created an initial six (6) months list of [priorities](https://github.com/Microsoft/mattercenter/blob/master/priorities.md) that include architectural changes we’d love your help with. Together, we are excited to see these priorities realized and to continue adding to this list. 
+We have been working on this code for some time and know its many limitations. We created an initial six (6) months list of [priorities](https://github.com/Microsoft/mattercenter/blob/master/PRIORITIES.md) that include architectural changes we’d love your help with. Together, we are excited to see these priorities realized and to continue adding to this list. 
 
 On December 17, 2015, we open sourced the project. We are thrilled to talk with as many contributors as possible to provide information and context:
 
@@ -59,7 +59,7 @@ On December 17, 2015, we open sourced the project. We are thrilled to talk with 
 
 *	Please try to make your pull request(s) as small as possible and be sure to keep your change close to master to avoid merge conflicts.
 
-For features, substantial code contributions, or interface changes, we would appreciate if you look first at the list of [priorities](https://github.com/Microsoft/mattercenter/blob/master/priorities.md) and announce your intention to work on a specific subject via the mailing list. This will allow for broader visibility, and maybe help find other people who already are working on that particular subject. 
+For features, substantial code contributions, or interface changes, we would appreciate if you look first at the list of [priorities](https://github.com/Microsoft/mattercenter/blob/master/PRIORITIES.md) and announce your intention to work on a specific subject via the mailing list. This will allow for broader visibility, and maybe help find other people who already are working on that particular subject. 
 
 We would prefer initial work to be based on the priority list. Of course, if the priority list does not contain a specific subject you think is important, please help us identify new subjects and see how they fit in with the other priorities. There is some architectural work and refactoring that needs to happen first (as described in the priorities list) that will enable other work. Therefore, please discuss your suggestions on the mailing list to ensure it is an appropriate addition at this time. The committers will prioritize the list.
  
