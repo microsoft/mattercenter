@@ -40,7 +40,7 @@ Please find links to our additional resources:
  2.	[Matter Center Build and Deployment Guide (+ prerequisites)] (https://github.com/Microsoft/mattercenter/blob/master/tree/master/cloud/docs/Matter%20Center%20Build%20and%20Deployment%20Guide.docx)
 
 
-#Questions, Issues and Feeback
+#Questions, Issues and Feedback
 Having trouble with Matter Center? Check-out [Issues] (https://github.com/Microsoft/mattercenter/issues) and if you don't see your issue, please open an [issue in GitHub](https://github.com/Microsoft/mattercenter/issues/new).
 
 Have feedback? Notice a bug? Submit through the Matter Center page on [User Voice](http://mattercenter.uservoice.com).
