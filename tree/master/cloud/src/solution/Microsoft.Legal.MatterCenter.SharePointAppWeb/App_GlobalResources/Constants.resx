@@ -306,11 +306,11 @@
     <comment>Message to be displayed when there are no current uploads</comment>
   </data>
   <data name="Image_Document_Icon" xml:space="preserve">
-    <value>[Enter path of icon to display as per document selected e.g. https://www.siteicons.com/docicon.gif]</value>
+    <value>[Enter path of icon to display as per document selected e.g. https://[TENANTNAME].sharepoint.com/_layouts/15/images/ic{0}.gif]</value>
     <comment>This is icon to be displayed according to the document selected</comment>
   </data>
   <data name="Image_General_Document" xml:space="preserve">
-    <value>[Enter path of icon to display for general document e.g. https://www.siteicons.com/generaldoc.gif]</value>
+    <value>[Enter path of icon to display for general document e.g. https://[TENANTNAME].sharepoint.com/_layouts/15/images/generaldocument.png]</value>
     <comment>Path of general document image on lcadms site</comment>
   </data>
   <data name="Matter_Client_Custom_Properties_Id" xml:space="preserve">
