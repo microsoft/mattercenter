@@ -45,7 +45,7 @@ param
         $OfficeSolutionList = @("Microsoft.Legal.MatterCenter")
 
         #Flag to specify the friendly name for copied files
-        $FriendlyName = @("Matter Center Beta")
+        $FriendlyName = @("Matter Center")
             
         Foreach ($File in (dir $FolderPath))
         {
