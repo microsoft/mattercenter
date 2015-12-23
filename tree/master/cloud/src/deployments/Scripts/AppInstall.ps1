@@ -43,7 +43,7 @@ param
         $OfficeSolutionList = @("Microsoft.Legal.MatterCenter")
 
         #Flag to specify the friendly name for copied files
-        $FriendlyName = @("Matter Center Beta")
+        $FriendlyName = @("Matter Center")
             
         Foreach ($File in (dir $FolderPath))
         {
@@ -377,7 +377,7 @@ if($ExcelValues.length -le 0)
 }
 $webUrl = $ExcelValues[0]
 $adminUrl = $ExcelValues[1]
-$AppName = @("Matter Center Beta")
+$AppName = @("Matter Center")
 $AppPkgName = @("Microsoft.Legal.MatterCenter.app")
 
 #On Premise Variables
