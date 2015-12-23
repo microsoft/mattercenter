@@ -1,0 +1,189 @@
+<MappingRoot ServiceApplication="Search Service Application">
+  <ManagedProperties>
+    <ManagedProperty Type="1" Name="MatterCenterPracticeGroup" Alias="MCPracticeGroup">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="PracticeGroup" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="MatterCenterAreaOfLaw" Alias="MCAreaofLaw">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="AreaOfLaw" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString09" Alias="MCSubAreaofLaw">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="SubAreaOfLaw" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="MatterCenterIsMatter">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="IsMatter" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString05" Alias="MCClient">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ClientName" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString08" Alias="MCResponsibleAttorney">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ResponsibleAttorney" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString07" Alias="MatterID">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="MatterID" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString06" Alias="MatterClientID">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ClientID" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="MatterCenterTeamMembers" Alias="MCTeamMembers">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="TeamMembers" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString10">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_SiteName" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString11" Alias="MCMatterName">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="MatterName" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="MatterIdOWSTEXT">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_Matter_Id" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString13">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_Matter_Name" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="ClientIdOWSTEXT" Alias="ClientID">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_Client_ID" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="ClientNameOWSTEXT">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_Client_Name" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableDate01" Alias="MCOpenDate">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="OpenDate" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="MatterCenterBlockedUploadUsers" Alias="MCBlockedUploadUsers">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="BlockedUploadUsers" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="DMSFROMOWSTEXT" Alias="From">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_DMS_From" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString20" Alias="To">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_DMS_To" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString21" Alias="Cc">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_DMS_Cc" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString22" Alias="Attachments">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_DMS_Attachments" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString23" Alias="Subject">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_DMS_Subject" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="DMSFromMailBoxOWSTEXT" Alias="FromMailbox">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_DMS_From_MailBox" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="DMSReceivedDateOWSTEXT" Alias="MailDate">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_DMS_ReceivedDate" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="DMSMailImportanceOWSTEXT" Alias="Importance">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_q_TEXT_DMS_Mail_Importance" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="SensitivityOWSTEXT" Alias="Sensitivity">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_q_TEXT_Sensitivity" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="EmailCategoriesOWSTEXT" Alias="Categories">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_q_TEXT_EmailCategories" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="EmailSentDateOWSTEXT" Alias="SentDate">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_q_TEXT_EmailSentDate" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="ConversationIdOWSTEXT" Alias="ConversationId">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_q_TEXT_ConversationId" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="ConversationTopicOWSTEXT" Alias="ConversationTopic">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_q_TEXT_ConversationTopic" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="HasAttachmentsOWSTEXT" Alias="HasAttachments">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_q_TEXT_HasAttachments" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString03" Alias="MCDocumentVersion">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows__UIVersionString" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString04" Alias="MCCheckedOutTo">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_CheckoutUser" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="MatterCenterBlockedUsers" Alias="MCBlockedUsers">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="BlockedUsers" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString15" Alias="MCDocumentClient">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_Client_Name" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString14" Alias="ClientID">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_Client_ID" />
+      </CrawlProperties>
+    </ManagedProperty>
+    <ManagedProperty Type="1" Name="RefinableString12">
+      <CrawlProperties>
+        <CrawlProperty Category="SharePoint" Name="ows_Matter_Id" />
+      </CrawlProperties>
+    </ManagedProperty>
+  </ManagedProperties>
+</MappingRoot>

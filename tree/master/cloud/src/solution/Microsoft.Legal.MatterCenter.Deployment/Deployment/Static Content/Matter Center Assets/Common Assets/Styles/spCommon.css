@@ -1,0 +1,155 @@
+﻿/* Header section */
+#matterCenterHeader {
+    margin-top: 8px;
+    width: auto;
+    height: 60px;
+    background-color: #0072c6;
+    min-width: 1150px;
+}
+
+    #matterCenterHeader a, #matterInfo a, #taskPane a, #calendarPane a {
+        text-decoration: none;
+    }
+
+#menu {
+    float: left;
+    height: 60px;
+    width: 60px;
+    cursor: pointer;
+}
+
+.searchZone {
+    height: 45px;
+}
+
+#mcIcon {
+    float: left;
+    margin-left: 20px;
+    height: 45px;
+    width: 45px;
+    margin-top: 10px;
+}
+
+.searchIcon {
+    float: right;
+    padding: 2px 3px 0 0;
+    cursor: pointer;
+}
+
+
+.iconText {
+    float: left;
+    height: 45px;
+    margin-top: 7px;
+    margin-left: 5px;
+}
+
+.mainText {
+    font: 19px "Segoe UI";
+    color: #fff;
+    height: 28px;
+}
+
+.subText {
+    font: 13px "Segoe UI";
+    color: #fff;
+    height: 15px;
+}
+
+.searchBox {
+    float: right;
+    margin: 15px 0 0 0;
+    padding-bottom: 3px;
+    background-color: #fff;
+    width: 400px;
+    height: 25px;
+    border: 1px solid #c8c8c8;
+}
+
+
+#searchText {
+    font: 14px "Segoe UI";
+    font-style: italic;
+    width: 360px;
+    border: none;
+    height: 20px;
+    margin-top: 2px;
+    padding-left: 6px;
+    text-indent: 4px;
+    color: #666;
+}
+
+.closeIcon {
+    position: absolute;
+    height: 65px;
+    width: 65px;
+    z-index: 101;
+    top: 20px;
+    cursor: pointer;
+}
+
+.menuFlyout {
+    padding: 10px;
+    position: absolute;
+    background-color: #fff;
+    height: 150px;
+    width: 1130px;
+    z-index: 101;
+    top: 80px;
+    display: none;
+}
+
+.menuFlyoutColumn {
+    float: left;
+    height: 200px;
+    width: 200px;
+}
+
+.flyoutColumnData {
+    margin: 12px 10px 17px 8px;
+    font: 22px "Segoe UI Semi Light", "Segoe UI";
+    color: #2b579a !important;
+    display: block;
+    font-weight: 400;
+}
+
+/* Footer section */
+#matterCenterFooter {
+    height: 110px;
+    background-color: #f5f5f5;
+    min-width: 1150px;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: right;
+}
+
+.footerLink {
+    height: 30px;
+    min-width: 600px;
+}
+
+    .footerLink span {
+        color: #666;
+        font: 16px "Segoe UI";
+    }
+
+    .footerLink .linkText:hover, .footerLink .linkText:visited {
+        text-decoration: none;
+    }
+
+.linkText {
+    margin: 0 10px;
+    font: 16px "Segoe UI";
+    color: #2b579a;
+}
+
+.footerLogo {
+    margin-bottom: 30px;
+}
+
+#footerContainer {
+    width: 1150px;
+    margin: auto;
+    margin-top: 20px;
+}

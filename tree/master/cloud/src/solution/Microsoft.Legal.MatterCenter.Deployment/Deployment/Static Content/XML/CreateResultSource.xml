@@ -1,0 +1,80 @@
+<SearchConfigurationSettings xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Portability">
+  <SearchQueryConfigurationSettings>
+    <SearchQueryConfigurationSettings>
+      <BestBets xmlns:d4p1="http://www.microsoft.com/sharepoint/search/KnownTypes/2008/08" />
+      <DefaultSourceId>00000000-0000-0000-0000-000000000000</DefaultSourceId>
+      <DefaultSourceIdSet>true</DefaultSourceIdSet>
+      <DeployToParent>false</DeployToParent>
+      <DisableInheritanceOnImport>false</DisableInheritanceOnImport>
+      <QueryRuleGroups xmlns:d4p1="http://www.microsoft.com/sharepoint/search/KnownTypes/2008/08" />
+      <QueryRules xmlns:d4p1="http://www.microsoft.com/sharepoint/search/KnownTypes/2008/08" />
+      <ResultTypes xmlns:d4p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration" />
+      <Sources xmlns:d4p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration.Query">
+        <d4p1:Source>
+          <d4p1:Active>true</d4p1:Active>
+          <d4p1:AuthInfo xmlns:d6p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration" i:nil="true" />
+          <d4p1:BuiltIn>false</d4p1:BuiltIn>
+          <d4p1:ConnectionTimeout>15000</d4p1:ConnectionTimeout>
+          <d4p1:ConnectionUrlTemplate />
+          <d4p1:CreatedDate>2015-06-16T07:17:24.26</d4p1:CreatedDate>
+          <d4p1:Description>Result source contain search scope for matter center specific site collections</d4p1:Description>
+          <d4p1:HasPermissionToReadAuthInfo>true</d4p1:HasPermissionToReadAuthInfo>
+          <d4p1:Id>befae6bc-7529-4cda-8316-a3a914339b1a</d4p1:Id>
+          <d4p1:IndexOffset>0</d4p1:IndexOffset>
+          <d4p1:LastModifiedDate>2015-06-16T07:17:24.26</d4p1:LastModifiedDate>
+          <d4p1:MaximumResponseLength>64</d4p1:MaximumResponseLength>
+          <d4p1:Name>Matter Center</d4p1:Name>
+          <d4p1:Owner xmlns:d6p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+            <d6p1:DatabaseId>00000000-0000-0000-0000-000000000000</d6p1:DatabaseId>
+            <d6p1:DisableInheritance>false</d6p1:DisableInheritance>
+            <d6p1:SPFarmId>baa1b08f-cbca-4af8-95fe-67ba9526f9b6</d6p1:SPFarmId>
+            <d6p1:SPSiteId>00000000-0000-0000-0000-000000000000</d6p1:SPSiteId>
+            <d6p1:SPSiteSubscriptionId>ce4385da-1e54-410d-87f7-223743a46183</d6p1:SPSiteSubscriptionId>
+            <d6p1:SPWebId>00000000-0000-0000-0000-000000000000</d6p1:SPWebId>
+          </d4p1:Owner>
+          <d4p1:ProviderId>fa947043-6046-4f97-9714-40d4c113963d</d4p1:ProviderId>
+          <d4p1:QueryTransform xmlns:d6p1="http://www.microsoft.com/sharepoint/search/KnownTypes/2008/08">
+            <d6p1:Id>caa91b43-e635-422b-93dd-8d2508dca033</d6p1:Id>
+            <d6p1:IsSystem>false</d6p1:IsSystem>
+            <d6p1:OverridePropertiesForSeralization xmlns:d7p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+            <d6p1:OwnerId>26709d69-9855-4603-a752-7ab1422f37b8</d6p1:OwnerId>
+            <d6p1:ParentId>befae6bc-7529-4cda-8316-a3a914339b1a</d6p1:ParentId>
+            <d6p1:ParentType>Source</d6p1:ParentType>
+            <d6p1:QueryPropertyExpressions>
+              <d6p1:MaxSize>2147483647</d6p1:MaxSize>
+              <d6p1:OrderedItems />
+            </d6p1:QueryPropertyExpressions>
+            <d6p1:_IsReadOnly>true</d6p1:_IsReadOnly>
+            <d6p1:_QueryTemplate>{searchTerms} AND ( path: "[Enter path of site collection, e.g. https://mytenant.sharepoint.com/sites/sitecollectionone]" OR path: "[Enter path of site collection, e.g. https://mytenant.sharepoint.com/sites/sitecollectiontwo]"  )</d6p1:_QueryTemplate>
+            <d6p1:_SourceId i:nil="true" />
+          </d4p1:QueryTransform>
+        </d4p1:Source>
+      </Sources>
+      <UserSegments xmlns:d4p1="http://www.microsoft.com/sharepoint/search/KnownTypes/2008/08" />
+    </SearchQueryConfigurationSettings>
+  </SearchQueryConfigurationSettings>
+  <SearchRankingModelConfigurationSettings>
+    <RankingModels xmlns:d3p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  </SearchRankingModelConfigurationSettings>
+  <SearchSchemaConfigurationSettings>
+    <Aliases xmlns:d3p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+      <d3p1:LastItemName i:nil="true" />
+      <d3p1:dictionary xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </Aliases>
+    <CategoriesAndCrawledProperties xmlns:d3p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    <CrawledProperties xmlns:d3p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration" i:nil="true" />
+    <ManagedProperties xmlns:d3p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+      <d3p1:LastItemName i:nil="true" />
+      <d3p1:dictionary xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <d3p1:TotalCount>0</d3p1:TotalCount>
+    </ManagedProperties>
+    <Mappings xmlns:d3p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+      <d3p1:LastItemName i:nil="true" />
+      <d3p1:dictionary xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </Mappings>
+    <Overrides xmlns:d3p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+      <d3p1:LastItemName i:nil="true" />
+      <d3p1:dictionary xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </Overrides>
+  </SearchSchemaConfigurationSettings>
+</SearchConfigurationSettings>

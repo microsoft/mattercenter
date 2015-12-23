@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>6CAFC0C6-A428-4d30-A9F9-700E829FEA51</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MyApplication</RootNamespace>
+    <AssemblyName>MyApplication</AssemblyName>
+    <Name>Microsoft.Legal.Deployment</Name>
+    <ProjectHome />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Deployment\Scripts\" />
+    <Folder Include="Deployment\Scripts\Helper Utilities\" />
+    <Folder Include="Deployment\Static Content\" />
+    <Folder Include="Deployment\Static Content\HTML\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Common Assets\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Common Assets\Images\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Common Assets\Scripts\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Common Assets\Styles\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Scripts\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Styles\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\images\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\scripts\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\styles\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Images\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Scripts\" />
+    <Folder Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Styles\" />
+    <Folder Include="Deployment\Static Content\XML\" />
+    <Folder Include="Deployment\Upgrade from Preview\" />
+    <Folder Include="Deployment\Upgrade from Preview\Helper Utilities\" />
+    <Folder Include="Docs\" />
+    <Folder Include="Deployment\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Deployment\Scripts\AppInstall.ps1" />
+    <Compile Include="Deployment\Scripts\ConfigureTrust.ps1" />
+    <Compile Include="Deployment\Scripts\CreateProperties.ps1" />
+    <Compile Include="Deployment\Scripts\CreateSampleData.ps1" />
+    <Compile Include="Deployment\Scripts\CreateSiteCollection.ps1" />
+    <Compile Include="Deployment\Scripts\Deploy.ps1" />
+    <Compile Include="Deployment\Scripts\DeployOfficeApp.ps1" />
+    <Compile Include="Deployment\Scripts\DeployOutlookApp.ps1" />
+    <Compile Include="Deployment\Scripts\EncryptDecrypt.ps1" />
+    <Compile Include="Deployment\Scripts\LibraryFunctions.ps1" />
+    <Compile Include="Deployment\Scripts\PreRequisitesScript.ps1" />
+    <Compile Include="Deployment\Scripts\PublishInIIS.ps1" />
+    <Compile Include="Deployment\Scripts\PublishOnAzure.ps1" />
+    <Compile Include="Deployment\Scripts\Revert.ps1" />
+    <Compile Include="Deployment\Scripts\RevertSampleData.ps1" />
+    <Compile Include="Deployment\Scripts\UpdateAppPackage.ps1" />
+    <Compile Include="Deployment\Upgrade from Preview\AppInstall.ps1" />
+    <Compile Include="Deployment\Upgrade from Preview\DeleteListData.ps1" />
+    <Compile Include="Deployment\Upgrade from Preview\DeployOfficeApp.ps1" />
+    <Compile Include="Deployment\Upgrade from Preview\DeployOutlookApp.ps1" />
+    <Compile Include="Deployment\Upgrade from Preview\LibraryFunctions.ps1" />
+    <Compile Include="Deployment\Upgrade from Preview\PreRequisitesScript.ps1" />
+    <Compile Include="Deployment\Upgrade from Preview\PublishOnAzure.ps1" />
+    <Compile Include="Deployment\Upgrade from Preview\UpdateAppPackage.ps1" />
+    <Compile Include="Deployment\Upgrade from Preview\UpgradeFromPreview.ps1" />
+    <Compile Include="Script.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Deployment\MCDeploymentConfig.xlsx" />
+    <Content Include="Deployment\Scripts\Helper Utilities\AntiXssLibrary.dll" />
+    <Content Include="Deployment\Scripts\Helper Utilities\AntiXssLibrary.xml" />
+    <Content Include="Deployment\Scripts\Helper Utilities\DocumentFormat.OpenXml.dll" />
+    <Content Include="Deployment\Scripts\Helper Utilities\DocumentFormat.OpenXml.xml" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.Common.dll" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.ConfigureLists.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.ConfigureLists.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateContentTypes.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateContentTypes.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateGroups.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateGroups.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateSampleData.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateSampleData.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateSiteCollection.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateSiteCollection.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateSiteColumns.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateSiteColumns.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateTerm.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.CreateTerm.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateListPermissions.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateListPermissions.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateLists.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateLists.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateTaxonomyFields.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateTaxonomyFields.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateView.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateView.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UploadFile.exe" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Legal.MatterCenter.UploadFile.exe.config" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.Online.SharePoint.Client.Tenant.dll" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.SharePoint.Client.dll" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.SharePoint.Client.Runtime.dll" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.SharePoint.Client.Search.dll" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.SharePoint.Client.Taxonomy.dll" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Microsoft.SharePoint.dll" />
+    <Content Include="Deployment\Scripts\Helper Utilities\Open Notebook.onetoc2" />
+    <Content Include="Deployment\Scripts\Helper Utilities\WindowsBase.dll" />
+    <Content Include="Deployment\Static Content\HTML\documentDetails.html" />
+    <Content Include="Deployment\Static Content\HTML\SettingsSP.html" />
+    <Content Include="Deployment\Static Content\HTML\WebDashboardSPTemplate.html" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Common Assets\Images\closeIcon.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Common Assets\Images\HamburgerIcon.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Common Assets\Images\MCIcon.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Common Assets\Images\microsoftLogo.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Common Assets\Images\SearchIcon.PNG" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Common Assets\Images\userList.PNG" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Common Assets\Images\WindowsLoadingFast.GIF" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Common Assets\Scripts\jquery-1.11.1.min.js" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Common Assets\Scripts\spCommon.js" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Common Assets\Styles\spCommon.css" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\close-666.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\loading_circles_30px_X_30px_white.gif" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landingpage_No-Preview_Icon_120px_x_90px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_Check_in_Icon_30px_x_30px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_Check_Out_Icon_30px_x_30px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_Download_Icon_30px_x_30px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_Glyph_Close.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_Glyph_Open.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_OneDrive_Icon_30px_x_30px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_Open_Icon_30px_x_30px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_Pin_Icon_30px_x_30px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_Send_Link_Icon_30px_x_30px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_Share_Icon_30px_x_30px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\MC_Documents_Landing_Page_Unpin_Icon_30px_x_30px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\White_Loading_Icon_30px_X_30px.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Images\WindowsLoadingFast.GIF" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Scripts\documentDetails.js" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Document Landing Assets\Styles\documentDetails.css" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\64x64-logo.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\images\close-666.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\images\OneNoteIcon.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\images\Pin.PNG" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\images\Unpin.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\images\userList.PNG" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\jquery-1.11.1.min.js" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\MatterLandingPage.css" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\MatterLandingPage.js" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\microsoft-white-logo-sm.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\One-Note-27X27-666.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\pin-666.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\Portal_logo_png.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\scripts\MatterLanding.js" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\share_28x28_666.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\styles\MatterLanding.css" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\unpin-666.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Matter Landing Assets\WindowsLoadingFast.GIF" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Images\blue_op_circle.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Images\green_op_circle.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Images\icon-combobox.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Images\information-blue.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Images\yellow_op_circle.png" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Scripts\jquery-ui-1.10.3.custom.js" />
+    <Content Include="Deployment\Static Content\Matter Center Assets\Web Dashboard Assets\Styles\Charts.css" />
+    <Content Include="Deployment\Static Content\XML\CreateResultSource.xml" />
+    <Content Include="Deployment\Static Content\XML\ManagedProperties.xml" />
+    <Content Include="Deployment\Static Content\XML\SearchConfiguration.xml" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\AntiXssLibrary.dll" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\AntiXssLibrary.xml" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\DocumentFormat.OpenXml.dll" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\DocumentFormat.OpenXml.xml" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.Common.dll" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.Common.dll.config" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.CreateSiteColumns.exe" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.CreateSiteColumns.exe.config" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.exe" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.exe.config" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe.config" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateListPermissions.exe" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateListPermissions.exe.config" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateLists.exe" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.UpdateLists.exe.config" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.UploadFile.exe" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Legal.MatterCenter.UploadFile.exe.config" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.Online.SharePoint.Client.Tenant.dll" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.SharePoint.Client.dll" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.SharePoint.Client.Runtime.dll" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.SharePoint.Client.Search.dll" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.SharePoint.Client.Taxonomy.dll" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\Microsoft.SharePoint.dll" />
+    <Content Include="Deployment\Upgrade from Preview\Helper Utilities\WindowsBase.dll" />
+    <Content Include="Docs\Matter Center Build and Deployment Guide.docx" />
+    <Content Include="Docs\Matter Center Build and Deployment Guide.md" />
+    <Content Include="Docs\Matter Center Coding guidelines.docx" />
+    <Content Include="Docs\Matter Center Coding guidelines.md" />
+    <Content Include="Docs\Matter Center Technical Specification.docx" />
+    <Content Include="Docs\Matter Center Technical Specification.md" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="Build" />
+</Project>

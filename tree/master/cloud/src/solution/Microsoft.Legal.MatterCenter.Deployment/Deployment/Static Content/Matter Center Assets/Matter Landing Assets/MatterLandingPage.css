@@ -1,0 +1,394 @@
+﻿#FunctionalityHeader {
+	height: auto;
+	margin-top: -8px;
+}
+
+	#FunctionalityHeader #OneNote {
+		display: inline;
+	}
+
+#FunctionalityTitle, #PinMatter {
+	margin: 0 0 0 11px;
+}
+
+#Share {
+	margin-left: 14px;
+}
+
+#GoToOneNote, #FunctionalityTitle, #Share, #PinMatter {
+	font-size: 16px;
+	color: #2b579a;
+}
+
+#FunctionalityHeader img:hover {
+	color: #666;
+	opacity: 1;
+}
+
+#GoToOneNote, #Share, #PinMatter {
+	height: 30px;
+}
+
+	#PinMatter:hover, #assign:hover, #block:hover, #Share:hover {
+		cursor: pointer;
+	}
+
+#footer {
+	background-color: #005a9e;
+	color: #fff;
+	font-family: "Segoe UI";
+	font-size: 12px;
+	height: 50px;
+	margin: 0 auto;
+	text-align: right;
+	left: 0%;
+	position: absolute;
+	width: 100%;
+	min-width: 1160px;
+}
+
+#FooterRow .ms-webpart-chrome-vertical {
+	display: block;
+}
+
+#contentDiv {
+	font-family: "Segoe UI";
+	margin: 0 auto;
+	position: relative;
+	width: 100%;
+}
+
+body {
+	font-family: "Segoe UI";
+	font-size: 14px;
+	height: 100%;
+}
+
+.leftFooter {
+	float: right;
+	padding-right: 5px;
+	margin-top: -14px;
+}
+
+	.leftFooter ul {
+		padding-left: 0;
+		margin-top: 27px;
+	}
+
+.leftFooterElement {
+	color: #fff;
+	padding: 0 0 0 10px;
+	position: relative;
+	top: 3px;
+}
+
+a {
+	background-color: transparent;
+	color: #486f84;
+	margin: 0 5px 0 0;
+	text-decoration: none !important;
+}
+
+.leftFooter a {
+	color: #fff;
+}
+
+.rightFooter ul {
+	float: right;
+	list-style-type: none;
+	padding-left: 0;
+}
+
+.rightend {
+	float: right;
+	font-size: 1.6em;
+	margin-top: -8px;
+	padding: 5px 10px;
+}
+
+img {
+	border: none;
+	cursor: pointer;
+}
+
+#MetaDataProperties, .PropertyContent {
+	height: auto;
+}
+
+.PropertyTitle {
+	font-weight: bold;
+	position: relative;
+	display: inline-block;
+}
+
+.DescriptionTitle {
+	font-family: "Segoe UI";
+	font-size: 14px;
+	color: #333;
+}
+
+.PropertyContent {
+	font-family: "Segoe UI";
+	font-size: 14px;
+	position: relative;
+	display: inline-block;
+	width: 550px;
+	float: right;
+	margin: 1px 75px 15px 0;
+	color: #333;
+}
+
+.PropertyDescription {
+	font-family: "Segoe UI";
+	font-size: 14px;
+	position: absolute;
+	width: 700px;
+}
+
+.MetaData {
+	font-family: "Segoe UI";
+	margin-bottom: 15px;
+	clear: both;
+}
+
+.users {
+	font-family: "Segoe UI";
+	font-size: 16px;
+}
+
+#assign {
+	color: #2b579a;
+	margin: 0 0 0 -45px;
+}
+
+#block {
+	margin-left: 24px;
+}
+
+#s4-titlerow, #sideNavBox, #titleAreaRow, .ms-pagebreadcrumb {
+	display: none !important;
+}
+
+#middleLeftRow {
+	width: 30% !important;
+}
+
+#contentBoxw {
+	margin: 0 230px 0 230px !important;
+}
+
+#contentBox {
+	margin-left: 20px !important;
+	min-height: 853px !important;
+}
+
+#OuterLeftCell {
+	vertical-align: top !important;
+}
+
+#FunctionalityHeader div {
+	width: 100px !important;
+}
+
+#s4-bodyContainer {
+	padding-bottom: 0 !important;
+}
+
+#FunctionalityHeader img {
+	margin: 0 10px -8px 0;
+	opacity: 0.655;
+}
+
+#unPinImg {
+	display: none;
+}
+
+#pinImg, .leftFooterElement, .users, #Share, #PinMatter {
+	display: inline;
+}
+
+#MiddleZoneTable {
+	padding: 0 0 2% 0;
+}
+
+.allUsers {
+	margin-left: 10px;
+	margin-top: -8px;
+	min-height: 56px;
+}
+
+	.allUsers ul {
+		margin-top: 12px !important;
+		width: 250px;
+	}
+
+.Container {
+	width: 1150px;
+	padding-bottom: 5px;
+	border-bottom: 2px solid #c8c8c8;
+	font-family: 'Segoe UI';
+	margin-left: 7px;
+}
+
+#IconBar {
+	display: table;
+}
+
+	#IconBar a {
+		display: table-cell;
+	}
+
+#ExtraText {
+	font-size: 8px;
+	display: table-row;
+}
+
+#AppTitle {
+	font-size: 12px;
+	display: table-cell;
+	font-family: 'Segoe UI';
+	padding-top: 10px;
+	padding-left: 7px;
+	color: #333;
+}
+
+#Logo {
+	vertical-align: middle;
+}
+
+#MSOZoneCell_WebPartWPQ8 {
+	margin-top: -9px;
+}
+
+#MSOZoneCell_WebPartWPQ5 {
+	margin-top: -8px;
+	margin-left: -5px;
+}
+
+#MSOZoneCell_WebPartWPQ10 {
+	margin-top: 8px;
+}
+
+#MSOZoneCell_WebPartWPQ9 {
+	padding-top: 12px;
+}
+
+.ms-imnSpan span {
+	font-size: 14px;
+	color: #666;
+}
+
+.TemplatesDiv {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.TemplateText {
+	font-size: 14px;
+	position: absolute;
+	width: 225px;
+}
+
+.TemplatesDiv, .TemplateText {
+	margin-left: 5px;
+	font-family: "Segoe UI";
+	color: #333;
+}
+
+.TemplateLink, .TemplateLink:visited {
+	text-decoration: none;
+	color: #2b579a;
+	font-family: "Segoe UI";
+}
+
+#WebPartWPQ4 {
+	overflow: hidden !important;
+}
+
+.ms-acal-summary-itemrow td div {
+	height: 34px !important;
+}
+
+.link-item, .link-item a, .link-item a:link, .groupheader {
+	font-family: 'Segoe UI';
+	font-size: 12px;
+}
+
+	.groupheader a, .groupheader a:visited {
+		font-size: 18px;
+		color: #333;
+	}
+
+.item {
+	margin-left: 0px;
+}
+
+#blockUserDetails {
+	display: none;
+}
+
+
+#contentRow {
+	padding-top: 0px;
+	margin-top: -10px;
+}
+
+.ms-acal-item {
+	height: 10px !important;
+	width: 10px !important;
+}
+
+#s4-titlerow {
+	display: none !important;
+}
+
+.selected {
+	color: #2b579a !important;
+}
+
+.unselected {
+	color: #666 !important;
+}
+
+#contentBox {
+	width: 1150px;
+	margin-left: auto !important;
+	margin-right: auto;
+}
+
+#MiddleLeftCell .ms-webpart-chrome, #MiddleLeftCell .ms-webpart-chrome #WebPartWPQ4 {
+	width: 0px !important;
+}
+
+.ms-acal-summary-dayrow div, .ms-acal-month-top span {
+	font-family: "Segoe UI";
+	color: #333;
+}
+
+.ms-acal-month-top span {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.ms-acal-summary-dayrow div {
+	font-size: 14px;
+}
+
+.ms-vh, .ms-vh2, .ms-vh-icon, .ms-vh-icon-empty, .ms-vh2-nofilter, .ms-vh2-nofilter-notextalign, .ms-vh2-nofilter-perm, .ms-vhImage, .ms-vh2-nograd, .ms-vh3-nograd, .ms-vh2-nograd-icon, .ms-vh2-nofilter-icon, .ms-ph {
+	font-size: 14px;
+	font-weight: 600;
+	color: #333;
+}
+
+#EditLinks > a {
+	color: #2b579a;
+}
+
+#EditLinks {
+	margin-top: 10px;
+}
+
+.loadingImage {
+	margin-left: 40px;
+	margin-top: 20px;
+}
