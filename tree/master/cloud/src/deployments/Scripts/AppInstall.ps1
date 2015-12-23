@@ -160,7 +160,7 @@ function loadAndInstallSharePointApps()
                 $web.LoadAndInstallApp($appIoStream)
                 $context.ExecuteQuery()
                 $fileName = split-path $File -Leaf
-                $AppInfo = Get-SPOAppInfo -Name $AppName
+                $AppInfo = Get-SPOAppInfo -Name $AppName  | Where {$_.Name -eq  $AppName }
 				#Ensure app is installed on catalog
                 Foreach($app in $AppInfo)
                  {
