@@ -379,7 +379,7 @@ if($ExcelValues.length -le 0)
 }
 $webUrl = $ExcelValues[0]
 $adminUrl = $ExcelValues[1]
-$AppName = @("Matter Center Beta")
+$AppName = @("Matter Center")
 $AppPkgName = @("Microsoft.Legal.MatterCenter.app")
 
 #On Premise Variables
