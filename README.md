@@ -43,7 +43,7 @@ Please find links to our additional resources:
 #Questions, Issues and Feedback
 Having trouble with Matter Center? Check-out [Issues] (https://github.com/Microsoft/mattercenter/issues) and if you don't see your issue, please open an [issue in GitHub](https://github.com/Microsoft/mattercenter/issues/new).
 
-Have feedback? Notice a bug? Submit through the Matter Center page on [User Voice](http://mattercenter.uservoice.com).
+Have feedback? Notice a bug? Submit through the Matter Center page on [UserVoice](http://mattercenter.uservoice.com).
 
 #Contribution
 This project was originated by the Microsoft Matter Center Engineering team. We wanted to build a solution to help our own legal professionals improve their productivity. Based on our conversations with many people in the industry, we decided to open source the project so others can use and enhance this solution.
@@ -55,7 +55,7 @@ We have been working on this code for some time and know its many limitations. W
 
 On December 17, 2015, we open sourced the project. We are thrilled to talk with as many contributors as possible to provide information and context:
 
-*	For bug fixes, we suggest simply creating an issue through GitHub and/or User Voice in order to alert people and chat about the design of the fix.
+*	For bug fixes, we suggest simply creating an issue through GitHub and/or UserVoice in order to alert people and chat about the design of the fix.
 
 *	Please try to make your pull request(s) as small as possible and be sure to keep your change close to master to avoid merge conflicts.
 
@@ -69,7 +69,7 @@ We encourage that you fork the repo if you’re planning to do substantial work.
 
 In addition to the priorities list, we bring Matter Center to GitHub with a wealth of existing feedback. Conversations with various communities has provided for a catalog of focus areas for us to consider as we move forward. 
 
-We have already pushed these ideas to [User Voice](http://mattercenter.uservoice.com) as well as to the [Issues list](https://github.com/Microsoft/mattercenter/issues). We encourage you to look to these two places.  
+We have already pushed these ideas to [UserVoice](http://mattercenter.uservoice.com) as well as to the [Issues list](https://github.com/Microsoft/mattercenter/issues). We encourage you to look to these two places.  
 
 #Committers
 There are currently three (3) [committers](https://github.com/Microsoft/mattercenter/graphs/contributors):
