@@ -1,0 +1,8 @@
+*.suo
+*.user
+tree/master/cloud/src/deployments/scripts/Logs
+tree/master/cloud/src/solution/.vs
+tree/master/cloud/src/solution/*/bin
+tree/master/cloud/src/solution/*/obj
+tree/master/cloud/src/solution/*/pkg/
+tree/master/cloud/src/solution/*/pkgobj/
