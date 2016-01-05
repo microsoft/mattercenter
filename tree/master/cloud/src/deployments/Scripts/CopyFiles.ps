@@ -1,0 +1,61 @@
+#----------------------------------------------
+# Script to create the folders and copy the Matter Center files for deployment to Azure/Sharepoint.
+# Author: Adrian Fisher-Fleming
+# Date: January 5, 2016
+#----------------------------------------------
+
+$ChkFile = "..\Exchange App" 
+$FileExists = Test-Path $ChkFile 
+if($FileExists -eq $True){
+	Remove-Item $ChkFile  -Force -Recurse
+}
+New-Item $ChkFile -itemtype directory
+
+$ChkFile = "..\Office App" 
+$FileExists = Test-Path $ChkFile 
+if($FileExists -eq $True){
+	Remove-Item $ChkFile  -Force -Recurse
+}
+New-Item $ChkFile -itemtype directory
+
+$ChkFile = "..\SharePoint App" 
+$FileExists = Test-Path $ChkFile 
+if($FileExists -eq $True){
+	Remove-Item $ChkFile  -Force -Recurse
+}
+New-Item $ChkFile -itemtype directory
+
+$ChkFile = "..\Service Publish" 
+$FileExists = Test-Path $ChkFile 
+if($FileExists -eq $True){
+	Remove-Item $ChkFile -Force -Recurse
+}
+
+$ChkFile = "..\Web Publish" 
+$FileExists = Test-Path $ChkFile 
+if($FileExists -eq $True){
+	Remove-Item $ChkFile -Force -Recurse
+}
+
+$ChkFile = "..\Microsoft.Legal.MatterCenter.ProviderService" 
+$FileExists = Test-Path $ChkFile 
+if($FileExists -eq $True){
+	Remove-Item $ChkFile -Force -Recurse
+}
+
+$ChkFile = "..\Microsoft.Legal.MatterCenter.SharePointAppWeb" 
+$FileExists = Test-Path $ChkFile 
+if($FileExists -eq $True){
+	Remove-Item $ChkFile -Force -Recurse
+}
+
+Copy-Item "..\..\solution\Microsoft.Legal.MatterCenter_Outlook\Microsoft.Legal.MatterCenter_OutlookManifest\Microsoft.Legal.MatterCenter_Outlook.xml" -Destination ..\"Exchange App\" -Recurse
+Copy-Item "..\..\solution\Microsoft.Legal.MatterCenter_Office\Microsoft.Legal.MatterCenter_OfficeManifest\Microsoft.Legal.MatterCenter_Office.xml" -Destination ..\"Office App\" -Recurse
+Copy-Item "..\..\solution\Microsoft.Legal.MatterCenter.ProviderService" -Destination ..\ -Recurse
+Copy-Item "..\..\solution\Microsoft.Legal.MatterCenter\bin\Debug\app.publish\1.0.0.0\Microsoft.Legal.MatterCenter.app" -Destination ..\"SharePoint App\" -Recurse
+Copy-Item "..\..\solution\Microsoft.Legal.MatterCenter.OneDriveRibbon\bin\Debug\app.publish\1.0.0.0\Microsoft.Legal.MatterCenter.OneDriveRibbon.app" -Destination ..\"SharePoint App\" -Recurse
+
+Copy-Item "..\..\solution\Microsoft.Legal.MatterCenter.SharePointAppWeb" -Destination ..\ -Recurse
+
+Rename-Item ..\Microsoft.Legal.MatterCenter.ProviderService "Service Publish"
+Rename-Item ..\Microsoft.Legal.MatterCenter.SharePointAppWeb "Web Publish"
