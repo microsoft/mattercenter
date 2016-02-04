@@ -145,7 +145,7 @@ function UpdateAppFile(){
 		Show-Message -Message "Updated the $fileName package" -Type ([MessageType]::Success)
 	} catch [Exception]
     {
-        $parentContentTypeId = ""
+        $parentContentTypeId = " "
 		Show-Message -Message "Failed to update the $fileName package" -Type ([MessageType]::Failure)
         Write-Log $ErrorLogFile $_.Exception.ToString()
     }
@@ -170,7 +170,9 @@ if (3 -eq $Configurations.Count){
     # Update SharePoint App
     UpdateAppFile -appPackagePath $SharePointAppPath -parentContentTypeId $ParentContentTypeId
     # Update OneDrive Ribbon App
-    UpdateAppFile -appPackagePath $RibbonAppPath -parentContentTypeId $ParentContentTypeId
+	if(Test-Path $RibbonAppPath) {
+		UpdateAppFile -appPackagePath $RibbonAppPath -parentContentTypeId $ParentContentTypeId
+	}
 } else{
     $ErrorMessage = "Incorrect configuration retrieved while updating App packages"
 	Show-Message -Message $ErrorMessage -Type ([MessageType]::Failure)

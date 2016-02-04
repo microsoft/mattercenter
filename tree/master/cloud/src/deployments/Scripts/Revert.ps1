@@ -139,7 +139,7 @@ if (3 -le $Checkpoint)
     Show-Message -Message "Deleting Site columns and Content types"
     try {
         & "$HelperPath\Microsoft.Legal.MatterCenter.CreateContentTypes.exe" "false" $Username $Password
-        & "$HelperPath\Microsoft.Legal.MatterCenter.CreateSiteColumns.exe" "false" $Username $Password
+        & "$HelperPath\Microsoft.Legal.MatterCenter.CreateSiteColumns.exe" "true" $Username $Password
     }
     catch {        
         Write-Log $RevertLogFile "Could not delete Site columns and Content types"
