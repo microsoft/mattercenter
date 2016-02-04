@@ -158,7 +158,7 @@
     <comment>SharePoint's internal field storing GUID of each item</comment>
   </data>
   <data name="Common_Term_Set_Group_Name" xml:space="preserve">
-    <value>DemoTerms</value>
+    <value>MatterCenterTerms</value>
     <comment>Name of the term set group which holds all the taxonomy configurations</comment>
   </data>
   <data name="Content_Type_Column_Client_Id" xml:space="preserve">
