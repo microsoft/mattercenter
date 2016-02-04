@@ -367,7 +367,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DemoTerms.
+        ///   Looks up a localized string similar to MatterCenterTerms.
         /// </summary>
         internal static string Common_Term_Set_Group_Name {
             get {

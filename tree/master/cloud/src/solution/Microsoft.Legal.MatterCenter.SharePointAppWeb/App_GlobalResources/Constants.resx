@@ -138,7 +138,7 @@
     <comment>Name of the term set which holds names of all the available clients with additional details</comment>
   </data>
   <data name="Common_Term_Set_Group_Name" xml:space="preserve">
-    <value>DemoTerms</value>
+    <value>MatterCenterTerms</value>
     <comment>Name of the term set group which holds all the taxonomy configurations</comment>
   </data>
   <data name="DMS_Matter_List_Name" xml:space="preserve">
