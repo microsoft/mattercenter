@@ -598,7 +598,7 @@
     <comment>OneDrive not configured message</comment>
   </data>
   <data name="One_Drive_Content_Type_Group" xml:space="preserve">
-    <value>_LegalDMS</value>
+    <value>_MatterCenter</value>
     <comment>Name of the content type group for OneDrive content type</comment>
   </data>
   <data name="One_Drive_Parent_Content_Type" xml:space="preserve">

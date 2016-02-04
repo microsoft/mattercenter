@@ -925,7 +925,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter path of icon to display as per document selected e.g. https://www.siteicons.com/docicon.gif].
+        ///   Looks up a localized string similar to [Enter path of icon to display as per document selected e.g. https://[TENANTNAME].sharepoint.com/_layouts/15/images/ic{0}.gif].
         /// </summary>
         internal static string Image_Document_Icon {
             get {
@@ -934,7 +934,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter path of icon to display for general document e.g. https://www.siteicons.com/generaldoc.gif].
+        ///   Looks up a localized string similar to [Enter path of icon to display for general document e.g. https://[TENANTNAME].sharepoint.com/_layouts/15/images/generaldocument.png].
         /// </summary>
         internal static string Image_General_Document {
             get {
@@ -2131,7 +2131,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LCADMSUILog.
+        ///   Looks up a localized string similar to [[[Enter name of the table on Azure storage where all error/exception log, e.g. MatterCenterUILogStorage]]].
         /// </summary>
         internal static string UILogTableName {
             get {

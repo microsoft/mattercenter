@@ -214,7 +214,7 @@
     <comment>This text represents Client ID</comment>
   </data>
   <data name="UILogTableName" xml:space="preserve">
-    <value>LCADMSUILog</value>
+    <value>[[[Enter name of the table on Azure storage where all error/exception log, e.g. MatterCenterUILogStorage]]]</value>
     <comment>Name of the table on Azure storage where all error/exception log</comment>
   </data>
   <data name="Application_Insight_App_Id" xml:space="preserve">
