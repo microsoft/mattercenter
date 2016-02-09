@@ -250,7 +250,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DemoTerms.
+        ///   Looks up a localized string similar to MatterCenterTerms.
         /// </summary>
         internal static string Common_Term_Set_Group_Name {
             get {
@@ -2050,7 +2050,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _LegalDMS.
+        ///   Looks up a localized string similar to _MatterCenter.
         /// </summary>
         internal static string One_Drive_Content_Type_Group {
             get {

@@ -434,6 +434,7 @@ if($IsValid -eq $true)
 	  If ((Get-Content $ErrorLogFile) -ne $Null) {
 		  Show-Message -Message "Publishing files to Azure or creating Azure Redis cache failed" -Type ([MessageType]::Failure)
 		  RevertAll $ScriptDirectory 9
+		  return
       }
 	}
 	else {	    
