@@ -7,7 +7,7 @@
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Matter Center Beta" />
   <Description DefaultValue="Matter Center Beta App allows you to search Matters, Documents and create Matter for particular Client"/>
-  <IconUrl DefaultValue="[Enter path of icon to display, e.g. https://www.siteicons.com/mcicon.gif]" />
+  <IconUrl DefaultValue="[Enter path of icon to display, e.g. https://[SITENAME].azurewebsites.net/Images/64x64-logo.png]" />
   <AppDomains>
     <AppDomain>https://login.microsoftonline.com/</AppDomain>
     <AppDomain>[Enter azure website URL for UI site, e.g. https://site.azurewebsites.net]</AppDomain>

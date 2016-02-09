@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
 <App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest"
-     Name="MatterCenter "
-     ProductID="{C2540691-70BE-4DA0-9CF4-D6E59AD7F65E}"
+     Name="MatterCenter"
+     ProductID="[Enter GUID, e.g. {8F914FE7-A31C-4CWD-LE5B-4CC7044CF82FB}]"
      Version="1.0.0.0"
      SharePointMinVersion="15.0.0.0"
 >
