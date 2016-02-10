@@ -619,11 +619,10 @@ msg.style.display = 'none' //msg is null here
 
 ```javascript
 // Inefficient
-$('#myList li).bind('click', function(){
+$('#myList li').bind('click', function(){
 $(this).addClass('clicked');
     // do stuff
 });
- 
 // Instead, we should listen for the click event at the parent level:
 $('#myList).bind('click', function(e){
     var target = e.target, // e.target grabs the node that triggered the event.
