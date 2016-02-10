@@ -1,0 +1,171 @@
+<style>
+    /*Top Ribbon*/
+    #s4-titlerow {
+        display: none !important;
+    }
+    /*Left Navigation*/
+    #sideNavBox {
+        display: none;
+    }
+
+    #s4-workspace {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    #contentRow {
+        padding-top: 0;
+    }
+
+    #contentBox {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    #s4-bodyContainer {
+        height: 100%;
+        padding-bottom: 0;
+    }
+
+    #webDashboardPage {
+        width: 100%;
+        height: 1330px;
+        min-height: 1330px;
+    }
+
+    .ms-pagebreadcrumb, #OuterRightCell {
+        display: none;
+    }
+
+    #OuterLeftCell {
+        width: 100%;
+        min-width: 345px;
+        padding-left: 0 !important;
+    }
+
+        #OuterLeftCell .floatLeft {
+            display: none;
+        }
+
+    #chartContentDiv {
+        display: block;
+    }
+
+    .s4-wpcell-plain {
+        margin-bottom: 0;
+    }
+
+    #MiddleRow {
+        display: none;
+    }
+
+    .scroll-wrap {
+        position: absolute;
+        right: 0;
+        left: 0;
+        top: 0;
+        -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
+        height: 100%;
+        width: 100%;
+    }
+
+    @media (max-width: 1226px) {
+        #chartContentDiv {
+            display: none;
+        }
+    }
+
+    @media (min-width: 355px) and (max-width: 746px) {
+        #contentBox {
+            min-width: auto;
+        }
+    }
+
+    @media (max-width: 355px) {
+        #contentBox {
+            min-width: 100px;
+        }
+    }
+</style>
+<!--Scripts added above since these calls were failing at the bottom-->
+<script type="text/javascript" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Web%20Dashboard%20Assets/Scripts/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Web%20Dashboard%20Assets/Scripts/jquery-ui-1.10.3.custom.js"></script>
+
+<script type="text/javascript">
+
+    var sSection = "section", sQuestionMarkChar = "?", sEqualChar = "=", sAmpersandChar = "&", oWebDashboardSPGlobal = {
+        iFrame: [],
+        clientContext: [],
+        rootWeb: []
+    };
+
+    $(document).ready(function () {
+        "use strict";
+        if ($("#webDashboardPage").length) {
+            oWebDashboardSPGlobal.iFrame = $("#webDashboardPage")[0];
+        }
+        var sClientName = "", sSectionID = getParameterByName(sSection), sQueryString = "";
+        if (sSectionID) {
+            sQueryString = sQuestionMarkChar + sSection + sEqualChar + sSectionID + sAmpersandChar;
+        }
+        oWebDashboardSPGlobal.iFrame.src = "WEB_DASHBOARD_PAGE_URL" + sQueryString;
+    });
+    // Dynamically update height of iFrame
+    (function () {
+        "use strict";
+        function receiveMessage(event) {
+            // iValidIframeUrl URL of Web Dashboard i-Frame
+            // anchorElement Temporary element to get the host name
+            var iValidIframeUrl = $("iframe[id=webDashboardPage]").attr("src"), anchorElement = document.createElement("a");
+            iValidIframeUrl = (iValidIframeUrl) ? iValidIframeUrl.split("?")[0] : "";
+            anchorElement.href = iValidIframeUrl;
+            var iValidIframeHost = anchorElement.protocol + "//" + anchorElement.hostname;
+
+            if (event.origin !== iValidIframeHost) {
+                return;
+            }
+
+            if (event.data) {
+                if ("scrolltop" === event.data.toLowerCase()) {     // If scrolltop message is present, update scroll for the page
+                    $("#s4-workspace, .scroll-wrap").scrollTop(0);
+                } else if (-1 < event.data.toLowerCase().indexOf(sQuestionMarkChar + "" + sSection + "" + sEqualChar)) {    // If ?section=" message is present, update the query string for the page, to support current view
+                    var sQueryString = event.data.toLowerCase();
+                    if (location.search) {
+                        history.pushState({}, "", location.href.replace(location.search, sQueryString));    // Code to update the href for current page, without reloading the page
+                    } else {
+                        history.pushState({}, "", location.href + sQueryString);    // Code to update the href for current page, without reloading the page
+                    }
+                } else if (-1 < event.data.toLowerCase().indexOf("enterprise_search$|$")) {         // If enterprise_search$|$ message is present, perform enterprise search using the text following $|$
+                    var sSearchTerm = event.data.replace("enterprise_search$|$", "");
+                    location.href = sSearchTerm;
+                } else {                                            // Else update the iFrame height with number in message
+                    var iframeHeight = event.data;
+                    oWebDashboardSPGlobal.iFrame.style.height = iframeHeight;
+                    oWebDashboardSPGlobal.iFrame.style.minHeight = iframeHeight;
+                }
+            }
+        }
+
+        window.onload = function () {
+            if ("addEventListener" in window) {
+                window.addEventListener("message", receiveMessage, true);
+            } else if ("attachEvent" in window) { /*IE*/
+                window.attachEvent("onmessage", receiveMessage);
+            }
+        };
+    })();
+
+    /* Function to read query string parameters by name */
+    function getParameterByName(sParamterName) {
+        "use strict";
+        sParamterName = sParamterName.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var oRegex = new RegExp("[\\?&]" + sParamterName + "=([^&#]*)"),
+            oResults = oRegex.exec(location.search);
+        return oResults === null ? "" : decodeURIComponent(oResults[1].replace(/\+/g, " "));
+    };
+
+</script>
+<div class="scroll-wrap">
+    <iframe id="webDashboardPage"></iframe>
+</div>

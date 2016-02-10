@@ -1,0 +1,68 @@
+﻿.LineChart {
+    background-color: #F4F4F4;
+    border-color: #DDD;
+    border-style: solid;
+    border-width: 1px;
+    height: 30px;
+}
+
+.LineChartExpandCollapseImg {
+    float: right;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+#LineChartHeading {
+    font-size: 1.15em;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+#MAQBubbleChart {
+    display: block;
+    float: left;
+    width: 49%;
+}
+
+#MAQDonutChart {
+    display: block;
+    float: right;
+    width: 49%;
+}
+
+#MAQHalfBowtieChart {
+    display: block;
+    float: left;
+    margin-top: 20px;
+    width: 49%;
+}
+
+#MAQStackedBarChart {
+    display: block;
+    float: right;
+    margin-top: 20px;
+    width: 49%;
+}
+
+.Charts {
+    clear: both;
+}
+
+#BingMap {
+    clear: both;
+    height: 600px;
+    margin-bottom: 50px;
+    margin-top: 20px;
+    position: relative;
+}
+
+    #BingMap .MicrosoftMap {
+        margin-top: 20px;
+    }
+
+#chartContentDiv {
+    font-family: 'Segoe UI';
+    margin: 0 auto;
+    position: relative;
+    width: 1180px;
+}
