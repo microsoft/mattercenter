@@ -624,7 +624,7 @@ $(this).addClass('clicked');
     // do stuff
 });
 // Instead, we should listen for the click event at the parent level:
-$('#myList).bind('click', function(e){
+$('#myList').bind('click', function(e){
     var target = e.target, // e.target grabs the node that triggered the event.
     $target = $(target);  // wraps the node in a jQuery object
     if (target.nodeName === 'LI') {
