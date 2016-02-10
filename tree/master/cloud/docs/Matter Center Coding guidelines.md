@@ -330,7 +330,7 @@ catch(Exception ex)
 |---|---|---|---|
 |Visual Studio 2013 Code Analyzer|2013 (Update 2)|![Visual Studio 2013 Code Analyzer](img/vs2013codeanalyzer.jpg)|NA|
 |StyleCop|4.7|Analyzes C# source code to enforce a set of style and consistency rules|Web|
-|Visual Studio 2013 Code Clone |2013 (Update 2)|![Visual Studio Code Clone](img/stylecop.png)|NA|
+|Visual Studio 2013 Code Clone |2013 (Update 2)|![Visual Studio Code Clone](img/vscodeclones.png)|NA|
 
 ## <a name='htmlguidelines'></a>HTML Guidelines
 
