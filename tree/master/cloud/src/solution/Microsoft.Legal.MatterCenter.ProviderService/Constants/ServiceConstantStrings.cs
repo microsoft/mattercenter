@@ -129,6 +129,11 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
         private static string stampedPropertyResponsibleAttorney = ConstantStrings.GetConfigurationFromResourceFile("Constants", "Stamped_Property_Responsible_Attorney", Enumerators.ResourceFileLocation.App_GlobalResources);
 
         /// <summary>
+        /// The stamped property responsible attorney
+        /// </summary>
+        private static string stampedPropertyResponsibleAttorneyEmail = ConstantStrings.GetConfigurationFromResourceFile("Constants", "Stamped_Property_Responsible_Attorney_Email", Enumerators.ResourceFileLocation.App_GlobalResources);
+
+        /// <summary>
         /// The stamped property team members
         /// </summary>
         private static string stampedPropertyTeamMembers = ConstantStrings.GetConfigurationFromResourceFile("Constants", "Stamped_Property_Team_Members", Enumerators.ResourceFileLocation.App_GlobalResources);
@@ -982,6 +987,18 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
         }
 
         /// <summary>
+        /// Gets the stamped property responsible attorney email.
+        /// </summary>
+        /// <value>The stamped property responsible attorney email.</value>
+        internal static string StampedPropertyResponsibleAttorneyEmail
+        {
+            get
+            {
+                return stampedPropertyResponsibleAttorneyEmail;
+            }
+        }
+
+        /// <summary>
         /// Gets the stamped property team members.
         /// </summary>
         /// <value>The stamped property team members.</value>
@@ -1530,6 +1547,18 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
             get
             {
                 return ConstantStrings.GetConfigurationFromResourceFile("Constants", "Stamped_Property_MatterCenter_Users", Enumerators.ResourceFileLocation.App_GlobalResources);
+            }
+        }
+
+        /// <summary>
+        /// Gets the stamped property of matter center user emails
+        /// </summary>
+        /// <value>The stamped property of matter center users emails.</value>
+        internal static string StampedPropertyMatterCenterUserEmails
+        {
+            get
+            {
+                return ConstantStrings.GetConfigurationFromResourceFile("Constants", "Stamped_Property_MatterCenter_User_Emails", Enumerators.ResourceFileLocation.App_GlobalResources);
             }
         }
 

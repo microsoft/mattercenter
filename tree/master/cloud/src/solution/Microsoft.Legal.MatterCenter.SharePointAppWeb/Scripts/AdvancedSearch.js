@@ -277,7 +277,7 @@ function onSearchSuccess(oFinalResult, event) {
                 }
             }
 
-            var arrColumnJSON = LCADMS.generateListViewJSON();
+            var arrColumnJSON = oGrid.generateGridViewJSON();
             var arrHeaders = (oCommonObject.isMatterView) ? oWebDashboardConstants.MatterHeaderName.split(";") : oWebDashboardConstants.DocumentHeaderName.split(";");
             itemsCountsToBeDisplayed();
             var GridConfig = {
@@ -312,7 +312,7 @@ function onSearchSuccess(oFinalResult, event) {
 
             $("#" + oFinalResult.oParam.container).html("<div id=\"gridPaginationTD\"></div>");
             // Set the Pin or unpin icon
-            new LCADMS.JsonGrid(GridConfig);
+            new oGrid.JsonGrid(GridConfig);
             if ($(".pinnedSearch").hasClass("active")) {
                 oGridConfig.currentView = 1;
             } else if ($(".mySearch").hasClass("active")) {
@@ -321,11 +321,11 @@ function onSearchSuccess(oFinalResult, event) {
                 oGridConfig.currentView = 0;
             }
             if (oGridConfig.bPageLoad) {
-                (getListViewWidth) ? getListViewWidth() : "";
+                (getGridViewWidth) ? getGridViewWidth() : "";
             }
             if ("allSearch" === sColumnID) {
                 (oGridConfig.bPageLoad) ? oGridConfig.isMatterView ? oGridConfig.nAllMatterCount = oGridConfig.nGridTotalResults : oGridConfig.nAllDocumentCount = oGridConfig.nGridTotalResults : "";
-                (getListViewWidth) ? getListViewWidth() : "";
+                (getGridViewWidth) ? getGridViewWidth() : "";
             }
             var sSelectedTab = getCurrentSelectedTab();
             $(sSelectedTab).css("maxWidth", oGridConfig.nGridWidth);
@@ -379,6 +379,7 @@ function gridFailure(oResult, sMessage, sColumnHeaderToUpdate) {
 function advancedSearch(sContainer, event) {
     "use strict";
     var sMethodName = oGridConfig.isMatterView ? "FindMatter" : "FindDocument";
+    oGridConfig.isMatterView ? $(".filterSearchText").attr({ "placeholder": "Search by matter name, matter ID, or keyword", "title": "Search by matter name, matter ID, or keyword" }) : $(".filterSearchText").attr({ "placeholder": "Search by document name, document ID, or keyword", "title": "Search by document name, document ID, or keyword" });
     var sRefinerString = oGridConfig.isMatterView ? oGlobalConstants.Matter_ID : oGlobalConstants.Document_ID;
     oGridConfig.currentView = "RecentDocumentContainer" === sContainer || "recentMatters" === sContainer ? 2 : 0;
     oSearchGlobal.clientDataLoaded = true;
@@ -493,7 +494,7 @@ function onPinnedItemSuccess(oFinalResult, event) {
                 sAltRowColorValue = "rgb(255, 255, 255)";
 
             } else {
-                var arrColumnJSON = LCADMS.generateListViewJSON();
+                var arrColumnJSON = oGrid.generateGridViewJSON();
                 var arrHeaders = (oCommonObject.isMatterView) ? oWebDashboardConstants.MatterHeaderName.split(";") : oWebDashboardConstants.DocumentHeaderName.split(";");
             }
             itemsCountsToBeDisplayed();
@@ -524,7 +525,7 @@ function onPinnedItemSuccess(oFinalResult, event) {
                 }
             }
 
-            new LCADMS.JsonGrid(GridConfig);
+            new oGrid.JsonGrid(GridConfig);
             if ($(".pinnedSearch").hasClass("active")) {
                 oGridConfig.currentView = 1;
             } else if ($(".mySearch").hasClass("active")) {
@@ -546,7 +547,7 @@ function onPinnedItemSuccess(oFinalResult, event) {
                 }
             }
             if (1 === oGridConfig.currentView) {
-                getListViewWidth();
+                getGridViewWidth();
                 createResponsiveGrid();
                 $(sSelectedTab).css("maxWidth", oGridConfig.nGridWidth);
                 $(sSelectedTab).css("width", 0);

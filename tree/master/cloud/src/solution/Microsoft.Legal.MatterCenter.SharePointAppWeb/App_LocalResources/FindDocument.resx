@@ -153,79 +153,79 @@
     <value>DocumentClient</value>
     <comment>This is the refiner name for pinned document client</comment>
   </data>
-  <data name="ListViewColumnFomatter" xml:space="preserve">
+  <data name="GridViewColumnFomatter" xml:space="preserve">
     <value>loadCheckboxColumn;loadDocumentTypeIcon;loadNameColumn;loadEllipsisColumn;genericColumn;loadClientMatterID_Column;loadDateColumn;genericColumn;genericColumn;loadCheckedOutToUser;loadDateColumn</value>
     <comment>Semicolon separated list of values whose function definition is already defined</comment>
   </data>
-  <data name="ListViewColumnPickerFields" xml:space="preserve">
+  <data name="GridViewColumnPickerFields" xml:space="preserve">
     <value>Document;Client;Client.Matter ID;Modified date;Author;Document version;Checked out to;Created date</value>
     <comment>Semicolon separated list of column options available in the column picker</comment>
   </data>
-  <data name="ListViewColumnValueFields" xml:space="preserve">
+  <data name="GridViewColumnValueFields" xml:space="preserve">
     <value>CheckBox;DocType;FileName;ECB;MCDocumentClientName;MCDocumentClientID;MCModifiedDate;MSITOfficeAuthor;MCVersionNumber;MCCheckoutUser;Created</value>
     <comment>Semicolon separated list of managed properties, which are used to bind JSON data</comment>
   </data>
-  <data name="ListViewColumnWidth" xml:space="preserve">
+  <data name="GridViewColumnWidth" xml:space="preserve">
     <value>21;30;210;30;210;160;205;150;210;220;200</value>
-    <comment>Semicolon separated list of width of columns of list view control</comment>
+    <comment>Semicolon separated list of width of columns of grid view control</comment>
   </data>
-  <data name="ListViewDefaultColumns" xml:space="preserve">
+  <data name="GridViewDefaultColumns" xml:space="preserve">
     <value>Check Box,NA;DocType,NA;Document,singleselect;ECB,NA;Client,singleselect;Client.Matter ID,NA;Modified date,date</value>
-    <comment>Semicolon separated list of default columns in the list view control. This list will be bypassed, if user selection exists</comment>
+    <comment>Semicolon separated list of default columns in the grid view control. This list will be bypassed, if user selection exists</comment>
   </data>
-  <data name="ListViewDocumentExtension" xml:space="preserve">
+  <data name="GridViewDocumentExtension" xml:space="preserve">
     <value>FileExtension</value>
     <comment>Property name for document extension</comment>
   </data>
-  <data name="ListViewDocumentOWAUrl" xml:space="preserve">
+  <data name="GridViewDocumentOWAUrl" xml:space="preserve">
     <value>DocumentOWAUrl</value>
     <comment>Property name for document OWA URL</comment>
   </data>
-  <data name="ListViewDocumentPath" xml:space="preserve">
+  <data name="GridViewDocumentPath" xml:space="preserve">
     <value>Path</value>
     <comment>Property name for document path</comment>
   </data>
-  <data name="ListViewDocumentSPWebUrl" xml:space="preserve">
+  <data name="GridViewDocumentSPWebUrl" xml:space="preserve">
     <value>SPWebUrl</value>
     <comment>Property name for document SPWebURL</comment>
   </data>
-  <data name="ListViewECBActions" xml:space="preserve">
+  <data name="GridViewECBActions" xml:space="preserve">
     <value>Open this Document,editdocument;View Matter Details,gotoMatterSites;Pin this Document,pin;Unpin this Document,unpin</value>
     <comment>Semicolon separated string of (comma separated string of actions,class) actions that are to be displayed in ECB menu</comment>
   </data>
-  <data name="ListViewHeaderName" xml:space="preserve">
+  <data name="GridViewHeaderName" xml:space="preserve">
     <value>Check Box,NA;DocType,NA;Document,singleselect;ECB,NA;Client,singleselect;Client.Matter ID,NA;Modified date,date;Author,singleselect;Document version,NA;Checked out to,singleselect;Created date,date</value>
-    <comment>Semicolon separated list of name of the column headers of list view control</comment>
+    <comment>Semicolon separated list of name of the column headers of grid view control</comment>
   </data>
-  <data name="ListViewMatterIDPropertyName" xml:space="preserve">
+  <data name="GridViewMatterIDPropertyName" xml:space="preserve">
     <value>RefinableString12</value>
     <comment>This is the property name for matter ID</comment>
   </data>
-  <data name="ListViewPinnedClientMatterIDPropertyName" xml:space="preserve">
+  <data name="GridViewPinnedClientMatterIDPropertyName" xml:space="preserve">
     <value>CalClientMatterId</value>
     <comment>This is the property name for client.matter ID</comment>
   </data>
-  <data name="ListViewNonDataColumns" xml:space="preserve">
+  <data name="GridViewNonDataColumns" xml:space="preserve">
     <value>Check Box,NA;DocType,NA;ECB,NA</value>
-    <comment>Name of non-data columns of list view control</comment>
+    <comment>Name of non-data columns of grid view control</comment>
   </data>
-  <data name="ListViewPinnedColumnValueFields" xml:space="preserve">
+  <data name="GridViewPinnedColumnValueFields" xml:space="preserve">
     <value>CheckBox;DocType;DocumentName;ECB;DocumentClient;CalClientMatterId;DocumentModifiedDate;DocumentOwner;DocumentVersion;DocumentCheckoutUser;DocumentCreatedDate</value>
     <comment>Semicolon separated list of key names, which are used to bind JSON data</comment>
   </data>
-  <data name="ListViewPinnedDocumentClientIDPropertyName" xml:space="preserve">
+  <data name="GridViewPinnedDocumentClientIDPropertyName" xml:space="preserve">
     <value>DocumentClientId</value>
     <comment>This is the property name for client ID</comment>
   </data>
-  <data name="ListViewPinnedMatterIDPropertyName" xml:space="preserve">
+  <data name="GridViewPinnedMatterIDPropertyName" xml:space="preserve">
     <value>DocumentMatterId</value>
     <comment>This is the property name for matter ID</comment>
   </data>
-  <data name="ListViewPinnedTitleProperty" xml:space="preserve">
+  <data name="GridViewPinnedTitleProperty" xml:space="preserve">
     <value>DocumentName</value>
     <comment>This is the property name for document title</comment>
   </data>
-  <data name="ListViewTitleProperty" xml:space="preserve">
+  <data name="GridViewTitleProperty" xml:space="preserve">
     <value>FileName</value>
     <comment>This is the property name for document title</comment>
   </data>
@@ -269,17 +269,17 @@
     <value>DocumentModifiedDate</value>
     <comment>This is the refiner name for pinned document modified date</comment>
   </data>
-  <data name="ListViewECBActionsTitle" xml:space="preserve">
+  <data name="GridViewECBActionsTitle" xml:space="preserve">
     <value>View this document$|$Go to this document\'s matter details$|$Add this document to Pinned Documents$|$Remove this document from Pinned Documents</value>
     <comment>$|$ separated list of title for ECB actions</comment>
   </data>
-  <data name="ListViewHeaderNameTitle" xml:space="preserve">
+  <data name="GridViewHeaderNameTitle" xml:space="preserve">
     <value>Select all$|$Doc type$|$Click to sort by document name$|$$|$Click to sort by client name$|$Click to sort by Client.Matter ID$|$Click to sort by last modified date$|$Click to sort by document author$|$Click to sort by version$|$Click to sort by who has documents checked out$|$Click to sort by created date</value>
-    <comment>$|$ separated list of title for List view header</comment>
+    <comment>$|$ separated list of title for Grid view header</comment>
   </data>
-  <data name="ListViewECBMenuTitle" xml:space="preserve">
+  <data name="GridViewECBMenuTitle" xml:space="preserve">
     <value>Click to view the document menu</value>
-    <comment>Title for list view ECB menu title</comment>
+    <comment>Title for grid view ECB menu title</comment>
   </data>
   <data name="AttachButtonText" xml:space="preserve">
     <value>Attach Documents</value>

@@ -673,13 +673,13 @@
     <value>_layouts/15/VisioWebAccess/VisioWebAccess.aspx?id={0}&amp;DefaultItemOpen=1</value>
     <comment>Represents the URL to open Visio file in browser</comment>
   </data>
-  <data name="ListViewItemsPerPage" xml:space="preserve">
+  <data name="GridViewItemsPerPage" xml:space="preserve">
     <value>21</value>
     <comment>Number of rows to fetch in a single request to display in list view control.
-Note: The value of this field should not be less than 21. In case you want to set it less than 21, than update ListView_BreakPoint property to value as per the following formula.
-ListView_BreakPoint = (710/21)*Number of items to show</comment>
+Note: The value of this field should not be less than 21. In case you want to set it less than 21, than update GridView_BreakPoint property to value as per the following formula.
+GridView_BreakPoint = (710/21)*Number of items to show</comment>
   </data>
-  <data name="ListViewLazyLoadingLimit" xml:space="preserve">
+  <data name="GridViewLazyLoadingLimit" xml:space="preserve">
     <value>95</value>
     <comment>Value of x in %. where x = Limit to trigger a service request for lazy loading of data on list view control when user scrolls to x% of screen height</comment>
   </data>
@@ -755,11 +755,11 @@ ListView_BreakPoint = (710/21)*Number of items to show</comment>
     <value>Title</value>
     <comment>Managed property name for title</comment>
   </data>
-  <data name="ListView_BreakPoint" xml:space="preserve">
+  <data name="GridView_BreakPoint" xml:space="preserve">
     <value>710</value>
-    <comment>Breakpoint for calculate number of rows in List View</comment>
+    <comment>Breakpoint for calculate number of rows in Grid View</comment>
   </data>
-  <data name="ListViewAllColumnOption" xml:space="preserve">
+  <data name="GridViewAllColumnOption" xml:space="preserve">
     <value>All column headers</value>
     <comment>Option to be displayed for selecting all columns in the list view column picker</comment>
   </data>
@@ -1087,7 +1087,7 @@ ListView_BreakPoint = (710/21)*Number of items to show</comment>
     <value>/ViewDocument</value>
     <comment>App Insight event name for view document link</comment>
   </data>
-  <data name="ListViewPinnedDocumentUrl" xml:space="preserve">
+  <data name="GridViewPinnedDocumentUrl" xml:space="preserve">
     <value>documenturl</value>
     <comment>Property name for document path in pinned documents section</comment>
   </data>
@@ -1142,5 +1142,13 @@ ListView_BreakPoint = (710/21)*Number of items to show</comment>
   <data name="RefreshTokenCookieExpiration" xml:space="preserve">
     <value>10</value>
     <comment>Expiration period of refresh token cookie in hours</comment>
+  </data>
+  <data name="Email_Validation_Regex" xml:space="preserve">
+    <value>^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$</value>
+    <comment>Regex pattern to validate email address</comment>
+  </data>
+  <data name="Incorrect_Team_Members_Code" xml:space="preserve">
+    <value>126</value>
+    <comment>Error code for invalid team members</comment>
   </data>
 </root>

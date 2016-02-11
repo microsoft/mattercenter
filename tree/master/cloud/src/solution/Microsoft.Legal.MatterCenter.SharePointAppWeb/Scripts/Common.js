@@ -15,7 +15,7 @@ var oCommonObject = (function () {
         oUsers: [], //// Array which will holds the JSON response of users's request
         oSiteUser: [], //// Array which will hold all the set of valid resolved users
         isMatterView: true,
-        iCurrentListViewData: 2, //// Represents current data that list view is holding on page load (All Matters/Documents: 1, My Matters/Documents: 2, Recent Matters/Documents: 3, Pinned Matters/Documents: 4)
+        iCurrentGridViewData: 2, //// Represents current data that grid view is holding on page load (All Matters/Documents: 1, My Matters/Documents: 2, Recent Matters/Documents: 3, Pinned Matters/Documents: 4)
         userPinnedData: [],
         pinnedData: [],
         pinnedFilterData: [],
@@ -589,7 +589,7 @@ var oCommonObject = (function () {
                                     commonConstants.oUsers = JSON.parse(result);
                                     /* Store valid site users in array for further use */
                                     $.each(commonConstants.oUsers, function (key, item) {
-                                        item.Email && commonConstants.oSiteUser.push(item.Name);
+                                        item.Email && commonConstants.oSiteUser.push(item.Email);
                                     });
                                     if (!commonConstants.oUsers.code) {
                                         var sConflictIdentified = "undefined" !== typeof (oMatterProvisionObject) ? oMatterProvisionObject.sConflictScenario() : "undefined" !== typeof (oManagePermissionsOnMatter) ? oManagePermissionsOnMatter.sConflictScenario() : "False";
@@ -599,13 +599,15 @@ var oCommonObject = (function () {
                                                 if ("User" === item.EntityType) {
                                                     return {
                                                         label: item.Name,
-                                                        Email: item.Email
+                                                        Email: item.Email,
+                                                        OriginalEmail: item.EntityData.Email
                                                     };
                                                 }
                                             } else {
                                                 return {
                                                     label: item.Name,
-                                                    Email: item.Email
+                                                    Email: item.Email,
+                                                    OriginalEmail: item.EntityData.Email
                                                 };
                                             }
                                         });
@@ -647,7 +649,7 @@ var oCommonObject = (function () {
                             //// remove the current input
                             terms.pop();
                             //// add the selected item
-                            terms.push(ui.item.value);
+                            terms.push(ui.item.value + " (" + ui.item.OriginalEmail + ")");
                             //// add placeholder to get the semicolon-and-space at the end
                             terms.push("");
                             terms = $.map(terms, function (item) {
@@ -655,11 +657,47 @@ var oCommonObject = (function () {
                             });
                             this.value = terms.join("; ");
                             return false;
+                        } else if (sSelector === "#txtConflictCheckBy") {
+                            this.value = ui.item.value + " (" + ui.item.OriginalEmail + ");";
+                            return false;
                         }
                     }
-                });
+                }).data("uiAutocomplete")._renderItem = function (ul, item) {
+                    var sUserTitle, sTooltip;
+                    // Check if there is a user to be returned then assign title else for no record results keep it empty
+                    if (item.OriginalEmail) {
+                        sUserTitle = item.title;
+                        sTooltip = item.OriginalEmail;
+                    } else {
+                        sUserTitle = "";
+                        sTooltip = "";
+                    }
+                    return $("<li>")
+                    .append("<a title='" + sTooltip + "'>" + item.label + "</a>")
+                    .appendTo(ul);
+                };
             }
         },
+
+        getUserName: function (sUserEmails, bIsName) {
+            "use strict";
+            var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp(oGlobalConstants.Email_Validation_Regex);
+            if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
+                arrUserNames = sUserEmails.split(";");
+                for (var iIterator = 0; iIterator < arrUserNames.length - 1; iIterator++) {
+                    if (arrUserNames[iIterator] && null !== arrUserNames[iIterator] && "" !== arrUserNames[iIterator]) {
+                        if (-1 !== arrUserNames[iIterator].lastIndexOf("(")) {
+                            sEmail = $.trim(arrUserNames[iIterator].substring(arrUserNames[iIterator].lastIndexOf("(") + 1, arrUserNames[iIterator].lastIndexOf(")")));
+                            if (oEmailRegex.test(sEmail)) {
+                                arrUserNames[iIterator] = bIsName ? $.trim(arrUserNames[iIterator].substring(0, arrUserNames[iIterator].lastIndexOf("("))) : sEmail;
+                            }
+                        }
+                    }
+                }
+            }
+            return arrUserNames;
+        },
+
         // Function to get current width of the window
         getWidth: function () {
             var nWidth = 0;
@@ -742,13 +780,13 @@ var oCommonObject = (function () {
         /* Function to update pinned status of the matter */
         updatePinnedStatus: function () {
             //// Get the URL of matter
-            var oMandatoryObject = $(".mandatory"); //// Get all the mandatory columns from the list view control
-            var iStartPosition = parseInt(parseInt(oListViewObject.itemsPerPage, 10) * (parseInt(oListViewObject.pageNumber, 10) - 1), 10)
-              , iLengthToTraverse = oMandatoryObject.length * parseInt(oListViewObject.pageNumber, 10),
+            var oMandatoryObject = $(".mandatory"); //// Get all the mandatory columns from the grid view control
+            var iStartPosition = parseInt(parseInt(oGridViewObject.itemsPerPage, 10) * (parseInt(oGridViewObject.pageNumber, 10) - 1), 10)
+              , iLengthToTraverse = oMandatoryObject.length * parseInt(oGridViewObject.pageNumber, 10),
             arrDataToCompare = $.map(oCommonObject.userPinnedData, function (item) {
                 return decodeURIComponent(trimEndChar($.trim(item), "/").toLowerCase());
             });
-            /* Update the status only for latest data load in the list view */
+            /* Update the status only for latest data load in the grid view */
             for (var iIterator = iStartPosition; iIterator < iLengthToTraverse ; iIterator++) {
                 var oCurrentObject = $(oMandatoryObject[iIterator]); //// Get the current mandatory object
                 var sCurrentPath = oCurrentObject.attr("data-" + oGlobalConstants.Path); //// Get the matter URL
@@ -772,9 +810,9 @@ var oCommonObject = (function () {
             sColumnPickerData = $.trim(sColumnPickerFields) ? $.trim(sColumnPickerFields).split(";") : "";
             oColumnPickerControl.generateColumnPickerControl(sColumnPickerSelector, sColumnPickerData);
         },
-        /* Function to update configurations and refresh list view */
-        updateAndRefreshListView: function (oCurrentElement, bIsSearchCall) {
-            var oPageHeader = $("#listViewPageHeader");
+        /* Function to update configurations and refresh grid view */
+        updateAndRefreshGridView: function (oCurrentElement, bIsSearchCall) {
+            var oPageHeader = $("#gridViewPageHeader");
             if (oPageHeader.length) {
                 oPageHeader.text(oCurrentElement.text()); //// Set the page header to current selection
                 //// Set the tool tip of the current section
@@ -806,12 +844,12 @@ var oCommonObject = (function () {
                 }
             }
             commonConstants.abortRequest();
-            commonConstants.clearListViewContent();
+            commonConstants.clearGridViewContent();
             commonConstants.clearFlyOutFilters(true); //// Clear server side filters
             commonConstants.clearClientFlyOutFilters(); //// Clear client side filters
-            (oCommonObject.isMatterView) ? getPinnedMatters($("#listView")) : getPinnedDocument($("#listView"));
+            (oCommonObject.isMatterView) ? getPinnedMatters($("#gridView")) : getPinnedDocument($("#gridView"));
             if (bIsSearchCall) {
-                (oCommonObject.isMatterView) ? getSearchMatters($("#listView"), 0) : getSearchDocuments($("#listView"), 0);
+                (oCommonObject.isMatterView) ? getSearchMatters($("#gridView"), 0) : getSearchDocuments($("#gridView"), 0);
             }
             $("#autoCompleteText").focus().blur();
             $("#attachDocuments").addClass("is-disabled");
@@ -862,9 +900,9 @@ var oCommonObject = (function () {
                 oCommonObject.isAllRowSelected = false;
                 $("#autoCompleteText").val("");
                 oCommonObject.sSearchedKeyword = "";
-                commonConstants.iCurrentListViewData = 1; //// Set the flag for search data
+                commonConstants.iCurrentGridViewData = 1; //// Set the flag for search data
                 commonConstants.arrCurrentRefiner.length = 0; //// Remove the current selected filters
-                commonConstants.updateAndRefreshListView($(this), true); //// Update the configuration and refresh the list view
+                commonConstants.updateAndRefreshGridView($(this), true); //// Update the configuration and refresh the grid view
             });
 
             /* Functionality of My Matters */
@@ -872,9 +910,9 @@ var oCommonObject = (function () {
                 oCommonObject.isAllRowSelected = false;
                 $("#autoCompleteText").val("");
                 oCommonObject.sSearchedKeyword = "";
-                commonConstants.iCurrentListViewData = 2; //// Set the flag for search data
+                commonConstants.iCurrentGridViewData = 2; //// Set the flag for search data
                 commonConstants.arrCurrentRefiner.length = 0; //// Remove the current selected filters
-                commonConstants.updateAndRefreshListView($(this), true); //// Update the configuration and refresh the list view
+                commonConstants.updateAndRefreshGridView($(this), true); //// Update the configuration and refresh the grid view
             });
 
             /* Functionality of Recent Matters */
@@ -882,9 +920,9 @@ var oCommonObject = (function () {
                 oCommonObject.isAllRowSelected = false;
                 $("#autoCompleteText").val("");
                 oCommonObject.sSearchedKeyword = "";
-                commonConstants.iCurrentListViewData = 3; //// Set the flag for search data
+                commonConstants.iCurrentGridViewData = 3; //// Set the flag for search data
                 commonConstants.arrCurrentRefiner.length = 0; //// Remove the current selected filters
-                commonConstants.updateAndRefreshListView($(this), true); //// Update the configuration and refresh the list view
+                commonConstants.updateAndRefreshGridView($(this), true); //// Update the configuration and refresh the grid view
             });
 
             /* Functionality of Pinned Matters */
@@ -892,9 +930,9 @@ var oCommonObject = (function () {
                 oCommonObject.isAllRowSelected = false;
                 $("#autoCompleteText").val("");
                 oCommonObject.sSearchedKeyword = "";
-                commonConstants.iCurrentListViewData = 4; //// Set the flag for search data
+                commonConstants.iCurrentGridViewData = 4; //// Set the flag for search data
                 commonConstants.arrCurrentRefiner.length = 0; //// Remove the current selected filters
-                commonConstants.updateAndRefreshListView($(this), false); //// Update the configuration and refresh the list view
+                commonConstants.updateAndRefreshGridView($(this), false); //// Update the configuration and refresh the grid view
             });
 
             /* Function to remove the extra styles attached by fabric */
@@ -1026,15 +1064,15 @@ var oCommonObject = (function () {
             $("#searchIcon").on("click", function () {
                 commonConstants.bHideAutoComplete = true;
                 if (!$(".ms-Icon--search")[0].disabled) {
-                    oListViewObject.pageNumber = 1; //// Reset the page number for list view control
-                    if (4 === oCommonObject.iCurrentListViewData()) { //// Check the flag for search data if current view is pinned view
-                        commonConstants.iCurrentListViewData = 1;
+                    oGridViewObject.pageNumber = 1; //// Reset the page number for grid view control
+                    if (4 === oCommonObject.iCurrentGridViewData()) { //// Check the flag for search data if current view is pinned view
+                        commonConstants.iCurrentGridViewData = 1;
                         $(".searchPanelDropdownOption").removeClass("selectedDropdownOption");
                         $(".alldata").addClass("selectedDropdownOption");
                         if (oCommonObject.isMatterView) {
-                            $(".ms-Dropdown-title, #listViewPageHeader").text("All Matters").attr("title", oGlobalConstants.All_Matters_Message); //// Set the drop down title to All Matters                 
+                            $(".ms-Dropdown-title, #gridViewPageHeader").text("All Matters").attr("title", oGlobalConstants.All_Matters_Message); //// Set the drop down title to All Matters                 
                         } else {
-                            $(".ms-Dropdown-title, #listViewPageHeader").text("All Documents").attr("title", oGlobalConstants.All_Documents_Message); //// Set the drop down title to All Matters
+                            $(".ms-Dropdown-title, #gridViewPageHeader").text("All Documents").attr("title", oGlobalConstants.All_Documents_Message); //// Set the drop down title to All Matters
                         }
                     }
                     oCommonObject.isAllRowSelected = false;
@@ -1043,15 +1081,15 @@ var oCommonObject = (function () {
                     if (!$("#autoCompleteText").val().trim().length) {
                         $("#autoCompletePlaceHolder").css("display", "inline");
                     }
-                    $("#listViewContainer").off("scroll").empty(); /// Remove the data from the list view
-                    $("#loadingImageContainer").removeClass("hide"); //// Hide the loading image of list view control
+                    $("#gridViewContainer").off("scroll").empty(); /// Remove the data from the grid view
+                    $("#loadingImageContainer").removeClass("hide"); //// Hide the loading image of grid view control
                     oCommonObject.sSearchedKeyword = $("#autoCompleteText").length ? $("#autoCompleteText").val() : "";
                     if (oCommonObject.isMatterView) {
                         //// Get data for Search Matters
-                        getSearchMatters($("#listView"), 1);
+                        getSearchMatters($("#gridView"), 1);
                     } else {
                         //// Get data for Search Documents
-                        getSearchDocuments($("#listView"), 1);
+                        getSearchDocuments($("#gridView"), 1);
                     }
                 }
             });
@@ -1076,7 +1114,7 @@ var oCommonObject = (function () {
             $(document.body).on("change", "#options-checkbox-unselected", function () {
                 var iIterator = 0;
                 var bCurrentItemStatus = $("#options-checkbox-unselected")[0].checked;
-                oListViewObject && (oListViewObject.bDefaultSelectionChanged = true);
+                oGridViewObject && (oGridViewObject.bDefaultSelectionChanged = true);
                 //// Starting the iteration from position 2 as Name column is to be selected always and it is present in position 1
                 for (iIterator = 2; iIterator <= nCheckBoxCount - 1; iIterator++) {
                     arrCheckBox[iIterator].checked = this.checked;
@@ -1092,7 +1130,7 @@ var oCommonObject = (function () {
         /* Function to perform column option selection */
         onColumnPickerCheckboxClick: function (iIndex, event) {
             if (iIndex) {
-                oListViewObject && (oListViewObject.bDefaultSelectionChanged = true);
+                oGridViewObject && (oGridViewObject.bDefaultSelectionChanged = true);
                 var bCurrentItemStatus = $("#options-checkbox-unselected" + iIndex)[0].checked;
                 var $AllColumnOption = $("#columnOptions").find("#options-checkbox-unselected");
                 commonConstants.toggleColumns(iIndex, bCurrentItemStatus);
@@ -1107,23 +1145,23 @@ var oCommonObject = (function () {
                 event ? event.stopPropagation() : "";
             }
         },
-        /* Function to perform list view item selection */
-        onListViewCheckboxClick: function () {
-            var $AllListViewItems = $(".isSelectRowsActive");
-            if ($AllListViewItems && $AllListViewItems.length && $AllListViewItems[0].checked) {
-                $AllListViewItems.prop("checked", false);
+        /* Function to perform grid view item selection */
+        onGridViewCheckboxClick: function () {
+            var $AllGridViewItems = $(".isSelectRowsActive");
+            if ($AllGridViewItems && $AllGridViewItems.length && $AllGridViewItems[0].checked) {
+                $AllGridViewItems.prop("checked", false);
                 oCommonObject.isAllRowSelected = false;
             }
             var nSelectedColumnCount = $(".jsonGrid").find(".is-selectedRow").length;
             var nTotalColumnCount = $(".gridCell").find("input[type='checkbox']").length;
             if (nTotalColumnCount && (nSelectedColumnCount === nTotalColumnCount)) {
-                $AllListViewItems.prop("checked", true);
+                $AllGridViewItems.prop("checked", true);
                 oCommonObject.isAllRowSelected = true;
             }
         },
-        /* Function to show/hide list view columns based upon user selection */
+        /* Function to show/hide grid view columns based upon user selection */
         toggleColumns: function (iIndex, bCurrentItemStatus) {
-            var nHeaderOptionMapping = oCommonObject.isMatterView ? iIndex + oFindMatterConstants.ListViewNonDataColumns.split(";").length + 1 : iIndex + oFindDocumentConstants.ListViewNonDataColumns.split(";").length + 1;
+            var nHeaderOptionMapping = oCommonObject.isMatterView ? iIndex + oFindMatterConstants.GridViewNonDataColumns.split(";").length + 1 : iIndex + oFindDocumentConstants.GridViewNonDataColumns.split(";").length + 1;
             if (bCurrentItemStatus) {
                 $(".dataColumn" + (parseInt(iIndex) + 1)).parent().removeClass("hide");
                 $(".jsonGridHeader:nth-child(" + nHeaderOptionMapping + ")").removeClass("hide");
@@ -1131,16 +1169,16 @@ var oCommonObject = (function () {
                 $(".dataColumn" + (parseInt(iIndex) + 1)).parent().addClass("hide");
                 $(".jsonGridHeader:nth-child(" + nHeaderOptionMapping + ")").addClass("hide");
             }
-            oListViewObject.arrUserSelectedColumns = [];
+            oGridViewObject.arrUserSelectedColumns = [];
             $.each($("#columnOptions").find("input[type='checkbox']:checked").siblings(), function (index, value) {
-                $(value).text().trim() && oListViewObject.arrUserSelectedColumns.push($(value).text().trim());
+                $(value).text().trim() && oGridViewObject.arrUserSelectedColumns.push($(value).text().trim());
             });
-            /* Adjust the caret down icon for last column in the list view */
+            /* Adjust the caret down icon for last column in the grid view */
             commonConstants.adjustCaretIcon();
         },
         /* Function for failure of auto complete */
         getAutoCompleteDataFailure: function (result) {
-            oListViewObject.waitTillDataLoaded = false;
+            oGridViewObject.waitTillDataLoaded = false;
             var oResult = JSON.parse(result);
             showCommonErrorPopUp(oResult.Result);
         },
@@ -1221,11 +1259,11 @@ var oCommonObject = (function () {
                 sServiceCallName = "FindDocument";
             }
 
-            if (2 !== oCommonObject.iCurrentListViewData()) { //// If All Matters/Documents section (flag is 1) is selected, then set filter by me flag to 0
+            if (2 !== oCommonObject.iCurrentGridViewData()) { //// If All Matters/Documents section (flag is 1) is selected, then set filter by me flag to 0
                 oFilterDetails.FilterByMe = 0;
             }
 
-            if (2 === oCommonObject.iCurrentListViewData()) { //// If My Matters/Documents section (flag is 2) is selected, then update the Sort filter
+            if (2 === oCommonObject.iCurrentGridViewData()) { //// If My Matters/Documents section (flag is 2) is selected, then update the Sort filter
                 oSortDetails.ByProperty = oCommonObject.isMatterView ? oGlobalConstants.Last_Modified_Time : oGlobalConstants.Document_Last_Modified_Time;
                 oSortDetails.Direction = 1;
             }
@@ -1301,59 +1339,59 @@ var oCommonObject = (function () {
                 }
             }
             if ("InfoFlyout" !== divClass) {
-                $("#listViewContainer .InfoFlyout").remove();
+                $("#gridViewContainer .InfoFlyout").remove();
             }
         },
         /* Function to add bindings for ECB control */
         addECBBindings: function () {
             /* Functionality of Pin */
             $(".pin").on("click", function () {
-                //// Use oListViewObject.oCurrentMandatory object for getting current mandatory column
+                //// Use oGridViewObject.oCurrentMandatory object for getting current mandatory column
                 if (oCommonObject.isMatterView) {
                     //// Pin Matter for User
-                    pinMatter(oListViewObject.oCurrentMandatory);
+                    pinMatter(oGridViewObject.oCurrentMandatory);
                 } else {
                     //// Pin Document for User
-                    pinDocument(oListViewObject.oCurrentMandatory);
+                    pinDocument(oGridViewObject.oCurrentMandatory);
                 }
             });
 
             /* Functionality of Unpin */
             $(".unpin").on("click", function () {
-                //// Use oListViewObject.oCurrentMandatory object for getting current mandatory column
+                //// Use oGridViewObject.oCurrentMandatory object for getting current mandatory column
                 if (oCommonObject.isMatterView) {
                     //// Unpin Matter for User
-                    unpinMatter(oListViewObject.oCurrentMandatory);
+                    unpinMatter(oGridViewObject.oCurrentMandatory);
                 } else {
                     //// Unpin Document for User
-                    unpinDocument(oListViewObject.oCurrentMandatory);
+                    unpinDocument(oGridViewObject.oCurrentMandatory);
                 }
             });
 
             /* Functionality of Upload */
             $(".upload").on("click", function () {
-                //// Use oListViewObject.oCurrentMandatory object for getting current mandatory column
+                //// Use oGridViewObject.oCurrentMandatory object for getting current mandatory column
                 if (!($(this).attr("disabled"))) {
                     $(".notification").remove();
-                    populateFolderHierarchy(oListViewObject.oCurrentMandatory);
+                    populateFolderHierarchy(oGridViewObject.oCurrentMandatory);
                 }
             });
 
             /* Functionality of Go to Matter Sites */
             $(".gotoMatterSites").on("click", function () {
-                //// Use oListViewObject.oCurrentMandatory object for getting current mandatory column
+                //// Use oGridViewObject.oCurrentMandatory object for getting current mandatory column
                 commonFunction.AppLogEvent(oGlobalConstants.Events_Tracking_Pages + oCommonObject.sCurrentPage + oGlobalConstants.Go_To_Matter_Sites, true);
             });
 
             /* Functionality of Matter Info */
             $(".matterinfo").on("click", function () {
-                //// Use oListViewObject.oCurrentMandatory object for getting current mandatory column
+                //// Use oGridViewObject.oCurrentMandatory object for getting current mandatory column
                 commonFunction.AppLogEvent(oGlobalConstants.Events_Tracking_Pages + oCommonObject.sCurrentPage + oGlobalConstants.Matter_Info, true);
             });
 
             /* Functionality of Document Info */
             $(".documentinfo").on("click", function () {
-                //// Use oListViewObject.oCurrentMandatory object for getting current mandatory column
+                //// Use oGridViewObject.oCurrentMandatory object for getting current mandatory column
                 commonFunction.AppLogEvent(oGlobalConstants.Events_Tracking_Pages + oCommonObject.sCurrentPage + oGlobalConstants.Document_Info, true);
             });
 
@@ -1362,10 +1400,10 @@ var oCommonObject = (function () {
                 //// Get the mandatory element from where we can get the meta data associated with the matter
                 commonFunction.AppLogEvent(oGlobalConstants.Events_Tracking_Pages + oCommonObject.sCurrentPage + oGlobalConstants.Edit_Document, true);
                 var sDocumentPath = "";
-                if (4 === oCommonObject.iCurrentListViewData()) {
-                    sDocumentPath = oListViewObject.oCurrentMandatory.attr("data-documentowaurl");
+                if (4 === oCommonObject.iCurrentGridViewData()) {
+                    sDocumentPath = oGridViewObject.oCurrentMandatory.attr("data-documentowaurl");
                 } else {
-                    sDocumentPath = getDocumentUrl(oListViewObject.oCurrentMandatory);
+                    sDocumentPath = getDocumentUrl(oGridViewObject.oCurrentMandatory);
                 }
                 commonConstants.openWindow(sDocumentPath, "_blank");
             });
@@ -1410,7 +1448,7 @@ var oCommonObject = (function () {
                 $.each(arrRefinerUniqueValues, function (iIndex, sCurrentItem) {
                     var sCurrentValue = $.trim(sCurrentItem);
                     /* Commented code kept if there is a requirement to remove extension from filter fly out in future */
-                    ////if ("undefined" !== typeof (oFindDocumentConstants) && (oFindDocumentConstants.ListViewTitleProperty === result.oParam.refinerValue || oFindDocumentConstants.ListViewPinnedTitleProperty === result.oParam.refinerValue)) {
+                    ////if ("undefined" !== typeof (oFindDocumentConstants) && (oFindDocumentConstants.GridViewTitleProperty === result.oParam.refinerValue || oFindDocumentConstants.GridViewPinnedTitleProperty === result.oParam.refinerValue)) {
                     ////    sCurrentValue = extractTitle(sCurrentValue);
                     ////} 
                     if (sCurrentValue) {
@@ -1533,7 +1571,7 @@ var oCommonObject = (function () {
             , oSortDetails = { ByProperty: sRefinerValue, Direction: 0 } //// Used for server side sorting           
             , oSearchDetails;
 
-            if (1 === oCommonObject.iCurrentListViewData()) { //// If All Matters section (flag is 1) is selected, then set filter by me flag to 0
+            if (1 === oCommonObject.iCurrentGridViewData()) { //// If All Matters section (flag is 1) is selected, then set filter by me flag to 0
                 oFilterDetails.FilterByMe = 0;
             }
 
@@ -1575,11 +1613,11 @@ var oCommonObject = (function () {
             if (oFilterFlyOut.length) {
                 var sRefinerName = oFilterFlyOut.attr("data-refinername")
                 , sFilterFlyoutType = oFilterFlyOut.attr("data-filterflyouttype");
-                if (4 === oCommonObject.iCurrentListViewData()) {
+                if (4 === oCommonObject.iCurrentGridViewData()) {
                     var sCurrentFilterText = $(".filterFlyoutSearchText").val().toLowerCase(); //// Current text in search panel
-                    oListViewObject.filterData; /// unfiltered data from the filter fly out
+                    oGridViewObject.filterData; /// unfiltered data from the filter fly out
                     var arrFilteredData = [];
-                    $.each(oListViewObject.filterData, function (iCount, sCurrentValue) {
+                    $.each(oGridViewObject.filterData, function (iCount, sCurrentValue) {
                         if (-1 < sCurrentValue.toLowerCase().indexOf(sCurrentFilterText)) {
                             arrFilteredData.push(sCurrentValue);
                         }
@@ -1603,7 +1641,7 @@ var oCommonObject = (function () {
                     , sCurrentFlyOutType = oThisObject && oThisObject.attr("data-clearfiltertype")
                     , oFilterFlyOut
                     , oGridRow = {};
-                if (4 === oCommonObject.iCurrentListViewData()) {
+                if (4 === oCommonObject.iCurrentGridViewData()) {
                     if ("text" === sCurrentFlyOutType) {
                         if (!oCommonObject.isMatterView) {
                             delete oPinnedFlyoutFilters.oSearchDocumentFilters[$("#textFlyoutContent").attr("data-refinername")];
@@ -1622,7 +1660,7 @@ var oCommonObject = (function () {
                         }
                     }
                     oGridRow = $(".GridRow, .GridRowAlternate");
-                    oListView.highlightListViewRow(oGridRow, false);
+                    oGridView.highlightGridViewRow(oGridRow, false);
                     $("#attachDocuments").addClass("is-disabled");
                 } else {
                     if ("text" === sCurrentFlyOutType) {
@@ -1639,8 +1677,8 @@ var oCommonObject = (function () {
                     commonConstants.arrCurrentRefiner = $.grep(commonConstants.arrCurrentRefiner, function (sCurrentValue) {
                         return sCurrentValue !== sRefinerName;
                     });
-                    commonConstants.clearListViewContent();
-                    (oCommonObject.isMatterView) ? getSearchMatters($("#listView"), 1) : getSearchDocuments($("#listView"), 1);
+                    commonConstants.clearGridViewContent();
+                    (oCommonObject.isMatterView) ? getSearchMatters($("#gridView"), 1) : getSearchDocuments($("#gridView"), 1);
                 }
             });
 
@@ -1668,7 +1706,7 @@ var oCommonObject = (function () {
 
             //// Function to search on click of values in filter fly out
             $(document).on("click", ".filterValueLabels", function (event) {
-                if ((4 === oCommonObject.iCurrentListViewData()) || (event && event.target && event.target.className.indexOf("filterValueCheckbox") < 0)) { //// If click is not triggered by fabric component
+                if ((4 === oCommonObject.iCurrentGridViewData()) || (event && event.target && event.target.className.indexOf("filterValueCheckbox") < 0)) { //// If click is not triggered by fabric component
                     var oFilterFlyOut = $("#textFlyoutContent")
                         , oThisObject = $(this);
                     if (oFilterFlyOut.length && oThisObject.length) {
@@ -1680,10 +1718,10 @@ var oCommonObject = (function () {
                         if ($.trim(sRefinerName) && $.trim(sFilterFlyoutType)) {
                             if (oCommonObject.isMatterView) {
                                 ////#region Search Matters
-                                if (4 === oCommonObject.iCurrentListViewData()) {
+                                if (4 === oCommonObject.iCurrentGridViewData()) {
                                     if ("singleselect" === sFilterFlyoutType.toLowerCase()) {
                                         switch (sRefinerName) {
-                                            case oFindMatterConstants.ListViewPinnedTitleProperty:
+                                            case oFindMatterConstants.GridViewPinnedTitleProperty:
                                                 oPinnedFlyoutFilters.oSearchMatterFilters.MatterName = oThisObject.find("span").attr("title");
                                                 commonConstants.filterData(oPinnedFlyoutFilters.oSearchMatterFilters, false, sRefinerName);
                                                 break;
@@ -1703,16 +1741,16 @@ var oCommonObject = (function () {
                                     }
                                 } else {
                                     commonConstants.updateFlyoutFilters(sRefinerName, sFilterFlyoutType, false, null, oThisObject);
-                                    commonConstants.clearListViewContent();
-                                    getSearchMatters($("#listView"), 1);
+                                    commonConstants.clearGridViewContent();
+                                    getSearchMatters($("#gridView"), 1);
                                 }
                                 ////#endregion
                             } else {
                                 ////#region Search Documents
-                                if (4 === oCommonObject.iCurrentListViewData()) {
+                                if (4 === oCommonObject.iCurrentGridViewData()) {
                                     if ("singleselect" === sFilterFlyoutType.toLowerCase()) {
                                         switch (sRefinerName) {
-                                            case oFindDocumentConstants.ListViewPinnedTitleProperty:
+                                            case oFindDocumentConstants.GridViewPinnedTitleProperty:
                                                 oPinnedFlyoutFilters.oSearchDocumentFilters.DocumentName = oThisObject.find("span").attr("title");
                                                 commonConstants.filterData(oPinnedFlyoutFilters.oSearchDocumentFilters, false, sRefinerName);
                                                 break;
@@ -1734,8 +1772,8 @@ var oCommonObject = (function () {
                                     $("#attachDocuments").addClass("is-disabled");
                                 } else {
                                     commonConstants.updateFlyoutFilters(sRefinerName, sFilterFlyoutType, false, null, oThisObject);
-                                    commonConstants.clearListViewContent();
-                                    getSearchDocuments($("#listView"), 1);
+                                    commonConstants.clearGridViewContent();
+                                    getSearchDocuments($("#gridView"), 1);
                                 }
                                 //// #endregion
                             }
@@ -1809,7 +1847,7 @@ var oCommonObject = (function () {
                     }
                     $.each(arrSplitValues, function (iCurrentCount, sValue) {
                         var sTrimmedValue = $.trim(sValue);
-                        (flag && $.inArray(sTrimmedValue, oListViewObject.filterData) === -1) && oListViewObject.filterData.push(sTrimmedValue);
+                        (flag && $.inArray(sTrimmedValue, oGridViewObject.filterData) === -1) && oGridViewObject.filterData.push(sTrimmedValue);
                     });
                 } else {
                     flag && results.push(value);
@@ -1823,15 +1861,15 @@ var oCommonObject = (function () {
                     oCommonObject.pinnedFilterData.push(oCommonObject.pinnedData[0]);   // Add first object to get the structure
                     bNoResults = true;
                 }
-                var listViewJSON = oListView.generateListViewJSON();
-                if (listViewJSON && listViewJSON.length) {
+                var gridViewJSON = oGridView.generateGridViewJSON();
+                if (gridViewJSON && gridViewJSON.length) {
                     var arrHeaderData, arrHeaderDataTitle;
                     if (oCommonObject.isMatterView) {
-                        arrHeaderData = oFindMatterConstants.ListViewHeaderName.split(";");
-                        arrHeaderDataTitle = oFindMatterConstants.ListViewHeaderNameTitle.split("$|$");
+                        arrHeaderData = oFindMatterConstants.GridViewHeaderName.split(";");
+                        arrHeaderDataTitle = oFindMatterConstants.GridViewHeaderNameTitle.split("$|$");
                     } else {
-                        arrHeaderData = oFindDocumentConstants.ListViewHeaderName.split(";");
-                        arrHeaderDataTitle = oFindDocumentConstants.ListViewHeaderNameTitle.split("$|$");
+                        arrHeaderData = oFindDocumentConstants.GridViewHeaderName.split(";");
+                        arrHeaderDataTitle = oFindDocumentConstants.GridViewHeaderNameTitle.split("$|$");
                     }
                     var oHeaderNames = [], oHeaderFilterType = [];
                     $.each(arrHeaderData, function (iItem, sCurrentValue) {
@@ -1839,29 +1877,29 @@ var oCommonObject = (function () {
                         oHeaderNames.push(oCurrentHeader[0]);
                         oCommonObject.oHeaderFilterType.push(oCurrentHeader[1]);
                     });
-                    //// Generate the common JSON structure for generating the list view control
+                    //// Generate the common JSON structure for generating the grid view control
                     var GridConfig = {
-                        container: "listViewContainer",
+                        container: "gridViewContainer",
                         data: results,
-                        gridName: "List View",
+                        gridName: "Grid View",
                         gridHeader: oHeaderNames,
                         gridHeaderTitle: arrHeaderDataTitle,
-                        columnNames: listViewJSON,
+                        columnNames: gridViewJSON,
                         sortby: "",
                         sortorder: "asc",
                         sortType: String,
                         initialsortorder: "",
                         retainpageonsort: false,
-                        maxRows: oListViewObject.itemsPerPage,
+                        maxRows: oGridViewObject.itemsPerPage,
                         viewrecords: true,
                         pagination: false,
                         altRowColor: "white",
                         cellSpacing: 0
                     };
-                    $("#listViewContainer").empty();
-                    new LCADMS.JsonGrid(GridConfig);
-                    oListView.bindECB();
-                    oListView.addListViewControlBindings();
+                    $("#gridViewContainer").empty();
+                    new oGrid.JsonGrid(GridConfig);
+                    oGridView.bindECB();
+                    oGridView.addGridViewControlBindings();
                     oCommonObject.configureOnLoadView(); //// Display the columns as per selection using column picker
                     //// Display the filter icon on the column header
                     var oFilteredKeys = {
@@ -1877,15 +1915,15 @@ var oCommonObject = (function () {
                 }
                 if (bNoResults) { // Check if no results to show generic message
                     oCommonObject.pinnedFilterData.pop(); // Remove dummy element        
-                    LCADMS.gridObject[0].data.pop(); // Remove dummy element
-                    $("#listViewContainer_Grid tbody tr").removeClass("hide").addClass("invisible");
-                    $("#listViewContainer_Grid tbody").append(oGlobalConstants.No_Results_Message);
+                    oGrid.gridObject[0].data.pop(); // Remove dummy element
+                    $("#gridViewContainer_Grid tbody tr").removeClass("hide").addClass("invisible");
+                    $("#gridViewContainer_Grid tbody").append(oGlobalConstants.No_Results_Message);
                 }
             }
         },
         /* Function to clear the fly out filters when search using advance search */
         clearFlyOutFilters: function (bIsAdvanceSearchCall) {
-            if (bIsAdvanceSearchCall) { //// Clear all the filters applied on list view
+            if (bIsAdvanceSearchCall) { //// Clear all the filters applied on grid view
                 if (oFlyoutFilters && oFlyoutFilters.DateFilters) {
                     oFlyoutFilters.Name = "";
                     oFlyoutFilters.ClientName = "";
@@ -1902,23 +1940,23 @@ var oCommonObject = (function () {
                 }
             }
         },
-        /* Function to clear the content of list view */
-        clearListViewContent: function () {
-            oListViewObject.pageNumber = 1; //// Reset the page number for list view control
-            $("#listViewContainer").off("scroll").empty(); //// Unbind the scroll event on the list view and Remove the data from the list view            
-            $("#loadingImageContainer").removeClass("hide"); //// Hide the loading image of list view control
+        /* Function to clear the content of grid view */
+        clearGridViewContent: function () {
+            oGridViewObject.pageNumber = 1; //// Reset the page number for grid view control
+            $("#gridViewContainer").off("scroll").empty(); //// Unbind the scroll event on the grid view and Remove the data from the grid view            
+            $("#loadingImageContainer").removeClass("hide"); //// Hide the loading image of grid view control
         },
-        /* Function to configure on load view for list view control */
+        /* Function to configure on load view for grid view control */
         configureOnLoadView: function () {
             //// This function will need to be modified in future, when user selection persistence will be implemented
-            var arrListHeaders = oCommonObject.isMatterView ? commonConstants.getArrayDifference(oFindMatterConstants.ListViewHeaderName.split(";"), oFindMatterConstants.ListViewNonDataColumns.split(";")) : commonConstants.getArrayDifference(oFindDocumentConstants.ListViewHeaderName.split(";"), oFindDocumentConstants.ListViewNonDataColumns.split(";"));
+            var arrListHeaders = oCommonObject.isMatterView ? commonConstants.getArrayDifference(oFindMatterConstants.GridViewHeaderName.split(";"), oFindMatterConstants.GridViewNonDataColumns.split(";")) : commonConstants.getArrayDifference(oFindDocumentConstants.GridViewHeaderName.split(";"), oFindDocumentConstants.GridViewNonDataColumns.split(";"));
             var nListHeaderCount = arrListHeaders.length;
             var sCheckBoxSelector = "#options-checkbox-unselected";
             var arrDefaultColumns = [];
-            var nNonDataColumns = oCommonObject.isMatterView ? oFindMatterConstants.ListViewNonDataColumns.split(";").length : oFindDocumentConstants.ListViewNonDataColumns.split(";").length;
+            var nNonDataColumns = oCommonObject.isMatterView ? oFindMatterConstants.GridViewNonDataColumns.split(";").length : oFindDocumentConstants.GridViewNonDataColumns.split(";").length;
             var nHeaderOptionMapping = 0, iIterator = 0;
-            if (oListViewObject && !oListViewObject.bDefaultSelectionChanged) {
-                arrDefaultColumns = oCommonObject.isMatterView ? oFindMatterConstants.ListViewDefaultColumns.split(";") : oFindDocumentConstants.ListViewDefaultColumns.split(";");
+            if (oGridViewObject && !oGridViewObject.bDefaultSelectionChanged) {
+                arrDefaultColumns = oCommonObject.isMatterView ? oFindMatterConstants.GridViewDefaultColumns.split(";") : oFindDocumentConstants.GridViewDefaultColumns.split(";");
                 for (iIterator = 1; iIterator <= nListHeaderCount - 1; iIterator++) {
                     if (-1 === $.inArray(arrListHeaders[iIterator], arrDefaultColumns)) {
                         nHeaderOptionMapping = iIterator + nNonDataColumns + 1;
@@ -1930,8 +1968,8 @@ var oCommonObject = (function () {
                         $(sCheckBoxSelector + iIterator).length ? $(sCheckBoxSelector + iIterator)[0].checked = true : "";
                     }
                 }
-            } else if (oListViewObject && oListViewObject.bDefaultSelectionChanged && 0 < oListViewObject.arrUserSelectedColumns.length) {
-                arrDefaultColumns = oListViewObject.arrUserSelectedColumns;
+            } else if (oGridViewObject && oGridViewObject.bDefaultSelectionChanged && 0 < oGridViewObject.arrUserSelectedColumns.length) {
+                arrDefaultColumns = oGridViewObject.arrUserSelectedColumns;
                 for (iIterator = 1; iIterator <= nListHeaderCount - 1; iIterator++) {
                     if (-1 === $.inArray(arrListHeaders[iIterator].split(",")[0], arrDefaultColumns)) {
                         nHeaderOptionMapping = iIterator + nNonDataColumns + 1;
@@ -1981,7 +2019,7 @@ var oCommonObject = (function () {
                 if (oCommonObject.isMatterView) {
                     if ("singleselect" === sFilterFlyoutType.toLowerCase()) {
                         switch (sRefinerName) {
-                            case oFindMatterConstants.ListViewTitleProperty: //// Matter
+                            case oFindMatterConstants.GridViewTitleProperty: //// Matter
                                 if (bClearCurrentFilter) {
                                     oFilterDetails.Name = "";
                                 } else {
@@ -2014,7 +2052,7 @@ var oCommonObject = (function () {
                 } else {
                     if ("singleselect" === sFilterFlyoutType.toLowerCase()) {
                         switch (sRefinerName) {
-                            case oFindDocumentConstants.ListViewTitleProperty: //// Document
+                            case oFindDocumentConstants.GridViewTitleProperty: //// Document
                                 if (bClearCurrentFilter) {
                                     oFilterDetails.Name = "";
                                 } else {
@@ -2048,11 +2086,11 @@ var oCommonObject = (function () {
             }
             return oFilterDetails;
         },
-        /* Function to filter list view on date filters */
-        filterListViewOnDate: function (sFromDate, sToDate) {
+        /* Function to filter grid view on date filters */
+        filterGridViewOnDate: function (sFromDate, sToDate) {
             var sRefinerName = $("#dateFlyoutContent").attr("data-refinername")
                 , sFilterFlyoutType = $("#dateFlyoutContent").attr("data-filterflyouttype");
-            if (4 === oCommonObject.iCurrentListViewData()) {
+            if (4 === oCommonObject.iCurrentGridViewData()) {
                 if (oCommonObject.isMatterView) {
                     switch (sRefinerName) {
                         case oFindMatterConstants.FilterRefinerPinnedModifiedDate:
@@ -2111,17 +2149,17 @@ var oCommonObject = (function () {
                 if (-1 === $.inArray(sRefinerName, commonConstants.arrCurrentRefiner)) {
                     commonConstants.arrCurrentRefiner.push(sRefinerName);
                 }
-                commonConstants.clearListViewContent();
-                (oCommonObject.isMatterView) ? getSearchMatters($("#listView"), 1) : getSearchDocuments($("#listView"), 1);
+                commonConstants.clearGridViewContent();
+                (oCommonObject.isMatterView) ? getSearchMatters($("#gridView"), 1) : getSearchDocuments($("#gridView"), 1);
             }
         },
         /* Function to get the current sort details */
         getSortDetails: function (bIsFilterFlyoutCall) {
             if (!bIsFilterFlyoutCall) {
-                if (1 === oCommonObject.iCurrentListViewData()) { //// If All Matters/Documents section (flag is 1) is selected, then update the Sort filter
-                    oCommonObject.oSortDetails().ByProperty = (oCommonObject.isMatterView) ? oFindMatterConstants.ListViewTitleProperty : oFindDocumentConstants.ListViewTitleProperty;
+                if (1 === oCommonObject.iCurrentGridViewData()) { //// If All Matters/Documents section (flag is 1) is selected, then update the Sort filter
+                    oCommonObject.oSortDetails().ByProperty = (oCommonObject.isMatterView) ? oFindMatterConstants.GridViewTitleProperty : oFindDocumentConstants.GridViewTitleProperty;
                     oCommonObject.oSortDetails().Direction = 0;
-                } else if (2 === oCommonObject.iCurrentListViewData()) { //// If My Matters/Documents section (flag is 2) is selected, then update the Sort filter
+                } else if (2 === oCommonObject.iCurrentGridViewData()) { //// If My Matters/Documents section (flag is 2) is selected, then update the Sort filter
                     oCommonObject.oSortDetails().ByProperty = oCommonObject.isMatterView ? oGlobalConstants.Last_Modified_Time : oGlobalConstants.Document_Last_Modified_Time;
                     oCommonObject.oSortDetails().Direction = 1;
                 } else {
@@ -2134,7 +2172,7 @@ var oCommonObject = (function () {
         updateSortingNotification: function () {
             var oCurrentSortObject = oCommonObject.oSortDetails();
             if ($.trim(oCurrentSortObject.ByProperty)) {
-                //// Update the sorting notification in list view header
+                //// Update the sorting notification in grid view header
                 var oCurrentHeader = $(".jsonGridHeader[id=" + oCurrentSortObject.ByProperty + "]");
                 if (oCurrentSortObject.Direction) { //// Descending sort applied
                     oCurrentHeader.find(".sort").html("&#x2193;").removeClass("hide");
@@ -2142,7 +2180,7 @@ var oCommonObject = (function () {
                     oCurrentHeader.find(".sort").html("&#x2191;").removeClass("hide");
                 }
             }
-            //// Update the filter notification in list view header
+            //// Update the filter notification in grid view header
             $.each(commonConstants.arrCurrentRefiner, function (iCurrentIndex, sCurrentValue) {
                 $(".jsonGridHeader[id=" + sCurrentValue + "]").find(".ms-Icon--filter").removeClass("hide");
             });
@@ -2150,7 +2188,7 @@ var oCommonObject = (function () {
         /* Function to bind scroll event on filter fly out */
         bindScrollOnFilterFlyout: function () {
             $("#filterResultsContainer").on("scroll", function (event) {
-                if (4 !== oCommonObject.iCurrentListViewData()) {  //// no lazy loading for pinned section (flag = 4)
+                if (4 !== oCommonObject.iCurrentGridViewData()) {  //// no lazy loading for pinned section (flag = 4)
                     var oFilterObject = $(this); //// Filter Results container object
                     if (oFilterObject.length) {
                         var filterBodyVisibleHeight = oFilterObject.height();
@@ -2179,12 +2217,12 @@ var oCommonObject = (function () {
         highlightSelectedFilters: function (sRefinerName, sFilterFlyoutType) {
             if (oCommonObject.isMatterView) {
                 //// #region Matter View
-                if (4 === oCommonObject.iCurrentListViewData()) {
+                if (4 === oCommonObject.iCurrentGridViewData()) {
                     if (oPinnedFlyoutFilters && oPinnedFlyoutFilters.oSearchMatterFilters) {
                         var oCurrentSearchFilter = oPinnedFlyoutFilters.oSearchMatterFilters;
                         if ("singleselect" === sFilterFlyoutType.toLowerCase()) {
                             switch (sRefinerName) {
-                                case oFindMatterConstants.ListViewPinnedTitleProperty:
+                                case oFindMatterConstants.GridViewPinnedTitleProperty:
                                     if (oCurrentSearchFilter.hasOwnProperty("MatterName")) {
                                         var oCurrentSelectedValue = $(".filterValueLabels").find("span[title='" + oPinnedFlyoutFilters.oSearchMatterFilters.MatterName + "']");
                                         if (oCurrentSelectedValue.length && oCurrentSelectedValue.parent().length) {
@@ -2226,7 +2264,7 @@ var oCommonObject = (function () {
                 } else {
                     if ("singleselect" === sFilterFlyoutType.toLowerCase()) {
                         switch (sRefinerName) {
-                            case oFindMatterConstants.ListViewTitleProperty: //// Matter
+                            case oFindMatterConstants.GridViewTitleProperty: //// Matter
                                 var oCurrentSelectedValue = $(".filterValueLabels").find("span[title='" + oFlyoutFilters.Name + "']");
                                 if (oCurrentSelectedValue.length && oCurrentSelectedValue.parent().length) {
                                     oCurrentSelectedValue.parent().addClass("selectedValue");
@@ -2260,12 +2298,12 @@ var oCommonObject = (function () {
                 //// #endregion
             } else {
                 //// #region Document View
-                if (4 === oCommonObject.iCurrentListViewData()) {
+                if (4 === oCommonObject.iCurrentGridViewData()) {
                     if (oPinnedFlyoutFilters && oPinnedFlyoutFilters.oSearchDocumentFilters) {
                         var oCurrentSearchFilter = oPinnedFlyoutFilters.oSearchDocumentFilters;
                         if ("singleselect" === sFilterFlyoutType.toLowerCase()) {
                             switch (sRefinerName) {
-                                case oFindDocumentConstants.ListViewPinnedTitleProperty:
+                                case oFindDocumentConstants.GridViewPinnedTitleProperty:
                                     if (oCurrentSearchFilter.hasOwnProperty("DocumentName")) {
                                         var oCurrentSelectedValue = $(".filterValueLabels").find("span[title='" + oPinnedFlyoutFilters.oSearchDocumentFilters.DocumentName + "']");
                                         if (oCurrentSelectedValue.length && oCurrentSelectedValue.parent().length) {
@@ -2307,7 +2345,7 @@ var oCommonObject = (function () {
                 } else {
                     if ("singleselect" === sFilterFlyoutType.toLowerCase()) {
                         switch (sRefinerName) {
-                            case oFindDocumentConstants.ListViewTitleProperty: //// Document
+                            case oFindDocumentConstants.GridViewTitleProperty: //// Document
                                 var oCurrentSelectedValue = $(".filterValueLabels").find("span[title='" + oFlyoutFilters.Name + "']");
                                 if (oCurrentSelectedValue.length && oCurrentSelectedValue.parent().length) {
                                     oCurrentSelectedValue.parent().addClass("selectedValue");
@@ -2381,7 +2419,7 @@ var oCommonObject = (function () {
             var oFromDate = $(".filterFlyoutFromText"), oToDate = $(".filterFlyoutToText");
             oCommonObject.isAllRowSelected = false;
             if (oFromDate.length && oToDate.length) {
-                if (4 === oCommonObject.iCurrentListViewData()) { //// Update the filters for pinned section
+                if (4 === oCommonObject.iCurrentGridViewData()) { //// Update the filters for pinned section
                     if (oCommonObject.isMatterView) {
                         if (sRefinerName === oFindMatterConstants.FilterRefinerPinnedModifiedDate) {
                             if (oPinnedFlyoutFilters.oSearchMatterFilters.MatterModifiedDate) {
@@ -2414,20 +2452,20 @@ var oCommonObject = (function () {
                 }
             }
         },
-        /* Updates the position of caret icon for last visible column in list view */
+        /* Updates the position of caret icon for last visible column in grid view */
         adjustCaretIcon: function () {
             $(".jsonGridHeader .ms-Icon--caretDown").length && $(".jsonGridHeader .ms-Icon--caretDown").removeClass("lastCaretIcon").addClass("firstCaretIcon");
             $(".jsonGridHeader:visible:last .ms-Icon--caretDown").length && $(".jsonGridHeader:visible:last .ms-Icon--caretDown").removeClass("firstCaretIcon").addClass("lastCaretIcon");
         },
-        /* Function to move filter fly out inside list view control */
+        /* Function to move filter fly out inside grid view control */
         moveFilterFlyout: function () {
             var sTextFlyoutWrapper = "<div id=\"textFlyoutContent\"></div>"
                 , sDateFlyoutWrapper = "<div id=\"dateFlyoutContent\"></div>";
-            //// Remove the already present filter fly outs inside list view
+            //// Remove the already present filter fly outs inside grid view
             $("#textFlyoutContent, #dateFlyoutContent").remove();
             //// Move both the date and text fly out inside filter fly outs
-            $("#listViewContainer").append(sTextFlyoutWrapper);
-            $("#listViewContainer").append(sDateFlyoutWrapper);
+            $("#gridViewContainer").append(sTextFlyoutWrapper);
+            $("#gridViewContainer").append(sDateFlyoutWrapper);
             //// Populate the filter fly outs with the HTML from the original fly outs
             $("#textFlyoutContent").html($(".textFlyoutContent").html());
             $("#dateFlyoutContent").html($(".dateFlyoutContent").html());
@@ -2478,7 +2516,7 @@ var oCommonObject = (function () {
                 var sFromFormatDate = commonConstants.formatDateForKQL(sFromDate);
                 var sToFormatDate = commonConstants.formatDateForKQL(sToDate);
                 if ($.trim(sFromFormatDate) || $.trim(sToFormatDate)) {
-                    commonConstants.filterListViewOnDate($.trim(sFromFormatDate), $.trim(sToFormatDate));
+                    commonConstants.filterGridViewOnDate($.trim(sFromFormatDate), $.trim(sToFormatDate));
                     $("#btnOK").addClass("activateButton");
                     $("#attachDocuments").addClass("is-disabled");
                 } else {
@@ -2646,14 +2684,14 @@ var oCommonObject = (function () {
             $("#autoCompleteText").attr("disabled", "disabled").addClass("is-disabled");
         },
 
-        //// Updates Listview for matters/documents
-        updateListView: function () {
-            (oCommonObject.isMatterView) ? getPinnedMatters($("#listView")) : getPinnedDocument($("#listView"));
-            if (oListViewObject.isPageLoad) {
-                (oCommonObject.isMatterView) ? getSearchMatters($("#listView"), 1) : getSearchDocuments($("#listView"), 1);
+        //// Updates GridView for matters/documents
+        updateGridView: function () {
+            (oCommonObject.isMatterView) ? getPinnedMatters($("#gridView")) : getPinnedDocument($("#gridView"));
+            if (oGridViewObject.isPageLoad) {
+                (oCommonObject.isMatterView) ? getSearchMatters($("#gridView"), 1) : getSearchDocuments($("#gridView"), 1);
             } else {
-                (oCommonObject.isMatterView) ? getSearchMatters($("#listView"), 0) : getSearchDocuments($("#listView"), 0);
-                oListViewObject.isPageLoad = 1;
+                (oCommonObject.isMatterView) ? getSearchMatters($("#gridView"), 0) : getSearchDocuments($("#gridView"), 0);
+                oGridViewObject.isPageLoad = 1;
             }
         },
         /* Function to set attributes to View document landing page button and bind click event */
@@ -2661,7 +2699,7 @@ var oCommonObject = (function () {
             var oViewDocumentLanding = $("#viewDocumentLandingPage");
             if (oViewDocumentLanding && oViewDocumentLanding.length) {
                 var sClientRelativeURL, sLibraryName, sDocumentMatterUrl;
-                if (4 === oCommonObject.iCurrentListViewData() || 1 === oGridConfig.currentView) {
+                if (4 === oCommonObject.iCurrentGridViewData() || 1 === oGridConfig.currentView) {
                     sClientRelativeURL = commonConstants.getClientURL($Element);
                 } else {
                     sClientRelativeURL = $Element.attr("data-" + oGlobalConstants.SP_Web_Url); //// This will get correct URL in case of sub-site as well                
@@ -2719,7 +2757,7 @@ var oCommonObject = (function () {
                         $(".documentPopupData").removeClass("hide");
                     } else {
                         $("#FlyoutPopupLoading").addClass("hide");
-                        $("#listViewContainer .InfoFlyout").find(".ms-Callout-inner").removeClass("hide");
+                        $("#gridViewContainer .InfoFlyout").find(".ms-Callout-inner").removeClass("hide");
                     }
                 } else {
                     showCommonErrorPopUp(results.code);
@@ -2738,8 +2776,8 @@ var oCommonObject = (function () {
             var $Element = $(oElement);
             if ($Element.length) {
                 var sDocumentPath, sClientRelativeURL, sDocumentLibrary, sClient, sClientURL;
-                if (4 === oCommonObject.iCurrentListViewData() || 1 === oGridConfig.currentView) {
-                    sDocumentPath = $Element.attr("data-" + oGlobalConstants.ListViewPinnedDocumentUrl);
+                if (4 === oCommonObject.iCurrentGridViewData() || 1 === oGridConfig.currentView) {
+                    sDocumentPath = $Element.attr("data-" + oGlobalConstants.GridViewPinnedDocumentUrl);
                     sClientURL = commonConstants.getClientURL($Element);
                 } else {
                     sDocumentPath = trimEndChar($Element.attr("data-" + oGlobalConstants.Path), "/");
@@ -2820,7 +2858,7 @@ var oCommonObject = (function () {
     ////#endregion
 
     ////#region Filter for advance search
-    /* JSON object to hold the filters for columns on list view - Server side */
+    /* JSON object to hold the filters for columns on grid view - Server side */
     var oFlyoutFilters = {
         Name: "",
         ClientName: "",
@@ -2837,7 +2875,7 @@ var oCommonObject = (function () {
         DocumentCheckoutUsers: [],
         DocumentAuthor: []
     };
-    /* JSON object to hold the filters for columns on list view - Client side */
+    /* JSON object to hold the filters for columns on grid view - Client side */
     var oPinnedFlyoutFilters = {
         oSearchMatterFilters: {
         },
@@ -2914,14 +2952,17 @@ var oCommonObject = (function () {
         bindAutocomplete: function (sSelector, bIsMultiUser) {
             return commonConstants.bindAutocomplete(sSelector, bIsMultiUser);
         },
+        getUserName: function (sUserEmails, bIsName) {
+            return commonConstants.getUserName(sUserEmails, bIsName);
+        },
         oSiteUser: commonConstants.oSiteUser,
         getWidth: function () {
             return commonConstants.getWidth();
         },
         bHideAutoComplete: commonConstants.bHideAutoComplete,
         isMatterView: commonConstants.isMatterView,
-        iCurrentListViewData: function () {
-            return commonConstants.iCurrentListViewData;
+        iCurrentGridViewData: function () {
+            return commonConstants.iCurrentGridViewData;
         },
         sCurrentPage: commonConstants.sCurrentPage,
         userPinnedData: commonConstants.userPinnedData,
@@ -2953,8 +2994,8 @@ var oCommonObject = (function () {
         onColumnPickerCheckboxClick: function (iIndex, event) {
             commonConstants.onColumnPickerCheckboxClick(iIndex, event);
         },
-        onListViewCheckboxClick: function () {
-            commonConstants.onListViewCheckboxClick();
+        onGridViewCheckboxClick: function () {
+            commonConstants.onGridViewCheckboxClick();
         },
         getAutoCompleteDataFailure: function (result) {
             commonConstants.getAutoCompleteDataFailure(result);
@@ -3013,8 +3054,8 @@ var oCommonObject = (function () {
         oSortDetails: function () {
             return commonConstants.oSortDetails;
         },
-        clearListViewContent: function () {
-            commonConstants.clearListViewContent();
+        clearGridViewContent: function () {
+            commonConstants.clearGridViewContent();
         },
         getSortDetails: function (bIsFilterFlyoutCall) {
             commonConstants.getSortDetails(bIsFilterFlyoutCall);
@@ -3072,8 +3113,8 @@ var oCommonObject = (function () {
         abortRequest: function () {
             return commonConstants.abortRequest();
         },
-        updateListView: function () {
-            return commonConstants.updateListView();
+        updateGridView: function () {
+            return commonConstants.updateGridView();
         },
         updateDocumentLandingAttributes: function ($Element) {
             return commonConstants.updateDocumentLandingAttributes($Element);

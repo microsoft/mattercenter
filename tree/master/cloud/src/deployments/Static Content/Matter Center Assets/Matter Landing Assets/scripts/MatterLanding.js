@@ -164,6 +164,8 @@ oGlobalConstants.iTeamMembersCount = 0;
 oGlobalConstants.iBlockedUsersCount = 0;
 oGlobalConstants.sBlockedUsersChunk = "";
 oGlobalConstants.sUsersChunk = "";
+oGlobalConstants.arrDisplayUserName = [];
+oGlobalConstants.arrDisplayBlockUserName = [];
 oGlobalConstants.iPresenceCount = 100000;
 oGlobalConstants.sProvisionMatterGroupName = "Provision Matter Users";
 oGlobalConstants.sListName = "UserPinnedMatter";
@@ -652,7 +654,7 @@ function processXML(xml, iFlag, oPropertiesList) {
     var oProcessedXml, iLength, oElements, iterator, iPropertiesLength, iPropertyIterator, oPinPropertiesList, sTextContent, sClientId;
     oProcessedXml = $.parseXML(xml);
     var oMatterInfoCount = 0;
-    oPinPropertiesList = ["MatterName", "ClientName", "AreaOfLaw", "PracticeGroup", "SubAreaOfLaw", "ResponsibleAttorney", "TeamMembers", "IsMatter", "OpenDate", "ClientID", "MatterID", "BlockedUploadUsers", "ClientName", "BlockedUsers", "LastItemModifiedDate"];  // Properties that are required for Pinning matter
+    oPinPropertiesList = ["MatterName", "ClientName", "AreaOfLaw", "PracticeGroup", "SubAreaOfLaw", "ResponsibleAttorney", "TeamMembers", "IsMatter", "OpenDate", "ClientID", "MatterID", "BlockedUploadUsers", "ClientName", "BlockedUsers", "LastItemModifiedDate", "MatterCenterUserEmails", "ResponsibleAttorneyEmail"];  // Properties that are required for Pinning matter
     iLength = oProcessedXml.firstChild.lastChild.firstChild.childElementCount;
     oElements = oProcessedXml.firstChild.lastChild.firstChild;
     iterator = 0;
@@ -737,29 +739,40 @@ function getUserData() {
         setTimeout(function () { getUserData(); }, 1000);
     } else {
         var clientContext = new SP.ClientContext.get_current();
-        var arrBlockUserName, arrUserName, arrTeamMembers = [], arrResponsibleAttorney = [];
-        if (oPinProperties.TeamMembers) {
-            arrTeamMembers = trimEndChar(oPinProperties.TeamMembers.trim(), ";").split(";");
+        var arrBlockUserName, arrUserNames, arrTeamMembers = [], arrUsersIds = [], arrResponsibleAttorney = [];
+        if (oPinProperties.MatterCenterUserEmails) {
+            arrTeamMembers = htmlDecode(oPinProperties.MatterCenterUserEmails).split("$|$");
+        } else {
+            arrTeamMembers = trimEndChar(htmlDecode(oPinProperties.TeamMembers.trim()), ";").split(";");
         }
-        if (oPinProperties.ResponsibleAttorney) {
-            arrResponsibleAttorney = trimEndChar(oPinProperties.ResponsibleAttorney.trim(), ";").split(";");
+        if (oPinProperties.ResponsibleAttorneyEmail) {
+            arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorneyEmail.trim()), ";").split(";");
+        } else if (oPinProperties.ResponsibleAttorney) {
+            arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorney.trim()), ";").split(";");
         }
-        arrUserName = $.merge(arrTeamMembers, arrResponsibleAttorney);
-        arrUserName = unique($.map(arrUserName, function (item) { return item.trim(); }));
+        arrUserNames = $.merge(arrTeamMembers, arrResponsibleAttorney);
         if (oPinProperties.BlockedUsers) {
-            arrBlockUserName = trimEndChar(oPinProperties.BlockedUsers.trim(), ";").split(";");
+            arrBlockUserName = trimEndChar(htmlDecode(oPinProperties.BlockedUsers.trim()), ";").split(";");
             arrBlockUserName = unique($.map(arrBlockUserName, function (item) { return item.trim(); }));
         }
-        if (arrUserName) {
-            oGlobalConstants.iTeamMembersCount = arrUserName.length;
+        //// Added all users in single dimensional array
+        if (arrUserNames) {
+            $.each(arrUserNames, function (key, value) {
+                if (value) {
+                    var arrUserName = value.split(";");
+                    $.each(arrUserName, function (key, sUserName) {
+                        if (sUserName) {
+                            arrUsersIds.push(sUserName.trim());
+                        }
+                    });
+                }
+            });
+            arrUsersIds = unique($.map(arrUsersIds, function (item) { return item.trim() !== "" ? item.trim() : null; }));
+            oGlobalConstants.iTeamMembersCount = arrUsersIds.length;
             $(".teamSection .userNumber").text("(" + oGlobalConstants.iTeamMembersCount + ")");
             $(".teamFlyoutData").find(".loadingIcon").addClass("hide");
-            $.each(arrUserName, function (key, value) {
-                if (value) {
-                    getUserEmail(clientContext, value, false);
-                } else {
-                    oGlobalConstants.iTeamMembersCount--;
-                }
+            $.each(arrUsersIds, function (key, value) {
+                getUserEmail(clientContext, value, false);
             });
         }
         if (arrBlockUserName) {
@@ -793,16 +806,16 @@ function getUserEmail(clientContext, loginName, isBlockedUser) {
     clientContext.load(oUser);
     clientContext.executeQueryAsync(function () {
         if (isBlockedUser) {
-            oGlobalConstants.sBlockedUsersChunk += "<span class=\"ms-verticalAlignTop ms-noWrap teamFlyoutDataRow\"><span class=\"ms-imnSpan\"><a class=\"ms-imnlink ms-spimn-presenceLink\" onclick='WriteDocEngagementLog(\"DocModifiedByPresenceClick\", \"ODModifiedByPresenceClick\"); IMNImageOnClick(event);return false;' href=\"#\"><span class=\"ms-spimn-presenceWrapper ms-imnImg ms-spimn-imgSize-10x10\"><img name=\"imnmark\" title=\"\" class=\"ms-spimn-img ms-spimn-presence-disconnected-10x10x32\" id=\"imn_" + (oGlobalConstants.iPresenceCount++) + ",type=sip\" alt=\"No presence information\" src=\"/_layouts/15/images/spimn.png\" sip=\"" + oUser.get_email() + "\" showofflinepawn=\"1\"></span></a><a href=\"sip:" + oUser.get_email() + "\">" + loginName + "</a></span></span>";
+            oGlobalConstants.arrDisplayBlockUserName.push({ "username": oUser.get_title(), "email": oUser.get_email() });
             oGlobalConstants.iBlockedUsersCount--;
             if (!oGlobalConstants.iBlockedUsersCount) {
-                $(".blockedFlyoutData").empty().append(oGlobalConstants.sBlockedUsersChunk);
+                displayUserDetails(oGlobalConstants.arrDisplayBlockUserName, false);
             }
         } else {
-            oGlobalConstants.sUsersChunk += "<span class=\"ms-verticalAlignTop ms-noWrap teamFlyoutDataRow\"><span class=\"ms-imnSpan\"><a class=\"ms-imnlink ms-spimn-presenceLink\" onclick='WriteDocEngagementLog(\"DocModifiedByPresenceClick\", \"ODModifiedByPresenceClick\"); IMNImageOnClick(event);return false;' href=\"#\"><span class=\"ms-spimn-presenceWrapper ms-imnImg ms-spimn-imgSize-10x10\"><img name=\"imnmark\" title=\"\" class=\"ms-spimn-img ms-spimn-presence-disconnected-10x10x32\" id=\"imn_" + (oGlobalConstants.iPresenceCount++) + ",type=sip\" alt=\"No presence information\" src=\"/_layouts/15/images/spimn.png\" sip=\"" + oUser.get_email() + "\" showofflinepawn=\"1\"></span></a><a href=\"sip:" + oUser.get_email() + "\">" + loginName + "</a></span></span>";
+            oGlobalConstants.arrDisplayUserName.push({ "username": oUser.get_title(), "email": oUser.get_email() });
             oGlobalConstants.iTeamMembersCount--;
             if (!oGlobalConstants.iTeamMembersCount) {
-                $(".teamFlyoutData").append(oGlobalConstants.sUsersChunk);
+                displayUserDetails(oGlobalConstants.arrDisplayUserName, true);
             }
         }
 
@@ -822,6 +835,27 @@ function trimEndChar(sOrignalString, sCharToTrim) {
         return sOrignalString.substr(0, sOrignalString.length - 1);
     }
     return sOrignalString;
+}
+
+// Function to display Team Members and Conflicted user on flyout
+function displayUserDetails(oUserArray, IsTeam) {
+    "use strict";
+    oUserArray = oUserArray.sort(function (sPrevious, sNext) {
+        if (sPrevious.username.toLowerCase() === sNext.username.toLowerCase()) {
+            return 0;
+        } else {
+            return (sPrevious.username.toLowerCase() < sNext.username.toLowerCase()) ? -1 : 1;
+        }
+    });
+    oGlobalConstants.sUsersChunk = "";
+    $.each(oUserArray, function (key, val) {
+        oGlobalConstants.sUsersChunk += "<span class=\"ms-verticalAlignTop ms-noWrap teamFlyoutDataRow\"><span class=\"ms-imnSpan\"><a class=\"ms-imnlink ms-spimn-presenceLink\" onclick='WriteDocEngagementLog(\"DocModifiedByPresenceClick\", \"ODModifiedByPresenceClick\"); IMNImageOnClick(event);return false;' href=\"#\"><span class=\"ms-spimn-presenceWrapper ms-imnImg ms-spimn-imgSize-10x10\"><img name=\"imnmark\" title=\"\" class=\"ms-spimn-img ms-spimn-presence-disconnected-10x10x32\" id=\"imn_" + (oGlobalConstants.iPresenceCount++) + ",type=sip\" alt=\"No presence information\" src=\"/_layouts/15/images/spimn.png\" sip=\"" + val.email + "\" showofflinepawn=\"1\"></span></a><a href=\"sip:" + val.email + "\">" + val.username + "</a></span></span>";
+    });
+    if (IsTeam) {
+        $(".teamFlyoutData").append(oGlobalConstants.sUsersChunk);
+    } else {
+        $(".blockedFlyoutData").append(oGlobalConstants.sUsersChunk);
+    }
 }
 
 // Function to check if user is exist of SharePoint Group

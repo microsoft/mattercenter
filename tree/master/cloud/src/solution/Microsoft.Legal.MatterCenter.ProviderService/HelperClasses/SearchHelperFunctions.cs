@@ -811,11 +811,11 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                 }
                 SearchExecutor searchExecutor = new SearchExecutor(clientContext);
                 ClientResult<ResultTableCollection> resultsTableCollection = searchExecutor.ExecuteQuery(keywordQuery);
-                string currentLoggedInUser = UIUtility.GetLoggedInUserDetails(clientContext).Name;
+                Users currentLoggedInUser = UIUtility.GetLoggedInUserDetails(clientContext);
 
                 if (null != resultsTableCollection && null != resultsTableCollection.Value && 0 < resultsTableCollection.Value.Count && null != resultsTableCollection.Value[0].ResultRows)
                 {
-                    if (isMatterSearch && 0 < resultsTableCollection.Value.Count && null != resultsTableCollection.Value[0].ResultRows && !string.IsNullOrWhiteSpace(currentLoggedInUser))
+                    if (isMatterSearch && 0 < resultsTableCollection.Value.Count && null != resultsTableCollection.Value[0].ResultRows && (!string.IsNullOrWhiteSpace(currentLoggedInUser.Name) || !string.IsNullOrWhiteSpace(currentLoggedInUser.Email)))
                     {
                         foreach (IDictionary<string, object> matterMetadata in resultsTableCollection.Value[0].ResultRows)
                         {
@@ -827,7 +827,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                                 string readOnlyUsers = Convert.ToString(matterMetadata[SearchConstants.ManagedPropertyBlockedUploadUsers], CultureInfo.InvariantCulture);
                                 if (!string.IsNullOrWhiteSpace(readOnlyUsers))
                                 {
-                                    isReadOnly = IsUserReadOnlyForMatter(isReadOnly, currentLoggedInUser, readOnlyUsers);
+                                    isReadOnly = IsUserReadOnlyForMatter(isReadOnly, currentLoggedInUser.Name, currentLoggedInUser.Email, readOnlyUsers);
                                 }
                                 matterMetadata.Add(TextConstants.IsReadOnlyUser, isReadOnly);
                             }
@@ -857,7 +857,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                     {
                         if (0 == resultsTableCollection.Value[0].TotalRows)
                         {
-                            result = SearchHelperFunctions.NoDataRow(managedProperties);    
+                            result = SearchHelperFunctions.NoDataRow(managedProperties);
                         }
                         else
                         {
@@ -906,13 +906,15 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
         /// </summary>
         /// <param name="isReadOnly">Flag indicating if user has read permission on matter</param>
         /// <param name="currentLoggedInUser">Current logged-in user name</param>
+        /// <param name="currentLoggedInUserEmail">Current logged-in user email</param>
         /// <param name="readOnlyUsers">List of read only user for matter</param>
         /// <returns>Flag indicating if user has read permission on matter</returns>
-        private static bool IsUserReadOnlyForMatter(Boolean isReadOnly, string currentLoggedInUser, string readOnlyUsers)
+        private static bool IsUserReadOnlyForMatter(Boolean isReadOnly, string currentLoggedInUser, string currentLoggedInUserEmail, string readOnlyUsers)
         {
             List<string> readOnlyUsersList = readOnlyUsers.Trim().Split(new string[] { ConstantStrings.Semicolon }, StringSplitOptions.RemoveEmptyEntries).ToList();
             List<string> currentReadOnlyUser = (from readOnlyUser in readOnlyUsersList
-                                                where readOnlyUser.ToUpperInvariant().Equals(currentLoggedInUser.ToUpperInvariant())
+                                                where string.Equals(readOnlyUser.Trim(), currentLoggedInUser.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                                                string.Equals(readOnlyUser.Trim(), currentLoggedInUserEmail.Trim(), StringComparison.OrdinalIgnoreCase)
                                                 select readOnlyUser).ToList();
             if (null != currentReadOnlyUser && 0 < currentReadOnlyUser.Count)
             {
@@ -1097,11 +1099,6 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                     }
                 }
                 searchDetails.ClientsList = encodedClientsList;
-            }
-
-            if (null != searchDetails.DocumentAuthor)
-            {
-                searchDetails.DocumentAuthor = Encoder.HtmlEncode(searchDetails.DocumentAuthor);
             }
 
             EncodeSearchDetailsUtility(searchDetails, isMatterSearch);

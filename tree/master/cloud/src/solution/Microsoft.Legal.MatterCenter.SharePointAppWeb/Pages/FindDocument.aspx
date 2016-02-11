@@ -4,7 +4,7 @@
     Search Document
 </asp:Content>
 <asp:Content ID="SearchDocumentHeadContent" ContentPlaceHolderID="HeadContentPlaceHolder" runat="server">
-    <link href="../Styles/ListView.css?ver=25.0.0.0" rel="stylesheet" />
+    <link href="../Styles/GridView.css?ver=25.0.0.0" rel="stylesheet" />
     <link href="../Styles/SearchDocument.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="../Styles/CommonControls.css?ver=25.0.0.0" />
 </asp:Content>
@@ -33,12 +33,12 @@
             </div>
         </div>
     </div>
-    <div id="listView" class="clear"></div>
+    <div id="gridView" class="clear"></div>
     <button class="ms-Button ms-Button--primary ms-Callout-content is-disabled hide" id="attachDocuments" value="Save">
         <span class="ms-Button-label" id="attachButtonText"></span>
         <span class="ms-Button-description"></span>
     </button>
-    <div class="listViewButtonGroup hide">
+    <div class="gridViewButtonGroup hide">
         <div id="SendToOneDrive"></div>
         <div id="EmailDocumentLinks"></div>
     </div>
@@ -49,7 +49,7 @@
 <asp:Content ID="SearchDocumentScriptContent" ContentPlaceHolderID="ScriptContentPlaceHolder" runat="server">
     <script type="text/javascript" src="../Scripts/jsonGrid.js?ver=25.0.0.0"></script>
     <script type="text/javascript" src="../Scripts/ECBControl.js?ver=25.0.0.0"></script>
-    <script type="text/javascript" src="../Scripts/ListView.js?ver=25.0.0.0"></script>
+    <script type="text/javascript" src="../Scripts/GridView.js?ver=25.0.0.0"></script>
     <script type="text/javascript" src="../Scripts/CommonControls.js?ver=25.0.0.0"></script>
     <script type="text/javascript" src="../Scripts/SearchDocument.js?ver=25.0.0.0"></script>
 </asp:Content>

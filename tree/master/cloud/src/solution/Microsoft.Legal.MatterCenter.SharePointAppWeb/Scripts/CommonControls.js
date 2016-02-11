@@ -62,7 +62,7 @@ var oColumnPickerControl = (function () {
     commonFunctions.generateColumnPickerControl = function (sColumnPickerSelector, arrCurrentView) {
         var sColumnPickerChunk = "", tempChunk = "";
         var sCheckBoxChunk = oGlobalConstants.ColumnPickerChunk;
-        var sAllColumnHeader = sCheckBoxChunk.replace(/\{0}/g, "").replace(/\{1}/g, oGlobalConstants.ListViewAllColumnOption).replace(/\{2}/g, null).replace(/\{3}/g, "");
+        var sAllColumnHeader = sCheckBoxChunk.replace(/\{0}/g, "").replace(/\{1}/g, oGlobalConstants.GridViewAllColumnOption).replace(/\{2}/g, null).replace(/\{3}/g, "");
         sColumnPickerChunk = sAllColumnHeader;
         $.each(arrCurrentView, function (iIterator, oCurrentItem) {
             tempChunk = sCheckBoxChunk.replace(/\{0}/g, iIterator).replace(/\{1}/g, oCurrentItem).replace(/\{2}/g, iIterator);

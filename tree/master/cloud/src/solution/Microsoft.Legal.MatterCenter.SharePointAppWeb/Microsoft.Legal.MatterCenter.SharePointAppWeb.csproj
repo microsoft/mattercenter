@@ -299,7 +299,7 @@
     <Content Include="Scripts\CommonControls.js" />
     <Content Include="Scripts\ECBControl.js" />
     <Content Include="Scripts\Home.js" />
-    <Content Include="Scripts\ListView.js" />
+    <Content Include="Scripts\GridView.js" />
     <Content Include="Scripts\MailCart.js" />
     <Content Include="Scripts\FilterPanel.js" />
     <Content Include="Scripts\gridConfigWebDashboard.js" />
@@ -346,7 +346,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <Content Include="Styles\Home.css" />
-    <Content Include="Styles\ListView.css" />
+    <Content Include="Styles\GridView.css" />
     <Content Include="Styles\MailCartPopup.css" />
     <Content Include="Styles\ManagePermissions.css" />
     <Content Include="Styles\SearchDocument.css" />

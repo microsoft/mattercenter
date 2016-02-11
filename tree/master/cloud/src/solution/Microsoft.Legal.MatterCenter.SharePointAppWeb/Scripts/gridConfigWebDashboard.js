@@ -52,7 +52,7 @@ function toggleView(isMatterView) {
     var sHeaderID = oGridConfig.isMatterView ? "DisplayFindMattersResults" : "DisplaySearchDocumentsResults";
     togglePinnedView($("#" + sHeaderID + " .pinnedSearch"), 1);			// Calling this to get pinned data and update count
     togglePinnedView($("#" + sHeaderID + " .mySearch"), 2);             // Calling this to get recent data and update count
-    isMatterView ? $(".filterSearchText").attr("placeholder", "Search by matter name, matter ID, or keyword") : $(".filterSearchText").attr("placeholder", "Search by document name, document ID, or keyword");
+    isMatterView ? $(".filterSearchText").attr({ "placeholder": "Search by matter name, matter ID, or keyword", "title": "Search by matter name, matter ID, or keyword" }) : $(".filterSearchText").attr({ "placeholder": "Search by document name, document ID, or keyword", "title": "Search by document name, document ID, or keyword" });
     // hide Practice group and Area of law in Search Document view.
     if (oGridConfig.isMatterView) {
         $(".filterSearchPG, .filterSearchAOL").removeClass("hide");
@@ -239,11 +239,11 @@ function sortPinMatter(container, sortByfield) {
         if (headerobject) {
             var sSortOrder = parseInt($(".sdBannerText").attr("data-order"), 10) ? "desc" : "asc";
             headerobject.setAttribute("sortorder", sSortOrder);
-            LCADMS.sortJsonGrid(headerobject, container, sortByfield);
+            oGrid.sortJsonGrid(headerobject, container, sortByfield);
             headerobject.setAttribute("sortorder", "asc");
 
-            var gridObjectPosition = LCADMS.gridName.indexOf("pinnedGrid_Grid");
-            var currentGridConfig = LCADMS.gridObject[gridObjectPosition];
+            var gridObjectPosition = oGrid.gridName.indexOf("pinnedGrid_Grid");
+            var currentGridConfig = oGrid.gridObject[gridObjectPosition];
             var pinnedMatters = currentGridConfig && currentGridConfig.data;
             // hide upload icon on matter tile and also on the matter pop up of pinned matters
             var $CurrWebPinnedMatter = $("#pinnedGrid .uploadImg");
@@ -263,8 +263,8 @@ function sortPinMatter(container, sortByfield) {
     }
 }
 
-//// #region Formatter functions for Web Dashboard list view
-// Function to add Pin column in Web dashboard list view
+//// #region Formatter functions for Web Dashboard grid view
+// Function to add Pin column in Web dashboard grid view
 function loadPinIcon(cellValue, rowObject, width, nIndex, event) {
     "use strict";
     var sPinChunk = (oGridConfig.bLoadPinnedData) ? "<img title=\"Unpin\" src=\"../Images/unpin-666.png\" class=\"unPinIcon unPinIconLeft\" onclick=\"unPinElement('',this," + nIndex + ", event)\"  data-RowIndex = " + nIndex + " alt=\"\"/>" : "<img title=\"Pin\" src=\"../Images/pin-666.png\" class=\"pinIcon pinIconLeft\"  onclick=\"pinElement(" + nIndex + ", this, event)\" data-RowIndex = " + nIndex + " alt=\"\" />";
@@ -393,7 +393,7 @@ function generateClientMatterID(cellValue, rowObject, width, nIndex, event) {
     return sClientMatterIDChunk;
 }
 
-// Function to generate Document Type Icon column in case of Search Document list view
+// Function to generate Document Type Icon column in case of Search Document grid view
 function loadDocumentTypeIcon(cellValue, rowObject, width, nIndex, event) {
     "use strict";
     var sExtension = "", iconSrc = "";

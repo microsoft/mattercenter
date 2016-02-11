@@ -380,7 +380,7 @@ commonFunction.AppLogEvent = function (sAppName, bToLog) {
 // Function to trim trailing special character if present
 function trimEndChar(sOrignalString, sCharToTrim) {
     "use strict";
-    if (sCharToTrim === sOrignalString.substr(-1)) {
+    if (sOrignalString && sCharToTrim === sOrignalString.substr(-1)) {
         return sOrignalString.substr(0, sOrignalString.length - 1);
     }
     return sOrignalString;

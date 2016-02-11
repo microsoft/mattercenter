@@ -1321,4 +1321,12 @@
     <value>&lt;div style='font-family:Calibri;font-size:12pt'&gt;{0}&lt;/div&gt;</value>
     <comment>CSS style for send as email body</comment>
   </data>
+  <data name="Email_Validation_Regex" xml:space="preserve">
+    <value>^[\s]*\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*[\s]*$</value>
+    <comment>Regex pattern to validate email address</comment>
+  </data>
+  <data name="Stamped_Property_Responsible_Attorney_Email" xml:space="preserve">
+    <value>ResponsibleAttorneyEmail</value>
+    <comment>Name of the stamped property to store Responsible Attorney Email</comment>
+  </data>
 </root>

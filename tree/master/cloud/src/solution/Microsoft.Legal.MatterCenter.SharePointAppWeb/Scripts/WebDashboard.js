@@ -807,7 +807,7 @@ function sortPinDocument(container, sortByfield) {
         if (headerobject) {
             var sSortOrder = parseInt($(".sdBannerText").attr("data-order"), 10) ? "desc" : "asc";
             headerobject.setAttribute("sortorder", sSortOrder);
-            LCADMS.sortJsonGrid(headerobject, container, sortByfield);
+            oGrid.sortJsonGrid(headerobject, container, sortByfield);
             headerobject.setAttribute("sortorder", "asc");
             sortPinnedArray(sSortOrder, sortByfield);
         }
@@ -922,8 +922,8 @@ function getLastVisibleColumnHeader(arrGridHeader) {
     return lastVisibleHeader;
 };
 
-// Function to get the initial width of the list view control
-function getListViewWidth() {
+// Function to get the initial width of the grid view control
+function getGridViewWidth() {
     "use strict";
     var arrGridWidthValues = oGridConfig.isMatterView ? oWebDashboardConstants.MatterColumnWidth.split(";") : oWebDashboardConstants.DocumentColumnWidth.split(";");
     oGridConfig.nGridWidth = arrGridWidthValues.reduce(function (previousValue, currentValue) { return parseInt(previousValue) + parseInt(currentValue); });

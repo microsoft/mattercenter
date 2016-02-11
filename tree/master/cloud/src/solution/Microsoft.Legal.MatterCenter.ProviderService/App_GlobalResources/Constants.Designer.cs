@@ -484,6 +484,15 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ^[\s]*\w+([-+.&apos;]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*[\s]*$.
+        /// </summary>
+        internal static string Email_Validation_Regex {
+            get {
+                return ResourceManager.GetString("Email_Validation_Regex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} library for this Matter is already created. Kindly delete the library or please enter a different Matter name..
         /// </summary>
         internal static string Error_Duplicate_Matter {
@@ -2542,6 +2551,15 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         internal static string Stamped_Property_Responsible_Attorney {
             get {
                 return ResourceManager.GetString("Stamped_Property_Responsible_Attorney", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ResponsibleAttorneyEmail.
+        /// </summary>
+        internal static string Stamped_Property_Responsible_Attorney_Email {
+            get {
+                return ResourceManager.GetString("Stamped_Property_Responsible_Attorney_Email", resourceCulture);
             }
         }
         
