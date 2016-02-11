@@ -1,6 +1,6 @@
 ﻿/* Specific styles for Search Documents page */
 
-.listViewButton {
+.gridViewButton {
     width: 170px;
     margin: 10px 0 0 0;
     padding: 0;
@@ -13,11 +13,11 @@
     margin-right: 10px;
 }
 
-#listViewContainer_Grid thead {
+#gridViewContainer_Grid thead {
     padding: 0 0 4px 0;
 }
 
-#listViewContainer_Grid tbody {
+#gridViewContainer_Grid tbody {
     margin: 48px 0 0 0;
 }
 
@@ -48,7 +48,7 @@
     cursor: pointer;
 }
 
-#listView #listViewContainer .disableButton {
+#gridView #gridViewContainer .disableButton {
     background-color: #808080;
     border-color: #808080;
     cursor: default;

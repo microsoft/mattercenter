@@ -154,6 +154,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
         /// <param name="client">Client object containing Client data</param>
         /// <param name="matter">Matter object containing Matter data</param>
         /// <param name="matterListName">Name of list where matter creation entry is logged</param>
+        /// <param name="matterConfigurations">matterConfigurations object consist of configuration of matter</param>
         /// <param name="clientContext">Client context</param>
         /// <returns>true if success else false</returns>
         internal static string SaveMatterDetails(RequestObject requestObject, Client client, Matter matter, string matterListName, MatterConfigurations matterConfigurations, ClientContext clientContext)
@@ -167,7 +168,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                     List<FieldUserValue> blockUserList = null;
                     List<List<FieldUserValue>> assignUserList = null;
 
-                    List<string> columnNames = new List<string>() 
+                    List<string> columnNames = new List<string>()
                         {
                             ServiceConstantStrings.MattersListColumnTitle,
                             ServiceConstantStrings.MattersListColumnClientName,
@@ -175,7 +176,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                             ServiceConstantStrings.MattersListColumnMatterName,
                             ServiceConstantStrings.MattersListColumnMatterID
                         };
-                    List<object> columnValues = new List<object>() 
+                    List<object> columnValues = new List<object>()
                         {
                             string.Concat(client.Name, ConstantStrings.Underscore, matter.Name),
                             client.Name,
@@ -211,10 +212,10 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                         }
                     }
 
-                    if (null != matter.AssignUserNames)
+                    if (null != matter.AssignUserEmails)
                     {
                         assignUserList = new List<List<FieldUserValue>>();
-                        foreach (IList<string> assignUsers in matter.AssignUserNames)
+                        foreach (IList<string> assignUsers in matter.AssignUserEmails)
                         {
                             List<FieldUserValue> tempAssignUserList = SharePointHelper.ResolveUserNames(clientContext, assignUsers).ToList();
                             assignUserList.Add(tempAssignUserList);
@@ -250,7 +251,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                     Microsoft.SharePoint.Client.Web web = clientContext.Web;
                     List matterList = web.Lists.GetByTitle(matterListName);
                     // To avoid the invalid symbol error while parsing the JSON, return the response in lower case
-                    returnFlag = Convert.ToString(Lists.AddItem(clientContext, matterList, columnNames, columnValues),CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentUICulture);
+                    returnFlag = Convert.ToString(Lists.AddItem(clientContext, matterList, columnNames, columnValues), CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentUICulture);
                 }
             }
             catch (Exception exception)
@@ -299,9 +300,9 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
             try
             {
                 List<FieldUserValue> userEmailList = new List<FieldUserValue>();
-                if (null != matter.AssignUserNames)
+                if (null != matter.AssignUserEmails)
                 {
-                    foreach (IList<string> userNames in matter.AssignUserNames)
+                    foreach (IList<string> userNames in matter.AssignUserEmails)
                     {
                         userList = SharePointHelper.ResolveUserNames(clientContext, userNames).ToList();
                         foreach (FieldUserValue userEmail in userList)
@@ -375,6 +376,13 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                 tempUser.LogOnName = Convert.ToString(item.Key, CultureInfo.InvariantCulture);
                 tempUser.Email = string.Equals(item.EntityType, ConstantStrings.PeoplePickerEntityTypeUser, StringComparison.OrdinalIgnoreCase) ? Convert.ToString(item.Description, CultureInfo.InvariantCulture) : Convert.ToString(item.EntityData.Email, CultureInfo.InvariantCulture);
                 tempUser.EntityType = Convert.ToString(item.EntityType, CultureInfo.InvariantCulture);
+                tempUser.ProviderName = Convert.ToString(item.ProviderName, CultureInfo.InvariantCulture);
+                tempUser.EntityData = new EntityData()
+                {
+                    Department = string.IsNullOrWhiteSpace(item.EntityData.Department) ? string.Empty : item.EntityData.Department,
+                    Email = string.IsNullOrWhiteSpace(item.EntityData.Email) ? tempUser.Email : item.EntityData.Email,
+                    Title = string.IsNullOrWhiteSpace(item.EntityData.Title) ? string.Empty : item.EntityData.Title
+                };
                 users.Add(tempUser);
             }
             return users;
@@ -605,9 +613,11 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
         /// </summary>
         /// <param name="requestObject">Request Object containing SharePoint App Token</param>
         /// <param name="client">Client object containing Client data</param>
-        /// <param name="matter">Matter object containing Matter data</param>
+        /// <param name="matter">Matter object</param>
+        /// <param name="matterDetails">Details of matter</param>
+        /// <param name="matterLandingFlag">Flag to determine if Matter landing page exists</param>
+        /// <param name="matterConfigurations">Object holding configuration for the matter</param>
         /// <returns>true if success else false</returns>
-        /// /// <summary>
         internal static string ShareMatter(RequestObject requestObject, Client client, Matter matter, MatterDetails matterDetails, string matterLandingFlag, MatterConfigurations matterConfigurations)
         {
             string returnFlag = ConstantStrings.FALSE;
@@ -643,9 +653,12 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
         /// </summary>
         /// <param name="requestObject">Request Object containing SharePoint App Token</param>
         /// <param name="client">Client object containing Client data</param>
-        /// <param name="matter">Matter object containing Matter data</param>
-        /// <param name="subAreaOfLawList">String contains all sub area of law</param>
-        /// <param name="mailListURL">URL contains list of mail recipients</param>
+        /// <param name="matter">Matter object</param>
+        /// <param name="matterDetails">Matter object containing Matter data details</param>
+        /// <param name="mailSiteURL">URL of the site</param>
+        /// <param name="centralMailListURL">URL of the Send Mail list</param>
+        /// <param name="matterLandingFlag">Flag to determine if Matter landing page exists</param>
+        /// <param name="matterConfigurations">Object holding configuration for the matter</param>
         /// <returns>Result of operation: Matter Shared successfully or not</returns>        
         internal static string ShareMatterUtility(RequestObject requestObject, Client client, Matter matter, MatterDetails matterDetails, string mailSiteURL, string centralMailListURL, string matterLandingFlag, MatterConfigurations matterConfigurations)
         {
@@ -718,7 +731,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                         List<string> columnNames = new List<string>() { ServiceConstantStrings.ShareListColumnMatterPath, ServiceConstantStrings.ShareListColumnMailList, TextConstants.ShareListColumnMailBody, TextConstants.ShareListColumnMailSubject };
                         List<object> columnValues = new List<object>() { matterPath, userEmailList, matterMailBody, matterMailSubject };
                         // To avoid the invalid symbol error while parsing the JSON, return the response in lower case 
-                        shareFlag = Convert.ToString(Lists.AddItem(clientContext, mailList, columnNames, columnValues),CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentUICulture);
+                        shareFlag = Convert.ToString(Lists.AddItem(clientContext, mailList, columnNames, columnValues), CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentUICulture);
                     }
                 }
             }
@@ -758,12 +771,20 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
             string matterCenterRoles = string.Join(ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR, matter.Roles);
             string documentTemplateCount = string.Join(ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR, matter.DocumentTemplateCount);
             string matterCenterUsers = string.Empty;
-            string separator = string.Empty;
+            string matterCenterUserEmails = string.Empty;
+            string separator = ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR;
             foreach (IList<string> userNames in matter.AssignUserNames)
             {
-                matterCenterUsers += separator + string.Join(ConstantStrings.Semicolon, userNames.Where(user => !string.IsNullOrWhiteSpace(user)));
-                separator = ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR;
+                matterCenterUsers += string.Join(ConstantStrings.Semicolon, userNames.Where(user => !string.IsNullOrWhiteSpace(user))) + separator;
             }
+            // Removed $|$ from end of the string 
+            matterCenterUsers = matterCenterUsers.Substring(0, matterCenterUsers.Length - separator.Length);
+            foreach (IList<string> userEmails in matter.AssignUserEmails)
+            {
+                matterCenterUserEmails += string.Join(ConstantStrings.Semicolon, userEmails.Where(user => !string.IsNullOrWhiteSpace(user))) + separator;
+            }
+            // Removed $|$ from end of the string 
+            matterCenterUserEmails = matterCenterUserEmails.Substring(0, matterCenterUserEmails.Length - separator.Length);
             List<string> keys = new List<string>();
             Dictionary<string, string> propertyList = new Dictionary<string, string>();
             keys.Add(ServiceConstantStrings.StampedPropertyPracticeGroup);
@@ -774,6 +795,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
             keys.Add(ServiceConstantStrings.StampedPropertyClientName);
             keys.Add(ServiceConstantStrings.StampedPropertyClientID);
             keys.Add(ServiceConstantStrings.StampedPropertyResponsibleAttorney);
+            keys.Add(ServiceConstantStrings.StampedPropertyResponsibleAttorneyEmail);
             keys.Add(ServiceConstantStrings.StampedPropertyTeamMembers);
             keys.Add(ServiceConstantStrings.StampedPropertyIsMatter);
             keys.Add(ServiceConstantStrings.StampedPropertyOpenDate);
@@ -785,6 +807,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
             keys.Add(ServiceConstantStrings.StampedPropertyMatterCenterRoles);
             keys.Add(ServiceConstantStrings.StampedPropertyMatterCenterPermissions);
             keys.Add(ServiceConstantStrings.StampedPropertyMatterCenterUsers);
+            keys.Add(ServiceConstantStrings.StampedPropertyMatterCenterUserEmails);
             keys.Add(ServiceConstantStrings.StampedPropertyDefaultContentType);
             keys.Add(ServiceConstantStrings.StampedPropertyIsConflictIdentified);
             keys.Add(ServiceConstantStrings.StampedPropertyDocumentTemplateCount);
@@ -799,6 +822,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
             propertyList.Add(ServiceConstantStrings.StampedPropertyClientName, Encoder.HtmlEncode(client.Name));
             propertyList.Add(ServiceConstantStrings.StampedPropertyClientID, Encoder.HtmlEncode(client.Id));
             propertyList.Add(ServiceConstantStrings.StampedPropertyResponsibleAttorney, Encoder.HtmlEncode(matterDetails.ResponsibleAttorney));
+            propertyList.Add(ServiceConstantStrings.StampedPropertyResponsibleAttorneyEmail, Encoder.HtmlEncode(matterDetails.ResponsibleAttorneyEmail));
             propertyList.Add(ServiceConstantStrings.StampedPropertyTeamMembers, Encoder.HtmlEncode(matterDetails.TeamMembers));
             propertyList.Add(ServiceConstantStrings.StampedPropertyIsMatter, ConstantStrings.TRUE);
             propertyList.Add(ServiceConstantStrings.StampedPropertyOpenDate, Encoder.HtmlEncode(DateTime.Now.ToString(ServiceConstantStrings.ValidDateFormat, CultureInfo.InvariantCulture)));
@@ -811,6 +835,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
             propertyList.Add(ServiceConstantStrings.StampedPropertyMatterCenterRoles, Encoder.HtmlEncode(matterCenterRoles));
             propertyList.Add(ServiceConstantStrings.StampedPropertyMatterCenterPermissions, Encoder.HtmlEncode(matterCenterPermission));
             propertyList.Add(ServiceConstantStrings.StampedPropertyMatterCenterUsers, Encoder.HtmlEncode(matterCenterUsers));
+            propertyList.Add(ServiceConstantStrings.StampedPropertyMatterCenterUserEmails, Encoder.HtmlEncode(matterCenterUserEmails));
             propertyList.Add(ServiceConstantStrings.StampedPropertyDefaultContentType, Encoder.HtmlEncode(matter.DefaultContentType));
             propertyList.Add(ServiceConstantStrings.StampedPropertyIsConflictIdentified, Encoder.HtmlEncode(matter.Conflict.Identified));
             propertyList.Add(ServiceConstantStrings.StampedPropertyDocumentTemplateCount, Encoder.HtmlEncode(documentTemplateCount));

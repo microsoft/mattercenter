@@ -124,6 +124,16 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
         }
 
         /// <summary>
+        /// Validate email address with REGEX pattern
+        /// </summary>
+        /// <param name="email">Email address</param>
+        /// <returns>Boolean result indicating whether the email address is of a valid format</returns>
+        internal static bool ValidateExternalUserInput(string email)
+        {
+            return Regex.IsMatch(email.Trim(), TextConstants.EmailValidationRegex, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+        }
+
+        /// <summary>
         /// Validates meta-data of a matter and returns the validation status (success/failure).
         /// </summary>
         /// <param name="matter">Matter object containing Matter data</param>
@@ -164,13 +174,13 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
             {
                 if (!(int.Parse(ConstantStrings.ProvisionMatterCheckMatterExists, CultureInfo.InvariantCulture) == methodNumber) && !(int.Parse(ConstantStrings.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber))
                 {
-                    if (0 >= matter.AssignUserNames.Count())
+                    if (0 >= matter.AssignUserEmails.Count())
                     {
                         return string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, TextConstants.IncorrectInputUserNamesCode, TextConstants.IncorrectInputUserNamesMessage);
                     }
                     else
                     {
-                        IList<string> userList = matter.AssignUserNames.SelectMany(x => x).Distinct().ToList();
+                        IList<string> userList = matter.AssignUserEmails.SelectMany(x => x).Distinct().ToList();
                         SharePointHelper.ResolveUserNames(clientContext, userList).FirstOrDefault();
                     }
                 }

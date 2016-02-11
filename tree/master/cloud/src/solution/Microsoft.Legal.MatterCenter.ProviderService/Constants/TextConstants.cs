@@ -16,6 +16,9 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
     using Microsoft.Legal.MatterCenter.Utility;
     #endregion
 
+    /// <summary>
+    /// Provides Text constants used in Matter Center.
+    /// </summary>
     internal static class TextConstants
     {
         /// <summary>
@@ -77,6 +80,11 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
         /// Incorrect Client name message
         /// </summary>
         internal static readonly string IncorrectInputClientNameMessage = ConstantStrings.GetConfigurationFromResourceFile("Constants", "Incorrect_Input_Client_Name_Message", Enumerators.ResourceFileLocation.App_GlobalResources);
+
+        /// <summary>
+        /// REGEX pattern for email validation
+        /// </summary>
+        internal static readonly string EmailValidationRegex = ConstantStrings.GetConfigurationFromResourceFile("Constants", "Email_Validation_Regex", Enumerators.ResourceFileLocation.App_GlobalResources);
 
         /// <summary>
         /// Incorrect Client name code

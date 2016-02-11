@@ -229,11 +229,11 @@ namespace Microsoft.Legal.MatterCenter.DataLayer
         /// Sets permissions for the list.
         /// </summary>
         /// <param name="clientContext">Client Context</param>
-        /// <param name="assignUserName">Users to give permission</param>
+        /// <param name="AssignUserEmails">List of User emails to give permission</param>
         /// <param name="permissions">Permissions for the users</param>
         /// <param name="listName">List name</param>
         /// <returns>String stating success flag</returns>
-        public static bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName)
+        public static bool SetPermission(ClientContext clientContext, IList<IList<string>> AssignUserEmails, IList<string> permissions, string listName)
         {
             bool result = false;
             if (null != clientContext && !string.IsNullOrWhiteSpace(listName))
@@ -244,16 +244,16 @@ namespace Microsoft.Legal.MatterCenter.DataLayer
                     List list = clientContext.Web.Lists.GetByTitle(listName);
                     clientContext.Load(list, l => l.HasUniqueRoleAssignments);
                     clientContext.ExecuteQuery();
-                    if (list.HasUniqueRoleAssignments && null != permissions && null != assignUserName && permissions.Count == assignUserName.Count)
+                    if (list.HasUniqueRoleAssignments && null != permissions && null != AssignUserEmails && permissions.Count == AssignUserEmails.Count)
                     {
                         int position = 0;
                         foreach (string roleName in permissions)
                         {
-                            IList<string> userName = assignUserName[position];
-                            if (!string.IsNullOrWhiteSpace(roleName) && null != userName)
+                            IList<string> assignUserEmails = AssignUserEmails[position];
+                            if (!string.IsNullOrWhiteSpace(roleName) && null != assignUserEmails)
                             {
                                 RoleDefinition roleDefinition = clientContext.Web.RoleDefinitions.GetByName(roleName);
-                                foreach (string user in userName)
+                                foreach (string user in assignUserEmails)
                                 {
                                     if (!string.IsNullOrWhiteSpace(user))
                                     {
@@ -316,12 +316,12 @@ namespace Microsoft.Legal.MatterCenter.DataLayer
         /// Set permission to the specified list item 
         /// </summary>
         /// <param name="clientContext">Client context object</param>
-        /// <param name="assignUserName">Users to give permission</param>
+        /// <param name="AssignUserEmails">User emails to give permission</param>
         /// <param name="listName">List name</param>
         /// <param name="listItemId">Unique list item id to break item level permission</param>
         /// <param name="permissions">Permissions for the users</param>
         /// <returns>Status of the unique item level permission assignment operation</returns>
-        public static bool SetItemPermission(ClientContext clientContext, IList<IList<string>> assignUserName, string listName, int listItemId, IList<string> permissions)
+        public static bool SetItemPermission(ClientContext clientContext, IList<IList<string>> AssignUserEmails, string listName, int listItemId, IList<string> permissions)
         {
             bool result = false;
             if (null != clientContext)
@@ -330,16 +330,16 @@ namespace Microsoft.Legal.MatterCenter.DataLayer
                 ListItem listItem = clientContext.Web.Lists.GetByTitle(listName).GetItemById(listItemId);
                 clientContext.Load(listItem, item => item.HasUniqueRoleAssignments);
                 clientContext.ExecuteQuery();
-                if (listItem.HasUniqueRoleAssignments && null != permissions && null != assignUserName && permissions.Count == assignUserName.Count)
+                if (listItem.HasUniqueRoleAssignments && null != permissions && null != AssignUserEmails && permissions.Count == AssignUserEmails.Count)
                 {
                     int position = 0;
                     foreach (string roleName in permissions)
                     {
-                        IList<string> userName = assignUserName[position];
-                        if (!string.IsNullOrWhiteSpace(roleName) && null != userName)
+                        IList<string> assignUserEmails = AssignUserEmails[position];
+                        if (!string.IsNullOrWhiteSpace(roleName) && null != assignUserEmails)
                         {
                             RoleDefinition roleDefinition = clientContext.Web.RoleDefinitions.GetByName(roleName);
-                            foreach (string user in userName)
+                            foreach (string user in assignUserEmails)
                             {
 
                                 if (!string.IsNullOrWhiteSpace(user))

@@ -1,5 +1,5 @@
 ﻿/* Use !important to override styles provided by fabric framework */
-#listViewPageHeaderContainer {
+#gridViewPageHeaderContainer {
     color: #333;
     font-size: 1em;
     font-weight: 400;
@@ -29,7 +29,7 @@
         border: 1px solid #c8c8c8;
     }
 
-    #searchPanelDropdown .ms-Dropdown-item, #searchPanelDropdown .ms-Dropdown-title, #listViewPageHeaderContainer {
+    #searchPanelDropdown .ms-Dropdown-item, #searchPanelDropdown .ms-Dropdown-title, #gridViewPageHeaderContainer {
         white-space: nowrap;
         overflow: hidden;
         -o-text-overflow: ellipsis;
@@ -305,7 +305,7 @@
 }
 
 
-/* region - Column Picker for list view control*/
+/* region - Column Picker for grid view control*/
 #columnPickerContainer, #columnPickerControl, #columnPickerStrip {
     position: absolute;
     right: 16px;
@@ -613,7 +613,7 @@
     height: 30px;
 }
 
-#listViewContainer .ms-Icon--filter {
+#gridViewContainer .ms-Icon--filter {
     margin: 5px 0 0 5px;
 }
 

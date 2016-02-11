@@ -1,11 +1,11 @@
 ﻿/// <disable>JS3057,JS3058,JS2074,JS2076,JS3092,JS3054,JS2005,JS3056,JS2073,JS2024,JS2026,JS2032,JS2064,JS3053, JS3116</disable>
 var selectAllFlagIs = false,
     nClickCount = 0;
-if (typeof LCADMS === "undefined") {
-    var LCADMS = {};
+if (typeof oGrid === "undefined") {
+    var oGrid = {};
 }
-LCADMS.gridName = [];
-LCADMS.gridObject = [];
+oGrid.gridName = [];
+oGrid.gridObject = [];
 
 var oUploadGlobal = {
     sClientRelativeUrl: "",
@@ -123,17 +123,17 @@ function clone(obj) {
     }
     throw new Error("Unable to copy obj! Its type isn't supported.");
 }
-LCADMS.getAdjustedRowChunk = function (inputData, width) {
+oGrid.getAdjustedRowChunk = function (inputData, width) {
     "use strict";
     return "<div class=\"jsonGridOverflow\" title=\"" + inputData + "\" style=\"width: " + width + "px;\"><span>" + inputData + "</span></div>";
 };
-LCADMS.getAdjustedRowChunkAndToolTip = function (inputData, width) {
+oGrid.getAdjustedRowChunkAndToolTip = function (inputData, width) {
     "use strict";
     width = width.replace("%", "");
     var windowWidth = document.querySelector("#reportHead").offsetWidth * (parseInt(width) / 100);
     return "<span class=\"jsonGridOverflow\" title=\"" + inputData + "\" style=\"width: " + (windowWidth - 40) + "px;\">" + inputData + "</span>";
 };
-LCADMS.setViewRecords = function (currentGridConfig) {
+oGrid.setViewRecords = function (currentGridConfig) {
     "use strict";
     var ELE = document.getElementById(currentGridConfig.gridName + "_ViewRecords");
     if ($(".pinnedSearch").hasClass("active")) {
@@ -153,7 +153,7 @@ LCADMS.setViewRecords = function (currentGridConfig) {
         $(ELE).find(".PaginateSpan").text(InsertCommasOnly(startItem) + " - " + InsertCommasOnly(endItem));
     }
 };
-LCADMS.populateGrid = function (currentGridConfig) {
+oGrid.populateGrid = function (currentGridConfig) {
     "use strict";
     var htmlGridObject = currentGridConfig.gridObject;
     if (htmlGridObject) {
@@ -162,10 +162,10 @@ LCADMS.populateGrid = function (currentGridConfig) {
         for (rowCounter = 0; rowCounter < numberOfRows; rowCounter += 1) {
             currentGridConfig.tblBody.deleteRow(-1);
         }
-        LCADMS.CreateHTMLTableRow(currentGridConfig);
+        oGrid.CreateHTMLTableRow(currentGridConfig);
     }
 };
-LCADMS.disablePrev = function (gridname) {
+oGrid.disablePrev = function (gridname) {
     "use strict";
     var prev = document.getElementById(gridname + "_Prev");
     var first = document.getElementById(gridname + "_First");
@@ -178,7 +178,7 @@ LCADMS.disablePrev = function (gridname) {
         first.setAttribute("src", "../Images/pagination-back-disabled.png");
     }
 };
-LCADMS.enablePrev = function (gridname) {
+oGrid.enablePrev = function (gridname) {
     "use strict";
     var prev = document.getElementById(gridname + "_Prev");
     var first = document.getElementById(gridname + "_First");
@@ -191,7 +191,7 @@ LCADMS.enablePrev = function (gridname) {
         first.setAttribute("src", "../Images/pagination-back-Enabled.png");
     }
 };
-LCADMS.disableNext = function (gridname) {
+oGrid.disableNext = function (gridname) {
     "use strict";
     var next = document.getElementById(gridname + "_Next");
     var last = document.getElementById(gridname + "_Last");
@@ -200,7 +200,7 @@ LCADMS.disableNext = function (gridname) {
     next.setAttribute("src", "../Images/pagination-front-disabled.png");
     last.setAttribute("src", "../Images/pagination-front-disabled.png");
 };
-LCADMS.enableNext = function (gridname) {
+oGrid.enableNext = function (gridname) {
     "use strict";
     var next = document.getElementById(gridname + "_Next");
     var last = document.getElementById(gridname + "_Last");
@@ -209,59 +209,59 @@ LCADMS.enableNext = function (gridname) {
     next.setAttribute("src", "../Images/pagination-front-enabled.png");
     last.setAttribute("src", "../Images/pagination-front-Enabled.png");
 };
-LCADMS.goLast = function (ELE, gridName) {
+oGrid.goLast = function (ELE, gridName) {
     "use strict";
     if (!hasClass(ELE, "click-disabled")) {
-        if (LCADMS.gridName.length > 0) {
-            var gridObjectPosition = LCADMS.gridName.indexOf(gridName);
+        if (oGrid.gridName.length > 0) {
+            var gridObjectPosition = oGrid.gridName.indexOf(gridName);
             if (-1 < gridObjectPosition) {
-                var currentGridConfig = LCADMS.gridObject[gridObjectPosition];
+                var currentGridConfig = oGrid.gridObject[gridObjectPosition];
                 currentGridConfig.currentPage = currentGridConfig.totalPages;
-                LCADMS.setViewRecords(currentGridConfig);
-                LCADMS.disableNext(currentGridConfig.gridName);
-                LCADMS.enablePrev(currentGridConfig.gridName);
-                LCADMS.populateGrid(currentGridConfig);
+                oGrid.setViewRecords(currentGridConfig);
+                oGrid.disableNext(currentGridConfig.gridName);
+                oGrid.enablePrev(currentGridConfig.gridName);
+                oGrid.populateGrid(currentGridConfig);
 
                 createResponsiveGrid();
             }
         }
     }
 };
-LCADMS.goFirst = function (ELE, gridName) {
+oGrid.goFirst = function (ELE, gridName) {
     "use strict";
     if (!hasClass(ELE, "click-disabled")) {
-        if (LCADMS.gridName.length > 0) {
-            var gridObjectPosition = LCADMS.gridName.indexOf(gridName);
+        if (oGrid.gridName.length > 0) {
+            var gridObjectPosition = oGrid.gridName.indexOf(gridName);
             if (-1 < gridObjectPosition) {
-                var currentGridConfig = LCADMS.gridObject[gridObjectPosition];
+                var currentGridConfig = oGrid.gridObject[gridObjectPosition];
                 currentGridConfig.currentPage = 0;
-                LCADMS.setViewRecords(currentGridConfig);
-                LCADMS.disablePrev(currentGridConfig.gridName);
-                LCADMS.enableNext(currentGridConfig.gridName);
-                LCADMS.populateGrid(currentGridConfig);
+                oGrid.setViewRecords(currentGridConfig);
+                oGrid.disablePrev(currentGridConfig.gridName);
+                oGrid.enableNext(currentGridConfig.gridName);
+                oGrid.populateGrid(currentGridConfig);
 
                 createResponsiveGrid();
             }
         }
     }
 };
-LCADMS.goPrevious = function (ELE, gridName) {
+oGrid.goPrevious = function (ELE, gridName) {
     "use strict";
     if (!hasClass(ELE, "click-disabled")) {
-        if (LCADMS.gridName.length > 0) {
-            var gridObjectPosition = LCADMS.gridName.indexOf(gridName);
+        if (oGrid.gridName.length > 0) {
+            var gridObjectPosition = oGrid.gridName.indexOf(gridName);
             if (-1 < gridObjectPosition) {
-                var currentGridConfig = LCADMS.gridObject[gridObjectPosition];
+                var currentGridConfig = oGrid.gridObject[gridObjectPosition];
                 currentGridConfig.currentPage -= 1;
-                LCADMS.setViewRecords(currentGridConfig);
+                oGrid.setViewRecords(currentGridConfig);
                 if (!currentGridConfig.currentPage) {
-                    LCADMS.disablePrev(currentGridConfig.gridName);
-                    LCADMS.enableNext(currentGridConfig.gridName);
+                    oGrid.disablePrev(currentGridConfig.gridName);
+                    oGrid.enableNext(currentGridConfig.gridName);
                 }
                 if (currentGridConfig.currentPage > 0) {
-                    LCADMS.enableNext(currentGridConfig.gridName);
+                    oGrid.enableNext(currentGridConfig.gridName);
                 }
-                LCADMS.populateGrid(currentGridConfig);
+                oGrid.populateGrid(currentGridConfig);
 
                 createResponsiveGrid();
             }
@@ -269,33 +269,33 @@ LCADMS.goPrevious = function (ELE, gridName) {
     }
 };
 
-LCADMS.goNext = function (ELE, gridName) {
+oGrid.goNext = function (ELE, gridName) {
     "use strict";
     if (!hasClass(ELE, "click-disabled")) {
-        if (LCADMS.gridName.length > 0) {
-            var gridObjectPosition = LCADMS.gridName.indexOf(gridName);
+        if (oGrid.gridName.length > 0) {
+            var gridObjectPosition = oGrid.gridName.indexOf(gridName);
             if (-1 < gridObjectPosition) {
-                var currentGridConfig = LCADMS.gridObject[gridObjectPosition];
+                var currentGridConfig = oGrid.gridObject[gridObjectPosition];
                 currentGridConfig.currentPage += 1;
-                LCADMS.setViewRecords(currentGridConfig);
+                oGrid.setViewRecords(currentGridConfig);
                 if (currentGridConfig.currentPage > 0) {
-                    LCADMS.enablePrev(currentGridConfig.gridName);
+                    oGrid.enablePrev(currentGridConfig.gridName);
                 }
                 if (currentGridConfig.currentPage === currentGridConfig.totalPages) {
-                    LCADMS.disableNext(currentGridConfig.gridName);
-                    LCADMS.enablePrev(currentGridConfig.gridName);
+                    oGrid.disableNext(currentGridConfig.gridName);
+                    oGrid.enablePrev(currentGridConfig.gridName);
                 }
-                LCADMS.populateGrid(currentGridConfig);
+                oGrid.populateGrid(currentGridConfig);
 
                 createResponsiveGrid();
             }
         }
     }
 };
-LCADMS.sortJsonGrid = function (cellObject, gridName, fieldName) {
+oGrid.sortJsonGrid = function (cellObject, gridName, fieldName) {
     "use strict";
-    if (LCADMS.gridName.length > 0) {
-        var gridObjectPosition = LCADMS.gridName.indexOf(gridName);
+    if (oGrid.gridName.length > 0) {
+        var gridObjectPosition = oGrid.gridName.indexOf(gridName);
         if (-1 < gridObjectPosition) {
             var sortOrder = cellObject.getAttribute("sortorder"),
                 sortFlag = false;
@@ -305,7 +305,7 @@ LCADMS.sortJsonGrid = function (cellObject, gridName, fieldName) {
             } else {
                 cellObject.setAttribute("sortorder", "asc");
             }
-            var currentGridConfig = LCADMS.gridObject[gridObjectPosition],
+            var currentGridConfig = oGrid.gridObject[gridObjectPosition],
                 columnCounter,
                 sortType = String;
 
@@ -322,16 +322,16 @@ LCADMS.sortJsonGrid = function (cellObject, gridName, fieldName) {
             currentGridConfig.data.sort(sortBy(fieldName, sortFlag, sortType));
             if (!currentGridConfig.retainpageonsort && currentGridConfig.totalPages) {
                 currentGridConfig.currentPage = 0;
-                LCADMS.setViewRecords(currentGridConfig);
-                LCADMS.disablePrev(currentGridConfig.gridName);
-                LCADMS.enableNext(currentGridConfig.gridName);
+                oGrid.setViewRecords(currentGridConfig);
+                oGrid.disablePrev(currentGridConfig.gridName);
+                oGrid.enableNext(currentGridConfig.gridName);
             }
 
-            LCADMS.populateGrid(currentGridConfig);
+            oGrid.populateGrid(currentGridConfig);
         }
     }
 };
-LCADMS.CreatePaginationControl = function (jsonGridConfiguration) {
+oGrid.CreatePaginationControl = function (jsonGridConfiguration) {
     "use strict";
     var row = jsonGridConfiguration.tblFoot.insertRow(-1),
         cell = row.insertCell(0),
@@ -360,10 +360,10 @@ LCADMS.CreatePaginationControl = function (jsonGridConfiguration) {
         }
 
     } else if (1 === oGridConfig.currentView) {
-        firstDiv.innerHTML = '<img title="First" id="' + jsonGridConfiguration.gridName + '_First"  class="first cur-pointer click-disabled"  src = "../Images/pagination-back-disabled.png" active="1" onclick="LCADMS.goFirst(this,\'' + jsonGridConfiguration.gridName + '\');" />';
+        firstDiv.innerHTML = '<img title="First" id="' + jsonGridConfiguration.gridName + '_First"  class="first cur-pointer click-disabled"  src = "../Images/pagination-back-disabled.png" active="1" onclick="oGrid.goFirst(this,\'' + jsonGridConfiguration.gridName + '\');" />';
         firstDiv.className = "jsongrid-first";
 
-        prevDiv.innerHTML = '<img title="Previous" id="' + jsonGridConfiguration.gridName + '_Prev"  active="1" class="prev cur-pointer middle click-disabled" src = "../Images/pagination-back-disabled.png" onclick="LCADMS.goPrevious(this,\'' + jsonGridConfiguration.gridName + '\');return false;" />';
+        prevDiv.innerHTML = '<img title="Previous" id="' + jsonGridConfiguration.gridName + '_Prev"  active="1" class="prev cur-pointer middle click-disabled" src = "../Images/pagination-back-disabled.png" onclick="oGrid.goPrevious(this,\'' + jsonGridConfiguration.gridName + '\');return false;" />';
         prevDiv.className = "jsongrid-prev";
     } else {
         if (1 === oGridConfig.nGridPageNumber) {
@@ -399,10 +399,10 @@ LCADMS.CreatePaginationControl = function (jsonGridConfiguration) {
         }
 
     } else if (1 === oGridConfig.currentView) {
-        nextDiv.innerHTML = '<img title="Next" id="' + jsonGridConfiguration.gridName + '_Next"  class="next cur-pointer middle"  active="0"  src = "../Images/pagination-front-enabled.png" onclick="LCADMS.goNext(this,\'' + jsonGridConfiguration.gridName + '\'); return false;" />';
+        nextDiv.innerHTML = '<img title="Next" id="' + jsonGridConfiguration.gridName + '_Next"  class="next cur-pointer middle"  active="0"  src = "../Images/pagination-front-enabled.png" onclick="oGrid.goNext(this,\'' + jsonGridConfiguration.gridName + '\'); return false;" />';
         nextDiv.className = "jsongrid-next";
 
-        lastDiv.innerHTML = '<img title="Last" id="' + jsonGridConfiguration.gridName + '_Last"  class="last cur-pointer"  active="0" src = "../Images/pagination-front-Enabled.png" onclick="LCADMS.goLast(this,\'' + jsonGridConfiguration.gridName + '\')"/>';
+        lastDiv.innerHTML = '<img title="Last" id="' + jsonGridConfiguration.gridName + '_Last"  class="last cur-pointer"  active="0" src = "../Images/pagination-front-Enabled.png" onclick="oGrid.goLast(this,\'' + jsonGridConfiguration.gridName + '\')"/>';
         lastDiv.className = "jsongrid-last";
     } else {
         if (oGridConfig.nGridPageNumber === (Math.floor((parseInt(oGridConfig.nGridTotalResults, 10) - 1) / oGridConfig.itemsPerPage) + 1)) {
@@ -425,16 +425,16 @@ LCADMS.CreatePaginationControl = function (jsonGridConfiguration) {
     var testDiv = document.getElementById("gridPaginationTD");
     testDiv.appendChild(paginationDiv);
     cell.appendChild(paginationDiv);
-    new LCADMS.setViewRecords(jsonGridConfiguration);
+    new oGrid.setViewRecords(jsonGridConfiguration);
     if (1 === oGridConfig.currentView) {
         if (jsonGridConfiguration.maxRows && jsonGridConfiguration.maxRows >= jsonGridConfiguration.data.length) {
             $("#" + jsonGridConfiguration.gridName + "_Last").addClass("click-disabled");
-            LCADMS.disableNext(jsonGridConfiguration.gridName);
+            oGrid.disableNext(jsonGridConfiguration.gridName);
 
         }
     }
 };
-LCADMS.CreateHTMLTableRow = function (jsonGridConfiguration, rowPosition) {
+oGrid.CreateHTMLTableRow = function (jsonGridConfiguration, rowPosition) {
     "use strict";
     var startIndex = jsonGridConfiguration.currentPage * jsonGridConfiguration.maxRows;
     var endIndex = (startIndex + jsonGridConfiguration.maxRows) <= jsonGridConfiguration.data.length ? (startIndex + jsonGridConfiguration.maxRows) : jsonGridConfiguration.data.length;
@@ -501,7 +501,7 @@ LCADMS.CreateHTMLTableRow = function (jsonGridConfiguration, rowPosition) {
             }
             if (!jsonGridConfiguration.columnNames[cellCounter].formatter) {
                 if (jsonGridConfiguration.columnNames[cellCounter].trimOnOverflow) {
-                    cell.innerHTML = LCADMS.getAdjustedRowChunk((jsonGridConfiguration.data[this.rowPosition][jsonGridConfiguration.columnNames[cellCounter].name] || "NA"), jsonGridConfiguration.columnNames[cellCounter].width);
+                    cell.innerHTML = oGrid.getAdjustedRowChunk((jsonGridConfiguration.data[this.rowPosition][jsonGridConfiguration.columnNames[cellCounter].name] || "NA"), jsonGridConfiguration.columnNames[cellCounter].width);
                 } else {
                     if (jsonGridConfiguration.columnNames[cellCounter].trimOnOverflowAndShowToolTip) {
                         cell.innerHTML = (jsonGridConfiguration.data[this.rowPosition][jsonGridConfiguration.columnNames[cellCounter].name] || "NA");
@@ -514,7 +514,7 @@ LCADMS.CreateHTMLTableRow = function (jsonGridConfiguration, rowPosition) {
                 cell.innerHTML = sFormattedChunk;
             }
             if (jsonGridConfiguration.columnNames[cellCounter].style) {
-                LCADMS.applyStyleToObject(cell, jsonGridConfiguration.columnNames[cellCounter].style);
+                oGrid.applyStyleToObject(cell, jsonGridConfiguration.columnNames[cellCounter].style);
             }
         }
         if (jsonGridConfiguration.drilldown) {
@@ -542,7 +542,7 @@ LCADMS.CreateHTMLTableRow = function (jsonGridConfiguration, rowPosition) {
     }
 };
 
-LCADMS.CreateEndRow = function (JsonGridConfiguration) {
+oGrid.CreateEndRow = function (JsonGridConfiguration) {
     "use strict";
     if (JsonGridConfiguration.tblBody && JsonGridConfiguration.appendEndRow) {
         $(JsonGridConfiguration.tblBody).append(JsonGridConfiguration.endRowChunk);
@@ -550,7 +550,7 @@ LCADMS.CreateEndRow = function (JsonGridConfiguration) {
 };
 
 
-LCADMS.CreateHTMLTableWithHeader = function (jsonGridConfiguration) {
+oGrid.CreateHTMLTableWithHeader = function (jsonGridConfiguration) {
     "use strict";
     var tHead = jsonGridConfiguration.tblHead,
         row = tHead.insertRow(-1),
@@ -577,7 +577,7 @@ LCADMS.CreateHTMLTableWithHeader = function (jsonGridConfiguration) {
         }
         cell.style.textAlign = jsonGridConfiguration.columnNames[LoopCounter].align;
         if (jsonGridConfiguration.columnNames[LoopCounter].sortable) {
-            cell.setAttribute("onclick", 'LCADMS.sortJsonGrid(this,"' + jsonGridConfiguration.container + '_Grid","' + jsonGridConfiguration.columnNames[LoopCounter].name + '")');
+            cell.setAttribute("onclick", 'oGrid.sortJsonGrid(this,"' + jsonGridConfiguration.container + '_Grid","' + jsonGridConfiguration.columnNames[LoopCounter].name + '")');
             cell.style.cursor = "pointer";
             if (jsonGridConfiguration.columnNames[LoopCounter].name === jsonGridConfiguration.sortby) {
                 if (jsonGridConfiguration.sortorder === "asc") {
@@ -660,7 +660,7 @@ LCADMS.CreateHTMLTableWithHeader = function (jsonGridConfiguration) {
         row.setAttribute("style", "display:none");
     }
 };
-LCADMS.applyStyleToObject = function (oGridObject, oStyleObject) {
+oGrid.applyStyleToObject = function (oGridObject, oStyleObject) {
     "use strict";
     var oStyles = Object.keys(oStyleObject);
     var iCounter = 0;
@@ -671,7 +671,7 @@ LCADMS.applyStyleToObject = function (oGridObject, oStyleObject) {
         }
     }
 };
-LCADMS.CreateHTMLTable = function (jsonGridConfiguration) {
+oGrid.CreateHTMLTable = function (jsonGridConfiguration) {
     "use strict";
     var grid = document.createElement("table");
     grid.cellPadding = jsonGridConfiguration.cellPadding;
@@ -683,12 +683,12 @@ LCADMS.CreateHTMLTable = function (jsonGridConfiguration) {
         grid.setAttribute("class", "InnerJsonGrid");
     }
     if (jsonGridConfiguration.style) {
-        LCADMS.applyStyleToObject(grid, jsonGridConfiguration.style);
+        oGrid.applyStyleToObject(grid, jsonGridConfiguration.style);
     }
     jsonGridConfiguration.containerObject.appendChild(grid);
     return grid;
 };
-LCADMS.JsonGrid = function (gridConfigOptions) {
+oGrid.JsonGrid = function (gridConfigOptions) {
     "use strict";
     var attr;
     var tBody;
@@ -765,25 +765,25 @@ LCADMS.JsonGrid = function (gridConfigOptions) {
 
             }
         }
-        this.gridObject = LCADMS.CreateHTMLTable(this.gridOptions);
+        this.gridObject = oGrid.CreateHTMLTable(this.gridOptions);
         this.gridOptions.tblHead = this.gridObject.createTHead();
         this.gridOptions.tblFoot = this.gridObject.createTFoot();
         tBody = document.createElement("tbody");
         this.gridObject.appendChild(tBody);
         this.gridOptions.tblBody = tBody;
         this.gridOptions.gridObject = this.gridObject;
-        new LCADMS.CreateHTMLTableWithHeader(this.gridOptions);
-        new LCADMS.CreateHTMLTableRow(this.gridOptions);
+        new oGrid.CreateHTMLTableWithHeader(this.gridOptions);
+        new oGrid.CreateHTMLTableRow(this.gridOptions);
         if (this.gridOptions.pagination) {
-            new LCADMS.CreatePaginationControl(this.gridOptions);
+            new oGrid.CreatePaginationControl(this.gridOptions);
         }
 
-        var indexPositionOfCurrentGrid = LCADMS.gridName.indexOf(this.gridOptions.gridName);
+        var indexPositionOfCurrentGrid = oGrid.gridName.indexOf(this.gridOptions.gridName);
         if (indexPositionOfCurrentGrid > -1) {
-            LCADMS.gridObject[indexPositionOfCurrentGrid] = this.gridOptions;
+            oGrid.gridObject[indexPositionOfCurrentGrid] = this.gridOptions;
         } else {
-            LCADMS.gridName.push(this.gridOptions.gridName);
-            LCADMS.gridObject.push(this.gridOptions);
+            oGrid.gridName.push(this.gridOptions.gridName);
+            oGrid.gridObject.push(this.gridOptions);
         }
         this.containerObject = null;
         this.gridObject = null;
@@ -791,12 +791,12 @@ LCADMS.JsonGrid = function (gridConfigOptions) {
     }
 };
 
-/* Function to generate the list view JSON */
-LCADMS.generateListViewJSON = function () {
+/* Function to generate the grid view JSON */
+oGrid.generateGridViewJSON = function () {
     "use strict";
-    var listViewJSON = [], arrColumnNames = [], arrColumnWidth = [], arrColumnFormatter = [];
+    var gridViewJSON = [], arrColumnNames = [], arrColumnWidth = [], arrColumnFormatter = [];
     if (oGridConfig.isMatterView) {
-        /* Get the data that is to be shown in Search Matter list view control */
+        /* Get the data that is to be shown in Search Matter grid view control */
         //// If pinned data is requested (flag = 4) get the different set of field names
         if (oGridConfig.bLoadPinnedData) {
             arrColumnNames = $.trim(oWebDashboardConstants.MatterPinnedColumnValueFields) ? $.trim(oWebDashboardConstants.MatterPinnedColumnValueFields).split(";") : "";
@@ -806,7 +806,7 @@ LCADMS.generateListViewJSON = function () {
         arrColumnWidth = $.trim(oWebDashboardConstants.MatterColumnWidth) ? $.trim(oWebDashboardConstants.MatterColumnWidth).split(";") : "";
         arrColumnFormatter = $.trim(oWebDashboardConstants.MatterColumnFormatter) ? $.trim(oWebDashboardConstants.MatterColumnFormatter).split(";") : "";
     } else {
-        /* Get the data that is to be shown in Search Document list view control */
+        /* Get the data that is to be shown in Search Document grid view control */
         //// If pinned data is requested (flag = 4) get the different set of field names
         if (oGridConfig.bLoadPinnedData) {
             arrColumnNames = $.trim(oWebDashboardConstants.DocumentPinnedColumnValueFields) ? $.trim(oWebDashboardConstants.DocumentPinnedColumnValueFields).split(";") : "";
@@ -817,7 +817,7 @@ LCADMS.generateListViewJSON = function () {
         arrColumnFormatter = $.trim(oWebDashboardConstants.DocumentColumnFormatter) ? $.trim(oWebDashboardConstants.DocumentColumnFormatter).split(";") : "";
     }
     if (arrColumnNames && arrColumnNames.length && arrColumnWidth && arrColumnWidth.length && arrColumnFormatter && arrColumnFormatter.length) {
-        /* Generate the column structure that is to be shown in the list view control */
+        /* Generate the column structure that is to be shown in the grid view control */
         $.each(arrColumnNames, function (iCurrentIndex, sCurrentValue) {
             var oCurrentItem = {};
             if ("ECB" === sCurrentValue) {
@@ -825,9 +825,9 @@ LCADMS.generateListViewJSON = function () {
             } else {
                 oCurrentItem = { name: sCurrentValue, width: arrColumnWidth[iCurrentIndex], id: sCurrentValue, align: "left", trimOnOverflow: false, formatter: arrColumnFormatter[iCurrentIndex], sortable: oGridConfig.sortable, sortType: String };
             }
-            listViewJSON.push(oCurrentItem);
+            gridViewJSON.push(oCurrentItem);
         });
-        return listViewJSON;
+        return gridViewJSON;
     }
     return [];
 };

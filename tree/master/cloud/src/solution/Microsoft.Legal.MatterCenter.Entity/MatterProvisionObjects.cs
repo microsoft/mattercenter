@@ -198,6 +198,16 @@ namespace Microsoft.Legal.MatterCenter.Entity
         }
 
         /// <summary>
+        /// Gets or sets the assigned user email addresses. Represents the team members associated with the project.
+        /// </summary>
+        /// <value>The list of assign user email addresses.</value>
+        public IList<IList<string>> AssignUserEmails
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets the blocked user names. Represents the users who are blocked from viewing the matter details.
         /// </summary>
         /// <value>The block user names.</value>
@@ -263,16 +273,16 @@ namespace Microsoft.Legal.MatterCenter.Entity
             set;
         }
 
-		///// <summary>
-		///// Gets or sets the Matter GUID.
-		///// </summary>
-		///// <value>The Matter GUID.</value>
+        ///// <summary>
+        ///// Gets or sets the Matter GUID.
+        ///// </summary>
+        ///// <value>The Matter GUID.</value>
 
-		public string MatterGuid
-		{
-			get;
-			set;
-		}
+        public string MatterGuid
+        {
+            get;
+            set;
+        }
     }
 
     /// <summary>
@@ -369,6 +379,17 @@ namespace Microsoft.Legal.MatterCenter.Entity
         /// <value>The responsible attorney.</value>
 
         public string ResponsibleAttorney
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the responsible attorney email associated with the matter.
+        /// </summary>
+        /// <value>The list of responsible attorney email addresses.</value>
+
+        public string ResponsibleAttorneyEmail
         {
             get;
             set;
@@ -493,6 +514,20 @@ namespace Microsoft.Legal.MatterCenter.Entity
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets the Provider name indicating tenant or extranet user
+        /// </summary>
+        public string ProviderName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the entity data returned from people picker web service
+        /// </summary>
+        public EntityData EntityData { get; set; }
     }
 
     /// <summary>
@@ -553,6 +588,11 @@ namespace Microsoft.Legal.MatterCenter.Entity
         /// Gets or sets the user display name.
         /// </summary>
         public string DisplayText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Provider name indicating tenant or extranet user
+        /// </summary>
+        public string ProviderName { get; set; }
 
         /// <summary>
         /// Gets or sets the entity type (user or security group).
@@ -694,6 +734,16 @@ namespace Microsoft.Legal.MatterCenter.Entity
         /// </summary>
         /// <value>The matter users</value>
         public string MatterUsers
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the emails for users of the projects
+        /// </summary>
+        /// <value>The list of matter center user emails</value>
+        public string MatterUserEmails
         {
             get;
             set;

@@ -12,15 +12,15 @@ var oSearchGlobal = {
 function getSearchMattersBeforeSend(result) {
     "use strict";
     var container = result.oParam.container;
-    $("#listViewContainer_Grid").find(".lazyLoading").removeClass("hide");
+    $("#gridViewContainer_Grid").find(".lazyLoading").removeClass("hide");
     oCommonObject.isServiceCallComplete = false;
 };
 
 /* Function for success of search matter */
 function getSearchMattersSuccess(result) {
     "use strict";
-    $("#listViewContainer_Grid").find(".lazyLoading").addClass("hide");
-    $("#listViewContainer .jsonGridHeader").removeAttr("disabled").removeClass("disableHeader"); //// Enable the grid header
+    $("#gridViewContainer_Grid").find(".lazyLoading").addClass("hide");
+    $("#gridViewContainer .jsonGridHeader").removeAttr("disabled").removeClass("disableHeader"); //// Enable the grid header
     oCommonObject.isServiceCallComplete = true;
     if (result && $.trim(result.Result) && result.oParam) {
         var sData = result.Result.split("$|$")
@@ -32,24 +32,24 @@ function getSearchMattersSuccess(result) {
             //// Pinned matters exists for the current logged in user
             if ("undefined" !== typeof sData[1] && totalResults) {
                 //// Check if the data is loaded for page load or lazy load
-                if (1 === oListViewObject.pageNumber) {
+                if (1 === oGridViewObject.pageNumber) {
                     bIsPageLoad = true;
-                    oListViewObject.searchResultCount = totalResults;
+                    oGridViewObject.searchResultCount = totalResults;
                 } else {
                     bIsPageLoad = false;
                 }
-                oListView.loadListView(sData[0], bIsPageLoad);
+                oGridView.loadGridView(sData[0], bIsPageLoad);
                 oCommonObject.updatePinnedStatus();
                 oCommonObject.updateSortingNotification();
                 oCommonObject.enableSearch();
             } else {
                 // No matters exists
-                oListView.loadListView(sData[0], true);
+                oGridView.loadGridView(sData[0], true);
                 oCommonObject.updateSortingNotification(result.oParam.bIsFilterFlyoutCall);
                 $("#loadingImageContainer").addClass("hide");
-                $("#listViewContainer_Grid tbody tr").removeClass("hide").addClass("invisible");
-                $("#listViewContainer_Grid tbody").append(oGlobalConstants.No_Results_Message);
-                oListViewObject.searchResultCount = 0;
+                $("#gridViewContainer_Grid tbody tr").removeClass("hide").addClass("invisible");
+                $("#gridViewContainer_Grid tbody").append(oGlobalConstants.No_Results_Message);
+                oGridViewObject.searchResultCount = 0;
                 oCommonObject.enableSearch();
                 oCommonObject.closeAllPopupExcept("", event);
             }
@@ -63,7 +63,7 @@ function getSearchMattersSuccess(result) {
 function getSearchMattersFailure(result) {
     "use strict";
     oCommonObject.isServiceCallComplete = true;
-    oListViewObject.waitTillDataLoaded = false;
+    oGridViewObject.waitTillDataLoaded = false;
     if (result.Result && result.Result.statusText && "abort" === result.Result.statusText) {
         return;
     }
@@ -81,7 +81,7 @@ function getSearchMatters(oContainer, bIsFilterFlyoutCall) {
       , oParam = { "container": oContainer, "bIsFilterFlyoutCall": bIsFilterFlyoutCall }
       , oSearchDetails;
 
-    if (1 === oCommonObject.iCurrentListViewData()) { //// If All Matters section (flag is 1) is selected, then set filter by me flag to 0
+    if (1 === oCommonObject.iCurrentGridViewData()) { //// If All Matters section (flag is 1) is selected, then set filter by me flag to 0
         oFilterDetails.FilterByMe = 0;
     }
 
@@ -91,7 +91,7 @@ function getSearchMatters(oContainer, bIsFilterFlyoutCall) {
         $.extend(oFilterDetails, oCommonObject.oFlyoutFilters());
     }
 
-    oSearchDetails = { "requestObject": { "SPAppToken": oSharePointContext.SPAppToken, "RefreshToken": oSharePointContext.RefreshToken }, "client": { "Url": oCommonObject.getDeployedUrl() }, "searchObject": { "PageNumber": oListViewObject.pageNumber, "ItemsPerPage": oListViewObject.itemsPerPage, "SearchTerm": sSearchTerm, "Filters": oFilterDetails, "Sort": oCommonObject.oSortDetails() } };
+    oSearchDetails = { "requestObject": { "SPAppToken": oSharePointContext.SPAppToken, "RefreshToken": oSharePointContext.RefreshToken }, "client": { "Url": oCommonObject.getDeployedUrl() }, "searchObject": { "PageNumber": oGridViewObject.pageNumber, "ItemsPerPage": oGridViewObject.itemsPerPage, "SearchTerm": sSearchTerm, "Filters": oFilterDetails, "Sort": oCommonObject.oSortDetails() } };
 
     oCommonObject.callSearchService("FindMatter", oSearchDetails, getSearchMattersSuccess, getSearchMattersFailure, getSearchMattersBeforeSend, oParam);
 }
@@ -112,7 +112,7 @@ function pinMatterSuccess(result) {
         showCommonErrorPopUp(oErrorPopUpData.code);
     } else {
         // Reason: Something went wrong
-        $("#listViewContainer").empty().html("<span class='noResultsText'>" + oGlobalConstants.Failure_Message + "</span>"); /// Remove the data from the list view
+        $("#gridViewContainer").empty().html("<span class='noResultsText'>" + oGlobalConstants.Failure_Message + "</span>"); /// Remove the data from the grid view
         $("#loadingImageContainer").addClass("hide");
     }
 }
@@ -120,7 +120,7 @@ function pinMatterSuccess(result) {
 /* Function for failure of pin matter */
 function pinMatterFailure(result) {
     "use strict";
-    oListViewObject.waitTillDataLoaded = false;
+    oGridViewObject.waitTillDataLoaded = false;
     showCommonErrorPopUp(result.Result);
 }
 
@@ -167,17 +167,17 @@ function unpinMatterSuccess(result) {
         oCommonObject.userPinnedData = $.grep(oCommonObject.userPinnedData, function (sCurrentValue) {
             return sCurrentValue !== result.oParam.sCurrentMatterUrl;
         });
-        if (4 === oCommonObject.iCurrentListViewData()) {
-            oListViewObject.pageNumber = 1; //// Reset the page number for list view control
-            $("#listViewContainer").empty(); /// Remove the data from the list view
-            getPinnedMatters($("#pinnedMatters")); //// Refresh the list view control to show new pinned data only in case of pinned section
+        if (4 === oCommonObject.iCurrentGridViewData()) {
+            oGridViewObject.pageNumber = 1; //// Reset the page number for grid view control
+            $("#gridViewContainer").empty(); /// Remove the data from the grid view
+            getPinnedMatters($("#pinnedMatters")); //// Refresh the grid view control to show new pinned data only in case of pinned section
         }
     } else if (-1 < result.indexOf("code")) { //// Display error pop up in case of exception
         var oErrorPopUpData = JSON.parse(result);
         showCommonErrorPopUp(oErrorPopUpData.code);
     } else {
         // Reason: Matter is not pinned. Hence, cannot be unpinned.
-        $("#listViewContainer").empty().html("<span class='noResultsText'>" + oFindMatterConstants.Failure_Invalid_Unpin + "</span>"); /// Remove the data from the list view
+        $("#gridViewContainer").empty().html("<span class='noResultsText'>" + oFindMatterConstants.Failure_Invalid_Unpin + "</span>"); /// Remove the data from the grid view
         $("#loadingImageContainer").addClass("hide");
     }
 }
@@ -185,7 +185,7 @@ function unpinMatterSuccess(result) {
 /* Function for failure of unpin matter */
 function unpinMatterFailure(result) {
     "use strict";
-    oListViewObject.waitTillDataLoaded = false;
+    oGridViewObject.waitTillDataLoaded = false;
     showCommonErrorPopUp(result.Result);
 }
 
@@ -195,7 +195,7 @@ function unpinMatter(oCurrentRow) {
     var sMatterUrl = "";
     if (oCurrentRow && oCurrentRow.length) {
         //// Get the meta data required for unpinning the matter
-        if (4 === oCommonObject.iCurrentListViewData()) {
+        if (4 === oCommonObject.iCurrentGridViewData()) {
             sMatterUrl = oCurrentRow.attr("data-matterurl");
         } else {
             sMatterUrl = oCurrentRow.attr("data-path");
@@ -220,7 +220,7 @@ function getPinnedMatterBeforeSend(result) {
 /* Function for success of getting pinned matters */
 function getPinnedMatterSuccess(result) {
     "use strict";
-    $("#listViewContainer_Grid").find(".lazyLoading").addClass("hide");
+    $("#gridViewContainer_Grid").find(".lazyLoading").addClass("hide");
     if (result && $.trim(result.Result)) {
         var sData = result.Result.split("$|$"); //// sData[0] = Pinned Matters collection, sData[1] = count of pinned matters
         var pinnedMatters = JSON.parse(sData[0]);
@@ -241,13 +241,13 @@ function getPinnedMatterSuccess(result) {
                 });
                 oCommonObject.updatePinnedStatus();
 
-                //// Show the pinned data in list view only if, user selects from drop down
-                (4 === oCommonObject.iCurrentListViewData()) && oListView.loadListView(sData[0], true); //// Always pass true as no lazy loading expected in pinned section
+                //// Show the pinned data in grid view only if, user selects from drop down
+                (4 === oCommonObject.iCurrentGridViewData()) && oGridView.loadGridView(sData[0], true); //// Always pass true as no lazy loading expected in pinned section
             } else {
                 // No pinned matters exists for user.
                 sData[1] = 0;
                 oCommonObject.userPinnedData.length = 0;
-                (4 === oCommonObject.iCurrentListViewData()) && $("#listViewContainer").html("<span class='noResultsText'>" + oFindMatterConstants.Failure_No_Pinned_Matters + "</span>");
+                (4 === oCommonObject.iCurrentGridViewData()) && $("#gridViewContainer").html("<span class='noResultsText'>" + oFindMatterConstants.Failure_No_Pinned_Matters + "</span>");
                 $("#loadingImageContainer").addClass("hide");
             }
         } else {
@@ -259,7 +259,7 @@ function getPinnedMatterSuccess(result) {
 /* Function for failure of getting pinned matters */
 function getPinnedMatterFailure(result) {
     "use strict";
-    oListViewObject.waitTillDataLoaded = false;
+    oGridViewObject.waitTillDataLoaded = false;
     showCommonErrorPopUp(result.Result);
 }
 
@@ -282,7 +282,7 @@ function updateECBforMatter(oContextualMenu, oSelectedElement) {
     var bIsReadOnlyUser = "", isPinned = "", sMatterUrl = "", matterName = "", siteName = "";
     var $Element = oSelectedElement;
     if ($Element) {
-        if (4 === oCommonObject.iCurrentListViewData()) {
+        if (4 === oCommonObject.iCurrentGridViewData()) {
             siteName = $Element.attr("data-matterclienturl") ? oCommonObject.renderAsText($Element.attr("data-matterclienturl").trim()) : "NA";
             bIsReadOnlyUser = oSelectedElement.attr("data-hideupload");
             isPinned = true;
@@ -417,7 +417,7 @@ function populateFolderHierarchy(element) {
 
     var sMatterName, sMatterUrl, oMatterFolderDetails;
     //// Get the meta-data based on current view (flag = 4 for pinned view)
-    if (4 === oCommonObject.iCurrentListViewData()) {
+    if (4 === oCommonObject.iCurrentGridViewData()) {
         sMatterName = $(element).attr("data-mattername");
         sMatterUrl = $(element).attr("data-matterclienturl");
     } else {
@@ -438,21 +438,21 @@ function populateFolderHierarchy(element) {
 /* Function to display Matter flyout */
 function showMatterDetailPopup(element, event, bUpload) {
     "use strict";
-    var flyoutExist = $("#listViewContainer .InfoFlyout");
+    var flyoutExist = $("#gridViewContainer .InfoFlyout");
     if (!(flyoutExist.length)) {
         var sFlyoutHTMLChunk = $(".InfoFlyout").length && $(".InfoFlyout").clone() && $(".InfoFlyout").clone()[0];
-        $("#listViewContainer").append(sFlyoutHTMLChunk);
+        $("#gridViewContainer").append(sFlyoutHTMLChunk);
         $(".FlyoutUrlTextbox").on("click", function (event) {
             event && event.stopPropagation();
         });
     }
-    flyoutExist = $("#listViewContainer .InfoFlyout"); //// Get the fly out again to get the updated chunk
+    flyoutExist = $("#gridViewContainer .InfoFlyout"); //// Get the fly out again to get the updated chunk
     flyoutExist.find(".ms-Callout-inner").addClass("hide");
     flyoutExist.removeClass("hide");
     flyoutExist.find("#FlyoutPopupLoading").removeClass("hide");
     var matterPopData = $(".InfoFlyout .ms-Callout-inner"), $Element = $(element);
     if (matterPopData.length && $Element) {
-        if (4 === oCommonObject.iCurrentListViewData()) {
+        if (4 === oCommonObject.iCurrentGridViewData()) {
             //// Changes for URL consolidation
             var matterName = (null !== $Element.attr("data-MatterGuid")) ? $Element.attr("data-MatterGuid") : ($Element.attr("data - mattername") ? $Element.attr("data - mattername").trim() : "NA"),
                 siteName = $Element.attr("data-matterclienturl") ? oCommonObject.renderAsText($Element.attr("data-matterclienturl").trim()) : "NA",
@@ -503,7 +503,7 @@ function showMatterDetailPopup(element, event, bUpload) {
             flyoutExist.find(".FlyoutUrl").addClass("hide");
             flyoutExist.find("#uploadToMatter").removeClass("hide");
             flyoutExist.find("#uploadToMatter").on("click", function () {
-                //// Use oListViewObject.oCurrentMandatory object for getting current mandatory column
+                //// Use oGridViewObject.oCurrentMandatory object for getting current mandatory column
                 populateFolderHierarchy($Element);
             });
             var bIsReadOnlyUser = $Element.attr("data-isreadonlyuser");
@@ -527,13 +527,13 @@ function placeMatterDetailsPopup(element, event) {
     "use strict";
     ////Following code is written in Java Script because we already have QueryString Implementation for word and outlook, and to avoid code Repetition in CSS.
     var nWindowWidth = $(window).width();
-    var oFlyout = $("#listViewContainer .InfoFlyout");
+    var oFlyout = $("#gridViewContainer .InfoFlyout");
     if (nWindowWidth <= 645) {
         oFlyout.find(".FlyoutHeading").addClass("FlyoutHeadingWordMargin");
         oFlyout.find(".ms-Callout-inner").addClass("FlyoutBoxContent");
         oFlyout.find(".FlyoutBox").addClass("MatterFlyoutWordSize");
         oFlyout.find(".FlyoutContentHeading").css("float", "none");
-        var flyoutArrowExist = $("#listViewContainer .InfoFlyout").find(".flyoutToparrow");
+        var flyoutArrowExist = $("#gridViewContainer .InfoFlyout").find(".flyoutToparrow");
         if (!flyoutArrowExist.length) {
             oFlyout.prepend("<div class='flyoutToparrow'></div>");
         }
@@ -543,7 +543,7 @@ function placeMatterDetailsPopup(element, event) {
         }
     } else {
         oFlyout.find(".FlyoutBox").addClass("MatterFlyoutOutlookSize");
-        var flyoutArrowExist = $("#listViewContainer .InfoFlyout").find(".flyoutLeftarrow");
+        var flyoutArrowExist = $("#gridViewContainer .InfoFlyout").find(".flyoutLeftarrow");
         if (!flyoutArrowExist.length) {
             oFlyout.prepend("<div class='flyoutLeftarrow'></div>");
             oFlyout.addClass("MatterFlyoutLeftMove");
@@ -592,7 +592,7 @@ function onURLExistSuccess(result) {
                 oMatterPopData.find("#viewMatters").attr({ "data-matterlink": sMatterPageLink, "onclick": "viewMatter(this);" });
             }
             $("#FlyoutPopupLoading").addClass("hide");
-            $("#listViewContainer .InfoFlyout").find(".ms-Callout-inner").removeClass("hide");
+            $("#gridViewContainer .InfoFlyout").find(".ms-Callout-inner").removeClass("hide");
         } else {
             onURLExistFailure(result);
         }
@@ -611,7 +611,7 @@ function onURLExistFailure(result) {
     }
     //// Finally show the data
     $("#FlyoutPopupLoading").addClass("hide");
-    $("#listViewContainer .InfoFlyout").find(".ms-Callout-inner").removeClass("hide");
+    $("#gridViewContainer .InfoFlyout").find(".ms-Callout-inner").removeClass("hide");
 }
 //// #endregion
 
@@ -628,7 +628,7 @@ $(document).ready(function () {
         success: function (response) {
             $("#HeaderPlaceHolder").html($(response).find("#commonSearchBar").html());
             $("#autoCompletePlaceHolder").attr("title", oFindMatterConstants.AutoComplete_Placeholder).text(oFindMatterConstants.AutoComplete_Placeholder);
-            $("#listView").html($(response).find("#listViewContent").html());
+            $("#gridView").html($(response).find("#gridViewContent").html());
             $(".textFlyoutContent").html($(response).find("#textFlyoutContent").html());
             $(".dateFlyoutContent").html($(response).find("#dateFlyoutContent").html());
             $(".clearFilterContent").html($(response).find("#clearFilterContent").html());
@@ -638,14 +638,14 @@ $(document).ready(function () {
             //// Generate the common drop down and place it on page
             oCommonObject.generateCommonDropdown("#searchPanelDropdown", oFindMatterConstants.SearchDropdownFields);
             //// Generate the column picker and place it on page
-            oCommonObject.generateColumnPicker("#columnPickerPanel #columnPickerBlock #columnOptions", oFindMatterConstants.ListViewColumnPickerFields);
+            oCommonObject.generateColumnPicker("#columnPickerPanel #columnPickerBlock #columnOptions", oFindMatterConstants.GridViewColumnPickerFields);
             oCommonObject.addDropdownBindings();
             oCommonObject.addAutoCompleteBindings();
             oCommonObject.addColumnPickerBindings();
-            oListView.loadECBControl();
-            oListView.adjustListViewHeight();
-            oListView.applyMapContainerHeight();
-            $(".ms-Dropdown-title, #listViewPageHeader").attr("title", oGlobalConstants.My_Matters_Message).text(oGlobalConstants.My_Matters_Title); //// Set the drop down title and page header to My Matters on page load
+            oGridView.loadECBControl();
+            oGridView.adjustGridViewHeight();
+            oGridView.applyMapContainerHeight();
+            $(".ms-Dropdown-title, #gridViewPageHeader").attr("title", oGlobalConstants.My_Matters_Message).text(oGlobalConstants.My_Matters_Title); //// Set the drop down title and page header to My Matters on page load
             oCommonObject.addFilterFlyoutBindings();
         }
     });

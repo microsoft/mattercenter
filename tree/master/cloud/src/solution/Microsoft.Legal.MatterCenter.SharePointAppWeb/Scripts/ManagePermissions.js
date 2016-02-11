@@ -10,7 +10,9 @@ var oManagePermissionsOnMatter = (function () {
         arrReadOnlyUsers: [],
         oMandatoryRoleNames: [],
         arrUserUploadPermissions: oGlobalConstants.User_Upload_Permissions && oGlobalConstants.User_Upload_Permissions.trim().split(","),
-        sConflictScenario: ""
+        sConflictScenario: "",
+        bHasEmailStamped: false,
+        oEmailRegex: new RegExp(oGlobalConstants.Email_Validation_Regex)
     },
     oEditPermissionOnMatter = {
         sPermissionToAppend: "<div id='row{0}' class='assignNewPermission'>"
@@ -290,7 +292,7 @@ var oManagePermissionsOnMatter = (function () {
         "use strict";
         if (result) {
             var arrResults = JSON.parse(result);
-            var iCounter = 0, iCount = 0, userRole, userPermission;
+            var iCounter = 0, iCount = 0, userRole, userPermission, sEmail = "";
             $(".loadingImage").hide();
             $("#editpermissionContainer").removeClass("hide");
             oJQueryObjects.arrResults = arrResults;
@@ -310,7 +312,18 @@ var oManagePermissionsOnMatter = (function () {
                                 var userName = "#txtAssign" + (iCounter), roles = "#ddlRoleAssign" + (iCounter), permissions = "#ddlPermAssign" + (iCounter);
                                 commonFunctions.addMorePermissions(iCounter);
                                 for (iCount = 0; iCount < arrResults.MatterObject.AssignUserNames[iCounter].length; iCount++) {
-                                    $(userName)[0].value += arrResults.MatterObject.AssignUserNames[iCounter][iCount] + ";";
+                                    if (arrResults.MatterObject.AssignUserEmails && 0 < arrResults.MatterObject.AssignUserEmails.length && arrResults.MatterObject.AssignUserEmails[iCounter][iCount]) {
+                                        sEmail = arrResults.MatterObject.AssignUserEmails[iCounter][iCount];
+                                        if (serviceConstants.oEmailRegex.test(sEmail)) {
+                                            $(userName)[0].value += arrResults.MatterObject.AssignUserNames[iCounter][iCount] + " (" + sEmail + ")" + ";";
+                                        } else {
+                                            $(userName)[0].value += arrResults.MatterObject.AssignUserNames[iCounter][iCount] + ";";
+                                        }
+                                        oManagePermissionsOnMatter.bHasEmailStamped = true;
+                                    } else {
+                                        $(userName)[0].value += arrResults.MatterObject.AssignUserNames[iCounter][iCount] + ";";
+
+                                    }
                                 }
                                 $(userName).attr("data-resolved", "1");
                                 userRole = arrResults.MatterObject.Roles ? arrResults.MatterObject.Roles[iCounter] ? arrResults.MatterObject.Roles[iCounter] : serviceConstants.arrRoles[0].Name : serviceConstants.arrRoles[0].Name;
@@ -434,7 +447,7 @@ var oManagePermissionsOnMatter = (function () {
         $(".loading").removeClass("hide");
         $("#btnSave").attr("disabled", "disabled");
         var isValid = "true" === oJQueryObjects.edit ? commonFunctions.validatePopup(1) : commonFunctions.validatePopup(2);
-        var oAssignPermList = $("input[id^=txtAssign]"), iErrorFlag = 0, sResponsibleAttorney = "", sTeamMembers = "";
+        var oAssignPermList = $("input[id^=txtAssign]"), iErrorFlag = 0, sResponsibleAttorney = [], sResponsibleAttorneyEmail = [];
         var arrResults = oJQueryObjects.arrResults
         , userId = [];
         if (arrResults.ClientObject) {
@@ -446,6 +459,8 @@ var oManagePermissionsOnMatter = (function () {
             var
              matterName = arrResults.MatterObject.Name ? arrResults.MatterObject.Name : ""
             , arrUserNames = []
+            , arrUserEmails = []
+            , arrTeamMembers = []
             , matterDetails = {}
             , arrRoles = []
             , arrPermissions = []
@@ -458,7 +473,7 @@ var oManagePermissionsOnMatter = (function () {
                 if ($CurrObject) {
                     var userPermission = $($CurrObject).val();
                     if (-1 < $.inArray(userPermission, serviceConstants.arrUserUploadPermissions)) {
-                        var readUsersList = $($("input[id^=txtAssign]")[iPosition]).val().trim().split(";");
+                        var readUsersList = oCommonObject.getUserName($($("input[id^=txtAssign]")[iPosition]).val().trim(), false);
                         if (readUsersList) {
                             var readUsersLength = readUsersList.length;
                             for (var iIterator = 0; iIterator < readUsersLength; iIterator++) {
@@ -478,16 +493,13 @@ var oManagePermissionsOnMatter = (function () {
                     sCurrElementID = sCurrElementID.trim().split("txtAssign")[1];
                     var sCurrRole = $("#ddlRoleAssign" + sCurrElementID), sCurrPermission = $("#txtAssign" + sCurrElementID);
                     if (sCurrRole && sCurrPermission) {
-                        if (-1 === $.inArray(sCurrRole.val(), serviceConstants.oMandatoryRoleNames)) {
-                            sTeamMembers = trimEndChar(sCurrPermission.val().trim(), ";") + ";" + sTeamMembers; // Removed and Appended semicolon to ensure all users are separated by semicolon                          
-                        } else {
-                            sResponsibleAttorney = trimEndChar(sCurrPermission.val().trim(), ";") + ";" + sResponsibleAttorney;      // Removed and Appended semicolon to ensure all users are separated by semicolon                    
+                        if (-1 !== $.inArray(sCurrRole.val(), serviceConstants.oMandatoryRoleNames)) {
+                            sResponsibleAttorney.push(oCommonObject.getUserName($.trim($(this).val()), true).join(";"));
+                            sResponsibleAttorneyEmail.push(oCommonObject.getUserName($.trim($(this).val()), false).join(";"));     // Removed and Appended semicolon to ensure all users are separated by semicolon                    
                         }
                     }
                 }
             });
-            sTeamMembers = trimEndChar(sTeamMembers.trim(), ";");
-            sResponsibleAttorney = trimEndChar(sResponsibleAttorney.trim(), ";");
             $.each(oAssignPermList, function () {
 
                 var sCurrElementID = $(this).attr("id");
@@ -516,7 +528,9 @@ var oManagePermissionsOnMatter = (function () {
             });
 
             $.each($("input[id^=txtAssign]"), function () {
-                arrUserNames.push($.trim($(this).val()).split(";"));
+                arrUserNames.push(oCommonObject.getUserName($.trim($(this).val()), true));
+                arrUserEmails.push(oManagePermissionsOnMatter.bHasEmailStamped ? oCommonObject.getUserName($.trim($(this).val(), false)) : getValidUserName($.trim($(this).val())));
+                arrTeamMembers.push(oCommonObject.getUserName($.trim($(this).val()), true).join(";"));
                 userId.push(this.id);
             });
 
@@ -527,8 +541,8 @@ var oManagePermissionsOnMatter = (function () {
             matterDetails = {
                 "requestObject": { "SPAppToken": oSharePointContext.SPAppToken, "RefreshToken": oSharePointContext.RefreshToken },
                 "client": { "Url": oJQueryObjects.clientUrl, "Id": sClientId, "Name": sClientName },
-                "matter": { "Name": oJQueryObjects.libraryName, "BlockUserNames": arrBlockUserNames, "AssignUserNames": arrUserNames, "Permissions": arrPermissions, "Roles": arrRoles, "Conflict": { "Identified": serviceConstants.sConflictScenario } },
-                "matterDetails": { "ResponsibleAttorney": trimEndChar(sResponsibleAttorney.trim(), ";"), "UploadBlockedUsers": serviceConstants.arrReadOnlyUsers, "TeamMembers": trimEndChar(sTeamMembers.trim(), ";"), "RoleInformation": JSON.stringify(roleInformation) }
+                "matter": { "Name": oJQueryObjects.libraryName, "BlockUserNames": arrBlockUserNames, "AssignUserNames": arrUserNames, "AssignUserEmails": arrUserEmails, "Permissions": arrPermissions, "Roles": arrRoles, "Conflict": { "Identified": serviceConstants.sConflictScenario } },
+                "matterDetails": { "ResponsibleAttorney": sResponsibleAttorney.join(";").replace(/;;/g, ";"), "ResponsibleAttorneyEmail": sResponsibleAttorneyEmail.join(";").replace(/;;/g, ";"), "UploadBlockedUsers": serviceConstants.arrReadOnlyUsers, "TeamMembers": arrTeamMembers.join(";"), "RoleInformation": JSON.stringify(roleInformation) }
                 , "editMode": oJQueryObjects.edit, "userId": userId
             };
             oCommonObject.callProvisioningService("UpdateMatterDetails", matterDetails, commonFunctions.matterUpdateSuccess, commonFunctions.matterUpdateFailure, commonFunctions.beforeSendMatterUpdate);
@@ -555,7 +569,7 @@ var oManagePermissionsOnMatter = (function () {
                     var results = JSON.stringify(oJQueryObjects.arrResults);
                     var errorMessage;
                     commonFunctions.getTeamMembersSuccess(results);
-                    if (arrResults.code === oGlobalConstants.Error_Code_Security_Group_Exists) {
+                    if (arrResults.code === oGlobalConstants.Error_Code_Security_Group_Exists || arrResults.code === oGlobalConstants.Incorrect_Team_Members_Code) {
                         errorMessage = arrResults.value.split("$|$")[0];
                     } else {
                         errorMessage = arrResults.value;
@@ -593,7 +607,27 @@ var oManagePermissionsOnMatter = (function () {
             return false;
         }
         return true;
-    }
+    };
+
+    // Function to get email address from text box if present else take user name instead of email address
+    function getValidUserName(sUserEmails) {
+        "use strict";
+        var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp(oGlobalConstants.Email_Validation_Regex);
+        if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
+            arrUserNames = sUserEmails.split(";");
+            for (var iIterator = 0; iIterator < arrUserNames.length - 1; iIterator++) {
+                if (arrUserNames[iIterator] && null !== arrUserNames[iIterator] && "" !== arrUserNames[iIterator]) {
+                    if (-1 !== arrUserNames[iIterator].lastIndexOf("(")) {
+                        sEmail = $.trim(arrUserNames[iIterator].substring(arrUserNames[iIterator].lastIndexOf("(") + 1, arrUserNames[iIterator].lastIndexOf(")")));
+                        if (oEmailRegex.test(sEmail)) {
+                            arrUserNames[iIterator] = sEmail;
+                        }
+                    }
+                }
+            }
+        }
+        return arrUserNames;
+    };
 
     function validateTeamAssigmentRole() {
         "use strict";

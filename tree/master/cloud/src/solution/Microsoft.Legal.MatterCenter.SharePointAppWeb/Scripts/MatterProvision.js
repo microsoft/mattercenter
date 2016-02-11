@@ -36,7 +36,8 @@ var oMatterProvisionObject = (function () {
         isErrorOccurred: false,
         iCallsComplete: 0,
         bCloseErrorPopup: true,
-        matterGUID: ""
+        matterGUID: "",
+        oEmailRegex: new RegExp(oGlobalConstants.Email_Validation_Regex)
     },
     /* Object to store all the JQuery binding elements used */
     oJQueryObjects = {
@@ -189,6 +190,11 @@ var oMatterProvisionObject = (function () {
                     removeLeft = 90;
                     removeTop = 77;
                     triangleTopPos = 48;
+                } else if (sElement === "#txtMatterName") {
+                    removeLeft = 305;
+                    if (bSecurityGroupError) {
+                        sMsg = oSecurityGroupError[0];
+                    }
                 } else {
                     removeLeft = 305;
                 }
@@ -481,7 +487,7 @@ var oMatterProvisionObject = (function () {
 
     /* Function to check if user has entered valid list of blocked users */
     function isValidBlockUser() {
-        var arrBlockUserList = oJQueryObjects.$BlockedUsers.val().trim().split(";");
+        var arrBlockUserList = oCommonObject.getUserName(oJQueryObjects.$BlockedUsers.val().trim(), false);
         for (var iIterator = 0; iIterator < arrBlockUserList.length - 1; iIterator++) {
             if (-1 === $.inArray(arrBlockUserList[iIterator].trim(), oCommonObject.oSiteUser)) {
                 return false;
@@ -585,12 +591,14 @@ var oMatterProvisionObject = (function () {
         , matterId = oJQueryObjects.$MatterId.val()
         , matterName = oJQueryObjects.$MatterName.val().trim()
         , matterDesc = oJQueryObjects.$MatterDescription.val().trim()
-        , conflictCheckBy = oJQueryObjects.$ConflictConductedBy.val().trim()
+        , conflictCheckBy = oCommonObject.getUserName(oJQueryObjects.$ConflictConductedBy.val().trim(), false)[0]
         , conflictCheckOn = oJQueryObjects.$ConflictCheckDate.val()
         , ConflictIdentified = oJQueryObjects.$ConflictIdentified.val()
         , blockUserNames = ""
         , boolSecureMatter = oJQueryObjects.$BoolSecureMatter
         , arrUserNames = []
+        , arrUserEmails = []
+        , arrPermissions = []
         , arrRoles = []
         , arrFolderNames = []
         , matterDetails = {}
@@ -616,34 +624,24 @@ var oMatterProvisionObject = (function () {
         });
 
         if ("True" === ConflictIdentified) {
-            blockUserNames = oJQueryObjects.$BlockedUsers.val().split(";");
+            blockUserNames = oCommonObject.getUserName(oJQueryObjects.$BlockedUsers.val().trim(), false);
         }
         $.each($("input[id^=txtAssign]"), function () {
-            arrUserNames.push($(this).val().trim().split(";"));
+            arrUserNames.push(oCommonObject.getUserName($(this).val().trim(), true));
+            arrUserEmails.push(oCommonObject.getUserName($(this).val().trim(), false));
+            userId.push(this.id);
         });
         $.each($("input[id^=ddlRoleAssign]"), function () {
             arrRoles.push($(this).val());
         });
         $.each($("input[id^=ddlPermAssign]"), function (iPosition) {
-            var $CurrObject = $(this)[0];
-            if ($CurrObject) {
-                var userPermission = $($CurrObject).val();
-                if (-1 < $.inArray(userPermission, serviceConstants.arrUserUploadPermissions)) {
-                    var readUsersList = $($("input[id^=txtAssign]")[iPosition]).val().trim().split(";");
-                    if (readUsersList) {
-                        var readUsersLength = readUsersList.length;
-                        for (var iIterator = 0; iIterator < readUsersLength; iIterator++) {
-                            var tempUser = readUsersList[iIterator];
-                            if (tempUser && -1 === $.inArray(tempUser, serviceConstants.arrReadOnlyUsers)) {
-                                serviceConstants.arrReadOnlyUsers.push(readUsersList[iIterator]); // store the users in the list
-                            }
-                        }
-                    }
+            arrPermissions.push($.trim($(this).val()));
+            if ($.trim($(this).val()).toLowerCase() === oGlobalConstants.User_Upload_Permissions.toLowerCase()) {
+                var iCurrentCount = $(this).attr("id") && $(this).attr("id").split("ddlPermAssign");
+                if (1 < iCurrentCount.length) {
+                    serviceConstants.arrReadOnlyUsers.push(trimEndChar(oCommonObject.getUserName($("input[id^=txtAssign" + iCurrentCount[1] + "]").val().trim(), false).join(";"), ";"));
                 }
             }
-        });
-        $.each($("input[id^=txtAssign]"), function () {
-            userId.push(this.id);
         });
         var isCalenderSelected = $("#demo-checkbox-unselected0")[0].checked;
         var isTaskSelected = $("#demo-checkbox-unselected3")[0].checked;
@@ -654,7 +652,7 @@ var oMatterProvisionObject = (function () {
             }, "client": {
                 "Url": sClientUrl, "Id": sClientId, "Name": sClientName
             }, "matter": {
-                "Name": matterName, "Id": matterId, "Description": matterDesc, "Conflict": { "Identified": ConflictIdentified, "CheckBy": conflictCheckBy, "CheckOn": conflictCheckOn, "SecureMatter": boolSecureMatter }, "BlockUserNames": blockUserNames, "AssignUserNames": arrUserNames, "Roles": arrRoles, "MatterGuid": serviceConstants.matterGUID
+                "Name": matterName, "Id": matterId, "Description": matterDesc, "Conflict": { "Identified": ConflictIdentified, "CheckBy": conflictCheckBy, "CheckOn": conflictCheckOn, "SecureMatter": boolSecureMatter }, "BlockUserNames": blockUserNames, "AssignUserNames": arrUserNames, "AssignUserEmails": arrUserEmails, "Roles": arrRoles, "MatterGuid": serviceConstants.matterGUID
             }, "matterConfigurations": {
                 "IsConflictCheck": serviceConstants.oDefaultConfiguration.IsConflictCheck, "IsMatterDescriptionMandatory": serviceConstants.oDefaultConfiguration.IsMatterDescriptionMandatory, "IsCalendarSelected": isCalenderSelected, "IsTaskSelected": isTaskSelected
             },
@@ -765,14 +763,59 @@ var oMatterProvisionObject = (function () {
             if (serviceConstants.oDefaultConfiguration.MatterUsers) {
                 var arrUsers = serviceConstants.oDefaultConfiguration.MatterUsers.split("$|$")
                 , arrRoles = serviceConstants.oDefaultConfiguration.MatterRoles.split("$|$")
+                , arrUserEmails = []
                 , arrPermissions = serviceConstants.oDefaultConfiguration.MatterPermissions.split("$|$")
-                , count = 1;
-                $.each(arrUsers, function (key, value) {
+                , count = 1
+                , iCounter
+                , iCount
+                , sEmail = "";
+                if (serviceConstants.oDefaultConfiguration.MatterUserEmails && "" !== serviceConstants.oDefaultConfiguration.MatterUserEmails) {
+                    arrUserEmails = serviceConstants.oDefaultConfiguration.MatterUserEmails.split("$|$");
+                }
+
+
+                count = 1;
+                for (iCounter = 0; iCounter < arrUsers.length; iCounter++) {
                     commonFunctions.addMorePermissions(count);
-                    var userName = "#txtAssign" + count;
-                    $(userName)[0].value = value ? (trimEndChar(value, ";") + ";") : value;
+                    var userName = "#txtAssign" + count, permissions = "#ddlPermAssign" + count;
+                    //// Get value from default configuration and set it in text box. i.e. UserName(user email address)
+                    if (arrUsers && 0 < arrUsers.length && arrUsers[iCounter]) {
+                        var arrAllUsers = arrUsers[iCounter].split(";");
+                        if (arrUserEmails && 0 < arrUserEmails.length && arrUserEmails[iCounter]) {
+                            var arrAllUserEmails = arrUserEmails[iCounter].split(";");
+                            for (iCount = 0; iCount < arrAllUsers.length; iCount++) {
+                                if (arrAllUsers[iCount] && "" !== arrAllUsers[iCount].trim()) {
+                                    sEmail = arrAllUserEmails[iCount];
+                                    if (serviceConstants.oEmailRegex.test(sEmail)) {
+                                        $(userName)[0].value += (trimEndChar(arrAllUsers[iCount], ";") + " (" + arrAllUserEmails[iCount] + ");");
+                                    } else {
+                                        $(userName)[0].value += (trimEndChar(arrAllUsers[iCount], ";") + ";");
+                                    }
+                                }
+                            }
+
+                        } else {
+                            for (iCount = 0; iCount < arrAllUsers.length; iCount++) {
+                                if (arrAllUsers[iCount] && "" !== arrAllUsers[iCount].trim()) {
+                                    $(userName).val(trimEndChar(arrAllUsers[iCount], ";") + ";");
+                                }
+                            }
+                        }
+                    } else {
+                        $(userName).val("");
+                    }
+                    $(permissions).val(arrPermissions[iCounter]).attr("data-value", arrPermissions[iCounter]);
+                    oCommonObject.bindAutocomplete(userName, true);
                     count++;
-                });
+                }
+                if (serviceConstants.oDefaultConfiguration.MatterRoles) {
+                    count = 1;
+                    $.each(arrPermissions, function (key, value) {
+                        var permissions = "#ddlPermAssign" + count;
+                        count++;
+                        $(permissions).val(value).attr("data-value", value);
+                    });
+                }
                 if (serviceConstants.oDefaultConfiguration.MatterPermissions) {
                     count = 1;
                     $.each(arrRoles, function (key, value) {
@@ -783,14 +826,6 @@ var oMatterProvisionObject = (function () {
                         } else {
                             $(roles).val($.trim(value)).attr("data-value", $.trim(value)).attr("data-mandatory", "true");
                         }
-                    });
-                }
-                if (serviceConstants.oDefaultConfiguration.MatterRoles) {
-                    count = 1;
-                    $.each(arrPermissions, function (key, value) {
-                        var permissions = "#ddlPermAssign" + count;
-                        count++;
-                        $(permissions).val(value).attr("data-value", value);
                     });
                 }
             } else {
@@ -1073,23 +1108,20 @@ var oMatterProvisionObject = (function () {
     commonFunctions.stampProperties = function () {
         $(".notificationContainer .notification .closeNotification").click();
         showNotification(".notificationContainer", oMatterProvisionConstants.Success_Matter_Step_3, "successBanner");
-        var oAssignPermList = $("input[id^=txtAssign]"), iErrorFlag = 0, sResponsibleAttorney = "", sTeamMembers = "";
+        var oAssignPermList = $("input[id^=txtAssign]"), iErrorFlag = 0, sResponsibleAttorney = [], sResponsibleAttorneyEmail = [], arrTeamMembers = [];
         $.each(oAssignPermList, function () {
             var sCurrElementID = $(this).attr("id");
             if (sCurrElementID) {
                 sCurrElementID = sCurrElementID.trim().split("txtAssign")[1];
                 var sCurrRole = $("#ddlRoleAssign" + sCurrElementID), sCurrPermission = $("#txtAssign" + sCurrElementID);
                 if (sCurrRole && sCurrPermission) {
-                    if (-1 === $.inArray(sCurrRole.val(), serviceConstants.oMandatoryRoleNames)) {
-                        sTeamMembers = trimEndChar(sCurrPermission.val().trim(), ";") + ";" + sTeamMembers; // Removed and Appended semicolon to ensure all users are separated by semicolon
-                    } else {
-                        sResponsibleAttorney = trimEndChar(sCurrPermission.val().trim(), ";") + ";" + sResponsibleAttorney; // Removed and Appended semicolon to ensure all users are separated by semicolon
+                    if (-1 !== $.inArray(sCurrRole.val(), serviceConstants.oMandatoryRoleNames)) {
+                        sResponsibleAttorney.push(oCommonObject.getUserName($.trim($(this).val()), true).join(";"));
+                        sResponsibleAttorneyEmail.push(oCommonObject.getUserName($.trim($(this).val()), false).join(";"));
                     }
                 }
             }
         });
-        sTeamMembers = trimEndChar(sTeamMembers.trim(), ";");
-        sResponsibleAttorney = trimEndChar(sResponsibleAttorney.trim(), ";");
 
         var sClientId = oJQueryObjects.$ClientId ? oJQueryObjects.$ClientId.val() : ""
         , sClientUrl = oJQueryObjects.$ClientName.attr("data-value")
@@ -1097,11 +1129,12 @@ var oMatterProvisionObject = (function () {
         , matterId = oJQueryObjects.$MatterId ? oJQueryObjects.$MatterId.val() : ""
         , matterName = oJQueryObjects.$MatterName ? oJQueryObjects.$MatterName.val().trim() : ""
         , matterDesc = oJQueryObjects.$MatterDescription ? oJQueryObjects.$MatterDescription.val().trim() : ""
-        , conflictCheckBy = oJQueryObjects.$ConflictConductedBy ? oJQueryObjects.$ConflictConductedBy.val().trim() : ""
+        , conflictCheckBy = oJQueryObjects.$ConflictConductedBy ? oCommonObject.getUserName(oJQueryObjects.$ConflictConductedBy.val().trim(), false)[0] : ""
         , conflictCheckOn = oJQueryObjects.$ConflictCheckDate ? oJQueryObjects.$ConflictCheckDate.val() : ""
         , ConflictIdentified = oJQueryObjects.$ConflictIdentified ? oJQueryObjects.$ConflictIdentified.val() : ""
         , boolSecureMatter = oJQueryObjects.$BoolSecureMatter
         , arrUserNames = []
+        , arrUserEmails = []
         , matterDetails = {}
         , arrRoles = []
         , arrPermissions = []
@@ -1153,7 +1186,9 @@ var oMatterProvisionObject = (function () {
         });
 
         $.each($("input[id^=txtAssign]"), function () {
-            arrUserNames.push($.trim($(this).val()).split(";"));
+            arrUserNames.push(oCommonObject.getUserName($(this).val().trim(), true));
+            arrUserEmails.push(oCommonObject.getUserName($(this).val().trim(), false));
+            arrTeamMembers.push(oCommonObject.getUserName($.trim($(this).val()), true).join(";"));
         });
 
         $.each($("input[id^=ddlPermAssign]"), function () {
@@ -1162,7 +1197,7 @@ var oMatterProvisionObject = (function () {
 
         if ("True" === ConflictIdentified) {
             if (sBlockedUserNames && "" !== sBlockedUserNames && oJQueryObjects.$BlockedUsers.length) {
-                arrBlockUserNames = oJQueryObjects.$BlockedUsers.val().split(";");
+                arrBlockUserNames = oCommonObject.getUserName(oJQueryObjects.$BlockedUsers.val().trim(), false);
             }
         }
         contentTypes = subAreaofLaw.trim().split(";");
@@ -1191,9 +1226,9 @@ var oMatterProvisionObject = (function () {
             }, "client": {
                 "Url": sClientUrl, "Id": sClientId, "Name": sClientName
             }, "matter": {
-                "Name": matterName, "Id": matterId, "Description": matterDesc, "Conflict": { "Identified": ConflictIdentified, "CheckBy": conflictCheckBy, "CheckOn": conflictCheckOn, "SecureMatter": boolSecureMatter }, "BlockUserNames": arrBlockUserNames, "AssignUserNames": arrUserNames, "ContentTypes": contentTypes, "DefaultContentType": defaultContentType, "Permissions": arrPermissions, "Roles": arrRoles, "DocumentTemplateCount": arrDocumentTemplatesCount, "MatterGuid": serviceConstants.matterGUID
+                "Name": matterName, "Id": matterId, "Description": matterDesc, "Conflict": { "Identified": ConflictIdentified, "CheckBy": conflictCheckBy, "CheckOn": conflictCheckOn, "SecureMatter": boolSecureMatter }, "BlockUserNames": arrBlockUserNames, "AssignUserNames": arrUserNames, "AssignUserEmails": arrUserEmails, "ContentTypes": contentTypes, "DefaultContentType": defaultContentType, "Permissions": arrPermissions, "Roles": arrRoles, "DocumentTemplateCount": arrDocumentTemplatesCount, "MatterGuid": serviceConstants.matterGUID
             }, "matterDetails": {
-                "PracticeGroup": serviceConstants.sPracticeGroupList, "AreaOfLaw": serviceConstants.sAreaOfLawList, "SubareaOfLaw": trimEndChar(subAreaofLaw, ";"), "ResponsibleAttorney": trimEndChar(sResponsibleAttorney.trim(), ";"), "UploadBlockedUsers": serviceConstants.arrReadOnlyUsers, "TeamMembers": trimEndChar(sTeamMembers.trim(), ";"), "RoleInformation": JSON.stringify(roleInformation)
+                "PracticeGroup": serviceConstants.sPracticeGroupList, "AreaOfLaw": serviceConstants.sAreaOfLawList, "SubareaOfLaw": trimEndChar(subAreaofLaw, ";"), "ResponsibleAttorney": sResponsibleAttorney.join(";").replace(/;;/g, ";"), "ResponsibleAttorneyEmail": sResponsibleAttorneyEmail.join(";").replace(/;;/g, ";"), "UploadBlockedUsers": serviceConstants.arrReadOnlyUsers, "TeamMembers": arrTeamMembers.join(";"), "RoleInformation": JSON.stringify(roleInformation)
             }, "matterProvisionChecks": oMatterProvisionFlags, "matterConfigurations": {
                 "IsConflictCheck": serviceConstants.oDefaultConfiguration.IsConflictCheck, "IsMatterDescriptionMandatory": serviceConstants.oDefaultConfiguration.IsMatterDescriptionMandatory
             }
@@ -1330,9 +1365,10 @@ var oMatterProvisionObject = (function () {
         return false;
     };
     commonFunctions.assignPermission = function () {
-        var sClientUrl = oJQueryObjects.$ClientName.attr("data-value"), matterName = oJQueryObjects.$MatterName.val().trim(), arrUserNames = [], arrPermissions = [], matterDetails;
+        var sClientUrl = oJQueryObjects.$ClientName.attr("data-value"), matterName = oJQueryObjects.$MatterName.val().trim(), arrUserNames = [], arrUserEmails = [], arrPermissions = [], matterDetails;
         $.each($("input[id^=txtAssign]"), function () {
-            arrUserNames.push($(this).val().trim().split(";"));
+            arrUserNames.push(oCommonObject.getUserName($(this).val().trim(), true));
+            arrUserEmails.push(oCommonObject.getUserName($(this).val().trim(), false));
         });
         $.each($("input[id^=ddlPermAssign]"), function () {
             arrPermissions.push($.trim($(this).val()));
@@ -1345,7 +1381,7 @@ var oMatterProvisionObject = (function () {
             }, "client": {
                 "Url": sClientUrl
             }, "matter": {
-                "Name": matterName, "Permissions": arrPermissions, "AssignUserNames": arrUserNames, "MatterGuid": serviceConstants.matterGUID
+                "Name": matterName, "Permissions": arrPermissions, "AssignUserNames": arrUserNames, "AssignUserEmails": arrUserEmails, "MatterGuid": serviceConstants.matterGUID
             }, "matterConfigurations": {
                 "IsCalendarSelected": isCalenderSelected,
                 "IsTaskSelected": isTaskSelected
@@ -1379,18 +1415,20 @@ var oMatterProvisionObject = (function () {
     , sBlockedUserNames = (oJQueryObjects.$BlockedUsers.length) ? oJQueryObjects.$BlockedUsers.val() : ""
     , ConflictIdentified = (oJQueryObjects.$ConflictIdentified.length) ? oJQueryObjects.$ConflictIdentified.val() : ""
     , arrUserNames = []
-    , conflictCheckBy = oJQueryObjects.$ConflictConductedBy.val().trim()
+    , arrUserEmails = []
+    , conflictCheckBy = oCommonObject.getUserName(oJQueryObjects.$ConflictConductedBy.val().trim(), false)[0]
     , conflictCheckOn = oJQueryObjects.$ConflictCheckDate.val()
     , boolSecureMatter = oJQueryObjects.$BoolSecureMatter
     , matterDesc = oJQueryObjects.$MatterDescription.val().trim()
     , matterDetails = {}
     , arrPermissions = [];
         $.each($("input[id^=txtAssign]"), function () {
-            arrUserNames.push($.trim($(this).val()).split(";"));
+            arrUserNames.push(oCommonObject.getUserName($(this).val().trim(), true));
+            arrUserEmails.push(oCommonObject.getUserName($(this).val().trim(), false));
         });
         if ("True" === ConflictIdentified) {
             if (sBlockedUserNames && "" !== sBlockedUserNames && oJQueryObjects.$BlockedUsers.length) {
-                arrBlockUserNames = oJQueryObjects.$BlockedUsers.val().split(";");
+                arrBlockUserNames = oCommonObject.getUserName(oJQueryObjects.$BlockedUsers.val().trim(), false);
             }
         }
         $.each($("input[id^=ddlPermAssign]"), function () {
@@ -1420,7 +1458,7 @@ var oMatterProvisionObject = (function () {
             }, "client": {
                 "Url": sClientUrl
             }, "matter": {
-                "Name": matterName, "Description": matterDesc, "AssignUserNames": arrUserNames, "BlockUserNames": arrBlockUserNames, "Conflict": { "Identified": ConflictIdentified, "CheckBy": conflictCheckBy, "CheckOn": conflictCheckOn, "SecureMatter": boolSecureMatter }, "Permissions": arrPermissions, "MatterGuid": serviceConstants.matterGUID
+                "Name": matterName, "Description": matterDesc, "AssignUserNames": arrUserNames, "AssignUserEmails": arrUserEmails, "BlockUserNames": arrBlockUserNames, "Conflict": { "Identified": ConflictIdentified, "CheckBy": conflictCheckBy, "CheckOn": conflictCheckOn, "SecureMatter": boolSecureMatter }, "Permissions": arrPermissions, "MatterGuid": serviceConstants.matterGUID
             }, "matterConfigurations": {
                 "IsConflictCheck": serviceConstants.oDefaultConfiguration.IsConflictCheck, "IsMatterDescriptionMandatory": serviceConstants.oDefaultConfiguration.IsMatterDescriptionMandatory, "IsCalendarSelected": isCalendarSelected, "IsRSSSelected": isRSSFeedSelected, "IsTaskSelected": isTaskSelected
             }
@@ -1467,18 +1505,20 @@ var oMatterProvisionObject = (function () {
         , sBlockedUserNames = (oJQueryObjects.$BlockedUsers.length) ? oJQueryObjects.$BlockedUsers.val() : ""
         , matterName = (oJQueryObjects.$MatterName.length) ? oJQueryObjects.$MatterName.val().trim() : ""
         , arrUserNames = []
+        , arrUserEmails = []
         , arrBlockUserNames = []
         , oSecurityGroupCheck = {}
         , userId = []
         , oParam = {
         };
         $.each($("input[id^=txtAssign]"), function () {
-            arrUserNames.push($.trim($(this).val()).split(";"));
+            arrUserNames.push(oCommonObject.getUserName($(this).val().trim(), true));
+            arrUserEmails.push(oCommonObject.getUserName($(this).val().trim(), false));
             userId.push(this.id);
         });
         if ("True" === sConflictIdentified) {
             if (sBlockedUserNames && "" !== sBlockedUserNames && oJQueryObjects.$BlockedUsers.length) {
-                arrBlockUserNames = oJQueryObjects.$BlockedUsers.val().split(";");
+                arrBlockUserNames = oCommonObject.getUserName(oJQueryObjects.$BlockedUsers.val().trim(), false);
             }
         }
         oParam = {
@@ -1490,7 +1530,7 @@ var oMatterProvisionObject = (function () {
             }, "client": {
                 "Url": sClientUrl
             }, "matter": {
-                "Name": matterName, "AssignUserNames": arrUserNames, "Conflict": { "Identified": sConflictIdentified }, "BlockUserNames": arrBlockUserNames
+                "Name": matterName, "AssignUserNames": arrUserNames, "AssignUserEmails": arrUserEmails, "Conflict": { "Identified": sConflictIdentified }, "BlockUserNames": arrBlockUserNames
             },
             "userId": userId
         };
@@ -1576,7 +1616,7 @@ var oMatterProvisionObject = (function () {
     /* Function to check person who is conducting conflict check is not in block user */
     function validateConflictUser() {
         var arrBlockedUsers = oJQueryObjects.$BlockedUsers.val().trim().split(";")
-                , sConflictCheckUser = oJQueryObjects.$ConflictConductedBy.val()
+                , sConflictCheckUser = oCommonObject.getUserName(oJQueryObjects.$ConflictConductedBy.val().trim(), false)[0]
             , bConflict = false;
         $.each(arrBlockedUsers, function (iIndex) {
             if (sConflictCheckUser === arrBlockedUsers[iIndex].trim()) {
@@ -1664,7 +1704,7 @@ var oMatterProvisionObject = (function () {
 
     /* Function to check if all the users entered in the list are valid User names */
     function isValidUserList(sUserList) {
-        var arrUserList = sUserList && sUserList.split("; "), bFlag = true; //// This will return an array with last element as "".
+        var arrUserList = oCommonObject.getUserName(sUserList.trim(), false), bFlag = true; //// This will return an array with last element as "".
         //// You have all the users in oCommonObject.oSiteUser JSON object and you have users entered by user in arrUserList
         //// Check if each user in arrUserList is a part of oCommonObject.oSiteUser array. If at least one of it is not there return false flag
         if (!arrUserList) {
@@ -1784,7 +1824,7 @@ var oMatterProvisionObject = (function () {
                                                                     return true;
                                                                 } else {
                                                                     showErrorNotification("#txtBlockUser", oMatterProvisionConstants.Error_Valid_Block_Users);
-                                                                } 
+                                                                }
                                                             }
                                                         } else {
                                                             showErrorNotification("#" + $(".assignPermission")[0].id, oMatterProvisionConstants.Error_Edit_Matter_Mandatory_Permission);

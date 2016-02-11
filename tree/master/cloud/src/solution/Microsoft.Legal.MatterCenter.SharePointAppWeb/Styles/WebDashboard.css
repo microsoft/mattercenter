@@ -214,12 +214,12 @@ input {
         opacity: 0.999;
     }
 
-#listViewSpan {
+#gridViewSpan {
     opacity: 0.665;
     top: 4px;
 }
 
-    #listViewSpan:hover {
+    #gridViewSpan:hover {
         opacity: 0.999;
     }
 

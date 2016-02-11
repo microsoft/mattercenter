@@ -333,22 +333,44 @@ function setDefaultPermissions() {
         serviceConstants.bIsPermissionValuesSet = !serviceConstants.bIsPermissionValuesSet;
         if (serviceVariables.oMatterConfigurations.MatterUsers) {
             $(".assignNewPerm").remove();
+
             var arrUsers = serviceVariables.oMatterConfigurations.MatterUsers.split("$|$")
+, arrUserEmails = []
             , arrRoles = serviceVariables.oMatterConfigurations.MatterRoles.split("$|$")
             , arrPermissions = serviceVariables.oMatterConfigurations.MatterPermissions.split("$|$")
-            , count = 1;
-            $.each(arrUsers, function (key, value) {
+            , count = 1
+            , iCounter
+            , iCount
+            , sEmail = ""
+            , oEmailRegex = new RegExp(oGlobalConstants.Email_Validation_Regex);
+            if (serviceVariables.oMatterConfigurations.MatterUserEmails && "" !== serviceVariables.oMatterConfigurations.MatterUserEmails) {
+                arrUserEmails = serviceVariables.oMatterConfigurations.MatterUserEmails.split("$|$");
+            }
+            for (iCounter = 0; iCounter < arrUsers.length; iCounter++) {
                 commonFunctions.addMorePermissions(count);
                 var userName = "#txtAssign" + count;
-                if ("" !== value) {
-                    $(userName).val(trimEndChar(value, ";") + ";");
+                if (arrUsers && 0 < arrUsers.length && arrUsers[iCounter]) {
+                    if (arrUserEmails && 0 < arrUserEmails.length && arrUserEmails[iCounter]) {
+                        var arrAllUsers = arrUsers[iCounter].split(";"), arrAllUserEmails = arrUserEmails[iCounter].split(";");
+                        for (iCount = 0; iCount < arrAllUsers.length; iCount++) {
+                            if (arrAllUsers[iCount] && "" !== arrAllUsers[iCount].trim()) {
+                                sEmail = arrAllUserEmails[iCount];
+                                if (oEmailRegex.test(sEmail)) {
+                                    $(userName)[0].value += (trimEndChar(arrAllUsers[iCount], ";") + " (" + arrAllUserEmails[iCount] + ");");
+                                } else {
+                                    $(userName)[0].value += (trimEndChar(arrAllUsers[iCount], ";") + ";");
+                                }
+                            }
+                        }
+                    } else {
+                        $(userName).val(trimEndChar(arrUsers[iCounter], ";") + ";");
+                    }
                 } else {
                     $(userName).val("");
                 }
                 oCommonObject.bindAutocomplete(userName, true);
                 count++;
-
-            });
+            }
             if (serviceVariables.oMatterConfigurations.MatterPermissions) {
                 count = 1;
                 $.each(arrRoles, function (key, value) {
@@ -792,6 +814,7 @@ function getConfigurationsFromFields() {
         "DefaultMatterType": "",
         "MatterTypes": "",
         "MatterUsers": "",
+        "MatterUserEmails": "",
         "MatterRoles": "",
         "MatterPermissions": "",
         "IsCalendarSelected": null,
@@ -816,6 +839,7 @@ function getConfigurationsFromFields() {
     }
 
     oMatterConfigurations.MatterUsers = getUsers();
+    oMatterConfigurations.MatterUserEmails = getUserEmails();
     if (oMatterConfigurations.MatterUsers) {
         oMatterConfigurations.MatterPermissions = getPermissionsOrRoles("ddlPermAssign");
         oMatterConfigurations.MatterRoles = getPermissionsOrRoles("ddlRoleAssign");
@@ -881,10 +905,24 @@ function getUsers() {
     "use strict";
     var arrUserNames = [];
     $.each($("input[id^=txtAssign]"), function () {
-        arrUserNames.push($.trim($(this).val()));
+        arrUserNames.push(oCommonObject.getUserName($(this).val().trim(), true));
     });
     if (arrUserNames.length) {
-        return arrUserNames.join("$|$");
+        return arrUserNames.join("$|$").replace(/,/g, ";");
+    } else {
+        return "";
+    }
+}
+
+// Gets the list of users from the textboxes
+function getUserEmails() {
+    "use strict";
+    var arrUseEmails = [];
+    $.each($("input[id^=txtAssign]"), function () {
+        arrUseEmails.push(oCommonObject.getUserName($(this).val().trim(), false));
+    });
+    if (arrUseEmails.length) {
+        return arrUseEmails.join("$|$").replace(/,/g, ";");
     } else {
         return "";
     }

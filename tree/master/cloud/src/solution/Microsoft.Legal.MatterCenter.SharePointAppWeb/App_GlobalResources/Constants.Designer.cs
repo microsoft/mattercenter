@@ -718,6 +718,15 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ^[\\s]*\\w+([-+.&apos;]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$.
+        /// </summary>
+        internal static string Email_Validation_Regex {
+            get {
+                return ResourceManager.GetString("Email_Validation_Regex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to /Search.
         /// </summary>
         internal static string Enterprise_Search {
@@ -907,6 +916,51 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 710.
+        /// </summary>
+        internal static string GridView_BreakPoint {
+            get {
+                return ResourceManager.GetString("GridView_BreakPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All column headers.
+        /// </summary>
+        internal static string GridViewAllColumnOption {
+            get {
+                return ResourceManager.GetString("GridViewAllColumnOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 21.
+        /// </summary>
+        internal static string GridViewItemsPerPage {
+            get {
+                return ResourceManager.GetString("GridViewItemsPerPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 95.
+        /// </summary>
+        internal static string GridViewLazyLoadingLimit {
+            get {
+                return ResourceManager.GetString("GridViewLazyLoadingLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to documenturl.
+        /// </summary>
+        internal static string GridViewPinnedDocumentUrl {
+            get {
+                return ResourceManager.GetString("GridViewPinnedDocumentUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home page.
         /// </summary>
         internal static string Home_page {
@@ -939,6 +993,15 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         internal static string Image_General_Document {
             get {
                 return ResourceManager.GetString("Image_General_Document", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 126.
+        /// </summary>
+        internal static string Incorrect_Team_Members_Code {
+            get {
+                return ResourceManager.GetString("Incorrect_Team_Members_Code", resourceCulture);
             }
         }
         
@@ -1047,51 +1110,6 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         internal static string Legal_Briefcase_Service_Url {
             get {
                 return ResourceManager.GetString("Legal_Briefcase_Service_Url", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 710.
-        /// </summary>
-        internal static string ListView_BreakPoint {
-            get {
-                return ResourceManager.GetString("ListView_BreakPoint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All column headers.
-        /// </summary>
-        internal static string ListViewAllColumnOption {
-            get {
-                return ResourceManager.GetString("ListViewAllColumnOption", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 21.
-        /// </summary>
-        internal static string ListViewItemsPerPage {
-            get {
-                return ResourceManager.GetString("ListViewItemsPerPage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 95.
-        /// </summary>
-        internal static string ListViewLazyLoadingLimit {
-            get {
-                return ResourceManager.GetString("ListViewLazyLoadingLimit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to documenturl.
-        /// </summary>
-        internal static string ListViewPinnedDocumentUrl {
-            get {
-                return ResourceManager.GetString("ListViewPinnedDocumentUrl", resourceCulture);
             }
         }
         

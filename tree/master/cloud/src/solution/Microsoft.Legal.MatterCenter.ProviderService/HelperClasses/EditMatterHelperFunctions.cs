@@ -134,9 +134,11 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
 
                     // Get existing stamped properties
                     string stampedUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, ServiceConstantStrings.StampedPropertyMatterCenterUsers);
+                    string stampedUserEmails = GetStampPropertyValue(matterStampedProperties.FieldValues, ServiceConstantStrings.StampedPropertyMatterCenterUserEmails);
                     string stampedPermissions = GetStampPropertyValue(matterStampedProperties.FieldValues, ServiceConstantStrings.StampedPropertyMatterCenterPermissions);
                     string stampedRoles = GetStampPropertyValue(matterStampedProperties.FieldValues, ServiceConstantStrings.StampedPropertyMatterCenterRoles);
                     string stampedResponsibleAttorneys = GetStampPropertyValue(matterStampedProperties.FieldValues, ServiceConstantStrings.StampedPropertyResponsibleAttorney);
+                    string stampedResponsibleAttorneysEmail = GetStampPropertyValue(matterStampedProperties.FieldValues, ServiceConstantStrings.StampedPropertyResponsibleAttorneyEmail);
                     string stampedTeamMembers = GetStampPropertyValue(matterStampedProperties.FieldValues, ServiceConstantStrings.StampedPropertyTeamMembers);
                     string stampedBlockedUploadUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, ServiceConstantStrings.StampedPropertyBlockedUploadUsers);
 
@@ -144,20 +146,25 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                     string currentRoles = string.Join(ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR, matter.Roles.Where(user => !string.IsNullOrWhiteSpace(user)));
                     string currentBlockedUploadUsers = string.Join(ConstantStrings.Semicolon, matterDetails.UploadBlockedUsers.Where(user => !string.IsNullOrWhiteSpace(user)));
                     string currentUsers = GetMatterAssignedUsers(matter);
+                    string currentUserEmails = GetMatterAssignedUsersEmail(clientContext, matter);
 
                     string finalMatterPermissions = string.IsNullOrWhiteSpace(stampedPermissions) || isEditMode ? currentPermissions : string.Concat(stampedPermissions, ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR, currentPermissions);
                     string finalMatterRoles = string.IsNullOrWhiteSpace(stampedRoles) || isEditMode ? currentRoles : string.Concat(stampedRoles, ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR, currentRoles);
                     string finalResponsibleAttorneys = string.IsNullOrWhiteSpace(stampedResponsibleAttorneys) || isEditMode ? matterDetails.ResponsibleAttorney : string.Concat(stampedResponsibleAttorneys, ConstantStrings.Semicolon, matterDetails.ResponsibleAttorney);
+                    string finalResponsibleAttorneysEmail = string.IsNullOrWhiteSpace(stampedResponsibleAttorneysEmail) || isEditMode ? matterDetails.ResponsibleAttorneyEmail : string.Concat(stampedResponsibleAttorneysEmail, ConstantStrings.Semicolon, matterDetails.ResponsibleAttorneyEmail);
                     string finalTeamMembers = string.IsNullOrWhiteSpace(stampedTeamMembers) || isEditMode ? matterDetails.TeamMembers : string.Concat(stampedTeamMembers, ConstantStrings.Semicolon, matterDetails.TeamMembers);
                     string finalMatterCenterUsers = string.IsNullOrWhiteSpace(stampedUsers) || isEditMode ? currentUsers : string.Concat(stampedUsers, ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR, currentUsers);
+                    string finalMatterCenterUserEmails = string.IsNullOrWhiteSpace(stampedUserEmails) || isEditMode ? currentUserEmails : string.Concat(stampedUserEmails, ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR, currentUserEmails);
                     string finalBlockedUploadUsers = string.IsNullOrWhiteSpace(stampedBlockedUploadUsers) || isEditMode ? currentBlockedUploadUsers : string.Concat(stampedBlockedUploadUsers, ConstantStrings.Semicolon, currentBlockedUploadUsers);
 
                     propertyList.Add(ServiceConstantStrings.StampedPropertyResponsibleAttorney, Encoder.HtmlEncode(finalResponsibleAttorneys));
+                    propertyList.Add(ServiceConstantStrings.StampedPropertyResponsibleAttorneyEmail, Encoder.HtmlEncode(finalResponsibleAttorneysEmail));
                     propertyList.Add(ServiceConstantStrings.StampedPropertyTeamMembers, Encoder.HtmlEncode(finalTeamMembers));
                     propertyList.Add(ServiceConstantStrings.StampedPropertyBlockedUploadUsers, Encoder.HtmlEncode(finalBlockedUploadUsers));
                     propertyList.Add(ServiceConstantStrings.StampedPropertyMatterCenterRoles, Encoder.HtmlEncode(finalMatterRoles));
                     propertyList.Add(ServiceConstantStrings.StampedPropertyMatterCenterPermissions, Encoder.HtmlEncode(finalMatterPermissions));
                     propertyList.Add(ServiceConstantStrings.StampedPropertyMatterCenterUsers, Encoder.HtmlEncode(finalMatterCenterUsers));
+                    propertyList.Add(ServiceConstantStrings.StampedPropertyMatterCenterUserEmails, Encoder.HtmlEncode(finalMatterCenterUserEmails));
 
                     Lists.SetPropertBagValuesForList(clientContext, matterStampedProperties, matter.Name, propertyList);
                     result = ConstantStrings.TRUE;
@@ -191,10 +198,56 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
         }
 
         /// <summary>
+        /// Converts the project users emails in a form that can be stamped to library.
+        /// </summary>
+        /// <param name="clientContext">ClientContext object</param>
+        /// <param name="matter">Matter object</param>
+        /// <returns>Users that can be stamped</returns>
+        private static string GetMatterAssignedUsersEmail(ClientContext clientContext, Matter matter)
+        {
+            string currentUsers = string.Empty;
+            string separator = string.Empty;
+            if (null != matter && 0 < matter.AssignUserEmails.Count)
+            {
+                foreach (IList<string> userNames in matter.AssignUserEmails)
+                {
+                    List<string> userEmails = new List<string>();
+                    if (null != clientContext && null != userNames)
+                    {
+                        foreach (string userName in userNames)
+                        {
+                            if (!string.IsNullOrWhiteSpace(userName))
+                            {
+                                if (ValidationHelperFunctions.ValidateExternalUserInput(userName))
+                                {
+                                    userEmails.Add(userName);
+                                }
+                                else
+                                {
+                                    User user = clientContext.Web.EnsureUser(userName.Trim());
+                                    ///// Only Fetch the User ID which is required
+                                    clientContext.Load(user, u => u.Email);
+                                    clientContext.ExecuteQuery();
+                                    ///// Add the user to the first element of the FieldUserValue array.
+                                    userEmails.Add(user.Email);
+                                }
+                            }
+                        }
+                        currentUsers += separator + string.Join(ConstantStrings.Semicolon, userEmails);
+                        separator = ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR;
+                    }
+                }
+            }
+
+            return currentUsers;
+        }
+
+
+        /// <summary>
         /// Fetches the effective permissions of users present in matter library.
         /// </summary>
         /// <param name="clientContext">ClientContext object</param>
-        /// <param name="libraryName">Matter library name</param>
+        /// <param name="matterLibrary">Matter library name</param>
         /// <returns>List permissions</returns>
         internal static IEnumerable<RoleAssignment> FetchUserPermission(ClientContext clientContext, string matterLibrary)
         {
@@ -219,12 +272,11 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
         /// Remove old users and assign permissions to new users.
         /// </summary>
         /// <param name="clientContext">ClientContext object</param>
-        /// <param name="requestObject">RequestObject</param>
-        /// <param name="client">Client object</param>
         /// <param name="matter">Matter object</param>
         /// <param name="users">List of users to remove</param>
+        /// <param name="loggedInUserTitle">Title of logged-in user</param>
         /// <param name="isListItem">ListItem or list</param>
-        /// <param name="list">List object</param>
+        /// <param name="listName">List Name</param>
         /// <param name="matterLandingPageId">List item id</param>
         /// <param name="isEditMode">Add/ Edit mode</param>
         /// <returns></returns>
@@ -242,11 +294,14 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                     // Add permission
                     if (!isListItem)
                     {
-                        result = Lists.SetPermission(clientContext, matter.AssignUserNames, matter.Permissions, listName);
+                        result = Lists.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, listName);
                     }
                     else
                     {
-                        result = Lists.SetItemPermission(clientContext, matter.AssignUserNames, ServiceConstantStrings.MatterLandingPageRepositoryName, matterLandingPageId, matter.Permissions);
+                        if (0 <= matterLandingPageId)
+                        {
+                            result = Lists.SetItemPermission(clientContext, matter.AssignUserEmails, ServiceConstantStrings.MatterLandingPageRepositoryName, matterLandingPageId, matter.Permissions);
+                        }
                     }
                 }
             }
@@ -255,7 +310,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                 throw;
             }
             // To avoid the invalid symbol error while parsing the JSON, return the response in lower case 
-            return Convert.ToString(result,CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture);
+            return Convert.ToString(result, CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture);
         }
 
         /// <summary>
@@ -263,8 +318,9 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
         /// </summary>
         /// <param name="clientContext">ClientContext object</param>
         /// <param name="usersToRemove">List of users</param>
+        /// <param name="loggedInUserTitle">Title of logged-in user</param>
         /// <param name="isListItem">ListItem or list</param>
-        /// <param name="list">List object</param>
+        /// <param name="listName">Name of the List</param>
         /// <param name="matterLandingPageId">List item id</param>
         private static void RemoveSpecificUsers(ClientContext clientContext, List<string> usersToRemove, string loggedInUserTitle, bool isListItem, string listName, int matterLandingPageId)
         {
@@ -284,14 +340,14 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                         if (0 <= matterLandingPageId)
                         {
                             listItem = list.GetItemById(matterLandingPageId);
-                            clientContext.Load(listItem, listItemProperties => listItemProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member, roleAssignmentProperties => roleAssignmentProperties.Member.Title, roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, roleDef => roleDef.BasePermissions)));
+                            clientContext.Load(listItem, listItemProperties => listItemProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member, roleAssignmentProperties => roleAssignmentProperties.Member.Title, roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, roleDef => roleDef.BasePermissions)).Where(listUsers => (PrincipalType.User == listUsers.Member.PrincipalType) || (PrincipalType.SecurityGroup == listUsers.Member.PrincipalType || (PrincipalType.SharePointGroup == listUsers.Member.PrincipalType))));
                             clientContext.ExecuteQuery();
                             roleCollection = listItem.RoleAssignments;
                         }
                     }
                     else
                     {
-                        clientContext.Load(list, listProperties => listProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member, roleAssignmentProperties => roleAssignmentProperties.Member.Title, roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, roleDef => roleDef.BasePermissions)));
+                        clientContext.Load(list, listProperties => listProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member, roleAssignmentProperties => roleAssignmentProperties.Member.Title, roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, roleDef => roleDef.BasePermissions)).Where(listUsers => (PrincipalType.User == listUsers.Member.PrincipalType) || (PrincipalType.SecurityGroup == listUsers.Member.PrincipalType) || (PrincipalType.SharePointGroup == listUsers.Member.PrincipalType)));
                         clientContext.ExecuteQuery();
                         roleCollection = list.RoleAssignments;
                     }
@@ -307,9 +363,17 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                                 {
                                     // Removing permission for all the user except current user with full control
                                     // Add those users in list, then traverse the list and removing all users from that list
-                                    if (role.Member.Title == user && !((role.Member.Title == loggedInUserTitle) && (roleDef.Name == ConstantStrings.EditMatterAllowedPermissionLevel)))
+                                    if (PrincipalType.SharePointGroup == role.Member.PrincipalType)
                                     {
                                         roleDefinationList.Add(roleDef);
+                                    }
+                                    else
+                                    {
+                                        string email = ((User)role.Member).Email;
+                                        if (email == user && !((email == loggedInUserTitle) && (roleDef.Name == ConstantStrings.EditMatterAllowedPermissionLevel)))
+                                        {
+                                            roleDefinationList.Add(roleDef);
+                                        }
                                     }
                                 }
                                 foreach (RoleDefinition roleDef in roleDefinationList)
@@ -344,7 +408,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                 {
                     foreach (RoleAssignment roles in userPermissionOnLibrary)
                     {
-                        users.Add(roles.Member.Title);
+                        users.Add(((User)roles.Member).Email);
                     }
                 }
             }
@@ -376,7 +440,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                 if (null != requestObject && null != client && null != matter && null != clientContext && null != matterRevertListObject)
                 {
                     List<string> users = new List<string>();
-                    users = matter.AssignUserNames.SelectMany(user => user).Distinct().ToList();
+                    users = matter.AssignUserEmails.SelectMany(user => user).Distinct().ToList();
 
                     // Remove recently added users
                     if (null != matterRevertListObject.MatterLibrary)
@@ -405,23 +469,23 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                         Matter matterRevertUserPermission = PrepareUserPermission(oldUserPermissions);
                         if (null != matterRevertListObject.MatterLibrary)
                         {
-                            result = Lists.SetPermission(clientContext, matterRevertUserPermission.AssignUserNames, matterRevertUserPermission.Permissions, matterRevertListObject.MatterLibrary);
+                            result = Lists.SetPermission(clientContext, matterRevertUserPermission.AssignUserEmails, matterRevertUserPermission.Permissions, matterRevertListObject.MatterLibrary);
                         }
                         if (null != matterRevertListObject.MatterOneNoteLibrary)
                         {
-                            result = Lists.SetPermission(clientContext, matterRevertUserPermission.AssignUserNames, matterRevertUserPermission.Permissions, matterRevertListObject.MatterOneNoteLibrary);
+                            result = Lists.SetPermission(clientContext, matterRevertUserPermission.AssignUserEmails, matterRevertUserPermission.Permissions, matterRevertListObject.MatterOneNoteLibrary);
                         }
                         if (null != matterRevertListObject.MatterCalendar)
                         {
-                            result = Lists.SetPermission(clientContext, matterRevertUserPermission.AssignUserNames, matterRevertUserPermission.Permissions, matterRevertListObject.MatterCalendar);
+                            result = Lists.SetPermission(clientContext, matterRevertUserPermission.AssignUserEmails, matterRevertUserPermission.Permissions, matterRevertListObject.MatterCalendar);
                         }
                         if (null != matterRevertListObject.MatterTask)
                         {
-                            result = Lists.SetPermission(clientContext, matterRevertUserPermission.AssignUserNames, matterRevertUserPermission.Permissions, matterRevertListObject.MatterTask);
+                            result = Lists.SetPermission(clientContext, matterRevertUserPermission.AssignUserEmails, matterRevertUserPermission.Permissions, matterRevertListObject.MatterTask);
                         }
                         if (null != matterRevertListObject.MatterSitePages && 0 <= matterLandingPageId)
                         {
-                            result = Lists.SetItemPermission(clientContext, matterRevertUserPermission.AssignUserNames, ServiceConstantStrings.MatterLandingPageRepositoryName, matterLandingPageId, matterRevertUserPermission.Permissions);
+                            result = Lists.SetItemPermission(clientContext, matterRevertUserPermission.AssignUserEmails, ServiceConstantStrings.MatterLandingPageRepositoryName, matterLandingPageId, matterRevertUserPermission.Permissions);
                         }
                     }
                 }
@@ -431,7 +495,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                 Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
             }
             // To avoid the invalid symbol error while parsing the JSON, return the response in lower case
-            return Convert.ToString(result,CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentUICulture);
+            return Convert.ToString(result, CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentUICulture);
         }
 
         /// <summary>
@@ -442,7 +506,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
         internal static Matter PrepareUserPermission(IEnumerable<RoleAssignment> userPermissions)
         {
             Matter matterUserPermission = new Matter();
-            matterUserPermission.AssignUserNames = new List<IList<string>>();
+            matterUserPermission.AssignUserEmails = new List<IList<string>>();
             matterUserPermission.Permissions = new List<string>();
 
             if (null != userPermissions && 0 < userPermissions.Count())
@@ -451,7 +515,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                 {
                     foreach (RoleDefinition roleDefinition in userPermission.RoleDefinitionBindings)
                     {
-                        matterUserPermission.AssignUserNames.Add(new List<string> { userPermission.Member.Title });
+                        matterUserPermission.AssignUserEmails.Add(new List<string> { ((User)userPermission.Member).Email });
                         matterUserPermission.Permissions.Add(roleDefinition.Name);
                     }
                 }
@@ -470,18 +534,18 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
             string result = ConstantStrings.TRUE;
             int teamMembersRowCount, securityGroupRowNumber = -1; // Blocked user field has security group
             List<Tuple<int, Principal>> teamMemberPrincipalCollection = new List<Tuple<int, Principal>>();
-            if (null != clientContext && null != matter && null != matter.AssignUserNames && null != matter.BlockUserNames)
+            if (null != clientContext && null != matter && null != matter.AssignUserEmails && null != matter.BlockUserNames)
             {
                 try
                 {
-                    teamMembersRowCount = matter.AssignUserNames.Count;
+                    teamMembersRowCount = matter.AssignUserEmails.Count;
                     List<string> blockedUsers = matter.BlockUserNames.Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
                     if (0 < teamMembersRowCount)
                     {
                         securityGroupRowNumber = -2; // Invalid user
                         for (int iterator = 0; iterator < teamMembersRowCount; iterator++)
                         {
-                            List<string> currentRowTeamMembers = matter.AssignUserNames[iterator].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
+                            List<string> currentRowTeamMembers = matter.AssignUserEmails[iterator].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
                             foreach (string teamMember in currentRowTeamMembers)
                             {
                                 Principal teamMemberPrincipal = clientContext.Web.EnsureUser(teamMember);
@@ -534,13 +598,14 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
         {
             string result = string.Empty;
             bool isInvalidUser = false;
-            int iCounter = 0, teamMembersRowCount = matter.AssignUserNames.Count(), iCount = 0;
+            int iCounter = 0, teamMembersRowCount = matter.AssignUserEmails.Count(), iCount = 0;
             List<Principal> teamMemberPrincipalCollection = new List<Principal>();
             try
             {
                 for (iCounter = 0; iCounter < teamMembersRowCount; iCounter++)
                 {
-                    IList<string> userList = matter.AssignUserNames[iCounter].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
+                    IList<string> userList = matter.AssignUserEmails[iCounter].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
+                    IList<string> userNameList = matter.AssignUserNames[iCounter].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
                     foreach (string userName in userList)
                     {
                         Principal teamMemberPrincipal = clientContext.Web.EnsureUser(userName.Trim());
@@ -549,7 +614,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
                     }
                     clientContext.ExecuteQuery();
                     //// Check whether the name entered by the user and the name resolved by SharePoint is same.
-                    foreach (string teamMember in userList)
+                    foreach (string teamMember in userNameList)
                     {
                         if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[iCount].Title.Trim(), StringComparison.OrdinalIgnoreCase))
                         {
@@ -583,7 +648,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
             try
             {
                 Users loggedInUser = UIUtility.GetLoggedInUserDetails(clientContext);
-                userName = loggedInUser.Name;
+                userName = loggedInUser.Email;
             }
             catch (Exception)
             {
@@ -620,9 +685,10 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
         /// <param name="clientContext">Client context object</param>
         /// <param name="matter">Matter object</param>
         /// <param name="loggedInUser">Name of logged in user</param>
+        /// <param name="listItemId">ID of the list item</param>
         /// <param name="listExists">List of existed list</param>
-        /// <param name="listItemId">ID of the list</param>
         /// <param name="assignFullControl">Flag to determine Assign or Remove Permission</param>
+        /// <param name="hasFullPermission">Flag to determine user has Full Permission or not</param>
         internal static void AssignRemoveFullControl(ClientContext clientContext, Matter matter, string loggedInUser, int listItemId, List<string> listExists, bool assignFullControl, bool hasFullPermission)
         {
             IList<IList<string>> currentUser = new List<IList<string>>();
@@ -758,18 +824,18 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.HelperClasses
         /// <param name="Permissions">List of Permission</param>
         /// <param name="loggedInUserName">Name of logged in User</param>
         /// <returns>Status of Full Permission</returns>
-        internal static bool CheckFullPermissionInAssignList(IList<IList<string>> AssignUserNames, IList<string> Permissions, string loggedInUserName)
+        internal static bool CheckFullPermissionInAssignList(IList<IList<string>> assignUserEmails, IList<string> Permissions, string loggedInUserName)
         {
             bool result = false;
-            if (null != Permissions && null != AssignUserNames && Permissions.Count == AssignUserNames.Count)
+            if (null != Permissions && null != assignUserEmails && Permissions.Count == assignUserEmails.Count)
             {
                 int position = 0;
                 foreach (string roleName in Permissions)
                 {
-                    IList<string> assignUserNames = AssignUserNames[position];
-                    if (!string.IsNullOrWhiteSpace(roleName) && null != assignUserNames)
+                    IList<string> AssignUserEmails = assignUserEmails[position];
+                    if (!string.IsNullOrWhiteSpace(roleName) && null != AssignUserEmails)
                     {
-                        foreach (string user in assignUserNames)
+                        foreach (string user in AssignUserEmails)
                         {
                             if (!string.IsNullOrWhiteSpace(user) && user.Trim().Equals(loggedInUserName.Trim()))
                             {

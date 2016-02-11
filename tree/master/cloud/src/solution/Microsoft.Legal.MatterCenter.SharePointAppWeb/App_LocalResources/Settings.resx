@@ -243,7 +243,7 @@
   </data>
   <data name="Clients_Header" xml:space="preserve">
     <value>Settings</value>
-    <comment>Header for the clients list view</comment>
+    <comment>Header for the clients grid view</comment>
   </data>
   <data name="Clients_View_Message" xml:space="preserve">
     <value>Click on a name to configure matter creation options for that client.</value>
