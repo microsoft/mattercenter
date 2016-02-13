@@ -250,7 +250,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DemoTerms.
+        ///   Looks up a localized string similar to MatterCenterTerms.
         /// </summary>
         internal static string Common_Term_Set_Group_Name {
             get {
@@ -480,6 +480,15 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         internal static string Email_Folder_Name {
             get {
                 return ResourceManager.GetString("Email_Folder_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ^[\s]*\w+([-+.&apos;]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*[\s]*$.
+        /// </summary>
+        internal static string Email_Validation_Regex {
+            get {
+                return ResourceManager.GetString("Email_Validation_Regex", resourceCulture);
             }
         }
         
@@ -2050,7 +2059,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _LegalDMS.
+        ///   Looks up a localized string similar to _MatterCenter.
         /// </summary>
         internal static string One_Drive_Content_Type_Group {
             get {
@@ -2542,6 +2551,15 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         internal static string Stamped_Property_Responsible_Attorney {
             get {
                 return ResourceManager.GetString("Stamped_Property_Responsible_Attorney", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ResponsibleAttorneyEmail.
+        /// </summary>
+        internal static string Stamped_Property_Responsible_Attorney_Email {
+            get {
+                return ResourceManager.GetString("Stamped_Property_Responsible_Attorney_Email", resourceCulture);
             }
         }
         

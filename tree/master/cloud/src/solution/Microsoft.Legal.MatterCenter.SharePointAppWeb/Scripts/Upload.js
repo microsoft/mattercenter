@@ -141,7 +141,7 @@ function folderHierarchySuccess(result) {
     }
     if (oMatter && oMatter[0]) {
         var sOriginalName, sMatterGUID;
-        if (4 === oCommonObject.iCurrentListViewData()) {
+        if (4 === oCommonObject.iCurrentGridViewData()) {
             sOriginalName = $(oMatter[0]).attr("data-mattername");
             sMatterGUID = $(oMatter[0]).attr("data-matterguid");
         } else {

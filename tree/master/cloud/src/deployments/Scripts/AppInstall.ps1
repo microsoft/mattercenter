@@ -163,25 +163,29 @@ function loadAndInstallSharePointApps()
                 $AppInfo = Get-SPOAppInfo -Name $AppName
 				#Ensure app is installed on catalog
                 Foreach($app in $AppInfo)
-                 {
+                {
                     $AppInstance = $web.GetAppInstancesByProductId($app.ProductId)
                     $context.Load($AppInstance)
                     $context.ExecuteQuery()
-					 Show-Message -Message ([String]::Concat("Status:", $AppInstance.Status)) -Type ([MessageType]::Success) -Newline $false
+					Show-Message -Message ([String]::Concat("Status:", $AppInstance.Status)) -Type ([MessageType]::Success) -Newline $false
                     while($AppInstance.Status -eq "Installing")
-                     {                        
+                    {                        
 					   Show-Message -Message "." -Type ([MessageType]::Success) -Newline $false
                        Start-Sleep -s 10
                        $context.Load($AppInstance)
                        $context.ExecuteQuery()
-                     }
+                    }
                      
-                     if($AppInstance.Status -eq "Installed") {
+                    if($AppInstance.Status -eq "Installed") {
 						 Show-Message -Message ([String]::Concat($AppInstance.Title, " has been successfully loaded and installed")) -Type ([MessageType]::Success)
-                     }
-                     else {                        
-						Write-Log $ErrorLogFile "Failed to install apps to SharePoint."
-                     }
+                    }
+                    else
+                    {                        
+				        if($app.Name -eq "Matter Center") 
+                        {
+                            Write-Log $ErrorLogFile "Failed to install apps to SharePoint."
+                        }
+                    }
                 }
             }
         }

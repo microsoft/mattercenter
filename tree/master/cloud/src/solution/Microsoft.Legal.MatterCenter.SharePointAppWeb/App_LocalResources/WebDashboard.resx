@@ -291,7 +291,7 @@
   </data>
   <data name="ItemsPerPage" xml:space="preserve">
     <value>30</value>
-    <comment>Number of rows to fetch in a single request to display in list view control.</comment>
+    <comment>Number of rows to fetch in a single request to display in grid view control.</comment>
   </data>
   <data name="DocumentDetailsAction" xml:space="preserve">
     <value>View document details</value>

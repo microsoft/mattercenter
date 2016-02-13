@@ -227,12 +227,19 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                             else
                             {
                                 Users noResult = new Users()
-                            {
-                                Name = TextConstants.PeoplePickerNoResults,
-                                LogOnName = string.Empty,
-                                Email = string.Empty,
-                                EntityType = string.Empty
-                            };
+                                {
+                                    Name = TextConstants.PeoplePickerNoResults,
+                                    LogOnName = string.Empty,
+                                    Email = string.Empty,
+                                    EntityType = string.Empty,
+                                    ProviderName = string.Empty,
+                                    EntityData = new EntityData()
+                                    {
+                                        Department = string.Empty,
+                                        Email = string.Empty,
+                                        Title = string.Empty
+                                    }
+                                };
                                 users.Add(noResult);
                             }
                             returnValue = JsonConvert.SerializeObject(users);
@@ -432,15 +439,15 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                             if (!string.IsNullOrWhiteSpace(matter.Name))
                             {
                                 //Assign permission for Matter library
-                                returnValue = Convert.ToString(Lists.SetPermission(clientContext, matter.AssignUserNames, matter.Permissions, matter.Name), CultureInfo.CurrentCulture);
+                                returnValue = Convert.ToString(Lists.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, matter.Name), CultureInfo.CurrentCulture);
 
                                 //Assign permission for OneNote library 
-                                Lists.SetPermission(clientContext, matter.AssignUserNames, matter.Permissions, oneNoteLibraryName);
+                                Lists.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, oneNoteLibraryName);
 
                                 // Assign permission to calendar list if it is selected
                                 if (ServiceConstantStrings.IsCreateCalendarEnabled && matterConfigurations.IsCalendarSelected)
                                 {
-                                    string returnValueCalendar = Convert.ToString(Lists.SetPermission(clientContext, matter.AssignUserNames, matter.Permissions, calendarName), CultureInfo.CurrentCulture);
+                                    string returnValueCalendar = Convert.ToString(Lists.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, calendarName), CultureInfo.CurrentCulture);
                                     if (!Convert.ToBoolean(returnValueCalendar, CultureInfo.InvariantCulture))
                                     {
                                         MatterCenterException customException = new MatterCenterException(TextConstants.ErrorCodeCalendarCreation, TextConstants.ErrorMessageCalendarCreation);
@@ -451,7 +458,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                                 // Assign permission to task list if it is selected
                                 if (matterConfigurations.IsTaskSelected)
                                 {
-                                    string returnValueTask = Convert.ToString(Lists.SetPermission(clientContext, matter.AssignUserNames, matter.Permissions, taskLibraryName), CultureInfo.CurrentCulture);
+                                    string returnValueTask = Convert.ToString(Lists.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, taskLibraryName), CultureInfo.CurrentCulture);
                                     if (!Convert.ToBoolean(returnValueTask, CultureInfo.InvariantCulture))
                                     {
                                         MatterCenterException customException = new MatterCenterException(TextConstants.ErrorMessageTaskCreation, TextConstants.ErrorCodeAddTaskList);
@@ -479,7 +486,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                 returnValue = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, string.Empty, TextConstants.MessageNoInputs);
             }
             // To avoid the invalid symbol error while parsing the JSON, return the response in lower case 
-            return returnValue.ToLower(CultureInfo.CurrentUICulture); 
+            return returnValue.ToLower(CultureInfo.CurrentUICulture);
         }
 
         /// <summary>     
@@ -518,7 +525,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                             {
                                 bool isCopyRoleAssignment = ProvisionHelperFunctions.CopyRoleAssignment(matter.Conflict.Identified, matter.Conflict.SecureMatter);
                                 Lists.BreakItemPermission(clientContext, ServiceConstantStrings.MatterLandingPageRepositoryName, matterLandingPageId, isCopyRoleAssignment);
-                                Lists.SetItemPermission(clientContext, matter.AssignUserNames, ServiceConstantStrings.MatterLandingPageRepositoryName, matterLandingPageId, matter.Permissions);
+                                Lists.SetItemPermission(clientContext, matter.AssignUserEmails, ServiceConstantStrings.MatterLandingPageRepositoryName, matterLandingPageId, matter.Permissions);
                                 //// Configure All Web Parts
                                 string[] webParts = MatterLandingHelperFunction.ConfigureXMLCodeOfWebParts(requestObject, client, matter, clientContext, pageName, uri, web, matterConfigurations);
                                 Microsoft.SharePoint.Client.File file = web.GetFileByServerRelativeUrl(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", uri.AbsolutePath, ConstantStrings.ForwardSlash, ServiceConstantStrings.MatterLandingPageRepositoryName.Replace(ConstantStrings.Space, string.Empty), ConstantStrings.ForwardSlash, pageName));
@@ -624,9 +631,10 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
         /// </summary>
         /// <param name="requestObject">Request Object containing SharePoint App Token</param>
         /// <param name="client">Client object containing Client data</param>
-        /// <param name="matter">Matter object containing Matter data</param>
+        /// <param name="matter">Matter object</param>
         /// <param name="matterDetails">Matter details object which has data of properties to be stamped</param>
         /// <param name="matterProvisionChecks">Matter provision flag object which hold boolean values</param>
+        /// <param name="matterConfigurations">Object Holding configuration for the matter</param>
         /// <returns>true if success else false</returns>               
         [OperationContract]
         [WebInvoke(
@@ -690,7 +698,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
         /// </summary>
         /// <param name="requestObject">Request Object containing SharePoint App Token</param>
         /// <param name="client">Client object containing Client data</param>
-        /// <param name="libraryName">Matter library name to get stamped properties</param>
+        /// <param name="matter">Matter object</param>
         /// <returns>Matter stamped properties</returns>
         [OperationContract]
         [WebInvoke(
@@ -713,10 +721,16 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                         if (0 < stampedPropertyValues.Count)
                         {
                             string matterCenterUsers = EditMatterHelperFunctions.GetStampPropertyValue(stampedPropertyValues, ServiceConstantStrings.StampedPropertyMatterCenterUsers);
+                            string matterCenterUserEmails = EditMatterHelperFunctions.GetStampPropertyValue(stampedPropertyValues, ServiceConstantStrings.StampedPropertyMatterCenterUserEmails);
                             List<List<string>> matterCenterUserCollection = new List<List<string>>();
+                            List<List<string>> matterCenterUserEmailsCollection = new List<List<string>>();
                             if (!string.IsNullOrWhiteSpace(matterCenterUsers))
                             {
                                 matterCenterUserCollection = EditMatterHelperFunctions.GetMatterAssignedUsers(matterCenterUsers);
+                            }
+                            if (!string.IsNullOrWhiteSpace(matterCenterUserEmails))
+                            {
+                                matterCenterUserEmailsCollection = EditMatterHelperFunctions.GetMatterAssignedUsers(matterCenterUserEmails);
                             }
                             MatterStampedDetails matterStampedDetails = new MatterStampedDetails()
                             {
@@ -732,6 +746,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                                     Permissions = EditMatterHelperFunctions.GetStampPropertyValue(stampedPropertyValues, ServiceConstantStrings.StampedPropertyMatterCenterPermissions).Split(new string[] { ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                                     BlockUserNames = EditMatterHelperFunctions.GetStampPropertyValue(stampedPropertyValues, ServiceConstantStrings.StampedPropertyBlockedUsers).Split(new string[] { ConstantStrings.Semicolon }, StringSplitOptions.RemoveEmptyEntries).ToList(),
                                     AssignUserNames = matterCenterUserCollection.ToList<IList<string>>(),
+                                    AssignUserEmails = matterCenterUserEmailsCollection.ToList<IList<string>>(),
                                     Conflict = new Conflict()
                                     {
                                         CheckBy = EditMatterHelperFunctions.GetStampPropertyValue(stampedPropertyValues, ServiceConstantStrings.StampedPropertyConflictCheckBy),
@@ -849,6 +864,8 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                     {
                         Matter matter = new Matter();
                         matter.AssignUserNames = SettingsHelper.GetUserList(matterConfigurations.MatterUsers);
+                        matter.AssignUserEmails = SettingsHelper.GetUserList(matterConfigurations.MatterUserEmails);
+
                         if (0 < matter.AssignUserNames.Count)
                         {
                             result = EditMatterHelperFunctions.ValidateTeamMembers(clientContext, matter, userId);
@@ -892,8 +909,9 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
         /// <param name="requestObject">Request object</param>
         /// <param name="client">Client object</param>
         /// <param name="matter">Matter object</param>
-        /// <param name="matterDetails">Matter Details object</param>
-        /// <param name="isEditMode">Edit/Add mode</param>
+        /// <param name="matterDetails">Matter Object containing Matter metadata</param>
+        /// <param name="editMode">Edit/Add mode</param>
+        /// <param name="userId">User Id information</param>
         /// <returns>Status of operation</returns>
         [OperationContract]
         [WebInvoke(
@@ -924,15 +942,27 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                             {
                                 if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
                                 {
-                                    if (0 == matter.AssignUserNames.Count())
+                                    if (0 == matter.AssignUserEmails.Count())
                                     {
                                         result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, TextConstants.IncorrectInputUserNamesCode, TextConstants.IncorrectInputUserNamesMessage);
                                     }
                                     else
                                     {
-                                        if (Convert.ToBoolean(matter.Conflict.Identified, CultureInfo.InvariantCulture))
+                                        result = EditMatterHelperFunctions.ValidateTeamMembers(clientContext, matter, userId);
+                                        if (string.IsNullOrEmpty(result))
                                         {
-                                            result = EditMatterHelperFunctions.CheckSecurityGroupInTeamMembers(clientContext, matter, userId);
+                                            result = ConstantStrings.TRUE;
+                                            if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
+                                            {
+                                                if (Convert.ToBoolean(matter.Conflict.Identified, CultureInfo.InvariantCulture))
+                                                {
+                                                    result = EditMatterHelperFunctions.CheckSecurityGroupInTeamMembers(clientContext, matter, userId);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, TextConstants.IncorrectInputConflictIdentifiedCode, TextConstants.IncorrectInputConflictIdentifiedMessage);
+                                            }
                                         }
                                     }
                                 }
@@ -946,46 +976,43 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                                     matterStampedProperties = EditMatterHelperFunctions.FetchMatterStampedProperties(clientContext, matter.Name);
                                     loggedInUserName = EditMatterHelperFunctions.GetUserUpdatingMatter(clientContext);
                                     bool isFullControlPresent = EditMatterHelperFunctions.ValidateFullControlPermission(matter);
-                                        if (isFullControlPresent)
-                                        {
-                                            // Get matter library current permissions
-                                            userPermissionOnLibrary = EditMatterHelperFunctions.FetchUserPermission(clientContext, matter.Name);
-                                            // Check if OneNote library, calendar, and matter landing page exists as separate objects
-                                            string originalMatterName = EditMatterHelperFunctions.GetMatterName(clientContext, matter.Name);
-                                            listItemId = Lists.RetrieveItemId(clientContext, ServiceConstantStrings.MatterLandingPageRepositoryName, originalMatterName);
-                                            List<string> usersToRemove = EditMatterHelperFunctions.RetrieveMatterUsers(userPermissionOnLibrary);
-                                            // Provide logged in user as full control on matter
+                                    if (isFullControlPresent)
+                                    {
+                                        // Get matter library current permissions
+                                        userPermissionOnLibrary = EditMatterHelperFunctions.FetchUserPermission(clientContext, matter.Name);
+                                        // Check if OneNote library, calendar, and matter landing page exists as separate objects
+                                        string originalMatterName = EditMatterHelperFunctions.GetMatterName(clientContext, matter.Name);
+                                        listItemId = Lists.RetrieveItemId(clientContext, ServiceConstantStrings.MatterLandingPageRepositoryName, originalMatterName);
+                                        List<string> usersToRemove = EditMatterHelperFunctions.RetrieveMatterUsers(userPermissionOnLibrary);
+                                        // Provide logged in user as full control on matter
                                         // 	Check whether logged in user has full permission on new permission changes
-                                        hasFullPermission = EditMatterHelperFunctions.CheckFullPermissionInAssignList(matter.AssignUserNames, matter.Permissions, loggedInUserName);
-                                            EditMatterHelperFunctions.AssignRemoveFullControl(clientContext, matter, loggedInUserName, listItemId, listExists, true, hasFullPermission);
-                                            if (listExists.Contains(matter.Name))
-                                            {
-                                                result = EditMatterHelperFunctions.UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name, -1, isEditMode);
-                                            }
-                                            if (listExists.Contains(matter.Name + ServiceConstantStrings.OneNoteLibrarySuffix))
-                                            {
-                                                result = EditMatterHelperFunctions.UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + ServiceConstantStrings.OneNoteLibrarySuffix, -1, isEditMode);
-                                            }
-                                            if (listExists.Contains(matter.Name + ServiceConstantStrings.CalendarNameSuffix))
-                                            {
-                                                result = EditMatterHelperFunctions.UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + ServiceConstantStrings.CalendarNameSuffix, -1, isEditMode);
-                                            }
-                                            if (listExists.Contains(matter.Name + ServiceConstantStrings.TaskNameSuffix))
-                                            {
-                                                result = EditMatterHelperFunctions.UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + ServiceConstantStrings.TaskNameSuffix, -1, isEditMode);
-                                            }
-                                            if (0 <= listItemId)
-                                            {
-                                                result = EditMatterHelperFunctions.UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, true, ServiceConstantStrings.MatterLandingPageRepositoryName, listItemId, isEditMode);
-                                            }
-                                            // Update matter metadata
-                                            result = EditMatterHelperFunctions.UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode);
-                                        }
-                                        else
+                                        hasFullPermission = EditMatterHelperFunctions.CheckFullPermissionInAssignList(matter.AssignUserEmails, matter.Permissions, loggedInUserName);
+                                        EditMatterHelperFunctions.AssignRemoveFullControl(clientContext, matter, loggedInUserName, listItemId, listExists, true, hasFullPermission);
+                                        if (listExists.Contains(matter.Name))
                                         {
-                                            result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectInputSelfPermissionRemoval, ServiceConstantStrings.ErrorEditMatterMandatoryPermission);
+                                            result = EditMatterHelperFunctions.UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name, -1, isEditMode);
                                         }
+                                        if (listExists.Contains(matter.Name + ServiceConstantStrings.OneNoteLibrarySuffix))
+                                        {
+                                            result = EditMatterHelperFunctions.UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + ServiceConstantStrings.OneNoteLibrarySuffix, -1, isEditMode);
+                                        }
+                                        if (listExists.Contains(matter.Name + ServiceConstantStrings.CalendarNameSuffix))
+                                        {
+                                            result = EditMatterHelperFunctions.UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + ServiceConstantStrings.CalendarNameSuffix, -1, isEditMode);
+                                        }
+                                        if (listExists.Contains(matter.Name + ServiceConstantStrings.TaskNameSuffix))
+                                        {
+                                            result = EditMatterHelperFunctions.UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + ServiceConstantStrings.TaskNameSuffix, -1, isEditMode);
+                                        }
+                                        result = EditMatterHelperFunctions.UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, true, ServiceConstantStrings.MatterLandingPageRepositoryName, listItemId, isEditMode);
+                                        // Update matter metadata
+                                        result = EditMatterHelperFunctions.UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode);
                                     }
+                                    else
+                                    {
+                                        result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectInputSelfPermissionRemoval, ServiceConstantStrings.ErrorEditMatterMandatoryPermission);
+                                    }
+                                }
                             }
                             else
                             {
@@ -1044,7 +1071,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                 {
                     using (ClientContext clientContext = ServiceUtility.GetClientContext(requestObject.SPAppToken, new Uri(client.Url), requestObject.RefreshToken))
                     {
-                        if (0 == matter.AssignUserNames.Count())
+                        if (0 == matter.AssignUserEmails.Count())
                         {
                             result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, TextConstants.IncorrectInputUserNamesCode, TextConstants.IncorrectInputUserNamesMessage);
                         }
@@ -1057,7 +1084,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService
                             result = ConstantStrings.TRUE;
                             if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
                             {
-                                if (0 == matter.AssignUserNames.Count())
+                                if (0 == matter.AssignUserEmails.Count())
                                 {
                                     result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, TextConstants.IncorrectInputUserNamesCode, TextConstants.IncorrectInputUserNamesMessage);
                                 }
