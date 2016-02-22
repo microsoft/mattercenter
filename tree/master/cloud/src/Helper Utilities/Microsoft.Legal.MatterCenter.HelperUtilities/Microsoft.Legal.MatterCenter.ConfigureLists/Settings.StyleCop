@@ -1,0 +1,5 @@
+<StyleCopSettings Version="105">
+  <GlobalSettings>
+    <IntegerProperty Name="MaxViolationCount">5000</IntegerProperty>
+  </GlobalSettings>
+</StyleCopSettings>

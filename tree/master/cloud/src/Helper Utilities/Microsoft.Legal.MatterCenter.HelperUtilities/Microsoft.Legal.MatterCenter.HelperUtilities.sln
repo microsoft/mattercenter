@@ -1,0 +1,157 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.Common", "Microsoft.Legal.MatterCenter.Common\Microsoft.Legal.MatterCenter.Common.csproj", "{2E35130D-BE31-4368-AC4D-1E3216ADF13F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.ConfigureLists", "Microsoft.Legal.MatterCenter.ConfigureLists\Microsoft.Legal.MatterCenter.ConfigureLists.csproj", "{5F89E8C3-C780-40A3-8A33-E0990107E61B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.CreateContentTypes", "Microsoft.Legal.MatterCenter.CreateContentTypes\Microsoft.Legal.MatterCenter.CreateContentTypes.csproj", "{A14E9EC0-BFEF-4183-A4E6-3666C5018F05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.CreateGroups", "Microsoft.Legal.MatterCenter.CreateGroups\Microsoft.Legal.MatterCenter.CreateGroups.csproj", "{E7766CAC-CC79-4823-8BB4-01FEB3E5313E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.CreateSampleData", "Microsoft.Legal.MatterCenter.CreateSampleData\Microsoft.Legal.MatterCenter.CreateSampleData.csproj", "{D421CE3D-8156-466D-8A68-2E5AB0BB81ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.CreateSiteCollection", "Microsoft.Legal.MatterCenter.CreateSiteCollection\Microsoft.Legal.MatterCenter.CreateSiteCollection.csproj", "{369E3583-8614-49CE-AF69-C055BA1DCD3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.CreateTerm", "Microsoft.Legal.MatterCenter.CreateTerm\Microsoft.Legal.MatterCenter.CreateTerm.csproj", "{047ACCD4-35C6-4E6E-9AD1-B7C7EE87E122}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.CreateSiteColumns", "Microsoft.Legal.MatterCenter.CreateSiteColumns\Microsoft.Legal.MatterCenter.CreateSiteColumns.csproj", "{741CE89E-37CD-4245-AC52-B1D0E16FF53E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.ProvisionWebDashboard", "Microsoft.Legal.MatterCenter.ProvisionWebDashboard\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.csproj", "{BFA9FB3A-D256-4ECA-BC07-1009F19DEAD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.UpdateAppConfig", "Microsoft.Legal.MatterCenter.UpdateAppConfig\Microsoft.Legal.MatterCenter.UpdateAppConfig.csproj", "{862522F4-9838-41C2-827D-CFAB8676C74A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.UpdateListPermissions", "Microsoft.Legal.MatterCenter.UpdateListPermissions\Microsoft.Legal.MatterCenter.UpdateListPermissions.csproj", "{35E35662-0A3D-48C8-B5A9-DAFEE5021179}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.UpdateLists", "Microsoft.Legal.MatterCenter.UpdateLists\Microsoft.Legal.MatterCenter.UpdateLists.csproj", "{0A9458F7-FFDF-4A50-ABAC-85267ECD0D37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.UpdateTaxonomyFields", "Microsoft.Legal.MatterCenter.UpdateTaxonomyFields\Microsoft.Legal.MatterCenter.UpdateTaxonomyFields.csproj", "{BF3DD4EC-137C-4494-BED9-F19F592237C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.UpdateView", "Microsoft.Legal.MatterCenter.UpdateView\Microsoft.Legal.MatterCenter.UpdateView.csproj", "{4A74259B-DC46-4D9B-842B-ECC337717E19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.UploadFile", "Microsoft.Legal.MatterCenter.UploadFile\Microsoft.Legal.MatterCenter.UploadFile.csproj", "{50CEB765-B476-45CE-9447-50526EEABBDA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E35130D-BE31-4368-AC4D-1E3216ADF13F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E35130D-BE31-4368-AC4D-1E3216ADF13F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E35130D-BE31-4368-AC4D-1E3216ADF13F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E35130D-BE31-4368-AC4D-1E3216ADF13F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F89E8C3-C780-40A3-8A33-E0990107E61B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F89E8C3-C780-40A3-8A33-E0990107E61B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F89E8C3-C780-40A3-8A33-E0990107E61B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F89E8C3-C780-40A3-8A33-E0990107E61B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A14E9EC0-BFEF-4183-A4E6-3666C5018F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A14E9EC0-BFEF-4183-A4E6-3666C5018F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A14E9EC0-BFEF-4183-A4E6-3666C5018F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A14E9EC0-BFEF-4183-A4E6-3666C5018F05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7766CAC-CC79-4823-8BB4-01FEB3E5313E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7766CAC-CC79-4823-8BB4-01FEB3E5313E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7766CAC-CC79-4823-8BB4-01FEB3E5313E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7766CAC-CC79-4823-8BB4-01FEB3E5313E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D421CE3D-8156-466D-8A68-2E5AB0BB81ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D421CE3D-8156-466D-8A68-2E5AB0BB81ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D421CE3D-8156-466D-8A68-2E5AB0BB81ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D421CE3D-8156-466D-8A68-2E5AB0BB81ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{369E3583-8614-49CE-AF69-C055BA1DCD3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{369E3583-8614-49CE-AF69-C055BA1DCD3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{369E3583-8614-49CE-AF69-C055BA1DCD3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{369E3583-8614-49CE-AF69-C055BA1DCD3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{047ACCD4-35C6-4E6E-9AD1-B7C7EE87E122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{047ACCD4-35C6-4E6E-9AD1-B7C7EE87E122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{047ACCD4-35C6-4E6E-9AD1-B7C7EE87E122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{047ACCD4-35C6-4E6E-9AD1-B7C7EE87E122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{741CE89E-37CD-4245-AC52-B1D0E16FF53E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{741CE89E-37CD-4245-AC52-B1D0E16FF53E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{741CE89E-37CD-4245-AC52-B1D0E16FF53E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{741CE89E-37CD-4245-AC52-B1D0E16FF53E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFA9FB3A-D256-4ECA-BC07-1009F19DEAD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFA9FB3A-D256-4ECA-BC07-1009F19DEAD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFA9FB3A-D256-4ECA-BC07-1009F19DEAD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFA9FB3A-D256-4ECA-BC07-1009F19DEAD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{862522F4-9838-41C2-827D-CFAB8676C74A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{862522F4-9838-41C2-827D-CFAB8676C74A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{862522F4-9838-41C2-827D-CFAB8676C74A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{862522F4-9838-41C2-827D-CFAB8676C74A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35E35662-0A3D-48C8-B5A9-DAFEE5021179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35E35662-0A3D-48C8-B5A9-DAFEE5021179}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35E35662-0A3D-48C8-B5A9-DAFEE5021179}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35E35662-0A3D-48C8-B5A9-DAFEE5021179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A9458F7-FFDF-4A50-ABAC-85267ECD0D37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A9458F7-FFDF-4A50-ABAC-85267ECD0D37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A9458F7-FFDF-4A50-ABAC-85267ECD0D37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A9458F7-FFDF-4A50-ABAC-85267ECD0D37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF3DD4EC-137C-4494-BED9-F19F592237C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF3DD4EC-137C-4494-BED9-F19F592237C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF3DD4EC-137C-4494-BED9-F19F592237C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF3DD4EC-137C-4494-BED9-F19F592237C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A74259B-DC46-4D9B-842B-ECC337717E19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A74259B-DC46-4D9B-842B-ECC337717E19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A74259B-DC46-4D9B-842B-ECC337717E19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A74259B-DC46-4D9B-842B-ECC337717E19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50CEB765-B476-45CE-9447-50526EEABBDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50CEB765-B476-45CE-9447-50526EEABBDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50CEB765-B476-45CE-9447-50526EEABBDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50CEB765-B476-45CE-9447-50526EEABBDA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 16
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://mattercenter.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Microsoft.Legal.MatterCenter.Common\\Microsoft.Legal.MatterCenter.Common.csproj
+		SccProjectName1 = Microsoft.Legal.MatterCenter.Common
+		SccLocalPath1 = Microsoft.Legal.MatterCenter.Common
+		SccProjectUniqueName2 = Microsoft.Legal.MatterCenter.ConfigureLists\\Microsoft.Legal.MatterCenter.ConfigureLists.csproj
+		SccProjectName2 = Microsoft.Legal.MatterCenter.ConfigureLists
+		SccLocalPath2 = Microsoft.Legal.MatterCenter.ConfigureLists
+		SccProjectUniqueName3 = Microsoft.Legal.MatterCenter.CreateContentTypes\\Microsoft.Legal.MatterCenter.CreateContentTypes.csproj
+		SccProjectName3 = Microsoft.Legal.MatterCenter.CreateContentTypes
+		SccLocalPath3 = Microsoft.Legal.MatterCenter.CreateContentTypes
+		SccProjectUniqueName4 = Microsoft.Legal.MatterCenter.CreateGroups\\Microsoft.Legal.MatterCenter.CreateGroups.csproj
+		SccProjectName4 = Microsoft.Legal.MatterCenter.CreateGroups
+		SccLocalPath4 = Microsoft.Legal.MatterCenter.CreateGroups
+		SccProjectUniqueName5 = Microsoft.Legal.MatterCenter.CreateSampleData\\Microsoft.Legal.MatterCenter.CreateSampleData.csproj
+		SccProjectName5 = Microsoft.Legal.MatterCenter.CreateSampleData
+		SccLocalPath5 = Microsoft.Legal.MatterCenter.CreateSampleData
+		SccProjectUniqueName6 = Microsoft.Legal.MatterCenter.CreateSiteCollection\\Microsoft.Legal.MatterCenter.CreateSiteCollection.csproj
+		SccProjectName6 = Microsoft.Legal.MatterCenter.CreateSiteCollection
+		SccLocalPath6 = Microsoft.Legal.MatterCenter.CreateSiteCollection
+		SccProjectUniqueName7 = Microsoft.Legal.MatterCenter.CreateTerm\\Microsoft.Legal.MatterCenter.CreateTerm.csproj
+		SccProjectName7 = Microsoft.Legal.MatterCenter.CreateTerm
+		SccLocalPath7 = Microsoft.Legal.MatterCenter.CreateTerm
+		SccProjectUniqueName8 = Microsoft.Legal.MatterCenter.CreateSiteColumns\\Microsoft.Legal.MatterCenter.CreateSiteColumns.csproj
+		SccProjectName8 = Microsoft.Legal.MatterCenter.CreateSiteColumns
+		SccLocalPath8 = Microsoft.Legal.MatterCenter.CreateSiteColumns
+		SccProjectUniqueName9 = Microsoft.Legal.MatterCenter.ProvisionWebDashboard\\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.csproj
+		SccProjectName9 = Microsoft.Legal.MatterCenter.ProvisionWebDashboard
+		SccLocalPath9 = Microsoft.Legal.MatterCenter.ProvisionWebDashboard
+		SccProjectUniqueName10 = Microsoft.Legal.MatterCenter.UpdateAppConfig\\Microsoft.Legal.MatterCenter.UpdateAppConfig.csproj
+		SccProjectName10 = Microsoft.Legal.MatterCenter.UpdateAppConfig
+		SccLocalPath10 = Microsoft.Legal.MatterCenter.UpdateAppConfig
+		SccProjectUniqueName11 = Microsoft.Legal.MatterCenter.UpdateListPermissions\\Microsoft.Legal.MatterCenter.UpdateListPermissions.csproj
+		SccProjectName11 = Microsoft.Legal.MatterCenter.UpdateListPermissions
+		SccLocalPath11 = Microsoft.Legal.MatterCenter.UpdateListPermissions
+		SccProjectUniqueName12 = Microsoft.Legal.MatterCenter.UpdateLists\\Microsoft.Legal.MatterCenter.UpdateLists.csproj
+		SccProjectName12 = Microsoft.Legal.MatterCenter.UpdateLists
+		SccLocalPath12 = Microsoft.Legal.MatterCenter.UpdateLists
+		SccProjectUniqueName13 = Microsoft.Legal.MatterCenter.UpdateTaxonomyFields\\Microsoft.Legal.MatterCenter.UpdateTaxonomyFields.csproj
+		SccProjectName13 = Microsoft.Legal.MatterCenter.UpdateTaxonomyFields
+		SccLocalPath13 = Microsoft.Legal.MatterCenter.UpdateTaxonomyFields
+		SccProjectUniqueName14 = Microsoft.Legal.MatterCenter.UpdateView\\Microsoft.Legal.MatterCenter.UpdateView.csproj
+		SccProjectName14 = Microsoft.Legal.MatterCenter.UpdateView
+		SccLocalPath14 = Microsoft.Legal.MatterCenter.UpdateView
+		SccProjectUniqueName15 = Microsoft.Legal.MatterCenter.UploadFile\\Microsoft.Legal.MatterCenter.UploadFile.csproj
+		SccProjectName15 = Microsoft.Legal.MatterCenter.UploadFile
+		SccLocalPath15 = Microsoft.Legal.MatterCenter.UploadFile
+	EndGlobalSection
+EndGlobal
