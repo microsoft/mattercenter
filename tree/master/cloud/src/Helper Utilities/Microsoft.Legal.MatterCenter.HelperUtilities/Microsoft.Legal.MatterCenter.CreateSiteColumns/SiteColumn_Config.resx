@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Client_Id" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="Client_Id" Description="This is Client Id" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="Client_Id" Name="Client_Id" Hidden="FALSE" Customization="" ReadOnly="TRUE" PITarget="" PrimaryPITarget="" PIAttribute="" PrimaryPIAttribute="" Aggregation="" Node="" ColName="nvarchar14" RowOrdinal="0" ShowInDisplayForm="TRUE"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="Client_Name" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="Client_Name" Description="This is the name of the Client" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="Client_Name" Name="Client_Name" Hidden="FALSE" Customization="" ReadOnly="TRUE" PITarget="" PrimaryPITarget="" PIAttribute="" PrimaryPIAttribute="" Aggregation="" Node="" ColName="nvarchar13" RowOrdinal="0" ShowInDisplayForm="TRUE"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="ConversationId" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="ConversationId" Description="This column contains id of the conversation" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="ConversationId" Name="ConversationId"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="ConversationTopic" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="ConversationTopic" Description="This column contains topic of conversation" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="ConversationTopic" Name="ConversationTopic"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="DMS_Attachments" xml:space="preserve">
+    <value>&lt;Field Name="DMS_Attachments" FromBaseType="FALSE" Type="Note" DisplayName="DMS_Attachments" Description="This column contains the names of the attached documents." Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" NumLines="30" RichText="FALSE" Sortable="FALSE" Group="{0}" StaticName="DMS_Attachments" RestrictedMode="TRUE" RichTextMode="Compatible" IsolateStyles="FALSE" AppendOnly="FALSE" UnlimitedLengthInDocumentLibrary="FALSE"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="DMS_Cc" xml:space="preserve">
+    <value>&lt;Field Name="DMS_Cc" FromBaseType="FALSE" Type="Note" DisplayName="DMS_Cc" Description="This column contains information about the recipients of the email mentioned in Cc." Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" NumLines="6" RichText="FALSE" Sortable="FALSE" Group="{0}" StaticName="DMS_Cc"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="DMS_From" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="DMS_From" Description="This column contains information about the  sender of the email." Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}" StaticName="DMS_From" Name="DMS_From"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="DMS_From_MailBox" xml:space="preserve">
+    <value>&lt;Field Name="DMS_From_MailBox" FromBaseType="FALSE" Type="Text" DisplayName="DMS_From_MailBox" Description="This column contains information about the name or email of the user who uploaded the email into the matter library." Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" 
+
+Group="{0}" StaticName="DMS_From_MailBox"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="DMS_Mail_Importance" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="DMS_Mail_Importance" Description="This column contains information about the  importance of the email." Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}" StaticName="DMS_Mail_Importance" Name="DMS_Mail_Importance"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="DMS_Subject" xml:space="preserve">
+    <value>&lt;Field Type="Note" DisplayName="DMS_Subject" Description="This column specifies the subject of the email" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" NumLines="6" RichText="TRUE" RichTextMode="FullHtml" IsolateStyles="TRUE" Sortable="FALSE" Group="{0}"  StaticName="DMS_Subject" Name="DMS_Subject"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="DMS_To" xml:space="preserve">
+    <value>&lt;Field Name="DMS_To" FromBaseType="FALSE" Type="Note" DisplayName="DMS_To" Description="This column contains information about the receiver of the email." Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" NumLines="6" RichText="FALSE" Sortable="FALSE" Group="{0}" StaticName="DMS_To"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="EmailCategories" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="EmailCategories" Description="This column contains information about categories of email" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="EmailCategories" Name="EmailCategories"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="SentDate" xml:space="preserve">
+    <value>&lt;Field Name="SentDate" DisplayName="SentDate" Type="DateTime" Description="This column contains information about the mail sent date" Required="FALSE" Group="{0}" StaticName="SentDate"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="ErrContentExists" xml:space="preserve">
+    <value>Content type already exists</value>
+  </data>
+  <data name="Exists" xml:space="preserve">
+    <value>already Exists</value>
+  </data>
+  <data name="HasAttachments" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="HasAttachments" Description="This column contains information about attachments of email" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="HasAttachments" Name="HasAttachments"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="Matter_Id" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="Matter_Id" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="Matter_Id" Name="Matter_Id" Hidden="FALSE" Customization="" ReadOnly="TRUE" PITarget="" PrimaryPITarget="" PIAttribute="" PrimaryPIAttribute="" Aggregation="" Node="" ColName="nvarchar16" RowOrdinal="0" ShowInDisplayForm="TRUE"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="Matter_Name" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="Matter_Name" Description="This is matter name" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}" StaticName="Matter_Name" Name="Matter_Name" Hidden="FALSE" Customization="" ReadOnly="TRUE" PITarget="" PrimaryPITarget="" PIAttribute="" PrimaryPIAttribute="" Aggregation="" Node="" ColName="nvarchar15" RowOrdinal="0" ShowInDisplayForm="TRUE"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="MsgContentTypeCreated" xml:space="preserve">
+    <value>Content type created</value>
+  </data>
+  <data name="MsgCreateContentType" xml:space="preserve">
+    <value>Enter the name of content type to be created</value>
+  </data>
+  <data name="MsgParentContentType" xml:space="preserve">
+    <value>Enter the name of parent content type</value>
+  </data>
+  <data name="OriginalName" xml:space="preserve">
+    <value>&lt;Field Type="Note" DisplayName="OriginalName" Description="This column specifies the original name of the file" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" NumLines="6" RichText="TRUE" RichTextMode="FullHtml" IsolateStyles="TRUE" Sortable="FALSE" Group="{0}"  StaticName="OriginalName" 
+
+Name="OriginalName"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="ReceivedDate" xml:space="preserve">
+    <value>&lt;Field Name="ReceivedDate" DisplayName="ReceivedDate" Type="DateTime" Description="This column contains information about the received date of the email." Required="FALSE" Group="{0}" StaticName="ReceivedDate"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="Sensitivity" xml:space="preserve">
+    <value>&lt;Field Type="Text" DisplayName="Sensitivity" Description="This column contains information about sensitivity part of email" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="Sensitivity" Name="Sensitivity"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="SiteColumnNames" xml:space="preserve">
+    <value>Matter_Name,Client_Id,Client_Name,Matter_Id,DMS_From,DMS_To,DMS_Cc,DMS_From_MailBox,ReceivedDate,DMS_Subject,DMS_Attachments,DMS_Mail_Importance,Sensitivity,EmailCategories,SentDate,ConversationId,ConversationTopic,HasAttachments,OriginalName,PracticeGroup,AreaOfLaw,SubareaOfLaw</value>
+  </data>
+  <data name="SiteColumnValue" xml:space="preserve">
+    <value>Site Column</value>
+  </data>
+  <data name="AreaOfLaw" xml:space="preserve">
+    <value>&lt;Field Type="TaxonomyFieldTypeMulti" DisplayName="AreaOfLaw" Description="This column is a managed metadata column mapped to Area of Law" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="AreaOfLaw" Name="AreaOfLaw" Mult="TRUE" Hidden="FALSE" Customization="" PITarget="" PrimaryPITarget="" PIAttribute="" PrimaryPIAttribute="" Aggregation="" Node="" RowOrdinal="0" ShowInDisplayForm="TRUE"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="PracticeGroup" xml:space="preserve">
+    <value>&lt;Field Type="TaxonomyFieldTypeMulti" DisplayName="PracticeGroup" Description="This column is a managed metadata column mapped to Practice Groups" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="PracticeGroup" Name="PracticeGroup" Mult="TRUE" Hidden="FALSE" Customization="" PITarget="" PrimaryPITarget="" PIAttribute="" PrimaryPIAttribute="" Aggregation="" Node="" RowOrdinal="0" ShowInDisplayForm="TRUE"&gt;&lt;/Field&gt;</value>
+  </data>
+  <data name="SubareaOfLaw" xml:space="preserve">
+    <value>&lt;Field Type="TaxonomyFieldTypeMulti" DisplayName="SubareaOfLaw" Description="This column is a managed metadata column mapped to Subarea of Law" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" MaxLength="255" Group="{0}"  StaticName="SubareaOfLaw" Name="SubareaOfLaw" Mult="TRUE" Hidden="FALSE" Customization="" PITarget="" PrimaryPITarget="" PIAttribute="" PrimaryPIAttribute="" Aggregation="" Node="" RowOrdinal="0" ShowInDisplayForm="TRUE"&gt;&lt;/Field&gt;</value>
+  </data>
+</root>
