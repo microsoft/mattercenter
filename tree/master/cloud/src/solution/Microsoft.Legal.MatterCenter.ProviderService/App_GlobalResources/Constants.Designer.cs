@@ -2519,6 +2519,15 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MatterCenterUserEmails.
+        /// </summary>
+        internal static string Stamped_Property_MatterCenter_User_Emails {
+            get {
+                return ResourceManager.GetString("Stamped_Property_MatterCenter_User_Emails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MatterCenterUsers.
         /// </summary>
         internal static string Stamped_Property_MatterCenter_Users {
