@@ -1329,4 +1329,8 @@
     <value>ResponsibleAttorneyEmail</value>
     <comment>Name of the stamped property to store Responsible Attorney Email</comment>
   </data>
+  <data name="Stamped_Property_MatterCenter_User_Emails" xml:space="preserve">
+    <value>MatterCenterUserEmails</value>
+    <comment>Name of the stamped property to store user emails</comment>
+  </data>
 </root>
