@@ -26,9 +26,11 @@ function addAppToExchange()
         if (0 -ne $users.Length) {
 			Show-Message -Message "Adding  $AppName App to Exchange..." -Type ([MessageType]::Success)
 
-		    $Data=Get-Content -Path $filePath -Encoding Byte -ReadCount 0
-		    $temp = New-App -OrganizationApp -FileData $Data -ProvidedTo SpecificUsers -UserList $users -DefaultStateForUser Enabled
-
+		    # Work around for installing Exchange app issue
+			$Data=Get-Content -Path $filePath -Encoding Byte -ReadCount 0
+            $temp = New-App -OrganizationApp -FileData $Data -ProvidedTo SpecificUsers -UserList $users
+            Remove-App -Identity $temp.Identity -Confirm:$False -OrganizationApp  
+            $temp = New-App -OrganizationApp -FileData $Data -ProvidedTo SpecificUsers -UserList $users -DefaultStateForUser Enabled
 			Show-Message -Message "Successfully added $AppName App to Exchange" -Type ([MessageType]::Success)
         }
         else {
