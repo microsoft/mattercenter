@@ -247,7 +247,7 @@ Note: Depending on the file size, a content check may take some time and you can
     <comment>Connection string used for Redis cache</comment>
   </data>
   <data name="Provision_Matter_App_URL" xml:space="preserve">
-    <value>[Enter App web URL where Send Mail list is located on SharePoint, e.g. https://[TENANTNAME].sharepoint.com/sites/catalog/MatterCenter]</value>
+    <value>https://MyTenant.sharepoint.com/sites/catalog/MatterCenter</value>
     <comment>App web URL where Send Mail list is located on SharePoint</comment>
   </data>
   <data name="Send_Mail_List_Name" xml:space="preserve">

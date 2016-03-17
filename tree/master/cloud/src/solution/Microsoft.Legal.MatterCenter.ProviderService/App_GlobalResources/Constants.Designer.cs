@@ -97,7 +97,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter URL of the central repository where all the common lists are stored, e.g. https://[TENANT].sharepoint.com/sites/catalog].
+        ///   Looks up a localized string similar to https://MyTenant.sharepoint.com/sites/catalog.
         /// </summary>
         internal static string Central_Repository_Url {
             get {
@@ -1321,7 +1321,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [[[Enter name of the table on Azure storage where all error/exception log, e.g. MatterCenterLogStorage]]].
+        ///   Looks up a localized string similar to MyLogStorage.
         /// </summary>
         internal static string LogTableName {
             get {
@@ -2285,7 +2285,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter Result source ID which retrieves results from Matter Center specific site collection only, e.g. 334fbf-40a4aa-ba-d34e-4274ca46553ada].
+        ///   Looks up a localized string similar to 333333-333333-33-3333-33333333333333.
         /// </summary>
         internal static string Search_Result_Source_ID {
             get {
@@ -2357,7 +2357,7 @@ namespace Microsoft.Legal.MatterCenter.ProviderService.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter URL of the SharePoint site, e.g. https://[TENANTNAME].sharepoint.com].
+        ///   Looks up a localized string similar to https://MyTenant.sharepoint.com.
         /// </summary>
         internal static string Site_Url {
             get {

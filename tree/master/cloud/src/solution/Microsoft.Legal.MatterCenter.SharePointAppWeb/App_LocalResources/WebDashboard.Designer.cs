@@ -187,7 +187,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_LocalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter Redirect URL for Feedback and Support, e.g. mailto:support@supportsite.com].
+        ///   Looks up a localized string similar to mailto:support@supportsite.com.
         /// </summary>
         internal static string Feedback_and_Support {
             get {

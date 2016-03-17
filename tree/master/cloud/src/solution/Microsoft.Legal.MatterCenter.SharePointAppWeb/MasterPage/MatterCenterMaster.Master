@@ -102,7 +102,7 @@
                             <div class="contextualHelpSections">
                             </div>
                             <div class="ContextualHelpSupport">
-                                <span class="ContextualHelpBottomText" title="Write an email to Support">Questions? Contact <span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. mailto:support@supportsite.com]">Matter Center Support</a></span></span>
+                                <span class="ContextualHelpBottomText" title="Write an email to Support">Questions? Contact <span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="mailto:support@supportsite.com">Matter Center Support</a></span></span>
                             </div>
                         </div>
                     </div>
@@ -174,9 +174,9 @@
                         <ul class="rightFooter">
                             <li>
                                 <ul class="footerLinks" role="menubar">
-                                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Feedback and Support, e.g. mailto:support@supportsite.com]" target="_parent">Feedback & Support</a></li>
-                                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Privacy terms, e.g. privacy.supportsite.com]" target="_parent">Privacy & Cookies</a></li>
-                                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Terms of use, e.g. termofuse.supportsite.com]" target="_parent">Terms of use</a></li>
+                                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="mailto:support@supportsite.com" target="_parent">Feedback & Support</a></li>
+                                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="https://privacy.supportsite.com" target="_parent">Privacy & Cookies</a></li>
+                                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="https://termofuse.supportsite.com" target="_parent">Terms of use</a></li>
                                     <li class="rightFooterElement copyRightElement" role="menuitem">© <%= DateTime.Now.Year %> Microsoft</li>
                                 </ul>
                             </li>
