@@ -122,7 +122,7 @@
     <comment>Date format for azure table storage row key</comment>
   </data>
   <data name="CloudStorageConnectionString" xml:space="preserve">
-    <value>DefaultEndpointsProtocol=https;AccountName=[Enter Azure account name, e.g. mattercenterlogaccount];AccountKey=[Enter Account Key for this storage account, e.g. BDLWAl5dePECEtzZTZEBdpPrTrIzUehs4odNasdaw5d8l7pKl2o0uOz4QQqQ+hBQwavQEwRWAasy8xhdxb78vow==]</value>
+    <value>DefaultEndpointsProtocol=https;AccountName=MyLogStorage;AccountKey=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==</value>
     <comment>Provides connection string used for logging to azure</comment>
   </data>
   <data name="EventViewer_EventID" xml:space="preserve">
@@ -146,7 +146,7 @@
     <comment>Indicates logging is on Azure or IIS</comment>
   </data>
   <data name="UtilityLogTableName" xml:space="preserve">
-    <value>[Enter name of the table on Azure storage where all error/exception log, e.g. MatterCenterLogTable]</value>
+    <value>MyLogStorage</value>
     <comment>Name of the table on Azure storage where all error/exception log</comment>
   </data>
 </root>

@@ -178,7 +178,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter app redirect URL for tenant, e.g. https://[TENANTNAME].sharepoint.com/sites/catalog/_layouts/15/appredirect.aspx].
+        ///   Looks up a localized string similar to https://MyTenant.sharepoint.com/sites/catalog/_layouts/15/appredirect.aspx.
         /// </summary>
         internal static string App_Redirect_URL {
             get {
@@ -187,7 +187,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter Application Insights ID specific to environment, e.g. a70d9cb8-e6f0-c8e7-0cbb8d1d-a4cf342c].
+        ///   Looks up a localized string similar to 555-5555555555-555-555555555-5555555.
         /// </summary>
         internal static string Application_Insight_App_Id {
             get {
@@ -223,7 +223,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter URL of the central repository where all the common lists are stored, e.g. https://[TENANTNAME].sharepoint.com/sites/catalog].
+        ///   Looks up a localized string similar to https://MyTenant.sharepoint.com/sites/catalog.
         /// </summary>
         internal static string Central_Repository_Url {
             get {
@@ -322,7 +322,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter Client ID of SharePoint App from the specific Tenancy, e.g. 4e55c7b2-eb66a-753e7-2679ac37be8b08].
+        ///   Looks up a localized string similar to 11111111-11111-11111-11111111111111.
         /// </summary>
         internal static string ClientID {
             get {
@@ -520,7 +520,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter Delve link URL, e.g. https://[TENANTNAME]-my.sharepoint.com/_layouts/15/me.aspx?q=].
+        ///   Looks up a localized string similar to https://MyTenant-my.sharepoint.com/_layouts/15/me.aspx?q=.
         /// </summary>
         internal static string Delve_Link {
             get {
@@ -979,7 +979,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter path of icon to display as per document selected e.g. https://[TENANTNAME].sharepoint.com/_layouts/15/images/ic{0}.gif].
+        ///   Looks up a localized string similar to https://MyTenant.sharepoint.com/_layouts/15/images/ic{0}.gif.
         /// </summary>
         internal static string Image_Document_Icon {
             get {
@@ -988,7 +988,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter path of icon to display for general document e.g. https://[TENANTNAME].sharepoint.com/_layouts/15/images/generaldocument.png].
+        ///   Looks up a localized string similar to https://MyTenant.sharepoint.com/_layouts/15/images/generaldocument.png.
         /// </summary>
         internal static string Image_General_Document {
             get {
@@ -1078,7 +1078,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter URL of Learn More link used on App Landing page e.g. http://www.microsoft.com/mattercenter].
+        ///   Looks up a localized string similar to http://www.MyWebSite.com/MyMatterCenterPage.
         /// </summary>
         internal static string Learn_More_Link {
             get {
@@ -1105,7 +1105,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter URL of the service to be used for legal briefcase apps, e.g. https://[SERVICENAME].azurewebsites.net/LegalBriefcase.svc/].
+        ///   Looks up a localized string similar to https://MyService.azurewebsites.net/LegalBriefcase.svc/.
         /// </summary>
         internal static string Legal_Briefcase_Service_Url {
             get {
@@ -1303,7 +1303,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter URL of the service to be used for matter provisioning app, e.g. https://[SERVICENAME].azurewebsites.net/MatterProvision.svc/].
+        ///   Looks up a localized string similar to https://MyService.azurewebsites.net/MatterProvision.svc/.
         /// </summary>
         internal static string Matter_Provision_Service_Url {
             get {
@@ -1447,7 +1447,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter URL of office JS files, e.g. https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js].
+        ///   Looks up a localized string similar to https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js.
         /// </summary>
         internal static string Office_JS_URL {
             get {
@@ -1834,7 +1834,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter URL of the service to be used for search apps, e.g. https://[SERVICENAME].azurewebsites.net/Search.svc/].
+        ///   Looks up a localized string similar to https://MyService.azurewebsites.net/Search.svc/.
         /// </summary>
         internal static string Search_Service_Url {
             get {
@@ -1960,7 +1960,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter URL of the SharePoint site, e.g. https://mytenant.sharepoint.com].
+        ///   Looks up a localized string similar to https://MyTenant.sharepoint.com.
         /// </summary>
         internal static string Site_Url {
             get {
@@ -2095,7 +2095,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter tenant URL of the Matter Center app, e.g. https://[TENANTNAME].sharepoint.com].
+        ///   Looks up a localized string similar to https://MyTenant.sharepoint.com.
         /// </summary>
         internal static string Tenant_Url {
             get {
@@ -2149,7 +2149,7 @@ namespace Microsoft.Legal.MatterCenter.SharePointAppWeb.App_GlobalResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [[[Enter name of the table on Azure storage where all error/exception log, e.g. MatterCenterUILogStorage]]].
+        ///   Looks up a localized string similar to MyLogStorageUI.
         /// </summary>
         internal static string UILogTableName {
             get {
