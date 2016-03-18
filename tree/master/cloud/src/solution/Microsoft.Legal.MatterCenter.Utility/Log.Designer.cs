@@ -70,7 +70,7 @@ namespace Microsoft.Legal.MatterCenter.Utility {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DefaultEndpointsProtocol=https;AccountName=[Enter Azure account name, e.g. mattercenterlogaccount];AccountKey=[Enter Account Key for this storage account, e.g. BDLWAl5dePECEtzZTZEBdpPrTrIzUehs4odNasdaw5d8l7pKl2o0uOz4QQqQ+hBQwavQEwRWAasy8xhdxb78vow==].
+        ///   Looks up a localized string similar to DefaultEndpointsProtocol=https;AccountName=MyLogStorage;AccountKey=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX==.
         /// </summary>
         internal static string CloudStorageConnectionString {
             get {
@@ -124,7 +124,7 @@ namespace Microsoft.Legal.MatterCenter.Utility {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter name of the table on Azure storage where all error/exception log, e.g. MatterCenterLogTable].
+        ///   Looks up a localized string similar to MyLogStorage.
         /// </summary>
         internal static string UtilityLogTableName {
             get {

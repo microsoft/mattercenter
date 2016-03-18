@@ -122,7 +122,7 @@
     <comment>This is a failure message for invalid service response</comment>
   </data>
   <data name="Feedback_and_Support" xml:space="preserve">
-    <value>[Enter Redirect URL for Feedback and Support, e.g. mailto:support@supportsite.com]</value>
+    <value>mailto:support@supportsite.com</value>
     <comment>Redirect URL for Feedback and Support</comment>
   </data>
   <data name="Mail_Cart_Mail_Subject" xml:space="preserve">
