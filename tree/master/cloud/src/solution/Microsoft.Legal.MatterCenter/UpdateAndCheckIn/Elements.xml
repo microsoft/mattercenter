@@ -14,6 +14,6 @@
     Start the URL with the token ~remoteAppUrl if the page is in the
     associated web project, use ~appWebUrl if page is in the app project.
     -->
-    <UrlAction Url="[Enter azure website URL for UI site, e.g. https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?ItemID={ItemId}&amp;ItemURL={ItemUrl}&amp;ListId={ListId}&amp;Operation=DMSCheckIn]" />
+    <UrlAction Url="https://MySite.azurewebsites.net/Pages/BriefcaseOperations.aspx?ItemID={ItemId}&amp;ItemURL={ItemUrl}&amp;ListId={ListId}&amp;Operation=DMSCheckIn" />
   </CustomAction>
 </Elements>

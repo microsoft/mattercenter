@@ -152,7 +152,7 @@ namespace Microsoft.Legal.MatterCenter.Utility {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [Enter App web URL where Send Mail list is located on SharePoint, e.g. https://[TENANTNAME].sharepoint.com/sites/catalog/MatterCenter].
+        ///   Looks up a localized string similar to https://MyTenant.sharepoint.com/sites/catalog/MatterCenter.
         /// </summary>
         internal static string Provision_Matter_App_URL {
             get {
