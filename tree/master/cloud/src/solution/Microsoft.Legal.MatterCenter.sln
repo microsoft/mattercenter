@@ -6,22 +6,12 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter_Office", "Microsoft.Legal.MatterCenter_Office\Microsoft.Legal.MatterCenter_Office.csproj", "{736CED7B-2538-4C9A-ACAD-444A0917312D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C} = {7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF} = {EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}
 		{04B6E5BA-DE44-4E40-9496-EE12F658DE67} = {04B6E5BA-DE44-4E40-9496-EE12F658DE67}
 		{D81C60EA-B7A9-432A-B563-171997BC3A41} = {D81C60EA-B7A9-432A-B563-171997BC3A41}
 		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0} = {8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter_Outlook", "Microsoft.Legal.MatterCenter_Outlook\Microsoft.Legal.MatterCenter_Outlook.csproj", "{0AB1971C-0D57-4CD8-8E5A-1461DA018937}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C} = {7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF} = {EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}
-		{04B6E5BA-DE44-4E40-9496-EE12F658DE67} = {04B6E5BA-DE44-4E40-9496-EE12F658DE67}
-		{D81C60EA-B7A9-432A-B563-171997BC3A41} = {D81C60EA-B7A9-432A-B563-171997BC3A41}
-		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0} = {8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter", "Microsoft.Legal.MatterCenter\Microsoft.Legal.MatterCenter.csproj", "{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C} = {7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}
 		{04B6E5BA-DE44-4E40-9496-EE12F658DE67} = {04B6E5BA-DE44-4E40-9496-EE12F658DE67}
@@ -68,12 +58,6 @@ Global
 		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{D81C60EA-B7A9-432A-B563-171997BC3A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D81C60EA-B7A9-432A-B563-171997BC3A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D81C60EA-B7A9-432A-B563-171997BC3A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -103,38 +87,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://mattercenter.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Microsoft.Legal.MatterCenter.Utility\\Microsoft.Legal.MatterCenter.Utility.csproj
-		SccProjectName1 = Microsoft.Legal.MatterCenter.Utility
-		SccLocalPath1 = Microsoft.Legal.MatterCenter.Utility
-		SccProjectUniqueName2 = Microsoft.Legal.MatterCenter.ProviderService\\Microsoft.Legal.MatterCenter.ProviderService.csproj
-		SccProjectName2 = Microsoft.Legal.MatterCenter.ProviderService
-		SccLocalPath2 = Microsoft.Legal.MatterCenter.ProviderService
-		SccProjectUniqueName3 = Microsoft.Legal.MatterCenter.SharePointAppWeb\\Microsoft.Legal.MatterCenter.SharePointAppWeb.csproj
-		SccProjectName3 = Microsoft.Legal.MatterCenter.SharePointAppWeb
-		SccLocalPath3 = Microsoft.Legal.MatterCenter.SharePointAppWeb
-		SccProjectUniqueName4 = Microsoft.Legal.MatterCenter\\Microsoft.Legal.MatterCenter.csproj
-		SccProjectName4 = Microsoft.Legal.MatterCenter
-		SccLocalPath4 = Microsoft.Legal.MatterCenter
-		SccProjectUniqueName5 = Microsoft.Legal.MatterCenter_Office\\Microsoft.Legal.MatterCenter_Office.csproj
-		SccProjectName5 = Microsoft.Legal.MatterCenter_Office
-		SccLocalPath5 = Microsoft.Legal.MatterCenter_Office
-		SccProjectUniqueName6 = Microsoft.Legal.MatterCenter_Outlook\\Microsoft.Legal.MatterCenter_Outlook.csproj
-		SccProjectName6 = Microsoft.Legal.MatterCenter_Outlook
-		SccLocalPath6 = Microsoft.Legal.MatterCenter_Outlook
-		SccProjectUniqueName7 = Microsoft.Legal.MatterCenter.OneDriveRibbon\\Microsoft.Legal.MatterCenter.OneDriveRibbon.csproj
-		SccProjectName7 = Microsoft.Legal.MatterCenter.OneDriveRibbon
-		SccLocalPath7 = Microsoft.Legal.MatterCenter.OneDriveRibbon
-		SccProjectUniqueName8 = Microsoft.Legal.MatterCenter.Entity\\Microsoft.Legal.MatterCenter.Entity.csproj
-		SccProjectName8 = Microsoft.Legal.MatterCenter.Entity
-		SccLocalPath8 = Microsoft.Legal.MatterCenter.Entity
-		SccProjectUniqueName9 = Microsoft.Legal.MatterCenter.DataLayer\\Microsoft.Legal.MatterCenter.DataLayer.csproj
-		SccProjectName9 = Microsoft.Legal.MatterCenter.DataLayer
-		SccLocalPath9 = Microsoft.Legal.MatterCenter.DataLayer
 	EndGlobalSection
 EndGlobal
