@@ -272,7 +272,7 @@ function uploadMailClient() {
         if (Office.context.mailbox.item.attachments) {
             var attachmentLength = Office.context.mailbox.item.attachments.length;
             for (iCounter = 0; iCounter < attachmentLength; iCounter++) {
-                oSearchGlobal.oServiceRequest.attachments[iCounter] = JSON.parse(JSON.stringify(Office.context.mailbox.item.attachments[iCounter].$0_0));
+                oSearchGlobal.oServiceRequest.attachments[iCounter] = JSON.parse(JSON.stringify(Office.context.mailbox.item.attachments[iCounter]._data$p$0));
             }
             Office.context.mailbox.getCallbackTokenAsync(attachmentTokenCallbackEmailClient);
             showAttachmentLoading();
