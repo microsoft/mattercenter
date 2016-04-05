@@ -769,6 +769,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                                     }
                                 }
                                 document.Save(inputConfigFile);
+                                configFile.CopyTo(mainConfigFile.FullName, true);       // Copy the file into original configuration file
                                 break;
                             }
                         }
@@ -1002,8 +1003,8 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                 if (isDeployedOnAzure)
                 {
                     // Update the configuration for Azure
-                    UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG, ConstantStrings.UI_FOLDER_NAME);
-                    UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG, ConstantStrings.SERVICE_FOLDER_NAME);
+                    UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_CLOUD, ConstantStrings.UI_FOLDER_NAME);
+                    UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_CLOUD, ConstantStrings.SERVICE_FOLDER_NAME);
                     UpdateWebConfig(configUpdateList, ConstantStrings.APP_INSIGHTS, ConstantStrings.UI_FOLDER_NAME);
                 }
                 else

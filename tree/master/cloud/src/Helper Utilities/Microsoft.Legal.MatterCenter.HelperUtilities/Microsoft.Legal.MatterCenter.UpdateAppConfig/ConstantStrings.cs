@@ -117,6 +117,11 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
         public const string WEB_CONFIG = "Web";
 
         /// <summary>
+        /// Defining constant string variable WEB_CONFIG_CLOUD
+        /// </summary>
+        public const string WEB_CONFIG_CLOUD = "Web_Cloud";
+
+        /// <summary>
         /// Defining constant string variable WEB_CONFIG_ONPREMISE
         /// </summary>
         public const string WEB_CONFIG_ONPREMISE = "Web_OnPremise";

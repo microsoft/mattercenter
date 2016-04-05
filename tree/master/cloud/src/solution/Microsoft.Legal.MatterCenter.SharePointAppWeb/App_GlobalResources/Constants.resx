@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Central_Repository_Url" xml:space="preserve">
-    <value>https://MyTenant.sharepoint.com/sites/catalog</value>
+    <value>[Enter URL of the central repository where all the common lists are stored, e.g. https://[TENANTNAME].sharepoint.com/sites/catalog]</value>
     <comment>URL of the central repository where all the common lists are stored</comment>
   </data>
   <data name="Client_Custom_Properties" xml:space="preserve">
@@ -158,7 +158,7 @@
     <comment>This loading message is displayed if while clients are being fetched</comment>
   </data>
   <data name="Matter_Provision_Service_Url" xml:space="preserve">
-    <value>https://MyService.azurewebsites.net/MatterProvision.svc/</value>
+    <value>[Enter URL of the service to be used for matter provisioning app, e.g. https://[SERVICENAME].azurewebsites.net/MatterProvision.svc/]</value>
     <comment>URL of the service to be used for matter provisioning app</comment>
   </data>
   <data name="Message_No_Inputs" xml:space="preserve">
@@ -182,7 +182,7 @@
     <comment>Refresh cycle period for data stored in local storage</comment>
   </data>
   <data name="Search_Service_Url" xml:space="preserve">
-    <value>https://MyService.azurewebsites.net/Search.svc/</value>
+    <value>[Enter URL of the service to be used for search apps, e.g. https://[SERVICENAME].azurewebsites.net/Search.svc/]</value>
     <comment>URL of the service to be used for search apps</comment>
   </data>
   <data name="Send_Mail_List_Name" xml:space="preserve">
@@ -198,7 +198,7 @@
     <comment>URL for Search Matter App</comment>
   </data>
   <data name="Site_Url" xml:space="preserve">
-    <value>https://MyTenant.sharepoint.com</value>
+    <value>[Enter URL of the SharePoint site, e.g. https://[TENANTNAME].sharepoint.com]</value>
     <comment>URL of the SharePoint site</comment>
   </data>
   <data name="IsDeployedOnAzure" xml:space="preserve">
@@ -206,19 +206,19 @@
     <comment>Indicates web service deployed on Azure or IIS</comment>
   </data>
   <data name="App_Redirect_URL" xml:space="preserve">
-    <value>https://MyTenant.sharepoint.com/sites/catalog/_layouts/15/appredirect.aspx</value>
+    <value>[Enter app redirect URL for tenant, e.g. https://[TENANTNAME].sharepoint.com/sites/catalog/_layouts/15/appredirect.aspx]</value>
     <comment>URL for app redirect page</comment>
   </data>
   <data name="ClientID" xml:space="preserve">
-    <value>11111111-11111-11111-11111111111111</value>
+    <value>[Enter Client ID of SharePoint App from the specific Tenancy, e.g. 4e55c7b2-eb66a-753e7-2679ac37be8b08]</value>
     <comment>This text represents Client ID</comment>
   </data>
   <data name="UILogTableName" xml:space="preserve">
-    <value>MyLogStorageUI</value>
+    <value>[[[Enter name of the table on Azure storage where all error/exception log, e.g. MatterCenterUILogStorage]]]</value>
     <comment>Name of the table on Azure storage where all error/exception log</comment>
   </data>
   <data name="Application_Insight_App_Id" xml:space="preserve">
-    <value>555-5555555555-555-555555555-5555555</value>
+    <value>[Enter Application Insights ID specific to environment, e.g. a70d9cb8-e6f0-c8e7-0cbb8d1d-a4cf342c]</value>
     <comment>Application ID for application insights</comment>
   </data>
   <data name="Sub_Area_Of_Law_Document_Templates" xml:space="preserve">
@@ -230,7 +230,7 @@
     <comment>Flag to differentiate wheather the deployment is carried out on Tenant level or site collection level</comment>
   </data>
   <data name="Legal_Briefcase_Service_Url" xml:space="preserve">
-    <value>https://MyService.azurewebsites.net/LegalBriefcase.svc/</value>
+    <value>[Enter URL of the service to be used for legal briefcase apps, e.g. https://[SERVICENAME].azurewebsites.net/LegalBriefcase.svc/]</value>
     <comment>URL of the service to be used for legal briefcase apps</comment>
   </data>
   <data name="ServicePath_MatterProvision" xml:space="preserve">
@@ -306,11 +306,11 @@
     <comment>Message to be displayed when there are no current uploads</comment>
   </data>
   <data name="Image_Document_Icon" xml:space="preserve">
-    <value>https://MyTenant.sharepoint.com/_layouts/15/images/ic{0}.gif</value>
+    <value>[Enter path of icon to display as per document selected e.g. https://[TENANTNAME].sharepoint.com/_layouts/15/images/ic{0}.gif]</value>
     <comment>This is icon to be displayed according to the document selected</comment>
   </data>
   <data name="Image_General_Document" xml:space="preserve">
-    <value>https://MyTenant.sharepoint.com/_layouts/15/images/generaldocument.png</value>
+    <value>[Enter path of icon to display for general document e.g. https://[TENANTNAME].sharepoint.com/_layouts/15/images/generaldocument.png]</value>
     <comment>Path of general document image on lcadms site</comment>
   </data>
   <data name="Matter_Client_Custom_Properties_Id" xml:space="preserve">
@@ -354,7 +354,7 @@
     <comment>Info popup message for file check out</comment>
   </data>
   <data name="Office_JS_URL" xml:space="preserve">
-    <value>https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js</value>
+    <value>[Enter URL of office JS files, e.g. https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js]</value>
     <comment>URLof office JS</comment>
   </data>
   <data name="Convenience_copy_available" xml:space="preserve">
@@ -642,7 +642,7 @@
     <comment>URL for App Landing page</comment>
   </data>
   <data name="Learn_More_Link" xml:space="preserve">
-    <value>http://www.MyWebSite.com/MyMatterCenterPage</value>
+    <value>[Enter URL of Learn More link used on App Landing page e.g. http://www.microsoft.com/mattercenter]</value>
     <comment>Hyperlink on click of Learn More link on app landing page</comment>
   </data>
   <data name="Matter_Center_Support_Email" xml:space="preserve">
@@ -1028,11 +1028,11 @@ GridView_BreakPoint = (710/21)*Number of items to show</comment>
     <comment>App Insight page name for Upload attachment</comment>
   </data>
   <data name="Tenant_Url" xml:space="preserve">
-    <value>https://MyTenant.sharepoint.com</value>
+    <value>[Enter tenant URL of the Matter Center app, e.g. https://[TENANTNAME].sharepoint.com]</value>
     <comment>The tenant url for the Matter Center app</comment>
   </data>
   <data name="Delve_Link" xml:space="preserve">
-    <value>https://MyTenant-my.sharepoint.com/_layouts/15/me.aspx?q=</value>
+    <value>[Enter Delve link URL, e.g. https://[TENANTNAME]-my.sharepoint.com/_layouts/15/me.aspx?q=]</value>
     <comment>The default page to which the Delve link redirects on being clicked</comment>
   </data>
   <data name="Delve" xml:space="preserve">
