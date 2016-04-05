@@ -122,7 +122,7 @@
     <comment>Query to get complete folder hierarchy within the specified library</comment>
   </data>
   <data name="Central_Repository_Url" xml:space="preserve">
-    <value>https://MyTenant.sharepoint.com/sites/catalog</value>
+    <value>[Enter URL of the central repository where all the common lists are stored, e.g. https://[TENANT].sharepoint.com/sites/catalog]</value>
     <comment>URL of the central repository where all the common lists are stored</comment>
   </data>
   <data name="Client_Custom_Properties" xml:space="preserve">
@@ -206,7 +206,7 @@
     <comment>',' separated list of search properties to be consumed in Find Matter service</comment>
   </data>
   <data name="LogTableName" xml:space="preserve">
-    <value>MyLogStorage</value>
+    <value>[[[Enter name of the table on Azure storage where all error/exception log, e.g. MatterCenterLogStorage]]]</value>
     <comment>Name of the table on Azure storage where all error/exception log</comment>
   </data>
   <data name="Mail_Cart_Mail_Body" xml:space="preserve">
@@ -418,7 +418,7 @@
     <comment>Name of the column storing path of the matter</comment>
   </data>
   <data name="Site_Url" xml:space="preserve">
-    <value>https://MyTenant.sharepoint.com</value>
+    <value>[Enter URL of the SharePoint site, e.g. https://[TENANTNAME].sharepoint.com]</value>
     <comment>URL of the SharePoint site</comment>
   </data>
   <data name="Stamped_Property_Area_Of_Law" xml:space="preserve">
@@ -1190,7 +1190,7 @@
     <comment>Message to show when Responsible Attorney not found</comment>
   </data>
   <data name="Search_Result_Source_ID" xml:space="preserve">
-    <value>333333-333333-33-3333-33333333333333</value>
+    <value>[Enter Result source ID which retrieves results from Matter Center specific site collection only, e.g. 334fbf-40a4aa-ba-d34e-4274ca46553ada]</value>
     <comment>Result source ID which retrieves results from Matter Center specific site collection only</comment>
   </data>
   <data name="Managed_Property_Document_Last_Modified_Time" xml:space="preserve">

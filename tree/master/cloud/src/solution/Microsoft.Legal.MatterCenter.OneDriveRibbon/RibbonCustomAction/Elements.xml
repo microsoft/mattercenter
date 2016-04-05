@@ -12,21 +12,21 @@
       that you want to enable for the custom action.
       -->
       <CommandUIDefinitions>
-        <CommandUIDefinition Location="Ribbon.Documents.Manage.Controls._children">
-          <FlyoutAnchor
-         Id="Ribbon.Flyoutanchor"
-         Sequence="0"
-         Alt="Ribbon.Flyoutanchor.Controls.CPFlyout_ALT"
-         LabelText="Matter Center Action"
-         PopulateDynamically="false"
-         PopulateOnlyOnce="true"
-         TemplateAlias="o1"
-         Image16by16="/_layouts/images/siteicon_16x16.png"
-         Image32by32="/_layouts/15/1033/images/formatmap32x32.png"
-         ToolTipTitle="Matter Center Action"
-         ToolTipDescription="You can only perform these actions on documents from the Matter Center Beta."
-         Image32by32Top="-375"
-         Image32by32Left="-171"
+           <CommandUIDefinition Location="Ribbon.Documents.Manage.Controls._children">
+             <FlyoutAnchor
+            Id="Ribbon.Flyoutanchor"
+            Sequence="0"
+            Alt="Ribbon.Flyoutanchor.Controls.CPFlyout_ALT"
+            LabelText="Matter Center Action"
+            PopulateDynamically="false"
+            PopulateOnlyOnce="true"
+            TemplateAlias="o1"
+            Image16by16="/_layouts/images/siteicon_16x16.png"
+            Image32by32="/_layouts/15/1033/images/formatmap32x32.png"
+            ToolTipTitle="Matter Center Action"
+            ToolTipDescription="You can only perform these actions on documents from the Matter Center Beta."
+            Image32by32Top="-375"
+            Image32by32Left="-171"
             >
             <Menu Id="Ribbon.Flyoutanchor.Menu">
               <MenuSection Id="Ribbon.Flyoutanchor.Menu.MenuSection" DisplayMode="Menu16">
@@ -89,7 +89,7 @@
         </CommandUIDefinition>
       </CommandUIDefinitions>
       <CommandUIHandlers>
-        <CommandUIHandler Command="Matter_Sync"  CommandAction="https://MySite.azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=UpdateCopy"
+        <CommandUIHandler Command="Matter_Sync"  CommandAction="https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=UpdateCopy"
           
                           EnabledScript="javascript:function moreThanOneEnabled(){   
                           
@@ -99,7 +99,7 @@
                           }                                                                  
                           moreThanOneEnabled();" >
         </CommandUIHandler>
-        <CommandUIHandler Command="Matter_Check_IN"  CommandAction="https://MySite.azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=DMSCheckIn"
+        <CommandUIHandler Command="Matter_Check_IN"  CommandAction="https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=DMSCheckIn"
         
                           EnabledScript="javascript:function moreThanOneEnabled(){   
                             var items = SP.ListOperation.Selection.getSelectedItems();
@@ -108,7 +108,7 @@
                           }
                           moreThanOneEnabled();" >
         </CommandUIHandler>
-        <CommandUIHandler Command="Matter_Check_Out"  CommandAction="https://MySite.azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=DMSCheckOut"
+        <CommandUIHandler Command="Matter_Check_Out"  CommandAction="https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=DMSCheckOut"
                           EnabledScript="javascript:function moreThanOneEnabled(){   
                             var items = SP.ListOperation.Selection.getSelectedItems();
                             var ci = CountDictionary(items);     
@@ -116,7 +116,7 @@
                           }
                           moreThanOneEnabled();" >
         </CommandUIHandler>
-        <CommandUIHandler Command="Matter_Break_Link"  CommandAction="https://MySite.azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=DetachFromDMS"
+        <CommandUIHandler Command="Matter_Break_Link"  CommandAction="https://[SITENAME].azurewebsites.net/Pages/BriefcaseOperations.aspx?SPListItemId={SelectedItemId}&amp;SPListId={SelectedListId}&amp;Operation=DetachFromDMS"
         
                           EnabledScript="javascript:function moreThanOneEnabled(){   
                             var items = SP.ListOperation.Selection.getSelectedItems();
@@ -125,8 +125,8 @@
                           }
                           moreThanOneEnabled();" >
         </CommandUIHandler>
-      </CommandUIHandlers>
+        </CommandUIHandlers>
     </CommandUIExtension >
-
+  
   </CustomAction>
 </Elements>
