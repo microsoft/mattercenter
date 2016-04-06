@@ -98,9 +98,16 @@ function enableAttachIfComposeMode() {
     if (Office.context && Office.context.mailbox && Office.context.mailbox.item) {
         //// If email is opened in Compose mode then show the Send as attachment button
         var oCurrentEmailItem = Office.context.mailbox.item.get_data();
-        if (oCurrentEmailItem && oCurrentEmailItem._data$p$0) {
-            var sEmailCreatedTime = oCurrentEmailItem._data$p$0.dateTimeCreated
-                , sEmailModifiedTime = oCurrentEmailItem._data$p$0.dateTimeModified;
+        var sEmailCreatedTime, sEmailModifiedTime;
+        if (oCurrentEmailItem && (oCurrentEmailItem.hasOwnProperty("$0_0") || oCurrentEmailItem.hasOwnProperty("_data$p$0"))) {
+            // If $0_0 property is not available, use _data$p$0 to get email item details
+            if (oCurrentEmailItem.hasOwnProperty("$0_0")) {
+                sEmailCreatedTime = oCurrentEmailItem.$0_0.dateTimeCreated
+                   , sEmailModifiedTime = oCurrentEmailItem.$0_0.dateTimeModified;
+            } else {
+                sEmailCreatedTime = oCurrentEmailItem._data$p$0.dateTimeCreated
+                   , sEmailModifiedTime = oCurrentEmailItem._data$p$0.dateTimeModified;
+            }
             //// Created time and Modified time are undefined if email is opened in compose mode
             if ("undefined" === typeof (sEmailCreatedTime) && "undefined" === typeof (sEmailModifiedTime)) {
                 $("#attachDocuments").attr("data-applicable", true);
