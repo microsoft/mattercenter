@@ -103,9 +103,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF EXIST "$(SolutionDir)..\..\Deployment" (XCOPY /y "$(ProjectDir)$(OutDir)$(TargetFileName).config" "$(SolutionDir)..\..\Deployment\Scripts\Helper Utilities\"
+    <PostBuildEvent>IF EXIST "$(SolutionDir)..\..\Deployments" (XCOPY /y "$(ProjectDir)$(OutDir)$(TargetFileName).config" "$(SolutionDir)..\..\Deployments\Scripts\Helper Utilities\"
 
-XCOPY /y "$(ProjectDir)$(OutDir)$(TargetFileName)" "$(SolutionDir)..\..\Deployment\Scripts\Helper Utilities\")</PostBuildEvent>
+XCOPY /y "$(ProjectDir)$(OutDir)$(TargetFileName)" "$(SolutionDir)..\..\Deployments\Scripts\Helper Utilities\")</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
