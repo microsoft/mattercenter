@@ -18,13 +18,13 @@ namespace Microsoft.Legal.MatterCenter.Utility
     public class SearchSettings
     {
         public string SearchResultSourceID { get; set; }
-        
+
 
         #region Matter Search Related Properties
         public string ManagedPropertyTitle { get; set; }
         public string ManagedPropertyName { get; set; }
         public string ManagedPropertyDescription { get; set; }
-        public string ManagedPropertySiteName{ get; set; }
+        public string ManagedPropertySiteName { get; set; }
         public string ManagedPropertyLastModifiedTime { get; set; }
         public string ManagedPropertyPracticeGroup { get; set; }
         public string ManagedPropertyAreaOfLaw { get; set; }
@@ -47,6 +47,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string ManagedPropertyIsMatter { get; set; }
         public string UserPermissions { get; set; }
         public string MatterConfigurationTitleValue { get; set; }
+        public string ColumnNameModifiedDate { get; set; }
+        public string MatterConfigurationColumn { get; set; }
         #endregion
 
         #region Document Search Related Properties
@@ -56,7 +58,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string ManagedPropertyDocumentClientId { get; set; }
         public string ManagedPropertyDocumentMatterId { get; set; }
         public string ManagedPropertyDocumentClientName { get; set; }
-         public string ManagedPropertyUIVersionStringOWSTEXT { get; set; }
+        public string ManagedPropertyUIVersionStringOWSTEXT { get; set; }
         public string ManagedPropertyServerRelativeUrl { get; set; }
 
         public string ManagedPropertyFileExtension { get; set; }
@@ -69,7 +71,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         #endregion
 
         #region Pin
-        public string PinnedListColumnUserAlias { get; set; }        
+        public string PinnedListColumnUserAlias { get; set; }
         public string PinnedListColumnMatterDetails { get; set; }
         public string PinnedListColumnDocumentDetails { get; set; }
 
@@ -85,7 +87,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public bool PeoplePickerAllowMultipleEntities { get; set; }
         public int PeoplePickerMaximumEntitySuggestions { get; set; }
         public int PeoplePickerMaxRecords { get; set; }
-        
+
         #endregion
 
     }

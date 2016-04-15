@@ -541,7 +541,8 @@ namespace Microsoft.Legal.MatterCenter.Service
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
-                return null;
+                GenericResponseVM genericResponseVM = await matterRepositoy.GetConfigurationsAsync(siteCollectionPath);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

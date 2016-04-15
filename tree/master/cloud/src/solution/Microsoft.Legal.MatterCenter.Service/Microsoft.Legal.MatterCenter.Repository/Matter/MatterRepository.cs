@@ -187,20 +187,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return users;
         }
 
-        public async Task<string> GetConfigurationsAsync(string siteCollectionUrl)
+        public async Task<GenericResponseVM> GetConfigurationsAsync(string siteCollectionUrl)
         {
-            ListItem listItem = await Task.FromResult(search.GetConfigurations(siteCollectionUrl, listNames.MatterConfigurationsList));
-            //if (listItem!=null)
-            //{
-            //    settingsUpdatedDate = Convert.ToString(listItem[matterSettings.ColumnNameModifiedDate], CultureInfo.InvariantCulture);
-            //    result = HttpUtility.HtmlDecode(string.Concat(Convert.ToString(settingsItem[matterSettings.MatterConfigurationColumn], 
-            //        CultureInfo.InvariantCulture), ConstantStrings.Pipe, ConstantStrings.DOLLAR, ConstantStrings.Pipe, settingsUpdatedDate));
-            //}
-            //else
-            //{
-            //    settingsUpdatedDate = Convert.ToString(errorCodeModifiedDate, CultureInfo.InvariantCulture);
-            //}
-            return null;
+            return await Task.FromResult(search.GetConfigurations(siteCollectionUrl, listNames.MatterConfigurationsList));
         }
     }
 }

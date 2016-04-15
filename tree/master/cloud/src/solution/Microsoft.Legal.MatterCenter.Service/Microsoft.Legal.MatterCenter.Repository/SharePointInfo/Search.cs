@@ -42,6 +42,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private CamlQueries camlQueries;
         private ListNames listNames;
         private SharedSettings sharedSettings;
+        private ErrorSettings errorSettings;
         /// <summary>
         /// 
         /// </summary>
@@ -56,7 +57,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
             IOptions<SharedSettings> sharedSettings,
             IOptions<LogTables> logTables,
             IOptions<SearchSettings> searchSettings,
-            IOptions<CamlQueries> camlQueries, IOptions<ListNames> listNames)
+            IOptions<CamlQueries> camlQueries, 
+            IOptions<ListNames> listNames,
+            IOptions<ErrorSettings> errorSettings)
         {
             this.spoAuthorization = spoAuthorization;
             this.generalSettings = generalSettings.Value;
@@ -68,6 +71,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.camlQueries = camlQueries.Value;
             this.listNames = listNames.Value;
             this.sharedSettings = sharedSettings.Value;
+            this.errorSettings = errorSettings.Value;
         }
 
         #region Public Methods
@@ -578,20 +582,36 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
-        public ListItem GetConfigurations(string siteCollectionUrl, string listName)
+        public GenericResponseVM GetConfigurations(string siteCollectionUrl, string listName)
         {
             try
             {
+                GenericResponseVM genericResponse = new GenericResponseVM();
                 ListItem settingsItem = null;
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(siteCollectionUrl))
                 {
                     if (spList.CheckPermissionOnList(clientContext, listName, PermissionKind.EditListItems))
                     {
-                        string listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery, 
+                        string listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery,
                             searchSettings.ManagedPropertyTitle, searchSettings.MatterConfigurationTitleValue);
                         settingsItem = spList.GetData(clientContext, listNames.MatterConfigurationsList, listQuery).FirstOrDefault();
+                        if (settingsItem != null)
+                        {
+                            genericResponse.Code = WebUtility.HtmlDecode(Convert.ToString(settingsItem[searchSettings.MatterConfigurationColumn]));
+                            genericResponse.Value = Convert.ToString(settingsItem[searchSettings.ColumnNameModifiedDate], CultureInfo.InvariantCulture);
+                        }
+                        else
+                        {
+                            genericResponse.Code = "0";
+                            genericResponse.Value = string.Empty;
+                        }
                     }
-                    return settingsItem;
+                    else
+                    {
+                        genericResponse.Code = errorSettings.UserNotSiteOwnerCode;
+                        genericResponse.Value = errorSettings.UserNotSiteOwnerMessage;
+                    }
+                    return genericResponse;
                 }
             }
             catch (Exception exception)
@@ -600,6 +620,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 throw;
             }
         }
+
+
 
         #endregion
 

@@ -17,6 +17,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         List<ContextHelpData> GetMatterHelp(Client client, string selectedPage, string listName);
         List<RoleDefinition> GetWebRoleDefinitions(Client client);
         IList<PeoplePickerUser> SearchUsers(SearchRequestVM searchRequestVM);
-        ListItem GetConfigurations(string siteCollectionUrl, string listName);
+        GenericResponseVM GetConfigurations(string siteCollectionUrl, string listName);
     }
 }
