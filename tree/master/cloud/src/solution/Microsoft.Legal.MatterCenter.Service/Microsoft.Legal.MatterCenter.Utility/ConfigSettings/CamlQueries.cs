@@ -13,6 +13,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string ContextualHelpQueryIncludeOrCondition { get; set; }
         public string RetrieveContextualHelpLinksQuery { get; set; }
         public string DMSRoleQuery { get; set; }
-        public string MatterConfigurationsListQuery { get; set; }
+        public string MatterConfigurationsListQuery { get; set;}
     }
 }
