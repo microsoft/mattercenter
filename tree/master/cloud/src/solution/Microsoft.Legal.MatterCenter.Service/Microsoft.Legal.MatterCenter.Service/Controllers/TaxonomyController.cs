@@ -23,6 +23,7 @@ using Microsoft.Legal.MatterCenter.Service.HelperClasses;
 using Microsoft.Legal.MatterCenter.Repository;
 using Newtonsoft.Json;
 using System.Reflection;
+using Microsoft.AspNet.Authorization;
 
 #endregion
 
@@ -184,6 +185,7 @@ namespace Microsoft.Legal.MatterCenter.Service.Controllers
         /// This is test method for testing the contrroller
         /// </summary>
         /// <returns></returns>
+        [Authorize]
         [HttpGet("getcurrentsitetitle")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -215,6 +217,24 @@ namespace Microsoft.Legal.MatterCenter.Service.Controllers
             var success = new 
             {
                 Title = siteName
+            };
+            return matterCenterServiceFunctions.ServiceResponse(success, (int)HttpStatusCode.OK);
+        }
+
+
+        /// <summary>
+        /// This is test method for testing the contrroller
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("getcurrentsitetitlev1")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        public IActionResult TestWebApi()
+        {
+            
+            var success = new
+            {
+                Title = "New Title"
             };
             return matterCenterServiceFunctions.ServiceResponse(success, (int)HttpStatusCode.OK);
         }

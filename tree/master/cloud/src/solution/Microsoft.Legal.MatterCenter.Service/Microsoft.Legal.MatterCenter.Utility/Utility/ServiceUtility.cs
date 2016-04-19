@@ -3,6 +3,7 @@ using StackExchange.Redis;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using System.Net;
+using Microsoft.Legal.MatterCenter.Models;
 
 namespace Microsoft.Legal.MatterCenter.Utility
 {
@@ -91,7 +92,19 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// <param name="value">Matter properties</param>
         /// <returns>Encoded String</returns>
         public static string EncodeValues(string value)=> !string.IsNullOrWhiteSpace(value) ? WebUtility.HtmlEncode(value.Trim()) : string.Empty;
-        
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static GenericResponseVM GenericResponse(string code, string value)
+        {
+            GenericResponseVM genericResponseVM = new GenericResponseVM();
+            genericResponseVM.Code = code;
+            genericResponseVM.Value = value;
+            return genericResponseVM;
+        }
     }
 }

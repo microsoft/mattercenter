@@ -21,10 +21,9 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string AppKey { get; set; }
         public string Tenant { get; set; }
         public string AADInstance { get; set; }
-        public string Resource { get; set; }
-        public string MatterUIUrl { get; set; }
+        public string Resource { get; set; }        
         public string RedisCacheHostName { get; set; }
         public bool IsTenantDeployment { get; set; }
-        public string IsReadOnlyUser { get; set; }
+        public string IsReadOnlyUser { get; set; }        
     }
 }

@@ -4,8 +4,10 @@ using Microsoft.Extensions.OptionsModel;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.SharePoint.Client;
+using Microsoft.SharePoint.Client.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
@@ -33,6 +35,25 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spoAuthorization = spoAuthorization;
         }
 
+        public bool CheckPermissionOnList(string url, string listName, PermissionKind permission)
+        {
+            bool returnValue = false;
+            using (ClientContext clientContext = spoAuthorization.GetClientContext(url))
+            {
+                if (!string.IsNullOrWhiteSpace(listName))
+                {
+                    ListCollection listCollection = clientContext.Web.Lists;
+                    clientContext.Load(listCollection, lists => lists.Include(list => list.Title, list => list.EffectiveBasePermissions).Where(list => list.Title == listName));
+                    clientContext.ExecuteQuery();
+                    if (listCollection.Count > 0)
+                    {
+                        returnValue = listCollection[0].EffectiveBasePermissions.Has(permission);
+                    }
+                }
+            }
+            return returnValue;
+        }
+
         /// <summary>
         /// Determines whether user has a particular permission on the list
         /// </summary>
@@ -42,21 +63,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns>Success flag</returns>
         public bool CheckPermissionOnList(Client client, string listName, PermissionKind permission)
         {
-            bool returnValue = false;
-            using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
-            {
-                if (!string.IsNullOrWhiteSpace(listName))
-                {
-                    ListCollection listCollection = clientContext.Web.Lists;
-                    clientContext.Load(listCollection, lists => lists.Include(list => list.Title, list => list.EffectiveBasePermissions).Where(list => list.Title == listName));
-                    clientContext.ExecuteQuery();
-                    if (listCollection.Count>0)
-                    {
-                        returnValue = listCollection[0].EffectiveBasePermissions.Has(permission);
-                    }
-                }
-            }            
-            return returnValue;
+            return CheckPermissionOnList(client.Url, listName, permission);
         }
 
         /// <summary>
@@ -94,19 +101,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
-        /// <summary>
-        /// Gets the list items of specified list based on CAML query.
-        /// </summary>
-        /// <param name="clientContext">Client context</param>
-        /// <param name="listName">Name of the list</param>
-        /// <param name="camlQuery">CAML Query that need to be executed on list</param>
-        /// <returns>Collection of list items</returns>
-        public ListItemCollection GetData(Client client, string listName, string camlQuery = null)
+        public ListItemCollection GetData(string url, string listName, string camlQuery = null)
         {
             try
             {
                 ListItemCollection listItemCollection = null;
-                using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
+                using (ClientContext clientContext = spoAuthorization.GetClientContext(url))
                 {
                     if (null != clientContext && !string.IsNullOrWhiteSpace(listName))
                     {
@@ -130,6 +130,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Gets the list items of specified list based on CAML query.
+        /// </summary>
+        /// <param name="clientContext">Client context</param>
+        /// <param name="listName">Name of the list</param>
+        /// <param name="camlQuery">CAML Query that need to be executed on list</param>
+        /// <returns>Collection of list items</returns>
+        public ListItemCollection GetData(Client client, string listName, string camlQuery = null)
+        {
+            return GetData(client.Url, listName, camlQuery);
         }
 
         /// <summary>
@@ -248,6 +260,238 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
             }
             return returnValue;
+        }
+
+        /// <summary>
+        /// Function to check whether list is present or not.
+        /// </summary>
+        /// <param name="clientContext">Client context object for SharePoint</param>
+        /// <param name="listsNames">List name</param>
+        /// <returns>Success flag</returns>
+        public bool Exists(Client client, ReadOnlyCollection<string> listsNames)
+        {
+            using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
+            {
+                List<string> existingLists = new List<string>();
+                if (null != clientContext && null != listsNames)
+                {
+                    //ToDo: Chec
+                    ListCollection lists = clientContext.Web.Lists;
+                    clientContext.Load(lists);
+                    clientContext.ExecuteQuery();
+                    existingLists = (from listName in listsNames
+                                     join item in lists
+                                     on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
+                                     select listName).ToList();
+                }
+                return existingLists.Count>0;
+            }
+        }
+
+
+        /// <summary>
+        /// Function to check whether list is present or not.
+        /// </summary>
+        /// <param name="clientContext">Client context object for SharePoint</param>
+        /// <param name="listsNames">List name</param>
+        /// <returns>Success flag</returns>
+        public List<string> MatterAssociatedLists(ClientContext clientContext, ReadOnlyCollection<string> listsNames)
+        {            
+            List<string> existingLists = new List<string>();
+            if (null != clientContext && null != listsNames)
+            {
+                //ToDo: Chec
+                ListCollection lists = clientContext.Web.Lists;
+                clientContext.Load(lists);
+                clientContext.ExecuteQuery();
+                existingLists = (from listName in listsNames
+                                    join item in lists
+                                    on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
+                                    select listName).ToList();
+            }
+            return existingLists;
+        }
+
+        public PropertyValues GetListProperties(ClientContext clientContext, string libraryName)
+        {
+            
+            PropertyValues stampedProperties = null;
+            try
+            {
+                if (null != clientContext && !string.IsNullOrWhiteSpace(libraryName))
+                {
+                    stampedProperties = clientContext.Web.Lists.GetByTitle(libraryName).RootFolder.Properties;
+                    clientContext.Load(stampedProperties);
+                    clientContext.ExecuteQuery();
+                }
+            }
+            catch (Exception)
+            {
+                throw; //// This will transfer control to catch block of parent function.
+            }
+
+            return stampedProperties;
+        }
+
+        public IEnumerable<RoleAssignment> FetchUserPermissionForLibrary(ClientContext clientContext, string libraryname)
+        {
+            IEnumerable<RoleAssignment> userPermissionCollection = null;
+            try
+            {
+                if (null != clientContext && !string.IsNullOrWhiteSpace(libraryname))
+                {
+                    List list = clientContext.Web.Lists.GetByTitle(libraryname);
+                    userPermissionCollection = clientContext.LoadQuery(list.RoleAssignments.Include(listRoleAssignment => 
+                        listRoleAssignment.PrincipalId, listRoleAssignment => listRoleAssignment.Member, 
+                        listRoleAssignment => listRoleAssignment.Member.Title, 
+                        listRoleAssignment => listRoleAssignment.Member.PrincipalType, 
+                        listRoleAssignment => listRoleAssignment.RoleDefinitionBindings.Include(userRoles => userRoles.BasePermissions, 
+                                                                                                userRoles => userRoles.Name, 
+                                                                                                userRoles => userRoles.Id)).Where(listUsers => (PrincipalType.User == listUsers.Member.PrincipalType) || (PrincipalType.SecurityGroup == listUsers.Member.PrincipalType)));
+                    clientContext.ExecuteQuery();
+                }
+            }
+            catch (Exception)
+            {
+                throw; //// This will transfer control to catch block of parent function.
+            }
+            return userPermissionCollection;
+        }
+
+        /// <summary>
+        /// Sets permissions for the list.
+        /// </summary>
+        /// <param name="clientContext">Client Context</param>
+        /// <param name="assignUserName">Users to give permission</param>
+        /// <param name="permissions">Permissions for the users</param>
+        /// <param name="listName">List name</param>
+        /// <returns>String stating success flag</returns>
+        public bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName)
+        {
+            bool result = false;
+            if (null != clientContext && !string.IsNullOrWhiteSpace(listName))
+            {
+                ClientRuntimeContext clientRuntimeContext = clientContext;
+                try
+                {
+                    List list = clientContext.Web.Lists.GetByTitle(listName);
+                    clientContext.Load(list, l => l.HasUniqueRoleAssignments);
+                    clientContext.ExecuteQuery();
+                    if (list.HasUniqueRoleAssignments && null != permissions && null != assignUserName && permissions.Count == assignUserName.Count)
+                    {
+                        int position = 0;
+                        foreach (string roleName in permissions)
+                        {
+                            IList<string> userName = assignUserName[position];
+                            if (!string.IsNullOrWhiteSpace(roleName) && null != userName)
+                            {
+                                RoleDefinition roleDefinition = clientContext.Web.RoleDefinitions.GetByName(roleName);
+                                foreach (string user in userName)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(user))
+                                    {
+                                        /////get the user object
+                                        Principal userPrincipal = clientContext.Web.EnsureUser(user.Trim());
+                                        /////create the role definition binding collection
+                                        RoleDefinitionBindingCollection roleDefinitionBindingCollection = new RoleDefinitionBindingCollection(clientRuntimeContext);
+                                        /////add the role definition to the collection
+                                        roleDefinitionBindingCollection.Add(roleDefinition);
+                                        /////create a RoleAssigment with the user and role definition
+                                        list.RoleAssignments.Add(userPrincipal, roleDefinitionBindingCollection);
+                                    }
+                                }
+                                /////execute the query to add everything
+                                clientRuntimeContext.ExecuteQuery();
+                            }
+                            position++;
+                        }
+                        ///// Success. Return a success code
+                        result = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    result = false;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Set permission to the specified list item 
+        /// </summary>
+        /// <param name="clientContext">Client context object</param>
+        /// <param name="assignUserName">Users to give permission</param>
+        /// <param name="listName">List name</param>
+        /// <param name="listItemId">Unique list item id to break item level permission</param>
+        /// <param name="permissions">Permissions for the users</param>
+        /// <returns>Status of the unique item level permission assignment operation</returns>
+        public bool SetItemPermission(ClientContext clientContext, IList<IList<string>> assignUserName, string listName, int listItemId, IList<string> permissions)
+        {
+            bool result = false;
+            if (null != clientContext)
+            {
+                ClientRuntimeContext clientRuntimeContext = clientContext;
+                ListItem listItem = clientContext.Web.Lists.GetByTitle(listName).GetItemById(listItemId);
+                clientContext.Load(listItem, item => item.HasUniqueRoleAssignments);
+                clientContext.ExecuteQuery();
+                if (listItem.HasUniqueRoleAssignments && null != permissions && null != assignUserName && permissions.Count == assignUserName.Count)
+                {
+                    int position = 0;
+                    foreach (string roleName in permissions)
+                    {
+                        IList<string> userName = assignUserName[position];
+                        if (!string.IsNullOrWhiteSpace(roleName) && null != userName)
+                        {
+                            RoleDefinition roleDefinition = clientContext.Web.RoleDefinitions.GetByName(roleName);
+                            foreach (string user in userName)
+                            {
+
+                                if (!string.IsNullOrWhiteSpace(user))
+                                {
+                                    /////get the user object
+                                    Principal userPrincipal = clientContext.Web.EnsureUser(user.Trim());
+                                    /////create the role definition binding collection
+                                    RoleDefinitionBindingCollection roleDefinitionBindingCollection = new RoleDefinitionBindingCollection(clientRuntimeContext);
+                                    /////add the role definition to the collection
+                                    roleDefinitionBindingCollection.Add(roleDefinition);
+                                    /////create a RoleAssigment with the user and role definition
+                                    listItem.RoleAssignments.Add(userPrincipal, roleDefinitionBindingCollection);
+                                }
+                            }
+                            /////execute the query to add everything
+                            clientRuntimeContext.ExecuteQuery();
+                        }
+                        position++;
+                    }
+                    ///// Success. Return a success code
+                    result = false;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Sets the value of the specified property.
+        /// </summary>
+        /// <param name="clientContext">Client context</param>
+        /// <param name="props">Property Bag</param>
+        /// <param name="matterName">Name of matter to which property is to be attached</param>
+        /// <param name="propertyList">List of properties</param>
+        public void SetPropertBagValuesForList(ClientContext clientContext, PropertyValues props, string matterName, Dictionary<string, string> propertyList)
+        {
+            if (null != clientContext && !string.IsNullOrWhiteSpace(matterName) && null != props && null != propertyList)
+            {
+                List list = clientContext.Web.Lists.GetByTitle(matterName);
+
+                foreach (var item in propertyList)
+                {
+                    props[item.Key] = item.Value;
+                    list.Update();
+                }
+
+                clientContext.ExecuteQuery();
+            }
         }
 
     }

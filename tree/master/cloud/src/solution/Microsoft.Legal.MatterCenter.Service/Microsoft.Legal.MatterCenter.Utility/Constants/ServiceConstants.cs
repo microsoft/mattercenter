@@ -274,6 +274,60 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// </summary>
         public const string PeoplePickerEntityTypeUser = "User";
 
+        /// <summary>
+        /// Provision Matter CreateMatter validation value
+        /// </summary>
+        public const string ProvisionMatterCreateMatter = "2";
+
+        /// <summary>
+        ///Provision Matter common validation value
+        /// </summary>
+        public const string ProvisionMatterCommonValidation = "0";
+
+        /// <summary>
+        /// Provision Matter CheckMatterExists validation value
+        /// </summary>
+        public const string ProvisionMatterCheckMatterExists = "1";
+
+        
+
+        /// <summary>
+        /// Provision Matter AssignUserPermissions value
+        /// </summary>
+        public const string ProvisionMatterAssignUserPermissions = "3";
+
+        /// <summary>
+        /// Provision Matter MatterLandingPage validation value
+        /// </summary>
+        public const string ProvisionMatterMatterLandingPage = "4";
+
+        /// <summary>
+        /// Provision Matter UpdateMetadataForList validation value
+        /// </summary>
+        public const string ProvisionMatterUpdateMetadataForList = "6";
+
+        /// <summary>
+        /// Provision Matter ShareMatter validation value
+        /// </summary>
+        public const string ProvisionMatterShareMatter = "7";
+
+        /// <summary>
+        /// Edit Matter permission validation value
+        /// </summary>
+        public const string EditMatterPermission = "8";
+
+        /// <summary>
+        /// Provision Matter AssignContentType validation value
+        /// </summary>
+        public const string ProvisionMatterAssignContentType = "5";
+
+        
+
+        /// <summary>
+        /// The false constant
+        /// </summary>
+        public const string FALSE = "false";
+
         #endregion
     }
 }

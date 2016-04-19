@@ -4,12 +4,19 @@ using Microsoft.Legal.MatterCenter.Models;
 using System.Net.Http;
 using Microsoft.Legal.MatterCenter.Service;
 using Newtonsoft.Json;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System.Threading.Tasks;
+using Microsoft.Extensions.OptionsModel;
+using Microsoft.Legal.MatterCenter.Utility;
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
 {
     public class TaxonomyUniTest
     {
         private readonly TestServer testServer;
+        private const string authority = "https://login.windows.net/microsoft.onmicrosoft.com";
+        private AuthenticationContext authContext;
+        
         public TaxonomyUniTest()
         {
             testServer = new TestServer(TestServer.CreateBuilder().UseStartup<Startup>());
@@ -17,12 +24,27 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         [Fact]
         public async void Get_Current_Site_Title()
         {
+            
             using (var client = testServer.CreateClient().AcceptJson())
             {
                 var response = await client.GetAsync("http://localhost:58775/api/v1/taxonomy/getcurrentsitetitle");
                 var result = response.Content.ReadAsStringAsync().Result;
                 Assert.NotNull(result);
             }
+        }
+
+        private async Task<string> GetAccessToken()
+        {
+            AuthenticationContext authContext = new AuthenticationContext(authority);
+            ClientCredential clientCred = new ClientCredential("844ffb77-5bfd-403e-9285-678e2eddc90c", "IAKt/4uoQFM0UJ1Ocj//WHOg1RzLspACzPAKkkPP0kw=");            
+            UserCredential userCredential = new UserCredential("v-lapedd@microsoft.com", "feb@2016");
+            AuthenticationResult authResult = await authContext.AcquireTokenAsync("https://microsoft.onmicrosoft.com/mcserviceadal",
+                clientCred);
+            return authResult.AccessToken;
+            //AuthenticationContext authContext = new AuthenticationContext(clientCredentials.Authority);
+            //ClientCredential clientCred = new ClientCredential(clientCredentials.ClientId, clientCredentials.ClientSecret);
+            //AuthenticationResult authResult = await authContext.AcquireTokenAsync(clientCredentials.ClientResource, clientCred);
+            //return authResult.AccessToken;
         }
 
         /// <summary>

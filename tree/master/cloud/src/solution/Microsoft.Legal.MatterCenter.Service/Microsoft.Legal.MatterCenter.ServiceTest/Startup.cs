@@ -20,6 +20,8 @@ using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Service;
 using Microsoft.Legal.MatterCenter.Service.Filters;
+using Microsoft.AspNet.Authentication.JwtBearer;
+using System.Globalization;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
@@ -72,11 +74,33 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             var log = loggerFactory.CreateLogger<Startup>();
             try
             {
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                loggerFactory.AddDebug();
-                app.UseDeveloperExceptionPage();
+                if (env.IsDevelopment())
+                {
+                    loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+                    loggerFactory.AddDebug();
+                    app.UseDeveloperExceptionPage();
+                }
+                
                 app.UseIISPlatformHandler();
-                app.UseAuthorizationMiddleware();
+                
+                app.UseJwtBearerAuthentication(options =>
+                {
+                    options.AutomaticAuthenticate = true;
+                    options.AutomaticAuthenticate = true;
+                    options.Authority = String.Format(CultureInfo.InvariantCulture,
+                        this.Configuration.GetSection("General").GetSection("AADInstance").Value,
+                        this.Configuration.GetSection("General").GetSection("Tenant").Value); 
+                    options.Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value;
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context => {
+                            return Task.FromResult(0);
+                        },
+                        OnValidatedToken = context => {
+                            return Task.FromResult(0);
+                        },                        
+                    };                    
+                });
                 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
                 app.UseMvc();
 
@@ -159,6 +183,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.Configure<LogTables>(this.Configuration.GetSection("LogTables"));
             services.Configure<SearchSettings>(this.Configuration.GetSection("Search"));
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
+            
         }
 
         private void ConfigureMatterPackages(IServiceCollection services)
@@ -176,6 +201,9 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.AddSingleton<ISPList, SPList>();
             services.AddSingleton<ISPPage, SPPage>();
             services.AddSingleton<ISharedRepository, SharedRepository>();
+            services.AddSingleton<IValidationFunctions, ValidationFunctions>();
+            services.AddSingleton<IEditFunctions, EditFunctions>();
+            
         }
         #endregion
     }

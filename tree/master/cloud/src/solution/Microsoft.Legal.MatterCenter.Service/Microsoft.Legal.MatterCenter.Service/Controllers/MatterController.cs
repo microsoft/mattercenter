@@ -14,7 +14,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.OptionsModel;
-
 using Swashbuckle.SwaggerGen.Annotations;
 using System.Net;
 using System.Reflection;
@@ -25,6 +24,8 @@ using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Globalization;
+
 #endregion
 namespace Microsoft.Legal.MatterCenter.Service
 {
@@ -41,6 +42,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         private IMatterRepository matterRepositoy;
         private ICustomLogger customLogger;
         private LogTables logTables;
+        private IValidationFunctions validationFunctions;
+        private IEditFunctions editFunctions;
+        private IMatterProvision matterProvision;
         /// <summary>
         /// Constructor where all the required dependencies are injected
         /// </summary>
@@ -53,7 +57,10 @@ namespace Microsoft.Legal.MatterCenter.Service
             ISPOAuthorization spoAuthorization,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IMatterRepository matterRepositoy,
-            ICustomLogger customLogger, IOptions<LogTables> logTables
+            ICustomLogger customLogger, IOptions<LogTables> logTables,
+            IValidationFunctions validationFunctions,
+            IEditFunctions editFunctions,
+            IMatterProvision matterProvision
             )
         {
             this.errorSettings = errorSettings.Value;
@@ -63,6 +70,9 @@ namespace Microsoft.Legal.MatterCenter.Service
             this.matterRepositoy = matterRepositoy;
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
+            this.validationFunctions = validationFunctions;
+            this.editFunctions = editFunctions;
+            this.matterProvision = matterProvision;
         }
 
 
@@ -120,7 +130,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             }
         }
 
-        [HttpPost("create")]
+        [HttpPost("update")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -130,25 +140,126 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="client">Client object containing Client data</param>
         /// <param name="details">Term Store object containing Term store data</param>
         /// <returns>Returns JSON object to the client</returns>        ///
-        public async Task<IActionResult> Create([FromBody]TermStoreViewModel termStoreViewModel)
-        {
-            return null;
+        public IActionResult Update([FromBody]MatterInformationVM matterInformation)
+        {            
+            string editMatterValidation = string.Empty;            
+            var matter = matterInformation.Matter;
+            var client = matterInformation.Client;
+            var userid = matterInformation.UserIds;
+            try
+            {
+                #region Error Checking
+                string authorization = HttpContext.Request.Headers["Authorization"];
+                ErrorResponse errorResponse = null;
+                errorResponse = spoAuthorization.ValidateClientToken(authorization);
+                //if the token is not valid, immediately return no authorization error to the user
+                if (errorResponse != null && !errorResponse.IsTokenValid)
+                {
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
+                }
+                if (matterInformation.Client == null && matterInformation.Matter == null && matterInformation.MatterDetails == null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+
+                #region Validations
+                GenericResponseVM validationResponse = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.EditMatterPermission), null); 
+                if(validationResponse != null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = validationResponse.Value,
+                        ErrorCode = validationResponse.Code,                        
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+
+                if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
+                {
+                    if (matter.AssignUserNames.Count==0)
+                    {                        
+                        errorResponse = new ErrorResponse()
+                        {
+                            Message = errorSettings.IncorrectInputUserNamesMessage,
+                            ErrorCode = errorSettings.IncorrectInputUserNamesCode,                            
+                        };
+                        return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    }
+                    else
+                    {
+                        if (Convert.ToBoolean(matter.Conflict.Identified, CultureInfo.InvariantCulture))
+                        {
+                            validationResponse = editFunctions.CheckSecurityGroupInTeamMembers(client, matter, userid);
+                            if (validationResponse != null)
+                            {
+                                errorResponse = new ErrorResponse()
+                                {
+                                    Message = validationResponse.Value,
+                                    ErrorCode = validationResponse.Code,
+                                };
+                                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                            }
+                        }
+                    }
+                }
+                else
+                {                    
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.IncorrectInputConflictIdentifiedMessage,
+                        ErrorCode = errorSettings.IncorrectInputConflictIdentifiedCode,
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+
+                #region Upadte Matter
+                GenericResponseVM genericResponse = matterProvision.UpdateMatter(matterInformation);
+                if(genericResponse==null)
+                {
+                    var result = new GenericResponseVM()
+                    {
+                        Code = "200",
+                        Value= "Update Success"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(result, (int)HttpStatusCode.OK);
+                }
+                else
+                {
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                }
+
+                #endregion
+                
+            }
+            catch (Exception ex)
+            {
+                MatterRevertList matterRevertListObject = new MatterRevertList()
+                {
+                    MatterLibrary = matterInformation.Matter.Name,
+                    MatterOneNoteLibrary = matterInformation.Matter.Name + matterSettings.OneNoteLibrarySuffix,
+                    MatterCalendar = matterInformation.Matter.Name + matterSettings.CalendarNameSuffix,
+                    MatterTask = matterInformation.Matter.Name + matterSettings.TaskNameSuffix,
+                    MatterSitePages = matterSettings.MatterLandingPageRepositoryName
+                };
+                //editFunctions.RevertMatterUpdates(client, matter, matterRevertListObject, loggedInUserName, userPermissionOnLibrary, listItemId, isEditMode);
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);                
+                throw;
+            }
+            finally
+            {
+
+            }
         }
 
-        [HttpPost("update")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
-        /// <summary>
-        /// Update 
-        /// </summary>        
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="details">Term Store object containing Term store data</param>
-        /// <returns>Returns JSON object to the client</returns>        ///
-        public async Task<IActionResult> Update(string matterId, [FromBody]TermStoreViewModel termStoreViewModel)
-        {
-            return null;
-        }
+        
 
         [HttpPost("pin")]
         [SwaggerResponse(HttpStatusCode.OK)]

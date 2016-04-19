@@ -23,5 +23,32 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string RoleListColumnIsRoleMandatory { get; set; }
         public string ColumnNameModifiedDate { get; set; }
         public string MatterConfigurationColumn { get; set; }
+
+        public string OneNoteLibrarySuffix { get; set; }
+        public string CalendarNameSuffix { get; set; }
+        public string TaskNameSuffix { get; set; }
+        public string ProvisionMatterAppURL { get; set; }
+        public string SendMailListName { get; set; }
+        public string SpecialCharacterExpressionMatterTitle { get; set; }
+        public string SpecialCharacterExpressionMatterId { get; set; }
+        public string SpecialCharacterExpressionMatterDescription { get; set; }
+        public string SpecialCharacterExpressionContentType { get; set; }
+        public string MatterIdLength { get; set; }
+        public string MatterNameLength { get; set; }
+
+        public string ContentTypeLength { get; set; }
+        public string MatterDescriptionLength { get; set; }
+        public string UserPermissions { get; set; }
+        public string CentralRepositoryUrl { get; set; }
+        public string MatterLandingPageRepositoryName { get; set; }
+        public string StampedPropertyMatterGUID { get; set; }
+
+
+        public string StampedPropertyMatterCenterUsers { get; set; }
+        public string StampedPropertyMatterCenterPermissions { get; set; }
+        public string StampedPropertyMatterCenterRoles { get; set; }
+        public string StampedPropertyResponsibleAttorney { get; set; }
+        public string StampedPropertyTeamMembers { get; set; }
+        public string StampedPropertyBlockedUploadUsers { get; set; }
     }
 }
