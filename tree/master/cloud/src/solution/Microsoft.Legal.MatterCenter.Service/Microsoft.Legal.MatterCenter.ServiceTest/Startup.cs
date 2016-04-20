@@ -51,9 +51,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
-
             ConfigureSettings(services);
-
             services.AddCors();
             services.AddLogging();
             ConfigureMvc(services, LoggerFactory);
@@ -74,23 +72,17 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             var log = loggerFactory.CreateLogger<Startup>();
             try
             {
-                if (env.IsDevelopment())
-                {
-                    loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                    loggerFactory.AddDebug();
-                    app.UseDeveloperExceptionPage();
-                }
-                
+                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+                loggerFactory.AddDebug();
+                app.UseDeveloperExceptionPage();
                 app.UseIISPlatformHandler();
-                
                 app.UseJwtBearerAuthentication(options =>
                 {
                     options.AutomaticAuthenticate = true;
-                    options.AutomaticAuthenticate = true;
                     options.Authority = String.Format(CultureInfo.InvariantCulture,
-                        this.Configuration.GetSection("General").GetSection("AADInstance").Value,
-                        this.Configuration.GetSection("General").GetSection("Tenant").Value); 
-                    options.Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value;
+                        this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
+                        this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString()); //"https://login.windows.net/microsoft.onmicrosoft.com";
+                    options.Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value.ToString();// "11dd7c26-8a0d-4d41-9210-946883ffd9d6";
                     options.Events = new JwtBearerEvents
                     {
                         OnAuthenticationFailed = context => {
@@ -98,8 +90,9 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                         },
                         OnValidatedToken = context => {
                             return Task.FromResult(0);
-                        },                        
-                    };                    
+                        }
+                    };
+
                 });
                 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
                 app.UseMvc();
@@ -183,7 +176,6 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.Configure<LogTables>(this.Configuration.GetSection("LogTables"));
             services.Configure<SearchSettings>(this.Configuration.GetSection("Search"));
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
-            
         }
 
         private void ConfigureMatterPackages(IServiceCollection services)
@@ -203,7 +195,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.AddSingleton<ISharedRepository, SharedRepository>();
             services.AddSingleton<IValidationFunctions, ValidationFunctions>();
             services.AddSingleton<IEditFunctions, EditFunctions>();
-            
+            services.AddSingleton<IMatterProvision, MatterProvision>();
         }
         #endregion
     }

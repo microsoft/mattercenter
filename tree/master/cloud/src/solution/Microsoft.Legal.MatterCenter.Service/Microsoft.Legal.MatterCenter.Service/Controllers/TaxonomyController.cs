@@ -16,15 +16,14 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.OptionsModel;
 using Microsoft.Legal.MatterCenter.Models;
 using Swashbuckle.SwaggerGen.Annotations;
+using Newtonsoft.Json;
+using System.Reflection;
+using Microsoft.AspNet.Authorization;
 using System.Net;
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Service.HelperClasses;
 using Microsoft.Legal.MatterCenter.Repository;
-using Newtonsoft.Json;
-using System.Reflection;
-using Microsoft.AspNet.Authorization;
-
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Service.Controllers
@@ -32,7 +31,9 @@ namespace Microsoft.Legal.MatterCenter.Service.Controllers
     /// <summary>
     /// Taxonomy Controller will read the term store information related to matter center
     /// </summary>
+    [Authorize]
     [Route("api/v1/taxonomy")]
+    
     public class TaxonomyController:Controller
     {
         private ErrorSettings errorSettings;
@@ -85,10 +86,9 @@ namespace Microsoft.Legal.MatterCenter.Service.Controllers
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -185,7 +185,7 @@ namespace Microsoft.Legal.MatterCenter.Service.Controllers
         /// This is test method for testing the contrroller
         /// </summary>
         /// <returns></returns>
-        [Authorize]
+        
         [HttpGet("getcurrentsitetitle")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
@@ -206,13 +206,10 @@ namespace Microsoft.Legal.MatterCenter.Service.Controllers
                     CustomPropertyName = "ClientURL"
                 }
             };
-            string authorization = HttpContext.Request.Headers["Authorization"];
+            
             string siteName = string.Empty;
-            var errorResponse = spoAuthorization.ValidateClientToken(authorization);
-            if (!errorResponse.IsTokenValid)
-            {                
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-            }
+            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+           
             siteName = taxonomyRepository.GetCurrentSiteName(termStoreViewModel1.Client);
             var success = new 
             {

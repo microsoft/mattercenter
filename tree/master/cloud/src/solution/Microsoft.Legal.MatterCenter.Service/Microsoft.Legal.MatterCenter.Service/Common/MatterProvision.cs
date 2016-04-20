@@ -15,10 +15,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         private MatterSettings matterSettings;
         private IMatterRepository matterRepositoy;
         private ISPOAuthorization spoAuthorization;
-        private EditFunctions editFunctions;
+        private IEditFunctions editFunctions;
         private ErrorSettings errorSettings;
         public MatterProvision(IMatterRepository matterRepositoy, IOptions<MatterSettings> matterSettings, IOptions<ErrorSettings> errorSettings,
-            ISPOAuthorization spoAuthorization, EditFunctions editFunctions)
+            ISPOAuthorization spoAuthorization, IEditFunctions editFunctions)
         {
             this.matterRepositoy = matterRepositoy;
             this.matterSettings = matterSettings.Value;

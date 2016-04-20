@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Assembly         : Microsoft.Legal.MatterCenter.ProviderService
+// Assembly         : Microsoft.Legal.MatterCenter.Repository
 // Author           : v-rijadh
 // Created          : 06-19-2014
 //***************************************************************************
@@ -13,15 +13,19 @@
 // <summary>This file provide methods to perform SharePoint term store functionalities.</summary>
 // ***********************************************************************
 
-using Microsoft.Extensions.OptionsModel;
-using Microsoft.Legal.MatterCenter.Models;
-using Microsoft.Legal.MatterCenter.Utility;
+
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.Taxonomy;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+
+#region Matter Namepspaces
+using Microsoft.Extensions.OptionsModel;
+using Microsoft.Legal.MatterCenter.Models;
+using Microsoft.Legal.MatterCenter.Utility;
+#endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -41,6 +45,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ICustomLogger customLogger;
         #endregion
 
+        /// <summary>
+        /// Constructor to inject required dependencies
+        /// </summary>
+        /// <param name="generalSettings"></param>
+        /// <param name="taxonomySettings"></param>
+        /// <param name="logTables"></param>
+        /// <param name="spoAuthorization"></param>
+        /// <param name="customLogger"></param>
         public Taxonomy(IOptions<GeneralSettings> generalSettings, IOptions<TaxonomySettings> taxonomySettings, IOptions<LogTables> logTables,
             ISPOAuthorization spoAuthorization, ICustomLogger customLogger)
         {

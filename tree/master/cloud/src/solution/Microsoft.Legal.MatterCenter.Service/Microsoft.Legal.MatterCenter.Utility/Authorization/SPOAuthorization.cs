@@ -36,6 +36,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         private ErrorSettings errorSettings;
         private ICustomLogger customLogger;
         private LogTables logTables;
+        private string accessToken;
         /// <summary>
         /// Constructor where GeneralSettings and ErrorSettings are injected
         /// </summary>
@@ -50,31 +51,20 @@ namespace Microsoft.Legal.MatterCenter.Utility
             this.logTables = logTables.Value;
         }
         
-        private string AccessToken { get; set; }        
         /// <summary>
-        /// This method will validate whether the token that client has been sent is a valid token or not.
-        /// If not, the methid will return false or else return true.
+        /// Property which will set or get the access token
         /// </summary>
-        /// <param name="authToken">The auth token the client has sent to service</param>
-        /// <returns>ErrorResponse</returns>
-        public ErrorResponse ValidateClientToken(string authToken)
+        public string AccessToken
         {
-            try
-            {                
-                var token = authToken.Split(' ')[1];
-                ErrorResponse authError = ValidateToken(authToken);
-                if (authError.IsTokenValid)
-                {
-                    AccessToken = token;
-                }
-                return authError;
-            }
-            catch(Exception ex)
+            get
             {
-                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
-            }            
-        }
+                return accessToken;
+            }
+            set
+            {
+                accessToken = value.Split(' ')[1];
+            }
+        }  
 
         /// <summary>
         /// This method will get the access token for the service and creats SharePoint ClientContext object and returns that object
@@ -83,7 +73,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// <returns>ClientContext - Return SharePoint Client Context Object</returns>
         public ClientContext GetClientContext(string url)
         {
-            try { 
+            try
+            { 
                 //ToDo: Try to get the service token from the client. Fi the client hasn't send the token
                 //then try to get access token for service from AAD
 
@@ -160,6 +151,10 @@ namespace Microsoft.Legal.MatterCenter.Utility
                 AuthenticationContext authContext = new AuthenticationContext(authority);
                 AuthenticationResult result = await authContext.AcquireTokenAsync(resource, clientCred, userAssertion);
                 return result.AccessToken;
+            }
+            catch(AggregateException ex)
+            {
+                throw;
             }
             catch(Exception ex)
             {

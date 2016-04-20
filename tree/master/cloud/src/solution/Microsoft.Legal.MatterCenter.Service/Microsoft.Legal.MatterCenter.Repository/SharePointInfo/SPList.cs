@@ -1,8 +1,18 @@
-﻿
+﻿// ***********************************************************************
+// Assembly         : Microsoft.Legal.MatterCenter.Repository
+// Author           : v-rijadh
+// Created          : 07-07-2016
+//***************************************************************************
+// History
+// Modified         : 07-07-2016
+// Modified By      : v-lapedd
+// ***********************************************************************
+// <copyright file="TaxonomyHelper.cs" company="Microsoft">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary>This file provide methods to get/update information from/in SP lists</summary>
 
-using Microsoft.Extensions.OptionsModel;
-using Microsoft.Legal.MatterCenter.Models;
-using Microsoft.Legal.MatterCenter.Utility;
+
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.Utilities;
 using System;
@@ -11,47 +21,64 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
+#region Matter Namespaces
+using Microsoft.Extensions.OptionsModel;
+using Microsoft.Legal.MatterCenter.Models;
+using Microsoft.Legal.MatterCenter.Utility;
+using System.Reflection;
+#endregion
+
 namespace Microsoft.Legal.MatterCenter.Repository
 {
+    /// <summary>
+    /// This file provide methods to get/update information from/in SP lists
+    /// </summary>
     public class SPList:ISPList
     {
         #region Properties
         private SearchSettings searchSettings;
         private ISPOAuthorization spoAuthorization;
         private CamlQueries camlQueries;
+        private ICustomLogger customLogger;
+        private LogTables logTables;
         #endregion
 
         /// <summary>
-        /// All the dependencies are injected 
+        /// All the dependencies are injected into the constructor
         /// </summary>
         /// <param name="spoAuthorization"></param>
         /// <param name="generalSettings"></param>
         public SPList(ISPOAuthorization spoAuthorization,
             IOptions<CamlQueries> camlQueries,
-            IOptions<SearchSettings> searchSettings)
+            IOptions<SearchSettings> searchSettings,
+            ICustomLogger customLogger, IOptions<LogTables> logTables)
         {
             this.searchSettings = searchSettings.Value;
             this.camlQueries = camlQueries.Value;
             this.spoAuthorization = spoAuthorization;
+            this.customLogger = customLogger;
+            this.logTables = logTables.Value;
         }
 
+
+        /// <summary>
+        /// Method will check the permission of the list that has been provided
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="listName"></param>
+        /// <param name="permission"></param>
+        /// <returns>True or false</returns>
         public bool CheckPermissionOnList(string url, string listName, PermissionKind permission)
-        {
-            bool returnValue = false;
-            using (ClientContext clientContext = spoAuthorization.GetClientContext(url))
+        {           
+            try
             {
-                if (!string.IsNullOrWhiteSpace(listName))
-                {
-                    ListCollection listCollection = clientContext.Web.Lists;
-                    clientContext.Load(listCollection, lists => lists.Include(list => list.Title, list => list.EffectiveBasePermissions).Where(list => list.Title == listName));
-                    clientContext.ExecuteQuery();
-                    if (listCollection.Count > 0)
-                    {
-                        returnValue = listCollection[0].EffectiveBasePermissions.Has(permission);
-                    }
-                }
+                return CheckPermissionOnList(url, listName, permission);
             }
-            return returnValue;
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }            
         }
 
         /// <summary>
@@ -63,7 +90,48 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns>Success flag</returns>
         public bool CheckPermissionOnList(Client client, string listName, PermissionKind permission)
         {
-            return CheckPermissionOnList(client.Url, listName, permission);
+            try
+            {
+                return CheckPermissionOnList(client.Url, listName, permission);
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether user has a particular permission on the list
+        /// </summary>
+        /// <param name="clientContext">Client context</param>
+        /// <param name="listName">List name</param>
+        /// <param name="permission">Permission to be checked</param>
+        /// <returns>Success flag</returns>
+        public bool CheckPermissionOnList(ClientContext clientContext, string listName, PermissionKind permission)
+        {
+            try
+            {
+                bool returnValue = false;
+                if (null != clientContext && !string.IsNullOrWhiteSpace(listName))
+                {
+                    ListCollection listCollection = clientContext.Web.Lists;
+                    clientContext.Load(listCollection, lists => lists.Include(list => list.Title, list =>
+                                                    list.EffectiveBasePermissions).Where(list => list.Title == listName));
+                    clientContext.ExecuteQuery();
+                    if (0 < listCollection.Count)
+                    {
+                        returnValue = listCollection[0].EffectiveBasePermissions.Has(permission);
+                    }
+                }
+                return returnValue;
+            }
+
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
 
         /// <summary>
@@ -95,8 +163,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 return listItemCollection;
             }
-            catch (Exception ex)
-            {                
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
         }
@@ -128,12 +197,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             catch (Exception ex)
             {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
         }
 
         /// <summary>
-        /// Gets the list items of specified list based on CAML query.
+        /// Gets the list items of specified list based on CAML query. 
         /// </summary>
         /// <param name="clientContext">Client context</param>
         /// <param name="listName">Name of the list</param>
@@ -141,7 +211,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns>Collection of list items</returns>
         public ListItemCollection GetData(Client client, string listName, string camlQuery = null)
         {
-            return GetData(client.Url, listName, camlQuery);
+            try
+            { 
+                return GetData(client.Url, listName, camlQuery);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
 
         /// <summary>
@@ -186,24 +264,37 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             catch (Exception ex)
             {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
         }
 
         
-
+        /// <summary>
+        /// Method which will give matter folder hierarchy
+        /// </summary>
+        /// <param name="matterData"></param>
+        /// <returns></returns>
         public List<FolderData> GetFolderHierarchy(MatterData matterData)
         {
-            using (ClientContext clientContext = spoAuthorization.GetClientContext(matterData.MatterUrl))
-            {
-                List list = clientContext.Web.Lists.GetByTitle(matterData.MatterName);
-                clientContext.Load(list.RootFolder);
-                ListItemCollection listItems = GetData(clientContext, matterData.MatterName, 
-                    string.Format(CultureInfo.InvariantCulture, camlQueries.AllFoldersQuery, matterData.MatterName));
-                List<FolderData> allFolders = new List<FolderData>();
-                allFolders = GetFolderAssignment(list, listItems, allFolders);
+            try
+            { 
+                using (ClientContext clientContext = spoAuthorization.GetClientContext(matterData.MatterUrl))
+                {
+                    List list = clientContext.Web.Lists.GetByTitle(matterData.MatterName);
+                    clientContext.Load(list.RootFolder);
+                    ListItemCollection listItems = GetData(clientContext, matterData.MatterName, 
+                        string.Format(CultureInfo.InvariantCulture, camlQueries.AllFoldersQuery, matterData.MatterName));
+                    List<FolderData> allFolders = new List<FolderData>();
+                    allFolders = GetFolderAssignment(list, listItems, allFolders);
 
-                return allFolders;
+                    return allFolders;
+                }
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
         }
 
@@ -216,51 +307,36 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns>List of folders of type folder data</returns>
         internal List<FolderData> GetFolderAssignment(List list, ListItemCollection listItems, List<FolderData> allFolders)
         {
-            FolderData folderData = new FolderData()
+            try
             {
-                Name = list.RootFolder.Name,
-                URL = list.RootFolder.ServerRelativeUrl,
-                ParentURL = null
-            };
-            allFolders.Add(folderData);
-            foreach (var listItem in listItems)
-            {
-                folderData = new FolderData()
+                FolderData folderData = new FolderData()
                 {
-                    Name = Convert.ToString(listItem[searchSettings.ColumnNameFileLeafRef], CultureInfo.InvariantCulture),
-                    URL = Convert.ToString(listItem[searchSettings.ColumnNameFileRef], CultureInfo.InvariantCulture),
-                    ParentURL = Convert.ToString(listItem[searchSettings.ColumnNameFileDirRef], CultureInfo.InvariantCulture)
+                    Name = list.RootFolder.Name,
+                    URL = list.RootFolder.ServerRelativeUrl,
+                    ParentURL = null
                 };
-
                 allFolders.Add(folderData);
-            }
-
-            return allFolders;
-        }
-
-        /// <summary>
-        /// Determines whether user has a particular permission on the list
-        /// </summary>
-        /// <param name="clientContext">Client context</param>
-        /// <param name="listName">List name</param>
-        /// <param name="permission">Permission to be checked</param>
-        /// <returns>Success flag</returns>
-        public bool CheckPermissionOnList(ClientContext clientContext, string listName, PermissionKind permission)
-        {
-            bool returnValue = false;
-            if (null != clientContext && !string.IsNullOrWhiteSpace(listName))
-            {
-                ListCollection listCollection = clientContext.Web.Lists;
-                clientContext.Load(listCollection, lists => lists.Include(list => list.Title, list => 
-                list.EffectiveBasePermissions).Where(list => list.Title == listName));
-                clientContext.ExecuteQuery();
-                if (0 < listCollection.Count)
+                foreach (var listItem in listItems)
                 {
-                    returnValue = listCollection[0].EffectiveBasePermissions.Has(permission);
+                    folderData = new FolderData()
+                    {
+                        Name = Convert.ToString(listItem[searchSettings.ColumnNameFileLeafRef], CultureInfo.InvariantCulture),
+                        URL = Convert.ToString(listItem[searchSettings.ColumnNameFileRef], CultureInfo.InvariantCulture),
+                        ParentURL = Convert.ToString(listItem[searchSettings.ColumnNameFileDirRef], CultureInfo.InvariantCulture)
+                    };
+
+                    allFolders.Add(folderData);
                 }
+                return allFolders;            
             }
-            return returnValue;
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
+
+        
 
         /// <summary>
         /// Function to check whether list is present or not.
@@ -270,21 +346,29 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns>Success flag</returns>
         public bool Exists(Client client, ReadOnlyCollection<string> listsNames)
         {
-            using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
-            {
-                List<string> existingLists = new List<string>();
-                if (null != clientContext && null != listsNames)
+            try
+            { 
+                using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
-                    //ToDo: Chec
-                    ListCollection lists = clientContext.Web.Lists;
-                    clientContext.Load(lists);
-                    clientContext.ExecuteQuery();
-                    existingLists = (from listName in listsNames
-                                     join item in lists
-                                     on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
-                                     select listName).ToList();
+                    List<string> existingLists = new List<string>();
+                    if (null != clientContext && null != listsNames)
+                    {
+                        //ToDo: Chec
+                        ListCollection lists = clientContext.Web.Lists;
+                        clientContext.Load(lists);
+                        clientContext.ExecuteQuery();
+                        existingLists = (from listName in listsNames
+                                         join item in lists
+                                         on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
+                                         select listName).ToList();
+                    }
+                    return existingLists.Count>0;
                 }
-                return existingLists.Count>0;
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
         }
 
@@ -298,16 +382,24 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public List<string> MatterAssociatedLists(ClientContext clientContext, ReadOnlyCollection<string> listsNames)
         {            
             List<string> existingLists = new List<string>();
-            if (null != clientContext && null != listsNames)
+            try
+            { 
+                if (null != clientContext && null != listsNames)
+                {
+                    //ToDo: Chec
+                    ListCollection lists = clientContext.Web.Lists;
+                    clientContext.Load(lists);
+                    clientContext.ExecuteQuery();
+                    existingLists = (from listName in listsNames
+                                        join item in lists
+                                        on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
+                                        select listName).ToList();
+                }
+            }
+            catch (Exception ex)
             {
-                //ToDo: Chec
-                ListCollection lists = clientContext.Web.Lists;
-                clientContext.Load(lists);
-                clientContext.ExecuteQuery();
-                existingLists = (from listName in listsNames
-                                    join item in lists
-                                    on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
-                                    select listName).ToList();
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
             return existingLists;
         }
@@ -325,8 +417,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     clientContext.ExecuteQuery();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw; //// This will transfer control to catch block of parent function.
             }
 
@@ -351,8 +444,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     clientContext.ExecuteQuery();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw; //// This will transfer control to catch block of parent function.
             }
             return userPermissionCollection;
@@ -409,9 +503,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         result = true;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    result = false;
+                    customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                    throw;
                 }
             }
             return result;
@@ -429,44 +524,52 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public bool SetItemPermission(ClientContext clientContext, IList<IList<string>> assignUserName, string listName, int listItemId, IList<string> permissions)
         {
             bool result = false;
-            if (null != clientContext)
+            try
             {
-                ClientRuntimeContext clientRuntimeContext = clientContext;
-                ListItem listItem = clientContext.Web.Lists.GetByTitle(listName).GetItemById(listItemId);
-                clientContext.Load(listItem, item => item.HasUniqueRoleAssignments);
-                clientContext.ExecuteQuery();
-                if (listItem.HasUniqueRoleAssignments && null != permissions && null != assignUserName && permissions.Count == assignUserName.Count)
+                if (null != clientContext)
                 {
-                    int position = 0;
-                    foreach (string roleName in permissions)
+                    ClientRuntimeContext clientRuntimeContext = clientContext;
+                    ListItem listItem = clientContext.Web.Lists.GetByTitle(listName).GetItemById(listItemId);
+                    clientContext.Load(listItem, item => item.HasUniqueRoleAssignments);
+                    clientContext.ExecuteQuery();
+                    if (listItem.HasUniqueRoleAssignments && null != permissions && null != assignUserName && permissions.Count == assignUserName.Count)
                     {
-                        IList<string> userName = assignUserName[position];
-                        if (!string.IsNullOrWhiteSpace(roleName) && null != userName)
+                        int position = 0;
+                        foreach (string roleName in permissions)
                         {
-                            RoleDefinition roleDefinition = clientContext.Web.RoleDefinitions.GetByName(roleName);
-                            foreach (string user in userName)
+                            IList<string> userName = assignUserName[position];
+                            if (!string.IsNullOrWhiteSpace(roleName) && null != userName)
                             {
-
-                                if (!string.IsNullOrWhiteSpace(user))
+                                RoleDefinition roleDefinition = clientContext.Web.RoleDefinitions.GetByName(roleName);
+                                foreach (string user in userName)
                                 {
-                                    /////get the user object
-                                    Principal userPrincipal = clientContext.Web.EnsureUser(user.Trim());
-                                    /////create the role definition binding collection
-                                    RoleDefinitionBindingCollection roleDefinitionBindingCollection = new RoleDefinitionBindingCollection(clientRuntimeContext);
-                                    /////add the role definition to the collection
-                                    roleDefinitionBindingCollection.Add(roleDefinition);
-                                    /////create a RoleAssigment with the user and role definition
-                                    listItem.RoleAssignments.Add(userPrincipal, roleDefinitionBindingCollection);
+
+                                    if (!string.IsNullOrWhiteSpace(user))
+                                    {
+                                        /////get the user object
+                                        Principal userPrincipal = clientContext.Web.EnsureUser(user.Trim());
+                                        /////create the role definition binding collection
+                                        RoleDefinitionBindingCollection roleDefinitionBindingCollection = new RoleDefinitionBindingCollection(clientRuntimeContext);
+                                        /////add the role definition to the collection
+                                        roleDefinitionBindingCollection.Add(roleDefinition);
+                                        /////create a RoleAssigment with the user and role definition
+                                        listItem.RoleAssignments.Add(userPrincipal, roleDefinitionBindingCollection);
+                                    }
                                 }
+                                /////execute the query to add everything
+                                clientRuntimeContext.ExecuteQuery();
                             }
-                            /////execute the query to add everything
-                            clientRuntimeContext.ExecuteQuery();
+                            position++;
                         }
-                        position++;
+                        ///// Success. Return a success code
+                        result = false;
                     }
-                    ///// Success. Return a success code
-                    result = false;
                 }
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
             return result;
         }
@@ -480,17 +583,25 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="propertyList">List of properties</param>
         public void SetPropertBagValuesForList(ClientContext clientContext, PropertyValues props, string matterName, Dictionary<string, string> propertyList)
         {
-            if (null != clientContext && !string.IsNullOrWhiteSpace(matterName) && null != props && null != propertyList)
-            {
-                List list = clientContext.Web.Lists.GetByTitle(matterName);
-
-                foreach (var item in propertyList)
+            try
+            { 
+                if (null != clientContext && !string.IsNullOrWhiteSpace(matterName) && null != props && null != propertyList)
                 {
-                    props[item.Key] = item.Value;
-                    list.Update();
-                }
+                    List list = clientContext.Web.Lists.GetByTitle(matterName);
 
-                clientContext.ExecuteQuery();
+                    foreach (var item in propertyList)
+                    {
+                        props[item.Key] = item.Value;
+                        list.Update();
+                    }
+
+                    clientContext.ExecuteQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
         }
 

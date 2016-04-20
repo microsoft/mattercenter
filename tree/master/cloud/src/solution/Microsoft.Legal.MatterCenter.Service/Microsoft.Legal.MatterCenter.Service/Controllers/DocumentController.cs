@@ -22,6 +22,7 @@ using System.Net;
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
 using System.Reflection;
+using Microsoft.AspNet.Authorization;
 #endregion
 
 
@@ -30,6 +31,7 @@ namespace Microsoft.Legal.MatterCenter.Service
     /// <summary>
     /// Document Controller class deals with finding document, pinning document, unpinning the document etc.
     /// </summary>
+    [Authorize]
     [Route("api/v1/document")]
     public class DocumentController:Controller
     {
@@ -78,11 +80,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -133,10 +133,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -187,10 +186,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -235,10 +233,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -282,10 +279,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetDocumentAssets(Client client)
         {
-            #region Error Checking
-            string authorization = HttpContext.Request.Headers["Authorization"];
+            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            #region Error Checking                
             ErrorResponse errorResponse = null;
-            errorResponse = spoAuthorization.ValidateClientToken(authorization);
             //if the token is not valid, immediately return no authorization error to the user
             if (errorResponse != null && !errorResponse.IsTokenValid)
             {

@@ -1,13 +1,27 @@
-﻿
-
-using Microsoft.Legal.MatterCenter.Models;
-using Microsoft.Legal.MatterCenter.Utility;
+﻿// ***********************************************************************
+// Assembly         : Microsoft.Legal.MatterCenter.Repository
+// Author           : v-rijadh
+// Created          : 07-07-2016
+//***************************************************************************
+// History
+// Modified         : 07-07-2016
+// Modified By      : v-lapedd
+// ***********************************************************************
+// <copyright file="TaxonomyHelper.cs" company="Microsoft">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary>This file provide methods to get information related to user</summary>
 using Microsoft.SharePoint.Client;
 using System;
 using System.Linq;
-using Microsoft.Extensions.OptionsModel;
 using System.Reflection;
 using System.Collections.Generic;
+
+#region Matter Namespaces
+using Microsoft.Legal.MatterCenter.Models;
+using Microsoft.Legal.MatterCenter.Utility;
+using Microsoft.Extensions.OptionsModel;
+#endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -23,7 +37,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ICustomLogger customLogger;
         private LogTables logTables;
         /// <summary>
-        /// 
+        /// Constructir where all the dependencies are injected
         /// </summary>
         /// <param name="spoAuthorization"></param>
         public UsersDetails(IOptions<MatterSettings> matterSettings, IOptions<ListNames> listNames, 
@@ -86,21 +100,31 @@ namespace Microsoft.Legal.MatterCenter.Repository
             
         }
 
+        /// <summary>
+        /// Over loaded method
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public Users GetLoggedInUserDetails(Client client)
         {
-            ClientContext clientContext = spoAuthorization.GetClientContext(client.Url);
-            return GetLoggedInUserDetails(clientContext);
+            try
+            {
+                ClientContext clientContext = spoAuthorization.GetClientContext(client.Url);
+                return GetLoggedInUserDetails(clientContext);
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
 
         /// <summary>
         /// Function to check user full permission on document library
         /// </summary>
-        /// <param name="environment">environment identifier</param>
-        /// <param name="refreshToken">The refresh token for Client Context</param>
-        /// <param name="clientUrl">The client URL for Client Context</param>
-        /// <param name="matterName">Document library name</param>
-        /// <param name="request">The HTTP request</param>
-        /// <returns>A Boolean variable indicating whether user has full permission on the matter</returns>
+        /// <param name="clientContext"></param>
+        /// <param name="matter"></param>
+        /// <returns></returns>
         public bool CheckUserFullPermission(ClientContext clientContext, Matter matter)
         {
             bool result = false;
@@ -135,11 +159,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <summary>
         /// Gets the user access.
         /// </summary>
-        /// <param name="refreshToken">The refresh token for Client Context</param>
-        /// <param name="clientUrl">The client URL for Client Context</param>
-        /// <param name="request">The HTTP request.</param>
-        /// <param name="environment">environment identifier</param>
-        /// <returns>User has access</returns>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public bool GetUserAccess(Client client) => spList.CheckPermissionOnList(client, listNames.SendMailListName, PermissionKind.EditListItems);
 
         /// <summary>
@@ -182,21 +203,22 @@ namespace Microsoft.Legal.MatterCenter.Repository
         }
 
         /// <summary>
-        /// 
+        /// Get the principal associated to the user
         /// </summary>
         /// <param name="client"></param>
-        /// <param name="currentRowTeamMembers"></param>
-        /// <param name="blockedUsers"></param>
+        /// <param name="matter">Matter Information</param>
+        /// <param name="userIds">The userids for which we need to return the principals</param>
         /// <returns></returns>
         public List<Tuple<int, Principal>> GetUserPrincipal(Client client, Matter matter, IList<string> userIds)
         {
             List<Tuple<int, Principal>> teamMemberPrincipalCollection = new List<Tuple<int, Principal>>();
+            int securityGroupRowNumber = -1;
             try
             {
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
                     int teamMembersRowCount = matter.AssignUserNames.Count;
-                    int securityGroupRowNumber = -1;
+                    
                     List<string> blockedUsers = matter.BlockUserNames.Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
                     if (0 < teamMembersRowCount)
                     {

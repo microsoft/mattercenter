@@ -28,6 +28,13 @@
             <param name="env"></param>
             <param name="loggerFactory"></param>
         </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.EditFunctions.ValidateFullControlPermission(Microsoft.Legal.MatterCenter.Models.Matter)">
+            <summary>
+            Validates if there is at-least one user with full control in assign list.
+            </summary>
+            <param name="matter">Matter object</param>
+            <returns>Status of Full Control permission</returns>
+        </member>
         <member name="M:Microsoft.Legal.MatterCenter.Service.MatterProvision.RetrieveMatterUsers(System.Collections.Generic.IEnumerable{Microsoft.SharePoint.Client.RoleAssignment})">
             <summary>
             Gets the display name of users having permission on library.
@@ -79,7 +86,7 @@
             Matter Controller class deals with matter provisioning, finding matter, pinning matter, unpinning the matterm, updating the matter
             </summary>
         </member>
-        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.#ctor(Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.MatterSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Service.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.IMatterRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.LogTables},Microsoft.Legal.MatterCenter.IValidationFunctions,Microsoft.Legal.MatterCenter.IEditFunctions,Microsoft.Legal.MatterCenter.Service.IMatterProvision)">
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.#ctor(Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.MatterSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Service.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.IMatterRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.LogTables},Microsoft.Legal.MatterCenter.IValidationFunctions,Microsoft.Legal.MatterCenter.Service.IEditFunctions,Microsoft.Legal.MatterCenter.Service.IMatterProvision)">
             <summary>
             Constructor where all the required dependencies are injected
             </summary>
@@ -171,13 +178,6 @@
             <param name="client">Client object</param>
             <param name="methodNumber">Number indicating which method needs to be validated</param>
             <returns>ErrorResponse that contains error message with error code</returns>
-        </member>
-        <member name="M:Microsoft.Legal.MatterCenter.EditFunctions.ValidateFullControlPermission(Microsoft.Legal.MatterCenter.Models.Matter)">
-            <summary>
-            Validates if there is at-least one user with full control in assign list.
-            </summary>
-            <param name="matter">Matter object</param>
-            <returns>Status of Full Control permission</returns>
         </member>
         <member name="M:Microsoft.Legal.MatterCenter.ValidationFunctions.CheckListExists(Microsoft.Legal.MatterCenter.Models.Client,System.String,Microsoft.Legal.MatterCenter.Models.MatterConfigurations)">
             <summary>

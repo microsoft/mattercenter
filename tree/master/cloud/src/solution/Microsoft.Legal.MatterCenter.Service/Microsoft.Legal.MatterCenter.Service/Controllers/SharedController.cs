@@ -26,9 +26,11 @@ using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Microsoft.AspNet.Authorization;
 #endregion
 namespace Microsoft.Legal.MatterCenter.Service
 {
+    [Authorize]
     [Route("api/v1/shared")]
     public class SharedController : Controller
     {
@@ -82,10 +84,9 @@ namespace Microsoft.Legal.MatterCenter.Service
             try
             {
 
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -136,10 +137,9 @@ namespace Microsoft.Legal.MatterCenter.Service
             try
             {
 
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {

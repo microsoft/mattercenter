@@ -51,9 +51,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
-
             ConfigureSettings(services);
-
             services.AddCors();
             services.AddLogging();
             ConfigureMvc(services, LoggerFactory);
@@ -77,27 +75,10 @@ namespace Microsoft.Legal.MatterCenter.Service
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
                 app.UseDeveloperExceptionPage();
-                app.UseIISPlatformHandler();                
-                app.UseJwtBearerAuthentication(options =>
-                {
-                    options.AutomaticAuthenticate = true;
-                    options.Authority = String.Format(CultureInfo.InvariantCulture, 
-                        this.Configuration.GetSection("General").GetSection("AADInstance").ToString(), 
-                        this.Configuration.GetSection("General").GetSection("Tenant").ToString()); //"https://login.windows.net/microsoft.onmicrosoft.com";
-                    options.Audience = this.Configuration.GetSection("General").GetSection("ClientId").ToString();// "11dd7c26-8a0d-4d41-9210-946883ffd9d6";
-                    options.Events = new JwtBearerEvents {
-                        OnAuthenticationFailed = context => {
-                            return Task.FromResult(0);
-                        },
-                        OnValidatedToken = context => {
-                            return Task.FromResult(0);
-                        }
-                    };
-                    
-                });
+                app.UseIISPlatformHandler();
+                CheckAuthorization(app);
                 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
                 app.UseMvc();
-
                 app.UseSwaggerGen();
                 app.UseSwaggerUi();
             }
@@ -197,6 +178,27 @@ namespace Microsoft.Legal.MatterCenter.Service
             services.AddSingleton<IValidationFunctions, ValidationFunctions>();
             services.AddSingleton<IEditFunctions, EditFunctions>();
             services.AddSingleton<IMatterProvision, MatterProvision>();
+        }
+
+        private void CheckAuthorization(IApplicationBuilder app)
+        {
+            app.UseJwtBearerAuthentication(options =>
+            {
+                options.AutomaticAuthenticate = true;
+                options.Authority = String.Format(CultureInfo.InvariantCulture,
+                    this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
+                    this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString()); 
+                options.Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value.ToString();
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context => {
+                        return Task.FromResult(0);
+                    },
+                    OnValidatedToken = context => {
+                        return Task.FromResult(0);
+                    }
+                };
+            });
         }
         #endregion
 

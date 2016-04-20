@@ -17,21 +17,21 @@ using Microsoft.Extensions.OptionsModel;
 using Swashbuckle.SwaggerGen.Annotations;
 using System.Net;
 using System.Reflection;
-
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using System.Globalization;
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Models;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Globalization;
-
+using Microsoft.AspNet.Authorization;
 #endregion
 namespace Microsoft.Legal.MatterCenter.Service
 {
     /// <summary>
     /// Matter Controller class deals with matter provisioning, finding matter, pinning matter, unpinning the matterm, updating the matter
     /// </summary>
+    [Authorize]
     [Route("api/v1/matter")]
     public class MatterController : Controller
     {
@@ -88,18 +88,11 @@ namespace Microsoft.Legal.MatterCenter.Service
         public async Task<IActionResult> Get([FromBody]SearchRequestVM searchRequestVM)
         {
             try
-            {
+            {    
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"]; 
+
                 #region Error Checking
-
-                string authorization = HttpContext.Request.Headers["Authorization"];
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
-                //if the token is not valid, immediately return no authorization error to the user
-                if (errorResponse != null && !errorResponse.IsTokenValid)
-                {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-                }
-
                 if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
                 {
                     errorResponse = new ErrorResponse()
@@ -148,15 +141,9 @@ namespace Microsoft.Legal.MatterCenter.Service
             var userid = matterInformation.UserIds;
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
-                ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
-                //if the token is not valid, immediately return no authorization error to the user
-                if (errorResponse != null && !errorResponse.IsTokenValid)
-                {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-                }
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
+                ErrorResponse errorResponse = null;                
                 if (matterInformation.Client == null && matterInformation.Matter == null && matterInformation.MatterDetails == null)
                 {
                     errorResponse = new ErrorResponse()
@@ -275,10 +262,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -323,10 +309,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -372,10 +357,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -428,10 +412,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -472,10 +455,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -526,10 +508,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -572,10 +553,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
@@ -632,10 +612,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                #region Error Checking
-                string authorization = HttpContext.Request.Headers["Authorization"];
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
                 ErrorResponse errorResponse = null;
-                errorResponse = spoAuthorization.ValidateClientToken(authorization);
                 //if the token is not valid, immediately return no authorization error to the user
                 if (errorResponse != null && !errorResponse.IsTokenValid)
                 {
