@@ -158,6 +158,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             services.Configure<LogTables>(this.Configuration.GetSection("LogTables"));
             services.Configure<SearchSettings>(this.Configuration.GetSection("Search"));
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
+            services.Configure<MailSettings>(this.Configuration.GetSection("Mail"));
         }
 
         private void ConfigureMatterPackages(IServiceCollection services)

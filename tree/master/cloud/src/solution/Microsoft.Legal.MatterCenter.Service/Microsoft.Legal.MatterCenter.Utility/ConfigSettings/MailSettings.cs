@@ -18,27 +18,35 @@ namespace Microsoft.Legal.MatterCenter.Utility
     /// </summary>
     public class MailSettings
     {
-        public string ManagedPropertyTitle { get; set; }
-        public string ManagedPropertyName { get; set; }
-        public string ManagedPropertyDescription { get; set; }
-        public string ManagedPropertySiteName { get; set; }
-        public string ManagedPropertyLastModifiedTime { get; set; }
-        public string ManagedPropertyPracticeGroup { get; set; }
-        public string ManagedPropertyAreaOfLaw { get; set; }
-        public string ManagedPropertySubAreaOfLaw { get; set; }
-        public string ManagedPropertyMatterId { get; set; }
-        public string ManagedPropertyCustomTitle { get; set; }
-        public string ManagedPropertyPath { get; set; }
-        public string ManagedPropertyMatterName { get; set; }
-        public string ManagedPropertyOpenDate { get; set; }
-        public string ManagedPropertyClientName { get; set; }
-        public string ManagedPropertyBlockedUploadUsers { get; set; }
-        public string ManagedPropertyResponsibleAttorney { get; set; }
-        public string ManagedPropertyClientID { get; set; }
-        public string ManagedPropertyMatterGuidLogging { get; set; }
-        public string ManagedPropertyTeamMembers { get; set; }
-        public string ManagedPropertyFileName { get; set; }
-        public string ManagedPropertyDocumentCheckOutUser { get; set; }
-        public string ManagedPropertyCreated { get; set; }
+        //public string ManagedPropertyTitle { get; set; }
+        //public string ManagedPropertyName { get; set; }
+        //public string ManagedPropertyDescription { get; set; }
+        //public string ManagedPropertySiteName { get; set; }
+        //public string ManagedPropertyLastModifiedTime { get; set; }
+        //public string ManagedPropertyPracticeGroup { get; set; }
+        //public string ManagedPropertyAreaOfLaw { get; set; }
+        //public string ManagedPropertySubAreaOfLaw { get; set; }
+        //public string ManagedPropertyMatterId { get; set; }
+        //public string ManagedPropertyCustomTitle { get; set; }
+        //public string ManagedPropertyPath { get; set; }
+        //public string ManagedPropertyMatterName { get; set; }
+        //public string ManagedPropertyOpenDate { get; set; }
+        //public string ManagedPropertyClientName { get; set; }
+        //public string ManagedPropertyBlockedUploadUsers { get; set; }
+        //public string ManagedPropertyResponsibleAttorney { get; set; }
+        //public string ManagedPropertyClientID { get; set; }
+        //public string ManagedPropertyMatterGuidLogging { get; set; }
+        //public string ManagedPropertyTeamMembers { get; set; }
+        //public string ManagedPropertyFileName { get; set; }
+        //public string ManagedPropertyDocumentCheckOutUser { get; set; }
+        //public string ManagedPropertyCreated { get; set; }
+
+        public string MatterMailBodyMatterInformation { get; set; }
+        public string MatterMailDefaultContentTypeHtmlChunk { get; set; }
+        public string MatterMailSubject { get; set; }
+        public string ShareListColumnMailBody { get; set; }
+        public string ShareListColumnMailSubject { get; set; }
+        public string MatterMailBodyConflictCheck { get; set; }
+        public string MatterMailBodyTeamMembers { get; set; }
     }
 }

@@ -84,6 +84,9 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string IncorrectTeamMembersCode { get; set; }
         public string IncorrectTeamMembersMessage { get; set; }
         public string IncorrectInputSelfPermissionRemoval { get; set; }
+
+        public string MatterLibraryExistsCode { get; set; }
+        public string ErrorDuplicateMatter { get; set; }
         #endregion
     }
 }

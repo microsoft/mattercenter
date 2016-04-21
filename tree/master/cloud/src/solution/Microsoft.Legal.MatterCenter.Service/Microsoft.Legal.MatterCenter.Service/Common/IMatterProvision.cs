@@ -9,6 +9,8 @@ namespace Microsoft.Legal.MatterCenter.Service
     public interface IMatterProvision
     {
         GenericResponseVM UpdateMatter(MatterInformationVM matterInformation);
+        GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata);
         GenericResponseVM CreateMatter();
+        GenericResponseVM DeleteMatter(Client client, Matter matter);
     }
 }

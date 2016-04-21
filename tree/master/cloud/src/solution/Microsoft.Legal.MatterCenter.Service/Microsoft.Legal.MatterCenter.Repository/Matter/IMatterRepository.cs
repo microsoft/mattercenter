@@ -42,5 +42,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         bool UpdateMatterStampedProperties(ClientContext clientContext, MatterDetails matterDetails, Matter matter, PropertyValues matterStampedProperties, bool isEditMode);
         void AssignRemoveFullControl(ClientContext clientContext, Matter matter, string loggedInUser, int listItemId, List<string> listExists, bool assignFullControl, bool hasFullPermission);
         bool RevertMatterUpdates(Client client, Matter matter, ClientContext clientContext, MatterRevertList matterRevertListObject, string loggedInUserTitle, IEnumerable<RoleAssignment> oldUserPermissions, int matterLandingPageId, bool isEditMode);
+        void SetPropertBagValuesForList(ClientContext clientContext, PropertyValues props, string matterName, Dictionary<string, string> propertyList);
+        bool AddItem(ClientContext clientContext, List list, IList<string> columns, IList<object> values);
+        GenericResponseVM DeleteMatter(Client client, Matter matter);
+        
     }
 }

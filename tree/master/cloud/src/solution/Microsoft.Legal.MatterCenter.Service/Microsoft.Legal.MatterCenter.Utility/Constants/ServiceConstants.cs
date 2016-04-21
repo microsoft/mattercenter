@@ -328,6 +328,45 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// </summary>
         public const string FALSE = "false";
 
+        /// <summary>
+        /// The false constant
+        /// </summary>
+        public const string TRUE = "true";
+
+        /// <summary>
+        /// The false constant
+        /// </summary>
+        public const string YES = "Yes";
+
+        /// <summary>
+        /// The false constant
+        /// </summary>
+        public const string NO = "No";
+
+        /// <summary>
+        /// Page extension
+        /// </summary>
+        public const string ASPX_EXTENSION = ".aspx";
+        /// <summary>
+        /// The service response HTML chunk for role information
+        /// </summary>
+        public const string RoleInfoHtmlChunk = "<div>{0}: {1}</div>";
+
+        /// <summary>
+        /// The HTTPS header constant
+        /// </summary>
+        public const string HTTPS = "https";
+
+        /// <summary>
+        /// The HTTP header constant
+        /// </summary>
+        public const string HTTP = "http";
+
+        /// <summary>
+        /// The string for matter
+        /// </summary>
+        public const string MATTER = "Matter";
+
         #endregion
     }
 }

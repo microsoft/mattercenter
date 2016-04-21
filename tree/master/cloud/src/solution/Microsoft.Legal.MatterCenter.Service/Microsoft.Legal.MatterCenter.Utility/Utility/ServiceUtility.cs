@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using System.Net;
 using Microsoft.Legal.MatterCenter.Models;
+using System.Collections.Generic;
+using System.Text;
+using System.Globalization;
 
 namespace Microsoft.Legal.MatterCenter.Utility
 {
@@ -105,6 +108,28 @@ namespace Microsoft.Legal.MatterCenter.Utility
             genericResponseVM.Code = code;
             genericResponseVM.Value = value;
             return genericResponseVM;
+        }
+
+
+        /// <summary>
+        /// Gets encoded value for search index property.
+        /// </summary>
+        /// <param name="keys">Key value of the property</param>
+        /// <returns>Encoded value</returns>
+        public static string GetEncodedValueForSearchIndexProperty(List<string> keys)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            if (null != keys && 0 < keys.Count)
+            {
+                foreach (string current in keys)
+                {
+                    stringBuilder.Append(Convert.ToBase64String(Encoding.Unicode.GetBytes(current)));
+                    stringBuilder.Append(ServiceConstants.PIPE);
+                }
+            }
+
+            return Convert.ToString(stringBuilder, CultureInfo.InvariantCulture);
         }
     }
 }

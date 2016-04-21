@@ -92,5 +92,23 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             return success;
         }
+
+        /// <summary>
+        /// Deletes the page
+        /// </summary>
+        /// <param name="clientContext">Client Context</param>
+        /// <param name="pageUrl">Page URL</param>
+        public void Delete(ClientContext clientContext, string pageUrl)
+        {
+            if (null != clientContext && !string.IsNullOrWhiteSpace(pageUrl))
+            {
+                File clientFile = clientContext.Web.GetFileByServerRelativeUrl(pageUrl);
+                if (IsFileExists(clientContext, pageUrl))
+                {
+                    clientFile.DeleteObject();
+                    clientContext.ExecuteQuery();
+                }
+            }
+        }
     }
 }
