@@ -1,7 +1,13 @@
 ﻿<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <h1 role="heading" class="add-margin-bottom">Pinned Matters</h1>
+        </div>
+    </div>
+
    <div class="row">
        <div class="col-sm-12">
-           loading matters....{{vm.title}}
+           <div ui-grid="{data: vm.matters}"></div>
        </div>
    </div>
 </div>
