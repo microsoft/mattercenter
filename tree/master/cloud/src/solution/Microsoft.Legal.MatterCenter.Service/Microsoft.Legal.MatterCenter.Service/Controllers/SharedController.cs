@@ -30,7 +30,7 @@ using Microsoft.AspNet.Authorization;
 #endregion
 namespace Microsoft.Legal.MatterCenter.Service
 {
-    [Authorize]
+    [Authorize(ActiveAuthenticationSchemes = "Bearer")]
     [Route("api/v1/shared")]
     public class SharedController : Controller
     {

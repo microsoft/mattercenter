@@ -60,6 +60,50 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.logTables = logTables.Value;
         }
 
+        public bool Delete(ClientContext clientContext, IList<string> listsNames)
+        {
+            bool result = false;
+            if (null != clientContext && null != listsNames)
+            {
+                ListCollection allLists = clientContext.Web.Lists;
+                clientContext.Load(allLists);
+                clientContext.ExecuteQuery();
+                foreach (string listName in listsNames)
+                {
+                    List list = allLists.Cast<List>().FirstOrDefault(item => item.Title.ToUpperInvariant().Equals(listName.ToUpperInvariant()));
+                    if (null != list)
+                    {
+                        result = true;
+                        list.DeleteObject();
+                    }
+
+                }
+                clientContext.ExecuteQuery();
+            }
+            return result;
+        }
+
+
+        public bool AddItem(ClientContext clientContext, List list, IList<string> columns, IList<object> values)
+        {
+            bool result = false;
+            if (null != clientContext && null != list && null != columns && null != values && columns.Count == values.Count)
+            {
+                // Add the Matter URL in list
+                ListItemCreationInformation listItemCreateInfo = new ListItemCreationInformation();
+                ListItem newListItem = list.AddItem(listItemCreateInfo);
+                int position = 0;
+                foreach (string column in columns)
+                {
+                    newListItem[column] = values[position++];
+                }
+                ///// Update the list
+                newListItem.Update();
+                clientContext.ExecuteQuery();
+                result = true;
+            }
+            return result;
+        }
 
         /// <summary>
         /// Method will check the permission of the list that has been provided
@@ -424,6 +468,41 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
 
             return stampedProperties;
+        }
+
+        /// <summary>
+        /// Fetches the values of property for specified matter.
+        /// </summary>
+        /// <param name="context">Client context</param>
+        /// <param name="matterName">Name of matter</param>
+        /// <param name="propertyList">List of properties</param>
+        /// <returns>Property list stamped to the matter</returns>
+        public string GetPropertyValueForList(ClientContext context, string matterName, string propertyList)
+        {
+            string value = string.Empty;
+            
+                if (!string.IsNullOrWhiteSpace(matterName) && null != propertyList)
+                {
+                    ListCollection allLists = context.Web.Lists;
+                    context.Load(allLists);
+                    context.ExecuteQuery();
+                    List list = allLists.Cast<List>().FirstOrDefault(item => item.Title.ToUpperInvariant().Equals(matterName.ToUpperInvariant()));
+                    if (null != list)
+                    {
+                        var props = list.RootFolder.Properties;
+                        context.Load(props);
+                        context.ExecuteQuery();
+                        if (null != props)
+                        {
+                            if (props.FieldValues.ContainsKey(propertyList))
+                            {
+                                value = Convert.ToString(props.FieldValues[propertyList], CultureInfo.InvariantCulture);
+                            }
+                        }
+                    }
+                }
+                return value;
+            
         }
 
         public IEnumerable<RoleAssignment> FetchUserPermissionForLibrary(ClientContext clientContext, string libraryname)

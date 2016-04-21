@@ -31,7 +31,7 @@ namespace Microsoft.Legal.MatterCenter.Service
     /// <summary>
     /// Document Controller class deals with finding document, pinning document, unpinning the document etc.
     /// </summary>
-    [Authorize]
+    [Authorize(ActiveAuthenticationSchemes = "Bearer")]
     [Route("api/v1/document")]
     public class DocumentController:Controller
     {

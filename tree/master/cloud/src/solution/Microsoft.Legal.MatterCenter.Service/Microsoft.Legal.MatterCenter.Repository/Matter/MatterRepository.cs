@@ -34,13 +34,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private CamlQueries camlQueries;
         private ListNames listNames;
         private IUsersDetails userdetails;
+        private ISPOAuthorization spoAuthorization;
+        private ISPPage spPage;
+        private ErrorSettings errorSettings;
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
         /// <param name="search"></param>
         public MatterRepository(ISearch search, IOptions<MatterSettings> matterSettings, 
-            IOptions<SearchSettings> searchSettings, IOptions<ListNames> listNames, 
-            ISPList spList, IOptions<CamlQueries> camlQueries, IUsersDetails userdetails)
+            IOptions<SearchSettings> searchSettings, IOptions<ListNames> listNames, ISPOAuthorization spoAuthorization,
+            ISPList spList, IOptions<CamlQueries> camlQueries, IUsersDetails userdetails, IOptions<ErrorSettings> errorSettings, ISPPage spPage)
         {
             this.search = search;
             this.matterSettings = matterSettings.Value;
@@ -49,6 +52,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spList = spList;
             this.camlQueries = camlQueries.Value;
             this.userdetails = userdetails;
+            this.spoAuthorization = spoAuthorization;
+            this.spPage = spPage;
+            this.errorSettings = errorSettings.Value;
         }
 
         public IList<FieldUserValue> ResolveUserNames(Client client, IList<string> userNames)
@@ -64,6 +70,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public async Task<SearchResponseVM> GetMattersAsync(SearchRequestVM searchRequestVM)
         {
             return await Task.FromResult(search.GetMatters(searchRequestVM));
+        }
+
+        public bool AddItem(ClientContext clientContext, List list, IList<string> columns, IList<object> values)
+        {
+            return spList.AddItem(clientContext, list, columns, values);
         }
 
         /// <summary>
@@ -90,6 +101,46 @@ namespace Microsoft.Legal.MatterCenter.Repository
             //    returnValue = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, TextConstants.IncorrectInputUserRolesCode, TextConstants.IncorrectInputUserRolesMessage);
             //}
             return roles;
+        }
+
+        public GenericResponseVM  DeleteMatter(Client client, Matter matter)
+        {
+            GenericResponseVM genericResponse = null;
+            using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
+            {
+                string stampResult = spList.GetPropertyValueForList(clientContext, matter.Name, matterSettings.StampedPropertySuccess);
+                if (0 != string.Compare(stampResult, ServiceConstants.TRUE, StringComparison.OrdinalIgnoreCase))
+                {
+                    IList<string> lists = new List<string>();
+                    lists.Add(matter.Name);
+                    lists.Add(string.Concat(matter.Name, matterSettings.CalendarNameSuffix));
+                    lists.Add(string.Concat(matter.Name, matterSettings.OneNoteLibrarySuffix));
+                    lists.Add(string.Concat(matter.Name, matterSettings.TaskNameSuffix));
+                    bool bListDeleted = spList.Delete(clientContext, lists);
+                    if (bListDeleted)
+                    {
+                        //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.DeleteMatterCode, TextConstants.MatterDeletedSuccessfully);
+                        genericResponse = ServiceUtility.GenericResponse(matterSettings.DeleteMatterCode, matterSettings.MatterDeletedSuccessfully);
+                    }
+                    else
+                    {
+                        //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.DeleteMatterCode, ServiceConstantStrings.MatterNotPresent);
+                        genericResponse = ServiceUtility.GenericResponse(matterSettings.DeleteMatterCode, matterSettings.MatterNotPresent);
+                    }
+                    Uri clientUri = new Uri(client.Url);
+                    string matterLandingPageUrl = string.Concat(clientUri.AbsolutePath, ServiceConstants.FORWARD_SLASH, 
+                        matterSettings.MatterLandingPageRepositoryName.Replace(ServiceConstants.SPACE, string.Empty), 
+                        ServiceConstants.FORWARD_SLASH, matter.MatterGuid, ServiceConstants.ASPX_EXTENSION);
+                    spPage.Delete(clientContext, matterLandingPageUrl);
+                    return ServiceUtility.GenericResponse("", "Matter updated successfully");
+                }
+                else
+                {               
+                    return ServiceUtility.GenericResponse(errorSettings.MatterLibraryExistsCode,
+                         errorSettings.ErrorDuplicateMatter + ServiceConstants.MATTER + ServiceConstants.DOLLAR + 
+                         MatterPrerequisiteCheck.LibraryExists);
+                }
+            }
         }
 
         /// <summary>
@@ -462,6 +513,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 throw; //// This will transfer control to catch block of parent function.
             }
             return false;
+        }
+
+        public void SetPropertBagValuesForList(ClientContext clientContext, PropertyValues props, string matterName, Dictionary<string, string> propertyList)
+        {
+            spList.SetPropertBagValuesForList(clientContext, props, matterName, propertyList);
         }
 
         /// <summary>
