@@ -13,16 +13,15 @@ angular.module('matterMain', [
         // For any unmatched url, send to /route1
         $urlRouterProvider.otherwise("/");
 
-        $locationProvider.html5Mode({
+       /* $locationProvider.html5Mode({
           enabled: false,
           requireBase: false
-      });
+      });*/
 
 
         
       var endpoints = {
-          "https://mattercenterservicenew.azurewebsites.net": "f9fdee20-9341-410e-9522-f168381a943b",
-          "http://localhost:58775": "f9fdee20-9341-410e-9522-f168381a943b",
+          //"https://mattercenternew.azurewebsites.net": "83b15df9-0dca-4137-a47f-cd69cffc3df8",
       };
 //'https://mattercenterservicenew.azurewebsites.net
         //http://localhost:58775

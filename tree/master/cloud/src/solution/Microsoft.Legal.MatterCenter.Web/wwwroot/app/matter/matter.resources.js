@@ -8,11 +8,11 @@ angular.module('matterMain')
               {
                   'getMatters': auth.attachCSRF({
                       method: 'GET',
-                      url: 'https://mattercenterservicenew.azurewebsites.net/api/v1/taxonomy/getcurrentsitetitle'
+                      url: '/api/v1/taxonomy/getcurrentsitetitle'
                   }),
 				  'getPinnedMatters': auth.attachCSRF({
                       method: 'POST',
-                      url: 'https://mattercenterservicenew.azurewebsites.net/api/v1/matter/getpinned'
+                      url: '/api/v1/matter/getpinned'
                   }),
               });
       }]);
