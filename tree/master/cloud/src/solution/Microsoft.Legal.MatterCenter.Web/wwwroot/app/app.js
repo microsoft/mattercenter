@@ -3,7 +3,9 @@
 angular.module('matterMain', [
   'ngResource',
   'ui.router',
-  'AdalAngular'
+  'AdalAngular',
+  'ngTouch',
+  'ui.grid'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {
@@ -19,10 +21,11 @@ angular.module('matterMain', [
 
         
       var endpoints = {
-        "http://localhost:58775/api": "f9fdee20-9341-410e-9522-f168381a943b",
+          "https://mattercenterservicenew.azurewebsites.net": "f9fdee20-9341-410e-9522-f168381a943b",
+          "http://localhost:58775": "f9fdee20-9341-410e-9522-f168381a943b",
       };
-
-
+//'https://mattercenterservicenew.azurewebsites.net
+        //http://localhost:58775
     adalProvider.init(
      {
          instance: 'https://login.microsoftonline.com/',

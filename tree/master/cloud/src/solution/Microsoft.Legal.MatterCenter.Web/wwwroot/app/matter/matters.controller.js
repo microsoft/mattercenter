@@ -16,11 +16,11 @@
                 });
             } 
 			
-	/*	getMatters(options, function (response) {
+		getMatters(options, function (response) {
                    vm.title = response.title;
 
                 });   
-		*/		
+			
 		function getPinnedMatters(options, callback) {
                 api({
                     resource: 'matterResource',
@@ -34,9 +34,9 @@
 							Name: "Microsoft", 
 							Url: "https://microsoft.sharepoint.com/teams/mcuisite"
 						};	
-
+                        
 		getPinnedMatters(options, function (response) {
-                   vm.matters = response;
+                   vm.matters = response.userPinnedMattersList;
 
                 });          
 

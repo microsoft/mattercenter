@@ -12,10 +12,11 @@ angular.module('matterMain')
                   }),
 				  'getPinnedMatters': auth.attachCSRF({
                       method: 'POST',
-                      url: 'http://localhost:58775/api/v1/matter/getpinned'
+                      url: 'https://mattercenterservicenew.azurewebsites.net/api/v1/matter/getpinned'
                   }),
               });
       }]);
 
 
-	  //https://mattercenterservicewebapi.azurewebsites.net/api
+//https://mattercenterservicewebapi.azurewebsites.net/api
+//http://localhost:58775/api/v1/matter/getpinned
