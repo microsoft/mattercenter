@@ -19,7 +19,7 @@ angular.module('matterMain', [
        .state('mc', {
            url: '/',
            views: {
-               "view": {
+               "mainView": {
                    templateUrl: '/app/home.html',
                    controller: 'homeController as vm'
                }

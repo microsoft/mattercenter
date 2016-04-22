@@ -31,7 +31,7 @@ namespace Microsoft.Legal.MatterCenter.Service
     /// <summary>
     /// Matter Controller class deals with matter provisioning, finding matter, pinning matter, unpinning the matterm, updating the matter
     /// </summary>
-    [Authorize]
+  //  [Authorize]
     [Route("api/v1/matter")]
     public class MatterController : Controller
     {

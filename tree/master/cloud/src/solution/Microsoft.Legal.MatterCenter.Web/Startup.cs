@@ -35,7 +35,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         public IApplicationEnvironment ApplicationEnvironment { get; }
         #endregion
 
-   /*     public Startup(IHostingEnvironment env)
+    /*   public Startup(IHostingEnvironment env)
         {
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
@@ -48,81 +48,109 @@ namespace Microsoft.Legal.MatterCenter.Web
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }
             Configuration = builder.Build();
-        }
-        */
+        } */
+        
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv, ILoggerFactory logger)
         {
             this.HostingEnvironment = env;
             this.ApplicationEnvironment = appEnv;
             this.LoggerFactory = logger;
-        }
+
+
+        } 
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Set up configuration sources.
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
-            ConfigureSettings(services);
-            services.AddCors();
-            services.AddLogging();
-            ConfigureMvc(services, LoggerFactory);
+          /*  services.AddMvc();
+            services.AddOptions();
+            //   services.Configure<List<AppSettings>>(Configuration.GetSection<>("Uri"));
 
-            // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
+            */
 
-            services.AddMvc();
-            ConfigureMatterPackages(services);
-            ConfigureSwagger(services);
+            // Set up configuration sources.
+                      var builder = new ConfigurationBuilder()
+                          .AddJsonFile("appsettings.json")
+                          .AddEnvironmentVariables();
+
+            if (HostingEnvironment.IsDevelopment())
+            {
+                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
+                builder.AddApplicationInsightsSettings(developerMode: true);
+            }
+
+            Configuration = builder.Build();
+                      ConfigureSettings(services);
+                      services.AddCors();
+                      services.AddLogging();
+                      ConfigureMvc(services, LoggerFactory);
+
+                      // Add framework services.
+                      services.AddApplicationInsightsTelemetry(Configuration);
+
+                      services.AddMvc();
+                      ConfigureMatterPackages(services);
+                      ConfigureSwagger(services); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            var log = loggerFactory.CreateLogger<Startup>();
-            try
-            {
-                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                loggerFactory.AddDebug();
-                app.UseIISPlatformHandler();
-                CheckAuthorization(app);
+            //  createConfig(env);
+
+            /*     app.UseIISPlatformHandler();
 
                 app.UseApplicationInsightsRequestTelemetry();
 
-                if (env.IsDevelopment())
-                {
-                    app.UseBrowserLink();
-                    app.UseDeveloperExceptionPage();
-                }
-                else
-                {
-                    app.UseExceptionHandler("/Home/Error");
-                }
+                app.UseMvc();
 
                 app.UseApplicationInsightsExceptionTelemetry();
+
                 app.UseDefaultFiles();
-                app.UseStaticFiles();
-                app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-                app.UseMvc();
-                app.UseSwaggerGen();
-                app.UseSwaggerUi();
+                app.UseStaticFiles(); */
+            var log = loggerFactory.CreateLogger<Startup>();
+                  try
+                  {
+                      loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+                      loggerFactory.AddDebug();
+                      app.UseIISPlatformHandler();
+                     // CheckAuthorization(app);
+
+                      app.UseApplicationInsightsRequestTelemetry();
+
+                      if (env.IsDevelopment())
+                      {
+                          app.UseBrowserLink();
+                          app.UseDeveloperExceptionPage();
+                      }
+                      else
+                      {
+                          app.UseExceptionHandler("/Home/Error");
+                      }
+
+                      app.UseApplicationInsightsExceptionTelemetry();
+                      app.UseDefaultFiles();
+                      app.UseStaticFiles();
+                      app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+                      app.UseMvc();
+                      app.UseSwaggerGen();
+                      app.UseSwaggerUi();
 
 
-            }
-            catch (Exception ex)
-            {
-                app.Run(
-                        async context => {
-                            log.LogError($"{ex.Message}");
-                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                            context.Response.ContentType = "text/plain";
-                            await context.Response.WriteAsync(ex.Message).ConfigureAwait(false);
-                            await context.Response.WriteAsync(ex.StackTrace).ConfigureAwait(false);
-                        });
+                  }
+                  catch (Exception ex)
+                  {
+                      app.Run(
+                              async context => {
+                                  log.LogError($"{ex.Message}");
+                                  context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                                  context.Response.ContentType = "text/plain";
+                                  await context.Response.WriteAsync(ex.Message).ConfigureAwait(false);
+                                  await context.Response.WriteAsync(ex.StackTrace).ConfigureAwait(false);
+                              });
 
-            }
+                  } 
         }
 
         // Entry point for the application.

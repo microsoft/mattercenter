@@ -31,7 +31,7 @@ namespace Microsoft.Legal.MatterCenter.Service.Controllers
     /// <summary>
     /// Taxonomy Controller will read the term store information related to matter center
     /// </summary>
-    [Authorize]
+    //[Authorize]
     [Route("api/v1/taxonomy")]
     
     public class TaxonomyController:Controller
