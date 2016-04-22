@@ -6,3 +6,4 @@ tree/master/cloud/src/solution/*/bin
 tree/master/cloud/src/solution/*/obj
 tree/master/cloud/src/solution/*/pkg/
 tree/master/cloud/src/solution/*/pkgobj/
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/node_modules

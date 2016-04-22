@@ -50,7 +50,7 @@ angular.module('matterMain', [
         });
 
         var endpoints = {
-            "https://localhost:44323": "83b15df9-0dca-4137-a47f-cd69cffc3df8"
+            "https://mattercenternew.azurewebsites.net": "83b15df9-0dca-4137-a47f-cd69cffc3df8"
         };
         adalProvider.init(
          {
