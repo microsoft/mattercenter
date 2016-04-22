@@ -102,15 +102,10 @@ namespace Microsoft.Legal.MatterCenter.Web
                 }
 
                 app.UseApplicationInsightsExceptionTelemetry();
-
+                app.UseDefaultFiles();
                 app.UseStaticFiles();
                 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-                app.UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=Home}/{action=Index}/{id?}");
-                });
+                app.UseMvc();
                 app.UseSwaggerGen();
                 app.UseSwaggerUi();
 
