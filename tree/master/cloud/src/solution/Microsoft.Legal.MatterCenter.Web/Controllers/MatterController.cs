@@ -809,7 +809,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         public string AssignUserPermissions(Client client, Matter matter, MatterConfigurations matterConfigurations)
         {
-
+            return null;
         }
     }
 }
