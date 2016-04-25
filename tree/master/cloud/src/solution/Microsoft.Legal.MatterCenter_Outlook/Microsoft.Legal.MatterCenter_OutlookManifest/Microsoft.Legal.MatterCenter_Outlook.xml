@@ -1,18 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="MailApp">
-  <Id>[Enter GUID, e.g. 8F914FE7-A31C-4CWD-LE5B-4CC7044CF82FB]</Id>
+  <Id>1078CC24-E89C-48F8-AFA1-CB3321636966</Id>
   <Version>1.0.0.0</Version>
   <ProviderName>Microsoft Corporation</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Matter Center Beta" />
   <Description DefaultValue="Matter Center Beta App allows you to search Matters, Documents and create Matter for particular Client"/>
-  <IconUrl DefaultValue="[Enter path of icon to display, e.g. https://[SITENAME].azurewebsites.net/Images/64x64-logo.png]" />
+  <IconUrl DefaultValue="https://matterwebapp.azurewebsites.net/Images/64x64-logo.png" />
   <AppDomains>
     <AppDomain>https://login.microsoftonline.com/</AppDomain>
-    <AppDomain>[Enter azure website URL for UI site, e.g. https://site.azurewebsites.net]</AppDomain>
-    <AppDomain>[Enter URL of the service, e.g. https://service.azurewebsites.net]</AppDomain>
-    <AppDomain>[Enter tenant URL of the Matter Center app, e.g. https://mytenant.sharepoint.com]</AppDomain>
+    <AppDomain>https://matterwebapp.azurewebsites.net</AppDomain>
+    <AppDomain>https://cdnjs.cloudflare.com/</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Mailbox" />
@@ -25,20 +24,20 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="[Enter URL of app home page with appType parameter, e.g. https://site.azurewebsites.net/pages/Home.aspx?appType=Outlook]" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
         <RequestedHeight>450</RequestedHeight>
       </DesktopSettings>
       <TabletSettings>
-        <SourceLocation DefaultValue="[Enter URL of app home page with appType parameter, e.g. https://site.azurewebsites.net/pages/Home.aspx?appType=Outlook]" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
         <RequestedHeight>300</RequestedHeight>
       </TabletSettings>
       <PhoneSettings>
-        <SourceLocation DefaultValue="[Enter URL of app home page with appType parameter, e.g. https://site.azurewebsites.net/pages/Home.aspx?appType=Outlook]" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
       </PhoneSettings>
     </Form>
     <Form xsi:type="ItemEdit">
       <DesktopSettings>
-        <SourceLocation DefaultValue="[Enter URL of app home page with appType parameter, e.g. https://site.azurewebsites.net/pages/Home.aspx?appType=Outlook]" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
       </DesktopSettings>
     </Form>
   </FormSettings>
