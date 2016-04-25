@@ -9,5 +9,9 @@ namespace Microsoft.Legal.MatterCenter
     public interface IValidationFunctions
     {
         GenericResponseVM IsMatterValid(MatterInformationVM matterInformation, int methodNumber, MatterConfigurations matterConfigurations);
+        GenericResponseVM MatterDetailsValidation(Matter matter, Client client, int methodNumber,
+            MatterConfigurations matterConfigurations);
+        GenericResponseVM MatterMetadataValidation(Matter matter, Client client,
+            int methodNumber, MatterConfigurations matterConfigurations);
     }
 }

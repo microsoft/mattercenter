@@ -31,7 +31,7 @@ namespace Microsoft.Legal.MatterCenter.Service
     /// <summary>
     /// Matter Controller class deals with matter provisioning, finding matter, pinning matter, unpinning the matterm, updating the matter
     /// </summary>
-  //  [Authorize]
+    [Authorize(ActiveAuthenticationSchemes = "Bearer")]
     [Route("api/v1/matter")]
     public class MatterController : Controller
     {
@@ -128,7 +128,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         /// <summary>
-        /// Creates a matter
+        /// Updates matter
         /// </summary>        
         /// <param name="client">Client object containing Client data</param>
         /// <param name="details">Term Store object containing Term store data</param>
@@ -220,7 +220,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
                 else
                 {
-                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.NotModified);
                 }
 
                 #endregion
@@ -246,7 +246,91 @@ namespace Microsoft.Legal.MatterCenter.Service
             }
         }
 
-        
+
+
+        [HttpPost("updatemetadata")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        /// <summary>
+        /// Updates matter metadata - Stamps properties to the created matter.
+        /// </summary>        
+        /// <param name="client">Client object containing Client data</param>
+        /// <param name="details">Term Store object containing Term store data</param>
+        /// <returns>Returns JSON object to the client</returns>        ///
+        public IActionResult UpdateMetadata([FromBody]MatterMetdataVM matterMetdata)
+        {
+            string editMatterValidation = string.Empty;
+            var matter = matterMetdata.Matter;
+            var client = matterMetdata.Client;
+            
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
+                ErrorResponse errorResponse = null;
+                if (matterMetdata.Client == null && matterMetdata.Matter == null && 
+                    matterMetdata.MatterDetails == null && matterMetdata.MatterProvisionFlags==null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+
+                #region Validations
+                MatterInformationVM matterInfo = new MatterInformationVM()
+                {
+                    Client = matterMetdata.Client,
+                    Matter = matterMetdata.Matter,
+                    MatterDetails = matterMetdata.MatterDetails
+                };
+                GenericResponseVM genericResponse = validationFunctions.IsMatterValid(matterInfo, 
+                    int.Parse(ServiceConstants.ProvisionMatterUpdateMetadataForList), 
+                    matterMetdata.MatterConfigurations);
+                if (genericResponse != null)
+                {
+                    matterProvision.DeleteMatter(client, matter);
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = genericResponse.Value,
+                        ErrorCode = genericResponse.Code,
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion   
+                try
+                {
+                    genericResponse = matterProvision.UpdateMatterMetadata(matterMetdata);
+                    if (genericResponse == null)
+                    {
+                        var result = new GenericResponseVM()
+                        {
+                            Code = "200",
+                            Value = "Update Success"
+                        };
+                        return matterCenterServiceFunctions.ServiceResponse(result, (int)HttpStatusCode.OK);
+                    }
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.NotModified);
+                }
+                catch(Exception ex)
+                {
+                    matterProvision.DeleteMatter(client, matter);
+                    customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {                
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+            
+        }
 
         [HttpPost("pin")]
         [SwaggerResponse(HttpStatusCode.OK)]
@@ -614,12 +698,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
-                //if the token is not valid, immediately return no authorization error to the user
-                if (errorResponse != null && !errorResponse.IsTokenValid)
-                {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-                }
+                ErrorResponse errorResponse = null;               
                 if (string.IsNullOrWhiteSpace(siteCollectionPath))
                 {
                     errorResponse = new ErrorResponse()
@@ -634,6 +713,88 @@ namespace Microsoft.Legal.MatterCenter.Service
                 GenericResponseVM genericResponseVM = await matterRepositoy.GetConfigurationsAsync(siteCollectionPath);
                 return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.OK);
             }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+
+        [HttpPost("savconfigurations")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        /// <summary>
+        /// Method saves matter configurations
+        /// </summary>        
+        /// <param name="client">Client object containing Client data</param>
+        /// <param name="details">Term Store object containing Term store data</param>
+        /// <returns>Returns JSON object to the client</returns>        ///
+        public IActionResult SavConfigurations([FromBody]SaveConfigurationsVM saveConfigurationsVM)
+        {
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+
+                #region Error Checking                
+                ErrorResponse errorResponse = null;                
+                if (string.IsNullOrWhiteSpace(saveConfigurationsVM.SiteCollectionPath) && saveConfigurationsVM.MatterConfigurations==null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+                var response = matterProvision.SavConfigurations(saveConfigurationsVM);
+                return matterCenterServiceFunctions.ServiceResponse(response, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        [HttpPost("savconfigurations")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        /// <summary>
+        /// Method saves matter configurations
+        /// </summary>        
+        /// <param name="client">Client object containing Client data</param>
+        /// <param name="details">Term Store object containing Term store data</param>
+        /// <returns>Returns JSON object to the client</returns>        ///
+        public IActionResult GetStampedProperties([FromBody]MatterVM matterVM)
+        {
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+
+                #region Error Checking                
+                ErrorResponse errorResponse = null;
+                if (matterVM==null && matterVM.Client==null && matterVM.Matter!=null && string.IsNullOrWhiteSpace(matterVM.Matter.Name))
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+                //ToDo: Need to concert this method to async
+                var matterStampedProperties = matterProvision.GetStampedProperties(matterVM);
+                //ToDo: Need to do nulk check on  matterStampedProperties
+                return matterCenterServiceFunctions.ServiceResponse(matterStampedProperties, (int)HttpStatusCode.OK);
+            }
+
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);

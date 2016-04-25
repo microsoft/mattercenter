@@ -22,7 +22,7 @@ namespace Microsoft.Legal.MatterCenter
         private CamlQueries camlQueries;
         private ISPList spList;
         private IMatterRepository matterRespository;
-        public ValidationFunctions(ISPList spList, IOptions<MatterSettings> matterSettings, 
+        public ValidationFunctions(ISPList spList, IOptions<MatterSettings> matterSettings,
             IOptions<ErrorSettings> errorSettings, IMatterRepository matterRespository,
             IOptions<ListNames> listNames, IOptions<CamlQueries> camlQueries)
         {
@@ -62,8 +62,8 @@ namespace Microsoft.Legal.MatterCenter
         {
             GenericResponseVM genericResponse = null;
             var matterDetails = matterInformation.MatterDetails;
-            if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) <= methodNumber && 
-                int.Parse(ServiceConstants.EditMatterPermission, CultureInfo.InvariantCulture) >= methodNumber && 
+            if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) <= methodNumber &&
+                int.Parse(ServiceConstants.EditMatterPermission, CultureInfo.InvariantCulture) >= methodNumber &&
                 !spList.CheckPermissionOnList(matterSettings.ProvisionMatterAppURL, matterSettings.SendMailListName, PermissionKind.EditListItems))
             {
                 genericResponse = new GenericResponseVM();
@@ -73,37 +73,37 @@ namespace Microsoft.Legal.MatterCenter
             }
             else
             {
-                
-                if (matterInformation.Client!=null)
+
+                if (matterInformation.Client != null)
                 {
                     genericResponse = new GenericResponseVM();
                     genericResponse = ValidateClientInformation(matterInformation.Client, methodNumber);
-                    if (genericResponse!=null)
+                    if (genericResponse != null)
                     {
                         return genericResponse;
                     }
                 }
-                if (matterInformation.Matter!=null)
+                if (matterInformation.Matter != null)
                 {
-                    genericResponse = MatterMetadataValidation(matterInformation.Matter, matterInformation.Client, 
+                    genericResponse = MatterMetadataValidation(matterInformation.Matter, matterInformation.Client,
                         methodNumber, matterConfigurations);
-                    if (genericResponse!=null)
+                    if (genericResponse != null)
                     {
                         return genericResponse;
                     }
                     if (int.Parse(ServiceConstants.EditMatterPermission, CultureInfo.InvariantCulture) == methodNumber)
                     {
                         genericResponse = RoleCheck(matterInformation.Matter);
-                        if (genericResponse!=null)
+                        if (genericResponse != null)
                         {
                             return genericResponse;
                         }
                     }
-                    if (matterInformation.Matter.Permissions!=null)
+                    if (matterInformation.Matter.Permissions != null)
                     {
                         bool isFullControlPresent = ValidateFullControlPermission(matterInformation.Matter);
                         if (!isFullControlPresent)
-                        {                            
+                        {
                             return GenericResponse(errorSettings.IncorrectInputUserAccessCode, errorSettings.ErrorEditMatterMandatoryPermission);
                         }
                     }
@@ -111,22 +111,22 @@ namespace Microsoft.Legal.MatterCenter
                 if (null != matterDetails && !(int.Parse(ServiceConstants.EditMatterPermission, CultureInfo.InvariantCulture) == methodNumber))
                 {
                     if (string.IsNullOrWhiteSpace(matterDetails.PracticeGroup))
-                    {                        
+                    {
                         return GenericResponse(errorSettings.IncorrectInputPracticeGroupCode, errorSettings.IncorrectInputPracticeGroupMessage);
                     }
                     if (string.IsNullOrWhiteSpace(matterDetails.AreaOfLaw))
                     {
-                        
+
                         return GenericResponse(errorSettings.IncorrectInputAreaOfLawCode, errorSettings.IncorrectInputAreaOfLawMessage);
                     }
                     if (string.IsNullOrWhiteSpace(matterDetails.SubareaOfLaw))
-                    {                        
+                    {
                         return GenericResponse(errorSettings.IncorrectInputSubareaOfLawCode, errorSettings.IncorrectInputSubareaOfLawMessage);
                     }
                     try
                     {
                         if (string.IsNullOrWhiteSpace(matterDetails.ResponsibleAttorney))
-                        {                            
+                        {
                             return GenericResponse(errorSettings.IncorrectInputResponsibleAttorneyCode, errorSettings.IncorrectInputResponsibleAttorneyMessage);
                         }
                         else
@@ -136,7 +136,7 @@ namespace Microsoft.Legal.MatterCenter
                         }
                     }
                     catch (Exception)
-                    {                        
+                    {
                         return GenericResponse(errorSettings.IncorrectInputResponsibleAttorneyCode, errorSettings.IncorrectInputResponsibleAttorneyMessage);
                     }
                 }
@@ -157,15 +157,15 @@ namespace Microsoft.Legal.MatterCenter
             GenericResponseVM genericResponse = null;
             try
             {
-                
-                if ( matter.Roles.Count()<=0)
-                {                    
+
+                if (matter.Roles.Count() <= 0)
+                {
                     return GenericResponse(errorSettings.IncorrectInputUserRolesCode, errorSettings.IncorrectInputUserRolesMessage);
                 }
                 IList<string> roles = matterRespository.RoleCheck(matterSettings.CentralRepositoryUrl, listNames.DMSRoleListName,
                 camlQueries.DMSRoleQuery);
                 if (matter.Roles.Except(roles).Count() > 0)
-                {                    
+                {
                     return GenericResponse(errorSettings.IncorrectInputUserRolesCode, errorSettings.IncorrectInputUserRolesMessage);
                 }
                 return genericResponse;
@@ -178,7 +178,7 @@ namespace Microsoft.Legal.MatterCenter
                 throw;
             }
 
-            
+
         }
 
         /// <summary>
@@ -193,20 +193,20 @@ namespace Microsoft.Legal.MatterCenter
             if (string.IsNullOrWhiteSpace(client.Url))
             {
                 response.Code = errorSettings.IncorrectInputClientUrlCode;
-                response.Value = errorSettings.IncorrectInputClientUrlMessage;                
+                response.Value = errorSettings.IncorrectInputClientUrlMessage;
             }
-            else if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber || 
-                int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber || 
+            else if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber ||
+                int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.ProvisionMatterUpdateMetadataForList, CultureInfo.InvariantCulture) == methodNumber)
             {
                 if (string.IsNullOrWhiteSpace(client.Id))
                 {
-                    
+
                     response.Code = errorSettings.IncorrectInputClientIdCode;
                     response.Value = errorSettings.IncorrectInputClientIdMessage;
                 }
                 else if (string.IsNullOrWhiteSpace(client.Name))
-                {                   
+                {
                     response.Code = errorSettings.IncorrectInputClientNameCode;
                     response.Value = errorSettings.IncorrectInputClientNameMessage;
                 }
@@ -221,49 +221,49 @@ namespace Microsoft.Legal.MatterCenter
         /// <param name="clientContext">Client context object for SharePoint</param>  
         /// <param name="methodNumber">Number indicating which method needs to be validated</param>     
         /// <returns>A string value indicating whether validations passed or fail</returns>
-        internal GenericResponseVM MatterMetadataValidation(Matter matter, Client client, 
+        public GenericResponseVM MatterMetadataValidation(Matter matter, Client client,
             int methodNumber, MatterConfigurations matterConfigurations)
         {
             GenericResponseVM genericResponseVM = null;
             genericResponseVM = MatterNameValidation(matter);
-            if (genericResponseVM!=null)
+            if (genericResponseVM != null)
             {
                 return genericResponseVM;
             }
-            if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber || 
-                int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber || 
+            if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber ||
+                int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.ProvisionMatterUpdateMetadataForList, CultureInfo.InvariantCulture) == methodNumber)
             {
                 if (string.IsNullOrWhiteSpace(matter.Id))
-                {   
+                {
                     return GenericResponse(errorSettings.IncorrectInputMatterIdCode, errorSettings.IncorrectInputMatterIdMessage);
                 }
                 else
                 {
                     var matterId = Regex.Match(matter.Id, matterSettings.SpecialCharacterExpressionMatterId, RegexOptions.IgnoreCase);
                     if (int.Parse(matterSettings.MatterIdLength, CultureInfo.InvariantCulture) < matter.Id.Length || !matterId.Success)
-                    {     
+                    {
                         return GenericResponse(errorSettings.IncorrectInputMatterIdCode, errorSettings.IncorrectInputMatterIdMessage);
                     }
                 }
             }
-            if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber || 
-                int.Parse(ServiceConstants.ProvisionMatterShareMatter, CultureInfo.InvariantCulture) == methodNumber || 
+            if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber ||
+                int.Parse(ServiceConstants.ProvisionMatterShareMatter, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.ProvisionMatterMatterLandingPage, CultureInfo.InvariantCulture) == methodNumber)
             {
                 genericResponseVM = MatterDetailsValidation(matter, client, methodNumber, matterConfigurations);
-                if (genericResponseVM!=null)
+                if (genericResponseVM != null)
                 {
                     return genericResponseVM;
                 }
             }
             try
             {
-                if (!(int.Parse(ServiceConstants.ProvisionMatterCheckMatterExists, CultureInfo.InvariantCulture) == methodNumber) && 
+                if (!(int.Parse(ServiceConstants.ProvisionMatterCheckMatterExists, CultureInfo.InvariantCulture) == methodNumber) &&
                     !(int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber))
                 {
                     if (0 >= matter.AssignUserNames.Count())
-                    {                                                
+                    {
                         return GenericResponse(errorSettings.IncorrectInputUserNamesCode, errorSettings.IncorrectInputUserNamesMessage);
                     }
                     else
@@ -275,25 +275,25 @@ namespace Microsoft.Legal.MatterCenter
                 }
             }
             catch (Exception)
-            {                
+            {
                 return GenericResponse(errorSettings.IncorrectInputUserNamesCode, errorSettings.IncorrectInputUserNamesMessage);
             }
 
-            if (int.Parse(ServiceConstants.ProvisionMatterAssignUserPermissions, CultureInfo.InvariantCulture) == methodNumber || 
-                int.Parse(ServiceConstants.ProvisionMatterMatterLandingPage, CultureInfo.InvariantCulture) == methodNumber || 
+            if (int.Parse(ServiceConstants.ProvisionMatterAssignUserPermissions, CultureInfo.InvariantCulture) == methodNumber ||
+                int.Parse(ServiceConstants.ProvisionMatterMatterLandingPage, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.EditMatterPermission, CultureInfo.InvariantCulture) == methodNumber)
             {
                 GenericResponseVM genericResponse = CheckUserPermission(matter);
-                if (genericResponse!=null)
+                if (genericResponse != null)
                 {
                     return genericResponse;
                 }
             }
-            if (int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber || 
+            if (int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.ProvisionMatterShareMatter, CultureInfo.InvariantCulture) == methodNumber)
             {
                 GenericResponseVM genericResponse = ValidateContentType(matter);
-                if (genericResponse!=null)
+                if (genericResponse != null)
                 {
                     return genericResponse;
                 }
@@ -311,13 +311,13 @@ namespace Microsoft.Legal.MatterCenter
             GenericResponseVM genericResponseVM = null;
             string matterNameValidation = string.Empty;
             if (string.IsNullOrWhiteSpace(matter.Name))
-            {                
+            {
                 return GenericResponse(errorSettings.IncorrectInputMatterNameCode, errorSettings.IncorrectInputMatterNameMessage);
             }
             var matterName = Regex.Match(matter.Name, matterSettings.SpecialCharacterExpressionMatterTitle, RegexOptions.IgnoreCase);
             if (int.Parse(matterSettings.MatterNameLength, CultureInfo.InvariantCulture) < matter.Name.Length || matter.Name.Length != matterName.Length)
             {
-                
+
                 return GenericResponse(errorSettings.IncorrectInputMatterNameCode, errorSettings.IncorrectInputMatterNameMessage);
             }
             return genericResponseVM;
@@ -330,21 +330,21 @@ namespace Microsoft.Legal.MatterCenter
         /// <param name="clientContext">Client context object for SharePoint</param>  
         /// <param name="methodNumber">Number indicating which method needs to be validated</param>        
         /// <returns>A string value indicating whether validations passed or fail</returns>
-        internal GenericResponseVM MatterDetailsValidation(Matter matter, Client client, int methodNumber, 
+        public GenericResponseVM MatterDetailsValidation(Matter matter, Client client, int methodNumber,
             MatterConfigurations matterConfigurations)
         {
             GenericResponseVM genericResponseVM = null;
             if (matterConfigurations.IsMatterDescriptionMandatory)
             {
                 if (string.IsNullOrWhiteSpace(matter.Description))
-                {             
+                {
                     return GenericResponse(errorSettings.IncorrectInputMatterDescriptionCode, errorSettings.IncorrectInputMatterDescriptionMessage);
                 }
                 else
                 {
                     var matterDescription = Regex.Match(matter.Description, matterSettings.SpecialCharacterExpressionMatterDescription, RegexOptions.IgnoreCase);
                     if (int.Parse(matterSettings.MatterDescriptionLength, CultureInfo.InvariantCulture) < matter.Description.Length || !matterDescription.Success)
-                    {  
+                    {
                         return GenericResponse(errorSettings.IncorrectInputMatterDescriptionCode, errorSettings.IncorrectInputMatterDescriptionMessage);
                     }
                 }
@@ -379,13 +379,13 @@ namespace Microsoft.Legal.MatterCenter
                         }
                     }
                     catch (Exception)
-                    {              
+                    {
                         return GenericResponse(errorSettings.IncorrectInputBlockUserNamesCode, errorSettings.IncorrectInputBlockUserNamesMessage);
                     }
 
                 }
                 if (string.IsNullOrWhiteSpace(matter.Conflict.CheckBy))
-                {                                       
+                {
                     return GenericResponse(errorSettings.IncorrectInputConflictCheckByCode, errorSettings.IncorrectInputConflictCheckByMessage);
                 }
                 else
@@ -396,13 +396,13 @@ namespace Microsoft.Legal.MatterCenter
                         matterRespository.ResolveUserNames(client, new List<string>() { matter.Conflict.CheckBy }).FirstOrDefault();
                     }
                     catch (Exception)
-                    {             
+                    {
                         return GenericResponse(errorSettings.IncorrectInputConflictCheckByCode, errorSettings.IncorrectInputConflictCheckByMessage);
                     }
                 }
             }
             if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber && 0 >= matter.Roles.Count())
-            {        
+            {
                 return GenericResponse(errorSettings.IncorrectInputUserRolesCode, errorSettings.IncorrectInputUserRolesMessage);
             }
             return genericResponseVM;
@@ -425,7 +425,7 @@ namespace Microsoft.Legal.MatterCenter
         private GenericResponseVM CheckUserPermission(Matter matter)
         {
             if (0 >= matter.Permissions.Count())
-            {                
+            {
                 return GenericResponse(errorSettings.IncorrectInputUserPermissionsCode, errorSettings.IncorrectInputUserPermissionsMessage);
             }
             else
@@ -433,7 +433,7 @@ namespace Microsoft.Legal.MatterCenter
                 string userAllowedPermissions = matterSettings.UserPermissions;
                 if (!string.IsNullOrEmpty(userAllowedPermissions))
                 {
-                    List<string> userPermissions = userAllowedPermissions.ToUpperInvariant().Trim().Split(new string[] { "," }, 
+                    List<string> userPermissions = userAllowedPermissions.ToUpperInvariant().Trim().Split(new string[] { "," },
                         StringSplitOptions.RemoveEmptyEntries).ToList();
                     foreach (string Permissions in matter.Permissions)
                     {
@@ -456,7 +456,7 @@ namespace Microsoft.Legal.MatterCenter
         private GenericResponseVM ValidateContentType(Matter matter)
         {
             if ((0 >= matter.ContentTypes.Count()) || string.IsNullOrWhiteSpace(matter.DefaultContentType))
-            {                
+            {
                 return GenericResponse(errorSettings.IncorrectInputContentTypeCode, errorSettings.IncorrectInputContentTypeMessage);
             }
             else
@@ -465,14 +465,14 @@ namespace Microsoft.Legal.MatterCenter
                 {
                     var contentTypeCheck = Regex.Match(contentType, matterSettings.SpecialCharacterExpressionContentType, RegexOptions.IgnoreCase);
                     if (contentTypeCheck.Success || int.Parse(matterSettings.ContentTypeLength, CultureInfo.InvariantCulture) < contentType.Length)
-                    {                        
+                    {
                         return GenericResponse(errorSettings.IncorrectInputContentTypeCode, errorSettings.IncorrectInputContentTypeMessage);
                     }
                 }
                 var defaultContentTypeCheck = Regex.Match(matter.DefaultContentType, matterSettings.SpecialCharacterExpressionContentType, RegexOptions.IgnoreCase);
-                if (defaultContentTypeCheck.Success || 
+                if (defaultContentTypeCheck.Success ||
                     int.Parse(matterSettings.ContentTypeLength, CultureInfo.InvariantCulture) < matter.DefaultContentType.Length)
-                {                    
+                {
                     return GenericResponse(errorSettings.IncorrectInputContentTypeCode, errorSettings.IncorrectInputContentTypeMessage);
                 }
             }
@@ -495,7 +495,7 @@ namespace Microsoft.Legal.MatterCenter
             return hasFullConrol;
         }
 
-        
+
 
     }
 }

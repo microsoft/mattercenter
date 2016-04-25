@@ -3,7 +3,7 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
+using System.Linq;
 using System;
 using System.Threading.Tasks;
 using Swashbuckle.SwaggerGen;
@@ -33,124 +33,84 @@ namespace Microsoft.Legal.MatterCenter.Web
         public ILoggerFactory LoggerFactory { get; }
         public IConfigurationRoot Configuration { get; set; }
         public IApplicationEnvironment ApplicationEnvironment { get; }
-        #endregion
-
-    /*   public Startup(IHostingEnvironment env)
-        {
-            // Set up configuration sources.
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .AddEnvironmentVariables();
-
-            if (env.IsDevelopment())
-            {
-                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                builder.AddApplicationInsightsSettings(developerMode: true);
-            }
-            Configuration = builder.Build();
-        } */
+        #endregion    
         
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv, ILoggerFactory logger)
         {
             this.HostingEnvironment = env;
             this.ApplicationEnvironment = appEnv;
             this.LoggerFactory = logger;
-
-
         } 
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-          /*  services.AddMvc();
-            services.AddOptions();
-            //   services.Configure<List<AppSettings>>(Configuration.GetSection<>("Uri"));
-
-            services.AddApplicationInsightsTelemetry(Configuration);
-            */
-
-            // Set up configuration sources.
-                      var builder = new ConfigurationBuilder()
-                          .AddJsonFile("appsettings.json")
-                          .AddEnvironmentVariables();
+          
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables();
 
             if (HostingEnvironment.IsDevelopment())
             {
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 builder.AddApplicationInsightsSettings(developerMode: true);
             }
-
+            
             Configuration = builder.Build();
-                      ConfigureSettings(services);
-                      services.AddCors();
-                      services.AddLogging();
-                      ConfigureMvc(services, LoggerFactory);
-
-                      // Add framework services.
-                      services.AddApplicationInsightsTelemetry(Configuration);
-
-                      services.AddMvc();
-                      ConfigureMatterPackages(services);
-                      ConfigureSwagger(services); 
+            ConfigureSettings(services);
+            services.AddCors();
+            services.AddLogging();
+            ConfigureMvc(services, LoggerFactory);
+            // Add framework services.
+            services.AddApplicationInsightsTelemetry(Configuration);
+            services.AddMvc();
+            ConfigureMatterPackages(services);
+            ConfigureSwagger(services); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            //  createConfig(env);
-
-            /*     app.UseIISPlatformHandler();
-
+            
+            var log = loggerFactory.CreateLogger<Startup>();
+            try
+            {
+                loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+                loggerFactory.AddDebug();
+                app.UseIISPlatformHandler();
+                
                 app.UseApplicationInsightsRequestTelemetry();
-
-                app.UseMvc();
+                if (env.IsDevelopment())
+                {
+                    app.UseBrowserLink();
+                    app.UseDeveloperExceptionPage();
+                }
+                else
+                {
+                    app.UseExceptionHandler("/Home/Error");
+                }              
 
                 app.UseApplicationInsightsExceptionTelemetry();
-
                 app.UseDefaultFiles();
-                app.UseStaticFiles(); */
-            var log = loggerFactory.CreateLogger<Startup>();
-                  try
-                  {
-                      loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-                      loggerFactory.AddDebug();
-                      app.UseIISPlatformHandler();
-                     // CheckAuthorization(app);
+                app.UseStaticFiles();
+                CheckAuthorization(app);
+                app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+                app.UseMvc();
+                app.UseSwaggerGen();
+                app.UseSwaggerUi();
+            }
+            catch (Exception ex)
+            {
+                app.Run(
+                        async context => {
+                            log.LogError($"{ex.Message}");
+                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                            context.Response.ContentType = "text/plain";
+                            await context.Response.WriteAsync(ex.Message).ConfigureAwait(false);
+                            await context.Response.WriteAsync(ex.StackTrace).ConfigureAwait(false);
+                        });
 
-                      app.UseApplicationInsightsRequestTelemetry();
-
-                      if (env.IsDevelopment())
-                      {
-                          app.UseBrowserLink();
-                          app.UseDeveloperExceptionPage();
-                      }
-                      else
-                      {
-                          app.UseExceptionHandler("/Home/Error");
-                      }
-
-                      app.UseApplicationInsightsExceptionTelemetry();
-                      app.UseDefaultFiles();
-                      app.UseStaticFiles();
-                      app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-                      app.UseMvc();
-                      app.UseSwaggerGen();
-                      app.UseSwaggerUi();
-
-
-                  }
-                  catch (Exception ex)
-                  {
-                      app.Run(
-                              async context => {
-                                  log.LogError($"{ex.Message}");
-                                  context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                                  context.Response.ContentType = "text/plain";
-                                  await context.Response.WriteAsync(ex.Message).ConfigureAwait(false);
-                                  await context.Response.WriteAsync(ex.StackTrace).ConfigureAwait(false);
-                              });
-
-                  } 
+            } 
         }
 
         // Entry point for the application.
