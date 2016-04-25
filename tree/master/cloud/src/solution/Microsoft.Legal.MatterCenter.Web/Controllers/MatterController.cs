@@ -88,8 +88,8 @@ namespace Microsoft.Legal.MatterCenter.Service
         public async Task<IActionResult> Get([FromBody]SearchRequestVM searchRequestVM)
         {
             try
-            {    
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"]; 
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
 
                 #region Error Checking
                 ErrorResponse errorResponse = null;
@@ -134,8 +134,8 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="details">Term Store object containing Term store data</param>
         /// <returns>Returns JSON object to the client</returns>        ///
         public IActionResult Update([FromBody]MatterInformationVM matterInformation)
-        {            
-            string editMatterValidation = string.Empty;            
+        {
+            string editMatterValidation = string.Empty;
             var matter = matterInformation.Matter;
             var client = matterInformation.Client;
             var userid = matterInformation.UserIds;
@@ -143,7 +143,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;                
+                ErrorResponse errorResponse = null;
                 if (matterInformation.Client == null && matterInformation.Matter == null && matterInformation.MatterDetails == null)
                 {
                     errorResponse = new ErrorResponse()
@@ -157,25 +157,25 @@ namespace Microsoft.Legal.MatterCenter.Service
                 #endregion
 
                 #region Validations
-                GenericResponseVM validationResponse = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.EditMatterPermission), null); 
-                if(validationResponse != null)
+                GenericResponseVM validationResponse = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.EditMatterPermission), null);
+                if (validationResponse != null)
                 {
                     errorResponse = new ErrorResponse()
                     {
                         Message = validationResponse.Value,
-                        ErrorCode = validationResponse.Code,                        
+                        ErrorCode = validationResponse.Code,
                     };
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
                 }
 
                 if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
                 {
-                    if (matter.AssignUserNames.Count==0)
-                    {                        
+                    if (matter.AssignUserNames.Count == 0)
+                    {
                         errorResponse = new ErrorResponse()
                         {
                             Message = errorSettings.IncorrectInputUserNamesMessage,
-                            ErrorCode = errorSettings.IncorrectInputUserNamesCode,                            
+                            ErrorCode = errorSettings.IncorrectInputUserNamesCode,
                         };
                         return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
                     }
@@ -197,7 +197,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                     }
                 }
                 else
-                {                    
+                {
                     errorResponse = new ErrorResponse()
                     {
                         Message = errorSettings.IncorrectInputConflictIdentifiedMessage,
@@ -209,12 +209,12 @@ namespace Microsoft.Legal.MatterCenter.Service
 
                 #region Upadte Matter
                 GenericResponseVM genericResponse = matterProvision.UpdateMatter(matterInformation);
-                if(genericResponse==null)
+                if (genericResponse == null)
                 {
                     var result = new GenericResponseVM()
                     {
                         Code = "200",
-                        Value= "Update Success"
+                        Value = "Update Success"
                     };
                     return matterCenterServiceFunctions.ServiceResponse(result, (int)HttpStatusCode.OK);
                 }
@@ -224,7 +224,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
 
                 #endregion
-                
+
             }
             catch (Exception ex)
             {
@@ -237,7 +237,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                     MatterSitePages = matterSettings.MatterLandingPageRepositoryName
                 };
                 //editFunctions.RevertMatterUpdates(client, matter, matterRevertListObject, loggedInUserName, userPermissionOnLibrary, listItemId, isEditMode);
-                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);                
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
             finally
@@ -263,14 +263,14 @@ namespace Microsoft.Legal.MatterCenter.Service
             string editMatterValidation = string.Empty;
             var matter = matterMetdata.Matter;
             var client = matterMetdata.Client;
-            
+
             try
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
-                if (matterMetdata.Client == null && matterMetdata.Matter == null && 
-                    matterMetdata.MatterDetails == null && matterMetdata.MatterProvisionFlags==null)
+                if (matterMetdata.Client == null && matterMetdata.Matter == null &&
+                    matterMetdata.MatterDetails == null && matterMetdata.MatterProvisionFlags == null)
                 {
                     errorResponse = new ErrorResponse()
                     {
@@ -289,8 +289,8 @@ namespace Microsoft.Legal.MatterCenter.Service
                     Matter = matterMetdata.Matter,
                     MatterDetails = matterMetdata.MatterDetails
                 };
-                GenericResponseVM genericResponse = validationFunctions.IsMatterValid(matterInfo, 
-                    int.Parse(ServiceConstants.ProvisionMatterUpdateMetadataForList), 
+                GenericResponseVM genericResponse = validationFunctions.IsMatterValid(matterInfo,
+                    int.Parse(ServiceConstants.ProvisionMatterUpdateMetadataForList),
                     matterMetdata.MatterConfigurations);
                 if (genericResponse != null)
                 {
@@ -317,7 +317,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                     }
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.NotModified);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     matterProvision.DeleteMatter(client, matter);
                     customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
@@ -325,11 +325,11 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
-            
+
         }
 
         [HttpPost("pin")]
@@ -698,7 +698,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;               
+                ErrorResponse errorResponse = null;
                 if (string.IsNullOrWhiteSpace(siteCollectionPath))
                 {
                     errorResponse = new ErrorResponse()
@@ -738,8 +738,8 @@ namespace Microsoft.Legal.MatterCenter.Service
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
 
                 #region Error Checking                
-                ErrorResponse errorResponse = null;                
-                if (string.IsNullOrWhiteSpace(saveConfigurationsVM.SiteCollectionPath) && saveConfigurationsVM.MatterConfigurations==null)
+                ErrorResponse errorResponse = null;
+                if (string.IsNullOrWhiteSpace(saveConfigurationsVM.SiteCollectionPath) && saveConfigurationsVM.MatterConfigurations == null)
                 {
                     errorResponse = new ErrorResponse()
                     {
@@ -778,7 +778,7 @@ namespace Microsoft.Legal.MatterCenter.Service
 
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
-                if (matterVM==null && matterVM.Client==null && matterVM.Matter!=null && string.IsNullOrWhiteSpace(matterVM.Matter.Name))
+                if (matterVM == null && matterVM.Client == null && matterVM.Matter != null && string.IsNullOrWhiteSpace(matterVM.Matter.Name))
                 {
                     errorResponse = new ErrorResponse()
                     {
@@ -800,6 +800,16 @@ namespace Microsoft.Legal.MatterCenter.Service
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
+        }
+
+
+        [HttpPost("assignuserpermissions")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        public string AssignUserPermissions(Client client, Matter matter, MatterConfigurations matterConfigurations)
+        {
+
         }
     }
 }

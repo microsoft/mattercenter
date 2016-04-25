@@ -37,7 +37,8 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             }
         }
 
-        /// <summary>
+
+         /// <summary>
         /// This unit test is for negative test case and this test case wont get any results back
         /// This test case will get 404
         /// </summary>

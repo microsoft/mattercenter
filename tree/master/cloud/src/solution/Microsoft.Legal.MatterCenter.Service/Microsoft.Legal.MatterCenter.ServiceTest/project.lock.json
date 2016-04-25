@@ -3,6 +3,40 @@
   "version": 2,
   "targets": {
     "DNX,Version=v4.5.1": {
+      "Microsoft.ApplicationInsights/1.1.1-beta": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Microsoft.ApplicationInsights.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.ApplicationInsights.dll": {}
+        }
+      },
+      "Microsoft.ApplicationInsights.AspNet/1.0.0-rc1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.ApplicationInsights": "1.1.1-beta",
+          "Microsoft.AspNet.Hosting.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Features": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
+          "Microsoft.Extensions.DiagnosticAdapter": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.ApplicationInsights.AspNet.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.ApplicationInsights.AspNet.dll": {}
+        }
+      },
       "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -705,6 +739,26 @@
           "lib/net451/Microsoft.AspNet.Mvc.Razor.Host.dll": {}
         }
       },
+      "Microsoft.AspNet.Mvc.TagHelpers/6.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Mvc.Razor": "6.0.0-rc1-final",
+          "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
+          "Microsoft.Extensions.FileSystemGlobbing": "1.0.0-rc1-final"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
+        }
+      },
       "Microsoft.AspNet.Mvc.ViewFeatures/6.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -878,6 +932,25 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNet.TestHost.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Tooling.Razor/1.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor.Runtime": "4.0.0-rc1-final",
+          "Newtonsoft.Json": "6.0.6"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.2": {
@@ -1403,6 +1476,43 @@
           "lib/net451/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
         }
       },
+      "Microsoft.Extensions.DiagnosticAdapter/1.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
+          "System.Diagnostics.DiagnosticSource": "4.0.0-beta-23516"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Collections.Concurrent",
+          "System.Core",
+          "System.Linq",
+          "System.Runtime"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.Extensions.DiagnosticAdapter.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.Extensions.DiagnosticAdapter.dll": {}
+        }
+      },
+      "Microsoft.Extensions.FileSystemGlobbing/1.0.0-rc1-final": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
+        }
+      },
       "Microsoft.Extensions.Globalization.CultureInfoCache/1.0.0-rc1-final": {
         "type": "package",
         "frameworkAssemblies": [
@@ -1715,31 +1825,6 @@
           "System.Threading": "4.0.11-beta-23516"
         }
       },
-      "Microsoft.Legal.MatterCenter.Service/1.0.0": {
-        "type": "project",
-        "framework": "DNX,Version=v4.5.1",
-        "dependencies": {
-          "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Cors": "6.0.0-rc1-final",
-          "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
-          "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-          "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-          "Microsoft.Legal.MatterCenter.Models": "1.0.0",
-          "Microsoft.Legal.MatterCenter.Repository": "1.0.0",
-          "Microsoft.Legal.MatterCenter.Utility": "1.0.0",
-          "Swashbuckle.SwaggerGen": "6.0.0-rc1-final",
-          "Swashbuckle.SwaggerUi": "6.0.0-rc1-final"
-        }
-      },
       "Microsoft.Legal.MatterCenter.Utility/1.0.0": {
         "type": "project",
         "framework": "DNX,Version=v4.5.1",
@@ -1752,6 +1837,37 @@
           "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
           "StackExchange.Redis": "1.0.488",
           "WindowsAzure.Storage": "6.2.0"
+        }
+      },
+      "Microsoft.Legal.MatterCenter.Web/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "Microsoft.ApplicationInsights.AspNet": "1.0.0-rc1",
+          "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Cors": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+          "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+          "Microsoft.Legal.MatterCenter.Models": "1.0.0",
+          "Microsoft.Legal.MatterCenter.Repository": "1.0.0",
+          "Microsoft.Legal.MatterCenter.Utility": "1.0.0",
+          "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
+          "Swashbuckle.SwaggerGen": "6.0.0-rc1-final",
+          "Swashbuckle.SwaggerUi": "6.0.0-rc1-final"
         }
       },
       "Microsoft.Net.Http.Headers/1.0.0-rc1-final": {
@@ -1804,6 +1920,27 @@
           "lib/net45/Microsoft.SharePoint.Client.Taxonomy.dll": {},
           "lib/net45/Microsoft.SharePoint.Client.UserProfiles.dll": {},
           "lib/net45/Microsoft.SharePoint.Client.WorkflowServices.dll": {}
+        }
+      },
+      "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.PageExecutionInstrumentation.Interfaces": "1.0.0-rc1-final",
+          "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll": {}
         }
       },
       "Newtonsoft.Json/7.0.1": {
@@ -2283,6 +2420,40 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x86": {
+      "Microsoft.ApplicationInsights/1.1.1-beta": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Microsoft.ApplicationInsights.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.ApplicationInsights.dll": {}
+        }
+      },
+      "Microsoft.ApplicationInsights.AspNet/1.0.0-rc1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.ApplicationInsights": "1.1.1-beta",
+          "Microsoft.AspNet.Hosting.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Features": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
+          "Microsoft.Extensions.DiagnosticAdapter": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.ApplicationInsights.AspNet.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.ApplicationInsights.AspNet.dll": {}
+        }
+      },
       "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -2985,6 +3156,26 @@
           "lib/net451/Microsoft.AspNet.Mvc.Razor.Host.dll": {}
         }
       },
+      "Microsoft.AspNet.Mvc.TagHelpers/6.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Mvc.Razor": "6.0.0-rc1-final",
+          "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
+          "Microsoft.Extensions.FileSystemGlobbing": "1.0.0-rc1-final"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
+        }
+      },
       "Microsoft.AspNet.Mvc.ViewFeatures/6.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -3161,6 +3352,25 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNet.TestHost.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Tooling.Razor/1.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor.Runtime": "4.0.0-rc1-final",
+          "Newtonsoft.Json": "6.0.6"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.2": {
@@ -3686,6 +3896,43 @@
           "lib/net451/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
         }
       },
+      "Microsoft.Extensions.DiagnosticAdapter/1.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
+          "System.Diagnostics.DiagnosticSource": "4.0.0-beta-23516"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Collections.Concurrent",
+          "System.Core",
+          "System.Linq",
+          "System.Runtime"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.Extensions.DiagnosticAdapter.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.Extensions.DiagnosticAdapter.dll": {}
+        }
+      },
+      "Microsoft.Extensions.FileSystemGlobbing/1.0.0-rc1-final": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
+        }
+      },
       "Microsoft.Extensions.Globalization.CultureInfoCache/1.0.0-rc1-final": {
         "type": "package",
         "frameworkAssemblies": [
@@ -3998,31 +4245,6 @@
           "System.Threading": "4.0.11-beta-23516"
         }
       },
-      "Microsoft.Legal.MatterCenter.Service/1.0.0": {
-        "type": "project",
-        "framework": "DNX,Version=v4.5.1",
-        "dependencies": {
-          "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Cors": "6.0.0-rc1-final",
-          "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
-          "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-          "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-          "Microsoft.Legal.MatterCenter.Models": "1.0.0",
-          "Microsoft.Legal.MatterCenter.Repository": "1.0.0",
-          "Microsoft.Legal.MatterCenter.Utility": "1.0.0",
-          "Swashbuckle.SwaggerGen": "6.0.0-rc1-final",
-          "Swashbuckle.SwaggerUi": "6.0.0-rc1-final"
-        }
-      },
       "Microsoft.Legal.MatterCenter.Utility/1.0.0": {
         "type": "project",
         "framework": "DNX,Version=v4.5.1",
@@ -4035,6 +4257,37 @@
           "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
           "StackExchange.Redis": "1.0.488",
           "WindowsAzure.Storage": "6.2.0"
+        }
+      },
+      "Microsoft.Legal.MatterCenter.Web/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "Microsoft.ApplicationInsights.AspNet": "1.0.0-rc1",
+          "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Cors": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+          "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+          "Microsoft.Legal.MatterCenter.Models": "1.0.0",
+          "Microsoft.Legal.MatterCenter.Repository": "1.0.0",
+          "Microsoft.Legal.MatterCenter.Utility": "1.0.0",
+          "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
+          "Swashbuckle.SwaggerGen": "6.0.0-rc1-final",
+          "Swashbuckle.SwaggerUi": "6.0.0-rc1-final"
         }
       },
       "Microsoft.Net.Http.Headers/1.0.0-rc1-final": {
@@ -4087,6 +4340,27 @@
           "lib/net45/Microsoft.SharePoint.Client.Taxonomy.dll": {},
           "lib/net45/Microsoft.SharePoint.Client.UserProfiles.dll": {},
           "lib/net45/Microsoft.SharePoint.Client.WorkflowServices.dll": {}
+        }
+      },
+      "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.PageExecutionInstrumentation.Interfaces": "1.0.0-rc1-final",
+          "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll": {}
         }
       },
       "Newtonsoft.Json/7.0.1": {
@@ -4572,6 +4846,40 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x64": {
+      "Microsoft.ApplicationInsights/1.1.1-beta": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Microsoft.ApplicationInsights.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.ApplicationInsights.dll": {}
+        }
+      },
+      "Microsoft.ApplicationInsights.AspNet/1.0.0-rc1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.ApplicationInsights": "1.1.1-beta",
+          "Microsoft.AspNet.Hosting.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Features": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
+          "Microsoft.Extensions.DiagnosticAdapter": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Abstractions": "1.0.0-rc1-final"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.ApplicationInsights.AspNet.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.ApplicationInsights.AspNet.dll": {}
+        }
+      },
       "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -5274,6 +5582,26 @@
           "lib/net451/Microsoft.AspNet.Mvc.Razor.Host.dll": {}
         }
       },
+      "Microsoft.AspNet.Mvc.TagHelpers/6.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Mvc.Razor": "6.0.0-rc1-final",
+          "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
+          "Microsoft.Extensions.FileSystemGlobbing": "1.0.0-rc1-final"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
+        }
+      },
       "Microsoft.AspNet.Mvc.ViewFeatures/6.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -5450,6 +5778,25 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNet.TestHost.dll": {}
+        }
+      },
+      "Microsoft.AspNet.Tooling.Razor/1.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.Razor.Runtime": "4.0.0-rc1-final",
+          "Newtonsoft.Json": "6.0.6"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.2": {
@@ -5975,6 +6322,43 @@
           "lib/net451/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {}
         }
       },
+      "Microsoft.Extensions.DiagnosticAdapter/1.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0-rc1-final",
+          "System.Diagnostics.DiagnosticSource": "4.0.0-beta-23516"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Collections.Concurrent",
+          "System.Core",
+          "System.Linq",
+          "System.Runtime"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.Extensions.DiagnosticAdapter.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.Extensions.DiagnosticAdapter.dll": {}
+        }
+      },
+      "Microsoft.Extensions.FileSystemGlobbing/1.0.0-rc1-final": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
+        },
+        "runtime": {
+          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
+        }
+      },
       "Microsoft.Extensions.Globalization.CultureInfoCache/1.0.0-rc1-final": {
         "type": "package",
         "frameworkAssemblies": [
@@ -6287,31 +6671,6 @@
           "System.Threading": "4.0.11-beta-23516"
         }
       },
-      "Microsoft.Legal.MatterCenter.Service/1.0.0": {
-        "type": "project",
-        "framework": "DNX,Version=v4.5.1",
-        "dependencies": {
-          "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Cors": "6.0.0-rc1-final",
-          "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
-          "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-          "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
-          "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-          "Microsoft.Legal.MatterCenter.Models": "1.0.0",
-          "Microsoft.Legal.MatterCenter.Repository": "1.0.0",
-          "Microsoft.Legal.MatterCenter.Utility": "1.0.0",
-          "Swashbuckle.SwaggerGen": "6.0.0-rc1-final",
-          "Swashbuckle.SwaggerUi": "6.0.0-rc1-final"
-        }
-      },
       "Microsoft.Legal.MatterCenter.Utility/1.0.0": {
         "type": "project",
         "framework": "DNX,Version=v4.5.1",
@@ -6324,6 +6683,37 @@
           "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
           "StackExchange.Redis": "1.0.488",
           "WindowsAzure.Storage": "6.2.0"
+        }
+      },
+      "Microsoft.Legal.MatterCenter.Web/1.0.0": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "Microsoft.ApplicationInsights.AspNet": "1.0.0-rc1",
+          "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Authentication.JwtBearer": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Cors": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Diagnostics": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+          "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
+          "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+          "Microsoft.Legal.MatterCenter.Models": "1.0.0",
+          "Microsoft.Legal.MatterCenter.Repository": "1.0.0",
+          "Microsoft.Legal.MatterCenter.Utility": "1.0.0",
+          "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
+          "Swashbuckle.SwaggerGen": "6.0.0-rc1-final",
+          "Swashbuckle.SwaggerUi": "6.0.0-rc1-final"
         }
       },
       "Microsoft.Net.Http.Headers/1.0.0-rc1-final": {
@@ -6376,6 +6766,27 @@
           "lib/net45/Microsoft.SharePoint.Client.Taxonomy.dll": {},
           "lib/net45/Microsoft.SharePoint.Client.UserProfiles.dll": {},
           "lib/net45/Microsoft.SharePoint.Client.WorkflowServices.dll": {}
+        }
+      },
+      "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0-rc1-final": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNet.FileProviders.Physical": "1.0.0-rc1-final",
+          "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
+          "Microsoft.AspNet.PageExecutionInstrumentation.Interfaces": "1.0.0-rc1-final",
+          "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final"
+        },
+        "frameworkAssemblies": [
+          "Microsoft.CSharp",
+          "mscorlib",
+          "System",
+          "System.Core"
+        ],
+        "compile": {
+          "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll": {}
+        },
+        "runtime": {
+          "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll": {}
         }
       },
       "Newtonsoft.Json/7.0.1": {
@@ -6870,13 +7281,45 @@
       "type": "project",
       "path": "../Microsoft.Legal.MatterCenter.Repository/project.json"
     },
-    "Microsoft.Legal.MatterCenter.Service/1.0.0": {
-      "type": "project",
-      "path": "../Microsoft.Legal.MatterCenter.Service/project.json"
-    },
     "Microsoft.Legal.MatterCenter.Utility/1.0.0": {
       "type": "project",
       "path": "../Microsoft.Legal.MatterCenter.Utility/project.json"
+    },
+    "Microsoft.Legal.MatterCenter.Web/1.0.0": {
+      "type": "project",
+      "path": "../../Microsoft.Legal.MatterCenter.Web/project.json"
+    },
+    "Microsoft.ApplicationInsights/1.1.1-beta": {
+      "type": "package",
+      "sha512": "aqtQ8KNFMGBFCmU3kkkEM7PlyPFvfh/1uKTxixD+myMzB9EjYeGOf0LvFnpkT1sp3voXfU8MUN+eYets8TutdQ==",
+      "files": [
+        "lib/dnxcore50/Microsoft.ApplicationInsights.dll",
+        "lib/dnxcore50/Microsoft.ApplicationInsights.XML",
+        "lib/net40/Microsoft.ApplicationInsights.dll",
+        "lib/net40/Microsoft.ApplicationInsights.XML",
+        "lib/net45/Microsoft.ApplicationInsights.dll",
+        "lib/net45/Microsoft.ApplicationInsights.XML",
+        "lib/portable-win81+wpa81/Microsoft.ApplicationInsights.dll",
+        "lib/portable-win81+wpa81/Microsoft.ApplicationInsights.XML",
+        "lib/wp8/Microsoft.ApplicationInsights.dll",
+        "lib/wp8/Microsoft.ApplicationInsights.XML",
+        "Microsoft.ApplicationInsights.1.1.1-beta.nupkg",
+        "Microsoft.ApplicationInsights.1.1.1-beta.nupkg.sha512",
+        "Microsoft.ApplicationInsights.nuspec"
+      ]
+    },
+    "Microsoft.ApplicationInsights.AspNet/1.0.0-rc1": {
+      "type": "package",
+      "sha512": "cFxg3E6Z9otsuBOKhiLqxb5H/B6wbvjvMfu+v3wG8KEJvZ2ZAzNhAXbxE69baweyWzokj5nsI+9YeSXNWacBHA==",
+      "files": [
+        "lib/dnx451/Microsoft.ApplicationInsights.AspNet.dll",
+        "lib/dnx451/Microsoft.ApplicationInsights.AspNet.xml",
+        "lib/dnxcore50/Microsoft.ApplicationInsights.AspNet.dll",
+        "lib/dnxcore50/Microsoft.ApplicationInsights.AspNet.xml",
+        "Microsoft.ApplicationInsights.AspNet.1.0.0-rc1.nupkg",
+        "Microsoft.ApplicationInsights.AspNet.1.0.0-rc1.nupkg.sha512",
+        "Microsoft.ApplicationInsights.AspNet.nuspec"
+      ]
     },
     "Microsoft.AspNet.Antiforgery/1.0.0-rc1-final": {
       "type": "package",
@@ -7357,6 +7800,20 @@
         "Microsoft.AspNet.Mvc.Razor.Host.nuspec"
       ]
     },
+    "Microsoft.AspNet.Mvc.TagHelpers/6.0.0-rc1-final": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "zcoDzmKSMdOVUQHQZJQStArNqc5ERTxosB3GiK/MbC0HFhJ4vmh/vwI0rxnXO6X25+gYnr/2PAiY9fHvGkN58A==",
+      "files": [
+        "lib/dotnet5.4/Microsoft.AspNet.Mvc.TagHelpers.dll",
+        "lib/dotnet5.4/Microsoft.AspNet.Mvc.TagHelpers.xml",
+        "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll",
+        "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.xml",
+        "Microsoft.AspNet.Mvc.TagHelpers.6.0.0-rc1-final.nupkg",
+        "Microsoft.AspNet.Mvc.TagHelpers.6.0.0-rc1-final.nupkg.sha512",
+        "Microsoft.AspNet.Mvc.TagHelpers.nuspec"
+      ]
+    },
     "Microsoft.AspNet.Mvc.ViewFeatures/6.0.0-rc1-final": {
       "type": "package",
       "serviceable": true,
@@ -7490,6 +7947,23 @@
         "Microsoft.AspNet.TestHost.1.0.0-rc1-final.nupkg",
         "Microsoft.AspNet.TestHost.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.AspNet.TestHost.nuspec"
+      ]
+    },
+    "Microsoft.AspNet.Tooling.Razor/1.0.0-rc1-final": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "ZWDxJ4sqrZyrtmlRKeBYrxguRNBnTGV2LNgyZrSyVQ8DcQjPkSqFwu18BeER+j6Od2mgV5aOCdCLDN0QnjYI7Q==",
+      "files": [
+        "app/project.json",
+        "app/razor-tooling",
+        "app/razor-tooling.cmd",
+        "lib/dotnet5.4/Microsoft.AspNet.Tooling.Razor.dll",
+        "lib/dotnet5.4/Microsoft.AspNet.Tooling.Razor.xml",
+        "lib/net451/Microsoft.AspNet.Tooling.Razor.dll",
+        "lib/net451/Microsoft.AspNet.Tooling.Razor.xml",
+        "Microsoft.AspNet.Tooling.Razor.1.0.0-rc1-final.nupkg",
+        "Microsoft.AspNet.Tooling.Razor.1.0.0-rc1-final.nupkg.sha512",
+        "Microsoft.AspNet.Tooling.Razor.nuspec"
       ]
     },
     "Microsoft.AspNet.WebApi.Client/5.2.2": {
@@ -7629,7 +8103,7 @@
     },
     "Microsoft.Data.Edm/5.6.4": {
       "type": "package",
-      "sha512": "1OaiC/l6AvZO8YycJab8uQXVTdQr88VCvToAb0MSXzQgOLX0ITDTq0zGDtXVhgvkkR859m2FF5NDLI9iRneyiA==",
+      "sha512": "I9ea/CEOufddjjyRYIowshdeFj5SIqfWZ5conK/UIaFx2/jJ+PDRhQ5jcJTqTg/ediCa1C22TeRl/MmL9zwBew==",
       "files": [
         "lib/net40/de/Microsoft.Data.Edm.resources.dll",
         "lib/net40/es/Microsoft.Data.Edm.resources.dll",
@@ -7682,7 +8156,7 @@
     },
     "Microsoft.Data.OData/5.6.4": {
       "type": "package",
-      "sha512": "h99QxlisYGsp2+4RJXNsxINI0g3c2deLGk1/oF8ik3Q8LDB8AvwFG6LkEbfz2v92cSU48qcFxPwBY+JHcYwvMw==",
+      "sha512": "Te71LAvjYppmBCLWomHvhVzKes3q8L5tmmDMSyLP7YrJMYG5/Ded8uJgxWWkUX/Vh11ZDpN2WXRByOg+BAHCYw==",
       "files": [
         "lib/net40/de/Microsoft.Data.OData.resources.dll",
         "lib/net40/es/Microsoft.Data.OData.resources.dll",
@@ -7735,7 +8209,7 @@
     },
     "Microsoft.Data.Services.Client/5.6.4": {
       "type": "package",
-      "sha512": "+gmufGimhkPUL1ZZMaHiXBZMevQybfgMZYJI+/Ox4NAhs+Y7L6nkYPpSOifUVy26BKAAXQMObbC6N1KXqCurgQ==",
+      "sha512": "94XNZKwnpHuFAdR70kqNTMBv2ex9m+VVQX8dHknZgtlq+nTlZDgzFmahU0wsBaIqJWc3k8Z+FftQ2Voq9r0NWA==",
       "files": [
         "lib/net40/de/Microsoft.Data.Services.Client.resources.dll",
         "lib/net40/es/Microsoft.Data.Services.Client.resources.dll",
@@ -8036,6 +8510,34 @@
         "Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0-rc1-final.nupkg",
         "Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.Extensions.DependencyInjection.Abstractions.nuspec"
+      ]
+    },
+    "Microsoft.Extensions.DiagnosticAdapter/1.0.0-rc1-final": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "E3gpaMweF1ikFox8xcx4iy8sO/84SlF3eRb0OmRIvWoVqqjfceeG4vsZ+4a4Zo36rCqT8eoTwH0VLZUX8UF3RQ==",
+      "files": [
+        "lib/dotnet5.4/Microsoft.Extensions.DiagnosticAdapter.dll",
+        "lib/dotnet5.4/Microsoft.Extensions.DiagnosticAdapter.xml",
+        "lib/net451/Microsoft.Extensions.DiagnosticAdapter.dll",
+        "lib/net451/Microsoft.Extensions.DiagnosticAdapter.xml",
+        "Microsoft.Extensions.DiagnosticAdapter.1.0.0-rc1-final.nupkg",
+        "Microsoft.Extensions.DiagnosticAdapter.1.0.0-rc1-final.nupkg.sha512",
+        "Microsoft.Extensions.DiagnosticAdapter.nuspec"
+      ]
+    },
+    "Microsoft.Extensions.FileSystemGlobbing/1.0.0-rc1-final": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "7N9IPDU0T1uQBj6hobeGNqiEd+Cuu6RHJ0RcwkUvzTsLq8Vf2Sc72+HEAICTw1CTRXHgW49Zr47PvO0QPxI/5g==",
+      "files": [
+        "lib/dotnet5.4/Microsoft.Extensions.FileSystemGlobbing.dll",
+        "lib/dotnet5.4/Microsoft.Extensions.FileSystemGlobbing.xml",
+        "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll",
+        "lib/net451/Microsoft.Extensions.FileSystemGlobbing.xml",
+        "Microsoft.Extensions.FileSystemGlobbing.1.0.0-rc1-final.nupkg",
+        "Microsoft.Extensions.FileSystemGlobbing.1.0.0-rc1-final.nupkg.sha512",
+        "Microsoft.Extensions.FileSystemGlobbing.nuspec"
       ]
     },
     "Microsoft.Extensions.Globalization.CultureInfoCache/1.0.0-rc1-final": {
@@ -8407,6 +8909,19 @@
         "Microsoft.SharePointOnline.CSOM.16.1.5026.1200.nupkg",
         "Microsoft.SharePointOnline.CSOM.16.1.5026.1200.nupkg.sha512",
         "Microsoft.SharePointOnline.CSOM.nuspec"
+      ]
+    },
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0-rc1-final": {
+      "type": "package",
+      "sha512": "L8QBjp1tfPA3j+r9eKtMlebX/k+7pIGxeHZ/ZjkNgt8RLVEOyw9HPMs2Wetav0P3gCIM7YIfIzXV22c19yI83Q==",
+      "files": [
+        "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll",
+        "lib/dnx451/Microsoft.VisualStudio.Web.BrowserLink.Loader.xml",
+        "lib/dnxcore50/Microsoft.VisualStudio.Web.BrowserLink.Loader.dll",
+        "lib/dnxcore50/Microsoft.VisualStudio.Web.BrowserLink.Loader.xml",
+        "Microsoft.VisualStudio.Web.BrowserLink.Loader.14.0.0-rc1-final.nupkg",
+        "Microsoft.VisualStudio.Web.BrowserLink.Loader.14.0.0-rc1-final.nupkg.sha512",
+        "Microsoft.VisualStudio.Web.BrowserLink.Loader.nuspec"
       ]
     },
     "Newtonsoft.Json/7.0.1": {
@@ -9211,7 +9726,7 @@
     },
     "System.Spatial/5.6.4": {
       "type": "package",
-      "sha512": "LI2Y7FjjVFfNdMgr8RhMQVjSzZQVc8tLOjLMwZ2atWIBxq3DOZuCKg6qdotKdO0VqZ7ALp2ASRkhHaWh6jnKbw==",
+      "sha512": "BoXUQ0mHyeAbkR3qlhwXqUFxzJ7rZuFOrvFM/jZRk+S6JLI2JxXRKby6bxuWbmwYv2o/eRPQPbAOvEk5hB2Gmg==",
       "files": [
         "lib/net40/de/System.Spatial.resources.dll",
         "lib/net40/es/System.Spatial.resources.dll",
@@ -9644,7 +10159,7 @@
       "Microsoft.AspNet.Mvc >= 6.0.0-rc1-final",
       "Microsoft.Extensions.Logging.Console >= 1.0.0-rc1-final",
       "Microsoft.AspNet.IISPlatformHandler >= 1.0.0-rc1-final",
-      "Microsoft.Legal.MatterCenter.Service >= 1.0.0-*"
+      "Microsoft.Legal.MatterCenter.Web >= 1.0.0-*"
     ],
     "DNX,Version=v4.5.1": []
   }

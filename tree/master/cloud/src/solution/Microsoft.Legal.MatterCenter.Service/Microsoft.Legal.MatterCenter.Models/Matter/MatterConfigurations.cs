@@ -61,6 +61,16 @@ namespace Microsoft.Legal.MatterCenter.Models
         }
 
         /// <summary>
+        /// Gets or sets the emails for users of the projects
+        /// </summary>
+        /// <value>The list of matter center user emails</value>
+        public string MatterUserEmails
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets the matter roles for the users
         /// </summary>
         /// <value>The matter roles for the users</value>

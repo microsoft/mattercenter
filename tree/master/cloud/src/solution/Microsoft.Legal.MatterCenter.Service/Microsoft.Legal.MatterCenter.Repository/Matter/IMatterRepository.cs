@@ -45,6 +45,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         void SetPropertBagValuesForList(ClientContext clientContext, PropertyValues props, string matterName, Dictionary<string, string> propertyList);
         bool AddItem(ClientContext clientContext, List list, IList<string> columns, IList<object> values);
         GenericResponseVM DeleteMatter(Client client, Matter matter);
-        
+        GenericResponseVM ValidateTeamMembers(ClientContext clientContext, Matter matter, IList<string> userId);
+        GenericResponseVM SaveConfigurationToList(MatterConfigurations matterConfigurations, ClientContext clientContext, string cachedItemModifiedDate);
+        ListItem GetItem(ClientContext clientContext, string listName, string listQuery);
+
     }
 }

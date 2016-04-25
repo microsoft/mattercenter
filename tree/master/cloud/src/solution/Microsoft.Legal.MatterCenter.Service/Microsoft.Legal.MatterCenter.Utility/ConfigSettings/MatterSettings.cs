@@ -69,6 +69,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string StampedPropertyDocumentTemplateCount { get; set; }
         public string StampedPropertyBlockedUsers { get; set; }
         public string StampedPropertySuccess { get; set; }
+        public string StampedPropertyMatterCenterUserEmails { get; set; }
         public string PropertyNameVtiIndexedPropertyKeys { get; set; }
         public string ValidDateFormat { get; set; }
         public string ShareListColumnMatterPath { get; set; }
@@ -76,5 +77,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string DeleteMatterCode { get; set; }
         public string MatterDeletedSuccessfully { get; set; }
         public string MatterNotPresent { get; set; }
+        public bool IsContentCheck { get; set; }     
+        
+
     }
 }

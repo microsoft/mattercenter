@@ -22,6 +22,7 @@ using System.Globalization;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -55,6 +56,115 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spoAuthorization = spoAuthorization;
             this.spPage = spPage;
             this.errorSettings = errorSettings.Value;
+        }
+
+        public GenericResponseVM ValidateTeamMembers(ClientContext clientContext, Matter matter, IList<string> userId)
+        {
+            bool isInvalidUser = false;
+            int iCounter = 0, teamMembersRowCount = matter.AssignUserEmails.Count(), iCount = 0;
+            List<Principal> teamMemberPrincipalCollection = new List<Principal>();
+            GenericResponseVM genericResponse = new GenericResponseVM();
+            try
+            {
+                for (iCounter = 0; iCounter < teamMembersRowCount; iCounter++)
+                {
+                    IList<string> userList = matter.AssignUserEmails[iCounter].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
+                    IList<string> userNameList = matter.AssignUserNames[iCounter].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
+                    foreach (string userName in userList)
+                    {
+                        Principal teamMemberPrincipal = clientContext.Web.EnsureUser(userName.Trim());
+                        clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title);
+                        teamMemberPrincipalCollection.Add(teamMemberPrincipal);
+                    }
+                    clientContext.ExecuteQuery();
+                    //// Check whether the name entered by the user and the name resolved by SharePoint is same.
+                    foreach (string teamMember in userNameList)
+                    {
+                        if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[iCount].Title.Trim(), StringComparison.OrdinalIgnoreCase))
+                        {
+                            //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectTeamMembersCode, ServiceConstantStrings.IncorrectTeamMembersMessage + ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR + userId[iCounter]);
+                            genericResponse.Code = errorSettings.IncorrectTeamMembersCode;
+                            genericResponse.Code = errorSettings.IncorrectTeamMembersMessage + ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR + userId[iCounter];
+                            isInvalidUser = true;
+                            break;
+                        }
+                        iCount++;
+                    }
+                    if (isInvalidUser)
+                    {
+                        break; // To break the outer loop as there is an invalid user
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return genericResponse;
+        }
+
+        public GenericResponseVM SaveConfigurationToList(MatterConfigurations matterConfigurations, ClientContext clientContext, string cachedItemModifiedDate)
+        {
+            string result = string.Empty;
+            GenericResponseVM genericResponse = null;
+            try
+            {
+                string listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery, searchSettings.ManagedPropertyTitle, searchSettings.MatterConfigurationTitleValue);
+                ListItemCollection collection = spList.GetData(clientContext, listNames.MatterConfigurationsList, listQuery);
+                // Set the default value for conflict check flag
+                matterConfigurations.IsContentCheck = matterSettings.IsContentCheck;
+                if (0 == collection.Count)
+                {
+                    List<string> columnNames = new List<string>() { matterSettings.MatterConfigurationColumn, searchSettings.ManagedPropertyTitle };
+                    List<object> columnValues = new List<object>() { WebUtility.HtmlEncode(JsonConvert.SerializeObject(matterConfigurations)), searchSettings.MatterConfigurationTitleValue };
+                    Web web = clientContext.Web;
+                    List list = web.Lists.GetByTitle(listNames.MatterConfigurationsList);
+                    spList.AddItem(clientContext, list, columnNames, columnValues);
+                }
+                else
+                {
+                    bool response = spList.CheckItemModified(collection, cachedItemModifiedDate);
+                    if (response)
+                    {
+                        foreach (ListItem item in collection)
+                        {
+                            item[matterSettings.MatterConfigurationColumn] = WebUtility.HtmlEncode(JsonConvert.SerializeObject(matterConfigurations));
+                            item.Update();
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectTeamMembersCode, ServiceConstantStrings.IncorrectTeamMembersMessage + ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR);
+                        genericResponse = new GenericResponseVM()
+                        {
+                            Code = errorSettings.IncorrectTeamMembersCode,
+                            Value = errorSettings.IncorrectTeamMembersMessage
+                        };
+                    }
+                }
+                if (genericResponse == null)
+                {
+                    clientContext.ExecuteQuery();
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Code = "200",
+                        Value = true.ToString()
+                    };
+                };
+            }     
+            catch (Exception exception)
+            {
+                //result = Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
+                throw;
+            }
+            return genericResponse;
+        }
+
+        public ListItem GetItem(ClientContext clientContext, string listName, string listQuery)
+        {
+            ListItem settingsItem = spList.GetData(clientContext, listName, listQuery).FirstOrDefault();
+            return settingsItem;
         }
 
         public IList<FieldUserValue> ResolveUserNames(Client client, IList<string> userNames)

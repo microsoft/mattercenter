@@ -19,7 +19,7 @@
     "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-    "Microsoft.Legal.MatterCenter.Service": "1.0.0-*"
+    "Microsoft.Legal.MatterCenter.Web": "1.0.0-*"
   },
   "commands": {
     "test": "xunit.runner.dnx"

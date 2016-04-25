@@ -27,5 +27,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         bool AddItem(ClientContext clientContext, List list, IList<string> columns, IList<object> values);
         string GetPropertyValueForList(ClientContext clientContext, string matterName, string propertyList);
         bool Delete(ClientContext clientContext, IList<string> lists);
+        bool CheckItemModified(ListItemCollection collection, string cachedItemModifiedDate);
     }
 }

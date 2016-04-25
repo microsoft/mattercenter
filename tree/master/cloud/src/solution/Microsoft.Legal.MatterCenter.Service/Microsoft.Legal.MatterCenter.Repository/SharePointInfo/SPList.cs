@@ -654,6 +654,41 @@ namespace Microsoft.Legal.MatterCenter.Repository
         }
 
         /// <summary>
+        /// Checks if item is modified after it is loaded on the client side
+        /// </summary>        
+        /// <param name="collection">List item collection</param>
+        /// <param name="cachedItemModifiedDate">Date time when current user loaded the page to see/update configuration values.</param>
+        /// <returns>Success flag</returns>
+        public bool CheckItemModified(ListItemCollection collection, string cachedItemModifiedDate)
+        {
+            bool response = false;
+            int errorModifiedDate = 0;  // If there is new list item being created then 'cachedItemModifiedDate' will be 0
+            if (null != collection && !string.IsNullOrWhiteSpace(cachedItemModifiedDate))
+            {
+                // Verify if new item flag is true and no list item is present in the Matter Configuration list
+                if (String.Equals(Convert.ToString(errorModifiedDate, CultureInfo.InvariantCulture), cachedItemModifiedDate) && collection.Count.Equals(0)) 
+                {
+                    response = true;
+                }
+                else if (0 < collection.Count)
+                {
+                    ListItem settingsListItem = collection.FirstOrDefault();
+                    DateTime cachedDate;
+                    if (DateTime.TryParse(cachedItemModifiedDate, out cachedDate))
+                    {
+                        DateTime itemModifiedDate = Convert.ToDateTime(settingsListItem[ServiceConstants.MODIFIED_DATE_COLUMN], CultureInfo.InvariantCulture);
+                        if (0 == DateTime.Compare(cachedDate, itemModifiedDate))
+                        {
+                            response = true;
+                        }
+                    }
+
+                }
+            }
+            return response;
+        }
+
+        /// <summary>
         /// Sets the value of the specified property.
         /// </summary>
         /// <param name="clientContext">Client context</param>

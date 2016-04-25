@@ -88,6 +88,16 @@ namespace Microsoft.Legal.MatterCenter.Models
         }
 
         /// <summary>
+        /// Gets or sets the assigned user email addresses. Represents the team members associated with the project.
+        /// </summary>
+        /// <value>The list of assign user email addresses.</value>
+        public IList<IList<string>> AssignUserEmails
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets the blocked user names. Represents the users who are blocked from viewing the matter details.
         /// </summary>
         /// <value>The block user names.</value>
