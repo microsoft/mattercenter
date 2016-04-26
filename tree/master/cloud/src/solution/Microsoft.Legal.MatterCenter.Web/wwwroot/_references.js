@@ -37,6 +37,7 @@
 /// <reference path="lib/angular-sanitize/angular-sanitize.js" />
 /// <reference path="lib/angular-sanitize/index.js" />
 /// <reference path="lib/angular-ui-grid/ui-grid.js" />
+/// <reference path="lib/angular-ui-grid/ui-grid-unstable.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
 /// <reference path="lib/bootstrap/dist/js/npm.js" />
 /// <reference path="lib/jquery/dist/jquery.js" />
