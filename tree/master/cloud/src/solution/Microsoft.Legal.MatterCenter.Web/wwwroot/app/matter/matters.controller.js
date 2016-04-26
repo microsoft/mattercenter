@@ -39,13 +39,41 @@
                     success: callback
                 });
             } 
+
+
+            function get(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'get',
+                    data: options,
+                    success: callback
+                });
+            } 
 		
           options = {
               Id: "123456",
 							Name: "Microsoft", 
 							Url: "https://msmatter.sharepoint.com/sites/catalog"
-						};	
-                        
+          };
+
+          var searchObject =
+                {
+                    PageNumber: 1,
+                    ItemsPerPage: 10,
+                    SearchTerm: "",
+                    Filters: "",
+                    Sort: 
+                    {
+                        ByProperty: "LastModifiedTime",
+                        Direction: 1
+                    }
+                }
+          vm.search = function () {
+              get(options, function (response) {
+                  vm.gridOptions.data = response.userPinnedMattersList;
+              });
+          }
+
 		getPinnedMatters(options, function (response) {
               //vm.matters = response.userPinnedMattersList;
               vm.gridOptions.data = response.userPinnedMattersList;

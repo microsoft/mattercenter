@@ -6,6 +6,11 @@ angular.module('matterMain')
 
           return $resource(null, null,
               {
+                  'get': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/get'
+                  }),
+
                   'getMatters': auth.attachCSRF({
                       method: 'GET',
                       url: '/api/v1/taxonomy/getcurrentsitetitle'
