@@ -807,9 +807,48 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
-        public string AssignUserPermissions(Client client, Matter matter, MatterConfigurations matterConfigurations)
+        public IActionResult AssignUserPermissions([FromBody] MatterMetdataVM matterMetadataVM)
         {
-            return null;
+            var client = matterMetadataVM.Client;
+            var matter = matterMetadataVM.Matter;
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];                
+                var matterConfigurations = matterMetadataVM.MatterConfigurations;
+                ErrorResponse errorResponse = null;
+                if (null == client && null == matter && null == client.Url && null == matterConfigurations)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+
+                var genericResponseVM = matterProvision.AssignUserPermissions(matterMetadataVM);
+                if(genericResponseVM!=null && genericResponseVM.IsError==true)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = genericResponseVM.Value,
+                        ErrorCode = genericResponseVM.Code,
+                        Description = ""
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                var assignPermissions = new {
+                    ReturnValue = true
+                };
+                return matterCenterServiceFunctions.ServiceResponse(assignPermissions, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                matterProvision.DeleteMatter(client, matter);
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
     }
 }

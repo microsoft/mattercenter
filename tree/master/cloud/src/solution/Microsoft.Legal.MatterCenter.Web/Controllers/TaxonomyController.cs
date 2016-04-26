@@ -197,7 +197,7 @@ namespace Microsoft.Legal.MatterCenter.Service.Controllers
                 {
                     Id = "123456",
                     Name = "Disney",
-                    Url = "https://microsoft.sharepoint.com/teams/mcuisite"
+                    Url = "https://msmatter.sharepoint.com/sites/microsoft"
                 },
                 TermStoreDetails = new TermStoreDetails()
                 {

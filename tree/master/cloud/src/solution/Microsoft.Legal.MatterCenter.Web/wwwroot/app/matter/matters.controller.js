@@ -32,7 +32,7 @@
 		
 		options = {	Id: "123456", 
 							Name: "Microsoft", 
-							Url: "https://microsoft.sharepoint.com/teams/mcuisite"
+							Url: "https://msmatter.sharepoint.com/sites/catalog"
 						};	
                         
 		getPinnedMatters(options, function (response) {

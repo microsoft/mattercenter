@@ -12,5 +12,6 @@ namespace Microsoft.Legal.MatterCenter.Service
         GenericResponseVM DeleteMatter(Client client, Matter matter);
         GenericResponseVM SavConfigurations(SaveConfigurationsVM saveConfigurationsVM);
         PropertyValues GetStampedProperties(MatterVM matterVM);
+        GenericResponseVM AssignUserPermissions(MatterMetdataVM matterMetadata);
     }
 }

@@ -278,6 +278,75 @@ namespace Microsoft.Legal.MatterCenter.Service
             return matterStampedProperties;
         }
 
+        public GenericResponseVM AssignUserPermissions(MatterMetdataVM matterMetadataVM)
+        {
+            var client = matterMetadataVM.Client;
+            var matter = matterMetadataVM.Matter;
+            var matterConfigurations = matterMetadataVM.MatterConfigurations;
+            ClientContext clientContext = null;
+            string calendarName = string.Concat(matter.Name, matterSettings.CalendarNameSuffix);
+            string oneNoteLibraryName = string.Concat(matter.Name, matterSettings.OneNoteLibrarySuffix);
+            string taskLibraryName = string.Concat(matter.Name, matterSettings.TaskNameSuffix);
+            GenericResponseVM genericResponseVM = null;
+            using (clientContext = spoAuthorization.GetClientContext(client.Url))
+            {
+                MatterInformationVM matterInfo = new MatterInformationVM()
+                {
+                    Client = matterMetadataVM.Client,
+                    Matter = matterMetadataVM.Matter,
+                    MatterDetails = matterMetadataVM.MatterDetails
+                };
+                genericResponseVM = validationFunctions.IsMatterValid(matterInfo, 
+                    int.Parse(ServiceConstants.ProvisionMatterAssignUserPermissions, CultureInfo.InvariantCulture), null);
+
+                if(genericResponseVM!=null)
+                {
+                    DeleteMatter(client, matter);
+                    return genericResponseVM;
+                }
+                if (!string.IsNullOrWhiteSpace(matter.Name))
+                {
+                    //Assign permission for Matter library
+                    matterRepositoy.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, matter.Name);
+                    //Assign permission for OneNote library 
+                    matterRepositoy.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, oneNoteLibraryName);
+                    if (matterSettings.IsCreateCalendarEnabled && matterConfigurations.IsCalendarSelected)
+                    {
+                        bool returnValueCalendar = matterRepositoy.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, calendarName);
+                        if (!returnValueCalendar)
+                        {
+                            genericResponseVM =
+                                new GenericResponseVM() {
+                                    Code = errorSettings.ErrorCodeCalendarCreation,
+                                    Value = errorSettings.ErrorMessageCalendarCreation,
+                                    IsError = true
+                                };
+                            return genericResponseVM; 
+                        }
+                    }
+
+                    // Assign permission to task list if it is selected
+                    if (matterConfigurations.IsTaskSelected)
+                    {
+                        bool returnValueTask = matterRepositoy.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, taskLibraryName);
+                        if (!returnValueTask)
+                        {
+                            
+                            genericResponseVM =
+                                new GenericResponseVM()
+                                {
+                                    Code = errorSettings.ErrorMessageTaskCreation,
+                                    Value = errorSettings.ErrorCodeAddTaskList,
+                                    IsError = true
+                                };
+                            return genericResponseVM;
+                        }
+                    }
+                }
+            }
+            return genericResponseVM;
+        }
+
         #region private functions
 
         /// <summary>
