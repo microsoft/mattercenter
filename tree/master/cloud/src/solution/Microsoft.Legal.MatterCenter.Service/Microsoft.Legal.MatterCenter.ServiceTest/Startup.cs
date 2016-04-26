@@ -36,7 +36,6 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         public IApplicationEnvironment ApplicationEnvironment { get; }
         #endregion
 
-
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv, ILoggerFactory logger)
         {
             this.HostingEnvironment = env;
@@ -44,59 +43,60 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             this.LoggerFactory = logger;
         }
 
+        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Set up configuration sources.
+
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
+
+            if (HostingEnvironment.IsDevelopment())
+            {
+                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
+                builder.AddApplicationInsightsSettings(developerMode: true);
+            }
+
             Configuration = builder.Build();
             ConfigureSettings(services);
             services.AddCors();
             services.AddLogging();
             ConfigureMvc(services, LoggerFactory);
             // Add framework services.
+            services.AddApplicationInsightsTelemetry(Configuration);
             services.AddMvc();
             ConfigureMatterPackages(services);
             ConfigureSwagger(services);
         }
 
-        /// <summary>
-        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        /// </summary>
-        /// <param name="app"></param>
-        /// <param name="env"></param>
-        /// <param name="loggerFactory"></param>
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
             var log = loggerFactory.CreateLogger<Startup>();
             try
             {
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
-                app.UseDeveloperExceptionPage();
                 app.UseIISPlatformHandler();
-                app.UseJwtBearerAuthentication(options =>
-                {
-                    options.AutomaticAuthenticate = true;
-                    options.Authority = String.Format(CultureInfo.InvariantCulture,
-                        this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
-                        this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString()); //"https://login.windows.net/microsoft.onmicrosoft.com";
-                    options.Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value.ToString();// "11dd7c26-8a0d-4d41-9210-946883ffd9d6";
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnAuthenticationFailed = context => {
-                            return Task.FromResult(0);
-                        },
-                        OnValidatedToken = context => {
-                            return Task.FromResult(0);
-                        }
-                    };
 
-                });
+                app.UseApplicationInsightsRequestTelemetry();
+                if (env.IsDevelopment())
+                {
+                    app.UseBrowserLink();
+                    app.UseDeveloperExceptionPage();
+                }
+                else
+                {
+                    app.UseExceptionHandler("/Home/Error");
+                }
+
+                app.UseApplicationInsightsExceptionTelemetry();
+                app.UseDefaultFiles();
+                app.UseStaticFiles();
+                CheckAuthorization(app);
                 app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
                 app.UseMvc();
-
                 app.UseSwaggerGen();
                 app.UseSwaggerUi();
             }
@@ -196,6 +196,27 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.AddSingleton<IValidationFunctions, ValidationFunctions>();
             services.AddSingleton<IEditFunctions, EditFunctions>();
             services.AddSingleton<IMatterProvision, MatterProvision>();
+        }
+
+        private void CheckAuthorization(IApplicationBuilder app)
+        {
+            app.UseJwtBearerAuthentication(options =>
+            {
+                options.AutomaticAuthenticate = true;
+                options.Authority = String.Format(CultureInfo.InvariantCulture,
+                    this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
+                    this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString());
+                options.Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value.ToString();
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context => {
+                        return Task.FromResult(0);
+                    },
+                    OnValidatedToken = context => {
+                        return Task.FromResult(0);
+                    }
+                };
+            });
         }
         #endregion
     }
