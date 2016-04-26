@@ -37,3 +37,6 @@ textarea {
     width: 500px;
     height: 250px;
 }
+.ui-grid-row:hover .ui-grid-cell {
+  background-color: #bcd9ed;
+}
