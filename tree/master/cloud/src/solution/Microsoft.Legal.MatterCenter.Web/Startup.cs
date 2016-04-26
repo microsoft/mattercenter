@@ -119,7 +119,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         #region Private Methods
 
         #region Swagger
-        private string pathToDoc = "Microsoft.Legal.MatterCenter.Service.xml";
+        private string pathToDoc = "Microsoft.Legal.MatterCenter.Web.xml";
 
         private void ConfigureSwagger(IServiceCollection services)
         {
