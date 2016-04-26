@@ -87,6 +87,12 @@ namespace Microsoft.Legal.MatterCenter.Utility
 
         public string MatterLibraryExistsCode { get; set; }
         public string ErrorDuplicateMatter { get; set; }
+
+        public string ErrorCodeCalendarCreation { get; set; }
+        public string ErrorMessageCalendarCreation { get; set; }
+
+        public string ErrorMessageTaskCreation { get; set; }
+        public string ErrorCodeAddTaskList { get; set; }
         #endregion
     }
 }

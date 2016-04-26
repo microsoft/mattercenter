@@ -8,6 +8,7 @@ namespace Microsoft.Legal.MatterCenter.Models
     public class GenericResponseVM
     {
         public string Code { get; set; }
-        public string Value { get; set;  }        
+        public string Value { get; set;  }
+        public bool IsError { get; set; }
     }
 }

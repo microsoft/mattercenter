@@ -917,5 +917,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             return currentUsers;
         }
+
+        public bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName)
+        {
+            return spList.SetPermission(clientContext, assignUserName, permissions, listName);
+        }
     }
 }

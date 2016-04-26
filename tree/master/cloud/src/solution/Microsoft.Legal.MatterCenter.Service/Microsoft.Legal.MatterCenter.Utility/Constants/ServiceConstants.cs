@@ -372,6 +372,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// </summary>
         public const string MODIFIED_DATE_COLUMN = "Modified";
 
+        
+
         #endregion
     }
 }

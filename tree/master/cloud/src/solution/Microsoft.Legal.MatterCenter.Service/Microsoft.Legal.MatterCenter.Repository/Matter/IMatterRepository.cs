@@ -48,6 +48,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         GenericResponseVM ValidateTeamMembers(ClientContext clientContext, Matter matter, IList<string> userId);
         GenericResponseVM SaveConfigurationToList(MatterConfigurations matterConfigurations, ClientContext clientContext, string cachedItemModifiedDate);
         ListItem GetItem(ClientContext clientContext, string listName, string listQuery);
+        bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName);
 
     }
 }

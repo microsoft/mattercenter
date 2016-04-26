@@ -36,6 +36,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string SpecialCharacterExpressionContentType { get; set; }
         public string MatterIdLength { get; set; }
         public string MatterNameLength { get; set; }
+        public bool IsCreateCalendarEnabled { get; set; }
 
         public string ContentTypeLength { get; set; }
         public string MatterDescriptionLength { get; set; }
