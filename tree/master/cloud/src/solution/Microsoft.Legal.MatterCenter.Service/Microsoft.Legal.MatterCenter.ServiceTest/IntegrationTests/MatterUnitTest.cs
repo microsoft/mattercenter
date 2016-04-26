@@ -125,5 +125,75 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 Assert.NotNull(result);               
             }
         }
+
+        [Fact]
+        public async void Get_Matter_Without_SearchTerm()
+        {
+            var searchRequest = new SearchRequestVM()
+            {
+                Client = new Client()
+                {
+                    Id = "123456",
+                    Name = "Microsoft",
+                    Url = "https://msmatter.sharepoint.com/sites/catalog"
+                },
+                SearchObject = new SearchObject()
+                {
+                    PageNumber = 1,
+                    ItemsPerPage=10,
+                    SearchTerm="",
+                    Filters = new FilterObject() { },
+                    Sort = new SortObject()
+                    {
+                        ByProperty = "LastModifiedTime",
+                        Direction = 1
+                    }
+                }
+            };
+            using (var testClient = testServer.CreateClient().AcceptJson())
+            {
+                var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/matter/get", searchRequest);
+                var result = response.Content.ReadAsJsonAsync<SearchResponseVM>().Result;
+                Assert.NotNull(result);
+                Assert.NotEmpty(result.SearchResults);               
+
+            }
+        }
+
+        [Fact]
+        public async void Get_Matter_With_SearchTerm()
+        {
+            var searchRequest = new SearchRequestVM()
+            {
+                Client = new Client()
+                {
+                    Id = "123456",
+                    Name = "Microsoft",
+                    Url = "https://msmatter.sharepoint.com/sites/catalog"
+                },
+                SearchObject = new SearchObject()
+                {
+                    PageNumber = 1,
+                    ItemsPerPage = 10,
+                    SearchTerm = "New Matter",
+                    Filters = new FilterObject() { },
+                    Sort = new SortObject()
+                    {
+                        ByProperty = "LastModifiedTime",
+                        Direction = 1
+                    }
+                }
+            };
+            using (var testClient = testServer.CreateClient().AcceptJson())
+            {
+                var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/matter/get", searchRequest);
+                var result = response.Content.ReadAsJsonAsync<SearchResponseVM>().Result;
+                Assert.NotNull(result);
+                Assert.NotEmpty(result.SearchResults);
+
+            }
+        }
+
+        
     }
 }
