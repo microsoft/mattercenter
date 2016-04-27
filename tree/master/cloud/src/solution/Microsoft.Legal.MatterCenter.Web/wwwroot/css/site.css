@@ -37,6 +37,20 @@ textarea {
     width: 500px;
     height: 250px;
 }
+
 .ui-grid-row:hover .ui-grid-cell {
-  background-color: #bcd9ed;
+    background-color: #bcd9ed;
 }
+
+
+
+
+
+.ui-grid-cell  {
+  overflow: visible;
+}
+
+/*.ui-grid-change-icon {
+    background: url(../images/Column_Picker_Expand.png) center no-repeat;
+  
+}*/
