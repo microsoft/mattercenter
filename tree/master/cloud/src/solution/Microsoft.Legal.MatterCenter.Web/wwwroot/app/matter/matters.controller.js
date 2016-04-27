@@ -51,15 +51,15 @@
             } 
 		
 
-            function get(options, callback) {
-                api({
-                    resource: 'matterResource',
-                    method: 'get',
-                    data: options,
-                    success: callback
-                });
-            } 
-		
+          function get(options, callback) {
+              api({
+                  resource: 'matterResource',
+                  method: 'get',
+                  data: options,
+                  success: callback
+              });
+          }
+
           options = {
               Id: "123456",
 							Name: "Microsoft", 
@@ -72,7 +72,7 @@
                     ItemsPerPage: 10,
                     SearchTerm: "",
                     Filters: "",
-                    Sort: 
+                    Sort:
                     {
                         ByProperty: "LastModifiedTime",
                         Direction: 1
@@ -84,7 +84,7 @@
               });
           }
 
-		getPinnedMatters(options, function (response) {
+          getPinnedMatters(options, function (response) {
               //vm.matters = response.userPinnedMattersList;
               console.log(response);
               vm.gridOptions.data = response.userPinnedMattersList;
