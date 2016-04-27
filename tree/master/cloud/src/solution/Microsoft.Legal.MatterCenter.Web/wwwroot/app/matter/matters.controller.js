@@ -2,9 +2,9 @@
     'use strict';
 
     angular.module("matterMain")
-        .controller('mattersController', ['$scope', '$state','$interval', '$stateParams', 'api',
-      function ($scope, $state,$interval, $stateParams, api) {
-	    var vm = this;
+        .controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api',
+      function ($scope, $state, $interval, $stateParams, api) {
+          var vm = this;
           var options = new Object;
           vm.gridOptions = {
               enableGridMenu: true,
@@ -27,52 +27,51 @@
           };
 
 
-		function getMatters(options, callback) {
-                api({
-                    resource: 'matterResource',
-                    method: 'getMatters',
-                    data: options,
-                    success: callback
-                });
-            } 
-			
-		getMatters(options, function (response) {
-                   vm.title = response.title;
+          function getMatters(options, callback) {
+              api({
+                  resource: 'matterResource',
+                  method: 'getMatters',
+                  data: options,
+                  success: callback
+              });
+          }
 
-                });   
-			
-		function getPinnedMatters(options, callback) {
-                api({
-                    resource: 'matterResource',
-                    method: 'getPinnedMatters',
-                    data: options,
-                    success: callback
-                });
-            } 
-		
+          getMatters(options, function (response) {
+              vm.title = response.title;
+          });
 
-            function get(options, callback) {
-                api({
-                    resource: 'matterResource',
-                    method: 'get',
-                    data: options,
-                    success: callback
-                });
-            } 
-		
+          function getPinnedMatters(options, callback) {
+              api({
+                  resource: 'matterResource',
+                  method: 'getPinnedMatters',
+                  data: options,
+                  success: callback
+              });
+          }
+
+
+          function get(options, callback) {
+              api({
+                  resource: 'matterResource',
+                  method: 'get',
+                  data: options,
+                  success: callback
+              });
+          }
+
           options = {
               Id: "123456",
-							Name: "Microsoft", 
-							Url: "https://msmatter.sharepoint.com/sites/catalog"
-						};	
-                        
+              Name: "Microsoft",
+              Url: "https://msmatter.sharepoint.com/sites/catalog"
+          };
+
           var searchObject =
                 {
                     PageNumber: 1,
                     ItemsPerPage: 10,
                     SearchTerm: "",
                     Filters: "",
-                    Sort: 
+                    Sort:
                     {
                         ByProperty: "LastModifiedTime",
                         Direction: 1
@@ -84,23 +83,22 @@
               });
           }
 
-		getPinnedMatters(options, function (response) {
+          getPinnedMatters(options, function (response) {
               //vm.matters = response.userPinnedMattersList;
-              console.log(response);
+              //console.log(response);
               vm.gridOptions.data = response.userPinnedMattersList;
 
 
-                });          
+          });
 
-          //$scope.ChangeHeaderMenuIcon = function () {
+          $scope.SearchMatters = [{ Id: 1, Name: "All Matters" }, { Id: 2, Name: "My Matters" }, { Id: 3, Name: "Pinned Matters" }]
+          $scope.Matters = $scope.SearchMatters[0];
 
-          //    jQuery('[ui-grid-menu-button]').find('i').removeClass('ui-grid-icon-menu').addClass('ui-grid-change-icon');
-          //}
+          $scope.SelectedMatters = function (Id) {
 
-          //$interval(function () { $scope.ChangeHeaderMenuIcon(); }, 0, 1);
-
-          $scope.ShowMenuWrapper = function () {
-              alert("Hi");
           }
-        }]);
+      }]);
+
+
+
 })();

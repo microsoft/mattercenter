@@ -8,25 +8,25 @@
 
         </div>
         <div class="col-sm-2">
-            <select class="col-sm-12">
-                <option>All Matters</option>
-                <option>My Matters</option>
-                <option>Pinned Matters</option>
-            </select>
+            <select class="col-sm-12 form-control" ng-change="SelectedMatters(Matters.Id)" ng-model="Matters" ng-options="search.Name for search in SearchMatters"></select>
         </div>
         <div class="col-sm-4">
-            <input class="col-sm-12" type="text" placeholder="Search by ID, or matter or client name" /><img ng-click="vm.search()" src="../../images/search-15x15-666.png" />
+            <input class="col-sm-12 form-control" type="text" placeholder="Search by ID, or matter or client name" /><img ng-click="vm.search()" src="../../images/search-15x15-666.png" />
         </div>
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <h1 role="heading" class="add-margin-bottom">Pinned Matters</h1>
+            <h3 role="heading" class="add-margin-bottom">{{Matters.Name}}</h3>
         </div>
     </div>
+    <hr/>
     <div class="row">
-        <div class="col-sm-12">
-            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
+        <div class="col-sm-12" ng-if="Matters.Id==3">
+            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid">
+            </div>
         </div>
+        <div class="col-sm-12" ng-if="Matters.Id==1">There are no Matters available.</div>
+        <div class="col-sm-12" ng-if="Matters.Id==2">There are no matters assigned to you.</div>
     </div>
 </div>
 

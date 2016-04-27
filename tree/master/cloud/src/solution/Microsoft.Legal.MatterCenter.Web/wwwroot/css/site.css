@@ -43,11 +43,25 @@ textarea {
 }
 
 
-
-
-
 .ui-grid-cell  {
   overflow: visible;
+}
+
+.dropdown-menu > li > a {
+    display: block;
+    padding: 10px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    height: 40px;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    color: #262626;
+    text-decoration: none;
+    background-color: #cde6f7;
 }
 
 /*.ui-grid-change-icon {
