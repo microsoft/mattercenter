@@ -27,7 +27,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             
             using (var client = testServer.CreateClient().AcceptJson())
             {
-                var response = await client.GetAsync("http://localhost:58775/api/v1/taxonomy/getcurrentsitetitle");
+                var response = await client.GetAsync("http://localhost:44323/api/v1/taxonomy/getcurrentsitetitle");
                 var result = response.Content.ReadAsStringAsync().Result;
                 Assert.NotNull(result);
             }

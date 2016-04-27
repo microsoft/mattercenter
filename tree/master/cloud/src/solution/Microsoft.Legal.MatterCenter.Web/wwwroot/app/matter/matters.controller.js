@@ -4,7 +4,7 @@
     angular.module("matterMain")
         .controller('mattersController', ['$scope', '$state','$interval', '$stateParams', 'api',
       function ($scope, $state,$interval, $stateParams, api) {
-          var vm = this;
+	    var vm = this;
           var options = new Object;
           vm.gridOptions = {
               enableGridMenu: true,
@@ -27,42 +27,70 @@
           };
 
 
-          function getMatters(options, callback) {
-              api({
-                  resource: 'matterResource',
-                  method: 'getMatters',
-                  data: options,
-                  success: callback
-              });
-          }
+		function getMatters(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getMatters',
+                    data: options,
+                    success: callback
+                });
+            } 
+			
+		getMatters(options, function (response) {
+                   vm.title = response.title;
 
-          getMatters(options, function (response) {
-              vm.title = response.title;
+                });   
+			
+		function getPinnedMatters(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getPinnedMatters',
+                    data: options,
+                    success: callback
+                });
+            } 
+		
 
-          });
-
-          function getPinnedMatters(options, callback) {
-              api({
-                  resource: 'matterResource',
-                  method: 'getPinnedMatters',
-                  data: options,
-                  success: callback
-              });
-          }
-
+            function get(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'get',
+                    data: options,
+                    success: callback
+                });
+            } 
+		
           options = {
               Id: "123456",
-              Name: "Microsoft",
-              Url: "https://msmatter.sharepoint.com/sites/catalog"
-          };
+							Name: "Microsoft", 
+							Url: "https://msmatter.sharepoint.com/sites/catalog"
+						};	
+                        
+          var searchObject =
+                {
+                    PageNumber: 1,
+                    ItemsPerPage: 10,
+                    SearchTerm: "",
+                    Filters: "",
+                    Sort: 
+                    {
+                        ByProperty: "LastModifiedTime",
+                        Direction: 1
+                    }
+                }
+          vm.search = function () {
+              get(options, function (response) {
+                  vm.gridOptions.data = response.userPinnedMattersList;
+              });
+          }
 
-          getPinnedMatters(options, function (response) {
+		getPinnedMatters(options, function (response) {
               //vm.matters = response.userPinnedMattersList;
               console.log(response);
               vm.gridOptions.data = response.userPinnedMattersList;
 
 
-          });
+                });          
 
           //$scope.ChangeHeaderMenuIcon = function () {
 
@@ -74,5 +102,5 @@
           $scope.ShowMenuWrapper = function () {
               alert("Hi");
           }
-      }]);
+        }]);
 })();

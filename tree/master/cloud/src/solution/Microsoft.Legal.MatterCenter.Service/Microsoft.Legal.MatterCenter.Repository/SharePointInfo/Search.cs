@@ -100,16 +100,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     {
                         if (searchObject.Filters.FilterByMe == 1)
                         {
-                            ////Get logged in user alias
-                            clientContext.Load(clientContext.Web.CurrentUser);
-                            clientContext.ExecuteQuery();
-                            string currentLoggedInUser = clientContext.Web.CurrentUser.Title;
-                            searchObject.SearchTerm = String.Concat(searchObject.SearchTerm, ServiceConstants.SPACE,
-                                ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, searchSettings.ManagedPropertyAuthor,
-                                ServiceConstants.COLON, currentLoggedInUser);
+                            
+                            Users currentUserDetail = userDetails.GetLoggedInUserDetails(clientContext);
+                            string userTitle = currentUserDetail.Name;
+                            searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
+                                ServiceConstants.OPENING_BRACKET, searchSettings.ManagedPropertyResponsibleAttorney, 
+                                ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle, 
+                                ServiceConstants.DOUBLE_QUOTE, ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
+                                searchSettings.ManagedPropertyTeamMembers, ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle,
+                                ServiceConstants.DOUBLE_QUOTE, ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
                         }
 
-                        keywordQuery = FilterDocuments(searchObject, keywordQuery);
+                        keywordQuery = FilterMatters(searchObject, keywordQuery);
 
                         keywordQuery = KeywordQueryMetrics(client, searchObject, keywordQuery, 
                             ServiceConstants.DOCUMENT_LIBRARY_FILTER_CONDITION, 
@@ -139,7 +141,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
                         keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
                         keywordQuery.BypassResultTypes = true;
-                        searchResponseVM = FillResultData(keywordQuery, searchRequestVM, true, managedProperties);
+                        searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, true, managedProperties);
                     }
                 }
                 return searchResponseVM;
@@ -218,7 +220,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
                         keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
                         keywordQuery.BypassResultTypes = true;
-                        searchResponseVM = FillResultData(keywordQuery, searchRequestVM, false, managedProperties);
+                        searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, false, managedProperties);
                     }
                 }
             }
@@ -1306,7 +1308,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="isMatterSearch">The flag to determine weather call is from Search Matter or Search Document.</param>
         /// <param name="managedProperties">List of managed properties</param>
         /// <returns>It returns a string object, that contains all the results combined with dollar pipe dollar separator.</returns>
-        private SearchResponseVM FillResultData(KeywordQuery keywordQuery, SearchRequestVM searchRequestVM, Boolean isMatterSearch, List<string> managedProperties)
+        private SearchResponseVM FillResultData(ClientContext clientContext, KeywordQuery keywordQuery, SearchRequestVM searchRequestVM, Boolean isMatterSearch, List<string> managedProperties)
         {
             SearchResponseVM searchResponseVM = new SearchResponseVM() ;
             Boolean isReadOnly;
@@ -1321,11 +1323,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 SearchExecutor searchExecutor = new SearchExecutor(clientContext);
                 ClientResult<ResultTableCollection> resultsTableCollection = searchExecutor.ExecuteQuery(keywordQuery);
-                string currentLoggedInUser = userDetails.GetLoggedInUserDetails(clientContext).Name;
+                Users currentLoggedInUser = userDetails.GetLoggedInUserDetails(clientContext);
 
                 if (null != resultsTableCollection && null != resultsTableCollection.Value && 0 < resultsTableCollection.Value.Count && null != resultsTableCollection.Value[0].ResultRows)
                 {
-                    if (isMatterSearch && 0 < resultsTableCollection.Value.Count && null != resultsTableCollection.Value[0].ResultRows && !string.IsNullOrWhiteSpace(currentLoggedInUser))
+                    if (isMatterSearch && 0 < resultsTableCollection.Value.Count && null != resultsTableCollection.Value[0].ResultRows && !string.IsNullOrWhiteSpace(currentLoggedInUser.Email))
                     {
                         foreach (IDictionary<string, object> matterMetadata in resultsTableCollection.Value[0].ResultRows)
                         {
@@ -1337,7 +1339,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 string readOnlyUsers = Convert.ToString(matterMetadata[searchSettings.ManagedPropertyBlockedUploadUsers], CultureInfo.InvariantCulture);
                                 if (!string.IsNullOrWhiteSpace(readOnlyUsers))
                                 {
-                                    isReadOnly = IsUserReadOnlyForMatter(isReadOnly, currentLoggedInUser, readOnlyUsers);
+                                    isReadOnly = IsUserReadOnlyForMatter(isReadOnly, currentLoggedInUser.Name, currentLoggedInUser.Email, readOnlyUsers);
                                 }
                                 matterMetadata.Add(generalSettings.IsReadOnlyUser, isReadOnly);
                             }
@@ -1359,25 +1361,19 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             }
                         }
                     }
-                    if (1 < resultsTableCollection.Value.Count)
-                    {
-                        //object$|$
-                        //result = string.Concat(JsonConvert.SerializeObject(resultsTableCollection.Value[0].ResultRows), ServiceConstants.DOLLAR,
-                        //    ServiceConstants.PIPE, ServiceConstants.DOLLAR, resultsTableCollection.Value[0].TotalRows, ServiceConstants.DOLLAR,
-                        //    ServiceConstants.PIPE, ServiceConstants.DOLLAR, JsonConvert.SerializeObject(resultsTableCollection.Value[1].ResultRows));
+                    if (resultsTableCollection.Value.Count>1)
+                    {                        
                         searchResponseVM.TotalRows = resultsTableCollection.Value[0].TotalRows;
                         searchResponseVM.SearchResults = resultsTableCollection.Value[0].ResultRows;
                     }
                     else
                     {
-                        if (0 == resultsTableCollection.Value[0].TotalRows)
+                        if (resultsTableCollection.Value[0].TotalRows==0)
                         {
                             searchResponseVM = NoDataRow(managedProperties);
                         }
                         else
-                        {
-                            //result = string.Concat(JsonConvert.SerializeObject(resultsTableCollection.Value[0].ResultRows), 
-                            //    ServiceConstants.DOLLAR, ServiceConstants.PIPE, ServiceConstants.DOLLAR, resultsTableCollection.Value[0].TotalRows);
+                        {                            
                             searchResponseVM.TotalRows = resultsTableCollection.Value[0].TotalRows;
                             searchResponseVM.SearchResults = resultsTableCollection.Value[0].ResultRows;
                         }
@@ -1474,12 +1470,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="currentLoggedInUser">Current logged-in user name</param>
         /// <param name="readOnlyUsers">List of read only user for matter</param>
         /// <returns>Flag indicating if user has read permission on matter</returns>
-        private bool IsUserReadOnlyForMatter(bool isReadOnly, string currentLoggedInUser, string readOnlyUsers)
+        private bool IsUserReadOnlyForMatter(Boolean isReadOnly, string currentLoggedInUser, string currentLoggedInUserEmail, string readOnlyUsers)
         {
             try {
                 List<string> readOnlyUsersList = readOnlyUsers.Trim().Split(new string[] { ServiceConstants.SEMICOLON }, StringSplitOptions.RemoveEmptyEntries).ToList();
                 List<string> currentReadOnlyUser = (from readOnlyUser in readOnlyUsersList
-                                                    where readOnlyUser.ToUpperInvariant().Equals(currentLoggedInUser.ToUpperInvariant())
+                                                    where string.Equals(readOnlyUser.Trim(), currentLoggedInUser.Trim(), StringComparison.OrdinalIgnoreCase) ||
+                                                    string.Equals(readOnlyUser.Trim(), currentLoggedInUserEmail.Trim(), StringComparison.OrdinalIgnoreCase)
                                                     select readOnlyUser).ToList();
                 if (null != currentReadOnlyUser && 0 < currentReadOnlyUser.Count)
                 {
