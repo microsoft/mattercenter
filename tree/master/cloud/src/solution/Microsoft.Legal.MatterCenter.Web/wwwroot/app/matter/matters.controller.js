@@ -66,21 +66,30 @@
 							Url: "https://msmatter.sharepoint.com/sites/catalog"
 						};	
                         
-          var searchObject =
-                {
-                    PageNumber: 1,
-                    ItemsPerPage: 10,
-                    SearchTerm: "",
-                    Filters: "",
-                    Sort:
-                    {
-                        ByProperty: "LastModifiedTime",
-                        Direction: 1
-                    }
-                }
+ 
           vm.search = function () {
-              get(options, function (response) {
-                  vm.gridOptions.data = response.userPinnedMattersList;
+
+              var searchRequest =
+                {
+                    Client: {
+                        Id: "123456",
+                        Name: "Microsoft",
+                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: 10,
+                        SearchTerm: vm.searchTerm,
+                        Filters: {},
+                        Sort:
+                        {
+                            ByProperty: "LastModifiedTime",
+                            Direction: 1
+                        }
+                    }
+                };
+              get(searchRequest, function (response) {
+                  vm.gridOptions.data = response.searchResults;
               });
           }
 
