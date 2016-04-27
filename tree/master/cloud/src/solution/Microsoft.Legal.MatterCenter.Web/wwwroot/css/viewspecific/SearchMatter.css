@@ -1,0 +1,43 @@
+﻿/* Specific styles for Search Matters page */
+
+body {
+}
+
+.nameColumn {
+    cursor: default;
+}
+
+.content {
+    cursor: pointer;
+}
+
+.ContextualMenuWrapper {
+    min-height: 160px; /*Each item in contextual menu wrapper has 40px height so change value accordingly  */
+}
+
+    .ContextualMenuWrapper .mattersiteloading {
+        margin-left: 40%;
+        margin-top: 40%;
+    }
+
+.mailContainer .failNotification {
+    color: white;
+    height: 23px;
+    margin: -15px -15px 10px;
+    font-size: 0.87em;
+    font-weight: 600;
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+
+.failNotification {
+    background-color: #f00;
+}
+
+@media only screen and (max-width: 320px) {
+    .jsonGridHeader:nth-child(n+3), .jsonGridRow:nth-child(n+3) {
+        display: none;
+    }
+}
