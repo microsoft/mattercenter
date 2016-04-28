@@ -31,7 +31,7 @@ Please note the following software must be installed before you can open and dep
 * [SharePoint Online Management Shell](http://www.microsoft.com/en-us/download/details.aspx?id=35588)
 *	[Windows PowerShell](http://www.microsoft.com/en-in/download/details.aspx?id=2560)
 *	[Azure PowerShell](http://go.microsoft.com/?linkid=9811175)
-*	 [Visual Studio 2015 (Community or Pro and above)](https://www.visualstudio.com/en-us/products/vs-2015-product-editions.aspx)
+*	 [Visual Studio 2015 (Community or Pro and above)](https://www.visualstudio.com/en-us/products/vs-2015-product-editions.aspx?wt.mc_id=github_microsoft_mattercenter)
 *	[Office Developer Tools for VS 2015](http://www.microsoft.com/web/handlers/WebPI.ashx?command=GetInstallerRedirect&appid=OfficeToolsForVS2015) 
 
 Please find links to our additional resources:
