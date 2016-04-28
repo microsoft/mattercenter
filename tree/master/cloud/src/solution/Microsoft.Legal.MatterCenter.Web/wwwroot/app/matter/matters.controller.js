@@ -5,7 +5,7 @@
         .controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout',
     function ($scope, $state, $interval, $stateParams, api, $timeout) {
         var vm = this;
-        var options = new Object;
+
         vm.gridOptions = {
             enableGridMenu: true,
             columnDefs: [{ field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: '<div class="row"><div class="col-sm-8"> {{row.entity.matterName}} </div><div class="col-sm-4 text-right"><div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">...</button><ul class="dropdown-menu"> <li class="cursor" ng-click="grid.appScope.Openuploadmodal()"><a>Upload to this Matter</a></li><li><a href="#">View Matter Details</li><li><a href="https://msmatter.sharepoint.com/sites/microsoft/" target="_blank">Go to Matter OneNote</li><li class="cursor" ng-click="grid.appScope.PinMatter(row)"><a>Pin this Matter</a></li><li class="cursor" ng-click="grid.appScope.UnpinMatter(row)"><a>Unpin this Matter</a></li></ul></div> </div></div>' },
@@ -26,23 +26,15 @@
             }
         };
 
-
-        function getMatters(options, callback) {
+        //search api call
+        function get(options, callback) {
             api({
                 resource: 'matterResource',
-                method: 'getMatters',
+                method: 'get',
                 data: options,
                 success: callback
             });
         }
-
-
-
-        getMatters(options, function (response) {
-            console.log(response);
-            vm.title = response.title;
-
-        });
 
         function getPinnedMatters(options, callback) {
             api({
@@ -53,16 +45,15 @@
             });
         }
 
-
-        function get(options, callback) {
+        //Callback function for pin
+        function PinMatters(options, callback) {
             api({
-                resource: 'matterResource',
-                method: 'get',
-                data: options,
-                success: callback
-            });
+                    resource: 'matterResource',
+                    method: 'PinMatters',
+                    data: options,
+                    success: callback
+                });
         }
-
 
         //Callback function for unpin
         function UnpinMatters(options, callback) {
@@ -73,22 +64,6 @@
                 success: callback
             });
         }
-
-        //Callback function for pin
-        function PinMatters(options, callback) {
-            api({
-                resource: 'matterResource',
-                method: 'PinMatters',
-                data: options,
-                success: callback
-            });
-        }
-
-        options = {
-            Id: "123456",
-            Name: "Microsoft",
-            Url: "https://msmatter.sharepoint.com/sites/catalog"
-        };
 
 
         vm.search = function () {
@@ -113,7 +88,7 @@
                   }
               };
             get(searchRequest, function (response) {
-                vm.gridOptions.data = response.searchResults;
+                vm.gridOptions.data = response.matterDataList;
             });
         }
 
@@ -180,16 +155,15 @@
                     vm.gridOptions.data = response.matterDataList;
                 });
             } else if (id == 3) {
-                getPinnedMatters(options, function (response) {
-                    //vm.matters = response.userPinnedMattersList;
-                    console.log(response);
+                var pinnedMattersRequest = {
+                    Id: "123456",
+                    Name: "Microsoft",
+                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                }
+                getPinnedMatters(pinnedMattersRequest, function (response) {
                     vm.gridOptions.data = response.matterDataList;
-
-
                 });
-
             }
-
         }
         //End
 
@@ -299,6 +273,21 @@
 
         $timeout(reposition(), 100);
         //End
+           vm.menuClick = function () {
+                var oAppMenuFlyout = $(".AppMenuFlyout");
+                if (!(oAppMenuFlyout.is(":visible"))) {
+                    //// Display the close icon and close the fly out
+                    $(".OpenSwitcher").addClass("hide");
+                    $(".CloseSwitcher").removeClass("hide");
+                    $(".MenuCaption").addClass("hideMenuCaption");
+                    oAppMenuFlyout.slideDown();
+                } else {
+                    oAppMenuFlyout.slideUp();
+                    $(".CloseSwitcher").addClass("hide");
+                    $(".OpenSwitcher").removeClass("hide");
+                    $(".MenuCaption").removeClass("hideMenuCaption");
+                }
+            }
     }]);
 })();
 
