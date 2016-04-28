@@ -1,0 +1,172 @@
+﻿
+<div class="">
+
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-2 menuText menuTextSelected"><h4 title="Step 1: Select a client and provide basic information for your new matter.">1 Open Matter</h4></div>
+                <div class="col-sm-2 menuText"> <h4 title="Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter.">2 Assign Permissions</h4></div>
+                <div class="col-sm-2 menuText"><h4 title="Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team.">3 Create and Notify</h4></div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <br />
+
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-4">
+                    <span class="custom-reqField">*</span> Client Name
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <!--<div class="dropdown">
+                        <a class="btn btn-default" data-toggle="dropdown" href="#" id="dropdownMenu1"> <b class="caret"></b></a>
+                        <ul  >
+                            <li>SELECT</li>
+                            <li class="form-control"  ng-repeat="c in cm.clientNameList">
+
+                            </li>
+                        </ul>
+                    </div>-->
+
+
+
+                    <select ng-model="cm.selectedClientName" ng-options="client.name for client in cm.clientNameList">
+                        <option value="" label="Select and item"></option>
+                    </select>
+                </div>
+
+
+
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-4">
+                    Client ID
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <input class="form-control" type="text">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="custom-reqField">*</span> Matter Name
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <input class="form-control " type="text" placeholder="Enter a name for this matter">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-4">
+                    <span class="custom-reqField">*</span> Matter ID
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <input class="form-control" type="text" placeholder="Enter a matter ID">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="custom-reqField">*</span>Matter Description
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <textarea class="form-control col-sm-12 custom-txtArea" rows="3" placeholder="Enter a brief description of the matter"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <span class="custom-reqField">*</span>Matter Type(click Select to define the practice group and area of law)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <textarea class="form-control col-sm-12 custom-txtArea" rows="3" placeholder="Enter a brief description of the matter"></textarea>
+                </div>
+                <div class="col-sm-4">
+
+                    <button class="btn btn-primary" ng-click="SelectModal()">Select Type</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--<div  class="modal fade"  id="myModal" tabindex="-1"   role="dialog"   aria-labelledby="myModalLabel"   aria-hidden="true">
+    <div  class="modal-dialog">
+
+
+        <div  class="modal-content">
+            Hi
+        </div >
+
+
+        <div  class="modal-body"></div >
+    </div >
+</div>-->
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img data-dismiss="modal" class="pull-right" src="../../images/close-666.png" /> 
+               
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

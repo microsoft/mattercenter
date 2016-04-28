@@ -26,7 +26,11 @@ angular.module('matterMain')
                   'PinMatters':auth.attachCSRF({
 				      method: 'POST',
 				      url: '/api/v1/matter/pin'
-				  }),
+                  }),
+                  'getTaxonomyDetails': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/taxonomy/gettaxonomy'
+                  }),
               });
       }]);
 
