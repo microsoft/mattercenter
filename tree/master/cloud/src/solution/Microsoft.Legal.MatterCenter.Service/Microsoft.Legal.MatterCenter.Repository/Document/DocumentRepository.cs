@@ -13,7 +13,12 @@
 using Microsoft.Extensions.OptionsModel;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
+using Microsoft.SharePoint.Client;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -24,17 +29,25 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ISPList spList;
         private SearchSettings searchSettings;
         private ListNames listNames;
+        private IUsersDetails userDetails;
+        private CamlQueries camlQueries;
+        private DocumentSettings documentSettings;
+        private MailSettings mailSettings;
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
         /// <param name="search"></param>
         public DocumentRepository(ISearch search, IOptions<SearchSettings> searchSettings, 
-            IOptions<ListNames> listNames, ISPList spList)
+            IOptions<ListNames> listNames, ISPList spList, IOptions<CamlQueries> camlQueries, IUsersDetails userDetails, IOptions<DocumentSettings> documentSettings, IOptions<MailSettings> mailSettings)
         {
             this.search = search;            
             this.searchSettings = searchSettings.Value;
             this.listNames = listNames.Value;
             this.spList = spList;
+            this.camlQueries = camlQueries.Value;
+            this.userDetails = userDetails;
+            this.documentSettings = documentSettings.Value;
+            this.mailSettings = mailSettings.Value;
         }
 
         /// <summary>
@@ -52,7 +65,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        public async Task<PinResponseVM> GetPinnedRecordsAsync(Client client)
+        public async Task<SearchResponseVM> GetPinnedRecordsAsync(Client client)
         {
             return await Task.FromResult(search.GetPinnedData(client, listNames.UserPinnedDocumentListName,
                 searchSettings.PinnedListColumnDocumentDetails, true));
@@ -105,6 +118,72 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public async Task<dynamic> GetDocumentAndClientGUIDAsync(Client client)
         {
             return await Task.FromResult(spList.GetDocumentAndClientGUID(client));
+        }
+
+        public void  SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties)
+        {
+            spList.SetUploadItemProperties(clientContext, documentLibraryName, fileName, folderPath, mailProperties);
+        }
+
+        public Users GetLoggedInUserDetails(ClientContext clientContext)
+        {
+            return userDetails.GetLoggedInUserDetails(clientContext);
+        }
+
+        public void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile)
+        {
+            spList.CreateFileInsideFolder(clientContext, folderPath, newFile);
+        }
+
+        public bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName)
+        {
+            return spList.FolderExists(folderPath, clientContext, documentLibraryName);
+        }
+
+        public bool PerformContentCheck(ClientContext context, MemoryStream localMemoryStream, string serverFileURL)
+        {
+            return spList.PerformContentCheck(context, localMemoryStream, serverFileURL);
+        }
+
+        public DuplicateDocument DocumentExists(ClientContext clientContext, ContentCheckDetails contentCheck, string documentLibraryName, string folderPath, bool isMail)
+        {
+            DuplicateDocument duplicateDocument = new DuplicateDocument(false, false);
+            if (null != clientContext && null != contentCheck && !string.IsNullOrEmpty(documentLibraryName) && !string.IsNullOrEmpty(folderPath))
+            {
+                string serverRelativePath = folderPath + ServiceConstants.FORWARD_SLASH + contentCheck.FileName;
+                string camlQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.GetAllFilesInFolderQuery, serverRelativePath);
+                ListItemCollection listItemCollection = null;
+                listItemCollection = spList.GetData(clientContext, documentLibraryName, camlQuery);
+                duplicateDocument.DocumentExists = (null != listItemCollection && 0 < listItemCollection.Count) ? true : false;
+                // Check file size, from, sent date as well.
+                if (duplicateDocument.DocumentExists)
+                {
+                    // check for other conditions as well.
+                    ListItem listItem = listItemCollection.FirstOrDefault();
+                    DateTime sentDate, storedFileSentDate;
+                    long fileSize = Convert.ToInt64(listItem.FieldValues[mailSettings.SearchEmailFileSize], CultureInfo.InvariantCulture);
+                    if (isMail)
+                    {
+                        // check for subject, from and sent date
+                        string subject = Convert.ToString(listItem.FieldValues[mailSettings.SearchEmailSubject], CultureInfo.InvariantCulture);
+                        string from = Convert.ToString(listItem.FieldValues[mailSettings.SearchEmailFrom], CultureInfo.InvariantCulture);
+                        bool isValidDateFormat;
+                        isValidDateFormat = DateTime.TryParse(Convert.ToString(listItem.FieldValues[mailSettings.SearchEmailSentDate], CultureInfo.InvariantCulture), out storedFileSentDate);
+                        isValidDateFormat &= DateTime.TryParse(contentCheck.SentDate, out sentDate);
+                        if (isValidDateFormat)
+                        {
+                            TimeSpan diffrence = sentDate - storedFileSentDate;
+                            uint tolleranceMin = Convert.ToUInt16(mailSettings.SentDateTolerance, CultureInfo.InvariantCulture);     // up to how much minutes difference between uploaded files is tolerable
+                            duplicateDocument.HasPotentialDuplicate = ((fileSize == contentCheck.FileSize) && (subject.Trim() == contentCheck.Subject.Trim()) && (from.Trim() == contentCheck.FromField.Trim()) && (diffrence.Minutes < tolleranceMin));
+                        }
+                    }
+                    else
+                    {
+                        duplicateDocument.HasPotentialDuplicate = (fileSize == contentCheck.FileSize);
+                    }
+                }
+            }
+            return duplicateDocument;
         }
     }
 }

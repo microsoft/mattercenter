@@ -93,6 +93,15 @@ namespace Microsoft.Legal.MatterCenter.Utility
 
         public string ErrorMessageTaskCreation { get; set; }
         public string ErrorCodeAddTaskList { get; set; }
+        public string ErrorCodeContentTypes { get; set; }
+        public string ErrorMessageContentTypes { get; set; }
+        public string ErrorEmptyFile { get; set; }
+
+        public string FoundIdenticalContent { get; set; }
+        public string FoundNonIdenticalContent { get; set; }
+        public string ContentCheckFailed { get; set; }
+        public string FilePotentialDuplicateMessage { get; set; }
+        public string FileAlreadyExistMessage { get; set; }
         #endregion
     }
 }

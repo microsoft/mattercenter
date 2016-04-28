@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Microsoft.Legal.MatterCenter
+namespace Microsoft.Legal.MatterCenter.Web.Common
 {
     public class ValidationFunctions : IValidationFunctions
     {

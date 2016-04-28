@@ -1,8 +1,9 @@
 ﻿using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.SharePoint.Client;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-
-namespace Microsoft.Legal.MatterCenter.Service
+namespace Microsoft.Legal.MatterCenter.Web.Common
 {
     public interface IMatterProvision
     {
@@ -13,5 +14,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         GenericResponseVM SavConfigurations(SaveConfigurationsVM saveConfigurationsVM);
         PropertyValues GetStampedProperties(MatterVM matterVM);
         GenericResponseVM AssignUserPermissions(MatterMetdataVM matterMetadata);
+        GenericResponseVM AssignContentType(MatterMetadata matterMetadata);
+        Task<IEnumerable<MatterData>> GetMatters(SearchRequestVM searchRequestVM);
     }
 }

@@ -21,6 +21,8 @@ using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Service;
 using Microsoft.Legal.MatterCenter.Service.Filters;
 using System.Globalization;
+using Microsoft.Legal.MatterCenter.Web.Common;
+using Microsoft.Legal.MatterCenter.Web.Common.Upload;
 #endregion
 
 
@@ -175,6 +177,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.Configure<LogTables>(this.Configuration.GetSection("LogTables"));
             services.Configure<SearchSettings>(this.Configuration.GetSection("Search"));
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
+            services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"));           
         }
 
         private void ConfigureMatterPackages(IServiceCollection services)
@@ -195,6 +198,9 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.AddSingleton<IValidationFunctions, ValidationFunctions>();
             services.AddSingleton<IEditFunctions, EditFunctions>();
             services.AddSingleton<IMatterProvision, MatterProvision>();
+            services.AddSingleton<ISPContentTypes, SPContentTypes>();
+            services.AddSingleton<IUploadHelperFunctionsUtility, UploadHelperFunctionsUtility>();
+            services.AddSingleton<IDocumentProvision, DocumentProvision>();
         }
 
         private void CheckAuthorization(IApplicationBuilder app)

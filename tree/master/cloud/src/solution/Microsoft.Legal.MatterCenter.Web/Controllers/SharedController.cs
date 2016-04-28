@@ -19,7 +19,7 @@ using Microsoft.Extensions.OptionsModel;
 using Swashbuckle.SwaggerGen.Annotations;
 using System.Net;
 using System.Reflection;
-
+using Microsoft.Legal.MatterCenter.Web.Common;
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;

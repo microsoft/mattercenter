@@ -26,6 +26,9 @@ using Microsoft.Extensions.OptionsModel;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 using System.Reflection;
+using Microsoft.SharePoint.Client.Taxonomy;
+using System.Text.RegularExpressions;
+using System.IO;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -41,6 +44,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private CamlQueries camlQueries;
         private ICustomLogger customLogger;
         private LogTables logTables;
+        private MailSettings mailSettings;
         #endregion
 
         /// <summary>
@@ -51,13 +55,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public SPList(ISPOAuthorization spoAuthorization,
             IOptions<CamlQueries> camlQueries,
             IOptions<SearchSettings> searchSettings,
-            ICustomLogger customLogger, IOptions<LogTables> logTables)
+            IOptions<ContentTypesConfig> contentTypesConfig,
+            ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<MailSettings> mailSettings)
         {
             this.searchSettings = searchSettings.Value;
             this.camlQueries = camlQueries.Value;
             this.spoAuthorization = spoAuthorization;
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
+            this.mailSettings = mailSettings.Value;
         }
 
         public bool Delete(ClientContext clientContext, IList<string> listsNames)
@@ -84,6 +90,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         }
 
 
+        
+
         public bool AddItem(ClientContext clientContext, List list, IList<string> columns, IList<object> values)
         {
             bool result = false;
@@ -102,6 +110,40 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 clientContext.ExecuteQuery();
                 result = true;
             }
+            return result;
+        }
+
+
+        /// <summary>
+        ///  Creates a new view for the list
+        /// </summary>
+        /// <param name="clientContext">Client Context</param>
+        /// <param name="matterList">List name</param>
+        /// <param name="viewColumnList">Name of the columns in view</param>
+        /// <param name="viewName">View name</param>
+        /// <param name="strQuery">View query</param>
+        /// <returns>String stating success flag</returns>
+        public bool AddView(ClientContext clientContext, List matterList, string[] viewColumnList, string viewName, string strQuery)
+        {
+            bool result = true;
+            if (null != clientContext && null != matterList && null != viewColumnList && !string.IsNullOrWhiteSpace(viewName) && !string.IsNullOrWhiteSpace(strQuery))
+                try
+                {
+                    View outlookView = matterList.Views.Add(new ViewCreationInformation
+                    {
+                        Title = viewName,
+                        ViewTypeKind = ViewType.Html,
+                        ViewFields = viewColumnList,
+                        Paged = true
+                    });
+                    outlookView.ViewQuery = strQuery;
+                    outlookView.Update();
+                    clientContext.ExecuteQuery();
+                }
+                catch (Exception)
+                {
+                    result = false;
+                }
             return result;
         }
 
@@ -246,6 +288,196 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
+        public  void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile)
+        {
+            Folder destinationFolder = clientContext.Web.GetFolderByServerRelativeUrl(folderPath);
+            clientContext.Load(destinationFolder);
+            clientContext.ExecuteQuery();
+            Microsoft.SharePoint.Client.File fileToUpload = destinationFolder.Files.Add(newFile);
+            clientContext.Load(fileToUpload);
+            clientContext.ExecuteQuery();
+        }
+
+        public bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName)
+        {
+            bool folderFound = false;
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(folderPath) && !string.IsNullOrWhiteSpace(documentLibraryName) && null != clientContext)
+                {
+                    string folderName = folderPath.Substring(folderPath.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
+                    List docLibList = clientContext.Web.Lists.GetByTitle(documentLibraryName);
+                    ListItemCollection folderList = docLibList.GetItems(CamlQuery.CreateAllFoldersQuery());
+                    clientContext.Load(clientContext.Web, web => web.ServerRelativeUrl);
+                    clientContext.Load(docLibList, list => list.Title);
+                    clientContext.Load(folderList, item => item.Include(currentItem => currentItem.Folder.Name, currentItem => currentItem.Folder.ServerRelativeUrl).Where(currentItem => currentItem.Folder.ServerRelativeUrl == folderPath));
+                    clientContext.ExecuteQuery();
+
+                    if (null != docLibList)
+                    {
+                        string rootFolderURL = string.Concat(clientContext.Web.ServerRelativeUrl, ServiceConstants.FORWARD_SLASH + folderName);
+                        if (string.Equals(rootFolderURL, folderPath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            //// Upload is performed on root folder
+                            folderFound = null != docLibList && docLibList.Title.ToUpperInvariant().Equals(documentLibraryName.ToUpperInvariant());
+                        }
+                        else
+                        {
+                            //// Upload is performed on different folder other than root folder
+                            folderFound = 0 < folderList.Count;
+                        }
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ConstantStrings.LogTableName);
+            }
+            return folderFound;
+        }
+
+        /// <summary>
+        /// Check if Content of local file and server file matches.
+        /// </summary>
+        /// <param name="context">SP client context</param>
+        /// <param name="localMemoryStream">Memory stream of local file</param>
+        /// <param name="serverFileURL">Server relative URL of file with filename</param>
+        /// <returns>True if content matched else false</returns>
+        public bool PerformContentCheck(ClientContext context, MemoryStream localMemoryStream, String serverFileURL)
+        {
+            bool isMatched = true;
+            if (null != context && null != localMemoryStream && !string.IsNullOrWhiteSpace(serverFileURL))
+            {
+                Microsoft.SharePoint.Client.File serverFile = context.Web.GetFileByServerRelativeUrl(serverFileURL);
+                context.Load(serverFile);
+                ClientResult<Stream> serverStream = serverFile.OpenBinaryStream();
+                context.ExecuteQuery();
+                if (null != serverFile)
+                {
+                    using (MemoryStream serverMemoryStream = new MemoryStream())
+                    {
+                        byte[] serverBuffer = new byte[serverFile.Length + 1];
+
+                        int readCount = 0;
+                        while ((readCount = serverStream.Value.Read(serverBuffer, 0, serverBuffer.Length)) > 0)
+                        {
+                            serverMemoryStream.Write(serverBuffer, 0, readCount);
+                        }
+                        serverMemoryStream.Seek(0, SeekOrigin.Begin);
+                        localMemoryStream.Seek(0, SeekOrigin.Begin);
+                        if (serverMemoryStream.Length == localMemoryStream.Length)
+                        {
+                            byte[] localBuffer = localMemoryStream.GetBuffer();
+                            serverBuffer = serverMemoryStream.GetBuffer();
+                            for (long index = 0; index < serverMemoryStream.Length; index++)
+                            {
+                                if (localBuffer[index] != serverBuffer[index])
+                                {
+                                    isMatched = false;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            isMatched = false;
+                        }
+                    }
+                }
+                else
+                {
+                    isMatched = false;
+                }
+            }
+            return isMatched;
+        }
+
+        /// <summary>
+        /// Sets the upload item properties.
+        /// </summary>
+        /// <param name="clientContext">The client context.</param>
+        /// <param name="web">The web.</param>
+        /// <param name="documentLibraryName">Name of the document library.</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="folderPath">Path of the folder.</param>
+        /// <param name="mailProperties">The mail properties.</param>
+        public void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties)
+        {
+            ListItemCollection items = null;
+            ListItem listItem = null;
+            if (null != clientContext && !string.IsNullOrEmpty(documentLibraryName) && !string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(folderPath) && null != mailProperties)
+            {
+                Web web = clientContext.Web;
+                ListCollection lists = web.Lists;
+                CamlQuery query = new CamlQuery();
+                List selectedList = lists.GetByTitle(documentLibraryName);
+                string serverRelativePath = folderPath +  ServiceConstants.FORWARD_SLASH + fileName;
+                query.ViewXml = string.Format(CultureInfo.InvariantCulture, camlQueries.GetAllFilesInFolderQuery, serverRelativePath);
+                items = selectedList.GetItems(query);
+                if (null != items)
+                {
+                    clientContext.Load(items, item => item.Include(currentItem => currentItem.DisplayName, currentItem => currentItem.File.Name).Where(currentItem => currentItem.File.Name == fileName));
+                    clientContext.ExecuteQuery();
+                    if (0 < items.Count)
+                    {
+                        listItem = items[0];
+                        if (null != mailProperties)
+                        {
+                            listItem[mailSettings.SearchEmailFrom] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENDER_KEY]) ? mailProperties[ServiceConstants.MAIL_SENDER_KEY].Trim() : string.Empty;
+                            if (!string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_RECEIVED_DATEKEY]))
+                            {
+                                listItem[mailSettings.SearchEmailReceivedDate] = Convert.ToDateTime(mailProperties[ServiceConstants.MAIL_RECEIVED_DATEKEY].Trim(), CultureInfo.InvariantCulture).ToUniversalTime();
+                            }
+                            else
+                            {
+                                listItem[mailSettings.SearchEmailReceivedDate] = null;
+                            }
+                            listItem[mailSettings.SearchEmailCC] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CC_ADDRESS_KEY]) ? mailProperties[ServiceConstants.MAIL_CC_ADDRESS_KEY].Trim() : string.Empty;
+                            listItem[mailSettings.SearchEmailAttachments] = (string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY]) || mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY].Equals(ServiceConstants.TRUE, StringComparison.OrdinalIgnoreCase)) ? mailProperties[ServiceConstants.MAIL_ATTACHMENT_KEY].Trim() : string.Empty;
+                            listItem[mailSettings.SearchEmailFromMailbox] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY]) ? mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY].Trim() : string.Empty;
+                            listItem[mailSettings.SearchEmailSubject] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT]) ? mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT].Trim() : string.Empty;
+                            listItem[mailSettings.SearchEmailTo] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_RECEIVER_KEY]) ? mailProperties[ServiceConstants.MAIL_RECEIVER_KEY].Trim() : string.Empty;
+                            listItem[mailSettings.SearchEmailImportance] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_IMPORTANCE_KEY]) ? mailProperties[ServiceConstants.MAIL_IMPORTANCE_KEY].Trim() : string.Empty;
+                            listItem[mailSettings.SearchEmailSensitivity] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENSITIVITY_KEY]) ? mailProperties[ServiceConstants.MAIL_SENSITIVITY_KEY].Trim() : string.Empty;
+                            listItem[mailSettings.SearchEmailHasAttachments] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY]) ? mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY].Trim() : string.Empty;
+                            listItem[mailSettings.SearchEmailConversationId] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CONVERSATIONID_KEY]) ? mailProperties[ServiceConstants.MAIL_CONVERSATIONID_KEY].Trim() : string.Empty;
+                            listItem[mailSettings.SearchEmailConversationTopic] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY]) ? mailProperties[ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY].Trim() : string.Empty;
+                            listItem[mailSettings.SearchEmailCategories] = GetCategories(mailProperties[ServiceConstants.MAIL_CATEGORIES_KEY].Trim());
+                            if (!string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY]))
+                            {
+                                listItem[mailSettings.SearchEmailSentDate] = Convert.ToDateTime(mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY].Trim(), CultureInfo.InvariantCulture).ToUniversalTime();
+                            }
+                            else
+                            {
+                                listItem[mailSettings.SearchEmailSentDate] = null;
+                            }
+                            listItem[mailSettings.SearchEmailOriginalName] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME]) ? mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME] : string.Empty;
+                            listItem.Update();
+                            clientContext.ExecuteQuery();
+                            listItem.RefreshLoad();
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Process the categories and trims the "category" word
+        /// </summary>
+        /// <param name="categories">Categories property</param>
+        /// <returns>Processed category field</returns>
+        internal static string GetCategories(string categories)
+        {
+            string processedCategories = string.Empty;
+            if (!string.IsNullOrWhiteSpace(categories))
+            {
+                processedCategories = Regex.Replace(categories, ServiceConstants.CATEGORIES, string.Empty, RegexOptions.IgnoreCase).Trim(); // Replace categories with empty strings
+                processedCategories = processedCategories.Replace(ServiceConstants.SPACE, string.Empty); // Remove the space generated because of replace operation
+                processedCategories = processedCategories.Replace(ServiceConstants.SEMICOLON, string.Concat(ServiceConstants.SEMICOLON, ServiceConstants.SPACE));
+            }
+            return processedCategories;
+        }
+
         /// <summary>
         /// Gets the list items of specified list based on CAML query. 
         /// </summary>
@@ -283,7 +515,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     string result = string.Empty;
                     ListCollection lists = clientContext.Web.Lists;
                     clientContext.Load(lists, list => list.Include(listItem => listItem.Id, listItem => listItem.RootFolder.ServerRelativeUrl));
-                    File file = clientContext.Web.GetFileByServerRelativeUrl(client.Id);
+                    SharePoint.Client.File file = clientContext.Web.GetFileByServerRelativeUrl(client.Id);
                     clientContext.Load(file, files => files.ListItemAllFields);
                     clientContext.ExecuteQuery();
                     if (0 < file.ListItemAllFields.FieldValues.Count)

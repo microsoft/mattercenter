@@ -25,6 +25,7 @@ using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.AspNet.Authorization;
+using Microsoft.Legal.MatterCenter.Web.Common;
 #endregion
 namespace Microsoft.Legal.MatterCenter.Service
 {
@@ -103,17 +104,8 @@ namespace Microsoft.Legal.MatterCenter.Service
                     };
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.NotFound);
                 }
-
-                #endregion
-
-                var searchObject = searchRequestVM.SearchObject;
-                // Encode all fields which are coming from js
-                SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
-                // Encode Search Term
-                searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
-                    WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES, ServiceConstants.DOUBLE_QUOTE) : string.Empty;
-
-                var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
+                #endregion                
+                var searchResultsVM = await matterProvision.GetMatters(searchRequestVM);
                 return matterCenterServiceFunctions.ServiceResponse(searchResultsVM, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -462,7 +454,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 #endregion
 
                 var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(client);
-                if (pinResponseVM != null && pinResponseVM.TotalCount == 0)
+                if (pinResponseVM != null && pinResponseVM.TotalRows == 0)
                 {
                     errorResponse = new ErrorResponse()
                     {
@@ -760,7 +752,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             }
         }
 
-        [HttpPost("savconfigurations")]
+        [HttpPost("getstampedproperties")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
@@ -847,6 +839,61 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 matterProvision.DeleteMatter(client, matter);
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Assigns specified content types to the specified matter (document library).
+        /// </summary>
+        /// <param name="requestObject">Request Object containing SharePoint App Token</param>
+        /// <param name="matterMetadata">Object containing metadata for Matter</param>
+        /// <returns>true if success else false</returns>
+        [HttpPost("assigncontenttype")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        public IActionResult AssignContentType([FromBody] MatterMetadata matterMetadata)
+        {
+            ErrorResponse errorResponse = null;
+            if (null == matterMetadata && null == matterMetadata.Client && null == matterMetadata.Matter )
+            {                
+                errorResponse = new ErrorResponse()
+                {
+                    Message = errorSettings.MessageNoInputs,
+                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                    Description = "No input data is passed"
+                };
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+               
+            }
+
+            // For each value in the list of Content Type Names
+            // Add that content Type to the Library
+            Matter matter = matterMetadata.Matter;
+            Client client = matterMetadata.Client;
+            try
+            {
+                var matterInformationVM = new MatterInformationVM()
+                {
+                    Client = client,
+                    Matter = matter,
+
+                };
+                GenericResponseVM genericResponse = validationFunctions.IsMatterValid(matterInformationVM, int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture), null);
+                if (genericResponse == null)
+                {                    
+                    matterProvision.DeleteMatter(client, matter);
+                }
+                genericResponse = matterProvision.AssignContentType(matterMetadata);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+            }
+            catch (Exception exception)
+            {
+                ///// SharePoint Specific Exception
+                matterProvision.DeleteMatter(client, matter);
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
         }

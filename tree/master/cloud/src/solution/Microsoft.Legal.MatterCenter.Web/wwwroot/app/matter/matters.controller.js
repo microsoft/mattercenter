@@ -96,7 +96,7 @@
           getPinnedMatters(options, function (response) {
               //vm.matters = response.userPinnedMattersList;
               console.log(response);
-              vm.gridOptions.data = response.userPinnedMattersList;
+              vm.gridOptions.data = response.matterDataList;
 
 
                 });          

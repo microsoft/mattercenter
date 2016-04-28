@@ -17,6 +17,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
     /// </summary>
     public class DocumentSettings
     {
-        
+        public string FolderStructureModified { get; set; }
     }
 }

@@ -31,10 +31,10 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             using (var testClient = testServer.CreateClient().AcceptJson())
             {
                 var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/document/getpinneddocuments", client);
-                var result = response.Content.ReadAsJsonAsync<PinResponseVM>().Result;
+                var result = response.Content.ReadAsJsonAsync<SearchResponseVM>().Result;
                 Assert.NotNull(result);
-                Assert.NotNull(result.UserPinnedDocumentsList);
-                Assert.NotEmpty(result.UserPinnedDocumentsList);                
+                Assert.NotNull(result.MatterDataList);
+                Assert.NotEmpty(result.MatterDataList);                
             }
         }
 
@@ -153,6 +153,40 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/document/unpindocument", pinRequestVM);
                 var result = response.Content.ReadAsStringAsync().Result;
                 Assert.NotNull(result);
+            }
+        }
+
+        [Fact]
+        public async void Get_Document_Without_SearchTerm()
+        {
+            var searchRequest = new SearchRequestVM()
+            {
+                Client = new Client()
+                {
+                    Id = "123456",
+                    Name = "Microsoft",
+                    Url = "https://msmatter.sharepoint.com/sites/catalog"
+                },
+                SearchObject = new SearchObject()
+                {
+                    PageNumber = 1,
+                    ItemsPerPage = 10,
+                    SearchTerm = "",
+                    Filters = new FilterObject() { },
+                    Sort = new SortObject()
+                    {
+                        ByProperty = "LastModifiedTime",
+                        Direction = 1
+                    }
+                }
+            };
+            using (var testClient = testServer.CreateClient().AcceptJson())
+            {
+                var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/document/getdocuments", searchRequest);
+                var result = response.Content.ReadAsJsonAsync<SearchResponseVM>().Result;
+                Assert.NotNull(result);
+                Assert.NotEmpty(result.SearchResults);
+
             }
         }
     }

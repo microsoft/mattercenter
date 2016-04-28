@@ -3,6 +3,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.SharePoint.Client;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -28,5 +29,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
         string GetPropertyValueForList(ClientContext clientContext, string matterName, string propertyList);
         bool Delete(ClientContext clientContext, IList<string> lists);
         bool CheckItemModified(ListItemCollection collection, string cachedItemModifiedDate);
+        bool AddView(ClientContext clientContext, List matterList, string[] viewColumnList, string viewName, string strQuery);
+        void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties);
+        void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile);
+        bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName);
+        bool PerformContentCheck(ClientContext context, MemoryStream localMemoryStream, string serverFileURL);
     }
 }

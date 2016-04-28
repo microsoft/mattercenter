@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Microsoft.Legal.MatterCenter.Service
+namespace Microsoft.Legal.MatterCenter.Web.Common
 {
     public class MatterCenterServiceFunctions: IMatterCenterServiceFunctions
     {

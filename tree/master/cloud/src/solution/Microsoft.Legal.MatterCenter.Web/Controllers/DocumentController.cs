@@ -21,6 +21,7 @@ using System.Net;
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
+using Microsoft.Legal.MatterCenter.Web.Common;
 using System.Reflection;
 using Microsoft.AspNet.Authorization;
 #endregion
@@ -110,7 +111,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                     WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES, ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
                 var searchResultsVM = await documentRepositoy.GetDocumentsAsync(searchRequestVM);
-                return matterCenterServiceFunctions.ServiceResponse(searchResultsVM.SearchResults, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(searchResultsVM, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
@@ -153,7 +154,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
                 #endregion
                 var pinResponseVM = await documentRepositoy.GetPinnedRecordsAsync(client);
-                if (pinResponseVM != null && pinResponseVM.TotalCount == 0)
+                if (pinResponseVM != null && pinResponseVM.TotalRows == 0)
                 {
                     errorResponse = new ErrorResponse()
                     {

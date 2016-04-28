@@ -25,15 +25,15 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             {
                 Id = "123456",
                 Name = "Microsoft",
-                Url = "https://microsoft.sharepoint.com/teams/mcuisite"
+                Url = "https://msmatter.sharepoint.com/sites/catalog"
             };
             using (var testClient = testServer.CreateClient().AcceptJson())
             {
                 var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/matter/getpinned", client);
-                var result = response.Content.ReadAsJsonAsync<PinResponseVM>().Result;
+                var result = response.Content.ReadAsJsonAsync<SearchResponseVM>().Result;
                 Assert.NotNull(result);
-                Assert.NotNull(result.UserPinnedMattersList);
-                Assert.NotEmpty(result.UserPinnedMattersList);
+                Assert.NotNull(result.MatterDataList);
+                Assert.NotEmpty(result.MatterDataList);
             }
         }
 

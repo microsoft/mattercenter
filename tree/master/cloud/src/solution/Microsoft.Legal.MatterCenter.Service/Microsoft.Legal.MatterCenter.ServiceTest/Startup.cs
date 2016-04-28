@@ -22,6 +22,8 @@ using Microsoft.Legal.MatterCenter.Service;
 using Microsoft.Legal.MatterCenter.Service.Filters;
 using Microsoft.AspNet.Authentication.JwtBearer;
 using System.Globalization;
+using Microsoft.Legal.MatterCenter.Web.Common;
+using Microsoft.Legal.MatterCenter.Web.Common.Upload;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
@@ -120,7 +122,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         #region Private Methods
 
         #region Swagger
-        private string pathToDoc = "Microsoft.Legal.MatterCenter.Service.xml";
+        private string pathToDoc = "Microsoft.Legal.MatterCenter.Web.xml";
 
         private void ConfigureSwagger(IServiceCollection services)
         {
@@ -176,6 +178,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.Configure<LogTables>(this.Configuration.GetSection("LogTables"));
             services.Configure<SearchSettings>(this.Configuration.GetSection("Search"));
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
+            services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"));
         }
 
         private void ConfigureMatterPackages(IServiceCollection services)
@@ -196,6 +199,9 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.AddSingleton<IValidationFunctions, ValidationFunctions>();
             services.AddSingleton<IEditFunctions, EditFunctions>();
             services.AddSingleton<IMatterProvision, MatterProvision>();
+            services.AddSingleton<ISPContentTypes, SPContentTypes>();
+            services.AddSingleton<IUploadHelperFunctionsUtility, UploadHelperFunctionsUtility>();
+            services.AddSingleton<IDocumentProvision, DocumentProvision>();
         }
 
         private void CheckAuthorization(IApplicationBuilder app)

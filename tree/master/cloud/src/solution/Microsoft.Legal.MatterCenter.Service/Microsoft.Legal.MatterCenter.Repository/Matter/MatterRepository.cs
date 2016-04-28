@@ -38,13 +38,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ISPOAuthorization spoAuthorization;
         private ISPPage spPage;
         private ErrorSettings errorSettings;
+        private ISPContentTypes spContentTypes;
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
         /// <param name="search"></param>
         public MatterRepository(ISearch search, IOptions<MatterSettings> matterSettings, 
-            IOptions<SearchSettings> searchSettings, IOptions<ListNames> listNames, ISPOAuthorization spoAuthorization,
-            ISPList spList, IOptions<CamlQueries> camlQueries, IUsersDetails userdetails, IOptions<ErrorSettings> errorSettings, ISPPage spPage)
+            IOptions<SearchSettings> searchSettings, IOptions<ListNames> listNames, ISPOAuthorization spoAuthorization, ISPContentTypes spContentTypes,
+        ISPList spList, IOptions<CamlQueries> camlQueries, IUsersDetails userdetails, IOptions<ErrorSettings> errorSettings, ISPPage spPage)
         {
             this.search = search;
             this.matterSettings = matterSettings.Value;
@@ -56,6 +57,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spoAuthorization = spoAuthorization;
             this.spPage = spPage;
             this.errorSettings = errorSettings.Value;
+            this.spContentTypes = spContentTypes;
         }
 
         public GenericResponseVM ValidateTeamMembers(ClientContext clientContext, Matter matter, IList<string> userId)
@@ -192,7 +194,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        public async Task<PinResponseVM> GetPinnedRecordsAsync(Client client)
+        public async Task<SearchResponseVM> GetPinnedRecordsAsync(Client client)
         {
             return await Task.FromResult(search.GetPinnedData(client, listNames.UserPinnedMatterListName,
                 searchSettings.PinnedListColumnMatterDetails, false));
@@ -788,6 +790,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             // To avoid the invalid symbol error while parsing the JSON, return the response in lower case
             return result;
+        }
+
+        public IList<ContentType> GetContentTypeData(ClientContext clientContext, IList<string> contentTypes, Client client, Matter matter)
+        {
+            return spContentTypes.GetContentTypeData(clientContext, contentTypes, client, matter);
+        }
+
+        public GenericResponseVM AssignContentTypeHelper(MatterMetadata matterMetadata, ClientContext clientContext, IList<ContentType> contentTypeCollection, Client client, Matter matter)
+        {
+            return spContentTypes.AssignContentTypeHelper(matterMetadata, clientContext, contentTypeCollection, client, matter);
         }
 
 

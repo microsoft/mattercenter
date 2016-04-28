@@ -24,6 +24,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string Resource { get; set; }        
         public string RedisCacheHostName { get; set; }
         public bool IsTenantDeployment { get; set; }
-        public string IsReadOnlyUser { get; set; }        
+        public string IsReadOnlyUser { get; set; }
+        public string SiteURL { get; set; }
     }
 }

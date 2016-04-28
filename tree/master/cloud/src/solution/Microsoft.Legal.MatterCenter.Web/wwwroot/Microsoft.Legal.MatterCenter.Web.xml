@@ -145,6 +145,14 @@
             <param name="searchRequestVM"></param>
             <returns>searchResponseVM</returns>
         </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.AssignContentType(Microsoft.Legal.MatterCenter.Models.MatterMetadata)">
+            <summary>
+            Assigns specified content types to the specified matter (document library).
+            </summary>
+            <param name="requestObject">Request Object containing SharePoint App Token</param>
+            <param name="matterMetadata">Object containing metadata for Matter</param>
+            <returns>true if success else false</returns>
+        </member>
         <member name="M:Microsoft.Legal.MatterCenter.Service.SharedController.#ctor(Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.SharedSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Service.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.LogTables},Microsoft.Legal.MatterCenter.Repository.ISharedRepository)">
             <summary>
             Constructor where all the required dependencies are injected

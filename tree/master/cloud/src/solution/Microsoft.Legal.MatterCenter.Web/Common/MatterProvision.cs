@@ -12,7 +12,7 @@ using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Microsoft.Legal.MatterCenter.Service
+namespace Microsoft.Legal.MatterCenter.Web.Common
 {
     public class MatterProvision:IMatterProvision
     {
@@ -48,6 +48,78 @@ namespace Microsoft.Legal.MatterCenter.Service
             this.searchSettings = searchSettings.Value;
         }
 
+
+        public async Task<IEnumerable<MatterData>> GetMatters(SearchRequestVM searchRequestVM)
+        {
+            var searchObject = searchRequestVM.SearchObject;
+            // Encode all fields which are coming from js
+            SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
+            // Encode Search Term
+            searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
+                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES, ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+
+            var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
+            IList<MatterData> matterDataList = new List<MatterData>();
+            IEnumerable<IDictionary<string, object>> searchResults = searchResultsVM.SearchResults;
+            foreach(var searchResult in searchResults)
+            {
+                MatterData matterData = new MatterData();
+                foreach (var key in searchResult.Keys)
+                {
+                    switch(key.ToLower())
+                    {
+                        case "mcmattername":
+                            matterData.MatterName = searchResult[key].ToString();
+                            break;
+                        case "description":
+                            matterData.MatterDescription = searchResult[key].ToString();
+                            break;
+                        case "mcopendate":
+                            matterData.MatterCreatedDate = searchResult[key].ToString();
+                            break;
+                        case "path":
+                            matterData.MatterUrl = searchResult[key].ToString();
+                            
+                            break;
+                        case "sitename":
+                            matterData.MatterClientUrl = searchResult[key].ToString();
+                            break;
+                        case "mcpracticegroup":
+                            matterData.MatterPracticeGroup = searchResult[key].ToString();
+                            break;
+                        case "mcareaoflaw":
+                            matterData.MatterAreaOfLaw = searchResult[key].ToString();
+                            break;
+                        case "mcsubareaoflaw":
+                            matterData.MatterSubAreaOfLaw = searchResult[key].ToString();
+                            break;                        
+                        case "mcclientname":
+                            matterData.MatterClient = searchResult[key].ToString();
+                            break;
+                        case "mcclientid":
+                            matterData.MatterClientId = searchResult[key].ToString();
+                            break;
+                        case "mcblockeduploaduser":
+                            matterData.HideUpload = searchResult[key].ToString();
+                            break;
+                        case "mcmatterid":
+                            matterData.MatterID = searchResult[key].ToString();
+                            break;
+                        case "mcresponsibleattorney":
+                            matterData.MatterResponsibleAttorney = searchResult[key].ToString();
+                            break;
+                        case "lastmodifiedtime":
+                            matterData.MatterModifiedDate = searchResult[key].ToString();
+                            break;
+                        case "mattercentermatterguid":
+                            matterData.MatterGuid = searchResult[key].ToString();
+                            break;
+                    }
+                }
+                matterDataList.Add(matterData);
+            }
+            return matterDataList;
+        }
 
         public GenericResponseVM UpdateMatter(MatterInformationVM matterInformation)
         {
@@ -345,6 +417,43 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
             }
             return genericResponseVM;
+        }
+
+        public GenericResponseVM AssignContentType(MatterMetadata matterMetadata)
+        {
+            try
+            {
+                var client = matterMetadata.Client;
+                var matter = matterMetadata.Matter;
+                ClientContext clientContext = null;
+                GenericResponseVM genericResponseVM = null;
+                using (clientContext = spoAuthorization.GetClientContext(client.Url))
+                {
+                    IList<ContentType> contentTypeCollection = matterRepositoy.GetContentTypeData(clientContext, matter.ContentTypes, client, matter);
+                    if (null != contentTypeCollection && matter.ContentTypes.Count == contentTypeCollection.Count && !string.IsNullOrWhiteSpace(matter.Name))
+                    {
+                        genericResponseVM = matterRepositoy.AssignContentTypeHelper(matterMetadata, clientContext, contentTypeCollection, client, matter);
+                    }
+                    else
+                    {
+                        genericResponseVM =
+                                    new GenericResponseVM()
+                                    {
+                                        Code = errorSettings.ErrorCodeContentTypes,
+                                        Value = errorSettings.ErrorMessageContentTypes,
+                                        IsError = true
+                                    };
+                        
+                    }
+                    return genericResponseVM;
+                }
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+
         }
 
         #region private functions

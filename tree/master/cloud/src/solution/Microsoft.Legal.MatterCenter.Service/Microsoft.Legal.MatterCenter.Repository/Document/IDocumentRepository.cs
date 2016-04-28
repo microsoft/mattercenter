@@ -11,6 +11,9 @@
 // ***********************************************************************
 
 using Microsoft.Legal.MatterCenter.Models;
+using Microsoft.SharePoint.Client;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -22,5 +25,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
     {
         Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM);
         Task<dynamic> GetDocumentAndClientGUIDAsync(Client client);
+        void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties);
+        Users GetLoggedInUserDetails(ClientContext clientContext);
+        void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile);
+        bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName);
+        bool PerformContentCheck(ClientContext context, MemoryStream localMemoryStream, string serverFileURL);
+        DuplicateDocument DocumentExists(ClientContext clientContext, ContentCheckDetails contentCheck, string documentLibraryName, string folderPath, bool isMail);
     }
 }

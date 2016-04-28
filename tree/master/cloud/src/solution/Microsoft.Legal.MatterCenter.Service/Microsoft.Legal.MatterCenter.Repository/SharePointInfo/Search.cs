@@ -240,7 +240,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="listColumnName"></param>
         /// <param name="isShowDocument"></param>
         /// <returns></returns>
-        public PinResponseVM GetPinnedData(Client client, string listName, string listColumnName, bool isShowDocument)
+        public SearchResponseVM GetPinnedData(Client client, string listName, string listColumnName, bool isShowDocument)
         {
             ////Holds logged-in user alias
             string userAlias = string.Empty;
@@ -248,8 +248,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             ListItemCollection listItems;
             ////Stores the JSON structure with the meta-data of pinned matter/document
             string userPinnedDetails = string.Empty;
-            
-            PinResponseVM pinResponseVM = new PinResponseVM();
+
+            SearchResponseVM searchResponse = new SearchResponseVM();
             using (clientContext = spoAuthorization.GetClientContext(client.Url))
             {
                 try
@@ -270,24 +270,24 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             {
                                 Dictionary<string, DocumentData> userpinnedDocumentCollection = 
                                     JsonConvert.DeserializeObject<Dictionary<string, DocumentData>>(userPinnedMatter);
-                                pinResponseVM.TotalCount = userpinnedDocumentCollection.Count;
-                                pinResponseVM.UserPinnedDocumentsList = userpinnedDocumentCollection.Values.Reverse();                                
+                                searchResponse.TotalRows = userpinnedDocumentCollection.Count;
+                                searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.Reverse();                                
                             }
                             else
                             {
                                 Dictionary<string, MatterData> userpinnedMatterCollection = 
                                     JsonConvert.DeserializeObject<Dictionary<string, MatterData>>(userPinnedMatter);
-                                pinResponseVM.TotalCount = userpinnedMatterCollection.Count;
-                                pinResponseVM.UserPinnedMattersList = userpinnedMatterCollection.Values.Reverse();                                
+                                searchResponse.TotalRows = userpinnedMatterCollection.Count;
+                                searchResponse.MatterDataList = userpinnedMatterCollection.Values.Reverse();                                
                             }                            
                         }                        
                     }
                     else
                     {
-                        pinResponseVM.TotalCount = 0;
-                        pinResponseVM.NoPinnedMessage = ServiceConstants.NO_PINNED_MESSAGE;
+                        searchResponse.TotalRows = 0;
+                        searchResponse.NoPinnedMessage = ServiceConstants.NO_PINNED_MESSAGE;
                     }
-                    return pinResponseVM;
+                    return searchResponse;
                 }
                 catch (Exception ex)
                 {

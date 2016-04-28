@@ -48,5 +48,24 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string ShareListColumnMailSubject { get; set; }
         public string MatterMailBodyConflictCheck { get; set; }
         public string MatterMailBodyTeamMembers { get; set; }
+
+        public string SearchEmailTo { get; set; }
+        public string SearchEmailSubject { get; set; }
+        public string SearchEmailSentDate { get; set; }
+        public string SearchEmailSensitivity { get; set; }
+        public string SearchEmailReceivedDate { get; set; }
+        public string SearchEmailImportance { get; set; }
+        public string SearchEmailHasAttachments { get; set; }
+        public string SearchEmailFromMailbox { get; set; }
+        public string SearchEmailFrom { get; set; }
+        public string SearchEmailConversationTopic { get; set; }
+        public string SearchEmailCC { get; set; }
+        public string SearchEmailCategories { get; set; }
+        public string SearchEmailAttachments { get; set; }
+        public string SearchEmailConversationId { get; set; }
+        public string SearchEmailOriginalName { get; set; }
+        public string NoMailSubject { get; set; }
+        public string SearchEmailFileSize { get; set; }
+        public int SentDateTolerance { get; set; }
     }
 }

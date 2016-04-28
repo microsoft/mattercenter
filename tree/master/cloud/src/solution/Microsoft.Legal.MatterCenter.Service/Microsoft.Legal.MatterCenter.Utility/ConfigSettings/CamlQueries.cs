@@ -14,5 +14,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string RetrieveContextualHelpLinksQuery { get; set; }
         public string DMSRoleQuery { get; set; }
         public string MatterConfigurationsListQuery { get; set;}
+        public string ViewOrderByQuery { get; set; }
+        public string GetAllFilesInFolderQuery { get; set; }
     }
 }
