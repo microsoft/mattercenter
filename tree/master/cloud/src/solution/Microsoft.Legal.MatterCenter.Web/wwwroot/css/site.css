@@ -119,3 +119,11 @@ textarea {
     background: url(../images/Column_Picker_Expand.png) center no-repeat;
   
 }*/
+
+.custom-reqField {
+    color:red;
+}
+
+.secondaryContainer {
+    line-height:10px;
+}
