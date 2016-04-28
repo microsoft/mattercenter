@@ -490,7 +490,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         }
 
         /// <summary>
-        /// Gets the uploaded email file properties.
+        /// Gets the uploaded email file properties....
         /// </summary>
         /// <param name="fileStream">The file stream.</param>
         /// <param name="mailProperties">The mail properties.</param>
