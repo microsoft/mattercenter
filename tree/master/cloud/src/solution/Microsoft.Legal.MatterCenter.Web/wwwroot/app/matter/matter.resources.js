@@ -19,6 +19,10 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/matter/getpinned'
                   }),
+                   'getTaxonomyDetails': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/taxonomy/gettaxonomy'
+                  }),
               });
       }]);
 
