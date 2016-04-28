@@ -18,7 +18,15 @@ angular.module('matterMain')
 				  'getPinnedMatters': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/matter/getpinned'
-                  }),
+				  }),
+				  'UnpinMatters': auth.attachCSRF({
+				      method: 'POST',
+				      url: '/api/v1/matter/unpin'
+				  }),
+                  'PinMatters':auth.attachCSRF({
+				      method: 'POST',
+				      url: '/api/v1/matter/pin'
+				  }),
               });
       }]);
 
