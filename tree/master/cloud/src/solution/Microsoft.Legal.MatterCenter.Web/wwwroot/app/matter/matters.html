@@ -8,11 +8,7 @@
 
         </div>
         <div class="col-sm-2">
-            <select class="col-sm-12">
-                <option>All Matters</option>
-                <option>My Matters</option>
-                <option>Pinned Matters</option>
-            </select>
+            <select class="col-sm-12" ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
         </div>
         <div class="col-sm-4">
             <input ng-model="vm.searchTerm" class="col-sm-12" type="text" placeholder="Search by ID, or matter or client name" /><img ng-click="vm.search()" src="../../images/search-15x15-666.png" />
@@ -20,7 +16,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <h1 role="heading" class="add-margin-bottom">Pinned Matters</h1>
+            <h1 role="heading" class="add-margin-bottom">{{ddlMatters.Name}}</h1>
         </div>
     </div>
     <div class="row">
@@ -28,5 +24,34 @@
             <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
         </div>
     </div>
+    <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row margin0">
+                        <div class="col-sm-10 pad0">
+                            <div class="attachmentHeader">Drag and drop items to folders on the right</div>
+                        </div>
+                        <div class="col-sm-2">
+                            <img data-dismiss="modal" class="pull-right" src="../../images/close-666.png" />
+                        </div>
+                    </div>
+                    <div class="row margin0">
+                        <div class="col-sm-9 pull-left mailHeaderItems"><div>Items</div></div>
+                        <div class="col-sm-3 pull-left mailHeaderFolders"><div></div>Folders</div>
+                    </div>
+
+                    <div class="row margin0">
+                        <div class="col-sm-9 maildata"><div class="noFilesUploaded"></div>No files uploaded</div>
+                        <div class="col-sm-3 folderContent"></div>
+                    </div>
+                    <div class="row margin0">
+                        <div class="pull-left"><img src="../../images/information-blue.png" /> You can also drag and drop files from your desktop.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 

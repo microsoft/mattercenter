@@ -44,12 +44,77 @@ textarea {
 
 
 
-
-
-.ui-grid-cell  {
-  overflow: visible;
+.cursor {
+    cursor: pointer;
 }
 
+.ui-grid-cell {
+    overflow: visible;
+}
+
+#attachmentHeader {
+    color: #333;
+    float: left;
+    font-size: 1.125em;
+    font-weight: 300;
+    padding-top: 5px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: 20px!important;
+    padding-bottom:20px;
+}
+
+.mailHeaderItems {
+    border-right: 1px solid #666;
+}
+
+.mailHeaderItems, .mailHeaderFolders {
+    border-top: 1px solid #c8c8c8;
+    border-bottom: 1px solid #c8c8c8;
+    background-color: #eaeaea;
+    color: #333;
+    font-size: 0.875em;
+    float: left;
+    height: 36px;
+}
+
+.maildata {
+    float: left;
+    overflow-y: auto;
+    border-right: 1px solid #666;
+    border-bottom: 1px solid #c8c8c8;
+    min-height: 150px;
+}
+
+.folderContent {
+    float: right;
+    padding-right: 6px;
+    height: 150px;
+    border-bottom: 1px solid #c8c8c8;
+}
+
+.mailHeaderItems div, .mailHeaderFolders div {
+    padding-left: 10px;
+    padding-top: 8px;
+}
+
+.noFilesUploaded {
+    color: #333;
+    font: normal 0.875em 'Segoe UI';
+    margin-top: 14px;
+    min-height: 50px;
+    margin-left: 10px;
+}
+
+.margin0 {
+    margin: 0px;
+}
+
+.pad0{
+    padding:0px;
+}
 /*.ui-grid-change-icon {
     background: url(../images/Column_Picker_Expand.png) center no-repeat;
   
