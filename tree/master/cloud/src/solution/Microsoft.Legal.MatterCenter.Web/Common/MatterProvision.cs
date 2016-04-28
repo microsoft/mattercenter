@@ -49,7 +49,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         }
 
 
-        public async Task<IEnumerable<MatterData>> GetMatters(SearchRequestVM searchRequestVM)
+        public async Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM)
         {
             var searchObject = searchRequestVM.SearchObject;
             // Encode all fields which are coming from js
@@ -118,7 +118,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 matterDataList.Add(matterData);
             }
-            return matterDataList;
+            searchResultsVM.MatterDataList = matterDataList;
+            return searchResultsVM;
         }
 
         public GenericResponseVM UpdateMatter(MatterInformationVM matterInformation)

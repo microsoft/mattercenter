@@ -60,11 +60,11 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 {
                     Id = "123456",
                     Name = "Microsoft",
-                    Url = "https://microsoft.sharepoint.com/teams/mcuisite"
+                    Url = "https://msmatter.sharepoint.com/sites/catalog"
                 },
                 TermStoreDetails = new TermStoreDetails()
                 {
-                    TermGroup = "Site Collection - microsoft.sharepoint.com-teams-mcuisite",
+                    TermGroup = "MatterCenterTerms",
                     TermSetName = "Clients",
                     CustomPropertyName = "ClientURL"
                 }
@@ -92,11 +92,11 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 {
                     Id = "123456",
                     Name = "Microsoft",
-                    Url = "https://microsoft.sharepoint.com/teams/mcuisite"
+                    Url = "https://msmatter.sharepoint.com/sites/catalog"
                 },
                 TermStoreDetails = new TermStoreDetails()
                 {
-                    TermGroup = "Site Collection - microsoft.sharepoint.com-teams-mcuisite",
+                    TermGroup = "MatterCenterTerms",
                     TermSetName = "Practice Groups",
                     CustomPropertyName = "FolderNames"
                 }

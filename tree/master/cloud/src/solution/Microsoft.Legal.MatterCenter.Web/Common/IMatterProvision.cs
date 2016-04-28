@@ -15,6 +15,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         PropertyValues GetStampedProperties(MatterVM matterVM);
         GenericResponseVM AssignUserPermissions(MatterMetdataVM matterMetadata);
         GenericResponseVM AssignContentType(MatterMetadata matterMetadata);
-        Task<IEnumerable<MatterData>> GetMatters(SearchRequestVM searchRequestVM);
+        Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM);
     }
 }
