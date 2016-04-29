@@ -16,6 +16,7 @@
 /// <reference path="app/config.js" />
 /// <reference path="app/directives/heading.directive.js" />
 /// <reference path="app/home.controller.js" />
+/// <reference path="app/matter/createMatter.controller.js" />
 /// <reference path="app/matter/matter.resources.js" />
 /// <reference path="app/matter/matters.controller.js" />
 /// <reference path="app/navigation.controller.js" />

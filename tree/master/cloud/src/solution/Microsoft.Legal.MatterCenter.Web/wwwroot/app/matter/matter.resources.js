@@ -10,11 +10,6 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/matter/get'
                   }),
-
-                  'getMatters': auth.attachCSRF({
-                      method: 'GET',
-                      url: '/api/v1/taxonomy/getcurrentsitetitle'
-                  }),
 				  'getPinnedMatters': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/matter/getpinned'
