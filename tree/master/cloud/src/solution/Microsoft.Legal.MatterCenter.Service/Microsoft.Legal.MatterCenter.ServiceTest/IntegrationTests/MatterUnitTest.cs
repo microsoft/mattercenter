@@ -194,6 +194,29 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             }
         }
 
-        
+
+        [Fact]
+        public async void Check_Matter_Exists()
+        {
+            var matterMetadataVM = new MatterMetdataVM()
+            {
+                Client = new Client()
+                {                   
+                    Url = "https://msmatter.sharepoint.com/sites/microsoft"
+                },
+                Matter = new Matter()
+                {
+                    Name="New Matter123",
+                    MatterGuid= "e224f0ba891492dc05bf97d73f8b2934"
+                },
+                HasErrorOccurred = false
+            };
+            using (var testClient = testServer.CreateClient().AcceptJson())
+            {
+                var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/matter/checkmatterexists", matterMetadataVM);
+                var result = response.Content.ReadAsJsonAsync<GenericResponseVM>().Result;
+                Assert.NotNull(result);
+            }
+        }
     }
 }

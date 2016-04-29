@@ -105,6 +105,19 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return genericResponse;
         }
 
+        /// <summary>
+        /// Checks if the lists exist
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="matterName"></param>
+        /// <param name="matterConfigurations"></param>
+        /// <returns></returns>
+        public List<string> Exists(Client client, ReadOnlyCollection<string> lists)
+        {
+            List<string> listExists = spList.Exists(client, lists);
+            return listExists;
+        }
+
         public GenericResponseVM SaveConfigurationToList(MatterConfigurations matterConfigurations, ClientContext clientContext, string cachedItemModifiedDate)
         {
             string result = string.Empty;
@@ -161,6 +174,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 throw;
             }
             return genericResponse;
+        }
+
+        public bool IsPageExists(ClientContext clientContext, string pageUrl)
+        {
+            return spPage.PageExists(pageUrl, clientContext);
         }
 
         public ListItem GetItem(ClientContext clientContext, string listName, string listQuery)

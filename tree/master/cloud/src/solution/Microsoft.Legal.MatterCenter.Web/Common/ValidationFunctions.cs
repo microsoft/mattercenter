@@ -41,8 +41,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="matterName"></param>
         /// <param name="matterConfigurations"></param>
         /// <returns></returns>
-        private bool CheckListExists(Client client, string matterName, MatterConfigurations matterConfigurations = null)
+        public List<string> CheckListExists(Client client, string matterName, MatterConfigurations matterConfigurations = null)
         {
+            
             List<string> lists = new List<string>();
             lists.Add(matterName);
             lists.Add(matterName + matterSettings.OneNoteLibrarySuffix);
@@ -54,7 +55,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 lists.Add(matterName + matterSettings.TaskNameSuffix);
             }
-            bool listExists = spList.Exists(client, new ReadOnlyCollection<string>(lists));
+            List<string> listExists = matterRespository.Exists(client, new ReadOnlyCollection<string>(lists));
             return listExists;
         }
 
@@ -76,7 +77,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
                 if (matterInformation.Client != null)
                 {
-                    genericResponse = new GenericResponseVM();
+                    
                     genericResponse = ValidateClientInformation(matterInformation.Client, methodNumber);
                     if (genericResponse != null)
                     {
@@ -189,11 +190,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <returns>String that contains error message</returns>
         internal GenericResponseVM ValidateClientInformation(Client client, int methodNumber)
         {
-            GenericResponseVM response = new GenericResponseVM();
+            GenericResponseVM response = null;
             if (string.IsNullOrWhiteSpace(client.Url))
             {
+                response = new GenericResponseVM();
                 response.Code = errorSettings.IncorrectInputClientUrlCode;
                 response.Value = errorSettings.IncorrectInputClientUrlMessage;
+                return response;
             }
             else if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber ||
@@ -201,14 +204,17 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 if (string.IsNullOrWhiteSpace(client.Id))
                 {
-
+                    response = new GenericResponseVM();
                     response.Code = errorSettings.IncorrectInputClientIdCode;
                     response.Value = errorSettings.IncorrectInputClientIdMessage;
+                    return response;
                 }
                 else if (string.IsNullOrWhiteSpace(client.Name))
                 {
+                    response = new GenericResponseVM();
                     response.Code = errorSettings.IncorrectInputClientNameCode;
                     response.Value = errorSettings.IncorrectInputClientNameMessage;
+                    return response;
                 }
             }
             return response;
