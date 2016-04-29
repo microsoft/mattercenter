@@ -43,6 +43,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         private IDocumentRepository documentRepositoy;
         private ICustomLogger customLogger;
         private LogTables logTables;
+        private IDocumentProvision documentProvision;
         /// <summary>
         /// Constructor where all the required dependencies are injected
         /// </summary>
@@ -56,7 +57,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             ISPOAuthorization spoAuthorization,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IDocumentRepository documentRepositoy,
-            ICustomLogger customLogger, IOptions<LogTables> logTables
+            ICustomLogger customLogger, IOptions<LogTables> logTables, IDocumentProvision documentProvision
             )
         {
             this.errorSettings = errorSettings.Value;
@@ -66,6 +67,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             this.documentRepositoy = documentRepositoy;
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
+            this.documentProvision = documentProvision;
         }
 
         /// <summary>
@@ -103,14 +105,9 @@ namespace Microsoft.Legal.MatterCenter.Service
 
                 #endregion
 
-                var searchObject = searchRequestVM.SearchObject;
-                // Encode all fields which are coming from js
-                SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
-                // Encode Search Term
-                searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
-                    WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES, ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+                
 
-                var searchResultsVM = await documentRepositoy.GetDocumentsAsync(searchRequestVM);
+                var searchResultsVM = await documentProvision.GetDocumentsAsync(searchRequestVM);
                 return matterCenterServiceFunctions.ServiceResponse(searchResultsVM, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)

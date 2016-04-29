@@ -191,8 +191,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                         keywordQuery = FilterMatters(searchObject, keywordQuery);
 
-                        keywordQuery = KeywordQueryMetrics(client, searchObject, keywordQuery, ServiceConstants.DOCUMENT_LIBRARY_FILTER_CONDITION, 
-                            searchSettings.ManagedPropertyIsMatter, true);
+                        keywordQuery = KeywordQueryMetrics(client, searchObject, keywordQuery, ServiceConstants.DOCUMENT_ITEM_FILTER_CONDITION, 
+                            searchSettings.ManagedPropertyIsDocument, false);
 
                         // Create a list of managed properties which are required to be present in search results
                         List<string> managedProperties = new List<string>();
@@ -219,7 +219,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         //Filter on Result source to fetch only Matter Center specific results
                         keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
                         keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
-                        keywordQuery.BypassResultTypes = true;
+                        
                         searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, false, managedProperties);
                     }
                 }

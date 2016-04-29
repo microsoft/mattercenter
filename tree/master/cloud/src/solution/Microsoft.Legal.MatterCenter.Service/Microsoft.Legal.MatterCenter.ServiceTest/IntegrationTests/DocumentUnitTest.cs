@@ -162,9 +162,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             var searchRequest = new SearchRequestVM()
             {
                 Client = new Client()
-                {
-                    Id = "123456",
-                    Name = "Microsoft",
+                {                    
                     Url = "https://msmatter.sharepoint.com/sites/catalog"
                 },
                 SearchObject = new SearchObject()
@@ -185,7 +183,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/document/getdocuments", searchRequest);
                 var result = response.Content.ReadAsJsonAsync<SearchResponseVM>().Result;
                 Assert.NotNull(result);
-                Assert.NotEmpty(result.SearchResults);
+                Assert.NotEmpty(result.DocumentDataList);
 
             }
         }
