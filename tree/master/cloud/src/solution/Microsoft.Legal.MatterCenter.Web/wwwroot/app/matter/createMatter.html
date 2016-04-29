@@ -1,170 +1,310 @@
-﻿
-<div class="">
-
-
-
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="row">
-                <div class="col-sm-2 menuText menuTextSelected"><h4 title="Step 1: Select a client and provide basic information for your new matter.">1 Open Matter</h4></div>
-                <div class="col-sm-2 menuText"> <h4 title="Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter.">2 Assign Permissions</h4></div>
-                <div class="col-sm-2 menuText"><h4 title="Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team.">3 Create and Notify</h4></div>
-            </div>
+﻿<div style="margin:1%;">
+    <div class="menu">
+        <div class="menuTextGroup">
+            <div><span title="Step 1: Select a client and provide basic information for your new matter." class="menuText menuTextSelected" data-section-num="1" data-section-name="snOpenMatter">1 Open Matter</span></div>
+            <div><span title="Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter." class="menuText" data-section-num="2" data-section-name="snConflictCheck">2 Assign Permissions</span></div>
+            <div><span title="Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team." class="menuText" data-section-num="3" data-section-name="snCreateAndShare">3 Create and Notify</span></div>
         </div>
     </div>
 
+    <div class="content">
+        <!-- Open matter section -->
+        <section class="sectionStep" id="snOpenMatter" style="display: block;">
+            <div class="sectionContent">
+                <label class="contentLabel medium" id="selectClient"><span class="mandatory">*&nbsp;</span>Client Name</label>
+                <div class="gutter"></div>
+                <label class="contentLabel small" id="clientId">Client ID</label>
 
 
-    <br />
+                <div>
 
-
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="row">
-                <div class="col-sm-4">
-                    <span class="custom-reqField">*</span> Client Name
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <!--<div class="dropdown">
-                        <a class="btn btn-default" data-toggle="dropdown" href="#" id="dropdownMenu1"> <b class="caret"></b></a>
-                        <ul  >
-                            <li>SELECT</li>
-                            <li class="form-control"  ng-repeat="c in cm.clientNameList">
-
-                            </li>
-                        </ul>
-                    </div>-->
-
-
-
-                    <select ng-model="cm.selectedClientName" ng-options="client.name for client in cm.clientNameList">
-                        <option value="" label="Select and item"></option>
+                    <select class="medium clear" ng-model="cm.selectedClientName" ng-change="cm.getSelectedClientValue()" ng-options="client.id as client.name for client in cm.clientNameList track by client.id">
+                        <option value="" label="- Select a client -"></option>
                     </select>
+
                 </div>
+                <div class="gutter"></div>
+                <input title="Client ID" disabled="disabled" class="small" id="txtClientId" ng-model="cm.clientId" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" placeholder="">
+                <label class="contentLabel medium clear" id="enterMatterName"><span class="mandatory">*&nbsp;</span>Matter Name</label>
+                <div class="gutter"></div>
+                <label class="contentLabel small" id="enterMatterId"><span class="mandatory">*&nbsp;</span>Matter ID</label>
+                <input title="Matter Name" class="medium clear" id="txtMatterName" ng-model="cm.matterName" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="Enter a name for this matter" value="">
+                <div class="gutter"></div>
+                <input title="Matter ID" class="small" id="txtMatterId" ng-model="cm.matterId" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="Enter a matter ID" value="">
+                <label class="contentLabel large clear"><span class="mandatory description">*&nbsp;</span>Matter Description</label>
+                <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" maxlength="255" placeholder="Enter a brief description of the matter" rows="2" cols="400"></textarea>
+                <label class="contentLabel large clear"><span class="mandatory">*&nbsp;</span>Matter Type (click Select to define the practice group and area of law)</label>
+                <div class="large" id="documentTemplates">
 
-
-
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="row">
-                <div class="col-sm-4">
-                    Client ID
+                </div>
+                <div class="gutter"></div>
+                <button class="button" id="btnLookup" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" ng-click="cm.selectMatterType()" value="Lookup">Select Type</button>
+                <div class="loadingLookUp hide">
+                    <img id="loadingLookupImage" alt="Loading..." src="../Images/WindowsLoadingFast.GIF">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <input class="form-control" type="text">
+        </section>
+        <!-- Conflict check section -->
+        <section class="sectionStep hide" id="snConflictCheck" style="display: none;">
+            <div class="sectionContent">
+                <div id="conflictCheck">
+                    <label class="medium chkConflictCheckParent conflictCheckPosition" id="chkConflictCheckParent">
+                        <input id="chkConflictCheck" type="checkbox" checked="checked" value="Yes">Conflict check conducted (must be complete prior to provisioning matter)
+                    </label>
+                    <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>Who conducted the conflict check?</label>
+                    <div class="gutter"></div>
+                    <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>Date Conducted</label>
+                    <div class="gutter"></div>
+                    <label class="contentLabel mediumSmall" id="conflictIdentified">Conflict Identified?</label>
+                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span><input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select name" autocomplete="off">
+                    <div class="gutter"></div>
+                    <input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">
+                    <div class="gutter"></div>
+                    <div class="conflictRadioBtn">
+                        <label class="smaller">
+                            <input name="rdbConflictCheck" type="radio" checked="checked" value="True">Yes
+                        </label>
+                        <label class="smaller">
+                            <input name="rdbConflictCheck" type="radio" value="False">No
+                        </label>
+                    </div>
+                    <div class="clear"></div>
+                    <section id="snBlockUser">
+                        <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
+                        <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span><input class="medium clear ui-autocomplete-input" id="txtBlockUser" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                        <div class="gutter"></div>
+                        <div class="large clear" id="areaBlockUser"></div>
+                    </section>
                 </div>
-
+                <label class="secureMatterLabel assignTeamRadioPosition">Would you like this matter to be secured only to the assigned team?</label>
+                <div class="secureMatterRadioBtn assignTeamRadioPosition">
+                    <label class="rdbOptions">
+                        <input name="rdbSecureMatterCheck" disabled="disabled" class="matterCheckYes" type="radio" value="True">Yes
+                    </label>
+                    <label class="rdbOptions">
+                        <input name="rdbSecureMatterCheck" disabled="disabled" class="matterCheckNo" type="radio" value="False">No
+                    </label>
+                </div>
+                <label class="contentLabel medium clear blue" id="assignTeam">Assign Team</label>
+                <label class="medium clear contentLabel" id="labelName"><span class="mandatory">*&nbsp;</span>Name</label>
+                <div class="gutter"></div>
+                <label class="mediumSmallRole contentLabel"><span class="mandatory">*&nbsp;</span>Role</label>
+                <div class="gutter"></div>
+                <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>Permission Level</label>
+                <div class="row1 assignNewPerm">
+                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span><input class="medium clear inputAssignPerm ui-autocomplete-input" id="txtAssign1" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                    <div class="gutter"></div>
+                    <div class="addNewMember">
+                        <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv">
+                            <input disabled="disabled" class="mediumSmallRole assignRole assignRoleField" id="ddlRoleAssign1" autofocus="autofocus" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" data-value="Attorney" data-mandatory="false">
+                            <img title="Dropdown icon" class="ddlRoleAssignIcon" id="ddlRoleAssignIcon1" alt="Role Icon" src="../Images/icon-combobox.png">
+                        </div>
+                        <div class="ddlRoleAssignList clear hide" id="ddlRoleAssignList1"><div title="Attorney" class="roleValue assignPerm1" data-value="Attorney" data-mandatory="false">Attorney</div><div title="Legal Admin" class="roleValue assignPerm1" data-value="Legal Admin" data-mandatory="false">Legal Admin</div><div title="Paralegal" class="roleValue assignPerm1" data-value="Paralegal" data-mandatory="false">Paralegal</div><div title="Responsible Attorney" class="roleValue assignPerm1" data-value="Responsible Attorney" data-mandatory="true">Responsible Attorney</div><div title="Working Attorney" class="roleValue assignPerm1" data-value="Working Attorney" data-mandatory="false">Working Attorney</div></div>
+                    </div>
+                    <div class="gutter"></div>
+                    <div>
+                        <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
+                            <input disabled="disabled" class="mediumSmallPermission assignPermission assignPermField" id="ddlPermAssign1" autofocus="autofocus" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" data-value="Contribute">
+                            <img title="Dropdown icon" class="ddlPermAssignIcon" id="ddlPermAssignIcon1" alt="Permission Icon" src="../Images/icon-combobox.png">
+                        </div>
+                        <div class="ddlPermAssignList clear hide" id="ddlPermAssignList1"><div title="Contribute" class="permValue permContent1" data-value="Contribute">Contribute</div><div title="Full Control" class="permValue permContent1" data-value="Full Control">Full Control</div><div title="Read" class="permValue permContent1" data-value="Read">Read</div></div>
+                    </div>
+                    <div class="gutter"></div>
+                    <div class="close">
+                        <img title="Delete" alt="Delete" src="../Images/icon-delete.png">
+                    </div>
+                </div>
+                <div class="clear" id="addNewAssignPerm"></div>
+                <a id="addMoreLink">Add More Names</a>
             </div>
+        </section>
+        <!-- Create and share matter section -->
+        <section class="sectionStep hide" id="snCreateAndShare" style="display: none;">
+            <div class="sectionContent">
+                <label class="clear createNotifyDescription">You have entered all of the necessary information to create this matter. After you click Create and Notify, the matter will be created and all team members will receive an email containing a link to this matter’s location.</label>
+                <div class="ms-ChoiceField calendarPosition">
+                    <input class="ms-ChoiceField-input" id="demo-checkbox-unselected0" type="checkbox">
+                    <label class="ms-ChoiceField-field" for="demo-checkbox-unselected0"><span class="ms-Label checkbox" id="checkbox-label-text0">Include calendar</span></label>
+                </div>
+                <div class="ms-ChoiceField clear rssFeedsPosition">
+                    <input class="ms-ChoiceField-input" id="demo-checkbox-unselected1" type="checkbox">
+                    <label class="ms-ChoiceField-field" for="demo-checkbox-unselected1"><span class="ms-Label checkbox" id="checkbox-label-text1">Include RSS Feeds</span></label>
+                </div>
+                <div class="ms-ChoiceField emailPosition">
+                    <input class="ms-ChoiceField-input" id="demo-checkbox-unselected2" type="checkbox">
+                    <label class="ms-ChoiceField-field" for="demo-checkbox-unselected2"><span class="ms-Label checkbox" id="checkbox-label-text2">Include email notification</span></label>
+                </div>
+                <div class="ms-ChoiceField taskPosition">
+                    <input class="ms-ChoiceField-input" id="demo-checkbox-unselected3" type="checkbox">
+                    <label class="ms-ChoiceField-field" for="demo-checkbox-unselected3"><span class="ms-Label checkbox" id="checkbox-label-text3">Include tasks</span></label>
+                </div>
+                <button class="button clear" id="btnCreateMatter" type="button" value="Create">Create and Notify</button>
+            </div>
+            <div class="loading hide">
+                <img id="loadingImage" alt="Loading..." src="../Images/WindowsLoadingFast.GIF">
+            </div>
+        </section>
+        <div id="space"></div>
+    </div>
 
+    <div class="pagination">
+        <div class="nextPreviousDiv">
+            <span class="Paginate" data-move="0">Previous</span>
+            <span class="Paginate active" data-move="1">Next</span>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="row">
-                <div class="col-sm-12">
-                    <span class="custom-reqField">*</span> Matter Name
+    <div class="popupContainerBackground " ng-class="cm.popupContainerBackground"></div>
+    <div class="popUpContainer " ng-class="cm.popupContainer" style="margin:auto !important; bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
+        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png">
+        <div class="alignCenter">
+            <header class="popUpHeader">
+                <div title="Select a Practice Group" class="popUpHeaderTitle popUpFloatLeft" >Select a Practice Group</div>
+                <div class="popUpPracticeGroup clear">
+                    <div class="popUpPGDiv">
+                        <select class="medium clear" ng-model="cm.selectedPracticeGroup" ng-change="cm.getSelectedPracticeGroupValue()" ng-options=" practiceGroup.termName for practiceGroup in cm.pracitceGroupList">
+                            <option value="" label="- Select a practice group -"></option>
+                        </select>
+                    </div>
+                   
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <input class="form-control " type="text" placeholder="Enter a name for this matter">
+            </header>
+            <div class="popUpBody popUpFloatLeft" style="overflow:hidden;">
+                <div class="popUpMatterDescription popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divAOL">
+                    <label title="Area of Law" class="popUpBodyHeader popUpFloatLeft">Area of Law</label>
+                    <div class="popUpFloatLeft popUpBorder " id="popupAOLBorder" style="height:213px;width:200px;">
+                        <input class="popUpMDTextArea clear" style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="Search by typing">
+                        <div class="popUpCommonContent popUpMD" id="popupAOLContent">
+                            <div class='popUpMDContent ' style="padding:3px !important;"  ng-repeat="areaOfLawTerm in cm.areaOfLawTerms">
+                                <div   ng-click='cm.selectedAreaOfLawTerm(areaOfLawTerm)'  data-value='' documents='' data-foldernamesaol='areaOfLawTerm.folderNames' data-areaoflaw-id='areaOfLawTerm.id'>{{areaOfLawTerm.termName}}</div>
+                            </div>
+                            </div>                         
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="row">
-                <div class="col-sm-4">
-                    <span class="custom-reqField">*</span> Matter ID
+                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divSAOL" style="width:28%;">
+                    <label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft" >Sub Area of Law (select matter type)</label>
+                    <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px;">
+                        <input class="popUpMDTextArea clear" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
+                        <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
+                            <div class="popUpSALContent " ng-repeat="subAreaOfLawTerm in cm.subAreaOfLawTerms"  style="padding:3px !important;">
+                                <div  data-value="" data-subareaoflaw-id="subAreaOfLawTerm.id" data-display-name="subAreaOfLawTerm.termName" data-isnofolderstructurepresent='subAreaOfLawTerm.isNoFolderStructurePresent' data-foldernamessal='subAreaOfLawTerm.folderNames' data-associated-document-template='subAreaOfLawTerm.documentTemplates' data-document-template='subAreaOfLawTerm.documentTemplateNames'>{{subAreaOfLawTerm.termName}}</div>
+                            </div>
+                            </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <input class="form-control" type="text" placeholder="Enter a matter ID">
+                <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft" style="position:relative;margin-top:0px;"id="navigate">
+                    <div class="popUpLeftClick popUpPosAbs" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
+                        <img title="Add" class="iconForward" style="margin:0px;" alt="Left" src="../Images/forward_666.png">
+                    </div>
+                    <div class="popUpRightClick popUpPosAbs" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
+                        <img title="Remove" class="iconBack" alt="Right" src="../Images/back-666.png">
+                    </div>
                 </div>
+                <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft" id="divDocTemplate">
+                    <div class="errorPopUpArea hide">
+                        <div class="errTriangleArea popUpFloatLeft"></div>
+                        <div class="errTriangleBorderArea popUpFloatLeft"></div>
+                        <div class="errTextArea popUpFloatRight"><span class="selectDefaultContentTypeMessage" style="visibility: hidden;">Please select primary matter type</span></div>
+                    </div>
 
+                    <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft">Matter Type</label>
+                    <div class="popUpFloatLeft popUpBorder" style="height:213px; width:200px;">
+                        <div class="popUpCommonContent popDT">
+                            </div>
+                    </div>
+                </div>
+                <div id="defaultMessageDiv">
+                    <img id="infoImg" alt="info" src="../Images/information-blue.png">
+                    <span id="defaultMessage">Please select primary matter type before you save.</span>
+                </div>
+                <button class="SavePopUpEntries" type="button">Save</button>
             </div>
-
         </div>
     </div>
+   
 
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="row">
-                <div class="col-sm-12">
-                    <span class="custom-reqField">*</span>Matter Description
+    <!--<div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <img data-dismiss="modal" class="pull-right" src="../../images/close-666.png" />
+                <div style="clear:both"></div>
+
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="alignCenter">
+                            <header class="popUpHeader">
+                                <div title="Select a Practice Group" class="popUpHeaderTitle popUpFloatLeft">Select a Practice Group</div>
+                                <div class="popUpPracticeGroup clear">
+                                    <div class="popUpPGDiv">
+                                        <select class="medium clear" ng-model="cm.selectedClientName" ng-change="cm.getSelectedClientValue()" ng-options="client.id as client.name for client in cm.clientNameList track by client.id">
+                                            <option value="" label="- Select a client -"></option>
+                                        </select>
+                                    </div>
+                                    <div class="hide" id="popUpPGList">
+                                        <div title="Litigation" class="popUpOptions" data-value="0" data-foldernamespg="Emails; Documents" data-practicegroup-id="9480b403-6c91-4a14-b9ef-26c5d83a2c2e">Litigation</div><div title="Transactional" class="popUpOptions" data-value="1" data-foldernamespg="Emails; Documents" data-practicegroup-id="00835059-2139-41bc-8afa-e2b25aaf202f">Transactional</div>
+                                    </div>
+                                </div>
+                            </header>
+                            <div class="popUpBody popUpFloatLeft">
+                                <div class="popUpMatterDescription popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divAOL">
+                                    <label title="Area of Law" class="popUpBodyHeader popUpFloatLeft">Area of Law</label>
+                                    <div class="popUpFloatLeft popUpBorder " id="popupAOLBorder">
+                                        <input class="popUpMDTextArea clear" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Search by typing">
+                                        <div class="popUpCommonContent popUpMD" id="popupAOLContent">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divSAOL">
+                                    <label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft">Sub Area of Law (select matter type)</label>
+                                    <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder">
+                                        <input class="popUpMDTextArea clear" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Search by typing">
+                                        <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="navigate">
+                                    <div class="popUpLeftClick popUpPosAbs">
+                                        <img title="Add" class="iconForward" alt="Left" src="../Images/forward_666.png">
+                                    </div>
+                                    <div class="popUpRightClick popUpPosAbs">
+                                        <img title="Remove" class="iconBack" alt="Right" src="../Images/back-666.png">
+                                    </div>
+                                </div>
+                                <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft" id="divDocTemplate">
+                                    <div class="errorPopUpArea hide">
+                                        <div class="errTriangleArea popUpFloatLeft"></div>
+                                        <div class="errTriangleBorderArea popUpFloatLeft"></div>
+                                        <div class="errTextArea popUpFloatRight"><span class="selectDefaultContentTypeMessage" style="visibility: hidden;">Please select primary matter type</span></div>
+                                    </div>
+
+                                    <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft">Matter Type</label>
+                                    <div class="popUpFloatLeft popUpBorder">
+                                        <div class="popUpCommonContent popDT">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="defaultMessageDiv">
+                                    <img id="infoImg" alt="info" src="../Images/information-blue.png">
+                                    <span id="defaultMessage">Please select primary matter type before you save.</span>
+                                </div>
+                                <button class="SavePopUpEntries" type="button">Save</button>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <textarea class="form-control col-sm-12 custom-txtArea" rows="3" placeholder="Enter a brief description of the matter"></textarea>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="row">
-                <div class="col-sm-12">
-                    <span class="custom-reqField">*</span>Matter Type(click Select to define the practice group and area of law)
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <textarea class="form-control col-sm-12 custom-txtArea" rows="3" placeholder="Enter a brief description of the matter"></textarea>
-                </div>
-                <div class="col-sm-4">
-
-                    <button class="btn btn-primary" ng-click="SelectModal()">Select Type</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    </div>-->
 </div>
-<!--<div  class="modal fade"  id="myModal" tabindex="-1"   role="dialog"   aria-labelledby="myModalLabel"   aria-hidden="true">
-    <div  class="modal-dialog">
-
-
-        <div  class="modal-content">
-            Hi
-        </div >
-
-
-        <div  class="modal-body"></div >
-    </div >
-</div>-->
-
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <img data-dismiss="modal" class="pull-right" src="../../images/close-666.png" /> 
-               
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-
 
 
 
