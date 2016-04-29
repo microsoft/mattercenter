@@ -607,7 +607,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             var matter = matterMetadataVM.Matter;
             var matterConfiguration = matterMetadataVM.MatterConfigurations;
             ErrorResponse errorResponse = null;
-            if (null == client && null == matter)
+            if (null == client && null == matter && string.IsNullOrWhiteSpace(client.Url))
             {
                 errorResponse = new ErrorResponse()
                 {
@@ -710,7 +710,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
 
                 genericResponse = matterProvision.CheckSecurityGroupExists(matterInformationVM);
-                if(matterInformationVM!=null)
+                if(genericResponse != null)
                 {
                     errorResponse = new ErrorResponse()
                     {
@@ -720,11 +720,8 @@ namespace Microsoft.Legal.MatterCenter.Service
                     };
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
-                var checkSecurityGroupExists = new
-                {
-                    securityGroupExists = true
-                };
-                return matterCenterServiceFunctions.ServiceResponse(checkSecurityGroupExists, (int)HttpStatusCode.OK);
+                genericResponse = ServiceUtility.GenericResponse(ServiceConstants.SUCCESS, ServiceConstants.TRUE);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
             }
             catch (Exception exception)
             {

@@ -4,7 +4,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using System.Net.Http;
 using Microsoft.Legal.MatterCenter.Service;
 using Newtonsoft.Json;
-
+using System.Collections.Generic;
 namespace Microsoft.Legal.MatterCenter.ServiceTest
 {
     public class MatterUnitTest
@@ -206,7 +206,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 },
                 Matter = new Matter()
                 {
-                    Name="New Matter123",
+                    Name="New Matter",
                     MatterGuid= "e224f0ba891492dc05bf97d73f8b2934"
                 },
                 HasErrorOccurred = false
@@ -214,6 +214,56 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             using (var testClient = testServer.CreateClient().AcceptJson())
             {
                 var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/matter/checkmatterexists", matterMetadataVM);
+                var result = response.Content.ReadAsJsonAsync<GenericResponseVM>().Result;
+                Assert.NotNull(result);
+            }
+        }
+
+        [Fact]
+        public async void Check_Security_Group_Exists()
+        {
+            var blockedUserNames = new List<string>();
+            blockedUserNames.Add("matteradmin@MSmatter.onmicrosoft.com");
+            IList<IList<string>> assignUserNames = new List<IList<string>>(); 
+
+            var userNames = new List<string>();
+            userNames.Add("Venkat M");
+            userNames.Add("");
+            assignUserNames.Add(userNames);
+
+
+
+            IList<IList<string>> assignUserEmails = new List<IList<string>>();
+            var emails = new List<string>();
+            emails.Add("venkatm@MSmatter.onmicrosoft.com");
+            emails.Add("");
+            assignUserEmails.Add(emails);
+
+            var userIds = new List<string>();
+            userIds.Add("txtAssign1");
+
+            var matterInformationVM = new MatterInformationVM()
+            {
+                Client = new Client()
+                {
+                    Url = "https://msmatter.sharepoint.com/sites/microsoft"
+                },
+                Matter = new Matter()
+                {
+                    Name = "New Matter",
+                    AssignUserNames = assignUserNames,
+                    AssignUserEmails= assignUserEmails,
+                    Conflict = new Conflict()
+                    {
+                        Identified = "True"
+                    },
+                    BlockUserNames = blockedUserNames,
+                },
+                UserIds= userIds
+            };
+            using (var testClient = testServer.CreateClient().AcceptJson())
+            {
+                var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/matter/checksecuritygroupexists", matterInformationVM);
                 var result = response.Content.ReadAsJsonAsync<GenericResponseVM>().Result;
                 Assert.NotNull(result);
             }

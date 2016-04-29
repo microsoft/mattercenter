@@ -404,7 +404,7 @@
             Document Controller class deals with finding document, pinning document, unpinning the document etc.
             </summary>
         </member>
-        <member name="M:Microsoft.Legal.MatterCenter.Service.DocumentController.#ctor(Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.DocumentSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Web.Common.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.IDocumentRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.LogTables})">
+        <member name="M:Microsoft.Legal.MatterCenter.Service.DocumentController.#ctor(Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.DocumentSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Web.Common.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.IDocumentRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.LogTables},Microsoft.Legal.MatterCenter.Web.Common.IDocumentProvision)">
             <summary>
             Constructor where all the required dependencies are injected
             </summary>
