@@ -5142,7 +5142,7 @@
     },
     "Microsoft.CodeAnalysis.Analyzers/1.0.0": {
       "type": "package",
-      "sha512": "E7VdmGw6xO3VHWapC+pNLZmo6yncS53UY3bmb5WZm9wliJBB1A6brgzKA4fcqiLrmJFx71r0M2zEbRDphRLUNg==",
+      "sha512": "2+V/VDgZu59Thrlp+FQH38H/SmPBegMKsG0ie1ZZyHtx7kJNEozIx/p9zs0UrolX0uyYX7Ouoj3Q3Be15lqXxA==",
       "files": [
         "analyzers/dotnet/cs/Microsoft.CodeAnalysis.Analyzers.dll",
         "analyzers/dotnet/cs/Microsoft.CodeAnalysis.CSharp.Analyzers.dll",
@@ -5158,7 +5158,7 @@
     },
     "Microsoft.CodeAnalysis.Common/1.1.0-rc1-20151109-01": {
       "type": "package",
-      "sha512": "5eea4BzS8/ge6aVWbweZ3LxMZumN7lm1hPPjSn3iAS3yi1ozsg1aCZ+lHq2nbS/ZNT+Z3QmTcmKaQd3b4bTqeA==",
+      "sha512": "gC9zpQARTjIOht1dZM5Bp0fbOKA40yh0wHBMG2psLGquche0URbfdB9i1pnCusLospEsRIrNvYl75647BcBVug==",
       "files": [
         "lib/net45/Microsoft.CodeAnalysis.dll",
         "lib/net45/Microsoft.CodeAnalysis.xml",
@@ -5172,7 +5172,7 @@
     },
     "Microsoft.CodeAnalysis.CSharp/1.1.0-rc1-20151109-01": {
       "type": "package",
-      "sha512": "2u8FpEIzbjvW6kveLYDwVgrrw7rkqN123dQSMLL3aRBcNFpKL4+hJkrU5uutsVNmjrzxjQkrSKQjIw6L2yjU9w==",
+      "sha512": "BFhSWMMlp0xLN/ogn71ULN7N0yy/yqJf/wu63x3KjV497n+8OlyiX7ZnbaQiUeafjW5P2vLzvZH99+5s+dH3Dg==",
       "files": [
         "lib/net45/Microsoft.CodeAnalysis.CSharp.dll",
         "lib/net45/Microsoft.CodeAnalysis.CSharp.xml",
@@ -5187,7 +5187,7 @@
     "Microsoft.CSharp/4.0.1-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "fb+HO3nIjHao9lqsVVM0ne3GM/+1EfRQUoM58cxEOt+5biy/8DQ1nxIahZ9VaJKw7Wgb6XhRhsdwg8DkePEOJA==",
+      "sha512": "z/W5YaTGVQ8WX6TQDW8cCBAe2rBhHOD7NZHxLAnBIMoLWMI/upWDi+dxHYMDDWmGOM7a3di6evem2OzOdaB1fQ==",
       "files": [
         "lib/dotnet5.4/Microsoft.CSharp.dll",
         "lib/MonoAndroid10/_._",
@@ -5236,7 +5236,7 @@
     },
     "Microsoft.Data.Edm/5.6.4": {
       "type": "package",
-      "sha512": "1OaiC/l6AvZO8YycJab8uQXVTdQr88VCvToAb0MSXzQgOLX0ITDTq0zGDtXVhgvkkR859m2FF5NDLI9iRneyiA==",
+      "sha512": "I9ea/CEOufddjjyRYIowshdeFj5SIqfWZ5conK/UIaFx2/jJ+PDRhQ5jcJTqTg/ediCa1C22TeRl/MmL9zwBew==",
       "files": [
         "lib/net40/de/Microsoft.Data.Edm.resources.dll",
         "lib/net40/es/Microsoft.Data.Edm.resources.dll",
@@ -5289,7 +5289,7 @@
     },
     "Microsoft.Data.OData/5.6.4": {
       "type": "package",
-      "sha512": "h99QxlisYGsp2+4RJXNsxINI0g3c2deLGk1/oF8ik3Q8LDB8AvwFG6LkEbfz2v92cSU48qcFxPwBY+JHcYwvMw==",
+      "sha512": "Te71LAvjYppmBCLWomHvhVzKes3q8L5tmmDMSyLP7YrJMYG5/Ded8uJgxWWkUX/Vh11ZDpN2WXRByOg+BAHCYw==",
       "files": [
         "lib/net40/de/Microsoft.Data.OData.resources.dll",
         "lib/net40/es/Microsoft.Data.OData.resources.dll",
@@ -5342,7 +5342,7 @@
     },
     "Microsoft.Data.Services.Client/5.6.4": {
       "type": "package",
-      "sha512": "+gmufGimhkPUL1ZZMaHiXBZMevQybfgMZYJI+/Ox4NAhs+Y7L6nkYPpSOifUVy26BKAAXQMObbC6N1KXqCurgQ==",
+      "sha512": "94XNZKwnpHuFAdR70kqNTMBv2ex9m+VVQX8dHknZgtlq+nTlZDgzFmahU0wsBaIqJWc3k8Z+FftQ2Voq9r0NWA==",
       "files": [
         "lib/net40/de/Microsoft.Data.Services.Client.resources.dll",
         "lib/net40/es/Microsoft.Data.Services.Client.resources.dll",
@@ -5819,7 +5819,7 @@
     },
     "Newtonsoft.Json/6.0.8": {
       "type": "package",
-      "sha512": "t7mSGIhaIzRl2Ib8/A7pj0AiTN4MxTgL87P2v97byP2edMrVwr5Tw5IF8PThTDddSoC1kDC3uSixe+vVzeF7iA==",
+      "sha512": "7ut47NDedTW19EbL0JpFDYUP62fcuz27hJrehCDNajdCS5NtqL+E39+7Um3OkNc2wl2ym7K8Ln5eNuLus6mVGQ==",
       "files": [
         "lib/net20/Newtonsoft.Json.dll",
         "lib/net20/Newtonsoft.Json.xml",
@@ -5844,7 +5844,7 @@
     "runtime.win7.System.Threading/4.0.11-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "paSNXQ5Y6Exu3OpekooyMJFQ8mitn69fGO5Br3XLIfQ1KiMYVmRf+o6dMprC0SpPROVCiCxdUaJx5XkDEVL3uA==",
+      "sha512": "kKQ9uUB1g3S9eyK5njdwh5LO0HxJ9CN6cF9dXtp7uzdZvh2UoTgAZ0Jf+/TvzWcUsfcKIPQUGPPLOBLaQpXASg==",
       "files": [
         "ref/dotnet/_._",
         "runtime.win7.System.Threading.4.0.11-beta-23516.nupkg",
@@ -5874,7 +5874,7 @@
     "System.Collections/4.0.11-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "TDca4OETV0kkXdpkyivMw1/EKKD1Sa/NVAjirw+fA0LZ37jLDYX+KhPPUQxgkvhCe/SVvxETD5Viiudza2k7OQ==",
+      "sha512": "FSd5zsGfmG2pidC3CVizQPNGTK1Q3A2HEuRqwUPLU/AArjELLC5p4l6XIAlJ9ZBPdbp6V8vFQAxUHzkFfyVkYA==",
       "files": [
         "lib/DNXCore50/System.Collections.dll",
         "lib/MonoAndroid10/_._",
@@ -5998,7 +5998,7 @@
     "System.Diagnostics.DiagnosticSource/4.0.0-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "WHVhr5/p8UDjqNV7l9PCxZgOufE2tO4XOWva9pau9c7PzJJTdB1By6scO5dgHLpmlB/u4y27Y9AzT8AqtG8sxw==",
+      "sha512": "0uDR/UOmFCNPDCyHEPHhCrk6c1iRnDp00YqwSZ8Qf5aaaJjm4WXnf4Q9xZw4OoApsSiODSypDMdpQU24IxR16A==",
       "files": [
         "lib/dotnet5.2/System.Diagnostics.DiagnosticSource.dll",
         "lib/dotnet5.2/System.Diagnostics.DiagnosticSource.xml",
@@ -6154,7 +6154,7 @@
     "System.Linq/4.0.1-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "uNxm2RB+kMeiKnY26iPvOtJLzTzNaAF4A2qqyzev6j8x8w2Dr+gg7LF7BHCwC55N7OirhHrAWUb3C0n4oi9qYw==",
+      "sha512": "AJaoyeAHLpurbTWnmvOhK/QC2sswKJrIA5RlPea+UdfXpHOw3srPNEPpseZDMV/EviVqAwUfFNkc5QxpGZtsLA==",
       "files": [
         "lib/dotnet5.4/System.Linq.dll",
         "lib/net45/_._",
@@ -6196,7 +6196,7 @@
     "System.Reflection/4.1.0-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "wfrnDfk8p2cqJQY3TTHsJRmf3cE3wa6BacncCn4dO58lVwQNNe9ASdLrLJZlMviAjx8+1fUpj6NX7leIOyaBJA==",
+      "sha512": "CtBdMwGqcohBPV7Pic8unnJlSxN1H3qZGLr4fP0GXXbI00E37ZQL+y5sy7FpHTQ8fsVmV8QbQqf+ngSkP6YTjQ==",
       "files": [
         "lib/DNXCore50/System.Reflection.dll",
         "lib/MonoAndroid10/_._",
@@ -6294,7 +6294,7 @@
     "System.Reflection.Metadata/1.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "a8VsRm/B0Ik1o5FumSMWmpwbG7cvIIajAYhzTTy9VB9XItByJDQHGZkQTIAdsvVJ6MI5O3uH/lb0izgQDlDIWA==",
+      "sha512": "RLIE4sSt2zngMLuqM6YmxBH99mTumtT4DNZE4+msfEaInUP5iCLQT+BHPl+2cjSAP1pdALyAjLB8RtCB+WGGWQ==",
       "files": [
         "lib/dotnet5.2/System.Reflection.Metadata.dll",
         "lib/dotnet5.2/System.Reflection.Metadata.xml",
@@ -6376,7 +6376,7 @@
     "System.Runtime/4.0.21-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "R174ctQjJnCIVxA2Yzp1v68wfLfPSROZWrbaSBcnEzHAQbOjprBQi37aWdr5y05Pq2J/O7h6SjTsYhVOLdiRYQ==",
+      "sha512": "ToYWwDgwR8fR9/8aaV+7PMFBfG2tEgGWED0l9OC9DQieaKEMAzXV3c6fOkK8FTd9YPjFcYnvx73tg21w6GuNDA==",
       "files": [
         "lib/DNXCore50/System.Runtime.dll",
         "lib/MonoAndroid10/_._",
@@ -6542,7 +6542,7 @@
     },
     "System.Spatial/5.6.4": {
       "type": "package",
-      "sha512": "LI2Y7FjjVFfNdMgr8RhMQVjSzZQVc8tLOjLMwZ2atWIBxq3DOZuCKg6qdotKdO0VqZ7ALp2ASRkhHaWh6jnKbw==",
+      "sha512": "BoXUQ0mHyeAbkR3qlhwXqUFxzJ7rZuFOrvFM/jZRk+S6JLI2JxXRKby6bxuWbmwYv2o/eRPQPbAOvEk5hB2Gmg==",
       "files": [
         "lib/net40/de/System.Spatial.resources.dll",
         "lib/net40/es/System.Spatial.resources.dll",
@@ -6692,7 +6692,7 @@
     "System.Threading/4.0.11-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "AiuvOzOo6CZpIIw3yGJZcs3IhiCZcy0P/ThubazmWExERHJZoOnD/jB+Bn2gxTAD0rc/ytrRdBur9PuX6DvvvA==",
+      "sha512": "vZNXMOIwejg9jS/AkkCs43BIDrzONbT43yhU7X2217Ypi9EZN5X16DwtqBD7eMjDBsA23IRZxuugzUnV8icaxQ==",
       "files": [
         "lib/MonoAndroid10/_._",
         "lib/MonoTouch10/_._",

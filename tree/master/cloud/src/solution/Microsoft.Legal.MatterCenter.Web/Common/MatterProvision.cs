@@ -59,66 +59,71 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES, ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
             var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
-            IList<MatterData> matterDataList = new List<MatterData>();
-            IEnumerable<IDictionary<string, object>> searchResults = searchResultsVM.SearchResults;
-            foreach(var searchResult in searchResults)
+            if (searchResultsVM.TotalRows > 0)
             {
-                MatterData matterData = new MatterData();
-                foreach (var key in searchResult.Keys)
+                IList<MatterData> matterDataList = new List<MatterData>();
+                IEnumerable<IDictionary<string, object>> searchResults = searchResultsVM.SearchResults;
+                foreach (var searchResult in searchResults)
                 {
-                    switch(key.ToLower())
+                    MatterData matterData = new MatterData();
+                    foreach (var key in searchResult.Keys)
                     {
-                        case "mcmattername":
-                            matterData.MatterName = searchResult[key].ToString();
-                            break;
-                        case "description":
-                            matterData.MatterDescription = searchResult[key].ToString();
-                            break;
-                        case "mcopendate":
-                            matterData.MatterCreatedDate = searchResult[key].ToString();
-                            break;
-                        case "path":
-                            matterData.MatterUrl = searchResult[key].ToString();
-                            
-                            break;
-                        case "sitename":
-                            matterData.MatterClientUrl = searchResult[key].ToString();
-                            break;
-                        case "mcpracticegroup":
-                            matterData.MatterPracticeGroup = searchResult[key].ToString();
-                            break;
-                        case "mcareaoflaw":
-                            matterData.MatterAreaOfLaw = searchResult[key].ToString();
-                            break;
-                        case "mcsubareaoflaw":
-                            matterData.MatterSubAreaOfLaw = searchResult[key].ToString();
-                            break;                        
-                        case "mcclientname":
-                            matterData.MatterClient = searchResult[key].ToString();
-                            break;
-                        case "mcclientid":
-                            matterData.MatterClientId = searchResult[key].ToString();
-                            break;
-                        case "mcblockeduploaduser":
-                            matterData.HideUpload = searchResult[key].ToString();
-                            break;
-                        case "mcmatterid":
-                            matterData.MatterID = searchResult[key].ToString();
-                            break;
-                        case "mcresponsibleattorney":
-                            matterData.MatterResponsibleAttorney = searchResult[key].ToString();
-                            break;
-                        case "lastmodifiedtime":
-                            matterData.MatterModifiedDate = searchResult[key].ToString();
-                            break;
-                        case "mattercentermatterguid":
-                            matterData.MatterGuid = searchResult[key].ToString();
-                            break;
+                        switch (key.ToLower())
+                        {
+                            case "mcmattername":
+                                matterData.MatterName = searchResult[key].ToString();
+                                break;
+                            case "description":
+                                matterData.MatterDescription = searchResult[key].ToString();
+                                break;
+                            case "mcopendate":
+                                matterData.MatterCreatedDate = searchResult[key].ToString();
+                                break;
+                            case "path":
+                                matterData.MatterUrl = searchResult[key].ToString();
+
+                                break;
+                            case "sitename":
+                                matterData.MatterClientUrl = searchResult[key].ToString();
+                                break;
+                            case "mcpracticegroup":
+                                matterData.MatterPracticeGroup = searchResult[key].ToString();
+                                break;
+                            case "mcareaoflaw":
+                                matterData.MatterAreaOfLaw = searchResult[key].ToString();
+                                break;
+                            case "mcsubareaoflaw":
+                                matterData.MatterSubAreaOfLaw = searchResult[key].ToString();
+                                break;
+                            case "mcclientname":
+                                matterData.MatterClient = searchResult[key].ToString();
+                                break;
+                            case "mcclientid":
+                                matterData.MatterClientId = searchResult[key].ToString();
+                                break;
+                            case "mcblockeduploaduser":
+                                matterData.HideUpload = searchResult[key].ToString();
+                                break;
+                            case "mcmatterid":
+                                matterData.MatterID = searchResult[key].ToString();
+                                break;
+                            case "mcresponsibleattorney":
+                                matterData.MatterResponsibleAttorney = searchResult[key].ToString();
+                                break;
+                            case "lastmodifiedtime":
+                                matterData.MatterModifiedDate = searchResult[key].ToString();
+                                break;
+                            case "mattercentermatterguid":
+                                matterData.MatterGuid = searchResult[key].ToString();
+                                break;
+                        }
                     }
+                    matterDataList.Add(matterData);
                 }
-                matterDataList.Add(matterData);
+                searchResultsVM.MatterDataList = matterDataList;
+                
             }
-            searchResultsVM.MatterDataList = matterDataList;
+            searchResultsVM.SearchResults = null;
             return searchResultsVM;
         }
 

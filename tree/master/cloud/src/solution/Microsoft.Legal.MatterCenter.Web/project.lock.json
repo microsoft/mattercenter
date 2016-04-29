@@ -7377,7 +7377,7 @@
     "Microsoft.CSharp/4.0.1-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "fb+HO3nIjHao9lqsVVM0ne3GM/+1EfRQUoM58cxEOt+5biy/8DQ1nxIahZ9VaJKw7Wgb6XhRhsdwg8DkePEOJA==",
+      "sha512": "z/W5YaTGVQ8WX6TQDW8cCBAe2rBhHOD7NZHxLAnBIMoLWMI/upWDi+dxHYMDDWmGOM7a3di6evem2OzOdaB1fQ==",
       "files": [
         "lib/dotnet5.4/Microsoft.CSharp.dll",
         "lib/MonoAndroid10/_._",
@@ -8676,7 +8676,7 @@
     "System.Reflection/4.1.0-beta-23516": {
       "type": "package",
       "serviceable": true,
-      "sha512": "wfrnDfk8p2cqJQY3TTHsJRmf3cE3wa6BacncCn4dO58lVwQNNe9ASdLrLJZlMviAjx8+1fUpj6NX7leIOyaBJA==",
+      "sha512": "CtBdMwGqcohBPV7Pic8unnJlSxN1H3qZGLr4fP0GXXbI00E37ZQL+y5sy7FpHTQ8fsVmV8QbQqf+ngSkP6YTjQ==",
       "files": [
         "lib/DNXCore50/System.Reflection.dll",
         "lib/MonoAndroid10/_._",
