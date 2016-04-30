@@ -65,7 +65,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             bool isInvalidUser = false;
             int iCounter = 0, teamMembersRowCount = matter.AssignUserEmails.Count(), iCount = 0;
             List<Principal> teamMemberPrincipalCollection = new List<Principal>();
-            GenericResponseVM genericResponse = new GenericResponseVM();
+            GenericResponseVM genericResponse = null;
             try
             {
                 for (iCounter = 0; iCounter < teamMembersRowCount; iCounter++)
@@ -84,6 +84,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     {
                         if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[iCount].Title.Trim(), StringComparison.OrdinalIgnoreCase))
                         {
+                            genericResponse = new GenericResponseVM();
                             //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectTeamMembersCode, ServiceConstantStrings.IncorrectTeamMembersMessage + ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR + userId[iCounter]);
                             genericResponse.Code = errorSettings.IncorrectTeamMembersCode;
                             genericResponse.Code = errorSettings.IncorrectTeamMembersMessage + ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR + userId[iCounter];
