@@ -259,7 +259,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
                 #endregion                
                 var searchResultsVM = await matterProvision.GetMatters(searchRequestVM);
-                return matterCenterServiceFunctions.ServiceResponse(searchResultsVM, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(searchResultsVM.MatterDataList, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

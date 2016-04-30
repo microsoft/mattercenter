@@ -32,7 +32,12 @@
                                     <select ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
                                 </div>
                                 <div id="searchBarHolder">
-                                    <div class="ms-TextField ms-TextField--placeholder autoCompleteSection">
+                                    <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                                    <div ng-show="noResults">
+                                        <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                    </div>
+                                   <!-- <div class="ms-TextField ms-TextField--placeholder autoCompleteSection">
                                         <input ng-model="vm.searchTerm" class="col-sm-12" type="text" placeholder="Search by ID, or matter or client name" />
                                     </div>
                                     <div id="searchIcon" title="Search" ng-click="vm.search()">
@@ -42,6 +47,7 @@
                                         <i class="ms-Icon ms-Icon--caretDown"></i>
                                     </div>
                                     <div class="autoCompletePanel hide"></div>
+                                    -->
                                 </div>
                                 <span class="DelveLink"><img title="Search in Delve" src="../Images/delve.png" onclick="javascript: delveIt();" /></span>
                         <!--

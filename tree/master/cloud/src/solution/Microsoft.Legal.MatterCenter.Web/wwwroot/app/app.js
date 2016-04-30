@@ -4,7 +4,8 @@ angular.module('matterMain', [
   'ngResource',
   'ui.router',
   'AdalAngular',
-  'ui.grid'
+  'ui.grid',
+  'ui.bootstrap'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {
