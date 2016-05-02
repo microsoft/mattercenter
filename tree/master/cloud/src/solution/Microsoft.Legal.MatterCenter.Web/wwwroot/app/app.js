@@ -43,15 +43,6 @@ angular.module('matterMain', [
                     controller: 'mattersController as vm'
                 }
             }, requireADLogin: true
-        })
-        .state('mc.createMatter', {
-            url: "^/createMatter",
-            views: {
-                "contentView": {
-                    templateUrl: '/app/matter/createMatter.html',
-                    controller: 'createMatterController as cm'
-                }
-            }, requireADLogin: true
         });
 
         $locationProvider.html5Mode({

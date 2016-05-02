@@ -1,6 +1,7 @@
 ﻿(function () {
     'use strict';
 
+
     angular.module("matterMain")
         .controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource',
     function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource) {
@@ -10,12 +11,12 @@
             enableGridMenu: true,
             columnDefs: [{ field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: '<div class="row"><div class="col-sm-8"> {{row.entity.matterName}} </div><div class="col-sm-4 text-right"><div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">...</button><ul class="dropdown-menu"> <li class="cursor" ng-click="grid.appScope.Openuploadmodal()"><a>Upload to this Matter</a></li><li><a href="#">View Matter Details</li><li><a href="https://msmatter.sharepoint.com/sites/microsoft/" target="_blank">Go to Matter OneNote</li><li class="cursor" ng-click="grid.appScope.PinMatter(row)"><a>Pin this Matter</a></li><li class="cursor" ng-click="grid.appScope.UnpinMatter(row)"><a>Unpin this Matter</a></li></ul></div> </div></div>' },
                         { field: 'matterClient', displayName: 'Client', enableCellEdit: true },
-                        //matterID
-               { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ngCellText">{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-                { field: 'matterModifiedDate', displayName: 'Modified Date', type: 'date', cellFilter: 'date:\'MMM dd,yyyy\'' },
-                { field: 'matterResponsibleAttorney', displayName: 'Responsible attorney', visible: false },
-                { field: 'matterSubAreaOfLaw', displayName: 'Sub area of law', visible: false },
-                { field: 'matterCreatedDate', displayName: 'Open date', type: 'date', cellFilter: 'date:\'MMM dd,yyyy\'', visible: false },
+                 //matterID 
+        { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ngCellText">{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+         { field: 'matterModifiedDate', displayName: 'Modified Date', type: 'date', cellFilter: 'date:\'MMM dd,yyyy\'' },
+         { field: 'matterResponsibleAttorney', displayName: 'Responsible attorney', visible: false },
+         { field: 'matterSubAreaOfLaw', displayName: 'Sub area of law', visible: false },
+         { field: 'matterCreatedDate', displayName: 'Open date', type: 'date', cellFilter: 'date:\'MMM dd,yyyy\'', visible: false },
             ],
             enableColumnMenus: false,
             onRegisterApi: function (gridApi) {
@@ -26,7 +27,8 @@
             }
         };
 
-        //search api call
+
+        //search api call 
         function get(options, callback) {
             api({
                 resource: 'matterResource',
@@ -35,6 +37,7 @@
                 success: callback
             });
         }
+
 
         function getPinnedMatters(options, callback) {
             api({
@@ -45,17 +48,19 @@
             });
         }
 
-        //Callback function for pin
+
+        //Callback function for pin 
         function PinMatters(options, callback) {
             api({
-                    resource: 'matterResource',
-                    method: 'PinMatters',
-                    data: options,
-                    success: callback
-                });
+                resource: 'matterResource',
+                method: 'PinMatters',
+                data: options,
+                success: callback
+            });
         }
 
-        //Callback function for unpin
+
+        //Callback function for unpin 
         function UnpinMatters(options, callback) {
             api({
                 resource: 'matterResource',
@@ -65,7 +70,9 @@
             });
         }
 
+
         vm.searchMatter = function (val) {
+
 
             var searchRequest =
               {
@@ -80,17 +87,20 @@
                       SearchTerm: val,
                       Filters: {},
                       Sort:
-                      {
-                          ByProperty: "LastModifiedTime",
-                          Direction: 1
-                      }
+                              {
+                                  ByProperty: "LastModifiedTime",
+                                  Direction: 1
+                              }
                   }
               };
+
 
             return matterResource.get(searchRequest).$promise;
         }
 
+
         vm.search = function () {
+
 
             var searchRequest =
               {
@@ -105,10 +115,10 @@
                       SearchTerm: vm.searchTerm,
                       Filters: {},
                       Sort:
-                      {
-                          ByProperty: "LastModifiedTime",
-                          Direction: 1
-                      }
+                              {
+                                  ByProperty: "LastModifiedTime",
+                                  Direction: 1
+                              }
                   }
               };
             get(searchRequest, function (response) {
@@ -117,18 +127,24 @@
         }
 
 
-        //Code written for displaying types in dropdown
-        //Start
+
+
+        //Code written for displaying types in dropdown 
+        //Start 
         $scope.Matters = [{ Id: 1, Name: "All Matters" }, { Id: 2, Name: "My Matters" }, { Id: 3, Name: "Pinned Matters" }];
         $scope.ddlMatters = $scope.Matters[0];
 
-        //End 
+
+        //End  
 
 
-        //Hits when the Dropdown changes
-        //Start
+
+
+        //Hits when the Dropdown changes 
+        //Start 
         $scope.GetMatters = function (id) {
             if (id == 1) {
+
 
                 var AllMattersRequest = {
                     Client: {
@@ -142,16 +158,18 @@
                         SearchTerm: "",
                         Filters: {},
                         Sort:
-                        {
-                            ByProperty: "LastModifiedTime",
-                            Direction: 1
-                        }
+                                {
+                                    ByProperty: "LastModifiedTime",
+                                    Direction: 1
+                                }
                     }
                 }
+
 
                 get(AllMattersRequest, function (response) {
                     vm.gridOptions.data = response;
                 });
+
 
             } else if (id == 2) {
                 var MyMattersRequest = {
@@ -168,12 +186,13 @@
                             FilterByMe: 1
                         },
                         Sort:
-                        {
-                            ByProperty: "LastModifiedTime",
-                            Direction: 1
-                        }
+                                {
+                                    ByProperty: "LastModifiedTime",
+                                    Direction: 1
+                                }
                     }
                 }
+
 
                 get(MyMattersRequest, function (response) {
                     vm.gridOptions.data = response;
@@ -189,14 +208,16 @@
                 });
             }
         }
-        //End
+        //End 
 
-        //To run GetMatters function on page load
+
+        //To run GetMatters function on page load 
         $scope.GetMatters(1);
-        //End
+        //End 
 
-        //Written for unpinning the matter
-        //Start
+
+        //Written for unpinning the matter 
+        //Start 
         $scope.UnpinMatter = function (data) {
             var alldata = data.entity;
             var unpinRequest = {
@@ -222,6 +243,7 @@
                     matterModifiedDate: alldata.matterModifiedDate,
                     matterGuid: alldata.matterGuid
 
+
                 }
             }
             UnpinMatters(unpinRequest, function (response) {
@@ -231,10 +253,11 @@
                 }
             });
         }
-        //End
+        //End 
 
-        //Written for pinning the matter
-        //Start
+
+        //Written for pinning the matter 
+        //Start 
         $scope.PinMatter = function (data) {
             var alldata = data.entity;
             var pinRequest = {
@@ -268,50 +291,57 @@
                 }
             });
         }
-        //End
+        //End 
 
-        //To open the UploadMatterModal
+
+        //To open the UploadMatterModal 
         $scope.Openuploadmodal = function () {
             jQuery('#UploadMatterModal').modal("show");
         }
 
 
 
-        //To display modal up in center of the screen
-        //Start
+
+
+
+        //To display modal up in center of the screen...
+        //Start 
         function reposition() {
             var modal = $(this),
                 dialog = modal.find('.modal-dialog');
             modal.css('display', 'block');
 
-            // Dividing by two centers the modal exactly, but dividing by three 
-            // or four works better for larger screens.
+
+            // Dividing by two centers the modal exactly, but dividing by three  
+            // or four works better for larger screens. 
             dialog.css("margin-top", Math.max(0, (jQuery(window).height() - dialog.height()) / 2));
         }
-        // Reposition when a modal is shown
+        // Reposition when a modal is shown 
         jQuery('.modal').on('show.bs.modal', reposition);
-        // Reposition when the window is resized
+        // Reposition when the window is resized 
         jQuery(window).on('resize', function () {
             jQuery('.modal:visible').each(reposition);
         });
 
+
         $timeout(reposition(), 100);
-        //End
-           vm.menuClick = function () {
-                var oAppMenuFlyout = $(".AppMenuFlyout");
-                if (!(oAppMenuFlyout.is(":visible"))) {
-                    //// Display the close icon and close the fly out
-                    $(".OpenSwitcher").addClass("hide");
-                    $(".CloseSwitcher").removeClass("hide");
-                    $(".MenuCaption").addClass("hideMenuCaption");
-                    oAppMenuFlyout.slideDown();
-                } else {
-                    oAppMenuFlyout.slideUp();
-                    $(".CloseSwitcher").addClass("hide");
-                    $(".OpenSwitcher").removeClass("hide");
-                    $(".MenuCaption").removeClass("hideMenuCaption");
-                }
+        //End 
+        vm.menuClick = function () {
+            var oAppMenuFlyout = $(".AppMenuFlyout");
+            if (!(oAppMenuFlyout.is(":visible"))) {
+                //// Display the close icon and close the fly out 
+                $(".OpenSwitcher").addClass("hide");
+                $(".CloseSwitcher").removeClass("hide");
+                $(".MenuCaption").addClass("hideMenuCaption");
+                oAppMenuFlyout.slideDown();
+            } else {
+                oAppMenuFlyout.slideUp();
+                $(".CloseSwitcher").addClass("hide");
+                $(".OpenSwitcher").removeClass("hide");
+                $(".MenuCaption").removeClass("hideMenuCaption");
             }
+        }
     }]);
 })();
+
 
