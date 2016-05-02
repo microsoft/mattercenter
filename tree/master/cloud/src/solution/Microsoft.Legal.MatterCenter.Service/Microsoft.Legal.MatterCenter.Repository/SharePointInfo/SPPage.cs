@@ -21,7 +21,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ISPOAuthorization spoAuthorization;
         private ICustomLogger customLogger;
         private LogTables logTables;
-        private SPList spList;
+        private ISPList spList;
         private MatterSettings matterSettings;
         #endregion
 
@@ -31,7 +31,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="spoAuthorization"></param>
         /// <param name="generalSettings"></param>
         public SPPage(ISPOAuthorization spoAuthorization, IOptions<GeneralSettings> generalSettings, 
-            IOptions<LogTables> logTables, ICustomLogger customLogger, SPList spList, IOptions<MatterSettings> matterSettings)
+            IOptions<LogTables> logTables, ICustomLogger customLogger, ISPList spList, IOptions<MatterSettings> matterSettings)
         {
             this.generalSettings = generalSettings.Value;
             this.spoAuthorization = spoAuthorization;
