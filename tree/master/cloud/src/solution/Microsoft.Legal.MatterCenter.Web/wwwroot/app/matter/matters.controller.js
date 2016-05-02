@@ -7,9 +7,20 @@
     function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource) {
         var vm = this;
         vm.selected = undefined;
+        // Onload show ui grid and hide error div
+        //start
+        $scope.divuigrid = true;
+        $scope.nodata = false;
+        //end
+
+        //to hide lazyloader on load
+        //start
+        $scope.lazyloader = true;
+        //end
+
         vm.gridOptions = {
             enableGridMenu: true,
-            columnDefs: [{ field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: '<div class="row"><div class="col-sm-8"> {{row.entity.matterName}} </div><div class="col-sm-4 text-right"><div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">...</button><ul class="dropdown-menu"> <li class="cursor" ng-click="grid.appScope.Openuploadmodal()"><a>Upload to this Matter</a></li><li><a href="#">View Matter Details</li><li><a href="https://msmatter.sharepoint.com/sites/microsoft/" target="_blank">Go to Matter OneNote</li><li class="cursor" ng-click="grid.appScope.PinMatter(row)"><a>Pin this Matter</a></li><li class="cursor" ng-click="grid.appScope.UnpinMatter(row)"><a>Unpin this Matter</a></li></ul></div> </div></div>' },
+            columnDefs: [{ field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: '<div class="row"><div class="col-sm-8"> {{row.entity.matterName}} </div><div class="col-sm-4 text-right"><div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">...</button><ul class="dropdown-menu"> <li class="cursor" ng-click="grid.appScope.Openuploadmodal()"><a>Upload to this Matter</a></li><li><a href="#">View Matter Details</li><li><a href="https://msmatter.sharepoint.com/sites/microsoft/" target="_blank">Go to Matter OneNote</li><li class="cursor" ng-show="grid.appScope.ddlMatters.Id==1" ng-click="grid.appScope.PinMatter(row)"><a>Pin this Matter</a></li><li class="cursor" ng-show="grid.appScope.ddlMatters.Id==2 || grid.appScope.ddlMatters.Id==3" ng-click="grid.appScope.UnpinMatter(row)"><a>Unpin this Matter</a></li></ul></div> </div></div>' },
                         { field: 'matterClient', displayName: 'Client', enableCellEdit: true },
                  //matterID 
         { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ngCellText">{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
@@ -143,9 +154,8 @@
         //Hits when the Dropdown changes 
         //Start 
         $scope.GetMatters = function (id) {
+            $scope.lazyloader = false;
             if (id == 1) {
-
-
                 var AllMattersRequest = {
                     Client: {
                         Id: "123456",
@@ -156,7 +166,14 @@
                         PageNumber: 1,
                         ItemsPerPage: 10,
                         SearchTerm: "",
-                        Filters: {},
+                        Filters: {
+                            AOLList: "",
+                            ClientsList: [],
+                            FilterByMe: 0,
+                            FromDate: "",
+                            PGList: "",
+                            ToDate: "",
+                        },
                         Sort:
                                 {
                                     ByProperty: "LastModifiedTime",
@@ -167,11 +184,21 @@
 
 
                 get(AllMattersRequest, function (response) {
-                    vm.gridOptions.data = response;
+                    $scope.lazyloader = true;
+                    if (response.errorCode == "404") {
+                        $scope.divuigrid = false;
+                        $scope.nodata = true;
+                        $scope.errorMessage = response.message;
+                    } else {
+                        $scope.divuigrid = true;
+                        $scope.nodata = false;
+                        vm.gridOptions.data = response;
+                    }
                 });
 
 
             } else if (id == 2) {
+                $scope.lazyloader = false;
                 var MyMattersRequest = {
                     Client: {
                         Id: "123456",
@@ -183,7 +210,12 @@
                         ItemsPerPage: 10,
                         SearchTerm: "",
                         Filters: {
-                            FilterByMe: 1
+                            AOLList: "",
+                            ClientsList: [],
+                            FilterByMe: 1,
+                            FromDate: "",
+                            PGList: "",
+                            ToDate: ""
                         },
                         Sort:
                                 {
@@ -195,16 +227,35 @@
 
 
                 get(MyMattersRequest, function (response) {
-                    vm.gridOptions.data = response;
+                    $scope.lazyloader = true;
+                    if (response.errorCode == "404") {
+                        $scope.divuigrid = false;
+                        $scope.nodata = true;
+                        $scope.errorMessage = response.message;
+                    } else {
+                        $scope.divuigrid = true;
+                        $scope.nodata = false;
+                        vm.gridOptions.data = response;
+                    }
                 });
             } else if (id == 3) {
+                $scope.lazyloader = false;
                 var pinnedMattersRequest = {
                     Id: "123456",
                     Name: "Microsoft",
                     Url: "https://msmatter.sharepoint.com/sites/catalog"
                 }
                 getPinnedMatters(pinnedMattersRequest, function (response) {
-                    vm.gridOptions.data = response;
+                    $scope.lazyloader = true;
+                    if (response.errorCode == "404") {
+                        $scope.divuigrid = false;
+                        $scope.nodata = true;
+                        $scope.errorMessage = response.message;
+                    } else {
+                        $scope.divuigrid = true;
+                        $scope.nodata = false;
+                        vm.gridOptions.data = response.matterDataList;
+                    }
                 });
             }
         }
