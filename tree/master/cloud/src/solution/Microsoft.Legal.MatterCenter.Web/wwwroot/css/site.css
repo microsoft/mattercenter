@@ -51,6 +51,9 @@ textarea {
 .ui-grid-cell {
     overflow: visible;
 }
+.ng-scope{
+    overflow: visible;
+}
 
 #attachmentHeader {
     color: #333;
@@ -62,8 +65,8 @@ textarea {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin-bottom: 20px!important;
-    padding-bottom:20px;
+    margin-bottom: 20px !important;
+    padding-bottom: 20px;
 }
 
 .mailHeaderItems {
@@ -112,8 +115,59 @@ textarea {
     margin: 0px;
 }
 
-.pad0{
-    padding:0px;
+.pad0 {
+    padding: 0px;
+}
+
+.noResultsText {
+    color: #333;
+    font-weight: 200;
+    line-height: 1.5;
+    padding-left: 5px;
+    padding-right: 30px;
+}
+
+.AppMenuFlyout {
+    position: absolute;
+    z-index: 101;
+    display: none;
+    width: 250px;
+    height: 155px;
+    box-sizing: border-box;
+    background-color: #fff;
+    padding: 10px;
+    top: 44px;
+    border: 1px solid #d1d1d1;
+    margin-left: 24px;
+}
+
+.AppFlyoutLinks {
+    display: table !important;
+    padding-bottom: 20px !important;
+}
+
+.AppFlyoutLinksText {
+    font-size: 18px !important;
+    color: #2b579a !important;
+}
+
+.lazyLoading {
+    position: absolute;
+    background-color: transparent;
+    color: #6c6c6c;
+    font-weight: lighter;
+    height: 30px;
+    left: 50%;
+    text-align: center;
+    vertical-align: middle;
+    width: 30px;
+    bottom: -30px; /* Provided negative bottom for alignment of loading image for lazy loading implementation */
+}
+.ui-grid-header-viewport{
+    overflow:visible;
+}
+.ui-grid-top-panel{
+    overflow:visible;
 }
 /*.ui-grid-change-icon {
     background: url(../images/Column_Picker_Expand.png) center no-repeat;
