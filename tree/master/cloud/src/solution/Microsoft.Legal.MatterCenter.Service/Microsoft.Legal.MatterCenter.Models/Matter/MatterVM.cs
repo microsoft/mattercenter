@@ -10,5 +10,6 @@ namespace Microsoft.Legal.MatterCenter.Models
         public Client Client { get; set; }
         public Matter Matter { get; set; }
         public MatterDetails MatterDetails { get; set; }
+        public IList<string> UserIds { get; set; }
     }
 }

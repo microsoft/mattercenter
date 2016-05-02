@@ -13,6 +13,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string MatterCenterHelpSectionListName { get; set; }
         public string MatterCenterHelpLinksListName { get; set; }
         public string DMSRoleListName { get; set; }
+        public string DMSMatterListName { get; set; }
         public string MatterConfigurationsList { get; set; }
     }
 }

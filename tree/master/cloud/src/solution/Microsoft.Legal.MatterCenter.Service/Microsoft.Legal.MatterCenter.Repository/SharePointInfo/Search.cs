@@ -571,9 +571,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     ClientResult<string> clientResult = ClientPeoplePickerWebServiceInterface.ClientPeoplePickerSearchUser(clientContext, queryParams);
                     clientContext.ExecuteQuery();
                     string results = clientResult.Value;
-                    IList<PeoplePickerUser> foundUsers = JsonConvert.DeserializeObject<List<PeoplePickerUser>>(results).Where(result => (string.Equals(result.EntityType, ServiceConstants.PeoplePickerEntityTypeUser,
+                    IList<PeoplePickerUser> foundUsers = JsonConvert.DeserializeObject<List<PeoplePickerUser>>(results).Where(result => (string.Equals(result.EntityType, ServiceConstants.PEOPLE_PICKER_ENTITY_TYPE_USER,
                         StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(result.Description)) || (!string.Equals(result.EntityType,
-                        ServiceConstants.PeoplePickerEntityTypeUser, StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(result.EntityData.Email))).Take(peoplePickerMaxRecords).ToList();
+                        ServiceConstants.PEOPLE_PICKER_ENTITY_TYPE_USER, StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(result.EntityData.Email))).Take(peoplePickerMaxRecords).ToList();
                     return foundUsers;
                 }
             }
@@ -588,7 +588,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             {
-                GenericResponseVM genericResponse = new GenericResponseVM();
+                GenericResponseVM genericResponse = null;
                 ListItem settingsItem = null;
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(siteCollectionUrl))
                 {
@@ -599,22 +599,30 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         settingsItem = spList.GetData(clientContext, listNames.MatterConfigurationsList, listQuery).FirstOrDefault();
                         if (settingsItem != null)
                         {
+                            genericResponse = new GenericResponseVM();
                             genericResponse.Code = WebUtility.HtmlDecode(Convert.ToString(settingsItem[searchSettings.MatterConfigurationColumn]));
                             genericResponse.Value = Convert.ToString(settingsItem[searchSettings.ColumnNameModifiedDate], CultureInfo.InvariantCulture);
+                            return genericResponse;
                         }
                         else
                         {
+                            genericResponse = new GenericResponseVM();
                             genericResponse.Code = "0";
                             genericResponse.Value = string.Empty;
+                            return genericResponse;
                         }
                     }
                     else
                     {
+                        genericResponse = new GenericResponseVM();
                         genericResponse.Code = errorSettings.UserNotSiteOwnerCode;
                         genericResponse.Value = errorSettings.UserNotSiteOwnerMessage;
+                        genericResponse.IsError = true;
+                        return genericResponse;
                     }
-                    return genericResponse;
+                    
                 }
+               
             }
             catch (Exception exception)
             {

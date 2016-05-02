@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.SharePoint.Client;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -35,6 +36,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile);
         bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName);
         bool PerformContentCheck(ClientContext context, MemoryStream localMemoryStream, string serverFileURL);
-        
+        bool CreateList(ClientContext clientContext, ListInformation listInformation);
+        bool BreakPermission(ClientContext clientContext, string libraryName, bool isCopyRoleAssignment);
+        string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle);
+        bool BreakItemPermission(ClientContext clientContext, string listName, int listItemId, bool isCopyRoleAssignment);
     }
 }

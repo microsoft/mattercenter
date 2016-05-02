@@ -23,6 +23,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
+using System.Reflection;
+using Microsoft.SharePoint.Client.WebParts;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -58,6 +60,26 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spPage = spPage;
             this.errorSettings = errorSettings.Value;
             this.spContentTypes = spContentTypes;
+        }
+
+        public bool CreateList(ClientContext clientContext, ListInformation listInformation)
+        {
+            return spList.CreateList(clientContext, listInformation);
+        }
+
+        public bool BreakItemPermission(ClientContext clientContext, string listName, int listItemId, bool isCopyRoleAssignment)
+        {
+            return spList.BreakItemPermission(clientContext, listName, listItemId, isCopyRoleAssignment);
+        }
+
+        public bool BreakPermission(ClientContext clientContext, string libraryName, bool isCopyRoleAssignment)
+        {
+            return spList.BreakPermission(clientContext, libraryName, isCopyRoleAssignment);
+        }
+
+        public bool CheckPermissionOnList(ClientContext clientContext, string listName, PermissionKind permission)
+        {
+            return spList.CheckPermissionOnList(clientContext, listName, permission);
         }
 
         public GenericResponseVM ValidateTeamMembers(ClientContext clientContext, Matter matter, IList<string> userId)
@@ -193,6 +215,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return userdetails.ResolveUserNames(client, userNames);
         }
 
+        public IList<FieldUserValue> ResolveUserNames(ClientContext clientContext, IList<string> userNames)
+        {
+            return userdetails.ResolveUserNames(clientContext, userNames);
+        }
+
         /// <summary>
         /// This method will try to fetch all the matters that are provisioned by the user
         /// </summary>
@@ -218,6 +245,122 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return await Task.FromResult(search.GetPinnedData(client, listNames.UserPinnedMatterListName,
                 searchSettings.PinnedListColumnMatterDetails, false));
         }
+
+        public int CreateWebPartPage(ClientContext clientContext, string pageName, string layout, string masterpagelistName, string listName, string pageTitle)
+        {
+            return spPage.CreateWebPartPage(clientContext, pageName, layout, masterpagelistName, listName, pageTitle); 
+        }
+
+        public bool SaveMatter(Client client, Matter matter, string matterListName, MatterConfigurations matterConfigurations, string matterSiteURL)
+        {
+            bool returnFlag = false;
+            try
+            {
+                using (ClientContext clientContext = spoAuthorization.GetClientContext(matterSiteURL))
+                {
+                    if (!string.IsNullOrWhiteSpace(matterListName) && null != matter && null != client)
+                    {
+                        FieldUserValue tempUser = null;
+                        List<FieldUserValue> blockUserList = null;
+                        List<List<FieldUserValue>> assignUserList = null;
+
+                        List<string> columnNames = new List<string>()
+                        {
+                            matterSettings.MattersListColumnTitle,
+                            matterSettings.MattersListColumnClientName,
+                            matterSettings.MattersListColumnClientID,
+                            matterSettings.MattersListColumnMatterName,
+                            matterSettings.MattersListColumnMatterID
+                        };
+                        List<object> columnValues = new List<object>()
+                        {
+                            string.Concat(client.Name, ServiceConstants.UNDER_SCORE, matter.Name),
+                            client.Name,
+                            client.Id,
+                            matter.Name,
+                            matter.Id
+                        };
+
+                        if (matterConfigurations.IsConflictCheck)
+                        {
+
+                            if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.CheckBy))
+                            {
+                                tempUser = ResolveUserNames(clientContext, new List<string>() { matter.Conflict.CheckBy }).FirstOrDefault();
+                                columnNames.Add(matterSettings.MattersListColumnConflictCheckBy);
+                                columnValues.Add(tempUser);
+                                if (!string.IsNullOrWhiteSpace(matter.Conflict.CheckOn))
+                                {
+                                    columnNames.Add(matterSettings.MattersListColumnConflictCheckOn);
+                                    columnValues.Add(Convert.ToDateTime(matter.Conflict.CheckOn, CultureInfo.InvariantCulture));
+                                }
+
+                                columnNames.Add(matterSettings.MattersListColumnConflictIdentified);
+                                columnValues.Add(Convert.ToBoolean(matter.Conflict.Identified, CultureInfo.InvariantCulture));
+                            }
+
+                            if (null != matter.BlockUserNames)
+                            {
+                                blockUserList = new List<FieldUserValue>();
+                                blockUserList = ResolveUserNames(clientContext, matter.BlockUserNames).ToList();
+                                columnNames.Add(matterSettings.MattersListColumnBlockUsers);
+                                columnValues.Add(blockUserList);
+                            }
+                        }
+
+                        if (null != matter.AssignUserEmails)
+                        {
+                            assignUserList = new List<List<FieldUserValue>>();
+                            foreach (IList<string> assignUsers in matter.AssignUserEmails)
+                            {
+                                List<FieldUserValue> tempAssignUserList = ResolveUserNames(clientContext, assignUsers).ToList();
+                                assignUserList.Add(tempAssignUserList);
+                            }
+
+                            if (0 != assignUserList.Count && null != matter.Roles && 0 != matter.Roles.Count)
+                            {
+                                int assignPosition = 0;
+                                List<FieldUserValue> managingAttorneyList = new List<FieldUserValue>();
+                                List<FieldUserValue> teamMemberList = new List<FieldUserValue>();
+                                foreach (string role in matter.Roles)
+                                {
+                                    switch (role)
+                                    {
+                                        case ServiceConstants.MANAGING_ATTORNEY_VALUE:
+                                            managingAttorneyList.AddRange(assignUserList[assignPosition]);
+                                            break;
+                                        default:
+                                            teamMemberList.AddRange(assignUserList[assignPosition]);
+                                            break;
+                                    }
+
+                                    assignPosition++;
+                                }
+
+                                columnNames.Add(matterSettings.MattersListColumnManagingAttorney);
+                                columnValues.Add(managingAttorneyList);
+                                columnNames.Add(matterSettings.MattersListColumnSupport);
+                                columnValues.Add(teamMemberList);
+                            }
+                        }
+
+                        Microsoft.SharePoint.Client.Web web = clientContext.Web;
+                        List matterList = web.Lists.GetByTitle(matterListName);
+                        // To avoid the invalid symbol error while parsing the JSON, return the response in lower case
+                        returnFlag = spList.AddItem(clientContext, matterList, columnNames, columnValues);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                //customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+
+            return returnFlag;
+        }
+    
+
 
         public IList<string> RoleCheck(string url, string listName, string columnName)
         {
@@ -386,7 +529,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     Users tempUser = new Users();
                     tempUser.Name = Convert.ToString(item.DisplayText, CultureInfo.InvariantCulture);
                     tempUser.LogOnName = Convert.ToString(item.Key, CultureInfo.InvariantCulture);
-                    tempUser.Email = string.Equals(item.EntityType, ServiceConstants.PeoplePickerEntityTypeUser, StringComparison.OrdinalIgnoreCase) ? 
+                    tempUser.Email = string.Equals(item.EntityType, ServiceConstants.PEOPLE_PICKER_ENTITY_TYPE_USER, StringComparison.OrdinalIgnoreCase) ? 
                         Convert.ToString(item.Description, CultureInfo.InvariantCulture) : Convert.ToString(item.EntityData.Email, CultureInfo.InvariantCulture);
                     tempUser.EntityType = Convert.ToString(item.EntityType, CultureInfo.InvariantCulture);
                     users.Add(tempUser);
@@ -394,6 +537,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 return users;
             }            
             return users;
+        }
+
+        public string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle)
+        {
+            return spList.AddOneNote(clientContext, clientAddressPath, oneNoteLocation, listName, oneNoteTitle);
         }
 
         /// <summary>
@@ -469,6 +617,23 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             List<string> listExists = spList.MatterAssociatedLists(clientContext, new ReadOnlyCollection<string>(lists));
             return listExists;
+        }
+
+        public bool SetItemPermission(ClientContext clientContext, IList<IList<string>> assignUserName, string listName, int listItemId, IList<string> permissions)
+        {
+            return spList.SetItemPermission(clientContext, assignUserName, listName, listItemId, permissions);
+        }
+
+        public string[] ConfigureXMLCodeOfWebParts(Client client, Matter matter, ClientContext clientContext, string pageName, Uri uri,
+            Web web, MatterConfigurations matterConfigurations)
+        {
+            return spPage.ConfigureXMLCodeOfWebParts(client, matter, clientContext, pageName, uri, web, matterConfigurations);
+        }
+
+        public bool AddWebPart(ClientContext clientContext, LimitedWebPartManager limitedWebPartManager, WebPartDefinition webPartDefinition,
+            string[] webParts, string[] zones)
+        {
+            return spPage.AddWebPart(clientContext, limitedWebPartManager, webPartDefinition, webParts, zones);
         }
 
         /// <summary>

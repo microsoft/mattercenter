@@ -29,6 +29,7 @@ using System.Reflection;
 using Microsoft.SharePoint.Client.Taxonomy;
 using System.Text.RegularExpressions;
 using System.IO;
+using Microsoft.AspNet.Http;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -66,6 +67,155 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.mailSettings = mailSettings.Value;
         }
 
+        public bool CreateList(ClientContext clientContext, ListInformation listInfo)
+        {
+            bool result = true;
+            if (null != clientContext && null != listInfo && !string.IsNullOrWhiteSpace(listInfo.name))
+            {
+                Web web = clientContext.Web;
+                ListTemplateCollection listTemplates = web.ListTemplates;
+                ListCreationInformation creationInfo = new ListCreationInformation();
+                creationInfo.Title = listInfo.name;
+                creationInfo.Description = listInfo.description;
+                // To determine changes in URL we specified below condition as this function is common
+                if (!string.IsNullOrWhiteSpace(listInfo.Path))
+                {
+                    creationInfo.Url = listInfo.Path;
+                }
+                if (!string.IsNullOrWhiteSpace(listInfo.templateType))
+                {
+                    string templateType = listInfo.templateType;
+                    clientContext.Load(listTemplates, item => item.Include(currentTemplate => currentTemplate.Name, currentTemplate => 
+                            currentTemplate.ListTemplateTypeKind).Where(selectedTemplate => selectedTemplate.Name == templateType));
+                    clientContext.ExecuteQuery();
+                    if (null != listTemplates && 0 < listTemplates.Count)
+                    {
+                        creationInfo.TemplateType = listTemplates.FirstOrDefault().ListTemplateTypeKind;
+                    }
+                    else
+                    {
+                        result = false;
+                    }
+                }
+                else
+                {
+                    creationInfo.TemplateType = (int)ListTemplateType.DocumentLibrary;
+                }
+                if (result)
+                {
+                    List list = web.Lists.Add(creationInfo);
+                    list.ContentTypesEnabled = listInfo.isContentTypeEnable;
+                    if (null != listInfo.folderNames && listInfo.folderNames.Count > 0)
+                    {
+                        list = AddFolders(clientContext, list, listInfo.folderNames);
+                    }
+                    if (null != listInfo.versioning)
+                    {
+                        list.EnableVersioning = listInfo.versioning.EnableVersioning;
+                        list.EnableMinorVersions = listInfo.versioning.EnableMinorVersions;
+                        list.ForceCheckout = listInfo.versioning.ForceCheckout;
+                    }
+                    list.Update();
+                    clientContext.Load(list, l => l.DefaultViewUrl);
+                    clientContext.ExecuteQuery();
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Breaks the permissions of the list.
+        /// </summary>
+        /// <param name="clientContext">Client context</param>
+        /// <param name="libraryName">Name of list</param>        
+        /// <param name="isCopyRoleAssignment">Flag to copy permission from parent</param>
+        /// <returns>Success flag</returns>
+        public bool BreakPermission(ClientContext clientContext, string libraryName, bool isCopyRoleAssignment)
+        {
+            bool flag = false;
+            if (null != clientContext && !string.IsNullOrWhiteSpace(libraryName))
+            {
+                try
+                {
+                    List list = clientContext.Web.Lists.GetByTitle(libraryName);
+                    clientContext.Load(list, l => l.HasUniqueRoleAssignments);
+                    clientContext.ExecuteQuery();
+
+                    if (!list.HasUniqueRoleAssignments)
+                    {
+                        list.BreakRoleInheritance(isCopyRoleAssignment, true);
+                        list.Update();
+                        clientContext.Load(list);
+                        clientContext.ExecuteQuery();
+                        flag = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    throw; // This will transfer control to catch block of parent function.
+                }
+            }
+            return flag;
+        }
+
+        public string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle)
+        {
+            string returnValue = String.Empty;
+            if (null != clientContext && !string.IsNullOrWhiteSpace(clientAddressPath) && !string.IsNullOrWhiteSpace(oneNoteLocation) && 
+                !string.IsNullOrWhiteSpace(listName))
+            {
+                Uri clientUrl = new Uri(clientAddressPath);
+                //ToDo: Need to validate the url path
+                string oneNotePath = ServiceConstants.ONE_NOTE_RELATIVE_FILE_PATH;
+                byte[] oneNoteFile = System.IO.File.ReadAllBytes(oneNotePath);
+                Web web = clientContext.Web;
+                Microsoft.SharePoint.Client.File file = web.GetFolderByServerRelativeUrl(oneNoteLocation).Files.Add(new FileCreationInformation()
+                {
+                    Url = string.Concat(listName, ServiceConstants.EXTENSION_ONENOTE_TABLE_OF_CONTENT),
+                    Overwrite = true,
+                    ContentStream = new MemoryStream(oneNoteFile)
+                });
+                web.Update();
+                clientContext.Load(file);
+                clientContext.ExecuteQuery();
+                ListItem oneNote = file.ListItemAllFields;
+                oneNote["Title"] = oneNoteTitle;
+                oneNote.Update();
+                returnValue = string.Concat(clientUrl.Scheme, ServiceConstants.COLON, ServiceConstants.FORWARD_SLASH, ServiceConstants.FORWARD_SLASH, 
+                    clientUrl.Authority, file.ServerRelativeUrl, ServiceConstants.WEB_STRING);
+            }
+            return returnValue;
+        }
+
+        /// <summary>
+        /// Validates and breaks the item level permission for the specified list item under the list/library. 
+        /// </summary>
+        /// <param name="clientContext">Client Context</param>
+        /// <param name="listName">List name</param>
+        /// <param name="listItemId">Unique list item id to break item level permission</param>
+        /// <param name="isCopyRoleAssignment">Flag to copy permission from parent</param>
+        /// <returns>String stating success flag</returns>
+        public bool BreakItemPermission(ClientContext clientContext, string listName, int listItemId, bool isCopyRoleAssignment)
+        {
+            bool result = false;
+            if (null != clientContext && !string.IsNullOrWhiteSpace(listName))
+            {
+                ListItem listItem = clientContext.Web.Lists.GetByTitle(listName).GetItemById(listItemId);
+                clientContext.Load(listItem, item => item.HasUniqueRoleAssignments);
+                clientContext.ExecuteQuery();
+
+                if (!listItem.HasUniqueRoleAssignments)
+                {
+                    listItem.BreakRoleInheritance(isCopyRoleAssignment, true);
+                    listItem.Update();
+                    clientContext.ExecuteQuery();
+                    result = true;
+                }
+            }
+            return result;
+        }
+
         public bool Delete(ClientContext clientContext, IList<string> listsNames)
         {
             bool result = false;
@@ -89,8 +239,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return result;
         }
 
-
         
+
 
         public bool AddItem(ClientContext clientContext, List list, IList<string> columns, IList<object> values)
         {
@@ -113,7 +263,37 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return result;
         }
 
-
+        /// <summary>
+        /// Adds all the folders from Content type in matter library.
+        /// </summary>
+        /// <param name="clientContext">Client context</param>
+        /// <param name="list">List of folders</param>
+        /// <param name="folderNames">The folder names.</param>
+        /// <returns>Microsoft SharePoint Client List</returns>
+        private List AddFolders(ClientContext clientContext, List list, IList<string> folderNames)
+        {
+            if (null != clientContext && null != list && null != folderNames)
+            {
+                FolderCollection listFolders = list.RootFolder.Folders;
+                Folder listRootFolder = list.RootFolder;
+                clientContext.Load(listFolders);
+                clientContext.ExecuteQuery();
+                if (0 < folderNames.Count)
+                {
+                    foreach (string folderName in folderNames)
+                    {
+                        // Check for empty folder names
+                        if (!string.IsNullOrEmpty(folderName))
+                        {
+                            listFolders.Add(folderName);
+                            listRootFolder.Update();
+                        }
+                    }
+                    list.Update();
+                }
+            }
+            return list;
+        }
         /// <summary>
         ///  Creates a new view for the list
         /// </summary>

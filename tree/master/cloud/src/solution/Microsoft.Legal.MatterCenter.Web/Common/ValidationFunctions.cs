@@ -63,7 +63,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         {
             GenericResponseVM genericResponse = null;
             var matterDetails = matterInformation.MatterDetails;
-            if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) <= methodNumber &&
+            if (int.Parse(ServiceConstants.PROVISION_MATTER_CREATEMATTER, CultureInfo.InvariantCulture) <= methodNumber &&
                 int.Parse(ServiceConstants.EditMatterPermission, CultureInfo.InvariantCulture) >= methodNumber &&
                 !spList.CheckPermissionOnList(matterSettings.ProvisionMatterAppURL, matterSettings.SendMailListName, PermissionKind.EditListItems))
             {
@@ -153,7 +153,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="matter">Matter object containing Matter data</param>
         /// <param name="client">Client Object</param>
         /// <returns>A string value indicating whether validations passed or fail</returns>
-        internal GenericResponseVM RoleCheck(Matter matter)
+        public GenericResponseVM RoleCheck(Matter matter)
         {
             GenericResponseVM genericResponse = null;
             try
@@ -198,7 +198,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 response.Value = errorSettings.IncorrectInputClientUrlMessage;
                 return response;
             }
-            else if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber ||
+            else if (int.Parse(ServiceConstants.PROVISION_MATTER_CREATEMATTER, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.ProvisionMatterUpdateMetadataForList, CultureInfo.InvariantCulture) == methodNumber)
             {
@@ -236,7 +236,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 return genericResponseVM;
             }
-            if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber ||
+            if (int.Parse(ServiceConstants.PROVISION_MATTER_CREATEMATTER, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.ProvisionMatterUpdateMetadataForList, CultureInfo.InvariantCulture) == methodNumber)
             {
@@ -253,9 +253,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     }
                 }
             }
-            if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber ||
+            if (int.Parse(ServiceConstants.PROVISION_MATTER_CREATEMATTER, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.ProvisionMatterShareMatter, CultureInfo.InvariantCulture) == methodNumber ||
-                int.Parse(ServiceConstants.ProvisionMatterMatterLandingPage, CultureInfo.InvariantCulture) == methodNumber)
+                int.Parse(ServiceConstants.PROVISIONMATTER_MATTER_LANDING_PAGE, CultureInfo.InvariantCulture) == methodNumber)
             {
                 genericResponseVM = MatterDetailsValidation(matter, client, methodNumber, matterConfigurations);
                 if (genericResponseVM != null)
@@ -285,8 +285,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 return GenericResponse(errorSettings.IncorrectInputUserNamesCode, errorSettings.IncorrectInputUserNamesMessage);
             }
 
-            if (int.Parse(ServiceConstants.ProvisionMatterAssignUserPermissions, CultureInfo.InvariantCulture) == methodNumber ||
-                int.Parse(ServiceConstants.ProvisionMatterMatterLandingPage, CultureInfo.InvariantCulture) == methodNumber ||
+            if (int.Parse(ServiceConstants.PROVISION_MATTER_ASSIGN_USER_PERMISSIONS, CultureInfo.InvariantCulture) == methodNumber ||
+                int.Parse(ServiceConstants.PROVISIONMATTER_MATTER_LANDING_PAGE, CultureInfo.InvariantCulture) == methodNumber ||
                 int.Parse(ServiceConstants.EditMatterPermission, CultureInfo.InvariantCulture) == methodNumber)
             {
                 GenericResponseVM genericResponse = CheckUserPermission(matter);
@@ -407,7 +407,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     }
                 }
             }
-            if (int.Parse(ServiceConstants.ProvisionMatterCreateMatter, CultureInfo.InvariantCulture) == methodNumber && 0 >= matter.Roles.Count())
+            if (int.Parse(ServiceConstants.PROVISION_MATTER_CREATEMATTER, CultureInfo.InvariantCulture) == methodNumber && 0 >= matter.Roles.Count())
             {
                 return GenericResponse(errorSettings.IncorrectInputUserRolesCode, errorSettings.IncorrectInputUserRolesMessage);
             }

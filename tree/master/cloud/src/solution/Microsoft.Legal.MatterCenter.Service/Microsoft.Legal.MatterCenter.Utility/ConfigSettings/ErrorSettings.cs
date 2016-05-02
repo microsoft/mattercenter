@@ -105,6 +105,11 @@ namespace Microsoft.Legal.MatterCenter.Utility
 
         public string MatterLandingExistsCode { get; set; }
         public string ErrorDuplicateMatterLandingPage { get; set; }
+        public string ErrorCodeAddCalendarList { get; set; }
+        public string ErrorMessageAddCalendarList { get; set; }
+        public string ErrorMessageAddTaskList { get; set; }
+
+        public string ErrorCodeMatterLandingPageExists { get; set; }
         
         #endregion
     }

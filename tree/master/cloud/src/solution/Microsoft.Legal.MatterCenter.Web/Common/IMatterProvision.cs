@@ -18,5 +18,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM);
         GenericResponseVM CheckMatterExists(MatterMetdataVM matterMetadataVM);
         GenericResponseVM CheckSecurityGroupExists(MatterInformationVM matterInformationVM);
+        GenericResponseVM CreateMatter(MatterMetdataVM matterMetadataVM);
+        GenericResponseVM CreateMatterLandingPage(MatterMetdataVM matterMetadataVM);
     }
 }

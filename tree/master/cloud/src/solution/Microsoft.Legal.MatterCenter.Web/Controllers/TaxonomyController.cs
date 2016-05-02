@@ -27,7 +27,7 @@ using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Web.Common;
 #endregion
 
-namespace Microsoft.Legal.MatterCenter.Service.Controllers
+namespace Microsoft.Legal.MatterCenter.Web
 {
     /// <summary>
     /// Taxonomy Controller will read the term store information related to matter center

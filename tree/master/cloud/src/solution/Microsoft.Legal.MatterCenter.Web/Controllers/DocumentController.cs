@@ -27,7 +27,7 @@ using Microsoft.AspNet.Authorization;
 #endregion
 
 
-namespace Microsoft.Legal.MatterCenter.Service
+namespace Microsoft.Legal.MatterCenter.Web
 {
     /// <summary>
     /// Document Controller class deals with finding document, pinning document, unpinning the document etc.
