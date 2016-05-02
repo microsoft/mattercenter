@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module("matterMain")
-        .controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout',
-    function ($scope, $state, $interval, $stateParams, api, $timeout) {
+        .controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource',
+    function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource) {
         var vm = this;
-        var options = new Object;
+
         vm.gridOptions = {
             enableGridMenu: true,
             columnDefs: [{ field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: '<div class="row"><div class="col-sm-8"> {{row.entity.matterName}} </div><div class="col-sm-4 text-right"><div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">...</button><ul class="dropdown-menu"> <li class="cursor" ng-click="grid.appScope.Openuploadmodal()"><a>Upload to this Matter</a></li><li><a href="#">View Matter Details</li><li><a href="https://msmatter.sharepoint.com/sites/microsoft/" target="_blank">Go to Matter OneNote</li><li class="cursor" ng-click="grid.appScope.PinMatter(row)"><a>Pin this Matter</a></li><li class="cursor" ng-click="grid.appScope.UnpinMatter(row)"><a>Unpin this Matter</a></li></ul></div> </div></div>' },
@@ -56,11 +56,11 @@
 
         function get(options, callback) {
             api({
-                resource: 'matterResource',
+                    resource: 'matterResource',
                 method: 'get',
-                data: options,
-                success: callback
-            });
+                    data: options,
+                    success: callback
+                });
         }
 
 
@@ -74,15 +74,28 @@
             });
         }
 
-        //Callback function for pin
-        function PinMatters(options, callback) {
-            api({
-                resource: 'matterResource',
-                method: 'PinMatters',
-                data: options,
-                success: callback
-            });
-        }
+        vm.searchMatter = function (val) {
+
+            var searchRequest =
+              {
+                  Client: {
+                      Id: "123456",
+                      Name: "Microsoft",
+                      Url: "https://msmatter.sharepoint.com/sites/catalog"
+                  },
+                  SearchObject: {
+                      PageNumber: 1,
+                      ItemsPerPage: 10,
+                      SearchTerm: val,
+                      Filters: {},
+                      Sort:
+                      {
+                          ByProperty: "LastModifiedTime",
+                          Direction: 1
+                      }
+                  }
+              };
+
 
         options = {
             Id: "123456",
@@ -151,7 +164,7 @@
                 }
 
                 get(AllMattersRequest, function (response) {
-                    vm.gridOptions.data = response.matterDataList;
+                    vm.gridOptions.data = response;
                 });
 
             } else if (id == 2) {
@@ -177,15 +190,16 @@
                 }
 
                 get(MyMattersRequest, function (response) {
-                    vm.gridOptions.data = response.matterDataList;
+                    vm.gridOptions.data = response;
                 });
             } else if (id == 3) {
-                getPinnedMatters(options, function (response) {
-                    //vm.matters = response.userPinnedMattersList;
-                    console.log(response);
+                var pinnedMattersRequest = {
+                    Id: "123456",
+                    Name: "Microsoft",
+                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                }
+                getPinnedMatters(pinnedMattersRequest, function (response) {
                     vm.gridOptions.data = response.matterDataList;
-
-
                 });
 
             }

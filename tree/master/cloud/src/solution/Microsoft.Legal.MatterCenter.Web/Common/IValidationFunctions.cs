@@ -13,5 +13,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             MatterConfigurations matterConfigurations);
         GenericResponseVM MatterMetadataValidation(Matter matter, Client client,
             int methodNumber, MatterConfigurations matterConfigurations);
+        List<string> CheckListExists(Client client, string matterName, MatterConfigurations matterConfigurations = null);
     }
 }

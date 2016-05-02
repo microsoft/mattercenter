@@ -620,7 +620,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="clientContext">Client context object for SharePoint</param>
         /// <param name="listsNames">List name</param>
         /// <returns>Success flag</returns>
-        public bool Exists(Client client, ReadOnlyCollection<string> listsNames)
+        public List<string> Exists(Client client, ReadOnlyCollection<string> listsNames)
         {
             try
             { 
@@ -638,7 +638,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                          on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
                                          select listName).ToList();
                     }
-                    return existingLists.Count>0;
+                    return existingLists;
                 }
             }
             catch (Exception ex)

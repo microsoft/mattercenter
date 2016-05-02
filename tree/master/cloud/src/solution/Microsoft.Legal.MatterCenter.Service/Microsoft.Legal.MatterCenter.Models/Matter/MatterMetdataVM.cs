@@ -5,5 +5,6 @@ namespace Microsoft.Legal.MatterCenter.Models
     {
         public MatterConfigurations MatterConfigurations { get; set; }
         public MatterProvisionFlags MatterProvisionFlags { get; set; }
+        public bool HasErrorOccurred { get; set; }
     }
 }

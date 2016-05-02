@@ -80,7 +80,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="clientContext">Client Context</param>
         /// <param name="pageUrl">File URL</param>
         /// <returns>Success flag</returns>
-        public static bool IsFileExists(ClientContext clientContext, string pageUrl)
+        public bool IsFileExists(ClientContext clientContext, string pageUrl)
         {
             bool success = false;
             if (null != clientContext && !string.IsNullOrWhiteSpace(pageUrl))
@@ -91,6 +91,41 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 success = clientFile.Exists;
             }
             return success;
+        }
+
+        /// <summary>
+        /// Checks if the requested page exists or not.
+        /// </summary>
+        /// <param name="requestedUrl">URL of the page, for which check is to be performed</param>
+        /// <param name="clientContext">ClientContext for SharePoint</param>
+        /// <returns>true or false string based upon the existence of the page, referred in requestedUrl</returns>
+        public bool PageExists(string requestedUrl, ClientContext clientContext)
+        {
+            bool pageExists = false;
+            try
+            {
+                string[] requestedUrls = requestedUrl.Split(new string[] { ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR }, StringSplitOptions.RemoveEmptyEntries);
+                if (1 < requestedUrls.Length)
+                {
+                    foreach (string url in requestedUrls)
+                    {
+                        if (IsFileExists(clientContext, url))
+                        {
+                            pageExists = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    pageExists = IsFileExists(clientContext, requestedUrl) ? true : false;
+                }
+            }
+            catch (Exception exception)
+            {
+                //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
+            }
+            return pageExists;
         }
 
         /// <summary>

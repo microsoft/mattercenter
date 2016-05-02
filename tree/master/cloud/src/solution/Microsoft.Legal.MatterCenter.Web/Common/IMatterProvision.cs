@@ -16,5 +16,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         GenericResponseVM AssignUserPermissions(MatterMetdataVM matterMetadata);
         GenericResponseVM AssignContentType(MatterMetadata matterMetadata);
         Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM);
+        GenericResponseVM CheckMatterExists(MatterMetdataVM matterMetadataVM);
+        GenericResponseVM CheckSecurityGroupExists(MatterInformationVM matterInformationVM);
     }
 }

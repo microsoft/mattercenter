@@ -462,6 +462,75 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
         }
 
+        public GenericResponseVM CheckMatterExists(MatterMetdataVM matterMetadataVM)
+        {
+            var matter = matterMetadataVM.Matter;
+            var client = matterMetadataVM.Client;
+            GenericResponseVM genericResponse = null;
+            using (ClientContext clientContext = spoAuthorization.GetClientContext(matterMetadataVM.Client.Url))
+            {
+                List<string> listExists = validationFunctions.CheckListExists(matterMetadataVM.Client, matterMetadataVM.Matter.Name, matterMetadataVM.MatterConfigurations);
+                if (listExists.Count>0)
+                {
+                    string listName = !string.Equals(matter.Name, listExists[0]) ? listExists[0].Contains(ServiceConstants.UNDER_SCORE) ? 
+                        listExists[0].Split(ServiceConstants.UNDER_SCORE[0]).Last() : ServiceConstants.MATTER : ServiceConstants.MATTER;
+                    return ServiceUtility.GenericResponse(errorSettings.MatterLibraryExistsCode,
+                        string.Format(CultureInfo.InvariantCulture, errorSettings.ErrorDuplicateMatter, listName) + ServiceConstants.DOLLAR + 
+                        ServiceConstants.PIPE + ServiceConstants.DOLLAR + MatterPrerequisiteCheck.LibraryExists);
+                }
+                else
+                {
+                    Uri clientUri = new Uri(client.Url);
+                    string requestedUrl = string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}{5}", clientUri.AbsolutePath, ServiceConstants.FORWARD_SLASH, 
+                        matterSettings.MatterLandingPageRepositoryName.Replace(ServiceConstants.SPACE, string.Empty),
+                        ServiceConstants.FORWARD_SLASH, matter.Name, ServiceConstants.ASPX_EXTENSION);
+                    if (matterRepositoy.IsPageExists(clientContext, requestedUrl))
+                    {                        
+                        return ServiceUtility.GenericResponse(errorSettings.MatterLibraryExistsCode,
+                        errorSettings.ErrorDuplicateMatterLandingPage + ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR + MatterPrerequisiteCheck.MatterLandingPageExists);
+                    }
+                }
+            }
+            return genericResponse;
+        }
+
+        public GenericResponseVM CheckSecurityGroupExists(MatterInformationVM matterInformationVM)
+        {
+            GenericResponseVM genericResponseVM = null;
+            var matter = matterInformationVM.Matter;
+            var client = matterInformationVM.Client;
+            var userids = matterInformationVM.UserIds;
+            using (ClientContext clientContext = spoAuthorization.GetClientContext(matterInformationVM.Client.Url))
+            {
+                genericResponseVM = matterRepositoy.ValidateTeamMembers(clientContext, matter, userids);
+                if(genericResponseVM!=null)
+                {
+                    return genericResponseVM;
+                }
+                else
+                {
+                    if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
+                    {
+                        if (0 == matter.AssignUserEmails.Count())
+                        {                            
+                            return ServiceUtility.GenericResponse(errorSettings.IncorrectInputUserNamesCode, errorSettings.IncorrectInputUserNamesMessage);
+                        }
+                        else
+                        {
+                            if (Convert.ToBoolean(matter.Conflict.Identified, CultureInfo.InvariantCulture))
+                            {
+                                return editFunctions.CheckSecurityGroupInTeamMembers(client, matter, userids);
+                            }
+                        }
+                    }
+                    else
+                    {                        
+                        return ServiceUtility.GenericResponse(errorSettings.IncorrectInputConflictIdentifiedCode, errorSettings.IncorrectInputConflictIdentifiedMessage);
+                    }
+                }
+            }
+            return genericResponseVM;
+        }
         #region private functions
 
         /// <summary>

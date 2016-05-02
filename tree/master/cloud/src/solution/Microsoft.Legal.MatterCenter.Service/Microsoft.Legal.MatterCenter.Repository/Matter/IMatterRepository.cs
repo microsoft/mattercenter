@@ -14,6 +14,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.SharePoint.Client;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -51,6 +52,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName);
         IList<ContentType> GetContentTypeData(ClientContext clientContext, IList<string> contentTypes, Client client, Matter matter);
         GenericResponseVM AssignContentTypeHelper(MatterMetadata matterMetadata, ClientContext clientContext, IList<ContentType> contentTypeCollection, Client client, Matter matter);
-
+        List<string> Exists(Client client, ReadOnlyCollection<string> lists);
+        bool IsPageExists(ClientContext clientContext, string pageUrl);
     }
 }
