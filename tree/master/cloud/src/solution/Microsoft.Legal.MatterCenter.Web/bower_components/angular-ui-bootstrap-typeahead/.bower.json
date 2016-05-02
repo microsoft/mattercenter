@@ -1,0 +1,26 @@
+{
+  "name": "angular-ui-bootstrap-typeahead",
+  "version": "0.12.0",
+  "authors": [
+    "Mark Fayngersh <mark.fayngersh@gmail.com>"
+  ],
+  "description": "Angular UI Bootstrap Typeahead",
+  "main": "./ui-bootstrap-typeahead-tpls.js",
+  "keywords": [
+    "angular",
+    "ui",
+    "bootstrap",
+    "typeahead"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/CrowdTwist/angular-ui-bootstrap-typeahead",
+  "_release": "0.12.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.12.0",
+    "commit": "7573db6deb16a3db0060be9691ff6ebe3b418dd4"
+  },
+  "_source": "https://github.com/CrowdTwist/angular-ui-bootstrap-typeahead.git",
+  "_target": "0.12.0",
+  "_originalSource": "angular-ui-bootstrap-typeahead"
+}

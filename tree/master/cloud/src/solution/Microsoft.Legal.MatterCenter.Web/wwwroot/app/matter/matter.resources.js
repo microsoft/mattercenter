@@ -8,7 +8,13 @@ angular.module('matterMain')
               {
                   'get': auth.attachCSRF({
                       method: 'POST',
-                      url: '/api/v1/matter/get'
+                      url: '/api/v1/matter/get',
+                      isArray: true
+                  }),
+
+                  'getMatters': auth.attachCSRF({
+                      method: 'GET',
+                      url: '/api/v1/taxonomy/getcurrentsitetitle'
                   }),
 				  'getPinnedMatters': auth.attachCSRF({
                       method: 'POST',
@@ -22,10 +28,10 @@ angular.module('matterMain')
 				      method: 'POST',
 				      url: '/api/v1/matter/pin'
                   }),
-                  'getTaxonomyDetails': auth.attachCSRF({
-                      method: 'POST',
-                      url: '/api/v1/taxonomy/gettaxonomy'
-                  }),
+                  'getTaxonomyDetails': auth.attachCSRF({  
+                      method: 'POST',  
+                      url: '/api/v1/taxonomy/gettaxonomy'  
+                  })
               });
       }]);
 

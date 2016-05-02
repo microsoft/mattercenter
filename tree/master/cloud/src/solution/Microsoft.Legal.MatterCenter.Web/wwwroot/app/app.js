@@ -4,12 +4,13 @@ angular.module('matterMain', [
   'ngResource',
   'ui.router',
   'AdalAngular',
-  'ui.grid'
+  'ui.grid',
+  'ui.bootstrap'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {
 
-        // For any unmatched url, send to /route1
+        // For any unmatched url, send to /route1...
         $urlRouterProvider.otherwise(function ($injector, $location) {
             var $state = $injector.get("$state");
             $state.go("mc.navigation");
@@ -43,15 +44,16 @@ angular.module('matterMain', [
                 }
             }, requireADLogin: true
         })
-        .state('mc.createMatter', {
-            url: "^/createMatter",
-            views: {
-                "contentView": {
-                    templateUrl: '/app/matter/createMatter.html',
-                    controller: 'createMatterController as cm'
-                }
-            }, requireADLogin: true
-        });
+        .state('mc.createMatter', {  
+            url: "^/createMatter",  
+            views: {  
+                "contentView": {  
+                    templateUrl: '/app/matter/createMatter.html',  
+                    controller: 'createMatterController as cm'  
+                }  
+            }, requireADLogin: true  
+          });
+
 
         $locationProvider.html5Mode({
             enabled: false,

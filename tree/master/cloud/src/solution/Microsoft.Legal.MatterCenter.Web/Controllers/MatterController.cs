@@ -27,7 +27,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.AspNet.Authorization;
 using Microsoft.Legal.MatterCenter.Web.Common;
 #endregion
-namespace Microsoft.Legal.MatterCenter.Web
+namespace Microsoft.Legal.MatterCenter.Service
 {
     /// <summary>
     /// Matter Controller class deals with matter provisioning, finding matter, pinning matter, unpinning the matterm, updating the matter
@@ -37,7 +37,6 @@ namespace Microsoft.Legal.MatterCenter.Web
     public class MatterController : Controller
     {
         private ErrorSettings errorSettings;
-        
         private ISPOAuthorization spoAuthorization;
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;
         private MatterSettings matterSettings;
@@ -55,7 +54,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
         public MatterController(IOptions<ErrorSettings> errorSettings,
-            IOptions<MatterSettings> matterSettings,           
+            IOptions<MatterSettings> matterSettings,
             ISPOAuthorization spoAuthorization,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IMatterRepository matterRepositoy,
@@ -75,7 +74,6 @@ namespace Microsoft.Legal.MatterCenter.Web
             this.validationFunctions = validationFunctions;
             this.editFunctions = editFunctions;
             this.matterProvision = matterProvision;
-            
         }
 
         #region Pin and UnPin
@@ -110,7 +108,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                         ErrorCode = HttpStatusCode.BadRequest.ToString(),
                         Description = "No input data is passed"
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
 
@@ -123,7 +121,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                         ErrorCode = ((int)HttpStatusCode.NotFound).ToString(),
                         Description = "No resource found for your search criteria"
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.NotFound);
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 return matterCenterServiceFunctions.ServiceResponse(pinResponseVM, (int)HttpStatusCode.OK);
             }
@@ -261,14 +259,16 @@ namespace Microsoft.Legal.MatterCenter.Web
                 }
                 #endregion                
                 var searchResultsVM = await matterProvision.GetMatters(searchRequestVM);
-                return matterCenterServiceFunctions.ServiceResponse(searchResultsVM, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(searchResultsVM.MatterDataList, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
-        }        
+        }
+
+        
 
         [HttpPost("getfolderhierarchy")]
         [SwaggerResponse(HttpStatusCode.OK)]
@@ -312,6 +312,164 @@ namespace Microsoft.Legal.MatterCenter.Web
                 throw;
             }
         }
+
+        [HttpPost("getroles")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        /// <summary>
+        /// unpin the matter
+        /// </summary>        
+        /// <param name="client">Client object containing Client data</param>
+        /// <param name="details">Term Store object containing Term store data</param>
+        /// <returns>Returns JSON object to the client</returns>        ///
+        public async Task<IActionResult> GetRoles([FromBody]Client client)
+        {
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
+                ErrorResponse errorResponse = null;
+                //if the token is not valid, immediately return no authorization error to the user
+                if (errorResponse != null && !errorResponse.IsTokenValid)
+                {
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
+                }
+                if (client == null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+                IList<Role> roles = new List<Role>();
+                string result = ServiceUtility.GetDataFromAzureRedisCache(ServiceConstants.CACHE_ROLES);
+                if (string.IsNullOrEmpty(result))
+                {
+                    roles = await matterRepositoy.GetRolesAsync(client);
+                    ServiceUtility.SetDataIntoAzureRedisCache<IList<Role>>(ServiceConstants.CACHE_ROLES, roles);
+                }
+                else
+                {
+                    roles = JsonConvert.DeserializeObject<IList<Role>>(result);
+                }
+                return matterCenterServiceFunctions.ServiceResponse(roles, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        [HttpPost("getpermissionlevels")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        /// <summary>
+        /// unpin the matter
+        /// </summary>        
+        /// <param name="client">Client object containing Client data</param>
+        /// <param name="details">Term Store object containing Term store data</param>
+        /// <returns>Returns JSON object to the client</returns>        ///
+        public async Task<IActionResult> GetPermissionLevels([FromBody]Client client)
+        {
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
+                ErrorResponse errorResponse = null;
+                //if the token is not valid, immediately return no authorization error to the user
+                if (errorResponse != null && !errorResponse.IsTokenValid)
+                {
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
+                }
+                if (client == null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+                IList<Role> roles = new List<Role>();
+                roles = await matterRepositoy.GetPermissionLevelsAsync(client);
+                return matterCenterServiceFunctions.ServiceResponse(roles, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+
+        [HttpPost("getusers")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        /// <summary>
+        /// get users
+        /// </summary>        
+        /// <param name="client">Client object containing Client data</param>
+        /// <param name="details">Term Store object containing Term store data</param>
+        /// <returns>Returns JSON object to the client</returns>        ///
+        public async Task<IActionResult> GetUsers([FromBody]SearchRequestVM searchRequestVM)
+        {
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
+                ErrorResponse errorResponse = null;
+                //if the token is not valid, immediately return no authorization error to the user
+                if (errorResponse != null && !errorResponse.IsTokenValid)
+                {
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
+                }
+                if (searchRequestVM.Client == null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+                searchRequestVM.SearchObject.SearchTerm = (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm)) ? searchRequestVM.SearchObject.SearchTerm : string.Empty;
+                IList<Users> users = await matterRepositoy.GetUsersAsync(searchRequestVM);
+                if (users != null && users.Count != 0)
+                {
+                    return matterCenterServiceFunctions.ServiceResponse(users, (int)HttpStatusCode.OK);
+                }
+                else
+                {
+                    Users noResult = new Users()
+                    {
+                        Name = errorSettings.PeoplePickerNoResults,
+                        LogOnName = string.Empty,
+                        Email = string.Empty,
+                        EntityType = string.Empty
+                    };
+                    users.Add(noResult);
+                    return matterCenterServiceFunctions.ServiceResponse(users, (int)HttpStatusCode.OK);
+                }
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
         
         [HttpPost("getstampedproperties")]
         [SwaggerResponse(HttpStatusCode.OK)]
@@ -422,19 +580,10 @@ namespace Microsoft.Legal.MatterCenter.Web
                         ErrorCode = HttpStatusCode.BadRequest.ToString(),
                         Description = "No input data is passed"
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
                 GenericResponseVM genericResponseVM = await matterRepositoy.GetConfigurationsAsync(siteCollectionPath);
-                if(genericResponseVM.IsError==true)
-                {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponseVM.Value,
-                        ErrorCode = genericResponseVM.Code,                        
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-                }
                 return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -446,88 +595,6 @@ namespace Microsoft.Legal.MatterCenter.Web
         #endregion
 
         #region Matter Provision
-
-        [HttpPost("create")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
-        public IActionResult Create([FromBody]MatterMetdataVM matterMetadataVM)
-        {
-            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
-            var client = matterMetadataVM.Client;
-            var matter = matterMetadataVM.Matter;
-            var matterConfiguration = matterMetadataVM.MatterConfigurations;
-            ErrorResponse errorResponse = null;
-            if (null == client && null == matter &&  null == client.Url)
-            {
-                errorResponse = new ErrorResponse()
-                {
-                    Message = errorSettings.MessageNoInputs,
-                    ErrorCode = "",
-                    
-                };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-            }
-            GenericResponseVM genericResponse = matterProvision.CreateMatter(matterMetadataVM);
-            if(genericResponse!=null)
-            {
-                matterProvision.DeleteMatter(client, matter);
-                errorResponse = new ErrorResponse()
-                {
-                    Message = genericResponse.Value,
-                    ErrorCode = genericResponse.Code,                    
-                };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-            }
-            return matterCenterServiceFunctions.ServiceResponse("", (int)HttpStatusCode.OK);
-        }
-
-        [HttpPost("createlandingpage")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
-        public IActionResult CreateLandingPage([FromBody]MatterMetdataVM matterMetadataVM)
-        {
-            var client = matterMetadataVM.Client;
-            var matter = matterMetadataVM.Matter;
-            try
-            {
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
-                
-                var matterConfiguration = matterMetadataVM.MatterConfigurations;
-                ErrorResponse errorResponse = null;
-                if (null == client && null == matter && string.IsNullOrWhiteSpace(client.Url))
-                {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = "",
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-                }
-                GenericResponseVM genericResponse = matterProvision.CreateMatterLandingPage(matterMetadataVM);
-                if (genericResponse != null)
-                {
-                    matterProvision.DeleteMatter(client, matter);
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponse.Value,
-                        ErrorCode = genericResponse.Code,
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-                }
-                return matterCenterServiceFunctions.ServiceResponse("", (int)HttpStatusCode.OK);
-            }
-            catch (Exception exception)
-            {
-                matterProvision.DeleteMatter(client, matter);
-                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
-            }
-        }
-
-
-
         [HttpPost("checkmatterexists")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
