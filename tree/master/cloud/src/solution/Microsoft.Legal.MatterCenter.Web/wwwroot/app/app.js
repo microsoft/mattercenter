@@ -10,7 +10,7 @@ angular.module('matterMain', [
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {
 
-        // For any unmatched url, send to /route1
+        // For any unmatched url, send to /route1...
         $urlRouterProvider.otherwise(function ($injector, $location) {
             var $state = $injector.get("$state");
             $state.go("mc.navigation");
@@ -41,15 +41,6 @@ angular.module('matterMain', [
                 "contentView": {
                     templateUrl: '/app/matter/matters.html',
                     controller: 'mattersController as vm'
-                }
-            }, requireADLogin: true
-        })
-        .state('mc.createMatter', {
-            url: "^/createMatter",
-            views: {
-                "contentView": {
-                    templateUrl: '/app/matter/createMatter.html',
-                    controller: 'createMatterController as cm'
                 }
             }, requireADLogin: true
         });

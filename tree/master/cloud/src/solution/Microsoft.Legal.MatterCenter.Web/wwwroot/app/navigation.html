@@ -89,6 +89,10 @@
                 <div class="headerLinks"><a id="settingsLink" onclick="closeHamburgerMenu();"><span title="Settings">Settings</span></a></div>
             </div>
         </header>
+
+
+        <asp:ContentPlaceHolder ID="BodyContentPlaceHolder" runat="server">
+        </asp:ContentPlaceHolder>
         <footer id="footer" class="commonContent">
             <div class="footerContent">
                 <ul class="rightFooter">
@@ -167,10 +171,10 @@
                             </a>
                         </div>
                         <div class="SecondaryLinkContainer CreateMatter" runat="server" id="CreateMatterLink" title="Create a new matter site">
-                            <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
+                            <a class="CreateMatterLink">
                                 <img class="SecondaryLinksImg" src="Images/MC_Create_a_matter.png" alt="Create a new matter" />
                             </a>
-                            <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
+                            <a class="CreateMatterLink">
                                 <span class="SecondaryLinksText">Create a new matter</span>
                             </a>
                         </div>
