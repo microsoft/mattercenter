@@ -10,7 +10,7 @@ angular.module('matterMain', [
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {
 
-        // For any unmatched url, send to /route1
+        // For any unmatched url, send to /route1...
         $urlRouterProvider.otherwise(function ($injector, $location) {
             var $state = $injector.get("$state");
             $state.go("mc.navigation");
