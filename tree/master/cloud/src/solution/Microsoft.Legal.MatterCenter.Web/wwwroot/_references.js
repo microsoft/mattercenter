@@ -23,7 +23,6 @@
 /// <reference path="app/navigation.controller.js" />
 /// <reference path="app/services/api.service.js" />
 /// <reference path="app/services/auth.service.js" />
-/// <reference path="fabric-0.6.0/js/jquery.components-0.6.0.min.js" />
 /// <reference path="js/site.js" />
 /// <reference path="lib/adal-angular/dist/adal.min.js" />
 /// <reference path="lib/adal-angular/dist/adal-angular.min.js" />
