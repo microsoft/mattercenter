@@ -181,6 +181,9 @@ textarea {
     left: 40%;
     top: 50%;
 }
+.ngViewport {
+    overflow:visible;
+}
 /*.ui-grid-change-icon {
     background: url(../images/Column_Picker_Expand.png) center no-repeat;
   
