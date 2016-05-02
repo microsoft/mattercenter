@@ -156,17 +156,17 @@
 
     <div class="popupContainerBackground " ng-class="cm.popupContainerBackground"></div>
     <div class="popUpContainer " ng-class="cm.popupContainer" style="margin:auto !important; bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
-        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png">
+        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
         <div class="alignCenter">
             <header class="popUpHeader">
-                <div title="Select a Practice Group" class="popUpHeaderTitle popUpFloatLeft" >Select a Practice Group</div>
+                <div title="Select a Practice Group" class="popUpHeaderTitle popUpFloatLeft">Select a Practice Group</div>
                 <div class="popUpPracticeGroup clear">
                     <div class="popUpPGDiv">
                         <select class="medium clear" ng-model="cm.selectedPracticeGroup" ng-change="cm.getSelectedPracticeGroupValue()" ng-options=" practiceGroup.termName for practiceGroup in cm.pracitceGroupList">
                             <option value="" label="- Select a practice group -"></option>
                         </select>
                     </div>
-                   
+
                 </div>
             </header>
             <div class="popUpBody popUpFloatLeft" style="overflow:hidden;">
@@ -175,24 +175,24 @@
                     <div class="popUpFloatLeft popUpBorder " id="popupAOLBorder" style="height:213px;width:200px;">
                         <input class="popUpMDTextArea clear" style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="Search by typing">
                         <div class="popUpCommonContent popUpMD" id="popupAOLContent">
-                            <div class='popUpMDContent ' style="padding:3px !important;"  ng-repeat="areaOfLawTerm in cm.areaOfLawTerms">
-                                <div   ng-click='cm.selectedAreaOfLawTerm(areaOfLawTerm)'  data-value='' documents='' data-foldernamesaol='areaOfLawTerm.folderNames' data-areaoflaw-id='areaOfLawTerm.id'>{{areaOfLawTerm.termName}}</div>
+                            <div class='popUpMDContent ' style="padding:3px !important;" ng-repeat="areaOfLawTerm in cm.areaOfLawTerms">
+                                <div ng-class="{popUpSelected : cm.activeAOLTerm === areaOfLawTerm}" ng-click='cm.selectedAreaOfLawTerm(areaOfLawTerm)' data-value='' documents='' data-foldernamesaol='areaOfLawTerm.folderNames' data-areaoflaw-id='areaOfLawTerm.id'>{{areaOfLawTerm.termName}}</div>
                             </div>
-                            </div>                         
+                        </div>
                     </div>
                 </div>
                 <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divSAOL" style="width:28%;">
-                    <label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft" >Sub Area of Law (select matter type)</label>
+                    <label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft">Sub Area of Law (select matter type)</label>
                     <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px;">
                         <input class="popUpMDTextArea clear" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                         <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
-                            <div class="popUpSALContent " ng-repeat="subAreaOfLawTerm in cm.subAreaOfLawTerms"  style="padding:3px !important;">
-                                <div  data-value="" data-subareaoflaw-id="subAreaOfLawTerm.id" data-display-name="subAreaOfLawTerm.termName" data-isnofolderstructurepresent='subAreaOfLawTerm.isNoFolderStructurePresent' data-foldernamessal='subAreaOfLawTerm.folderNames' data-associated-document-template='subAreaOfLawTerm.documentTemplates' data-document-template='subAreaOfLawTerm.documentTemplateNames'>{{subAreaOfLawTerm.termName}}</div>
+                            <div class="popUpSALContent " ng-repeat="subAreaOfLawTerm in cm.subAreaOfLawTerms" style="padding:3px !important;">
+                                <div ng-class="{popUpSelected : cm.activeSubAOLTerm === subAreaOfLawTerm}" ng-click='cm.selectedSubAreaOfLawTerm(subAreaOfLawTerm)' data-value="" data-subareaoflaw-id="subAreaOfLawTerm.id" data-display-name="subAreaOfLawTerm.termName" data-isnofolderstructurepresent='subAreaOfLawTerm.isNoFolderStructurePresent' data-foldernamessal='subAreaOfLawTerm.folderNames' data-associated-document-template='subAreaOfLawTerm.documentTemplates' data-document-template='subAreaOfLawTerm.documentTemplateNames'>{{subAreaOfLawTerm.termName}}</div>
                             </div>
-                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft" style="position:relative;margin-top:0px;"id="navigate">
+                <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
                         <img title="Add" class="iconForward" style="margin:0px;" alt="Left" src="../Images/forward_666.png">
                     </div>
@@ -210,7 +210,7 @@
                     <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft">Matter Type</label>
                     <div class="popUpFloatLeft popUpBorder" style="height:213px; width:200px;">
                         <div class="popUpCommonContent popDT">
-                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="defaultMessageDiv">
@@ -221,7 +221,7 @@
             </div>
         </div>
     </div>
-   
+
 
     <!--<div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">
