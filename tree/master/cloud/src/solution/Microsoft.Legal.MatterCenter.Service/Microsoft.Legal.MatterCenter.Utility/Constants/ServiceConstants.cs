@@ -18,6 +18,12 @@ namespace Microsoft.Legal.MatterCenter.Utility
     public class ServiceConstants
     {
 
+        public const string SUCCESS = "200";
+        /// <summary>
+        /// The underscore constant
+        /// </summary>
+        public const string UNDER_SCORE = "_";
+
         /// <summary>
         /// The invalid char regex
         /// </summary>

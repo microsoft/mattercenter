@@ -8,5 +8,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
     {
         bool UrlExists(Client client, string pageUrl);
         void Delete(ClientContext clientContext, string pageUrl);
+        bool IsFileExists(ClientContext clientContext, string pageUrl);
+        bool PageExists(string requestedUrl, ClientContext clientContext);
     }
 }

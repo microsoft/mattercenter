@@ -59,66 +59,71 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES, ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
             var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
-            IList<MatterData> matterDataList = new List<MatterData>();
-            IEnumerable<IDictionary<string, object>> searchResults = searchResultsVM.SearchResults;
-            foreach(var searchResult in searchResults)
+            if (searchResultsVM.TotalRows > 0)
             {
-                MatterData matterData = new MatterData();
-                foreach (var key in searchResult.Keys)
+                IList<MatterData> matterDataList = new List<MatterData>();
+                IEnumerable<IDictionary<string, object>> searchResults = searchResultsVM.SearchResults;
+                foreach (var searchResult in searchResults)
                 {
-                    switch(key.ToLower())
+                    MatterData matterData = new MatterData();
+                    foreach (var key in searchResult.Keys)
                     {
-                        case "mcmattername":
-                            matterData.MatterName = searchResult[key].ToString();
-                            break;
-                        case "description":
-                            matterData.MatterDescription = searchResult[key].ToString();
-                            break;
-                        case "mcopendate":
-                            matterData.MatterCreatedDate = searchResult[key].ToString();
-                            break;
-                        case "path":
-                            matterData.MatterUrl = searchResult[key].ToString();
-                            
-                            break;
-                        case "sitename":
-                            matterData.MatterClientUrl = searchResult[key].ToString();
-                            break;
-                        case "mcpracticegroup":
-                            matterData.MatterPracticeGroup = searchResult[key].ToString();
-                            break;
-                        case "mcareaoflaw":
-                            matterData.MatterAreaOfLaw = searchResult[key].ToString();
-                            break;
-                        case "mcsubareaoflaw":
-                            matterData.MatterSubAreaOfLaw = searchResult[key].ToString();
-                            break;                        
-                        case "mcclientname":
-                            matterData.MatterClient = searchResult[key].ToString();
-                            break;
-                        case "mcclientid":
-                            matterData.MatterClientId = searchResult[key].ToString();
-                            break;
-                        case "mcblockeduploaduser":
-                            matterData.HideUpload = searchResult[key].ToString();
-                            break;
-                        case "mcmatterid":
-                            matterData.MatterID = searchResult[key].ToString();
-                            break;
-                        case "mcresponsibleattorney":
-                            matterData.MatterResponsibleAttorney = searchResult[key].ToString();
-                            break;
-                        case "lastmodifiedtime":
-                            matterData.MatterModifiedDate = searchResult[key].ToString();
-                            break;
-                        case "mattercentermatterguid":
-                            matterData.MatterGuid = searchResult[key].ToString();
-                            break;
+                        switch (key.ToLower())
+                        {
+                            case "mcmattername":
+                                matterData.MatterName = searchResult[key].ToString();
+                                break;
+                            case "description":
+                                matterData.MatterDescription = searchResult[key].ToString();
+                                break;
+                            case "mcopendate":
+                                matterData.MatterCreatedDate = searchResult[key].ToString();
+                                break;
+                            case "path":
+                                matterData.MatterUrl = searchResult[key].ToString();
+
+                                break;
+                            case "sitename":
+                                matterData.MatterClientUrl = searchResult[key].ToString();
+                                break;
+                            case "mcpracticegroup":
+                                matterData.MatterPracticeGroup = searchResult[key].ToString();
+                                break;
+                            case "mcareaoflaw":
+                                matterData.MatterAreaOfLaw = searchResult[key].ToString();
+                                break;
+                            case "mcsubareaoflaw":
+                                matterData.MatterSubAreaOfLaw = searchResult[key].ToString();
+                                break;
+                            case "mcclientname":
+                                matterData.MatterClient = searchResult[key].ToString();
+                                break;
+                            case "mcclientid":
+                                matterData.MatterClientId = searchResult[key].ToString();
+                                break;
+                            case "mcblockeduploaduser":
+                                matterData.HideUpload = searchResult[key].ToString();
+                                break;
+                            case "mcmatterid":
+                                matterData.MatterID = searchResult[key].ToString();
+                                break;
+                            case "mcresponsibleattorney":
+                                matterData.MatterResponsibleAttorney = searchResult[key].ToString();
+                                break;
+                            case "lastmodifiedtime":
+                                matterData.MatterModifiedDate = searchResult[key].ToString();
+                                break;
+                            case "mattercentermatterguid":
+                                matterData.MatterGuid = searchResult[key].ToString();
+                                break;
+                        }
                     }
+                    matterDataList.Add(matterData);
                 }
-                matterDataList.Add(matterData);
+                searchResultsVM.MatterDataList = matterDataList;
+                
             }
-            searchResultsVM.MatterDataList = matterDataList;
+            searchResultsVM.SearchResults = null;
             return searchResultsVM;
         }
 
@@ -457,6 +462,75 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
         }
 
+        public GenericResponseVM CheckMatterExists(MatterMetdataVM matterMetadataVM)
+        {
+            var matter = matterMetadataVM.Matter;
+            var client = matterMetadataVM.Client;
+            GenericResponseVM genericResponse = null;
+            using (ClientContext clientContext = spoAuthorization.GetClientContext(matterMetadataVM.Client.Url))
+            {
+                List<string> listExists = validationFunctions.CheckListExists(matterMetadataVM.Client, matterMetadataVM.Matter.Name, matterMetadataVM.MatterConfigurations);
+                if (listExists.Count>0)
+                {
+                    string listName = !string.Equals(matter.Name, listExists[0]) ? listExists[0].Contains(ServiceConstants.UNDER_SCORE) ? 
+                        listExists[0].Split(ServiceConstants.UNDER_SCORE[0]).Last() : ServiceConstants.MATTER : ServiceConstants.MATTER;
+                    return ServiceUtility.GenericResponse(errorSettings.MatterLibraryExistsCode,
+                        string.Format(CultureInfo.InvariantCulture, errorSettings.ErrorDuplicateMatter, listName) + ServiceConstants.DOLLAR + 
+                        ServiceConstants.PIPE + ServiceConstants.DOLLAR + MatterPrerequisiteCheck.LibraryExists);
+                }
+                else
+                {
+                    Uri clientUri = new Uri(client.Url);
+                    string requestedUrl = string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}{5}", clientUri.AbsolutePath, ServiceConstants.FORWARD_SLASH, 
+                        matterSettings.MatterLandingPageRepositoryName.Replace(ServiceConstants.SPACE, string.Empty),
+                        ServiceConstants.FORWARD_SLASH, matter.Name, ServiceConstants.ASPX_EXTENSION);
+                    if (matterRepositoy.IsPageExists(clientContext, requestedUrl))
+                    {                        
+                        return ServiceUtility.GenericResponse(errorSettings.MatterLibraryExistsCode,
+                        errorSettings.ErrorDuplicateMatterLandingPage + ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR + MatterPrerequisiteCheck.MatterLandingPageExists);
+                    }
+                }
+            }
+            return genericResponse;
+        }
+
+        public GenericResponseVM CheckSecurityGroupExists(MatterInformationVM matterInformationVM)
+        {
+            GenericResponseVM genericResponseVM = null;
+            var matter = matterInformationVM.Matter;
+            var client = matterInformationVM.Client;
+            var userids = matterInformationVM.UserIds;
+            using (ClientContext clientContext = spoAuthorization.GetClientContext(matterInformationVM.Client.Url))
+            {
+                genericResponseVM = matterRepositoy.ValidateTeamMembers(clientContext, matter, userids);
+                if(genericResponseVM!=null)
+                {
+                    return genericResponseVM;
+                }
+                else
+                {
+                    if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
+                    {
+                        if (0 == matter.AssignUserEmails.Count())
+                        {                            
+                            return ServiceUtility.GenericResponse(errorSettings.IncorrectInputUserNamesCode, errorSettings.IncorrectInputUserNamesMessage);
+                        }
+                        else
+                        {
+                            if (Convert.ToBoolean(matter.Conflict.Identified, CultureInfo.InvariantCulture))
+                            {
+                                return editFunctions.CheckSecurityGroupInTeamMembers(client, matter, userids);
+                            }
+                        }
+                    }
+                    else
+                    {                        
+                        return ServiceUtility.GenericResponse(errorSettings.IncorrectInputConflictIdentifiedCode, errorSettings.IncorrectInputConflictIdentifiedMessage);
+                    }
+                }
+            }
+            return genericResponseVM;
+        }
         #region private functions
 
         /// <summary>

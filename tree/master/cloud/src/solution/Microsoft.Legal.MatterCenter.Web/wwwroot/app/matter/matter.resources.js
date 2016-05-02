@@ -8,7 +8,8 @@ angular.module('matterMain')
               {
                   'get': auth.attachCSRF({
                       method: 'POST',
-                      url: '/api/v1/matter/get'
+                      url: '/api/v1/matter/get',
+                      isArray: true
                   }),
 				  'getPinnedMatters': auth.attachCSRF({
                       method: 'POST',

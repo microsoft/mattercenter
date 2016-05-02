@@ -18,7 +18,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         bool CheckPermissionOnList(ClientContext clientContext, string listName, PermissionKind permission);
         bool CheckPermissionOnList(Client client, string listName, PermissionKind permission);
         bool CheckPermissionOnList(string url, string listName, PermissionKind permission);
-        bool Exists(Client client, ReadOnlyCollection<string> lists);
+        List<string> Exists(Client client, ReadOnlyCollection<string> lists);
+        
         List<string> MatterAssociatedLists(ClientContext clientContext, ReadOnlyCollection<string> lists);
         PropertyValues GetListProperties(ClientContext clientContext, string libraryname);
         IEnumerable<RoleAssignment> FetchUserPermissionForLibrary(ClientContext clientContext, string libraryname);
@@ -34,5 +35,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile);
         bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName);
         bool PerformContentCheck(ClientContext context, MemoryStream localMemoryStream, string serverFileURL);
+        
     }
 }

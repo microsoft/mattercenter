@@ -102,6 +102,10 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string ContentCheckFailed { get; set; }
         public string FilePotentialDuplicateMessage { get; set; }
         public string FileAlreadyExistMessage { get; set; }
+
+        public string MatterLandingExistsCode { get; set; }
+        public string ErrorDuplicateMatterLandingPage { get; set; }
+        
         #endregion
     }
 }
