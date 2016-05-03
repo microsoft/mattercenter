@@ -71,27 +71,19 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
         /// <summary>
-        /// Gets the matters based on search criteria.
+        /// Gets the documents based on search criteria.
         /// </summary>
         /// <param name="searchRequestVM"></param>
-        /// <returns>searchResponseVM</returns>
+        /// <returns></returns>
         [HttpPost("getdocuments")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]  
         public async Task<IActionResult> Get([FromBody]SearchRequestVM searchRequestVM)
         {
             try
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
-                //if the token is not valid, immediately return no authorization error to the user
-                if (errorResponse != null && !errorResponse.IsTokenValid)
-                {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-                }
-
+                ErrorResponse errorResponse = null;  
                 if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
                 {
                     errorResponse = new ErrorResponse()
@@ -100,13 +92,9 @@ namespace Microsoft.Legal.MatterCenter.Web
                         ErrorCode = HttpStatusCode.BadRequest.ToString(),
                         Description = "No input data is passed"
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.NotFound);
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
-
-                #endregion
-
-                
-
+                #endregion 
                 var searchResultsVM = await documentProvision.GetDocumentsAsync(searchRequestVM);
                 return matterCenterServiceFunctions.ServiceResponse(searchResultsVM, (int)HttpStatusCode.OK);
             }
@@ -117,16 +105,13 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
         }
 
-        [HttpPost("getpinneddocuments")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
         /// <summary>
-        /// Get Pin Documents
-        /// </summary>        
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="details">Term Store object containing Term store data</param>
-        /// <returns>Returns JSON object to the client</returns>        ///
+        /// Get all the documents which are pinned
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        [HttpPost("getpinneddocuments")]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public async Task<IActionResult> GetPin([FromBody]Client client)
         {
             try
@@ -170,16 +155,13 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
         }
 
-        [HttpPost("pindocument")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
         /// <summary>
-        /// pin the matter
-        /// </summary>        
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="details">Term Store object containing Term store data</param>
-        /// <returns>Returns JSON object to the client</returns>        ///
+        /// Pin a new document
+        /// </summary>
+        /// <param name="pinRequestDocumentVM"></param>
+        /// <returns></returns>
+        [HttpPost("pindocument")]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public async Task<IActionResult> Pin([FromBody]PinRequestDocumentVM pinRequestDocumentVM)
         {
             try
@@ -187,11 +169,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
-                //if the token is not valid, immediately return no authorization error to the user
-                if (errorResponse != null && !errorResponse.IsTokenValid)
-                {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-                }
+                
                 if (pinRequestDocumentVM == null && pinRequestDocumentVM.Client == null && pinRequestDocumentVM.DocumentData == null)
                 {
                     errorResponse = new ErrorResponse()
@@ -200,7 +178,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                         ErrorCode = HttpStatusCode.BadRequest.ToString(),
                         Description = "No input data is passed"
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 var isDocumentPinned = await documentRepositoy.PinRecordAsync<PinRequestDocumentVM>(pinRequestDocumentVM);
@@ -217,28 +195,20 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
         }
 
-        [HttpPost("unpindocument")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
         /// <summary>
-        /// unpin the matter
-        /// </summary>        
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="details">Term Store object containing Term store data</param>
-        /// <returns>Returns JSON object to the client</returns>        ///
+        /// Unpin the document which is already pinned
+        /// </summary>
+        /// <param name="pinRequestMatterVM"></param>
+        /// <returns></returns>
+        [HttpPost("unpindocument")]
+        [SwaggerResponse(HttpStatusCode.OK)] 
         public async Task<IActionResult> UnPin([FromBody]PinRequestMatterVM pinRequestMatterVM)
         {
             try
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
-                //if the token is not valid, immediately return no authorization error to the user
-                if (errorResponse != null && !errorResponse.IsTokenValid)
-                {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-                }
+                ErrorResponse errorResponse = null;                
                 if (pinRequestMatterVM == null && pinRequestMatterVM.Client == null && pinRequestMatterVM.MatterData == null)
                 {
                     errorResponse = new ErrorResponse()
@@ -273,31 +243,34 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <returns>Document and list GUID</returns>
         [HttpPost("getassets")]
         [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        
         public async Task<IActionResult> GetDocumentAssets(Client client)
         {
-            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
-            #region Error Checking                
-            ErrorResponse errorResponse = null;
-            //if the token is not valid, immediately return no authorization error to the user
-            if (errorResponse != null && !errorResponse.IsTokenValid)
+            try
             {
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-            }
-            if (client == null)
-            {
-                errorResponse = new ErrorResponse()
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
+                ErrorResponse errorResponse = null;
+            
+                if (client == null)
                 {
-                    Message = errorSettings.MessageNoInputs,
-                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                    Description = "No input data is passed"
-                };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                }
+                #endregion
+                var documentAsset = await documentRepositoy.GetDocumentAndClientGUIDAsync(client);
+                return matterCenterServiceFunctions.ServiceResponse(documentAsset, (int)HttpStatusCode.OK);
             }
-            #endregion
-            var documentAsset = await documentRepositoy.GetDocumentAndClientGUIDAsync(client);
-            return matterCenterServiceFunctions.ServiceResponse(documentAsset, (int)HttpStatusCode.OK);
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
     }
 }

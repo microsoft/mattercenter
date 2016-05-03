@@ -403,12 +403,12 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// <summary>
         ///Provision Matter common validation value
         /// </summary>
-        public const string ProvisionMatterCommonValidation = "0";
+        public const string PROVISION_MATTER_COMMON_VALIDATION = "0";
 
         /// <summary>
         /// Provision Matter CheckMatterExists validation value
         /// </summary>
-        public const string ProvisionMatterCheckMatterExists = "1";
+        public const string PROVISION_MATTER_CHECK_MATTER_EXISTS = "1";
 
         
 
@@ -676,7 +676,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// <summary>
         /// Constant required for extension for OneNote table of content
         /// </summary>
-        public const string ONE_NOTE_RELATIVE_FILE_PATH = "~/Open Notebook.onetoc2";
+        public const string ONE_NOTE_RELATIVE_FILE_PATH = "Open Notebook.onetoc2";
 
         /// <summary>
         /// The managing attorney value constant

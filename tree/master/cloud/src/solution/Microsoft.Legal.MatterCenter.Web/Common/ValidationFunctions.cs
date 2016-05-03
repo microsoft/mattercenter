@@ -265,7 +265,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
             try
             {
-                if (!(int.Parse(ServiceConstants.ProvisionMatterCheckMatterExists, CultureInfo.InvariantCulture) == methodNumber) &&
+                if (!(int.Parse(ServiceConstants.PROVISION_MATTER_CHECK_MATTER_EXISTS, CultureInfo.InvariantCulture) == methodNumber) &&
                     !(int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber))
                 {
                     if (0 >= matter.AssignUserNames.Count())
@@ -349,7 +349,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 else
                 {
                     var matterDescription = Regex.Match(matter.Description, matterSettings.SpecialCharacterExpressionMatterDescription, RegexOptions.IgnoreCase);
-                    if (int.Parse(matterSettings.MatterDescriptionLength, CultureInfo.InvariantCulture) < matter.Description.Length || !matterDescription.Success)
+                    if (matter.Description.Length > matterSettings.MatterDescriptionLength  || !matterDescription.Success)
                     {
                         return GenericResponse(errorSettings.IncorrectInputMatterDescriptionCode, errorSettings.IncorrectInputMatterDescriptionMessage);
                     }

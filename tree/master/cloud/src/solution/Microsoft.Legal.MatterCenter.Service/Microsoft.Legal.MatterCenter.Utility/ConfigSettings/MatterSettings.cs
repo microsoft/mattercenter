@@ -39,7 +39,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public bool IsCreateCalendarEnabled { get; set; }
 
         public string ContentTypeLength { get; set; }
-        public string MatterDescriptionLength { get; set; }
+        public int MatterDescriptionLength { get; set; }
         public string UserPermissions { get; set; }
         public string CentralRepositoryUrl { get; set; }
         public string MatterLandingPageRepositoryName { get; set; }
