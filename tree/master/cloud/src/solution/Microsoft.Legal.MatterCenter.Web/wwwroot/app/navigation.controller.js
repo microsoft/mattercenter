@@ -2,11 +2,11 @@
     'use strict';
 
     angular.module("matterMain")
-        .controller('navigationController', ['$scope', '$state', '$stateParams', 'api',
-        function ($scope, $state, $stateParams, api) {
+        .controller('navigationController', ['$state', '$stateParams', 'api',
+        function ($state, $stateParams, api) {
 
             var vm = this;
-
+            vm.SPOHomePage = configs.uri.SPOsiteURL + '/SitePages/MatterCenterHome.aspx';
             vm.menuClick = function () {
                 var oAppMenuFlyout = $(".AppMenuFlyout");
                 if (!(oAppMenuFlyout.is(":visible"))) {

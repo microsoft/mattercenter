@@ -163,10 +163,10 @@
                               <!--   <div class="col-xs-12 col-md-6"> -->  
                     <div class="RightLinkContainer">
                         <div class="SecondaryLinkContainer UploadAttachments" title="Upload documents to a matter">
-                            <a class="UploadAttachmentsLink">
+                            <a class="UploadAttachmentsLink" ui-sref='mc.matters()'>
                                 <img class="SecondaryLinksImg" src="Images/MC_Upload.png" alt="Upload attachments" />
                             </a>
-                            <a class="UploadAttachmentsLink">
+                            <a class="UploadAttachmentsLink" ui-sref='mc.matters()'>
                                 <span class="SecondaryLinksText">Upload attachments</span>
                             </a>
                         </div>
@@ -179,10 +179,10 @@
                             </a>
                         </div>
                         <div class="SecondaryLinkContainer MatterDashboard" title="Go to the web home page">
-                            <a class="MatterDashboardLink">
+                            <a class="MatterDashboardLink" href="{{vm.SPOHomePage}}" target="_blank">
                                 <img class="SecondaryLinksImg" src="Images/MC_Go_to_dashboard.png" alt="Go to Matter Center Home" />
                             </a>
-                            <a class="MatterDashboardLink">
+                            <a class="MatterDashboardLink" href="{{vm.SPOHomePage}}" target="_blank">
                                 <span class="SecondaryLinksText">Go to Matter Center Home</span>
                             </a>
                         </div>
