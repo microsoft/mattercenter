@@ -89,13 +89,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
-                //if the token is not valid, immediately return no authorization error to the user
-                if (errorResponse != null && !errorResponse.IsTokenValid)
-                {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-                }
-
+                ErrorResponse errorResponse = null;             
+                //ToDo: use the validation helper functions from the common folder
                 ValidationHelperFunctions.ErrorSettings = errorSettings;
                 errorResponse = ValidationHelperFunctions.TaxonomyValidation(termStoreViewModel.Client);
                 if (errorResponse != null && !String.IsNullOrWhiteSpace(errorResponse.Message))
@@ -116,8 +111,8 @@ namespace Microsoft.Legal.MatterCenter.Web
                     key = ServiceConstants.CACHE_CLIENTS;
                 }
 
-                ServiceUtility.GeneralSettings = generalSettings;
-                //cacheValue = ServiceUtility.GetDataFromAzureRedisCache(key);
+                ServiceUtility.RedisCacheHostName = generalSettings.RedisCacheHostName;
+                cacheValue = ServiceUtility.GetDataFromAzureRedisCache(key);
                 TaxonomyResponseVM taxonomyRepositoryVM = null;
                 if (String.IsNullOrEmpty(cacheValue))
                 {
@@ -146,7 +141,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                                 ErrorCode = "404",
                                 Description = "No data is present for the given passed input"
                             };
-                            return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.NotFound);
+                            return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                         }
                         return matterCenterServiceFunctions.ServiceResponse(pgTermSets, (int)HttpStatusCode.OK);
                     }
@@ -161,7 +156,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                                 ErrorCode = "404",
                                 Description = "No data is present for the given passed input"
                             };
-                            return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.NotFound);
+                            return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                         }
                         return matterCenterServiceFunctions.ServiceResponse(clientTermSets, (int)HttpStatusCode.OK);
                     }
@@ -173,7 +168,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     ErrorCode = "404",
                     Description = "No data is present for the given passed input"                    
                 };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.NotFound);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
             }
             catch(Exception ex)
             {

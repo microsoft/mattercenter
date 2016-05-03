@@ -8,8 +8,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
     public interface IMatterProvision
     {
         GenericResponseVM UpdateMatter(MatterInformationVM matterInformation);
-        GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata);
-        GenericResponseVM CreateMatter();
+        GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata);        
         GenericResponseVM DeleteMatter(Client client, Matter matter);
         GenericResponseVM SavConfigurations(SaveConfigurationsVM saveConfigurationsVM);
         PropertyValues GetStampedProperties(MatterVM matterVM);

@@ -529,7 +529,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         if (!String.IsNullOrWhiteSpace(userAllowedPermissions))
                         {
                             //// Get the user permissions from the Resource file
-                            List<string> userPermissions = userAllowedPermissions.ToUpperInvariant().Trim().Split(new string[] { ServiceConstants.COLON }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                            List<string> userPermissions = userAllowedPermissions.ToUpperInvariant().Trim().Split(new string[] { ServiceConstants.COMMA }, StringSplitOptions.RemoveEmptyEntries).ToList();
                             //// Filter only the allowed roles using LINQ query
                             roleDefinition = (from webRole in web.RoleDefinitions.ToList()
                                                                    where userPermissions.Contains(webRole.Name.ToUpperInvariant())

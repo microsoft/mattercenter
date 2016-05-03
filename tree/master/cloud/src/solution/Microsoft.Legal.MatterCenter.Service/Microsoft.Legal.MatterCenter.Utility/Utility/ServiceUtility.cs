@@ -12,9 +12,9 @@ namespace Microsoft.Legal.MatterCenter.Utility
 {
     public class ServiceUtility
     {
-        public static GeneralSettings GeneralSettings { get; set; }
+        
 
-        private static string RedisCacheHostName
+        public static string RedisCacheHostName
         {
             get; set;
         }
@@ -63,7 +63,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
                 {
                     IDatabase cacheDatabase = Connection.GetDatabase();
                     var serializeData = JsonConvert.SerializeObject(value);                    
-                    cacheDatabase.StringSet(key, JsonConvert.SerializeObject(serializeData), TimeSpan.FromDays(1));                   
+                    cacheDatabase.StringSet(key, serializeData, TimeSpan.FromDays(1));                   
                 }
             }
             catch (Exception exception)

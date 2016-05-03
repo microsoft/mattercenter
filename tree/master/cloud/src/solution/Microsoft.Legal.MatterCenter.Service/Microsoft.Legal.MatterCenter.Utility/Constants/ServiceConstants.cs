@@ -18,6 +18,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
     public class ServiceConstants
     {
 
+        public const string CACHE_PERMISSIONS = "Permissions";
+
         public const string SUCCESS = "200";
         /// <summary>
         /// The underscore constant

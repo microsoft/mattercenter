@@ -204,10 +204,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         }
 
 
-        public GenericResponseVM CreateMatter()
-        {
-            return null;
-        }
+        
 
         public GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata)
         {
