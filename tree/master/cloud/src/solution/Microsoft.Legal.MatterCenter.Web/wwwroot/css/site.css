@@ -184,6 +184,15 @@ textarea {
 .ngViewport {
     overflow:visible;
 }
+
+.searchPanelDropdown {
+    cursor:pointer;
+    height: 30px;
+    line-height: 29px;
+    padding-left: 9px;
+    border: none;
+}
+
 /*.ui-grid-change-icon {
     background: url(../images/Column_Picker_Expand.png) center no-repeat;
   

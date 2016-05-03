@@ -17,18 +17,52 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //start
     $scope.lazyloader = true;
     //end
+    var headertemplate = "<div ng-class='{'sortable': sortable }'>\
+    <div class='dropdown' style='float:right;'>\
+        <a href='javascript:;' class='prisma-header-dropdown-anchor dropdown-toggle' type='button' data-toggle='dropdown'>\
+            <img src='../images/icon-combobox.png'/>\
+        </a>\
+        <div class='dropdown-menu flyoutWrapper' role='menu'>\
+           <input class='form-control' placeholder='Search'/> \
+             <hr/> \
+            <div class='clearFilterText' data-clearfiltertype='text'>\
+            <div class='clearFiltersIcon'>\
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>\
+            </div>\
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Matter'><span>Clear filters from </span><span class='clearFilterTitle'>Matter</span></div>\
+        </div>\
+        </div>\
+    </div>\
+    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
+        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
+        <span ui-grid-visible='col.sort.direction' ng-class='{ 'ui-grid-icon-up-dir': col.sort.direction == asc, 'ui-grid-icon-down-dir': col.sort.direction == desc, 'ui-grid-icon-blank': !col.sort.direction }' class='ui-grid-invisible ui-grid-icon-blank'>&nbsp;</span>\
+    </div>\
+    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
+        <i ng-class='{ 'ui-grid-icon-up-dir': col.sort.direction == asc, 'ui-grid-icon-down-dir': col.sort.direction == desc, 'ui-grid-icon-blank': !col.sort.direction }' title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
+    </div>\
+</div>"
 
     vm.gridOptions = {
         enableGridMenu: true,
         columnDefs: [{
-            field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: '<div class="row"><div class="col-sm-8 cursor"  data-container="body" data-toggle="popover" data-placement="right" data-content="<div>{{row.entity.matterName}}</div> <div> Client : {{row.entity.matterClient}} </div> <div>Client.Matter ID : {{row.entity.matterClientId}}.{{row.entity.matterID}}</div> <div>Sub area of law : {{row.entity.matterSubAreaOfLaw}} </div> <div>Responsible attorney : {{row.entity.matterResponsibleAttorney}}</div><div><button >View matter details</button></div><div><button >Upload to a matter</button></div> " '
-            + " > {{row.entity.matterName}} </div>"
+            field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: '<div class="row"><div class="col-sm-8"><button class="btn btn-link" type="button"  data-container="body" data-toggle="popover" data-placement="right" details={{row.entity}} data-content="<div>{{row.entity.matterName}}</div> <div> <b>Client :</b>  {{row.entity.matterClient}} </div> <div><b>Client.Matter ID :</b> {{row.entity.matterClientId}}.{{row.entity.matterID}}</div> <div><b>Sub area of law :</b> {{row.entity.matterSubAreaOfLaw}} </div> <div><b>Responsible attorney</b> : {{row.entity.matterResponsibleAttorney}}</div><div><button><a >View matter details</a></button></div><div><button>Upload to a matter</button></div> " '
+            + " > {{row.entity.matterName}} </button></div>"
             + "<div class='col-sm-4 text-right><div class='dropdown'><button class='btn btn-default dropdown-toggle' type='button' data-toggle='dropdown'>...</button><ul class='dropdown-menu'>"
             + "<li class='cursor' ng-click='grid.appScope.Openuploadmodal()'><a>Upload to this Matter</a></li><li><a href='#'>View Matter Details</li><li><a href='https://msmatter.sharepoint.com/sites/microsoft/'  target='_blank'>"
             + "Go to Matter OneNote</li><li class='cursor' ng-show='grid.appScope.ddlMatters.Id==1' ng-click='grid.appScope.PinMatter(row)'><a>Pin this Matter</a></li><li class='cursor'"
-            + " ng-show='grid.appScope.ddlMatters.Id==2 || grid.appScope.ddlMatters.Id==3' ng-click='grid.appScope.UnpinMatter(row)'><a>Unpin this Matter</a></li></ul></div> </div></div>'"
+            + " ng-show='grid.appScope.ddlMatters.Id==2 || grid.appScope.ddlMatters.Id==3' ng-click='grid.appScope.UnpinMatter(row)'><a>Unpin this Matter</a></li></ul></div> </div></div>'",
+            //menuItems: [
+            // {
+            //     title: 'Outer Scope Alert',
+            //     icon: 'ui-grid-icon-info-circled',
+            //     action: function ($event) {
+            //         this.context.blargh(); // $scope.blargh() would work too, this is just an example
+            //     },
+            //     context: $scope
+            // }],
+            headerCellTemplate: headertemplate
         },
-            { field: 'matterClient', displayName: 'Client', enableCellEdit: true },
+            { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: headertemplate },
              //matterID 
     { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ngCellText">{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
      { field: 'matterModifiedDate', displayName: 'Modified Date', type: 'date', cellFilter: 'date:\'MMM dd,yyyy\'' },
@@ -408,7 +442,28 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             restrict: 'AE',
             link: function (scope, element, attrs) {
                 if (attrs.toggle == "popover") {
-                    $(element).popover();
+                    var obj = eval('(' + attrs.details + ')');
+                    $(element).popover({
+                        html: true,
+                        trigger: 'click',
+                        delay: 500,
+                        //template:
+                        //          '<div class="popover">\
+                        //             <div class="popover-header">\
+                        //                 <h3 class="popover-title"></h3>\
+                        //              </div>\
+                        //             <div class="popover-content">\
+                        //                  ' + obj.matterName + ' \
+                        //                  <div> <b>Client :</b> '+ obj.matterClient + '</div>\
+                        //                  <div><b>Client.Matter ID :</b> '+ obj.matterClientId + '.' + obj.matterID + '</div>\
+                        //                  <div><b>Sub area of law :</b> '+ obj.matterSubAreaOfLaw + '</div> \
+                        //                  <div><b>Responsible attorney</b> : '+ obj.matterResponsibleAttorney + '</div>\
+                        //                  <div><button ><a href="https://msmatter.sharepoint.com/sites/microsoft/SitePages" target="_blank">View matter details</a></button></div>\
+                        //                  <div><button  ng-click="Openuploadmodal()">Upload to a matter</button></div>\
+                        //             </div>\
+                        //           </div>'
+
+                    });
                 }
             }
         };
