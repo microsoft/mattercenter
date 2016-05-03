@@ -7,7 +7,7 @@
 function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource) {
     var vm = this;
     vm.selected = undefined;
-    // Onload show ui grid and hide error div
+    // Onload show ui grid and hide error div..
     //start
     $scope.divuigrid = true;
     $scope.nodata = false;
