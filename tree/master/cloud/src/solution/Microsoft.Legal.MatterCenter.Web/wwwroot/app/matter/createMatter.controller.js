@@ -1,11 +1,10 @@
 ﻿(function () {
     'use strict';
 
-    angular.module("matterMain")
-        .controller('createMatterController', ['$scope', '$state', '$stateParams', 'api',
+    var app=  angular.module("matterMain");
+        app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api',
         function ($scope, $state, $stateParams, api) {
             var cm = this;
-
             cm.clientNameList = [];
             cm.selectedClientName = null;
             cm.clientId = null;
@@ -14,16 +13,15 @@
             cm.areaOfLawTerms = [];
             cm.subAreaOfLawTerms = [];        
             cm.documentTypeLawTerms = [];
+            cm.selectedDocumentTypeLawTerms=[];
             cm.activeAOLTerm = null;
             cm.activeSubAOLTerm = null;
             cm.activeDocumentTypeLawTerm = null;
             cm.sectionName = "snOpenMatter";
             cm.removeDTItem = false;
-            
-           
+            cm.primaryMatterType = cm.errorPopUp = false;
             var optionsForClientGroup = new Object;
             var optionsForPracticeGroup = new Object;
-
             function getTaxonomyDetailsForClient(optionsForClientGroup, callback) {
                 api({
                     resource: 'matterResource',
@@ -33,7 +31,6 @@
                 });
 
             }
-
             function getTaxonomyDetailsForPractice(optionsForPracticeGroup, callback) {
                 api({
                     resource: 'matterResource',
@@ -41,12 +38,9 @@
                     data: optionsForPracticeGroup,
                     success: callback
                 });
-
             }
-
             optionsForClientGroup = {
                 Client: {
-
                     Url: "https://msmatter.sharepoint.com/sites/catalog"
                 },
                 TermStoreDetails: {
@@ -70,7 +64,7 @@
 
             //call back function for getting the clientNamesList
             getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
-
+                console.log(response);
 
                 cm.clientNameList = response.clientTerms;
                 cm.popupContainerBackground = "hide";// jQuery('#myModal').modal('show');
@@ -95,9 +89,11 @@
             }
 
             //function for closing the popup
-            cm.selectMatterTypePopUpClose = function () {               
-                cm.popupContainerBackground = "hide";
-                cm.popupContainer = "hide";
+            cm.selectMatterTypePopUpClose = function () {
+                if (cm.popupContainer == "Show") {
+                    cm.popupContainerBackground = "hide";
+                    cm.popupContainer = "hide";
+                } 
             }
             //function to get the clientId from ClientName dropdown
             cm.getSelectedClientValue = function (client) {
@@ -114,6 +110,7 @@
                     cm.subAreaOfLawTerms = cm.selectedPracticeGroup.areaTerms[0].subareaTerms;
                     cm.activeSubAOLTerm = cm.selectedPracticeGroup.areaTerms[0].subareaTerms[0];
                     cm.activeAOLTerm = cm.selectedPracticeGroup.areaTerms[0];
+                    cm.errorPopUp = false;
                 } else {
                     cm.areaOfLawTerms = cm.subAreaOfLawTerms = null;
 
@@ -123,7 +120,7 @@
 
             //function to get the subAOL items on selection of AOLTerm
             cm.selectAreaOfLawTerm = function (areaOfLawTerm) {
-
+                cm.errorPopUp = false;
                 cm.activeAOLTerm = areaOfLawTerm;
 
                 cm.subAreaOfLawTerms = areaOfLawTerm.subareaTerms;
@@ -132,6 +129,7 @@
             }
             ////function to for seclection of subAOL items 
             cm.selectSubAreaOfLawTerm = function (subAreaOfLawTerm) {
+                cm.errorPopUp = false;
                 cm.activeSubAOLTerm = subAreaOfLawTerm;
                 
             }
@@ -139,8 +137,10 @@
             cm.selectDocumentTemplateTypeLawTerm = function (documentTemplateTypeLawTerm) {
                 // alert(documentTemplateTypeLawTerm);
                 if (documentTemplateTypeLawTerm != null) {
+                    cm.errorPopUp = false;;
                     cm.removeDTItem = true;
                     cm.activeDocumentTypeLawTerm = documentTemplateTypeLawTerm;
+                    cm.primaryMatterType = true;
                 }
 
             }
@@ -150,15 +150,18 @@
                 if (cm.activeSubAOLTerm != null) {
                     angular.forEach(cm.documentTypeLawTerms, function (term) { //For loop
                         if (cm.activeSubAOLTerm.id == term.id) {// this line will check whether the data is existing or not
-
                             isThisNewDocTemplate = false;
                         }
                     });
                     if (isThisNewDocTemplate) {
-
+                        console.log(cm.selectedPracticeGroup);
+                        console.log(cm.activeAOLTerm);
+                        console.log(cm.activeSubAOLTerm);
+                       
                         cm.documentTypeLawTerms.push(cm.activeSubAOLTerm);
-                        cm.activeSubAOLTerm = null;
-
+                        cm.activeDocumentTypeLawTerm = null;
+                        //cm.primaryMatterType = true; alert(cm.primaryMatterType);
+                      //  cm.activeSubAOLTerm = null;
                     }
                 }
             }
@@ -169,6 +172,7 @@
                     var index = cm.documentTypeLawTerms.indexOf(cm.activeDocumentTypeLawTerm);
                     cm.documentTypeLawTerms.splice(index, 1);
                     cm.removeDTItem = false;
+                    cm.primaryMatterType = false;
                     cm.activeDocumentTypeLawTerm = null;
                 }
                
@@ -182,6 +186,7 @@
 
                     }
                     else {
+                      
                         alert("Incomplete");
                     }
                 }
@@ -191,7 +196,26 @@
             }
            
             cm.saveDocumentTemplates = function () {
+               
+                if (cm.primaryMatterType) {
+                    cm.errorPopUp = false;
+                    angular.forEach(cm.documentTypeLawTerms, function (term) {
+                        var primaryType = false;
+                        //For loop
+                        if (cm.activeDocumentTypeLawTerm.id == term.id) {// this line will check whether the data is existing or not
+                            primaryType = true;
+                        }
+                        term.primaryMatterType = primaryType;
+                        cm.popupContainerBackground = "hide";
+                        cm.popupContainer = "hide";
+                       
+                    });
 
+                    cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;
+                }
+                else {
+                    cm.errorPopUp=true;
+                }
             }
             //$scope.SelectModal= function(){
             //   // jQuery('#myModal').modal('show');
@@ -199,4 +223,11 @@
 
         }]);
 
+        app.filter('getAssociatedDocumentTemplatesCount', function () {
+            return function (input, splitChar) {
+
+                return input.split(splitChar).length;;
+            }
+        });
+       
 })();
