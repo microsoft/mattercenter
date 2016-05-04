@@ -31,6 +31,10 @@ angular.module('matterMain')
                   'getTaxonomyDetails': auth.attachCSRF({  
                       method: 'POST',  
                       url: '/api/v1/taxonomy/gettaxonomy'  
+                  }),
+                  'checkMatterExists': auth.attachCSRF({
+                      method: 'POST',  
+                      url: '/api/v1/matter/checkmatterexists'
                   })
               });
       }]);
