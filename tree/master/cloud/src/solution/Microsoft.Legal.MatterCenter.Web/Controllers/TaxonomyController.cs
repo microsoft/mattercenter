@@ -22,7 +22,6 @@ using Microsoft.AspNet.Authorization;
 using System.Net;
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
-using Microsoft.Legal.MatterCenter.Service.HelperClasses;
 using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Web.Common;
 #endregion
@@ -45,7 +44,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         private ITaxonomyRepository taxonomyRepository;
         private ICustomLogger customLogger;
         private LogTables logTables;
-
+        private IValidationFunctions validationFunctions;
         /// <summary>
         /// Constructor where all the required dependencies are injected
         /// </summary>
@@ -60,7 +59,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             IOptions<GeneralSettings> generalSettings,
             ISPOAuthorization spoAuthorization, 
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
-            ITaxonomyRepository taxonomyRepository, ICustomLogger customLogger, IOptions<LogTables> logTables)
+            ITaxonomyRepository taxonomyRepository, ICustomLogger customLogger, IOptions<LogTables> logTables, IValidationFunctions validationFunctions)
         {
             this.errorSettings = errorSettings.Value;
             this.taxonomySettings = taxonomySettings.Value;
@@ -70,6 +69,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             this.taxonomyRepository = taxonomyRepository;
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
+            this.validationFunctions = validationFunctions;
         }
          
         [HttpPost("gettaxonomy")]
@@ -89,13 +89,23 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;             
-                //ToDo: use the validation helper functions from the common folder
-                ValidationHelperFunctions.ErrorSettings = errorSettings;
-                errorResponse = ValidationHelperFunctions.TaxonomyValidation(termStoreViewModel.Client);
-                if (errorResponse != null && !String.IsNullOrWhiteSpace(errorResponse.Message))
+                ErrorResponse errorResponse = null;
+                var matterInformation = new MatterInformationVM()
                 {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    Client = new Client()
+                    {
+                        Url = termStoreViewModel.Client.Url
+                    }
+                };
+                var genericResponseVM = validationFunctions.IsMatterValid(matterInformation, 0, null); 
+                if (genericResponseVM != null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        ErrorCode = genericResponseVM.Code,
+                        Message = genericResponseVM.Value
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
 

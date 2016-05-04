@@ -34,12 +34,12 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string SpecialCharacterExpressionMatterId { get; set; }
         public string SpecialCharacterExpressionMatterDescription { get; set; }
         public string SpecialCharacterExpressionContentType { get; set; }
-        public string MatterIdLength { get; set; }
-        public string MatterNameLength { get; set; }
+        public int MatterIdLength { get; set; }
+        public int MatterNameLength { get; set; }
         public bool IsCreateCalendarEnabled { get; set; }
 
-        public string ContentTypeLength { get; set; }
-        public string MatterDescriptionLength { get; set; }
+        public int ContentTypeLength { get; set; }
+        public int MatterDescriptionLength { get; set; }
         public string UserPermissions { get; set; }
         public string CentralRepositoryUrl { get; set; }
         public string MatterLandingPageRepositoryName { get; set; }

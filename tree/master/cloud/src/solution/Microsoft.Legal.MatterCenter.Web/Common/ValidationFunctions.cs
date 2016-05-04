@@ -247,7 +247,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 else
                 {
                     var matterId = Regex.Match(matter.Id, matterSettings.SpecialCharacterExpressionMatterId, RegexOptions.IgnoreCase);
-                    if (int.Parse(matterSettings.MatterIdLength, CultureInfo.InvariantCulture) < matter.Id.Length || !matterId.Success)
+                    if (matterSettings.MatterIdLength < matter.Id.Length || !matterId.Success)
                     {
                         return GenericResponse(errorSettings.IncorrectInputMatterIdCode, errorSettings.IncorrectInputMatterIdMessage);
                     }
@@ -265,7 +265,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
             try
             {
-                if (!(int.Parse(ServiceConstants.ProvisionMatterCheckMatterExists, CultureInfo.InvariantCulture) == methodNumber) &&
+                if (!(int.Parse(ServiceConstants.PROVISION_MATTER_CHECK_MATTER_EXISTS, CultureInfo.InvariantCulture) == methodNumber) &&
                     !(int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture) == methodNumber))
                 {
                     if (0 >= matter.AssignUserNames.Count())
@@ -321,9 +321,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 return GenericResponse(errorSettings.IncorrectInputMatterNameCode, errorSettings.IncorrectInputMatterNameMessage);
             }
             var matterName = Regex.Match(matter.Name, matterSettings.SpecialCharacterExpressionMatterTitle, RegexOptions.IgnoreCase);
-            if (int.Parse(matterSettings.MatterNameLength, CultureInfo.InvariantCulture) < matter.Name.Length || matter.Name.Length != matterName.Length)
+            if (matterSettings.MatterNameLength < matter.Name.Length || matter.Name.Length != matterName.Length)
             {
-
                 return GenericResponse(errorSettings.IncorrectInputMatterNameCode, errorSettings.IncorrectInputMatterNameMessage);
             }
             return genericResponseVM;
@@ -349,7 +348,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 else
                 {
                     var matterDescription = Regex.Match(matter.Description, matterSettings.SpecialCharacterExpressionMatterDescription, RegexOptions.IgnoreCase);
-                    if (int.Parse(matterSettings.MatterDescriptionLength, CultureInfo.InvariantCulture) < matter.Description.Length || !matterDescription.Success)
+                    if (matter.Description.Length > matterSettings.MatterDescriptionLength  || !matterDescription.Success)
                     {
                         return GenericResponse(errorSettings.IncorrectInputMatterDescriptionCode, errorSettings.IncorrectInputMatterDescriptionMessage);
                     }
@@ -470,14 +469,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 foreach (string contentType in matter.ContentTypes)
                 {
                     var contentTypeCheck = Regex.Match(contentType, matterSettings.SpecialCharacterExpressionContentType, RegexOptions.IgnoreCase);
-                    if (contentTypeCheck.Success || int.Parse(matterSettings.ContentTypeLength, CultureInfo.InvariantCulture) < contentType.Length)
+                    if (!contentTypeCheck.Success || matterSettings.ContentTypeLength < contentType.Length)
                     {
                         return GenericResponse(errorSettings.IncorrectInputContentTypeCode, errorSettings.IncorrectInputContentTypeMessage);
                     }
                 }
                 var defaultContentTypeCheck = Regex.Match(matter.DefaultContentType, matterSettings.SpecialCharacterExpressionContentType, RegexOptions.IgnoreCase);
-                if (defaultContentTypeCheck.Success ||
-                    int.Parse(matterSettings.ContentTypeLength, CultureInfo.InvariantCulture) < matter.DefaultContentType.Length)
+                if (!defaultContentTypeCheck.Success ||
+                    matterSettings.ContentTypeLength < matter.DefaultContentType.Length)
                 {
                     return GenericResponse(errorSettings.IncorrectInputContentTypeCode, errorSettings.IncorrectInputContentTypeMessage);
                 }
@@ -500,8 +499,5 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
             return hasFullConrol;
         }
-
-
-
     }
 }

@@ -424,10 +424,13 @@ namespace Microsoft.Legal.MatterCenter.Service
         #endregion
 
         #region Matter Provision
+        /// <summary>
+        /// This method will check whether a matter already exists with a given name
+        /// </summary>
+        /// <param name="matterMetadataVM"></param>
+        /// <returns></returns>
         [HttpPost("checkmatterexists")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult CheckMatterExists([FromBody]MatterMetdataVM matterMetadataVM)
         {
             spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
@@ -451,7 +454,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 Client = client,
                 Matter = matter
             };
-            genericResponse = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.ProvisionMatterCheckMatterExists, 
+            genericResponse = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.PROVISION_MATTER_CHECK_MATTER_EXISTS, 
                 CultureInfo.InvariantCulture), null);
             if(genericResponse!=null)
             {
@@ -486,7 +489,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
                 else
                 {
-                    genericResponse = matterProvision.DeleteMatter(client, matter);
+                    genericResponse = matterProvision.DeleteMatter(matterMetadataVM as MatterVM);
                     errorResponse = new ErrorResponse()
                     {
                         Message = genericResponse.Value,
@@ -502,10 +505,13 @@ namespace Microsoft.Legal.MatterCenter.Service
             }                
         }
 
+        /// <summary>
+        /// This method will check whether a given security group already exists or not
+        /// </summary>
+        /// <param name="matterInformationVM"></param>
+        /// <returns></returns>
         [HttpPost("checksecuritygroupexists")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult CheckSecurityGroupExists([FromBody]MatterInformationVM matterInformationVM)
         {
             spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
@@ -559,16 +565,16 @@ namespace Microsoft.Legal.MatterCenter.Service
             }
         }
 
+        /// <summary>
+        /// This method will update a given matter information/configuration
+        /// </summary>
+        /// <param name="matterInformation"></param>
+        /// <returns></returns>
         [HttpPost("update")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
-        /// <summary>
-        /// Updates matter
-        /// </summary>        
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="details">Term Store object containing Term store data</param>
-        /// <returns>Returns JSON object to the client</returns>        ///
+      
         public IActionResult Update([FromBody]MatterInformationVM matterInformation)
         {
             string editMatterValidation = string.Empty;
@@ -683,17 +689,15 @@ namespace Microsoft.Legal.MatterCenter.Service
         }
 
 
-
+        /// <summary>
+        /// Updates matter metadata - Stamps properties to the created matter.
+        /// </summary>
+        /// <param name="matterMetdata"></param>
+        /// <returns></returns>
         [HttpPost("updatemetadata")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
-        /// <summary>
-        /// Updates matter metadata - Stamps properties to the created matter.
-        /// </summary>        
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="details">Term Store object containing Term store data</param>
-        /// <returns>Returns JSON object to the client</returns>        ///
+        [SwaggerResponse(HttpStatusCode.BadRequest)]        
         public IActionResult UpdateMetadata([FromBody]MatterMetdataVM matterMetdata)
         {
             string editMatterValidation = string.Empty;
@@ -730,7 +734,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                     matterMetdata.MatterConfigurations);
                 if (genericResponse != null)
                 {
-                    matterProvision.DeleteMatter(client, matter);
+                    matterProvision.DeleteMatter(matterMetdata as MatterVM);
                     errorResponse = new ErrorResponse()
                     {
                         Message = genericResponse.Value,
@@ -755,7 +759,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
                 catch (Exception ex)
                 {
-                    matterProvision.DeleteMatter(client, matter);
+                    matterProvision.DeleteMatter(matterMetdata as MatterVM);
                     customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                     throw;
                 }
@@ -768,10 +772,13 @@ namespace Microsoft.Legal.MatterCenter.Service
 
         }
 
+        /// <summary>
+        /// This method will assign user permission to the matter
+        /// </summary>
+        /// <param name="matterMetadataVM"></param>
+        /// <returns></returns>
         [HttpPost("assignuserpermissions")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult AssignUserPermissions([FromBody] MatterMetdataVM matterMetadataVM)
         {
             var client = matterMetadataVM.Client;
@@ -810,7 +817,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             }
             catch (Exception ex)
             {
-                matterProvision.DeleteMatter(client, matter);
+                matterProvision.DeleteMatter(matterMetadataVM as MatterVM);
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
@@ -823,12 +830,39 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="requestObject">Request Object containing SharePoint App Token</param>
         /// <param name="matterMetadata">Object containing metadata for Matter</param>
         /// <returns>true if success else false</returns>
-        [HttpPost("assigncontenttype")]
+        [HttpPost("deletematter")]
         [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        public IActionResult Delete([FromBody] MatterVM matterVM)
+        {
+            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            ErrorResponse errorResponse = null;
+            if (null == matterVM && null == matterVM.Client && null == matterVM.Matter && string.IsNullOrWhiteSpace(matterVM.Client.Url) && string.IsNullOrWhiteSpace(matterVM.Matter.Name))
+            {
+                errorResponse = new ErrorResponse()
+                {
+                    Message = errorSettings.MessageNoInputs,
+                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                    Description = "No input data is passed"
+                };
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+            }
+
+            GenericResponseVM genericResponse = matterProvision.DeleteMatter(matterVM);
+            return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+        }
+
+
+        /// <summary>
+        /// Assigns specified content types to the specified matter (document library).
+        /// </summary>
+        /// <param name="requestObject">Request Object containing SharePoint App Token</param>
+        /// <param name="matterMetadata">Object containing metadata for Matter</param>
+        /// <returns>true if success else false</returns>
+        [HttpPost("assigncontenttype")]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult AssignContentType([FromBody] MatterMetadata matterMetadata)
         {
+            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
             ErrorResponse errorResponse = null;
             if (null == matterMetadata && null == matterMetadata.Client && null == matterMetadata.Matter )
             {                
@@ -838,34 +872,49 @@ namespace Microsoft.Legal.MatterCenter.Service
                     ErrorCode = HttpStatusCode.BadRequest.ToString(),
                     Description = "No input data is passed"
                 };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-               
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);               
             }
 
             // For each value in the list of Content Type Names
             // Add that content Type to the Library
             Matter matter = matterMetadata.Matter;
             Client client = matterMetadata.Client;
-            try
+            var matterInformationVM = new MatterInformationVM()
             {
-                var matterInformationVM = new MatterInformationVM()
-                {
-                    Client = client,
-                    Matter = matter,
+                Client = client,
+                Matter = matter,
 
-                };
+            };
+            try
+            {                
                 GenericResponseVM genericResponse = validationFunctions.IsMatterValid(matterInformationVM, int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture), null);
-                if (genericResponse == null)
-                {                    
-                    matterProvision.DeleteMatter(client, matter);
+                if (genericResponse != null)
+                { 
+                    matterProvision.DeleteMatter(matterInformationVM as MatterVM);
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = genericResponse.Value,
+                        ErrorCode = genericResponse.Code.ToString()                       
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 genericResponse = matterProvision.AssignContentType(matterMetadata);
+                if (genericResponse != null && genericResponse.IsError==true)
+                {
+                    matterProvision.DeleteMatter(matterInformationVM as MatterVM);
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = genericResponse.Value,
+                        ErrorCode = genericResponse.Code.ToString()
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                }
                 return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
             }
             catch (Exception exception)
             {
                 ///// SharePoint Specific Exception
-                matterProvision.DeleteMatter(client, matter);
+                matterProvision.DeleteMatter(matterInformationVM as MatterVM);
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
@@ -878,13 +927,12 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="matterMetdataVM"></param>
         /// <returns></returns>
         [HttpPost("create")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult Create([FromBody] MatterMetdataVM matterMetdataVM)
         {
             ErrorResponse errorResponse = null;
             GenericResponseVM genericResponseVM = null;
+            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
             if (null == matterMetdataVM && null == matterMetdataVM.Client && null == matterMetdataVM.Matter && string.IsNullOrWhiteSpace(matterMetdataVM.Client.Url))
             {
                 errorResponse = new ErrorResponse()
@@ -898,7 +946,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             try
             {
                 genericResponseVM = matterProvision.CreateMatter(matterMetdataVM);
-                if (genericResponseVM != null)
+                if (genericResponseVM != null && genericResponseVM.IsError==true)
                 {
                     //Matter not created successfully
                     errorResponse = new ErrorResponse()
@@ -919,6 +967,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             }
             catch (Exception exception)
             {
+                matterProvision.DeleteMatter(matterMetdataVM as MatterVM);
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
@@ -930,11 +979,10 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="matterMetdataVM"></param>
         /// <returns></returns>
         [HttpPost("createlandingpage")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult CreateLandingPage([FromBody] MatterMetdataVM matterMetdataVM)
         {
+            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
             ErrorResponse errorResponse = null;
             GenericResponseVM genericResponseVM = null;
             //No valid input
@@ -954,7 +1002,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 genericResponseVM = matterProvision.CreateMatterLandingPage(matterMetdataVM);
                 if(genericResponseVM!=null)
                 {
-                    matterProvision.DeleteMatter(matterMetdataVM.Client, matterMetdataVM.Matter);
+                    matterProvision.DeleteMatter(matterMetdataVM as MatterVM);
                     //Matter landing page not created successfully
                     errorResponse = new ErrorResponse()
                     {
@@ -974,12 +1022,11 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception exception)
             {
                 //If there is error in creating matter landing page, delete all the information related to this matter
-                matterProvision.DeleteMatter(matterMetdataVM.Client, matterMetdataVM.Matter);
+                matterProvision.DeleteMatter(matterMetdataVM as MatterVM);
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
         }
-
         #endregion
     }
 }

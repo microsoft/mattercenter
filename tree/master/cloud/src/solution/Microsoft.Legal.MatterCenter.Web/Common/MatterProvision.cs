@@ -230,15 +230,17 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
             catch(Exception ex)
             {
-                DeleteMatter(client, matter);
+                DeleteMatter(matterMetadata as MatterVM);
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
             return returnFlag;
         }
 
-        public GenericResponseVM DeleteMatter(Client client, Matter matter)
+        public GenericResponseVM DeleteMatter(MatterVM matterVM)
         {
+            var client = matterVM.Client;
+            var matter = matterVM.Matter;
             GenericResponseVM genericResponse =   matterRepositoy.DeleteMatter(client, matter);
             return genericResponse;
         }
@@ -377,7 +379,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
                 if(genericResponseVM!=null)
                 {
-                    DeleteMatter(client, matter);
+                    DeleteMatter(matterMetadataVM as MatterVM);
                     return genericResponseVM;
                 }
                 if (!string.IsNullOrWhiteSpace(matter.Name))
@@ -536,48 +538,55 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             var matter = matterMetadataVM.Matter;
             var matterConfiguration = matterMetadataVM.MatterConfigurations;
             GenericResponseVM genericResponseVM = null;
-            using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
+            try
             {
-                if(!matterRepositoy.CheckPermissionOnList(clientContext, listNames.MatterConfigurationsList, PermissionKind.EditListItems))
+                using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
-                    return ServiceUtility.GenericResponse(errorSettings.UserNotSiteOwnerCode, errorSettings.UserNotSiteOwnerMessage);
-                }
-                var matterInformation = new MatterInformationVM()
-                {
-                    Client = client,
-                    Matter = matter
-                };
-
-                genericResponseVM = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.PROVISION_MATTER_CREATEMATTER), matterConfiguration);
-
-                if(genericResponseVM!=null)
-                {
-                    return ServiceUtility.GenericResponse(genericResponseVM.Code, genericResponseVM.Value);
-                }
-
-                genericResponseVM = CheckMatterExists(matterMetadataVM);
-
-                if (genericResponseVM != null)
-                {
-                    return ServiceUtility.GenericResponse(genericResponseVM.Code, genericResponseVM.Value);
-                }
-
-                if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
-                {
-                    if (Convert.ToBoolean(matter.Conflict.Identified, CultureInfo.InvariantCulture))
+                    if (!matterRepositoy.CheckPermissionOnList(clientContext, listNames.MatterConfigurationsList, PermissionKind.EditListItems))
                     {
-                        genericResponseVM = editFunctions.CheckSecurityGroupInTeamMembers(client, matter, matterMetadataVM.UserIds);
-                        if (genericResponseVM!=null)
-                        {                           
-                            return ServiceUtility.GenericResponse(errorSettings.IncorrectInputConflictIdentifiedCode, errorSettings.IncorrectInputConflictIdentifiedMessage);
-                        }
+                        return ServiceUtility.GenericResponse(errorSettings.UserNotSiteOwnerCode, errorSettings.UserNotSiteOwnerMessage);
+                    }
+                    var matterInformation = new MatterInformationVM()
+                    {
+                        Client = client,
+                        Matter = matter
+                    };
+
+                    genericResponseVM = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.PROVISION_MATTER_CREATEMATTER), matterConfiguration);
+
+                    if (genericResponseVM != null)
+                    {
+                        return ServiceUtility.GenericResponse(genericResponseVM.Code, genericResponseVM.Value);
                     }
 
-                    genericResponseVM = CreateMatter(clientContext, matterMetadataVM);
-                    
+                    genericResponseVM = CheckMatterExists(matterMetadataVM);
+
+                    if (genericResponseVM != null)
+                    {
+                        return ServiceUtility.GenericResponse(genericResponseVM.Code, genericResponseVM.Value);
+                    }
+
+                    if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
+                    {
+                        if (Convert.ToBoolean(matter.Conflict.Identified, CultureInfo.InvariantCulture))
+                        {
+                            genericResponseVM = editFunctions.CheckSecurityGroupInTeamMembers(client, matter, matterMetadataVM.UserIds);
+                            if (genericResponseVM != null)
+                            {
+                                return ServiceUtility.GenericResponse(errorSettings.IncorrectInputConflictIdentifiedCode, errorSettings.IncorrectInputConflictIdentifiedMessage);
+                            }
+                        }
+
+                        genericResponseVM = CreateMatter(clientContext, matterMetadataVM);
+
+                    }
                 }
+                return genericResponseVM;
             }
-            return genericResponseVM;
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         public GenericResponseVM CreateMatterLandingPage(MatterMetdataVM matterMetadataVM)
@@ -637,12 +646,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
         private GenericResponseVM CreateMatter(ClientContext clientContext, MatterMetdataVM matterMetadataVM)
         {
+            var client = matterMetadataVM.Client;
+            var matter = matterMetadataVM.Matter;
+            GenericResponseVM genericResponseVM = null;
             try
-            {
-                var client = matterMetadataVM.Client;
-                var matter = matterMetadataVM.Matter;
-                var matterConfiguration = matterMetadataVM.MatterConfigurations;
-                GenericResponseVM genericResponseVM = null;
+            {                
+                var matterConfiguration = matterMetadataVM.MatterConfigurations;                
                 Uri centralListURL = new Uri(string.Concat(matterSettings.CentralRepositoryUrl, ServiceConstants.FORWARD_SLASH, 
                     ServiceConstants.LISTS, ServiceConstants.FORWARD_SLASH, listNames.DMSMatterListName)); // Central Repository List URL  
                 IList<string> documentLibraryFolders = new List<string>();
@@ -714,7 +723,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
                 string oneNoteUrl = string.Concat(clientUrl.AbsolutePath, ServiceConstants.FORWARD_SLASH, 
                     matter.MatterGuid, matterSettings.OneNoteLibrarySuffix, ServiceConstants.FORWARD_SLASH, matter.MatterGuid);
-                string matterURL = matterRepositoy.AddOneNote(clientContext, client.Url, oneNoteUrl, matter.MatterGuid, matter.Name);
+                matterRepositoy.AddOneNote(clientContext, client.Url, oneNoteUrl, matter.MatterGuid, matter.Name);
                 if (null != matter.Conflict)
                 {
                     //Break permission for Matter library
@@ -738,10 +747,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     if(isMatterSaved==false)
                     {
                         genericResponseVM = ServiceUtility.GenericResponse(errorSettings.ErrorCodeAddTaskList, "Matter Not Saved");
-                        genericResponseVM.IsError = true;
+                        genericResponseVM.IsError = true;                        
                         return genericResponseVM;
                     }
                 }
+                genericResponseVM = new GenericResponseVM()
+                {
+                    Code = HttpStatusCode.OK.ToString(),
+                    Value = client.Url,
+                    IsError = false
+                };
                 return genericResponseVM;
             }
             catch (Exception ex)

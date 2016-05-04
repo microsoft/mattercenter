@@ -630,13 +630,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 throw;
             }
         }
-
-
-
         #endregion
 
-        #region Private Methods      
-
+        #region Private Methods
         /// <summary>
         /// Pins the record and associate to logged-in user.
         /// </summary>

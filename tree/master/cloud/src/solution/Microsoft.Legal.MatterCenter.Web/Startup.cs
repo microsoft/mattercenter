@@ -23,6 +23,7 @@ using Microsoft.Legal.MatterCenter.Service.Filters;
 using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
 using Microsoft.Legal.MatterCenter.Web.Common.Upload;
+using System.IO;
 #endregion
 
 
@@ -73,7 +74,8 @@ namespace Microsoft.Legal.MatterCenter.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            
+            createConfig(env);
+
             var log = loggerFactory.CreateLogger<Startup>();
             try
             {
@@ -223,6 +225,23 @@ namespace Microsoft.Legal.MatterCenter.Web
                 };
             });
         }
+
+        private void createConfig(IHostingEnvironment env)
+        {
+
+            string destPath = Path.Combine(env.WebRootPath, "app/config.js");
+            System.IO.File.WriteAllText(destPath, string.Empty);
+            TextWriter tw = new StreamWriter(destPath);
+            tw.WriteLine("var configs = { \"uri\":  {");
+            tw.WriteLine(" \"SPOsiteURL\": \"" + Configuration["General:SiteURL"] + "\",");
+            tw.WriteLine(" \"tenant\": \"" + Configuration["General:Tenant"] + "\",");
+            tw.WriteLine("}, \"ADAL\" : { ");
+            tw.WriteLine(" \"clientId\": \"" + Configuration["General:ClientId"] + "\"");
+            tw.WriteLine("}};");
+
+            tw.Close(); 
+        }
+
         #endregion
     }
 }

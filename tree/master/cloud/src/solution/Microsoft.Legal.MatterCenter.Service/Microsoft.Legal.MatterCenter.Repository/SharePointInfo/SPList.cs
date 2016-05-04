@@ -30,6 +30,7 @@ using Microsoft.SharePoint.Client.Taxonomy;
 using System.Text.RegularExpressions;
 using System.IO;
 using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Hosting;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -46,6 +47,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ICustomLogger customLogger;
         private LogTables logTables;
         private MailSettings mailSettings;
+        private IHostingEnvironment hostingEnvironment;
         #endregion
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             IOptions<CamlQueries> camlQueries,
             IOptions<SearchSettings> searchSettings,
             IOptions<ContentTypesConfig> contentTypesConfig,
-            ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<MailSettings> mailSettings)
+            ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<MailSettings> mailSettings, IHostingEnvironment hostingEnvironment)
         {
             this.searchSettings = searchSettings.Value;
             this.camlQueries = camlQueries.Value;
@@ -65,6 +67,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
             this.mailSettings = mailSettings.Value;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         public bool CreateList(ClientContext clientContext, ListInformation listInfo)
@@ -167,7 +170,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 Uri clientUrl = new Uri(clientAddressPath);
                 //ToDo: Need to validate the url path
-                string oneNotePath = ServiceConstants.ONE_NOTE_RELATIVE_FILE_PATH;
+                string oneNotePath = hostingEnvironment.MapPath(ServiceConstants.ONE_NOTE_RELATIVE_FILE_PATH);
                 byte[] oneNoteFile = System.IO.File.ReadAllBytes(oneNotePath);
                 Web web = clientContext.Web;
                 Microsoft.SharePoint.Client.File file = web.GetFolderByServerRelativeUrl(oneNoteLocation).Files.Add(new FileCreationInformation()
@@ -338,7 +341,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {           
             try
             {
-                return CheckPermissionOnList(url, listName, permission);
+                ClientContext clientContext = spoAuthorization.GetClientContext(url);
+                return CheckPermissionOnList(clientContext, listName, permission);
             }
             catch (Exception exception)
             {
@@ -358,7 +362,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             {
-                return CheckPermissionOnList(client.Url, listName, permission);
+                ClientContext clientContext = spoAuthorization.GetClientContext(client.Url);
+                return CheckPermissionOnList(clientContext, listName, permission);
             }
             catch (Exception exception)
             {

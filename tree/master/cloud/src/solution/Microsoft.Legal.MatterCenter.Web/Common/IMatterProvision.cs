@@ -9,7 +9,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
     {
         GenericResponseVM UpdateMatter(MatterInformationVM matterInformation);
         GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata);        
-        GenericResponseVM DeleteMatter(Client client, Matter matter);
+        GenericResponseVM DeleteMatter(MatterVM matterVM);
         GenericResponseVM SavConfigurations(SaveConfigurationsVM saveConfigurationsVM);
         PropertyValues GetStampedProperties(MatterVM matterVM);
         GenericResponseVM AssignUserPermissions(MatterMetdataVM matterMetadata);
