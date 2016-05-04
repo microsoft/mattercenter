@@ -38,10 +38,17 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 if (null != clientContext && null != contentTypesNames)
                 {
+                    //Web web = clientContext.Web;
+                    //contentTypeCollection = web.ContentTypes;
+                    //clientContext.Load(contentTypeCollection, contentType => contentType.Include(thisContentType => thisContentType.Name).
+                    //            Where(currContentType => currContentType.Group == contentTypesConfig.OneDriveContentTypeGroup));
+                    //clientContext.ExecuteQuery();
+                    //selectedContentTypeCollection = GetContentTypeList(contentTypesNames, contentTypeCollection.ToList());
+
                     Web web = clientContext.Web;
+                    string contentTypeName = contentTypesConfig.OneDriveContentTypeGroup.Trim();
                     contentTypeCollection = web.ContentTypes;
-                    clientContext.Load(contentTypeCollection, contentType => contentType.Include(thisContentType => thisContentType.Name).
-                                Where(currContentType => currContentType.Group == contentTypesConfig.OneDriveContentTypeGroup));
+                    clientContext.Load(contentTypeCollection, contentType => contentType.Include(thisContentType => thisContentType.Name).Where(currContentType => currContentType.Group == contentTypeName));
                     clientContext.ExecuteQuery();
                     selectedContentTypeCollection = GetContentTypeList(contentTypesNames, contentTypeCollection.ToList());
                 }
