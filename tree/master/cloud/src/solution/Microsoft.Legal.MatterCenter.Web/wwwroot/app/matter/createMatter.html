@@ -17,7 +17,7 @@
                 <div class="gutter"></div>
                 <label class="contentLabel small" id="clientId">Client ID</label>
 
-
+               
                 <div>
 
                     <select class="medium clear" ng-model="cm.selectedClientName" ng-change="cm.getSelectedClientValue()" ng-options="client.id as client.name for client in cm.clientNameList track by client.id">
@@ -27,17 +27,18 @@
                 </div>
                 <div class="gutter"></div>
                 <input title="Client ID" disabled="disabled" class="small" id="txtClientId" ng-model="cm.clientId" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" placeholder="">
+
                 <label class="contentLabel medium clear" id="enterMatterName"><span class="mandatory">*&nbsp;</span>Matter Name</label>
                 <div class="gutter"></div>
                 <label class="contentLabel small" id="enterMatterId"><span class="mandatory">*&nbsp;</span>Matter ID</label>
-                <input title="Matter Name" class="medium clear" id="txtMatterName" ng-model="cm.matterName" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="Enter a name for this matter" value="">
+                <input title="Matter Name" class="medium clear"  id="txtMatterName" ng-blur='cm.checkValidMatterName()' ng-model="cm.matterName" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="Enter a name for this matter" value="">
                 <div class="gutter"></div>
                 <input title="Matter ID" class="small" id="txtMatterId" ng-model="cm.matterId" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="Enter a matter ID" value="">
                 <label class="contentLabel large clear"><span class="mandatory description">*&nbsp;</span>Matter Description</label>
                 <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" maxlength="255" placeholder="Enter a brief description of the matter" rows="2" cols="400"></textarea>
                 <label class="contentLabel large clear"><span class="mandatory">*&nbsp;</span>Matter Type (click Select to define the practice group and area of law)</label>
                 <div class="large" id="documentTemplates">
-                    <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}'  ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style="cursor:default;" data-value="" data-foldernamespg="" data-practicegroup-id="" data-foldernamesaol="" data-areaoflaw-id="" data-subareaoflaw-id="" data-display-name="" data-isnofolderstructurepresent="" data-foldernamessal="" data-associated-document-template="" data-document-template="" data-areaoflaw="" data-practicegroup="">{{selectedDocumentTypeLawTerm.termName}} ({{selectedDocumentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
+                    <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}'  ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style="cursor:default;" data-value="{{$index}}" data-foldernamespg='{{cm.selectedPracticeGroup.folderNames}}' data-practicegroup-id='{{cm.selectedPracticeGroup.id}}' data-foldernamesaol='{{cm.activeAOLTerm.folderNames}}' data-areaoflaw-id='{{cm.activeAOLTerm.id}}' data-subareaoflaw-id='{{cm.activeSubAOLTerm.id}}' data-display-name='{{cm.activeSubAOLTerm.termName}}' data-isnofolderstructurepresent='{{cm.activeSubAOLTerm.isNoFolderStructurePresent}}' data-foldernamessal='{{cm.activeSubAOLTerm.folderNames}}' data-associated-document-template='{{cm.activeSubAOLTerm.documentTemplateNames}}' data-document-template='{{cm.activeSubAOLTerm.documentTemplates}}' data-areaoflaw='{{cm.activeAOLTerm.termName}}' data-practicegroup='{{cm.selectedPracticeGroup.termName}}'>{{selectedDocumentTypeLawTerm.termName}} ({{selectedDocumentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
                 </div>
                 <div class="gutter"></div>
                 <button class="button" id="btnLookup" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" ng-click="cm.selectMatterType()" value="Lookup">Select Type</button>
@@ -177,7 +178,7 @@
                     <div class="popUpFloatLeft popUpBorder " id="popupAOLBorder" style="height:213px;width:200px;">
                         <input class="popUpMDTextArea clear" ng-model="cm.searchAOLText" style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="Search by typing">
                         <div class="popUpCommonContent popUpMD" id="popupAOLContent">
-                            <div class='popUpMDContent ' style="padding:3px !important;" ng-repeat="areaOfLawTerm in cm.areaOfLawTerms | filter:cm.searchAOLText">
+                            <div class='popUpMDContent ' style="padding:3px !important;" ng-repeat="areaOfLawTerm in cm.areaOfLawTerms |  filter: {termName: cm.searchAOLText}">
                                 <div ng-class="{popUpSelected : cm.activeAOLTerm === areaOfLawTerm}" ng-click='cm.selectAreaOfLawTerm(areaOfLawTerm)' data-value='{{$index}}' documents='' data-foldernamesaol='{{areaOfLawTerm.folderNames}}' data-areaoflaw-id='{{areaOfLawTerm.id}}'>{{areaOfLawTerm.termName}}</div>
                             </div>
                         </div>
@@ -188,8 +189,8 @@
                     <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px;">
                         <input class="popUpMDTextArea clear" ng-model="cm.searchSubAOLText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                         <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
-                            <div class="popUpSALContent " ng-repeat='subAreaOfLawTerm in cm.subAreaOfLawTerms | filter:cm.searchSubAOLText' style="padding:3px !important;">
-                                <div ng-class="{popUpSelected : cm.activeSubAOLTerm === subAreaOfLawTerm}" ng-click='cm.selectSubAreaOfLawTerm(subAreaOfLawTerm)' data-value='{{$index}}' data-subareaoflaw-id='{{subAreaOfLawTerm.id}}' data-display-name='{{subAreaOfLawTerm.termName}}' data-isnofolderstructurepresent='{{subAreaOfLawTerm.isNoFolderStructurePresent}}' data-foldernamessal='{{subAreaOfLawTerm.folderNames}}' data-associated-document-template='{{subAreaOfLawTerm.documentTemplateNames}}' data-document-template='{{subAreaOfLawTerm.termName}}'>{{subAreaOfLawTerm.termName}}</div>
+                            <div class="popUpSALContent " ng-repeat='subAreaOfLawTerm in cm.subAreaOfLawTerms  | filter: {termName: cm.searchSubAOLText}' style="padding:3px !important;">
+                                <div ng-class="{popUpSelected : cm.activeSubAOLTerm === subAreaOfLawTerm}" ng-click='cm.selectSubAreaOfLawTerm(subAreaOfLawTerm)' data-value='{{$index}}' data-subareaoflaw-id='{{subAreaOfLawTerm.id}}' data-display-name='{{subAreaOfLawTerm.termName}}' data-isnofolderstructurepresent='{{subAreaOfLawTerm.isNoFolderStructurePresent}}' data-foldernamessal='{{subAreaOfLawTerm.folderNames}}' data-associated-document-template='{{subAreaOfLawTerm.documentTemplateNames}}' data-document-template='{{subAreaOfLawTerm.documentTemplates}}'>{{subAreaOfLawTerm.termName}}</div>
                             </div>
                         </div>
                     </div>
@@ -215,7 +216,7 @@
                         <div class="popUpCommonContent popDT">
                             <div class="popUpDTContent" style="padding:1px !important;"   ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
                                 <div  ng-class='{popUpSelected : cm.activeDocumentTypeLawTerm === documentTypeLawTerm}' ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'  
-                                     data-value='' 
+                                     data-value='{{$index}}' 
                                      data-foldernamespg='{{cm.selectedPracticeGroup.folderNames}}' 
                                      data-practicegroup-id='{{cm.selectedPracticeGroup.id}}' 
                                      data-foldernamesaol='{{cm.activeAOLTerm.folderNames}}'
@@ -225,7 +226,7 @@
                                       data-isnofolderstructurepresent='{{cm.activeSubAOLTerm.isNoFolderStructurePresent}}'
                                       data-foldernamessal='{{cm.activeSubAOLTerm.folderNames}}'
                                       data-associated-document-template='{{cm.activeSubAOLTerm.documentTemplateNames}}' 
-                                     data-document-template="" data-areaoflaw='{{cm.activeAOLTerm.termName}}'
+                                     data-document-template='{{cm.activeSubAOLTerm.documentTemplates}}' data-areaoflaw='{{cm.activeAOLTerm.termName}}'
                                      data-practicegroup='{{cm.selectedPracticeGroup.termName}}'>{{documentTypeLawTerm.termName}} ({{documentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
                             </div>
                         </div>
@@ -233,7 +234,7 @@
                 </div>
                 <div id="defaultMessageDiv">
                     <img id="infoImg" alt="info" src="../Images/information-blue.png">
-                    <span id="defaultMessage">Please select primary matter type before you save.</span>
+                    <span id="defaultMessage">Please select primary matter type before you save. </span>
                 </div>
                 <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries" type="button">Save</button>
             </div>
