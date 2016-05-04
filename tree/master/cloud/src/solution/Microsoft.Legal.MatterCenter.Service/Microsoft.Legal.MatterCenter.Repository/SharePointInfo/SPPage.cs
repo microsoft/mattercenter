@@ -169,7 +169,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 if (matterConfigurations.IsRSSSelected)
                 {
                     rssFeedWebPart = string.Format(CultureInfo.InvariantCulture, ServiceConstants.RSS_FEED_WEB_PART, WebUtility.UrlEncode(matter.Name));
-                    rssTitleWebPart = string.Format(CultureInfo.InvariantCulture, ServiceConstants.CONTENT_EDITOR_WEB_PART, string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_SECTION_CONTENT, contentEditorSectionIds[Convert.ToInt32(MatterLandingSection.RSSTitlePanel, CultureInfo.InvariantCulture)]));
+                    rssTitleWebPart = string.Format(CultureInfo.InvariantCulture, ServiceConstants.CONTENT_EDITOR_WEB_PART, 
+                        string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_SECTION_CONTENT, 
+                        contentEditorSectionIds[Convert.ToInt32(MatterLandingSection.RSSTitlePanel, CultureInfo.InvariantCulture)]));
                 }
 
                 ////Configure calendar Web Part XML
@@ -190,9 +192,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.STYLE_TAG, cssLink), headerWebPartSection);
                 headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.STYLE_TAG, commonCssLink), headerWebPartSection);
                 headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG_WITH_CONTENTS, string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_STAMP_PROPERTIES, matter.Name, matter.MatterGuid)), headerWebPartSection);
-                footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.STYLE_TAG, jsLinkMatterLandingPage), footerWebPartSection);
-                footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.STYLE_TAG, jsLinkCommon), footerWebPartSection);
-                footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.STYLE_TAG, jsLinkJQuery), footerWebPartSection);
+                footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG, jsLinkMatterLandingPage), footerWebPartSection);
+                footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG, jsLinkCommon), footerWebPartSection);
+                footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG, jsLinkJQuery), footerWebPartSection);
                 string headerWebPart = string.Format(CultureInfo.InvariantCulture, ServiceConstants.CONTENT_EDITOR_WEB_PART, headerWebPartSection);
                 string footerWebPart = string.Format(CultureInfo.InvariantCulture, ServiceConstants.CONTENT_EDITOR_WEB_PART, footerWebPartSection);
                 string oneNoteWebPart = string.Format(CultureInfo.InvariantCulture, ServiceConstants.CONTENT_EDITOR_WEB_PART, string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_SECTION_CONTENT, contentEditorSectionIds[Convert.ToInt32(MatterLandingSection.OneNotePanel, CultureInfo.InvariantCulture)]));

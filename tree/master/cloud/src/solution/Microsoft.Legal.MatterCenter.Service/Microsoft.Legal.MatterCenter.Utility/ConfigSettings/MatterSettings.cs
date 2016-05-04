@@ -52,6 +52,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string StampedPropertyResponsibleAttorney { get; set; }
         public string StampedPropertyTeamMembers { get; set; }
         public string StampedPropertyBlockedUploadUsers { get; set; }
+        public string StampedPropertyMatterCenterUserEmails { get; set; }
+
         public string StampedPropertyPracticeGroup { get; set; }
         public string StampedPropertyAreaOfLaw { get; set; }
         public string StampedPropertySubAreaOfLaw { get; set; }
@@ -70,7 +72,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string StampedPropertyDocumentTemplateCount { get; set; }
         public string StampedPropertyBlockedUsers { get; set; }
         public string StampedPropertySuccess { get; set; }
-        public string StampedPropertyMatterCenterUserEmails { get; set; }
+        
         public string PropertyNameVtiIndexedPropertyKeys { get; set; }
         public string ValidDateFormat { get; set; }
         public string ShareListColumnMatterPath { get; set; }

@@ -55,6 +55,17 @@ namespace Microsoft.Legal.MatterCenter.Models
         }
 
         /// <summary>
+        /// Gets or sets the responsible attorney email associated with the matter.
+        /// </summary>
+        /// <value>The list of responsible attorney email addresses.</value>
+
+        public string ResponsibleAttorneyEmail
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets the team members associated with the matter.
         /// </summary>
         /// <value>The team members.</value>

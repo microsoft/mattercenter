@@ -766,6 +766,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             }
             catch (Exception ex)
             {
+                matterProvision.DeleteMatter(matterMetdata as MatterVM);
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }

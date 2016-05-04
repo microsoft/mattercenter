@@ -469,13 +469,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 foreach (string contentType in matter.ContentTypes)
                 {
                     var contentTypeCheck = Regex.Match(contentType, matterSettings.SpecialCharacterExpressionContentType, RegexOptions.IgnoreCase);
-                    if (!contentTypeCheck.Success || matterSettings.ContentTypeLength < contentType.Length)
+                    if (contentTypeCheck.Success || matterSettings.ContentTypeLength < contentType.Length)
                     {
                         return GenericResponse(errorSettings.IncorrectInputContentTypeCode, errorSettings.IncorrectInputContentTypeMessage);
                     }
                 }
                 var defaultContentTypeCheck = Regex.Match(matter.DefaultContentType, matterSettings.SpecialCharacterExpressionContentType, RegexOptions.IgnoreCase);
-                if (!defaultContentTypeCheck.Success ||
+                if (defaultContentTypeCheck.Success ||
                     matterSettings.ContentTypeLength < matter.DefaultContentType.Length)
                 {
                     return GenericResponse(errorSettings.IncorrectInputContentTypeCode, errorSettings.IncorrectInputContentTypeMessage);

@@ -1052,7 +1052,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// </summary>
         public const int ZONE_INDEX = 1;
 
-
+        #region Web Part Constants
         /// <summary>
         /// XML definition of the left web part
         /// </summary>
@@ -1289,6 +1289,10 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// Matter landing stamp properties
         /// </summary>
         public const string MATTER_LANDING_STAMP_PROPERTIES = "var documentLibraryName = \"{0}\", isNewMatterLandingPage = true, documentLibraryGUID=\"{1}\";";
+        #endregion
+
+
+
         #endregion
     }
 }

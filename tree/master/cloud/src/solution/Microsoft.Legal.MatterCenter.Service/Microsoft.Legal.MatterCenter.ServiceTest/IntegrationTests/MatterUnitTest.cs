@@ -455,6 +455,70 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             };
             #endregion
 
+            #region Update Matter Metadata
+            
+            var ct = new List<string>();
+            ct.Add("Copyright");
+            ct.Add("");
+
+            var uploadBlockedUsers = new List<string>();
+            var docTemplateCount = new List<string>();
+            docTemplateCount.Add("1");
+
+            var matterMetadata = new MatterMetdataVM()
+            {
+                Client = new Client()
+                {
+                    Id = "100001",
+                    Name = "Microsoft",
+                    Url = "https://msmatter.sharepoint.com/sites/microsoft"
+                },
+                Matter = new Matter()
+                {
+                    Name = "Matter For Debugging Unit",
+                    Id = "Debug12341",
+                    Description = "Matter for debugging Unit",
+                    Conflict = new Conflict()
+                    {
+                        Identified = "True",
+                        CheckBy = "matteradmin@MSmatter.onmicrosoft.com",
+                        CheckOn = "05/03/2016",
+                        SecureMatter = "True"
+                    },
+                    BlockUserNames = blockUserNames,
+                    AssignUserNames = assignUserNames,
+                    AssignUserEmails = assignUserEmails,
+                    Roles = roles,
+                    MatterGuid = matterGuid,
+                    ContentTypes= ct,
+                    DefaultContentType= "Copyright",
+                    Permissions= permissions,
+                    DocumentTemplateCount= docTemplateCount
+                },
+                MatterConfigurations = new MatterConfigurations()
+                {
+                    IsConflictCheck=true,
+                    IsMatterDescriptionMandatory=true
+                },
+                MatterDetails = new MatterDetails()
+                {
+                    PracticeGroup = "Litigation;",
+                    AreaOfLaw= "Intellectual Property;",
+                    SubareaOfLaw= "Copyright;",
+                    ResponsibleAttorney= "SaiKiran Gudala;",
+                    ResponsibleAttorneyEmail= "SaiG@MSmatter.onmicrosoft.com;",
+                    UploadBlockedUsers= uploadBlockedUsers,
+                    TeamMembers= "SaiKiran Gudala;",
+                    RoleInformation= "{\"Responsible Attorney\":\"Venkat M(venkatm@MSmatter.onmicrosoft.com)\"}"
+                },
+                MatterProvisionFlags = new MatterProvisionFlags()
+                {
+                    SendEmailFlag = true,
+                    MatterLandingFlag = "true"
+                }
+            };
+            #endregion
+
             using (var testClient = testServer.CreateClient().AcceptJson())
             {
                 var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/matter/create", matterMetaDataVM);
@@ -480,11 +544,12 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                     result = response.Content.ReadAsJsonAsync<GenericResponseVM>().Result;
                 }
 
-                //Call Assign User Permission API
-
-                //Call Create matter landing page API
-                
-
+                if (result.IsError == false)
+                {
+                    //Call Assign Content Type API
+                    response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/matter/UpdateMetadata", matterMetadata);
+                    result = response.Content.ReadAsJsonAsync<GenericResponseVM>().Result;
+                }
                 Assert.NotNull(result);
             }
         }
