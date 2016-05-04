@@ -78,35 +78,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string DeleteMatterCode { get; set; }
         public string MatterDeletedSuccessfully { get; set; }
         public string MatterNotPresent { get; set; }
-        public bool IsContentCheck { get; set; }
-
-        public bool IsMajorVersionEnable { get; set; }
-        public bool IsMinorVersionEnable { get; set; }
-        public bool IsForceCheckOut { get; set; }
-        public string TitleListsPath { get; set; }
-
-        public string MattersListColumnTitle { get; set; }
-        public string MattersListColumnClientName { get; set; }
-        public string MattersListColumnClientID { get; set; }
-        public string MattersListColumnMatterName { get; set; }
-        public string MattersListColumnMatterID { get; set; }
-
-        public string MattersListColumnConflictCheckBy { get; set; }
-        public string MattersListColumnConflictCheckOn { get; set; }
-        public string MattersListColumnConflictIdentified { get; set; }
-        public string MattersListColumnBlockUsers { get; set; }
+        public bool IsContentCheck { get; set; }     
         
-        public string MattersListColumnManagingAttorney { get; set; }
-        public string MattersListColumnSupport { get; set; }
-        public string MatterLandingPageSections { get; set; }
 
-
-        public string CommonCSSFileLink { get; set; }
-        public string JQueryFileName { get; set; }
-        public string CommonFolderName { get; set; }
-        public string MatterLandingFolderName { get; set; }
-        public string MatterLandingCSSFileName { get; set; }
-        public string CommonJSFileLink { get; set; }
-        public string MatterLandingJSFileName { get; set; }
     }
 }

@@ -163,26 +163,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns></returns>
         public bool GetUserAccess(Client client) => spList.CheckPermissionOnList(client, listNames.SendMailListName, PermissionKind.EditListItems);
 
-
-        public IList<FieldUserValue> ResolveUserNames(ClientContext clientContext, IList<string> userNames)
-        {
-            List<FieldUserValue> userList = new List<FieldUserValue>();
-            foreach (string userName in userNames)
-            {
-                if (!string.IsNullOrWhiteSpace(userName))
-                {
-                    User user = clientContext.Web.EnsureUser(userName.Trim());
-                    ///// Only Fetch the User ID which is required
-                    clientContext.Load(user, u => u.Id);
-                    clientContext.ExecuteQuery();
-                    ///// Add the user to the first element of the FieldUserValue array.
-                    FieldUserValue tempUser = new FieldUserValue();
-                    tempUser.LookupId = user.Id;
-                    userList.Add(tempUser);
-                }
-            }           
-            return userList;
-        }
         /// <summary>
         /// Bulk resolves the specified users.
         /// </summary>
@@ -193,11 +173,26 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             {
-                
+                List<FieldUserValue> userList = new List<FieldUserValue>();
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
-                    return ResolveUserNames(clientContext, userNames);
-                    
+                    {
+                        foreach (string userName in userNames)
+                        {
+                            if (!string.IsNullOrWhiteSpace(userName))
+                            {
+                                User user = clientContext.Web.EnsureUser(userName.Trim());
+                                ///// Only Fetch the User ID which is required
+                                clientContext.Load(user, u => u.Id);
+                                clientContext.ExecuteQuery();
+                                ///// Add the user to the first element of the FieldUserValue array.
+                                FieldUserValue tempUser = new FieldUserValue();
+                                tempUser.LookupId = user.Id;
+                                userList.Add(tempUser);
+                            }
+                        }
+                    }
+                    return userList;
                 }
             }
             catch (Exception ex)

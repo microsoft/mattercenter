@@ -1,15 +1,15 @@
 ﻿<div style="margin:1%;">
     <div class="menu">
         <div class="menuTextGroup">
-            <div ><span title="Step 1: Select a client and provide basic information for your new matter." ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText menuTextSelected" data-section-num="1" data-section-name="snOpenMatter">1 Open Matter</span></div>
-            <div ><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter." class="menuText" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 Assign Permissions</span></div>
-            <div><span  ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team." class="menuText" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 Create and Notify</span></div>
+            <div><span title="Step 1: Select a client and provide basic information for your new matter." class="menuText menuTextSelected" data-section-num="1" data-section-name="snOpenMatter">1 Open Matter</span></div>
+            <div><span title="Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter." class="menuText" data-section-num="2" data-section-name="snConflictCheck">2 Assign Permissions</span></div>
+            <div><span title="Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team." class="menuText" data-section-num="3" data-section-name="snCreateAndShare">3 Create and Notify</span></div>
         </div>
     </div>
 
     <div class="content">
         <!-- Open matter section -->
-        <section class="sectionStep" id="snOpenMatter" ng-show='cm.sectionName=="snOpenMatter"' style="display: block;">
+        <section class="sectionStep" id="snOpenMatter" style="display: block;">
             <div class="sectionContent">
                 <label class="contentLabel medium" id="selectClient"><span class="mandatory">*&nbsp;</span>Client Name</label>
                 <div class="gutter"></div>
@@ -35,7 +35,7 @@
                 <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" maxlength="255" placeholder="Enter a brief description of the matter" rows="2" cols="400"></textarea>
                 <label class="contentLabel large clear"><span class="mandatory">*&nbsp;</span>Matter Type (click Select to define the practice group and area of law)</label>
                 <div class="large" id="documentTemplates">
-                    <div class="popUpSelected"  ng-repeat='documentTypeLawTerms in cm.documentTypeLawTerms' data-value="" data-foldernamespg="" data-practicegroup-id="" data-foldernamesaol="" data-areaoflaw-id="" data-subareaoflaw-id="" data-display-name="" data-isnofolderstructurepresent="" data-foldernamessal="" data-associated-document-template="" data-document-template="" data-areaoflaw="" data-practicegroup="">{{documentTypeLawTerms.termName}}</div>
+
                 </div>
                 <div class="gutter"></div>
                 <button class="button" id="btnLookup" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" ng-click="cm.selectMatterType()" value="Lookup">Select Type</button>
@@ -45,7 +45,7 @@
             </div>
         </section>
         <!-- Conflict check section -->
-        <section class="sectionStep " id="snConflictCheck" ng-show='cm.sectionName=="snConflictCheck"' style="display: block;">
+        <section class="sectionStep hide" id="snConflictCheck" style="display: none;">
             <div class="sectionContent">
                 <div id="conflictCheck">
                     <label class="medium chkConflictCheckParent conflictCheckPosition" id="chkConflictCheckParent">
@@ -119,7 +119,7 @@
             </div>
         </section>
         <!-- Create and share matter section -->
-        <section class="sectionStep " id="snCreateAndShare" ng-show='cm.sectionName=="snCreateAndShare"' style="display: block;">
+        <section class="sectionStep hide" id="snCreateAndShare" style="display: none;">
             <div class="sectionContent">
                 <label class="clear createNotifyDescription">You have entered all of the necessary information to create this matter. After you click Create and Notify, the matter will be created and all team members will receive an email containing a link to this matter’s location.</label>
                 <div class="ms-ChoiceField calendarPosition">
@@ -154,78 +154,74 @@
         </div>
     </div>
 
-    <div class="popupContainerBackground " ng-click="cm.popupContainerBackground=cm.popupContainer='hide'" ng-class="cm.popupContainerBackground"></div>
+    <div class="popupContainerBackground " ng-class="cm.popupContainerBackground"></div>
     <div class="popUpContainer " ng-class="cm.popupContainer" style="margin:auto !important; bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
-        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
+        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png">
         <div class="alignCenter">
             <header class="popUpHeader">
-                <div title="Select a Practice Group" class="popUpHeaderTitle popUpFloatLeft">Select a Practice Group</div>
+                <div title="Select a Practice Group" class="popUpHeaderTitle popUpFloatLeft" >Select a Practice Group</div>
                 <div class="popUpPracticeGroup clear">
                     <div class="popUpPGDiv">
-                        <select class="medium clear" ng-model='cm.selectedPracticeGroup' ng-change='cm.getSelectedPracticeGroupValue()' ng-options='practiceGroup.termName for practiceGroup in cm.pracitceGroupList'>
+                        <select class="medium clear" ng-model="cm.selectedPracticeGroup" ng-change="cm.getSelectedPracticeGroupValue()" ng-options=" practiceGroup.termName for practiceGroup in cm.pracitceGroupList">
                             <option value="" label="- Select a practice group -"></option>
                         </select>
                     </div>
-
+                   
                 </div>
             </header>
             <div class="popUpBody popUpFloatLeft" style="overflow:hidden;">
                 <div class="popUpMatterDescription popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divAOL">
                     <label title="Area of Law" class="popUpBodyHeader popUpFloatLeft">Area of Law</label>
                     <div class="popUpFloatLeft popUpBorder " id="popupAOLBorder" style="height:213px;width:200px;">
-                        <input class="popUpMDTextArea clear" ng-model="cm.searchAOLText" style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="Search by typing">
+                        <input class="popUpMDTextArea clear" style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="Search by typing">
                         <div class="popUpCommonContent popUpMD" id="popupAOLContent">
-                            <div class='popUpMDContent ' style="padding:3px !important;" ng-repeat="areaOfLawTerm in cm.areaOfLawTerms | filter:cm.searchAOLText">
-                                <div ng-class="{popUpSelected : cm.activeAOLTerm === areaOfLawTerm}" ng-click='cm.selectAreaOfLawTerm(areaOfLawTerm)' data-value='' documents='' data-foldernamesaol='{{areaOfLawTerm.folderNames}}' data-areaoflaw-id='{{areaOfLawTerm.id}}'>{{areaOfLawTerm.termName}}</div>
+                            <div class='popUpMDContent ' style="padding:3px !important;"  ng-repeat="areaOfLawTerm in cm.areaOfLawTerms">
+                                <div   ng-click='cm.selectedAreaOfLawTerm(areaOfLawTerm)'  data-value='' documents='' data-foldernamesaol='areaOfLawTerm.folderNames' data-areaoflaw-id='areaOfLawTerm.id'>{{areaOfLawTerm.termName}}</div>
                             </div>
-                        </div>
+                            </div>                         
                     </div>
                 </div>
                 <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divSAOL" style="width:28%;">
-                    <label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft">Sub Area of Law (select matter type)</label>
+                    <label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft" >Sub Area of Law (select matter type)</label>
                     <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px;">
-                        <input class="popUpMDTextArea clear" ng-model="cm.searchSubAOLText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
+                        <input class="popUpMDTextArea clear" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                         <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
-                            <div class="popUpSALContent " ng-repeat='subAreaOfLawTerm in cm.subAreaOfLawTerms | filter:cm.searchSubAOLText' style="padding:3px !important;">
-                                <div ng-class="{popUpSelected : cm.activeSubAOLTerm === subAreaOfLawTerm}" ng-click='cm.selectSubAreaOfLawTerm(subAreaOfLawTerm)' data-value='' data-subareaoflaw-id='{{subAreaOfLawTerm.id}}' data-display-name='{{subAreaOfLawTerm.termName}}' data-isnofolderstructurepresent='{{subAreaOfLawTerm.isNoFolderStructurePresent}}' data-foldernamessal='{{subAreaOfLawTerm.folderNames}}' data-associated-document-template='{{subAreaOfLawTerm.documentTemplates}}' data-document-template='{{subAreaOfLawTerm.documentTemplateNames}}'>{{subAreaOfLawTerm.termName}}</div>
+                            <div class="popUpSALContent " ng-repeat="subAreaOfLawTerm in cm.subAreaOfLawTerms"  style="padding:3px !important;">
+                                <div  data-value="" data-subareaoflaw-id="subAreaOfLawTerm.id" data-display-name="subAreaOfLawTerm.termName" data-isnofolderstructurepresent='subAreaOfLawTerm.isNoFolderStructurePresent' data-foldernamessal='subAreaOfLawTerm.folderNames' data-associated-document-template='subAreaOfLawTerm.documentTemplates' data-document-template='subAreaOfLawTerm.documentTemplateNames'>{{subAreaOfLawTerm.termName}}</div>
                             </div>
-                        </div>
+                            </div>
                     </div>
                 </div>
-                <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft" style="position:relative;margin-top:0px;" id="navigate">
+                <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft" style="position:relative;margin-top:0px;"id="navigate">
                     <div class="popUpLeftClick popUpPosAbs" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward" style="margin:0px;" alt="Left" src="../Images/forward_666.png">
+                        <img title="Add" class="iconForward" style="margin:0px;" alt="Left" src="../Images/forward_666.png">
                     </div>
                     <div class="popUpRightClick popUpPosAbs" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img  ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack" alt="Right" src="../Images/back-666.png">
+                        <img title="Remove" class="iconBack" alt="Right" src="../Images/back-666.png">
                     </div>
-                   
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft" id="divDocTemplate">
                     <div class="errorPopUpArea hide">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
-                        <div class="errTextArea popUpFloatRight"  style="margin:12px 25px 0px 0px;"><span class="selectDefaultContentTypeMessage" style="visibility: hidden;">Please select primary matter type</span></div>
+                        <div class="errTextArea popUpFloatRight"><span class="selectDefaultContentTypeMessage" style="visibility: hidden;">Please select primary matter type</span></div>
                     </div>
 
                     <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft">Matter Type</label>
                     <div class="popUpFloatLeft popUpBorder" style="height:213px; width:200px;">
                         <div class="popUpCommonContent popDT">
-                            <div class="popUpDTContent" style="padding:1px !important;"   ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
-                                <div  ng-class='{popUpSelected : cm.activeDocumentTypeLawTerm === documentTypeLawTerm}' ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'  data-value="" data-foldernamespg="" data-practicegroup-id="" data-foldernamesaol="" data-areaoflaw-id="" data-subareaoflaw-id="" data-display-name="" data-isnofolderstructurepresent="" data-foldernamessal="" data-associated-document-template="" data-document-template="" data-areaoflaw="" data-practicegroup="">{{documentTypeLawTerm.termName}}</div>
                             </div>
-                        </div>
                     </div>
                 </div>
                 <div id="defaultMessageDiv">
                     <img id="infoImg" alt="info" src="../Images/information-blue.png">
                     <span id="defaultMessage">Please select primary matter type before you save.</span>
                 </div>
-                <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries" type="button">Save</button>
+                <button class="SavePopUpEntries" type="button">Save</button>
             </div>
         </div>
     </div>
-
+   
 
     <!--<div class="modal fade" id="myModal" role="dialog">
         <div class="modal-dialog">

@@ -28,7 +28,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Authorization;
 #endregion
-namespace Microsoft.Legal.MatterCenter.Web
+namespace Microsoft.Legal.MatterCenter.Service
 {
     [Authorize]
     [Route("api/v1/shared")]

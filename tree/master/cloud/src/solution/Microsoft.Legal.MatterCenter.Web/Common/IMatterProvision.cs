@@ -8,7 +8,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
     public interface IMatterProvision
     {
         GenericResponseVM UpdateMatter(MatterInformationVM matterInformation);
-        GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata);        
+        GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata);
+        GenericResponseVM CreateMatter();
         GenericResponseVM DeleteMatter(Client client, Matter matter);
         GenericResponseVM SavConfigurations(SaveConfigurationsVM saveConfigurationsVM);
         PropertyValues GetStampedProperties(MatterVM matterVM);
@@ -17,7 +18,5 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM);
         GenericResponseVM CheckMatterExists(MatterMetdataVM matterMetadataVM);
         GenericResponseVM CheckSecurityGroupExists(MatterInformationVM matterInformationVM);
-        GenericResponseVM CreateMatter(MatterMetdataVM matterMetadataVM);
-        GenericResponseVM CreateMatterLandingPage(MatterMetdataVM matterMetadataVM);
     }
 }

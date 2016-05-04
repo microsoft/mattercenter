@@ -3,7 +3,6 @@ using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.SharePoint.Client;
-using Microsoft.SharePoint.Client.WebParts;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -204,7 +203,10 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         }
 
 
-        
+        public GenericResponseVM CreateMatter()
+        {
+            return null;
+        }
 
         public GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata)
         {
@@ -373,7 +375,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     MatterDetails = matterMetadataVM.MatterDetails
                 };
                 genericResponseVM = validationFunctions.IsMatterValid(matterInfo, 
-                    int.Parse(ServiceConstants.PROVISION_MATTER_ASSIGN_USER_PERMISSIONS, CultureInfo.InvariantCulture), null);
+                    int.Parse(ServiceConstants.ProvisionMatterAssignUserPermissions, CultureInfo.InvariantCulture), null);
 
                 if(genericResponseVM!=null)
                 {
@@ -529,243 +531,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
             return genericResponseVM;
         }
-
-        public GenericResponseVM CreateMatter(MatterMetdataVM matterMetadataVM)
-        {
-            var client = matterMetadataVM.Client;
-            var matter = matterMetadataVM.Matter;
-            var matterConfiguration = matterMetadataVM.MatterConfigurations;
-            GenericResponseVM genericResponseVM = null;
-            using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
-            {
-                if(!matterRepositoy.CheckPermissionOnList(clientContext, listNames.MatterConfigurationsList, PermissionKind.EditListItems))
-                {
-                    return ServiceUtility.GenericResponse(errorSettings.UserNotSiteOwnerCode, errorSettings.UserNotSiteOwnerMessage);
-                }
-                var matterInformation = new MatterInformationVM()
-                {
-                    Client = client,
-                    Matter = matter
-                };
-
-                genericResponseVM = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.PROVISION_MATTER_CREATEMATTER), matterConfiguration);
-
-                if(genericResponseVM!=null)
-                {
-                    return ServiceUtility.GenericResponse(genericResponseVM.Code, genericResponseVM.Value);
-                }
-
-                genericResponseVM = CheckMatterExists(matterMetadataVM);
-
-                if (genericResponseVM != null)
-                {
-                    return ServiceUtility.GenericResponse(genericResponseVM.Code, genericResponseVM.Value);
-                }
-
-                if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
-                {
-                    if (Convert.ToBoolean(matter.Conflict.Identified, CultureInfo.InvariantCulture))
-                    {
-                        genericResponseVM = editFunctions.CheckSecurityGroupInTeamMembers(client, matter, matterMetadataVM.UserIds);
-                        if (genericResponseVM!=null)
-                        {                           
-                            return ServiceUtility.GenericResponse(errorSettings.IncorrectInputConflictIdentifiedCode, errorSettings.IncorrectInputConflictIdentifiedMessage);
-                        }
-                    }
-
-                    genericResponseVM = CreateMatter(clientContext, matterMetadataVM);
-                    
-                }
-            }
-            return genericResponseVM;
-        }
-
-        public GenericResponseVM CreateMatterLandingPage(MatterMetdataVM matterMetadataVM)
-        {
-            var client = matterMetadataVM.Client;
-            var matter = matterMetadataVM.Matter;
-            var matterConfigurations = matterMetadataVM.MatterConfigurations;
-            GenericResponseVM genericResponseVM = null;
-            int matterLandingPageId;
-            var matterInformation = new MatterInformationVM()
-            {
-                Client = client,
-                Matter = matter
-            };
-
-            genericResponseVM = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.PROVISIONMATTER_MATTER_LANDING_PAGE), matterConfigurations);
-
-            if (genericResponseVM != null)
-            {
-                return ServiceUtility.GenericResponse(genericResponseVM.Code, genericResponseVM.Value);
-            }
-            //// Create Matter Landing Web Part Page
-            string pageName = string.Format(CultureInfo.InvariantCulture, "{0}{1}", matter.MatterGuid, ServiceConstants.ASPX_EXTENSION);
-            using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
-            {
-                matterLandingPageId = matterRepositoy.CreateWebPartPage(clientContext, pageName, ServiceConstants.DefaultLayout, 
-                    ServiceConstants.MasterPageGallery, matterSettings.MatterLandingPageRepositoryName, matter.Name);
-                if (0 <= matterLandingPageId)
-                {
-                    Uri uri = new Uri(client.Url);
-                    SharePoint.Client.Web web = clientContext.Web;
-
-                    bool isCopyRoleAssignment = CopyRoleAssignment(matter.Conflict.Identified, matter.Conflict.SecureMatter);
-                    matterRepositoy.BreakItemPermission(clientContext, matterSettings.MatterLandingPageRepositoryName, matterLandingPageId, isCopyRoleAssignment);
-                    matterRepositoy.SetItemPermission(clientContext, matter.AssignUserEmails, matterSettings.MatterLandingPageRepositoryName, 
-                        matterLandingPageId, matter.Permissions);
-                    //// Configure All Web Parts
-                    string[] webParts = matterRepositoy.ConfigureXMLCodeOfWebParts(client, matter, clientContext, 
-                        pageName, uri, web, matterConfigurations);
-                    Microsoft.SharePoint.Client.File file = web.GetFileByServerRelativeUrl(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", uri.AbsolutePath, ServiceConstants.FORWARD_SLASH, matterSettings.MatterLandingPageRepositoryName.Replace(ServiceConstants.SPACE, string.Empty), ServiceConstants.FORWARD_SLASH, pageName));
-                    clientContext.Load(file);
-                    clientContext.ExecuteQuery();
-                    LimitedWebPartManager limitedWebPartManager = file.GetLimitedWebPartManager(PersonalizationScope.Shared);
-                    WebPartDefinition webPartDefinition = null;
-                    string[] zones = { ServiceConstants.HEADER_ZONE, ServiceConstants.TOP_ZONE, ServiceConstants.RIGHT_ZONE, ServiceConstants.TOP_ZONE, ServiceConstants.RIGHT_ZONE, ServiceConstants.FOOTER_ZONE, ServiceConstants.RIGHT_ZONE, ServiceConstants.RIGHT_ZONE };
-                    matterRepositoy.AddWebPart(clientContext, limitedWebPartManager, webPartDefinition, webParts, zones);
-                    return genericResponseVM;
-                }
-                else
-                {
-                    return ServiceUtility.GenericResponse(errorSettings.ErrorCodeMatterLandingPageExists, errorSettings.ErrorCodeMatterLandingPageExists);
-                }
-            }
-        }
-
         #region private functions
-
-        private GenericResponseVM CreateMatter(ClientContext clientContext, MatterMetdataVM matterMetadataVM)
-        {
-            try
-            {
-                var client = matterMetadataVM.Client;
-                var matter = matterMetadataVM.Matter;
-                var matterConfiguration = matterMetadataVM.MatterConfigurations;
-                GenericResponseVM genericResponseVM = null;
-                Uri centralListURL = new Uri(string.Concat(matterSettings.CentralRepositoryUrl, ServiceConstants.FORWARD_SLASH, 
-                    ServiceConstants.LISTS, ServiceConstants.FORWARD_SLASH, listNames.DMSMatterListName)); // Central Repository List URL  
-                IList<string> documentLibraryFolders = new List<string>();
-                Dictionary<string, bool> documentLibraryVersioning = new Dictionary<string, bool>();
-                Uri clientUrl = new Uri(client.Url);
-
-                ListInformation listInformation = new ListInformation();
-                listInformation.name = matter.Name;
-                listInformation.description = matter.Description;
-                listInformation.folderNames = matter.FolderNames;
-                listInformation.isContentTypeEnable = true;
-                listInformation.versioning = new VersioningInfo();
-                listInformation.versioning.EnableVersioning = matterSettings.IsMajorVersionEnable;
-                listInformation.versioning.EnableMinorVersions = matterSettings.IsMinorVersionEnable;
-                listInformation.versioning.ForceCheckout = matterSettings.IsForceCheckOut;
-                listInformation.Path = matter.MatterGuid;
-
-                matterRepositoy.CreateList(clientContext, listInformation);
-
-                documentLibraryVersioning.Add("EnableVersioning", false);
-                documentLibraryFolders.Add(matter.MatterGuid);
-                listInformation.name = matter.Name + matterSettings.OneNoteLibrarySuffix;
-                listInformation.folderNames = documentLibraryFolders;
-                listInformation.versioning.EnableVersioning = false;
-                listInformation.versioning.EnableMinorVersions = false;
-                listInformation.versioning.ForceCheckout = false;
-                listInformation.Path = matter.MatterGuid + matterSettings.OneNoteLibrarySuffix;
-                matterRepositoy.CreateList(clientContext, listInformation);
-
-                bool isCopyRoleAssignment = CopyRoleAssignment(matter.Conflict.Identified, matter.Conflict.SecureMatter);
-                //create calendar list if create calendar flag is enabled and break its permissions
-                string calendarName = string.Concat(matter.Name, matterSettings.CalendarNameSuffix);
-                string taskListName = string.Concat(matter.Name, matterSettings.TaskNameSuffix);
-
-                if (matterSettings.IsCreateCalendarEnabled && matterConfiguration.IsCalendarSelected)
-                {
-                    ListInformation calendarInformation = new ListInformation();
-                    calendarInformation.name = calendarName;
-                    calendarInformation.isContentTypeEnable = false;
-                    calendarInformation.templateType = ServiceConstants.CALENDAR_NAME;
-                    calendarInformation.Path = matterSettings.TitleListsPath + matter.MatterGuid + matterSettings.CalendarNameSuffix;
-
-                    if (matterRepositoy.CreateList(clientContext, calendarInformation))
-                    {
-                        matterRepositoy.BreakPermission(clientContext, calendarName, isCopyRoleAssignment);
-                    }
-                    else
-                    {                        
-                        return ServiceUtility.GenericResponse(errorSettings.ErrorCodeAddCalendarList, errorSettings.ErrorMessageAddCalendarList);
-                    }
-                }
-
-                if (matterConfiguration.IsTaskSelected)
-                {
-                    ListInformation taskListInformation = new ListInformation();
-                    taskListInformation.name = taskListName;
-                    taskListInformation.isContentTypeEnable = false;
-                    taskListInformation.templateType = ServiceConstants.TASK_LIST_TEMPLATE_TYPE;
-                    taskListInformation.Path = matterSettings.TitleListsPath + matter.MatterGuid + matterSettings.TaskNameSuffix;
-                    if (matterRepositoy.CreateList(clientContext, taskListInformation))
-                    {
-                        matterRepositoy.BreakPermission(clientContext, taskListName, isCopyRoleAssignment);
-                    }
-                    else
-                    {                        
-                        return ServiceUtility.GenericResponse(errorSettings.ErrorCodeAddTaskList, errorSettings.ErrorMessageAddTaskList);
-                    }
-                }
-
-                string oneNoteUrl = string.Concat(clientUrl.AbsolutePath, ServiceConstants.FORWARD_SLASH, 
-                    matter.MatterGuid, matterSettings.OneNoteLibrarySuffix, ServiceConstants.FORWARD_SLASH, matter.MatterGuid);
-                string matterURL = matterRepositoy.AddOneNote(clientContext, client.Url, oneNoteUrl, matter.MatterGuid, matter.Name);
-                if (null != matter.Conflict)
-                {
-                    //Break permission for Matter library
-                    matterRepositoy.BreakPermission(clientContext, matter.Name, isCopyRoleAssignment);
-
-                    //Break permission for OneNote document library
-                    string oneNoteLibraryName = string.Concat(matter.Name, matterSettings.OneNoteLibrarySuffix);
-                    matterRepositoy.BreakPermission(clientContext, oneNoteLibraryName, isCopyRoleAssignment);
-                }
-
-                genericResponseVM = validationFunctions.RoleCheck(matter);
-                if(genericResponseVM==null)
-                {
-                    string centralList = Convert.ToString(centralListURL, CultureInfo.InvariantCulture);
-                    string matterSiteURL = centralList.Substring(0, centralList.LastIndexOf(string.Concat(ServiceConstants.FORWARD_SLASH, 
-                        ServiceConstants.LISTS, ServiceConstants.FORWARD_SLASH), StringComparison.OrdinalIgnoreCase));
-                    string matterListName = centralList.Substring(centralList.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
-
-                    
-                    bool isMatterSaved = matterRepositoy.SaveMatter(client, matter, matterListName, matterConfiguration, matterSiteURL);
-                    if(isMatterSaved==false)
-                    {
-                        genericResponseVM = ServiceUtility.GenericResponse(errorSettings.ErrorCodeAddTaskList, "Matter Not Saved");
-                        genericResponseVM.IsError = true;
-                        return genericResponseVM;
-                    }
-                }
-                return genericResponseVM;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-
-        /// <summary>
-        /// Checks whether to retain previous users while breaking permission
-        /// </summary>
-        /// <param name="conflictIdentified">Conflict identified information</param>
-        /// <param name="matterSecured">Security information</param>
-        /// <returns>Flag to indicate whether to retain the previous users</returns>
-        internal static bool CopyRoleAssignment(string conflictIdentified, string matterSecured)
-        {
-            bool isBreakPermission = true;
-            if (Convert.ToBoolean(conflictIdentified, CultureInfo.InvariantCulture) || Convert.ToBoolean(matterSecured, CultureInfo.InvariantCulture))
-            {
-                isBreakPermission = false;
-            }
-            return isBreakPermission;
-        }
 
         /// <summary>
         /// Extracts matter details from matter library property bag.

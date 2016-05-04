@@ -175,7 +175,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 {
                     PageNumber = 1,
                     ItemsPerPage = 10,
-                    SearchTerm = "M",
+                    SearchTerm = "New Matter",
                     Filters = new FilterObject() { },
                     Sort = new SortObject()
                     {
@@ -214,18 +214,6 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             using (var testClient = testServer.CreateClient().AcceptJson())
             {
                 var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/matter/checkmatterexists", matterMetadataVM);
-                var result = response.Content.ReadAsJsonAsync<GenericResponseVM>().Result;
-                Assert.NotNull(result);
-            }
-        }
-
-        [Fact]
-        public async void Get_Matter_Configurations()
-        {
-            var siteCollectionPath = "https://msmatter.sharepoint.com/sites/microsoft";
-            using (var testClient = testServer.CreateClient().AcceptJson())
-            {
-                var response = await testClient.PostAsJsonAsync("http://localhost:58775/api/v1/matter/GetConfigurations", siteCollectionPath);
                 var result = response.Content.ReadAsJsonAsync<GenericResponseVM>().Result;
                 Assert.NotNull(result);
             }

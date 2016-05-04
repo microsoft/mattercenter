@@ -12,7 +12,6 @@
 
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.SharePoint.Client;
-using Microsoft.SharePoint.Client.WebParts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -55,18 +54,5 @@ namespace Microsoft.Legal.MatterCenter.Repository
         GenericResponseVM AssignContentTypeHelper(MatterMetadata matterMetadata, ClientContext clientContext, IList<ContentType> contentTypeCollection, Client client, Matter matter);
         List<string> Exists(Client client, ReadOnlyCollection<string> lists);
         bool IsPageExists(ClientContext clientContext, string pageUrl);
-        bool CheckPermissionOnList(ClientContext clientContext, string listName, PermissionKind permission);
-        bool CreateList(ClientContext clientContext, ListInformation listInformation);
-        bool BreakPermission(ClientContext clientContext, string libraryName, bool isCopyRoleAssignment);
-        string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle);
-        bool SaveMatter(Client client, Matter matter, string matterListName, MatterConfigurations matterConfigurations, string matterSiteURL);
-        int CreateWebPartPage(ClientContext clientContext, string pageName, string layout, string masterpagelistName, string listName, string pageTitle);
-        bool BreakItemPermission(ClientContext clientContext, string listName, int listItemId, bool isCopyRoleAssignment);
-        bool SetItemPermission(ClientContext clientContext, IList<IList<string>> assignUserName, string listName, int listItemId, IList<string> permissions);
-        string[] ConfigureXMLCodeOfWebParts(Client client, Matter matter, ClientContext clientContext, string pageName, Uri uri,
-            Web web, MatterConfigurations matterConfigurations);
-
-        bool AddWebPart(ClientContext clientContext, LimitedWebPartManager limitedWebPartManager, WebPartDefinition webPartDefinition,
-            string[] webParts, string[] zones);
     }
 }

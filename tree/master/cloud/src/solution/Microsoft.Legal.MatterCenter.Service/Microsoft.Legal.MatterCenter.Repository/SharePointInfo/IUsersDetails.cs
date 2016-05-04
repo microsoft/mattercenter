@@ -26,7 +26,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         Users GetLoggedInUserDetails(ClientContext clientContext);
         Users GetLoggedInUserDetails(Client client);
         IList<FieldUserValue> ResolveUserNames(Client client, IList<string> userNames);
-        IList<FieldUserValue> ResolveUserNames(ClientContext clientContext, IList<string> userNames);
         List<Tuple<int, Principal>> GetUserPrincipal(Client client, Matter matter, IList<string> userIds);
     }
 }
