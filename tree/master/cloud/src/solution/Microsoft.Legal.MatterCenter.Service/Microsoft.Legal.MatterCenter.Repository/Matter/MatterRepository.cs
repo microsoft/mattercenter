@@ -406,7 +406,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         matterSettings.MatterLandingPageRepositoryName.Replace(ServiceConstants.SPACE, string.Empty), 
                         ServiceConstants.FORWARD_SLASH, matter.MatterGuid, ServiceConstants.ASPX_EXTENSION);
                     spPage.Delete(clientContext, matterLandingPageUrl);
-                    return ServiceUtility.GenericResponse("", "Matter updated successfully");
+                    return ServiceUtility.GenericResponse("", "Matter deleted successfully");
                 }
                 else
                 {               

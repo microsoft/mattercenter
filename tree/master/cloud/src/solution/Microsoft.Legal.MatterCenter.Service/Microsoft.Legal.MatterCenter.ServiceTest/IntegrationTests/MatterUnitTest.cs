@@ -501,6 +501,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 Matter = new Matter()
                 {
                     Name = "Matter For Debugging Unit",
+                    MatterGuid = "1C0B1194EBF746DE829B8432A130EED3"
                 }
             };
 
