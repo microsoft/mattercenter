@@ -5,11 +5,25 @@
         app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api',
         function ($scope, $state, $stateParams, api) {
             var cm = this;
-            cm.clientNameList = [];
-            cm.selectedClientName = null;
-            cm.clientId = null;
-            cm.popupContainerBackground = "Show";
-            cm.popupContainer = "hide";
+            var oPageOneState={
+                ClientValue: [],
+                ClientId: "",
+                MatterName: "",
+                MatterId: "",
+                MatterDescription: "",
+                ContentTypes: [],
+                matterMandatory: "",
+                oAreaOfLawTerms: [],
+                oSubAreaOfLawTerms: [],
+                oSelectedDocumentTypeLawTerms:[]
+            }
+            cm.clientId = "";
+            cm.selectedClientName = "";
+            cm.matterName="";
+            cm.matterId="";
+            cm.matterDescription="";
+
+            cm.clientNameList = [];           
             cm.areaOfLawTerms = [];
             cm.subAreaOfLawTerms = [];        
             cm.documentTypeLawTerms = [];
@@ -17,11 +31,16 @@
             cm.activeAOLTerm = null;
             cm.activeSubAOLTerm = null;
             cm.activeDocumentTypeLawTerm = null;
+            cm.popupContainerBackground = "Show";
+            cm.popupContainer = "hide";
+
             cm.sectionName = "snOpenMatter";
             cm.removeDTItem = false;
             cm.primaryMatterType = cm.errorPopUp = false;
+
             var optionsForClientGroup = new Object;
             var optionsForPracticeGroup = new Object;
+            var optionsForCheckMatterName = new Object;
             function getTaxonomyDetailsForClient(optionsForClientGroup, callback) {
                 api({
                     resource: 'matterResource',
@@ -36,6 +55,15 @@
                     resource: 'matterResource',
                     method: 'getTaxonomyDetails',
                     data: optionsForPracticeGroup,
+                    success: callback
+                });
+            }
+
+            function getCheckValidMatterName(optionsForCheckMatterName, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'checkMatterExists',
+                    data: optionsForCheckMatterName,
                     success: callback
                 });
             }
@@ -58,9 +86,24 @@
                 TermStoreDetails: {
                     TermGroup: "MatterCenterTerms",
                     TermSetName: "Practice Groups",
-                    CustomPropertyName: "ClientURL"
+                    CustomPropertyName: "ContentTypeName",
+                    DocumentTemplatesName:"DocumentTemplates"
                 }
             }
+
+            optionsForCheckMatterName={
+                Client: {
+
+                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                },
+                Matter: {
+                    MatterGuid: "",
+                    Name:cm.matterName.trim()
+                }
+            }
+
+
+            
 
             //call back function for getting the clientNamesList
             getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
@@ -71,6 +114,9 @@
 
 
             });
+
+
+           
 
             //calls this function when selectType button clicks
             cm.selectMatterType = function () {
@@ -177,22 +223,79 @@
                 }
                
             }
+            cm.checkValidMatterName = function () {
+                optionsForCheckMatterName.Matter.Name = cm.matterName.trim();
+                getCheckValidMatterName(optionsForCheckMatterName, function (response) {
+                    if (response.code != 200) {
+                        alert("Matter Name already Exists");
+                    } else {
+                        alert("success");
+                    }
+                });
 
+            }
 
             cm.navigateToSecondSection = function (sectionName) {
-                if (sectionName == "snConflictCheck") {
-                    if (cm.clientId != null && cm.selectedClientName != null && (cm.matterName != null || cm.matterName.trim() != '') && (cm.matterId != null || cm.matterId.trim() != '') && (cm.matterDescription != null || cm.matterDescription.trim() != '')) {
-                        cm.sectionName = sectionName;
+                if ("" !== cm.selectedClientName.trim() && null!==cm.selectedClientName) {
+                    if ("" !== cm.clientId.trim() && null !== cm.clientId) {
+                        if ("" != cm.matterName.trim() && null !== cm.matterName) {
+                            if ("" !== cm.matterId.trim() && null != cm.matterId)
+                            {
+                                if ("" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
+                                    alert(cm.selectedDocumentTypeLawTerms.length);
+                                    if (cm.selectedDocumentTypeLawTerms.length > 0) {
+
+                                        oPageOneState.ClientValue.push({ ClientName: cm.clientNameList });
+                                        oPageOneState.ClientId = cm.clientId.trim();
+                                        oPageOneState.MatterTitle = cm.matterName.trim();
+                                        oPageOneState.MatterId = cm.matterId.trim();
+                                        oPageOneState.MatterDescription = cm.matterDescription.trim();
+                                        oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
+                                        oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
+                                        oPageOneState.oSelectedDocumentTypeLawTerms = cm.selectedDocumentTypeLawTerms;
+                                        localStorage.setItem('oPageOneData', JSON.stringify(oPageOneState));
+                                        cm.sectionName = sectionName;
+                                    }
+                                }
+                                else {
+                                    alert(cm.matterDescription);
+                                }
+                            }
+                            else {
+                                alert(cm.matterId);
+                            }
+
+                        }
+                        else {
+                            alert(cm.matterName);
+                        }
 
                     }
                     else {
-                      
-                        alert("Incomplete");
+                        alert(cm.clientId);
                     }
                 }
                 else {
-                    cm.sectionName = sectionName;
+                    alert(cm.selectedClientName);
                 }
+               
+                //if (sectionName == "snConflictCheck") {
+                //    if (cm.clientId != null && cm.selectedClientName != null){
+
+                //        if()
+                //    }
+                //        && (cm.matterName != null || cm.matterName.trim() != '') && (cm.matterId != null || cm.matterId.trim() != '') && (cm.matterDescription != null || cm.matterDescription.trim() != '')) {
+                //        cm.sectionName = sectionName;
+
+                //    }
+                //    else {
+                      
+                //        alert("Incomplete");
+                //    }
+                //}
+                //else {
+                //    cm.sectionName = sectionName;
+                //}
             }
            
             cm.saveDocumentTemplates = function () {
@@ -229,5 +332,8 @@
                 return input.split(splitChar).length;;
             }
         });
+      
+
+
        
 })();
