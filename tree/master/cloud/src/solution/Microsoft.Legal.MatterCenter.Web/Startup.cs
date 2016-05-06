@@ -66,7 +66,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             ConfigureMvc(services, LoggerFactory);
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
-            services.AddMvc();
+            services.AddMvcCore();
             ConfigureMatterPackages(services);
             ConfigureSwagger(services); 
         }

@@ -17,8 +17,6 @@ using Microsoft.Extensions.OptionsModel;
 using Swashbuckle.SwaggerGen.Annotations;
 using System.Net;
 using System.Reflection;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.Globalization;
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
@@ -686,13 +684,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
 
             }
-        }
-
-
-        
-
-        
-
+        } 
 
         /// <summary>
         /// Assigns specified content types to the specified matter (document library).

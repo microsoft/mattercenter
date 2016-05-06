@@ -739,26 +739,6 @@
           "lib/net451/Microsoft.AspNet.Mvc.Razor.Host.dll": {}
         }
       },
-      "Microsoft.AspNet.Mvc.TagHelpers/6.0.0-rc1-final": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNet.Mvc.Razor": "6.0.0-rc1-final",
-          "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
-          "Microsoft.Extensions.FileSystemGlobbing": "1.0.0-rc1-final"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
-        }
-      },
       "Microsoft.AspNet.Mvc.ViewFeatures/6.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -932,25 +912,6 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNet.TestHost.dll": {}
-        }
-      },
-      "Microsoft.AspNet.Tooling.Razor/1.0.0-rc1-final": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNet.Razor.Runtime": "4.0.0-rc1-final",
-          "Newtonsoft.Json": "6.0.6"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.2": {
@@ -1498,21 +1459,6 @@
           "lib/net451/Microsoft.Extensions.DiagnosticAdapter.dll": {}
         }
       },
-      "Microsoft.Extensions.FileSystemGlobbing/1.0.0-rc1-final": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
-        }
-      },
       "Microsoft.Extensions.Globalization.CultureInfoCache/1.0.0-rc1-final": {
         "type": "package",
         "frameworkAssemblies": [
@@ -1851,11 +1797,9 @@
           "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
           "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
           "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-          "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
           "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
           "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
@@ -3156,26 +3100,6 @@
           "lib/net451/Microsoft.AspNet.Mvc.Razor.Host.dll": {}
         }
       },
-      "Microsoft.AspNet.Mvc.TagHelpers/6.0.0-rc1-final": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNet.Mvc.Razor": "6.0.0-rc1-final",
-          "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
-          "Microsoft.Extensions.FileSystemGlobbing": "1.0.0-rc1-final"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
-        }
-      },
       "Microsoft.AspNet.Mvc.ViewFeatures/6.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -3352,25 +3276,6 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNet.TestHost.dll": {}
-        }
-      },
-      "Microsoft.AspNet.Tooling.Razor/1.0.0-rc1-final": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNet.Razor.Runtime": "4.0.0-rc1-final",
-          "Newtonsoft.Json": "6.0.6"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.2": {
@@ -3918,21 +3823,6 @@
           "lib/net451/Microsoft.Extensions.DiagnosticAdapter.dll": {}
         }
       },
-      "Microsoft.Extensions.FileSystemGlobbing/1.0.0-rc1-final": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
-        }
-      },
       "Microsoft.Extensions.Globalization.CultureInfoCache/1.0.0-rc1-final": {
         "type": "package",
         "frameworkAssemblies": [
@@ -4271,11 +4161,9 @@
           "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
           "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
           "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-          "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
           "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
           "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
@@ -5582,26 +5470,6 @@
           "lib/net451/Microsoft.AspNet.Mvc.Razor.Host.dll": {}
         }
       },
-      "Microsoft.AspNet.Mvc.TagHelpers/6.0.0-rc1-final": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNet.Mvc.Razor": "6.0.0-rc1-final",
-          "Microsoft.Extensions.Caching.Memory": "1.0.0-rc1-final",
-          "Microsoft.Extensions.FileSystemGlobbing": "1.0.0-rc1-final"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll": {}
-        }
-      },
       "Microsoft.AspNet.Mvc.ViewFeatures/6.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -5778,25 +5646,6 @@
         },
         "runtime": {
           "lib/net451/Microsoft.AspNet.TestHost.dll": {}
-        }
-      },
-      "Microsoft.AspNet.Tooling.Razor/1.0.0-rc1-final": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNet.Razor.Runtime": "4.0.0-rc1-final",
-          "Newtonsoft.Json": "6.0.6"
-        },
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Microsoft.AspNet.Tooling.Razor.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.2": {
@@ -6344,21 +6193,6 @@
           "lib/net451/Microsoft.Extensions.DiagnosticAdapter.dll": {}
         }
       },
-      "Microsoft.Extensions.FileSystemGlobbing/1.0.0-rc1-final": {
-        "type": "package",
-        "frameworkAssemblies": [
-          "Microsoft.CSharp",
-          "mscorlib",
-          "System",
-          "System.Core"
-        ],
-        "compile": {
-          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
-        },
-        "runtime": {
-          "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll": {}
-        }
-      },
       "Microsoft.Extensions.Globalization.CultureInfoCache/1.0.0-rc1-final": {
         "type": "package",
         "frameworkAssemblies": [
@@ -6697,11 +6531,9 @@
           "Microsoft.AspNet.Hosting": "1.0.0-rc1-final",
           "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
           "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
-          "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
+          "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
           "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
           "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
-          "Microsoft.AspNet.Tooling.Razor": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
@@ -7800,20 +7632,6 @@
         "Microsoft.AspNet.Mvc.Razor.Host.nuspec"
       ]
     },
-    "Microsoft.AspNet.Mvc.TagHelpers/6.0.0-rc1-final": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "zcoDzmKSMdOVUQHQZJQStArNqc5ERTxosB3GiK/MbC0HFhJ4vmh/vwI0rxnXO6X25+gYnr/2PAiY9fHvGkN58A==",
-      "files": [
-        "lib/dotnet5.4/Microsoft.AspNet.Mvc.TagHelpers.dll",
-        "lib/dotnet5.4/Microsoft.AspNet.Mvc.TagHelpers.xml",
-        "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.dll",
-        "lib/net451/Microsoft.AspNet.Mvc.TagHelpers.xml",
-        "Microsoft.AspNet.Mvc.TagHelpers.6.0.0-rc1-final.nupkg",
-        "Microsoft.AspNet.Mvc.TagHelpers.6.0.0-rc1-final.nupkg.sha512",
-        "Microsoft.AspNet.Mvc.TagHelpers.nuspec"
-      ]
-    },
     "Microsoft.AspNet.Mvc.ViewFeatures/6.0.0-rc1-final": {
       "type": "package",
       "serviceable": true,
@@ -7947,23 +7765,6 @@
         "Microsoft.AspNet.TestHost.1.0.0-rc1-final.nupkg",
         "Microsoft.AspNet.TestHost.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.AspNet.TestHost.nuspec"
-      ]
-    },
-    "Microsoft.AspNet.Tooling.Razor/1.0.0-rc1-final": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "ZWDxJ4sqrZyrtmlRKeBYrxguRNBnTGV2LNgyZrSyVQ8DcQjPkSqFwu18BeER+j6Od2mgV5aOCdCLDN0QnjYI7Q==",
-      "files": [
-        "app/project.json",
-        "app/razor-tooling",
-        "app/razor-tooling.cmd",
-        "lib/dotnet5.4/Microsoft.AspNet.Tooling.Razor.dll",
-        "lib/dotnet5.4/Microsoft.AspNet.Tooling.Razor.xml",
-        "lib/net451/Microsoft.AspNet.Tooling.Razor.dll",
-        "lib/net451/Microsoft.AspNet.Tooling.Razor.xml",
-        "Microsoft.AspNet.Tooling.Razor.1.0.0-rc1-final.nupkg",
-        "Microsoft.AspNet.Tooling.Razor.1.0.0-rc1-final.nupkg.sha512",
-        "Microsoft.AspNet.Tooling.Razor.nuspec"
       ]
     },
     "Microsoft.AspNet.WebApi.Client/5.2.2": {
@@ -8524,20 +8325,6 @@
         "Microsoft.Extensions.DiagnosticAdapter.1.0.0-rc1-final.nupkg",
         "Microsoft.Extensions.DiagnosticAdapter.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.Extensions.DiagnosticAdapter.nuspec"
-      ]
-    },
-    "Microsoft.Extensions.FileSystemGlobbing/1.0.0-rc1-final": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "7N9IPDU0T1uQBj6hobeGNqiEd+Cuu6RHJ0RcwkUvzTsLq8Vf2Sc72+HEAICTw1CTRXHgW49Zr47PvO0QPxI/5g==",
-      "files": [
-        "lib/dotnet5.4/Microsoft.Extensions.FileSystemGlobbing.dll",
-        "lib/dotnet5.4/Microsoft.Extensions.FileSystemGlobbing.xml",
-        "lib/net451/Microsoft.Extensions.FileSystemGlobbing.dll",
-        "lib/net451/Microsoft.Extensions.FileSystemGlobbing.xml",
-        "Microsoft.Extensions.FileSystemGlobbing.1.0.0-rc1-final.nupkg",
-        "Microsoft.Extensions.FileSystemGlobbing.1.0.0-rc1-final.nupkg.sha512",
-        "Microsoft.Extensions.FileSystemGlobbing.nuspec"
       ]
     },
     "Microsoft.Extensions.Globalization.CultureInfoCache/1.0.0-rc1-final": {
