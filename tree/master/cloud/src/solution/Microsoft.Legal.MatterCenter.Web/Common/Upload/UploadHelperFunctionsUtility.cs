@@ -9,7 +9,7 @@
 // </copyright>
 // <summary>This file provide methods to perform document transfer functionalities.</summary>
 // ***********************************************************************
-namespace Microsoft.Legal.MatterCenter.Web.Common.Upload
+namespace Microsoft.Legal.MatterCenter.Web.Common
 {
     using Extensions.OptionsModel;
     #region using

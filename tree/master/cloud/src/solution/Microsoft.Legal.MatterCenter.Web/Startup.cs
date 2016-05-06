@@ -22,7 +22,7 @@ using Microsoft.Legal.MatterCenter.Service;
 using Microsoft.Legal.MatterCenter.Service.Filters;
 using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
-using Microsoft.Legal.MatterCenter.Web.Common.Upload;
+
 using System.IO;
 #endregion
 
@@ -201,6 +201,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.AddSingleton<IEditFunctions, EditFunctions>();
             services.AddSingleton<IMatterProvision, MatterProvision>();
             services.AddSingleton<ISPContentTypes, SPContentTypes>();
+            services.AddSingleton<IUploadHelperFunctions, UploadHelperFunctions>();
             services.AddSingleton<IUploadHelperFunctionsUtility, UploadHelperFunctionsUtility>();
             services.AddSingleton<IDocumentProvision, DocumentProvision>();
         }

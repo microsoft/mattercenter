@@ -9,7 +9,7 @@
 // </copyright>
 // <summary>This file provide methods to perform document upload functionalities.</summary>
 // ***********************************************************************
-namespace Microsoft.Legal.MatterCenter.Web.Common.Upload
+namespace Microsoft.Legal.MatterCenter.Web.Common
 {
     using Extensions.OptionsModel;
     #region using
@@ -31,7 +31,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common.Upload
     /// <summary>
     /// Provide methods to perform document transfer functionalities.
     /// </summary>
-    internal class UploadHelperFunctions
+    public class UploadHelperFunctions:IUploadHelperFunctions
     {
         private ISPOAuthorization spoAuthorization;
         private ErrorSettings errorSettings;
@@ -62,7 +62,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common.Upload
         /// <param name="message">Reference object for the message to be returned</param>
         /// <param name="originalFileName">Original file name of the attachment</param>
         /// <returns>It returns a string object, that contains the execution status of the function.</returns>
-        internal bool Upload(Client client, ServiceRequest serviceRequest, string soapRequest, string attachmentOrMailID, bool isMailUpload, string fileName, string folderPath, bool isFirstCall, ref string message, string originalFileName)
+        public bool Upload(Client client, ServiceRequest serviceRequest, string soapRequest, string attachmentOrMailID, bool isMailUpload, string fileName, string folderPath, bool isFirstCall, ref string message, string originalFileName)
         {
             bool result = ServiceConstants.UPLOAD_FAILED;
             try

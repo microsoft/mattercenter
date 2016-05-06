@@ -7,7 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Microsoft.Legal.MatterCenter.Web.Common.Upload
+namespace Microsoft.Legal.MatterCenter.Web.Common
 {
     public interface IUploadHelperFunctionsUtility
     {

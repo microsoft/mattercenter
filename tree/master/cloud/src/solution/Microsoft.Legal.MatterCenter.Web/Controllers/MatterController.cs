@@ -689,140 +689,9 @@ namespace Microsoft.Legal.MatterCenter.Service
         }
 
 
-        /// <summary>
-        /// Updates matter metadata - Stamps properties to the created matter.
-        /// </summary>
-        /// <param name="matterMetdata"></param>
-        /// <returns></returns>
-        [HttpPost("updatemetadata")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]        
-        public IActionResult UpdateMetadata([FromBody]MatterMetdataVM matterMetdata)
-        {
-            string editMatterValidation = string.Empty;
-            var matter = matterMetdata.Matter;
-            var client = matterMetdata.Client;
+        
 
-            try
-            {
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
-                #region Error Checking                
-                ErrorResponse errorResponse = null;
-                if (matterMetdata.Client == null && matterMetdata.Matter == null &&
-                    matterMetdata.MatterDetails == null && matterMetdata.MatterProvisionFlags == null)
-                {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
-                }
-                #endregion
-
-                #region Validations
-                MatterInformationVM matterInfo = new MatterInformationVM()
-                {
-                    Client = matterMetdata.Client,
-                    Matter = matterMetdata.Matter,
-                    MatterDetails = matterMetdata.MatterDetails
-                };
-                GenericResponseVM genericResponse = validationFunctions.IsMatterValid(matterInfo,
-                    int.Parse(ServiceConstants.ProvisionMatterUpdateMetadataForList),
-                    matterMetdata.MatterConfigurations);
-                if (genericResponse != null)
-                {
-                    matterProvision.DeleteMatter(matterMetdata as MatterVM);
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponse.Value,
-                        ErrorCode = genericResponse.Code,
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
-                }
-                #endregion   
-                try
-                {
-                    genericResponse = matterProvision.UpdateMatterMetadata(matterMetdata);
-                    if (genericResponse == null)
-                    {
-                        var result = new GenericResponseVM()
-                        {
-                            Code = "200",
-                            Value = "Update Success"
-                        };
-                        return matterCenterServiceFunctions.ServiceResponse(result, (int)HttpStatusCode.OK);
-                    }
-                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.NotModified);
-                }
-                catch (Exception ex)
-                {
-                    matterProvision.DeleteMatter(matterMetdata as MatterVM);
-                    customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                    throw;
-                }
-            }
-            catch (Exception ex)
-            {
-                matterProvision.DeleteMatter(matterMetdata as MatterVM);
-                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
-            }
-
-        }
-
-        /// <summary>
-        /// This method will assign user permission to the matter
-        /// </summary>
-        /// <param name="matterMetadataVM"></param>
-        /// <returns></returns>
-        [HttpPost("assignuserpermissions")]
-        [SwaggerResponse(HttpStatusCode.OK)]        
-        public IActionResult AssignUserPermissions([FromBody] MatterMetdataVM matterMetadataVM)
-        {
-            var client = matterMetadataVM.Client;
-            var matter = matterMetadataVM.Matter;
-            try
-            {
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];                
-                var matterConfigurations = matterMetadataVM.MatterConfigurations;
-                ErrorResponse errorResponse = null;
-                if (null == client && null == matter && null == client.Url && null == matterConfigurations)
-                {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
-                }
-
-                var genericResponseVM = matterProvision.AssignUserPermissions(matterMetadataVM);
-                if(genericResponseVM!=null && genericResponseVM.IsError==true)
-                {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponseVM.Value,
-                        ErrorCode = genericResponseVM.Code,
-                        Description = ""
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
-                }
-                var assignPermissions = new {
-                    ReturnValue = true
-                };
-                return matterCenterServiceFunctions.ServiceResponse(assignPermissions, (int)HttpStatusCode.OK);
-            }
-            catch (Exception ex)
-            {
-                matterProvision.DeleteMatter(matterMetadataVM as MatterVM);
-                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
-            }
-        }
+        
 
 
         /// <summary>
@@ -852,6 +721,57 @@ namespace Microsoft.Legal.MatterCenter.Service
             return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Create a new matter
+        /// </summary>
+        /// <param name="matterMetdataVM"></param>
+        /// <returns></returns>
+        [HttpPost("create")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public IActionResult Create([FromBody] MatterMetdataVM matterMetdataVM)
+        {
+            ErrorResponse errorResponse = null;
+            GenericResponseVM genericResponseVM = null;
+            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            if (null == matterMetdataVM && null == matterMetdataVM.Client && null == matterMetdataVM.Matter && string.IsNullOrWhiteSpace(matterMetdataVM.Client.Url))
+            {
+                errorResponse = new ErrorResponse()
+                {
+                    Message = errorSettings.MessageNoInputs,
+                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                    Description = "No input data is passed"
+                };
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+            }
+            try
+            {
+                genericResponseVM = matterProvision.CreateMatter(matterMetdataVM);
+                if (genericResponseVM != null && genericResponseVM.IsError == true)
+                {
+                    //Matter not created successfully
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = genericResponseVM.Value,
+                        ErrorCode = genericResponseVM.Code,
+                        Description = "Matter page not created successfully"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                }
+                //Matter page created successfully
+                genericResponseVM = new GenericResponseVM
+                {
+                    Code = HttpStatusCode.OK.ToString(),
+                    Value = "Matter page created successfully"
+                };
+                return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.OK);
+            }
+            catch (Exception exception)
+            {
+                matterProvision.DeleteMatter(matterMetdataVM as MatterVM);
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
 
         /// <summary>
         /// Assigns specified content types to the specified matter (document library).
@@ -921,61 +841,61 @@ namespace Microsoft.Legal.MatterCenter.Service
             }
         }
 
-
         /// <summary>
-        /// Create a new matter
+        /// This method will assign user permission to the matter
         /// </summary>
-        /// <param name="matterMetdataVM"></param>
+        /// <param name="matterMetadataVM"></param>
         /// <returns></returns>
-        [HttpPost("create")]
-        [SwaggerResponse(HttpStatusCode.OK)]        
-        public IActionResult Create([FromBody] MatterMetdataVM matterMetdataVM)
+        [HttpPost("assignuserpermissions")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public IActionResult AssignUserPermissions([FromBody] MatterMetdataVM matterMetadataVM)
         {
-            ErrorResponse errorResponse = null;
-            GenericResponseVM genericResponseVM = null;
-            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
-            if (null == matterMetdataVM && null == matterMetdataVM.Client && null == matterMetdataVM.Matter && string.IsNullOrWhiteSpace(matterMetdataVM.Client.Url))
-            {
-                errorResponse = new ErrorResponse()
-                {
-                    Message = errorSettings.MessageNoInputs,
-                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                    Description = "No input data is passed"
-                };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-            }            
+            var client = matterMetadataVM.Client;
+            var matter = matterMetadataVM.Matter;
             try
             {
-                genericResponseVM = matterProvision.CreateMatter(matterMetdataVM);
-                if (genericResponseVM != null && genericResponseVM.IsError==true)
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                var matterConfigurations = matterMetadataVM.MatterConfigurations;
+                ErrorResponse errorResponse = null;
+                if (null == client && null == matter && null == client.Url && null == matterConfigurations)
                 {
-                    //Matter not created successfully
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+
+                var genericResponseVM = matterProvision.AssignUserPermissions(matterMetadataVM);
+                if (genericResponseVM != null && genericResponseVM.IsError == true)
+                {
                     errorResponse = new ErrorResponse()
                     {
                         Message = genericResponseVM.Value,
                         ErrorCode = genericResponseVM.Code,
-                        Description = "Matter page not created successfully"
+                        Description = ""
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
                 }
-                //Matter page created successfully
-                genericResponseVM = new GenericResponseVM
+                var assignPermissions = new
                 {
-                    Code = HttpStatusCode.OK.ToString(),
-                    Value = "Matter page created successfully"
+                    ReturnValue = true
                 };
-                return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(assignPermissions, (int)HttpStatusCode.OK);
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                matterProvision.DeleteMatter(matterMetdataVM as MatterVM);
-                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                matterProvision.DeleteMatter(matterMetadataVM as MatterVM);
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
         }
 
+
         /// <summary>
-        /// Creates matter landing page. If there is any error in creating the landing page, the whole matter will get deleted along with docunment libraries
+        /// Creates matter landing page. If there is any error in creating the landing page, the whole matter will get deleted along with document libraries
         /// </summary>
         /// <param name="matterMetdataVM"></param>
         /// <returns></returns>
@@ -1028,6 +948,94 @@ namespace Microsoft.Legal.MatterCenter.Service
                 throw;
             }
         }
+
+        /// <summary>
+        /// Updates matter metadata - Stamps properties to the created matter.
+        /// </summary>
+        /// <param name="matterMetdata"></param>
+        /// <returns></returns>
+        [HttpPost("updatemetadata")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        public IActionResult UpdateMetadata([FromBody]MatterMetdataVM matterMetdata)
+        {
+            string editMatterValidation = string.Empty;
+            var matter = matterMetdata.Matter;
+            var client = matterMetdata.Client;
+
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+
+                #region Error Checking                
+                ErrorResponse errorResponse = null;
+                if (matterMetdata.Client == null && matterMetdata.Matter == null &&
+                    matterMetdata.MatterDetails == null && matterMetdata.MatterProvisionFlags == null)
+                {
+                    matterProvision.DeleteMatter(matterMetdata as MatterVM);
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+
+                #region Validations
+                MatterInformationVM matterInfo = new MatterInformationVM()
+                {
+                    Client = matterMetdata.Client,
+                    Matter = matterMetdata.Matter,
+                    MatterDetails = matterMetdata.MatterDetails
+                };
+                GenericResponseVM genericResponse = validationFunctions.IsMatterValid(matterInfo,
+                    int.Parse(ServiceConstants.ProvisionMatterUpdateMetadataForList),
+                    matterMetdata.MatterConfigurations);
+                if (genericResponse != null)
+                {
+                    matterProvision.DeleteMatter(matterMetdata as MatterVM);
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = genericResponse.Value,
+                        ErrorCode = genericResponse.Code,
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion   
+
+                try
+                {
+                    genericResponse = matterProvision.UpdateMatterMetadata(matterMetdata);
+                    if (genericResponse == null)
+                    {
+                        genericResponse = new GenericResponseVM()
+                        {
+                            Code = "200",
+                            Value = "Update Success"
+                        };
+                        
+                    }
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                }
+                catch (Exception ex)
+                {
+                    matterProvision.DeleteMatter(matterMetdata as MatterVM);
+                    customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                matterProvision.DeleteMatter(matterMetdata as MatterVM);
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+
+        }
+
         #endregion
     }
 }

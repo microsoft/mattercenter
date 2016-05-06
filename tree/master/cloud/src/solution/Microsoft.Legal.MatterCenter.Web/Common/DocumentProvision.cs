@@ -12,20 +12,61 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
     public class DocumentProvision : IDocumentProvision
     {
         private IDocumentRepository docRepository;
-        public DocumentProvision(IDocumentRepository docRepository)
+        private IUploadHelperFunctions uploadHelperFunctions;
+        public DocumentProvision(IDocumentRepository docRepository, IUploadHelperFunctions uploadHelperFunctions)
         {
             this.docRepository = docRepository;
+            this.uploadHelperFunctions = uploadHelperFunctions;
         }
 
 
-        public bool UploadAttachments(ServiceRequest serviceRequest, Client client)
+        public GenericResponseVM UploadAttachments(AttachmentRequestVM attachmentRequestVM)
         {
-            return true;
+            int attachmentCount = 0;
+            string message = string.Empty;
+            var client = attachmentRequestVM.Client;
+            var serviceRequest = attachmentRequestVM.ServiceRequest;
+            bool result = true;
+            GenericResponseVM genericResponse = null;
+            foreach (AttachmentDetails attachment in serviceRequest.Attachments)
+            {
+                if (uploadHelperFunctions.Upload(client, serviceRequest, ServiceConstants.ATTACHMENT_SOAP_REQUEST, attachment.id, false,
+                    attachment.name, serviceRequest.FolderPath[attachmentCount], true, ref message, attachment.originalName).Equals(ServiceConstants.UPLOAD_FAILED))
+                {
+                    result = false;
+                    break;
+                }
+                attachmentCount++;
+            }
+            if (!result)
+            {
+                if (!string.IsNullOrEmpty(message))
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Value = message,
+                        IsError = true
+                    };
+                    return genericResponse;
+                }
+                else
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Value = "Attachment not uploaded",
+                        IsError = true
+                    };
+                    return genericResponse;
+                }
+            } 
+            return genericResponse;
         }
 
-        public bool UploadEmails(ServiceRequest serviceRequest, Client client)
+        public GenericResponseVM UploadEmails(AttachmentRequestVM attachmentRequest)
         {
-            return true;
+            return null;
         }
 
         public async Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM)

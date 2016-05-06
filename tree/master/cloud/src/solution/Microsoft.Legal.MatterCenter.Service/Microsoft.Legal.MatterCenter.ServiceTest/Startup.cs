@@ -23,7 +23,7 @@ using Microsoft.Legal.MatterCenter.Service.Filters;
 using Microsoft.AspNet.Authentication.JwtBearer;
 using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
-using Microsoft.Legal.MatterCenter.Web.Common.Upload;
+
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
@@ -200,6 +200,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.AddSingleton<IEditFunctions, EditFunctions>();
             services.AddSingleton<IMatterProvision, MatterProvision>();
             services.AddSingleton<ISPContentTypes, SPContentTypes>();
+            services.AddSingleton<IUploadHelperFunctions, UploadHelperFunctions>();
             services.AddSingleton<IUploadHelperFunctionsUtility, UploadHelperFunctionsUtility>();
             services.AddSingleton<IDocumentProvision, DocumentProvision>();
         }

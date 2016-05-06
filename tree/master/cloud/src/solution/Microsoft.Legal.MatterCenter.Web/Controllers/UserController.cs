@@ -54,6 +54,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             this.customLogger = customLogger;
             this.logTables = logTables.Value;             
             this.generalSettings = generalSettings.Value;
+            this.matterRepositoy = matterRepositoy;
         }
 
         /// <summary>
