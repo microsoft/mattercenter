@@ -2,9 +2,14 @@
     'use strict';
 
     var app=  angular.module("matterMain");
-        app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api',
-        function ($scope, $state, $stateParams, api) {
+    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api','matterResource',
+        function ($scope, $state, $stateParams, api,matterResource) {
             var cm = this;
+            cm.selectedConflictCheckUser = undefined;
+            cm.selectedConflictUser = undefined;
+            cm.chkConfilctCheck = undefined;
+            cm.conflictRadioCheck = true;
+
             var oPageOneState={
                 ClientValue: [],
                 ClientId: "",
@@ -17,17 +22,18 @@
                 oSubAreaOfLawTerms: [],
                 oSelectedDocumentTypeLawTerms:[]
             }
+           
             cm.clientId = "";
             cm.selectedClientName = "";
-            cm.matterName="";
-            cm.matterId="";
-            cm.matterDescription="";
+            cm.matterName = "";
+            cm.matterId = "";
+            cm.matterDescription = "";
 
-            cm.clientNameList = [];           
+            cm.clientNameList = [];
             cm.areaOfLawTerms = [];
-            cm.subAreaOfLawTerms = [];        
+            cm.subAreaOfLawTerms = [];
             cm.documentTypeLawTerms = [];
-            cm.selectedDocumentTypeLawTerms=[];
+            cm.selectedDocumentTypeLawTerms = [];
             cm.activeAOLTerm = null;
             cm.activeSubAOLTerm = null;
             cm.activeDocumentTypeLawTerm = null;
@@ -37,10 +43,42 @@
             cm.sectionName = "snOpenMatter";
             cm.removeDTItem = false;
             cm.primaryMatterType = cm.errorPopUp = false;
+            cm.matterGUID = "";
+            cm.iCurrentPage = 0;
+               
+            
+            ///* Function to generate 32 bit GUID */
+            function get_GUID() {
+                function create_GUID(bFlag) {
+                    var sCurrentGUID = (Math.random().toString(16) + "000000000").substr(2, 8);
+                    return bFlag ? "-" + sCurrentGUID.substr(0, 4) + "-" + sCurrentGUID.substr(4, 4) : sCurrentGUID;
+                }
+                return create_GUID() + create_GUID(true) + create_GUID(true) + create_GUID();
+            }
 
+            /* Function to get the GUID by removing the hyphen character */
+            function getMatterGUID() {
+                cm.matterGUID = get_GUID().replace(/-/g, ""); //// Remove '-' (hyphen) from the GUID as this character is removed from URL by SharePoint
+            }
+
+            getMatterGUID();
+           
+           
             var optionsForClientGroup = new Object;
             var optionsForPracticeGroup = new Object;
             var optionsForCheckMatterName = new Object;
+            // var optionsForUsers = new Object;
+            var siteCollectionPath = "https://msmatter.sharepoint.com/sites/catalog";
+       
+            function getDefaultMatterConfigurations(siteCollectionPath, callback) {
+                api({
+                    resource:'matterResource',
+                    method: 'getDefaultMatterConfigurations',
+                    data: JSON.stringify(siteCollectionPath),
+                    success:callback
+                });
+            }
+
             function getTaxonomyDetailsForClient(optionsForClientGroup, callback) {
                 api({
                     resource: 'matterResource',
@@ -59,6 +97,9 @@
                 });
             }
 
+
+
+
             function getCheckValidMatterName(optionsForCheckMatterName, callback) {
                 api({
                     resource: 'matterResource',
@@ -67,6 +108,36 @@
                     success: callback
                 });
             }
+
+            function getUsers(optionsForUsers, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getUsers',
+                    data: optionsForUsers,
+                    success: callback
+                });
+            }
+
+
+            function getRoles(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getRoles',
+                    data: options,
+                    success: callback
+                });
+            }
+            function getPermissionLevels(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getPermissionLevels',
+                    data: options,
+                    success: callback
+                });
+            }
+
+            
+
             optionsForClientGroup = {
                 Client: {
                     Url: "https://msmatter.sharepoint.com/sites/catalog"
@@ -77,7 +148,8 @@
                     CustomPropertyName: "ClientURL"
                 }
             }
-
+               
+           
             optionsForPracticeGroup = {
                 Client: {
 
@@ -101,13 +173,24 @@
                     Name:cm.matterName.trim()
                 }
             }
+            //optionsForUsers
 
+            cm.searchUsers = function (val) {
+                var searchUserRequest = {
+                    Client: {
 
-            
+                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    },
+                    SearchObject: {
+                        SearchTerm: val
+                    }
+                };
+
+                return matterResource.getUsers(searchUserRequest).$promise;
+            }
 
             //call back function for getting the clientNamesList
-            getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
-                console.log(response);
+            getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {              
 
                 cm.clientNameList = response.clientTerms;
                 cm.popupContainerBackground = "hide";// jQuery('#myModal').modal('show');
@@ -115,8 +198,25 @@
 
             });
 
-
-           
+            var optionsForRoles = new Object;
+            optionsForRoles = {                                
+               
+                Url: "https://msmatter.sharepoint.com/sites/catalog"
+                
+            }
+            getRoles(optionsForRoles, function (response) {
+                console.log("roles");
+                console.log(response);
+            });
+            var optionsForPermissionLevels = new Object;
+            optionsForPermissionLevels = {
+               
+                Url: "https://msmatter.sharepoint.com/sites/catalog"
+            }
+            getPermissionLevels(optionsForPermissionLevels, function (response) {
+                console.log("Permission Levels");
+                console.log(response);
+            });
 
             //calls this function when selectType button clicks
             cm.selectMatterType = function () {
@@ -143,8 +243,18 @@
             }
             //function to get the clientId from ClientName dropdown
             cm.getSelectedClientValue = function (client) {
-                
+
+             
                 cm.clientId = cm.selectedClientName;
+                if (null != cm.clientId) {
+
+                    getDefaultMatterConfigurations(siteCollectionPath, function (response) {
+                        console.log(response); 
+                    });
+                }
+                else {
+
+                }
 
             }
             //function to get the all AOL and SAOL terms
@@ -225,58 +335,93 @@
             }
             cm.checkValidMatterName = function () {
                 optionsForCheckMatterName.Matter.Name = cm.matterName.trim();
-                getCheckValidMatterName(optionsForCheckMatterName, function (response) {
-                    if (response.code != 200) {
-                        alert("Matter Name already Exists");
-                    } else {
-                        alert("success");
-                    }
-                });
+                if ("" !== cm.matterName.trim()) {
+                    getCheckValidMatterName(optionsForCheckMatterName, function (response) {
+                        if (response.code != 200) {
+                            alert(response.code + "Matter Name already Exists");
+                        } else {
+                          //  alert("success");
+                        }
+                    });
+                }
 
             }
+            
+
+           
+
+            cm.valuationDate = new Date();
+            cm.valuationDatePickerIsOpen = false;
+           
+
+            $scope.$watch(function () {
+                return cm.valuationDatePickerIsOpen;
+            }, function (value) {
+              //  cm.conflictDate = value;
+            });
+
+            cm.valuationDatePickerOpen = function ($event) {
+
+                if ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation(); // This is the magic
+                }
+                this.valuationDatePickerIsOpen = true;
+            };
+   
 
             cm.navigateToSecondSection = function (sectionName) {
-                if ("" !== cm.selectedClientName.trim() && null!==cm.selectedClientName) {
-                    if ("" !== cm.clientId.trim() && null !== cm.clientId) {
-                        if ("" != cm.matterName.trim() && null !== cm.matterName) {
-                            if ("" !== cm.matterId.trim() && null != cm.matterId)
-                            {
-                                if ("" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
-                                    alert(cm.selectedDocumentTypeLawTerms.length);
-                                    if (cm.selectedDocumentTypeLawTerms.length > 0) {
+                if (sectionName == "snConflictCheck") {
+                    if (null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
+                        if ("" !== cm.clientId.trim() && null !== cm.clientId) {
+                            if ("" != cm.matterName.trim() && null !== cm.matterName) {
+                                if ("" !== cm.matterId.trim() && null != cm.matterId) {
+                                    if ("" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
 
-                                        oPageOneState.ClientValue.push({ ClientName: cm.clientNameList });
-                                        oPageOneState.ClientId = cm.clientId.trim();
-                                        oPageOneState.MatterTitle = cm.matterName.trim();
-                                        oPageOneState.MatterId = cm.matterId.trim();
-                                        oPageOneState.MatterDescription = cm.matterDescription.trim();
-                                        oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
-                                        oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
-                                        oPageOneState.oSelectedDocumentTypeLawTerms = cm.selectedDocumentTypeLawTerms;
-                                        localStorage.setItem('oPageOneData', JSON.stringify(oPageOneState));
-                                        cm.sectionName = sectionName;
+                                        if (cm.selectedDocumentTypeLawTerms.length > 0) {
+
+                                            oPageOneState.ClientValue.push({ ClientName: cm.clientNameList });
+                                            oPageOneState.ClientId = cm.clientId.trim();
+                                            oPageOneState.MatterName = cm.matterName.trim();
+                                            oPageOneState.MatterId = cm.matterId.trim();
+                                            oPageOneState.MatterDescription = cm.matterDescription.trim();
+                                            oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
+                                            oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
+                                            oPageOneState.oSelectedDocumentTypeLawTerms = cm.selectedDocumentTypeLawTerms;
+                                            //oPageOneState.oSectionName = cm.sectionName;
+                                            localStorage.setItem('oPageOneData', JSON.stringify(oPageOneState));
+                                            cm.sectionName = sectionName;
+                                            localStorage.iLivePage = cm.iCurrentPage=2;
+                                        }
+                                        else {
+                                            alert("Select matter type by area of law for this matter");
+                                        }
+                                    }
+                                    else {
+                                        alert("Enter a description for this matter");
                                     }
                                 }
                                 else {
-                                    alert(cm.matterDescription);
+                                    alert("Enter a matter ID.");
                                 }
+
                             }
                             else {
-                                alert(cm.matterId);
+                                alert("Please enter a valid Matter name which contains only alphanumeric characters and spaces");
                             }
 
                         }
                         else {
-                            alert(cm.matterName);
+                            alert("Selected  client for this matter clientId is null ");
                         }
-
                     }
                     else {
-                        alert(cm.clientId);
+                        alert("Select a client for this matter ");
                     }
                 }
                 else {
-                    alert(cm.selectedClientName);
+
+                    cm.sectionName = sectionName;
                 }
                
                 //if (sectionName == "snConflictCheck") {
@@ -323,6 +468,61 @@
             //$scope.SelectModal= function(){
             //   // jQuery('#myModal').modal('show');
             //}
+            cm.conflictRadioCheckValue = true;
+            cm.conflictRadioChange = function (value) {
+                cm.selectedConflictUser = "";
+            }
+           
+
+
+            if (localStorage.getItem("iLivePage")) {
+                if (localStorage.getItem("iLivePage") == 2) {
+                    var oPageData = JSON.parse(localStorage.getItem("oPageOneData"));
+                    cm.clientId = oPageData.ClientId;
+                    cm.selectedClientName = oPageData.ClientId;
+                    cm.matterName = oPageData.MatterName;
+                    cm.matterId = oPageData.MatterId;
+                    cm.matterDescription = oPageData.MatterDescription;
+
+                    cm.clientNameList = [];
+                    cm.areaOfLawTerms = [];
+                    cm.subAreaOfLawTerms = [];
+                    cm.documentTypeLawTerms = [];
+                    cm.selectedDocumentTypeLawTerms = [];
+                    cm.activeAOLTerm = null;
+                    cm.activeSubAOLTerm = null;
+                    cm.activeDocumentTypeLawTerm = oPageData.oSelectedDocumentTypeLawTerms;
+                    cm.selectedDocumentTypeLawTerms = cm.documentTemplateNames = oPageData.oSelectedDocumentTypeLawTerms;
+                    cm.popupContainerBackground = "Show";
+                    cm.popupContainer = "hide";
+
+                    cm.sectionName = "";
+                    cm.removeDTItem = false;
+                    cm.primaryMatterType = cm.errorPopUp = false;
+                    cm.matterGUID = "";
+                    cm.iCurrentPage = 0;
+                    cm.navigateToSecondSection("");
+                    cm.navigateToSecondSection("snConflictCheck");
+
+                }
+            }
+
+            cm.menuClick = function () {
+                var oAppMenuFlyout = $(".AppMenuFlyout");
+                if (!(oAppMenuFlyout.is(":visible"))) {
+                    //// Display the close icon and close the fly out 
+                    $(".OpenSwitcher").addClass("hide");
+                    $(".CloseSwitcher").removeClass("hide");
+                    $(".MenuCaption").addClass("hideMenuCaption");
+                    oAppMenuFlyout.slideDown();
+                } else {
+                    oAppMenuFlyout.slideUp();
+                    $(".CloseSwitcher").addClass("hide");
+                    $(".OpenSwitcher").removeClass("hide");
+                    $(".MenuCaption").removeClass("hideMenuCaption");
+                }
+            }
+
 
         }]);
 
@@ -333,7 +533,7 @@
             }
         });
       
-
+        
 
        
 })();

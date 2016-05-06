@@ -1,11 +1,69 @@
-﻿<div style="margin:1%;">
-    <div class="menu">
-        <div class="menuTextGroup">
-            <div ><span title="Step 1: Select a client and provide basic information for your new matter." ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText menuTextSelected" data-section-num="1" data-section-name="snOpenMatter">1 Open Matter</span></div>
-            <div ><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter." class="menuText" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 Assign Permissions</span></div>
-            <div><span  ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team." class="menuText" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 Create and Notify</span></div>
+﻿<div id="MasterPageContainer" class="MasterPageContent">
+    
+    <div class="AppHeader">
+        <div class="AppSwitcherContainer" ng-click="cm.menuClick()">
+            <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
+            <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
+            <div class="MenuCaption"><span>menu</span></div>
+        </div>
+        <div class="AppMenuFlyout ms-shadow">
+            <div class="AppMenuFlyoutPriLinks">
+                <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="Home"><span class="AppFlyoutLinksText">Home</span></a>
+                <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="Search matters"><span class="AppFlyoutLinksText">Matters</span></a>
+                <a class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
+            </div>
+        </div>
+        
+
+        <div class="menu">
+            <div class="menuTextGroup">
+                <div><span title="Step 1: Select a client and provide basic information for your new matter." ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText menuTextSelected" data-section-num="1" data-section-name="snOpenMatter">1 Open Matter</span></div>
+                <div><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter." class="menuText" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 Assign Permissions</span></div>
+                <div><span ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team." class="menuText" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 Create and Notify</span></div>
+            </div>
+        </div>
+
+
+        <div id="ContextualHelp">
+            <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
+
+            <div data-class="ms-u-slideLeftIn40" class="ContextualHelpContainer ms-u-slideLeftIn40">
+                <div class="ContextualHelpFlyout">
+                    <img class="closeContextualHelpFlyout" title="Close" alt="Close flyout" src="Images/contextual_help_close_icon.png" />
+                    <div class="ContextualHelpHeader" title="Matter Center For Outlook">Matter Center For Outlook</div>
+                    <div class="contextualHelpSections">
+                    </div>
+                    <div class="ContextualHelpSupport">
+                        <span class="ContextualHelpBottomText" title="Write an email to Support">Questions? Contact <span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. mailto:support@supportsite.com]">Matter Center Support</a></span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="ProfileSwitcher">
+            <img class="AppHeaderProfilePict" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture" runat="server" />
+        </div>
+        <div class="PersonaFlyout">
+            <div class="PersonaContainer">
+                <div class="PersonaPictureContainer">
+                    <img id="PersonaPicture" src="Images/MC_Profile_Switcher.png" alt="Profile Picture" title="Profile Picture" runat="server" />
+                </div>
+                <div class="PersonaPictureDetails">
+                    <div class="PersonaTitle" id="PersonaTitle" ></div>
+                    <div class="PersonaEmail" id="PersonaEmail" ></div>
+                </div>
+            </div>
+            <div class="SignOutLink">
+                <asp:LinkButton ID="SignOutLink" Text="Sign Out" OnClick="SignOutLink_Click" CssClass="" runat="server"></asp:LinkButton>
+            </div>
         </div>
     </div>
+    <input type="hidden" id="requestvalidator" name="requestvalidator" runat="server" />
+    
+</div>
+
+
+<div style="margin:1%;">
+  
 
     <div class="content">    
 
@@ -20,7 +78,7 @@
                
                 <div>
 
-                    <select class="medium clear" ng-model="cm.selectedClientName" ng-change="cm.getSelectedClientValue()" ng-options="client.id as client.name for client in cm.clientNameList track by client.id">
+                    <select class="medium clear" ng-model="cm.selectedClientName" ng-select="cm.selectedClientName" ng-change="cm.getSelectedClientValue()" ng-options="client.id as client.name for client in cm.clientNameList track by client.id">
                         <option value="" label="- Select a client -"></option>
                     </select>
 
@@ -52,40 +110,52 @@
             <div class="sectionContent">
                 <div id="conflictCheck">
                     <label class="medium chkConflictCheckParent conflictCheckPosition" id="chkConflictCheckParent">
-                        <input id="chkConflictCheck" type="checkbox" checked="checked" value="Yes">Conflict check conducted (must be complete prior to provisioning matter)
+                        <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">Conflict check conducted (must be complete prior to provisioning matter)
                     </label>
                     <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>Who conducted the conflict check?</label>
                     <div class="gutter"></div>
                     <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>Date Conducted</label>
                     <div class="gutter"></div>
                     <label class="contentLabel mediumSmall" id="conflictIdentified">Conflict Identified?</label>
-                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span><input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select name" autocomplete="off">
+                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-model="cm.selectedConflictCheckUser" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" typeahead="users.name + ' ('+ users.email + ')' for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
+                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <div ng-show="noResults">
+                        <i class="glyphicon glyphicon-remove"></i> No Results Found
+                    </div>
                     <div class="gutter"></div>
-                    <input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">
+                    <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
+                    <input type="text" class="form-control" uib-datepicker-popup="mm\dd\yyyy" style=" width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />
+                    
                     <div class="gutter"></div>
                     <div class="conflictRadioBtn">
                         <label class="smaller">
-                            <input name="rdbConflictCheck" type="radio" checked="checked" value="True">Yes
+                            <input  type="radio"  ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-checked="checked" ng-value="true" ng-model="cm.conflictRadioCheck" value=true>Yes
                         </label>
                         <label class="smaller">
-                            <input name="rdbConflictCheck" type="radio" value="False">No
+                            <input  type="radio" ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-model="cm.conflictRadioCheck"  ng-value="false"  value=false>No
                         </label>
                     </div>
                     <div class="clear"></div>
-                    <section id="snBlockUser">
+                    <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
                         <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
-                        <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span><input class="medium clear ui-autocomplete-input" id="txtBlockUser" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
-                        <div class="gutter"></div>
+                        <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.selectedConflictUser"  typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                       
+                        <div ng-show="noResults">
+                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                        </div><i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                         <div class="gutter"></div>
                         <div class="large clear" id="areaBlockUser"></div>
                     </section>
                 </div>
                 <label class="secureMatterLabel assignTeamRadioPosition">Would you like this matter to be secured only to the assigned team?</label>
                 <div class="secureMatterRadioBtn assignTeamRadioPosition">
                     <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" disabled="disabled" class="matterCheckYes" type="radio" value="True">Yes
+                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" checked="checked" class="matterCheckYes" type="radio" ng-value="True">Yes
                     </label>
                     <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" disabled="disabled" class="matterCheckNo" type="radio" value="False">No
+                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck"  class="matterCheckNo" type="radio" ng-value="False">No
                     </label>
                 </div>
                 <label class="contentLabel medium clear blue" id="assignTeam">Assign Team</label>
@@ -95,20 +165,25 @@
                 <div class="gutter"></div>
                 <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>Permission Level</label>
                 <div class="row1 assignNewPerm">
-                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span><input class="medium clear inputAssignPerm ui-autocomplete-input" id="txtAssign1" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                    <input class="medium clear inputAssignPerm ui-autocomplete-input commonspace" id="txtAssign1" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
                     <div class="gutter"></div>
                     <div class="addNewMember">
-                        <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv">
-                            <input disabled="disabled" class="mediumSmallRole assignRole assignRoleField" id="ddlRoleAssign1" autofocus="autofocus" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" data-value="Attorney" data-mandatory="false">
-                            <img title="Dropdown icon" class="ddlRoleAssignIcon" id="ddlRoleAssignIcon1" alt="Role Icon" src="../Images/icon-combobox.png">
+                        <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth">
+                            <select class="medium clear dropdownCustom" >
+                                <option value="" label="- Select a role -"></option>
+                                </select>
                         </div>
                         <div class="ddlRoleAssignList clear hide" id="ddlRoleAssignList1"><div title="Attorney" class="roleValue assignPerm1" data-value="Attorney" data-mandatory="false">Attorney</div><div title="Legal Admin" class="roleValue assignPerm1" data-value="Legal Admin" data-mandatory="false">Legal Admin</div><div title="Paralegal" class="roleValue assignPerm1" data-value="Paralegal" data-mandatory="false">Paralegal</div><div title="Responsible Attorney" class="roleValue assignPerm1" data-value="Responsible Attorney" data-mandatory="true">Responsible Attorney</div><div title="Working Attorney" class="roleValue assignPerm1" data-value="Working Attorney" data-mandatory="false">Working Attorney</div></div>
                     </div>
                     <div class="gutter"></div>
                     <div>
                         <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
-                            <input disabled="disabled" class="mediumSmallPermission assignPermission assignPermField" id="ddlPermAssign1" autofocus="autofocus" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" data-value="Contribute">
-                            <img title="Dropdown icon" class="ddlPermAssignIcon" id="ddlPermAssignIcon1" alt="Permission Icon" src="../Images/icon-combobox.png">
+                            <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
+                                <select class="medium clear dropdownCustom">
+                                    <option value="" label="- Assign a permission -"></option>
+                                </select>
+                            </div>
                         </div>
                         <div class="ddlPermAssignList clear hide" id="ddlPermAssignList1"><div title="Contribute" class="permValue permContent1" data-value="Contribute">Contribute</div><div title="Full Control" class="permValue permContent1" data-value="Full Control">Full Control</div><div title="Read" class="permValue permContent1" data-value="Read">Read</div></div>
                     </div>

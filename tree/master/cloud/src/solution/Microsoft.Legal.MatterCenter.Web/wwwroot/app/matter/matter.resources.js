@@ -35,6 +35,25 @@ angular.module('matterMain')
                   'checkMatterExists': auth.attachCSRF({
                       method: 'POST',  
                       url: '/api/v1/matter/checkmatterexists'
+                  }),
+                  'getDefaultMatterConfigurations':auth.attachCSRF({  
+                      method: 'POST',  
+                      url: '/api/v1/matter/getconfigurations'  
+                  }),
+                  'getUsers': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/user/getusers',
+                      isArray: true
+                  }),
+                   'getRoles': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/user/getroles',
+                      isArray: true
+                  }),
+                   'getPermissionLevels': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/user/getpermissionlevels',
+                      isArray: true
                   })
               });
       }]);
