@@ -72,6 +72,26 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-sm-7 visible-sm text-right">
+                            <div id="ContextualHelp" >
+                                <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
+
+                                <div data-class="ms-u-slideLeftIn40" class="ContextualHelpContainer ms-u-slideLeftIn40">
+                                    <div class="ContextualHelpFlyout">
+                                        <img class="closeContextualHelpFlyout" title="Close" alt="Close flyout" src="Images/contextual_help_close_icon.png" />
+                                        <div class="ContextualHelpHeader" title="Matter Center For Outlook">Matter Center For Outlook</div>
+                                        <div class="contextualHelpSections">
+                                        </div>
+                                        <div class="ContextualHelpSupport">
+                                            <span class="ContextualHelpBottomText" title="Write an email to Support">Questions? Contact <span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. mailto:support@supportsite.com]">Matter Center Support</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="ProfileSwitcher">
+                                <img class="AppHeaderProfilePict" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture" runat="server" />
+                            </div>
+                        </div>
                     </div>
                     <span class="DelveLink"><img title="Search in Delve" src="../Images/delve.png" onclick="javascript: delveIt();" /></span>
                     <!--
@@ -82,8 +102,10 @@
                          <input ng-model="vm.searchTerm" class="col-sm-12" type="text" placeholder="Search by ID, or matter or client name" /><img ng-click="vm.search()" src="../../images/search-15x15-666.png" />
                      </div>
                     -->
+
+
                 </div>
-                <div id="ContextualHelp">
+                <div id="ContextualHelp" class="hidden-sm">
                     <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
 
                     <div data-class="ms-u-slideLeftIn40" class="ContextualHelpContainer ms-u-slideLeftIn40">
@@ -98,7 +120,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="ProfileSwitcher">
+                <div id="ProfileSwitcher" class="hidden-sm">
                     <img class="AppHeaderProfilePict" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture" runat="server" />
                 </div>
                 <div class="PersonaFlyout">
@@ -228,6 +250,7 @@
         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
     </div>
 </div>
+
 
 <!--</div..>
 </div>-->

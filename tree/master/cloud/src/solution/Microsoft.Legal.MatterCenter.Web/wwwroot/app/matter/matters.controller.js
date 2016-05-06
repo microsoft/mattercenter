@@ -17,58 +17,102 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //start
     $scope.lazyloader = true;
     //end
-    var headertemplate = "<div ng-class='{'sortable': sortable }'>\
-    <div class='dropdown' style='float:right;'>\
-        <a href='javascript:;' class='prisma-header-dropdown-anchor dropdown-toggle' type='button' data-toggle='dropdown'>\
+
+    //Assigning html for Matterheadertemplate
+    //Start
+    var MatterHeaderTemplate = "<div >\
+    <div class='dropdown keep-open' style='float:right;'>\
+        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
             <img src='../images/icon-combobox.png'/>\
         </a>\
-        <div class='dropdown-menu flyoutWrapper' role='menu'>\
-           <input class='form-control' placeholder='Search'/> \
-             <hr/> \
+        <div class='dropdown-menu flyoutWrapper' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
+         <div class='input-group'>\
+           <input class='form-control' ng-model='grid.appScope.vm.searchTerm' placeholder='Search'/> \
+                <div class='input-group-btn'>\
+                 <button type='button' ng-click='grid.appScope.vm.search()' class='btn btn-default' ><img src='../images/search-15x15-666.png' /></button>\
+                 </div>\
+         </div>\
+         <hr/> \
             <div class='clearFilterText' data-clearfiltertype='text'>\
             <div class='clearFiltersIcon'>\
                 <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>\
             </div>\
             <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Matter'><span>Clear filters from </span><span class='clearFilterTitle'>Matter</span></div>\
+             <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='matter in grid.appScope.matters' ng-click='grid.appScope.filterMatterName(matter.matterName)'>{{matter.matterName}}</div> </div>\
         </div>\
         </div>\
     </div>\
     <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
         <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
-        <span ui-grid-visible='col.sort.direction' ng-class='{ 'ui-grid-icon-up-dir': col.sort.direction == asc, 'ui-grid-icon-down-dir': col.sort.direction == desc, 'ui-grid-icon-blank': !col.sort.direction }' class='ui-grid-invisible ui-grid-icon-blank'>&nbsp;</span>\
+        <span ui-grid-visible='col.sort.direction'  class='ui-grid-invisible ui-grid-icon-blank'>&nbsp;</span>\
     </div>\
-    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
-        <i ng-class='{ 'ui-grid-icon-up-dir': col.sort.direction == asc, 'ui-grid-icon-down-dir': col.sort.direction == desc, 'ui-grid-icon-blank': !col.sort.direction }' title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
+    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
+        <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
     </div>\
 </div>"
+    //End
 
+
+    //Assigning html for Clientheadertemplate
+    //Start
+    var ClientHeaderTemplate = "<div >\
+    <div class='dropdown keep-open' style='float:right;'>\
+        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
+            <img src='../images/icon-combobox.png'/>\
+        </a>\
+        <div class='dropdown-menu flyoutWrapper' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
+         <div class='input-group'>\
+           <input class='form-control' ng-model='grid.appScope.vm.searchClientTerm' placeholder='Search'/> \
+                <div class='input-group-btn'>\
+                 <button type='button' ng-click='grid.appScope.vm.searchClient()' class='btn btn-default' ><img src='../images/search-15x15-666.png' /></button>\
+                 </div>\
+         </div>\
+         <hr/> \
+            <div class='clearFilterText' data-clearfiltertype='text'>\
+            <div class='clearFiltersIcon'>\
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>\
+            </div>\
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Client'><span>Clear filters from </span><span class='clearFilterTitle'>Client</span></div>\
+             <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.Clients' ng-click='grid.appScope.filterClientName(Client.matterClient)'>{{client.matterClient}}</div> </div>\
+        </div>\
+        </div>\
+    </div>\
+    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
+        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
+        <span ui-grid-visible='col.sort.direction'  class='ui-grid-invisible ui-grid-icon-blank'>&nbsp;</span>\
+    </div>\
+    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
+        <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
+    </div>\
+</div>"
+    //End
+
+
+
+    //Assigning html for celltemplate
+    //Start
+    var matterCellTemplate = '<div class="row"><div class="col-sm-8"><button class="btn btn-link" details={{row.entity}} type="button" popover> {{row.entity.matterName}} </button><div class="popover-content" style="display:none"></div></div>'
+            + "<div class='col-sm-4 text-right'><div class='dropdown'><button class='btn btn-default dropdown-toggle' type='button' data-toggle='dropdown'>...</button><ul class='dropdown-menu'>"
+            + "<li class='cursor' ng-click='grid.appScope.Openuploadmodal()'><a>Upload to this Matter</a></li><li><a href='#'>View Matter Details</li><li><a href='https://msmatter.sharepoint.com/sites/microsoft/'  target='_blank'>"
+            + "Go to Matter OneNote</li><li class='cursor' ng-show='{{row.entity.isMatterUnPinned}}' ng-click='grid.appScope.PinMatter(row)'><a>Pin this Matter</a></li><li class='cursor'"
+            + " ng-show='{{row.entity.isMatterPinned}}' ng-click='grid.appScope.UnpinMatter(row)'><a>Unpin this Matter</a></li></ul></div> </div></div>'"
+    //End
+
+
+    //Assigning options to the grid
+    //Start
     vm.gridOptions = {
         enableGridMenu: true,
         columnDefs: [{
-            field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: '<div class="row"><div class="col-sm-8"><button class="btn btn-link" type="button"  data-container="body" data-toggle="popover" data-placement="right" details={{row.entity}} data-content="<div>{{row.entity.matterName}}</div> <div> <b>Client :</b>  {{row.entity.matterClient}} </div> <div><b>Client.Matter ID :</b> {{row.entity.matterClientId}}.{{row.entity.matterID}}</div> <div><b>Sub area of law :</b> {{row.entity.matterSubAreaOfLaw}} </div> <div><b>Responsible attorney</b> : {{row.entity.matterResponsibleAttorney}}</div><div><button><a >View matter details</a></button></div><div><button>Upload to a matter</button></div> " '
-            + " > {{row.entity.matterName}} </button></div>"
-            + "<div class='col-sm-4 text-right><div class='dropdown'><button class='btn btn-default dropdown-toggle' type='button' data-toggle='dropdown'>...</button><ul class='dropdown-menu'>"
-            + "<li class='cursor' ng-click='grid.appScope.Openuploadmodal()'><a>Upload to this Matter</a></li><li><a href='#'>View Matter Details</li><li><a href='https://msmatter.sharepoint.com/sites/microsoft/'  target='_blank'>"
-            + "Go to Matter OneNote</li><li class='cursor' ng-show='grid.appScope.ddlMatters.Id==1' ng-click='grid.appScope.PinMatter(row)'><a>Pin this Matter</a></li><li class='cursor'"
-            + " ng-show='grid.appScope.ddlMatters.Id==2 || grid.appScope.ddlMatters.Id==3' ng-click='grid.appScope.UnpinMatter(row)'><a>Unpin this Matter</a></li></ul></div> </div></div>'",
-            //menuItems: [
-            // {
-            //     title: 'Outer Scope Alert',
-            //     icon: 'ui-grid-icon-info-circled',
-            //     action: function ($event) {
-            //         this.context.blargh(); // $scope.blargh() would work too, this is just an example
-            //     },
-            //     context: $scope
-            // }],
-            headerCellTemplate: headertemplate
+            field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: matterCellTemplate,
+            headerCellTemplate: MatterHeaderTemplate
         },
-            { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: headertemplate },
-             //matterID 
-    { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ngCellText">{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-     { field: 'matterModifiedDate', displayName: 'Modified Date', type: 'date', cellFilter: 'date:\'MMM dd,yyyy\'' },
-     { field: 'matterResponsibleAttorney', displayName: 'Responsible attorney', visible: false },
-     { field: 'matterSubAreaOfLaw', displayName: 'Sub area of law', visible: false },
-     { field: 'matterCreatedDate', displayName: 'Open date', type: 'date', cellFilter: 'date:\'MMM dd,yyyy\'', visible: false },
+            { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },
+            { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ngCellText">{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+            { field: 'matterModifiedDate', displayName: 'Modified Date', type: 'date', cellFilter: 'date:"MMM dd,yyyy"' },
+            { field: 'matterResponsibleAttorney', displayName: 'Responsible attorney', visible: false },
+            { field: 'matterSubAreaOfLaw', displayName: 'Sub area of law', visible: false },
+            { field: 'matterCreatedDate', displayName: 'Open date', type: 'date', cellFilter: 'date:\'MMM dd,yyyy\'', visible: false },
         ],
         enableColumnMenus: false,
         onRegisterApi: function (gridApi) {
@@ -78,7 +122,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             });
         }
     };
-
+    //End
 
     //search api call 
     function get(options, callback) {
@@ -152,7 +196,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
 
     vm.search = function () {
-
+        $scope.lazyloader = false;
 
         var searchRequest =
           {
@@ -168,17 +212,114 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                   Filters: {},
                   Sort:
                           {
+                              ByProperty: "MCMatterName",
+                              Direction: 0
+                          }
+              }
+          };
+        get(searchRequest, function (response) {
+            $scope.lazyloader = true;
+            $scope.matters = response;
+        });
+    }
+
+
+    //For Searching client in GridHeader Menu
+    vm.searchClient = function () {
+        $scope.lazyloader = false;
+
+        var searchRequest =
+          {
+              Client: {
+                  Id: "123456",
+                  Name: "Microsoft",
+                  Url: "https://msmatter.sharepoint.com/sites/catalog"
+              },
+              SearchObject: {
+                  PageNumber: 1,
+                  ItemsPerPage: 10,
+                  SearchTerm: vm.searchClientTerm,
+                  Filters: {},
+                  Sort:
+                          {
+                              ByProperty: "MCClientName",
+                              Direction: 0
+                          }
+              }
+          };
+        get(searchRequest, function (response) {
+            $scope.lazyloader = true;
+            $scope.Clients = response;
+        });
+    }
+
+
+    //For filtering mattername 
+    //Start
+    $scope.filterMatterName = function (mattername) {
+        $scope.lazyloader = false;
+        var searchRequest =
+          {
+              Client: {
+                  Id: "123456",
+                  Name: "Microsoft",
+                  Url: "https://msmatter.sharepoint.com/sites/catalog"
+              },
+              SearchObject: {
+                  PageNumber: 1,
+                  ItemsPerPage: 10,
+                  SearchTerm: mattername,
+                  Filters: {},
+                  Sort:
+                          {
                               ByProperty: "LastModifiedTime",
                               Direction: 1
                           }
               }
           };
         get(searchRequest, function (response) {
-            vm.gridOptions.data = response.matterDataList;
+            $scope.lazyloader = true;
+            vm.gridOptions.data = response;
+            $scope.matters = [];
         });
+
     }
 
+    //End
 
+
+    //For filtering Clientname 
+    //Start
+    $scope.filterClientName = function (clientname) {
+        $scope.lazyloader = false;
+        var searchRequest =
+          {
+              Client: {
+                  Id: "123456",
+                  Name: "Microsoft",
+                  Url: "https://msmatter.sharepoint.com/sites/catalog"
+              },
+              SearchObject: {
+                  PageNumber: 1,
+                  ItemsPerPage: 10,
+                  SearchTerm: clientname,
+                  Filters: {},
+                  Sort:
+                          {
+                              ByProperty: "LastModifiedTime",
+                              Direction: 1
+                          }
+              }
+          };
+        get(searchRequest, function (response) {
+            $scope.lazyloader = true;
+            vm.gridOptions.data = response;
+            $scope.Clients = [];
+        });
+
+    }
+
+    //End
 
 
     //Code written for displaying types in dropdown 
@@ -188,7 +329,24 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
 
     //End  
+    $scope.Pinnedobj = [];
+    $scope.getMatterPinned = function () {
 
+        var pinnedMattersRequest = {
+            Id: "123456",
+            Name: "Microsoft",
+            Url: "https://msmatter.sharepoint.com/sites/catalog"
+        }
+        getPinnedMatters(pinnedMattersRequest, function (response) {
+            $scope.Pinnedobj = [];
+            for (var i = 0; i < response.matterDataList.length; i++) {
+                $scope.Pinnedobj.push(response.matterDataList[i]);
+            }
+        });
+        return true;
+    }
+
+    $scope.getMatterPinned();
 
 
 
@@ -223,7 +381,6 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 }
             }
 
-
             get(AllMattersRequest, function (response) {
                 $scope.lazyloader = true;
                 if (response.errorCode == "404") {
@@ -231,9 +388,26 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                     $scope.nodata = true;
                     $scope.errorMessage = response.message;
                 } else {
+                    $scope.getMatterPinned();
                     $scope.divuigrid = true;
                     $scope.nodata = false;
-                    vm.gridOptions.data = response;
+                    if ($scope.Pinnedobj.length > 0) {
+                        angular.forEach($scope.Pinnedobj, function (pinobj) {
+                            angular.forEach(response, function (res) {
+                                if (pinobj.matterName == res.matterName) {
+                                    res.isMatterPinned = true;
+                                    res.isMatterUnPinned = false;
+                                } else {
+                                    res.isMatterPinned = false;
+                                    res.isMatterUnPinned = true;
+                                }
+                            });
+                        });
+                        vm.gridOptions.data = response;
+                        console.log(response);
+                    } else {
+                        vm.gridOptions.data = response;
+                    }
                 }
             });
 
@@ -274,9 +448,25 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                     $scope.nodata = true;
                     $scope.errorMessage = response.message;
                 } else {
+                    $scope.getMatterPinned();
                     $scope.divuigrid = true;
                     $scope.nodata = false;
-                    vm.gridOptions.data = response;
+                    if ($scope.Pinnedobj.length > 0) {
+                        angular.forEach($scope.Pinnedobj, function (pinobj) {
+                            angular.forEach(response, function (res) {
+                                if (pinobj.matterGuid == res.matterGuid) {
+                                    res.isMatterPinned = true;
+                                    res.isMatterUnPinned = false;
+                                } else {
+                                    res.isMatterPinned = false;
+                                    res.isMatterUnPinned = true;
+                                }
+                            });
+                        });
+                        vm.gridOptions.data = response;
+                    } else {
+                        vm.gridOptions.data = response;
+                    }
                 }
             });
         } else if (id == 3) {
@@ -295,6 +485,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 } else {
                     $scope.divuigrid = true;
                     $scope.nodata = false;
+                    angular.forEach(response.matterDataList, function (res) {
+                        res.isMatterPinned = false;
+                        res.isMatterUnPinned = true;
+                    });
                     vm.gridOptions.data = response.matterDataList;
                 }
             });
@@ -304,7 +498,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
 
     //To run GetMatters function on page load 
-    $scope.GetMatters(1);
+    $scope.GetMatters($scope.ddlMatters.Id);
     //End 
 
 
@@ -319,28 +513,12 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 Url: "https://msmatter.sharepoint.com/sites/catalog"
             },
             matterData: {
-                matterName: alldata.matterName,
-                matterDescription: alldata.matterDescription,
-                matterCreatedDate: alldata.matterCreatedDate,
-                matterUrl: alldata.matterUrl,
-                matterPracticeGroup: alldata.matterPracticeGroup,
-                matterAreaOfLaw: alldata.matterAreaOfLaw,
-                matterSubAreaOfLaw: alldata.matterSubAreaOfLaw,
-                matterClientUrl: alldata.matterClientUrl,
-                matterClient: alldata.matterClient,
-                matterClientId: alldata.matterClientId,
-                hideUpload: alldata.hideUpload,
-                matterID: alldata.matterID,
-                matterResponsibleAttorney: alldata.matterResponsibleAttorney,
-                matterModifiedDate: alldata.matterModifiedDate,
-                matterGuid: alldata.matterGuid
-
-
+                matterName: alldata.matterUrl,
             }
         }
         UnpinMatters(unpinRequest, function (response) {
             if (response.isMatterUnPinned) {
-                $scope.GetMatters($scope.ddlMatters);
+                $scope.GetMatters($scope.ddlMatters.Id);
                 alert("Success");
             }
         });
@@ -378,7 +556,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         }
         PinMatters(pinRequest, function (response) {
             if (response.isMatterPinned) {
-                $scope.GetMatters($scope.ddlMatters);
+                $scope.GetMatters($scope.ddlMatters.Id);
                 alert("Success");
             }
         });
@@ -390,10 +568,6 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     $scope.Openuploadmodal = function () {
         jQuery('#UploadMatterModal').modal("show");
     }
-
-
-
-
 
 
     //To display modal up in center of the screen...
@@ -434,38 +608,42 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         }
     }
 
-
-
 }]);
-    app.directive('toggle', function () {
+
+
+    app.directive('popover', function () {
         return {
             restrict: 'AE',
             link: function (scope, element, attrs) {
-                if (attrs.toggle == "popover") {
+                //if (attrs.toggle == "popover") {
                     var obj = eval('(' + attrs.details + ')');
+                    var html ='<div class="popover">\
+                                     <div class="popover-header">\
+                                         <h3 class="popover-title"></h3>\
+                                      </div>\
+                                     <div class="popover-content">\
+                                          ' + obj.matterName + ' \
+                                          <div> <b>Client :</b> '+ obj.matterClient + '</div>\
+                                          <div><b>Client.Matter ID :</b> '+ obj.matterClientId + '.' + obj.matterID + '</div>\
+                                          <div><b>Sub area of law :</b> '+ obj.matterSubAreaOfLaw + '</div> \
+                                          <div><b>Responsible attorney</b> : '+ obj.matterResponsibleAttorney + '</div>\
+                                          <div><button ><a href="https://msmatter.sharepoint.com/sites/microsoft/SitePages" target="_blank">View matter details</a></button></div>\
+                                          <div><button  ng-click="Openuploadmodal()">Upload to a matter</button></div>\
+                                     </div>\
+                                   </div>';
+                    $(element).parent().find('.popover-content').append(html);
                     $(element).popover({
                         html: true,
                         trigger: 'click',
                         delay: 500,
-                        //template:
-                        //          '<div class="popover">\
-                        //             <div class="popover-header">\
-                        //                 <h3 class="popover-title"></h3>\
-                        //              </div>\
-                        //             <div class="popover-content">\
-                        //                  ' + obj.matterName + ' \
-                        //                  <div> <b>Client :</b> '+ obj.matterClient + '</div>\
-                        //                  <div><b>Client.Matter ID :</b> '+ obj.matterClientId + '.' + obj.matterID + '</div>\
-                        //                  <div><b>Sub area of law :</b> '+ obj.matterSubAreaOfLaw + '</div> \
-                        //                  <div><b>Responsible attorney</b> : '+ obj.matterResponsibleAttorney + '</div>\
-                        //                  <div><button ><a href="https://msmatter.sharepoint.com/sites/microsoft/SitePages" target="_blank">View matter details</a></button></div>\
-                        //                  <div><button  ng-click="Openuploadmodal()">Upload to a matter</button></div>\
-                        //             </div>\
-                        //           </div>'
+                        content: function () {
+                            // Get the content from the hidden sibling.
+                            return $(element).parent().find('.popover-content').html();
+                        },
 
                     });
                 }
-            }
+            //}
         };
     })
 

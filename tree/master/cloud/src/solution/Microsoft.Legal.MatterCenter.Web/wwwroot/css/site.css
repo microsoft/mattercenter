@@ -193,6 +193,27 @@ textarea {
     border: none;
 }
 
+#filterResultsContainer {
+    max-height: 134px!important;
+    min-height: 0;
+    overflow-y: auto;
+    clear: both;
+    position: relative;
+}
+
+#filterResultsContainer .filterValueLabels, #filterResultsContainer .bufferElements, #filterResultsContainer .filterFlyOutNoResults {
+    margin: 10px 0 0 10px;
+}
+.filterFlyOutNoResults {
+    font-family: "Segoe UI Web Semilight", "Segoe UI Semilight", "Segoe WP Semilight", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
+    width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
 /*.ui-grid-change-icon {
     background: url(../images/Column_Picker_Expand.png) center no-repeat;..
   
