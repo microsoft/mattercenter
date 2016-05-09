@@ -12,8 +12,8 @@
     <AppDomain>https://login.microsoftonline.com/</AppDomain>
     <AppDomain>https://matterwebapp.azurewebsites.net</AppDomain>
     <AppDomain>https://cdnjs.cloudflare.com/</AppDomain>
-    <AppDomain>https://officejscommands.azurewebsites.net/</AppDomain>
-    <AppDomain>https://oep.azurewebsites.net/</AppDomain>
+    <AppDomain>https://appsforoffice.microsoft.com/</AppDomain>
+    
   </AppDomains>
   <Hosts>
     <Host Name="Mailbox" />
@@ -26,20 +26,21 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/launchDialog.html" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
+        <!-- change url to https://matterwebapp.azurewebsites.net/app/launchDialog.html once dialog API for OWA is released -->
         <RequestedHeight>450</RequestedHeight>
       </DesktopSettings>
       <TabletSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/launchDialog.html" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
         <RequestedHeight>300</RequestedHeight>
       </TabletSettings>
       <PhoneSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/launchDialog.html" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
       </PhoneSettings>
     </Form>
     <Form xsi:type="ItemEdit">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/launchDialog.html" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
       </DesktopSettings>
     </Form>
   </FormSettings>
