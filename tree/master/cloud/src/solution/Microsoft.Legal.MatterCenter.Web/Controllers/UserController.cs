@@ -28,7 +28,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         private ErrorSettings errorSettings;
         private ISPOAuthorization spoAuthorization;
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;        
-        private IMatterRepository matterRepositoy;
+        private IUserRepository userRepositoy;
         private ICustomLogger customLogger;
         private LogTables logTables;      
         private GeneralSettings generalSettings;
@@ -42,7 +42,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         public UserController(IOptions<ErrorSettings> errorSettings,           
             ISPOAuthorization spoAuthorization,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
-            IMatterRepository matterRepositoy,
+            IUserRepository userRepositoy,
             ICustomLogger customLogger, 
             IOptions<LogTables> logTables,  
             IOptions<GeneralSettings> generalSettings
@@ -54,7 +54,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             this.customLogger = customLogger;
             this.logTables = logTables.Value;             
             this.generalSettings = generalSettings.Value;
-            this.matterRepositoy = matterRepositoy;
+            this.userRepositoy = userRepositoy;
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 }
                 #endregion
                 searchRequestVM.SearchObject.SearchTerm = (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm)) ? searchRequestVM.SearchObject.SearchTerm : string.Empty;
-                IList<Users> users = await matterRepositoy.GetUsersAsync(searchRequestVM);
+                IList<Users> users = await userRepositoy.GetUsersAsync(searchRequestVM);
                 if (users != null && users.Count != 0)
                 {
                     return matterCenterServiceFunctions.ServiceResponse(users, (int)HttpStatusCode.OK);
@@ -149,7 +149,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 string result = ServiceUtility.GetDataFromAzureRedisCache(ServiceConstants.CACHE_ROLES);
                 if (string.IsNullOrEmpty(result))
                 {
-                    roles = await matterRepositoy.GetRolesAsync(client);
+                    roles = await userRepositoy.GetRolesAsync(client);
                     ServiceUtility.SetDataIntoAzureRedisCache<IList<Role>>(ServiceConstants.CACHE_ROLES, roles);
                 }
                 else
@@ -199,7 +199,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 string result = ServiceUtility.GetDataFromAzureRedisCache(ServiceConstants.CACHE_PERMISSIONS);
                 if (string.IsNullOrEmpty(result))
                 {
-                    roles = await matterRepositoy.GetPermissionLevelsAsync(client);
+                    roles = await userRepositoy.GetPermissionLevelsAsync(client);
                     ServiceUtility.SetDataIntoAzureRedisCache<IList<Role>>(ServiceConstants.CACHE_PERMISSIONS, roles);
                 }
                 else

@@ -74,7 +74,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            createConfig(env);
+            CreateConfig(env);
 
             var log = loggerFactory.CreateLogger<Startup>();
             try
@@ -204,6 +204,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.AddSingleton<IUploadHelperFunctions, UploadHelperFunctions>();
             services.AddSingleton<IUploadHelperFunctionsUtility, UploadHelperFunctionsUtility>();
             services.AddSingleton<IDocumentProvision, DocumentProvision>();
+            services.AddSingleton<IUserRepository, UserRepository>();
         }
 
         private void CheckAuthorization(IApplicationBuilder app)
@@ -227,7 +228,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             });
         }
 
-        private void createConfig(IHostingEnvironment env)
+        private void CreateConfig(IHostingEnvironment env)
         {
 
             string destPath = Path.Combine(env.WebRootPath, "app/config.js");

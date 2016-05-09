@@ -38,7 +38,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private IDocumentRepository documentRepository;
         private DocumentSettings documentSettings;
         private IUploadHelperFunctionsUtility uploadHelperFunctionsUtility;
-        public UploadHelperFunctions(ISPOAuthorization spoAuthorization, IOptions<ErrorSettings> errorSettings, 
+        private IUserRepository userRepositoy;
+        public UploadHelperFunctions(ISPOAuthorization spoAuthorization, IOptions<ErrorSettings> errorSettings, IUserRepository userRepositoy,
             IDocumentRepository documentRepository, IOptions<DocumentSettings> documentSettings, IUploadHelperFunctionsUtility uploadHelperFunctionsUtility)
         {
             this.spoAuthorization = spoAuthorization;
@@ -46,6 +47,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.documentRepository = documentRepository;
             this.documentSettings = documentSettings.Value;
             this.uploadHelperFunctionsUtility = uploadHelperFunctionsUtility;
+            this.userRepositoy = userRepositoy;
         }
         /// <summary>
         /// Acts as entry point from service to place the request to upload email/attachment. Reads the web request headers and requests applicable methods based on headers.
@@ -722,7 +724,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                     {
                         
-                        Users currentUserDetail = documentRepository.GetLoggedInUserDetails(clientContext);
+                        Users currentUserDetail = userRepositoy.GetLoggedInUserDetails(clientContext);
                         Dictionary<string, string> mailProperties = new Dictionary<string, string>
                         {
                             { ServiceConstants.MAIL_SENDER_KEY, mailMetadata.mailSender },
