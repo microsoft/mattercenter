@@ -163,7 +163,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             var instrumentationKey = this.Configuration.GetSection("ApplicationInsights").GetSection("InstrumentationKey").Value.ToString();
             builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterExceptionFilter(logger, instrumentationKey)); });
         }
-        \  
+         
 
         private void ConfigureSettings(IServiceCollection services)
         {
