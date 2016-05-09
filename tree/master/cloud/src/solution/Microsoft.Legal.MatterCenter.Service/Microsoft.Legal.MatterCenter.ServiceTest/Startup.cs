@@ -160,8 +160,8 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 o.SerializerSettings.Formatting = Formatting.Indented;
             });
 
-            //builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterFilter(logger)); });
-            builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterExceptionFilter(logger)); });
+            var instrumentationKey = this.Configuration.GetSection("ApplicationInsights").GetSection("InstrumentationKey").Value.ToString();
+            builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterExceptionFilter(logger, instrumentationKey)); });
         }
 
 
