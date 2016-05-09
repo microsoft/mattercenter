@@ -14,15 +14,15 @@
             </div>
         </div>
         
-
-        <div class="menu">
-            <div class="menuTextGroup">
-                <div><span title="Step 1: Select a client and provide basic information for your new matter." ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText menuTextSelected" data-section-num="1" data-section-name="snOpenMatter">1 Open Matter</span></div>
-                <div><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter." class="menuText" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 Assign Permissions</span></div>
-                <div><span ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team." class="menuText" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 Create and Notify</span></div>
+        <div id="HeaderPlaceHolder">
+            <div class="menu">
+                <div class="menuTextGroup">
+                    <div><span title="Step 1: Select a client and provide basic information for your new matter." ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText " data-section-num="1" data-section-name="snOpenMatter">1 Open Matter</span></div>
+                    <div><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter." class="menuText" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 Assign Permissions</span></div>
+                    <div><span ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team." class="menuText" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 Create and Notify</span></div>
+                </div>
             </div>
         </div>
-
 
         <div id="ContextualHelp">
             <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
@@ -62,7 +62,7 @@
 </div>
 
 
-<div style="margin:1%;">
+<div class="" style="margin:1%;">
   
 
     <div class="content">    
@@ -107,119 +107,161 @@
         </section>
         <!-- Conflict check section -->
         <section class="sectionStep " id="snConflictCheck" ng-show='cm.sectionName=="snConflictCheck"' style="display: block;">
-            <div class="sectionContent">
-                <div id="conflictCheck">
-                    <label class="medium chkConflictCheckParent conflictCheckPosition" id="chkConflictCheckParent">
-                        <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">Conflict check conducted (must be complete prior to provisioning matter)
+           
+
+
+
+
+                  <div class="sectionContent">
+              <div id="conflictCheck">
+                  <label class="medium chkConflictCheckParent conflictCheckPosition" id="chkConflictCheckParent">
+                      <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">Conflict check conducted (must be complete prior to provisioning matter)
+                  </label>
+                  <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>Who conducted the conflict check?</label>
+                  <div class="gutter"></div>
+                  <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>Date Conducted</label>
+                  <div class="gutter"></div>
+                  <label class="contentLabel mediumSmall" id="conflictIdentified">Conflict Identified?</label>
+                  <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                  <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-model="cm.selectedConflictCheckUser"  spellcheck="true" type="text" typeahead="users.name + ' ('+ users.email + ')' for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
+                  <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                  <div ng-show="noResults">
+                      <i class="glyphicon glyphicon-remove"></i> No Results Found
+                  </div>
+                  <div class="gutter"></div>
+                  <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
+                     <input type="text" class="form-control" uib-datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />
+
+                <div class="gutter"></div>
+                <div class="conflictRadioBtn">
+                    <label class="smaller">
+                        <input  type="radio"  ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)'  ng-value="true" ng-model="cm.conflictRadioCheck"  value=true>Yes
                     </label>
-                    <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>Who conducted the conflict check?</label>
-                    <div class="gutter"></div>
-                    <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>Date Conducted</label>
-                    <div class="gutter"></div>
-                    <label class="contentLabel mediumSmall" id="conflictIdentified">Conflict Identified?</label>
+                    <label class="smaller">
+                        <input  type="radio" ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-model="cm.conflictRadioCheck"  ng-value="false"  value=false>No
+                    </label>
+                </div>
+                <div class="clear"></div>
+                <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
+                    <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-model="cm.selectedConflictCheckUser" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" typeahead="users.name + ' ('+ users.email + ')' for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
-                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.selectedConflictUser"  typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+
                     <div ng-show="noResults">
                         <i class="glyphicon glyphicon-remove"></i> No Results Found
-                    </div>
-                    <div class="gutter"></div>
-                    <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
-                    <input type="text" class="form-control" uib-datepicker-popup="mm\dd\yyyy" style=" width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />
-                    
-                    <div class="gutter"></div>
-                    <div class="conflictRadioBtn">
-                        <label class="smaller">
-                            <input  type="radio"  ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-checked="checked" ng-value="true" ng-model="cm.conflictRadioCheck" value=true>Yes
-                        </label>
-                        <label class="smaller">
-                            <input  type="radio" ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-model="cm.conflictRadioCheck"  ng-value="false"  value=false>No
-                        </label>
-                    </div>
-                    <div class="clear"></div>
-                    <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
-                        <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
-                        <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.selectedConflictUser"  typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
-                       
-                        <div ng-show="noResults">
-                            <i class="glyphicon glyphicon-remove"></i> No Results Found
-                        </div><i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                         <div class="gutter"></div>
-                        <div class="large clear" id="areaBlockUser"></div>
-                    </section>
-                </div>
-                <label class="secureMatterLabel assignTeamRadioPosition">Would you like this matter to be secured only to the assigned team?</label>
-                <div class="secureMatterRadioBtn assignTeamRadioPosition">
-                    <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" checked="checked" class="matterCheckYes" type="radio" ng-value="True">Yes
-                    </label>
-                    <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck"  class="matterCheckNo" type="radio" ng-value="False">No
-                    </label>
-                </div>
-                <label class="contentLabel medium clear blue" id="assignTeam">Assign Team</label>
-                <label class="medium clear contentLabel" id="labelName"><span class="mandatory">*&nbsp;</span>Name</label>
-                <div class="gutter"></div>
-                <label class="mediumSmallRole contentLabel"><span class="mandatory">*&nbsp;</span>Role</label>
-                <div class="gutter"></div>
-                <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>Permission Level</label>
-                <div class="row1 assignNewPerm">
-                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input class="medium clear inputAssignPerm ui-autocomplete-input commonspace" id="txtAssign1" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
-                    <div class="gutter"></div>
-                    <div class="addNewMember">
-                        <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth">
-                            <select class="medium clear dropdownCustom" >
-                                <option value="" label="- Select a role -"></option>
-                                </select>
-                        </div>
-                        <div class="ddlRoleAssignList clear hide" id="ddlRoleAssignList1"><div title="Attorney" class="roleValue assignPerm1" data-value="Attorney" data-mandatory="false">Attorney</div><div title="Legal Admin" class="roleValue assignPerm1" data-value="Legal Admin" data-mandatory="false">Legal Admin</div><div title="Paralegal" class="roleValue assignPerm1" data-value="Paralegal" data-mandatory="false">Paralegal</div><div title="Responsible Attorney" class="roleValue assignPerm1" data-value="Responsible Attorney" data-mandatory="true">Responsible Attorney</div><div title="Working Attorney" class="roleValue assignPerm1" data-value="Working Attorney" data-mandatory="false">Working Attorney</div></div>
-                    </div>
-                    <div class="gutter"></div>
-                    <div>
-                        <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
-                            <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
-                                <select class="medium clear dropdownCustom">
-                                    <option value="" label="- Assign a permission -"></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="ddlPermAssignList clear hide" id="ddlPermAssignList1"><div title="Contribute" class="permValue permContent1" data-value="Contribute">Contribute</div><div title="Full Control" class="permValue permContent1" data-value="Full Control">Full Control</div><div title="Read" class="permValue permContent1" data-value="Read">Read</div></div>
-                    </div>
-                    <div class="gutter"></div>
-                    <div class="close">
-                        <img title="Delete" alt="Delete" src="../Images/icon-delete.png">
-                    </div>
-                </div>
-                <div class="clear" id="addNewAssignPerm"></div>
-                <a id="addMoreLink">Add More Names</a>
+                    </div><i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                     <div class="gutter"></div>
+                    <div class="large clear" id="areaBlockUser"></div>
+                </section>
             </div>
-        </section>
+            <label class="secureMatterLabel assignTeamRadioPosition">Would you like this matter to be secured only to the assigned team?</label>
+            <div class="secureMatterRadioBtn assignTeamRadioPosition">
+                <label class="rdbOptions">
+                    <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck"  class="matterCheckYes"  type="radio" value="True">Yes
+                </label>
+                <label class="rdbOptions">
+                    <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck"  class="matterCheckNo" type="radio" value="False">No
+                </label>
+            </div>
+            <label class="contentLabel medium clear blue" id="assignTeam">Assign Team</label>
+            <label class="medium clear contentLabel" id="labelName"><span class="mandatory">*&nbsp;</span>Name</label>
+            <div class="gutter"></div>
+            <label class="mediumSmallRole contentLabel"><span class="mandatory">*&nbsp;</span>Role</label>
+            <div class="gutter"></div>
+            <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>Permission Level</label>
+           
+                      
+
+                      <div data-ng-repeat="assignTeam in cm.assignPermissionTeams">
+                         
+                        
+                         
+
+
+
+
+                          <div class="row{{$index}} assignNewPerm">
+                              <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                              <input class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  id="txtAssign1"  spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                              <div ng-show="noResults">
+                                  <i class="glyphicon glyphicon-remove"></i> No Results Found
+                              </div><i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                              <div class="gutter"></div>
+                              <div class="addNewMember">
+                                  <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth">
+                                      <select class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole"  ng-options='assignRole.name for assignRole in cm.assignRoles '>
+                                         
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="gutter"></div>
+                              <div>
+                                  <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
+                                      <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
+                                          <select class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '>
+                                            
+                                          </select>
+                                      </div>
+                                  </div>
+                                 </div>
+                              <div class="gutter"></div>
+                              <div class="close customClose" >
+                                  <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="Delete" alt="Delete" src="../Images/icon-delete.png">
+                              </div>
+                          </div>
+
+                      </div>
+            <div class="clear" id="addNewAssignPerm"></div>
+            <a id="addMoreLink" ng-click="cm.addNewAssignPermissions()">Add More Names</a>
+
+                      
+        </div>
+</section>
         <!-- Create and share matter section -->
         <section class="sectionStep " id="snCreateAndShare" ng-show='cm.sectionName=="snCreateAndShare"' style="display: block;">
             <div class="sectionContent">
-                <label class="clear createNotifyDescription">You have entered all of the necessary information to create this matter. After you click Create and Notify, the matter will be created and all team members will receive an email containing a link to this matter’s location.</label>
-                <div class="ms-ChoiceField calendarPosition">
-                    <input class="ms-ChoiceField-input" id="demo-checkbox-unselected0" type="checkbox">
-                    <label class="ms-ChoiceField-field" for="demo-checkbox-unselected0"><span class="ms-Label checkbox" id="checkbox-label-text0">Include calendar</span></label>
+                <div style="">
+                    <span class="">
+                        You have entered all of the necessary information to create this matter.
+                        After you click Create and Notify, the matter will be created and all team members will receive
+                    </span>
                 </div>
-                <div class="ms-ChoiceField clear rssFeedsPosition">
-                    <input class="ms-ChoiceField-input" id="demo-checkbox-unselected1" type="checkbox">
-                    <label class="ms-ChoiceField-field" for="demo-checkbox-unselected1"><span class="ms-Label checkbox" id="checkbox-label-text1">Include RSS Feeds</span></label>
+                <div>
+                    <span>an email containing a link to this matter’s location.</span>
                 </div>
-                <div class="ms-ChoiceField emailPosition">
-                    <input class="ms-ChoiceField-input" id="demo-checkbox-unselected2" type="checkbox">
-                    <label class="ms-ChoiceField-field" for="demo-checkbox-unselected2"><span class="ms-Label checkbox" id="checkbox-label-text2">Include email notification</span></label>
+
+                <div class="gutter" style="clear:both;"></div>
+                <div >
+                    
+                        <input id="demo-checkbox-unselected0" ng-model="cm.includeCalendar" ng-init="cm.includeCalendar=true" class="ms-ChoiceField-input ms-checkBox" type="checkbox">
+                        <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox">Include calendar</span></label>
+                   
                 </div>
-                <div class="ms-ChoiceField taskPosition">
-                    <input class="ms-ChoiceField-input" id="demo-checkbox-unselected3" type="checkbox">
-                    <label class="ms-ChoiceField-field" for="demo-checkbox-unselected3"><span class="ms-Label checkbox" id="checkbox-label-text3">Include tasks</span></label>
+                <div class="gutter" style="clear:both;"></div>
+                <div >
+
+                    <input id="demo-checkbox-unselected1" ng-model="cm.includeRssFeeds" ng-init="cm.includeRssFeeds=true" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox">Include RSS Feeds</span></label>
+
                 </div>
-                <button class="button clear" id="btnCreateMatter" type="button" value="Create">Create and Notify</button>
-            </div>
+                <div class="gutter" style="clear:both;"></div>
+
+                <div>
+
+                    <input id="demo-checkbox-unselected2" ng-model="cm.includeEmail" ng-init="cm.includeEmail=true" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox">Include email notification</span></label>
+                </div>
+                <div class="gutter" style="clear:both;"></div>
+                <div >
+
+                    <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks=true" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox">Include tasks</span></label>
+                </div>
+                <button class="button clear" type="button" id="btnCreateMatter" value="Create">Create and Notify</button>
+            
+                </div>
             <div class="loading hide">
-                <img id="loadingImage" alt="Loading..." src="../Images/WindowsLoadingFast.GIF">
+                <img id="loadingImage" src="../Images/WindowsLoadingFast.GIF" alt="Loading...">
             </div>
         </section>
         <div id="space"></div>

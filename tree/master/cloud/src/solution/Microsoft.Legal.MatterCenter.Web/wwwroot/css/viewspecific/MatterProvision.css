@@ -453,7 +453,7 @@ _::-moz-svg-foreign-content, :root .mainArea .notificationContainer {
         float: right;
         font-family: 'Segoe UI', Calibri, 'Times New Roman';
         font-size: 0.75em;
-        height: 32px;
+        /*height: 32px;*/
         margin-left: 492px;
         position: absolute;
         width: 108px;
