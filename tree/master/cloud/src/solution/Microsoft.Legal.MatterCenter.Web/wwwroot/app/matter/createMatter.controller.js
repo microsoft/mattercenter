@@ -45,7 +45,11 @@
             cm.primaryMatterType = cm.errorPopUp = false;
             cm.matterGUID = "";
             cm.iCurrentPage = 0;
-               
+            cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 'row_' + 1 }];
+            cm.assignRoles = [];
+            cm.assignPermissions = [];
+            cm.secureMatterCheck = "True";
+            cm.conflictRadioCheck = true;
             
             ///* Function to generate 32 bit GUID */
             function get_GUID() {
@@ -205,8 +209,9 @@
                 
             }
             getRoles(optionsForRoles, function (response) {
-                console.log("roles");
-                console.log(response);
+                //console.log("roles");
+                //console.log(response);
+                cm.assignRoles = response;
             });
             var optionsForPermissionLevels = new Object;
             optionsForPermissionLevels = {
@@ -214,8 +219,9 @@
                 Url: "https://msmatter.sharepoint.com/sites/catalog"
             }
             getPermissionLevels(optionsForPermissionLevels, function (response) {
-                console.log("Permission Levels");
-                console.log(response);
+                //console.log("Permission Levels");
+                //console.log(response);
+                cm.assignPermissions = response;
             });
 
             //calls this function when selectType button clicks
@@ -350,24 +356,7 @@
 
            
 
-            cm.valuationDate = new Date();
-            cm.valuationDatePickerIsOpen = false;
-           
-
-            $scope.$watch(function () {
-                return cm.valuationDatePickerIsOpen;
-            }, function (value) {
-              //  cm.conflictDate = value;
-            });
-
-            cm.valuationDatePickerOpen = function ($event) {
-
-                if ($event) {
-                    $event.preventDefault();
-                    $event.stopPropagation(); // This is the magic
-                }
-                this.valuationDatePickerIsOpen = true;
-            };
+         
    
 
             cm.navigateToSecondSection = function (sectionName) {
@@ -419,10 +408,19 @@
                         alert("Select a client for this matter ");
                     }
                 }
-                else {
+                else if (sectionName == "snCreateAndShare") {
 
-                    cm.sectionName = sectionName;
+                    
+                    if (undefined !== cm.chkConfilctCheck && true == cm.chkConfilctCheck) {
+                       cm.sectionName = sectionName;
+                    }
+
                 }
+                else {
+                    cm.sectionName = sectionName;
+
+                }
+
                
                 //if (sectionName == "snConflictCheck") {
                 //    if (cm.clientId != null && cm.selectedClientName != null){
@@ -473,7 +471,20 @@
                 cm.selectedConflictUser = "";
             }
            
+            cm.addNewAssignPermissions = function () {
+                var newItemNo = cm.assignPermissionTeams.length + 1;
+                cm.assignPermissionTeams.push({ 'assigneTeamRowNumber':  newItemNo });
+            };
 
+            cm.removeAssignPermissionsRow = function (index) {
+                var remainingRows = cm.assignPermissionTeams.length;
+                if (1 < remainingRows) {
+
+                    cm.assignPermissionTeams.splice(index, 1);
+                    console.log(cm.assignPermissionTeams);
+                    console.log(cm.assignPermissionTeams.length);
+                }
+            };
 
             if (localStorage.getItem("iLivePage")) {
                 if (localStorage.getItem("iLivePage") == 2) {
@@ -492,7 +503,7 @@
                     cm.activeAOLTerm = null;
                     cm.activeSubAOLTerm = null;
                     cm.activeDocumentTypeLawTerm = oPageData.oSelectedDocumentTypeLawTerms;
-                    cm.selectedDocumentTypeLawTerms = cm.documentTemplateNames = oPageData.oSelectedDocumentTypeLawTerms;
+                    cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms = oPageData.oSelectedDocumentTypeLawTerms;
                     cm.popupContainerBackground = "Show";
                     cm.popupContainer = "hide";
 
@@ -503,6 +514,7 @@
                     cm.iCurrentPage = 0;
                     cm.navigateToSecondSection("");
                     cm.navigateToSecondSection("snConflictCheck");
+                 
 
                 }
             }
