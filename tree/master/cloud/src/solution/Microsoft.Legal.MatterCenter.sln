@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Legal.MatterCenter.Web", "Microsoft.Legal.MatterCenter.Web\Microsoft.Legal.MatterCenter.Web.xproj", "{B310D19A-3BFE-4A19-9C79-575A54A5F841}"
 EndProject
