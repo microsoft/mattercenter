@@ -26,20 +26,20 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/authDialog.html" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/launchDialog.html" />
         <RequestedHeight>450</RequestedHeight>
       </DesktopSettings>
       <TabletSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/authDialog.html" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/launchDialog.html" />
         <RequestedHeight>300</RequestedHeight>
       </TabletSettings>
       <PhoneSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/authDialog.html" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/launchDialog.html" />
       </PhoneSettings>
     </Form>
     <Form xsi:type="ItemEdit">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/authDialog.html" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/launchDialog.html" />
       </DesktopSettings>
     </Form>
   </FormSettings>
