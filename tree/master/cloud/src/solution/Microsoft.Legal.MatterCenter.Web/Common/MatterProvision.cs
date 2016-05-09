@@ -29,10 +29,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private CamlQueries camlQueries;
         private ListNames listNames;
         private SearchSettings searchSettings;
+        private IUserRepository userRepositoy;
         public MatterProvision(IMatterRepository matterRepositoy, IOptions<MatterSettings> matterSettings, IOptions<ErrorSettings> errorSettings,
             ISPOAuthorization spoAuthorization, IEditFunctions editFunctions, IValidationFunctions validationFunctions,
             ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<MailSettings> mailSettings, IOptions<CamlQueries> camlQueries, IOptions<ListNames> listNames,
-            IOptions<SearchSettings> searchSettings
+            IOptions<SearchSettings> searchSettings, IUserRepository userRepositoy
             )
         {
             this.matterRepositoy = matterRepositoy;
@@ -47,6 +48,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.camlQueries = camlQueries.Value;
             this.listNames = listNames.Value;
             this.searchSettings = searchSettings.Value;
+            this.userRepositoy = userRepositoy;
         }
 
 
@@ -143,7 +145,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {                
                 clientContext = spoAuthorization.GetClientContext(matterInformation.Client.Url);
                 PropertyValues matterStampedProperties = matterRepositoy.GetStampedProperties(clientContext, matter.Name);
-                loggedInUserName = matterRepositoy.GetLoggedInUserDetails(clientContext).Name;
+                loggedInUserName = userRepositoy.GetLoggedInUserDetails(clientContext).Name;
                 bool isFullControlPresent = editFunctions.ValidateFullControlPermission(matter);
                 
                 if (!isFullControlPresent)

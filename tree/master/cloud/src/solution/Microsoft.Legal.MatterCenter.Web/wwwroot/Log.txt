@@ -1,0 +1,126 @@
+﻿2016-05-06 16:30:23.879 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/fabric-0.6.0/css/fabric-0.6.0.components.min.css  
+2016-05-06 16:30:23.879 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/fabric-0.6.0/css/fabric-0.6.0.min.css  
+2016-05-06 16:30:23.879 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/app/config.js  
+2016-05-06 16:30:23.879 -07:00 [Information] Request starting HTTP/1.1 DEBUG http://localhost:11749/ text/html 
+2016-05-06 16:30:24.033 -07:00 [Information] Sending file. Request path: '"/app/config.js"'. Physical path: '"C:\Projects\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot\app\config.js"'
+2016-05-06 16:30:24.079 -07:00 [Information] Request finished in 0.0141ms 200 application/javascript
+2016-05-06 16:30:24.297 -07:00 [Information] Request finished in 0.039ms 404 
+2016-05-06 16:30:24.297 -07:00 [Information] Request finished in 0.0375ms 404 
+2016-05-06 16:30:24.297 -07:00 [Information] Request finished in 0.0359ms 404 
+2016-05-06 16:31:19.300 -07:00 [Information] Request starting HTTP/1.1 POST https://localhost:44323/api/v1/matter/get application/json 315
+2016-05-06 16:31:19.769 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 16:31:19.833 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 16:31:19.842 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 16:31:20.070 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.Get" with arguments (["Microsoft.Legal.MatterCenter.Models.SearchRequestVM"]) - ModelState is Valid'
+2016-05-06 16:31:21.745 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 16:31:21.780 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.Get" in 0.1969ms
+2016-05-06 16:31:21.782 -07:00 [Information] Request finished in 0.2485ms 200 application/json; charset=utf-8
+2016-05-06 16:31:22.177 -07:00 [Information] Request starting HTTP/1.1 POST https://localhost:44323/api/v1/matter/getpinned application/json 88
+2016-05-06 16:31:22.178 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 16:31:22.179 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 16:31:22.180 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 16:31:22.185 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.GetPin" with arguments (["Microsoft.Legal.MatterCenter.Models.Client"]) - ModelState is Valid'
+2016-05-06 16:31:24.038 -07:00 [Information] eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1iYTlnb0VLWSIsImtpZCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1iYTlnb0VLWSJ9.eyJhdWQiOiJiOTRmMDdkZi1jODI1LTQzMWYtYjljNS1iOTQ5OWU4ZTlhYzEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQvIiwiaWF0IjoxNDYyNTc2NTI1LCJuYmYiOjE0NjI1NzY1MjUsImV4cCI6MTQ2MjU4MDQyNSwiYW1yIjpbInB3ZCJdLCJmYW1pbHlfbmFtZSI6IkdhamFybGEiLCJnaXZlbl9uYW1lIjoiV2lsc29uIiwiaXBhZGRyIjoiMTY3LjIyMC42My45NyIsIm5hbWUiOiJXaWxzb24gR2FqYXJsYSIsIm5vbmNlIjoiODg2NzcwYzktMGI3ZC00ZTA5LWI2NGQtNWZkNmIwNDBkNzQ1Iiwib2lkIjoiOTMzY2UxZmQtMjY5My00YWFlLWI3YmEtMmEwYjY4ZTQxMDI5Iiwic3ViIjoia3FneXRMQ1JRUlVjUU1vaFBYQkVCSkhPZ052azRFV0tBTTBhM1VZaEdwUSIsInRpZCI6IjNjNDU2MmNhLTM5YTQtNGQ4Yi05MWZmLTZkM2VlZmFiNWMxZCIsInVuaXF1ZV9uYW1lIjoibWF0dGVyYWRtaW5ATVNtYXR0ZXIub25taWNyb3NvZnQuY29tIiwidXBuIjoibWF0dGVyYWRtaW5ATVNtYXR0ZXIub25taWNyb3NvZnQuY29tIiwidmVyIjoiMS4wIn0.rOfmGhuC4BvZF95WgGqmwyn5fx17awhVR4FdWemTE5popVB3kQD--DiP5W9hD1IWfQcP0SB-RLtxWUXZIn7wVm9OO6psf-P06lGTzCf2DD4h5gp2emh8Od9d4oaua8JknmMdKsBAh5SefbDelUO0Cev-DB3OeTvs_bubnqwo4h-m8h3rmgAkXgmGhocMmD4QCHzBSZxuC2XLM3RxpkNvBC8xnMn_0txto-xtLy0z5pkykQx04zz_qns65sJotCgbASk-XfiHEXUBtwKrVGL7rpDF2q7Z-FLunow8AQawDs9e-x8FXHEmm42O0u9YmV_mkmNjwc0Hq2mJEOIBVTZVKg
+2016-05-06 16:31:26.508 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 16:31:26.518 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.GetPin" in 0.4344ms
+2016-05-06 16:31:26.519 -07:00 [Information] Request finished in 0.4344ms 200 application/json; charset=utf-8
+2016-05-06 16:56:53.999 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/app/matter/createMatter.controller.js  
+2016-05-06 16:56:53.999 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/fabric-0.6.0/css/fabric-0.6.0.components.min.css  
+2016-05-06 16:56:53.999 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/app/matter/matter.resources.js  
+2016-05-06 16:56:53.999 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/app/config.js  
+2016-05-06 16:56:53.999 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/fabric-0.6.0/css/fabric-0.6.0.min.css  
+2016-05-06 16:56:53.999 -07:00 [Information] Request starting HTTP/1.1 DEBUG http://localhost:11749/ text/html 
+2016-05-06 16:56:54.175 -07:00 [Information] The file "/app/matter/createMatter.controller.js" was not modified
+2016-05-06 16:56:54.175 -07:00 [Information] The file "/app/matter/matter.resources.js" was not modified
+2016-05-06 16:56:54.177 -07:00 [Information] Sending file. Request path: '"/app/config.js"'. Physical path: '"C:\Projects\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot\app\config.js"'
+2016-05-06 16:56:54.246 -07:00 [Information] Request finished in 0.0157ms 200 application/javascript
+2016-05-06 16:56:54.246 -07:00 [Information] Request finished in 0.0141ms 304 application/javascript
+2016-05-06 16:56:54.246 -07:00 [Information] Request finished in 0.0141ms 304 application/javascript
+2016-05-06 16:56:54.481 -07:00 [Information] Request finished in 0.0375ms 404 
+2016-05-06 16:56:54.481 -07:00 [Information] Request finished in 0.0375ms 404 
+2016-05-06 16:56:54.482 -07:00 [Information] Request finished in 0.0359ms 404 
+2016-05-06 16:56:56.443 -07:00 [Information] Request starting HTTP/1.1 POST https://localhost:44323/api/v1/matter/get application/json 315
+2016-05-06 16:56:57.033 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 16:56:57.096 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 16:56:57.106 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 16:56:57.324 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.Get" with arguments (["Microsoft.Legal.MatterCenter.Models.SearchRequestVM"]) - ModelState is Valid'
+2016-05-06 16:56:59.024 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 16:56:59.061 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.Get" in 0.1984ms
+2016-05-06 16:56:59.064 -07:00 [Information] Request finished in 0.2625ms 200 application/json; charset=utf-8
+2016-05-06 16:56:59.277 -07:00 [Information] Request starting HTTP/1.1 POST https://localhost:44323/api/v1/matter/getpinned application/json 88
+2016-05-06 16:56:59.280 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 16:56:59.282 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 16:56:59.285 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 16:56:59.288 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.GetPin" with arguments (["Microsoft.Legal.MatterCenter.Models.Client"]) - ModelState is Valid'
+2016-05-06 16:56:59.295 -07:00 [Information] eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1iYTlnb0VLWSIsImtpZCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1iYTlnb0VLWSJ9.eyJhdWQiOiJiOTRmMDdkZi1jODI1LTQzMWYtYjljNS1iOTQ5OWU4ZTlhYzEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQvIiwiaWF0IjoxNDYyNTc2NTI1LCJuYmYiOjE0NjI1NzY1MjUsImV4cCI6MTQ2MjU4MDQyNSwiYW1yIjpbInB3ZCJdLCJmYW1pbHlfbmFtZSI6IkdhamFybGEiLCJnaXZlbl9uYW1lIjoiV2lsc29uIiwiaXBhZGRyIjoiMTY3LjIyMC42My45NyIsIm5hbWUiOiJXaWxzb24gR2FqYXJsYSIsIm5vbmNlIjoiODg2NzcwYzktMGI3ZC00ZTA5LWI2NGQtNWZkNmIwNDBkNzQ1Iiwib2lkIjoiOTMzY2UxZmQtMjY5My00YWFlLWI3YmEtMmEwYjY4ZTQxMDI5Iiwic3ViIjoia3FneXRMQ1JRUlVjUU1vaFBYQkVCSkhPZ052azRFV0tBTTBhM1VZaEdwUSIsInRpZCI6IjNjNDU2MmNhLTM5YTQtNGQ4Yi05MWZmLTZkM2VlZmFiNWMxZCIsInVuaXF1ZV9uYW1lIjoibWF0dGVyYWRtaW5ATVNtYXR0ZXIub25taWNyb3NvZnQuY29tIiwidXBuIjoibWF0dGVyYWRtaW5ATVNtYXR0ZXIub25taWNyb3NvZnQuY29tIiwidmVyIjoiMS4wIn0.rOfmGhuC4BvZF95WgGqmwyn5fx17awhVR4FdWemTE5popVB3kQD--DiP5W9hD1IWfQcP0SB-RLtxWUXZIn7wVm9OO6psf-P06lGTzCf2DD4h5gp2emh8Od9d4oaua8JknmMdKsBAh5SefbDelUO0Cev-DB3OeTvs_bubnqwo4h-m8h3rmgAkXgmGhocMmD4QCHzBSZxuC2XLM3RxpkNvBC8xnMn_0txto-xtLy0z5pkykQx04zz_qns65sJotCgbASk-XfiHEXUBtwKrVGL7rpDF2q7Z-FLunow8AQawDs9e-x8FXHEmm42O0u9YmV_mkmNjwc0Hq2mJEOIBVTZVKg
+2016-05-06 16:57:00.101 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 16:57:00.109 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.GetPin" in 0.0828ms
+2016-05-06 16:57:00.111 -07:00 [Information] Request finished in 0.0844ms 200 application/json; charset=utf-8
+2016-05-06 16:59:06.701 -07:00 [Information] Request starting HTTP/1.1 POST http://localhost:44323/api/v1/matter/get application/json 315
+2016-05-06 16:59:06.704 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 16:59:06.705 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 16:59:06.708 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 16:59:06.710 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.Get" with arguments (["Microsoft.Legal.MatterCenter.Models.SearchRequestVM"]) - ModelState is Valid'
+2016-05-06 16:59:07.598 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 16:59:07.601 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.Get" in 0.0891ms
+2016-05-06 16:59:07.604 -07:00 [Information] Request finished in 0.0891ms 200 application/json; charset=utf-8
+2016-05-06 16:59:09.252 -07:00 [Information] Request starting HTTP/1.1 POST https://localhost:44323/api/v1/matter/getpinned application/json 88
+2016-05-06 16:59:09.254 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 16:59:09.256 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 16:59:09.257 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 16:59:09.259 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.GetPin" with arguments (["Microsoft.Legal.MatterCenter.Models.Client"]) - ModelState is Valid'
+2016-05-06 16:59:09.260 -07:00 [Information] eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1iYTlnb0VLWSIsImtpZCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1iYTlnb0VLWSJ9.eyJhdWQiOiJiOTRmMDdkZi1jODI1LTQzMWYtYjljNS1iOTQ5OWU4ZTlhYzEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQvIiwiaWF0IjoxNDYyNTc2NTI1LCJuYmYiOjE0NjI1NzY1MjUsImV4cCI6MTQ2MjU4MDQyNSwiYW1yIjpbInB3ZCJdLCJmYW1pbHlfbmFtZSI6IkdhamFybGEiLCJnaXZlbl9uYW1lIjoiV2lsc29uIiwiaXBhZGRyIjoiMTY3LjIyMC42My45NyIsIm5hbWUiOiJXaWxzb24gR2FqYXJsYSIsIm5vbmNlIjoiODg2NzcwYzktMGI3ZC00ZTA5LWI2NGQtNWZkNmIwNDBkNzQ1Iiwib2lkIjoiOTMzY2UxZmQtMjY5My00YWFlLWI3YmEtMmEwYjY4ZTQxMDI5Iiwic3ViIjoia3FneXRMQ1JRUlVjUU1vaFBYQkVCSkhPZ052azRFV0tBTTBhM1VZaEdwUSIsInRpZCI6IjNjNDU2MmNhLTM5YTQtNGQ4Yi05MWZmLTZkM2VlZmFiNWMxZCIsInVuaXF1ZV9uYW1lIjoibWF0dGVyYWRtaW5ATVNtYXR0ZXIub25taWNyb3NvZnQuY29tIiwidXBuIjoibWF0dGVyYWRtaW5ATVNtYXR0ZXIub25taWNyb3NvZnQuY29tIiwidmVyIjoiMS4wIn0.rOfmGhuC4BvZF95WgGqmwyn5fx17awhVR4FdWemTE5popVB3kQD--DiP5W9hD1IWfQcP0SB-RLtxWUXZIn7wVm9OO6psf-P06lGTzCf2DD4h5gp2emh8Od9d4oaua8JknmMdKsBAh5SefbDelUO0Cev-DB3OeTvs_bubnqwo4h-m8h3rmgAkXgmGhocMmD4QCHzBSZxuC2XLM3RxpkNvBC8xnMn_0txto-xtLy0z5pkykQx04zz_qns65sJotCgbASk-XfiHEXUBtwKrVGL7rpDF2q7Z-FLunow8AQawDs9e-x8FXHEmm42O0u9YmV_mkmNjwc0Hq2mJEOIBVTZVKg
+2016-05-06 16:59:09.724 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 16:59:09.725 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.GetPin" in 0.0469ms
+2016-05-06 16:59:09.727 -07:00 [Information] Request finished in 0.0469ms 200 application/json; charset=utf-8
+2016-05-06 17:05:42.247 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/fabric-0.6.0/css/fabric-0.6.0.components.min.css  
+2016-05-06 17:05:42.247 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/fabric-0.6.0/css/fabric-0.6.0.min.css  
+2016-05-06 17:05:42.247 -07:00 [Information] Request starting HTTP/1.1 DEBUG http://localhost:11749/ text/html 
+2016-05-06 17:05:42.247 -07:00 [Information] Request starting HTTP/1.1 GET http://localhost:44323/app/config.js  
+2016-05-06 17:05:42.381 -07:00 [Information] Sending file. Request path: '"/app/config.js"'. Physical path: '"C:\Projects\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot\app\config.js"'
+2016-05-06 17:05:42.451 -07:00 [Information] Request finished in 0.0141ms 200 application/javascript
+2016-05-06 17:05:42.653 -07:00 [Information] Request finished in 0.0344ms 404 
+2016-05-06 17:05:42.654 -07:00 [Information] Request finished in 0.0344ms 404 
+2016-05-06 17:05:42.654 -07:00 [Information] Request finished in 0.0344ms 404 
+2016-05-06 17:09:55.987 -07:00 [Information] Request starting HTTP/1.1 POST http://localhost:44323/api/v1/matter/get application/json 315
+2016-05-06 17:09:56.495 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 17:09:56.562 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 17:09:56.574 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 17:09:56.795 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.Get" with arguments (["Microsoft.Legal.MatterCenter.Models.SearchRequestVM"]) - ModelState is Valid'
+2016-05-06 17:09:58.494 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 17:09:58.530 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.Get" in 0.1984ms
+2016-05-06 17:09:58.533 -07:00 [Information] Request finished in 0.2547ms 200 application/json; charset=utf-8
+2016-05-06 17:10:00.632 -07:00 [Information] Request starting HTTP/1.1 POST https://localhost:44323/api/v1/matter/getpinned application/json 88
+2016-05-06 17:10:00.635 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 17:10:00.637 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 17:10:00.639 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 17:10:00.646 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.GetPin" with arguments (["Microsoft.Legal.MatterCenter.Models.Client"]) - ModelState is Valid'
+2016-05-06 17:10:00.652 -07:00 [Information] eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1iYTlnb0VLWSIsImtpZCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1iYTlnb0VLWSJ9.eyJhdWQiOiJiOTRmMDdkZi1jODI1LTQzMWYtYjljNS1iOTQ5OWU4ZTlhYzEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQvIiwiaWF0IjoxNDYyNTc2NTI1LCJuYmYiOjE0NjI1NzY1MjUsImV4cCI6MTQ2MjU4MDQyNSwiYW1yIjpbInB3ZCJdLCJmYW1pbHlfbmFtZSI6IkdhamFybGEiLCJnaXZlbl9uYW1lIjoiV2lsc29uIiwiaXBhZGRyIjoiMTY3LjIyMC42My45NyIsIm5hbWUiOiJXaWxzb24gR2FqYXJsYSIsIm5vbmNlIjoiODg2NzcwYzktMGI3ZC00ZTA5LWI2NGQtNWZkNmIwNDBkNzQ1Iiwib2lkIjoiOTMzY2UxZmQtMjY5My00YWFlLWI3YmEtMmEwYjY4ZTQxMDI5Iiwic3ViIjoia3FneXRMQ1JRUlVjUU1vaFBYQkVCSkhPZ052azRFV0tBTTBhM1VZaEdwUSIsInRpZCI6IjNjNDU2MmNhLTM5YTQtNGQ4Yi05MWZmLTZkM2VlZmFiNWMxZCIsInVuaXF1ZV9uYW1lIjoibWF0dGVyYWRtaW5ATVNtYXR0ZXIub25taWNyb3NvZnQuY29tIiwidXBuIjoibWF0dGVyYWRtaW5ATVNtYXR0ZXIub25taWNyb3NvZnQuY29tIiwidmVyIjoiMS4wIn0.rOfmGhuC4BvZF95WgGqmwyn5fx17awhVR4FdWemTE5popVB3kQD--DiP5W9hD1IWfQcP0SB-RLtxWUXZIn7wVm9OO6psf-P06lGTzCf2DD4h5gp2emh8Od9d4oaua8JknmMdKsBAh5SefbDelUO0Cev-DB3OeTvs_bubnqwo4h-m8h3rmgAkXgmGhocMmD4QCHzBSZxuC2XLM3RxpkNvBC8xnMn_0txto-xtLy0z5pkykQx04zz_qns65sJotCgbASk-XfiHEXUBtwKrVGL7rpDF2q7Z-FLunow8AQawDs9e-x8FXHEmm42O0u9YmV_mkmNjwc0Hq2mJEOIBVTZVKg
+2016-05-06 17:10:01.207 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 17:10:01.229 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.GetPin" in 0.0594ms
+2016-05-06 17:10:01.233 -07:00 [Information] Request finished in 0.0594ms 200 application/json; charset=utf-8
+2016-05-06 17:13:54.444 -07:00 [Information] Request starting HTTP/1.1 POST http://localhost:44323/api/v1/matter/get application/json 315
+2016-05-06 17:13:54.452 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 17:13:54.454 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 17:13:54.455 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 17:13:54.457 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.Get" with arguments (["Microsoft.Legal.MatterCenter.Models.SearchRequestVM"]) - ModelState is Valid'
+2016-05-06 17:13:55.204 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 17:13:55.208 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.Get" in 0.075ms
+2016-05-06 17:13:55.213 -07:00 [Information] Request finished in 0.0765ms 200 application/json; charset=utf-8
+2016-05-06 17:13:56.372 -07:00 [Information] Request starting HTTP/1.1 POST https://localhost:44323/api/v1/matter/get application/json 315
+2016-05-06 17:13:56.374 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 17:13:56.376 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 17:13:56.377 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 17:13:56.381 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.Get" with arguments (["Microsoft.Legal.MatterCenter.Models.SearchRequestVM"]) - ModelState is Valid'
+2016-05-06 17:13:56.912 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 17:13:56.914 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.Get" in 0.0532ms
+2016-05-06 17:13:56.916 -07:00 [Information] Request finished in 0.0547ms 204 
+2016-05-06 17:13:58.542 -07:00 [Information] Request starting HTTP/1.1 POST https://localhost:44323/api/v1/matter/getpinned application/json 88
+2016-05-06 17:13:58.545 -07:00 [Information] HttContext.User merged via AutomaticAuthentication from authenticationScheme: "Bearer".
+2016-05-06 17:13:58.547 -07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2016-05-06 17:13:58.549 -07:00 [Information] Authorization was successful for user: "matteradmin@MSmatter.onmicrosoft.com".
+2016-05-06 17:13:58.551 -07:00 [Information] Executing action method "Microsoft.Legal.MatterCenter.Service.MatterController.GetPin" with arguments (["Microsoft.Legal.MatterCenter.Models.Client"]) - ModelState is Valid'
+2016-05-06 17:13:58.552 -07:00 [Information] eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1iYTlnb0VLWSIsImtpZCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1iYTlnb0VLWSJ9.eyJhdWQiOiJiOTRmMDdkZi1jODI1LTQzMWYtYjljNS1iOTQ5OWU4ZTlhYzEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQvIiwiaWF0IjoxNDYyNTc2NTI1LCJuYmYiOjE0NjI1NzY1MjUsImV4cCI6MTQ2MjU4MDQyNSwiYW1yIjpbInB3ZCJdLCJmYW1pbHlfbmFtZSI6IkdhamFybGEiLCJnaXZlbl9uYW1lIjoiV2lsc29uIiwiaXBhZGRyIjoiMTY3LjIyMC42My45NyIsIm5hbWUiOiJXaWxzb24gR2FqYXJsYSIsIm5vbmNlIjoiODg2NzcwYzktMGI3ZC00ZTA5LWI2NGQtNWZkNmIwNDBkNzQ1Iiwib2lkIjoiOTMzY2UxZmQtMjY5My00YWFlLWI3YmEtMmEwYjY4ZTQxMDI5Iiwic3ViIjoia3FneXRMQ1JRUlVjUU1vaFBYQkVCSkhPZ052azRFV0tBTTBhM1VZaEdwUSIsInRpZCI6IjNjNDU2MmNhLTM5YTQtNGQ4Yi05MWZmLTZkM2VlZmFiNWMxZCIsInVuaXF1ZV9uYW1lIjoibWF0dGVyYWRtaW5ATVNtYXR0ZXIub25taWNyb3NvZnQuY29tIiwidXBuIjoibWF0dGVyYWRtaW5ATVNtYXR0ZXIub25taWNyb3NvZnQuY29tIiwidmVyIjoiMS4wIn0.rOfmGhuC4BvZF95WgGqmwyn5fx17awhVR4FdWemTE5popVB3kQD--DiP5W9hD1IWfQcP0SB-RLtxWUXZIn7wVm9OO6psf-P06lGTzCf2DD4h5gp2emh8Od9d4oaua8JknmMdKsBAh5SefbDelUO0Cev-DB3OeTvs_bubnqwo4h-m8h3rmgAkXgmGhocMmD4QCHzBSZxuC2XLM3RxpkNvBC8xnMn_0txto-xtLy0z5pkykQx04zz_qns65sJotCgbASk-XfiHEXUBtwKrVGL7rpDF2q7Z-FLunow8AQawDs9e-x8FXHEmm42O0u9YmV_mkmNjwc0Hq2mJEOIBVTZVKg
+2016-05-06 17:13:59.051 -07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNet.Mvc.ActionContext".
+2016-05-06 17:13:59.053 -07:00 [Information] Executed action "Microsoft.Legal.MatterCenter.Service.MatterController.GetPin" in 0.05ms
+2016-05-06 17:13:59.054 -07:00 [Information] Request finished in 0.0515ms 200 application/json; charset=utf-8

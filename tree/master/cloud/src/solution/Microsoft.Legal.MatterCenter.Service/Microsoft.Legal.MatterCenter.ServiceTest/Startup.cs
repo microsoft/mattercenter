@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
+﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Linq;
+using System;
+using System.Threading.Tasks;
 using Swashbuckle.SwaggerGen;
 using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json.Serialization;
@@ -14,23 +13,23 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Net;
 using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Authentication.JwtBearer;
 
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
-using Microsoft.Legal.MatterCenter.Service;
 using Microsoft.Legal.MatterCenter.Service.Filters;
-using Microsoft.AspNet.Authentication.JwtBearer;
 using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
 
+using System.IO;
 #endregion
+
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
 {
     public class Startup
     {
-
         #region Properties
         public IHostingEnvironment HostingEnvironment { get; }
         public ILoggerFactory LoggerFactory { get; }
@@ -66,7 +65,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             ConfigureMvc(services, LoggerFactory);
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
-            services.AddMvc();
+            services.AddMvcCore();
             ConfigureMatterPackages(services);
             ConfigureSwagger(services);
         }
@@ -74,6 +73,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            CreateConfig(env);
 
             var log = loggerFactory.CreateLogger<Startup>();
             try
@@ -159,7 +159,6 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 o.SerializerSettings.Converters.Add(new StringEnumConverter());
                 o.SerializerSettings.Formatting = Formatting.Indented;
             });
-
             var instrumentationKey = this.Configuration.GetSection("ApplicationInsights").GetSection("InstrumentationKey").Value.ToString();
             builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterExceptionFilter(logger, instrumentationKey)); });
         }
@@ -179,6 +178,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.Configure<SearchSettings>(this.Configuration.GetSection("Search"));
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
             services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"));
+            services.Configure<MatterCenterApplicationInsights>(this.Configuration.GetSection("ApplicationInsights"));
         }
 
         private void ConfigureMatterPackages(IServiceCollection services)
@@ -203,6 +203,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.AddSingleton<IUploadHelperFunctions, UploadHelperFunctions>();
             services.AddSingleton<IUploadHelperFunctionsUtility, UploadHelperFunctionsUtility>();
             services.AddSingleton<IDocumentProvision, DocumentProvision>();
+            services.AddSingleton<IUserRepository, UserRepository>();
         }
 
         private void CheckAuthorization(IApplicationBuilder app)
@@ -225,6 +226,23 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 };
             });
         }
+
+        private void CreateConfig(IHostingEnvironment env)
+        {
+
+            string destPath = Path.Combine(env.WebRootPath, "app/config.js");
+            System.IO.File.WriteAllText(destPath, string.Empty);
+            TextWriter tw = new StreamWriter(destPath);
+            tw.WriteLine("var configs = { \"uri\":  {");
+            tw.WriteLine(" \"SPOsiteURL\": \"" + Configuration["General:SiteURL"] + "\",");
+            tw.WriteLine(" \"tenant\": \"" + Configuration["General:Tenant"] + "\",");
+            tw.WriteLine("}, \"ADAL\" : { ");
+            tw.WriteLine(" \"clientId\": \"" + Configuration["General:ClientId"] + "\"");
+            tw.WriteLine("}};");
+
+            tw.Close();
+        }
+
         #endregion
     }
 }
