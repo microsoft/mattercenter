@@ -160,11 +160,10 @@ namespace Microsoft.Legal.MatterCenter.Web
                 o.SerializerSettings.Converters.Add(new StringEnumConverter());
                 o.SerializerSettings.Formatting = Formatting.Indented;
             });
-
-            //builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterFilter(logger)); });
-            builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterExceptionFilter(logger)); });
+            var instrumentationKey = this.Configuration.GetSection("ApplicationInsights").GetSection("InstrumentationKey").Value.ToString();
+            builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterExceptionFilter(logger, instrumentationKey)); });
         }
-
+         
 
         private void ConfigureSettings(IServiceCollection services)
         {
@@ -179,7 +178,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.Configure<LogTables>(this.Configuration.GetSection("LogTables"));
             services.Configure<SearchSettings>(this.Configuration.GetSection("Search"));
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
-            services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"));           
+            services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"));
+            services.Configure<MatterCenterApplicationInsights>(this.Configuration.GetSection("ApplicationInsights"));
         }
 
         private void ConfigureMatterPackages(IServiceCollection services)
