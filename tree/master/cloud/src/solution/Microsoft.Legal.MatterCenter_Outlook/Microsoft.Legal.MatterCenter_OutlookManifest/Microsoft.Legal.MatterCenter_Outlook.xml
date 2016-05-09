@@ -12,6 +12,8 @@
     <AppDomain>https://login.microsoftonline.com/</AppDomain>
     <AppDomain>https://matterwebapp.azurewebsites.net</AppDomain>
     <AppDomain>https://cdnjs.cloudflare.com/</AppDomain>
+    <AppDomain>https://officejscommands.azurewebsites.net/</AppDomain>
+    <AppDomain>https://oep.azurewebsites.net/</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Mailbox" />
@@ -24,20 +26,20 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/authDialog.html" />
         <RequestedHeight>450</RequestedHeight>
       </DesktopSettings>
       <TabletSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/authDialog.html" />
         <RequestedHeight>300</RequestedHeight>
       </TabletSettings>
       <PhoneSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/authDialog.html" />
       </PhoneSettings>
     </Form>
     <Form xsi:type="ItemEdit">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
+        <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net/app/authDialog.html" />
       </DesktopSettings>
     </Form>
   </FormSettings>
