@@ -213,6 +213,13 @@ textarea {
     -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
 } 
+
+.folderContent ul {
+    margin: 0;
+    padding-left: 0;
+    text-align: left;
+    list-style:none;
+}
 /*.ui-grid-change-icon {
     background: url(../images/Column_Picker_Expand.png) center no-repeat;
   

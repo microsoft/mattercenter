@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource',
-function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope',
+function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope) {
     var vm = this;
     vm.selected = undefined;
     // Onload show ui grid and hide error div
@@ -655,9 +655,14 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             $(".MenuCaption").removeClass("hideMenuCaption");
         }
     }
+    $rootScope.breadcrumb = true;
+    $rootScope.foldercontent = false;
 
+    $scope.hideBreadCrumb = function () {
+        $rootScope.breadcrumb = true;
+        $rootScope.foldercontent = false;
 
-
+    }
 }]);
     //app.directive('toggle', function () {
     //    return {
@@ -674,35 +679,49 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         return {
             restrict: 'AE',
             link: function (scope, element, attrs) {
-                //if (attrs.toggle == "popover") {
                 var obj = eval('(' + attrs.details + ')');
-                $(element).popover({
-                    html: true,
-                    trigger: 'click',
-                    delay: 500,
-                    content: function () {
-                        // Get the content from the hidden sibling.
-                        return '<div>\
+                var content = '<div>\
                                           ' + obj.matterName + ' \
                                           <div> <b>Client :</b> '+ obj.matterClient + '</div>\
                                           <div><b>Client.Matter ID :</b> '+ obj.matterClientId + '.' + obj.matterID + '</div>\
                                           <div><b>Sub area of law :</b> '+ obj.matterSubAreaOfLaw + '</div> \
                                           <div><b>Responsible attorney</b> : '+ obj.matterResponsibleAttorney + '</div>\
                                           <div><button ><a href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/'+ obj.matterGuid + '.aspx" target="_blank">View matter details</a></button></div>\
-                            <div><button  ng-click="Openuploadmodal()">Upload to a matter</button></div>\
+                            <div><a onclick="Openuploadmodal(this)" mattername="' + obj.matterName + '" matterurl="' + obj.matterUrl + '" type="button">Upload to a matter</a></div>\
                        </div>';
-                    },
-
-                }).click(function (evt) {
-                    evt.stopPropagation();
-                    $(this).popover('show');
+                $(element).popover({
+                    html: true,
+                    trigger: 'click',
+                    delay: 500,
+                    content: content,
                 });
             }
-            //}
-        };
+        }
+    });
+
+
+    app.directive('showbreadcrumb', function ($rootScope) {
+        return {
+            restrict: 'AE',
+            link: function (scope, element, attrs) {
+                $(element).find('ul li ul li').on("dblclick", function (e) {
+                    $rootScope.breadcrumb = false;
+                    $rootScope.foldercontent = true;
+                    $rootScope.$apply();
+                    var text = $(this).find('div').attr('title');
+                    $('#breadcrumb #currentFolder').html(text);
+                });
+
+            }
+        }
     });
 
 
 
 })();
 
+function Openuploadmodal(mattername) {
+    var Name = mattername.getAttribute("mattername");
+    var Url = mattername.getAttribute("matterurl");
+    jQuery('#UploadMatterModal').modal("show");
+}
