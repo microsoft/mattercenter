@@ -54,6 +54,11 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/user/getpermissionlevels',
                       isArray: true
+                  }),
+                   'checkSecurityGroupExists': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/checksecuritygroupexists'
+                     
                   })
               });
       }]);

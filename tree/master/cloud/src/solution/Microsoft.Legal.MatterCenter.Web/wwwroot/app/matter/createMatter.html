@@ -96,7 +96,21 @@
                 <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" maxlength="255" placeholder="Enter a brief description of the matter" rows="2" cols="400"></textarea>
                 <label class="contentLabel large clear"><span class="mandatory">*&nbsp;</span>Matter Type (click Select to define the practice group and area of law)</label>
                 <div class="large" id="documentTemplates">
-                    <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}'  ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style="cursor:default;" data-value="{{$index}}" data-foldernamespg='{{cm.selectedPracticeGroup.folderNames}}' data-practicegroup-id='{{cm.selectedPracticeGroup.id}}' data-foldernamesaol='{{cm.activeAOLTerm.folderNames}}' data-areaoflaw-id='{{cm.activeAOLTerm.id}}' data-subareaoflaw-id='{{cm.activeSubAOLTerm.id}}' data-display-name='{{cm.activeSubAOLTerm.termName}}' data-isnofolderstructurepresent='{{cm.activeSubAOLTerm.isNoFolderStructurePresent}}' data-foldernamessal='{{cm.activeSubAOLTerm.folderNames}}' data-associated-document-template='{{cm.activeSubAOLTerm.documentTemplateNames}}' data-document-template='{{cm.activeSubAOLTerm.documentTemplates}}' data-areaoflaw='{{cm.activeAOLTerm.termName}}' data-practicegroup='{{cm.selectedPracticeGroup.termName}}'>{{selectedDocumentTypeLawTerm.termName}} ({{selectedDocumentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
+                    <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}'  ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style="cursor:default;" 
+                         data-value="{{$index}}"
+                          data-foldernamespg='{{selectedDocumentTypeLawTerm.foldernamespg}}'
+                          data-practicegroup-id='{{selectedDocumentTypeLawTerm.practicegroupId}}'
+                          data-foldernamesaol='{{selectedDocumentTypeLawTerm.foldernamesaol}}' 
+                         data-areaoflaw-id='{{selectedDocumentTypeLawTerm.areaoflawId}}' 
+                         data-subareaoflaw-id='{{selectedDocumentTypeLawTerm.id}}' 
+                         data-display-name='{{selectedDocumentTypeLawTerm.termName}}'
+                          data-isnofolderstructurepresent='{{selectedDocumentTypeLawTerm.isNoFolderStructurePresent}}'
+                          data-foldernamessal='{{selectedDocumentTypeLawTerm.folderNames}}' 
+                         data-associated-document-template='{{selectedDocumentTypeLawTerm.documentTemplateNames}}' 
+                         data-document-template='{{selectedDocumentTypeLawTerm.documentTemplates}}'
+                          data-areaoflaw='{{selectedDocumentTypeLawTerm.areaoflaw}}'
+                          data-practicegroup='{{selectedDocumentTypeLawTerm.practicegroup}}'>
+                    {{selectedDocumentTypeLawTerm.termName}} ({{selectedDocumentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
                 </div>
                 <div class="gutter"></div>
                 <button class="button" id="btnLookup" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" ng-click="cm.selectMatterType()" value="Lookup">Select Type</button>
@@ -131,7 +145,16 @@
                   <div class="gutter"></div>
                   <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
                      <input type="text" class="form-control" uib-datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />
-
+                <!--  <input type="text" class="calendar form-control"
+                         datepicker-popup="dd-MMMM-yyyy" 
+                         ng-model="cm.conflictDate" 
+                         is-open="cm.opened" 
+                         datepicker-options="cm.dateOptions" 
+                         ng-required="true" close-text="Close" 
+                         alt-input-formats="altInputFormats" />
+                  <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="cm.open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>-->
                 <div class="gutter"></div>
                 <div class="conflictRadioBtn">
                     <label class="smaller">
@@ -145,7 +168,7 @@
                 <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
                     <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.selectedConflictUser"  typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                    <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.blockedUserName"  typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
 
                     <div ng-show="noResults">
                         <i class="glyphicon glyphicon-remove"></i> No Results Found
@@ -248,7 +271,7 @@
 
                 <div>
 
-                    <input id="demo-checkbox-unselected2" ng-model="cm.includeEmail" ng-init="cm.includeEmail=true" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <input id="demo-checkbox-unselected2" ng-model="cm.includeEmail" ng-init="cm.includeEmail=true" ng-click="cm.createAndNotify(cm.includeEmail)" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
                     <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox">Include email notification</span></label>
                 </div>
                 <div class="gutter" style="clear:both;"></div>
@@ -257,7 +280,7 @@
                     <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks=true" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
                     <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox">Include tasks</span></label>
                 </div>
-                <button class="button clear" type="button" id="btnCreateMatter" value="Create">Create and Notify</button>
+                <button class="button clear" type="button" id="btnCreateMatter" ng-click="cm.createMatter()" value="Create">{{cm.createButton}}</button>
             
                 </div>
             <div class="loading hide">
@@ -343,7 +366,8 @@
                                       data-isnofolderstructurepresent='{{cm.activeSubAOLTerm.isNoFolderStructurePresent}}'
                                       data-foldernamessal='{{cm.activeSubAOLTerm.folderNames}}'
                                       data-associated-document-template='{{cm.activeSubAOLTerm.documentTemplateNames}}' 
-                                     data-document-template='{{cm.activeSubAOLTerm.documentTemplates}}' data-areaoflaw='{{cm.activeAOLTerm.termName}}'
+                                     data-document-template='{{cm.activeSubAOLTerm.documentTemplates}}' 
+                                     data-areaoflaw='{{cm.activeAOLTerm.termName}}'
                                      data-practicegroup='{{cm.selectedPracticeGroup.termName}}'>{{documentTypeLawTerm.termName}} ({{documentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
                             </div>
                         </div>
