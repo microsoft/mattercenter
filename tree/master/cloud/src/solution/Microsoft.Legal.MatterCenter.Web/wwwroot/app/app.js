@@ -44,6 +44,15 @@ angular.module('matterMain', [
                 }
             }, requireADLogin: true
         })
+        .state('mc.documents', {
+            url: "^/documents",
+            views: {
+                "contentView": {
+                    templateUrl: '/app/document/documents.html',
+                    controller: 'documentsController as vm'
+                }
+            }, requireADLogin: true
+        })
         .state('mc.createMatter', {  
             url: "^/createMatter",  
             views: {  
