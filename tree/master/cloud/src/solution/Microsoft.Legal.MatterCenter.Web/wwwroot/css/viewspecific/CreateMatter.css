@@ -1,0 +1,39 @@
+﻿.commonspace{
+    margin-right:5px;
+    margin-top:1px;
+}
+.commonwidth{
+    width:200px !important;
+}
+.roleWidth{
+    min-width:140px !important;
+    max-width:140px !important;
+}
+.customClose{margin-left:5px;float:left !important;}
+.mediumSmallPermission{ min-width:140px !important;
+    max-width:140px !important; margin-left:5px;}
+
+.pagination{margin:0px !important;}
+
+
+.content {
+    float: left;
+    height: calc(100% + 120px);
+    margin-left: 49px;
+    width: 100%;
+    width: calc(100% - 150px);
+word-wrap: break-word !important;
+    padding-top: 4px;
+    pointer-events: visible;
+
+     overflow: hidden;
+}
+.sectionStep{
+      height: calc(100% + 120px);
+      
+}
+.content .button{
+    width:150px;
+}
+.textAreaBlock{border:0px none;}
+.ms-checkBox{ margin:10px 5px 0 0 !important}
