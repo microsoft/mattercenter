@@ -29,7 +29,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ISPList spList;
         private SearchSettings searchSettings;
         private ListNames listNames;
-        private IUsersDetails userDetails;
+        
         private CamlQueries camlQueries;
         private DocumentSettings documentSettings;
         private MailSettings mailSettings;
@@ -38,14 +38,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="search"></param>
         public DocumentRepository(ISearch search, IOptions<SearchSettings> searchSettings, 
-            IOptions<ListNames> listNames, ISPList spList, IOptions<CamlQueries> camlQueries, IUsersDetails userDetails, IOptions<DocumentSettings> documentSettings, IOptions<MailSettings> mailSettings)
+            IOptions<ListNames> listNames, ISPList spList, IOptions<CamlQueries> camlQueries,  IOptions<DocumentSettings> documentSettings, IOptions<MailSettings> mailSettings)
         {
             this.search = search;            
             this.searchSettings = searchSettings.Value;
             this.listNames = listNames.Value;
             this.spList = spList;
             this.camlQueries = camlQueries.Value;
-            this.userDetails = userDetails;
+            
             this.documentSettings = documentSettings.Value;
             this.mailSettings = mailSettings.Value;
         }
@@ -125,10 +125,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             spList.SetUploadItemProperties(clientContext, documentLibraryName, fileName, folderPath, mailProperties);
         }
 
-        public Users GetLoggedInUserDetails(ClientContext clientContext)
-        {
-            return userDetails.GetLoggedInUserDetails(clientContext);
-        }
+        
 
         public void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile)
         {

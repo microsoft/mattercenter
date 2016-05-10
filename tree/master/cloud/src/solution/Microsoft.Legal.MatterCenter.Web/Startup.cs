@@ -74,7 +74,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            createConfig(env);
+            CreateConfig(env);
 
             var log = loggerFactory.CreateLogger<Startup>();
             try
@@ -160,11 +160,10 @@ namespace Microsoft.Legal.MatterCenter.Web
                 o.SerializerSettings.Converters.Add(new StringEnumConverter());
                 o.SerializerSettings.Formatting = Formatting.Indented;
             });
-
-            //builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterFilter(logger)); });
-            builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterExceptionFilter(logger)); });
+            var instrumentationKey = this.Configuration.GetSection("ApplicationInsights").GetSection("InstrumentationKey").Value.ToString();
+            builder.AddMvcOptions(o => { o.Filters.Add(new MatterCenterExceptionFilter(logger, instrumentationKey)); });
         }
-
+         
 
         private void ConfigureSettings(IServiceCollection services)
         {
@@ -179,7 +178,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.Configure<LogTables>(this.Configuration.GetSection("LogTables"));
             services.Configure<SearchSettings>(this.Configuration.GetSection("Search"));
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
-            services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"));           
+            services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"));
+            services.Configure<MatterCenterApplicationInsights>(this.Configuration.GetSection("ApplicationInsights"));
         }
 
         private void ConfigureMatterPackages(IServiceCollection services)
@@ -204,6 +204,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.AddSingleton<IUploadHelperFunctions, UploadHelperFunctions>();
             services.AddSingleton<IUploadHelperFunctionsUtility, UploadHelperFunctionsUtility>();
             services.AddSingleton<IDocumentProvision, DocumentProvision>();
+            services.AddSingleton<IUserRepository, UserRepository>();
         }
 
         private void CheckAuthorization(IApplicationBuilder app)
@@ -227,7 +228,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             });
         }
 
-        private void createConfig(IHostingEnvironment env)
+        private void CreateConfig(IHostingEnvironment env)
         {
 
             string destPath = Path.Combine(env.WebRootPath, "app/config.js");

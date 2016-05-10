@@ -1,4 +1,4 @@
-﻿<!--<div class="container-fluid">-->
+﻿<!--<div class="container-fluid">   -->
 <div class="row">
     <div class="col-xs-12">
 
@@ -15,11 +15,6 @@
                 <div class='appSwitcherName selected'><span></span></div>
             </div>
             <div class="AppHeader">
-                <div class="AppSwitcherContainer" ng-click="vm.menuClick()">
-                    <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
-                    <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
-                    <div class="MenuCaption"><span>menu</span></div>
-                </div>
                 <div class="AppMenuFlyout ms-shadow">
                     <div class="AppMenuFlyoutPriLinks">
                         <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="Home"><span class="AppFlyoutLinksText">Home</span></a>
@@ -28,26 +23,74 @@
                     </div>
                 </div>
                 <div id="HeaderPlaceHolder">
-                    <div id="">
-                        <select ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
-                    </div>
-                    <div id="searchBarHolder">
-                        <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-                        <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                        <div ng-show="noResults">
-                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                    <div id="" class="row">
+
+                        <div class="col-xs-4 col-sm-1 col-md-6 col-lg-6">
+                            <div class="col-xs-10 col-sm-2 col-md-2 col-lg-2" ng-click="vm.menuClick()">
+                                <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
+                                <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
+                                <div class="MenuCaption"><span>menu</span></div>
+                            </div>
+                            <div class="col-md-10 col-lg-10 visible-md visible-lg">
+                                <select class="form-control" ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
+                            </div>
                         </div>
-                        <!-- <div class="ms-TextField ms-TextField--placeholder autoCompleteSection">
-                             <input ng-model="vm.searchTerm" class="col-sm-12" type="text" placeholder="Search by ID, or matter or client name" />
-                         </div>
-                         <div id="searchIcon" title="Search" ng-click="vm.search()">
-                             <i class="ms-TextField-icon ms-Icon ms-Icon--search"></i>
-                         </div>
-                         <div id="glyphIcon" title="View document list options">
-                             <i class="ms-Icon ms-Icon--caretDown"></i>
-                         </div>
-                         <div class="autoCompletePanel hide"></div>
-                         -->
+                        <div id="searchBarHolder" class="col-md-6 col-lg-6 visible-md visible-lg">
+                            <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                            <div ng-show="noResults">
+                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+                            </div>
+
+                        </div>
+                        <div id="searchBarHolder" class="col-xs-8 col-sm-4 hidden-md hidden-lg">
+                            <div class="input-group">
+                                <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                                <div ng-show="noResults">
+                                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                </div>
+                                <!-- <div class="ms-TextField ms-TextField--placeholder autoCompleteSection">
+                                    <input ng-model="vm.searchTerm" class="col-sm-12" type="text" placeholder="Search by ID, or matter or client name" />
+                                </div>
+                                <div id="searchIcon" title="Search" ng-click="vm.search()">
+                                    <i class="ms-TextField-icon ms-Icon ms-Icon--search"></i>
+                                </div>
+                                <div id="glyphIcon" title="View document list options">
+                                    <i class="ms-Icon ms-Icon--caretDown"></i>
+                                </div>
+                                <div class="autoCompletePanel hide"></div>
+                                -->
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li class="searchPanelDropdown" ng-click="GetMatters(1)">All Matters</li>
+                                        <li class="searchPanelDropdown" ng-click="GetMatters(2)">My Matters</li>
+                                        <li class="searchPanelDropdown" ng-click="GetMatters(3)">Pinned Matters</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-7 visible-sm text-right">
+                            <div id="ContextualHelp">
+                                <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
+
+                                <div data-class="ms-u-slideLeftIn40" class="ContextualHelpContainer ms-u-slideLeftIn40">
+                                    <div class="ContextualHelpFlyout">
+                                        <img class="closeContextualHelpFlyout" title="Close" alt="Close flyout" src="Images/contextual_help_close_icon.png" />
+                                        <div class="ContextualHelpHeader" title="Matter Center For Outlook">Matter Center For Outlook</div>
+                                        <div class="contextualHelpSections">
+                                        </div>
+                                        <div class="ContextualHelpSupport">
+                                            <span class="ContextualHelpBottomText" title="Write an email to Support">Questions? Contact <span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. mailto:support@supportsite.com]">Matter Center Support</a></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="ProfileSwitcher">
+                                <img class="AppHeaderProfilePict" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture" runat="server" />
+                            </div>
+                        </div>
                     </div>
                     <span class="DelveLink"><img title="Search in Delve" src="../Images/delve.png" onclick="javascript: delveIt();" /></span>
                     <!--
@@ -59,7 +102,7 @@
                      </div>
                     -->
                 </div>
-                <div id="ContextualHelp">
+                <div id="ContextualHelp" class="hidden-sm">
                     <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
 
                     <div data-class="ms-u-slideLeftIn40" class="ContextualHelpContainer ms-u-slideLeftIn40">
@@ -74,7 +117,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="ProfileSwitcher">
+                <div id="ProfileSwitcher" class="hidden-sm">
                     <img class="AppHeaderProfilePict" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture" runat="server" />
                 </div>
                 <div class="PersonaFlyout">
@@ -167,7 +210,7 @@
         <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
     </div>
     <div class="col-sm-12" ng-if="nodata">
-        <hr/>
+        <hr />
         <span class="noResultsText">{{errorMessage}}</span>
     </div>
 </div>
@@ -204,6 +247,7 @@
         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
     </div>
 </div>
+
 
 <!--</div>
 </div>-->

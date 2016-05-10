@@ -12,6 +12,8 @@
     <AppDomain>https://login.microsoftonline.com/</AppDomain>
     <AppDomain>https://matterwebapp.azurewebsites.net</AppDomain>
     <AppDomain>https://cdnjs.cloudflare.com/</AppDomain>
+    <AppDomain>https://appsforoffice.microsoft.com/</AppDomain>
+    
   </AppDomains>
   <Hosts>
     <Host Name="Mailbox" />
@@ -25,6 +27,7 @@
     <Form xsi:type="ItemRead">
       <DesktopSettings>
         <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
+        <!-- change url to https://matterwebapp.azurewebsites.net/app/launchDialog.html once dialog API for OWA is released -->
         <RequestedHeight>450</RequestedHeight>
       </DesktopSettings>
       <TabletSettings>

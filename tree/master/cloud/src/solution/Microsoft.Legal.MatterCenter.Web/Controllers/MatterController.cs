@@ -348,7 +348,8 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.Unauthorized)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         /// <summary>
-        /// Method saves matter configurations
+        /// Method saves default matter configurations from the settings page. When the user select a client and these
+        /// default configurations will be loaded by default for that client
         /// </summary>        
         /// <param name="client">Client object containing Client data</param>
         /// <param name="details">Term Store object containing Term store data</param>
@@ -358,7 +359,6 @@ namespace Microsoft.Legal.MatterCenter.Service
             try
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
-
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 if (string.IsNullOrWhiteSpace(saveConfigurationsVM.SiteCollectionPath) && saveConfigurationsVM.MatterConfigurations == null)
@@ -369,7 +369,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                         ErrorCode = HttpStatusCode.BadRequest.ToString(),
                         Description = "No input data is passed"
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 var response = matterProvision.SavConfigurations(saveConfigurationsVM);

@@ -4,29 +4,33 @@
 // Created          : 04-07-2016
 //
 // ***********************************************************************
-// <copyright file="IMatterRepository.cs" company="Microsoft">
+// <copyright file="IDocumentRepository.cs" company="Microsoft">
 //     Copyright (c) . All rights reserved.
 // </copyright>
-// This interface contains all the matter related functionalities
+// This interface contains all the document related functionalities
 // ***********************************************************************
 
-using Microsoft.Legal.MatterCenter.Models;
+
 using Microsoft.SharePoint.Client;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+#region Matter Related Namespaces
+using Microsoft.Legal.MatterCenter.Models;
+#endregion
+
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
     /// <summary>
-    /// Interface matter repository contains all matter related methods such as finding matter, creating matter, pin, inpin, update matter etc
+    /// Interface matter repository contains all document related methods such as finding document, pin, unpin, document etc
     /// </summary>
     public interface IDocumentRepository:ICommonRepository
     {
         Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM);
         Task<dynamic> GetDocumentAndClientGUIDAsync(Client client);
         void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties);
-        Users GetLoggedInUserDetails(ClientContext clientContext);
+       
         void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile);
         bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName);
         bool PerformContentCheck(ClientContext context, MemoryStream localMemoryStream, string serverFileURL);
