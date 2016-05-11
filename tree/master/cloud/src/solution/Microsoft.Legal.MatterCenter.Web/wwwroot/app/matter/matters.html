@@ -243,19 +243,15 @@
                         <div class="folderStructureContent" showbreadcrumb ng-hide="foldercontent">
                             <ul>
                                 <li>
-                                    <ul>
-                                        <li data-client="" data-foldername="" data-parentname="" class="childNode" style="display: inline-block; width: 90%; padding: 0px;">
+                                    <ul ng-repeat="folder in vm.foldersList">
+                                        <li ng-if="folder.parentURL" data-client="" data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}" class="childNode" 
+                                            style="display: inline-block; width: 90%; padding: 0px;">
                                             <div class="treeNodes" title="Documents">
-                                                <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents" data-foldername="" data-parentname="">
-                                                Documents
+                                                <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents" 
+                                                     data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}">
+                                                {{folder.name}}
                                             </div>
-                                        </li>
-                                        <li data-client="" data-foldername="" data-parentname="" class="childNode ui-droppable" style="display: inline-block; width: 90%; padding: 0px;">
-                                            <div class="treeNodes" title="Emails">
-                                                <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Emails" data-foldername="" data-parentname="">
-                                                Emails
-                                            </div>
-                                        </li>
+                                        </li>                                        
                                     </ul>
                                 </li>
                             </ul>

@@ -113,8 +113,12 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 </div>";
     //End
 
-    vm.gridOptions = {
+    vm.gridOptions = {        
         enableGridMenu: true,
+        enableRowHeaderSelection: false,
+        enableRowSelection: true,
+        enableSelectAll: false,
+        multiSelect: false,
         columnDefs: [{
             field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: matterCellTemplate,
             headerCellTemplate: MatterHeaderTemplate
@@ -132,6 +136,9 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             $scope.gridApi = gridApi;
             gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
                 $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
+            });
+            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                vm.selectedRow = row.entity
             });
         }
     };
@@ -179,10 +186,35 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         });
     }
 
+    //Callback function for folder hierarchy 
+    function getFolderHierarchy(options, callback) {
+        api({
+            resource: 'matterResource',
+            method: 'getFolderHierarchy',
+            data: options,
+            success: callback
+        });
+    }
+
+
+    vm.getFolderHierarchy = function () {
+        var matterData ={             
+            MatterName: vm.selectedRow.matterName,
+            MatterUrl: "https://msmatter.sharepoint.com/sites/microsoft"                    
+          };
+        getFolderHierarchy(matterData, function (response) {
+            vm.foldersList = response.foldersList;
+            jQuery('#UploadMatterModal').modal("show");
+        });
+    }
+
+    //To open the UploadMatterModal 
+    $scope.Openuploadmodal = function () {
+        vm.getFolderHierarchy();
+    }
+
 
     vm.searchMatter = function (val) {
-
-
         var searchRequest =
           {
               Client: {
@@ -202,15 +234,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                           }
               }
           };
-
-
         return matterResource.get(searchRequest).$promise;
     }
 
 
     vm.search = function () {
-
-
         var searchRequest =
           {
               Client: {
@@ -608,10 +636,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //End 
 
 
-    //To open the UploadMatterModal 
-    $scope.Openuploadmodal = function () {
-        jQuery('#UploadMatterModal').modal("show");
-    }
+    
 
 
 
@@ -687,7 +712,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                                           <div><b>Sub area of law :</b> '+ obj.matterSubAreaOfLaw + '</div> \
                                           <div><b>Responsible attorney</b> : '+ obj.matterResponsibleAttorney + '</div>\
                                           <div><button ><a href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/'+ obj.matterGuid + '.aspx" target="_blank">View matter details</a></button></div>\
-                            <div><a onclick="Openuploadmodal(this)" mattername="' + obj.matterName + '" matterurl="' + obj.matterUrl + '" type="button">Upload to a matter</a></div>\
+                            <div><a onclick="$scope.Openuploadmodal()" type="button">Upload to a matter</a></div>\
                        </div>';
                 $(element).popover({
                     html: true,
@@ -720,8 +745,3 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
 })();
 
-function Openuploadmodal(mattername) {
-    var Name = mattername.getAttribute("mattername");
-    var Url = mattername.getAttribute("matterurl");
-    jQuery('#UploadMatterModal').modal("show");
-}

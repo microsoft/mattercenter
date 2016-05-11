@@ -5,6 +5,7 @@ angular.module('matterMain', [
   'ui.router',
   'AdalAngular',
   'ui.grid',
+  'ui.grid.selection',
   'ui.bootstrap'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
