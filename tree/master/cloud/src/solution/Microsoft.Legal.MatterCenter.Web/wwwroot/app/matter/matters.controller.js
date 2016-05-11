@@ -205,6 +205,12 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         getFolderHierarchy(matterData, function (response) {
             vm.foldersList = response.foldersList;
             jQuery('#UploadMatterModal').modal("show");
+            //Initialize Officejs library
+            Office.initialize = function (reason) {
+            };
+            if (Office.content.mailbox) {
+                vm.showMailAttachments();
+            }
         });
     }
 
@@ -213,6 +219,41 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         vm.getFolderHierarchy();
     }
 
+    vm.showMailAttachments = function(){
+        if (Office.content.mailbox) {
+            vm.attachmentToken = '';
+            vm.ewsUrl = Office.content.mailbox.ewsUrl;
+            vm.subject = Office.content.mailbox.item.subject;
+            vm.mailId = Office.content.mailbox.item.itemid;
+            vm.attachments = new Array();
+            var iCounter = 0;
+            if (Office.content.mailbox.item.attachments) {
+                var attachmentsLength = Office.content.mailbox.item.attachments.length;
+                for (iCounter = 0; iCounter < attachmentsLength; iCounter++) {
+                    if (Office.context.mailbox.item.attachments[iCounter].hasOwnProperty("$0_0")) {
+                        vm.attachments[iCounter] = JSON.parse(JSON.stringify(Office.context.mailbox.item.attachments[iCounter].$0_0));
+                    }
+                    else if(Office.context.mailbox.item.attachments[iCounter].hasOwnProperty("_data$p$0")){
+                        vm.attachments[iCounter] = JSON.parse(JSON.stringify(Office.context.mailbox.item.attachments[iCounter]._data$p$0));
+                    }
+                }
+                Office.context.mailbox.getCallbackTokenAsync(attachmentTokenCallbackEmailClient);
+            }
+        }
+        else {
+            //The app is not loaded in outlook or owa
+        }
+    }
+
+    function attachmentTokenCallbackEmailClient(asyncResult, userContext) {
+        "use strict";
+        if (asyncResult.status === "succeeded") {
+            vm.attachmentToken = asyncResult.value;
+            //createMailPopup();
+        } else {
+            //showNotification(oFindMatterConstants.Fail_Attachment_Token, "failNotification");
+        }
+    }
 
     vm.searchMatter = function (val) {
         var searchRequest =
