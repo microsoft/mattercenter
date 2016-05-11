@@ -100,7 +100,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         <div class='dropdown'>\
             <button class='btn btn-default dropdown-toggle' type='button' data-toggle='dropdown'>...</button><ul class='dropdown-menu'>\
                 <li class='cursor' ng-click='grid.appScope.Openuploadmodal()'><a>Upload to this Matter</a></li>\
-                <li><a href='#'>View Matter Details</a></li>\
+                <li><a href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'>View Matter Details</a></li>\
                 <li>\
                     <a href='https://msmatter.sharepoint.com/sites/microsoft/' target='_blank'>\
                         Go to Matter OneNote\

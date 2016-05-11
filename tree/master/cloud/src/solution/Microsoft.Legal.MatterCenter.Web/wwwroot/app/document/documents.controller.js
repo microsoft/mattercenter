@@ -93,7 +93,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     //Start
     var documentCellTemplate = "<div class='row'>\
     <div class='col-sm-8'>\
-        <a popover type='button' class='btn btn-link' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href='' > {{row.entity.documentName}} </a>\
+        <a popoverdoc type='button' class='btn btn-link' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href='' > {{row.entity.documentName}} </a>\
         <div class='popover-content'></div>\
     </div>\
     <div class='col-sm-4 text-right'>\
@@ -671,14 +671,14 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     //    return {
     //        restrict: 'AE',
     //        link: function (scope, element, attrs) {
-    //            if (attrs.toggle == "popover") {
-    //                $(element).popover();
+    //            if (attrs.toggle == "popoverdoc") {
+    //                $(element).popoverdoc();
     //            }
     //        }
     //    };
     //})
 
-    app.directive('popover', function () {
+    app.directive('popoverdoc', function () {
         return {
             restrict: 'AE',
             link: function (scope, element, attrs) {
