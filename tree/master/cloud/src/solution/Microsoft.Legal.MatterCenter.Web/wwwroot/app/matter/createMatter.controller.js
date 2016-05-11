@@ -142,6 +142,15 @@
                 });
             }
 
+            function createMatter(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'createMatter',
+                    data: options,
+                    success: callback
+                });
+            }
+
             
 
             optionsForClientGroup = {
@@ -257,7 +266,7 @@
                 if (null != cm.clientId) {
 
                     getDefaultMatterConfigurations(siteCollectionPath, function (response) {
-                        console.log(response); 
+                       // console.log(response); 
                     });
                 }
                 else {
@@ -335,8 +344,8 @@
 
                         cm.documentTypeLawTerms.push(documentType);
                         cm.activeDocumentTypeLawTerm = null;
-                        console.log("doc");
-                        console.log(cm.documentTypeLawTerms)
+                     //   console.log("doc");
+                     //   console.log(cm.documentTypeLawTerms)
                         //cm.primaryMatterType = true; alert(cm.primaryMatterType);
                       //  cm.activeSubAOLTerm = null;
                     }
@@ -391,6 +400,7 @@
                                             oPageOneState.MatterDescription = cm.matterDescription.trim();
                                             oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
                                             oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
+                                            oPageOneState.matterGUID = cm.matterGUID;
                                             oPageOneState.oSelectedDocumentTypeLawTerms = cm.selectedDocumentTypeLawTerms;
                                             //oPageOneState.oSectionName = cm.sectionName;
                                             localStorage.setItem('oPageOneData', JSON.stringify(oPageOneState));
@@ -429,10 +439,11 @@
                     if (undefined !== cm.chkConfilctCheck && true == cm.chkConfilctCheck) {
 
                         cm.sectionName = sectionName;
+                        
 
                         callCheckSecurityGroupExists();
-
-                        console.log(cm.assignPermissionTeams);
+                        // console.log(getAssignedUserRoles());
+                       
 
                     }
                     else {
@@ -479,7 +490,7 @@
           var callCheckSecurityGroupExists=function(){
                 
                 cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
-                console.log(cm.assignPermissionTeams);
+                //console.log(cm.assignPermissionTeams);
                 var count=1;
                 angular.forEach(cm.assignPermissionTeams, function (team) { //For loop
                     cm.arrAssignedUserName.push(getUserName(team.assignedUser + ";", true));
@@ -510,7 +521,7 @@
               // console.log(optionsForSecurityGroupCheck);
 
                 checkSecurityGroupExists(optionsForSecurityGroupCheck, function (response) {
-                    console.log(response);
+                   // console.log(response);
 
                     if (!response.value) {
                         alert(" Assign roles and permissions to a particular user for this matter ");
@@ -592,8 +603,8 @@
                 if (1 < remainingRows) {
 
                     cm.assignPermissionTeams.splice(index, 1);
-                    console.log(cm.assignPermissionTeams);
-                    console.log(cm.assignPermissionTeams.length);
+                  //  console.log(cm.assignPermissionTeams);
+                  //  console.log(cm.assignPermissionTeams.length);
                 }
             };
 
@@ -621,7 +632,7 @@
                     cm.sectionName = "";
                     cm.removeDTItem = false;
                     cm.primaryMatterType = cm.errorPopUp = false;
-                    cm.matterGUID = "";
+                    cm.matterGUID = oPageData.matterGUID;
                     cm.iCurrentPage = 0;
                     cm.navigateToSecondSection("");
                     cm.navigateToSecondSection("snConflictCheck");
@@ -659,10 +670,28 @@
             }
 
 
-            cm.createMatter = function () {
+
+
+
+            cm.createMatterButton = function () {
 
                 var matterGUID = cm.matterGUID;
-
+                var arrFolderNames=[];
+                arrFolderNames = retrieveFolderStructure();
+                var arrRoles = [];
+                arrRoles = getAssignedUserRoles();
+                var arrPermissions = [];
+                arrPermissions = getAssignedUserPermissions();
+                var contentTypes = [];
+                var defaultContentType = "";
+                contentTypes = getDefaultContentTypeValues("contenttypes");
+                defaultContentType = getDefaultContentTypeValues("defaultcontenttype");
+                var sPracticeGroupName=getDefaultContentTypeValues("practicegroupname")
+                    ,sPracticeGroupId=getDefaultContentTypeValues("practicegroupid")
+                    ,sAreaOfLawName=getDefaultContentTypeValues("areatermname")
+                    ,sAreaOfLawId=getDefaultContentTypeValues("areatermid"),
+                    sSubareaOfLawName=getDefaultContentTypeValues("subareatermname"),
+                    sSubareaOfLawId=getDefaultContentTypeValues("subareatermid");
 
                 var optionsForMatterMetaDataVM =  {
                     Client: {
@@ -677,25 +706,420 @@
                       
                         Conflict:{
                             Identified: cm.conflictRadioCheck,
-                            CheckBy: (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "",
+                            CheckBy:"venkatm@MSmatter.onmicrosoft.com",
+                          //  CheckBy: (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "",
                             CheckOn : cm.conflictDate,
                             SecureMatter : "True"
                         },
                         AssignUserNames: cm.arrAssignedUserName,
-                         AssignUserEmails : cm.arrAssignedUserEmails,
-                        BlockUserNames : (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "",
+                        AssignUserEmails : cm.arrAssignedUserEmails,
+                        BlockUserNames:"SaiG@MSmatter.onmicrosoft.com",
+                      //  BlockUserNames : (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "",
                         MatterGuid:cm.matterGUID,
-                        FolderNames:""
+                        FolderNames: arrFolderNames,
+                        Roles: arrRoles
                     },
                     MatterConfigurations:{
                         IsConflictCheck: cm.chkConfilctCheck,
                         IsMatterDescriptionMandatory : true,
-                        IsCalendarSelected : true,
-                        IsTaskSelected : true
+                        IsCalendarSelected: cm.includeCalendar,
+                        IsTaskSelected: cm.includeTasks
                     },
-                    UserIds: cm.userIDs
+                    UserIds: cm.userIDs,
+                    HasErrorOccurred: false
+                }
+
+                createMatter(optionsForMatterMetaDataVM, function (response) {
+
+                    ///  cm.clientNameList = response.clientTerms;
+                    console.log(response);
+                    cm.popupContainerBackground = "show";// jQuery('#myModal').modal('show');
+
+
+                });
+               
+
+
+             
+
+
+                
+
+               
+
+
+            }
+          
+
+            function associateContentTypes() {
+                var optionsForAssignContentTypeMetadata = {
+                    Client: {
+                        Id: cm.clientId,
+                        Name: "Microsoft",
+                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    },
+                    Matter: {
+                        Name: cm.matterName.trim(),
+                        Id: cm.matterId,
+                        ContentTypes: contentTypes,
+                        DefaultContentType: defaultContentType,
+                        MatterGuid: matterGUID
+                    },
+                    PracticeGroupTerm: {
+                        TermName: sPracticeGroupName,
+                        Id: sPracticeGroupId
+                    },
+                    AreaTerm: {
+                        TermName: sAreaOfLawName,
+                        Id: sAreaOfLawId
+                    },
+                    SubareaTerm: {
+                        TermName: sSubareaOfLawName,
+                        Id: sSubareaOfLawId
                     }
 
+                }
+            }
+
+            function assignPermission() {
+                var optionsForAssignUserPermissionMetadataVM = {
+
+                    Client: {
+                        Id: cm.clientId,
+                        Name: "Microsoft",
+                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    },
+                    Matter: {
+                        Name: cm.matterName.trim(),
+                        Permissions: arrPermissions,
+                        AssignUserNames: cm.arrAssignedUserName,
+                        AssignUserEmails: cm.arrAssignedUserEmails,
+                        MatterGuid: matterGUID
+                    },
+                    MatterConfigurations: {
+
+                        IsCalendarSelected: cm.includeCalendar,
+                        IsTaskSelected: cm.includeTasks
+                    }
+                }
+            }
+
+
+            function createMatterLandingPage() {
+
+                var optionsForCreateMatterLandingPage = {
+                    Client: {
+                        Id: cm.clientId,
+                        Name: "Microsoft",
+                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    },
+                    MatterConfigurations: {
+
+                        IsConflictCheck: cm.chkConfilctCheck,
+                        IsMatterDescriptionMandatory: true,
+                        IsCalendarSelected: cm.includeCalendar,
+                        IsTaskSelected: cm.includeTasks,
+                        IsRSSSelected: cm.includeRssFeeds
+                    },
+                    Matter: {
+                        Name: cm.matterName.trim(),
+                        Description: cm.matterDescription,
+                        AssignUserNames: cm.arrAssignedUserName,
+                        AssignUserEmails: cm.arrAssignedUserEmails,
+                        BlockUserNames: (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "",
+                        Conflict: {
+                            Identified: cm.conflictRadioCheck,
+                            CheckBy: (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "",
+                            CheckOn: cm.conflictDate,
+                            SecureMatter: "True"
+                        },
+                        Permissions: arrPermissions,
+                        MatterGuid: matterGUID
+                    }
+                }
+            }
+           
+
+            function updateMatterMetadata() {
+                var optionsForMatterMetadata = {
+                    Client: {
+                        Id: cm.clientId,
+                        Name: "Microsoft",
+                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    },
+                    MatterConfigurations: {
+
+                        IsConflictCheck: cm.chkConfilctCheck,
+                        IsMatterDescriptionMandatory: true,
+                        IsCalendarSelected: cm.includeCalendar,
+                        IsTaskSelected: cm.includeTasks,
+                        IsRSSSelected: cm.includeRssFeeds
+                    },
+                    Matter: {
+                        Name: cm.matterName.trim(),
+                        Id: cm.matterId,
+                        Description: cm.matterDescription,
+                        Conflict: {
+                            Identified: cm.conflictRadioCheck,
+                            CheckBy: (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "",
+                            CheckOn: cm.conflictDate,
+                            SecureMatter: "True"
+                        },
+                        AssignUserNames: cm.arrAssignedUserName,
+                        AssignUserEmails: cm.arrAssignedUserEmails,
+                        BlockUserNames: (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "",
+
+                        Permissions: arrPermissions,
+                        MatterGuid: matterGUID
+                    }
+                }
+            }
+
+            function retrieveFolderStructure() {
+                "use strict";
+                var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrFolderStructure = [];
+                if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                    arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                    nLength = arrContentTypes.length;
+                    for (nCount = 0; nCount < nLength; nCount++) {
+                        if (arrContentTypes[nCount].primaryMatterType === true || 0 === nCount) {
+                            // Check if the isNoFolderStructurePresent flag is set to true
+                            if (arrContentTypes[nCount].isNoFolderStructurePresent && "false" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
+                                // If the folder at the specific level is not present then move to the parent level
+                                arrFolderStructure = arrContentTypes[nCount].folderNames && "" !== arrContentTypes[nCount].folderNames ? arrContentTypes[nCount].folderNames.split(";") : arrContentTypes[nCount].foldernamesaol && "" !== arrContentTypes[nCount].foldernamesaol ? arrContentTypes[nCount].foldernamesaol.split(";") : arrContentTypes[nCount].foldernamespg && "" !== arrContentTypes[nCount].foldernamespg ? arrContentTypes[nCount].foldernamespg.split(";") : [];
+                            }
+                        }
+
+                    }
+                }
+                return arrFolderStructure;
+            }
+
+
+            function getDefaultContentTypeValues(contentTypeValue){
+                var returnedValue;
+                switch (contentTypeValue) {
+                    case "contenttypes":
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("contenttypes" == contentTypeValue) {
+                                    arrContents.push(arrContentTypes[nCount].termName);
+                            
+                                    var arrAssociatedDocumentTemplates=arrContentTypes[nCount].documentTemplateNames.split(";");
+                                    for(var iIterator = 0; iIterator < arrAssociatedDocumentTemplates.length; iIterator++){
+                                        if(-1==arrContents.indexOf(arrAssociatedDocumentTemplates[iIterator])){
+                                            arrContents.push(arrAssociatedDocumentTemplates[iIterator]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue=arrContents;
+                        break;
+                    case "defaultcontenttype":
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("defaultcontenttype" == contentTypeValue) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].termName;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue=defaultContentType;
+                        break;
+                    case "practicegroupname":
+                      
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("practicegroupname" == contentTypeValue) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].practicegroup;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue=defaultContentType;
+                        break;
+                    case "practicegroupid":
+                      
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("practicegroupid"==contentTypeValue ) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].practicegroupId;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue=defaultContentType;
+                        break;
+                    case "subareatermname":
+                       
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("subareatermname" == contentTypeValue) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].termName;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue=defaultContentType;
+                        break;
+                    case "subareatermid":
+                       
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("subareatermid" == contentTypeValue) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].id;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue=defaultContentType;
+                        break;
+                    case "areatermname":
+                       
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("areatermname" == contentTypeValue) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].areaoflaw;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue=defaultContentType;
+                        break;
+                    case "areatermid":
+                       
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("areatermid" == contentTypeValue) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].areaoflawId;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue=defaultContentType;
+                        break;
+                    
+                }
+
+                return returnedValue;
+
+               
+            }
+
+            //function getContentTypes(value) {
+            //    "use strict";
+            //    var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+            //    if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+            //        arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+            //        nLength = arrContentTypes.length;
+            //        for (nCount = 0; nCount < nLength; nCount++) {
+            //          //  if (arrContentTypes[nCount].primaryMatterType === true || 0 === nCount) {
+            //                // Check if the isNoFolderStructurePresent flag is set to true
+            //               // if (arrContentTypes[nCount].isNoFolderStructurePresent && "false" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
+                        
+            //            // If the folder at the specific level is not present then move to the parent level
+            //            if("contenttypes"==value){
+            //                arrContents.push(arrContentTypes[nCount].termName);
+                            
+            //                var arrAssociatedDocumentTemplates=arrContentTypes[nCount].documentTemplateNames.split(";");
+            //                for(var iIterator = 0; iIterator < arrAssociatedDocumentTemplates.length; iIterator++){
+            //                    if(-1==arrContents.indexOf(arrAssociatedDocumentTemplates[iIterator])){
+            //                        arrContents.push(arrAssociatedDocumentTemplates[iIterator]);
+            //                    }
+            //                }
+            //            }
+            //            if ("defaultcontenttype"==value ) {
+            //                if (arrContentTypes[nCount].primaryMatterType === true) {
+            //                    defaultContentType = arrContentTypes[nCount].termName;
+            //                }
+            //            }
+            //               // }
+            //           // }
+
+            //        }
+            //    }
+            //    if (value == "defaultcontenttype") {
+            //        return defaultContentType;
+            //    } else {
+            //        return arrContents;
+            //    }
+            //}
+
+         //  var contentTypes = getContentType("contentTypes");
+         // var  defaultContentType = getContentType("defaultcontenttype");
+         //   console.log("----");
+         ////   var obj = retrieveFolderStructure();
+         //   console.log(contentTypes);
+         //   console.log(defaultContentType);
+
+            function getAssignedUserRoles() {
+                "use strict";
+                var arrAssigneTeams = cm.assignPermissionTeams, nCount = 0, nlength ,  arrRoles = [];
+                if(arrAssigneTeams){
+                    nlength = arrAssigneTeams.length;
+
+                    for (nCount = 0; nCount < nlength; nCount++) {
+                        if (arrAssigneTeams[nCount] && arrAssigneTeams[nCount].assignedRole) {
+                            if (arrAssigneTeams[nCount].assignedRole && arrAssigneTeams[nCount].assignedRole.name) {
+                                if ("" !== arrAssigneTeams[nCount].assignedRole.name) {
+                                    arrRoles.push(arrAssigneTeams[nCount].assignedRole.name);
+                                }
+                            }
+                        }
+                    }
+                }
+                return arrRoles;
+            }
+
+            function getAssignedUserPermissions() {
+                "use strict";
+                var arrAssigneTeams = cm.assignPermissionTeams, nCount = 0, nlength, arrAssignRoles, arrPermissions = [];
+                if (arrAssigneTeams) {
+                    nlength = arrAssigneTeams.length;
+
+                    for (nCount = 0; nCount < nlength; nCount++) {
+                        if (arrAssigneTeams[nCount] && arrAssigneTeams[nCount].assignedPermission) {
+                            if (arrAssigneTeams[nCount].assignedPermission && arrAssigneTeams[nCount].assignedPermission.name) {
+                                if ("" !== arrAssigneTeams[nCount].assignedPermission.name) {
+                                    arrPermissions.push(arrAssigneTeams[nCount].assignedPermission.name);
+                                }
+                            }
+                        }
+                    }
+                }
+                return arrPermissions;
             }
 
 
