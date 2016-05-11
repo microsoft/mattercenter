@@ -3,7 +3,7 @@
     color: #333;
     font-size: 1em;
     font-weight: 400;
-    padding-bottom: 15px;
+    padding: 0 0 15px 0px;
     border-bottom: 1px solid #c8c8c8;
     margin-right: 10px;
 }
@@ -27,7 +27,9 @@
         top: 39px;
         box-shadow: none;
         border: 1px solid #c8c8c8;
+        border-radius: 0px;
     }
+
 
     #searchPanelDropdown .ms-Dropdown-item, #searchPanelDropdown .ms-Dropdown-title, #gridViewPageHeaderContainer {
         white-space: nowrap;
@@ -83,6 +85,11 @@
 #searchBarHolder {
     position: relative;
 }
+
+
+    #searchBarHolder input {
+        border-radius: 0px;
+    }
 
     #searchBarHolder .autoCompletePanel {
         top: 30px;
@@ -633,8 +640,23 @@
     height: 30px;
 }
 
-@-moz-document url-prefix() { 
-  #uploadToMatter, #viewMatters, #viewDocumentLandingPage, #openDocument {
-      padding:0;
-  }
+@-moz-document url-prefix() {
+    #uploadToMatter, #viewMatters, #viewDocumentLandingPage, #openDocument {
+        padding: 0;
+    }
+}
+
+.ms-TextField .ms-TextField-field {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid #c8c8c8;
+    border-radius: 0;
+    font-family: 'Segoe UI Web Semilight','Segoe UI Semilight','Segoe WP Semilight','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
+    font-size: 14px;
+    color: #333;
+    height: 30px;
+    padding: 6px 3px 7px 8px;
+    width: 100%;
 }

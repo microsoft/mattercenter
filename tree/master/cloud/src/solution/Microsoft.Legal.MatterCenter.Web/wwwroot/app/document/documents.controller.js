@@ -115,6 +115,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
 
     vm.gridOptions = {
         enableGridMenu: true,
+        enableRowHeaderSelection: false,
+        enableRowSelection: true,
+        enableSelectAll: false,
+        multiSelect: false,
         columnDefs: [{
             field: 'documentName', displayName: 'Document', enableHiding: false, cellTemplate: documentCellTemplate,
             headerCellTemplate: documentHeaderTemplate
