@@ -54,7 +54,32 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/matter/checksecuritygroupexists'
                      
+                  }),
+                  'getFolderHierarchy': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/getfolderhierarchy'
+                     
+                  }),
+                  'createMatter': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/create'
+
+                  }),
+                  'assignUserPermissions': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/assignuserpermissions'
+
+                  }),
+                   'assignContentType': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/assigncontenttype'
+
+                  }),
+                   'createLandingPage': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/createlandingpage'
                   })
+
               });
       }]);
 

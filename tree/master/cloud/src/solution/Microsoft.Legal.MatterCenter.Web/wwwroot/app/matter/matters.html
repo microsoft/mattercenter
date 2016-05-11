@@ -25,17 +25,17 @@
                 <div id="HeaderPlaceHolder">
                     <div id="" class="row">
 
-                        <div class="col-xs-4 col-sm-1 col-md-6 col-lg-6">
+                        <div class="col-xs-4 col-sm-1 col-md-6 col-lg-6 pad0">
                             <div class="col-xs-10 col-sm-2 col-md-2 col-lg-2" ng-click="vm.menuClick()">
                                 <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
                                 <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
                                 <div class="MenuCaption"><span>menu</span></div>
                             </div>
-                            <div class="col-md-10 col-lg-10 visible-md visible-lg">
-                                <select class="form-control" ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
+                            <div class="col-md-10 col-lg-10  visible-md visible-lg" id="searchPanelDropdown">
+                                <select class="form-control ms-Dropdown ms-Dropdown-items" ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
                             </div>
                         </div>
-                        <div id="searchBarHolder" class="col-md-6 col-lg-6 visible-md visible-lg">
+                        <div id="searchBarHolder" class="col-md-6 col-lg-6 visible-md visible-lg pad0">
                             <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
                             <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                             <div ng-show="noResults">
@@ -200,9 +200,9 @@
     </div>
 
 </div>
-<div class="row">
-    <div class="col-sm-12">
-        <h1 role="heading" class="add-margin-bottom">{{ddlMatters.Name}}</h1>
+<div class="row title">
+    <div class="col-sm-12" id="gridViewPageHeaderContainer">
+        <span role="heading" class="add-margin-bottom">{{ddlMatters.Name}}</span>
     </div>
 </div>
 <div class="row">
@@ -243,19 +243,15 @@
                         <div class="folderStructureContent" showbreadcrumb ng-hide="foldercontent">
                             <ul>
                                 <li>
-                                    <ul>
-                                        <li data-client="" data-foldername="" data-parentname="" class="childNode" style="display: inline-block; width: 90%; padding: 0px;">
+                                    <ul ng-repeat="folder in vm.foldersList">
+                                        <li ng-if="folder.parentURL" data-client="" data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}" class="childNode" 
+                                            style="display: inline-block; width: 90%; padding: 0px;">
                                             <div class="treeNodes" title="Documents">
-                                                <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents" data-foldername="" data-parentname="">
-                                                Documents
+                                                <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents" 
+                                                     data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}">
+                                                {{folder.name}}
                                             </div>
-                                        </li>
-                                        <li data-client="" data-foldername="" data-parentname="" class="childNode ui-droppable" style="display: inline-block; width: 90%; padding: 0px;">
-                                            <div class="treeNodes" title="Emails">
-                                                <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Emails" data-foldername="" data-parentname="">
-                                                Emails
-                                            </div>
-                                        </li>
+                                        </li>                                        
                                     </ul>
                                 </li>
                             </ul>
@@ -269,12 +265,12 @@
         </div>
     </div>
 </div>
+
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-hide="lazyloader">
         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
     </div>
 </div>
-
 
 <!--</div>
 </div>-->

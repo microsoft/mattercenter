@@ -98,7 +98,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     </div>\
     <div class='col-sm-4 text-right'>\
         <div class='dropdown'>\
-            <button class='btn btn-default dropdown-toggle' type='button' data-toggle='dropdown'>...</button><ul class='dropdown-menu'>\
+            <a class='btn-link dropdown-toggle UiGrid-a' type='button' data-toggle='dropdown'>...</a><ul class='dropdown-menu'>\
                 <li class='cursor' ng-click='grid.appScope.Openuploadmodal()'><a>Upload to this Matter</a></li>\
                 <li><a href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'>View Matter Details</a></li>\
                 <li>\
@@ -113,8 +113,12 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 </div>";
     //End
 
-    vm.gridOptions = {
+    vm.gridOptions = {        
         enableGridMenu: true,
+        enableRowHeaderSelection: false,
+        enableRowSelection: true,
+        enableSelectAll: false,
+        multiSelect: false,
         columnDefs: [{
             field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: matterCellTemplate,
             headerCellTemplate: MatterHeaderTemplate
@@ -132,6 +136,9 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             $scope.gridApi = gridApi;
             gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
                 $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
+            });
+            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                vm.selectedRow = row.entity
             });
         }
     };
@@ -179,10 +186,76 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         });
     }
 
+    //Callback function for folder hierarchy 
+    function getFolderHierarchy(options, callback) {
+        api({
+            resource: 'matterResource',
+            method: 'getFolderHierarchy',
+            data: options,
+            success: callback
+        });
+    }
+
+
+    vm.getFolderHierarchy = function () {
+        var matterData ={             
+            MatterName: vm.selectedRow.matterName,
+            MatterUrl: "https://msmatter.sharepoint.com/sites/microsoft"                    
+          };
+        getFolderHierarchy(matterData, function (response) {
+            vm.foldersList = response.foldersList;
+            jQuery('#UploadMatterModal').modal("show");
+            //Initialize Officejs library
+            Office.initialize = function (reason) {
+            };
+            if (Office.content.mailbox) {
+                vm.showMailAttachments();
+            }
+        });
+    }
+
+    //To open the UploadMatterModal 
+    $scope.Openuploadmodal = function () {
+        vm.getFolderHierarchy();
+    }
+
+    vm.showMailAttachments = function(){
+        if (Office.content.mailbox) {
+            vm.attachmentToken = '';
+            vm.ewsUrl = Office.content.mailbox.ewsUrl;
+            vm.subject = Office.content.mailbox.item.subject;
+            vm.mailId = Office.content.mailbox.item.itemid;
+            vm.attachments = new Array();
+            var iCounter = 0;
+            if (Office.content.mailbox.item.attachments) {
+                var attachmentsLength = Office.content.mailbox.item.attachments.length;
+                for (iCounter = 0; iCounter < attachmentsLength; iCounter++) {
+                    if (Office.context.mailbox.item.attachments[iCounter].hasOwnProperty("$0_0")) {
+                        vm.attachments[iCounter] = JSON.parse(JSON.stringify(Office.context.mailbox.item.attachments[iCounter].$0_0));
+                    }
+                    else if(Office.context.mailbox.item.attachments[iCounter].hasOwnProperty("_data$p$0")){
+                        vm.attachments[iCounter] = JSON.parse(JSON.stringify(Office.context.mailbox.item.attachments[iCounter]._data$p$0));
+                    }
+                }
+                Office.context.mailbox.getCallbackTokenAsync(attachmentTokenCallbackEmailClient);
+            }
+        }
+        else {
+            //The app is not loaded in outlook or owa
+        }
+    }
+
+    function attachmentTokenCallbackEmailClient(asyncResult, userContext) {
+        "use strict";
+        if (asyncResult.status === "succeeded") {
+            vm.attachmentToken = asyncResult.value;
+            //createMailPopup();
+        } else {
+            //showNotification(oFindMatterConstants.Fail_Attachment_Token, "failNotification");
+        }
+    }
 
     vm.searchMatter = function (val) {
-
-
         var searchRequest =
           {
               Client: {
@@ -202,15 +275,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                           }
               }
           };
-
-
         return matterResource.get(searchRequest).$promise;
     }
 
 
     vm.search = function () {
-
-
         var searchRequest =
           {
               Client: {
@@ -608,10 +677,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //End 
 
 
-    //To open the UploadMatterModal 
-    $scope.Openuploadmodal = function () {
-        jQuery('#UploadMatterModal').modal("show");
-    }
+    
 
 
 
@@ -687,7 +753,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                                           <div><b>Sub area of law :</b> '+ obj.matterSubAreaOfLaw + '</div> \
                                           <div><b>Responsible attorney</b> : '+ obj.matterResponsibleAttorney + '</div>\
                                           <div><button ><a href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/'+ obj.matterGuid + '.aspx" target="_blank">View matter details</a></button></div>\
-                            <div><a onclick="Openuploadmodal(this)" mattername="' + obj.matterName + '" matterurl="' + obj.matterUrl + '" type="button">Upload to a matter</a></div>\
+                            <div><a onclick="$scope.Openuploadmodal()" type="button">Upload to a matter</a></div>\
                        </div>';
                 $(element).popover({
                     html: true,
@@ -720,8 +786,3 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
 })();
 
-function Openuploadmodal(mattername) {
-    var Name = mattername.getAttribute("mattername");
-    var Url = mattername.getAttribute("matterurl");
-    jQuery('#UploadMatterModal').modal("show");
-}
