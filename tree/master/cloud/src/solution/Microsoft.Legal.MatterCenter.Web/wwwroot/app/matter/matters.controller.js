@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource',
-function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope',
+function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope) {
     var vm = this;
     vm.selected = undefined;
     // Onload show ui grid and hide error div
@@ -113,8 +113,12 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 </div>";
     //End
 
-    vm.gridOptions = {
+    vm.gridOptions = {        
         enableGridMenu: true,
+        enableRowHeaderSelection: false,
+        enableRowSelection: true,
+        enableSelectAll: false,
+        multiSelect: false,
         columnDefs: [{
             field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: matterCellTemplate,
             headerCellTemplate: MatterHeaderTemplate
@@ -132,6 +136,9 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             $scope.gridApi = gridApi;
             gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
                 $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
+            });
+            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                vm.selectedRow = row.entity
             });
         }
     };
@@ -179,10 +186,35 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         });
     }
 
+    //Callback function for folder hierarchy 
+    function getFolderHierarchy(options, callback) {
+        api({
+            resource: 'matterResource',
+            method: 'getFolderHierarchy',
+            data: options,
+            success: callback
+        });
+    }
+
+
+    vm.getFolderHierarchy = function () {
+        var matterData ={             
+            MatterName: vm.selectedRow.matterName,
+            MatterUrl: "https://msmatter.sharepoint.com/sites/microsoft"                    
+          };
+        getFolderHierarchy(matterData, function (response) {
+            vm.foldersList = response.foldersList;
+            jQuery('#UploadMatterModal').modal("show");
+        });
+    }
+
+    //To open the UploadMatterModal 
+    $scope.Openuploadmodal = function () {
+        vm.getFolderHierarchy();
+    }
+
 
     vm.searchMatter = function (val) {
-
-
         var searchRequest =
           {
               Client: {
@@ -202,15 +234,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                           }
               }
           };
-
-
         return matterResource.get(searchRequest).$promise;
     }
 
 
     vm.search = function () {
-
-
         var searchRequest =
           {
               Client: {
@@ -608,10 +636,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //End 
 
 
-    //To open the UploadMatterModal 
-    $scope.Openuploadmodal = function () {
-        jQuery('#UploadMatterModal').modal("show");
-    }
+    
 
 
 
@@ -655,9 +680,14 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             $(".MenuCaption").removeClass("hideMenuCaption");
         }
     }
+    $rootScope.breadcrumb = true;
+    $rootScope.foldercontent = false;
 
+    $scope.hideBreadCrumb = function () {
+        $rootScope.breadcrumb = true;
+        $rootScope.foldercontent = false;
 
-
+    }
 }]);
     //app.directive('toggle', function () {
     //    return {
@@ -674,32 +704,41 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         return {
             restrict: 'AE',
             link: function (scope, element, attrs) {
-                //if (attrs.toggle == "popover") {
                 var obj = eval('(' + attrs.details + ')');
-                $(element).popover({
-                    html: true,
-                    trigger: 'click',
-                    delay: 500,
-                    content: function () {
-                        // Get the content from the hidden sibling.
-                        return '<div>\
+                var content = '<div>\
                                           ' + obj.matterName + ' \
                                           <div> <b>Client :</b> '+ obj.matterClient + '</div>\
                                           <div><b>Client.Matter ID :</b> '+ obj.matterClientId + '.' + obj.matterID + '</div>\
                                           <div><b>Sub area of law :</b> '+ obj.matterSubAreaOfLaw + '</div> \
                                           <div><b>Responsible attorney</b> : '+ obj.matterResponsibleAttorney + '</div>\
                                           <div><button ><a href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/'+ obj.matterGuid + '.aspx" target="_blank">View matter details</a></button></div>\
-                            <div><button  ng-click="Openuploadmodal()">Upload to a matter</button></div>\
+                            <div><a onclick="$scope.Openuploadmodal()" type="button">Upload to a matter</a></div>\
                        </div>';
-                    },
-
-                }).click(function (evt) {
-                    evt.stopPropagation();
-                    $(this).popover('show');
+                $(element).popover({
+                    html: true,
+                    trigger: 'click',
+                    delay: 500,
+                    content: content,
                 });
             }
-            //}
-        };
+        }
+    });
+
+
+    app.directive('showbreadcrumb', function ($rootScope) {
+        return {
+            restrict: 'AE',
+            link: function (scope, element, attrs) {
+                $(element).find('ul li ul li').on("dblclick", function (e) {
+                    $rootScope.breadcrumb = false;
+                    $rootScope.foldercontent = true;
+                    $rootScope.$apply();
+                    var text = $(this).find('div').attr('title');
+                    $('#breadcrumb #currentFolder').html(text);
+                });
+
+            }
+        }
     });
 
 

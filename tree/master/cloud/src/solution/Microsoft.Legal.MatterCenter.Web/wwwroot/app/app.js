@@ -5,6 +5,7 @@ angular.module('matterMain', [
   'ui.router',
   'AdalAngular',
   'ui.grid',
+  'ui.grid.selection',
   'ui.bootstrap'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
@@ -41,6 +42,15 @@ angular.module('matterMain', [
                 "contentView": {
                     templateUrl: '/app/matter/matters.html',
                     controller: 'mattersController as vm'
+                }
+            }, requireADLogin: true
+        })
+        .state('mc.documents', {
+            url: "^/documents",
+            views: {
+                "contentView": {
+                    templateUrl: '/app/document/documents.html',
+                    controller: 'documentsController as vm'
                 }
             }, requireADLogin: true
         })

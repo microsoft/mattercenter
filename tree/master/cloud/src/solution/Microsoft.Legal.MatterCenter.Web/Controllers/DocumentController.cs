@@ -97,7 +97,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 }
                 #endregion 
                 var searchResultsVM = await documentProvision.GetDocumentsAsync(searchRequestVM);
-                return matterCenterServiceFunctions.ServiceResponse(searchResultsVM, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(searchResultsVM.DocumentDataList, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

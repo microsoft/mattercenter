@@ -11,11 +11,6 @@ angular.module('matterMain')
                       url: '/api/v1/matter/get',
                       isArray: true
                   }),
-
-                  'getMatters': auth.attachCSRF({
-                      method: 'GET',
-                      url: '/api/v1/taxonomy/getcurrentsitetitle'
-                  }),
 				  'getPinnedMatters': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/matter/getpinned'
@@ -59,7 +54,13 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/matter/checksecuritygroupexists'
                      
-                  })
+                  }),
+                  'getFolderHierarchy': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/getfolderhierarchy'
+                     
+                  }),
+
               });
       }]);
 

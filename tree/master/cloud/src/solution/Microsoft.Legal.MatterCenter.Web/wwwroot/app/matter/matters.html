@@ -223,7 +223,7 @@
                         <div class="attachmentHeader">Drag and drop items to folders on the right</div>
                     </div>
                     <div class="col-sm-2">
-                        <img data-dismiss="modal" class="pull-right" src="../../images/close-666.png" />
+                        <img data-dismiss="modal" ng-click="hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
                     </div>
                 </div>
                 <div class="row margin0">
@@ -233,7 +233,30 @@
 
                 <div class="row margin0">
                     <div class="col-sm-9 maildata"><div class="noFilesUploaded"></div>No files uploaded</div>
-                    <div class="col-sm-3 folderContent"></div>
+                    <div class="col-sm-3 folderContent">
+                        <div id="breadcrumb" class="breadcrumb" ng-hide="breadcrumb">
+                            <img alt="Root" ng-click="hideBreadCrumb()" id="rootLink" src="../Images/Return_Icon_23px_23px_666.png" title="<span class=&quot;content&quot;>cv vb</span>" draggable="false">
+                            <div id="parentFolder" class="breadcrumbItem" ></div>
+                            <div id="breadcrumbSeparator"></div>
+                            <div id="currentFolder" class="breadcrumbItem"></div>
+                        </div>
+                        <div class="folderStructureContent" showbreadcrumb ng-hide="foldercontent">
+                            <ul>
+                                <li>
+                                    <ul ng-repeat="folder in vm.foldersList">
+                                        <li ng-if="folder.parentURL" data-client="" data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}" class="childNode" 
+                                            style="display: inline-block; width: 90%; padding: 0px;">
+                                            <div class="treeNodes" title="Documents">
+                                                <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents" 
+                                                     data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}">
+                                                {{folder.name}}
+                                            </div>
+                                        </li>                                        
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="row margin0">
                     <div class="pull-left"><img src="../../images/information-blue.png" /> You can also drag and drop files from your desktop.</div>

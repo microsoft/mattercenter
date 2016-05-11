@@ -286,7 +286,10 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
                 #endregion
                 var folderHierarchy = await matterRepositoy.GetFolderHierarchyAsync(matterData);
-                return matterCenterServiceFunctions.ServiceResponse(folderHierarchy, (int)HttpStatusCode.OK);
+                var genericResponse = new {
+                    foldersList = folderHierarchy
+                };
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
