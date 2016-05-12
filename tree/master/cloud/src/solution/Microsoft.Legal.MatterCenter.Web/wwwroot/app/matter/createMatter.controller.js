@@ -571,19 +571,19 @@
             }
 
 
-            //cm.dateOptions = {
+            cm.dateOptions = {
                
-            //    formatYear: 'yy',
-            //    maxDate: new Date(2020, 5, 22),
-            //    minDate: new Date(),
-            //    startingDay: 1
-            //};
+                formatYear: 'yy',
+                maxDate: new Date(2020, 5, 22),
+                minDate: new Date(),
+                startingDay: 1
+            };
 
-            //cm.open1 = function () {
-            //    cm.opened = true;
-            //};
+            cm.open1 = function () {
+                cm.opened = true;
+            };
 
-            //cm.opened= false;
+            cm.opened= false;
            
             //$scope.SelectModal= function(){
             //   // jQuery('#myModal').modal('show');
