@@ -1,7 +1,6 @@
 ﻿<!--<div class="container-fluid">   -->
 <div class="row">
     <div class="col-xs-12">
-
         <div id="MasterPageContainer" class="MasterPageContent">
             <div class="commonAppSwitch  hide">
                 <img alt="Toggle app switcher menu" class="listMenuImage" src="Images/new-app-switcher-hamburger-icon-19X16-2b579a.png" />
@@ -25,23 +24,22 @@
                 <div id="HeaderPlaceHolder">
                     <div id="" class="row">
 
-                        <div class="col-xs-4 col-sm-1 col-md-6 col-lg-6 pad0">
+                        <div class="col-xs-4 col-sm-1 col-md-4 col-lg-4 pad0">
                             <div class="col-xs-10 col-sm-2 col-md-2 col-lg-2" ng-click="vm.menuClick()">
                                 <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
                                 <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
                                 <div class="MenuCaption"><span>menu</span></div>
                             </div>
                             <div class="col-md-10 col-lg-10  visible-md visible-lg" id="searchPanelDropdown">
-                                <select class="form-control ms-Dropdown ms-Dropdown-items" ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
+                                <select class="form-control" ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
                             </div>
                         </div>
-                        <div id="searchBarHolder" class="col-md-6 col-lg-6 visible-md visible-lg pad0">
+                        <div id="searchBarHolder" class="col-md-7 col-lg-7 visible-md visible-lg pad0">
                             <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
                             <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                             <div ng-show="noResults">
                                 <i class="glyphicon glyphicon-remove"></i> No Results Found
                             </div>
-
                         </div>
                         <div id="searchBarHolder" class="col-xs-8 col-sm-4 hidden-md hidden-lg">
                             <div class="input-group">
@@ -237,28 +235,28 @@
                 <div class="row margin0">
                     <div class="col-sm-9 maildata">
                         <!--Content start to show mail attachment information-->
-                        <div class="attachmentSection"  ng-repeat="attachmentInfo in vm.allAttachmentDetails">
+                        <div class="attachmentSection" ng-repeat="attachmentInfo in vm.allAttachmentDetails">
                             <div ng-if="individualAttachment.isEmail" class="attachment">
                                 <div class="attachmentName mailName">
-                                    <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false" 
-                                         ng-click="editAttachment($index)" alt="Edit" src="../Images/edit-666.png">
-                                    <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false" 
-                                         ng-click="saveAttachment($index)" alt="Save" src="../Images/save-666.png">
+                                    <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
+                                         onclick="editAttachment(this,{{attachmentInfo.counter}})" alt="Edit" src="../Images/edit-666.png">
+                                    <img title="Save attachment name" class="saveUploadIcon hide" id="0saveIcon" draggable="false"
+                                         onclick="saveAttachment(this,{{attachmentInfo.counter}})" alt="Save" src="../Images/save-666.png">
                                     <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
                                     <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" draggable="false" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
-                                    <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
-                                    <div title="Test attachments" class="popupName ui-draggable" id="{{attachmentInfo.counter}}attachment" draggable="true" ondragstart="dragStart(this);" 
+                                    <input class="popupName editPopupContent hide ui-draggable" id="0attachmentText" type="text" maxlength="128">
+                                    <div title="Test attachments" class="popupName ui-draggable" id="0attachment" draggable="true" ondragstart="dragStart(this);"
                                          data-attachmentid="{{attachmentInfo.attachmentId}}">{{attachmentInfo.attachmentFileName}}</div>
                                     <div class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message"></div>
                                 </div>
                             </div>
 
-                            <div  ng-if="!individualAttachment.isEmail" class="attachment">
+                            <div ng-if="!individualAttachment.isEmail" class="attachment">
                                 <div class="attachmentName">
-                                    <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false" 
-                                         ng-click="editAttachment($index)" alt="Edit" src="../Images/edit-666.png">
-                                    <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false" 
-                                         ng-click="saveAttachment($index)" alt="Save" src="../Images/save-666.png">
+                                    <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
+                                         onclick="editAttachment(this, {{attachmentInfo.counter}})" alt="Edit" src="../Images/edit-666.png">
+                                    <img title="Save attachment name" class="saveUploadIcon hide" id="0saveIcon" draggable="false"
+                                         onclick="saveAttachment(this, {{attachmentInfo.counter}})" alt="Save" src="../Images/save-666.png">
                                     <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
                                     <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" draggable="false" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
                                     <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
@@ -272,12 +270,12 @@
                             </div>
                         </div>
                         <!--Content end to show mail attachment information-->
-                        <div ng-if="vm.allAttachmentDetails.length==0" class="noFilesUploaded">No files uploaded</div>                    
+                        <div ng-if="vm.allAttachmentDetails.length==0" class="noFilesUploaded">No files uploaded</div>
                     </div>
                     <div class="col-sm-3 folderContent">
                         <div id="breadcrumb" class="breadcrumb" ng-hide="breadcrumb">
                             <img alt="Root" ng-click="hideBreadCrumb()" id="rootLink" src="../Images/Return_Icon_23px_23px_666.png" title="<span class=&quot;content&quot;>cv vb</span>" draggable="false">
-                            <div id="parentFolder" class="breadcrumbItem" ></div>
+                            <div id="parentFolder" class="breadcrumbItem"></div>
                             <div id="breadcrumbSeparator"></div>
                             <div id="currentFolder" class="breadcrumbItem"></div>
                         </div>
@@ -285,14 +283,14 @@
                             <ul>
                                 <li>
                                     <ul ng-repeat="folder in vm.foldersList">
-                                        <li ng-if="folder.parentURL" data-client="" data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}" class="childNode" 
+                                        <li ng-if="folder.parentURL" data-client="" data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}" class="childNode"
                                             style="display: inline-block; width: 90%; padding: 0px;">
                                             <div class="treeNodes" title="Documents">
-                                                <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents" 
+                                                <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents"
                                                      data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}">
                                                 {{folder.name}}
                                             </div>
-                                        </li>                                        
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
@@ -312,6 +310,8 @@
         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
     </div>
 </div>
+
+
 
 <!--</div>
 </div>-->

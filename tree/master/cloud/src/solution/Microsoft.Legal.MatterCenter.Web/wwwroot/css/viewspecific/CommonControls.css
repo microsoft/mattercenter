@@ -572,9 +572,9 @@
     }
 
 #btnOK {
-    margin-left: 10px;
+    margin-left: 0;
     margin-top: 10px;
-    height: 10px;
+    height: 28px;
     width: 80px;
     color: #fff;
     cursor: pointer;
