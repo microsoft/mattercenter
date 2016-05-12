@@ -218,6 +218,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         vm.getFolderHierarchy();
     }
 
+    function dragStart(ev) {
+        "use strict";
+        oUploadGlobal.src = ev;
+    }
+
     vm.oUploadGlobal = {
         regularInvalidCharacter: new RegExp("[\*\?\|\\\t/:\"\"'<>#{}%~&]", "g"),
         regularStartEnd: new RegExp("^[\. ]|[\. ]$", "g"),
@@ -250,10 +255,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     }
 
     vm.getIconSource = function (sExtension) {
-        var iconSrc = configs.Upload.ImageDocumentIcon.replace("{0}", sExtension);
-        iconSrc = (-1 < configs.Upload.PNGIconExtensions.indexOf(sExtension)) ?
-                        iconSrc.substring(0, configs.Upload.ImageDocumentIcon.lastIndexOf(".") + 1) + "png" : iconSrc;
-        return iconSrc;
+        //var iconSrc = configs.Upload.ImageDocumentIcon.replace("{0}", sExtension);
+        //iconSrc = (-1 < configs.Upload.PNGIconExtensions.indexOf(sExtension)) ?
+        //                iconSrc.substring(0, configs.Upload.ImageDocumentIcon.lastIndexOf(".") + 1) + "png" : iconSrc;
+        //return iconSrc;
     }
 
     vm.checkEmptyorWhitespace = function(input) {
@@ -322,7 +327,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             var attachmentType = vm.attachments[attachment].hasOwnProperty("attachmentType") ? vm.attachments[attachment].attachmentType : "";
             var sContentType = vm.attachments[attachment].hasOwnProperty("contentType") ? vm.attachments[attachment].contentType : "";
             var sExtension = -1 < attachmentName.lastIndexOf(".") ? attachmentName.substring(attachmentName.lastIndexOf(".") + 1) : 1 === parseInt(attachmentType) ? "msg" : "";
-            var iconSrc = vm.getIconSource(sExtension);
+            var iconSrc = ''; //vm.getIconSource(sExtension);
             //if (-1 < sContentType.indexOf(configs.Upload.ImageContentType)) {
             //}
             //else{
