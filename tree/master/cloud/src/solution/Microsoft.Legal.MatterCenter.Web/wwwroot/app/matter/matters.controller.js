@@ -42,7 +42,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         </div>\
         </div>\
     </div>\
-    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
+    <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
         <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
         <span ui-grid-visible='col.sort.direction'  class='ui-grid-invisible ui-grid-icon-blank'>&nbsp;</span>\
     </div>\
@@ -87,33 +87,84 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 </div>"
     //End
 
-
+    //Assigning html for ModifiedDateheadertemplate
+    //Start
+    var ModifiedDateheadertemplate = "<div >\
+    <div class='dropdown keep-open' style='float:right;'>\
+        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
+            <img src='../images/icon-combobox.png'/>\
+        </a>\
+        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
+         <div class='input-group'>\
+             <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'\
+                    uib-datepicker-popup='MM/dd/yyyy'\
+                    ng-model='startDate'\
+                    is-open='grid.appScope.openedStartDate' \
+                    datepicker-options='dateOptions'\
+                    ng-required='true' close-text='Close'\
+                    alt-input-formats='altInputFormats' />\
+                <span class='input-group-btn'>\
+                    <button type='button' class='btn btn-default' ng-click='grid.appScope.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>\
+                </span>\
+          </div>\
+          <div class='input-group' style='margin-top:5px'>\
+             <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'\
+                    uib-datepicker-popup='MM/dd/yyyy'\
+                    ng-model='endDate'\
+                    is-open='grid.appScope.openedEndDate' \
+                    datepicker-options='dateOptions'\
+                    ng-required='true' close-text='Close'\
+                    alt-input-formats='altInputFormats' />\
+                <span class='input-group-btn'>\
+                    <button type='button' class='btn btn-default' ng-click='grid.appScope.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>\
+                </span>\
+          </div>\
+          <div class='okDateButton' id='btnOK' ng-click='grid.appScope.FilterModifiedDate()'>Ok</div>\
+          <hr/> \
+            <div class='clearFilterText' data-clearfiltertype='text'>\
+            <div class='clearFiltersIcon'>\
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>\
+            </div>\
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Modified Date'><span>Clear filters from </span><span class='clearFilterTitle'>Modified Date</span></div>\
+             <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.Clients' ng-click='grid.appScope.filterClientName(Client.matterClient)'>{{client.matterClient}}</div> </div>\
+        </div>\
+        </div>\
+    </div>\
+    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
+        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
+        <span ui-grid-visible='col.sort.direction'  class='ui-grid-invisible ui-grid-icon-blank'>&nbsp;</span>\
+    </div>\
+    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
+        <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
+    </div>\
+</div>"
+    //End
 
     //Assigning html for celltemplate
     //Start
     var matterCellTemplate = "<div class='row'>\
-    <div class='col-sm-8'>\
+    <div class='col-xs-8 col-sm-8'>\
         <a popover type='button' class='btn btn-link' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href='' > {{row.entity.matterName}} </a>\
         <div class='popover-content'></div>\
     </div>\
-    <div class='col-sm-4 text-right'>\
+    <div class='col-xs-4 col-sm-4 text-right'>\
         <div class='dropdown'>\
-            <a class='btn-link dropdown-toggle UiGrid-a' type='button' data-toggle='dropdown'>...</a><ul class='dropdown-menu'>\
-                <li class='cursor' ng-click='grid.appScope.Openuploadmodal()'><a>Upload to this Matter</a></li>\
-                <li><a href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'>View Matter Details</a></li>\
-                <li>\
-                    <a href='https://msmatter.sharepoint.com/sites/microsoft/' target='_blank'>\
+            <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a><ul style='left:60px' class='dropdown-menu'>\
+                <li class='ms-ContextualMenu-item' ng-click='grid.appScope.Openuploadmodal()'><a class='ECBItem ms-ContextualMenu-link upload'>Upload to this Matter</a></li>\
+                <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'>View Matter Details</a></li>\
+                <li class='ms-ContextualMenu-item'>\
+                    <a class='ECBItem ms-ContextualMenu-link upload' href='https://msmatter.sharepoint.com/sites/microsoft/' target='_blank'>\
                         Go to Matter OneNote\
                     </a>\
                 </li>\
-                <li class='cursor' ng-click='row.entity.MatterInfo===undefined?grid.appScope.PinMatter(row):grid.appScope.UnpinMatter(row)'><a>{{row.entity.MatterInfo===undefined?'Pin this Matter':'Unpin this matter'}}</a></li>\
+                <li class='ms-ContextualMenu-item' ng-click='row.entity.MatterInfo===undefined?grid.appScope.PinMatter(row):grid.appScope.UnpinMatter(row)'><a class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?'Pin this Matter':'Unpin this matter'}}</a></li>\
             </ul>\
         </div>\
     </div>\
 </div>";
     //End
 
-    vm.gridOptions = {        
+    vm.gridOptions = {
         enableGridMenu: true,
         enableRowHeaderSelection: false,
         enableRowSelection: true,
@@ -125,11 +176,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         },
             { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },
              //matterID 
-    { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ngCellText">{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-     { field: 'matterModifiedDate', displayName: 'Modified Date', type: 'date', cellFilter: 'date:\'MMM dd,yyyy\'' },
+    { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+     { field: 'matterModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: ModifiedDateheadertemplate },
      { field: 'matterResponsibleAttorney', displayName: 'Responsible attorney', visible: false },
      { field: 'matterSubAreaOfLaw', displayName: 'Sub area of law', visible: false },
-     { field: 'matterCreatedDate', displayName: 'Open date', type: 'date', cellFilter: 'date:\'MMM dd,yyyy\'', visible: false },
+     { field: 'matterCreatedDate', displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
         ],
         enableColumnMenus: false,
         onRegisterApi: function (gridApi) {
@@ -198,16 +249,16 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
 
     vm.getFolderHierarchy = function () {
-        var matterData ={             
+        var matterData = {
             MatterName: vm.selectedRow.matterName,
-            MatterUrl: "https://msmatter.sharepoint.com/sites/microsoft"                    
-          };
+            MatterUrl: "https://msmatter.sharepoint.com/sites/microsoft"
+        };
         getFolderHierarchy(matterData, function (response) {
             vm.foldersList = response.foldersList;
             jQuery('#UploadMatterModal').modal("show");
             //Initialize Officejs library
             Office.initialize = function (reason) {
-                
+
             };
             vm.initOutlook();
         });
@@ -239,7 +290,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         bAllowContentCheck: false
     };
 
-    vm.attachmentTokenCallbackEmailClient = function(asyncResult, userContext) {
+    vm.attachmentTokenCallbackEmailClient = function (asyncResult, userContext) {
         "use strict";
         if (asyncResult.status === "succeeded") {
             vm.attachmentToken = asyncResult.value;
@@ -256,14 +307,14 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         return iconSrc;
     }
 
-    vm.checkEmptyorWhitespace = function(input) {
+    vm.checkEmptyorWhitespace = function (input) {
         "use strict";
         if (/\S/.test(input)) {
             return input;
         }
         return oFindMatterConstants.No_Subject_Mail;
     }
-    
+
     vm.initOutlook = function () {
         if (Office.context && Office.context.mailbox) {
             vm.attachmentToken = '';
@@ -283,15 +334,15 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                     }
                 }
                 Office.context.mailbox.getCallbackTokenAsync(vm.attachmentTokenCallbackEmailClient);
-                
+
             }
         }
     }
 
-    
+
     vm.createMailPopup = function () {
         var sImageChunk = "", nIDCounter = 0;
-        var attachmentName = "", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";        
+        var attachmentName = "", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";
         vm.allAttachmentDetails = []
         var individualAttachment = {};
         //For just email
@@ -318,7 +369,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             } else {
                 sAttachmentFileName = attachmentName;
             }
-            
+
             var attachmentType = vm.attachments[attachment].hasOwnProperty("attachmentType") ? vm.attachments[attachment].attachmentType : "";
             var sContentType = vm.attachments[attachment].hasOwnProperty("contentType") ? vm.attachments[attachment].contentType : "";
             var sExtension = -1 < attachmentName.lastIndexOf(".") ? attachmentName.substring(attachmentName.lastIndexOf(".") + 1) : 1 === parseInt(attachmentType) ? "msg" : "";
@@ -519,6 +570,55 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     }
 
     //End
+
+
+    //Code for filtering ModifiedDate
+    //start
+    $scope.FilterModifiedDate = function () {
+        $scope.lazyloader = false;
+        var searchRequest =
+          {
+              Client: {
+                  Id: "123456",
+                  Name: "Microsoft",
+                  Url: "https://msmatter.sharepoint.com/sites/catalog"
+              },
+              SearchObject: {
+                  PageNumber: 1,
+                  ItemsPerPage: 10,
+                  SearchTerm: clientname,
+                  Filters: {
+                      OLList: "",
+                      ClientName: "",
+                      ClientsList: [],
+                      DateFilters: { CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: $scope.startDate, ModifiedToDate: $scope.endDate, OpenDateFrom: "", OpenDateTo: "" },
+                      DocumentAuthor: [],
+                      DocumentCheckoutUsers: [],
+                      FilterByMe: 1,
+                      FromDate: "",
+                      Name: "",
+                      PGList: "",
+                      ResponsibleAttorneys: [],
+                      SubareaOfLaw: "",
+                      ToDate: ""
+                  },
+                  Sort:
+                          {
+                              ByProperty: "LastModifiedTime",
+                              Direction: 1
+                          }
+              }
+          };
+        get(searchRequest, function (response) {
+            $scope.lazyloader = true;
+            vm.gridOptions.data = response;
+            $scope.startDate = "";
+            $scope.endDate = "";
+        });
+
+    }
+
+    //end
 
     //Code written for displaying types in dropdown 
     //Start 
@@ -763,7 +863,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //End 
 
 
-    
+
 
 
 
@@ -815,6 +915,48 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         $rootScope.foldercontent = false;
 
     }
+
+    //Angular Datepicker Starts here
+    //Start
+    $scope.dateOptions = {
+
+        formatYear: 'yy',
+        maxDate: new Date(),
+    };
+
+    $scope.openStartDate = function ($event) {
+        if ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+        }
+        this.openedStartDate = true;
+    };
+    $scope.openEndDate = function ($event) {
+        if ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+        }
+        this.openedEndDate = true;
+    };
+
+    $scope.openedStartDate = false;
+    $scope.openedEndDate = false;
+
+    $scope.start = new Date();
+    $scope.end = new Date();
+
+    $scope.minStartDate = 0;
+    $scope.maxStartDate = $scope.end;
+    $scope.minEndDate = $scope.start;
+    $scope.maxEndDate = $scope.end;
+
+    $scope.$watch('start', function (v) {
+        $scope.minEndDate = v;
+    });
+    $scope.$watch('end', function (v) {
+        $scope.maxStartDate = v;
+    });
+    //End
 }]);
     //app.directive('toggle', function () {
     //    return {
@@ -868,7 +1010,32 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         }
     });
 
-
+    app.directive('datefilter', function () {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                var dDate = attrs.date;
+                var oDates = new Date(dDate), months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], date = "", oLocalDate = dDate;
+                if (isNaN(oDates)) {
+                    var arrSplitedDate = dDate.replace(/[-]/g, "/");
+                    arrSplitedDate = arrSplitedDate.split("/");
+                    dDate = arrSplitedDate[1] + "-" + arrSplitedDate[0] + "-" + arrSplitedDate[2];
+                    oDates = new Date(dDate);
+                }
+                if (0 > oLocalDate.indexOf("Z")) {
+                    date += months[parseInt(oDates.getMonth(), 10)] + " ";
+                    date += oDates.getDate() + ", ";
+                    date += oDates.getFullYear();
+                } else {
+                    date += months[parseInt(oDates.getUTCMonth(), 10)] + " ";
+                    date += oDates.getUTCDate() + ", ";
+                    date += oDates.getUTCFullYear();
+                }
+                $(element).html(date);
+                return date;
+            }
+        }
+    });
 
 })();
 
