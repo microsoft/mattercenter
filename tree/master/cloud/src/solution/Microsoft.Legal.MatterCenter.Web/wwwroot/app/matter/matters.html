@@ -214,6 +214,9 @@
         <span class="noResultsText">{{errorMessage}}</span>
     </div>
 </div>
+
+<!--Upload Modal Screen Start-->
+
 <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -232,7 +235,45 @@
                 </div>
 
                 <div class="row margin0">
-                    <div class="col-sm-9 maildata"><div class="noFilesUploaded"></div>No files uploaded</div>
+                    <div class="col-sm-9 maildata">
+                        <!--Content start to show mail attachment information-->
+                        <div class="attachmentSection"  ng-repeat="attachmentInfo in vm.allAttachmentDetails">
+                            <div ng-if="individualAttachment.isEmail" class="attachment">
+                                <div class="attachmentName mailName">
+                                    <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false" 
+                                         onclick="editAttachment(this,{{attachmentInfo.counter}})" alt="Edit" src="../Images/edit-666.png">
+                                    <img title="Save attachment name" class="saveUploadIcon hide" id="0saveIcon" draggable="false" 
+                                         onclick="saveAttachment(this,{{attachmentInfo.counter}})" alt="Save" src="../Images/save-666.png">
+                                    <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
+                                    <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" draggable="false" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
+                                    <input class="popupName editPopupContent hide ui-draggable" id="0attachmentText" type="text" maxlength="128">
+                                    <div title="Test attachments" class="popupName ui-draggable" id="0attachment" draggable="true" ondragstart="dragStart(this);" 
+                                         data-attachmentid="{{attachmentInfo.attachmentId}}">{{attachmentInfo.attachmentFileName}}</div>
+                                    <div class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message"></div>
+                                </div>
+                            </div>
+
+                            <div  ng-if="!individualAttachment.isEmail" class="attachment">
+                                <div class="attachmentName">
+                                    <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false" 
+                                         onclick="editAttachment(this, {{attachmentInfo.counter}})" alt="Edit" src="../Images/edit-666.png">
+                                    <img title="Save attachment name" class="saveUploadIcon hide" id="0saveIcon" draggable="false" 
+                                         onclick="saveAttachment(this, {{attachmentInfo.counter}})" alt="Save" src="../Images/save-666.png">
+                                    <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
+                                    <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" draggable="false" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
+                                    <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
+                                    <div title="{{attachmentInfo.attachmentFileName}}"
+                                         class="popupName ui-draggable" id="{{attachmentInfo.counter}}attachment"
+                                         draggable="true"
+                                         ondragstart="dragStart(this);"
+                                         data-attachmentid="{{attachmentInfo.attachmentId}}">{{attachmentInfo.attachmentFileName}}</div>
+                                    <div class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Content end to show mail attachment information-->
+                        <div ng-if="vm.allAttachmentDetails.length==0" class="noFilesUploaded">No files uploaded</div>                    
+                    </div>
                     <div class="col-sm-3 folderContent">
                         <div id="breadcrumb" class="breadcrumb" ng-hide="breadcrumb">
                             <img alt="Root" ng-click="hideBreadCrumb()" id="rootLink" src="../Images/Return_Icon_23px_23px_666.png" title="<span class=&quot;content&quot;>cv vb</span>" draggable="false">
@@ -265,7 +306,7 @@
         </div>
     </div>
 </div>
-
+<!--Upload Modal Screen End-->
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-hide="lazyloader">
         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />

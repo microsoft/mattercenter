@@ -207,53 +207,139 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             jQuery('#UploadMatterModal').modal("show");
             //Initialize Officejs library
             Office.initialize = function (reason) {
+                
             };
-            if (Office.content.mailbox) {
-                vm.showMailAttachments();
-            }
+            vm.initOutlook();
         });
     }
 
-    //To open the UploadMatterModal 
+    //#region Code for Upload functionality 
     $scope.Openuploadmodal = function () {
         vm.getFolderHierarchy();
     }
 
-    vm.showMailAttachments = function(){
-        if (Office.content.mailbox) {
-            vm.attachmentToken = '';
-            vm.ewsUrl = Office.content.mailbox.ewsUrl;
-            vm.subject = Office.content.mailbox.item.subject;
-            vm.mailId = Office.content.mailbox.item.itemid;
-            vm.attachments = new Array();
-            var iCounter = 0;
-            if (Office.content.mailbox.item.attachments) {
-                var attachmentsLength = Office.content.mailbox.item.attachments.length;
-                for (iCounter = 0; iCounter < attachmentsLength; iCounter++) {
-                    if (Office.context.mailbox.item.attachments[iCounter].hasOwnProperty("$0_0")) {
-                        vm.attachments[iCounter] = JSON.parse(JSON.stringify(Office.context.mailbox.item.attachments[iCounter].$0_0));
-                    }
-                    else if(Office.context.mailbox.item.attachments[iCounter].hasOwnProperty("_data$p$0")){
-                        vm.attachments[iCounter] = JSON.parse(JSON.stringify(Office.context.mailbox.item.attachments[iCounter]._data$p$0));
-                    }
-                }
-                Office.context.mailbox.getCallbackTokenAsync(attachmentTokenCallbackEmailClient);
-            }
-        }
-        else {
-            //The app is not loaded in outlook or owa
-        }
-    }
+    vm.oUploadGlobal = {
+        regularInvalidCharacter: new RegExp("[\*\?\|\\\t/:\"\"'<>#{}%~&]", "g"),
+        regularStartEnd: new RegExp("^[\. ]|[\. ]$", "g"),
+        regularExtraSpace: new RegExp(" {2,}", "g"),
+        regularInvalidRule: new RegExp("[\.]{2,}", "g"),
+        oUploadParameter: [],
+        sClientRelativeUrl: "",
+        sFolderUrl: "",
+        arrContent: [],
+        arrFiles: [],
+        arrOverwrite: [],
+        src: [],
+        iActiveUploadRequest: 0,
+        oDrilldownParameter: { nCurrentLevel: 0, sCurrentParentUrl: "", sRootUrl: "" },
+        sNotificationMsg: "",
+        bAppendOptionEnabled: false,
+        oXHR: new XMLHttpRequest(),
+        bIsAbortedCC: false,
+        bAllowContentCheck: false
+    };
 
-    function attachmentTokenCallbackEmailClient(asyncResult, userContext) {
+    vm.attachmentTokenCallbackEmailClient = function(asyncResult, userContext) {
         "use strict";
         if (asyncResult.status === "succeeded") {
             vm.attachmentToken = asyncResult.value;
-            //createMailPopup();
+            vm.createMailPopup();
         } else {
             //showNotification(oFindMatterConstants.Fail_Attachment_Token, "failNotification");
         }
     }
+
+    vm.getIconSource = function (sExtension) {
+        var iconSrc = configs.Upload.ImageDocumentIcon.replace("{0}", sExtension);
+        iconSrc = (-1 < configs.Upload.PNGIconExtensions.indexOf(sExtension)) ?
+                        iconSrc.substring(0, configs.Upload.ImageDocumentIcon.lastIndexOf(".") + 1) + "png" : iconSrc;
+        return iconSrc;
+    }
+
+    vm.checkEmptyorWhitespace = function(input) {
+        "use strict";
+        if (/\S/.test(input)) {
+            return input;
+        }
+        return oFindMatterConstants.No_Subject_Mail;
+    }
+    
+    vm.initOutlook = function () {
+        if (Office.context && Office.context.mailbox) {
+            vm.attachmentToken = '';
+            vm.ewsUrl = Office.context.mailbox.ewsUrl;
+            vm.subject = Office.context.mailbox.item.subject;
+            vm.mailId = Office.context.mailbox.item.itemId;
+            vm.attachments = new Array();
+            var iCounter = 0;
+            if (Office.context.mailbox.item.attachments) {
+                var attachmentsLength = Office.context.mailbox.item.attachments.length;
+                for (iCounter = 0; iCounter < attachmentsLength; iCounter++) {
+                    if (Office.context.mailbox.item.attachments[iCounter].hasOwnProperty("$0_0")) {
+                        vm.attachments[iCounter] = JSON.parse(JSON.stringify(Office.context.mailbox.item.attachments[iCounter].$0_0));
+                    }
+                    else if (Office.context.mailbox.item.attachments[iCounter].hasOwnProperty("_data$p$0")) {
+                        vm.attachments[iCounter] = JSON.parse(JSON.stringify(Office.context.mailbox.item.attachments[iCounter]._data$p$0));
+                    }
+                }
+                Office.context.mailbox.getCallbackTokenAsync(vm.attachmentTokenCallbackEmailClient);
+                
+            }
+        }
+    }
+
+    
+    vm.createMailPopup = function () {
+        var sImageChunk = "", nIDCounter = 0;
+        var attachmentName = "", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";        
+        vm.allAttachmentDetails = []
+        var individualAttachment = {};
+        //For just email
+        individualAttachment.attachmentId = Office.context.mailbox.item.itemId;
+        individualAttachment.counter = nIDCounter;
+        individualAttachment.attachmentFileName = Office.context.mailbox.item.subject;
+        individualAttachment.isEmail = true;
+
+        vm.allAttachmentDetails.push(individualAttachment);
+
+        //For all attachments in the current email
+        for (var attachment in vm.attachments) {
+            individualAttachment = {};
+            bHasEML = false;
+            nIDCounter++;
+            attachmentName = vm.checkEmptyorWhitespace(vm.attachments[attachment].name);
+            attachmentName = attachmentName.replace(vm.oUploadGlobal.regularExtraSpace, "")
+                                        .replace(vm.oUploadGlobal.regularInvalidCharacter, "")
+                                        .replace(vm.oUploadGlobal.regularInvalidRule, ".")
+                                        .replace(vm.oUploadGlobal.regularStartEnd, "");
+            if (attachmentName.lastIndexOf(".eml") === attachmentName.length - 4) {
+                sAttachmentFileName = attachmentName.substring(0, attachmentName.lastIndexOf(".eml"));
+                bHasEML = true;
+            } else {
+                sAttachmentFileName = attachmentName;
+            }
+            
+            var attachmentType = vm.attachments[attachment].hasOwnProperty("attachmentType") ? vm.attachments[attachment].attachmentType : "";
+            var sContentType = vm.attachments[attachment].hasOwnProperty("contentType") ? vm.attachments[attachment].contentType : "";
+            var sExtension = -1 < attachmentName.lastIndexOf(".") ? attachmentName.substring(attachmentName.lastIndexOf(".") + 1) : 1 === parseInt(attachmentType) ? "msg" : "";
+            var iconSrc = vm.getIconSource(sExtension);
+            //if (-1 < sContentType.indexOf(configs.Upload.ImageContentType)) {
+            //}
+            //else{
+
+            //}
+            individualAttachment.attachmentId = vm.attachments[attachment].id;
+            individualAttachment.counter = nIDCounter;
+            individualAttachment.attachmentFileName = sAttachmentFileName;
+            individualAttachment.bHasEML = bHasEML;
+            individualAttachment.attachmentType = attachmentType;
+            individualAttachment.iconSrc = iconSrc;
+            individualAttachment.extension = sExtension;
+            individualAttachment.isEmail = false;
+            vm.allAttachmentDetails.push(individualAttachment);
+        }
+    }
+    //#endregion
 
     vm.searchMatter = function (val) {
         var searchRequest =

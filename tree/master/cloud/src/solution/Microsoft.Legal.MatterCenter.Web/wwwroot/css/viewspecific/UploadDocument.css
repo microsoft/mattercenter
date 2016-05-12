@@ -298,8 +298,8 @@
 }
 
 .attachmentSection {
-    height: 130px;
-    margin-bottom: 20px;
+    height: auto;
+    
 }
 
 .attachmentListLoading {
