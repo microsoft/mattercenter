@@ -237,11 +237,11 @@
                         <!--Content start to show mail attachment information-->
                         <div class="attachmentSection" ng-repeat="attachmentInfo in vm.allAttachmentDetails">
                             <div ng-if="individualAttachment.isEmail" class="attachment">
-                                <div class="attachmentName mailName">
+                                <div class="attachmentName mailName">                                    
                                     <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
-                                         onclick="editAttachment(this,{{attachmentInfo.counter}})" alt="Edit" src="../Images/edit-666.png">
+                                         ng-click="vm.editAttachment(attachmentInfo.counter)" alt="Edit" src="../Images/edit-666.png">
                                     <img title="Save attachment name" class="saveUploadIcon hide" id="0saveIcon" draggable="false"
-                                         onclick="saveAttachment(this,{{attachmentInfo.counter}})" alt="Save" src="../Images/save-666.png">
+                                         ng-click="vm.saveAttachment(attachmentInfo.counter)" alt="Save" src="../Images/save-666.png">
                                     <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
                                     <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" draggable="false" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
                                     <input class="popupName editPopupContent hide ui-draggable" id="0attachmentText" type="text" maxlength="128">
@@ -254,9 +254,9 @@
                             <div ng-if="!individualAttachment.isEmail" class="attachment">
                                 <div class="attachmentName">
                                     <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
-                                         onclick="editAttachment(this, {{attachmentInfo.counter}})" alt="Edit" src="../Images/edit-666.png">
+                                         ng-click="vm.editAttachment( attachmentInfo.counter)" alt="Edit" src="../Images/edit-666.png">
                                     <img title="Save attachment name" class="saveUploadIcon hide" id="0saveIcon" draggable="false"
-                                         onclick="saveAttachment(this, {{attachmentInfo.counter}})" alt="Save" src="../Images/save-666.png">
+                                         ng-click="vm.saveAttachment(attachmentInfo.counter)" alt="Save" src="../Images/save-666.png">
                                     <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
                                     <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" draggable="false" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
                                     <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">

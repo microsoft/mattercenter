@@ -247,7 +247,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         });
     }
 
-
+    //#region Code for Upload functionality
     vm.getFolderHierarchy = function () {
         var matterData = {
             MatterName: vm.selectedRow.matterName,
@@ -258,18 +258,25 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             jQuery('#UploadMatterModal').modal("show");
             //Initialize Officejs library
             Office.initialize = function (reason) {
-
+                vm.initOutlook();
             };
-            vm.initOutlook();
+            
         });
     }
 
-    //#region Code for Upload functionality 
+    vm.editAttachment = function(){
+        alert('Edit attachment clicked');
+    }
+
+    vm.saveAttachment = function(){
+        alert('Save attachment clicked');
+    }
+
     $scope.Openuploadmodal = function () {
         vm.getFolderHierarchy();
     }
 
-    function dragStart(ev) {
+    vm.dragStart = function(ev) {
         "use strict";
         oUploadGlobal.src = ev;
     }
