@@ -78,7 +78,16 @@ angular.module('matterMain')
                    'createLandingPage': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/matter/createlandingpage'
+                  }),
+                   'updateMatterMetadata': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/UpdateMetadata'
+                  }),
+                  'getStampedProperties':auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/getstampedproperties'
                   })
+                  
 
               });
       }]);
