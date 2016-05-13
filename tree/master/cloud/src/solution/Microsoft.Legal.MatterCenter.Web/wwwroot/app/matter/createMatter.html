@@ -78,7 +78,7 @@
                
                 <div>
 
-                    <select class="medium clear" ng-model="cm.selectedClientName" ng-select="cm.selectedClientName" ng-change="cm.getSelectedClientValue()" ng-options="client.id as client.name for client in cm.clientNameList track by client.id">
+                    <select class="medium clear" ng-model="cm.selectedClientName"  ng-change="cm.getSelectedClientValue(cm.selectedClientName)" ng-options="client.id as client.name for client in cm.clientNameList ">
                         <option value="" label="- Select a client -"></option>
                     </select>
 
@@ -144,10 +144,9 @@
                   </div>
                   <div class="gutter"></div>
                   <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
-                  <!--   <input type="text" class="form-control" uib-datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />
-                  -->
-                  <input type="text" class="calendar form-control"
-                         uib-datepicker-popup="dd-MMMM-yyyy" 
+                     <input type="text" class="form-control" datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />
+                  <!--<input type="text" class="calendar form-control"
+                         uib-datetimepopup="mm\dd\yyyyy" 
                          ng-model="cm.conflictDate" 
                          is-open="cm.opened" 
                          datepicker-options="cm.dateOptions" 
@@ -155,7 +154,20 @@
                          alt-input-formats="altInputFormats" />
                   <span class="input-group-btn">
                       <button type="button" class="btn btn-default" ng-click="cm.open1()"><i class="glyphicon glyphicon-calendar"></i></button>
-                  </span>
+                  </span>-->
+
+                  <!--<div class='input-group'>
+                      <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                             uib-datepicker-popup='MM/dd/yyyy'
+                             ng-model='cm.conflictDate'
+                             is-open='cm.opened'
+                             datepicker-options='dateOptions'
+                             ng-required='true' close-text='Close'
+                             alt-input-formats='altInputFormats' />
+                      <span class='input-group-btn'>
+                          <button type='button' class='btn btn-default' ng-click=' cm.open1()'><i class='glyphicon glyphicon-calendar'></i></button>
+                      </span>
+                  </div>-->
                 <div class="gutter"></div>
                 <div class="conflictRadioBtn">
                     <label class="smaller">
