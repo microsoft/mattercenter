@@ -237,7 +237,7 @@
                         <!--Content start to show mail attachment information-->
                         <div class="attachmentSection" ng-repeat="attachmentInfo in vm.allAttachmentDetails">
                             <div ng-if="individualAttachment.isEmail" class="attachment">
-                                <div class="attachmentName mailName">                                    
+                                <div class="attachmentName mailName">
                                     <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
                                          ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
                                     <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
@@ -245,11 +245,14 @@
                                     <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
                                     <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
                                     <input class="popupName editPopupContent hide ui-draggable" id="0attachmentText" type="text" maxlength="128">
-                                    <div title="Test attachments" 
-                                         class="popupName ui-draggable" 
-                                         id="{{attachmentInfo.counter}}attachment" 
-                                         draggable                                         
-                                         data-attachmentid="{{attachmentInfo.attachmentId}}">{{attachmentInfo.attachmentFileName}}</div>
+                                    <div title="Test attachments"
+                                         class="popupName ui-draggable"
+                                         id="{{attachmentInfo.counter}}attachment"
+                                         draggable
+                                         data-isEmail="{{attachmentInfo.isEmail}}"
+                                         data-attachmentid="{{attachmentInfo.attachmentId}}">
+                                        {{attachmentInfo.attachmentFileName}}
+                                    </div>
                                     <div class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message"></div>
                                 </div>
                             </div>
@@ -263,13 +266,16 @@
                                     <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
                                     <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
                                     <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
-                                    <div title="{{attachmentInfo.attachmentFileName}}" 
+                                    <div title="{{attachmentInfo.attachmentFileName}}"
                                          id="{{attachmentInfo.counter}}attachment"
-                                         class="popupName ui-draggable"                                        
+                                         class="popupName ui-draggable"
                                          draggable
                                          data-contentType="{{attachmentInfo.contentType}}"
                                          data-size="{{attachmentInfo.size}}"
-                                         data-attachmentid="{{attachmentInfo.attachmentId}}">{{attachmentInfo.attachmentFileName}}</div>
+                                         data-isEmail="{{attachmentInfo.isEmail}}"
+                                         data-attachmentid="{{attachmentInfo.attachmentId}}">
+                                        {{attachmentInfo.attachmentFileName}}
+                                    </div>
                                     <div class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message"></div>
                                 </div>
                             </div>

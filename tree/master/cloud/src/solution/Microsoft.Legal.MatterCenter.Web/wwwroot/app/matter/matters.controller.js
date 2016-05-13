@@ -270,7 +270,6 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //This method will handle the file upload scenario for both email and attachment
     vm.handleDrop = function (targetDrop, sourceFile) {
         //Construct the JSON object that needs to be sent to the client
-
         var attachments = [];
         var attachmentsArray = {};
         attachmentsArray.attachmentType = 0;
@@ -290,7 +289,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 AttachmentToken: vm.attachmentToken,
                 FolderPath: targetDrop.url,
                 EwsUrl: vm.ewsUrl,
-                DocumentLibraryName: '',
+                DocumentLibraryName:vm.selectedRow.matterName,
                 MailId: sourceFile.attachmentId,
                 PerformContentCheck: false,
                 Overwrite: false,
@@ -299,9 +298,47 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 Attachments: attachments
             }
         }
+
+        if (sourceFile.isEmail && sourceFile.isEmail==="true") {
+            vm.uploadEmail(attachmentRequestVM);
+        }
+        if (sourceFile.isEmail && sourceFile.isEmail==="false") {
+            vm.uploadAttachment(attachmentRequestVM);
+        }
     }
 
-    vm.editAttachment = function(element, event){
+    vm.uploadEmail = function (attachmentRequestVM) {
+        uploadEmail(attachmentRequestVM, function (response) {
+            console.log(response);
+        });
+    }
+
+    function uploadEmail(attachmentRequestVM, callback) {
+        api({
+            resource: 'matterResource',
+            method: 'uploadEmail',
+            data: attachmentRequestVM,
+            success: callback
+        });
+    }
+
+    vm.uploadAttachment = function (attachmentRequestVM) {
+        uploadAttachment(attachmentRequestVM, function (response) {
+            console.log(response);
+        });
+    }
+
+    function uploadAttachment(attachmentRequestVM, callback) {
+        api({
+            resource: 'matterResource',
+            method: 'uploadAttachment',
+            data: attachmentRequestVM,
+            success: callback
+        });
+    }
+
+    vm.editAttachment = function (element, event) {
+        //ToDo: Use Angular data binding functionality
         var editIcon = $("#"+event.target.id);
         var rowIndex = event.target.id.charAt(0);
         var saveIcon = $("#" + rowIndex + "saveIcon");
@@ -324,6 +361,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     }
 
     vm.saveAttachment = function(element, event){
+        //ToDo: Use Angular data binding functionality
         var saveIcon = $("#" + event.target.id);
         var rowIndex = event.target.id.charAt(0);
         var editIcon = $("#"+ rowIndex + "editIcon");
@@ -363,12 +401,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
     $scope.Openuploadmodal = function () {
         vm.getFolderHierarchy();
-    }
-
-    vm.dragStart = function(ev) {
-        "use strict";
-        oUploadGlobal.src = ev;
-    }
+    }    
 
     vm.oUploadGlobal = {
         regularInvalidCharacter: new RegExp("[\*\?\|\\\t/:\"\"'<>#{}%~&]", "g"),
@@ -435,7 +468,6 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                     }
                 }
                 Office.context.mailbox.getCallbackTokenAsync(vm.attachmentTokenCallbackEmailClient);
-
             }
         }
     }

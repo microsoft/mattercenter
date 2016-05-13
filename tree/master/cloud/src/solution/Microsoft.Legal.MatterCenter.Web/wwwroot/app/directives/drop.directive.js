@@ -39,7 +39,8 @@ matterMain.directive('droppable', function () {
                     title: item.title,
                     attachmentId: item.dataset.attachmentid,
                     contentType: item.dataset.contenttype,
-                    size:item.dataset.size
+                    size:item.dataset.size,
+                    isEmail: item.dataset.isemail
                 }
                 //scope.folder contains the target folder information that the current item is getting dropped to
                 //call the parent method called handleDrop which will call the web api method to upload the attachment

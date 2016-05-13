@@ -86,8 +86,15 @@ angular.module('matterMain')
                   'getStampedProperties':auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/matter/getstampedproperties'
+                  }),
+                  'uploadEmail': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/document/UploadMail'
+                  }),
+                  'uploadAttachment': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/document/UploadAttachments'
                   })
-                  
 
               });
       }]);
