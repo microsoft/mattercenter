@@ -237,6 +237,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         });
     }
 
+    
+
+    //#region Code for Upload functionality
+
     //Callback function for folder hierarchy 
     function getFolderHierarchy(options, callback) {
         api({
@@ -247,7 +251,6 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         });
     }
 
-    //#region Code for Upload functionality
     vm.getFolderHierarchy = function () {
         var matterData = {
             MatterName: vm.selectedRow.matterName,
@@ -264,12 +267,98 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         });
     }
 
-    vm.editAttachment = function(){
-        alert('Edit attachment clicked');
+    //This method will handle the file upload scenario for both email and attachment
+    vm.handleDrop = function (targetDrop, sourceFile) {
+        //Construct the JSON object that needs to be sent to the client
+
+        var attachments = [];
+        var attachmentsArray = {};
+        attachmentsArray.attachmentType = 0;
+        attachmentsArray.name = sourceFile.title;
+        attachmentsArray.originalName = sourceFile.title;
+        attachmentsArray.isInline = false;
+        attachmentsArray.contentType = sourceFile.contentType;
+        attachmentsArray.id = sourceFile.attachmentId;
+        attachmentsArray.size = sourceFile.size;
+        attachments.push(attachmentsArray);
+
+        var attachmentRequestVM = {
+            Client: {
+                Url : "https://msmatter.sharepoint.com/sites/microsoft"
+            },
+            ServiceRequest: {
+                AttachmentToken: vm.attachmentToken,
+                FolderPath: targetDrop.url,
+                EwsUrl: vm.ewsUrl,
+                DocumentLibraryName: '',
+                MailId: sourceFile.attachmentId,
+                PerformContentCheck: false,
+                Overwrite: false,
+                Subject: vm.subject,
+                AllowContentCheck: true,
+                Attachments: attachments
+            }
+        }
     }
 
-    vm.saveAttachment = function(){
-        alert('Save attachment clicked');
+    vm.editAttachment = function(element, event){
+        var editIcon = $("#"+event.target.id);
+        var rowIndex = event.target.id.charAt(0);
+        var saveIcon = $("#" + rowIndex + "saveIcon");
+        var attachIcon = $("#" + rowIndex + "attachIcon");
+        var thisAttachment = $("#" + rowIndex + "attachment");
+        var thisAttachmentText = $("#" + rowIndex + "attachmentText");
+        var attachmentText = thisAttachment[0].innerHTML;
+
+        if (saveIcon.hasClass("hide")) {
+            saveIcon.removeClass("hide");
+            editIcon.addClass("hide");
+            attachIcon.addClass("hide");
+        }
+
+        if (thisAttachmentText.hasClass("hide")) {
+            thisAttachmentText.removeClass("hide");
+            thisAttachment.addClass("hide");
+            thisAttachmentText.val(attachmentText);
+        }
+    }
+
+    vm.saveAttachment = function(element, event){
+        var saveIcon = $("#" + event.target.id);
+        var rowIndex = event.target.id.charAt(0);
+        var editIcon = $("#"+ rowIndex + "editIcon");
+        var thisAttachment = $("#" + rowIndex + "attachment");
+        var thisAttachmentText = $("#" + rowIndex + "attachmentText");
+        var attachIcon = $("#" + rowIndex + "attachIcon");
+        var attachmentText = thisAttachmentText[0].value.trim();
+        var oldText = thisAttachment[0].innerHTML;
+        if (!vm.oUploadGlobal.regularInvalidCharacter.test(attachmentText) &&
+            !vm.oUploadGlobal.regularExtraSpace.test(attachmentText) &&
+            !vm.oUploadGlobal.regularInvalidRule.test(attachmentText) &&
+            !vm.oUploadGlobal.regularStartEnd.test(attachmentText)) {
+            if (editIcon.hasClass("hide")) {
+                editIcon.removeClass("hide");
+                attachIcon.removeClass("hide");
+                saveIcon.addClass("hide");
+            }
+            if (thisAttachment.hasClass("hide")) {
+                thisAttachment.removeClass("hide");
+                thisAttachmentText.addClass("hide");
+                if ("" === attachmentText) {
+                    thisAttachment.html(oldText);
+                    thisAttachment.attr("title", oldText);
+                } else {
+                    thisAttachment.html(attachmentText);
+                    thisAttachment.attr("title", attachmentText);
+                }
+            }
+            //ToDo:$(".errorPopUp").addClass("hide");
+
+        }
+        else {
+            vm.oUploadGlobal.regularInvalidCharacter.lastIndex = 0;
+            //ToDo:showErrorNotification(thisAttachmentText, "Invalid character");
+        }
     }
 
     $scope.Openuploadmodal = function () {
@@ -391,6 +480,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             //else{
 
             //}
+            individualAttachment.contentType = sContentType;
             individualAttachment.attachmentId = vm.attachments[attachment].id;
             individualAttachment.counter = nIDCounter;
             individualAttachment.attachmentFileName = sAttachmentFileName;
@@ -399,6 +489,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             individualAttachment.iconSrc = iconSrc;
             individualAttachment.extension = sExtension;
             individualAttachment.isEmail = false;
+            individualAttachment.size = vm.attachments[attachment].size
             vm.allAttachmentDetails.push(individualAttachment);
         }
     }

@@ -239,13 +239,16 @@
                             <div ng-if="individualAttachment.isEmail" class="attachment">
                                 <div class="attachmentName mailName">                                    
                                     <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
-                                         ng-click="vm.editAttachment(attachmentInfo.counter)" alt="Edit" src="../Images/edit-666.png">
-                                    <img title="Save attachment name" class="saveUploadIcon hide" id="0saveIcon" draggable="false"
-                                         ng-click="vm.saveAttachment(attachmentInfo.counter)" alt="Save" src="../Images/save-666.png">
+                                         ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
+                                    <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
+                                         ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
                                     <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
-                                    <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" draggable="false" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
+                                    <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
                                     <input class="popupName editPopupContent hide ui-draggable" id="0attachmentText" type="text" maxlength="128">
-                                    <div title="Test attachments" class="popupName ui-draggable" id="0attachment" draggable="true" ondragstart="dragStart(this);"
+                                    <div title="Test attachments" 
+                                         class="popupName ui-draggable" 
+                                         id="{{attachmentInfo.counter}}attachment" 
+                                         draggable                                         
                                          data-attachmentid="{{attachmentInfo.attachmentId}}">{{attachmentInfo.attachmentFileName}}</div>
                                     <div class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message"></div>
                                 </div>
@@ -254,16 +257,18 @@
                             <div ng-if="!individualAttachment.isEmail" class="attachment">
                                 <div class="attachmentName">
                                     <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
-                                         ng-click="vm.editAttachment( attachmentInfo.counter)" alt="Edit" src="../Images/edit-666.png">
-                                    <img title="Save attachment name" class="saveUploadIcon hide" id="0saveIcon" draggable="false"
-                                         ng-click="vm.saveAttachment(attachmentInfo.counter)" alt="Save" src="../Images/save-666.png">
+                                         ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
+                                    <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
+                                         ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
                                     <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
-                                    <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" draggable="false" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
+                                    <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
                                     <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
-                                    <div title="{{attachmentInfo.attachmentFileName}}"
-                                         class="popupName ui-draggable" id="{{attachmentInfo.counter}}attachment"
-                                         draggable="true"
-                                         ondragstart="dragStart(this);"
+                                    <div title="{{attachmentInfo.attachmentFileName}}" 
+                                         id="{{attachmentInfo.counter}}attachment"
+                                         class="popupName ui-draggable"                                        
+                                         draggable
+                                         data-contentType="{{attachmentInfo.contentType}}"
+                                         data-size="{{attachmentInfo.size}}"
                                          data-attachmentid="{{attachmentInfo.attachmentId}}">{{attachmentInfo.attachmentFileName}}</div>
                                     <div class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message"></div>
                                 </div>
@@ -284,8 +289,8 @@
                                 <li>
                                     <ul ng-repeat="folder in vm.foldersList">
                                         <li ng-if="folder.parentURL" data-client="" data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}" class="childNode"
-                                            style="display: inline-block; width: 90%; padding: 0px;">
-                                            <div class="treeNodes" title="Documents">
+                                            style="display: inline-block; width: 90%; padding:0;">
+                                            <div class="treeNodes" title="Documents" droppable drop="handleDrop()" folder="folder" id="folder{{$index}}">
                                                 <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents"
                                                      data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}">
                                                 {{folder.name}}
