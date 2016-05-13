@@ -788,8 +788,8 @@ input#sdBannerDropDown {
 #HeaderPlaceHolder {
     display: inline-block;
     vertical-align: super;
-    padding: 0 0 0 10px;
-    min-width: 550px;
+    padding: 0;
+    min-width: 700px;
 }
 
 #ProfileSwitcher {

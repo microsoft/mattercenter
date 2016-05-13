@@ -137,16 +137,17 @@
                   <div class="gutter"></div>
                   <label class="contentLabel mediumSmall" id="conflictIdentified">Conflict Identified?</label>
                   <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                  <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-model="cm.selectedConflictCheckUser"  spellcheck="true" type="text" typeahead="users.name + ' ('+ users.email + ')' for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
+                  <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-model="cm.selectedConflictCheckUser"  spellcheck="true" type="text" uib-typeahead="users.name + ' ('+ users.email + ')' for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
                   <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                   <div ng-show="noResults">
                       <i class="glyphicon glyphicon-remove"></i> No Results Found
                   </div>
                   <div class="gutter"></div>
                   <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
-                     <input type="text" class="form-control" uib-datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />
-                <!--  <input type="text" class="calendar form-control"
-                         datepicker-popup="dd-MMMM-yyyy" 
+                  <!--   <input type="text" class="form-control" uib-datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />
+                  -->
+                  <input type="text" class="calendar form-control"
+                         uib-datepicker-popup="dd-MMMM-yyyy" 
                          ng-model="cm.conflictDate" 
                          is-open="cm.opened" 
                          datepicker-options="cm.dateOptions" 
@@ -154,7 +155,7 @@
                          alt-input-formats="altInputFormats" />
                   <span class="input-group-btn">
                       <button type="button" class="btn btn-default" ng-click="cm.open1()"><i class="glyphicon glyphicon-calendar"></i></button>
-                  </span>-->
+                  </span>
                 <div class="gutter"></div>
                 <div class="conflictRadioBtn">
                     <label class="smaller">
@@ -168,7 +169,7 @@
                 <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
                     <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.blockedUserName"  typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                    <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.blockedUserName"  uib-typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
 
                     <div ng-show="noResults">
                         <i class="glyphicon glyphicon-remove"></i> No Results Found
@@ -205,7 +206,7 @@
 
                           <div class="row{{$index}} assignNewPerm">
                               <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                              <input class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  id="txtAssign1"  spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                              <input class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  id="txtAssign1"  spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
                               <div ng-show="noResults">
                                   <i class="glyphicon glyphicon-remove"></i> No Results Found
                               </div><i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>

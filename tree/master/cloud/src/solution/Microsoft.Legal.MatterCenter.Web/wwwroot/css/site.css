@@ -39,10 +39,12 @@ textarea {
 }
 
 .ui-grid-row:hover .ui-grid-cell {
-    background-color: #bcd9ed;
+    background-color: rgba(229, 241, 250, 1);
 }
 
-
+.ui-grid-row.ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
+    background-color: rgba(229, 241, 250, 1);
+}
 
 .cursor {
     cursor: pointer;
@@ -51,7 +53,8 @@ textarea {
 .ui-grid-cell {
     overflow: visible;
 }
-.ng-scope{
+
+.ng-scope {
     overflow: visible;
 }
 
@@ -138,7 +141,6 @@ textarea {
     padding: 10px;
     top: 44px;
     border: 1px solid #d1d1d1;
-    margin-left: 24px;
 }
 
 .AppFlyoutLinks {
@@ -163,47 +165,50 @@ textarea {
     width: 30px;
     bottom: -30px; /* Provided negative bottom for alignment of loading image for lazy loading implementation */
 }
-.ui-grid-header-viewport{
-    overflow:visible;
+
+.ui-grid-header-viewport {
+    overflow: visible;
 }
-.ui-grid-top-panel{
-    overflow:visible;
+
+.ui-grid-top-panel {
+    overflow: visible;
+    background: #fff;
 }
-.noResultsText {
-    color: #333;
-    font-weight: 200;
-    line-height: 1.5;
-    padding-left: 5px;
-    padding-right: 30px;
-}
+
 #loadingImageContainer {
     position: absolute;
     left: 40%;
     top: 50%;
 }
+
 .ngViewport {
-    overflow:visible;
+    overflow: visible;
 }
 
 .searchPanelDropdown {
-    cursor:pointer;
+    cursor: pointer;
     height: 30px;
     line-height: 29px;
     padding-left: 9px;
     border: none;
 }
 
+.form-control {
+    border-radius: 0;
+}
+
 #filterResultsContainer {
-    max-height: 134px!important;
+    max-height: 134px !important;
     min-height: 0;
     overflow-y: auto;
     clear: both;
     position: relative;
 }
 
-#filterResultsContainer .filterValueLabels, #filterResultsContainer .bufferElements, #filterResultsContainer .filterFlyOutNoResults {
-    margin: 10px 0 0 10px;
-}
+    #filterResultsContainer .filterValueLabels, #filterResultsContainer .bufferElements, #filterResultsContainer .filterFlyOutNoResults {
+        margin: 10px 0 0 10px;
+    }
+
 .filterFlyOutNoResults {
     font-family: "Segoe UI Web Semilight", "Segoe UI Semilight", "Segoe WP Semilight", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
     width: 220px;
@@ -212,13 +217,82 @@ textarea {
     -o-text-overflow: ellipsis;
     -ms-text-overflow: ellipsis;
     text-overflow: ellipsis;
-} 
+}
 
 .folderContent ul {
     margin: 0;
     padding-left: 0;
     text-align: left;
-    list-style:none;
+    list-style: none;
+}
+
+.ui-grid, .ui-grid-header-cell, .ui-grid-header, .ui-grid-cell {
+    border: none;
+}
+
+.UiGrid-a {
+    text-align: center;
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+    padding: 11px 0 7px 0 !important;
+    color: black;
+    font-weight: bold;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+
+    .UiGrid-a:hover {
+        background-color: #bcd9ed;
+    }
+
+.ui-grid-row:nth-child(odd) .ui-grid-cell {
+    background-color: #fff;
+}
+
+.ui-grid-row:nth-child(even) .ui-grid-cell {
+    background-color: #fff;
+}
+
+.title {
+    margin: 0 0 0 10px;
+}
+
+.ui-grid-header-cell-label {
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.ui-grid-header-cell-wrapper {
+    color: #333;
+    font-family: 'Segoe UI Web Regular','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
+}
+
+.ui-grid-canvas {
+    color: #333;
+    font-family: 'Segoe UI Web Regular','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
+    font-size: 0.875em;
+    font-weight: 400;
+}
+
+.ui-grid-viewport {
+    overflow: hidden !important;
+}
+
+.overflowMain {
+    overflow: hidden !important;
+}
+
+.padlf10 {
+    padding-left: 10px !important;
+}
+
+#searchBarHolder input {
+    max-width: 310px;
+}
+
+.ui-grid-menu-button{
+    top:25px;
 }
 /*.ui-grid-change-icon {
     background: url(../images/Column_Picker_Expand.png) center no-repeat;

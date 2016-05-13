@@ -31,12 +31,10 @@
     <link href="css/viewspecific/matterprovision.css" rel="stylesheet" />
     <link href="css/viewspecific/commoncontrols.css" rel="stylesheet" />
     <link href="css/viewspecific/creatematter.css" rel="stylesheet" />
-
     <script src="lib/jquery/dist/jquery.js"></script>
     <script src="lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script src="lib/bootstrap/dist/js/bootstrap.js"></script>
-
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular-route/angular-route.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
@@ -49,17 +47,12 @@
     <script src="lib/adal-angular/dist/adal.min.js"></script>
     <script src="lib/adal-angular/dist/adal-angular.min.js"></script>
     <script src="lib/angular-ui-grid/ui-grid.min.js"></script>
-
-    <script src="lib/angular-ui-bootstrap-typeahead/ui-bootstrap-typeahead-tpls.js"></script>
-
+    <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="js/site.js" asp-append-version="true"></script>
-    
+    <script src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
 </head>
-<body ng-app="matterMain">
+<body ng-app="matterMain" class="overflowMain">
     <div ui-view="mainView"></div>
-
-    
-
     <script src="app/app.js"></script>
     <script src="app/config.js"></script>
     <script src="app/directives/heading.directive.js"></script>
@@ -71,7 +64,7 @@
     <script src="app/matter/matter.resources.js"></script>
     <script src="app/matter/matters.controller.js"></script>
     <script src="app/matter/createMatter.controller.js"></script>
-
+    <script src="app/matter/upload.js"></script>
     <script src="app/document/documents.controller.js"></script>
     <script src="app/document/document.resources.js"></script>
 
