@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope',
-function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants',
+function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants) {
     var vm = this;
     vm.selected = undefined;
     // Onload show ui grid and hide error div
@@ -43,7 +43,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         </div>\
         </div>\
     </div>\
-    <div role='button' style='padding-left: 11px;' ng-click='$event.stopPropagation();grid.appScope.sortByType('MCMatterName')' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
+    <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
         <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
         <span class='sort pull-right' ng-show='grid.appScope.sortMCMatterName'>↑</span>\
         <span ng-show='grid.appScope.sortDownMCMatterName' class='sort pull-right'>↓</span>\
@@ -245,7 +245,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         });
     }
 
-    
+
 
     //#region Code for Upload functionality
 
@@ -271,7 +271,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             Office.initialize = function (reason) {
                 vm.initOutlook();
             };
-            
+
         });
     }
 
@@ -291,13 +291,13 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
         var attachmentRequestVM = {
             Client: {
-                Url : "https://msmatter.sharepoint.com/sites/microsoft"
+                Url: "https://msmatter.sharepoint.com/sites/microsoft"
             },
             ServiceRequest: {
                 AttachmentToken: vm.attachmentToken,
                 FolderPath: targetDrop.url,
                 EwsUrl: vm.ewsUrl,
-                DocumentLibraryName:vm.selectedRow.matterName,
+                DocumentLibraryName: vm.selectedRow.matterName,
                 MailId: sourceFile.attachmentId,
                 PerformContentCheck: false,
                 Overwrite: false,
@@ -307,10 +307,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             }
         }
 
-        if (sourceFile.isEmail && sourceFile.isEmail==="true") {
+        if (sourceFile.isEmail && sourceFile.isEmail === "true") {
             vm.uploadEmail(attachmentRequestVM);
         }
-        if (sourceFile.isEmail && sourceFile.isEmail==="false") {
+        if (sourceFile.isEmail && sourceFile.isEmail === "false") {
             vm.uploadAttachment(attachmentRequestVM);
         }
     }
@@ -347,7 +347,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
     vm.editAttachment = function (element, event) {
         //ToDo: Use Angular data binding functionality
-        var editIcon = $("#"+event.target.id);
+        var editIcon = $("#" + event.target.id);
         var rowIndex = event.target.id.charAt(0);
         var saveIcon = $("#" + rowIndex + "saveIcon");
         var attachIcon = $("#" + rowIndex + "attachIcon");
@@ -368,11 +368,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         }
     }
 
-    vm.saveAttachment = function(element, event){
+    vm.saveAttachment = function (element, event) {
         //ToDo: Use Angular data binding functionality
         var saveIcon = $("#" + event.target.id);
         var rowIndex = event.target.id.charAt(0);
-        var editIcon = $("#"+ rowIndex + "editIcon");
+        var editIcon = $("#" + rowIndex + "editIcon");
         var thisAttachment = $("#" + rowIndex + "attachment");
         var thisAttachmentText = $("#" + rowIndex + "attachmentText");
         var attachIcon = $("#" + rowIndex + "attachIcon");
@@ -409,7 +409,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
     $scope.Openuploadmodal = function () {
         vm.getFolderHierarchy();
-    }    
+    }
 
     vm.oUploadGlobal = {
         regularInvalidCharacter: new RegExp("[\*\?\|\\\t/:\"\"'<>#{}%~&]", "g"),
@@ -1085,23 +1085,9 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     $scope.openedStartDate = false;
     $scope.openedEndDate = false;
 
-    $scope.start = new Date();
-    $scope.end = new Date();
-
-    $scope.minStartDate = 0;
-    $scope.maxStartDate = $scope.end;
-    $scope.minEndDate = $scope.start;
-    $scope.maxEndDate = $scope.end;
-
-    $scope.$watch('start', function (v) {
-        $scope.minEndDate = v;
-    });
-    $scope.$watch('end', function (v) {
-        $scope.maxStartDate = v;
-    });
     //End
 
-        //#region Custom Sorting functionality
+    //#region Custom Sorting functionality
     //Start
     var SortRequest = {
         Client: {
@@ -1271,8 +1257,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //#endregion
 
 }]);
-   
-   app.directive('popover', function () {
+
+    app.directive('popover', function () {
         return {
             restrict: 'AE',
             link: function (scope, element, attrs) {
