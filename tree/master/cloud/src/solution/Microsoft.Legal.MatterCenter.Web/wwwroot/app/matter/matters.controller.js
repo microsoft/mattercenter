@@ -45,6 +45,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     </div>\
     <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
         <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
+        <span ui-grid-visible='col.sort.direction' aria-label='{{getSortDirectionAriaLabel()}}' class='ui-grid-invisible'><sub ui-grid-visible='isSortPriorityVisible()' class='ui-grid-sort-priority-number'>{{col.sort.priority + 1}}</sub></span>\
         <span class='sort pull-right' ng-show='grid.appScope.sortMCMatterName'>↑</span>\
         <span ng-show='grid.appScope.sortDownMCMatterName' class='sort pull-right'>↓</span>\
     </div>\
@@ -82,7 +83,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     </div>\
     <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
         <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
-         <span class='sort pull-right' ng-show='grid.appScope.sortMCClient'>↑</span>\
+        <span ui-grid-visible='col.sort.direction' aria-label='Sort None' class='ui-grid-invisible'></span>\
+        <span class='sort pull-right' ng-show='grid.appScope.sortMCClient'>↑</span>\
         <span ng-show='grid.appScope.sortDownMCClient' class='sort pull-right'>↓</span>\
     </div>\
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
@@ -103,11 +105,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
          <div class='input-group'>\
              <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'\
                     uib-datepicker-popup='MM/dd/yyyy'\
-                    ng-model='startDate'\
+                    data-ng-model='startDate'\
                     is-open='grid.appScope.openedStartDate' \
                     datepicker-options='dateOptions'\
                     ng-required='true' close-text='Close'\
-                    alt-input-formats='altInputFormats' />\
+                    alt-input-formats='altInputFormats' min-date='2016/06/01' max-date='2016/06/08'/>\
                 <span class='input-group-btn'>\
                     <button type='button' class='btn btn-default' ng-click='grid.appScope.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>\
                 </span>\
@@ -115,11 +117,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
           <div class='input-group' style='margin-top:5px'>\
              <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'\
                     uib-datepicker-popup='MM/dd/yyyy'\
-                    ng-model='endDate'\
+                    data-ng-model='endDate'\
                     is-open='grid.appScope.openedEndDate' \
                     datepicker-options='dateOptions'\
                     ng-required='true' close-text='Close'\
-                    alt-input-formats='altInputFormats' />\
+                    alt-input-formats='altInputFormats'  date-disabled='grid.appScopedisabled(date, mode)'/>\
                 <span class='input-group-btn'>\
                     <button type='button' class='btn btn-default' ng-click='grid.appScope.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>\
                 </span>\
@@ -137,7 +139,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     </div>\
     <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
         <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
-          <span class='sort pull-right' ng-show='grid.appScope.sortMCModifiedDate'>↑</span>\
+        <span ui-grid-visible='col.sort.direction' aria-label='Sort None' class='ui-grid-invisible'></span>\
+        <span class='sort pull-right' ng-show='grid.appScope.sortMCModifiedDate'>↑</span>\
         <span ng-show='grid.appScope.sortDownMCModifiedDate' class='sort pull-right'>↓</span>\
     </div>\
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
@@ -171,6 +174,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //End
 
     vm.gridOptions = {
+        paginationPageSizes: [6, 18, 100],
+        paginationPageSize: 6,
         enableGridMenu: true,
         enableRowHeaderSelection: false,
         enableRowSelection: true,
@@ -198,7 +203,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 vm.selectedRow = row.entity
             });
             $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
-            $scope.sortChanged($scope.gridApi.grid, [$scope.gridOptions.columnDefs[1]]);
+            $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
         }
     };
 
@@ -729,12 +734,12 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
               SearchObject: {
                   PageNumber: 1,
                   ItemsPerPage: 10,
-                  SearchTerm: clientname,
+                  SearchTerm: "",
                   Filters: {
                       OLList: "",
                       ClientName: "",
                       ClientsList: [],
-                      DateFilters: { CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: $scope.startDate, ModifiedToDate: $scope.endDate, OpenDateFrom: "", OpenDateTo: "" },
+                      DateFilters: { CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: "05/02/2016", ModifiedToDate: "05/06/2016", OpenDateFrom: "", OpenDateTo: "" },
                       DocumentAuthor: [],
                       DocumentCheckoutUsers: [],
                       FilterByMe: 1,
@@ -748,7 +753,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                   Sort:
                           {
                               ByProperty: "LastModifiedTime",
-                              Direction: 1
+                              Direction: 0
                           }
               }
           };
@@ -1063,8 +1068,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //Start
     $scope.dateOptions = {
 
-        formatYear: 'yy',
-        maxDate: new Date(),
+        formatYear: 'yy'
     };
 
     $scope.openStartDate = function ($event) {
@@ -1084,6 +1088,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
     $scope.openedStartDate = false;
     $scope.openedEndDate = false;
+
+    $scope.disabled = function (date, mode) {
+        return (mode === 'day' && (date.getDay() != 0 ));
+    };
 
     //End
 
@@ -1126,7 +1134,9 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 $scope.divuigrid = true;
                 $scope.nodata = false;
                 vm.gridOptions.data = response;
-                $scope.$apply();
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
             }
         });
     }
@@ -1136,115 +1146,146 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         $scope.nodata = true;
         if (sortColumns.length != 0) {
             if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
-                switch (sortColumns[0].sort.direction) {
-                    case uiGridConstants.ASC:
+                if (sortColumns[0].sort != undefined) {
+                    if (localStorage.MatterNameSort == undefined || localStorage.MatterNameSort == "asc") {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                         SortRequest.SearchObject.Sort.Direction = 0;
                         $scope.FilterByType();
-                        break;
-                    case uiGridConstants.DESC:
+                        localStorage.MatterNameSort = "desc";
+                    } else {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                         SortRequest.SearchObject.Sort.Direction = 1;
                         $scope.FilterByType();
-                        break;
+                        localStorage.MatterNameSort = "asc";
+                    }
+                } else {
+                    $scope.divuigrid = true;
+                    $scope.nodata = false;
                 }
             }
             else if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
-                switch (sortColumns[0].sort.direction) {
-                    case uiGridConstants.ASC:
+                if (sortColumns[0].sort != undefined) {
+                    if (localStorage.ClientSort == undefined || localStorage.ClientSort == "asc") {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
                         SortRequest.SearchObject.Sort.Direction = 0;
                         $scope.FilterByType();
-                        break;
-                    case uiGridConstants.DESC:
+                        localStorage.ClientSort = "desc";
+                    }
+                    else {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
                         SortRequest.SearchObject.Sort.Direction = 1;
                         $scope.FilterByType();
-                        break;
+                        localStorage.ClientSort = "asc";
+                    }
+                } else {
+                    $scope.divuigrid = true;
+                    $scope.nodata = false;
                 }
             }
             else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
-                switch (sortColumns[0].sort.direction) {
-                    case uiGridConstants.ASC:
+                if (sortColumns[0].sort != undefined) {
+                    if (localStorage.ClientIDSort == undefined || localStorage.ClientIDSort == "asc") {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
                         SortRequest.SearchObject.Sort.Direction = 0;
                         $scope.FilterByType();
-                        break;
-                    case uiGridConstants.DESC:
+                        localStorage.ClientIDSort = "desc";
+                    } else {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
                         SortRequest.SearchObject.Sort.Direction = 1;
                         $scope.FilterByType();
-                        break;
+                        localStorage.ClientIDSort = "asc";
+                    }
+
+                } else {
+                    $scope.divuigrid = true;
+                    $scope.nodata = false;
                 }
             }
             else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
-                switch (sortColumns[0].sort.direction) {
-                    case uiGridConstants.ASC:
+                if (sortColumns[0].sort != undefined) {
+                    if (localStorage.ModiFiedTimeSort == undefined || localStorage.ModiFiedTimeSort == "asc") {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                         SortRequest.SearchObject.Sort.Direction = 0;
                         $scope.FilterByType();
-                        break;
-                    case uiGridConstants.DESC:
+                        localStorage.ModiFiedTimeSort = "desc";
+                    } else {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                         SortRequest.SearchObject.Sort.Direction = 1;
                         $scope.FilterByType();
-                        break;
+                        localStorage.ModiFiedTimeSort = "asc";
+                    }
+
+                } else {
+                    $scope.divuigrid = true;
+                    $scope.nodata = false;
                 }
             }
             else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
-                switch (sortColumns[0].sort.direction) {
-                    case uiGridConstants.ASC:
+                if (sortColumns[0].sort != undefined) {
+                    if (localStorage.ResAttoSort == undefined || localStorage.ResAttoSort == "asc") {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
                         SortRequest.SearchObject.Sort.Direction = 0;
                         $scope.FilterByType();
-                        break;
-                    case uiGridConstants.DESC:
+                        localStorage.ResAttoSort = "desc";
+                    } else {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
                         SortRequest.SearchObject.Sort.Direction = 1;
                         $scope.FilterByType();
-                        break;
+                        localStorage.ResAttoSort = "asc";
+                    }
+                } else {
+                    $scope.divuigrid = true;
+                    $scope.nodata = false;
                 }
             }
             else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
-                switch (sortColumns[0].sort.direction) {
-                    case uiGridConstants.ASC:
+                if (sortColumns[0].sort != undefined) {
+                    if (localStorage.SubAreaSort == undefined || localStorage.SubAreaSort == "asc") {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
                         SortRequest.SearchObject.Sort.Direction = 0;
                         $scope.FilterByType();
-                        break;
-                    case uiGridConstants.DESC:
+                        localStorage.SubAreaSort = "desc";
+                    } else {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
                         SortRequest.SearchObject.Sort.Direction = 1;
                         $scope.FilterByType();
-                        break;
+                        localStorage.SubAreaSort = "desc";
+                    }
+                } else {
+                    $scope.divuigrid = true;
+                    $scope.nodata = false;
                 }
             }
             else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
-                switch (sortColumns[0].sort.direction) {
-                    case uiGridConstants.ASC:
+                if (sortColumns[0].sort != undefined) {
+                    if (localStorage.OpenDateSort == undefined || localStorage.OpenDateSort == "asc") {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
                         SortRequest.SearchObject.Sort.Direction = 0;
                         $scope.FilterByType();
-                        break;
-                    case uiGridConstants.DESC:
+                        localStorage.OpenDateSort = "desc"
+                    } else {
                         $scope.lazyloader = false;
                         SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
                         SortRequest.SearchObject.Sort.Direction = 1;
                         $scope.FilterByType();
-                        break;
+                        localStorage.OpenDateSort = "asc"
+                    }
+                } else {
+                    $scope.divuigrid = true;
+                    $scope.nodata = false;
                 }
             }
         } else {
@@ -1261,9 +1302,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     app.directive('popover', function () {
         return {
             restrict: 'AE',
+            scope: { details: '@' },
             link: function (scope, element, attrs) {
-                var obj = eval('(' + attrs.details + ')');
-                var content = '<div class="">\
+                scope.$watch("details", function () {
+                    var obj = eval('(' + attrs.details + ')');
+                    var content = '<div class="">\
                                    <div class="FlyoutBoxContent">\
                                       <div class="FlyoutContent FlyoutHeading">\
                                           <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.matterName + ' </div>\
@@ -1288,11 +1331,12 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                                        <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" onclick="$scope.Openuploadmodal()" type="button">Upload to a matter</a></button>\
                                     </div>\
                                 </div>';
-                $(element).popover({
-                    html: true,
-                    trigger: 'click',
-                    delay: 500,
-                    content: content,
+                    $(element).popover({
+                        html: true,
+                        trigger: 'click',
+                        delay: 500,
+                        content: content,
+                    });
                 });
             }
         }
