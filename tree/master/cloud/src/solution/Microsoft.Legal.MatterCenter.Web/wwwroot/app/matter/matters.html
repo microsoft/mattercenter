@@ -1,5 +1,5 @@
 ﻿<!--<div class="container-fluid">   -->
-<div class="row">
+<div class="row" ng-init="initOfficeLibrary()">
     <div class="col-xs-12">
         <div id="MasterPageContainer" class="MasterPageContent">
             <div class="commonAppSwitch  hide">
@@ -236,13 +236,16 @@
                     <div class="col-sm-9 maildata">
                         <!--Content start to show mail attachment information-->
                         <div class="attachmentSection" ng-repeat="attachmentInfo in vm.allAttachmentDetails">
+                            <div ng-if="vm.loadingAttachments" class='attachmentSection'><img alt='Loading' class='attachmentListLoading' src='../images/loading_metro.gif' /></div>
                             <div ng-if="individualAttachment.isEmail" class="attachment">
                                 <div class="attachmentName mailName">
                                     <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
                                          ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
                                     <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
                                          ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
-                                    <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
+                                    <div ng-if="vm.mailUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
+                                        <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
+                                    </div>
                                     <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
                                     <input class="popupName editPopupContent hide ui-draggable" id="0attachmentText" type="text" maxlength="128">
                                     <div title="Test attachments"
@@ -253,7 +256,7 @@
                                          data-attachmentid="{{attachmentInfo.attachmentId}}">
                                         {{attachmentInfo.attachmentFileName}}
                                     </div>
-                                    <div class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message"></div>
+                                    <div ng-if="vm.mailUpLoadSuccess" title="{{vm.mailUploadedFile}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.mailUploadedFile}}</div>
                                 </div>
                             </div>
 
@@ -263,7 +266,9 @@
                                          ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
                                     <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
                                          ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
-                                    <div class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status"></div>
+                                    <div ng-if="vm.docUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
+                                        <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
+                                    </div>
                                     <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
                                     <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
                                     <div title="{{attachmentInfo.attachmentFileName}}"
@@ -276,7 +281,7 @@
                                          data-attachmentid="{{attachmentInfo.attachmentId}}">
                                         {{attachmentInfo.attachmentFileName}}
                                     </div>
-                                    <div class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message"></div>
+                                    <div ng-if="vm.docUpLoadSuccess" title="{{vm.docUploadedFile}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.docUploadedFile}}</div>
                                 </div>
                             </div>
                         </div>

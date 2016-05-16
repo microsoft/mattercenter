@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope',
-function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', '$location',
+function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, $location) {
     var vm = this;
     vm.selected = undefined;
     // Onload show ui grid and hide error div
@@ -164,23 +164,24 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 </div>";
     //End
 
+    $scope.initOfficeLibrary = function () {
+        
+    };
+
     vm.gridOptions = {
         enableGridMenu: true,
         enableRowHeaderSelection: false,
         enableRowSelection: true,
         enableSelectAll: false,
         multiSelect: false,
-        columnDefs: [{
-            field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: matterCellTemplate,
-            headerCellTemplate: MatterHeaderTemplate
-        },
-            { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },
-             //matterID 
-    { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-     { field: 'matterModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: ModifiedDateheadertemplate },
-     { field: 'matterResponsibleAttorney', displayName: 'Responsible attorney', visible: false },
-     { field: 'matterSubAreaOfLaw', displayName: 'Sub area of law', visible: false },
-     { field: 'matterCreatedDate', displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+        columnDefs: [
+            { field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: matterCellTemplate,headerCellTemplate: MatterHeaderTemplate},
+            { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },             
+            { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+            { field: 'matterModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: ModifiedDateheadertemplate },
+            { field: 'matterResponsibleAttorney', displayName: 'Responsible attorney', visible: false },
+            { field: 'matterSubAreaOfLaw', displayName: 'Sub area of law', visible: false },
+            { field: 'matterCreatedDate', displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
         ],
         enableColumnMenus: false,
         onRegisterApi: function (gridApi) {
@@ -240,7 +241,9 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     
 
     //#region Code for Upload functionality
-
+    vm.docUpLoadSuccess = false;
+    vm.mailUpLoadSuccess = false;
+    vm.loadingAttachments = false;
     //Callback function for folder hierarchy 
     function getFolderHierarchy(options, callback) {
         api({
@@ -260,9 +263,16 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             vm.foldersList = response.foldersList;
             jQuery('#UploadMatterModal').modal("show");
             //Initialize Officejs library
+            //Office.initialize = function (reason) {
+                
+            //};
+
+            
             Office.initialize = function (reason) {
                 vm.initOutlook();
             };
+                
+            
             
         });
     }
@@ -272,25 +282,50 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         //Construct the JSON object that needs to be sent to the client
         var attachments = [];
         var attachmentsArray = {};
-        attachmentsArray.attachmentType = 0;
-        attachmentsArray.name = sourceFile.title;
-        attachmentsArray.originalName = sourceFile.title;
-        attachmentsArray.isInline = false;
-        attachmentsArray.contentType = sourceFile.contentType;
-        attachmentsArray.id = sourceFile.attachmentId;
-        attachmentsArray.size = sourceFile.size;
-        attachments.push(attachmentsArray);
+        var mailId = '';
+        if (sourceFile.isEmail && sourceFile.isEmail === "true") {
+            attachments = vm.allAttachmentDetails
+            mailId = Office.context.mailbox.item.itemId;
+            for (var iCounter = 0; iCounter < vm.allAttachmentDetails.length; iCounter++) {
+                attachments = [];
+                attachmentsArray.attachmentType = 0;
+                attachmentsArray.name = vm.allAttachmentDetails[iCounter].attachmentFileName;                
+                attachmentsArray.isInline = false;
+                attachmentsArray.contentType = vm.allAttachmentDetails[iCounter].contentType;
+                attachmentsArray.id = vm.allAttachmentDetails[iCounter].attachmentId;
+                attachmentsArray.size = vm.allAttachmentDetails[iCounter].size;
+                attachments.push(attachmentsArray);
+            }
+        }
+        else {
+            attachments = [];
+            attachmentsArray.attachmentType = 0;
+            attachmentsArray.name = sourceFile.title;
+            attachmentsArray.originalName = sourceFile.title;
+            attachmentsArray.isInline = false;
+            attachmentsArray.contentType = sourceFile.contentType;
+            attachmentsArray.id = sourceFile.attachmentId;
+            attachmentsArray.size = sourceFile.size;
+            attachments.push(attachmentsArray);
+            mailId = Office.context.mailbox.item.itemId;
+        }
+        
 
+
+        vm.targetDrop = targetDrop;
+        vm.sourceFile = sourceFile;
+        var folders = [];
+        folders.push(targetDrop.url);
         var attachmentRequestVM = {
             Client: {
                 Url : "https://msmatter.sharepoint.com/sites/microsoft"
             },
             ServiceRequest: {
                 AttachmentToken: vm.attachmentToken,
-                FolderPath: targetDrop.url,
+                FolderPath: folders,
                 EwsUrl: vm.ewsUrl,
                 DocumentLibraryName:vm.selectedRow.matterName,
-                MailId: sourceFile.attachmentId,
+                MailId: mailId,
                 PerformContentCheck: false,
                 Overwrite: false,
                 Subject: vm.subject,
@@ -309,6 +344,15 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
     vm.uploadEmail = function (attachmentRequestVM) {
         uploadEmail(attachmentRequestVM, function (response) {
+            if(response.code==="OK" && response.value==="Attachment upload success"){
+                vm.mailUpLoadSuccess = true;
+                var subject = Office.context.mailbox.item.subject;
+                subject = subject.substring(0, subject.lastIndexOf("."));
+                vm.mailUploadedFile = subject;
+            }
+            if (response.code === "OK" && response.value === "Attachment upload failure") {
+                
+            }
             console.log(response);
         });
     }
@@ -324,7 +368,28 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
     vm.uploadAttachment = function (attachmentRequestVM) {
         uploadAttachment(attachmentRequestVM, function (response) {
-            console.log(response);
+            
+            vm.oUploadGlobal.iActiveUploadRequest--;
+            var target = vm.targetDrop;
+            var source = vm.sourceFile;
+            //If the upload is success
+            if (response.code === "OK" && response.value === "Attachment upload success") {
+                vm.docUpLoadSuccess = true;
+                if (vm.oUploadGlobal.iActiveUploadRequest === 0) {
+                    //ToDo: Remove the animated image
+                }                
+                var extEmailOrMsg =''// vm.allAttachmentDetails[0].name.substr(vm.allAttachmentDetails[0].name.lastIndexOf(".") + 1);
+                if (extEmlOrMsg === "eml" || extEmlOrMsg === "msg") {
+                    vm.docUploadedFile = vm.allAttachmentDetails[0].name.substring(0, vm.allAttachmentDetails[0].name.lastIndexOf("."));
+                }
+                else {
+                    vm.docUploadedFile = vm.targetDrop.name;
+                }                
+            }
+            //If the upload is not success
+            else {
+
+            }
         });
     }
 
@@ -429,6 +494,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         if (asyncResult.status === "succeeded") {
             vm.attachmentToken = asyncResult.value;
             vm.createMailPopup();
+            vm.loadingAttachments = false;
         } else {
             //showNotification(oFindMatterConstants.Fail_Attachment_Token, "failNotification");
         }
@@ -474,6 +540,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
 
     vm.createMailPopup = function () {
+        vm.loadingAttachments = true;
         var sImageChunk = "", nIDCounter = 0;
         var attachmentName = "", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";
         vm.allAttachmentDetails = []
@@ -482,10 +549,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         individualAttachment.attachmentId = Office.context.mailbox.item.itemId;
         individualAttachment.counter = nIDCounter;
         individualAttachment.attachmentFileName = Office.context.mailbox.item.subject;
-        individualAttachment.isEmail = true;
-
+        individualAttachment.isEmail = true;     
         vm.allAttachmentDetails.push(individualAttachment);
-
         //For all attachments in the current email
         for (var attachment in vm.attachments) {
             individualAttachment = {};

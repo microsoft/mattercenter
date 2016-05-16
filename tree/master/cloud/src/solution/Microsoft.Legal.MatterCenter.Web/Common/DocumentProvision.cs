@@ -28,16 +28,21 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             var serviceRequest = attachmentRequestVM.ServiceRequest;
             bool result = true;
             GenericResponseVM genericResponse = null;
+            
             foreach (AttachmentDetails attachment in serviceRequest.Attachments)
             {
                 if (uploadHelperFunctions.Upload(client, serviceRequest, ServiceConstants.ATTACHMENT_SOAP_REQUEST, attachment.id, false,
-                    attachment.name, serviceRequest.FolderPath[attachmentCount], true, ref message, attachment.originalName).Equals(ServiceConstants.UPLOAD_FAILED))
+                    attachment.name, serviceRequest.FolderPath[attachmentCount], false, ref message,
+                    attachment.originalName).Equals(ServiceConstants.UPLOAD_FAILED))
                 {
                     result = false;
                     break;
                 }
                 attachmentCount++;
             }
+            
+                
+            
             if (!result)
             {
                 if (!string.IsNullOrEmpty(message))
@@ -64,9 +69,44 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return genericResponse;
         }
 
-        public GenericResponseVM UploadEmails(AttachmentRequestVM attachmentRequest)
+        public GenericResponseVM UploadEmails(AttachmentRequestVM attachmentRequestVM)
         {
-            return null;
+            string message = string.Empty;
+            var client = attachmentRequestVM.Client;
+            var serviceRequest = attachmentRequestVM.ServiceRequest;
+            bool result = true;
+            GenericResponseVM genericResponse = null;
+            if (uploadHelperFunctions.Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, true,
+                        serviceRequest.Subject, serviceRequest.FolderPath[0], false, ref message,
+                        string.Empty).Equals(ServiceConstants.UPLOAD_FAILED))
+            {
+                result = false;
+            }
+
+            if (!result)
+            {
+                if (!string.IsNullOrEmpty(message))
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Value = message,
+                        IsError = true
+                    };
+                    return genericResponse;
+                }
+                else
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Value = "Attachment not uploaded",
+                        IsError = true
+                    };
+                    return genericResponse;
+                }
+            }
+            return genericResponse;
         }
 
         public async Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM)

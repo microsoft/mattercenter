@@ -304,7 +304,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     };
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
-
+                
                 genericResponse = documentProvision.UploadAttachments(attachmentRequestVM);
                 if(genericResponse!=null && genericResponse.IsError==true)
                 {
@@ -336,7 +336,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <returns></returns>
         [HttpPost("uploadmail")]
         [SwaggerResponse(HttpStatusCode.OK)]
-        public async Task<IActionResult> UploadMail([FromBody] AttachmentRequestVM attachmentRequestVM)
+        public IActionResult UploadMail([FromBody] AttachmentRequestVM attachmentRequestVM)
         {
             try
             {
@@ -347,7 +347,7 @@ namespace Microsoft.Legal.MatterCenter.Web
 
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
-                if (client == null)
+                if (client == null && serviceRequest==null && string.IsNullOrWhiteSpace(serviceRequest.MailId))
                 {
                     errorResponse = new ErrorResponse()
                     {
@@ -358,8 +358,25 @@ namespace Microsoft.Legal.MatterCenter.Web
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-                return null;
-                
+                genericResponse = documentProvision.UploadAttachments(attachmentRequestVM);
+                if (genericResponse != null && genericResponse.IsError == true)
+                {
+                    //errorResponse = new ErrorResponse()
+                    //{
+                    //    Message = genericResponse.Value,
+                    //    ErrorCode = genericResponse.Code
+                    //};
+                    genericResponse.Code = HttpStatusCode.OK.ToString();
+                    genericResponse.Value = "Attachment upload failure";
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                }
+                genericResponse = new GenericResponseVM()
+                {
+                    Code = HttpStatusCode.OK.ToString(),
+                    Value = "Attachment upload success"
+                };
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+
             }
             catch (Exception ex)
             {

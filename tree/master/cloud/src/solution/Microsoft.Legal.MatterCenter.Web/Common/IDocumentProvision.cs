@@ -7,7 +7,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 {
     public interface IDocumentProvision
     {
-        GenericResponseVM UploadAttachments(AttachmentRequestVM attachmentRequest);
+        GenericResponseVM UploadAttachments(AttachmentRequestVM attachmentRequestVM);
         GenericResponseVM UploadEmails(AttachmentRequestVM attachmentRequest);
         Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM);
     }
