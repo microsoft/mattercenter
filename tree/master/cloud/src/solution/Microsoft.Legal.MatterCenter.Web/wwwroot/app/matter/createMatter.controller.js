@@ -3,7 +3,8 @@
 
     var app=  angular.module("matterMain");
     app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api','matterResource',
-        function ($scope, $state, $stateParams, api,matterResource) {
+        function ($scope, $state, $stateParams, api, matterResource) {
+            ///All Variables
             var cm = this;
             cm.selectedConflictCheckUser = undefined;
             cm.blockedUserName = undefined;
@@ -11,9 +12,7 @@
             cm.conflictRadioCheck = true;
             cm.iShowSuccessMessage = 0;
             cm.oMandatoryRoleNames = [];
-            cm.bMatterLandingPage = false;
-
-           
+            cm.bMatterLandingPage = false;          
             
             cm.createButton = "Create";
 
@@ -65,8 +64,9 @@
             cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber:  1 }];
             cm.assignRoles = [];
             cm.assignPermissions = [];
-            cm.secureMatterCheck = "True";
+            cm.secureMatterCheck = "False";
             cm.conflictRadioCheck = true;
+            cm.includeTasks = false;
             
             ///* Function to generate 32 bit GUID */
             function get_GUID() {
@@ -90,15 +90,9 @@
             var optionsForCheckMatterName = new Object;
             // var optionsForUsers = new Object;
             var siteCollectionPath = "https://msmatter.sharepoint.com/sites/microsoft";
-       
-            function getDefaultMatterConfigurations(siteCollectionPath, callback) {
-                api({
-                    resource:'matterResource',
-                    method: 'getDefaultMatterConfigurations',
-                    data: JSON.stringify(siteCollectionPath),
-                    success:callback
-                });
-            }
+
+            ////API calling functions
+
 
             function getTaxonomyDetailsForClient(optionsForClientGroup, callback) {
                 api({
@@ -109,6 +103,17 @@
                 });
 
             }
+       
+            function getDefaultMatterConfigurations(siteCollectionPath, callback) {
+                api({
+                    resource:'matterResource',
+                    method: 'getDefaultMatterConfigurations',
+                    data: JSON.stringify(siteCollectionPath),
+                    success:callback
+                });
+            }
+
+           
             function getTaxonomyDetailsForPractice(optionsForPracticeGroup, callback) {
                 api({
                     resource: 'matterResource',
@@ -117,9 +122,6 @@
                     success: callback
                 });
             }
-
-
-
 
             function getCheckValidMatterName(optionsForCheckMatterName, callback) {
                 api({
@@ -138,7 +140,6 @@
                     success: callback
                 });
             }
-
 
             function getRoles(options, callback) {
                 api({
@@ -226,7 +227,7 @@
                 }
             }
                
-           
+           //input parameters building here for all the api's
             optionsForPracticeGroup = {
                 Client: {
 
@@ -270,10 +271,15 @@
             getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {              
 
                 cm.clientNameList = response.clientTerms;
-                cm.popupContainerBackground = "hide";// jQuery('#myModal').modal('show');
-
+               // jQuery('#myModal').modal('show');
+                getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                    cm.pracitceGroupList = response.pgTerms;
+                    cm.popupContainerBackground = "hide";
+                });
 
             });
+
+           
 
             var optionsForRoles = new Object;
             optionsForRoles = {                                
@@ -321,13 +327,17 @@
             });
 
             //calls this function when selectType button clicks
-            cm.selectMatterType = function () {
-                cm.popupContainerBackground = "Show";
-                if (cm.pracitceGroupList == null) {
+            cm.selectMatterType = function (value) {
+               
+                    cm.popupContainerBackground = "Show";
+                
+                if (cm.pracitceGroupList == null ) {
                     getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                         cm.pracitceGroupList = response.pgTerms;
-                        cm.popupContainer = "Show";
-                        cm.popupContainerBackground = "Show";
+                       
+                            cm.popupContainer = "Show";
+                            cm.popupContainerBackground = "Show";
+                       
                     });
                 }
                 else {
@@ -351,8 +361,124 @@
               
                 if (null != cm.clientId) {
 
-                    getDefaultMatterConfigurations(siteCollectionPath, function (response) {
-                       // console.log(response); 
+                    getDefaultMatterConfigurations(siteCollectionPath, function (result) {
+                      
+                        if (result.isError) {
+                           
+                        //    alert();
+                        }
+                        else {
+                            var dMatterAreaOfLaw = "", dMatterPracticeGroup = "", dMatterSubAreOfLaw = "", dMatterTypes = "", dPrimaryMatterType = "", dMatterUsers = "", dMatterUserEmails = "", dMatterPermissions = "", dMatterRoles = "";
+
+                            console.log(result.code);
+                            var defaultMatterConfig = JSON.parse(result.code);
+
+                            cm.matterName = defaultMatterConfig.DefaultMatterName;
+                            cm.matterId = defaultMatterConfig.DefaultMatterId;
+                            if (defaultMatterConfig.IsRestrictedAccessSelected) {
+                                cm.secureMatterCheck = "True";
+                            }
+                            if (defaultMatterConfig.IsCalendarSelected) {
+                                cm.includeCalendar = defaultMatterConfig.IsCalendarSelected;
+                            }
+                            if (defaultMatterConfig.IsEmailOptionSelected) {
+                                cm.includeEmail = defaultMatterConfig.IsEmailOptionSelected;
+                            }
+                            if (defaultMatterConfig.IsRSSSelected) {
+                                cm.includeRssFeeds = defaultMatterConfig.IsRSSSelected;
+                            }
+                            if (defaultMatterConfig.IsConflictCheck) {
+                                cm.chkConfilctCheck = defaultMatterConfig.IsConflictCheck;
+                            }
+                            if (defaultMatterConfig.IsMatterDescriptionMandatory) {
+                               // cm.secureMatterCheck = defaultMatterConfig.IsMatterDescriptionMandatory;
+                            }
+                           // if (defaultMatterConfig.IsContentCheck) {
+                               // cm.secureMatterCheck = "True";
+                           // }
+                            if (defaultMatterConfig.IsTaskSelected) {
+                                cm.includeTasks = defaultMatterConfig.IsTaskSelected;
+                            }
+                            var arrDMatterAreaOfLaw = [];
+                            var arrDMatterPracticeGroup = [];
+                            arrDMatterAreaOfLaw = defaultMatterConfig.MatterAreaofLaw.split('$|$');
+                            arrDMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup.split('$|$');
+                       //     dMatterAreaOfLaw = defaultMatterConfig.MatterAreaofLaw ? defaultMatterConfig.MatterAreaofLaw : "";
+                         //   dMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup?defaultMatterConfig.MatterPracticeGroup: "";
+                         //   dMatterSubAreOfLaw = defaultMatterConfig.?: "";
+                            dMatterTypes = defaultMatterConfig.MatterTypes ? defaultMatterConfig.MatterTypes : "";
+
+                            var arrDMatterTypes = dMatterTypes.split('$|$');
+                            dPrimaryMatterType = defaultMatterConfig.DefaultMatterType?defaultMatterConfig.DefaultMatterType: "";
+                            dMatterUsers = defaultMatterConfig.MatterUsers?defaultMatterConfig.MatterUsers: "";;
+                            dMatterUserEmails = defaultMatterConfig.MatterUserEmails?defaultMatterConfig.MatterUserEmails: "";
+                            dMatterPermissions = defaultMatterConfig.MatterPermissions?defaultMatterConfig.MatterPermissions: "";
+                            dMatterRoles = defaultMatterConfig.MatterRoles ? defaultMatterConfig.MatterRoles : "";
+                            cm.selectMatterType();
+                            cm.popupContainerBackground = "hide";
+                            cm.popupContainer = "hide";
+                            //  selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms
+
+                            // cm.documentTypeLawTerms
+
+                            //cm.subAreaOfLawTerms
+
+                            //cm.areaOfLawTerms
+                            ////////////////
+                            angular.forEach(cm.pracitceGroupList, function (pgTerm) {
+                                //For loop
+                               
+                                   
+                                        angular.forEach(pgTerm.areaTerms, function (areaTerm) {
+
+                                           // for (var iCount = 0; iCount < arrDMatterAreaOfLaw.length; iCount++) {
+
+                                               // if (areaTerm.termName == arrDMatterAreaOfLaw[iCount]) {
+                                                    angular.forEach(areaTerm.subareaTerms, function (subAreaTerm) {
+
+                                                        for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
+
+                                                            if (subAreaTerm.termName == arrDMatterTypes[iCount]) {
+                                                                //  cm.selectedDocumentTypeLawTerms = 
+                                                                var documentType = subAreaTerm;
+                                                                documentType.foldernamespg = pgTerm.folderNames;
+                                                                documentType.practicegroupId = pgTerm.id;
+                                                                documentType.foldernamesaol = areaTerm.folderNames;
+                                                                documentType.areaoflawId = areaTerm.id;
+                                                                documentType.areaoflaw = areaTerm.termName;
+                                                                documentType.practicegroup = pgTerm.termName;
+                                                                //cm.documentTypeLawTerms
+
+                                                                cm.documentTypeLawTerms.push(subAreaTerm);
+                                                                documentType.primaryMatterType = false;
+                                                                if (subAreaTerm.termName == dPrimaryMatterType) {
+                                                                    documentType.primaryMatterType = true;
+                                                                }
+                                                                cm.selectedDocumentTypeLawTerms.push(documentType);
+                                                            }
+
+                                                        }
+                                                    });
+                                              //  }
+
+                                           // }
+                                        });
+
+
+                                    
+                                
+                            });
+
+                            console.log("////////////PG/////////////////////");
+                            console.log(cm.pracitceGroupList);
+                            console.log("//////////////AOL///////////////////");
+                            console.log(cm.areaOfLawTerms);
+                            console.log("/////////////////SAOL////////////////");
+                            console.log(cm.subAreaOfLawTerms);
+                            console.log("/////////////////////DL////////////");
+                            console.log(cm.documentTypeLawTerms);
+
+                    }
                     });
                 }
                 else {
