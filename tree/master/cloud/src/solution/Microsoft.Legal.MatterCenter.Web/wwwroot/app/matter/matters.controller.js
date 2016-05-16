@@ -20,12 +20,13 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
     //Assigning html for Matterheadertemplate
     //Start
-    var MatterHeaderTemplate = "<div >\
-    <div class='dropdown keep-open' style='float:right;'>\
+    $scope.matterDropDowm = false;
+    var MatterHeaderTemplate = "<div ng-mouseenter='grid.appScope.matterDropDowm = true' ng-mouseleave='grid.appScope.matterDropDowm = false'>\
+    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.matterDropDowm'>\
         <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
             <img src='../images/icon-combobox.png'/>\
         </a>\
-        <div class='dropdown-menu flyoutWrapper' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
+        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
          <div class='input-group'>\
            <input class='form-control' ng-model='grid.appScope.vm.searchTerm' placeholder='Search'/> \
                 <div class='input-group-btn'>\
@@ -42,9 +43,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         </div>\
         </div>\
     </div>\
-    <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
+    <div role='button' style='padding-left: 11px;' ng-click='$event.stopPropagation();grid.appScope.sortByType('MCMatterName')' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
         <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
-        <span ui-grid-visible='col.sort.direction'  class='ui-grid-invisible ui-grid-icon-blank'>&nbsp;</span>\
+        <span class='sort pull-right' ng-show='grid.appScope.sortMCMatterName'>↑</span>\
+        <span ng-show='grid.appScope.sortDownMCMatterName' class='sort pull-right'>↓</span>\
     </div>\
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
         <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
@@ -55,12 +57,13 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
     //Assigning html for Clientheadertemplate
     //Start
-    var ClientHeaderTemplate = "<div >\
-    <div class='dropdown keep-open' style='float:right;'>\
+    $scope.clientDropDowm = false;
+    var ClientHeaderTemplate = "<div ng-mouseenter='grid.appScope.clientDropDowm = true' ng-mouseleave='grid.appScope.clientDropDowm = false'>\
+    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.clientDropDowm'>\
         <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
             <img src='../images/icon-combobox.png'/>\
         </a>\
-        <div class='dropdown-menu flyoutWrapper' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
+        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
          <div class='input-group'>\
            <input class='form-control' ng-model='grid.appScope.vm.searchClientTerm' placeholder='Search'/> \
                 <div class='input-group-btn'>\
@@ -79,7 +82,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     </div>\
     <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
         <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
-        <span ui-grid-visible='col.sort.direction'  class='ui-grid-invisible ui-grid-icon-blank'>&nbsp;</span>\
+         <span class='sort pull-right' ng-show='grid.appScope.sortMCClient'>↑</span>\
+        <span ng-show='grid.appScope.sortDownMCClient' class='sort pull-right'>↓</span>\
     </div>\
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
         <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
@@ -89,8 +93,9 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
     //Assigning html for ModifiedDateheadertemplate
     //Start
-    var ModifiedDateheadertemplate = "<div >\
-    <div class='dropdown keep-open' style='float:right;'>\
+    $scope.modifieddateDropDowm = false;
+    var ModifiedDateheadertemplate = "<div ng-mouseenter='grid.appScope.modifieddateDropDowm = true' ng-mouseleave='grid.appScope.modifieddateDropDowm = false'>\
+    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.modifieddateDropDowm'>\
         <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
             <img src='../images/icon-combobox.png'/>\
         </a>\
@@ -132,7 +137,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     </div>\
     <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
         <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
-        <span ui-grid-visible='col.sort.direction'  class='ui-grid-invisible ui-grid-icon-blank'>&nbsp;</span>\
+          <span class='sort pull-right' ng-show='grid.appScope.sortMCModifiedDate'>↑</span>\
+        <span ng-show='grid.appScope.sortDownMCModifiedDate' class='sort pull-right'>↓</span>\
     </div>\
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
         <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
@@ -143,13 +149,13 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //Assigning html for celltemplate
     //Start
     var matterCellTemplate = "<div class='row'>\
-    <div class='col-xs-8 col-sm-8'>\
-        <a popover type='button' class='btn btn-link' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href='' > {{row.entity.matterName}} </a>\
+    <div class='col-xs-8 col-sm-10' id='matterPopup'>\
+        <a popover type='button' class='btn btn-link col-xs-12 col-sm-12' style='text-align:left' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href='' > {{row.entity.matterName}} </a>\
         <div class='popover-content'></div>\
     </div>\
-    <div class='col-xs-4 col-sm-4 text-right'>\
+    <div class='col-xs-4 col-sm-2 text-right'>\
         <div class='dropdown'>\
-            <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a><ul style='left:60px' class='dropdown-menu'>\
+            <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a><ul style='margin:0;padding:0' class='dropdown-menu'>\
                 <li class='ms-ContextualMenu-item' ng-click='grid.appScope.Openuploadmodal()'><a class='ECBItem ms-ContextualMenu-link upload'>Upload to this Matter</a></li>\
                 <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'>View Matter Details</a></li>\
                 <li class='ms-ContextualMenu-item'>\
@@ -191,6 +197,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                 vm.selectedRow = row.entity
             });
+            $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
+            $scope.sortChanged($scope.gridApi.grid, [$scope.gridOptions.columnDefs[1]]);
         }
     };
 
@@ -1092,32 +1100,208 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         $scope.maxStartDate = v;
     });
     //End
-}]);
-    //app.directive('toggle', function () {
-    //    return {
-    //        restrict: 'AE',
-    //        link: function (scope, element, attrs) {
-    //            if (attrs.toggle == "popover") {
-    //                $(element).popover();
-    //            }
-    //        }
-    //    };
-    //})
 
-    app.directive('popover', function () {
+        //#region Custom Sorting functionality
+    //Start
+    var SortRequest = {
+        Client: {
+            Id: "123456",
+            Name: "Microsoft",
+            Url: "https://msmatter.sharepoint.com/sites/catalog"
+        },
+        SearchObject: {
+            PageNumber: 1,
+            ItemsPerPage: 10,
+            SearchTerm: "",
+            Filters: {
+                AOLList: "",
+                ClientsList: [],
+                FilterByMe: 1,
+                FromDate: "",
+                PGList: "",
+                ToDate: ""
+            },
+            Sort:
+                    {
+                        ByProperty: '',
+                        Direction: 0
+                    }
+        }
+    }
+
+    $scope.FilterByType = function () {
+        get(SortRequest, function (response) {
+            $scope.lazyloader = true;
+            if (response.errorCode == "404") {
+                $scope.divuigrid = false;
+                $scope.nodata = true;
+                $scope.errorMessage = response.message;
+            } else {
+                $scope.divuigrid = true;
+                $scope.nodata = false;
+                vm.gridOptions.data = response;
+                $scope.$apply();
+            }
+        });
+    }
+
+    $scope.sortChanged = function (grid, sortColumns) {
+        $scope.divuigrid = false;
+        $scope.nodata = true;
+        if (sortColumns.length != 0) {
+            if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
+                switch (sortColumns[0].sort.direction) {
+                    case uiGridConstants.ASC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                        SortRequest.SearchObject.Sort.Direction = 0;
+                        $scope.FilterByType();
+                        break;
+                    case uiGridConstants.DESC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                        SortRequest.SearchObject.Sort.Direction = 1;
+                        $scope.FilterByType();
+                        break;
+                }
+            }
+            else if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
+                switch (sortColumns[0].sort.direction) {
+                    case uiGridConstants.ASC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
+                        SortRequest.SearchObject.Sort.Direction = 0;
+                        $scope.FilterByType();
+                        break;
+                    case uiGridConstants.DESC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
+                        SortRequest.SearchObject.Sort.Direction = 1;
+                        $scope.FilterByType();
+                        break;
+                }
+            }
+            else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
+                switch (sortColumns[0].sort.direction) {
+                    case uiGridConstants.ASC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
+                        SortRequest.SearchObject.Sort.Direction = 0;
+                        $scope.FilterByType();
+                        break;
+                    case uiGridConstants.DESC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
+                        SortRequest.SearchObject.Sort.Direction = 1;
+                        $scope.FilterByType();
+                        break;
+                }
+            }
+            else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
+                switch (sortColumns[0].sort.direction) {
+                    case uiGridConstants.ASC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                        SortRequest.SearchObject.Sort.Direction = 0;
+                        $scope.FilterByType();
+                        break;
+                    case uiGridConstants.DESC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                        SortRequest.SearchObject.Sort.Direction = 1;
+                        $scope.FilterByType();
+                        break;
+                }
+            }
+            else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
+                switch (sortColumns[0].sort.direction) {
+                    case uiGridConstants.ASC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
+                        SortRequest.SearchObject.Sort.Direction = 0;
+                        $scope.FilterByType();
+                        break;
+                    case uiGridConstants.DESC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
+                        SortRequest.SearchObject.Sort.Direction = 1;
+                        $scope.FilterByType();
+                        break;
+                }
+            }
+            else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
+                switch (sortColumns[0].sort.direction) {
+                    case uiGridConstants.ASC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
+                        SortRequest.SearchObject.Sort.Direction = 0;
+                        $scope.FilterByType();
+                        break;
+                    case uiGridConstants.DESC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
+                        SortRequest.SearchObject.Sort.Direction = 1;
+                        $scope.FilterByType();
+                        break;
+                }
+            }
+            else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
+                switch (sortColumns[0].sort.direction) {
+                    case uiGridConstants.ASC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                        SortRequest.SearchObject.Sort.Direction = 0;
+                        $scope.FilterByType();
+                        break;
+                    case uiGridConstants.DESC:
+                        $scope.lazyloader = false;
+                        SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                        SortRequest.SearchObject.Sort.Direction = 1;
+                        $scope.FilterByType();
+                        break;
+                }
+            }
+        } else {
+            $scope.lazyloader = false;
+            SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+            SortRequest.SearchObject.Sort.Direction = 0;
+            $scope.FilterByType();
+        }
+    }
+    //#endregion
+
+}]);
+   
+   app.directive('popover', function () {
         return {
             restrict: 'AE',
             link: function (scope, element, attrs) {
                 var obj = eval('(' + attrs.details + ')');
-                var content = '<div>\
-                                          ' + obj.matterName + ' \
-                                          <div> <b>Client :</b> '+ obj.matterClient + '</div>\
-                                          <div><b>Client.Matter ID :</b> '+ obj.matterClientId + '.' + obj.matterID + '</div>\
-                                          <div><b>Sub area of law :</b> '+ obj.matterSubAreaOfLaw + '</div> \
-                                          <div><b>Responsible attorney</b> : '+ obj.matterResponsibleAttorney + '</div>\
-                                          <div><button ><a href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/'+ obj.matterGuid + '.aspx" target="_blank">View matter details</a></button></div>\
-                            <div><a onclick="$scope.Openuploadmodal()" type="button">Upload to a matter</a></div>\
-                       </div>';
+                var content = '<div class="">\
+                                   <div class="FlyoutBoxContent">\
+                                      <div class="FlyoutContent FlyoutHeading">\
+                                          <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.matterName + ' </div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client.Matter ID:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Sub area of law:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible attorney:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
+                                       </div>\
+                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a></button>\
+                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" onclick="$scope.Openuploadmodal()" type="button">Upload to a matter</a></button>\
+                                    </div>\
+                                </div>';
                 $(element).popover({
                     html: true,
                     trigger: 'click',
@@ -1148,26 +1332,29 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     app.directive('datefilter', function () {
         return {
             restrict: 'A',
+            scope: { date: '@' },
             link: function (scope, element, attrs) {
-                var dDate = attrs.date;
-                var oDates = new Date(dDate), months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], date = "", oLocalDate = dDate;
-                if (isNaN(oDates)) {
-                    var arrSplitedDate = dDate.replace(/[-]/g, "/");
-                    arrSplitedDate = arrSplitedDate.split("/");
-                    dDate = arrSplitedDate[1] + "-" + arrSplitedDate[0] + "-" + arrSplitedDate[2];
-                    oDates = new Date(dDate);
-                }
-                if (0 > oLocalDate.indexOf("Z")) {
-                    date += months[parseInt(oDates.getMonth(), 10)] + " ";
-                    date += oDates.getDate() + ", ";
-                    date += oDates.getFullYear();
-                } else {
-                    date += months[parseInt(oDates.getUTCMonth(), 10)] + " ";
-                    date += oDates.getUTCDate() + ", ";
-                    date += oDates.getUTCFullYear();
-                }
-                $(element).html(date);
-                return date;
+                scope.$watch("date", function () {
+                    var dDate = attrs.date;
+                    var oDates = new Date(dDate), months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], date = "", oLocalDate = dDate;
+                    if (isNaN(oDates)) {
+                        var arrSplitedDate = dDate.replace(/[-]/g, "/");
+                        arrSplitedDate = arrSplitedDate.split("/");
+                        dDate = arrSplitedDate[1] + "-" + arrSplitedDate[0] + "-" + arrSplitedDate[2];
+                        oDates = new Date(dDate);
+                    }
+                    if (0 > oLocalDate.indexOf("Z")) {
+                        date += months[parseInt(oDates.getMonth(), 10)] + " ";
+                        date += oDates.getDate() + ", ";
+                        date += oDates.getFullYear();
+                    } else {
+                        date += months[parseInt(oDates.getUTCMonth(), 10)] + " ";
+                        date += oDates.getUTCDate() + ", ";
+                        date += oDates.getUTCFullYear();
+                    }
+                    $(element).html(date);
+                    return date;
+                });
             }
         }
     });
