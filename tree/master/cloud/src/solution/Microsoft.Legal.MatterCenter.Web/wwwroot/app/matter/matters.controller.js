@@ -244,6 +244,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     vm.docUpLoadSuccess = false;
     vm.mailUpLoadSuccess = false;
     vm.loadingAttachments = false;
+
+
     //Callback function for folder hierarchy 
     function getFolderHierarchy(options, callback) {
         api({
@@ -262,18 +264,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         getFolderHierarchy(matterData, function (response) {
             vm.foldersList = response.foldersList;
             jQuery('#UploadMatterModal').modal("show");
-            //Initialize Officejs library
-            //Office.initialize = function (reason) {
-                
-            //};
-
-            
+            //Initialize Officejs library                     
             Office.initialize = function (reason) {
-                vm.initOutlook();
-            };
                 
-            
-            
+            };
+            vm.initOutlook();  
         });
     }
 
@@ -283,6 +278,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         var attachments = [];
         var attachmentsArray = {};
         var mailId = '';
+        
         if (sourceFile.isEmail && sourceFile.isEmail === "true") {
             attachments = vm.allAttachmentDetails
             mailId = Office.context.mailbox.item.itemId;
@@ -328,7 +324,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 MailId: mailId,
                 PerformContentCheck: false,
                 Overwrite: false,
-                Subject: vm.subject,
+                Subject: vm.subject + ".eml",
                 AllowContentCheck: true,
                 Attachments: attachments
             }
@@ -342,20 +338,27 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         }
     }
 
+    //#region Call Back function when the email gets uploaded
+
+    //This is the call back function when the email gets uploaded
     vm.uploadEmail = function (attachmentRequestVM) {
         uploadEmail(attachmentRequestVM, function (response) {
+            //If the mail upload is success
             if(response.code==="OK" && response.value==="Attachment upload success"){
                 vm.mailUpLoadSuccess = true;
                 var subject = Office.context.mailbox.item.subject;
                 subject = subject.substring(0, subject.lastIndexOf("."));
                 vm.mailUploadedFile = subject;
+                vm.mailUploadedFolder = vm.targetDrop.name;
             }
-            if (response.code === "OK" && response.value === "Attachment upload failure") {
+            //If the mail upload is not success
+            else {
                 
             }
             console.log(response);
         });
     }
+    //#endregion
 
     function uploadEmail(attachmentRequestVM, callback) {
         api({
@@ -380,15 +383,17 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 }                
                 var extEmailOrMsg =''// vm.allAttachmentDetails[0].name.substr(vm.allAttachmentDetails[0].name.lastIndexOf(".") + 1);
                 if (extEmlOrMsg === "eml" || extEmlOrMsg === "msg") {
-                    vm.docUploadedFile = vm.allAttachmentDetails[0].name.substring(0, vm.allAttachmentDetails[0].name.lastIndexOf("."));
+                    vm.docUploadedFolder = vm.allAttachmentDetails[0].name.substring(0, vm.allAttachmentDetails[0].name.lastIndexOf("."));
                 }
                 else {
-                    vm.docUploadedFile = vm.targetDrop.name;
+                    vm.docUploadedFolder = vm.targetDrop.name;
                 }                
             }
-            //If the upload is not success
+            //If the attachment upload is not success
             else {
-
+                //If perform content check exception arises
+                //If the document already exists exception arises
+                //If overwrite is true exception arises
             }
         });
     }

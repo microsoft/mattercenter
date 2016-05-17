@@ -77,7 +77,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             bool result = true;
             GenericResponseVM genericResponse = null;
             if (uploadHelperFunctions.Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, true,
-                        serviceRequest.Subject, serviceRequest.FolderPath[0], false, ref message,
+                        serviceRequest.Subject, serviceRequest.FolderPath[0], true, ref message,
                         string.Empty).Equals(ServiceConstants.UPLOAD_FAILED))
             {
                 result = false;

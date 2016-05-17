@@ -82,7 +82,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="uploadFileName">Name of the file.</param>
         /// <param name="clientContext">SP client context</param>
         /// <returns>result message as per document matches or not</returns>
-        public string PerformContentCheckUtility(bool isMailUpload, string folderPath, bool isMsg, XmlDocument xmlDocument, XmlNamespaceManager nsmgr, string extension, string uploadFileName, ClientContext clientContext)
+        public string PerformContentCheckUtility(bool isMailUpload, string folderPath, bool isMsg, XmlDocument xmlDocument, 
+            XmlNamespaceManager nsmgr, string extension, string uploadFileName, ClientContext clientContext)
         {
             dynamic bytes = GetStream(xmlDocument, nsmgr, isMailUpload, extension, isMsg);
             string message = string.Empty;
@@ -93,17 +94,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     string serverFileUrl = folderPath + ServiceConstants.FORWARD_SLASH + uploadFileName;
                     if (documentRepository.PerformContentCheck(clientContext, targetStream, serverFileUrl))
                     {
-                        message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.FoundIdenticalContent, ServiceConstants.PIPE, ServiceConstants.TRUE);
+                        message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.FoundIdenticalContent, 
+                            ServiceConstants.PIPE, ServiceConstants.TRUE);
                     }
                     else
                     {
-                        message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.FoundNonIdenticalContent, ServiceConstants.PIPE, ServiceConstants.FALSE);
+                        message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.FoundNonIdenticalContent, 
+                            ServiceConstants.PIPE, ServiceConstants.FALSE);
                     }
                 }
                 catch (Exception exception)
                 {
                     //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
-                    message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.ContentCheckFailed, ServiceConstants.PIPE, ServiceConstants.TRUE);
+                    message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.ContentCheckFailed, 
+                        ServiceConstants.PIPE, ServiceConstants.TRUE);
                 }
             }
             return message;

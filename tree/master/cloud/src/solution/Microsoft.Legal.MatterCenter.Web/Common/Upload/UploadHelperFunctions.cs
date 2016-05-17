@@ -64,17 +64,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="message">Reference object for the message to be returned</param>
         /// <param name="originalFileName">Original file name of the attachment</param>
         /// <returns>It returns a string object, that contains the execution status of the function.</returns>
-        public bool Upload(Client client, ServiceRequest serviceRequest, string soapRequest, string attachmentOrMailID, bool isMailUpload, string fileName, string folderPath, bool isFirstCall, ref string message, string originalFileName)
+        public bool Upload(Client client, ServiceRequest serviceRequest, string soapRequest, string attachmentOrMailID, 
+            bool isMailUpload, string fileName, string folderPath, bool isFirstCall, ref string message, string originalFileName)
         {
             bool result = ServiceConstants.UPLOAD_FAILED;
             try
             {
-                if (null != client && null != serviceRequest && !string.IsNullOrWhiteSpace(soapRequest) && !string.IsNullOrWhiteSpace(attachmentOrMailID) && !string.IsNullOrWhiteSpace(fileName) && !string.IsNullOrWhiteSpace(folderPath))
+                if (null != client && null != serviceRequest && !string.IsNullOrWhiteSpace(soapRequest) && 
+                    !string.IsNullOrWhiteSpace(attachmentOrMailID) && !string.IsNullOrWhiteSpace(fileName) && !string.IsNullOrWhiteSpace(folderPath))
                 {
                     string documentLibraryName = serviceRequest.DocumentLibraryName;
 
                     //// Make the request to the Exchange server and get the response.
-                    HttpWebResponse webResponse = uploadHelperFunctionsUtility.GetWebResponse(serviceRequest.EwsUrl, serviceRequest.AttachmentToken, soapRequest, attachmentOrMailID);
+                    HttpWebResponse webResponse = uploadHelperFunctionsUtility.GetWebResponse(serviceRequest.EwsUrl, serviceRequest.AttachmentToken, 
+                        soapRequest, attachmentOrMailID);
 
                     if (!isFirstCall)
                     {
@@ -95,17 +98,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         }
 
                         //// Make the request to the Exchange server and get the response.
-                        webResponse = uploadHelperFunctionsUtility.GetWebResponse(serviceRequest.EwsUrl, serviceRequest.AttachmentToken, ServiceConstants.ATTACHMENT_SOAP_REQUEST, attachmentOrMailID);
+                        webResponse = uploadHelperFunctionsUtility.GetWebResponse(serviceRequest.EwsUrl, serviceRequest.AttachmentToken, 
+                            ServiceConstants.ATTACHMENT_SOAP_REQUEST, attachmentOrMailID);
                     }
 
                     //// If the response is okay, create an XML document from the response and process the request.
                     if (webResponse.StatusCode == HttpStatusCode.OK)
                     {
-                        result = UploadFilesMail(serviceRequest.Overwrite, serviceRequest.PerformContentCheck, serviceRequest.AllowContentCheck, documentLibraryName, webResponse, isMailUpload, client, fileName, folderPath, ref message);
+                        result = UploadFilesMail(serviceRequest.Overwrite, serviceRequest.PerformContentCheck, 
+                            serviceRequest.AllowContentCheck, documentLibraryName, webResponse, isMailUpload, client, fileName, folderPath, ref message);
                     }
                     if (string.IsNullOrWhiteSpace(message) && result.Equals(ServiceConstants.UPLOAD_FAILED) && isFirstCall)
                     {
-                        result = Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, isMailUpload, fileName, folderPath, false, ref message, originalFileName);
+                        result = Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, 
+                            isMailUpload, fileName, folderPath, false, ref message, originalFileName);
                     }
                 }
                 else
@@ -135,7 +141,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="folderPath">upload folder path</param>
         /// <param name="message">Reference object for the message to be returned</param>
         /// <returns>Returns whether File Uploaded successfully or failed</returns>
-        internal bool UploadFilesMail(bool isOverwrite, bool isContentCheckRequired, bool allowContentCheck, string documentLibraryName, HttpWebResponse webResponse, bool isMailUpload, 
+        internal bool UploadFilesMail(bool isOverwrite, bool isContentCheckRequired, bool allowContentCheck, 
+            string documentLibraryName, HttpWebResponse webResponse, bool isMailUpload, 
             Client client, string fileName, string folderPath, ref string message)
         {
             bool isMsg = true;

@@ -237,12 +237,13 @@
                         <!--Content start to show mail attachment information-->
                         <div class="attachmentSection" ng-repeat="attachmentInfo in vm.allAttachmentDetails">
                             <div ng-if="vm.loadingAttachments" class='attachmentSection'><img alt='Loading' class='attachmentListLoading' src='../images/loading_metro.gif' /></div>
-                            <div ng-if="individualAttachment.isEmail" class="attachment">
+                            <div ng-if="attachmentInfo.isEmail" class="attachment">
                                 <div class="attachmentName mailName">
                                     <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
                                          ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
                                     <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
                                          ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
+                                    <!--If the mail upload is success, show this div-->
                                     <div ng-if="vm.mailUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
                                         <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
                                     </div>
@@ -256,11 +257,12 @@
                                          data-attachmentid="{{attachmentInfo.attachmentId}}">
                                         {{attachmentInfo.attachmentFileName}}
                                     </div>
-                                    <div ng-if="vm.mailUpLoadSuccess" title="{{vm.mailUploadedFile}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.mailUploadedFile}}</div>
+                                    <!--If the mail upload is success, show the folder name under which the email has been dropped-->
+                                    <div ng-if="vm.mailUpLoadSuccess" title="{{vm.mailUploadedFolder}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.mailUploadedFolder}}</div>
                                 </div>
                             </div>
 
-                            <div ng-if="!individualAttachment.isEmail" class="attachment">
+                            <div ng-if="!attachmentInfo.isEmail" class="attachment">
                                 <div class="attachmentName">
                                     <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
                                          ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
@@ -269,6 +271,7 @@
                                     <div ng-if="vm.docUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
                                         <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
                                     </div>
+                                    <!--If the attachment upload is success, show this div-->
                                     <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
                                     <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
                                     <div title="{{attachmentInfo.attachmentFileName}}"
@@ -281,7 +284,8 @@
                                          data-attachmentid="{{attachmentInfo.attachmentId}}">
                                         {{attachmentInfo.attachmentFileName}}
                                     </div>
-                                    <div ng-if="vm.docUpLoadSuccess" title="{{vm.docUploadedFile}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.docUploadedFile}}</div>
+                                    <!--If the attachment upload is success, show the folder name under which the attachment has been dropped-->
+                                    <div ng-if="vm.docUpLoadSuccess" title="{{vm.docUploadedFolder}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.docUploadedFolder}}</div>
                                 </div>
                             </div>
                         </div>

@@ -358,7 +358,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-                genericResponse = documentProvision.UploadAttachments(attachmentRequestVM);
+                genericResponse = documentProvision.UploadEmails(attachmentRequestVM);
                 if (genericResponse != null && genericResponse.IsError == true)
                 {
                     //errorResponse = new ErrorResponse()
