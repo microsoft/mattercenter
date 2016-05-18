@@ -280,7 +280,7 @@ textarea {
 }
 
 .overflowMain {
-    overflow: hidden !important;
+    /*overflow: hidden !important;*/
 }
 
 .padlf10 {

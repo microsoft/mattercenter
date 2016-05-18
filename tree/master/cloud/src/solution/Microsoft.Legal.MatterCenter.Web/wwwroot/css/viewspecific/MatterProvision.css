@@ -271,6 +271,7 @@ _::-moz-svg-foreign-content, :root .mainArea .notificationContainer {
         font-size: .875em;
         margin-bottom: 2px;
         color: #666;
+        font-weight:normal;
     }
 
     .content select, .content input, .content textarea, .content #documentTemplates {
@@ -443,7 +444,7 @@ _::-moz-svg-foreign-content, :root .mainArea .notificationContainer {
     .sectionStep .sectionContent {
         float: left;
         position: relative;
-        width: 100%;
+        width: 70%;
     }
 
     .sectionStep #addMoreLink {

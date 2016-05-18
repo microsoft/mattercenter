@@ -2,6 +2,9 @@
     margin-right:5px;
     margin-top:1px;
 }
+.dateWidth {
+width:140px !important;
+}
 .commonwidth{
     width:200px !important;
 }
@@ -14,19 +17,20 @@
     max-width:140px !important; margin-left:5px;}
 
 .pagination{margin:0px !important;}
-
+overflowMain {overflow:auto !important;}
 
 .content {
     float: left;
-    height: calc(100% + 120px);
-    margin-left: 49px;
+    height: 100%;
+    margin-left: 62px;
     width: 100%;
     width: calc(100% - 150px);
 word-wrap: break-word !important;
     padding-top: 4px;
     pointer-events: visible;
 
-     overflow: hidden;
+    overflow: visible !important;
+     margin-top: -11px;
 }
 .sectionStep{
       height: calc(100% + 120px);
@@ -37,3 +41,23 @@ word-wrap: break-word !important;
 }
 .textAreaBlock{border:0px none;}
 .ms-checkBox{ margin:10px 5px 0 0 !important}
+.headerClassAd{margin-top:-10px; margin-left:7px;}
+
+.errPopUpMsg{min-height: 62px; top: 11px; left: 24px;}
+.errTrinagleBorderCustDesc{left: 50px; top: 72px;}
+.errrTriangleCustDesc{left: 50px; top: 73px;}
+.errPopUpBlockDesc {left: 389px; top: 109px;}
+
+.errorBorder{
+        border: 2px solid red !important;
+}
+
+.errorPopUp .errText {color:red;left:40px;top:-40px;}
+.conflictradioCheck {margin-left:5px !important;}
+
+/*
+    cm.errorPopUpBlock
+    cm.errTrinagleBlock
+    cm.errTrinagleBroderBlock
+    cm.errorPopUpMsgBlock
+*/

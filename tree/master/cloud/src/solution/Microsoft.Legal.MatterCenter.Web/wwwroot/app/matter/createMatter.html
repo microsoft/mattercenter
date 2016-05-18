@@ -1,5 +1,5 @@
 ﻿<div id="MasterPageContainer" class="MasterPageContent">
-    
+
     <div class="AppHeader">
         <div class="AppSwitcherContainer" ng-click="cm.menuClick()">
             <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
@@ -13,8 +13,8 @@
                 <a class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
             </div>
         </div>
-        
-        <div id="HeaderPlaceHolder">
+
+        <div id="HeaderPlaceHolder" class="headerClassAd">
             <div class="menu">
                 <div class="menuTextGroup">
                     <div><span title="Step 1: Select a client and provide basic information for your new matter." ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText " data-section-num="1" data-section-name="snOpenMatter">1 Open Matter</span></div>
@@ -48,24 +48,32 @@
                     <img id="PersonaPicture" src="Images/MC_Profile_Switcher.png" alt="Profile Picture" title="Profile Picture" runat="server" />
                 </div>
                 <div class="PersonaPictureDetails">
-                    <div class="PersonaTitle" id="PersonaTitle" ></div>
-                    <div class="PersonaEmail" id="PersonaEmail" ></div>
+                    <div class="PersonaTitle" id="PersonaTitle"></div>
+                    <div class="PersonaEmail" id="PersonaEmail"></div>
                 </div>
             </div>
             <div class="SignOutLink">
                 <asp:LinkButton ID="SignOutLink" Text="Sign Out" OnClick="SignOutLink_Click" CssClass="" runat="server"></asp:LinkButton>
             </div>
         </div>
+
+        <div class="errorPopUp" ng-show="cm.errorPopUpBlock" >
+
+          
+            <!--<div class="errTriangle popUpFloatLeft" ng-class="cm.errTrinagleBlock"></div>
+            <div class="errTriangleBorder popUpFloatLeft" ng-class="cm.errTrinagleBroderBlock"></div>-->
+            <div class="errText popUpFloatRight" > {{cm.errTextMsg}}</div>
+        </div>
     </div>
     <input type="hidden" id="requestvalidator" name="requestvalidator" runat="server" />
-    
+
 </div>
 
 
-<div class="" style="margin:1%;">
-  
+<div class="" style="margin:0%;">
 
-    <div class="content">    
+
+    <div class="content" ng-click="cm.CheckPopUp()" >
 
 
         <!-- Open matter section -->
@@ -75,10 +83,10 @@
                 <div class="gutter"></div>
                 <label class="contentLabel small" id="clientId">Client ID</label>
 
-               
+
                 <div>
 
-                    <select class="medium clear" ng-model="cm.selectedClientName"  ng-change="cm.getSelectedClientValue(cm.selectedClientName)" ng-options="client.id as client.name for client in cm.clientNameList ">
+                    <select class="medium clear" ng-class="{'errorBorder' :  (cm.errorBorder == 'client')}" ng-model="cm.selectedClientName" ng-change="cm.getSelectedClientValue(cm.selectedClientName)" ng-options="client.id as client.name for client in cm.clientNameList ">
                         <option value="" label="- Select a client -"></option>
                     </select>
 
@@ -89,31 +97,32 @@
                 <label class="contentLabel medium clear" id="enterMatterName"><span class="mandatory">*&nbsp;</span>Matter Name</label>
                 <div class="gutter"></div>
                 <label class="contentLabel small" id="enterMatterId"><span class="mandatory">*&nbsp;</span>Matter ID</label>
-                <input title="Matter Name" class="medium clear"  id="txtMatterName" ng-blur='cm.checkValidMatterName()' ng-model="cm.matterName" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="Enter a name for this matter" value="">
+                <input title="Matter Name" class="medium clear" id="txtMatterName" ng-blur='cm.checkValidMatterName()' ng-class="{'errorBorder' :  (cm.errorBorder == 'mattername')}" ng-model="cm.matterName" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="Enter a name for this matter" value="">
                 <div class="gutter"></div>
-                <input title="Matter ID" class="small" id="txtMatterId" ng-model="cm.matterId" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="Enter a matter ID" value="">
+                <input title="Matter ID" class="small" id="txtMatterId" ng-model="cm.matterId" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterid')}" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="Enter a matter ID" value="">
                 <label class="contentLabel large clear"><span class="mandatory description">*&nbsp;</span>Matter Description</label>
-                <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" maxlength="255" placeholder="Enter a brief description of the matter" rows="2" cols="400"></textarea>
+                <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterdescription')}" spellcheck="true" maxlength="255" placeholder="Enter a brief description of the matter" rows="2" cols="400"></textarea>
                 <label class="contentLabel large clear"><span class="mandatory">*&nbsp;</span>Matter Type (click Select to define the practice group and area of law)</label>
                 <div class="large" id="documentTemplates">
-                    <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}'  ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style="cursor:default;" 
+                    <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}' ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style="cursor:default; font-weight:normal;"
                          data-value="{{$index}}"
-                          data-foldernamespg='{{selectedDocumentTypeLawTerm.foldernamespg}}'
-                          data-practicegroup-id='{{selectedDocumentTypeLawTerm.practicegroupId}}'
-                          data-foldernamesaol='{{selectedDocumentTypeLawTerm.foldernamesaol}}' 
-                         data-areaoflaw-id='{{selectedDocumentTypeLawTerm.areaoflawId}}' 
-                         data-subareaoflaw-id='{{selectedDocumentTypeLawTerm.id}}' 
+                         data-foldernamespg='{{selectedDocumentTypeLawTerm.foldernamespg}}'
+                         data-practicegroup-id='{{selectedDocumentTypeLawTerm.practicegroupId}}'
+                         data-foldernamesaol='{{selectedDocumentTypeLawTerm.foldernamesaol}}'
+                         data-areaoflaw-id='{{selectedDocumentTypeLawTerm.areaoflawId}}'
+                         data-subareaoflaw-id='{{selectedDocumentTypeLawTerm.id}}'
                          data-display-name='{{selectedDocumentTypeLawTerm.termName}}'
-                          data-isnofolderstructurepresent='{{selectedDocumentTypeLawTerm.isNoFolderStructurePresent}}'
-                          data-foldernamessal='{{selectedDocumentTypeLawTerm.folderNames}}' 
-                         data-associated-document-template='{{selectedDocumentTypeLawTerm.documentTemplateNames}}' 
+                         data-isnofolderstructurepresent='{{selectedDocumentTypeLawTerm.isNoFolderStructurePresent}}'
+                         data-foldernamessal='{{selectedDocumentTypeLawTerm.folderNames}}'
+                         data-associated-document-template='{{selectedDocumentTypeLawTerm.documentTemplateNames}}'
                          data-document-template='{{selectedDocumentTypeLawTerm.documentTemplates}}'
-                          data-areaoflaw='{{selectedDocumentTypeLawTerm.areaoflaw}}'
-                          data-practicegroup='{{selectedDocumentTypeLawTerm.practicegroup}}'>
-                    {{selectedDocumentTypeLawTerm.termName}} ({{selectedDocumentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
+                         data-areaoflaw='{{selectedDocumentTypeLawTerm.areaoflaw}}'
+                         data-practicegroup='{{selectedDocumentTypeLawTerm.practicegroup}}'>
+                        {{selectedDocumentTypeLawTerm.termName}} ({{selectedDocumentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})
+                    </div>
                 </div>
                 <div class="gutter"></div>
-                <button class="button" id="btnLookup" type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" ng-click="cm.selectMatterType()" value="Lookup">Select Type</button>
+                <button class="button" id="btnLookup" type="button" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" ng-click="cm.selectMatterType()" value="Lookup">Select Type</button>
                 <div class="loadingLookUp hide">
                     <img id="loadingLookupImage" alt="Loading..." src="../Images/WindowsLoadingFast.GIF">
                 </div>
@@ -121,126 +130,130 @@
         </section>
         <!-- Conflict check section -->
         <section class="sectionStep " id="snConflictCheck" ng-show='cm.sectionName=="snConflictCheck"' style="display: block;">
-           
 
 
 
 
-                  <div class="sectionContent">
-              <div id="conflictCheck">
-                  <label class="medium chkConflictCheckParent conflictCheckPosition" id="chkConflictCheckParent">
-                      <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">Conflict check conducted (must be complete prior to provisioning matter)
-                  </label>
-                  <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>Who conducted the conflict check?</label>
-                  <div class="gutter"></div>
-                  <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>Date Conducted</label>
-                  <div class="gutter"></div>
-                  <label class="contentLabel mediumSmall" id="conflictIdentified">Conflict Identified?</label>
-                  <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                  <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-model="cm.selectedConflictCheckUser"  spellcheck="true" type="text" uib-typeahead="users.name + ' ('+ users.email + ')' for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
-                  <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                  <div ng-show="noResults">
-                      <i class="glyphicon glyphicon-remove"></i> No Results Found
-                  </div>
-                  <div class="gutter"></div>
-                  <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
-                     <input type="text" class="form-control" datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />
-                  <!--<input type="text" class="calendar form-control"
-                         uib-datetimepopup="mm\dd\yyyyy" 
-                         ng-model="cm.conflictDate" 
-                         is-open="cm.opened" 
-                         datepicker-options="cm.dateOptions" 
-                         ng-required="true" close-text="Close" 
-                         alt-input-formats="altInputFormats" />
-                  <span class="input-group-btn">
-                      <button type="button" class="btn btn-default" ng-click="cm.open1()"><i class="glyphicon glyphicon-calendar"></i></button>
-                  </span>-->
 
-                  <!--<div class='input-group'>
-                      <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
-                             uib-datepicker-popup='MM/dd/yyyy'
-                             ng-model='cm.conflictDate'
-                             is-open='cm.opened'
-                             datepicker-options='dateOptions'
-                             ng-required='true' close-text='Close'
-                             alt-input-formats='altInputFormats' />
-                      <span class='input-group-btn'>
-                          <button type='button' class='btn btn-default' ng-click=' cm.open1()'><i class='glyphicon glyphicon-calendar'></i></button>
-                      </span>
-                  </div>-->
-                <div class="gutter"></div>
-                <div class="conflictRadioBtn">
-                    <label class="smaller">
-                        <input  type="radio"  ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)'  ng-value="true" ng-model="cm.conflictRadioCheck"  value=true>Yes
+            <div class="sectionContent">
+                <div id="conflictCheck">
+                    <label class="medium chkConflictCheckParent conflictCheckPosition" id="chkConflictCheckParent">
+                        <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">Conflict check conducted (must be complete prior to provisioning matter)
                     </label>
-                    <label class="smaller">
-                        <input  type="radio" ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-model="cm.conflictRadioCheck"  ng-value="false"  value=false>No
+                    <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>Who conducted the conflict check?</label>
+                    <div class="gutter"></div>
+                    <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>Date Conducted</label>
+                    <div class="gutter"></div>
+                    <label class="contentLabel mediumSmall" id="conflictIdentified">Conflict Identified?</label>
+                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name + ' ('+ users.email + ')' for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-no-results="conflictUserResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
+                   
+                    <div ng-show="conflictUserResults">
+                        <i class="glyphicon glyphicon-remove"></i> No Results Found
+                    </div>
+                    <i ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <div class="gutter"></div>
+                    <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
+                    <!--<input type="text" class="form-control" datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />-->
+
+
+                    <input type="text" class="calendar form-control dateWidth"
+                           uib-datepicker-popup='MM/dd/yyyy'
+                           ng-class="{'errorBorder' :  (cm.errorBorder == 'cdate')}"
+                          data-ng-model="cm.conflictDate"
+                           is-open="cm.opened" placeholder="mm/dd/yyyy"
+                           datepicker-options="cm.dateOptions"
+                           ng-required="true" close-text="Close" readonly
+                           ng-focus="cm.open1()" alt-input-formats="['M!/d!/yyyy']"  />
+
+                    <!--<span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="cm.open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>-->
+                    <!--<div class='input-group'>
+                        <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                               uib-datepicker-popup='MM/dd/yyyy'
+                               ng-model='cm.conflictDate'
+                               is-open='cm.opened'
+                               datepicker-options='dateOptions'
+                               ng-required='true' close-text='Close'
+                               alt-input-formats='altInputFormats' />
+                        <span class='input-group-btn'>
+                            <button type='button' class='btn btn-default' ng-click=' cm.open1()'><i class='glyphicon glyphicon-calendar'></i></button>
+                        </span>
+                    </div>-->
+                    <div class="gutter"></div>
+                    <div class="conflictRadioBtn">
+                        <label class="smaller">
+                            <input type="radio" class="conflictradioCheck " ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-value="true" ng-model="cm.conflictRadioCheck" value=true>Yes
+                        </label>
+                        <label class="smaller">
+                            <input type="radio" class="conflictradioCheck " ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-model="cm.conflictRadioCheck" ng-value="false" value=false>No
+                        </label>
+                    </div>
+                    <div class="clear"></div>
+                    <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
+                        <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
+                        <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.blockedUserName" uib-typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+
+                        <div ng-show="blockUserResults">
+                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                        </div><i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh"></i>
+                        <div class="gutter"></div>
+                        <div class="large clear" id="areaBlockUser"></div>
+                    </section>
+                </div>
+                <label class="secureMatterLabel assignTeamRadioPosition">Would you like this matter to be secured only to the assigned team?</label>
+                <div class="secureMatterRadioBtn assignTeamRadioPosition">
+                    <label class="rdbOptions">
+                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" class="matterCheckYes" type="radio" value="True">Yes
+                    </label>
+                    <label class="rdbOptions">
+                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" class="matterCheckNo" type="radio" value="False">No
                     </label>
                 </div>
-                <div class="clear"></div>
-                <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
-                    <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
-                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.blockedUserName"  uib-typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                <label class="contentLabel medium clear blue" id="assignTeam">Assign Team</label>
+                <label class="medium clear contentLabel" id="labelName"><span class="mandatory">*&nbsp;</span>Name</label>
+                <div class="gutter"></div>
+                 <label class="mediumSmallRole contentLabel"><span class="mandatory">*&nbsp;</span>Role</label>
+                <div class="gutter"></div>
+                 <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>Permission Level</label>
 
-                    <div ng-show="noResults">
-                        <i class="glyphicon glyphicon-remove"></i> No Results Found
-                    </div><i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                     <div class="gutter"></div>
-                    <div class="large clear" id="areaBlockUser"></div>
-                </section>
+                <div data-ng-repeat="assignTeam in cm.assignPermissionTeams">
+
+                    <div class="row{{$index}} assignNewPerm">
+                        <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                        <input class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                        <div ng-show='teamAssingnResults'>
+                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                        </div><i ng-show='loadingLocations' class="glyphicon glyphicon-refresh"></i>
+                        <div class="gutter"></div>
+                        <div class="addNewMember">
+                            <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth">
+                                <select class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
+                            </div>
+                        </div>
+                        <div class="gutter"></div>
+                        <div>
+                            <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
+                                <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
+                                    <select class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gutter"></div>
+                        <div class="close customClose">
+                            <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="Delete" alt="Delete" src="../Images/icon-delete.png">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="clear" id="addNewAssignPerm"></div>
+                <a id="addMoreLink" ng-click="cm.addNewAssignPermissions()">Add More Names</a>
+
+
             </div>
-            <label class="secureMatterLabel assignTeamRadioPosition">Would you like this matter to be secured only to the assigned team?</label>
-            <div class="secureMatterRadioBtn assignTeamRadioPosition">
-                <label class="rdbOptions">
-                    <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck"  class="matterCheckYes"  type="radio" value="True">Yes
-                </label>
-                <label class="rdbOptions">
-                    <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck"  class="matterCheckNo" type="radio" value="False">No
-                </label>
-            </div>        
-           
-                      <div class="gutter"></div>
-
-                      <div data-ng-repeat="assignTeam in cm.assignPermissionTeams">                      
-                        
-                          <div class="row{{$index}} assignNewPerm">
-                              <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                              <input class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control"  id="txtAssign1"  spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
-                              <div ng-show="noResults">
-                                  <i class="glyphicon glyphicon-remove"></i> No Results Found
-                              </div><i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                              <div class="gutter"></div>
-                              <div class="addNewMember">
-                                  <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth">
-                                      <select class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole"  ng-options='assignRole.name for assignRole in cm.assignRoles '>
-                                         
-                                      </select>
-                                  </div>
-                              </div>
-                              <div class="gutter"></div>
-                              <div>
-                                  <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
-                                      <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
-                                          <select class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '>
-                                            
-                                          </select>
-                                      </div>
-                                  </div>
-                                 </div>
-                              <div class="gutter"></div>
-                              <div class="close customClose" >
-                                  <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="Delete" alt="Delete" src="../Images/icon-delete.png">
-                              </div>
-                          </div>
-
-                      </div>
-            <div class="clear" id="addNewAssignPerm"></div>
-            <a id="addMoreLink" ng-click="cm.addNewAssignPermissions()">Add More Names</a>
-
-                      
-        </div>
-</section>
+        </section>
         <!-- Create and share matter section -->
         <section class="sectionStep " id="snCreateAndShare" ng-show='cm.sectionName=="snCreateAndShare"' style="display: block;">
             <div class="sectionContent">
@@ -255,14 +268,14 @@
                 </div>
 
                 <div class="gutter" style="clear:both;"></div>
-                <div >
-                    
-                        <input id="demo-checkbox-unselected0" ng-model="cm.includeCalendar" ng-init="cm.includeCalendar" class="ms-ChoiceField-input ms-checkBox" type="checkbox">
-                        <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox">Include calendar</span></label>
-                   
+                <div>
+
+                    <input id="demo-checkbox-unselected0" ng-model="cm.includeCalendar" ng-init="cm.includeCalendar" class="ms-ChoiceField-input ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox">Include calendar</span></label>
+
                 </div>
                 <div class="gutter" style="clear:both;"></div>
-                <div >
+                <div>
 
                     <input id="demo-checkbox-unselected1" ng-model="cm.includeRssFeeds" ng-init="cm.includeRssFeeds" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
                     <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox">Include RSS Feeds</span></label>
@@ -276,14 +289,14 @@
                     <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox">Include email notification</span></label>
                 </div>
                 <div class="gutter" style="clear:both;"></div>
-                <div >
+                <div>
 
                     <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
                     <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox">Include tasks</span></label>
                 </div>
                 <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton()' value="Create">{{cm.createButton}}</button>
-            
-                </div>
+
+            </div>
             <div class="loading hide">
                 <img id="loadingImage" src="../Images/WindowsLoadingFast.GIF" alt="Loading...">
             </div>
@@ -341,35 +354,35 @@
                         <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward" style="margin:0px;" alt="Left" src="../Images/forward_666.png">
                     </div>
                     <div class="popUpRightClick popUpPosAbs" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img  ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack" alt="Right" src="../Images/back-666.png">
+                        <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack" alt="Right" src="../Images/back-666.png">
                     </div>
-                   
+
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft" id="divDocTemplate">
                     <div class="errorPopUpArea  " ng-show='cm.errorPopUp'>
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
-                        <div class="errTextArea popUpFloatRight"  style="margin:12px 25px 0px 0px;"><span class="selectDefaultContentTypeMessage" style="visibility: visible;">Please select primary matter type</span></div>
+                        <div class="errTextArea popUpFloatRight" style="margin:12px 25px 0px 0px;"><span class="selectDefaultContentTypeMessage" style="visibility: visible;">Please select primary matter type</span></div>
                     </div>
 
                     <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft">Matter Type</label>
                     <div class="popUpFloatLeft popUpBorder" style="height:213px; width:200px;">
                         <div class="popUpCommonContent popDT">
-                            <div class="popUpDTContent" style="padding:1px !important;"   ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
-                                <div  ng-class='{popUpSelected : cm.activeDocumentTypeLawTerm === documentTypeLawTerm}' ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'  
-                                     data-value='{{$index}}' 
-                                     data-foldernamespg='{{cm.selectedPracticeGroup.folderNames}}' 
-                                     data-practicegroup-id='{{cm.selectedPracticeGroup.id}}' 
+                            <div class="popUpDTContent" style="padding:1px !important;" ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
+                                <div ng-class='{popUpSelected : cm.activeDocumentTypeLawTerm === documentTypeLawTerm}' ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
+                                     data-value='{{$index}}'
+                                     data-foldernamespg='{{cm.selectedPracticeGroup.folderNames}}'
+                                     data-practicegroup-id='{{cm.selectedPracticeGroup.id}}'
                                      data-foldernamesaol='{{cm.activeAOLTerm.folderNames}}'
-                                      data-areaoflaw-id='{{cm.activeAOLTerm.id}}'
-                                      data-subareaoflaw-id='{{cm.activeSubAOLTerm.id}}'
+                                     data-areaoflaw-id='{{cm.activeAOLTerm.id}}'
+                                     data-subareaoflaw-id='{{cm.activeSubAOLTerm.id}}'
                                      data-display-name='{{cm.activeSubAOLTerm.termName}}'
-                                      data-isnofolderstructurepresent='{{cm.activeSubAOLTerm.isNoFolderStructurePresent}}'
-                                      data-foldernamessal='{{cm.activeSubAOLTerm.folderNames}}'
-                                      data-associated-document-template='{{cm.activeSubAOLTerm.documentTemplateNames}}' 
-                                     data-document-template='{{cm.activeSubAOLTerm.documentTemplates}}' 
+                                     data-isnofolderstructurepresent='{{cm.activeSubAOLTerm.isNoFolderStructurePresent}}'
+                                     data-foldernamessal='{{cm.activeSubAOLTerm.folderNames}}'
+                                     data-associated-document-template='{{cm.activeSubAOLTerm.documentTemplateNames}}'
+                                     data-document-template='{{cm.activeSubAOLTerm.documentTemplates}}'
                                      data-areaoflaw='{{cm.activeAOLTerm.termName}}'
-                                     data-practicegroup='{{cm.selectedPracticeGroup.termName}}'>{{documentTypeLawTerm.termName}} ({{documentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
+                                     data-practicegroup='{{cm.selectedPracticeGroup.termName}}'>{{documentTypeLawTerm.termName}}({{documentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
                             </div>
                         </div>
                     </div>
@@ -384,7 +397,7 @@
     </div>
 
 
-    
+
 </div>
 
 
