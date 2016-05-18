@@ -6,7 +6,8 @@ angular.module('matterMain', [
   'AdalAngular',
   'ui.grid',
   'ui.grid.selection',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ui.grid.pagination'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {

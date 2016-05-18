@@ -276,6 +276,7 @@ textarea {
 }
 
 .ui-grid-viewport {
+     height:700px !important;
     overflow: hidden !important;
 }
 
@@ -294,7 +295,32 @@ textarea {
 .ui-grid-menu-button{
     top:25px;
 }
-/*.ui-grid-change-icon {
-    background: url(../images/Column_Picker_Expand.png) center no-repeat;
-  
-}*/
+
+.dropdown-menu .ms-ContextualMenu-item a:hover {
+    background-color: #cde6f7 !important;
+    color: #333 !important;
+    font-family: "Segoe UI Semibold","Segoe UI Web Semibold" !important;
+}
+
+.popover {
+    max-width: 400px;
+    max-height: 278px;
+    width: 350px;
+    border-radius: 2px;
+}
+
+.popover-title {
+    padding: 0;
+    margin: 0;
+    border-bottom:0;
+}
+
+.popover-content {
+    padding: 0;
+}
+
+.UiGrid-a .dropdown-menu{
+    margin:0;
+    padding:0;
+}
+
