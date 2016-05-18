@@ -12,6 +12,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         NonIdenticalContent=4,
         ContentCheckFailed=5,
         UploadFailure=6,
-        FileAlreadyExists=7
+        FileAlreadyExists=7,
+        UploadToFolder =8
     }
 }

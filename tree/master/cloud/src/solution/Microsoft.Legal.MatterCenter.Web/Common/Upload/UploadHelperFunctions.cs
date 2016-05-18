@@ -64,9 +64,10 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="message">Reference object for the message to be returned</param>
         /// <param name="originalFileName">Original file name of the attachment</param>
         /// <returns>It returns a string object, that contains the execution status of the function.</returns>
-        public bool Upload(Client client, ServiceRequest serviceRequest, string soapRequest, string attachmentOrMailID, 
+        public GenericResponseVM Upload(Client client, ServiceRequest serviceRequest, string soapRequest, string attachmentOrMailID, 
             bool isMailUpload, string fileName, string folderPath, bool isFirstCall, ref string message, string originalFileName)
         {
+            GenericResponseVM genericResponse = null;
             bool result = ServiceConstants.UPLOAD_FAILED;
             try
             {
@@ -105,12 +106,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     //// If the response is okay, create an XML document from the response and process the request.
                     if (webResponse.StatusCode == HttpStatusCode.OK)
                     {
-                        result = UploadFilesMail(serviceRequest.Overwrite, serviceRequest.PerformContentCheck, 
+                        genericResponse = UploadFilesMail(serviceRequest.Overwrite, serviceRequest.PerformContentCheck, 
                             serviceRequest.AllowContentCheck, documentLibraryName, webResponse, isMailUpload, client, fileName, folderPath, ref message);
                     }
-                    if (string.IsNullOrWhiteSpace(message) && result.Equals(ServiceConstants.UPLOAD_FAILED) && isFirstCall)
+                    if (genericResponse!=null && genericResponse.IsError == true && isFirstCall)
                     {
-                        result = Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, 
+                        genericResponse = Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, 
                             isMailUpload, fileName, folderPath, false, ref message, originalFileName);
                     }
                 }
@@ -122,9 +123,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             catch (Exception exception)
             {
                 //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
-                result = ServiceConstants.UPLOAD_FAILED;
+                throw;
             }
-            return result;
+            return genericResponse;
         }
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="folderPath">upload folder path</param>
         /// <param name="message">Reference object for the message to be returned</param>
         /// <returns>Returns whether File Uploaded successfully or failed</returns>
-        internal bool UploadFilesMail(bool isOverwrite, bool isContentCheckRequired, bool allowContentCheck, 
+        internal GenericResponseVM UploadFilesMail(bool isOverwrite, bool isContentCheckRequired, bool allowContentCheck, 
             string documentLibraryName, HttpWebResponse webResponse, bool isMailUpload, 
             Client client, string fileName, string folderPath, ref string message)
         {
@@ -151,7 +152,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             string mailMessage = string.Empty;
             string originalName = string.Empty;
             string xmlPath = string.Empty;
-            bool result = ServiceConstants.UPLOAD_SUCCEEDED;
+            GenericResponseVM genericResponse = null;
             ContentCheckDetails contentCheck = null;
             try
             {
@@ -187,14 +188,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                             contentCheck = new ContentCheckDetails(uploadFileName, mailMetaData.mailSubject, memoryStream.Length, mailMetaData.mailSender, mailMetaData.sentDate);
                         }
                     }
-                    if (!isOverwrite && !isContentCheckRequired && uploadHelperFunctionsUtility.CheckDuplicateDocument(clientContext, documentLibraryName, isMailUpload, folderPath, contentCheck, uploadFileName, allowContentCheck, ref message))
+
+                    genericResponse = uploadHelperFunctionsUtility.CheckDuplicateDocument(clientContext, documentLibraryName, isMailUpload, folderPath, contentCheck, uploadFileName, allowContentCheck, ref message);
+
+                    if (!isOverwrite && !isContentCheckRequired && genericResponse!=null)
                     {
-                        result = ServiceConstants.UPLOAD_FAILED;
+                        return genericResponse;
                     }
                     else if (isContentCheckRequired)
                     {
-                        message = uploadHelperFunctionsUtility.PerformContentCheckUtility(isMailUpload, folderPath, isMsg, xmlDocument, nsmgr, extension, uploadFileName, clientContext);
-                        result = ServiceConstants.UPLOAD_FAILED;
+                        genericResponse = uploadHelperFunctionsUtility.PerformContentCheckUtility(isMailUpload, folderPath, isMsg, xmlDocument, nsmgr, extension, uploadFileName, clientContext);
+                        if(genericResponse!=null)
+                        {
+                            return genericResponse;
+                        }
                     }
                     else
                     {
@@ -212,7 +219,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                             {
                                 if (string.Equals(extension, ServiceConstants.EMAIL_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase))
                                 {
-                                    UploadEMLFile(documentLibraryName, client, folderPath, fileName, ref message, xmlDocument, nsmgr, ref mailMetaData, ref bytes, extension);
+                                    UploadEMLFile(documentLibraryName, client, folderPath, fileName, ref message, xmlDocument, nsmgr, 
+                                        ref mailMetaData, ref bytes, extension);
                                 }
                                 else
                                 {
@@ -231,7 +239,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                         mailMetaData.originalName = originalName;
                                         if (!UploadToFolder(client, folderPath, fileName, string.Empty, memoryStream, documentLibraryName, mailMetaData, ref message))
                                         {
-                                            result = ServiceConstants.UPLOAD_FAILED;
+                                            //result = ServiceConstants.UPLOAD_FAILED;
+                                            genericResponse = new GenericResponseVM()
+                                            {
+                                                IsError = true,
+                                                Code = UploadEnums.UploadToFolder.ToString(),
+                                                Value = message
+                                            };
+                                            return genericResponse;
                                         }
                                     }
                                 }
@@ -239,7 +254,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         }
                         if (!string.IsNullOrEmpty(message))
                         {
-                            result = ServiceConstants.UPLOAD_FAILED;
+                            //result = ServiceConstants.UPLOAD_FAILED;
+                            genericResponse = new GenericResponseVM()
+                            {
+                                IsError = true,
+                                Code = UploadEnums.UploadFailure.ToString(),
+                                Value = message
+                            };
+                            return genericResponse;
                         }
                     }
                 }
@@ -247,9 +269,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             catch (Exception exception)
             {
                 //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
-                result = ServiceConstants.UPLOAD_FAILED;
+                throw;
             }
-            return result;
+            return genericResponse;
         }
 
         /// <summary>

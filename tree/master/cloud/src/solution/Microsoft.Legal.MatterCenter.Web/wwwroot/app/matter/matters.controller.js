@@ -244,7 +244,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     vm.docUpLoadSuccess = false;
     vm.mailUpLoadSuccess = false;
     vm.loadingAttachments = false;
-
+    vm.IsDupliacteDocument = false;
 
     //Callback function for folder hierarchy 
     function getFolderHierarchy(options, callback) {
@@ -272,7 +272,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         });
     }
 
-    //This method will handle the file upload scenario for both email and attachment
+    //#region This method will handle the file upload scenario for both email and attachment
     vm.handleDrop = function (targetDrop, sourceFile) {
         //Construct the JSON object that needs to be sent to the client
         var attachments = [];
@@ -337,9 +337,9 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             vm.uploadAttachment(attachmentRequestVM);
         }
     }
+    //#endregion
 
     //#region Call Back function when the email gets uploaded
-
     //This is the call back function when the email gets uploaded
     vm.uploadEmail = function (attachmentRequestVM) {
         uploadEmail(attachmentRequestVM, function (response) {
@@ -360,6 +360,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     }
     //#endregion
 
+    
+    
     function uploadEmail(attachmentRequestVM, callback) {
         api({
             resource: 'matterResource',
@@ -369,6 +371,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         });
     }
 
+
+    //#region Call back function when attachment gets uploaded
     vm.uploadAttachment = function (attachmentRequestVM) {
         uploadAttachment(attachmentRequestVM, function (response) {
             
@@ -390,13 +394,12 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 }                
             }
             //If the attachment upload is not success
-            else {
-                //If perform content check exception arises
-                //If the document already exists exception arises
-                //If overwrite is true exception arises
+            else if (response.code === "DuplicateDocument") {
+                vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
             }
         });
     }
+    //#endregion
 
     function uploadAttachment(attachmentRequestVM, callback) {
         api({
@@ -468,6 +471,34 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             //ToDo:showErrorNotification(thisAttachmentText, "Invalid character");
         }
     }
+
+    //#region  Method for overwrite or append or contentcheck document
+    vm.overWriteDocument = function (operation) {
+        if (operation === "overwrite") {
+            if (vm.sourceFile.isEmail && vm.sourceFile.isEmail === "true") {
+
+            }
+            else {
+
+            }
+        }
+        else if (operation === "contentCheck") {
+
+        }
+        else if (operation === "append") {
+
+        }
+    }
+    //#endregion
+
+    //#region Method for closing the notification dialog
+    vm.closeNotificationDialog = function () {
+        vm.IsDupliacteDocument = false;
+        jQuery('#overWriteNo').hide();
+    }
+    //#endregion
+
+    
 
     $scope.Openuploadmodal = function () {
         vm.getFolderHierarchy();
