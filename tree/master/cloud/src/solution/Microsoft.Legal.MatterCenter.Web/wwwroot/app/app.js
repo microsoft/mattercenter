@@ -81,5 +81,21 @@ angular.module('matterMain', [
          }, $httpProvider);
          
 
-    }]);
+    }]).directive('menuclose', function () {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                $(element).on('click', function (event) {
+                    if (event.target.className == "AppSwitcher OpenSwitcher" || event.target.className == "AppSwitcher OpenSwitcher hide") {
+
+                    } else {
+                        $(".AppMenuFlyout").slideUp();
+                        $(".CloseSwitcher").addClass("hide");
+                        $(".OpenSwitcher").removeClass("hide");
+                        $(".MenuCaption").removeClass("hideMenuCaption");
+                    }
+                });
+            }
+        }
+    });
 

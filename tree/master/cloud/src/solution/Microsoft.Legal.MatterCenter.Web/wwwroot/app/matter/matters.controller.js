@@ -105,11 +105,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
          <div class='input-group'>\
              <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'\
                     uib-datepicker-popup='MM/dd/yyyy'\
-                    data-ng-model='startDate'\
+                    ng-model='grid.appScope.$parent.startdate'\
                     is-open='grid.appScope.openedStartDate' \
-                    datepicker-options='dateOptions'\
+                    datepicker-options='grid.appScope.dateOptions'\
                     ng-required='true' close-text='Close'\
-                    alt-input-formats='altInputFormats' min-date='2016/06/01' max-date='2016/06/08'/>\
+                    alt-input-formats='altInputFormats'/>\
                 <span class='input-group-btn'>\
                     <button type='button' class='btn btn-default' ng-click='grid.appScope.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>\
                 </span>\
@@ -117,11 +117,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
           <div class='input-group' style='margin-top:5px'>\
              <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'\
                     uib-datepicker-popup='MM/dd/yyyy'\
-                    data-ng-model='endDate'\
+                    ng-model='grid.appScope.$parent.enddate'\
                     is-open='grid.appScope.openedEndDate' \
-                    datepicker-options='dateOptions'\
+                    datepicker-options='grid.appScope.enddateOptions'\
                     ng-required='true' close-text='Close'\
-                    alt-input-formats='altInputFormats'  date-disabled='grid.appScopedisabled(date, mode)'/>\
+                    alt-input-formats='altInputFormats' />\
                 <span class='input-group-btn'>\
                     <button type='button' class='btn btn-default' ng-click='grid.appScope.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>\
                 </span>\
@@ -174,7 +174,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //End
 
     $scope.initOfficeLibrary = function () {
-        
+
     };
 
     vm.gridOptions = {
@@ -186,8 +186,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         enableSelectAll: false,
         multiSelect: false,
         columnDefs: [
-            { field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: matterCellTemplate,headerCellTemplate: MatterHeaderTemplate},
-            { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },             
+            { field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: matterCellTemplate, headerCellTemplate: MatterHeaderTemplate },
+            { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },
             { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
             { field: 'matterModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: ModifiedDateheadertemplate },
             { field: 'matterResponsibleAttorney', displayName: 'Responsible attorney', visible: false },
@@ -291,14 +291,14 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         var attachments = [];
         var attachmentsArray = {};
         var mailId = '';
-        
+
         if (sourceFile.isEmail && sourceFile.isEmail === "true") {
             attachments = vm.allAttachmentDetails
             mailId = Office.context.mailbox.item.itemId;
             for (var iCounter = 0; iCounter < vm.allAttachmentDetails.length; iCounter++) {
                 attachments = [];
                 attachmentsArray.attachmentType = 0;
-                attachmentsArray.name = vm.allAttachmentDetails[iCounter].attachmentFileName;                
+                attachmentsArray.name = vm.allAttachmentDetails[iCounter].attachmentFileName;
                 attachmentsArray.isInline = false;
                 attachmentsArray.contentType = vm.allAttachmentDetails[iCounter].contentType;
                 attachmentsArray.id = vm.allAttachmentDetails[iCounter].attachmentId;
@@ -318,7 +318,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             attachments.push(attachmentsArray);
             mailId = Office.context.mailbox.item.itemId;
         }
-        
+
 
 
         vm.targetDrop = targetDrop;
@@ -357,24 +357,24 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     vm.uploadEmail = function (attachmentRequestVM) {
         uploadEmail(attachmentRequestVM, function (response) {
             //If the mail upload is success
-            if(response.code==="OK" && response.value==="Attachment upload success"){
+            if (response.code === "OK" && response.value === "Attachment upload success") {
                 vm.mailUpLoadSuccess = true;
                 var subject = Office.context.mailbox.item.subject;
                 subject = subject.substring(0, subject.lastIndexOf("."));
                 vm.mailUploadedFile = subject;
                 vm.mailUploadedFolder = vm.targetDrop.name;
             }
-            //If the mail upload is not success
+                //If the mail upload is not success
             else {
-                
+
             }
             console.log(response);
         });
     }
     //#endregion
 
-    
-    
+
+
     function uploadEmail(attachmentRequestVM, callback) {
         api({
             resource: 'matterResource',
@@ -388,7 +388,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //#region Call back function when attachment gets uploaded
     vm.uploadAttachment = function (attachmentRequestVM) {
         uploadAttachment(attachmentRequestVM, function (response) {
-            
+
             vm.oUploadGlobal.iActiveUploadRequest--;
             var target = vm.targetDrop;
             var source = vm.sourceFile;
@@ -397,16 +397,16 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 vm.docUpLoadSuccess = true;
                 if (vm.oUploadGlobal.iActiveUploadRequest === 0) {
                     //ToDo: Remove the animated image
-                }                
-                var extEmailOrMsg =''// vm.allAttachmentDetails[0].name.substr(vm.allAttachmentDetails[0].name.lastIndexOf(".") + 1);
+                }
+                var extEmailOrMsg = ''// vm.allAttachmentDetails[0].name.substr(vm.allAttachmentDetails[0].name.lastIndexOf(".") + 1);
                 if (extEmlOrMsg === "eml" || extEmlOrMsg === "msg") {
                     vm.docUploadedFolder = vm.allAttachmentDetails[0].name.substring(0, vm.allAttachmentDetails[0].name.lastIndexOf("."));
                 }
                 else {
                     vm.docUploadedFolder = vm.targetDrop.name;
-                }                
+                }
             }
-            //If the attachment upload is not success
+                //If the attachment upload is not success
             else if (response.code === "DuplicateDocument") {
                 vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
             }
@@ -511,7 +511,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     }
     //#endregion
 
-    
+
 
     $scope.Openuploadmodal = function () {
         vm.getFolderHierarchy();
@@ -598,7 +598,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         individualAttachment.attachmentId = Office.context.mailbox.item.itemId;
         individualAttachment.counter = nIDCounter;
         individualAttachment.attachmentFileName = Office.context.mailbox.item.subject;
-        individualAttachment.isEmail = true;     
+        individualAttachment.isEmail = true;
         vm.allAttachmentDetails.push(individualAttachment);
         //For all attachments in the current email
         for (var attachment in vm.attachments) {
@@ -840,7 +840,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                       OLList: "",
                       ClientName: "",
                       ClientsList: [],
-                      DateFilters: { CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: "05/02/2016", ModifiedToDate: "05/06/2016", OpenDateFrom: "", OpenDateTo: "" },
+                      DateFilters: { CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: $scope.startdate, ModifiedToDate: $scope.enddate, OpenDateFrom: "", OpenDateTo: "" },
                       DocumentAuthor: [],
                       DocumentCheckoutUsers: [],
                       FilterByMe: 1,
@@ -861,8 +861,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         get(searchRequest, function (response) {
             $scope.lazyloader = true;
             vm.gridOptions.data = response;
-            $scope.startDate = "";
-            $scope.endDate = "";
+            $scope.startdate = "";
+            $scope.enddate = "";
         });
 
     }
@@ -1169,8 +1169,20 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //Start
     $scope.dateOptions = {
 
-        formatYear: 'yy'
+        formatYear: 'yy',
+        maxDate: new Date()
     };
+
+
+    $scope.enddateOptions = {
+        formatYear: 'yy',
+        maxDate: new Date()
+    }
+
+    $scope.$watch('startdate', function (newval, oldval) {
+        $scope.enddateOptions.minDate = newval;
+    });
+
 
     $scope.openStartDate = function ($event) {
         if ($event) {
@@ -1191,8 +1203,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     $scope.openedEndDate = false;
 
     $scope.disabled = function (date, mode) {
-        return (mode === 'day' && (date.getDay() != 0 ));
+        return (mode === 'day' && (date.getDay() != 0));
     };
+
+
 
     //End
 
