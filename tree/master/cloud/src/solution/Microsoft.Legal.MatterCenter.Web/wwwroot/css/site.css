@@ -55,7 +55,7 @@ textarea {
 }
 
 .ng-scope {
-    overflow: visible;
+    overflow: hidden;
 }
 
 #attachmentHeader {
