@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location',
-function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location','$http',
+function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http) {
     var vm = this;
     vm.selected = undefined;
     // Onload show ui grid and hide error div
@@ -258,6 +258,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     vm.mailUpLoadSuccess = false;
     vm.loadingAttachments = false;
     vm.IsDupliacteDocument = false;
+    vm.IsNonIdenticalContent = false;
     vm.showLoading = false;
     //Callback function for folder hierarchy 
     function getFolderHierarchy(options, callback) {
@@ -288,9 +289,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //#region drop method will handle the file upload scenario for both email and attachment
 
     //Helper method which will handle mail or doc upload. This method will be called from inside vm.handleDrop
-    function mailOrDocUpload(targetDrop, sourceFile, isOverwrite)
-    {        
-        //Construct the JSON object that needs to be sent to the client
+    function mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck)
+    {   
         var attachments = [];
         var attachmentsArray = {};
         var mailId = '';
@@ -333,10 +333,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 EwsUrl: vm.ewsUrl,
                 DocumentLibraryName: vm.selectedRow.matterName,
                 MailId: mailId,
-                PerformContentCheck: false,
+                PerformContentCheck: performContentCheck,
                 Overwrite: isOverwrite,
                 Subject: vm.subject + ".eml",
-                AllowContentCheck: true,
+                AllowContentCheck: performContentCheck,
                 Attachments: attachments
             }
         }
@@ -348,14 +348,34 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             vm.uploadAttachment(attachmentRequestVM);
         }
     }
-
-    vm.handleDrop = function (targetDrop, sourceFile) {
+    
+    //This function will handle the files that has been dragged from the outlook
+    vm.handleOutlookDrop = function (targetDrop, sourceItem) {
         vm.targetDrop = targetDrop;
         vm.sourceFile = sourceFile;
-        var isOverwrite = false;//Todo: Need to get from the configuration file
+        var isOverwrite = false;//Todo: Need to get from the config.js
+        var performContentCheck = false;//Todo: Need to get from the config.js
         vm.showLoading = true;
-        mailOrDocUpload(targetDrop, sourceFile, isOverwrite);
+        mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck);
     }
+    
+    //This function will handle the files that has been dragged from the user desktop
+    vm.handleDesktopDrop = function(targetDrop, sourceFiles){
+        vm.files = sourceFiles.files;
+        var fd = new FormData();
+        angular.forEach(vm.files, function (file) {
+            fd.append('file', file);
+            fd.append('targetDropUrl', targetDrop.url)
+            fd.append('clientUrl', 'https://msmatter.sharepoint.com/sites/microsoft"')
+        })
+
+        $http.post("/api/v1/document/uploadfiles", fd, {
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        });
+    }
+
+
     //#endregion
 
     //#region Mail Upload Methods
@@ -371,11 +391,16 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 subject = subject.substring(0, subject.lastIndexOf("."));
                 vm.mailUploadedFile = subject;
                 vm.mailUploadedFolder = vm.targetDrop.name;
-                removeDraggableDirective();
+                //removeDraggableDirective();
             }
             //If the mail upload is not success
             else if (response.code === "DuplicateDocument") {
                 vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
+                vm.IsNonIdenticalContent = false; 
+            }
+            else if (response.code === "NonIdenticalContent") {
+                vm.IsNonIdenticalContent = true; //ToDo:Set it to false on mail upload dialog open
+                vm.IsDupliacteDocument = false;
             }
             console.log(response);
         });
@@ -389,7 +414,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             data: attachmentRequestVM,
             success: callback
         });
-    }
+    }   
+    
     //#endregion
 
     //#region Call back function when attachment gets uploaded
@@ -402,6 +428,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             //If the upload is success
             if (response.code === "OK" && response.value === "Attachment upload success") {
                 vm.IsDupliacteDocument = false;
+                vm.IsNonIdenticalContent = false;
                 vm.docUpLoadSuccess = true;
                 if (vm.oUploadGlobal.iActiveUploadRequest === 0) {
                     //ToDo: Remove the animated image
@@ -413,12 +440,18 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 else {
                     vm.docUploadedFolder = vm.targetDrop.name;
                 }
-                removeDraggableDirective();
+                //removeDraggableDirective();
 
             }
             //If the attachment upload is not success
             else if (response.code === "DuplicateDocument") {
                 vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
+                vm.IsNonIdenticalContent = false;
+            }
+            //NonIdenticalContent
+            else if (response.code === "NonIdenticalContent") {
+                vm.IsNonIdenticalContent = true; //ToDo:Set it to false on mail upload dialog open
+                vm.IsDupliacteDocument = false;
             }
         });
     }
@@ -436,7 +469,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //Remove the draggable directive after successful file upload
     function removeDraggableDirective() {
         var divElement = angular.element(jQuery("#" + vm.sourceFile.id));
-        divElement.removeAttr("draggable");
+        //divElement.removeAttr("draggable");
     }
 
     //Remove the draggable directive after successful file upload
@@ -517,19 +550,23 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         if (operation === "overwrite") {
             jQuery('#overWriteNo').hide();
             vm.showLoading = true;
-            mailOrDocUpload(vm.targetDrop, vm.sourceFile, true);            
+            vm.IsDupliacteDocument = false;
+            vm.IsNonIdenticalContent = false;
+            mailOrDocUpload(vm.targetDrop, vm.sourceFile, vm.IsDupliacteDocument, vm.IsNonIdenticalContent);
         }
         else if (operation === "contentCheck") {
-
+            vm.showLoading = true;
         }
         else if (operation === "append") {
-
+            vm.showLoading = true;
         }
     }
 
     //Method for closing the notification dialog
     vm.closeNotificationDialog = function () {
         vm.IsDupliacteDocument = false;
+        vm.IsNonIdenticalContent = false;
+        vm.showLoading = false;
         jQuery('#overWriteNo').hide();
     }
 
@@ -588,7 +625,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         return oFindMatterConstants.No_Subject_Mail;
     }
 
+    
+
     vm.initOutlook = function () {
+        vm.IsDupliacteDocument = false;
         if (Office.context && Office.context.mailbox) {
             vm.attachmentToken = '';
             vm.ewsUrl = Office.context.mailbox.ewsUrl;
