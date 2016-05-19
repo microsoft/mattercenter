@@ -308,12 +308,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 genericResponse = documentProvision.UploadAttachments(attachmentRequestVM);
                 if(genericResponse!=null && genericResponse.IsError==true)
                 {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponse.Value,
-                        ErrorCode = genericResponse.Code
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 genericResponse = new GenericResponseVM()
                 {
@@ -358,16 +353,9 @@ namespace Microsoft.Legal.MatterCenter.Web
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-                genericResponse = documentProvision.UploadAttachments(attachmentRequestVM);
+                genericResponse = documentProvision.UploadEmails(attachmentRequestVM);
                 if (genericResponse != null && genericResponse.IsError == true)
-                {
-                    //errorResponse = new ErrorResponse()
-                    //{
-                    //    Message = genericResponse.Value,
-                    //    ErrorCode = genericResponse.Code
-                    //};
-                    genericResponse.Code = HttpStatusCode.OK.ToString();
-                    genericResponse.Value = "Attachment upload failure";
+                {                                
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 genericResponse = new GenericResponseVM()

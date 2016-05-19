@@ -9,8 +9,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
     /// </summary>
     public interface IUploadHelperFunctions
     {
-                
-        bool Upload(Client client, ServiceRequest serviceRequest, string soapRequest, string attachmentOrMailID,
+
+        GenericResponseVM Upload(Client client, ServiceRequest serviceRequest, string soapRequest, string attachmentOrMailID,
             bool isMailUpload, string fileName, string folderPath, bool isFirstCall, ref string message, string originalFileName);
         
     }

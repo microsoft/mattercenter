@@ -57,17 +57,25 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="contentCheck">Content check object</param>
         /// <param name="uploadFileName">Name of the file.</param>
         /// <returns>message as per duplicate exists or not</returns>
-        public bool CheckDuplicateDocument(ClientContext clientContext, string documentLibraryName, bool isMailUpload, string folderPath, ContentCheckDetails contentCheck, string uploadFileName, bool allowContentCheck, ref string message)
+        public GenericResponseVM CheckDuplicateDocument(ClientContext clientContext, string documentLibraryName, bool isMailUpload, string folderPath, ContentCheckDetails contentCheck, string uploadFileName, bool allowContentCheck, ref string message)
         {
+            GenericResponseVM genericResponse = null;
             DuplicateDocument duplicateDocument = documentRepository.DocumentExists(clientContext, contentCheck, documentLibraryName, folderPath, isMailUpload);
             if (duplicateDocument.DocumentExists)
             {
                 string documentPath = string.Concat(generalSettings.SiteURL, folderPath, ServiceConstants.FORWARD_SLASH, uploadFileName);
                 string duplicateMessage = (allowContentCheck && duplicateDocument.HasPotentialDuplicate) ? errorSettings.FilePotentialDuplicateMessage : errorSettings.FileAlreadyExistMessage;
-                message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", string.Format(CultureInfo.InvariantCulture, duplicateMessage, uploadFileName, documentPath), 
-                    ServiceConstants.SYMBOL_AT, duplicateDocument.HasPotentialDuplicate.ToString());
+                //message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", string.Format(CultureInfo.InvariantCulture, duplicateMessage, uploadFileName, documentPath), 
+                //    ServiceConstants.SYMBOL_AT, duplicateDocument.HasPotentialDuplicate.ToString());
+                genericResponse = new GenericResponseVM()
+                {
+                    IsError = true,
+                    Code = UploadEnums.DuplicateDocument.ToString(),
+                    Value = string.Format(CultureInfo.InvariantCulture, duplicateMessage, uploadFileName, documentPath)
+                };
+                return genericResponse;
             }
-            return duplicateDocument.DocumentExists;
+            return genericResponse;
         }
 
         /// <summary>
@@ -82,10 +90,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="uploadFileName">Name of the file.</param>
         /// <param name="clientContext">SP client context</param>
         /// <returns>result message as per document matches or not</returns>
-        public string PerformContentCheckUtility(bool isMailUpload, string folderPath, bool isMsg, XmlDocument xmlDocument, XmlNamespaceManager nsmgr, string extension, string uploadFileName, ClientContext clientContext)
+        public GenericResponseVM PerformContentCheckUtility(bool isMailUpload, string folderPath, bool isMsg, XmlDocument xmlDocument, 
+            XmlNamespaceManager nsmgr, string extension, string uploadFileName, ClientContext clientContext)
         {
             dynamic bytes = GetStream(xmlDocument, nsmgr, isMailUpload, extension, isMsg);
             string message = string.Empty;
+            GenericResponseVM genericResponse = null;
             using (MemoryStream targetStream = new MemoryStream(bytes, 0, bytes.Length, false, true))
             {
                 try
@@ -93,20 +103,45 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     string serverFileUrl = folderPath + ServiceConstants.FORWARD_SLASH + uploadFileName;
                     if (documentRepository.PerformContentCheck(clientContext, targetStream, serverFileUrl))
                     {
-                        message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.FoundIdenticalContent, ServiceConstants.PIPE, ServiceConstants.TRUE);
+                        //message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.FoundIdenticalContent, 
+                        //    ServiceConstants.PIPE, ServiceConstants.TRUE);
+                        genericResponse = new GenericResponseVM()
+                        {
+                            IsError = true,
+                            Code = UploadEnums.IdenticalContent.ToString(),
+                            Value = errorSettings.FoundIdenticalContent
+                        };
+                        return genericResponse;
                     }
                     else
                     {
-                        message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.FoundNonIdenticalContent, ServiceConstants.PIPE, ServiceConstants.FALSE);
+                        //message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.FoundNonIdenticalContent, 
+                        //    ServiceConstants.PIPE, ServiceConstants.FALSE);
+
+                        genericResponse = new GenericResponseVM()
+                        {
+                            IsError = true,
+                            Code = UploadEnums.NonIdenticalContent.ToString(),
+                            Value = errorSettings.FoundNonIdenticalContent
+                        };
+                        return genericResponse;
                     }
                 }
                 catch (Exception exception)
                 {
                     //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
-                    message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.ContentCheckFailed, ServiceConstants.PIPE, ServiceConstants.TRUE);
+                    //message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", errorSettings.ContentCheckFailed, 
+                    //    ServiceConstants.PIPE, ServiceConstants.TRUE);
+                    genericResponse = new GenericResponseVM()
+                    {
+                        IsError = true,
+                        Code = UploadEnums.ContentCheckFailed.ToString(),
+                        Value = errorSettings.ContentCheckFailed
+                    };
+                    return genericResponse;
                 }
             }
-            return message;
+            return genericResponse;
         }
 
         /// <summary>
