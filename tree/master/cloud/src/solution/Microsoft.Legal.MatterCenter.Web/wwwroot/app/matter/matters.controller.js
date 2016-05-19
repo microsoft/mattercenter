@@ -350,7 +350,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     }
     
     //This function will handle the files that has been dragged from the outlook
-    vm.handleOutlookDrop = function (targetDrop, sourceItem) {
+    vm.handleOutlookDrop = function (targetDrop, sourceFile) {
         vm.targetDrop = targetDrop;
         vm.sourceFile = sourceFile;
         var isOverwrite = false;//Todo: Need to get from the config.js
@@ -365,8 +365,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         var fd = new FormData();
         angular.forEach(vm.files, function (file) {
             fd.append('file', file);
-            fd.append('targetDropUrl', targetDrop.url)
-            fd.append('clientUrl', 'https://msmatter.sharepoint.com/sites/microsoft"')
+            fd.append('targetDropUrl', targetDrop.url);
+            fd.append('folderUrl', targetDrop.url)
+            fd.append('documentLibraryName', targetDrop.name)
+            fd.append('clientUrl', 'https://msmatter.sharepoint.com/sites/microsoft"');
         })
 
         $http.post("/api/v1/document/uploadfiles", fd, {

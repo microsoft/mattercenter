@@ -49,7 +49,7 @@ matterMain.directive('droppable', function () {
                     var sourceItem = {
                         //Construct the JSON object for the dragged item                    
                         title: item.title,
-                        attachmentId:tem.dataset.attachmentid,
+                        attachmentId:item.dataset.attachmentid,
                         contentType:item.dataset.contenttype,
                         size:item.dataset.size,
                         isEmail: item.dataset.isemail,

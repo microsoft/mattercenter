@@ -24,6 +24,11 @@ using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Web.Common;
 using System.Reflection;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Http;
+using System.Text.RegularExpressions;
+using System.Globalization;
+using Microsoft.Net.Http.Headers;
+using System.Collections.Generic;
 #endregion
 
 
@@ -44,7 +49,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         private ICustomLogger customLogger;
         private LogTables logTables;
         private IDocumentProvision documentProvision;
-        
+        private GeneralSettings generalSettings;
         /// <summary>
         /// Constructor where all the required dependencies are injected
         /// </summary>
@@ -58,7 +63,9 @@ namespace Microsoft.Legal.MatterCenter.Web
             ISPOAuthorization spoAuthorization,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IDocumentRepository documentRepositoy,
-            ICustomLogger customLogger, IOptions<LogTables> logTables, IDocumentProvision documentProvision
+            ICustomLogger customLogger, IOptions<LogTables> logTables, IDocumentProvision documentProvision,
+            IOptions<GeneralSettings> generalSettings
+
             )
         {
             this.errorSettings = errorSettings.Value;
@@ -69,6 +76,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
             this.documentProvision = documentProvision;
+            this.generalSettings = generalSettings.Value;
         }
 
         /// <summary>
@@ -335,7 +343,81 @@ namespace Microsoft.Legal.MatterCenter.Web
         [SwaggerResponse(HttpStatusCode.OK)]
         public IActionResult UploadFiles()
         {
-            return null;
+            try
+            {
+                IFormFileCollection fileCollection = Request.Form.Files;
+                Regex regEx = new Regex("[*?|\\\t/:\"\"'<>#{}%~&]");
+                string clientUrl = Request.Form["clientUrl"];
+                string folderUrl = Request.Form["folderUrl"];
+                string documentLibraryName = Request.Form["documentLibraryName"];
+                bool isDeployedOnAzure = Convert.ToBoolean(generalSettings.IsTenantDeployment, CultureInfo.InvariantCulture);
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                string originalName = string.Empty;
+                bool allowContentCheck = Convert.ToBoolean(Request.Form["AllowContentCheck"], CultureInfo.InvariantCulture);
+                Int16 isOverwrite = 3;
+                bool continueUpload = true;
+                #region Error Checking                
+                GenericResponseVM genericResponse = null;
+                IList<GenericResponseVM> listResponse = new List<GenericResponseVM>();
+                if (isDeployedOnAzure == false && string.IsNullOrWhiteSpace(clientUrl) && string.IsNullOrWhiteSpace(folderUrl))
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                }
+
+                for (int fileCounter = 0; fileCounter < fileCollection.Count; fileCounter++)
+                {
+                    IFormFile uploadedFile = fileCollection[fileCounter];
+                    if (!Int16.TryParse(Request.Form["Overwrite" + fileCounter], out isOverwrite))
+                    {
+                        isOverwrite = 3;
+                    }
+                    continueUpload = true;
+                    ContentDispositionHeaderValue fileMetadata = ContentDispositionHeaderValue.Parse(uploadedFile.ContentDisposition);
+                    string fileName = originalName = fileMetadata.FileName.Trim('"');
+                    ContentCheckDetails contentCheckDetails = new ContentCheckDetails(fileMetadata.FileName, (long)fileMetadata.Size);
+                    string fileExtension = System.IO.Path.GetExtension(fileName).Trim();
+                    if (-1 < fileName.IndexOf('\\'))
+                    {
+                        fileName = fileName.Substring(fileName.LastIndexOf('\\') + 1);
+                    }
+                    else if (-1 < fileName.IndexOf('/'))
+                    {
+                        fileName = fileName.Substring(fileName.LastIndexOf('/') + 1);
+                    }
+                    if (null != uploadedFile.OpenReadStream() && 0 == uploadedFile.OpenReadStream().Length)
+                    {
+                        listResponse.Add(new GenericResponseVM() { Code = fileName, Value = errorSettings.ErrorEmptyFile });
+                    }
+                    else if (regEx.IsMatch(fileName))
+                    {
+                        listResponse.Add(new GenericResponseVM() { Code = fileName, Value = errorSettings.ErrorInvalidCharacter });
+                    }
+                    else
+                    {
+                        string folder = folderUrl.Substring(folderUrl.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
+                        //documentProvision.UploadFiles(uploadedFile, fileExtension, originalName, listResponse, fileName, clientUrl, folder, documentLibraryName);
+                    }
+                }
+                genericResponse = new GenericResponseVM()
+                {
+                    Value = "All files uploaded successfully",
+                    Code = HttpStatusCode.OK.ToString(),
+                    IsError = false
+                };
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
 
         /// <summary>

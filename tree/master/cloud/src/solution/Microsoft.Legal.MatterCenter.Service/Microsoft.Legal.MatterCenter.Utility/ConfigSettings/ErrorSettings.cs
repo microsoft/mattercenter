@@ -110,7 +110,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string ErrorMessageAddTaskList { get; set; }
 
         public string ErrorCodeMatterLandingPageExists { get; set; }
-        
+        public string ErrorInvalidCharacter { get; set; }
+
         #endregion
     }
 }

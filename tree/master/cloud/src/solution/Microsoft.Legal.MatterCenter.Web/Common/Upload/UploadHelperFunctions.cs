@@ -191,7 +191,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
                     
 
-                    if (!isOverwrite && !isContentCheckRequired && genericResponse!=null)
+                    if (!isOverwrite && !isContentCheckRequired)
                     {
                         genericResponse = uploadHelperFunctionsUtility.CheckDuplicateDocument(clientContext, documentLibraryName, isMailUpload, folderPath, contentCheck, uploadFileName, allowContentCheck, ref message);
                         if(genericResponse!=null)
