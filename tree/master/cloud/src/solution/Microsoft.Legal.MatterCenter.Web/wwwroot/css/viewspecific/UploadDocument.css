@@ -303,7 +303,8 @@
 }
 
 .attachmentListLoading {
-    margin-top: 2%;
+    margin-top: -2%;
+    margin-left: 300px;
 }
 
 #mailFooter {

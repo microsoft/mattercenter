@@ -13,7 +13,7 @@ angular.module('matterMain')
                   }),
 				  'getPinnedMatters': auth.attachCSRF({
                       method: 'POST',
-                      url: '/api/v1/matter/getpinned'
+                      url: '/api/v1/matter/getpinned'                      
 				  }),
 				  'UnpinMatters': auth.attachCSRF({
 				      method: 'POST',
@@ -92,6 +92,10 @@ angular.module('matterMain')
                       url: '/api/v1/document/UploadMail'
                   }),
                   'uploadAttachment': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/document/UploadAttachments'
+                  }),
+                  'uploadfiles': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/document/UploadAttachments'
                   })

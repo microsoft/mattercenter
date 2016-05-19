@@ -32,19 +32,35 @@ matterMain.directive('droppable', function () {
                 if(e.stopPropogation) e.stopPropogation();
                 this.classList.remove('over');
                 var folderId = this.id
-                //Get the current item that is getting dragged
-                var item = document.getElementById(e.dataTransfer.getData('Text'));
-                //Construct the JSON object for the dragged item
-                var sourceItem = {
-                    title: item.title,
-                    attachmentId: item.dataset.attachmentid,
-                    contentType: item.dataset.contenttype,
-                    size:item.dataset.size,
-                    isEmail: item.dataset.isemail
+                var sourceItems = [];
+                
+                //Check if the file has been dropped from the users desktop
+                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length != 0){
+                    //Need to handler files that has been dragged from the user desktop
+                    var sourceFiles = {
+                        files : e.dataTransfer.files,
+                        isOverwrite : false
+                    }                    
+                    scope.$parent.vm.handleDesktopDrop(scope.folder, sourceFiles)
                 }
-                //scope.folder contains the target folder information that the current item is getting dropped to
-                //call the parent method called handleDrop which will call the web api method to upload the attachment
-                scope.$parent.vm.handleDrop(scope.folder, sourceItem)
+                else {
+                    //Get the current item that is getting dragged
+                    var item = document.getElementById(e.dataTransfer.getData('Text'));
+                    var sourceItem = {
+                        //Construct the JSON object for the dragged item                    
+                        title: item.title,
+                        attachmentId:tem.dataset.attachmentid,
+                        contentType:item.dataset.contenttype,
+                        size:item.dataset.size,
+                        isEmail: item.dataset.isemail,
+                        i:item.id        
+                    }                    
+                    //scope.folder contains the target folder information that the current item is getting dropped to
+                    //call the parent method called handleDrop which will call the web api method to upload the attachment
+                    scope.$parent.vm.handleOutlookDrop(scope.folder, sourceItem)
+                }
+                
+                
                return false;
             }, false);
         }

@@ -324,6 +324,20 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
         }
 
+
+
+        /// <summary>
+        /// Uploads mail to SharePoint library.
+        /// </summary>
+        /// <param name="attachmentRequestVM"></param>
+        /// <returns></returns>
+        [HttpPost("uploadfiles")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public IActionResult UploadFiles()
+        {
+            return null;
+        }
+
         /// <summary>
         /// Uploads mail to SharePoint library.
         /// </summary>
