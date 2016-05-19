@@ -51,7 +51,7 @@
                     <div class="AppMenuFlyoutPriLinks">
                         <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="Home"><span class="AppFlyoutLinksText">Home</span></a>
                         <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="Search matters"><span class="AppFlyoutLinksText">Matters</span></a>
-                        <a class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
+                        <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
                     </div>
                 </div>
                 <div id="HeaderPlaceHolder">
@@ -67,7 +67,7 @@
                                 <select class="form-control" ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
                             </div>
                         </div>
-                        <div id="searchBarHolder" class="col-md-7 col-lg-7 visible-md visible-lg pad0">
+                        <div id="searchBarHolder" class="col-md-6 col-lg-6 visible-md visible-lg pad0">
                             <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
                             <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                             <div ng-show="noResults">
@@ -237,7 +237,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12" ng-if="divuigrid">
+    <div class="col-sm-12" ng-if="divuigrid" >
         <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection ui-grid-pagination class="grid"></div>
     </div>
     <div class="col-sm-12" ng-if="nodata">
