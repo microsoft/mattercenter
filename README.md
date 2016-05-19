@@ -75,7 +75,7 @@ We have already pushed these ideas to [UserVoice](http://mattercenter.uservoice.
 There are currently three (3) [committers](https://github.com/Microsoft/mattercenter/graphs/contributors):
  
 1. Amitabh Mukherjee, [Amitabh.Mukherjee@microsoft.com](mailto:amitabhm@microsoft.com)
-2. Leo Conniff, [v-leconn@microsoft.com](mailto:v-leconn@microsoft.com)
+2. Wilson Reddy Gajarla, [wilg@microsoft.com](mailto:wilg@microsoft.com)
 3. Sunnykumar Mistry, [v-sumist@microsoft.com] (mailto:v-sumist@microsoft.com) 
 
 Additional committers will be added later based on interest and deep technical involvement with the project.
