@@ -3,7 +3,7 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location','$http',
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http',
 function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http) {
     var vm = this;
     vm.selected = undefined;
@@ -44,7 +44,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         </div>\
     </div>\
     <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
-        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
+        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by matter name'>{{ col.colDef.displayName }}</span>\
         <span ui-grid-visible='col.sort.direction' aria-label='{{getSortDirectionAriaLabel()}}' class='ui-grid-invisible'><sub ui-grid-visible='isSortPriorityVisible()' class='ui-grid-sort-priority-number'>{{col.sort.priority + 1}}</sub></span>\
         <span class='sort pull-right' ng-show='grid.appScope.sortMCMatterName'>↑</span>\
         <span ng-show='grid.appScope.sortDownMCMatterName' class='sort pull-right'>↓</span>\
@@ -82,7 +82,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         </div>\
     </div>\
     <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
-        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
+        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by client name'>{{ col.colDef.displayName }}</span>\
         <span ui-grid-visible='col.sort.direction' aria-label='Sort None' class='ui-grid-invisible'></span>\
         <span class='sort pull-right' ng-show='grid.appScope.sortMCClient'>↑</span>\
         <span ng-show='grid.appScope.sortDownMCClient' class='sort pull-right'>↓</span>\
@@ -138,7 +138,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         </div>\
     </div>\
     <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
-        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
+        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort last modified date'>{{ col.colDef.displayName }}</span>\
         <span ui-grid-visible='col.sort.direction' aria-label='Sort None' class='ui-grid-invisible'></span>\
         <span class='sort pull-right' ng-show='grid.appScope.sortMCModifiedDate'>↑</span>\
         <span ng-show='grid.appScope.sortDownMCModifiedDate' class='sort pull-right'>↓</span>\
@@ -152,11 +152,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //Assigning html for celltemplate
     //Start
     var matterCellTemplate = "<div class='row'>\
-    <div class='col-xs-8 col-sm-10' id='matterPopup'>\
+    <div class='col-xs-7 col-sm-9 col-md-9 col-lg-10' id='matterPopup'>\
         <a popover type='button' class='btn btn-link col-xs-12 col-sm-12' style='text-align:left' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href='' > {{row.entity.matterName}} </a>\
         <div class='popover-content'></div>\
     </div>\
-    <div class='col-xs-4 col-sm-2 text-right'>\
+    <div class='col-xs-5 col-sm-3 col-md-3 col-lg-2 text-right'>\
         <div class='dropdown'>\
             <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a><ul style='margin:0;padding:0' class='dropdown-menu'>\
                 <li class='ms-ContextualMenu-item' ng-click='grid.appScope.Openuploadmodal()'><a class='ECBItem ms-ContextualMenu-link upload'>Upload to this Matter</a></li>\
@@ -178,7 +178,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     };
 
     vm.gridOptions = {
-        paginationPageSizes: [6, 18, 100],
+        paginationPageSizes: [6, 50, 100],
         paginationPageSize: 6,
         enableGridMenu: true,
         enableRowHeaderSelection: false,
@@ -188,11 +188,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         columnDefs: [
             { field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: matterCellTemplate, headerCellTemplate: MatterHeaderTemplate },
             { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },
-            { field: 'matterClientId', displayName: 'Client.MatterID', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+            { field: 'matterClientId', displayName: 'Client.MatterID', headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
             { field: 'matterModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: ModifiedDateheadertemplate },
-            { field: 'matterResponsibleAttorney', displayName: 'Responsible attorney', visible: false },
-            { field: 'matterSubAreaOfLaw', displayName: 'Sub area of law', visible: false },
-            { field: 'matterCreatedDate', displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+            { field: 'matterResponsibleAttorney', headerTooltip: 'Click to sort by attorney', displayName: 'Responsible attorney', visible: false },
+            { field: 'matterSubAreaOfLaw', headerTooltip: 'Click to sort by sub area of law', displayName: 'Sub area of law', visible: false },
+            { field: 'matterCreatedDate', headerTooltip: 'Click to sort by matter open date', displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
         ],
         enableColumnMenus: false,
         onRegisterApi: function (gridApi) {
@@ -280,17 +280,16 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             jQuery('#UploadMatterModal').modal("show");
             //Initialize Officejs library                     
             Office.initialize = function (reason) {
-                
+
             };
-            vm.initOutlook();  
+            vm.initOutlook();
         });
     }
 
     //#region drop method will handle the file upload scenario for both email and attachment
 
     //Helper method which will handle mail or doc upload. This method will be called from inside vm.handleDrop
-    function mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck)
-    {   
+    function mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck) {
         var attachments = [];
         var attachmentsArray = {};
         var mailId = '';
@@ -320,7 +319,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             attachmentsArray.size = sourceFile.size;
             attachments.push(attachmentsArray);
             mailId = Office.context.mailbox.item.itemId;
-        }     
+        }
         var folders = [];
         folders.push(targetDrop.url);
         var attachmentRequestVM = {
@@ -348,7 +347,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             vm.uploadAttachment(attachmentRequestVM);
         }
     }
-    
+
     //This function will handle the files that has been dragged from the outlook
     vm.handleOutlookDrop = function (targetDrop, sourceFile) {
         vm.targetDrop = targetDrop;
@@ -358,9 +357,9 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         vm.showLoading = true;
         mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck);
     }
-    
+
     //This function will handle the files that has been dragged from the user desktop
-    vm.handleDesktopDrop = function(targetDrop, sourceFiles){
+    vm.handleDesktopDrop = function (targetDrop, sourceFiles) {
         vm.files = sourceFiles.files;
         var fd = new FormData();
         angular.forEach(vm.files, function (file) {
@@ -381,13 +380,13 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     //#endregion
 
     //#region Mail Upload Methods
-    
+
     //Call back function when the mail gets uploaded
     vm.uploadEmail = function (attachmentRequestVM) {
         uploadEmail(attachmentRequestVM, function (response) {
             vm.showLoading = false
             //If the mail upload is success
-            if(response.code==="OK" && response.value==="Attachment upload success"){
+            if (response.code === "OK" && response.value === "Attachment upload success") {
                 vm.mailUpLoadSuccess = true;
                 var subject = Office.context.mailbox.item.subject;
                 subject = subject.substring(0, subject.lastIndexOf("."));
@@ -395,10 +394,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 vm.mailUploadedFolder = vm.targetDrop.name;
                 //removeDraggableDirective();
             }
-            //If the mail upload is not success
+                //If the mail upload is not success
             else if (response.code === "DuplicateDocument") {
                 vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
-                vm.IsNonIdenticalContent = false; 
+                vm.IsNonIdenticalContent = false;
             }
             else if (response.code === "NonIdenticalContent") {
                 vm.IsNonIdenticalContent = true; //ToDo:Set it to false on mail upload dialog open
@@ -416,8 +415,8 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             data: attachmentRequestVM,
             success: callback
         });
-    }   
-    
+    }
+
     //#endregion
 
     //#region Call back function when attachment gets uploaded
@@ -434,7 +433,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 vm.docUpLoadSuccess = true;
                 if (vm.oUploadGlobal.iActiveUploadRequest === 0) {
                     //ToDo: Remove the animated image
-                }                
+                }
                 var extEmailOrMsg = vm.sourceFile.title.substr(vm.sourceFile.title.lastIndexOf(".") + 1);
                 if (extEmailOrMsg === "eml" || extEmailOrMsg === "msg") {
                     vm.docUploadedFolder = vm.sourceFile.title.substring(0, vm.sourceFile.title.lastIndexOf("."));
@@ -445,12 +444,12 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
                 //removeDraggableDirective();
 
             }
-            //If the attachment upload is not success
+                //If the attachment upload is not success
             else if (response.code === "DuplicateDocument") {
                 vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
                 vm.IsNonIdenticalContent = false;
             }
-            //NonIdenticalContent
+                //NonIdenticalContent
             else if (response.code === "NonIdenticalContent") {
                 vm.IsNonIdenticalContent = true; //ToDo:Set it to false on mail upload dialog open
                 vm.IsDupliacteDocument = false;
@@ -481,11 +480,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     }
     //#endregion
 
-    
+
 
     vm.editAttachment = function (element, event) {
         //ToDo: Use Angular data binding functionality
-        var editIcon = $("#"+event.target.id);
+        var editIcon = $("#" + event.target.id);
         var rowIndex = event.target.id.charAt(0);
         var saveIcon = $("#" + rowIndex + "saveIcon");
         var attachIcon = $("#" + rowIndex + "attachIcon");
@@ -506,11 +505,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         }
     }
 
-    vm.saveAttachment = function(element, event){
+    vm.saveAttachment = function (element, event) {
         //ToDo: Use Angular data binding functionality
         var saveIcon = $("#" + event.target.id);
         var rowIndex = event.target.id.charAt(0);
-        var editIcon = $("#"+ rowIndex + "editIcon");
+        var editIcon = $("#" + rowIndex + "editIcon");
         var thisAttachment = $("#" + rowIndex + "attachment");
         var thisAttachmentText = $("#" + rowIndex + "attachmentText");
         var attachIcon = $("#" + rowIndex + "attachIcon");
@@ -546,7 +545,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     }
 
     //#region  Methods for Error Notifications Dialogs
-    
+
     //Methods for over writing the document
     vm.overWriteDocument = function (operation) {
         if (operation === "overwrite") {
@@ -577,9 +576,9 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
 
     $scope.Openuploadmodal = function () {
         vm.getFolderHierarchy();
-    }    
+    }
 
-    
+
     vm.oUploadGlobal = {
         regularInvalidCharacter: new RegExp("[\*\?\|\\\t/:\"\"'<>#{}%~&]", "g"),
         regularStartEnd: new RegExp("^[\. ]|[\. ]$", "g"),
@@ -627,7 +626,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         return oFindMatterConstants.No_Subject_Mail;
     }
 
-    
+
 
     vm.initOutlook = function () {
         vm.IsDupliacteDocument = false;
@@ -664,7 +663,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
         individualAttachment.attachmentId = Office.context.mailbox.item.itemId;
         individualAttachment.counter = nIDCounter;
         individualAttachment.attachmentFileName = Office.context.mailbox.item.subject;
-        individualAttachment.isEmail = true;     
+        individualAttachment.isEmail = true;
         vm.allAttachmentDetails.push(individualAttachment);
         //For all attachments in the current email
         for (var attachment in vm.attachments) {
@@ -1478,6 +1477,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     }
     //#endregion
 
+    $scope.$watch('grid.options.totalItems', function (newval, oldval) {
+        console.log(newval);
+    });
+
 }]);
 
     app.directive('popover', function () {
@@ -1569,6 +1572,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
             }
         }
     });
+
 
 })();
 
