@@ -54,7 +54,9 @@ word-wrap: break-word !important;
 
 .errorPopUp .errText {color:red;left:40px;top:-40px;}
 .conflictradioCheck {margin-left:5px !important;}
-
+.createLable{position:absolute;font-size:14px;}
+.customDivCreate {white-space:normal; font-size:.875em;
+}
 /*
     cm.errorPopUpBlock
     cm.errTrinagleBlock
