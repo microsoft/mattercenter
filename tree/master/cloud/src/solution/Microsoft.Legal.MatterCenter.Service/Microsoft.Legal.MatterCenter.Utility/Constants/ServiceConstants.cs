@@ -56,7 +56,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// </summary>
         public const string INVALID_FILENAME_REGEX = "_fajlovi|.files|-Dateien|_fichiers|_bestanden|_file|_archivos|-filer|_tiedostot|_pliki|_soubory|_elemei|_ficheiros|_arquivos|_dosyalar|_datoteke|_fitxers|_failid|_fails|_bylos|_fajlovi|_fitxategiak$";
 
-
+        
 
         #region Azure Cache keys
         /// <summary>

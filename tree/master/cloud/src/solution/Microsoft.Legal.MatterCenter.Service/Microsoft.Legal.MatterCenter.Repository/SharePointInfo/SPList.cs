@@ -48,6 +48,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private LogTables logTables;
         private MailSettings mailSettings;
         private IHostingEnvironment hostingEnvironment;
+        private ErrorSettings errorSettings;
         #endregion
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="spoAuthorization"></param>
         /// <param name="generalSettings"></param>
         public SPList(ISPOAuthorization spoAuthorization,
-            IOptions<CamlQueries> camlQueries,
+            IOptions<CamlQueries> camlQueries, IOptions<ErrorSettings> errorSettings,
             IOptions<SearchSettings> searchSettings,
             IOptions<ContentTypesConfig> contentTypesConfig,
             ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<MailSettings> mailSettings, IHostingEnvironment hostingEnvironment)
@@ -68,6 +69,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.logTables = logTables.Value;
             this.mailSettings = mailSettings.Value;
             this.hostingEnvironment = hostingEnvironment;
+            this.errorSettings = errorSettings.Value;
         }
 
         public bool CreateList(ClientContext clientContext, ListInformation listInfo)
@@ -125,6 +127,81 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
             }
             return result;
+        }
+
+        public GenericResponseVM UploadDocument(string folderPath, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folderName, string documentLibraryName)
+        {
+            IList<string> listResponse = new List<string>();
+            GenericResponseVM genericResponse = null;
+            bool isUploadSuccessful = false;
+            try
+            {
+                ClientContext clientContext = spoAuthorization.GetClientContext(clientUrl);
+                Web web = clientContext.Web;
+                var uploadFile = new FileCreationInformation();
+                using (var stream = uploadedFile.OpenReadStream())
+                {
+                    stream.Seek(0, SeekOrigin.Begin);
+                    uploadFile.ContentStream = stream;
+                    uploadFile.Url = fileName;
+                    uploadFile.Overwrite = true;
+                    using (clientContext)
+                    {
+                        genericResponse = DocumentUpload(folderPath, listResponse, clientContext, documentLibraryName, web, folderName, uploadFile);
+                    }
+                }
+                if (genericResponse==null)
+                {
+                    SetUploadItemProperties(clientContext, documentLibraryName, fileName, folderPath, mailProperties);
+                }
+                
+            }
+            catch (Exception exception)
+            {
+                //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, UIConstantStrings.LogTableName);
+                throw;
+            }
+            return genericResponse;
+        }
+
+        /// <summary>
+        /// Upload helper function for uploading documents to SharePoint library.
+        /// </summary>
+        /// <param name="folderPath">Folder path of Document Library</param>
+        /// <param name="listResponse">SharePoint list response</param>
+        /// <param name="clientContext">Client context object for connection between SP & client</param>
+        /// <param name="documentLibraryName">Name of document library in which upload is to be done</param>
+        /// <param name="web">Object of site</param>
+        /// <param name="folderName">Target folder name where file needs to be uploaded.</param>
+        /// <param name="uploadFile">Object having file creation information</param>
+        /// <returns>It returns true if upload is successful else false</returns>
+        private GenericResponseVM DocumentUpload(string folderPath, IList<string> listResponse, ClientContext clientContext, string documentLibraryName, Web web, string folderName, FileCreationInformation uploadFile)
+        {            
+            GenericResponseVM genericResponse = null;
+            using (clientContext)
+            {
+                if (FolderExists(folderPath, clientContext, documentLibraryName))
+                {
+                    Folder destionationFolder = clientContext.Web.GetFolderByServerRelativeUrl(folderPath);
+                    clientContext.Load(destionationFolder);
+                    clientContext.ExecuteQuery();
+                    Microsoft.SharePoint.Client.File fileToUpload = destionationFolder.Files.Add(uploadFile);
+                    destionationFolder.Update();
+                    web.Update();
+                    clientContext.Load(fileToUpload);
+                    clientContext.ExecuteQuery();                    
+                }
+                else
+                {                   
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Code = errorSettings.FolderStructureModified,
+                        Value = folderName,
+                        IsError = true
+                    };
+                }
+            }
+            return genericResponse;
         }
 
         /// <summary>

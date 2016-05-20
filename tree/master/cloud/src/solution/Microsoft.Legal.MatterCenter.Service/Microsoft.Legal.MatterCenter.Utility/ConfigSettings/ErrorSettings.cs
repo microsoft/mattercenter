@@ -111,7 +111,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
 
         public string ErrorCodeMatterLandingPageExists { get; set; }
         public string ErrorInvalidCharacter { get; set; }
-
+        public string FolderStructureModified { get; set; }
         #endregion
     }
 }

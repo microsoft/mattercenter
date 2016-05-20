@@ -35,7 +35,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="clientContext"></param>
         /// <returns></returns>
         public Users GetLoggedInUserDetails(ClientContext clientContext)=> userDetails.GetLoggedInUserDetails(clientContext);
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clientContext"></param>
+        /// <returns></returns>
+        public Users GetLoggedInUserDetails(Client client) => userDetails.GetLoggedInUserDetails(client);
+
         /// <summary>
         /// 
         /// </summary>

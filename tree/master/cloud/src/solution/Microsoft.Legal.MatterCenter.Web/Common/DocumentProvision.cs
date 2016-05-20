@@ -7,6 +7,8 @@ using Microsoft.Legal.MatterCenter.Utility;
 using System.Net;
 using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.AspNet.Http;
+using System.IO;
+using Microsoft.Extensions.OptionsModel;
 
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
@@ -14,10 +16,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
     {
         private IDocumentRepository docRepository;
         private IUploadHelperFunctions uploadHelperFunctions;
-        public DocumentProvision(IDocumentRepository docRepository, IUploadHelperFunctions uploadHelperFunctions)
+        private IUserRepository userRepository;
+        private GeneralSettings generalSettings;
+        public DocumentProvision(IDocumentRepository docRepository, IUserRepository userRepository, IUploadHelperFunctions uploadHelperFunctions, IOptions<GeneralSettings> generalSettings)
         {
             this.docRepository = docRepository;
             this.uploadHelperFunctions = uploadHelperFunctions;
+            this.userRepository = userRepository;
+            this.generalSettings = generalSettings.Value;
         }
 
 
@@ -167,14 +173,69 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return searchResultsVM;
         }
 
-        public void UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, IList<GenericResponseVM> listResponse, string fileName, string clientUrl, string folder, string documentLibraryName)
+        public GenericResponseVM UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, 
+            string folderName, string fileName, string clientUrl, string folder, string documentLibraryName)
         {
-            //Dictionary<string, string> mailProperties = ContinueUpload(uploadedFile, fileExtension);
-            ////setting original name property for attachment
-            //if (string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MailOriginalName]))
-            //{
-            //    mailProperties[ConstantStrings.MailOriginalName] = originalName;
-            //}
+            GenericResponseVM genericResponse = null;
+            try
+            {                
+                Dictionary<string, string> mailProperties = ContinueUpload(uploadedFile, fileExtension);
+                //setting original name property for attachment
+                if (string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MailOriginalName]))
+                {
+                    mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME] = originalName;
+                }
+
+                genericResponse = docRepository.UploadDocument(folderName, uploadedFile, fileName, mailProperties, clientUrl, folder, documentLibraryName);
+            }
+            catch(Exception ex)
+            {
+                genericResponse = new GenericResponseVM()
+                {
+                    Code = UploadEnums.UploadFailure.ToString(),
+                    Value = folderName,
+                    IsError = true
+                };
+            }
+            return genericResponse;
+
+        }
+
+        private Dictionary<string, string> ContinueUpload(IFormFile uploadedFile, string fileExtension)
+        {
+            Dictionary<string, string> mailProperties = new Dictionary<string, string>
+                            {
+                                { ServiceConstants.MAIL_SENDER_KEY, string.Empty },
+                                { ServiceConstants.MAIL_RECEIVER_KEY, string.Empty },
+                                { ServiceConstants.MAIL_RECEIVED_DATEKEY, string.Empty },
+                                { ServiceConstants.MAIL_CC_ADDRESS_KEY, string.Empty },
+                                { ServiceConstants.MAIL_ATTACHMENT_KEY, string.Empty },
+                                { ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT, string.Empty },
+                                { ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY, string.Empty },
+                                { ServiceConstants.MAIL_FILE_EXTENSION_KEY, fileExtension },
+                                { ServiceConstants.MAIL_IMPORTANCE_KEY, string.Empty},
+                                { ServiceConstants.MAIL_CONVERSATIONID_KEY, string.Empty},
+                                { ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY, string.Empty},
+                                { ServiceConstants.MAIL_SENT_DATE_KEY, string.Empty},
+                                { ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY, string.Empty},
+                                { ServiceConstants.MAIL_SENSITIVITY_KEY, string.Empty },
+                                { ServiceConstants.MAIL_CATEGORIES_KEY, string.Empty },
+                                { ServiceConstants.MailOriginalName, string.Empty}
+                            };
+            if (string.Equals(fileExtension, ServiceConstants.EMAIL_FILE_EXTENSION, StringComparison.OrdinalIgnoreCase))
+            {
+                var client = new Client()
+                {
+                    Url = generalSettings.CentralRepositoryUrl
+                };
+                
+                Users currentUserDetail = userRepository.GetLoggedInUserDetails(client);
+                mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY] = currentUserDetail.Name;
+                Stream fileStream = uploadedFile.OpenReadStream();
+                mailProperties = MailMessageParser.GetMailFileProperties(fileStream, mailProperties);       // Reading properties only for .eml file 
+               
+            }
+            return mailProperties;
         }
     }
 }

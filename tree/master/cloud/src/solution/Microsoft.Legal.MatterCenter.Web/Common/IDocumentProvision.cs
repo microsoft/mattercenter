@@ -12,6 +12,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         GenericResponseVM UploadAttachments(AttachmentRequestVM attachmentRequestVM);
         GenericResponseVM UploadEmails(AttachmentRequestVM attachmentRequest);
         Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM);
-        void UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, IList<GenericResponseVM> listResponse, string fileName, string clientUrl, string folder, string documentLibraryName);
+        GenericResponseVM UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, string folderName, string fileName, string clientUrl, string folder, string documentLibraryName);
     }
 }

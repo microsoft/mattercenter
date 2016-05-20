@@ -10,6 +10,7 @@
 // This class deals with all the document related functions such as finding document, pin, unpin
 // ***********************************************************************
 
+using Microsoft.AspNet.Http;
 using Microsoft.Extensions.OptionsModel;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
@@ -69,6 +70,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             return await Task.FromResult(search.GetPinnedData(client, listNames.UserPinnedDocumentListName,
                 searchSettings.PinnedListColumnDocumentDetails, true));
+        }
+
+        public GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, 
+            Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName)
+        {
+            return spList.UploadDocument(folderName, uploadedFile, fileName, mailProperties, clientUrl, folder, documentLibraryName);
         }
 
         /// <summary>
@@ -131,6 +138,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             spList.CreateFileInsideFolder(clientContext, folderPath, newFile);
         }
+
+       
 
         public bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName)
         {

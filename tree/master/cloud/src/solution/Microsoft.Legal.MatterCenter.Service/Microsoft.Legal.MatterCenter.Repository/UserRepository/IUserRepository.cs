@@ -13,6 +13,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
     public interface IUserRepository
     {
         Users GetLoggedInUserDetails(ClientContext clientContext);
+        Users GetLoggedInUserDetails(Client client);
         Task<IList<Users>> GetUsersAsync(SearchRequestVM searchRequestVM);
         Task<IList<Role>> GetRolesAsync(Client client);
         Task<IList<Role>> GetPermissionLevelsAsync(Client client);

@@ -380,7 +380,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     continueUpload = true;
                     ContentDispositionHeaderValue fileMetadata = ContentDispositionHeaderValue.Parse(uploadedFile.ContentDisposition);
                     string fileName = originalName = fileMetadata.FileName.Trim('"');
-                    ContentCheckDetails contentCheckDetails = new ContentCheckDetails(fileMetadata.FileName, (long)fileMetadata.Size);
+                    ContentCheckDetails contentCheckDetails = new ContentCheckDetails(fileMetadata.FileName, uploadedFile.Length);
                     string fileExtension = System.IO.Path.GetExtension(fileName).Trim();
                     if (-1 < fileName.IndexOf('\\'))
                     {
@@ -392,21 +392,26 @@ namespace Microsoft.Legal.MatterCenter.Web
                     }
                     if (null != uploadedFile.OpenReadStream() && 0 == uploadedFile.OpenReadStream().Length)
                     {
-                        listResponse.Add(new GenericResponseVM() { Code = fileName, Value = errorSettings.ErrorEmptyFile });
+                        listResponse.Add(new GenericResponseVM() { Code = fileName, Value = errorSettings.ErrorEmptyFile, IsError = true });
                     }
                     else if (regEx.IsMatch(fileName))
                     {
-                        listResponse.Add(new GenericResponseVM() { Code = fileName, Value = errorSettings.ErrorInvalidCharacter });
+                        listResponse.Add(new GenericResponseVM() { Code = fileName, Value = errorSettings.ErrorInvalidCharacter, IsError = true });
                     }
                     else
                     {
                         string folder = folderUrl.Substring(folderUrl.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
-                        //documentProvision.UploadFiles(uploadedFile, fileExtension, originalName, listResponse, fileName, clientUrl, folder, documentLibraryName);
+                        genericResponse = documentProvision.UploadFiles(uploadedFile, fileExtension, originalName, folderUrl, fileName, 
+                            clientUrl, folder, documentLibraryName);
+                        if(genericResponse!=null && genericResponse.IsError==true)
+                        {
+                            listResponse.Add(genericResponse);
+                        }
                     }
                 }
                 genericResponse = new GenericResponseVM()
                 {
-                    Value = "All files uploaded successfully",
+                    Value = UploadEnums.UploadSuccess.ToString(),
                     Code = HttpStatusCode.OK.ToString(),
                     IsError = false
                 };

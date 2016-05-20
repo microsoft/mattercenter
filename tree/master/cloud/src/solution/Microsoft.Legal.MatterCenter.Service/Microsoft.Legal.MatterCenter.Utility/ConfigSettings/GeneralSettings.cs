@@ -26,5 +26,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public bool IsTenantDeployment { get; set; }
         public string IsReadOnlyUser { get; set; }
         public string SiteURL { get; set; }
+        public string CentralRepositoryUrl { get; set; }
     }
 }
