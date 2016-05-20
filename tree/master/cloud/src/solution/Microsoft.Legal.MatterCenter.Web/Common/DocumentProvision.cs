@@ -56,10 +56,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             var serviceRequest = attachmentRequestVM.ServiceRequest;
             bool result = true;
             GenericResponseVM genericResponse = null;
-            genericResponse = uploadHelperFunctions.Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, true,
+            if (uploadHelperFunctions.Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, true,
                         serviceRequest.Subject, serviceRequest.FolderPath[0], true, ref message,
-                        string.Empty);
-            if (genericResponse != null && genericResponse.IsError == true)
+                        string.Empty).Equals(ServiceConstants.UPLOAD_FAILED))
             {
                 result = false;
             }
