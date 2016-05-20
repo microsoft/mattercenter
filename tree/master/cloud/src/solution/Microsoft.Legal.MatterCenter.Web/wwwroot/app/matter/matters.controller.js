@@ -18,159 +18,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     $scope.lazyloader = true;
     //end
 
-    //Assigning html for Matterheadertemplate
+    //Assigning scopes for Dropdowns in headers
     //Start
     $scope.matterDropDowm = false;
-    var MatterHeaderTemplate = "<div ng-mouseenter='grid.appScope.matterDropDowm = true' ng-mouseleave='grid.appScope.matterDropDowm = false'>\
-    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.matterDropDowm'>\
-        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
-            <img src='../images/icon-combobox.png'/>\
-        </a>\
-        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
-         <div class='input-group'>\
-           <input class='form-control' ng-model='grid.appScope.vm.searchTerm' placeholder='Search'/> \
-                <div class='input-group-btn'>\
-                 <button type='button' ng-click='grid.appScope.vm.searchMatterGrid()' class='btn btn-default' ><img src='../images/search-15x15-666.png' /></button>\
-                 </div>\
-         </div>\
-         <hr/> \
-            <div class='clearFilterText' data-clearfiltertype='text'>\
-            <div class='clearFiltersIcon'>\
-                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>\
-            </div>\
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Matter'><span>Clear filters from </span><span class='clearFilterTitle'>Matter</span></div>\
-             <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='matter in grid.appScope.matters' ng-click='grid.appScope.filterMatterName(matter.matterName)'>{{matter.matterName}}</div> </div>\
-        </div>\
-        </div>\
-    </div>\
-    <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
-        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by matter name'>{{ col.colDef.displayName }}</span>\
-        <span ui-grid-visible='col.sort.direction' aria-label='{{getSortDirectionAriaLabel()}}' class='ui-grid-invisible'><sub ui-grid-visible='isSortPriorityVisible()' class='ui-grid-sort-priority-number'>{{col.sort.priority + 1}}</sub></span>\
-        <span class='sort pull-right' ng-show='grid.appScope.sortMCMatterName'>↑</span>\
-        <span ng-show='grid.appScope.sortDownMCMatterName' class='sort pull-right'>↓</span>\
-    </div>\
-    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
-        <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
-    </div>\
-</div>"
-    //End
-
-
-    //Assigning html for Clientheadertemplate
-    //Start
     $scope.clientDropDowm = false;
-    var ClientHeaderTemplate = "<div ng-mouseenter='grid.appScope.clientDropDowm = true' ng-mouseleave='grid.appScope.clientDropDowm = false'>\
-    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.clientDropDowm'>\
-        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
-            <img src='../images/icon-combobox.png'/>\
-        </a>\
-        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
-         <div class='input-group'>\
-           <input class='form-control' ng-model='grid.appScope.vm.searchClientTerm' placeholder='Search'/> \
-                <div class='input-group-btn'>\
-                 <button type='button' ng-click='grid.appScope.vm.searchClient()' class='btn btn-default' ><img src='../images/search-15x15-666.png' /></button>\
-                 </div>\
-         </div>\
-         <hr/> \
-            <div class='clearFilterText' data-clearfiltertype='text'>\
-            <div class='clearFiltersIcon'>\
-                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>\
-            </div>\
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Client'><span>Clear filters from </span><span class='clearFilterTitle'>Client</span></div>\
-             <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.Clients' ng-click='grid.appScope.filterClientName(Client.matterClient)'>{{client.matterClient}}</div> </div>\
-        </div>\
-        </div>\
-    </div>\
-    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
-        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by client name'>{{ col.colDef.displayName }}</span>\
-        <span ui-grid-visible='col.sort.direction' aria-label='Sort None' class='ui-grid-invisible'></span>\
-        <span class='sort pull-right' ng-show='grid.appScope.sortMCClient'>↑</span>\
-        <span ng-show='grid.appScope.sortDownMCClient' class='sort pull-right'>↓</span>\
-    </div>\
-    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
-        <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
-    </div>\
-</div>"
-    //End
-
-    //Assigning html for ModifiedDateheadertemplate
-    //Start
     $scope.modifieddateDropDowm = false;
-    var ModifiedDateheadertemplate = "<div ng-mouseenter='grid.appScope.modifieddateDropDowm = true' ng-mouseleave='grid.appScope.modifieddateDropDowm = false'>\
-    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.modifieddateDropDowm'>\
-        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
-            <img src='../images/icon-combobox.png'/>\
-        </a>\
-        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
-         <div class='input-group'>\
-             <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'\
-                    uib-datepicker-popup='MM/dd/yyyy'\
-                    ng-model='grid.appScope.$parent.startdate'\
-                    is-open='grid.appScope.openedStartDate' \
-                    datepicker-options='grid.appScope.dateOptions'\
-                    ng-required='true' close-text='Close'\
-                    alt-input-formats='altInputFormats'/>\
-                <span class='input-group-btn'>\
-                    <button type='button' class='btn btn-default' ng-click='grid.appScope.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>\
-                </span>\
-          </div>\
-          <div class='input-group' style='margin-top:5px'>\
-             <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'\
-                    uib-datepicker-popup='MM/dd/yyyy'\
-                    ng-model='grid.appScope.$parent.enddate'\
-                    is-open='grid.appScope.openedEndDate' \
-                    datepicker-options='grid.appScope.enddateOptions'\
-                    ng-required='true' close-text='Close'\
-                    alt-input-formats='altInputFormats' />\
-                <span class='input-group-btn'>\
-                    <button type='button' class='btn btn-default' ng-click='grid.appScope.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>\
-                </span>\
-          </div>\
-          <div class='okDateButton' id='btnOK' ng-click='grid.appScope.FilterModifiedDate()'>Ok</div>\
-          <hr/> \
-            <div class='clearFilterText' data-clearfiltertype='text'>\
-            <div class='clearFiltersIcon'>\
-                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>\
-            </div>\
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Modified Date'><span>Clear filters from </span><span class='clearFilterTitle'>Modified Date</span></div>\
-             <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.Clients' ng-click='grid.appScope.filterClientName(Client.matterClient)'>{{client.matterClient}}</div> </div>\
-        </div>\
-        </div>\
-    </div>\
-    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
-        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort last modified date'>{{ col.colDef.displayName }}</span>\
-        <span ui-grid-visible='col.sort.direction' aria-label='Sort None' class='ui-grid-invisible'></span>\
-        <span class='sort pull-right' ng-show='grid.appScope.sortMCModifiedDate'>↑</span>\
-        <span ng-show='grid.appScope.sortDownMCModifiedDate' class='sort pull-right'>↓</span>\
-    </div>\
-    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
-        <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
-    </div>\
-</div>"
-    //End
-
-    //Assigning html for celltemplate
-    //Start
-    var matterCellTemplate = "<div class='row'>\
-    <div class='col-xs-7 col-sm-9 col-md-9 col-lg-10' id='matterPopup'>\
-        <a popover type='button' class='btn btn-link col-xs-12 col-sm-12' style='text-align:left' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href='' > {{row.entity.matterName}} </a>\
-        <div class='popover-content'></div>\
-    </div>\
-    <div class='col-xs-5 col-sm-3 col-md-3 col-lg-2 text-right'>\
-        <div class='dropdown'>\
-            <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a><ul style='margin:0;padding:0' class='dropdown-menu'>\
-                <li class='ms-ContextualMenu-item' ng-click='grid.appScope.Openuploadmodal()'><a class='ECBItem ms-ContextualMenu-link upload'>Upload to this Matter</a></li>\
-                <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'>View Matter Details</a></li>\
-                <li class='ms-ContextualMenu-item'>\
-                    <a class='ECBItem ms-ContextualMenu-link upload' href='https://msmatter.sharepoint.com/sites/microsoft/' target='_blank'>\
-                        Go to Matter OneNote\
-                    </a>\
-                </li>\
-                <li class='ms-ContextualMenu-item' ng-click='row.entity.MatterInfo===undefined?grid.appScope.PinMatter(row):grid.appScope.UnpinMatter(row)'><a class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?'Pin this Matter':'Unpin this matter'}}</a></li>\
-            </ul>\
-        </div>\
-    </div>\
-</div>";
     //End
 
     $scope.initOfficeLibrary = function () {
@@ -178,18 +30,18 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource
     };
 
     vm.gridOptions = {
-        paginationPageSizes: [6, 50, 100],
-        paginationPageSize: 6,
+        paginationPageSizes: [10, 50, 100],
+        paginationPageSize: 10,
         enableGridMenu: true,
         enableRowHeaderSelection: false,
         enableRowSelection: true,
         enableSelectAll: false,
         multiSelect: false,
         columnDefs: [
-            { field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: matterCellTemplate, headerCellTemplate: MatterHeaderTemplate },
-            { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },
+            { field: 'matterName', displayName: 'Matter', enableHiding: false, cellTemplate: '../app/matter/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterHeaderTemplate.html' },
+            { field: 'matterClient', displayName: 'Client', enableCellEdit: true, headerCellTemplate: '../app/matter/ClientHeaderTemplate.html' },
             { field: 'matterClientId', displayName: 'Client.MatterID', headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-            { field: 'matterModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: ModifiedDateheadertemplate },
+            { field: 'matterModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/ModifiedDateTemplate.html' },
             { field: 'matterResponsibleAttorney', headerTooltip: 'Click to sort by attorney', displayName: 'Responsible attorney', visible: false },
             { field: 'matterSubAreaOfLaw', headerTooltip: 'Click to sort by sub area of law', displayName: 'Sub area of law', visible: false },
             { field: 'matterCreatedDate', headerTooltip: 'Click to sort by matter open date', displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
