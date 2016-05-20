@@ -349,16 +349,17 @@ namespace Microsoft.Legal.MatterCenter.Web
                 Regex regEx = new Regex("[*?|\\\t/:\"\"'<>#{}%~&]");
                 string clientUrl = Request.Form["clientUrl"];
                 string folderUrl = Request.Form["folderUrl"];
+                string folderName = folderUrl.Substring(folderUrl.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
                 string documentLibraryName = Request.Form["documentLibraryName"];
                 bool isDeployedOnAzure = Convert.ToBoolean(generalSettings.IsTenantDeployment, CultureInfo.InvariantCulture);
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 string originalName = string.Empty;
                 bool allowContentCheck = Convert.ToBoolean(Request.Form["AllowContentCheck"], CultureInfo.InvariantCulture);
-                Int16 isOverwrite = 3;
-                bool continueUpload = true;
+                Int16 isOverwrite = 3;                
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
-                IList<GenericResponseVM> listResponse = new List<GenericResponseVM>();
+                IList<object> listResponse = new List<object>();
+                bool continueUpload = true;
                 if (isDeployedOnAzure == false && string.IsNullOrWhiteSpace(clientUrl) && string.IsNullOrWhiteSpace(folderUrl))
                 {
                     genericResponse = new GenericResponseVM()
@@ -403,19 +404,33 @@ namespace Microsoft.Legal.MatterCenter.Web
                         string folder = folderUrl.Substring(folderUrl.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
                         genericResponse = documentProvision.UploadFiles(uploadedFile, fileExtension, originalName, folderUrl, fileName, 
                             clientUrl, folder, documentLibraryName);
-                        if(genericResponse!=null && genericResponse.IsError==true)
+                        if (genericResponse == null)
                         {
-                            listResponse.Add(genericResponse);
+                            var successFile = new
+                            {
+                                IsError = false,
+                                Code = HttpStatusCode.OK.ToString(),
+                                Value = UploadEnums.UploadSuccess.ToString(),
+                                FileName = fileName,
+                                DropFolder = folderName
+                            };
+                            listResponse.Add(successFile);
                         }
+                        else
+                        {
+                            var successFile = new
+                            {
+                                IsError = true,
+                                Code = HttpStatusCode.BadRequest.ToString(),
+                                Value = UploadEnums.UploadFailure.ToString(),
+                                FileName = fileName,
+                                DropFolder = folderName
+                            };
+                            listResponse.Add(successFile);                           
+                        }                   
                     }
-                }
-                genericResponse = new GenericResponseVM()
-                {
-                    Value = UploadEnums.UploadSuccess.ToString(),
-                    Code = HttpStatusCode.OK.ToString(),
-                    IsError = false
-                };
-                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                }                
+                return matterCenterServiceFunctions.ServiceResponse(listResponse, (int)HttpStatusCode.OK);
                 #endregion
             }
             catch (Exception ex)
