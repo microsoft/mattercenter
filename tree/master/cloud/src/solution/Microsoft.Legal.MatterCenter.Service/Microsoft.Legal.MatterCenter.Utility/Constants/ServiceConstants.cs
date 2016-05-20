@@ -1045,6 +1045,11 @@ namespace Microsoft.Legal.MatterCenter.Utility
             
         }
 
+        /// <summary>
+        /// The original name of uploaded mail
+        /// </summary>
+        public const string MailOriginalName = "originalName";
+
         #region Matter Landing Page Constants
 
         /// <summary>

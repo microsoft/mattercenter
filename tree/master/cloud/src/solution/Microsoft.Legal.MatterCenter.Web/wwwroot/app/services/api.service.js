@@ -1,11 +1,12 @@
 ﻿'use strict';
 
 angular.module('matterMain')
-  .factory('api', ['matterResource', 'documentResource',
-    function api(matterResource, documentResource) {
+  .factory('api', ['matterResource', 'documentResource', 'dashBoardResource',
+    function api(matterResource, documentResource, dashBoardResource) {
         var resources = {
             'matterResource': matterResource,
-            'documentResource': documentResource
+            'documentResource': documentResource,
+            'dashBoardResource': dashBoardResource
         };
 
         function callAPI(options) {

@@ -178,5 +178,7 @@ namespace Microsoft.Legal.MatterCenter.Models
             get;
             set;
         }
+
+        public bool Checker { get; set; }
     }
 }

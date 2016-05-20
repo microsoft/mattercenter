@@ -633,7 +633,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     clientContext.ExecuteQuery();
                     LimitedWebPartManager limitedWebPartManager = file.GetLimitedWebPartManager(PersonalizationScope.Shared);
                     WebPartDefinition webPartDefinition = null;
-                    string[] zones = { ServiceConstants.HEADER_ZONE, ServiceConstants.TOP_ZONE, ServiceConstants.RIGHT_ZONE, ServiceConstants.TOP_ZONE, ServiceConstants.RIGHT_ZONE, ServiceConstants.FOOTER_ZONE, ServiceConstants.RIGHT_ZONE, ServiceConstants.RIGHT_ZONE };
+                    string[] zones = { ServiceConstants.HEADER_ZONE, ServiceConstants.TOP_ZONE, ServiceConstants.RIGHT_ZONE, ServiceConstants.TOP_ZONE,
+                        ServiceConstants.RIGHT_ZONE, ServiceConstants.RIGHT_ZONE, ServiceConstants.FOOTER_ZONE,
+                        ServiceConstants.RIGHT_ZONE, ServiceConstants.RIGHT_ZONE };
                     matterRepositoy.AddWebPart(clientContext, limitedWebPartManager, webPartDefinition, webParts, zones);
                     return genericResponseVM;
                 }

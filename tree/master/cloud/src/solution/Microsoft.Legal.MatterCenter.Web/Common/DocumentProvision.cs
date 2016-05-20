@@ -6,6 +6,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 using System.Net;
 using Microsoft.Legal.MatterCenter.Repository;
+using Microsoft.AspNet.Http;
 
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
@@ -103,6 +104,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     DocumentData documentData = new DocumentData();
                     foreach (var key in searchResult.Keys)
                     {
+                        documentData.Checker = false;
                         switch (key.ToLower())
                         {
                             
@@ -163,6 +165,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
             searchResultsVM.SearchResults = null;
             return searchResultsVM;
+        }
+
+        public void UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, IList<GenericResponseVM> listResponse, string fileName, string clientUrl, string folder, string documentLibraryName)
+        {
+            //Dictionary<string, string> mailProperties = ContinueUpload(uploadedFile, fileExtension);
+            ////setting original name property for attachment
+            //if (string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MailOriginalName]))
+            //{
+            //    mailProperties[ConstantStrings.MailOriginalName] = originalName;
+            //}
         }
     }
 }

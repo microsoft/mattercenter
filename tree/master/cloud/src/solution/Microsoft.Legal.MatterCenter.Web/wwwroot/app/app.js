@@ -63,7 +63,17 @@ angular.module('matterMain', [
                     controller: 'createMatterController as cm'  
                 }  
             }, requireADLogin: true  
-          });
+        })
+        .state('mc.dashboard', {
+            url: "^/dashboard",
+            views: {
+                "contentView": {
+                    templateUrl: '/app/dashboard/dashboard.html',
+                    controller: 'DashBoardController as vm'
+                }
+            }, requireADLogin: true
+        })
+        ;
 
 
         $locationProvider.html5Mode({
