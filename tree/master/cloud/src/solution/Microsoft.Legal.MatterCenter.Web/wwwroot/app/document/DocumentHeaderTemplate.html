@@ -1,0 +1,47 @@
+﻿<div ng-mouseenter='grid.appScope.documentDropDowm = true' ng-mouseleave='grid.appScope.documentDropDowm = false'>
+
+    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.documentDropDowm'>
+
+        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id=' acombo' dropdown-toggle' type='button' data-toggle='dropdown'>
+
+            <img src='../images/icon-combobox.png' />
+        </a>
+        <div class='dropdown-menu flyoutWrapper' ng-click='$event.stopPropagation();' role='menu' aria-labelledby='acombo'>
+
+            <div class='input-group'>
+
+                <input class='form-control' ng-model='grid.appScope.vm.searchTerm' placeholder='Search' />
+                <div class='input-group-btn'>
+
+                    <button type='button' ng-click='grid.appScope.vm.searchDocumentGrid()' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                </div>
+            </div>
+            <hr />
+            <div class='clearFilterText' data-clearfiltertype='text'>
+
+                <div class='clearFiltersIcon'>
+
+                    <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
+                </div>
+                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Matter'><span>Clear filters from </span><span class='clearFilterTitle'>Document</span></div>
+                <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='matter in grid.appScope.matters' ng-click='grid.appScope.filterdocumentName(matter.documentName)'>{{matter.documentName}}</div> </div>
+            </div>
+        </div>
+    </div>
+    <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
+        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>
+        <span ui-grid-visible='col.sort.direction' aria-label='{{getSortDirectionAriaLabel()}}' class='ui-grid-invisible'><sub ui-grid-visible='isSortPriorityVisible()' class='ui-grid-sort-priority-number'>{{col.sort.priority + 1}}</sub></span>
+        <span class='sort pull-right' ng-show='grid.appScope.sortMCMatterName'>↑</span>
+        <span ng-show='grid.appScope.sortDownMCMatterName' class='sort pull-right'>↓</span>
+    </div>
+    <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
+        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by document name'>{{ col.colDef.displayName }}</span>
+        <span ui-grid-visible='col.sort.direction' aria-label='{{getSortDirectionAriaLabel()}}' class='ui-grid-invisible'><sub ui-grid-visible='isSortPriorityVisible()' class='ui-grid-sort-priority-number'>{{col.sort.priority + 1}}</sub></span>
+        <span class='sort pull-right' ng-show='grid.appScope.sortMCDocumentName'>↑</span>
+        <span ng-show='grid.appScope.sortDownMCDocumentName' class='sort pull-right'>↓</span>
+    </div>
+    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>
+
+        <i title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>
+    </div>
+</div>
