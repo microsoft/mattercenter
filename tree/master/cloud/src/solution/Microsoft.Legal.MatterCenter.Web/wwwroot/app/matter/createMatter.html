@@ -146,12 +146,12 @@
                     <div class="gutter"></div>
                     <label class="contentLabel mediumSmall" id="conflictIdentified">Conflict Identified?</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name + ' ('+ users.email + ')' for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-no-results="conflictUserResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
+                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text"  uib-typeahead="users.name  for users in cm.searchUsers($viewValue)"  typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser")'  typeahead-no-results="conflictUserResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
                    
                     <div ng-show="conflictUserResults">
                         <i class="glyphicon glyphicon-remove"></i> No Results Found
                     </div>
-                    <i ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <span class="pull-left"> <i ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh"></i></span>
                     <div class="gutter"></div>
                     <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
                     <!--<input type="text" class="form-control" datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />-->
@@ -194,14 +194,15 @@
                     <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
                         <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.blockedUserName" uib-typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
 
                         <div ng-show="blockUserResults">
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
-                        </div><i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh"></i>
-                        <div class="gutter"></div>
-                        <div class="large clear" id="areaBlockUser"></div>
-                    </section>
+                        </div><span class="pull-left">
+    <i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh"></i></span>
+    <div class="gutter"></div>
+    <div class="large clear" id="areaBlockUser"></div>
+</section>
                 </div>
                 <label class="secureMatterLabel assignTeamRadioPosition">Would you like this matter to be secured only to the assigned team?</label>
                 <div class="secureMatterRadioBtn assignTeamRadioPosition">
@@ -223,10 +224,11 @@
 
                     <div class="row{{$index}} assignNewPerm">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  + ' ('+ users.email + ')'  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                        <input class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults'  typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team")' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
                         <div ng-show='teamAssingnResults'>
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
-                        </div><i ng-show='loadingLocations' class="glyphicon glyphicon-refresh"></i>
+                        </div>
+                        <span class="pull-left"><i ng-show='loadingLocations' class="glyphicon glyphicon-refresh"></i></span>
                         <div class="gutter"></div>
                         <div class="addNewMember">
                             <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth">
@@ -257,42 +259,44 @@
         <!-- Create and share matter section -->
         <section class="sectionStep " id="snCreateAndShare" ng-show='cm.sectionName=="snCreateAndShare"' style="display: block;">
             <div class="sectionContent">
-                <div style="">
-                    <span class="">
-                        You have entered all of the necessary information to create this matter.
-                        After you click Create and Notify, the matter will be created and all team members will receive
-                    </span>
-                </div>
-                <div>
-                    <span>an email containing a link to this matter’s location.</span>
-                </div>
+               
+                    <div class="row customDivCreate">
+                        <div class="col-sm-12">
+                            You have entered all of the necessary information to create this matter.
+                            After you click Create and Notify, the matter will be created and all team members will receive
+
+
+                            an email containing a link to this matter’s location.
+                        </div>
+                    </div>
+                
 
                 <div class="gutter" style="clear:both;"></div>
-                <div>
+                <div class="row pull-left">
 
                     <input id="demo-checkbox-unselected0" ng-model="cm.includeCalendar" ng-init="cm.includeCalendar" class="ms-ChoiceField-input ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox">Include calendar</span></label>
+                    <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox createLable">Include calendar</span></label>
 
                 </div>
                 <div class="gutter" style="clear:both;"></div>
-                <div>
+                <div class="row pull-left">
 
                     <input id="demo-checkbox-unselected1" ng-model="cm.includeRssFeeds" ng-init="cm.includeRssFeeds" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox">Include RSS Feeds</span></label>
+                    <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">Include RSS Feeds</span></label>
 
                 </div>
                 <div class="gutter" style="clear:both;"></div>
 
-                <div>
+                <div class="row pull-left">
 
                     <input id="demo-checkbox-unselected2" ng-model="cm.includeEmail" ng-init="cm.includeEmail" ng-click="cm.createAndNotify(cm.includeEmail)" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox">Include email notification</span></label>
+                    <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox createLable">Include email notification</span></label>
                 </div>
                 <div class="gutter" style="clear:both;"></div>
-                <div>
+                <div class="row pull-left">
 
                     <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox">Include tasks</span></label>
+                    <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">Include tasks</span></label>
                 </div>
                 <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton()' value="Create">{{cm.createButton}}</button>
 
@@ -306,99 +310,107 @@
 
     <div class="pagination">
         <div class="nextPreviousDiv">
-            <span class="Paginate" data-move="0">Previous</span>
-            <span class="Paginate active" data-move="1">Next</span>
+            <span class="Paginate" data-move="0" ng-click="cm.PreviousClick()">Previous</span>
+            <span class="Paginate active" data-move="1" ng-click="cm.NextClick()">Next</span>
         </div>
     </div>
 
     <div class="popupContainerBackground " ng-click="cm.selectMatterTypePopUpClose()" ng-class="cm.popupContainerBackground"></div>
-    <div class="popUpContainer " ng-class="cm.popupContainer" style="margin:auto !important; bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
-        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
-        <div class="alignCenter">
-            <header class="popUpHeader">
-                <div title="Select a Practice Group" class="popUpHeaderTitle popUpFloatLeft">Select a Practice Group</div>
-                <div class="popUpPracticeGroup clear">
-                    <div class="popUpPGDiv">
-                        <select class="medium clear " ng-model='cm.selectedPracticeGroup' ng-change='cm.getSelectedPracticeGroupValue()' ng-options='practiceGroup.termName for practiceGroup in cm.pracitceGroupList'>
-                            <option value="" label="- Select a practice group -"></option>
-                        </select>
-                    </div>
-
-                </div>
-            </header>
-            <div class="popUpBody popUpFloatLeft" style="overflow:hidden;">
-                <div class="popUpMatterDescription popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divAOL">
-                    <label title="Area of Law" class="popUpBodyHeader popUpFloatLeft">Area of Law</label>
-                    <div class="popUpFloatLeft popUpBorder " id="popupAOLBorder" style="height:213px;width:200px;">
-                        <input class="popUpMDTextArea clear" ng-model="cm.searchAOLText" style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="Search by typing">
-                        <div class="popUpCommonContent popUpMD" id="popupAOLContent">
-                            <div class='popUpMDContent ' style="padding:3px !important;" ng-repeat="areaOfLawTerm in cm.areaOfLawTerms |  filter: {termName: cm.searchAOLText}">
-                                <div ng-class="{popUpSelected : cm.activeAOLTerm === areaOfLawTerm}" ng-click='cm.selectAreaOfLawTerm(areaOfLawTerm)' data-value='{{$index}}' documents='' data-foldernamesaol='{{areaOfLawTerm.folderNames}}' data-areaoflaw-id='{{areaOfLawTerm.id}}'>{{areaOfLawTerm.termName}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divSAOL" style="width:28%;">
-                    <label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft">Sub Area of Law (select matter type)</label>
-                    <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px;">
-                        <input class="popUpMDTextArea clear" ng-model="cm.searchSubAOLText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
-                        <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
-                            <div class="popUpSALContent " ng-repeat='subAreaOfLawTerm in cm.subAreaOfLawTerms  | filter: {termName: cm.searchSubAOLText}' style="padding:3px !important;">
-                                <div ng-class="{popUpSelected : cm.activeSubAOLTerm === subAreaOfLawTerm}" ng-click='cm.selectSubAreaOfLawTerm(subAreaOfLawTerm)' data-value='{{$index}}' data-subareaoflaw-id='{{subAreaOfLawTerm.id}}' data-display-name='{{subAreaOfLawTerm.termName}}' data-isnofolderstructurepresent='{{subAreaOfLawTerm.isNoFolderStructurePresent}}' data-foldernamessal='{{subAreaOfLawTerm.folderNames}}' data-associated-document-template='{{subAreaOfLawTerm.documentTemplateNames}}' data-document-template='{{subAreaOfLawTerm.documentTemplates}}'>{{subAreaOfLawTerm.termName}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft" style="position:relative;margin-top:0px;" id="navigate">
-                    <div class="popUpLeftClick popUpPosAbs" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward" style="margin:0px;" alt="Left" src="../Images/forward_666.png">
-                    </div>
-                    <div class="popUpRightClick popUpPosAbs" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack" alt="Right" src="../Images/back-666.png">
-                    </div>
-
-                </div>
-                <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft" id="divDocTemplate">
-                    <div class="errorPopUpArea  " ng-show='cm.errorPopUp'>
-                        <div class="errTriangleArea popUpFloatLeft"></div>
-                        <div class="errTriangleBorderArea popUpFloatLeft"></div>
-                        <div class="errTextArea popUpFloatRight" style="margin:12px 25px 0px 0px;"><span class="selectDefaultContentTypeMessage" style="visibility: visible;">Please select primary matter type</span></div>
-                    </div>
-
-                    <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft">Matter Type</label>
-                    <div class="popUpFloatLeft popUpBorder" style="height:213px; width:200px;">
-                        <div class="popUpCommonContent popDT">
-                            <div class="popUpDTContent" style="padding:1px !important;" ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
-                                <div ng-class='{popUpSelected : cm.activeDocumentTypeLawTerm === documentTypeLawTerm}' ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
-                                     data-value='{{$index}}'
-                                     data-foldernamespg='{{cm.selectedPracticeGroup.folderNames}}'
-                                     data-practicegroup-id='{{cm.selectedPracticeGroup.id}}'
-                                     data-foldernamesaol='{{cm.activeAOLTerm.folderNames}}'
-                                     data-areaoflaw-id='{{cm.activeAOLTerm.id}}'
-                                     data-subareaoflaw-id='{{cm.activeSubAOLTerm.id}}'
-                                     data-display-name='{{cm.activeSubAOLTerm.termName}}'
-                                     data-isnofolderstructurepresent='{{cm.activeSubAOLTerm.isNoFolderStructurePresent}}'
-                                     data-foldernamessal='{{cm.activeSubAOLTerm.folderNames}}'
-                                     data-associated-document-template='{{cm.activeSubAOLTerm.documentTemplateNames}}'
-                                     data-document-template='{{cm.activeSubAOLTerm.documentTemplates}}'
-                                     data-areaoflaw='{{cm.activeAOLTerm.termName}}'
-                                     data-practicegroup='{{cm.selectedPracticeGroup.termName}}'>{{documentTypeLawTerm.termName}}({{documentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="defaultMessageDiv">
-                    <img id="infoImg" alt="info" src="../Images/information-blue.png">
-                    <span id="defaultMessage">Please select primary matter type before you save. </span>
-                </div>
-                <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries" type="button">Save</button>
-            </div>
-        </div>
-    </div>
+    
 
 
 
 </div>
+
+<div class="popUpContainer "  ng-class="cm.popupContainer" style="margin:auto !important; bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
+    <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
+    <div class="alignCenter">
+        <header class="popUpHeader">
+            <div title="Select a Practice Group" class="popUpHeaderTitle popUpFloatLeft">Select a Practice Group</div>
+            <div class="popUpPracticeGroup clear">
+                <div class="popUpPGDiv">
+                    <select class="medium clear " ng-model='cm.selectedPracticeGroup' ng-change='cm.getSelectedPracticeGroupValue()' ng-options='practiceGroup.termName for practiceGroup in cm.pracitceGroupList'>
+                        <option value="" label="- Select a practice group -"></option>
+                    </select>
+                </div>
+
+            </div>
+        </header>
+        <div class="popUpBody popUpFloatLeft" style="overflow:hidden;">
+            <div class="popUpMatterDescription popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divAOL">
+                <label title="Area of Law" class="popUpBodyHeader popUpFloatLeft">Area of Law</label>
+                <div class="popUpFloatLeft popUpBorder " id="popupAOLBorder" style="height:213px;width:200px;">
+                    <input class="popUpMDTextArea clear" ng-model="cm.searchAOLText" style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="Search by typing">
+                    <div class="popUpCommonContent popUpMD" id="popupAOLContent">
+                        <div class='popUpMDContent ' style="padding:3px !important;" ng-repeat="areaOfLawTerm in cm.areaOfLawTerms |  filter: {termName: cm.searchAOLText}">
+                            <div ng-class="{popUpSelected : cm.activeAOLTerm === areaOfLawTerm}" ng-click='cm.selectAreaOfLawTerm(areaOfLawTerm)' data-value='{{$index}}' documents='' data-foldernamesaol='{{areaOfLawTerm.folderNames}}' data-areaoflaw-id='{{areaOfLawTerm.id}}'>{{areaOfLawTerm.termName}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divSAOL" style="width:28%;">
+                <label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft">Sub Area of Law (select matter type)</label>
+                <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px;">
+                    <input class="popUpMDTextArea clear" ng-model="cm.searchSubAOLText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
+                    <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
+                        <div class="popUpSALContent " ng-repeat='subAreaOfLawTerm in cm.subAreaOfLawTerms  | filter: {termName: cm.searchSubAOLText}' style="padding:3px !important;">
+                            <div ng-class="{popUpSelected : cm.activeSubAOLTerm === subAreaOfLawTerm}" ng-click='cm.selectSubAreaOfLawTerm(subAreaOfLawTerm)' data-value='{{$index}}' data-subareaoflaw-id='{{subAreaOfLawTerm.id}}' data-display-name='{{subAreaOfLawTerm.termName}}' data-isnofolderstructurepresent='{{subAreaOfLawTerm.isNoFolderStructurePresent}}' data-foldernamessal='{{subAreaOfLawTerm.folderNames}}' data-associated-document-template='{{subAreaOfLawTerm.documentTemplateNames}}' data-document-template='{{subAreaOfLawTerm.documentTemplates}}'>{{subAreaOfLawTerm.termName}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft" style="position:relative;margin-top:0px;" id="navigate">
+                <div class="popUpLeftClick popUpPosAbs" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
+                    <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward" style="margin:0px;" alt="Left" src="../Images/forward_666.png">
+                </div>
+                <div class="popUpRightClick popUpPosAbs" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
+                    <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack" alt="Right" src="../Images/back-666.png">
+                </div>
+
+            </div>
+            <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft" id="divDocTemplate">
+                <div class="errorPopUpArea  " ng-show='cm.errorPopUp'>
+                    <div class="errTriangleArea popUpFloatLeft"></div>
+                    <div class="errTriangleBorderArea popUpFloatLeft"></div>
+                    <div class="errTextArea popUpFloatRight" style="margin:12px 25px 0px 0px;"><span class="selectDefaultContentTypeMessage" style="visibility: visible;">Please select primary matter type</span></div>
+                </div>
+
+                <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft">Matter Type</label>
+                <div class="popUpFloatLeft popUpBorder" style="height:213px; width:200px;">
+                    <div class="popUpCommonContent popDT">
+                        <div class="popUpDTContent" style="padding:1px !important;" ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
+                            <div ng-class='{popUpSelected : cm.activeDocumentTypeLawTerm === documentTypeLawTerm}' ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
+                                 data-value='{{$index}}'
+                                 data-foldernamespg='{{cm.selectedPracticeGroup.folderNames}}'
+                                 data-practicegroup-id='{{cm.selectedPracticeGroup.id}}'
+                                 data-foldernamesaol='{{cm.activeAOLTerm.folderNames}}'
+                                 data-areaoflaw-id='{{cm.activeAOLTerm.id}}'
+                                 data-subareaoflaw-id='{{cm.activeSubAOLTerm.id}}'
+                                 data-display-name='{{cm.activeSubAOLTerm.termName}}'
+                                 data-isnofolderstructurepresent='{{cm.activeSubAOLTerm.isNoFolderStructurePresent}}'
+                                 data-foldernamessal='{{cm.activeSubAOLTerm.folderNames}}'
+                                 data-associated-document-template='{{cm.activeSubAOLTerm.documentTemplateNames}}'
+                                 data-document-template='{{cm.activeSubAOLTerm.documentTemplates}}'
+                                 data-areaoflaw='{{cm.activeAOLTerm.termName}}'
+                                 data-practicegroup='{{cm.selectedPracticeGroup.termName}}'>{{documentTypeLawTerm.termName}}({{documentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="defaultMessageDiv">
+                <img id="infoImg" alt="info" src="../Images/information-blue.png">
+                <span id="defaultMessage">Please select primary matter type before you save. </span>
+            </div>
+            <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries" type="button">Save</button>
+        </div>
+    </div>
+</div>
+<div id="loadingImageContainer">
+    <div class="lazyLoading" ng-class="cm.popupContainerBackground">
+        <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+    </div>
+</div>
+
 
 
 

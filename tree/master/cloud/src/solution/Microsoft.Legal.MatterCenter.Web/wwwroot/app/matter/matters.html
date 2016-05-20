@@ -1,38 +1,5 @@
 ﻿<!--<div class="container-fluid">   -->
 <div class="row" ng-init="initOfficeLibrary()">
-    <!--<div class="row margin0">
-        <div class="col-xs-2" >
-            <div class="col-xs-3" ng-click="vm.menuClick()">
-                <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
-                <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
-                <span class="MenuCaption">menu</span>
-            </div>
-            <div class="AppMenuFlyout ms-shadow">
-                <div class="AppMenuFlyoutPriLinks">
-                    <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="Home"><span class="AppFlyoutLinksText">Home</span></a>
-                    <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="Search matters"><span class="AppFlyoutLinksText">Matters</span></a>
-                    <a class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
-                </div>
-            </div>
-            <div class="col-xs-9">
-                <select class="form-control" ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
-            </div>
-        </div>
-        <div class="col-xs-3">
-            <div class="input-group">
-                <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                <div ng-show="noResults">
-                    <i class="glyphicon glyphicon-remove"></i> No Results Found
-                </div>
-                <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-search"></i></span>
-            </div>
-        </div>
-        <div class="col-xs-7">
-            <img class="ContextualHelpLogo pull-right" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
-            <img class="AppHeaderProfilePict pull-right" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture">
-        </div>
-    </div>-->
     <div class="col-xs-12">
         <div id="MasterPageContainer" class="MasterPageContent">
             <div class="commonAppSwitch  hide">
@@ -251,10 +218,10 @@
 <!--Upload Modal Screen Start-->
 <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="width:100%">
-        <div ng-if="vm.IsDupliacteDocument" class="notificationContainerForPopup" style="height: 80px;margin-left:0">
+        <div  ng-if="vm.IsDupliacteDocument" class="notificationContainerForPopup" style="height: 80px;margin-left:0">
             <div title="The file {{vm.sourceFile.title}} already exists in the folder. Do you want to overwrite it?"
                  class="notification warningNotification">
-                <img id="warningImg" alt="Warning Message" src="../Images/warning-message.png">
+                <img id="warningImg" draggable="false" alt="Warning Message" src="../Images/warning-message.png">
                 <div id="overWriteDocumentName">
                     <span>
                         The file <a class="overWriteContent" id="fileName"
@@ -272,29 +239,8 @@
                 </div>
             </div>
         </div>
-
-        <div ng-if="vm.IsNonIdenticalContent" title="The two documents do not have identical content" class="notificationContainerForPopup" 
-             style="height: 80px;margin-left:0">
-            <div title="The file {{vm.sourceFile.title}} already exists in the folder. Do you want to overwrite it?"
-                 class="notification warningNotification">
-                <img id="warningImg" draggable="false" alt="Warning Message" src="../Images/warning-message.png">
-                <div id="overWriteDocumentName"> The two documents do not have identical content</div>
-
-                <div class="askForOverwrite">
-                    <input title="The file will be saved as the latest version of the existing document that has same title. Matter Center will
-                       retain all prior versions of the document."
-                           id="overWriteYes"
-                           ng-click="vm.overWriteDocument('overwrite');"
-                           type="button" value="Save as latest version"
-                           data-operation="overwrite">
-                    <input title="This document will not be uploaded and you will return to the previous screen."
-                           id="overWriteNo" ng-click="vm.closeNotificationDialog();" type="button" value="Cancel upload" data-operation="ignore">
-                </div>
-            </div>
-        </div>
-
         <div class="modal-content">
-
+            
             <div class="modal-body">
                 <div class="row margin0">
                     <div class="col-sm-10 pad0">
@@ -311,21 +257,14 @@
 
                 <div class="row margin0">
                     <div class="col-sm-9 maildata">
-                        <div ng-if="vm.showLoading" class='attachmentSection'>
-                            <img alt='Loading' class='attachmentListLoading'
-                                 src='../images/loading_metro.gif' />
-                        </div>
                         <!--Content start to show mail attachment information-->
                         <div class="attachmentSection" ng-repeat="attachmentInfo in vm.allAttachmentDetails">
-                            <div ng-if="vm.loadingAttachments" class='attachmentSection'>
-                                <img alt='Loading' class='attachmentListLoading'
-                                     src='../images/loading_metro.gif' />
-                            </div>
+                            <div ng-if="vm.loadingAttachments" class='attachmentSection'><img alt='Loading' class='attachmentListLoading' src='../images/loading_metro.gif' /></div>
                             <div ng-if="attachmentInfo.isEmail" class="attachment">
                                 <div class="attachmentName mailName">
-                                    <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon"
+                                    <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
                                          ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
-                                    <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon"
+                                    <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
                                          ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
                                     <!--If the mail upload is success, show this div-->
                                     <div ng-if="vm.mailUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
@@ -342,24 +281,22 @@
                                         {{attachmentInfo.attachmentFileName}}
                                     </div>
                                     <!--If the mail upload is success, show the folder name under which the email has been dropped-->
-                                    <div ng-if="vm.mailUpLoadSuccess" title="{{vm.mailUploadedFolder}}" class="uploadSuccessMessage"
-                                         id="{{attachmentInfo.counter}}attachment-Message">{{vm.mailUploadedFolder}}</div>
+                                    <div ng-if="vm.mailUpLoadSuccess" title="{{vm.mailUploadedFolder}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.mailUploadedFolder}}</div>
                                 </div>
                             </div>
 
                             <div ng-if="!attachmentInfo.isEmail" class="attachment">
                                 <div class="attachmentName">
-                                    <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon"
+                                    <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
                                          ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
-                                    <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon"
+                                    <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
                                          ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
                                     <div ng-if="vm.docUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
                                         <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
                                     </div>
                                     <!--If the attachment upload is success, show this div-->
                                     <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
-                                    <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText"
-                                           type="text" maxlength="128">
+                                    <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
                                     <div title="{{attachmentInfo.attachmentFileName}}"
                                          id="{{attachmentInfo.counter}}attachment"
                                          class="popupName ui-draggable"
@@ -371,8 +308,7 @@
                                         {{attachmentInfo.attachmentFileName}}
                                     </div>
                                     <!--If the attachment upload is success, show the folder name under which the attachment has been dropped-->
-                                    <div ng-if="vm.docUpLoadSuccess" title="{{vm.docUploadedFolder}}" class="uploadSuccessMessage"
-                                         id="{{attachmentInfo.counter}}attachment-Message">{{vm.docUploadedFolder}}</div>
+                                    <div ng-if="vm.docUpLoadSuccess" title="{{vm.docUploadedFolder}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.docUploadedFolder}}</div>
                                 </div>
                             </div>
                         </div>
@@ -381,8 +317,7 @@
                     </div>
                     <div class="col-sm-3 folderContent">
                         <div id="breadcrumb" class="breadcrumb" ng-hide="breadcrumb">
-                            <img alt="Root" ng-click="hideBreadCrumb()" id="rootLink" src="../Images/Return_Icon_23px_23px_666.png"
-                                 title="<span class=&quot;content&quot;>cv vb</span>" draggable="false">
+                            <img alt="Root" ng-click="hideBreadCrumb()" id="rootLink" src="../Images/Return_Icon_23px_23px_666.png" title="<span class=&quot;content&quot;>cv vb</span>" draggable="false">
                             <div id="parentFolder" class="breadcrumbItem"></div>
                             <div id="breadcrumbSeparator"></div>
                             <div id="currentFolder" class="breadcrumbItem"></div>
@@ -412,7 +347,7 @@
         </div>
     </div>
 </div>
-<!--Upload Modal Screen End-->
+
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-hide="lazyloader">
         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
