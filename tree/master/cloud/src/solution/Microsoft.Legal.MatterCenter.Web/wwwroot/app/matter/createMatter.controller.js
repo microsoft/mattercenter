@@ -12,7 +12,8 @@
             cm.conflictRadioCheck = true;
             cm.iShowSuccessMessage = 0;
             cm.oMandatoryRoleNames = [];
-            cm.bMatterLandingPage = false;          
+            cm.bMatterLandingPage = false;
+            cm.oSiteUsers = [];
             
             cm.createButton = "Create";
 
@@ -26,7 +27,10 @@
                 matterMandatory: "",
                 oAreaOfLawTerms: [],
                 oSubAreaOfLawTerms: [],
-                oSelectedDocumentTypeLawTerms:[]
+                oSelectedDocumentTypeLawTerms: [],
+                oValidMatterName: undefined,
+                isNextClick: false,
+                sectionClickName:""
             }
 
             var oPageTwoState = {
@@ -36,7 +40,8 @@
                 ConflictRadioCheck:"",
                 BlockedUserName:[],
                 SecureMatterCheck: true,
-                AssignPermissionTeams: []
+                AssignPermissionTeams: [],
+                oSiteUsers:[]
             }
            
             cm.clientId = "";
@@ -60,7 +65,7 @@
             cm.removeDTItem = false;
             cm.primaryMatterType = cm.errorPopUp = false;
             cm.matterGUID = "";
-            cm.iCurrentPage = 0;
+            cm.iCurrentPage = 1;
             cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber:  1 }];
             cm.assignRoles = [];
             cm.assignPermissions = [];
@@ -388,7 +393,7 @@
                         else {
                             var dMatterAreaOfLaw = "", dMatterPracticeGroup = "", dMatterSubAreOfLaw = "", dMatterTypes = "", dPrimaryMatterType = "", dMatterUsers = "", dMatterUserEmails = "", dMatterPermissions = "", dMatterRoles = "";
 
-                            console.log(result.code);
+                          
                             var defaultMatterConfig = JSON.parse(result.code);
 
                             cm.matterName = defaultMatterConfig.DefaultMatterName;
@@ -492,6 +497,9 @@
                                     arrDMatterUsers[aCount] = arrDMatterUsers[aCount].replace(/\;$/, '');
                                     arrDMatterUserEmails[aCount] = arrDMatterUserEmails[aCount].replace(/\;$/, '');
                                     assignPermTeam.assignedUser = arrDMatterUsers[aCount] + "(" + arrDMatterUserEmails[aCount] + ")";
+                                    if (-1 == cm.oSiteUsers.indexOf(arrDMatterUserEmails[aCount])) {
+                                        cm.oSiteUsers.push(arrDMatterUserEmails[aCount]);
+                                    }
                                 }
                                 else {
                                     assignPermTeam.assignedUser = "";
@@ -630,13 +638,23 @@
                
             }
             cm.checkValidMatterName = function () {
+                oPageOneState.oValidMatterName = undefined;
                 optionsForCheckMatterName.Matter.Name = cm.matterName.trim();
                 if ("" !== cm.matterName.trim()) {
                     getCheckValidMatterName(optionsForCheckMatterName, function (response) {
                         if (response.code != 200) {
-                            alert(response.code + "Matter Name already Exists");
+                            cm.errTextMsg = "Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
+                            cm.errorBorder = "mattername";
+                            cm.errorPopUpBlock = true;
+                            oPageOneState.oValidMatterName = false;
+                          return false;
                         } else {
-                          //  alert("success");
+                            //  alert("success");
+                            oPageOneState.oValidMatterName = true;
+                            if ( oPageOneState.isNextClick) {
+                                cm.navigateToSecondSection(oPageOneState.sectionClickName);
+                            }
+                            return true;
                         }
                     });
                 }
@@ -644,100 +662,26 @@
             }
             
 
-            
-
+     
          
    
 
             cm.navigateToSecondSection = function (sectionName) {
+           oPageOneState.sectionClickName=sectionName;
                 if (sectionName == "snConflictCheck") {
-                    if (null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
-                        if ("" !== cm.clientId.trim() && null !== cm.clientId) {
-                            if (cm.matterName && "" != cm.matterName.trim() && null !== cm.matterName) {
-                                if (cm.matterId && "" !== cm.matterId.trim() && null != cm.matterId) {
-                                    if ( cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
-
-                                        if (cm.selectedDocumentTypeLawTerms.length > 0) {
-                                            storeMatterDataToLocalStorageFirstPage();
-                                            cm.sectionName = sectionName;
-                                        }
-                                        else {
-                                            cm.errTextMsg = "Select matter type by area of law for this matter";
-                                            cm.errorBorder = "selectType";
-                                            cm.errorPopUpBlock = true;
-                                        }
-                                    }
-                                    else {
-                                        // alert("Enter a description for this matter");
-
-                                        cm.errTextMsg = "Enter a description for this matter.";
-                                     //   cm.errorPopUpBlock = "matterDescription";
-                                      
-                                        cm.errorBorder = "matterdescription";
-                                      cm.errorPopUpBlock = true;
-
-                                    }
-                                }
-                                else {
-                                    cm.errTextMsg = "Enter a matter ID.";
-                                    cm.errorBorder = "matterid";
-                                    cm.errorPopUpBlock = true;
-                                }
-
-                            }
-                            else {
-                                cm.errTextMsg = "Please enter a valid Matter name which contains only alphanumeric characters and spaces";
-                                cm.errorBorder = "mattername";
-                                cm.errorPopUpBlock = true;
-                            }
-
-                        }
-                        else {
-                            cm.errTextMsg = "Selected  client for this matter clientId is null ";
-                            cm.errorBorder = "client";
-                            cm.errorPopUpBlock = true;
-                        }
-                    }
-                    else {
-                        cm.errTextMsg = "Select a client for this matter ";
-                        cm.errorBorder = "client";
-                        cm.errorPopUpBlock = true;
+                    if (validateCurrentPage(cm.iCurrentPage)) {
+                        cm.sectionName = sectionName;
+                        oPageOneState.isNextClick = false;
+                        cm.iCurrentPage = 2;
                     }
                 }
                 else if (sectionName == "snCreateAndShare") {
 
-                 
-                    if (undefined !== cm.chkConfilctCheck && true == cm.chkConfilctCheck) {
-                      
-                        if (undefined !== cm.conflictDate && null !== cm.conflictDate && "" != cm.conflictDate) {
-                           // cm.conflictDate = new Date();
-                            var attornyCheck = validateAttornyUserRolesAndPermissins();
-                            if (attornyCheck) {
-                                storeMatterDataToLocalStorageSecondPage();
-                                cm.sectionName = sectionName;
-                            }
-                            
-                        }
-                        else{
-                            cm.errTextMsg = "Enter the date on which the conflict check was performed ";
-                            cm.errorBorder = "cdate";
-                            cm.errorPopUpBlock = true;
-}
-                        
-
-                       // callCheckSecurityGroupExists();
-                        // console.log(getAssignedUserRoles());
-                       
-
+                    if (validateCurrentPage(cm.iCurrentPage)) {
+                        cm.sectionName = sectionName;
+                        cm.iCurrentPage = 3;
                     }
-                    else {
-                        //  cm.sectionName = sectionName;
-                        cm.errTextMsg = "A confilct check must be completed prior to provisioning this matter ";
-                        cm.errorBorder = "";
-                        cm.errorPopUpBlock = true;
-
-                    }
-
+                  
 
                     //if (sectionName == "snConflictCheck") {
                     //    if (cm.clientId != null && cm.selectedClientName != null){
@@ -757,17 +701,18 @@
                     //    cm.sectionName = sectionName;
                     //}
                 }
-                else {
-                    cm.sectionName = sectionName;
+                else if (sectionName == "snOpenMatter") {
+                    cm.iCurrentPage = 1; cm.sectionName = sectionName;
 
                 }
             }
 
-            var validateAttornyUserRolesAndPermissins = function (value) {
+            var validateAttornyUserRolesAndPermissins = function () {
                 var responsibleAttorny=0,fullControl=0;
                 for (var iCount = 0; iCount < cm.assignPermissionTeams.length; iCount++) {
 
-                    if (""!==cm.assignPermissionTeams[iCount].assignedUser) {
+                    if ("" !== cm.assignPermissionTeams[iCount].assignedUser) {
+                      
                         if (cm.assignPermissionTeams[iCount].assignedRole && "" !== cm.assignPermissionTeams[iCount].assignedRole.name) {
                             if (cm.assignPermissionTeams[iCount].assignedPermission && "" != cm.assignPermissionTeams[iCount].assignedPermission.name) {
                                 if (cm.assignPermissionTeams[iCount].assignedRole.mandatory) {
@@ -824,6 +769,62 @@
 
             }
 
+            function validateUsers() {
+                var username = "";
+                if (cm.selectedConflictCheckUser && "" !== cm.selectedConflictCheckUser) {
+                    username = getUserName(cm.selectedConflictCheckUser + ";", false);
+                     if (-1 == cm.oSiteUsers.indexOf(username[0])) {
+                        //  cm.blockedUserName.trim()
+                        cm.errTextMsg = "Enter the conflict reviewers name (for auditing purposes).";
+                        cm.errorBorder = "";
+                        cm.errorPopUpBlock = true;
+                        return false;
+                    }                   
+                }
+                if (cm.blockedUserName && "" !== cm.blockedUserName) {
+                    username = getUserName(cm.blockedUserName + ";", false);
+                    if (-1 == cm.oSiteUsers.indexOf(username[0])) {
+                        //  cm.blockedUserName.trim()
+                        cm.errTextMsg = "Enter users that are conflicted with this matter.";
+                        cm.errorBorder = "";
+                        cm.errorPopUpBlock = true;
+                        return false;
+                    }
+                }
+
+                angular.forEach(cm.assignPermissionTeams, function (team) {
+                    if (team.assignedUser && team.assignedUser != "") {//For loop
+                        username = getUserName(team.assignedUser + ";", false)
+                        if (-1 == cm.oSiteUsers.indexOf(username[0])) {
+                            //  cm.blockedUserName.trim()
+                            cm.errTextMsg = "Please enter valid team members.";
+                            cm.errorBorder = "";
+                            cm.errorPopUpBlock = true;
+                            return false;
+
+                        }
+
+                        if (cm.blockedUserName && cm.blockedUserName != "") {
+                            if (team.assignedUser == cm.blockedUserName) {
+                                cm.errTextMsg = "Please enter individual who is not conflicted.";
+                                cm.errorBorder = "";
+                                cm.errorPopUpBlock = true;
+                                return false;
+                            }
+                        }
+                    }
+                    else {
+                        cm.errTextMsg = "Responsible Attorney cannot be empty.";
+                        cm.errorBorder = "";
+                        cm.errorPopUpBlock = true;
+                        return false;
+                    }
+                   
+                });
+                return true;
+
+            }
+
 
             cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
 
@@ -837,7 +838,27 @@
                 });
             }
             
-          var callCheckSecurityGroupExists=function(){
+            cm.onSelect = function ($item, $model, $label,value) {
+                if (value == "conflictcheckuser") {
+                    cm.selectedConflictCheckUser = $item.name + '(' + $item.email + ')';
+                }
+                if (value == "blockuser") {
+                    cm.blockedUserName = $item.name + '(' + $item.email + ')';
+                }
+                if (value == "team") {
+                    $label.assignedUser = $item.name + '(' + $item.email + ')';
+                }               
+                //  console.log($item);
+              
+               
+                if (-1 == cm.oSiteUsers.indexOf($item.email)) {
+                    cm.oSiteUsers.push($item.email);
+                }
+            }
+
+           
+
+          var callCheckSecurityGroupExists=function(sectionName){
                 
                 cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
                 //console.log(cm.assignPermissionTeams);
@@ -859,7 +880,7 @@
                         Conflict:{
                             Identified : "True"
                         },
-                        BlockUserNames : (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "",
+                        BlockUserNames : (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : [],
                     },
                     UserIds: cm.userIDs
                     }
@@ -875,6 +896,9 @@
 
                     if (!response.value) {
                         alert(" Assign roles and permissions to a particular user for this matter ");
+                    } else {
+                        cm.iCurrentPage = 3; cm.popupContainerBackground = "hide";
+                        cm.sectionName=sectionName;
                     }
                 });
             }
@@ -1007,16 +1031,17 @@
                     cm.removeDTItem = false;
                     cm.primaryMatterType = cm.errorPopUp = false;
                     cm.matterGUID = oPageData.matterGUID;
-                    cm.iCurrentPage = 0;
+                    cm.iCurrentPage = 1;
 
-                  cm.includeCalendar = localStorage.getItem("IsCalendarSelected");
-                    cm.secureMatterCheck= localStorage.getItem("IsRestrictedAccessSelected");
-                    cm.includeRssFeeds=  localStorage.getItem("IsRSSSelected");
-                      cm.includeEmail = localStorage.getItem("IsEmailOptionSelected");
-                       cm.isMatterDescriptionMandatory= localStorage.getItem("IsMatterDescriptionMandatory");
-                        cm.chkConfilctCheck= localStorage.getItem("IsConflictCheck");
-                         cm.isMatterDescriptionMandatory  =localStorage.getItem("IsMatterDescriptionMandatory");
-                         cm.includeTasks=  localStorage.getItem("IsTaskSelected");
+                  cm.includeCalendar = (localStorage.getItem("IsCalendarSelected")==="true");
+                  cm.secureMatterCheck= (localStorage.getItem("IsRestrictedAccessSelected")==="true");
+                    cm.includeRssFeeds=  (localStorage.getItem("IsRSSSelected")==="true");
+                    cm.includeEmail = (localStorage.getItem("IsEmailOptionSelected")==="true");
+                       cm.isMatterDescriptionMandatory= (localStorage.getItem("IsMatterDescriptionMandatory")==="true");
+                       cm.chkConfilctCheck= (localStorage.getItem("IsConflictCheck")==="true");
+                       cm.isMatterDescriptionMandatory  =(localStorage.getItem("IsMatterDescriptionMandatory")==="true");
+                       cm.includeTasks = (localStorage.getItem("IsTaskSelected")==="true");
+                       oPageOneState.oValidMatterName = oPageData.oValidMatterName;
                    // cm.navigateToSecondSection("");
                    // cm.navigateToSecondSection("snConflictCheck");
                  
@@ -1033,6 +1058,7 @@
                   cm.blockedUserName = oPageData.BlockedUserName;
                   cm.secureMatterCheck = oPageData.SecureMatterCheck;
                   cm.assignPermissionTeams = oPageData.AssignPermissionTeams;
+                  cm.oSiteUsers = oPageData.oSiteUsers;
                   cm.sectionName = "snCreateAndShare";
                   
                  // cm.navigateToSecondSection("snCreateAndShare");
@@ -1040,7 +1066,7 @@
                  cm.navigateToSecondSection(cm.sectionName);
             }
 
-            cm.includeEmail = true;
+          //  cm.includeEmail = true;
             if (cm.includeEmail) {
                 cm.createButton = "Create and Notify";
             }
@@ -1073,7 +1099,7 @@
 
 
             cm.createMatterButton = function () {
-
+                cm.popupContainerBackground = "Show";
                 var matterGUID = cm.matterGUID;
                 var arrFolderNames=[];
                 arrFolderNames = retrieveFolderStructure();
@@ -1083,6 +1109,7 @@
                 arrPermissions = getAssignedUserPermissions();
                 var contentTypes = [];
                 var defaultContentType = "";
+                cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
                 contentTypes = getDefaultContentTypeValues("contenttypes");
                 cm.bMatterLandingPage = true;
                 defaultContentType = getDefaultContentTypeValues("defaultcontenttype");
@@ -1466,7 +1493,9 @@
                   console.log("stampProperties Success");
                   console.log(response);
                   clearAllProperties();
-                  cm.navigateToSecondSection(cm.sectionName)
+                 
+                  cm.navigateToSecondSection(cm.sectionName);
+                  cm.popupContainerBackground = "hide";
                 //  updateMatterMetadata();
 
               });
@@ -1833,7 +1862,7 @@
                 cm.removeDTItem = false;
                 cm.primaryMatterType = cm.errorPopUp = false;
                 cm.matterGUID = "";
-                cm.iCurrentPage = 0;
+                cm.iCurrentPage = 1;
                 cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
                 cm.assignRoles = [];
                 cm.assignPermissions = [];
@@ -1860,10 +1889,19 @@
                 oPageOneState.MatterName = cm.matterName.trim();
                 oPageOneState.MatterId = cm.matterId.trim();
                 oPageOneState.MatterDescription = cm.matterDescription.trim();
-                oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
+                oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms; 
                 oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
                 oPageOneState.matterGUID = cm.matterGUID;
                 oPageOneState.oSelectedDocumentTypeLawTerms = cm.selectedDocumentTypeLawTerms;
+              //  oPageOneState.oValidMatterName = oPageOneState.oValidMatterName;
+               
+                //oPageOneState.oDefaultSecureMatterCheck = cm.secureMatterCheck;
+                //oPageOneState.oDefaultInculdeCalendar = cm.includeCalendar;
+                //oPageOneState.oDefaultIncludeEmail = cm.includeEmail;
+                //oPageOneState.oDefaultRssFeeds = cm.includeRssFeeds;
+                //oPageOneState.oDefaultIsTaskSelected = cm.includeTasks;
+                //oPageTwoState.oDefaultIsConflictCheck = cm.chkConfilctCheck;
+                //oPageTwoState.oDefaultIsMatterDescriptionMandatory = cm.isMatterDescriptionMandatory;
 
                 //oPageOneState.oSectionName = cm.sectionName;
                 localStorage.setItem('oPageOneData', JSON.stringify(oPageOneState));
@@ -1878,7 +1916,7 @@
                   
 
                 //cm.sectionName = sectionName;
-                localStorage.iLivePage = cm.iCurrentPage = 2;
+                localStorage.iLivePage =  2;
 
             }
 
@@ -1890,13 +1928,152 @@
                 oPageTwoState.BlockedUserName = cm.blockedUserName;
                 oPageTwoState.SecureMatterCheck = cm.secureMatterCheck;
                 oPageTwoState.AssignPermissionTeams = cm.assignPermissionTeams;
+                oPageTwoState.oSiteUsers = cm.oSiteUsers;
                 localStorage.setItem('oPageTwoData', JSON.stringify(oPageTwoState));
-                localStorage.iLivePage = cm.iCurrentPage = 3;
+                localStorage.iLivePage  = 3;
             }
+
+            cm.NextClick = function () {
+                if (cm.iCurrentPage == 1) {
+                    cm.navigateToSecondSection("snConflictCheck");
+                }
+                else if (cm.iCurrentPage == 2) {
+                    cm.navigateToSecondSection("snCreateAndShare");
+                }
+
+            }
+
+            cm.PreviousClick = function () {
+                if (cm.iCurrentPage == 2) {
+                cm.navigateToSecondSection("snOpenMatter");
+
+                }
+                else if (cm.iCurrentPage == 3) {
+                 cm.navigateToSecondSection("snConflictCheck");
+                }
+
+            }
+
 
             cm.CheckPopUp = function () {
                 cm.errorPopUpBlock = false;
                 cm.errorBorder = "";
+            }
+
+            function validateCurrentPage(iCurrPage) {
+                if (iCurrPage == 1) {
+                    if (null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
+                        if ("" !== cm.clientId.trim() && null !== cm.clientId) {
+                            if (cm.matterName && "" != cm.matterName.trim() && null !== cm.matterName) {
+                                //  var matVal = cm.checkValidMatterName();
+                                oPageOneState.isNextClick = true;
+                                if (undefined !== oPageOneState.oValidMatterName) {
+                                    if (oPageOneState.oValidMatterName) {
+
+                                        if (cm.matterId && "" !== cm.matterId.trim() && null != cm.matterId) {
+                                            if (cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
+
+                                                if (cm.selectedDocumentTypeLawTerms.length > 0) {
+                                                    storeMatterDataToLocalStorageFirstPage();
+                                                   
+                                                    return true;
+                                                }
+                                                else {
+                                                    cm.errTextMsg = "Select matter type by area of law for this matter";
+                                                    cm.errorBorder = "selectType";
+                                                    cm.errorPopUpBlock = true; return false;
+                                                }
+                                            }
+                                            else {
+                                                // alert("Enter a description for this matter");
+
+                                                cm.errTextMsg = "Enter a description for this matter.";
+                                                //   cm.errorPopUpBlock = "matterDescription";
+
+                                                cm.errorBorder = "matterdescription";
+                                                cm.errorPopUpBlock = true; return false;
+
+                                            }
+                                        }
+                                        else {
+                                            cm.errTextMsg = "Enter a matter ID.";
+                                            cm.errorBorder = "matterid";
+                                            cm.errorPopUpBlock = true; return false;
+                                        }
+
+                                    }
+                                    else {
+                                        cm.errTextMsg = "Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
+                                        cm.errorBorder = "mattername";
+                                        cm.errorPopUpBlock = true; return false;
+                                    }
+                                }
+
+                            }
+                            else {
+                                cm.errTextMsg = "Please enter a valid Matter name which contains only alphanumeric characters and spaces";
+                                cm.errorBorder = "mattername";
+                                cm.errorPopUpBlock = true; return false;
+                            }
+
+                        }
+                        else {
+                            cm.errTextMsg = "Selected  client for this matter clientId is null ";
+                            cm.errorBorder = "client";
+                            cm.errorPopUpBlock = true; return false;
+                        }
+                    }
+                    else {
+                        cm.errTextMsg = "Select a client for this matter ";
+                        cm.errorBorder = "client";
+                        cm.errorPopUpBlock = true;
+                        return false;
+                    }
+
+                }
+                else if (iCurrPage == 2) {
+                    if (undefined !== cm.chkConfilctCheck && true == cm.chkConfilctCheck) {
+
+                        if (undefined !== cm.conflictDate && null !== cm.conflictDate && "" != cm.conflictDate) {
+                            // cm.conflictDate = new Date();
+                            var validUsers = validateUsers();
+                            if (validUsers) {
+                                var attornyCheck = validateAttornyUserRolesAndPermissins();
+                                if (attornyCheck) {
+                                    cm.popupContainerBackground = "Show";
+                                    storeMatterDataToLocalStorageSecondPage();
+                                    callCheckSecurityGroupExists("snCreateAndShare");
+
+                                    // cm.sectionName = sectionName;
+                                }
+                            }
+
+                        }
+                        else {
+                            cm.errTextMsg = "Enter the date on which the conflict check was performed ";
+                            cm.errorBorder = "cdate";
+                            cm.errorPopUpBlock = true;
+                        }
+
+
+                        // callCheckSecurityGroupExists();
+                        // console.log(getAssignedUserRoles());
+
+
+                    }
+                    else {
+                        //  cm.sectionName = sectionName;
+                        cm.errTextMsg = "A confilct check must be completed prior to provisioning this matter ";
+                        cm.errorBorder = "";
+                        cm.errorPopUpBlock = true;
+
+                    }
+
+                }
+                else if (iCurrPage == 3) {
+                    return true;
+                }
+
             }
 
             

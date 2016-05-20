@@ -189,15 +189,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         }
                     }
 
-                    
+                    genericResponse = uploadHelperFunctionsUtility.CheckDuplicateDocument(clientContext, documentLibraryName, isMailUpload, folderPath, contentCheck, uploadFileName, allowContentCheck, ref message);
 
                     if (!isOverwrite && !isContentCheckRequired)
                     {
-                        genericResponse = uploadHelperFunctionsUtility.CheckDuplicateDocument(clientContext, documentLibraryName, isMailUpload, folderPath, contentCheck, uploadFileName, allowContentCheck, ref message);
-                        if(genericResponse!=null)
-                        {
-                            return genericResponse;
-                        }
+                        return genericResponse;
                     }
                     else if (isContentCheckRequired)
                     {
@@ -209,7 +205,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     }
                     else
                     {
-                        genericResponse = null;
                         if (isMailUpload)       //Upload entire Email
                         {
                             UploadMail(client, folderPath, fileName, documentLibraryName, xmlDocument, ref message);
@@ -274,13 +269,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             catch (Exception exception)
             {
                 //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
-                genericResponse = new GenericResponseVM()
-                {
-                    IsError = true,
-                    Code = UploadEnums.UploadFailure.ToString(),
-                    Value = "False"
-                };
-                return genericResponse;
+                throw;
             }
             return genericResponse;
         }
