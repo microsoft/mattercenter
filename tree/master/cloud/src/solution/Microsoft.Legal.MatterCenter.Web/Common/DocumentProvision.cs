@@ -141,7 +141,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 documentData.DocumentCreatedDate = searchResult[key].ToString();
                                 break;
                             case "fileextension":
-                                documentData.DocumentExtension = searchResult[key].ToString();
+                                documentData.DocumentExtension = searchResult[key].ToString();                                
                                 break;
                             case "docid":
                                 documentData.DocumentID = searchResult[key].ToString();
@@ -160,8 +160,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 documentData.DocumentParentUrl = searchResult[key].ToString();
                                 documentData.DocumentMatterUrl = documentData.DocumentParentUrl.Substring(0, documentData.DocumentParentUrl.LastIndexOf("/"));
                                 break;
-
-                        }
+                                
+                        }                        
+                        documentData.DocumentIconUrl = $"{generalSettings.SiteURL}/_layouts/15/images/ic{documentData.DocumentExtension}.gif";                       
                     }
                     documentDataList.Add(documentData);
                 }

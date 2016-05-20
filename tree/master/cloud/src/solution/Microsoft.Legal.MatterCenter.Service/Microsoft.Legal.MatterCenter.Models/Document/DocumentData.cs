@@ -180,5 +180,6 @@ namespace Microsoft.Legal.MatterCenter.Models
         }
 
         public bool Checker { get; set; }
+        public string DocumentIconUrl { get; set; }
     }
 }

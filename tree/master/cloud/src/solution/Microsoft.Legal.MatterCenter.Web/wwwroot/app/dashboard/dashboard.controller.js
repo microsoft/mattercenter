@@ -48,13 +48,14 @@
     		    enableFiltering : gridOptions.enableFiltering,
     		    columnDefs: [
                     { field: 'checker', displayName: 'checked', cellTemplate: '/app/dashboard/cellCheckboxTemplate.html', headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html', enableColumnMenu:false },
-                    { field: 'documentExtension', displayName: 'Icon', enableColumnMenu: false },
+                    { field: 'documentIconUrl', displayName: 'Icon', cellTemplate: '<div class="ui-grid-cell-contents"><img src="{{row.entity.documentIconUrl}}"/></div>', headerCellTemplate: '<div class="ui-grid-cell-contents"><img class="docTypeIconHeader" id="docTypeIcon" alt="Document type icon" src="https://msmatter.sharepoint.com/_layouts/15/images/generaldocument.png"></div>', enableColumnMenu: false },
     	            { field: 'documentName', displayName: 'Document', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentName}}</div>', enableColumnMenu: false },
                     { field: 'documentClientId', displayName: 'Client', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>', enableColumnMenu: false },
                     { field: 'documentOwner', displayName: 'Author', enableColumnMenu: false },
                     { field: 'documentModifiedDate', displayName: 'Modified date', enableColumnMenu: false },
                     { field: 'documentId', displayName: 'Document ID', enableColumnMenu: false },
                     { field: 'documentVersion', displayName: 'Version', enableColumnMenu: false },
+                    { field: 'pin', cellTemplate: '<div class="ui-grid-cell-contents"><img src="../Images/pin-666.png"/></div>', enableColumnMenu: false }                    
     		    ],
     		    onRegisterApi: function (gridApi) {
     		        vm.gridApi = gridApi    		        		       
@@ -86,7 +87,7 @@
         	//api call to get all documents
     	    function get(options, callback) {
     	    	api({
-    	    		resource: 'dashBoardResource',
+    	    	    resource: 'documentResource',
     	    		method: 'get',
     	    		data: options,
     	    		success: callback
@@ -94,37 +95,46 @@
     	    }
 
         	//api call to get all pinned documents
-    	    //function getPinDocuments(options, callback) {
-    	    //	api({
-    	    //		resource: 'dashBoardResource',
-    	    //		method: 'getPinnedDocuments',
-    	    //		data: options,
-    	    //		success: callback
-    	    //	});
-    	    //}
+    	    function getPinDocuments(options, callback) {
+    	    	api({
+    	    		resource: 'documentResource',
+    	    		method: 'getPinnedDocuments',
+    	    		data: options,
+    	    		success: callback
+    	    	});
+    	    }
 
-        	////api call to get documents of the current logged in user
-    	    //function myDocuments(options, callback) {
-    	    //	api({
-    	    //		resource: 'dashBoardResource',
-    	    //		method: 'getMyDocuments',
-    	    //		data: options,
-    	    //		success: callback
-    	    //	});
-    	    //}
+        	//api call to get documents of the current logged in user
+    	    function myDocuments(options, callback) {
+    	    	api({
+    	    	    resource: 'documentResource',
+    	    	    method: 'get',
+    	    		data: options,
+    	    		success: callback
+    	    	});
+    	    }
         	//#endregion
             
-            //function to get the documents based on document type such as "all", "pinned document", "my documents"
-    	    vm.getDocuments = function (documentType, searchTerm) {    	    	
+    	    
+
+            //function to get the documents based on search term
+    	    vm.getDocuments = function (searchTerm) {    	    	
     	    	var documentRequest = {
-    	    		Client: {
+    	    	    Client: {
+    	    	        //ToDo: Need to read from config.js
     	    			Url: "https://msmatter.sharepoint.com/sites/catalog"
     	    		},
                     SearchObject:{
                         PageNumber: 1,
                         ItemsPerPage: gridOptions.paginationPageSize,
                         SearchTerm: searchTerm,
-                        Filters: {},
+                        Filters: {                            
+                            ClientsList: [],
+                            FromDate: "",
+                            ToDate: "",
+                            DocumentAuthor: "",
+                            //FilterByMe: 1
+                        },
                         Sort:
                           {
                               ByProperty: "LastModifiedTime",
@@ -135,7 +145,46 @@
     	    	get(documentRequest, function(response){
                     vm.documentGridOptions.data = response
                 });
-            }
+    	    }
+
+            //function to get the documents which are pinned by user
+    	    vm.getPinnedDocuments = function () {    	        
+    	        var client = {
+    	            //ToDo: Need to read from config.js
+    	            Url: "https://msmatter.sharepoint.com/sites/catalog"
+    	        }    	            
+    	       
+    	        getPinDocuments(client, function (response) {
+    	            vm.documentGridOptions.data = response.DocumentDataList
+    	        });
+    	    }
+
+    	   
+
+            //function to get the documents based on document type such as "all", "pinned document", "my documents"
+    	    vm.getAllDocuments = function (searchTerm) {
+    	        var documentRequest = {
+    	            Client: {
+    	                Url: "https://msmatter.sharepoint.com/sites/catalog"
+    	            },
+    	            SearchObject: {
+    	                PageNumber: 1,
+    	                ItemsPerPage: gridOptions.paginationPageSize,
+    	                SearchTerm: searchTerm,
+    	                Filters: {},
+    	                Sort:
+                          {
+                              ByProperty: "LastModifiedTime",
+                              Direction: 1
+                          }
+    	            }
+    	        }
+    	        get(documentRequest, function (response) {
+    	            vm.documentGridOptions.data = response
+    	        });
+    	    }
+
+    	    
     	    //#endregion
         }
 	    //#endregion

@@ -1,4 +1,4 @@
-﻿<div class="ngHeaderSortColumn {{col.headerClass}}">
+﻿<div class="ngHeaderSortColumn {{col.headerClass}}" style="width: 20px; text-align: left; cursor: default; min-width: 10px; max-width: 10px;">
     <div  ng-class="'colt' + col.index" class="ngHeaderText">
         <input  type="checkbox" id="chkAllDocCheckBox"  ng-model="checker.checked" ng-change="grid.appScope.vm.toggleCheckerAll(checker.checked);">
     </div>
