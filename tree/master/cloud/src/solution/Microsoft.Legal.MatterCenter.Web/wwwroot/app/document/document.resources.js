@@ -13,7 +13,8 @@ angular.module('matterMain')
                   }),
                   'getPinnedDocuments': auth.attachCSRF({
                       method: 'POST',
-                      url: '/api/v1/document/getpinneddocuments'
+                      url: '/api/v1/document/getpinneddocuments',
+                      isArray: true
                   }),
                   'unPinDocument': auth.attachCSRF({
                       method: 'POST',

@@ -3,7 +3,22 @@
     var app = angular.module("matterMain");
     app.controller('DashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'dashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http',
         function matterDashBoard($scope, $state, $interval, $stateParams, api, $timeout, dashBoardResource, $rootScope, uiGridConstants, $location, $http) {      	
-    	    var vm = this;        
+            var vm = this;
+
+            //#region Variable to show matter count
+            vm.isMatterView = false;
+            vm.allMatterCount = 0;
+            vm.myMatterCount = 0;
+            vm.pinMatterCount = 0;
+            //#endregion
+
+            //#region Variable to show document count
+            vm.isDocumentView = true;
+            vm.allDocumentCount = 0;
+            vm.myDocumentCount = 0;
+            vm.pinDocumentCount = 0;
+            //#endregion
+
     	    var gridOptions = {
     		    paginationPageSize: 10,
     		    enableGridMenu: false,
@@ -15,7 +30,8 @@
     		    enableFiltering: false
     	    }
         
-    	    //#region Matter Grid Options
+    	    //#region Matter             
+            //#region Matter Grid functionality
     	    vm.matterGridOptions = {
     		    paginationPageSize: gridOptions.paginationPageSize,
     		    enableGridMenu: gridOptions.enableGridMenu,
@@ -33,10 +49,20 @@
                     { field: 'matterSubAreaOfLaw', headerTooltip: 'Click to sort by sub area of law', displayName: 'Sub area of law', visible: false },
                     { field: 'matterCreatedDate', headerTooltip: 'Click to sort by matter open date', displayName: 'Open date'},
     		    ],
+    		    onRegisterApi: function (gridApi) {
+    		        vm.gridApi = gridApi;
+    		        //Set the selected row of the grid to selectedRow property of the controller
+    		        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+    		            vm.selectedRow = row.entity
+    		        });
+    		    }
     	    }
     	    //#endregion
+            //#endregion
 
-    	    //#region Document Grid Options
+    	    //#region Document 
+
+            //#region Document Grid Functionality
     	    vm.documentGridOptions = {
     	        paginationPageSize: gridOptions.paginationPageSize,
                 enablePagination:false,
@@ -58,7 +84,11 @@
                     { field: 'pin', cellTemplate: '<div class="ui-grid-cell-contents"><img src="../Images/pin-666.png"/></div>', enableColumnMenu: false }                    
     		    ],
     		    onRegisterApi: function (gridApi) {
-    		        vm.gridApi = gridApi    		        		       
+    		        vm.gridApi = gridApi;
+                    //Set the selected row of the grid to selectedRow property of the controller
+    		        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+    		            vm.selectedRow = row.entity
+    		        });
     		    }
     	    }
     	   
@@ -82,6 +112,7 @@
     	            vm.documentGridOptions.data[i].checker = checked;
     	        }    	        
     	    };
+            //#endregion
             
             //#region api call to get document information
         	//api call to get all documents
@@ -115,9 +146,7 @@
     	    }
         	//#endregion
             
-    	    
-
-            //function to get the documents based on search term
+    	    //#region function to get the documents based on search term
     	    vm.getDocuments = function (searchTerm) {    	    	
     	    	var documentRequest = {
     	    	    Client: {
@@ -143,11 +172,15 @@
                     }
     	    	}                
     	    	get(documentRequest, function(response){
-                    vm.documentGridOptions.data = response
+    	    	    vm.documentGridOptions.data = response;
+    	    	    vm.allDocumentCount = response.length;
+    	    	    
+    	    	    
                 });
     	    }
+            //#endregion
 
-            //function to get the documents which are pinned by user
+            //#region function to get the documents which are pinned by user
     	    vm.getPinnedDocuments = function () {    	        
     	        var client = {
     	            //ToDo: Need to read from config.js
@@ -155,39 +188,53 @@
     	        }    	            
     	       
     	        getPinDocuments(client, function (response) {
-    	            vm.documentGridOptions.data = response.DocumentDataList
-    	        });
-    	    }
-
-    	   
-
-            //function to get the documents based on document type such as "all", "pinned document", "my documents"
-    	    vm.getAllDocuments = function (searchTerm) {
-    	        var documentRequest = {
-    	            Client: {
-    	                Url: "https://msmatter.sharepoint.com/sites/catalog"
-    	            },
-    	            SearchObject: {
-    	                PageNumber: 1,
-    	                ItemsPerPage: gridOptions.paginationPageSize,
-    	                SearchTerm: searchTerm,
-    	                Filters: {},
-    	                Sort:
-                          {
-                              ByProperty: "LastModifiedTime",
-                              Direction: 1
-                          }
+    	            if (response) {
+    	                vm.documentGridOptions.data = response;
+    	                vm.pinDocumentCount = response.length;
     	            }
-    	        }
-    	        get(documentRequest, function (response) {
-    	            vm.documentGridOptions.data = response
     	        });
     	    }
+            //#endregion    	   
 
-    	    
+            //#region function to get the documents based on login user
+    	    vm.getMyDocuments = function (searchTerm) {
+    	        var documentRequest = {
+    	    	    Client: {
+    	    	        //ToDo: Need to read from config.js
+    	    			Url: "https://msmatter.sharepoint.com/sites/catalog"
+    	    		},
+                    SearchObject:{
+                        PageNumber: 1,
+                        ItemsPerPage: gridOptions.paginationPageSize,
+                        SearchTerm: searchTerm,
+                        Filters: {                            
+                            ClientsList: [],
+                            FromDate: "",
+                            ToDate: "",
+                            DocumentAuthor: "",
+                            FilterByMe: 1
+                        },
+                        Sort:{
+                            ByProperty: "LastModifiedTime",
+                            Direction: 1
+                        }
+                    }
+    	    	}
+    	        get(documentRequest, function (response) {
+    	            vm.documentGridOptions.data = response;
+    	            vm.myDocumentCount = response.length;
+    	            
+    	        });
+    	    }
+            //#endregion
+
+            //Call all document related api if view is document
+    	    if (vm.isDocumentView) {
+    	        vm.getDocuments();   
+    	        vm.getPinnedDocuments();
+    	        vm.getMyDocuments();
+    	    }    	    
     	    //#endregion
         }
-	    //#endregion
-
     ])
 })();

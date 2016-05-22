@@ -18,6 +18,22 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     $scope.lazyloader = true;
     //end
 
+
+    vm.iAsyncCallsCompleted = false;
+    vm.bAttachDocumentFailed = false;
+    vm.selectedRows = [];
+    vm.showAttachmentProgress = false;
+    vm.showAttachment = true;
+    vm.attachButtonText = configs.uploadMessages.attachButtonText;
+    vm.showPopUpHolder = false;
+    vm.showAttachmentProgress = false;
+    vm.showErrorAttachmentInfo = false;
+    vm.showFailedAtachments = false;
+    vm.showSuccessAttachments = false;
+    vm.failedFiles = [];
+    var asyncCallCompleted = 0;
+
+    //#region Grid Cell/Header Templates
     //Assigning html for Matterheadertemplate
     //Start
     $scope.documentDropDowm = false;
@@ -167,27 +183,26 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     </div>\
 </div>";
     //End
+    //#endregion
+
 
     vm.gridOptions = {
         enableGridMenu: true,
-        enableRowHeaderSelection: false,
+        enableRowHeaderSelection: true,
         enableRowSelection: true,
-        enableSelectAll: false,
-        multiSelect: false,
-        columnDefs: [{
-            field: 'documentName', displayName: 'Document', enableHiding: false, cellTemplate: documentCellTemplate,
-            headerCellTemplate: documentHeaderTemplate
-        },
-            { field: 'documentClientId', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },
-             //matterID 
-    { field: 'documentClientId', displayName: 'Client.Matter ID', cellTemplate: '<div class="ngCellText">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
-     { field: 'documentModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: ModifiedDateheadertemplate },
-     { field: 'documentOwner', displayName: 'Author', visible: false },
-     { field: 'documentVersion', displayName: 'Document Version', visible: false },
-     { field: 'documentCheckoutUser', displayName: 'Checked out to', cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
-     { field: 'documentCreatedDate', displayName: 'Created date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
+        enableSelectAll: true,
+        multiSelect: true,
+        columnDefs: [
+            {field: 'documentName', displayName: 'Document', enableHiding: false, cellTemplate: documentCellTemplate,headerCellTemplate: documentHeaderTemplate},
+            { field: 'documentClientId', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },            
+            { field: 'documentClientId', displayName: 'Client.Matter ID', cellTemplate: '<div class="ngCellText">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+            { field: 'documentModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: ModifiedDateheadertemplate },
+            { field: 'documentOwner', displayName: 'Author', visible: false },
+            { field: 'documentVersion', displayName: 'Document Version', visible: false },
+            { field: 'documentCheckoutUser', displayName: 'Checked out to', cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
+            { field: 'documentCreatedDate', displayName: 'Created date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
         ],
-        enableColumnMenus: false,
+        enableColumnMenus: false,        
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
             gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
@@ -195,11 +210,148 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
             });
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                 vm.selectedRow = row.entity
+                vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
+                if (vm.selectedRows && vm.selectedRows.length < 5) {
+                    vm.showAttachment = true
+                    vm.showErrorAttachmentInfo = false;
+                    vm.warningMessageText = '';
+                }
+                else {
+                    vm.showErrorAttachmentInfo = true;
+                    vm.showAttachment = false;
+                    vm.warningMessageText = configs.uploadMessages.maxAttachedMessage;
+                }
             });
             $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
             $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
+            
         }
     };
+
+    //#region Code for attaching documents in compose more
+    
+    Office.initialize = function (reason) {
+        
+    };
+    
+    vm.enableAttachIfComposeMode = function () {
+        if (Office && Office.context && Office.context.mailbox && Office.context.mailbox.item) {
+            vm.showErrorAttachmentInfo = false;
+            //vm.showFailedAtachments = false;
+            vm.failedFiles = [];
+            asyncCallCompleted = 0;
+            var oCurrentEmailItem = Office.context.mailbox.item.get_data();
+            var sEmailCreatedTime, sEmailModifiedTime;
+            if (oCurrentEmailItem && (oCurrentEmailItem.hasOwnProperty("$0_0") || oCurrentEmailItem.hasOwnProperty("_data$p$0"))) {
+                // If $0_0 property is not available, use _data$p$0 to get email item details
+                if (oCurrentEmailItem.hasOwnProperty("$0_0")) {
+                    sEmailCreatedTime = oCurrentEmailItem.$0_0.dateTimeCreated;
+                    sEmailModifiedTime = oCurrentEmailItem.$0_0.dateTimeModified;
+                } else {
+                    sEmailCreatedTime = oCurrentEmailItem._data$p$0.dateTimeCreated;
+                    sEmailModifiedTime = oCurrentEmailItem._data$p$0.dateTimeModified;
+                }
+                if (typeof (sEmailCreatedTime) === "undefined" && typeof (sEmailModifiedTime) === "undefined") {
+                    vm.sendDocumentAsAttachment();
+                }
+            }
+            
+        }
+    }
+
+    vm.sendDocumentAsAttachment = function(){        
+        if (vm.selectedRows && vm.selectedRows.length) {
+            vm.showFailedAtachments = false;
+            vm.failedFiles = [];
+            vm.showPopUpHolder = true;
+            vm.attachedProgressPopUp = true;
+            vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", vm.selectedRows);
+            angular.forEach(vm.selectedRows, function (selRow) {
+                var documentPath = trimEndChar(selRow.documentOWAUrl, "/");
+                var documentName = '';
+                if (documentPath) {
+                    documentPath = trimEndChar(documentPath.trim(), "/");
+                    documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1);
+                    if (documentPath && documentName) {
+                        sendAttachmentAsync(decodeURIComponent(documentPath), decodeURIComponent(documentName));                        
+                    }
+                }
+            });
+        }
+    }
+    
+    
+    /* Send asynchronous calls to send each document as attachment */
+    function sendAttachmentAsync(sDocumentPath, sDocumentName) {        
+        Office.context.mailbox.item.addFileAttachmentAsync(sDocumentPath, sDocumentName, {
+            asyncContext: {
+                sCurrentDocumentPath: sDocumentPath,
+                sCurrentDocumentName: sDocumentName
+            }
+        },
+        function (asyncResult) {
+            if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+                //failedHtml = failedHtml + "";
+                vm.failedFiles.push(asyncResult.asyncContext.sCurrentDocumentName)
+                vm.showFailedAtachments = true;       
+                //$(".failureDocumentList").append("<div title=\"" + asyncResult.asyncContext.sCurrentDocumentName + "\" class=\"documentList\">" + asyncResult.asyncContext.sCurrentDocumentName + "</div>");
+
+            }
+            asyncCallCompleted = asyncCallCompleted + 1;
+            if (asyncCallCompleted === vm.selectedRows.length) {
+                notifyAttachmentResult();
+            }
+            //if ($(".is-selectedRow").length === oDocumentConstants.iAsyncCallsCompleted) {
+            //    notifyAttachmentResult();
+            //} else {
+            //    $("#currentDocumentCount").text(parseInt(oDocumentConstants.iAsyncCallsCompleted, 10) + 1);
+            //}
+            
+        });
+    }
+
+    function notifyAttachmentResult() {
+        "use strict";
+        vm.showAttachmentProgress = false;
+
+        if (vm.showFailedAtachments) {
+            vm.showSuccessAttachments = false;
+            vm.showFailedAtachments = true;
+            vm.failedHeaderMessage = configs.uploadMessages.attachFailureMessage;
+        } else {
+            vm.showFailedAtachments = false;
+            vm.showSuccessAttachments = true;
+            vm.failedHeaderMessage = '';
+        }
+        vm.showPopUpHolder = true;
+
+        console.log(vm.showFailedAtachments)
+        console.log(vm.showPopUpHolder)
+        console.log(vm.showSuccessAttachments)
+        console.log(vm.failedHeaderMessage)
+        //var oAllSelector = $("#CheckBox .ms-ChoiceField-input");
+        //if (oAllSelector && oAllSelector.length) {
+        //    oAllSelector[0].checked = false;
+        //}
+    }
+
+    vm.checkVariables = function () {
+        console.log(vm.showFailedAtachments)
+        console.log(vm.showPopUpHolder)
+        console.log(vm.showSuccessAttachments)
+        console.log(vm.failedHeaderMessage)
+    }
+
+    function trimEndChar(sOrignalString, sCharToTrim) {
+        "use strict";
+        if (sOrignalString && sCharToTrim === sOrignalString.substr(-1)) {
+            return sOrignalString.substr(0, sOrignalString.length - 1);
+        }
+        return sOrignalString;
+    }
+    
+    //#endregion
+
 
 
     //search api call 
@@ -246,8 +398,6 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
 
 
     vm.searchDocument = function (val) {
-
-
         var searchRequest =
           {
               Client: {
@@ -274,8 +424,6 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
 
 
     vm.search = function () {
-
-
         var searchRequest =
           {
               Client: {
@@ -496,9 +644,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
             Url: "https://msmatter.sharepoint.com/sites/catalog"
         }
         getPinnedDocuments(pinnedDocumentsRequest, function (response) {
-            for (var i = 0; i < response.documentDataList.length; i++) {
-                $scope.Pinnedobj.push(response.documentDataList[i]);
-            }
+            //for (var i = 0; i < response.length; i++) {
+            //    $scope.Pinnedobj.push(response.documentDataList[i]);
+            //}
+            $scope.Pinnedobj.push(response);
         });
         return true;
     }

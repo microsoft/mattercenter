@@ -1,5 +1,5 @@
 ﻿<script type="text/ng-template" id="colHeaderCheckBox.html">
-    
+
 </script>
 
 <div class="popupWait hide"></div>
@@ -54,24 +54,7 @@
     <div id="contentDiv">
         <div class="LeftContent">
             <div class="mailpopupContainerBackground hide"></div>
-            <div class="mailContainer hide">
-                <div class="notificationContainerForMailPopup"></div>
-                <img class="popUpCloseIcon " alt="Close" src="../Images/close-666.png" title="Close" />
-                <div id="mailContent">
-                    <header class="mailHeader">
-                        <div id="attachmentHeader" class="hide" title="Drag and drop items to the folders below">
-                            <span class="attachmentHeaderInstruction"></span>
-                        </div>
-                    </header>
-                    <div id="mailBody"></div>
-                    <div id="mailFooter">
-                        <img alt="info" id="popupInfoIcon" src="../Images/information-blue.png" />
-                        <div id="popupFooterText">
-                            You can also drag and drop files from your desktop.
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
             <div class="appName hide">
                 <div class="appLink">
                     <a>
@@ -83,43 +66,64 @@
             </div>
             <div class="Search" id="Search">
                 <div class="bannerMatterWorkspace">
+                    <div class="filterWrapper">
+                        <div class="filterSearchPanel">
+                            <input title="Search by document name, document ID, or keyword" class="filterSearchText" type="text" placeholder="Search by document name, document ID, or keyword">
+                            <div class="filterSearch">
+                                <img title="Search" class="filterSearchImg" alt="Search" src="../Images/search-15x15-666.png">
+                            </div>
+                            <img title="Advanced search" class="filterSearchDD" style="display: inline;" alt="Drop Down" src="../Images/downward-advanced-search-29x29-666.png">
+                            <img title="Advanced search" class="filterSearchDD hide" id="filterSearchDown" style="display: none;" alt="Drop Down" src="../Images/upward-advanced-search-29x29-666.png">
+                            <div class="filterAutoComplete hide"></div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="DisplayResults">
-                <div id="DisplayFindMattersResults" class="fallbackFlex">
-                    <div title="Manage your recent matters: upload emails or documents to a matter, review matter details, or pin matters" class="mySearch active" id="RecentMattersHeader" onclick="togglePinnedView(this, 2)">
+                <!--Start - Show Display Count for matters-->
+                <div id="DisplayFindMattersResults" class="fallbackFlex" ng-show="vm.isMatterView">
+                    <div title="Manage your recent matters: upload emails or documents to a matter, review matter details, or pin matters"
+                         class="mySearch active" id="RecentMattersHeader" onclick="togglePinnedView(this, 2)">
                         <span class="resultsTab">My matters</span>
-                        <span class="ResultNumbers">(0)</span>
+                        <span class="ResultNumbers">({{vm.myMatterCount}})</span>
                     </div>
-                    <div title="Manage matters: upload emails or documents to a matter, review matter details, or pin matters" class="allSearch" onclick="togglePinnedView(this, 0)">
+                    <div title="Manage matters: upload emails or documents to a matter, review matter details, or pin matters"
+                         class="allSearch" onclick="togglePinnedView(this, 0)">
                         <span class="resultsTab">All matters</span>
-                        <span class="ResultNumbers">(0)</span>
+                        <span class="ResultNumbers">(vm.allMatterCount)</span>
                     </div>
-                    <div title="Manage your pinned matters: upload emails or documents to a matter, review matter details, or unpin matters" class="pinnedSearch" id="PinnedMatters" onclick="togglePinnedView(this, 1)">
+                    <div title="Manage your pinned matters: upload emails or documents to a matter, review matter details, or unpin matters"
+                         class="pinnedSearch" id="PinnedMatters" onclick="togglePinnedView(this, 1)">
                         <span class="resultsTab">Pinned matters</span>
-                        <span class="ResultNumbers">(0)</span>
+                        <span class="ResultNumbers">(vm.pinMatterCount)</span>
                     </div>
-                   
+
                     <div class="viewSwitcher"><span>…</span></div>
                 </div>
-                <div id="DisplaySearchDocumentsResults" class="hide">
-                    <div title="Manage your recent documents: view, edit, or pin a document" class="mySearch active" id="RecentDocuments" onclick="togglePinnedView(this, 2)">
+                <!--End - Show Display Count for matters-->
+                <!--Start - Show Display Count for Documents-->
+                <div id="DisplaySearchDocumentsResults" ng-show="vm.isDocumentView">
+                    <div title="Manage your recent documents: view, edit, or pin a document"
+                         class="mySearch active" id="RecentDocuments" onclick="togglePinnedView(this, 2)">
                         <span class="resultsTab">My documents</span>
-                        <span class="ResultNumbers">(0)</span>
+                        <span class="ResultNumbers">({{vm.myDocumentCount}})</span>
                     </div>
-                    <div title="Manage documents: view, edit, or pin a document" class="allSearch" onclick="togglePinnedView(this, 0)">
+                    <div title="Manage documents: view, edit, or pin a document" class="allSearch"
+                         onclick="togglePinnedView(this, 0)">
                         <span class="resultsTab">All documents</span>
-                        <span class="ResultNumbers">(0)</span>
+                        <span class="ResultNumbers">({{vm.allDocumentCount}})</span>
                     </div>
-                    <div title="Manage documents: view, edit, or pin a document" class="pinnedSearch" id="PinnedDocuments" onclick="togglePinnedView(this, 1)">
+                    <div title="Manage documents: view, edit, or pin a document" class="pinnedSearch"
+                         id="PinnedDocuments" onclick="togglePinnedView(this, 1)">
                         <span class="resultsTab">Pinned documents</span>
-                        <span class="ResultNumbers">(0)</span>
+                        <span class="ResultNumbers">({{vm.pinDocumentCount}})</span>
                     </div>
                     <div class="viewSwitcher"><span>…</span></div>
-                    
                 </div>
+                <!--End - Show Display Count for Documents-->
             </div>
-            <div class="extraTabHolder">…</div>
+
             <div class="searchDocumentHeader">
                 <div class="switchTab hide">
                     <div class="navDiv" onclick="changeNavigationTabs(this);">Search Results</div>
@@ -164,7 +168,7 @@
                 </div>
             </div>
             <div class="detailSeparator"></div>
-            <button ng-click="vm.getDocuments()" value="Documents" />
+
             <div id="grid1" ui-grid="vm.documentGridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
             <div class="Grid" id="grid">
             </div>
@@ -176,6 +180,6 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </div>
