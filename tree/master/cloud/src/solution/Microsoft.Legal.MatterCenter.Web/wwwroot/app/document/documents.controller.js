@@ -35,8 +35,10 @@
         vm.showFailedAtachments = false;
         vm.showSuccessAttachments = false;
         vm.failedFiles = [];
+        vm.failedFiles.push("Test 1")
+        vm.failedFiles.push("Test 2")
         vm.enableAttachment = true;
-        var asyncCallCompleted = 0;
+        vm.asyncCallCompleted = 0;
      
         //#region Grid Cell/Header Templates
         //Start
@@ -101,7 +103,7 @@
                     vm.showErrorAttachmentInfo = false;
                     //vm.showFailedAtachments = false;
                     vm.failedFiles = [];
-                    asyncCallCompleted = 0;
+                    vm.asyncCallCompleted = 0;
                     var oCurrentEmailItem = Office.context.mailbox.item.get_data();
                     var sEmailCreatedTime, sEmailModifiedTime;
                     if (oCurrentEmailItem && (oCurrentEmailItem.hasOwnProperty("$0_0") || oCurrentEmailItem.hasOwnProperty("_data$p$0"))) {
@@ -127,7 +129,7 @@
                     vm.failedFiles = [];
                     vm.showPopUpHolder = true;
                     vm.attachedProgressPopUp = true;
-                    vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", vm.selectedRows);
+                    vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", 1);
                     angular.forEach(vm.selectedRows, function (selRow) {
                         var documentPath = trimEndChar(selRow.documentOWAUrl, "/");
                         var documentName = '';
@@ -154,14 +156,19 @@
                 function (asyncResult) {
                     if (asyncResult.status === Office.AsyncResultStatus.Failed) {
                         //failedHtml = failedHtml + "";
+                        
                         vm.failedFiles.push(asyncResult.asyncContext.sCurrentDocumentName)
                         vm.showFailedAtachments = true;
                         //$(".failureDocumentList").append("<div title=\"" + asyncResult.asyncContext.sCurrentDocumentName + "\" class=\"documentList\">" + asyncResult.asyncContext.sCurrentDocumentName + "</div>");
 
                     }
-                    asyncCallCompleted = asyncCallCompleted + 1;
+                    vm.asyncCallCompleted = vm.asyncCallCompleted + 1;
                     if (asyncCallCompleted === vm.selectedRows.length) {
                         notifyAttachmentResult();
+                    }
+                    else {
+                        
+                        vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", parseInt(vm.asyncCallCompleted, 10) + 1);
                     }
                     //if ($(".is-selectedRow").length === oDocumentConstants.iAsyncCallsCompleted) {
                     //    notifyAttachmentResult();

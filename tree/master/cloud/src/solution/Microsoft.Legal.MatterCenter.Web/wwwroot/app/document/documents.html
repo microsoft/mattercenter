@@ -81,7 +81,7 @@
             </div>
             <div class="attachedFailedPopUp" ng-if="vm.showFailedAtachments">
                 <div class="attachedPopUpDetails">{{vm.failedHeaderMessage}}</div>
-                <div class="failureDocumentList" ng-repeat="failedFile in vm.failedFiles">
+                <div class="failureDocumentList" ng-repeat="failedFile in vm.failedFiles track by $index">
                     <div title="{{failedFile}}" class="documentList"> {{failedFile}} </div>
                 </div>
                 <div title="Close" class="attachedPopUpCloseIconContainer" ng-click="vm.closeNotification()">Close</div>
