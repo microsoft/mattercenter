@@ -1,19 +1,30 @@
 ﻿<div class='row'>
-
     <div class='col-xs-7 col-sm-9 col-md-9 col-lg-10' id='documentPopup' title='{{row.entity.documentName}}'>
-
-        <a popoverdoc type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align: left' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href=''><img class="docTypeIconHeader" id="docTypeIcon" src="{{row.entity.documentIconUrl}}" alt="Document type icon"> {{row.entity.documentName}}</a>
+        <a popoverdoc type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align: left'
+           details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right'
+           data-html='true' href=''>
+            <img class="docTypeIconHeader" id="docTypeIcon"
+                 src="{{row.entity.documentIconUrl}}" alt="Document type icon" /> 
+        </a>
         <div class='popover-content'></div>
     </div>
     <div class='col-xs-5 col-sm-3 col-md-3 col-lg-2 text-right'>
-
         <div class='dropdown'>
+            <a class='btn btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' href='' type='button' data-toggle='dropdown'></a>
+            <ul style='margin:0;padding:0' class='dropdown-menu'>
 
-            <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a><ul style='margin:0;padding:0' class='dropdown-menu'>
-
-                <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' ng-href='{{row.entity.documentOWAUrl}}' target='_blank'>Open this Document</a></li>
-                <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' ng-href='{{row.entity.documentMatterUrl}}' target='_blank'>View Matter Details</a></li>
-                <li class='ms-ContextualMenu-item' ng-click='row.entity.MatterInfo===undefined?grid.appScope.PinMatter(row):grid.appScope.UnpinMatter(row)'><a class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?'Pin this Matter':'Unpin this matter'}}</a></li>
+                <li class='ms-ContextualMenu-item'>
+                    <a class='ECBItem ms-ContextualMenu-link upload' ng-href='{{row.entity.documentOWAUrl}}'
+                       target='_blank'>Open this Document</a>
+                </li>
+                <li class='ms-ContextualMenu-item'>
+                    <a class='ECBItem ms-ContextualMenu-link upload' ng-href='{{row.entity.documentMatterUrl}}' 
+                       target='_blank'>View Matter Details</a>
+                </li>
+                <li class='ms-ContextualMenu-item' 
+                    ng-click='row.entity.MatterInfo===undefined?grid.appScope.PinMatter(row):grid.appScope.UnpinMatter(row)'>
+                    <a class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?'Pin this Matter':'Unpin this matter'}}</a>
+                </li>
             </ul>
         </div>
     </div>

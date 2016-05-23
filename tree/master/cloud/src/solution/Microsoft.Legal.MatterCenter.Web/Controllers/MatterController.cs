@@ -81,9 +81,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="client"></param>
         /// <returns></returns>
         [HttpPost("getpinned")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]        
+        [SwaggerResponse(HttpStatusCode.OK)]             
         public async Task<IActionResult> GetPin([FromBody]Client client)
         {
             try
@@ -132,9 +130,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="pinRequestMatterVM"></param>
         /// <returns></returns>
         [HttpPost("pin")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]        
+        [SwaggerResponse(HttpStatusCode.OK)]           
         public async Task<IActionResult> Pin([FromBody]PinRequestMatterVM pinRequestMatterVM)
         {
             try
@@ -173,9 +169,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="pinRequestMatterVM"></param>
         /// <returns></returns>
         [HttpPost("unpin")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]        
+        [SwaggerResponse(HttpStatusCode.OK)]         
         public async Task<IActionResult> UnPin([FromBody]PinRequestMatterVM pinRequestMatterVM)
         {
             try
@@ -223,9 +217,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="searchRequestVM"></param>
         /// <returns>searchResponseVM</returns>
         [HttpPost("get")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]       
         public async Task<IActionResult> Get([FromBody]SearchRequestVM searchRequestVM)
         {
             try
@@ -258,9 +250,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         
 
         [HttpPost("getfolderhierarchy")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         /// <summary>
         /// unpin the matter
         /// </summary>        
@@ -302,9 +292,7 @@ namespace Microsoft.Legal.MatterCenter.Service
 
         
         [HttpPost("getstampedproperties")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         /// <summary>
         /// Method saves matter configurations
         /// </summary>        
@@ -347,9 +335,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         #region Configurations
 
         [HttpPost("savconfigurations")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         /// <summary>
         /// Method saves default matter configurations from the settings page. When the user select a client and these
         /// default configurations will be loaded by default for that client
@@ -386,9 +372,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         }
 
         [HttpPost("getconfigurations")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         /// <summary>
         /// get users
         /// </summary>        
@@ -573,9 +557,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <returns></returns>
         [HttpPost("update")]
         [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
-      
+        
         public IActionResult Update([FromBody]MatterInformationVM matterInformation)
         {
             string editMatterValidation = string.Empty;
@@ -950,9 +932,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="matterMetdata"></param>
         /// <returns></returns>
         [HttpPost("updatemetadata")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult UpdateMetadata([FromBody]MatterMetdataVM matterMetdata)
         {
             string editMatterValidation = string.Empty;

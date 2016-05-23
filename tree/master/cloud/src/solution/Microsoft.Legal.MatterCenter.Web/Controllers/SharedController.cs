@@ -74,9 +74,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="requestedPageUrl">String object containing the Matter Landing Page file path</param>
         /// <returns>$|$ Separated string indicating that the OneNote and the Matter Landing Page exist or not</returns>        
         [HttpPost("urlexists")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public async Task<IActionResult> UrlExists(Client client, string oneNoteUrl, string matterLandingPageUrl)
         {
             string result = string.Empty;
@@ -128,9 +126,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="selectedPage">String object containing the page number where user is on</param>
         /// <returns>IActionResult which return List of ContextHelpData in JSON format</returns>        
         [HttpPost("help")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public async Task<IActionResult> Help(Client client, string selectedPage)
         {
             string result = string.Empty;

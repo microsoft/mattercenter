@@ -73,9 +73,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
          
         [HttpPost("gettaxonomy")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         /// <summary>
         /// Gets the hierarchy of terms along with the specific custom properties of each term from term store.
         /// </summary>        
@@ -193,8 +191,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <returns></returns>
         
         [HttpGet("getcurrentsitetitle")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult GetCurrentSiteTitle()
         {
             var termStoreViewModel1 = new TermStoreViewModel()
@@ -230,11 +227,9 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// </summary>
         /// <returns></returns>
         [HttpGet("getcurrentsitetitlev1")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult TestWebApi()
-        {
-            
+        {            
             var success = new
             {
                 Title = "New Title"

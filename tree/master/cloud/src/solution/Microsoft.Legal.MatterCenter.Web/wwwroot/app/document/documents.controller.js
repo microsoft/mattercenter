@@ -5,308 +5,314 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('documentsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http',
-function ($scope, $state, $interval, $stateParams, api, $timeout, documentResource, $rootScope, uiGridConstants, $location, $http) {
-    var vm = this;
-    vm.selected = undefined;
-    // Onload show ui grid and hide error div
-    //start
-    $scope.divuigrid = true;
-    $scope.nodata = false;
-    //end
+    app.controller('documentsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout',
+        'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http',
+    function ($scope, $state, $interval, $stateParams, api, $timeout,
+        documentResource, $rootScope, uiGridConstants, $location, $http) {
+        var vm = this;
+        vm.selected = undefined;
+        // Onload show ui grid and hide error div
+        //start
+        $scope.divuigrid = true;
+        $scope.nodata = false;
+        //end
 
-    //to hide lazyloader on load
-    //start
-    $scope.lazyloader = true;
-    //end
+        //to hide lazyloader on load
+        //start
+        $scope.lazyloader = true;
+        //end
 
 
-    vm.iAsyncCallsCompleted = false;
-    vm.bAttachDocumentFailed = false;
-    vm.selectedRows = [];
-    vm.showAttachmentProgress = false;
-    vm.showAttachment = true;
-    vm.attachButtonText = configs.uploadMessages.attachButtonText;
-    vm.showPopUpHolder = false;
-    vm.showAttachmentProgress = false;
-    vm.showErrorAttachmentInfo = false;
-    vm.showFailedAtachments = false;
-    vm.showSuccessAttachments = false;
-    vm.failedFiles = [];
-    var asyncCallCompleted = 0;
+        vm.iAsyncCallsCompleted = false;
+        vm.bAttachDocumentFailed = false;
+        vm.selectedRows = [];
+        vm.showAttachmentProgress = false;
+        vm.showAttachment = false;
+        vm.attachButtonText = configs.uploadMessages.attachButtonText;
+        vm.showPopUpHolder = false;
+        vm.showAttachmentProgress = false;
+        vm.showErrorAttachmentInfo = false;
+        vm.showFailedAtachments = false;
+        vm.showSuccessAttachments = false;
+        vm.failedFiles = [];
+        vm.enableAttachment = true;
+        var asyncCallCompleted = 0;
+     
+        //#region Grid Cell/Header Templates
+        //Start
+        $scope.documentDropDowm = false;
+        $scope.clientDropDowm = false;
+        $scope.modifieddateDropDowm = false;
+        //End
 
-    //#region Grid Cell/Header Templates
-    //Start
-    $scope.documentDropDowm = false;
-    $scope.clientDropDowm = false;
-    $scope.modifieddateDropDowm = false;
-    //End
+        vm.gridOptions = {
+            enableGridMenu: true,
+            enableRowHeaderSelection: true,
+            enableRowSelection: true,
+            enableSelectAll: true,
+            multiSelect: true,
+            columnDefs: [
+                { field: 'documentName', displayName: 'Document',width:'20%', enableHiding: false, cellTemplate: '../app/document/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentHeaderTemplate.html' },
+                { field: 'documentClientId', displayName: 'Client',width:'15%', enableCellEdit: true, headerCellTemplate: '../app/document/ClientHeaderTemplate.html' },
+                { field: 'documentClientId', displayName: 'Client.Matter ID',width:'10%', headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ngCellText">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+                { field: 'documentModifiedDate', displayName: 'Modified Date',width:'10%', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/ModifiedDateHeaderTemplate.html' },
+                { field: 'documentOwner', displayName: 'Author',width:'20%', headerTooltip: 'Click to sort by document Author', visible: false },
+                { field: 'documentVersion', displayName: 'Document Version',width:'5%', headerTooltip: 'Click to sort by version', visible: false },
+                { field: 'documentCheckoutUser', displayName: 'Checked out to',width:'10%', headerTooltip: 'Click to sort by who has documents checked out', cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
+                { field: 'documentCreatedDate', displayName: 'Created date',width:'10%', headerTooltip: 'Click to sort by created date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
+            ],
+            enableColumnMenus: false,
+            onRegisterApi: function (gridApi) {
+                $scope.gridApi = gridApi;
+                gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
+                    $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
+                });
+                gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                    vm.selectedRow = row.entity
+                    //If the app is opened in outlook, then the below validation is going to be applied
+                    if (vm.isOutlook && vm.showAttachment) {
+                        vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
+                        if (vm.selectedRows && vm.selectedRows.length < 5) {
+                            vm.enableAttachment = true
+                            vm.showErrorAttachmentInfo = false;
+                            vm.warningMessageText = '';
+                        }
+                        else {
+                            vm.showErrorAttachmentInfo = true;
+                            vm.enableAttachment = false;
+                            vm.warningMessageText = configs.uploadMessages.maxAttachedMessage;
+                        }
+                    }
+                });
+                $scope.gridApi.core.on.sortChanged($scope, $scope.sortChangedDocument);
+                $scope.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
 
-    vm.gridOptions = {
-        enableGridMenu: true,
-        enableRowHeaderSelection: true,
-        enableRowSelection: true,
-        enableSelectAll: true,
-        multiSelect: true,
-        columnDefs: [
-            { field: 'documentName', displayName: 'Document',width:'20%', enableHiding: false, cellTemplate: '../app/document/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentHeaderTemplate.html' },
-            { field: 'documentClientId', displayName: 'Client',width:'15%', enableCellEdit: true, headerCellTemplate: '../app/document/ClientHeaderTemplate.html' },
-            { field: 'documentClientId', displayName: 'Client.Matter ID',width:'10%', headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ngCellText">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
-            { field: 'documentModifiedDate', displayName: 'Modified Date',width:'10%', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/ModifiedDateHeaderTemplate.html' },
-            { field: 'documentOwner', displayName: 'Author',width:'20%', headerTooltip: 'Click to sort by document Author', visible: false },
-            { field: 'documentVersion', displayName: 'Document Version',width:'5%', headerTooltip: 'Click to sort by version', visible: false },
-            { field: 'documentCheckoutUser', displayName: 'Checked out to',width:'10%', headerTooltip: 'Click to sort by who has documents checked out', cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
-            { field: 'documentCreatedDate', displayName: 'Created date',width:'10%', headerTooltip: 'Click to sort by created date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
-        ],
-        enableColumnMenus: false,
-        onRegisterApi: function (gridApi) {
-            $scope.gridApi = gridApi;
-            gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
-                $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
-            });
-            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                vm.selectedRow = row.entity
-                vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
-                if (vm.selectedRows && vm.selectedRows.length < 5) {
-                    vm.showAttachment = true
-                    vm.showErrorAttachmentInfo = false;
-                    vm.warningMessageText = '';
-                }
-                else {
-                    vm.showErrorAttachmentInfo = true;
-                    vm.showAttachment = false;
-                    vm.warningMessageText = configs.uploadMessages.maxAttachedMessage;
-                }
-            });
-            $scope.gridApi.core.on.sortChanged($scope, $scope.sortChangedDocument);
-            $scope.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
-
-        }
-    };
+            }
+        };
 
     //#region Code for attaching documents in compose more
-
-    Office.initialize = function (reason) {
-
-    };
-
-    vm.enableAttachIfComposeMode = function () {
-        if (Office && Office.context && Office.context.mailbox && Office.context.mailbox.item) {
-            vm.showErrorAttachmentInfo = false;
-            //vm.showFailedAtachments = false;
-            vm.failedFiles = [];
-            asyncCallCompleted = 0;
-            var oCurrentEmailItem = Office.context.mailbox.item.get_data();
-            var sEmailCreatedTime, sEmailModifiedTime;
-            if (oCurrentEmailItem && (oCurrentEmailItem.hasOwnProperty("$0_0") || oCurrentEmailItem.hasOwnProperty("_data$p$0"))) {
-                // If $0_0 property is not available, use _data$p$0 to get email item details
-                if (oCurrentEmailItem.hasOwnProperty("$0_0")) {
-                    sEmailCreatedTime = oCurrentEmailItem.$0_0.dateTimeCreated;
-                    sEmailModifiedTime = oCurrentEmailItem.$0_0.dateTimeModified;
-                } else {
-                    sEmailCreatedTime = oCurrentEmailItem._data$p$0.dateTimeCreated;
-                    sEmailModifiedTime = oCurrentEmailItem._data$p$0.dateTimeModified;
-                }
-                if (typeof (sEmailCreatedTime) === "undefined" && typeof (sEmailModifiedTime) === "undefined") {
-                    vm.sendDocumentAsAttachment();
-                }
-            }
-
+        var isAppOpenedInOutlook = $location.absUrl().split('|')[0].split('=')[2];
+        if (isAppOpenedInOutlook && isAppOpenedInOutlook === "Outlook") {
+            vm.isOutlook = true;
         }
-    }
-
-    vm.sendDocumentAsAttachment = function () {
-        if (vm.selectedRows && vm.selectedRows.length) {
-            vm.showFailedAtachments = false;
-            vm.failedFiles = [];
-            vm.showPopUpHolder = true;
-            vm.attachedProgressPopUp = true;
-            vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", vm.selectedRows);
-            angular.forEach(vm.selectedRows, function (selRow) {
-                var documentPath = trimEndChar(selRow.documentOWAUrl, "/");
-                var documentName = '';
-                if (documentPath) {
-                    documentPath = trimEndChar(documentPath.trim(), "/");
-                    documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1);
-                    if (documentPath && documentName) {
-                        sendAttachmentAsync(decodeURIComponent(documentPath), decodeURIComponent(documentName));
+        if(vm.isOutlook){
+            Office.initialize = function (reason) {
+                if (Office && Office.context && Office.context.mailbox && Office.context.mailbox.item) {
+                    vm.showErrorAttachmentInfo = false;
+                    //vm.showFailedAtachments = false;
+                    vm.failedFiles = [];
+                    asyncCallCompleted = 0;
+                    var oCurrentEmailItem = Office.context.mailbox.item.get_data();
+                    var sEmailCreatedTime, sEmailModifiedTime;
+                    if (oCurrentEmailItem && (oCurrentEmailItem.hasOwnProperty("$0_0") || oCurrentEmailItem.hasOwnProperty("_data$p$0"))) {
+                        if (oCurrentEmailItem.hasOwnProperty("$0_0")) {
+                            sEmailCreatedTime = oCurrentEmailItem.$0_0.dateTimeCreated;
+                            sEmailModifiedTime = oCurrentEmailItem.$0_0.dateTimeModified;
+                        } else {
+                            sEmailCreatedTime = oCurrentEmailItem._data$p$0.dateTimeCreated;
+                            sEmailModifiedTime = oCurrentEmailItem._data$p$0.dateTimeModified;
+                        }
+                        if (typeof (sEmailCreatedTime) === "undefined" && typeof (sEmailModifiedTime) === "undefined") {
+                            vm.showAttachment = true;
+                            vm.enableAttachment = true;
+                            vm.gridOptions.columnDefs.splice(1, 7);
+                        }
                     }
                 }
+            };            
+
+            vm.sendDocumentAsAttachment = function () {
+                if (vm.selectedRows && vm.selectedRows.length) {
+                    vm.showFailedAtachments = false;
+                    vm.failedFiles = [];
+                    vm.showPopUpHolder = true;
+                    vm.attachedProgressPopUp = true;
+                    vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", vm.selectedRows);
+                    angular.forEach(vm.selectedRows, function (selRow) {
+                        var documentPath = trimEndChar(selRow.documentOWAUrl, "/");
+                        var documentName = '';
+                        if (documentPath) {
+                            documentPath = trimEndChar(documentPath.trim(), "/");
+                            documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1);
+                            if (documentPath && documentName) {
+                                sendAttachmentAsync(decodeURIComponent(documentPath), decodeURIComponent(documentName));
+                            }
+                        }
+                    });
+                }
+            }
+
+
+            /* Send asynchronous calls to send each document as attachment */
+            function sendAttachmentAsync(sDocumentPath, sDocumentName) {
+                Office.context.mailbox.item.addFileAttachmentAsync(sDocumentPath, sDocumentName, {
+                    asyncContext: {
+                        sCurrentDocumentPath: sDocumentPath,
+                        sCurrentDocumentName: sDocumentName
+                    }
+                },
+                function (asyncResult) {
+                    if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+                        //failedHtml = failedHtml + "";
+                        vm.failedFiles.push(asyncResult.asyncContext.sCurrentDocumentName)
+                        vm.showFailedAtachments = true;
+                        //$(".failureDocumentList").append("<div title=\"" + asyncResult.asyncContext.sCurrentDocumentName + "\" class=\"documentList\">" + asyncResult.asyncContext.sCurrentDocumentName + "</div>");
+
+                    }
+                    asyncCallCompleted = asyncCallCompleted + 1;
+                    if (asyncCallCompleted === vm.selectedRows.length) {
+                        notifyAttachmentResult();
+                    }
+                    //if ($(".is-selectedRow").length === oDocumentConstants.iAsyncCallsCompleted) {
+                    //    notifyAttachmentResult();
+                    //} else {
+                    //    $("#currentDocumentCount").text(parseInt(oDocumentConstants.iAsyncCallsCompleted, 10) + 1);
+                    //}
+
+                });
+            }
+
+            function notifyAttachmentResult() {
+                "use strict";
+                vm.showAttachmentProgress = false;
+
+                if (vm.showFailedAtachments) {
+                    vm.showSuccessAttachments = false;
+                    vm.showFailedAtachments = true;
+                    vm.failedHeaderMessage = configs.uploadMessages.attachFailureMessage;
+                } else {
+                    vm.showFailedAtachments = false;
+                    vm.showSuccessAttachments = true;
+                    vm.failedHeaderMessage = '';
+                }
+                vm.showPopUpHolder = true;
+
+                console.log(vm.showFailedAtachments)
+                console.log(vm.showPopUpHolder)
+                console.log(vm.showSuccessAttachments)
+                console.log(vm.failedHeaderMessage)
+                //var oAllSelector = $("#CheckBox .ms-ChoiceField-input");
+                //if (oAllSelector && oAllSelector.length) {
+                //    oAllSelector[0].checked = false;
+                //}
+            }
+
+            vm.checkVariables = function () {
+                console.log(vm.showFailedAtachments)
+                console.log(vm.showPopUpHolder)
+                console.log(vm.showSuccessAttachments)
+                console.log(vm.failedHeaderMessage)
+            }
+
+            function trimEndChar(sOrignalString, sCharToTrim) {
+                "use strict";
+                if (sOrignalString && sCharToTrim === sOrignalString.substr(-1)) {
+                    return sOrignalString.substr(0, sOrignalString.length - 1);
+                }
+                return sOrignalString;
+            }
+
+            vm.closeNotification = function(){
+                vm.showPopUpHolder = false;
+            }
+        }
+
+        //#endregion
+
+
+
+        //search api call 
+        function get(options, callback) {
+            api({
+                resource: 'documentResource',
+                method: 'get',
+                data: options,
+                success: callback
             });
         }
-    }
 
 
-    /* Send asynchronous calls to send each document as attachment */
-    function sendAttachmentAsync(sDocumentPath, sDocumentName) {
-        Office.context.mailbox.item.addFileAttachmentAsync(sDocumentPath, sDocumentName, {
-            asyncContext: {
-                sCurrentDocumentPath: sDocumentPath,
-                sCurrentDocumentName: sDocumentName
-            }
-        },
-        function (asyncResult) {
-            if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-                //failedHtml = failedHtml + "";
-                vm.failedFiles.push(asyncResult.asyncContext.sCurrentDocumentName)
-                vm.showFailedAtachments = true;
-                //$(".failureDocumentList").append("<div title=\"" + asyncResult.asyncContext.sCurrentDocumentName + "\" class=\"documentList\">" + asyncResult.asyncContext.sCurrentDocumentName + "</div>");
-
-            }
-            asyncCallCompleted = asyncCallCompleted + 1;
-            if (asyncCallCompleted === vm.selectedRows.length) {
-                notifyAttachmentResult();
-            }
-            //if ($(".is-selectedRow").length === oDocumentConstants.iAsyncCallsCompleted) {
-            //    notifyAttachmentResult();
-            //} else {
-            //    $("#currentDocumentCount").text(parseInt(oDocumentConstants.iAsyncCallsCompleted, 10) + 1);
-            //}
-
-        });
-    }
-
-    function notifyAttachmentResult() {
-        "use strict";
-        vm.showAttachmentProgress = false;
-
-        if (vm.showFailedAtachments) {
-            vm.showSuccessAttachments = false;
-            vm.showFailedAtachments = true;
-            vm.failedHeaderMessage = configs.uploadMessages.attachFailureMessage;
-        } else {
-            vm.showFailedAtachments = false;
-            vm.showSuccessAttachments = true;
-            vm.failedHeaderMessage = '';
+        function getPinnedDocuments(options, callback) {
+            api({
+                resource: 'documentResource',
+                method: 'getPinnedDocuments',
+                data: options,
+                success: callback
+            });
         }
-        vm.showPopUpHolder = true;
 
-        console.log(vm.showFailedAtachments)
-        console.log(vm.showPopUpHolder)
-        console.log(vm.showSuccessAttachments)
-        console.log(vm.failedHeaderMessage)
-        //var oAllSelector = $("#CheckBox .ms-ChoiceField-input");
-        //if (oAllSelector && oAllSelector.length) {
-        //    oAllSelector[0].checked = false;
-        //}
-    }
 
-    vm.checkVariables = function () {
-        console.log(vm.showFailedAtachments)
-        console.log(vm.showPopUpHolder)
-        console.log(vm.showSuccessAttachments)
-        console.log(vm.failedHeaderMessage)
-    }
-
-    function trimEndChar(sOrignalString, sCharToTrim) {
-        "use strict";
-        if (sOrignalString && sCharToTrim === sOrignalString.substr(-1)) {
-            return sOrignalString.substr(0, sOrignalString.length - 1);
+        //Callback function for pin 
+        function pinDocuments(options, callback) {
+            api({
+                resource: 'documentResource',
+                method: 'pinDocument',
+                data: options,
+                success: callback
+            });
         }
-        return sOrignalString;
-    }
-
-    //#endregion
 
 
-
-    //search api call 
-    function get(options, callback) {
-        api({
-            resource: 'documentResource',
-            method: 'get',
-            data: options,
-            success: callback
-        });
-    }
-
-
-    function getPinnedDocuments(options, callback) {
-        api({
-            resource: 'documentResource',
-            method: 'getPinnedDocuments',
-            data: options,
-            success: callback
-        });
-    }
+        //Callback function for unpin 
+        function UnpinDocuments(options, callback) {
+            api({
+                resource: 'documentResource',
+                method: 'unPinDocument',
+                data: options,
+                success: callback
+            });
+        }
 
 
-    //Callback function for pin 
-    function pinDocuments(options, callback) {
-        api({
-            resource: 'documentResource',
-            method: 'pinDocument',
-            data: options,
-            success: callback
-        });
-    }
+        vm.searchDocument = function (val) {
+            var searchRequest ={
+                  Client: {
+                      Id: "123456",
+                      Name: "Microsoft",
+                      Url: "https://msmatter.sharepoint.com/sites/catalog"
+                  },
+                  SearchObject:{
+                    PageNumber: 1,
+                    ItemsPerPage: 10,
+                    SearchTerm: val,
+                    Filters: {},
+                    Sort:{
+                        ByProperty: "LastModifiedTime",
+                        Direction: 1
+                    }
+                }
+            };
+            return documentResource.get(searchRequest).$promise;
+        }
 
 
-    //Callback function for unpin 
-    function UnpinDocuments(options, callback) {
-        api({
-            resource: 'documentResource',
-            method: 'unPinDocument',
-            data: options,
-            success: callback
-        });
-    }
+        vm.search = function () {
+            var searchRequest =
+              {
+                  Client: {
+                      Id: "123456",
+                      Name: "Microsoft",
+                      Url: "https://msmatter.sharepoint.com/sites/catalog"
+                  },
+                  SearchObject: {
+                      PageNumber: 1,
+                      ItemsPerPage: 10,
+                      SearchTerm: vm.searchTerm,
+                      Filters: {},
+                      Sort:
+                              {
+                                  ByProperty: "LastModifiedTime",
+                                  Direction: 1
+                              }
+                  }
+              };
+            get(searchRequest, function (response) {
+                vm.gridOptions.data = response.matterDataList;
+            });
+        }
 
-
-    vm.searchDocument = function (val) {
-        var searchRequest =
-          {
-              Client: {
-                  Id: "123456",
-                  Name: "Microsoft",
-                  Url: "https://msmatter.sharepoint.com/sites/catalog"
-              },
-              SearchObject: {
-                  PageNumber: 1,
-                  ItemsPerPage: 10,
-                  SearchTerm: val,
-                  Filters: {},
-                  Sort:
-                          {
-                              ByProperty: "LastModifiedTime",
-                              Direction: 1
-                          }
-              }
-          };
-
-
-        return documentResource.get(searchRequest).$promise;
-    }
-
-
-    vm.search = function () {
-        var searchRequest =
-          {
-              Client: {
-                  Id: "123456",
-                  Name: "Microsoft",
-                  Url: "https://msmatter.sharepoint.com/sites/catalog"
-              },
-              SearchObject: {
-                  PageNumber: 1,
-                  ItemsPerPage: 10,
-                  SearchTerm: vm.searchTerm,
-                  Filters: {},
-                  Sort:
-                          {
-                              ByProperty: "LastModifiedTime",
-                              Direction: 1
-                          }
-              }
-          };
-        get(searchRequest, function (response) {
-            vm.gridOptions.data = response.matterDataList;
-        });
-    }
-
-    //SearchRequest Object
-    var searchRequest =
-        {
+        //SearchRequest Object
+        var searchRequest ={
             Client: {
                 Id: "123456",
                 Name: "Microsoft",
@@ -347,135 +353,135 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
         };
 
 
-    //For Searching Matter in GridHeader Menu
-    //Start
-    vm.searchDocumentGrid = function () {
-        $scope.lazyloader = false;
+        //For Searching Matter in GridHeader Menu
+        //Start
+        vm.searchDocumentGrid = function () {
+            $scope.lazyloader = false;
 
-        searchRequest.SearchObject.SearchTerm = vm.searchTerm;
-        searchRequest.SearchObject.Sort.ByProperty = "FileName";
-        searchRequest.SearchObject.Sort.Direction = 1;
-        get(searchRequest, function (response) {
-            $scope.lazyloader = true;
-            $scope.matters = response;
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
-        });
-    }
-    //End
-
-    //For Searching client in GridHeader Menu
-    //start
-    vm.searchClient = function () {
-        $scope.lazyloader = false;
-        searchRequest.SearchObject.SearchTerm = vm.searchClientTerm;
-        searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
-        searchRequest.SearchObject.Sort.Direction = 1;
-        get(searchRequest, function (response) {
-            $scope.lazyloader = true;
-            $scope.Clients = response;
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
-        });
-    }
-    //end
-
-    //For filtering documentName 
-    //Start
-    $scope.filterdocumentName = function (documentName) {
-        $scope.lazyloader = false;
-        searchRequest.SearchObject.SearchTerm = documentName;
-        searchRequest.SearchObject.Sort.ByProperty = "FileName";
-        searchRequest.SearchObject.Sort.Direction = 1;
-        get(searchRequest, function (response) {
-            $scope.lazyloader = true;
-            vm.gridOptions.data = response;
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
-            $scope.matters = [];
-        });
-
-    }
-
-    //End
-
-
-    //For filtering Clientname 
-    //Start
-    $scope.filterClientName = function (clientname) {
-        $scope.lazyloader = false;
-        searchRequest.SearchObject.SearchTerm = clientname;
-        searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
-        searchRequest.SearchObject.Sort.Direction = 1;
-        get(searchRequest, function (response) {
-            $scope.lazyloader = true;
-            vm.gridOptions.data = response;
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
-            $scope.Clients = [];
-        });
-
-    }
-
-    //End
-
-
-    //Code for filtering ModifiedDate
-    //start
-    $scope.FilterModifiedDate = function () {
-        $scope.lazyloader = false;
-        searchRequest.SearchObject.SearchTerm = "";
-        searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $scope.startdate;
-        searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $scope.enddate;
-        searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
-        searchRequest.SearchObject.Sort.Direction = 0;
-        get(searchRequest, function (response) {
-            $scope.lazyloader = true;
-            vm.gridOptions.data = response;
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
-            $scope.startdate = "";
-            $scope.enddate = "";
-        });
-
-    }
-
-    //end
-
-    //Code written for displaying types in dropdown 
-    //Start 
-    $scope.Documents = [{ Id: 1, Name: "All documents" }, { Id: 2, Name: "My documents" }, { Id: 3, Name: "Pinned documents" }];
-    $scope.ddlDocuments = $scope.Documents[0];
-
-
-    //End  
-
-    $scope.Pinnedobj = [];
-    $scope.getDocumentPinned = function () {
-
-        var pinnedDocumentsRequest = {
-            Id: "123456",
-            Name: "Microsoft",
-            Url: "https://msmatter.sharepoint.com/sites/catalog"
+            searchRequest.SearchObject.SearchTerm = vm.searchTerm;
+            searchRequest.SearchObject.Sort.ByProperty = "FileName";
+            searchRequest.SearchObject.Sort.Direction = 1;
+            get(searchRequest, function (response) {
+                $scope.lazyloader = true;
+                $scope.matters = response;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            });
         }
-        getPinnedDocuments(pinnedDocumentsRequest, function (pinresponse) {
-            $scope.Pinnedobj = [];
-            for (var i = 0; i < pinresponse.length; i++) {
-                $scope.Pinnedobj.push(pinresponse[i].documentName + "." + pinresponse[i].documentExtension);
-            }
-            if (!$scope.$$phase) {
-                $scope.$apply();
-            }
-        });
-        return true;
-    }
+        //End
 
-    $scope.getDocumentPinned();
+        //For Searching client in GridHeader Menu
+        //start
+        vm.searchClient = function () {
+            $scope.lazyloader = false;
+            searchRequest.SearchObject.SearchTerm = vm.searchClientTerm;
+            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
+            searchRequest.SearchObject.Sort.Direction = 1;
+            get(searchRequest, function (response) {
+                $scope.lazyloader = true;
+                $scope.Clients = response;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            });
+        }
+        //end
+
+        //For filtering documentName 
+        //Start
+        $scope.filterdocumentName = function (documentName) {
+            $scope.lazyloader = false;
+            searchRequest.SearchObject.SearchTerm = documentName;
+            searchRequest.SearchObject.Sort.ByProperty = "FileName";
+            searchRequest.SearchObject.Sort.Direction = 1;
+            get(searchRequest, function (response) {
+                $scope.lazyloader = true;
+                vm.gridOptions.data = response;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+                $scope.matters = [];
+            });
+
+        }
+
+        //End
+
+
+        //For filtering Clientname 
+        //Start
+        $scope.filterClientName = function (clientname) {
+            $scope.lazyloader = false;
+            searchRequest.SearchObject.SearchTerm = clientname;
+            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
+            searchRequest.SearchObject.Sort.Direction = 1;
+            get(searchRequest, function (response) {
+                $scope.lazyloader = true;
+                vm.gridOptions.data = response;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+                $scope.Clients = [];
+            });
+
+        }
+
+        //End
+
+
+        //Code for filtering ModifiedDate
+        //start
+        $scope.FilterModifiedDate = function () {
+            $scope.lazyloader = false;
+            searchRequest.SearchObject.SearchTerm = "";
+            searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $scope.startdate;
+            searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $scope.enddate;
+            searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+            searchRequest.SearchObject.Sort.Direction = 0;
+            get(searchRequest, function (response) {
+                $scope.lazyloader = true;
+                vm.gridOptions.data = response;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+                $scope.startdate = "";
+                $scope.enddate = "";
+            });
+
+        }
+
+        //end
+
+        //Code written for displaying types in dropdown 
+        //Start 
+        $scope.Documents = [{ Id: 1, Name: "All documents" }, { Id: 2, Name: "My documents" }, { Id: 3, Name: "Pinned documents" }];
+        $scope.ddlDocuments = $scope.Documents[0];
+
+
+        //End  
+
+        $scope.Pinnedobj = [];
+        $scope.getDocumentPinned = function () {
+
+            var pinnedDocumentsRequest = {
+                Id: "123456",
+                Name: "Microsoft",
+                Url: "https://msmatter.sharepoint.com/sites/catalog"
+            }
+            getPinnedDocuments(pinnedDocumentsRequest, function (pinresponse) {
+                $scope.Pinnedobj = [];
+                for (var i = 0; i < pinresponse.length; i++) {
+                    $scope.Pinnedobj.push(pinresponse[i].documentName + "." + pinresponse[i].documentExtension);
+                }
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            });
+            return true;
+        }
+
+        $scope.getDocumentPinned();
 
 
     //Hits when the Dropdown changes 
@@ -483,14 +489,13 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     $scope.GetDocuments = function (id) {
         $scope.lazyloader = false;
         if (id == 1) {
-            var AllDocRequest =
-       {
-           Client: {
+            var AllDocRequest ={
+            Client: {
                Id: "123456",
                Name: "Microsoft",
                Url: "https://msmatter.sharepoint.com/sites/catalog"
-           },
-           SearchObject: {
+            },
+            SearchObject: {
                PageNumber: 1,
                ItemsPerPage: 10,
                SearchTerm: '',
@@ -516,12 +521,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                    SubareaOfLaw: "",
                    ToDate: ""
                },
-               Sort:
-                       {
-                           ByProperty: 'LastModifiedTime',
-                           Direction: 1
-                       }
-           }
+               Sort:{
+                    ByProperty: 'LastModifiedTime',
+                    Direction: 1
+                }
+                }
        };
             get(AllDocRequest, function (response) {
                 $scope.lazyloader = true;
@@ -560,8 +564,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
 
         } else if (id == 2) {
             $scope.lazyloader = false;
-            var MyDocRequest =
-      {
+            var MyDocRequest ={
           Client: {
               Id: "123456",
               Name: "Microsoft",
@@ -594,10 +597,10 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                   ToDate: ""
               },
               Sort:
-                      {
-                          ByProperty: 'LastModifiedTime',
-                          Direction: 1
-                      }
+                {
+                    ByProperty: 'LastModifiedTime',
+                    Direction: 1
+                }
           }
       };
 

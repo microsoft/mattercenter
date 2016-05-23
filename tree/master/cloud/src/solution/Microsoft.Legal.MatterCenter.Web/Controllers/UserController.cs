@@ -63,9 +63,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
         [HttpPost("getusers")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]        
         /// <summary>
         /// get users
         /// </summary>        
@@ -122,9 +120,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="client"></param>
         /// <returns></returns>
         [HttpPost("getroles")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]        
+        [SwaggerResponse(HttpStatusCode.OK)]               
         public async Task<IActionResult> GetRoles([FromBody]Client client)
         {
             try
@@ -171,9 +167,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="client"></param>
         /// <returns></returns>
         [HttpPost("getpermissionlevels")]
-        [SwaggerResponse(HttpStatusCode.OK)]
-        [SwaggerResponse(HttpStatusCode.Unauthorized)]
-        [SwaggerResponse(HttpStatusCode.BadRequest)]        
+        [SwaggerResponse(HttpStatusCode.OK)]         
         public async Task<IActionResult> GetPermissionLevels([FromBody]Client client)
         {
             try

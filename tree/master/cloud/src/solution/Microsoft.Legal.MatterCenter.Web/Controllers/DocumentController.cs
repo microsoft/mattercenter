@@ -92,16 +92,16 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion 
                 var searchResultsVM = await documentProvision.GetDocumentsAsync(searchRequestVM);
@@ -127,29 +127,29 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 //if the token is not valid, immediately return no authorization error to the user                
                 if (client == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.NotFound);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 var pinResponseVM = await documentRepositoy.GetPinnedRecordsAsync(client);
                 if (pinResponseVM != null && pinResponseVM.TotalRows == 0)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = pinResponseVM.NoPinnedMessage,
-                        ErrorCode = ((int)HttpStatusCode.NotFound).ToString(),
-                        Description = "No resource found for your search criteria"
+                        Value = pinResponseVM.NoPinnedMessage,
+                        Code = ((int)HttpStatusCode.NotFound).ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 return matterCenterServiceFunctions.ServiceResponse(pinResponseVM.DocumentDataList, (int)HttpStatusCode.OK);
             }
@@ -173,16 +173,16 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 if (pinRequestDocumentVM == null && pinRequestDocumentVM.Client == null && pinRequestDocumentVM.DocumentData == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 var isDocumentPinned = await documentRepositoy.PinRecordAsync<PinRequestDocumentVM>(pinRequestDocumentVM);
@@ -212,16 +212,16 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 if (pinRequestMatterVM == null && pinRequestMatterVM.Client == null && pinRequestMatterVM.MatterData == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 var isDocumentUnPinned = await documentRepositoy.UnPinRecordAsync<PinRequestMatterVM>(pinRequestMatterVM);
@@ -252,16 +252,16 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 if (client == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 var documentAsset = await documentRepositoy.GetDocumentAndClientGUIDAsync(client);
@@ -275,7 +275,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
         /// <summary>
-        /// Uploads attachment to SharePoint library.
+        /// Uploads attachment which are there in the current mail item to SharePoint library.
         /// </summary>
         /// <param name="attachmentRequestVM"></param>
         /// <returns></returns>
@@ -335,7 +335,7 @@ namespace Microsoft.Legal.MatterCenter.Web
 
 
         /// <summary>
-        /// Uploads mail to SharePoint library.
+        /// Uploads attachments from the user desktop to sharepoint library
         /// </summary>
         /// <param name="attachmentRequestVM"></param>
         /// <returns></returns>

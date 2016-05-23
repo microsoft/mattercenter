@@ -84,7 +84,7 @@
                 <div class="failureDocumentList" ng-repeat="failedFile in vm.failedFiles">
                     <div title="{{failedFile}}" class="documentList"> {{failedFile}} </div>
                 </div>
-                <div title="Close" class="attachedPopUpCloseIconContainer">Close</div>
+                <div title="Close" class="attachedPopUpCloseIconContainer" ng-click="vm.closeNotification()">Close</div>
             </div>
         </div>
     </div>
@@ -92,11 +92,13 @@
     <div class="col-sm-12" ng-if="divuigrid">
         <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
     </div>
-
-    <button ng-if="vm.showAttachment" class="ms-Button ms-Button--primary ms-Callout-content" id="attachDocuments" ng-click="vm.enableAttachIfComposeMode()">
-        <span class="ms-Button-label" id="attachButtonText">{{vm.attachButtonText}}</span>
-        <span class="ms-Button-description"></span>
-    </button>
+    <div ng-if="vm.isOutlook && vm.showAttachment">
+        <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
+                id="attachDocuments" ng-click="vm.sendDocumentAsAttachment()()">
+            <span class="ms-Button-label" id="attachButtonText">{{vm.attachButtonText}}</span>
+            <span class="ms-Button-description"></span>
+        </button>
+    </div>
     <div class="col-sm-12" ng-if="nodata">
         <hr />
         <span class="noResultsText">{{errorMessage}}</span>
