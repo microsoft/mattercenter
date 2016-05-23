@@ -1,220 +1,74 @@
 ﻿<!--<div class="container-fluid">   -->
 <div class="row">
-    <div class="col-xs-12">
-
-        <div id="MasterPageContainer" class="MasterPageContent">
-            <div class="commonAppSwitch  hide">
-                <img alt="Toggle app switcher menu" class="listMenuImage" src="Images/new-app-switcher-hamburger-icon-19X16-2b579a.png" />
-                <div class="appSwitchMenu hide">
-                    <ul>
-                        <li class="switchAppLink" data-attr="Search Matters">Search Matters</li>
-                        <li class="switchAppLink" data-attr="Search Documents">Search Documents</li>
-                        <li runat="server" id="ProvisionMatterLink" class="switchAppLink" data-attr="Provision Matters"></li>
-                    </ul>
-                </div>
-                <div class='appSwitcherName selected'><span></span></div>
+    <div class="row" id="mainmenu">
+        <div class="col-xs-2 col-sm-1 col-md-2 pad0">
+            <div class="col-xs-3 col-sm-3" ng-click="vm.menuClick()">
+                <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
+                <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
+                <span class="MenuCaption">menu</span>
             </div>
-            <div class="AppHeader">
-                <div class="AppMenuFlyout ms-shadow">
-                    <div class="AppMenuFlyoutPriLinks">
-                        <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="Home"><span class="AppFlyoutLinksText">Home</span></a>
-                        <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="Search matters"><span class="AppFlyoutLinksText">Matters</span></a>
-                        <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
-                    </div>
-                </div>
-                <div id="HeaderPlaceHolder">
-                    <div id="" class="row">
-
-                        <div class="col-xs-4 col-sm-1 col-md-4 col-lg-4 pad0">
-                            <div class="col-xs-10 col-sm-2 col-md-2 col-lg-2" ng-click="vm.menuClick()">
-                                <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
-                                <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
-                                <div class="MenuCaption"><span>menu</span></div>
-                            </div>
-                            <div class="col-md-10 col-lg-10 visible-md visible-lg">
-                                <select class="form-control" ng-model="ddlDocuments" ng-options="document.Name for document in Documents" ng-change="GetDocuments(ddlDocuments.Id)"></select>
-                            </div>
-                        </div>
-                        <div id="searchBarHolder" class="col-md-6 col-lg-6 visible-md visible-lg">
-                            <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-                            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                            <div ng-show="noResults">
-                                <i class="glyphicon glyphicon-remove"></i> No Results Found
-                            </div>
-                        </div>
-                        <span class="" style="float:left"><a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
-                        <div id="searchBarHolder" class="col-xs-8 col-sm-4 hidden-md hidden-lg">
-                            <div class="input-group">
-                                <input type="text" ng-model="vm.selected" placeholder="Search by ID, document or client name" typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-                                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                                <div ng-show="noResults">
-                                    <i class="glyphicon glyphicon-remove"></i> No Results Found
-                                </div>
-                                <!-- <div class="ms-TextField ms-TextField--placeholder autoCompleteSection">
-                                    <input ng-model="vm.searchTerm" class="col-sm-12" type="text" placeholder="Search by ID, or matter or client name" />
-                                </div>
-                                <div id="searchIcon" title="Search" ng-click="vm.search()">
-                                    <i class="ms-TextField-icon ms-Icon ms-Icon--search"></i>
-                                </div>
-                                <div id="glyphIcon" title="View document list options">
-                                    <i class="ms-Icon ms-Icon--caretDown"></i>
-                                </div>
-                                <div class="autoCompletePanel hide"></div>
-                                -->
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li class="searchPanelDropdown" ng-click="GetMatters(1)">All documents</li>
-                                        <li class="searchPanelDropdown" ng-click="GetMatters(2)">My documents</li>
-                                        <li class="searchPanelDropdown" ng-click="GetMatters(3)">Pinned documents</li>
-                                    </ul>
-                                </div>
-                                
-                            </div>
-                        </div>
-                        <div class="col-sm-7 visible-sm text-right">
-                            <div id="ContextualHelp">
-                                <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
-
-                                <div data-class="ms-u-slideLeftIn40" class="ContextualHelpContainer ms-u-slideLeftIn40">
-                                    <div class="ContextualHelpFlyout">
-                                        <img class="closeContextualHelpFlyout" title="Close" alt="Close flyout" src="Images/contextual_help_close_icon.png" />
-                                        <div class="ContextualHelpHeader" title="Matter Center For Outlook">Matter Center For Outlook</div>
-                                        <div class="contextualHelpSections">
-                                        </div>
-                                        <div class="ContextualHelpSupport">
-                                            <span class="ContextualHelpBottomText" title="Write an email to Support">Questions? Contact <span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. mailto:support@supportsite.com]">Matter Center Support</a></span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="ProfileSwitcher">
-                                <img class="AppHeaderProfilePict" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture" runat="server" />
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!--
-                     <div class="col-sm-2">
-                         <select class="col-sm-12" ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
-                     </div>
-                     <div class="col-sm-4">
-                         <input ng-model="vm.searchTerm" class="col-sm-12" type="text" placeholder="Search by ID, or matter or client name" /><img ng-click="vm.search()" src="../../images/search-15x15-666.png" />
-                     </div>
-                    -->
-                </div>
-                <div id="ContextualHelp" class="hidden-sm">
-                    <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
-
-                    <div data-class="ms-u-slideLeftIn40" class="ContextualHelpContainer ms-u-slideLeftIn40">
-                        <div class="ContextualHelpFlyout">
-                            <img class="closeContextualHelpFlyout" title="Close" alt="Close flyout" src="Images/contextual_help_close_icon.png" />
-                            <div class="ContextualHelpHeader" title="Matter Center For Outlook">Matter Center For Outlook</div>
-                            <div class="contextualHelpSections">
-                            </div>
-                            <div class="ContextualHelpSupport">
-                                <span class="ContextualHelpBottomText" title="Write an email to Support">Questions? Contact <span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. mailto:support@supportsite.com]">Matter Center Support</a></span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="ProfileSwitcher" class="hidden-sm">
-                    <img class="AppHeaderProfilePict" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture" runat="server" />
-                </div>
-                <div class="PersonaFlyout">
-                    <div class="PersonaContainer">
-                        <div class="PersonaPictureContainer">
-                            <img id="PersonaPicture" src="Images/MC_Profile_Switcher.png" alt="Profile Picture" title="Profile Picture" runat="server" />
-                        </div>
-                        <div class="PersonaPictureDetails">
-                            <div class="PersonaTitle" id="PersonaTitle" runat="server"></div>
-                            <div class="PersonaEmail" id="PersonaEmail" runat="server"></div>
-                        </div>
-                    </div>
-                    <div class="SignOutLink">
-                        <asp:LinkButton ID="SignOutLink" Text="Sign Out" OnClick="SignOutLink_Click" CssClass="" runat="server"></asp:LinkButton>
-                    </div>
+            <div class="AppMenuFlyout ms-shadow">
+                <div class="AppMenuFlyoutPriLinks">
+                    <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="Home"><span class="AppFlyoutLinksText">Home</span></a>
+                    <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="Search matters"><span class="AppFlyoutLinksText">Matters</span></a>
+                    <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
                 </div>
             </div>
-            <input type="hidden" id="requestvalidator" name="requestvalidator" runat="server" />
-            <div class="AppContent">
-                <header id="matterCenterHeader" class="commonContent">
-                    <div class="floatLeft" id="hamburgerConatiner">
-                        <img class="headerActions" title="View links" data-hamburger="0" id="openHamburger" alt="" src="Images/MC_homepage_Hamburger.png" />
-                    </div>
-                    <div class="closeIcon">
-                        <img class="headerActions hide" title="Close" data-hamburger="1" id="closeHamburger" alt="" src="Images/MC_Navigation_Close_icon_60px_X_60px.png" />
-                    </div>
-                    <div class="floatLeft" id="matterCenterHomeText">
-                        <img class="floatLeft" id="matterCenterHome" title="Matter Center" alt="" src="Images/MC_homepage_Logo.png" />
-                        <div class="floatRight">
-                            <div class="upperSubText">Matter Center</div>
-                            <div class="lowerSubText">for Office 365</div>
-                        </div>
-                    </div>
-                    <div class="searchBox">
-                        <input id="searchText" type="text" placeholder="Search SharePoint" />
-                        <div id="searchLink">
-                            <img class="searchIcon" title="Search" alt="search" src="Images/search-15x15-666.png" />
-                        </div>
-                    </div>
-                    <div class="hide" id="headerFlyout">
-                        <div class="switchAppRow headerLinks" id="searchMatterTab" data-attr="Matters"><span title="Matters">Matters</span></div>
-                        <div class="switchAppRow headerLinks" id="searchDocumentTab" data-attr="Documents"><span title="Documents">Documents</span></div>
-                        <div class="headerLinks"><a id="settingsLink" onclick="closeHamburgerMenu();"><span title="Settings">Settings</span></a></div>
-                    </div>
-                </header>
-
-
-                <asp:ContentPlaceHolder ID="BodyContentPlaceHolder" runat="server">
-                </asp:ContentPlaceHolder>
-                <footer id="footer" class="commonContent">
-                    <div class="footerContent">
-                        <ul class="rightFooter">
-                            <li>
-                                <ul role="menubar">
-                                    <li class="rightend" role="menuitem">
-                                        <a aria-haspopup="true" href="http://www.microsoft.com/en-in/default.aspx" target="_parent">
-                                            <img title="Microsoft" class="mslogo imgNoBorder" alt="Microsoft" src="Images/microsoft-grey-logo-sm.png" />
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <br />
-                        <ul class="rightFooter">
-                            <li>
-                                <ul class="footerLinks" role="menubar">
-                                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Feedback and Support, e.g. mailto:support@supportsite.com]" target="_parent">Feedback & Support</a></li>
-                                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Privacy terms, e.g. privacy.supportsite.com]" target="_parent">Privacy & Cookies</a></li>
-                                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Terms of use, e.g. termofuse.supportsite.com]" target="_parent">Terms of use</a></li>
-                                    <li class="rightFooterElement copyRightElement" role="menuitem">© <%= DateTime.Now.Year %> Microsoft</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </footer>
+            <div class="col-md-9 hidden-xs hidden-sm">
+                <select class="form-control" ng-model="ddlDocuments" ng-options="document.Name for document in Documents" ng-change="GetDocuments(ddlDocuments.Id)"></select>
             </div>
         </div>
-
-
+        <div class="col-md-4 col-lg-4 hidden-xs hidden-sm">
+            <div class="input-group col-xs-12">
+                <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.matterID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-search"></i></span>
+                <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
+            </div>
+            <div class="col-xs-12">
+                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                <div ng-show="noResults">
+                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                </div>
+            </div>
+        </div>
+        <div id="searchBarHolder" class="col-xs-7 col-sm-5 hidden-md hidden-lg">
+            <div class="input-group col-xs-12">
+                <input type="text" ng-model="vm.selected" placeholder="Search by ID, document or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                    <ul class="dropdown-menu pull-right">
+                        <li class="searchPanelDropdown" ng-click="GetMatters(1)">All documents</li>
+                        <li class="searchPanelDropdown" ng-click="GetMatters(2)">My documents</li>
+                        <li class="searchPanelDropdown" ng-click="GetMatters(3)">Pinned documents</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                <div ng-show="noResults">
+                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3 col-sm-6 col-md-6">
+            <img class="ContextualHelpLogo pull-right" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
+            <img class="AppHeaderProfilePict pull-right" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture">
+        </div>
     </div>
-
 </div>
 <div class="row title">
     <div class="col-sm-12" id="gridViewPageHeaderContainer">
         <span role="heading" class="add-margin-bottom">{{ddlDocuments.Name}}</span>
     </div>
 </div>
-
 <div class="row">
     <!--Start For attaching documents messages to the current mail item-->
     <div class="errorAttachDocument" ng-if="vm.showErrorAttachmentInfo">
         <img title="Warning" class="warningMessageIcon" src="../images/warning-message.png" alt="Warning icon" />
         <div class="warningMessageText">{{vm.warningMessageText}}</div>
     </div>
-    <div class="warningPopUpHolder" ng-if="vm.showPopUpHolder">  
-        <div class="warningPopUpContainer">            
+    <div class="warningPopUpHolder" ng-if="vm.showPopUpHolder">
+        <div class="warningPopUpContainer">
             <div class="attachedSuccessPopUp" ng-if="vm.showSuccessAttachments">
                 <div class="warningPopUpDetails"></div>
                 <div title="Close" class="warningPopUpCloseIconContainer">Close</div>
@@ -239,8 +93,6 @@
         <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
     </div>
 
-    
-
     <button ng-if="vm.showAttachment" class="ms-Button ms-Button--primary ms-Callout-content" id="attachDocuments" ng-click="vm.enableAttachIfComposeMode()">
         <span class="ms-Button-label" id="attachButtonText">{{vm.attachButtonText}}</span>
         <span class="ms-Button-description"></span>
@@ -250,10 +102,8 @@
         <span class="noResultsText">{{errorMessage}}</span>
     </div>
 </div>
-
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-hide="lazyloader">
         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
     </div>
 </div>
-

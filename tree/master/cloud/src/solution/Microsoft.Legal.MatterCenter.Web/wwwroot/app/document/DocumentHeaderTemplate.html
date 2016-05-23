@@ -29,13 +29,7 @@
         </div>
     </div>
     <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
-        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>
-        <span ui-grid-visible='col.sort.direction' aria-label='{{getSortDirectionAriaLabel()}}' class='ui-grid-invisible'><sub ui-grid-visible='isSortPriorityVisible()' class='ui-grid-sort-priority-number'>{{col.sort.priority + 1}}</sub></span>
-        <span class='sort pull-right' ng-show='grid.appScope.sortMCMatterName'>↑</span>
-        <span ng-show='grid.appScope.sortDownMCMatterName' class='sort pull-right'>↓</span>
-    </div>
-    <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
-        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by document name'>{{ col.colDef.displayName }}</span>
+        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by document name'><img class="docTypeIconHeader" id="docTypeIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/generaldocument.png" alt="Document type icon"> Document</span>
         <span ui-grid-visible='col.sort.direction' aria-label='{{getSortDirectionAriaLabel()}}' class='ui-grid-invisible'><sub ui-grid-visible='isSortPriorityVisible()' class='ui-grid-sort-priority-number'>{{col.sort.priority + 1}}</sub></span>
         <span class='sort pull-right' ng-show='grid.appScope.sortMCDocumentName'>↑</span>
         <span ng-show='grid.appScope.sortDownMCDocumentName' class='sort pull-right'>↓</span>

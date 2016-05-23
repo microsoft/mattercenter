@@ -1,4 +1,6 @@
-﻿(function () {
+﻿/// <reference path="documentheadertemplate.html" />
+/// <reference path="documentheadertemplate.html" />
+(function () {
     'use strict';
 
     var app = angular.module("matterMain");
@@ -34,157 +36,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     var asyncCallCompleted = 0;
 
     //#region Grid Cell/Header Templates
-    //Assigning html for Matterheadertemplate
     //Start
     $scope.documentDropDowm = false;
-    var documentHeaderTemplate = "<div ng-mouseenter='grid.appScope.documentDropDowm = true' ng-mouseleave='grid.appScope.documentDropDowm = false'>\
-    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.documentDropDowm'>\
-        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
-            <img src='../images/icon-combobox.png'/>\
-        </a>\
-        <div class='dropdown-menu flyoutWrapper' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
-         <div class='input-group'>\
-           <input class='form-control' ng-model='grid.appScope.vm.searchTerm' placeholder='Search'/> \
-                <div class='input-group-btn'>\
-                 <button type='button' ng-click='grid.appScope.vm.searchDocumentGrid()' class='btn btn-default' ><img src='../images/search-15x15-666.png' /></button>\
-                 </div>\
-         </div>\
-         <hr/> \
-            <div class='clearFilterText' data-clearfiltertype='text'>\
-            <div class='clearFiltersIcon'>\
-                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>\
-            </div>\
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Matter'><span>Clear filters from </span><span class='clearFilterTitle'>Document</span></div>\
-             <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='matter in grid.appScope.matters' ng-click='grid.appScope.filterdocumentName(document.documentName)'>{{document.documentName}}</div> </div>\
-        </div>\
-        </div>\
-    </div>\
-     <div role='button' style='padding-left: 11px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
-        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
-        <span ui-grid-visible='col.sort.direction' aria-label='{{getSortDirectionAriaLabel()}}' class='ui-grid-invisible'><sub ui-grid-visible='isSortPriorityVisible()' class='ui-grid-sort-priority-number'>{{col.sort.priority + 1}}</sub></span>\
-        <span class='sort pull-right' ng-show='grid.appScope.sortMCDocumentName'>↑</span>\
-        <span ng-show='grid.appScope.sortDownMCDocumentName' class='sort pull-right'>↓</span>\
-    </div>\
-    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
-        <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
-    </div>\
-</div>"
-    //End
-
-
-    //Assigning html for Clientheadertemplate
-    //Start
     $scope.clientDropDowm = false;
-    var ClientHeaderTemplate = "<div ng-mouseenter='grid.appScope.clientDropDowm = true' ng-mouseleave='grid.appScope.clientDropDowm = false'>\
-    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.clientDropDowm'>\
-        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
-            <img src='../images/icon-combobox.png'/>\
-        </a>\
-        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
-         <div class='input-group'>\
-           <input class='form-control' ng-model='grid.appScope.vm.searchClientTerm' placeholder='Search'/> \
-                <div class='input-group-btn'>\
-                 <button type='button' ng-click='grid.appScope.vm.searchClient()' class='btn btn-default' ><img src='../images/search-15x15-666.png' /></button>\
-                 </div>\
-         </div>\
-         <hr/> \
-            <div class='clearFilterText' data-clearfiltertype='text'>\
-            <div class='clearFiltersIcon'>\
-                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>\
-            </div>\
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Client'><span>Clear filters from </span><span class='clearFilterTitle'>Client</span></div>\
-             <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.Clients' ng-click='grid.appScope.filterClientName(Client.matterClient)'>{{client.matterClient}}</div> </div>\
-        </div>\
-        </div>\
-    </div>\
-    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
-        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
-        <span ui-grid-visible='col.sort.direction' aria-label='Sort None' class='ui-grid-invisible'></span>\
-        <span class='sort pull-right' ng-show='grid.appScope.sortMCClient'>↑</span>\
-        <span ng-show='grid.appScope.sortDownMCClient' class='sort pull-right'>↓</span>\
-    </div>\
-    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
-        <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
-    </div>\
-</div>"
-    //End
-
-    //Assigning html for ModifiedDateheadertemplate
-    //Start
     $scope.modifieddateDropDowm = false;
-    var ModifiedDateheadertemplate = "<div ng-mouseenter='grid.appScope.modifieddateDropDowm = true' ng-mouseleave='grid.appScope.modifieddateDropDowm = false'>\
-    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.modifieddateDropDowm'>\
-        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id='acombo' dropdown-toggle' type='button' data-toggle='dropdown'>\
-            <img src='../images/icon-combobox.png'/>\
-        </a>\
-        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu'  aria-labelledby='acombo'>\
-         <div class='input-group'>\
-             <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'\
-                    uib-datepicker-popup='MM/dd/yyyy'\
-                    ng-model='grid.appScope.$parent.startdate'\
-                    is-open='grid.appScope.openedStartDate' \
-                    datepicker-options='grid.appScope.dateOptions'\
-                    ng-required='true' close-text='Close'\
-                    alt-input-formats='altInputFormats'/>\
-                <span class='input-group-btn'>\
-                    <button type='button' class='btn btn-default' ng-click='grid.appScope.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>\
-                </span>\
-          </div>\
-          <div class='input-group' style='margin-top:5px'>\
-             <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'\
-                    uib-datepicker-popup='MM/dd/yyyy'\
-                    ng-model='grid.appScope.$parent.enddate'\
-                    is-open='grid.appScope.openedEndDate' \
-                    datepicker-options='grid.appScope.enddateOptions'\
-                    ng-required='true' close-text='Close'\
-                    alt-input-formats='altInputFormats' />\
-                <span class='input-group-btn'>\
-                    <button type='button' class='btn btn-default' ng-click='grid.appScope.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>\
-                </span>\
-          </div>\
-          <div class='okDateButton' id='btnOK' ng-click='grid.appScope.FilterModifiedDate()'>Ok</div>\
-          <hr/> \
-            <div class='clearFilterText' data-clearfiltertype='text'>\
-            <div class='clearFiltersIcon'>\
-                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>\
-            </div>\
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Modified Date'><span>Clear filters from </span><span class='clearFilterTitle'>Modified Date</span></div>\
-             <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.Clients' ng-click='grid.appScope.filterClientName(Client.matterClient)'>{{client.matterClient}}</div> </div>\
-        </div>\
-        </div>\
-    </div>\
-    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>\
-        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}</span>\
-        <span ui-grid-visible='col.sort.direction' aria-label='Sort None' class='ui-grid-invisible'></span>\
-        <span class='sort pull-right' ng-show='grid.appScope.sortMCModifiedDate'>↑</span>\
-        <span ng-show='grid.appScope.sortDownMCModifiedDate' class='sort pull-right'>↓</span>\
-    </div>\
-    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{'ui-grid-column-menu-button-last-col': isLastCol}'>\
-        <i  title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>\
-    </div>\
-</div>"
     //End
-
-    //Assigning html for celltemplate
-    //Start
-    var documentCellTemplate = "<div class='row'>\
-    <div class='col-xs-7 col-sm-9 col-md-9 col-lg-10' id='documentPopup'>\
-        <a popoverdoc type='button' class='btn btn-link col-xs-12 col-sm-12' style='text-align:left' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href='' > {{row.entity.documentName}} </a>\
-        <div class='popover-content'></div>\
-    </div>\
-    <div class='col-xs-5 col-sm-3 col-md-3 col-lg-2 text-right'>\
-        <div class='dropdown'>\
-            <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a><ul style='margin:0;padding:0' class='dropdown-menu'>\
-                <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' ng-href='https://msmatter.sharepoint.com/sites/microsoft/Sites/Microsoft/'>Open this Document</a></li>\
-                <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' ng-href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'>View Matter Details</a></li>\
-                <li class='ms-ContextualMenu-item' ng-click='row.entity.MatterInfo===undefined?grid.appScope.PinMatter(row):grid.appScope.UnpinMatter(row)'><a class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?'Pin this Matter':'Unpin this matter'}}</a></li>\
-            </ul>\
-        </div>\
-    </div>\
-</div>";
-    //End
-    //#endregion
-
 
     vm.gridOptions = {
         enableGridMenu: true,
@@ -193,16 +49,16 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
         enableSelectAll: true,
         multiSelect: true,
         columnDefs: [
-            {field: 'documentName', displayName: 'Document', enableHiding: false, cellTemplate: documentCellTemplate,headerCellTemplate: documentHeaderTemplate},
-            { field: 'documentClientId', displayName: 'Client', enableCellEdit: true, headerCellTemplate: ClientHeaderTemplate },            
-            { field: 'documentClientId', displayName: 'Client.Matter ID', cellTemplate: '<div class="ngCellText">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
-            { field: 'documentModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: ModifiedDateheadertemplate },
-            { field: 'documentOwner', displayName: 'Author', visible: false },
-            { field: 'documentVersion', displayName: 'Document Version', visible: false },
-            { field: 'documentCheckoutUser', displayName: 'Checked out to', cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
-            { field: 'documentCreatedDate', displayName: 'Created date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
+            { field: 'documentName', displayName: 'Document',width:'20%', enableHiding: false, cellTemplate: '../app/document/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentHeaderTemplate.html' },
+            { field: 'documentClientId', displayName: 'Client',width:'15%', enableCellEdit: true, headerCellTemplate: '../app/document/ClientHeaderTemplate.html' },
+            { field: 'documentClientId', displayName: 'Client.Matter ID',width:'10%', headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ngCellText">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+            { field: 'documentModifiedDate', displayName: 'Modified Date',width:'10%', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/ModifiedDateHeaderTemplate.html' },
+            { field: 'documentOwner', displayName: 'Author',width:'20%', headerTooltip: 'Click to sort by document Author', visible: false },
+            { field: 'documentVersion', displayName: 'Document Version',width:'5%', headerTooltip: 'Click to sort by version', visible: false },
+            { field: 'documentCheckoutUser', displayName: 'Checked out to',width:'10%', headerTooltip: 'Click to sort by who has documents checked out', cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
+            { field: 'documentCreatedDate', displayName: 'Created date',width:'10%', headerTooltip: 'Click to sort by created date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
         ],
-        enableColumnMenus: false,        
+        enableColumnMenus: false,
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
             gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
@@ -222,18 +78,18 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                     vm.warningMessageText = configs.uploadMessages.maxAttachedMessage;
                 }
             });
-            $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
-            $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
-            
+            $scope.gridApi.core.on.sortChanged($scope, $scope.sortChangedDocument);
+            $scope.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
+
         }
     };
 
     //#region Code for attaching documents in compose more
-    
+
     Office.initialize = function (reason) {
-        
+
     };
-    
+
     vm.enableAttachIfComposeMode = function () {
         if (Office && Office.context && Office.context.mailbox && Office.context.mailbox.item) {
             vm.showErrorAttachmentInfo = false;
@@ -255,11 +111,11 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                     vm.sendDocumentAsAttachment();
                 }
             }
-            
+
         }
     }
 
-    vm.sendDocumentAsAttachment = function(){        
+    vm.sendDocumentAsAttachment = function () {
         if (vm.selectedRows && vm.selectedRows.length) {
             vm.showFailedAtachments = false;
             vm.failedFiles = [];
@@ -273,16 +129,16 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                     documentPath = trimEndChar(documentPath.trim(), "/");
                     documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1);
                     if (documentPath && documentName) {
-                        sendAttachmentAsync(decodeURIComponent(documentPath), decodeURIComponent(documentName));                        
+                        sendAttachmentAsync(decodeURIComponent(documentPath), decodeURIComponent(documentName));
                     }
                 }
             });
         }
     }
-    
-    
+
+
     /* Send asynchronous calls to send each document as attachment */
-    function sendAttachmentAsync(sDocumentPath, sDocumentName) {        
+    function sendAttachmentAsync(sDocumentPath, sDocumentName) {
         Office.context.mailbox.item.addFileAttachmentAsync(sDocumentPath, sDocumentName, {
             asyncContext: {
                 sCurrentDocumentPath: sDocumentPath,
@@ -293,7 +149,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
             if (asyncResult.status === Office.AsyncResultStatus.Failed) {
                 //failedHtml = failedHtml + "";
                 vm.failedFiles.push(asyncResult.asyncContext.sCurrentDocumentName)
-                vm.showFailedAtachments = true;       
+                vm.showFailedAtachments = true;
                 //$(".failureDocumentList").append("<div title=\"" + asyncResult.asyncContext.sCurrentDocumentName + "\" class=\"documentList\">" + asyncResult.asyncContext.sCurrentDocumentName + "</div>");
 
             }
@@ -306,7 +162,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
             //} else {
             //    $("#currentDocumentCount").text(parseInt(oDocumentConstants.iAsyncCallsCompleted, 10) + 1);
             //}
-            
+
         });
     }
 
@@ -349,7 +205,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
         }
         return sOrignalString;
     }
-    
+
     //#endregion
 
 
@@ -448,34 +304,63 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
         });
     }
 
+    //SearchRequest Object
+    var searchRequest =
+        {
+            Client: {
+                Id: "123456",
+                Name: "Microsoft",
+                Url: "https://msmatter.sharepoint.com/sites/catalog"
+            },
+            SearchObject: {
+                PageNumber: 1,
+                ItemsPerPage: 10,
+                SearchTerm: '',
+                Filters: {
+                    ClientName: "",
+                    ClientsList: [],
+                    PGList: [],
+                    AOLList: [],
+                    DateFilters: {
+                        CreatedFromDate: "",
+                        CreatedToDate: "",
+                        ModifiedFromDate: "",
+                        ModifiedToDate: "",
+                        OpenDateFrom: "",
+                        OpenDateTo: ""
+                    },
+                    DocumentAuthor: "",
+                    DocumentCheckoutUsers: "",
+                    FilterByMe: 0,
+                    FromDate: "",
+                    Name: "",
+                    ResponsibleAttorneys: "",
+                    SubareaOfLaw: "",
+                    ToDate: ""
+                },
+                Sort:
+                        {
+                            ByProperty: 'LastModifiedTime',
+                            Direction: 1
+                        }
+            }
+        };
+
 
     //For Searching Matter in GridHeader Menu
     //Start
     vm.searchDocumentGrid = function () {
         $scope.lazyloader = false;
 
-        var searchRequest =
-          {
-              Client: {
-                  Id: "123456",
-                  Name: "Microsoft",
-                  Url: "https://msmatter.sharepoint.com/sites/catalog"
-              },
-              SearchObject: {
-                  PageNumber: 1,
-                  ItemsPerPage: 10,
-                  SearchTerm: vm.searchTerm,
-                  Filters: {},
-                  Sort:
-                          {
-                              ByProperty: "MCdocumentName",
-                              Direction: 0
-                          }
-              }
-          };
+        searchRequest.SearchObject.SearchTerm = vm.searchTerm;
+        searchRequest.SearchObject.Sort.ByProperty = "FileName";
+        searchRequest.SearchObject.Sort.Direction = 1;
         get(searchRequest, function (response) {
             $scope.lazyloader = true;
             $scope.matters = response;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
         });
     }
     //End
@@ -484,29 +369,15 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     //start
     vm.searchClient = function () {
         $scope.lazyloader = false;
-
-        var searchRequest =
-          {
-              Client: {
-                  Id: "123456",
-                  Name: "Microsoft",
-                  Url: "https://msmatter.sharepoint.com/sites/catalog"
-              },
-              SearchObject: {
-                  PageNumber: 1,
-                  ItemsPerPage: 10,
-                  SearchTerm: vm.searchClientTerm,
-                  Filters: {},
-                  Sort:
-                          {
-                              ByProperty: "MCClientName",
-                              Direction: 0
-                          }
-              }
-          };
+        searchRequest.SearchObject.SearchTerm = vm.searchClientTerm;
+        searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
+        searchRequest.SearchObject.Sort.Direction = 1;
         get(searchRequest, function (response) {
             $scope.lazyloader = true;
             $scope.Clients = response;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
         });
     }
     //end
@@ -515,28 +386,15 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     //Start
     $scope.filterdocumentName = function (documentName) {
         $scope.lazyloader = false;
-        var searchRequest =
-          {
-              Client: {
-                  Id: "123456",
-                  Name: "Microsoft",
-                  Url: "https://msmatter.sharepoint.com/sites/catalog"
-              },
-              SearchObject: {
-                  PageNumber: 1,
-                  ItemsPerPage: 10,
-                  SearchTerm: documentName,
-                  Filters: {},
-                  Sort:
-                          {
-                              ByProperty: "LastModifiedTime",
-                              Direction: 1
-                          }
-              }
-          };
+        searchRequest.SearchObject.SearchTerm = documentName;
+        searchRequest.SearchObject.Sort.ByProperty = "FileName";
+        searchRequest.SearchObject.Sort.Direction = 1;
         get(searchRequest, function (response) {
             $scope.lazyloader = true;
             vm.gridOptions.data = response;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
             $scope.matters = [];
         });
 
@@ -549,28 +407,15 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     //Start
     $scope.filterClientName = function (clientname) {
         $scope.lazyloader = false;
-        var searchRequest =
-          {
-              Client: {
-                  Id: "123456",
-                  Name: "Microsoft",
-                  Url: "https://msmatter.sharepoint.com/sites/catalog"
-              },
-              SearchObject: {
-                  PageNumber: 1,
-                  ItemsPerPage: 10,
-                  SearchTerm: clientname,
-                  Filters: {},
-                  Sort:
-                          {
-                              ByProperty: "LastModifiedTime",
-                              Direction: 1
-                          }
-              }
-          };
+        searchRequest.SearchObject.SearchTerm = clientname;
+        searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
+        searchRequest.SearchObject.Sort.Direction = 1;
         get(searchRequest, function (response) {
             $scope.lazyloader = true;
             vm.gridOptions.data = response;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
             $scope.Clients = [];
         });
 
@@ -583,42 +428,17 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     //start
     $scope.FilterModifiedDate = function () {
         $scope.lazyloader = false;
-        var searchRequest =
-          {
-              Client: {
-                  Id: "123456",
-                  Name: "Microsoft",
-                  Url: "https://msmatter.sharepoint.com/sites/catalog"
-              },
-              SearchObject: {
-                  PageNumber: 1,
-                  ItemsPerPage: 10,
-                  SearchTerm: "",
-                  Filters: {
-                      OLList: "",
-                      ClientName: "",
-                      ClientsList: [],
-                      DateFilters: { CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: $scope.startdate, ModifiedToDate: $scope.enddate, OpenDateFrom: "", OpenDateTo: "" },
-                      DocumentAuthor: [],
-                      DocumentCheckoutUsers: [],
-                      FilterByMe: 1,
-                      FromDate: "",
-                      Name: "",
-                      PGList: "",
-                      ResponsibleAttorneys: [],
-                      SubareaOfLaw: "",
-                      ToDate: ""
-                  },
-                  Sort:
-                          {
-                              ByProperty: "LastModifiedTime",
-                              Direction: 0
-                          }
-              }
-          };
+        searchRequest.SearchObject.SearchTerm = "";
+        searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $scope.startdate;
+        searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $scope.enddate;
+        searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+        searchRequest.SearchObject.Sort.Direction = 0;
         get(searchRequest, function (response) {
             $scope.lazyloader = true;
             vm.gridOptions.data = response;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
             $scope.startdate = "";
             $scope.enddate = "";
         });
@@ -643,11 +463,14 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
             Name: "Microsoft",
             Url: "https://msmatter.sharepoint.com/sites/catalog"
         }
-        getPinnedDocuments(pinnedDocumentsRequest, function (response) {
-            //for (var i = 0; i < response.length; i++) {
-            //    $scope.Pinnedobj.push(response.documentDataList[i]);
-            //}
-            $scope.Pinnedobj.push(response);
+        getPinnedDocuments(pinnedDocumentsRequest, function (pinresponse) {
+            $scope.Pinnedobj = [];
+            for (var i = 0; i < pinresponse.length; i++) {
+                $scope.Pinnedobj.push(pinresponse[i].documentName + "." + pinresponse[i].documentExtension);
+            }
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
         });
         return true;
     }
@@ -660,34 +483,47 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     $scope.GetDocuments = function (id) {
         $scope.lazyloader = false;
         if (id == 1) {
-            var AllMattersRequest = {
-                Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
-                },
-                SearchObject: {
-                    PageNumber: 1,
-                    ItemsPerPage: 10,
-                    SearchTerm: "",
-                    Filters: {
-                        AOLList: "",
-                        ClientsList: [],
-                        FilterByMe: 0,
-                        FromDate: "",
-                        PGList: "",
-                        ToDate: "",
-                    },
-                    Sort:
-                            {
-                                ByProperty: "LastModifiedTime",
-                                Direction: 1
-                            }
-                }
-            }
-
-
-            get(AllMattersRequest, function (response) {
+            var AllDocRequest =
+       {
+           Client: {
+               Id: "123456",
+               Name: "Microsoft",
+               Url: "https://msmatter.sharepoint.com/sites/catalog"
+           },
+           SearchObject: {
+               PageNumber: 1,
+               ItemsPerPage: 10,
+               SearchTerm: '',
+               Filters: {
+                   ClientName: "",
+                   ClientsList: [],
+                   PGList: [],
+                   AOLList: [],
+                   DateFilters: {
+                       CreatedFromDate: "",
+                       CreatedToDate: "",
+                       ModifiedFromDate: "",
+                       ModifiedToDate: "",
+                       OpenDateFrom: "",
+                       OpenDateTo: ""
+                   },
+                   DocumentAuthor: "",
+                   DocumentCheckoutUsers: "",
+                   FilterByMe: 0,
+                   FromDate: "",
+                   Name: "",
+                   ResponsibleAttorneys: "",
+                   SubareaOfLaw: "",
+                   ToDate: ""
+               },
+               Sort:
+                       {
+                           ByProperty: 'LastModifiedTime',
+                           Direction: 1
+                       }
+           }
+       };
+            get(AllDocRequest, function (response) {
                 $scope.lazyloader = true;
                 if (response.errorCode == "404") {
                     $scope.divuigrid = false;
@@ -700,7 +536,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                     if ($scope.Pinnedobj.length > 0) {
                         angular.forEach($scope.Pinnedobj, function (pinobj) {
                             angular.forEach(response, function (res) {
-                                if (pinobj.documentName == res.documentName) {
+                                if (pinobj == res.documentName) {
                                     if (res.ismatterdone == undefined && !res.ismatterdone) {
                                         res.MatterInfo = "Unpin this matter";
                                         res.ismatterdone = true;
@@ -709,9 +545,14 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                             });
                         });
                         vm.gridOptions.data = response;
-                        console.log(response);
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
                     } else {
                         vm.gridOptions.data = response;
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
                     }
                 }
             });
@@ -719,34 +560,48 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
 
         } else if (id == 2) {
             $scope.lazyloader = false;
-            var MyDocumentsRequest = {
-                Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
-                },
-                SearchObject: {
-                    PageNumber: 1,
-                    ItemsPerPage: 10,
-                    SearchTerm: "",
-                    Filters: {
-                        AOLList: "",
-                        ClientsList: [],
-                        FilterByMe: 1,
-                        FromDate: "",
-                        PGList: "",
-                        ToDate: ""
-                    },
-                    Sort:
-                            {
-                                ByProperty: "LastModifiedTime",
-                                Direction: 1
-                            }
-                }
-            }
+            var MyDocRequest =
+      {
+          Client: {
+              Id: "123456",
+              Name: "Microsoft",
+              Url: "https://msmatter.sharepoint.com/sites/catalog"
+          },
+          SearchObject: {
+              PageNumber: 1,
+              ItemsPerPage: 10,
+              SearchTerm: '',
+              Filters: {
+                  ClientName: "",
+                  ClientsList: [],
+                  PGList: [],
+                  AOLList: [],
+                  DateFilters: {
+                      CreatedFromDate: "",
+                      CreatedToDate: "",
+                      ModifiedFromDate: "",
+                      ModifiedToDate: "",
+                      OpenDateFrom: "",
+                      OpenDateTo: ""
+                  },
+                  DocumentAuthor: "",
+                  DocumentCheckoutUsers: "",
+                  FilterByMe: 1,
+                  FromDate: "",
+                  Name: "",
+                  ResponsibleAttorneys: "",
+                  SubareaOfLaw: "",
+                  ToDate: ""
+              },
+              Sort:
+                      {
+                          ByProperty: 'LastModifiedTime',
+                          Direction: 1
+                      }
+          }
+      };
 
-
-            get(MyDocumentsRequest, function (response) {
+            get(MyDocRequest, function (response) {
                 $scope.lazyloader = true;
                 if (response.errorCode == "404") {
                     $scope.divuigrid = false;
@@ -759,7 +614,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                     if ($scope.Pinnedobj.length > 0) {
                         angular.forEach($scope.Pinnedobj, function (pinobj) {
                             angular.forEach(response, function (res) {
-                                if (pinobj.documentName == res.documentName) {
+                                if (pinobj == res.documentName) {
                                     if (res.ismatterdone == undefined && !res.ismatterdone) {
                                         res.MatterInfo = "Unpin this matter";
                                         res.ismatterdone = true;
@@ -768,8 +623,14 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                             });
                         });
                         vm.gridOptions.data = response;
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
                     } else {
                         vm.gridOptions.data = response;
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
                     }
                 }
             });
@@ -790,13 +651,13 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                     $scope.getDocumentPinned();
                     $scope.divuigrid = true;
                     $scope.nodata = false;
-                    angular.forEach(response.matterDataList, function (res) {
+                    angular.forEach(response.documentDataList, function (res) {
                         if (res.ismatterdone == undefined && !res.ismatterdone) {
                             res.MatterInfo = "Unpin this matter";
                             res.ismatterdone = true;
                         }
                     });
-                    vm.gridOptions.data = response.matterDataList;
+                    vm.gridOptions.data = response.documentDataList;
                 }
             });
         }
@@ -892,7 +753,6 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
     //Angular Datepicker Starts here
     //Start
     $scope.dateOptions = {
-
         formatYear: 'yy',
         maxDate: new Date()
     };
@@ -947,11 +807,25 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
             ItemsPerPage: 10,
             SearchTerm: "",
             Filters: {
-                AOLList: "",
+                ClientName: "",
                 ClientsList: [],
-                FilterByMe: 1,
+                PGList: [],
+                AOLList: [],
+                DateFilters: {
+                    CreatedFromDate: "",
+                    CreatedToDate: "",
+                    ModifiedFromDate: "",
+                    ModifiedToDate: "",
+                    OpenDateFrom: "",
+                    OpenDateTo: ""
+                },
+                DocumentAuthor: "",
+                DocumentCheckoutUsers: "",
+                FilterByMe: 0,
                 FromDate: "",
-                PGList: "",
+                Name: "",
+                ResponsibleAttorneys: "",
+                SubareaOfLaw: "",
                 ToDate: ""
             },
             Sort:
@@ -980,7 +854,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
         });
     }
 
-    $scope.sortChanged = function (grid, sortColumns) {
+    $scope.sortChangedDocument = function (grid, sortColumns) {
         $scope.divuigrid = false;
         $scope.nodata = true;
         if (sortColumns.length != 0) {
@@ -1169,7 +1043,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                     var obj = eval('(' + attrs.details + ')');
                     var content = '<div class="">\
                                    <div class="FlyoutBoxContent">\
-                                      <div class="FlyoutContent FlyoutHeading">\
+                                      <div class="FlyoutContent">\
                                           <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.documentName + ' </div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
@@ -1182,7 +1056,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Document ID:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.DocumentID + '</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.documentID + '</div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Author:</div>\
@@ -1190,7 +1064,7 @@ function ($scope, $state, $interval, $stateParams, api, $timeout, documentResour
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Modified date:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.DocumentModifiedDate + '</div>\
+                                          <div class="ms-font-m FlyoutContent" datefilter date='+ obj.documentModifiedDate + '>' + obj.documentModifiedDate + '</div>\
                                        </div>\
                                        <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">Open document</a></button>\
                                        <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/catalog/SitePages/documentDetails.aspx">View document details</a></button>\
