@@ -230,13 +230,13 @@ textarea {
     border: none;
 }
 
-.ui-grid-cell{
-     height: 48px;
-     white-space: normal;
-     -ms-text-overflow: clip;
-     -o-text-overflow: clip;
-     text-overflow: clip;
-     overflow: visible;
+.ui-grid-cell {
+    height: 48px;
+    white-space: normal;
+    -ms-text-overflow: clip;
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    overflow: visible;
 }
 
 .txtellipsis {
@@ -294,7 +294,7 @@ textarea {
 
 .ui-grid-viewport {
     overflow: scroll;
-    overflow-x:hidden!important;
+    overflow-x: hidden !important;
 }
 
 .overflowMain {
@@ -309,8 +309,8 @@ textarea {
     max-width: 310px;
 }
 
-.ui-grid-menu-button{
-    top:25px;
+.ui-grid-menu-button {
+    top: 25px;
 }
 
 .dropdown-menu .ms-ContextualMenu-item a:hover {
@@ -329,16 +329,16 @@ textarea {
 .popover-title {
     padding: 0;
     margin: 0;
-    border-bottom:0;
+    border-bottom: 0;
 }
 
 .popover-content {
     padding: 0;
 }
 
-.UiGrid-a .dropdown-menu{
-    margin:0;
-    padding:0;
+.UiGrid-a .dropdown-menu {
+    margin: 0;
+    padding: 0;
 }
 
 /*.ui-grid-render-container{
@@ -346,19 +346,65 @@ textarea {
 }*/
 
 .padl10px {
-    padding-left:10px;
+    padding-left: 10px;
 }
 
-#mainmenu{
-    margin:0;
-    padding :10px 0 0 10px;
+#mainmenu {
+    margin: 0;
+    padding: 10px 0 0 10px;
 }
 
-#mainmenu input{
-    max-width:none;
+    #mainmenu input {
+        max-width: none;
+    }
+
+    #mainmenu .AppMenuFlyout {
+        left: 15px;
+    }
+
+#contentDiv input {
+    max-width: none;
 }
 
-#mainmenu .AppMenuFlyout{
-    left:15px;
+.searchdashboard{
+    padding-top:15px;
 }
 
+.dashboarddrop{
+    position: absolute;
+    top: 48px;
+    padding: 0 7px 1px 15px;
+}
+.dashboarddropinner{
+    z-index: 1;
+    background: #fff;
+    border:1px solid #ccc;
+}
+.pad15{
+    padding:15px;
+}
+.pad10{
+    padding:10px;
+}
+
+.dashboardSearch{
+    width: 80px;
+    background: #0072c6;
+    padding: 5px 0 5px 0px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 0.875em;
+    text-align: center;
+    font-weight: 600;
+    font-family: Segoe UI;
+}
+
+.clientdropinner{
+    position: absolute;
+    top: -11px;
+    left: 16.6%;
+    border: 1px solid #ccc;
+    z-index: 10;
+    background: #fff;
+    padding-bottom:10px;
+}
