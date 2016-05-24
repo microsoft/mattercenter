@@ -282,8 +282,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("uploadattachments")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public IActionResult UploadAttachments([FromBody] AttachmentRequestVM attachmentRequestVM)
-        {
-            
+        {            
             try
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
