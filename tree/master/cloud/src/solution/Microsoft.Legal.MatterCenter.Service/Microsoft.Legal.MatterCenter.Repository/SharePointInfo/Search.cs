@@ -103,11 +103,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             
                             Users currentUserDetail = userDetails.GetLoggedInUserDetails(clientContext);
                             string userTitle = currentUserDetail.Name;
-                            searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
+                            searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, ServiceConstants.SPACE, 
+                                ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
                                 ServiceConstants.OPENING_BRACKET, searchSettings.ManagedPropertyResponsibleAttorney, 
                                 ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle, 
                                 ServiceConstants.DOUBLE_QUOTE, ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
-                                searchSettings.ManagedPropertyTeamMembers, ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle,
+                                searchSettings.ManagedPropertyTeamMembers, ServiceConstants.COLON, ServiceConstants.SPACE, 
+                                ServiceConstants.DOUBLE_QUOTE, userTitle,
                                 ServiceConstants.DOUBLE_QUOTE, ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
                         }
 
@@ -1214,7 +1216,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="managedProperty">The managed property.</param>
         /// <param name="isMatterView">If the user is pinning a matter, this will be true, else will be false.</param>
         /// <returns>It returns a Keyword Query object.</returns>
-        private KeywordQuery KeywordQueryMetrics(Client client, SearchObject searchObject, KeywordQuery keywordQuery, string filterCondition, string managedProperty, bool isMatterView)
+        private KeywordQuery KeywordQueryMetrics(Client client, SearchObject searchObject, KeywordQuery keywordQuery, 
+            string filterCondition, string managedProperty, bool isMatterView)
         {
             KeywordQuery result = null;
             try
@@ -1231,7 +1234,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 keywordQuery.RefinementFilters.Add(filterCondition);
                 if (isMatterView)
                 {
-                    keywordQuery.RefinementFilters.Add(string.Concat(managedProperty, ServiceConstants.COLON, ServiceConstants.DOUBLE_QUOTE, true, ServiceConstants.DOUBLE_QUOTE));
+                    keywordQuery.RefinementFilters.Add(string.Concat(managedProperty, ServiceConstants.COLON, 
+                        ServiceConstants.DOUBLE_QUOTE, true, ServiceConstants.DOUBLE_QUOTE));
                 }
                 else
                 {
@@ -1241,7 +1245,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                     foreach (string extension in invalidExtensions)
                     {
-                        chunk = chunk + "equals" + ServiceConstants.OPENING_BRACKET + ServiceConstants.DOUBLE_QUOTE + extension + ServiceConstants.DOUBLE_QUOTE + ServiceConstants.CLOSING_BRACKET + ServiceConstants.COMMA;
+                        chunk = chunk + "equals" + ServiceConstants.OPENING_BRACKET + ServiceConstants.DOUBLE_QUOTE + extension + 
+                            ServiceConstants.DOUBLE_QUOTE + ServiceConstants.CLOSING_BRACKET + ServiceConstants.COMMA;
                     }
                     chunk = chunk.Remove(chunk.Length - 1);
 
@@ -1312,14 +1317,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="isMatterSearch">The flag to determine weather call is from Search Matter or Search Document.</param>
         /// <param name="managedProperties">List of managed properties</param>
         /// <returns>It returns a string object, that contains all the results combined with dollar pipe dollar separator.</returns>
-        private SearchResponseVM FillResultData(ClientContext clientContext, KeywordQuery keywordQuery, SearchRequestVM searchRequestVM, Boolean isMatterSearch, List<string> managedProperties)
+        private SearchResponseVM FillResultData(ClientContext clientContext, KeywordQuery keywordQuery, 
+            SearchRequestVM searchRequestVM, Boolean isMatterSearch, List<string> managedProperties)
         {
             SearchResponseVM searchResponseVM = new SearchResponseVM() ;
             Boolean isReadOnly;
             try
             {
                 var searchObject = searchRequestVM.SearchObject;
-                var client = searchRequestVM.Client;
+                //var client = searchRequestVM.Client;
                 if (null != searchObject.Sort)
                 {
                     keywordQuery.EnableSorting = true;
@@ -1329,9 +1335,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 ClientResult<ResultTableCollection> resultsTableCollection = searchExecutor.ExecuteQuery(keywordQuery);
                 Users currentLoggedInUser = userDetails.GetLoggedInUserDetails(clientContext);
 
-                if (null != resultsTableCollection && null != resultsTableCollection.Value && 0 < resultsTableCollection.Value.Count && null != resultsTableCollection.Value[0].ResultRows)
+                if (null != resultsTableCollection && null != resultsTableCollection.Value && 0 < 
+                    resultsTableCollection.Value.Count && null != resultsTableCollection.Value[0].ResultRows)
                 {
-                    if (isMatterSearch && 0 < resultsTableCollection.Value.Count && null != resultsTableCollection.Value[0].ResultRows && !string.IsNullOrWhiteSpace(currentLoggedInUser.Email))
+                    if (isMatterSearch && 0 < resultsTableCollection.Value.Count && 
+                        null != resultsTableCollection.Value[0].ResultRows && !string.IsNullOrWhiteSpace(currentLoggedInUser.Email))
                     {
                         foreach (IDictionary<string, object> matterMetadata in resultsTableCollection.Value[0].ResultRows)
                         {
@@ -1343,7 +1351,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 string readOnlyUsers = Convert.ToString(matterMetadata[searchSettings.ManagedPropertyBlockedUploadUsers], CultureInfo.InvariantCulture);
                                 if (!string.IsNullOrWhiteSpace(readOnlyUsers))
                                 {
-                                    isReadOnly = IsUserReadOnlyForMatter(isReadOnly, currentLoggedInUser.Name, currentLoggedInUser.Email, readOnlyUsers);
+                                    isReadOnly = IsUserReadOnlyForMatter(isReadOnly, currentLoggedInUser.Name, 
+                                        currentLoggedInUser.Email, readOnlyUsers);
                                 }
                                 matterMetadata.Add(generalSettings.IsReadOnlyUser, isReadOnly);
                             }
@@ -1413,7 +1422,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     keywordQuery = AddSortingRefiner(keywordQuery, searchObject.Sort.ByProperty, searchObject.Sort.Direction);
                     //// Add Matter ID property as second level sort for Client.MatterID column based on Search Matter or Search Document
-                    if (searchSettings.ManagedPropertyClientID == searchObject.Sort.ByProperty || searchSettings.ManagedPropertyDocumentClientId == searchObject.Sort.ByProperty)
+                    if (searchSettings.ManagedPropertyClientID == searchObject.Sort.ByProperty || 
+                        searchSettings.ManagedPropertyDocumentClientId == searchObject.Sort.ByProperty)
                     {
                         if (isMatterSearch)
                         {

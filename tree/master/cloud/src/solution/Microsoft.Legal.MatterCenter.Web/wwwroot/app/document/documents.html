@@ -74,7 +74,11 @@
                 <div title="Close" class="warningPopUpCloseIconContainer">Close</div>
             </div>
             <div class="attachedProgressPopUp" ng-if="vm.showAttachmentProgress">
-                <div class="progressPopUpDetails">{{vm.attachInProgressMessage}}</div>
+                <div class="progressPopUpDetails">
+                    Attaching
+                    <span id="currentDocumentCount" />of {{vm.asyncCallCompleted}} documents...
+                    <div>Do not close Matter Center until all documents are attached.</div>
+                </div>
                 <div class="warningLoadingIcon">
                     <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
                 </div>

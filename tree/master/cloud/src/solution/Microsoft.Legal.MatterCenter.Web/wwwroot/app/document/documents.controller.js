@@ -29,8 +29,7 @@
         vm.showAttachmentProgress = false;
         vm.showAttachment = false;
         vm.attachButtonText = configs.uploadMessages.attachButtonText;
-        vm.showPopUpHolder = false;
-        vm.showAttachmentProgress = false;
+        vm.showPopUpHolder = false;        
         vm.showErrorAttachmentInfo = false;
         vm.showFailedAtachments = false;
         vm.showSuccessAttachments = false;
@@ -137,6 +136,7 @@
                             documentPath = trimEndChar(documentPath.trim(), "/");
                             documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1);
                             if (documentPath && documentName) {
+                                vm.showAttachmentProgress = true;
                                 sendAttachmentAsync(decodeURIComponent(documentPath), decodeURIComponent(documentName));
                             }
                         }
@@ -154,22 +154,18 @@
                     }
                 },
                 function (asyncResult) {
-                    if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-                        //failedHtml = failedHtml + "";
-                        
+                    if (asyncResult.status === Office.AsyncResultStatus.Failed) {   
                         vm.failedFiles.push(asyncResult.asyncContext.sCurrentDocumentName)
-                        vm.showFailedAtachments = true;
-                        //$(".failureDocumentList").append("<div title=\"" + asyncResult.asyncContext.sCurrentDocumentName + "\" class=\"documentList\">" + asyncResult.asyncContext.sCurrentDocumentName + "</div>");
-
+                        vm.showFailedAtachments = true;     
                     }
                     vm.asyncCallCompleted = vm.asyncCallCompleted + 1;
-                    if (asyncCallCompleted === vm.selectedRows.length) {
+                    if (vm.asyncCallCompleted === vm.selectedRows.length) {
+                        vm.showAttachmentProgress = false;
                         notifyAttachmentResult();
                     }
-                    else {
-                        
-                        vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", parseInt(vm.asyncCallCompleted, 10) + 1);
-                    }
+                    //else {                        
+                    //    vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", parseInt(vm.asyncCallCompleted, 10) + 1);
+                    //}
                     //if ($(".is-selectedRow").length === oDocumentConstants.iAsyncCallsCompleted) {
                     //    notifyAttachmentResult();
                     //} else {
@@ -180,9 +176,7 @@
             }
 
             function notifyAttachmentResult() {
-                "use strict";
-                vm.showAttachmentProgress = false;
-
+                "use strict";  
                 if (vm.showFailedAtachments) {
                     vm.showSuccessAttachments = false;
                     vm.showFailedAtachments = true;
@@ -191,17 +185,9 @@
                     vm.showFailedAtachments = false;
                     vm.showSuccessAttachments = true;
                     vm.failedHeaderMessage = '';
+                    vm.failedFiles = [];
                 }
-                vm.showPopUpHolder = true;
-
-                console.log(vm.showFailedAtachments)
-                console.log(vm.showPopUpHolder)
-                console.log(vm.showSuccessAttachments)
-                console.log(vm.failedHeaderMessage)
-                //var oAllSelector = $("#CheckBox .ms-ChoiceField-input");
-                //if (oAllSelector && oAllSelector.length) {
-                //    oAllSelector[0].checked = false;
-                //}
+                vm.showPopUpHolder = true;                         
             }
 
             vm.checkVariables = function () {

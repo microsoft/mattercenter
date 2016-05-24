@@ -59,7 +59,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
             // Encode Search Term
             searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
-                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES, ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES, 
+                ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
             var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
             if (searchResultsVM.TotalRows > 0)
