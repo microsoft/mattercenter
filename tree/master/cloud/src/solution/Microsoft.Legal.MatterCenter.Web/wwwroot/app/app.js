@@ -64,12 +64,21 @@ angular.module('matterMain', [
                 }  
             }, requireADLogin: true  
         })
-        .state('mc.dashboard', {
-            url: "^/dashboard",
+        .state('mc.documentdashboard', {
+            url: "^/documentdashboard",
             views: {
                 "contentView": {
-                    templateUrl: '/app/dashboard/dashboard.html',
-                    controller: 'DashBoardController as vm'
+                    templateUrl: '/app/dashboard/documentdashboard.html',
+                    controller: 'DocumentDashBoardController as vm'
+                }
+            }, requireADLogin: true
+        })
+        .state('mc.matterdashboard', {
+            url: "^/matterdashboard",
+            views: {
+                "contentView": {
+                    templateUrl: '/app/dashboard/matterdashboard.html',
+                    controller: 'MatterDashBoardController as vm'
                 }
             }, requireADLogin: true
         })

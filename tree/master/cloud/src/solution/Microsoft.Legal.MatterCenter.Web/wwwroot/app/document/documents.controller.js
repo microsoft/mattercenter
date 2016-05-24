@@ -20,10 +20,7 @@
         //to hide lazyloader on load
         //start
         $scope.lazyloader = true;
-        //end
-
-
-        vm.iAsyncCallsCompleted = false;
+        //end        
         vm.bAttachDocumentFailed = false;
         vm.selectedRows = [];
         vm.showAttachmentProgress = false;
@@ -33,9 +30,7 @@
         vm.showErrorAttachmentInfo = false;
         vm.showFailedAtachments = false;
         vm.showSuccessAttachments = false;
-        vm.failedFiles = [];
-        vm.failedFiles.push("Test 1")
-        vm.failedFiles.push("Test 2")
+        vm.failedFiles = [];        
         vm.enableAttachment = true;
         vm.asyncCallCompleted = 0;
      
@@ -161,22 +156,14 @@
                     vm.asyncCallCompleted = vm.asyncCallCompleted + 1;
                     if (vm.asyncCallCompleted === vm.selectedRows.length) {
                         vm.showAttachmentProgress = false;
+                        vm.asyncCallCompleted = 0;
                         notifyAttachmentResult();
-                    }
-                    //else {                        
-                    //    vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", parseInt(vm.asyncCallCompleted, 10) + 1);
-                    //}
-                    //if ($(".is-selectedRow").length === oDocumentConstants.iAsyncCallsCompleted) {
-                    //    notifyAttachmentResult();
-                    //} else {
-                    //    $("#currentDocumentCount").text(parseInt(oDocumentConstants.iAsyncCallsCompleted, 10) + 1);
-                    //}
+                    }                    
 
                 });
             }
 
-            function notifyAttachmentResult() {
-                "use strict";  
+            function notifyAttachmentResult() {                  
                 if (vm.showFailedAtachments) {
                     vm.showSuccessAttachments = false;
                     vm.showFailedAtachments = true;
@@ -188,15 +175,7 @@
                     vm.failedFiles = [];
                 }
                 vm.showPopUpHolder = true;                         
-            }
-
-            vm.checkVariables = function () {
-                console.log(vm.showFailedAtachments)
-                console.log(vm.showPopUpHolder)
-                console.log(vm.showSuccessAttachments)
-                console.log(vm.failedHeaderMessage)
-            }
-
+            }            
             function trimEndChar(sOrignalString, sCharToTrim) {
                 "use strict";
                 if (sOrignalString && sCharToTrim === sOrignalString.substr(-1)) {

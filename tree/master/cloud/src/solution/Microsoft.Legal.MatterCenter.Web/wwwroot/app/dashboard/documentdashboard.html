@@ -1,0 +1,270 @@
+﻿<script type="text/ng-template" id="colHeaderCheckBox.html">
+</script>
+<div class="popupWait hide"></div>
+<div class="loadingImage hide" id="popupWaitLoadingImage">
+    <a title="Matter Center Home" id="mcIcon" href="/sitepages/MatterCenterHome.aspx" target="_parent">
+        <img title="Matter Center" src="../Images/WindowsLoadingFast.GIF" alt="Matter Center" />
+    </a>
+</div>
+<div class="popupContainerBackground hide"></div>
+<div id="mainDivContainer">
+    <div class="matterPopup"></div>
+    <div class="documentPopup"></div>
+    <div class="clear"></div>
+    <!--Start Pop up conatins for documents to send documents to one drive, send email etc-->
+    <div class="popUpContainer hide">
+        <header class="popUpHeader">
+            <div class="popUpHeaderTitle popUpFloatLeft"></div>
+            <div class="notificationContainerForPopup"></div>
+            <img class="mailCartCloseIcon" alt="Close" src="../Images/close-666.png" title="Close" />
+        </header>
+        <div id="PopupBody">
+            <div class="selectMailFormat">
+                <div class="sendEmailOptions sendToOneDriveOption" onclick="sendToBriefcase();">
+                    <img class="mailCartLogo" src="../Images/my-briefcase-666.png" alt="Send to My OneDrive for Business" title="Send to My OneDrive" />
+                    <div title="Send to My OneDrive for Business" class="inlineValues">Send to My OneDrive for Business</div>
+                </div>
+                <div class="sendEmailOptions emailAttachmentOption" onclick="downloadEmail(true);">
+                    <img class="mailCartLogo" src="../Images/attach_666_27X27.png" alt="Email as attachment" title="Email as attachment" /><div title="Email as attachment" class="inlineValues">Email as attachment</div>
+                </div>
+                <div class="sendEmailOptions emailLinkOption" onclick="downloadEmail(false);">
+                    <img class="mailCartLogo" src="../Images/link-666.png" alt="Email as link" title="Email as link" /><div title="Email as link" class="inlineValues">Email as link</div>
+                </div>
+            </div>
+            <div class="popUpBody popUpFloatLeft">
+                <div class="checkOutPopup">
+                    <div class="checkOutPopupPointer"></div>
+                    <div class="checkOutPopupData">
+                        <div class="checkOutMetadata marginTop10"></div>
+                    </div>
+                </div>
+                <ul class="emailDocumentNames"></ul>
+                <div class='pinLoadingImage' id='mailCartLoadingImage'>
+                    <img src='/Images/WindowsLoadingFast.GIF' title='Loading' class='LoadingImage' alt='Loading...' />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End Pop up conatins for documents to send documents to one drive, send email etc-->
+    <div class="matterCenterHeaderBackground hide"></div>
+    <!--Main dashboard content-->
+    <div id="contentDiv">
+        <div class="row searchdashboard">
+            <div class="col-xs-9">
+                <div class="input-group">
+                    <input type="text" ng-model="vm.selected" placeholder="Search by document name, document ID, or keyword" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                    <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
+                </div>
+            </div>
+            <div class="col-xs-3 pad0">
+                <img title="Advanced search" style="display: inline;" type='button' ng-if="downwarddrop" ng-click="vm.showupward()" data-toggle='dropdown' alt="Drop Down" src="../Images/downward-advanced-search-29x29-666.png">
+                <img title="Advanced search" id="filterSearchDown" ng-if="upwarddrop" ng-click="vm.showdownward()" alt="Drop Down" src="../Images/upward-advanced-search-29x29-666.png">
+            </div>
+            <div class="col-xs-12">
+                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                <div ng-show="noResults">
+                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                </div>
+            </div>
+            <div class="col-xs-9 dashboarddrop" ng-click='$event.stopPropagation();' ng-if="searchdrop">
+                <div class="col-xs-12 dashboarddropinner">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">Clients</div>
+                        <div class="col-xs-12 col-sm-7 pull-left pad10">
+                            <div class="input-group">
+                                <input type="text" placeholder="Enter or select a client" class="form-control">
+                                <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.showclientdrop()"><img src='../images/icon-combobox.png' /></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 " ng-if="clientdrop">
+                        <div class="row ">
+                            <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="checkClient=true">Select All</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="checkClient=false">Select None</a></div>
+                                <div class="col-xs-12 refinerWrapper">
+                                    <input type="checkbox" ng-model="checkClient" /> <span>Microsoft</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <div class="filterOkButton"><div class="dashboardSearch">Ok</div></div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="filterOkButton"><div class="dashboardSearch">Cancel</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">Author</div>
+                        <div class="col-xs-12 col-sm-7 pull-left pad10">
+                            <input type="text" placeholder="Document Author" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadLocation" typeahead-no-results="AuthornoResults" class="form-control">
+                        </div>
+                        <div class="col-xs-12 hide">
+                            <i ng-show="loadLocation" class="glyphicon glyphicon-refresh"></i>
+                            <div ng-show="AuthornoResults">
+                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">Date</div>
+                        <div class="col-xs-12 col-sm-7 pull-left pad10">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-4">
+                                    <div class='input-group'>
+                                        <input type='text' placeholder='From' class='calendar form-control'
+                                               uib-datepicker-popup='MM/dd/yyyy'
+                                               ng-model='startdate'
+                                               is-open='openedStartDate'
+                                               datepicker-options='dateOptions'
+                                               ng-required='true' close-text='Close'
+                                               alt-input-formats='altInputFormats' />
+                                        <span class='input-group-btn'>
+
+                                            <button type='button' class='btn btn-default' ng-click='openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-4">
+                                    <div class='input-group'>
+                                        <input type='text' placeholder='To' class='calendar form-control'
+                                               uib-datepicker-popup='MM/dd/yyyy'
+                                               ng-model='enddate'
+                                               is-open='openedEndDate'
+                                               datepicker-options='enddateOptions'
+                                               ng-required='true' close-text='Close'
+                                               alt-input-formats='altInputFormats' />
+                                        <span class='input-group-btn'>
+
+                                            <button type='button' class='btn btn-default' ng-click='openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-xs-5 col-sm-3 pad15">
+                            <div id="filterAdvancedSearch" class="dashboardSearch">
+                                Search
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <ul class="nav nav-tabs" toggletab>
+                    <li class="active"><a href="#MyDocuments" data-toggle="tab">My documents({{vm.myDocumentCount}})</a></li>
+                    <li><a href="#AllDocuments" data-toggle="tab">All documents({{vm.allDocumentCount}})</a></li>
+                    <li><a href="#PinnedDocuments" data-toggle="tab">Pinned documents({{vm.pinDocumentCount}})</a></li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="MyDocuments"></div>
+                    <div class="tab-pane" id="AllDocuments">
+                        <div class="row">
+                            <div id="grid1" ui-grid="vm.documentGridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="PinnedDocuments">...</div>
+                </div>
+            </div>
+
+            <div class="LeftContent">
+                <div class="mailpopupContainerBackground hide"></div>
+
+                <div class="appName hide">
+                    <div class="appLink">
+                        <a>
+                            <img alt="Matter Center" class="appImage" src="../Images/Portal_logo_png.png" />
+                            <div class="appTitle"><span>Matter Center</span></div>
+                            <div class="appTitleSmall"><span>for Office 365</span></div>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="DisplayResults">
+                    
+                    <!--Start - Show Display Count for Documents-->
+                    <div id="DisplaySearchDocumentsResults" ng-show="vm.isDocumentView">
+                        <div title="Manage your recent documents: view, edit, or pin a document"
+                             class="mySearch active" id="RecentDocuments" onclick="togglePinnedView(this, 2)">
+                            <span class="resultsTab">My documents</span>
+                            <span class="ResultNumbers">({{vm.myDocumentCount}})</span>
+                        </div>
+                        <div title="Manage documents: view, edit, or pin a document" class="allSearch"
+                             onclick="togglePinnedView(this, 0)">
+                            <span class="resultsTab">All documents</span>
+                            <span class="ResultNumbers">({{vm.allDocumentCount}})</span>
+                        </div>
+                        <div title="Manage documents: view, edit, or pin a document" class="pinnedSearch"
+                             id="PinnedDocuments" onclick="togglePinnedView(this, 1)">
+                            <span class="resultsTab">Pinned documents</span>
+                            <span class="ResultNumbers">({{vm.pinDocumentCount}})</span>
+                        </div>
+                        <div class="viewSwitcher"><span>…</span></div>
+                    </div>
+                    <!--End - Show Display Count for Documents-->
+                </div>
+                <div class="searchDocumentHeader">
+                    <div class="switchTab hide">
+                        <div class="navDiv" onclick="changeNavigationTabs(this);">Search Results</div>
+                    </div>
+                </div>
+                <div class="EmailContentDiv">
+                    <div id="Email">
+                        <span id="EmailDiv">
+                            <span id="EmailImg">
+                                <img src="../Images/cart_icon_30px_X_30px.png" class="mailCartIcon" title="Review the contents of your mail cart and send the selected documents to your OneDrive or via email." alt="Mail Cart" />
+                            </span>
+                            <span id="EmailText">
+                                &nbsp;
+                                <span id="EmailTextCount">(0)</span>
+                            </span>
+                        </span>
+                        <div class="sdBanner">
+                            <div class="sdBannerDropdown">
+                                <div class="sdBannerLabel"><span>Sort by: </span></div>
+                                <input class="sdBannerText" id="sdBannerDropDown" type="text" data-result="2" value="None" data-sort-value="" data-order="0" data-value="" data-ss-value="" disabled="disabled" />
+                                <img alt="Sort By" class="sdBannerDD" title="Sort By" src="../Images/icon-combobox.png" />
+                            </div>
+                            <div id="sdBannerDropdownForDocuments" class="sdBannerPanel hide">
+                                <div class="sdBannerPanelItem sdBannerPanelFirstItem" id="optionNoneForDocuments" data-sort-value="" data-order="0" data-value=""></div>
+                                <div class="sdBannerPanelItem" id="optionFileNameASCForDocuments" data-order="0" data-value="DocumentName" data-ss-value="SearchName"></div>
+                                <div class="sdBannerPanelItem" id="optionFileNameDESCForDocuments" data-order="1" data-value="DocumentName" data-ss-value="SearchName"></div>
+                                <div class="sdBannerPanelItem" id="optionCreatedDateASCForDocuments" data-order="0" data-value="DocumentCreatedDate" data-ss-value="DateTime"></div>
+                                <div class="sdBannerPanelItem" id="optionCreatedDateDESCForDocuments" data-order="1" data-value="DocumentCreatedDate" data-ss-value="DateTime"></div>
+                                <div class="sdBannerPanelItem" id="optionModifiedDateASCForDocuments" data-order="0" data-value="DocumentModifiedDate" data-ss-value="ModifiedDate"></div>
+                                <div class="sdBannerPanelItem sdBannerPanelLastItem" id="optionModifiedDateDESCForDocuments" data-order="1" data-value="DocumentModifiedDate" data-ss-value="ModifiedDate"></div>
+                            </div>
+                            <div id="sdBannerDropdownForMatters" class="sdBannerPanel hide">
+                                <div class="sdBannerPanelItem sdBannerPanelFirstItem" id="optionNoneForMatters" data-sort-value="" data-order="0" data-value=""></div>
+                                <div class="sdBannerPanelItem" id="optionFileNameASCForMatters" data-order="0" data-value="MatterName" data-ss-value="SearchName"></div>
+                                <div class="sdBannerPanelItem" id="optionFileNameDESCForMatters" data-order="1" data-value="MatterName" data-ss-value="SearchName"></div>
+                                <div class="sdBannerPanelItem" id="optionCreatedDateASCForMatters" data-order="0" data-value="MatterCreatedDate" data-ss-value="DateTime"></div>
+                                <div class="sdBannerPanelItem sdBannerPanelLastItem" id="optionCreatedDateDESCForMatters" data-order="1" data-value="MatterCreatedDate" data-ss-value="DateTime"></div>
+                                <div class="sdBannerPanelItem hide" id="optionModifiedDateASCForMatters" data-order="0" data-value="MatterModifiedDate" data-ss-value="ModifiedDate"></div>
+                                <div class="sdBannerPanelItem hide" id="optionModifiedDateDESCForMatters" data-order="1" data-value="MatterModifiedDate" data-ss-value="ModifiedDate"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="detailSeparator"></div>
+                <div id="grid1" ui-grid="vm.documentGridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
+                <div class="Grid" id="grid">
+                </div>
+                <div class="Grid hide" id="pinnedGrid">
+                </div>
+                <div id="recentView">
+                    <div id="RecentDocumentContainer" class=""></div>
+                    <div id="recentMatters" class="hide">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
