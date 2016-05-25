@@ -230,6 +230,10 @@ textarea {
     border: none;
 }
 
+.ui-grid {
+    height: 520px;
+}
+
 .ui-grid-cell {
     height: 48px;
     white-space: normal;
@@ -245,6 +249,7 @@ textarea {
     text-overflow: ellipsis;
     height: 100%;
     overflow: hidden;
+    color: #2b579a!important;
 }
 
 .UiGrid-a {
@@ -293,8 +298,7 @@ textarea {
 }
 
 .ui-grid-viewport {
-    overflow: scroll;
-    overflow-x: hidden !important;
+    overflow: hidden !important;
 }
 
 .overflowMain {
@@ -366,28 +370,31 @@ textarea {
     max-width: none;
 }
 
-.searchdashboard{
-    padding-top:15px;
+.searchdashboard {
+    padding-top: 15px;
 }
 
-.dashboarddrop{
+.dashboarddrop {
     position: absolute;
     top: 48px;
     padding: 0 7px 1px 15px;
 }
-.dashboarddropinner{
+
+.dashboarddropinner {
     z-index: 1000;
     background: #fff;
-    border:1px solid #ccc;
-}
-.pad15{
-    padding:15px;
-}
-.pad10{
-    padding:10px;
+    border: 1px solid #ccc;
 }
 
-.dashboardSearch{
+.pad15 {
+    padding: 15px;
+}
+
+.pad10 {
+    padding: 10px;
+}
+
+.dashboardSearch {
     width: 80px;
     background: #0072c6;
     padding: 5px 0 5px 0px;
@@ -399,12 +406,57 @@ textarea {
     font-family: Segoe UI;
 }
 
-.clientdropinner{
+.clientdropinner {
     position: absolute;
     top: -11px;
     left: 16.6%;
     border: 1px solid #ccc;
     z-index: 10;
     background: #fff;
-    padding-bottom:10px;
+    padding-bottom: 10px;
+}
+
+.sortby {
+    position: absolute;
+    top: 80px;
+    padding: 0;
+}
+
+.padtop20{
+    padding-top:20px;
+}
+
+.padtop5{
+    padding-top:5px;
+}
+
+.sortby ul{
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+    position: absolute;
+    left: 8px;
+    z-index: 1;
+    list-style: none;
+    padding: 0;
+    margin-top: 5px;
+}
+
+.sortby ul li:hover{
+    background-color: #eaecea;
+    cursor: pointer;
+}
+
+.sortby ul li{
+    padding: 5px 10px 5px 10px;
+    color: #333;
+    display: inline-block;
+    float: right;
+    font-size: 0.87em;
+    font-family: "Segoe UI";
+    text-align: left;
+    width: 118px;
+}
+
+.overflowMain a:hover{
+    text-decoration:none;
 }

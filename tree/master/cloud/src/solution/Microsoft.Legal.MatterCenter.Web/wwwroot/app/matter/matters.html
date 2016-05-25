@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="col-md-9 hidden-xs hidden-sm">
-                <select class="form-control" ng-model="ddlMatters" ng-options="matter.Name for matter in Matters" ng-change="GetMatters(ddlMatters.Id)"></select>
+                <select class="form-control" ng-model="vm.ddlMatters" ng-options="matter.Name for matter in vm.Matters" ng-change="vm.GetMatters(vm.ddlMatters.Id)"></select>
             </div>
         </div>
         <div class="col-md-4 col-lg-4 hidden-xs hidden-sm">
@@ -36,9 +36,9 @@
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                     <ul class="dropdown-menu pull-right">
-                        <li class="searchPanelDropdown" ng-click="GetMatters(1)">All Matters</li>
-                        <li class="searchPanelDropdown" ng-click="GetMatters(2)">My Matters</li>
-                        <li class="searchPanelDropdown" ng-click="GetMatters(3)">Pinned Matters</li>
+                        <li class="searchPanelDropdown" ng-click="vm.GetMatters(1)">All Matters</li>
+                        <li class="searchPanelDropdown" ng-click="vm.GetMatters(2)">My Matters</li>
+                        <li class="searchPanelDropdown" ng-click="vm.GetMatters(3)">Pinned Matters</li>
                     </ul>
                 </div>
             </div>
@@ -57,14 +57,14 @@
 </div>
 <div class="row title">
     <div class="col-sm-12" id="gridViewPageHeaderContainer">
-        <span role="heading" class="add-margin-bottom">{{ddlMatters.Name}}</span>
+        <span role="heading" class="add-margin-bottom">{{vm.ddlMatters.Name}}</span>
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12" ng-if="divuigrid">
+    <div class="col-sm-12" ng-if="vm.divuigrid">
         <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection ui-grid-pagination class="grid"></div>
     </div>
-    <div class="col-sm-12" ng-if="nodata">
+    <div class="col-sm-12" ng-if="vm.nodata">
         <hr />
         <span class="noResultsText">{{errorMessage}}</span>
     </div>
@@ -105,7 +105,7 @@
                         <div class="attachmentHeader">Drag and drop items to folders on the right</div>
                     </div>
                     <div class="col-sm-2">
-                        <img data-dismiss="modal" ng-click="hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
+                        <img data-dismiss="modal" ng-click="vm.hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
                     </div>
                 </div>
                 <div class="row margin0">
@@ -232,7 +232,7 @@
 </div>
 
 <div id="loadingImageContainer">
-    <div class="lazyLoading" ng-hide="lazyloader">
+    <div class="lazyLoading" ng-hide="vm.lazyloader">
         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
     </div>
 </div>

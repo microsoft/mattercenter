@@ -7,30 +7,31 @@
         function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http) {
             var vm = this;
             vm.selected = undefined;
-            // Onload show ui grid and hide error div
-            //start
-            $scope.divuigrid = true;
-            $scope.nodata = false;
-            //end
 
-            //to hide lazyloader on load
+            //#region Onload show ui grid and hide error div
             //start
-            $scope.lazyloader = true;
-            //end
+            vm.divuigrid = true;
+            vm.nodata = false;
+            //#endregion
 
-            //Assigning scopes for Dropdowns in headers
+            //#region To hide lazyloader on load
+            //start
+            vm.lazyloader = true;
+            //#endregion
+
+            //#region Assigning scopes for Dropdowns in headers
             //Start
-            $scope.matterDropDowm = false;
-            $scope.clientDropDowm = false;
-            $scope.modifieddateDropDowm = false;
+            vm.matterDropDowm = false;
+            vm.clientDropDowm = false;
+            vm.modifieddateDropDowm = false;
             //End
-
-
 
             $scope.initOfficeLibrary = function () {
 
             };
 
+
+            //#region Setting the options for grid
             vm.gridOptions = {
                 paginationPageSizes: [10, 50, 100],
                 paginationPageSize: 10,
@@ -40,10 +41,10 @@
                 enableSelectAll: false,
                 multiSelect: false,
                 columnDefs: [
-                     { field: 'matterName', displayName: 'Matter', enableHiding: false,width:"20%", cellTemplate: '../app/matter/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterHeaderTemplate.html' },
+                     { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "20%", cellTemplate: '../app/matter/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterHeaderTemplate.html' },
                      { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "15%", headerCellTemplate: '../app/matter/ClientHeaderTemplate.html' },
-                     { field: 'matterClientId', displayName: 'Client.MatterID', width: "12%", headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-                     { field: 'matterModifiedDate', displayName: 'Modified Date', width: "8%", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/ModifiedDateTemplate.html' },
+                     { field: 'matterClientId', displayName: 'Client.MatterID', width: "15%", headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+                     { field: 'matterModifiedDate', displayName: 'Modified Date', width: "10%", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/ModifiedDateTemplate.html' },
                      { field: 'matterResponsibleAttorney', headerTooltip: 'Click to sort by attorney', width: "15%", displayName: 'Responsible attorney', visible: false },
                      { field: 'matterSubAreaOfLaw', headerTooltip: 'Click to sort by sub area of law', width: "15%", displayName: 'Sub area of law', visible: false },
                      { field: 'matterCreatedDate', headerTooltip: 'Click to sort by matter open date', width: "15%", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
@@ -61,8 +62,9 @@
                     $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
                 }
             };
+            //#endregion
 
-
+            //#region Setting the api calls 
             //search api call 
             function get(options, callback) {
                 api({
@@ -104,7 +106,7 @@
                     success: callback
                 });
             }
-
+            //#endregion
 
 
             //#region Code for Upload functionality
@@ -570,6 +572,7 @@
             //#endregion
 
 
+            //#region For filtering the grid when clicked on search button 
             vm.searchMatter = function (val) {
                 var searchRequest =
                   {
@@ -595,7 +598,7 @@
 
 
             vm.search = function () {
-                $scope.lazyloader = false;
+                vm.lazyloader = false;
                 var searchRequest =
                   {
                       Client: {
@@ -616,147 +619,101 @@
                       }
                   };
                 get(searchRequest, function (response) {
-                   $scope.lazyloader = true;
+                    vm.lazyloader = true;
                     vm.gridOptions.data = response;
                 });
             }
+            //#endregion
 
+            //#region Searchrequest object
+            var searchRequest =
+                 {
+                     Client: {
+                         Id: "123456",
+                         Name: "Microsoft",
+                         Url: "https://msmatter.sharepoint.com/sites/catalog"
+                     },
+                     SearchObject: {
+                         PageNumber: 1,
+                         ItemsPerPage: 10,
+                         SearchTerm: vm.searchTerm,
+                         Filters: {},
+                         Sort:
+                                 {
+                                     ByProperty: "LastModifiedTime",
+                                     Direction: 0
+                                 }
+                     }
+                 };
 
-            //For Searching Matter in GridHeader Menu
+            //#endregion
+
+            //#region For Searching Matter in GridHeader Menu
             //Start
             vm.searchMatterGrid = function () {
-                $scope.lazyloader = false;
-
-                var searchRequest =
-                  {
-                      Client: {
-                          Id: "123456",
-                          Name: "Microsoft",
-                          Url: "https://msmatter.sharepoint.com/sites/catalog"
-                      },
-                      SearchObject: {
-                          PageNumber: 1,
-                          ItemsPerPage: 10,
-                          SearchTerm: vm.searchTerm,
-                          Filters: {},
-                          Sort:
-                                  {
-                                      ByProperty: "MCMatterName",
-                                      Direction: 0
-                                  }
-                      }
-                  };
+                vm.lazyloader = false;
+                searchRequest.SearchObject.SearchTerm = vm.searchTerm;
+                searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                 get(searchRequest, function (response) {
-                    $scope.lazyloader = true;
-                    $scope.matters = response;
+                    vm.lazyloader = true;
+                    vm.matters = response;
                 });
             }
-            //End
+            //#endregion
 
-            //For Searching client in GridHeader Menu
+            //#region For Searching client in GridHeader Menu
             //start
             vm.searchClient = function () {
-                $scope.lazyloader = false;
-
-                var searchRequest =
-                  {
-                      Client: {
-                          Id: "123456",
-                          Name: "Microsoft",
-                          Url: "https://msmatter.sharepoint.com/sites/catalog"
-                      },
-                      SearchObject: {
-                          PageNumber: 1,
-                          ItemsPerPage: 10,
-                          SearchTerm: vm.searchClientTerm,
-                          Filters: {},
-                          Sort:
-                                  {
-                                      ByProperty: "MCClientName",
-                                      Direction: 0
-                                  }
-                      }
-                  };
+                vm.lazyloader = false;
+                searchRequest.SearchObject.SearchTerm = vm.searchClientTerm;
+                searchRequest.SearchObject.Sort.ByProperty = "MCClientName";
                 get(searchRequest, function (response) {
-                    $scope.lazyloader = true;
-                    $scope.Clients = response;
+                    vm.lazyloader = true;
+                    vm.Clients = response;
                 });
             }
-            //end
+            //#endregion
 
-            //For filtering mattername 
+            //#region For filtering mattername 
             //Start
-            $scope.filterMatterName = function (mattername) {
-                $scope.lazyloader = false;
-                var searchRequest =
-                  {
-                      Client: {
-                          Id: "123456",
-                          Name: "Microsoft",
-                          Url: "https://msmatter.sharepoint.com/sites/catalog"
-                      },
-                      SearchObject: {
-                          PageNumber: 1,
-                          ItemsPerPage: 10,
-                          SearchTerm: mattername,
-                          Filters: {},
-                          Sort:
-                                  {
-                                      ByProperty: "LastModifiedTime",
-                                      Direction: 1
-                                  }
-                      }
-                  };
+            vm.filterMatterName = function (mattername) {
+                vm.lazyloader = false;
+                searchRequest.SearchObject.SearchTerm = mattername;
+                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                searchRequest.SearchObject.Sort.Direction = 1;
                 get(searchRequest, function (response) {
-                    $scope.lazyloader = true;
+                    vm.lazyloader = true;
                     vm.gridOptions.data = response;
-                    $scope.matters = [];
+                    vm.matters = [];
                 });
 
             }
+            //#endregion
 
-            //End
 
-
-            //For filtering Clientname 
+            //#region For filtering Clientname 
             //Start
-            $scope.filterClientName = function (clientname) {
-                $scope.lazyloader = false;
-                var searchRequest =
-                  {
-                      Client: {
-                          Id: "123456",
-                          Name: "Microsoft",
-                          Url: "https://msmatter.sharepoint.com/sites/catalog"
-                      },
-                      SearchObject: {
-                          PageNumber: 1,
-                          ItemsPerPage: 10,
-                          SearchTerm: clientname,
-                          Filters: {},
-                          Sort:
-                                  {
-                                      ByProperty: "LastModifiedTime",
-                                      Direction: 1
-                                  }
-                      }
-                  };
+            vm.filterClientName = function (clientname) {
+                vm.lazyloader = false;
+                searchRequest.SearchObject.SearchTerm = clientname;
+                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                searchRequest.SearchObject.Sort.Direction = 1;
                 get(searchRequest, function (response) {
-                    $scope.lazyloader = true;
+                    vm.lazyloader = true;
                     vm.gridOptions.data = response;
-                    $scope.Clients = [];
+                    vm.Clients = [];
                 });
 
             }
 
-            //End
+            //#endregion
 
 
-            //Code for filtering ModifiedDate
+            //#region Code for filtering ModifiedDate
             //start
-            $scope.FilterModifiedDate = function () {
-                $scope.lazyloader = false;
-                var searchRequest =
+            vm.FilterModifiedDate = function () {
+                vm.lazyloader = false;
+                var ModifiedDateRequest =
                   {
                       Client: {
                           Id: "123456",
@@ -768,7 +725,7 @@
                           ItemsPerPage: 10,
                           SearchTerm: "",
                           Filters: {
-                              OLList: "",
+                              AOLList: "",
                               ClientName: "",
                               ClientsList: [],
                               DateFilters: { CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: "05/02/2016", ModifiedToDate: "05/06/2016", OpenDateFrom: "", OpenDateTo: "" },
@@ -789,27 +746,27 @@
                                   }
                       }
                   };
-                get(searchRequest, function (response) {
-                    $scope.lazyloader = true;
+                get(ModifiedDateRequest, function (response) {
+                    vm.lazyloader = true;
                     vm.gridOptions.data = response;
-                    $scope.startDate = "";
-                    $scope.endDate = "";
+                    vm.startDate = "";
+                    vm.endDate = "";
                 });
 
             }
 
-            //end
+            //#endregion
 
-            //Code written for displaying types in dropdown 
+            //#region Code written for displaying types in dropdown 
             //Start 
-            $scope.Matters = [{ Id: 1, Name: "All Matters" }, { Id: 2, Name: "My Matters" }, { Id: 3, Name: "Pinned Matters" }];
-            $scope.ddlMatters = $scope.Matters[0];
+            vm.Matters = [{ Id: 1, Name: "All Matters" }, { Id: 2, Name: "My Matters" }, { Id: 3, Name: "Pinned Matters" }];
+            vm.ddlMatters = vm.Matters[0];
 
 
-            //End  
+            //#endregion  
 
-            $scope.Pinnedobj = [];
-            $scope.getMatterPinned = function () {
+            vm.Pinnedobj = [];
+            vm.getMatterPinned = function () {
 
                 var pinnedMattersRequest = {
                     Id: "123456",
@@ -818,7 +775,7 @@
                 }
                 getPinnedMatters(pinnedMattersRequest, function (response) {
                     for (var i = 0; i < response.matterDataList.length; i++) {
-                        $scope.Pinnedobj.push(response.matterDataList[i]);
+                        vm.Pinnedobj.push(response.matterDataList[i]);
                     }
                     if (!$scope.$$phase) {
                         $scope.$apply();
@@ -827,53 +784,56 @@
                 return true;
             }
 
-            $scope.getMatterPinned();
+            vm.getMatterPinned();
+
+            //#region Request object for the GetMattersMethod
+            var MattersRequest = {
+                Client: {
+                    Id: "123456",
+                    Name: "Microsoft",
+                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                },
+                SearchObject: {
+                    PageNumber: 1,
+                    ItemsPerPage: 10,
+                    SearchTerm: "",
+                    Filters: {
+                        AOLList: "",
+                        ClientsList: [],
+                        FilterByMe: 0,
+                        FromDate: "",
+                        PGList: "",
+                        ToDate: "",
+                    },
+                    Sort:
+                            {
+                                ByProperty: "LastModifiedTime",
+                                Direction: 1
+                            }
+                }
+            }
+
+            //#endregion
 
 
-            //Hits when the Dropdown changes 
+            //#region Hits when the Dropdown changes 
             //Start 
-            $scope.GetMatters = function (id) {
-                $scope.lazyloader = false;
+            vm.GetMatters = function (id) {
+                vm.lazyloader = false;
                 if (id == 1) {
-                    var AllMattersRequest = {
-                        Client: {
-                            Id: "123456",
-                            Name: "Microsoft",
-                            Url: "https://msmatter.sharepoint.com/sites/catalog"
-                        },
-                        SearchObject: {
-                            PageNumber: 1,
-                            ItemsPerPage: 10,
-                            SearchTerm: "",
-                            Filters: {
-                                AOLList: "",
-                                ClientsList: [],
-                                FilterByMe: 0,
-                                FromDate: "",
-                                PGList: "",
-                                ToDate: "",
-                            },
-                            Sort:
-                                    {
-                                        ByProperty: "LastModifiedTime",
-                                        Direction: 1
-                                    }
-                        }
-                    }
-
-
-                    get(AllMattersRequest, function (response) {
-                        $scope.lazyloader = true;
+                    MattersRequest.SearchObject.Filters.FilterByMe = 0;
+                    get(MattersRequest, function (response) {
+                        vm.lazyloader = true;
                         if (response.errorCode == "404") {
-                            $scope.divuigrid = false;
-                            $scope.nodata = true;
+                            vm.divuigrid = false;
+                            vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
-                            $scope.getMatterPinned();
-                            $scope.divuigrid = true;
-                            $scope.nodata = false;
-                            if ($scope.Pinnedobj.length > 0) {
-                                angular.forEach($scope.Pinnedobj, function (pinobj) {
+                            vm.getMatterPinned();
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            if (vm.Pinnedobj.length > 0) {
+                                angular.forEach(vm.Pinnedobj, function (pinobj) {
                                     angular.forEach(response, function (res) {
                                         if (pinobj.matterName == res.matterName) {
                                             if (res.ismatterdone == undefined && !res.ismatterdone) {
@@ -884,54 +844,32 @@
                                     });
                                 });
                                 vm.gridOptions.data = response;
+                                if (!$scope.$$phase) {
+                                    $scope.$apply();
+                                }
                             } else {
                                 vm.gridOptions.data = response;
+                                if (!$scope.$$phase) {
+                                    $scope.$apply();
+                                }
                             }
                         }
                     });
-
-
                 } else if (id == 2) {
-                    $scope.lazyloader = false;
-                    var MyMattersRequest = {
-                        Client: {
-                            Id: "123456",
-                            Name: "Microsoft",
-                            Url: "https://msmatter.sharepoint.com/sites/catalog"
-                        },
-                        SearchObject: {
-                            PageNumber: 1,
-                            ItemsPerPage: 10,
-                            SearchTerm: "",
-                            Filters: {
-                                AOLList: "",
-                                ClientsList: [],
-                                FilterByMe: 1,
-                                FromDate: "",
-                                PGList: "",
-                                ToDate: ""
-                            },
-                            Sort:
-                                    {
-                                        ByProperty: "LastModifiedTime",
-                                        Direction: 1
-                                    }
-                        }
-                    }
-
-
-                    get(MyMattersRequest, function (response) {
-                        $scope.lazyloader = true;
+                    vm.lazyloader = false;
+                    MattersRequest.SearchObject.Filters.FilterByMe = 1;
+                    get(MattersRequest, function (response) {
+                        vm.lazyloader = true;
                         if (response.errorCode == "404") {
-                            $scope.divuigrid = false;
-                            $scope.nodata = true;
+                            vm.divuigrid = false;
+                            vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
-                            $scope.getMatterPinned();
-                            $scope.divuigrid = true;
-                            $scope.nodata = false;
-                            if ($scope.Pinnedobj.length > 0) {
-                                angular.forEach($scope.Pinnedobj, function (pinobj) {
+                            vm.getMatterPinned();
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            if (vm.Pinnedobj.length > 0) {
+                                angular.forEach(vm.Pinnedobj, function (pinobj) {
                                     angular.forEach(response, function (res) {
                                         if (pinobj.matterName == res.matterName) {
                                             if (res.ismatterdone == undefined && !res.ismatterdone) {
@@ -942,28 +880,34 @@
                                     });
                                 });
                                 vm.gridOptions.data = response;
+                                if (!$scope.$$phase) {
+                                    $scope.$apply();
+                                }
                             } else {
                                 vm.gridOptions.data = response;
+                                if (!$scope.$$phase) {
+                                    $scope.$apply();
+                                }
                             }
                         }
                     });
                 } else if (id == 3) {
-                    $scope.lazyloader = false;
+                    vm.lazyloader = false;
                     var pinnedMattersRequest = {
                         Id: "123456",
                         Name: "Microsoft",
                         Url: "https://msmatter.sharepoint.com/sites/catalog"
                     }
                     getPinnedMatters(pinnedMattersRequest, function (response) {
-                        $scope.lazyloader = true;
+                        vm.lazyloader = true;
                         if (response.errorCode == "404") {
-                            $scope.divuigrid = false;
-                            $scope.nodata = true;
+                            vm.divuigrid = false;
+                            vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
-                            $scope.getMatterPinned();
-                            $scope.divuigrid = true;
-                            $scope.nodata = false;
+                            vm.getMatterPinned();
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                             angular.forEach(response.matterDataList, function (res) {
                                 if (res.ismatterdone == undefined && !res.ismatterdone) {
                                     res.MatterInfo = "Unpin this matter";
@@ -971,21 +915,24 @@
                                 }
                             });
                             vm.gridOptions.data = response.matterDataList;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
                         }
                     });
                 }
             }
+            //#endregion 
+
+
+            //#region To run GetMatters function on page load 
+            vm.GetMatters(vm.ddlMatters.Id);
             //End 
 
 
-            //To run GetMatters function on page load 
-            $scope.GetMatters($scope.ddlMatters.Id);
-            //End 
-
-
-            //Written for unpinning the matter 
+            //#region Written for unpinning the matter 
             //Start 
-            $scope.UnpinMatter = function (data) {
+            vm.UnpinMatter = function (data) {
                 var alldata = data.entity;
                 var unpinRequest = {
                     Client: {
@@ -999,7 +946,7 @@
                 }
                 UnpinMatters(unpinRequest, function (response) {
                     if (response.isMatterUnPinned) {
-                        $timeout(function () { $scope.GetMatters($scope.ddlMatters.Id); }, 500);
+                        $timeout(function () { vm.GetMatters(vm.ddlMatters.Id); }, 500);
                         alert("Success");
                     }
                 });
@@ -1007,9 +954,9 @@
             //End 
 
 
-            //Written for pinning the matter 
+            //#region Written for pinning the matter 
             //Start 
-            $scope.PinMatter = function (data) {
+            vm.PinMatter = function (data) {
                 var alldata = data.entity;
                 var pinRequest = {
                     Client: {
@@ -1037,29 +984,20 @@
                 }
                 PinMatters(pinRequest, function (response) {
                     if (response.isMatterPinned) {
-                        $timeout(function () { $scope.GetMatters($scope.ddlMatters.Id); }, 500);
+                        $timeout(function () { vm.GetMatters(vm.ddlMatters.Id); }, 500);
                         alert("Success");
                     }
                 });
             }
-            //End 
+            //#endregion
 
 
-
-
-
-
-
-
-
-            //To display modal up in center of the screen...
+            //#region To display modal up in center of the screen...
             //Start 
             function reposition() {
                 var modal = $(this),
-                    dialog = modal.find('.modal-dialog');
+                dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
-
-
                 // Dividing by two centers the modal exactly, but dividing by three  
                 // or four works better for larger screens. 
                 dialog.css("margin-top", Math.max(0, (jQuery(window).height() - dialog.height()) / 2));
@@ -1071,9 +1009,10 @@
                 jQuery('.modal:visible').each(reposition);
             });
 
-
             $timeout(reposition(), 100);
-            //End 
+            //#endregion 
+
+            //#region For making menu visbible and hide
             vm.menuClick = function () {
                 var oAppMenuFlyout = $(".AppMenuFlyout");
                 if (!(oAppMenuFlyout.is(":visible"))) {
@@ -1089,42 +1028,44 @@
                     $(".MenuCaption").removeClass("hideMenuCaption");
                 }
             }
+            //#endregion
+
             $rootScope.breadcrumb = true;
             $rootScope.foldercontent = false;
 
-            $scope.hideBreadCrumb = function () {
+            vm.hideBreadCrumb = function () {
                 $rootScope.breadcrumb = true;
                 $rootScope.foldercontent = false;
 
             }
 
-            //Angular Datepicker Starts here
+            //#region Angular Datepicker Starts here
             //Start
-            $scope.dateOptions = {
+            vm.dateOptions = {
 
                 formatYear: 'yy',
                 maxDate: new Date()
             };
 
 
-            $scope.enddateOptions = {
+            vm.enddateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             }
 
             $scope.$watch('startdate', function (newval, oldval) {
-                $scope.enddateOptions.minDate = newval;
+                vm.enddateOptions.minDate = newval;
             });
 
 
-            $scope.openStartDate = function ($event) {
+            vm.openStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
                 this.openedStartDate = true;
             };
-            $scope.openEndDate = function ($event) {
+            vm.openEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
@@ -1132,16 +1073,16 @@
                 this.openedEndDate = true;
             };
 
-            $scope.openedStartDate = false;
-            $scope.openedEndDate = false;
+            vm.openedStartDate = false;
+            vm.openedEndDate = false;
 
-            $scope.disabled = function (date, mode) {
+            vm.disabled = function (date, mode) {
                 return (mode === 'day' && (date.getDay() != 0));
             };
 
 
 
-            //End
+            //#endregion
 
             //#region Custom Sorting functionality
             //Start
@@ -1173,14 +1114,14 @@
 
             $scope.FilterByType = function () {
                 get(SortRequest, function (response) {
-                    $scope.lazyloader = true;
+                    vm.lazyloader = true;
                     if (response.errorCode == "404") {
-                        $scope.divuigrid = false;
-                        $scope.nodata = true;
+                        vm.divuigrid = false;
+                        vm.nodata = true;
                         $scope.errorMessage = response.message;
                     } else {
-                        $scope.divuigrid = true;
-                        $scope.nodata = false;
+                        vm.divuigrid = true;
+                        vm.nodata = false;
                         vm.gridOptions.data = response;
                         if (!$scope.$$phase) {
                             $scope.$apply();
@@ -1190,60 +1131,60 @@
             }
 
             $scope.sortChanged = function (grid, sortColumns) {
-                $scope.divuigrid = false;
-                $scope.nodata = true;
+                vm.divuigrid = false;
+                vm.nodata = true;
                 if (sortColumns.length != 0) {
                     if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
                         if (sortColumns[0].sort != undefined) {
                             if (localStorage.MatterNameSort == undefined || localStorage.MatterNameSort == "asc") {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
                                 localStorage.MatterNameSort = "desc";
                             } else {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
                                 localStorage.MatterNameSort = "asc";
                             }
                         } else {
-                            $scope.divuigrid = true;
-                            $scope.nodata = false;
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
                         if (sortColumns[0].sort != undefined) {
                             if (localStorage.ClientSort == undefined || localStorage.ClientSort == "asc") {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
                                 localStorage.ClientSort = "desc";
                             }
                             else {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
                                 localStorage.ClientSort = "asc";
                             }
                         } else {
-                            $scope.divuigrid = true;
-                            $scope.nodata = false;
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
                         if (sortColumns[0].sort != undefined) {
                             if (localStorage.ClientIDSort == undefined || localStorage.ClientIDSort == "asc") {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
                                 localStorage.ClientIDSort = "desc";
                             } else {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
@@ -1251,20 +1192,20 @@
                             }
 
                         } else {
-                            $scope.divuigrid = true;
-                            $scope.nodata = false;
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
                         if (sortColumns[0].sort != undefined) {
                             if (localStorage.ModiFiedTimeSort == undefined || localStorage.ModiFiedTimeSort == "asc") {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
                                 localStorage.ModiFiedTimeSort = "desc";
                             } else {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
@@ -1272,72 +1213,72 @@
                             }
 
                         } else {
-                            $scope.divuigrid = true;
-                            $scope.nodata = false;
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
                         if (sortColumns[0].sort != undefined) {
                             if (localStorage.ResAttoSort == undefined || localStorage.ResAttoSort == "asc") {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
                                 localStorage.ResAttoSort = "desc";
                             } else {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
                                 localStorage.ResAttoSort = "asc";
                             }
                         } else {
-                            $scope.divuigrid = true;
-                            $scope.nodata = false;
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
                         if (sortColumns[0].sort != undefined) {
                             if (localStorage.SubAreaSort == undefined || localStorage.SubAreaSort == "asc") {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
                                 localStorage.SubAreaSort = "desc";
                             } else {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
                                 localStorage.SubAreaSort = "desc";
                             }
                         } else {
-                            $scope.divuigrid = true;
-                            $scope.nodata = false;
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
                         if (sortColumns[0].sort != undefined) {
                             if (localStorage.OpenDateSort == undefined || localStorage.OpenDateSort == "asc") {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
                                 localStorage.OpenDateSort = "desc"
                             } else {
-                                $scope.lazyloader = false;
+                                vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
                                 localStorage.OpenDateSort = "asc"
                             }
                         } else {
-                            $scope.divuigrid = true;
-                            $scope.nodata = false;
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
                     }
                 } else {
-                    $scope.lazyloader = false;
+                    vm.lazyloader = false;
                     SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                     SortRequest.SearchObject.Sort.Direction = 0;
                     $scope.FilterByType();
