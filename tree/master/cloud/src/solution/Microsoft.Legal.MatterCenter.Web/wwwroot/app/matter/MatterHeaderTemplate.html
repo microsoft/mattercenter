@@ -1,5 +1,5 @@
-﻿<div ng-mouseenter='grid.appScope.matterDropDowm = true' ng-mouseleave='grid.appScope.matterDropDowm = false'>
-    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.matterDropDowm'>
+﻿<div ng-mouseenter='grid.appScope.vm.matterDropDowm = true' ng-mouseleave='grid.appScope.vm.matterDropDowm = false'>
+    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.vm.matterDropDowm'>
         <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor dropdown-toggle' id="acombo" type='button' data-toggle='dropdown'>
             <img src='../images/icon-combobox.png' />
         </a>
@@ -16,7 +16,7 @@
                     <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
                 </div>
                 <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Matter'><span>Clear filters from </span><span class='clearFilterTitle'>Matter</span></div>
-                <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='matter in grid.appScope.matters' ng-click='grid.appScope.filterMatterName(matter.matterName)'>{{matter.matterName}}</div> </div>
+                <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='matter in grid.appScope.vm.matters' ng-click='grid.appScope.vm.filterMatterName(matter.matterName)'>{{matter.matterName}}</div> </div>
             </div>
         </div>
     </div>

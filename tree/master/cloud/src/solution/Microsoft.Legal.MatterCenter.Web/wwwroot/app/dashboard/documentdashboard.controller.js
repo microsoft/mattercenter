@@ -6,24 +6,45 @@
             var vm = this;
 
             //#region Global Variables
-            $scope.documentdrop = false;
-            $scope.downwarddrop = true;
-            $scope.upwarddrop = false;
-            $scope.loadLocation = false;
-            $scope.AuthornoResults = false;
-            $scope.clientdrop = false;
-            $scope.clientdropvisible = false;
-            $scope.checkClient = false;
+            vm.documentdrop = false;
+            vm.downwarddrop = true;
+            vm.upwarddrop = false;
+            vm.loadLocation = false;
+            vm.AuthornoResults = false;
+            vm.clientdrop = false;
+            vm.clientdropvisible = false;
+            vm.checkClient = false;
+            vm.sortbydrop = false;
+            vm.sortbydropvisible = false;
+            vm.sortbytext = 'Relevant';
             //#endregion
-
-
-           
 
             //#region Variable to show document count
             
             vm.allDocumentCount = 0;
             vm.myDocumentCount = 0;
             vm.pinDocumentCount = 0;
+            //#endregion
+
+            //#region closing all dropdowns on click of page
+            vm.closealldrops = function ($event) {
+                $event.stopPropagation();
+                vm.searchdrop = false;
+                vm.downwarddrop = true;
+                vm.upwarddrop = false;
+                vm.clientdrop = false;
+                vm.clientdropvisible = false;
+                vm.sortbydrop = false;
+                vm.sortbydropvisible = false;
+            }
+            //#endregion
+
+            //#region closing and hiding innerdropdowns of search box
+            vm.hideinnerdashboarddrop = function ($event) {
+                $event.stopPropagation();
+                vm.clientdrop = false;
+                vm.clientdropvisible = false;
+            }
             //#endregion
 
             var gridOptions = {
@@ -51,14 +72,14 @@
                 enableFiltering: gridOptions.enableFiltering,
                 columnDefs: [
                     { field: 'checker', displayName: 'checked', width: '2%', cellTemplate: '/app/dashboard/cellCheckboxTemplate.html', headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html', enableColumnMenu: false },
-                    { field: 'documentIconUrl', displayName: 'Icon', width: '3%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="{{row.entity.documentIconUrl}}"/></div>', headerCellTemplate: '<div class="ui-grid-cell-contents"><img class="docTypeIconHeader" id="docTypeIcon" style="padding:0" alt="Document type icon" src="https://msmatter.sharepoint.com/_layouts/15/images/generaldocument.png"></div>', enableColumnMenu: false },
-    	            { field: 'documentName', displayName: 'Document', width: '25%', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentName}}</div>', enableColumnMenu: false },
+                    { field: 'documentIconUrl', displayName: 'Icon', width: '2%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="{{row.entity.documentIconUrl}}"/></div>', headerCellTemplate: '<div class="ui-grid-cell-contents"><img class="docTypeIconHeader" id="docTypeIcon" style="padding:0" alt="Document type icon" src="https://msmatter.sharepoint.com/_layouts/15/images/generaldocument.png"></div>', enableColumnMenu: false },
+    	            { field: 'documentName', displayName: 'Document', width: '20%', cellTemplate:'/app/dashboard/DocumentDashboardCellTemplate.html', enableColumnMenu: false },
                     { field: 'documentClientId', displayName: 'Client', width: '15%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>', enableColumnMenu: false },
                     { field: 'documentOwner', displayName: 'Author', width: '14%', enableColumnMenu: false },
                     { field: 'documentModifiedDate', displayName: 'Modified date', width: '20%', enableColumnMenu: false },
                     { field: 'documentId', displayName: 'Document ID', width: '10%', enableColumnMenu: false },
                     { field: 'documentVersion', displayName: 'Version', width: '6%', enableColumnMenu: false },
-                    { field: 'pin', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="../Images/pin-666.png"/></div>', enableColumnMenu: false }
+                    { field: 'pin', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/pin-666.png"/></div>', enableColumnMenu: false }
                 ],
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
@@ -207,23 +228,38 @@
 
             //Call all document related api if view is document
             
-            vm.getDocuments();
-            vm.getPinnedDocuments();
-            vm.getMyDocuments();
+            $timeout(vm.getDocuments(),500);
+            //$timeout(vm.getPinnedDocuments(),500);
+            //$timeout(vm.getMyDocuments(),700);
             
             //#endregion
 
             //#region Closing and Opening searchbar dropdowns
-            vm.showupward = function () {
-                $scope.searchdrop = true;
-                $scope.downwarddrop = false;
-                $scope.upwarddrop = true;
+            vm.showupward = function ($event) {
+                $event.stopPropagation();
+                vm.searchdrop = true;
+                vm.downwarddrop = false;
+                vm.upwarddrop = true;
             }
 
-            vm.showdownward = function () {
-                $scope.searchdrop = false;
-                $scope.upwarddrop = false;
-                $scope.downwarddrop = true;
+            vm.showdownward = function ($event) {
+                $event.stopPropagation();
+                vm.searchdrop = false;
+                vm.upwarddrop = false;
+                vm.downwarddrop = true;
+            }
+            //#endregion
+
+            //#region Showing and Hiding the sortby dropdown
+            vm.showsortby = function ($event) {
+                $event.stopPropagation();
+                if (!vm.sortbydropvisible) {
+                    vm.sortbydrop = true;
+                    vm.sortbydropvisible = true;
+                } else {
+                    vm.sortbydrop = false;
+                    vm.sortbydropvisible = false;
+                }
             }
             //#endregion
 
@@ -266,16 +302,26 @@
             //#endregion
 
             //#region showing and hiding client dropdown
-            vm.showclientdrop = function () {
-                if (!$scope.clientdropvisible) {
-                    $scope.clientdrop = true;
-                    $scope.clientdropvisible = true;
+            vm.showclientdrop = function ($event) {
+                $event.stopPropagation();
+                if (!vm.clientdropvisible) {
+                    vm.clientdrop = true;
+                    vm.clientdropvisible = true;
                 } else {
-                    $scope.clientdrop = false;
-                    $scope.clientdropvisible = false;
+                    vm.clientdrop = false;
+                    vm.clientdropvisible = false;
                 }
             }
 
+
+            //#endregion
+
+            //#region For Sorting by Alphebatical or Created date
+
+            vm.sortyby = function (data) {
+                vm.sortbytext = data;
+                vm.sortbydrop = false;
+            }
 
             //#endregion
         }
