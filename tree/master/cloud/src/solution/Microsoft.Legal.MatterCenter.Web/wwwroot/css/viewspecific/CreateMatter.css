@@ -52,14 +52,166 @@ word-wrap: break-word !important;
         border: 2px solid red !important;
 }
 
-.errorPopUp .errText {color:red;left:40px;top:-40px;}
+.errorPopUp .errText {color:red;left:40px;top:11px;}
 .conflictradioCheck {margin-left:5px !important;}
 .createLable{position:absolute;font-size:14px;}
 .customDivCreate {white-space:normal; font-size:.875em;
 }
+.sectionStep .sectionContent{width:100%;}
+.menu{ height:100%; max-height:146px;}
 /*
     cm.errorPopUpBlock
     cm.errTrinagleBlock
     cm.errTrinagleBroderBlock
     cm.errorPopUpMsgBlock
 */
+.error-messages.ng-active {
+  background:maroon;
+  color:black;
+  padding:5px;
+  border-radius:5px;
+  margin-top:25px;
+  position:relative;
+  width:100px;
+}
+.error-messages.ng-active:after {
+  position:absolute;
+  top:-10px;
+  content:"";
+  left:20px;
+  border-style:solid;
+  border-color:transparent transparent maroon;
+  border-width:5px;
+}
+
+.errPopUpMatterName{left:219px;top:47px; height: 50px;margin: 10px; position: absolute;    width: 264px;   z-index: 100;}
+.errTringleBlockMatterName{left:50px;top:73px; }
+.errTringleBorderBlockMatterName{left:50px;top:72px; }
+.errTextMatterName {min-height: 55px;top: 14px !important;left: 24px;}
+
+.errPopUpMatterClient{left:234px;top:-15px; height: 50px;margin: 10px; position: absolute;    width: 264px;   z-index: 100;}
+.errTringleBlockMatterClient{left:50px;top:73px; }
+.errTringleBorderBlockMatterClient{left:50px;top:72px; }
+.errTextMatterClient {min-height: 55px;top: 19px !important;left: 24px;}
+
+
+.errPopUpMatterId{left:345px;right:47px;}
+.errTringleBlockMatterId{left:50px;right:73px;}
+.errTringleBorderBlockMatterId{left:50px;right:72px;}
+.errTextMatterId {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+
+
+.errPopUpMatterDescr{left:389px;top:109px; height: 50px;margin: 10px; position: absolute;    width: 264px;   z-index: 100;}
+.errTringleBlockMatterDescr{left:50px;top:73px;}
+.errTringleBorderBlockMatterDescr{left:50px;top:72px; }
+.errTextMatterDescr {min-height: 62px;top: 12px !important;left: 24px;
+}
+
+
+.errPopUpMatterSelectTemp{left:460px;right:264px;top:276px;}
+.errTringleBlockMatterSelectTemp{left:125px;right:73px;}
+.errTringleBorderBlockSelectTemp{left:125px;right:72px;}
+.errTextMatterSelectTemp {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+
+.errPopUpCCheckUser{left:234px;right:264px;top:27px;}
+.errTringleBlockCCheckUser{left:50px;right:73px;}
+.errTringleBorderCCheckUser{left:50px;right:72px;}
+.errTextMatterCCheckUser {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+
+.errPopUpCBlockUser{left:160px;right:264px;top:89px;}
+.errTringleBlockCBlockUser{left:125px;right:73px;}
+.errTringleBorderCBlockUser{left:125px;right:72px;}
+.errTextMatterCBlockUser {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+
+.errPopUpCDate{left:414px;top:16px;}
+.errTringleBlockCDate{left:50px;top:73px;}
+.errTringleBorderCDate{left:50px;top:72px;}
+.errTextMatterCDate {min-height: 55px;top: 19px !important;left: 24px;width:100%}
+
+.errPopUpCCheck{left:227px;top:77px;}
+.errTringleBlockCCheck{left:50px;right:73px;}
+.errTringleBorderCCheck{left:50px;right:72px;}
+.errTextMatterCCheck {min-height: 64px;top: 17px !important;left: 24px;width:100%}
+
+
+.errPopUpCreate{left:79px;top:145px;}
+.errTringleBlockCreate{left:50px;right:73px;}
+.errTringleBorderCreate{left:50px;right:72px;}
+.errTextMatterCreate {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+
+/*.errPopUpCAttorny{left:70px;top:-20px;}
+.errTringleBlockCAttorny{left:50px;right:56px;}
+.errTringleBorderCAttorny{left:50px;right:55px;}
+.errTextMatterCAttorny {min-height: 40px;top: 17px !important;left: 24px;width:100%}*/
+@media (min-width: 0px) and (max-width: 734px) {
+
+    .errPopUpMatterName{left:13px;top:258px; height: 50px;margin: 10px; position: absolute;    width: 264px;   z-index: 100;}
+.errTringleBlockMatterName{left:50px;top:73px; }
+.errTringleBorderBlockMatterName{left:50px;top:72px; }
+.errTextMatterName {min-height: 55px;top: 14px !important;left: 24px;}
+
+.errPopUpMatterClient{left:10px;top:132px; height: 50px;margin: 10px; position: absolute;    width: 264px;   z-index: 100;}
+.errTringleBlockMatterClient{left:50px;top:73px; }
+.errTringleBorderBlockMatterClient{left:50px;top:72px; }
+.errTextMatterClient {min-height: 55px;top: 19px !important;left: 24px;}
+
+
+.errPopUpMatterId{left:10px;top:204px;}
+.errTringleBlockMatterId{left:50px;right:73px;}
+.errTringleBorderBlockMatterId{left:50px;right:72px;}
+.errTextMatterId {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+
+
+.errPopUpMatterDescr{left:10px;top:317px; height: 50px;margin: 10px; position: absolute;    width: 264px;   z-index: 100;}
+.errTringleBlockMatterDescr{left:50px;top:73px;}
+.errTringleBorderBlockMatterDescr{left:50px;top:72px; }
+.errTextMatterDescr {min-height: 62px;top: 12px !important;left: 24px;
+}
+
+
+.errPopUpMatterSelectTemp{left:45px;top:545px;}
+.errTringleBlockMatterSelectTemp{left:125px;right:73px;}
+.errTringleBorderBlockSelectTemp{left:125px;right:72px;}
+.errTextMatterSelectTemp {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+
+.errPopUpCCheckUser{left:10px;right:264px;top:125px;}
+.errTringleBlockCCheckUser{left:50px;right:73px;}
+.errTringleBorderCCheckUser{left:50px;right:72px;}
+.errTextMatterCCheckUser {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+
+.errPopUpCBlockUser{left:10px;top:355px;}
+.errTringleBlockCBlockUser{left:125px;right:73px;}
+.errTringleBorderCBlockUser{left:125px;right:72px;}
+.errTextMatterCBlockUser {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+
+.errPopUpCDate{left:10px;top:242px;}
+.errTringleBlockCDate{left:50px;top:73px;}
+.errTringleBorderCDate{left:50px;top:72px;}
+.errTextMatterCDate {min-height: 55px;top: 19px !important;left: 24px;width:100%}
+
+.errPopUpCCheck{left:10px;top:60px;}
+.errTringleBlockCCheck{left:50px;right:73px;}
+.errTringleBorderCCheck{left:50px;right:72px;}
+.errTextMatterCCheck {min-height: 64px;top: -2px !important;left: 24px;width:100%}
+
+
+.errPopUpCreate{left:79px;top:282px;}
+.errTringleBlockCreate{left:50px;right:73px;}
+.errTringleBorderCreate{left:50px;right:72px;}
+.errTextMatterCreate {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+}
+
+.notificationContainer .notification {
+    font-size: .9em;
+    padding: 8px 12px;
+    position: relative;
+}
+
+ .notificationContainer {
+    position: absolute;
+    left: 0;
+    top: 52px;
+    width: 100%;
+    z-index: 99;
+    pointer-events: visible;
+}

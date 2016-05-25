@@ -14,6 +14,7 @@
             cm.oMandatoryRoleNames = [];
             cm.bMatterLandingPage = false;
             cm.oSiteUsers = [];
+            cm.successBanner = true;
             
             cm.createButton = "Create";
 
@@ -30,7 +31,9 @@
                 oSelectedDocumentTypeLawTerms: [],
                 oValidMatterName: undefined,
                 isNextClick: false,
-                sectionClickName:""
+                sectionClickName:"",
+                specialCharacterExpressionMatter: "[A-Za-z0-9_]+[-A-Za-z0-9_, ]*"
+                
             }
 
             var oPageTwoState = {
@@ -310,6 +313,10 @@
                                     }
                                 });
                             }
+                            else {
+                                team.assignedRole = cm.assignRoles[0];
+
+                            }
                         });
 
                         getPermissionLevels(optionsForPermissionLevels, function (response) {
@@ -325,6 +332,10 @@
 
                                         }
                                     });
+                                }
+                                else {
+                                    team.assignedPermission = cm.assignPermissions[0];
+
                                 }
 
                                  cm.popupContainerBackground = "hide";
@@ -639,12 +650,24 @@
             }
             cm.checkValidMatterName = function () {
                 oPageOneState.oValidMatterName = undefined;
+                var bInValid = false;
+                var RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
+                var sCurrMatterName=cm.matterName.trim();
+                if (null !== sCurrMatterName && "" !== sCurrMatterName) {
+                    var arrValidMatch = sCurrMatterName.match(RegularExpression);
+                    if (null === arrValidMatch || arrValidMatch[0] !== sCurrMatterName) {
+                        bInValid = false;
+                    } else {
+                        bInValid = true;
+                    }
+                }
+                if (bInValid){
                 optionsForCheckMatterName.Matter.Name = cm.matterName.trim();
-                if ("" !== cm.matterName.trim()) {
+               
                     getCheckValidMatterName(optionsForCheckMatterName, function (response) {
                         if (response.code != 200) {
                             cm.errTextMsg = "Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
-                            cm.errorBorder = "mattername";
+                            cm.errorBorder = "mattername"; showErrorNotification("mattername");
                             cm.errorPopUpBlock = true;
                             oPageOneState.oValidMatterName = false;
                           return false;
@@ -657,16 +680,17 @@
                             return true;
                         }
                     });
-                }
+                } 
 
-            }
-            
+            }          
 
      
          
    
 
             cm.navigateToSecondSection = function (sectionName) {
+                cm.errorPopUpBlock = false;
+                cm.errorBorder = "";
            oPageOneState.sectionClickName=sectionName;
                 if (sectionName == "snConflictCheck") {
                     if (validateCurrentPage(cm.iCurrentPage)) {
@@ -732,15 +756,17 @@
                             }
                         }
                         else {
+                            cm.errorPopUpBlock = true;
                             cm.errTextMsg = "Enter at least one role for this matter.";
                             cm.errorBorder = "";
-                            cm.errorPopUpBlock = true;
+                           
                             return false;
                         }
                     }
                     else {
-                        cm.errTextMsg = "Responsible Attorney cannot be empty.";
+                        cm.errTextMsg =cm.assignPermissionTeams[iCount].assignedRole.name+" cannot be empty.";
                         cm.errorBorder = "";
+                        showErrorNotificationAssignTeams(cm.errTextMsg, cm.assignPermissionTeams[iCount].assigneTeamRowNumber,"user");
                         cm.errorPopUpBlock = true;
                         return false;
                     }
@@ -754,7 +780,8 @@
                     }
                     else {
                         cm.errTextMsg = "Please provide at least one user who has Full Control permission on this  matter.";
-                        cm.errorBorder = "";
+                         cm.errorBorder = "permUser1";
+                         showErrorNotificationAssignTeams( cm.errTextMsg,1,"perm");
                         cm.errorPopUpBlock = true;
                         return false;
 
@@ -762,7 +789,8 @@
                 }
                 else {
                     cm.errTextMsg = "Enter at least one Responsible Attorney for this matter.";
-                    cm.errorBorder = "";
+                    cm.errorBorder = "roleUser1";
+                    showErrorNotificationAssignTeams( cm.errTextMsg,1,"role");
                     cm.errorPopUpBlock = true;
                     return false;
                 }
@@ -770,13 +798,16 @@
             }
 
             function validateUsers() {
+                var keepGoing=true;
+
                 var username = "";
                 if (cm.selectedConflictCheckUser && "" !== cm.selectedConflictCheckUser) {
                     username = getUserName(cm.selectedConflictCheckUser + ";", false);
                      if (-1 == cm.oSiteUsers.indexOf(username[0])) {
                         //  cm.blockedUserName.trim()
                         cm.errTextMsg = "Enter the conflict reviewers name (for auditing purposes).";
-                        cm.errorBorder = "";
+                        cm.errorBorder = "ccheckuser";
+                        showErrorNotification("ccheckuser");
                         cm.errorPopUpBlock = true;
                         return false;
                     }                   
@@ -786,43 +817,57 @@
                     if (-1 == cm.oSiteUsers.indexOf(username[0])) {
                         //  cm.blockedUserName.trim()
                         cm.errTextMsg = "Enter users that are conflicted with this matter.";
-                        cm.errorBorder = "";
+                        cm.errorBorder = "cblockuser";
+                        showErrorNotification("cblockuser");
                         cm.errorPopUpBlock = true;
                         return false;
                     }
                 }
-
-                angular.forEach(cm.assignPermissionTeams, function (team) {
-                    if (team.assignedUser && team.assignedUser != "") {//For loop
-                        username = getUserName(team.assignedUser + ";", false)
-                        if (-1 == cm.oSiteUsers.indexOf(username[0])) {
-                            //  cm.blockedUserName.trim()
-                            cm.errTextMsg = "Please enter valid team members.";
-                            cm.errorBorder = "";
-                            cm.errorPopUpBlock = true;
-                            return false;
-
-                        }
-
-                        if (cm.blockedUserName && cm.blockedUserName != "") {
-                            if (team.assignedUser == cm.blockedUserName) {
-                                cm.errTextMsg = "Please enter individual who is not conflicted.";
-                                cm.errorBorder = "";
-                                cm.errorPopUpBlock = true;
-                                return false;
-                            }
-                        }
-                    }
-                    else {
-                        cm.errTextMsg = "Responsible Attorney cannot be empty.";
-                        cm.errorBorder = "";
-                        cm.errorPopUpBlock = true;
-                        return false;
-                    }
+                
+                 angular.forEach(cm.assignPermissionTeams, function (team) {
                    
-                });
-                return true;
+                     if (keepGoing){
+                     if (team.assignedUser && team.assignedUser != "") {//For loop
+                         username = getUserName(team.assignedUser + ";", false)
+                         if (-1 == cm.oSiteUsers.indexOf(username[0])) {
+                             //  cm.blockedUserName.trim()
+                             cm.errTextMsg = "Please enter valid team members.";
+                             cm.errorBorder = "";
+                             cm.errorPopUpBlock = true;
+                             return false;
 
+                         }
+
+                         if (cm.blockedUserName && cm.blockedUserName != "") {
+                             if (team.assignedUser == cm.blockedUserName) {
+                                 cm.errTextMsg = "Please enter individual who is not conflicted.";
+                                 cm.errorBorder = "";
+                                 cm.errorPopUpBlock = true;
+                                 showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                 cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
+                                 return false;
+                             }
+                         }
+                     }
+                     else {
+                       
+                       
+                         showErrorNotificationAssignTeams(team.assignedRole.name + " cannot be empty", team.assigneTeamRowNumber,"user")
+                     
+
+                         //  console.log(te.offsetTop);
+                       //  cm.errTextMsg = "Enter cannot be empty.";
+                         cm.errorBorder = "txtUser"+team.assigneTeamRowNumber;
+                      //   cm.errorPopUpBlock = true;
+                      keepGoing = false;
+                         return false;
+                     }
+                 }
+                });
+               
+if(keepGoing){
+ return true;
+}
             }
 
 
@@ -993,7 +1038,7 @@
            
             cm.addNewAssignPermissions = function () {
                 var newItemNo = cm.assignPermissionTeams.length + 1;
-                cm.assignPermissionTeams.push({ 'assigneTeamRowNumber':  newItemNo });
+                cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0],'assignedPermission':cm.assignPermissions[0] });
             };
 
             cm.removeAssignPermissionsRow = function (index) {
@@ -1098,7 +1143,8 @@
 
 
 
-            cm.createMatterButton = function () {
+            cm.createMatterButton = function ($event) {
+               
                 cm.popupContainerBackground = "Show";
                 var matterGUID = cm.matterGUID;
                 var arrFolderNames=[];
@@ -1158,18 +1204,38 @@
                     MatterProvisionFlags: {},
                     HasErrorOccurred:false
                 };
+             
+                if ("" !== sCheckBy && "" != sBlockUserName) {
+                    cm.successMsg="Step 1/3: Creating matter library and OneNote library...";
+                    cm.successBanner = true;
+                    createMatter(matterMetdataVM, function (response) {
 
-                createMatter(matterMetdataVM, function (response) {
+                        ///  cm.clientNameList = response.clientTerms;
+                        console.log("createMatter API success");
+                        console.log(response);
 
-                    ///  cm.clientNameList = response.clientTerms;
-                    console.log("createMatter API success");
-                    console.log(response);
-                //    cm.popupContainerBackground = "show";// jQuery('#myModal').modal('show');
-                    associateContentTypes();
-                    assignPermission();
-                    createMatterLandingPage();
+                       
+                        cm.successMsg="Step 2/3: Assigning permissions to matter library and OneNote library,associating Content Types, creating view and matter landing page..."
+                        //    cm.popupContainerBackground = "show";// jQuery('#myModal').modal('show');
+                        associateContentTypes();
+                        assignPermission();
+                        createMatterLandingPage();
 
-                });   
+                    });
+                } else {
+                   // cm.popupContainerBackground = "hide";
+                    cm.errTextMsg = "Error in creation of matter:Incorrect inputs.";
+                    showErrorNotification("mcreate"); 
+                    cm.errorBorder = "";
+                    cm.errorPopUpBlock = true;
+                    cm.popupContainerBackground = "hide";
+                    $event.stopPropagation();
+                    return false;
+
+                   
+
+                }
+              
 
 
                 
@@ -1333,6 +1399,8 @@
             function stampProperties() {
               //  alert();
                 var matterGUID = cm.matterGUID;
+                cm.successBanner = true;
+                cm.successMsg = "Step 3/3: Updating metadata of matter library and sharing matter with the users...";
                 var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
                 var sCheckBy = getUserEmail(sCheckByUserEmail);
                 var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
@@ -1492,6 +1560,7 @@
                 updateMatterMetadataAPI(optionsForStampMatterDetails, function (response) {
                   console.log("stampProperties Success");
                   console.log(response);
+                  cm.successMsg="Matter is successfully created. You can find recently created matter over here.";
                   clearAllProperties();
                  
                   cm.navigateToSecondSection(cm.sectionName);
@@ -1955,24 +2024,78 @@
             }
 
 
-            cm.CheckPopUp = function () {
+            cm.CheckPopUp = function (e) {
+                //  e.stopPropagation();
+
+               console.log(e.target);
                 cm.errorPopUpBlock = false;
                 cm.errorBorder = "";
+             
             }
 
             function validateCurrentPage(iCurrPage) {
                 if (iCurrPage == 1) {
-                    if (null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
+                    var windowWidth = GetWidth();
+                    var RegularExpression;
+                    if (undefined !==cm.selectedClientName && null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
                         if ("" !== cm.clientId.trim() && null !== cm.clientId) {
-                            if (cm.matterName && "" != cm.matterName.trim() && null !== cm.matterName) {
+                            var bInValid = false;
+                             RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
+                            var sCurrMatterName = cm.matterName.trim();
+                            if (null !== sCurrMatterName && "" !== sCurrMatterName) {
+                                var arrValidMatch = sCurrMatterName.match(RegularExpression);
+                                if (null === arrValidMatch || arrValidMatch[0] !== sCurrMatterName) {
+                                    bInValid = false;
+                                } else {
+                                    bInValid = true;
+                                }
+                            }
+                            if (bInValid) {
                                 //  var matVal = cm.checkValidMatterName();
                                 oPageOneState.isNextClick = true;
                                 if (undefined !== oPageOneState.oValidMatterName) {
                                     if (oPageOneState.oValidMatterName) {
+                                      //  RegularExpression = new RegExp(oMatterProvisionConstants.Special_Character_Expression_Matter_Id);
+                                        bInValid = false;
+                                       // if (cm.matterId && "" !== cm.matterId.trim() && null != cm.matterId) {
+                                        var sCurrentMatterId=cm.matterId;
+                                        if (undefined !== sCurrentMatterId && null !== sCurrentMatterId && "" !== sCurrentMatterId) {
+                                            sCurrentMatterId = sCurrentMatterId.trim();
+                                            var arrValidMatch = sCurrentMatterId.match(RegularExpression);
+                                            if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterId) {
+                                                bInValid = false;
+                                            } else {
+                                                bInValid = true;
+                                            }
+                                        }
+                                        else {
+                                            cm.errTextMsg = "Enter a matter ID.";
+                                            cm.errorBorder = "matterid";
+                                            showErrorNotification("matterid");
+                                            cm.errorPopUpBlock = true; return false;
+                                        }
+                                        if (bInValid) {
 
-                                        if (cm.matterId && "" !== cm.matterId.trim() && null != cm.matterId) {
-                                            if (cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
+                                            var sCurrentMatterDesc = cm.matterDescription;
+                                            if (undefined !== sCurrentMatterDesc && null !== sCurrentMatterDesc && "" !== sCurrentMatterDesc) {
+                                                sCurrentMatterDesc = sCurrentMatterDesc.trim(); bInValid = false;
+                                                var arrValidMatch = sCurrentMatterDesc.match(RegularExpression);
+                                                if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterDesc) {
+                                                    bInValid = false;
+                                                } else {
+                                                    bInValid = true;
+                                                }
+                                            }
+                                            else {
+                                                cm.errTextMsg = "Enter a description for this matter.";
+                                              
+                                                showErrorNotification("matterdescription");
+                                                cm.errorBorder = "matterdescription";
+                                                cm.errorPopUpBlock = true; return false;
+                                            }
 
+                                           // if (cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
+                                            if (bInValid) {
                                                 if (cm.selectedDocumentTypeLawTerms.length > 0) {
                                                     storeMatterDataToLocalStorageFirstPage();
                                                    
@@ -1980,24 +2103,25 @@
                                                 }
                                                 else {
                                                     cm.errTextMsg = "Select matter type by area of law for this matter";
-                                                    cm.errorBorder = "selectType";
+                                                    cm.errorBorder = ""; showErrorNotification("selecttemp");
                                                     cm.errorPopUpBlock = true; return false;
                                                 }
                                             }
                                             else {
                                                 // alert("Enter a description for this matter");
-
-                                                cm.errTextMsg = "Enter a description for this matter.";
+                                                cm.errTextMsg = "Please enter a valid text which contains only alphanumeric characters, spaces & hyphen";
+                                              //  cm.errTextMsg = "Enter a description for this matter.";
                                                 //   cm.errorPopUpBlock = "matterDescription";
-
+                                                showErrorNotification("matterdescription");
                                                 cm.errorBorder = "matterdescription";
                                                 cm.errorPopUpBlock = true; return false;
 
                                             }
                                         }
                                         else {
-                                            cm.errTextMsg = "Enter a matter ID.";
+                                            cm.errTextMsg = "Please enter a valid text which contains only alphanumeric characters, spaces & hyphen.";
                                             cm.errorBorder = "matterid";
+                                            showErrorNotification("matterid");
                                             cm.errorPopUpBlock = true; return false;
                                         }
 
@@ -2005,6 +2129,15 @@
                                     else {
                                         cm.errTextMsg = "Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
                                         cm.errorBorder = "mattername";
+                                        showErrorNotification("mattername");
+                                        //var matterErrorEle = document.getElementById("errorBlock");
+                                        //var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
+                                        //var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
+                                        //var matterErrorTextEle = document.getElementById("errText");
+                                        //matterErrorEle.className = 'errPopUpMatterName';
+                                        //matterErrorTrinageleBlockEle.className = 'errTringleBlockMatterName';
+                                        //matterErrorTrinagleBorderEle.className = 'errTringleBorderBlockMatterName';
+                                        //matterErrorTextEle.className = "errTextMatterName";
                                         cm.errorPopUpBlock = true; return false;
                                     }
                                 }
@@ -2013,6 +2146,8 @@
                             else {
                                 cm.errTextMsg = "Please enter a valid Matter name which contains only alphanumeric characters and spaces";
                                 cm.errorBorder = "mattername";
+                                showErrorNotification("mattername");
+                              
                                 cm.errorPopUpBlock = true; return false;
                             }
 
@@ -2025,7 +2160,8 @@
                     }
                     else {
                         cm.errTextMsg = "Select a client for this matter ";
-                        cm.errorBorder = "client";
+                        cm.errorBorder = "client";                      
+                        showErrorNotification("client");
                         cm.errorPopUpBlock = true;
                         return false;
                     }
@@ -2051,8 +2187,8 @@
                         }
                         else {
                             cm.errTextMsg = "Enter the date on which the conflict check was performed ";
-                            cm.errorBorder = "cdate";
-                            cm.errorPopUpBlock = true;
+                            cm.errorBorder = "cdate"; showErrorNotification("cdate");
+                            cm.errorPopUpBlock = true; return false;
                         }
 
 
@@ -2065,6 +2201,7 @@
                         //  cm.sectionName = sectionName;
                         cm.errTextMsg = "A confilct check must be completed prior to provisioning this matter ";
                         cm.errorBorder = "";
+                        showErrorNotification("conflictcheck");
                         cm.errorPopUpBlock = true;
 
                     }
@@ -2076,7 +2213,193 @@
 
             }
 
-            
+
+            function showErrorNotification(errorCase) {
+                if (errorCase && errorCase != "") {
+                    var matterErrorEle = document.getElementById("errorBlock");
+                    var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
+                    var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
+                    var matterErrorTextEle = document.getElementById("errText");
+                    matterErrorEle.className = ""; matterErrorTrinageleBlockEle.className = ""; matterErrorTrinagleBorderEle.className = ""; matterErrorTextEle.className = "";
+                    matterErrorEle.classList.add("errorPopUp");
+                    matterErrorTrinageleBlockEle.classList.add("errTriangle");
+                    matterErrorTrinageleBlockEle.classList.add("popUpFloatLeft");
+                    matterErrorTrinagleBorderEle.classList.add("errTriangleBorder");
+                    matterErrorTrinagleBorderEle.classList.add("popUpFloatLeft");
+                    matterErrorTextEle.classList.add("errText");
+                    matterErrorTextEle.classList.add("popUpFloatRight");
+                    switch (errorCase) {
+
+                        case "mattername":
+
+                            matterErrorEle.classList.add("errPopUpMatterName");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterName");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockMatterName");
+                            matterErrorTextEle.classList.add("errTextMatterName");
+                            break;
+
+                        case "client":
+
+                            matterErrorEle.classList.add("errPopUpMatterClient");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterClient");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockMatterClient");
+                            matterErrorTextEle.classList.add("errTextMatterClient");
+                            break;
+
+                        case "matterdescription":
+
+                            matterErrorEle.classList.add("errPopUpMatterDescr");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterDescr");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockMatterDescr");
+                            matterErrorTextEle.classList.add("errTextMatterDescr");
+                            break;
+
+                        case "matterid":
+                            matterErrorEle.classList.add("errPopUpMatterId");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterId");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockMatterId");
+                            matterErrorTextEle.classList.add("errTextMatterId");
+                            break;
+                        case "selecttemp":
+                            matterErrorEle.classList.add("errPopUpMatterSelectTemp");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterSelectTemp");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockSelectTemp");
+                            matterErrorTextEle.classList.add("errTextMatterSelectTemp");
+                            break;
+                        case "conflictcheck":
+                            matterErrorEle.classList.add("errPopUpCCheck");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCCheck");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCCheck");
+                            matterErrorTextEle.classList.add("errTextMatterCCheck");
+                            break;
+                        case "cdate":
+                            matterErrorEle.classList.add("errPopUpCDate");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCDate");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCDate");
+                            matterErrorTextEle.classList.add("errTextMatterCDate");
+                            break;
+
+                        case "attorny":
+                            matterErrorEle.classList.add("errPopUpCAttorny");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCAttorny");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCAttorny");
+                            matterErrorTextEle.classList.add("errTextMatterCAttorny");
+                            break;
+                        case "ccheckuser":
+                            matterErrorEle.classList.add("errPopUpCCheckUser");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCCheckUser");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCCheckUser");
+                            matterErrorTextEle.classList.add("errTextMatterCCheckUser");
+                            break;
+                        case "cblockuser":
+                            matterErrorEle.classList.add("errPopUpCBlockUser");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCBlockUser");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCBlockUser");
+                            matterErrorTextEle.classList.add("errTextMatterCBlockUser");
+                            break;
+
+                        case "mcreate":
+                            matterErrorEle.classList.add("errPopUpCreate");
+                            matterErrorTrinageleBlockEle.classList.add("errTringleBlockCreate");
+                            matterErrorTrinagleBorderEle.classList.add("errTringleBorderCreate");
+                            matterErrorTextEle.classList.add("errTextMatterCreate");
+                            break;
+                    }
+
+                }
+
+            }
+
+            function showErrorNotificationAssignTeams(errorMsg,teamRowNumber,type) {
+var fieldType="";
+if(type=="user"){fieldType="txtUser"}
+else if(type=="role"){fieldType="roleUser"}
+else if(type=="perm"){fieldType="permUser"}
+                var temp = document.getElementById(fieldType +teamRowNumber);
+                var matterErrorEle = document.getElementById("errorBlock");
+                var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
+                var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
+                var matterErrorTextEle = document.getElementById("errText");
+                matterErrorEle.className = ""; matterErrorTrinageleBlockEle.className = ""; matterErrorTrinagleBorderEle.className = ""; matterErrorTextEle.className = "";
+                matterErrorEle.classList.add("errorPopUp");
+                matterErrorTrinageleBlockEle.classList.add("errTriangle");
+                matterErrorTrinageleBlockEle.classList.add("popUpFloatLeft");
+                matterErrorTrinagleBorderEle.classList.add("errTriangleBorder");
+                matterErrorTrinagleBorderEle.classList.add("popUpFloatLeft");
+                matterErrorTextEle.classList.add("errText");
+                matterErrorTextEle.classList.add("popUpFloatRight");
+                var errPopUpCAttorny = document.createElement('style'),
+                    errTringleBlockCAttorny = document.createElement('style'),
+                    errTringleBorderCAttorny = document.createElement('style'),
+                    errTextMatterCAttorny = document.createElement('style');
+                errPopUpCAttorny.type = 'text/css';
+                errTringleBlockCAttorny.type = 'text/css';
+                errTringleBorderCAttorny.type = 'text/css';
+                errTextMatterCAttorny.type = 'text/css';
+
+                var width = GetWidth();
+                var x=0,y=0;
+                if (width > 734) {
+                    y = temp.offsetTop - 26, x = temp.offsetLeft + 45;
+                }
+                else {
+                    y = temp.offsetTop+57 , x = temp.offsetLeft+10 ;
+                }
+               
+               
+                errPopUpCAttorny.innerHTML = ".errPopUpCAttorny{top:" + y + "px;left:" +x+ "px;}";
+                errTringleBlockCAttorny.innerHTML = "{min-height: 40px;top: 17px !important;left: 24px;width:100%}";
+                errTringleBorderCAttorny.innerHTML = "{min-height: 40px,top: 17px !important;left: 24px;width:100%}";
+                errTextMatterCAttorny.innerHTML = "{min-height:40px;top:21px !important;left: 24px;width:100%}";
+                document.getElementsByTagName('head')[0].appendChild(errPopUpCAttorny);
+                document.getElementsByTagName('head')[0].appendChild(errTringleBlockCAttorny);
+                document.getElementsByTagName('head')[0].appendChild(errTringleBorderCAttorny);
+                document.getElementsByTagName('head')[0].appendChild(errTextMatterCAttorny);
+
+                //matterErrorEle.style.top = te.offsetTop-26 + "px";
+                //matterErrorEle.style.left = te.offsetLeft + 45 + "px";
+                //matterErrorTrinageleBlockEle.style.left = 50 + "px";
+                //matterErrorTrinagleBorderEle.style.left = 50 + "px";
+                //matterErrorTextEle.style.top = 12 + "px";
+                //  console.log(te.offsetTop);
+                cm.errTextMsg = errorMsg;
+               
+                   cm.errorPopUpBlock = true;
+                matterErrorEle.classList.add("errPopUpCAttorny");
+                matterErrorTrinageleBlockEle.classList.add("errTringleBlockCAttorny");
+                matterErrorTrinagleBorderEle.classList.add("errTringleBorderCAttorny");
+                matterErrorTextEle.classList.add("errTextMatterCAttorny");
+            }
+
+            function resizeErrorPopup() {
+                "use strict";
+                
+                var windowWidth = GetWidth();
+                var width;
+                cm.errorPopUpBlock = false;
+
+                if (windowWidth <= 734) {
+                    cm.errorPopUpBlock = false;
+                }
+            }
+
+            cm.closeSuccessBanner = function () {
+                cm.successMsg = "";
+                cm.successBanner = false;
+            }
+
+            function GetWidth() {
+                "use strict";
+                var x = 0;
+                if (self.innerHeight) {
+                    x = self.innerWidth;
+                } else if (document.documentElement && document.documentElement.clientHeight) {
+                    x = document.documentElement.clientWidth;
+                } else if (document.body) {
+                    x = document.body.clientWidth;
+                }
+                return x;
+            }
 
         }]);
 
@@ -2086,6 +2409,7 @@
                 return input.split(splitChar).length;;
             }
         });
+
       
         
 

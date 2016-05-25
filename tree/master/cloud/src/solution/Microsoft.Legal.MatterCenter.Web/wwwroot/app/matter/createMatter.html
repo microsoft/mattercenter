@@ -56,13 +56,14 @@
                 <asp:LinkButton ID="SignOutLink" Text="Sign Out" OnClick="SignOutLink_Click" CssClass="" runat="server"></asp:LinkButton>
             </div>
         </div>
-
-        <div class="errorPopUp" ng-show="cm.errorPopUpBlock" >
+        <div class="notificationContainer successBanner" ng-if="cm.successBanner">
+        <div class="notification">{{cm.successMsg}}<span class="closeNotification" ng-click="cm.closeSuccessBanner()">x</span></div></div>
+        <div id="errorBlock" class="errorPopUp" ng-show="cm.errorPopUpBlock" >
 
           
-            <!--<div class="errTriangle popUpFloatLeft" ng-class="cm.errTrinagleBlock"></div>
-            <div class="errTriangleBorder popUpFloatLeft" ng-class="cm.errTrinagleBroderBlock"></div>-->
-            <div class="errText popUpFloatRight" > {{cm.errTextMsg}}</div>
+            <div id="errTrinagleBlock" class="errTriangle popUpFloatLeft" ng-class="cm.errTrinagleBlock"></div>
+            <div  id="errTrinagleBroderBlock"  class="errTriangleBorder popUpFloatLeft" ng-class="cm.errTrinagleBroderBlock"></div>
+            <div id="errText" class="errText popUpFloatRight" > {{cm.errTextMsg}}</div>
         </div>
     </div>
     <input type="hidden" id="requestvalidator" name="requestvalidator" runat="server" />
@@ -70,10 +71,10 @@
 </div>
 
 
-<div class="" style="margin:0%;">
+<div resize class="" style="margin:0%;">
 
 
-    <div class="content" ng-click="cm.CheckPopUp()" >
+    <div class="content"  ng-click="cm.CheckPopUp(this)" >
 
 
         <!-- Open matter section -->
@@ -86,23 +87,24 @@
 
                 <div>
 
-                    <select class="medium clear" ng-class="{'errorBorder' :  (cm.errorBorder == 'client')}" ng-model="cm.selectedClientName" ng-change="cm.getSelectedClientValue(cm.selectedClientName)" ng-options="client.id as client.name for client in cm.clientNameList ">
+                    <select class="medium clear" ng-class="{'errorBorder' :  (cm.errorBorder == 'client')}" ng-model="cm.selectedClientName" ng-change="cm.getSelectedClientValue(cm.selectedClientName)" required ng-options="client.id as client.name for client in cm.clientNameList ">
                         <option value="" label="- Select a client -"></option>
                     </select>
+                    
 
-                </div>
+                    </div>
                 <div class="gutter"></div>
                 <input title="Client ID" disabled="disabled" class="small" id="txtClientId" ng-model="cm.clientId" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" placeholder="">
 
                 <label class="contentLabel medium clear" id="enterMatterName"><span class="mandatory">*&nbsp;</span>Matter Name</label>
                 <div class="gutter"></div>
                 <label class="contentLabel small" id="enterMatterId"><span class="mandatory">*&nbsp;</span>Matter ID</label>
-                <input title="Matter Name" class="medium clear" id="txtMatterName" ng-blur='cm.checkValidMatterName()' ng-class="{'errorBorder' :  (cm.errorBorder == 'mattername')}" ng-model="cm.matterName" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="Enter a name for this matter" value="">
+                <input title="Matter Name" class="medium clear" id="txtMatterName" ng-blur='cm.checkValidMatterName()' ng-class="{'errorBorder' :  (cm.errorBorder == 'mattername')}" ng-model="cm.matterName" n style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="Enter a name for this matter" value="">
                 <div class="gutter"></div>
                 <input title="Matter ID" class="small" id="txtMatterId" ng-model="cm.matterId" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterid')}" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="Enter a matter ID" value="">
                 <label class="contentLabel large clear"><span class="mandatory description">*&nbsp;</span>Matter Description</label>
                 <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterdescription')}" spellcheck="true" maxlength="255" placeholder="Enter a brief description of the matter" rows="2" cols="400"></textarea>
-                <label class="contentLabel large clear"><span class="mandatory">*&nbsp;</span>Matter Type (click Select to define the practice group and area of law)</label>
+                <label class="contentLabel large clear customDivCreate"><span class="mandatory">*&nbsp;</span>Matter Type (click Select to define the practice group and area of law)</label>
                 <div class="large" id="documentTemplates">
                     <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}' ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style="cursor:default; font-weight:normal;"
                          data-value="{{$index}}"
@@ -137,7 +139,7 @@
 
             <div class="sectionContent">
                 <div id="conflictCheck">
-                    <label class="medium chkConflictCheckParent conflictCheckPosition" id="chkConflictCheckParent">
+                    <label class="medium chkConflictCheckParent conflictCheckPosition customDivCreate" id="chkConflictCheckParent">
                         <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">Conflict check conducted (must be complete prior to provisioning matter)
                     </label>
                     <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>Who conducted the conflict check?</label>
@@ -146,7 +148,7 @@
                     <div class="gutter"></div>
                     <label class="contentLabel mediumSmall" id="conflictIdentified">Conflict Identified?</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text"  uib-typeahead="users.name  for users in cm.searchUsers($viewValue)"  typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser")'  typeahead-no-results="conflictUserResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
+                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}"  ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text"  uib-typeahead="users.name  for users in cm.searchUsers($viewValue)"  typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser")'  typeahead-no-results="conflictUserResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
                    
                     <div ng-show="conflictUserResults">
                         <i class="glyphicon glyphicon-remove"></i> No Results Found
@@ -194,7 +196,7 @@
                     <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
                         <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser"  ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
 
                         <div ng-show="blockUserResults">
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
@@ -204,7 +206,7 @@
     <div class="large clear" id="areaBlockUser"></div>
 </section>
                 </div>
-                <label class="secureMatterLabel assignTeamRadioPosition">Would you like this matter to be secured only to the assigned team?</label>
+                <label class="secureMatterLabel assignTeamRadioPosition customDivCreate">Would you like this matter to be secured only to the assigned team?</label>
                 <div class="secureMatterRadioBtn assignTeamRadioPosition">
                     <label class="rdbOptions">
                         <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" class="matterCheckYes" type="radio" value="True">Yes
@@ -224,7 +226,7 @@
 
                     <div class="row{{$index}} assignNewPerm">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults'  typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team")' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults'  typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team")' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
                         <div ng-show='teamAssingnResults'>
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
                         </div>
@@ -232,14 +234,14 @@
                         <div class="gutter"></div>
                         <div class="addNewMember">
                             <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth">
-                                <select class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
+                                <select id='roleUser{{assignTeam.assigneTeamRowNumber}}'  ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}"  class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
                             </div>
                         </div>
                         <div class="gutter"></div>
                         <div>
                             <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
                                 <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
-                                    <select class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
+                                    <select id='permUser{{assignTeam.assigneTeamRowNumber}}'  ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}"  class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
                                 </div>
                             </div>
                         </div>
@@ -298,7 +300,7 @@
                     <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
                     <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">Include tasks</span></label>
                 </div>
-                <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton()' value="Create">{{cm.createButton}}</button>
+                <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton($event)' value="Create">{{cm.createButton}}</button>
 
             </div>
             <div class="loading hide">
@@ -322,7 +324,7 @@
 
 </div>
 
-<div class="popUpContainer "  ng-class="cm.popupContainer" style="margin:auto !important; bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
+<div class="popUpContainer "  ng-class="cm.popupContainer" style=" bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
     <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
     <div class="alignCenter">
         <header class="popUpHeader">
@@ -375,7 +377,7 @@
                     <div class="errTextArea popUpFloatRight" style="margin:12px 25px 0px 0px;"><span class="selectDefaultContentTypeMessage" style="visibility: visible;">Please select primary matter type</span></div>
                 </div>
 
-                <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft">Matter Type</label>
+                <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft customDivCreate">Matter Type</label>
                 <div class="popUpFloatLeft popUpBorder" style="height:213px; width:200px;">
                     <div class="popUpCommonContent popDT">
                         <div class="popUpDTContent" style="padding:1px !important;" ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
@@ -397,11 +399,13 @@
                     </div>
                 </div>
             </div>
-            <div id="defaultMessageDiv">
+
+           
+            <div id="defaultMessageDiv" class="">
                 <img id="infoImg" alt="info" src="../Images/information-blue.png">
-                <span id="defaultMessage">Please select primary matter type before you save. </span>
+                <span id="defaultMessage" class="">Please select primary matter type before you save. </span>
             </div>
-            <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries" type="button">Save</button>
+            <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries " type="button">Save</button>
         </div>
     </div>
 </div>
