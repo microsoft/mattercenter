@@ -34,7 +34,7 @@
                 enableFiltering: false
             }
 
-            //#region Matter             
+                  
             //#region Matter Grid functionality
             vm.matterGridOptions = {
                 paginationPageSize: gridOptions.paginationPageSize,
@@ -45,13 +45,13 @@
                 multiSelect: gridOptions.multiSelect,
                 enableFiltering: gridOptions.enableFiltering,
                 columnDefs: [
-                    { field: 'matterName', displayName: 'Matter', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>' },
-                    { field: 'matterClient', displayName: 'Client', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>' },
-                    { field: 'matterClientId', displayName: 'Client.MatterID', headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, },
-                    { field: 'matterModifiedDate', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>' },
-                    { field: 'matterResponsibleAttorney', headerTooltip: 'Click to sort by attorney', displayName: 'Responsible attorney', visible: false },
-                    { field: 'matterSubAreaOfLaw', headerTooltip: 'Click to sort by sub area of law', displayName: 'Sub area of law', visible: false },
-                    { field: 'matterCreatedDate', headerTooltip: 'Click to sort by matter open date', displayName: 'Open date' },
+                    { field: 'matterName',width: '25%', displayName: 'Matter', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterName}}</div>', enableColumnMenu: false },
+                    { field: 'matterClient',width: '15%', displayName: 'Client', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>', enableColumnMenu: false  },
+                    { field: 'matterClientId',width: '15%', displayName: 'Client.Matter ID', headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false  },
+                    { field: 'matterModifiedDate', width: '20%', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false  },
+                    { field: 'matterResponsibleAttorney', width: '25%', headerTooltip: 'Click to sort by attorney', displayName: 'Responsible attorney', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
+                    { field: 'pin', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="../Images/pin-666.png"/></div>', enableColumnMenu: false },
+                    { field: 'upload', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="../Images/upload-666.png"/></div>', enableColumnMenu: false }
                 ],
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
@@ -63,6 +63,7 @@
             }
             //#endregion
 
+            //#region API to get the client taxonomy and Practice Group taxonomy
             var optionsForClientGroup = {
                 Client: {
                     Url: "https://msmatter.sharepoint.com/sites/microsoft"
@@ -73,8 +74,7 @@
                     CustomPropertyName: "ClientURL"
                 }
             };
-
-            //input parameters building here for all the api's
+            
             var optionsForPracticeGroup = {
                 Client: {
                     Url: "https://msmatter.sharepoint.com/sites/microsoft"
@@ -104,21 +104,55 @@
                     success: callback
                 });
             }
-            
-            getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
-                vm.clients = response.clientTerms;
-            });
+            //#endregion
 
-            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                vm.practiceGroups = response.pgTerms;
-                vm.aolTerms = [];
-                angular.forEach(response.pgTerms, function (pgTerm) {
-                    angular.forEach(pgTerm.areaTerms, function (areaterm) {
-                        vm.aolTerms.push(areaterm);
-                    });
-                })
-            });
+            //#region API to get matters for the selected criteria and bind data to grid
+            //api for matter search
+            function get(options, callback) {
+                api({
+                    resource: 'matterDashBoardResource',
+                    method: 'get',
+                    data: options,
+                    success: callback
+                });
+            }
 
+            //api to get pinned matters
+            function getPinnedMatters(options, callback) {
+                api({
+                    resource: 'matterDashBoardResource',
+                    method: 'getPinnedMatters',
+                    data: options,
+                    success: callback
+                });
+            }
+            vm.search = function () {
+                $scope.lazyloader = false;
+                var searchRequest ={
+                    Client: {                        
+                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: 10,
+                        SearchTerm: '',
+                        Filters: {},
+                        Sort:{
+                            ByProperty: "LastModifiedTime",
+                            Direction: 1
+                        }
+                    }
+                };
+                get(searchRequest, function (response) {
+                    $scope.lazyloader = true;
+                    vm.matterGridOptions.data = response;
+                    vm.allMatterCount = response.length
+                });
+            }
+
+            //#endregion
+
+            //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
             vm.checkAll = function (checkAll, type) {
                 if (type === 'client') {
                     angular.forEach(vm.clients, function (client) {
@@ -179,6 +213,8 @@
                     $scope.aoldropvisible = false;
                 }
             }
+            //#endregion
+
             //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
             vm.filterSearchCancel = function (type) {
                 $scope.clientdrop = false;
@@ -187,9 +223,7 @@
                 $scope.pgdropvisible = false;
                 $scope.aoldrop = false;
                 $scope.aoldropvisible = false;
-            }
-
-            
+            }            
             //#endregion
 
             //vm.getMatters();
@@ -198,6 +232,7 @@
             //vm.getPracticeGroups()
 
             //#endregion 
+
             //#region Closing and Opening searchbar dropdowns
             vm.showupward = function () {
                 $scope.searchdrop = true;
@@ -210,6 +245,7 @@
                 $scope.downwarddrop = true;
             }
             //#endregion
+
             //#region Angular Datepicker Starts here
             //Start
             $scope.dateOptions = {
@@ -240,9 +276,15 @@
             $scope.openedStartDate = false;
             $scope.openedEndDate = false;
             //#endregion
+
             //#region showing and hiding client dropdown
             vm.showClientDrop = function () {
                 if (!$scope.clientdropvisible) {
+                    if (vm.clients ===undefined ) {
+                        getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
+                            vm.clients = response.clientTerms;
+                        });
+                    }
                     $scope.clientdrop = true;
                     $scope.clientdropvisible = true;
                     $scope.pgdrop = false;
@@ -263,6 +305,17 @@
             //#region showing and hiding practice group dropdown
             vm.showPracticegroupDrop = function () {
                 if (!$scope.pgdropvisible) {
+                    if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
+                        getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                            vm.practiceGroups = response.pgTerms;
+                            vm.aolTerms = [];
+                            angular.forEach(response.pgTerms, function (pgTerm) {
+                                angular.forEach(pgTerm.areaTerms, function (areaterm) {
+                                    vm.aolTerms.push(areaterm);
+                                });
+                            })
+                        });
+                    }
                     $scope.pgdrop = true;
                     $scope.pgdropvisible = true;
                     $scope.clientdrop = false;
@@ -283,6 +336,17 @@
             //#region showing and hiding area of law dropdown
             vm.showAreaofLawDrop = function () {
                 if (!$scope.aoldropvisible) {
+                    if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
+                        getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                            vm.practiceGroups = response.pgTerms;
+                            vm.aolTerms = [];
+                            angular.forEach(response.pgTerms, function (pgTerm) {
+                                angular.forEach(pgTerm.areaTerms, function (areaterm) {
+                                    vm.aolTerms.push(areaterm);
+                                });
+                            })
+                        });
+                    }
                     $scope.aoldrop = true;
                     $scope.aoldropvisible = true;
                     $scope.clientdrop = false;
@@ -299,6 +363,9 @@
                 }
             }
             //#endregion
+
+            //Call search api on page load
+            vm.search();
         }
     ]);
     app.directive("toggletab", function () {

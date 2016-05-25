@@ -142,7 +142,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 " ng-if="aoldrop">
+                    <div class="col-xs-12" ng-if="aoldrop">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'aol')">Select All</a> </div>
@@ -235,12 +235,12 @@
                         <div title="Manage matters: upload emails or documents to a matter, review matter details, or pin matters"
                              class="allSearch" onclick="togglePinnedView(this, 0)">
                             <span class="resultsTab">All matters</span>
-                            <span class="ResultNumbers">(vm.allMatterCount)</span>
+                            <span class="ResultNumbers">({{vm.allMatterCount}})</span>
                         </div>
                         <div title="Manage your pinned matters: upload emails or documents to a matter, review matter details, or unpin matters"
                              class="pinnedSearch" id="PinnedMatters" onclick="togglePinnedView(this, 1)">
                             <span class="resultsTab">Pinned matters</span>
-                            <span class="ResultNumbers">(vm.pinMatterCount)</span>
+                            <span class="ResultNumbers">({{vm.pinMatterCount}})</span>
                         </div>
                         <div class="viewSwitcher"><span>…</span></div>
                     </div>
@@ -290,11 +290,8 @@
                     </div>
                 </div>
                 <div class="detailSeparator"></div>
-                <div id="grid1" ui-grid="vm.documentGridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
-                <div class="Grid" id="grid">
-                </div>
-                <div class="Grid hide" id="pinnedGrid">
-                </div>
+                <div class="col-lg-12" id="grid1" ui-grid="vm.matterGridOptions" ui-grid-exporter ui-grid-selection ui-grid-auto-resize></div>
+                
                 <div id="recentView">
                     <div id="RecentDocumentContainer" class=""></div>
                     <div id="recentMatters" class="hide">
