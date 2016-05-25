@@ -10,15 +10,19 @@ angular.module('matterMain')
                       url: '/api/v1/matter/get',
                       isArray: true
                   }),
-                  'getPinDocuments': auth.attachCSRF({
+                  'getPinnedMatters': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/matter/getpinned',
                       isArray: true
                   }),
-                  'getMyDocuments': auth.attachCSRF({
+                  'getMyMatters': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/matter/getpinned',
                       isArray: true
+                  }),
+                  'getTaxonomyDetails': auth.attachCSRF({  
+                      method: 'POST',  
+                      url: '/api/v1/taxonomy/gettaxonomy'  
                   }),
               });
       }]);

@@ -20,7 +20,7 @@
            
 
             //#region Variable to show document count
-            vm.isDocumentView = true;
+            
             vm.allDocumentCount = 0;
             vm.myDocumentCount = 0;
             vm.pinDocumentCount = 0;
@@ -206,11 +206,11 @@
             //#endregion
 
             //Call all document related api if view is document
-            if (vm.isDocumentView) {
-                vm.getDocuments();
-                vm.getPinnedDocuments();
-                vm.getMyDocuments();
-            }
+            
+            vm.getDocuments();
+            vm.getPinnedDocuments();
+            vm.getMyDocuments();
+            
             //#endregion
 
             //#region Closing and Opening searchbar dropdowns

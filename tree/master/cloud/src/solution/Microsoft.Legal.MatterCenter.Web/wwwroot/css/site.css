@@ -376,7 +376,7 @@ textarea {
     padding: 0 7px 1px 15px;
 }
 .dashboarddropinner{
-    z-index: 1;
+    z-index: 1000;
     background: #fff;
     border:1px solid #ccc;
 }

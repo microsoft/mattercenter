@@ -3,27 +3,25 @@
     var app = angular.module("matterMain");
     app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http',
         function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http) {
-            var vm = this;
-
-            
+            var vm = this;            
             $scope.downwarddrop = true;
             $scope.upwarddrop = false;
             $scope.loadLocation = false;
             $scope.AuthornoResults = false;
             $scope.clientdrop = false;
             $scope.clientdropvisible = false;
+            $scope.pgdrop = false;
+            $scope.pgdropvisible = false;
+            $scope.aoldrop = false;
+            $scope.aoldropvisible = false;            
             $scope.checkClient = false;
             //#endregion
-
-
-            //#region Variable to show matter count
-            vm.isMatterView = false;
+            //#region Variable to show matter count            
             vm.allMatterCount = 0;
             vm.myMatterCount = 0;
             vm.pinMatterCount = 0;
-            //#endregion
-
             
+            //#endregion            
 
             var gridOptions = {
                 paginationPageSize: 10,
@@ -64,43 +62,167 @@
                 }
             }
             //#endregion
-            //#endregion
+
+            var optionsForClientGroup = {
+                Client: {
+                    Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                },
+                TermStoreDetails: {
+                    TermGroup: "MatterCenterTerms",
+                    TermSetName: "Clients",
+                    CustomPropertyName: "ClientURL"
+                }
+            };
+
+            //input parameters building here for all the api's
+            var optionsForPracticeGroup = {
+                Client: {
+                    Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                },
+                TermStoreDetails: {
+                    TermGroup: "MatterCenterTerms",
+                    TermSetName: "Practice Groups",
+                    CustomPropertyName: "ContentTypeName",
+                    DocumentTemplatesName: "DocumentTemplates"
+                }
+            }
+
+            function getTaxonomyDetailsForClient(optionsForClientGroup, callback) {
+                api({
+                    resource: 'matterDashBoardResource',
+                    method: 'getTaxonomyDetails',
+                    data: optionsForClientGroup,
+                    success: callback
+                });
+            }
+
+            function getTaxonomyDetailsForPractice(optionsForPracticeGroup, callback) {
+                api({
+                    resource: 'matterDashBoardResource',
+                    method: 'getTaxonomyDetails',
+                    data: optionsForPracticeGroup,
+                    success: callback
+                });
+            }
+            
+            getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
+                vm.clients = response.clientTerms;
+            });
+
+            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                vm.practiceGroups = response.pgTerms;
+                vm.aolTerms = [];
+                angular.forEach(response.pgTerms, function (pgTerm) {
+                    angular.forEach(pgTerm.areaTerms, function (areaterm) {
+                        vm.aolTerms.push(areaterm);
+                    });
+                })
+            });
+
+            vm.checkAll = function (checkAll, type) {
+                if (type === 'client') {
+                    angular.forEach(vm.clients, function (client) {
+                        client.Selected = checkAll;
+                    });
+                }
+                if (type === 'pg') {
+                    angular.forEach(vm.practiceGroups, function (pg) {
+                        pg.Selected = checkAll;
+                    });
+                }
+                if (type === 'aol') {
+                    angular.forEach(vm.aolTerms, function (aol) {
+                        aol.Selected = checkAll;
+                    });
+                }
+            }          
+
+            //#region This event is going to fire when the user clicks on "OK" button in the filter panel
+            vm.filterSearchOK = function (type) {
+                if (type === 'client') {
+                    vm.selectedClients = '';
+                    angular.forEach(vm.clients, function (client) {
+                        if (client.Selected) {
+                            vm.selectedClients = vm.selectedClients + client.name + ","
+                        }
+                    });
+                    $scope.clientdrop = false;
+                    $scope.clientdropvisible = false;
+                }
+                if (type === 'pg') {
+                    vm.selectedPGs = '';
+                    vm.selectedAOLs = '';
+                    angular.forEach(vm.practiceGroups, function (pg) {
+                        if (pg.Selected) {
+                            vm.selectedPGs = vm.selectedPGs + pg.termName + ","
+                            //For each of the selected pg's select corresponding aol check boxes automatically and update the aol
+                            //textbox accordingly
+                            angular.forEach(pg.areaTerms, function (areaterm) {
+                                areaterm.Selected = true;
+                                vm.selectedAOLs = vm.selectedAOLs + areaterm.termName + ","                                
+                            });
+                        }
+                    });
+                    
+                    $scope.pgdrop = false;
+                    $scope.pgdropvisible = false;
+                }
+
+                if (type === 'aol') {
+                    vm.selectedAOLs = '';
+                    angular.forEach(vm.aolTerms, function (aol) {
+                        if (aol.Selected) {
+                            vm.selectedAOLs = vm.selectedAOLs + aol.termName + ","
+                        }
+                    });
+                    $scope.aoldrop = false;
+                    $scope.aoldropvisible = false;
+                }
+            }
+            //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
+            vm.filterSearchCancel = function (type) {
+                $scope.clientdrop = false;
+                $scope.clientdropvisible = false;
+                $scope.pgdrop = false;
+                $scope.pgdropvisible = false;
+                $scope.aoldrop = false;
+                $scope.aoldropvisible = false;
+            }
 
             
+            //#endregion
 
+            //vm.getMatters();
+            //vm.getPinnedMatters();
+            //vm.getMyMatters();            
+            //vm.getPracticeGroups()
+
+            //#endregion 
             //#region Closing and Opening searchbar dropdowns
             vm.showupward = function () {
                 $scope.searchdrop = true;
                 $scope.downwarddrop = false;
                 $scope.upwarddrop = true;
             }
-
             vm.showdownward = function () {
                 $scope.searchdrop = false;
                 $scope.upwarddrop = false;
                 $scope.downwarddrop = true;
             }
             //#endregion
-
             //#region Angular Datepicker Starts here
             //Start
             $scope.dateOptions = {
-
                 formatYear: 'yy',
                 maxDate: new Date()
             };
-
-
             $scope.enddateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             }
-
             $scope.$watch('startdate', function (newval, oldval) {
                 $scope.enddateOptions.minDate = newval;
             });
-
-
             $scope.openStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
@@ -115,23 +237,67 @@
                 }
                 this.openedEndDate = true;
             };
-
             $scope.openedStartDate = false;
             $scope.openedEndDate = false;
             //#endregion
-
             //#region showing and hiding client dropdown
-            vm.showclientdrop = function () {
+            vm.showClientDrop = function () {
                 if (!$scope.clientdropvisible) {
                     $scope.clientdrop = true;
                     $scope.clientdropvisible = true;
+                    $scope.pgdrop = false;
+                    $scope.pgdropvisible = false;
+                    $scope.aoldrop = false;
+                    $scope.aoldropvisible = false;
                 } else {
                     $scope.clientdrop = false;
                     $scope.clientdropvisible = false;
+                    $scope.pgdrop = false;
+                    $scope.pgdropvisible = false;
+                    $scope.aoldrop = false;
+                    $scope.aoldropvisible = false;
                 }
             }
+            //#endregion
 
+            //#region showing and hiding practice group dropdown
+            vm.showPracticegroupDrop = function () {
+                if (!$scope.pgdropvisible) {
+                    $scope.pgdrop = true;
+                    $scope.pgdropvisible = true;
+                    $scope.clientdrop = false;
+                    $scope.clientdropvisible = false;
+                    $scope.aoldrop = false;
+                    $scope.aoldropvisible = false;
+                } else {                   
+                    $scope.clientdrop = false;
+                    $scope.clientdropvisible = false;
+                    $scope.pgdrop = false;
+                    $scope.pgdropvisible = false;
+                    $scope.aoldrop = false;
+                    $scope.aoldropvisible = false;
+                }
+            }
+            //#endregion
 
+            //#region showing and hiding area of law dropdown
+            vm.showAreaofLawDrop = function () {
+                if (!$scope.aoldropvisible) {
+                    $scope.aoldrop = true;
+                    $scope.aoldropvisible = true;
+                    $scope.clientdrop = false;
+                    $scope.clientdropvisible = false;
+                    $scope.pgdrop = false;
+                    $scope.pgdropvisible = false;
+                } else {
+                    $scope.clientdrop = false;
+                    $scope.clientdropvisible = false;
+                    $scope.pgdrop = false;
+                    $scope.pgdropvisible = false;
+                    $scope.aoldrop = false;
+                    $scope.aoldropvisible = false;
+                }
+            }
             //#endregion
         }
     ]);
@@ -148,7 +314,4 @@
         }
     });
 
-}
-
-
-)();
+})();

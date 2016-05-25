@@ -68,47 +68,101 @@
             </div>
             <div class="col-xs-9 dashboarddrop" ng-click='$event.stopPropagation();' ng-if="searchdrop">
                 <div class="col-xs-12 dashboarddropinner">
+                    <!--Start Client Selection Dropdown-->
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">Clients</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" placeholder="Enter or select a client" class="form-control">
-                                <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.showclientdrop()"><img src='../images/icon-combobox.png' /></span>
+                                <input type="text" value="{{vm.selectedClients}}" placeholder="Enter or select a client" class="form-control">
+                                <span class="input-group-addon cursor" id="basic-addon1"
+                                      ng-click="vm.showClientDrop()"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-xs-12 " ng-if="clientdrop">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="checkClient=true">Select All</a> </div>
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="checkClient=false">Select None</a></div>
-                                <div class="col-xs-12 refinerWrapper">
-                                    <input type="checkbox" ng-model="checkClient" /> <span>Microsoft</span>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'client')">Select All</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'client')">Select None</a></div>
+                                <div class="col-xs-12 refinerWrapper" ng-repeat="client in vm.clients">
+                                    <input type="checkbox"  data-clientid="{{client.id}}"  
+                                           data-clienturl="{{client.url}}" ng-model="client.Selected"/> <span>{{client.name}}</span>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch">Ok</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('client')">Ok</div></div>
                                     </div>
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch">Cancel</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel()">Cancel</div></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!--End Client Search Selection Down-->
+                    <!--Start Practice Group Selection Dropdown-->
                     <div class="row">
-                        <div class="col-xs-12 col-sm-2 pull-left pad15">Author</div>
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">Practice Group</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
-                            <input type="text" placeholder="Document Author" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadLocation" typeahead-no-results="AuthornoResults" class="form-control">
-                        </div>
-                        <div class="col-xs-12 hide">
-                            <i ng-show="loadLocation" class="glyphicon glyphicon-refresh"></i>
-                            <div ng-show="AuthornoResults">
-                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+                            <div class="input-group">
+                                <input type="text" value="{{vm.selectedPGs}}" placeholder="Enter or select a practice group" class="form-control">
+                                <span class="input-group-addon cursor" id="basic-addon1"
+                                      ng-click="vm.showPracticegroupDrop()"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
                     </div>
+                    <div class="col-xs-12 " ng-if="pgdrop">
+                        <div class="row ">
+                            <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'pg')">Select All</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'pg')">Select None</a></div>
+                                <div class="col-xs-12 refinerWrapper" ng-repeat="pg in vm.practiceGroups">
+                                    <input type="checkbox" ng-model="pg.Selected"/> <span>{{pg.termName}}</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <div class="filterOkButton"><div class="dashboardSearch"  ng-click="vm.filterSearchOK('pg')">Ok</div></div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel()">Cancel</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End Practive Group Selection Dropdown-->
+                    <!--Start AOL Selection Dropdown-->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">Area of Law</div>
+                        <div class="col-xs-12 col-sm-7 pull-left pad10">
+                            <div class="input-group">
+                                <input type="text" value="{{vm.selectedAOLs}}" placeholder="Enter or select an area of law" class="form-control">
+                                <span class="input-group-addon cursor" id="basic-addon1"
+                                        ng-click="vm.showAreaofLawDrop()"><img src='../images/icon-combobox.png' /></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 " ng-if="aoldrop">
+                        <div class="row ">
+                            <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'aol')">Select All</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'aol')">Select None</a></div>
+                                <div class="col-xs-12 refinerWrapper" ng-repeat="aol in vm.aolTerms">
+                                    <input type="checkbox" ng-model="aol.Selected"/> <span>{{aol.termName}}</span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <div class="filterOkButton"><div class="dashboardSearch"  ng-click="vm.filterSearchOK('aol')">Ok</div></div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel()">Cancel</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End AOL Selection Dropdown-->
+                                        
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">Date</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
@@ -172,7 +226,7 @@
 
                 <div id="DisplayResults">
                     <!--Start - Show Display Count for matters-->
-                    <div id="DisplayFindMattersResults" class="fallbackFlex" ng-show="vm.isMatterView">
+                    <div id="DisplayFindMattersResults" class="fallbackFlex">
                         <div title="Manage your recent matters: upload emails or documents to a matter, review matter details, or pin matters"
                              class="mySearch active" id="RecentMattersHeader" onclick="togglePinnedView(this, 2)">
                             <span class="resultsTab">My matters</span>
