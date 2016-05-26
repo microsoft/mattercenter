@@ -319,7 +319,8 @@
             //#endregion
 
             //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
-            vm.checkAll = function (checkAll, type) {
+            vm.checkAll = function (checkAll, type,$event) {
+            $event.stopPropagation();
                 if (type === 'client') {
                     angular.forEach(vm.clients, function (client) {
                         client.Selected = checkAll;

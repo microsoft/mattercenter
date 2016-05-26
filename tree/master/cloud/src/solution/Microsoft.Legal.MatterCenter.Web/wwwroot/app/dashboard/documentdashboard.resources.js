@@ -20,5 +20,17 @@ angular.module('matterMain')
                       url: '/api/v1/document/getdocuments',
                       isArray: true
                   }),
+                  'getTaxonomyDetails': auth.attachCSRF({  
+                      method: 'POST',  
+                      url: '/api/v1/taxonomy/gettaxonomy'  
+                  }),
+                  'unPinDocument': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/document/unpindocument'
+                  }),
+                  'pinDocument': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/document/pindocument'
+                  })
               });
       }]);

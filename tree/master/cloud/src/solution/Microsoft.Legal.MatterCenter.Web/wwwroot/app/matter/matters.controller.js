@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http',
-        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window',
+        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window) {
             var vm = this;
             vm.selected = undefined;
 
@@ -774,9 +774,7 @@
                     Url: "https://msmatter.sharepoint.com/sites/catalog"
                 }
                 getPinnedMatters(pinnedMattersRequest, function (response) {
-                    for (var i = 0; i < response.matterDataList.length; i++) {
-                        vm.Pinnedobj.push(response.matterDataList[i]);
-                    }
+                    vm.Pinnedobj.push(response);
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
@@ -914,7 +912,7 @@
                                     res.ismatterdone = true;
                                 }
                             });
-                            vm.gridOptions.data = response.matterDataList;
+                            vm.gridOptions.data = response;
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1286,6 +1284,51 @@
             }
             //#endregion
 
+            //#region setting the grid options when window is resized
+
+            angular.element($window).bind('resize', function () {
+                if ($window.innerWidth < 340) {
+                    vm.gridOptions.enableGridMenu = false;
+                    vm.gridOptions.enablePaginationControls = false;
+                    vm.gridOptions.columnDefs = [{ field: 'matterName', displayName: 'Matter', enableHiding: false, width: "100%", cellTemplate: '../app/matter/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterHeaderTemplate.html' }];
+                    $scope.$apply();
+                } else {
+                    vm.gridOptions = {
+                        paginationPageSizes: [10, 50, 100],
+                        paginationPageSize: 10,
+                        enableGridMenu: true,
+                        enableRowHeaderSelection: false,
+                        enableRowSelection: true,
+                        enableSelectAll: false,
+                        multiSelect: false,
+                        enablePaginationControls: true,
+                        columnDefs: [
+                             { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "20%", cellTemplate: '../app/matter/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterHeaderTemplate.html' },
+                             { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "15%", headerCellTemplate: '../app/matter/ClientHeaderTemplate.html' },
+                             { field: 'matterClientId', displayName: 'Client.MatterID', width: "15%", headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+                             { field: 'matterModifiedDate', displayName: 'Modified Date', width: "10%", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/ModifiedDateTemplate.html' },
+                             { field: 'matterResponsibleAttorney', headerTooltip: 'Click to sort by attorney', width: "15%", displayName: 'Responsible attorney', visible: false },
+                             { field: 'matterSubAreaOfLaw', headerTooltip: 'Click to sort by sub area of law', width: "15%", displayName: 'Sub area of law', visible: false },
+                             { field: 'matterCreatedDate', headerTooltip: 'Click to sort by matter open date', width: "15%", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+                        ],
+                        enableColumnMenus: false,
+                        onRegisterApi: function (gridApi) {
+                            $scope.gridApi = gridApi;
+                            gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
+                                $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
+                            });
+                            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                                vm.selectedRow = row.entity
+                            });
+                            $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
+                            $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
+                        }
+                    };
+                }
+            });
+
+            //#endregion
+
         }]);
 
     app.directive('popover', function () {
@@ -1317,7 +1360,7 @@
                                           <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
                                        </div>\
                                        <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a></button>\
-                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" onclick="$scope.Openuploadmodal()" type="button">Upload to a matter</a></button>\
+                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" onclick="Openuploadmodal(\'' + obj.matterName + '\',\'' + obj.matterUrl + '\')" type="button">Upload to a matter</a></button>\
                                     </div>\
                                 </div>';
                     $(element).popover({
@@ -1380,3 +1423,8 @@
 
 })();
 
+function Openuploadmodal(mattername, matterurl) {
+     jQuery('#UploadMatterModal').modal("show");
+    console.log(mattername);
+    console.log(matterurl);
+}

@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="col-md-9 hidden-xs hidden-sm">
-                <select class="form-control" ng-model="ddlDocuments" ng-options="document.Name for document in Documents" ng-change="GetDocuments(ddlDocuments.Id)"></select>
+                <select class="form-control" ng-model="vm.ddlDocuments" ng-options="document.Name for document in vm.Documents" ng-change="vm.GetDocuments(vm.ddlDocuments.Id)"></select>
             </div>
         </div>
         <div class="col-md-4 col-lg-4 hidden-xs hidden-sm">
@@ -37,9 +37,9 @@
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                     <ul class="dropdown-menu pull-right">
-                        <li class="searchPanelDropdown" ng-click="GetMatters(1)">All documents</li>
-                        <li class="searchPanelDropdown" ng-click="GetMatters(2)">My documents</li>
-                        <li class="searchPanelDropdown" ng-click="GetMatters(3)">Pinned documents</li>
+                        <li class="searchPanelDropdown" ng-click="GetDocuments(1)">All documents</li>
+                        <li class="searchPanelDropdown" ng-click="GetDocuments(2)">My documents</li>
+                        <li class="searchPanelDropdown" ng-click="GetDocuments(3)">Pinned documents</li>
                     </ul>
                 </div>
             </div>
@@ -58,7 +58,7 @@
 </div>
 <div class="row title">
     <div class="col-sm-12" id="gridViewPageHeaderContainer">
-        <span role="heading" class="add-margin-bottom">{{ddlDocuments.Name}}</span>
+        <span role="heading" class="add-margin-bottom">{{vm.ddlDocuments.Name}}</span>
     </div>
 </div>
 <div class="row">
@@ -93,7 +93,7 @@
         </div>
     </div>
     <!--End For attaching documents messages to the current mail item-->
-    <div class="col-sm-12" ng-if="divuigrid">
+    <div class="col-sm-12" ng-if="vm.divuigrid">
         <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
     </div>
     <div ng-if="vm.isOutlook && vm.showAttachment">
@@ -103,13 +103,13 @@
             <span class="ms-Button-description"></span>
         </button>
     </div>
-    <div class="col-sm-12" ng-if="nodata">
+    <div class="col-sm-12" ng-if="vm.nodata">
         <hr />
-        <span class="noResultsText">{{errorMessage}}</span>
+        <span class="noResultsText">{{vm.errorMessage}}</span>
     </div>
 </div>
 <div id="loadingImageContainer">
-    <div class="lazyLoading" ng-hide="lazyloader">
+    <div class="lazyLoading" ng-hide="vm.lazyloader">
         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
     </div>
 </div>
