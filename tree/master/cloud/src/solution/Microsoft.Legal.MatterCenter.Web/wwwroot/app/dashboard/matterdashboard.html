@@ -52,7 +52,9 @@
         <div class="row searchdashboard">
             <div class="col-xs-9">
                 <div class="input-group">
-                    <input type="text" ng-model="vm.selected" placeholder="Search by document name, document ID, or keyword" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                    <input type="text" ng-model="vm.searchText" placeholder="Search by document name, document ID, or keyword" 
+                           uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatters($viewValue)" 
+                           typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
                     <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
             </div>

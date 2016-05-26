@@ -18,6 +18,7 @@
             vm.sortbydrop = false;
             vm.sortbydropvisible = false;
             vm.sortbytext = 'None';
+            vm.searchText = '';
             //#endregion
             //#region Variable to show matter count            
             vm.allMatterCount = 0;
@@ -191,6 +192,30 @@
             }
 
 
+            //SearchRequest Object that will be filled up for different search requirements
+            var jsonMatterSearchRequest = {
+                Client: {                    
+                    Url: configs.global.repositoryUrl
+                },
+                SearchObject: {
+                    PageNumber: 1,
+                    ItemsPerPage: gridOptions.paginationPageSize,
+                    SearchTerm: '',
+                    Filters: {                        
+                        ClientsList: [""],
+                        PGList: [""],
+                        AOLList: [""],                        
+                        FromDate: "",
+                        ToDate: "",
+                        FilterByMe: "0"                        
+                    },
+                    Sort:{
+                        ByProperty: 'LastModifiedTime',
+                        Direction: 1
+                    }
+                }
+            };
+
             vm.getMatterPinned = function () {                
                 var pinnedMattersRequest = {
                     Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Read from config.js
@@ -205,16 +230,48 @@
                 });  
             }
 
-            vm.search = function () {
-                $scope.lazyloader = false;
-                var searchRequest = {
-                    Client: {
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+            //This search function will be used when the user enters some text in the search text box
+            vm.searchMatters = function (val) {
+                var searchRequest ={
+                    Client: {                          
+                        Url: configs.global.repositoryUrl
                     },
                     SearchObject: {
                         PageNumber: 1,
                         ItemsPerPage: 10,
-                        SearchTerm: '',
+                        SearchTerm: val,
+                        Filters: {},
+                        Sort:{
+                            ByProperty: "LastModifiedTime",
+                            Direction: 1
+                        }
+                    }
+                };                
+                return matterDashBoardResource.get(searchRequest).$promise;
+            }
+
+            //This search function will be used for binding search results to the grid
+            vm.search = function () {
+                //"(MCMatterName:\"testerv123\" AND MCMatterID:\"123Test\")",
+                //test1234(test1d)
+                var searchToText = '';
+                var finalSearchText = '';
+                if (vm.searchText != "") {
+                    searchToText = vm.searchText.replace("(", ",")
+                    searchToText = searchToText.replace(")", "")
+                    var firstText = searchToText.split(',')[0]
+                    var secondText = searchToText.split(',')[1]
+                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                }
+                $scope.lazyloader = false;
+                var searchRequest = {
+                    Client: {
+                        Url: configs.global.repositoryUrl
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: 10,
+                        SearchTerm: finalSearchText,
                         Filters: {},
                         Sort: {
                             ByProperty: "LastModifiedTime",
@@ -223,7 +280,7 @@
                     }
                 };
                 var pinnedMattersRequest = {
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Read from config.js
+                    Url: configs.global.repositoryUrl
                 }
                 var tempMatters = [];
                 get(searchRequest, function (response) {
@@ -265,7 +322,7 @@
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var pinRequest = {
                         Client: {
-                            Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Need to read from config.js file
+                            Url: configs.global.repositoryUrl
                         },
                         matterData: {
                             matterName: currentRowData.matterName,
@@ -297,7 +354,7 @@
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var unpinRequest = {
                         Client: {
-                            Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Need to read from config.js file
+                            Url: configs.global.repositoryUrl
                         },
                         matterData: {
                             matterName: currentRowData.matterUrl,
@@ -560,7 +617,7 @@
             vm.getFolderHierarchy = function () {
                 var matterData = {
                     MatterName: vm.selectedRow.matterName,
-                    MatterUrl: "https://msmatter.sharepoint.com/sites/microsoft"
+                    MatterUrl: vm.selectedRow.matterClientUrl,
                 };
                 getFolderHierarchy(matterData, function (response) {
                     vm.foldersList = response.foldersList;
@@ -576,7 +633,7 @@
                 fd.append('targetDropUrl', targetDrop.url);
                 fd.append('folderUrl', targetDrop.url)
                 fd.append('documentLibraryName', vm.selectedRow.matterName)
-                fd.append('clientUrl', 'https://msmatter.sharepoint.com/sites/microsoft');
+                fd.append('clientUrl', vm.selectedRow.matterClientUrl);
                 angular.forEach(vm.files, function (file) {
                     fd.append('file', file);
                 })

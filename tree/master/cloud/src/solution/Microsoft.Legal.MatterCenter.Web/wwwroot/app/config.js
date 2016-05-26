@@ -12,5 +12,9 @@ var configs = {
         "attachInProgressMessage":"",
         "attachFailureMessage":"One or more of your selected documents failed to attach:",
         "attachButtonText":"Attach Documents"
+    },
+    global:{
+        repositoryUrl:"https://msmatter.sharepoint.com/sites/catalog",
+        tenantUrl:"https://msmatter.sharepoint.com"
     }
  };
