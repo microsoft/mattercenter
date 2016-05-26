@@ -442,6 +442,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             matterData.MatterResponsibleAttorney = ServiceUtility.EncodeValues(matterData.MatterResponsibleAttorney);
             matterData.MatterModifiedDate = ServiceUtility.EncodeValues(matterData.MatterModifiedDate);
             matterData.MatterGuid = ServiceUtility.EncodeValues(matterData.MatterGuid);
+            matterData.PinType = ServiceUtility.EncodeValues(matterData.PinType);
             pinRequestMatterVM.MatterData = matterData;
             return await Task.FromResult(search.PinMatter(pinRequestMatterVM));
         }

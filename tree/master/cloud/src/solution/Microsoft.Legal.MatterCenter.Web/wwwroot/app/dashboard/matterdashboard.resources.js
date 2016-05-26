@@ -32,5 +32,10 @@ angular.module('matterMain')
 				      method: 'POST',
 				      url: '/api/v1/matter/pin'
                   }),
+                  'getFolderHierarchy': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/getfolderhierarchy'
+                     
+                  }),
               });
       }]);

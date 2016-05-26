@@ -83,8 +83,8 @@
                     { field: 'matterClientId', width: '15%', displayName: 'Client.Matter ID', headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false },
                     { field: 'matterModifiedDate', width: '15%', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
                     { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: 'Responsible attorney', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
-                    { field: 'pin', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png" data-row= {{row.entity}} ng-click="grid.appScope.vm.pinorunpin($event)"/></div>', enableColumnMenu: false },
-                    { field: 'upload', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png"/></div>', enableColumnMenu: false }
+                    { field: 'pin', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
+                    { field: 'upload', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal($event, row.entity)"/></div>', enableColumnMenu: false }
                 ],
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
@@ -93,10 +93,7 @@
                         vm.selectedRow = row.entity
                     });
                 }
-            }
-
-            
-
+            }  
             //#endregion
 
             //#region API to get the client taxonomy and Practice Group taxonomy
@@ -184,19 +181,28 @@
                 });
             }
 
+            function getFolderHierarchy(options, callback) {
+                api({
+                    resource: 'matterDashBoardResource',
+                    method: 'getFolderHierarchy',
+                    data: options,
+                    success: callback
+                });
+            }
 
-            vm.getMatterPinned = function () {
-                var pinnedMattersRequest = {                        
+
+            vm.getMatterPinned = function () {                
+                var pinnedMattersRequest = {
                     Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Read from config.js
                 }
                 getPinnedMatters(pinnedMattersRequest, function (response) {
                     vm.Pinnedobj = response;
-                    vm.pinMatterCount = response.length;                    
+                    vm.pinMatterCount = response.length;
+                    vm.matterGridOptions.data = vm.Pinnedobj;
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
-                });
-                
+                });  
             }
 
             vm.search = function () {
@@ -224,6 +230,8 @@
                     //We need to call pinned api to determine whether a matter is pinned or not                    
                     getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
                         if (pinnedResponse && pinnedResponse.length > 0) {
+                            vm.Pinnedobj = pinnedResponse;
+                            vm.pinMatterCount = vm.Pinnedobj.length
                             angular.forEach(pinnedResponse, function (pinobj) {
                                 angular.forEach(response, function (res) {
                                     //Check if the pinned matter name is equal to search matter name
@@ -242,6 +250,7 @@
                             $scope.lazyloader = true;
                             vm.matterGridOptions.data = response;
                             vm.allMatterCount = response.length
+                            vm.pinMatterCount = 0;
                         }
                     });                    
                     
@@ -250,10 +259,8 @@
 
             
             //This function will pin or unpin the matter based on the image button clicked
-            vm.pinorunpin = function (e) {                
-                if (vm.selectedRow == undefined) {
-                    vm.selectedRow = JSON.parse(e.currentTarget.dataset.row)
-                }
+            vm.pinorunpin = function (e, currentRowData) {
+                
                 if (e.currentTarget.src.toLowerCase().indexOf("images/pin-666.png")>0 ) {
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var pinRequest = {
@@ -261,26 +268,28 @@
                             Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Need to read from config.js file
                         },
                         matterData: {
-                            matterName: vm.selectedRow.matterName,
-                            matterDescription: vm.selectedRow.matterDescription,
-                            matterCreatedDate: vm.selectedRow.matterCreatedDate,
-                            matterUrl: vm.selectedRow.matterUrl,
-                            matterPracticeGroup: vm.selectedRow.matterPracticeGroup,
-                            matterAreaOfLaw: vm.selectedRow.matterAreaOfLaw,
-                            matterSubAreaOfLaw: vm.selectedRow.matterSubAreaOfLaw,
-                            matterClientUrl: vm.selectedRow.matterClientUrl,
-                            matterClient: vm.selectedRow.matterClient,
-                            matterClientId: vm.selectedRow.matterClientId,
-                            hideUpload: vm.selectedRow.hideUpload,
-                            matterID: vm.selectedRow.matterID,
-                            matterResponsibleAttorney: vm.selectedRow.matterResponsibleAttorney,
-                            matterModifiedDate: vm.selectedRow.matterModifiedDate,
-                            matterGuid: vm.selectedRow.matterGuid
+                            matterName: currentRowData.matterName,
+                            matterDescription: currentRowData.matterDescription,
+                            matterCreatedDate: currentRowData.matterCreatedDate,
+                            matterUrl: currentRowData.matterUrl,
+                            matterPracticeGroup: currentRowData.matterPracticeGroup,
+                            matterAreaOfLaw: currentRowData.matterAreaOfLaw,
+                            matterSubAreaOfLaw: currentRowData.matterSubAreaOfLaw,
+                            matterClientUrl: currentRowData.matterClientUrl,
+                            matterClient: currentRowData.matterClient,
+                            matterClientId: currentRowData.matterClientId,
+                            hideUpload: currentRowData.hideUpload,
+                            matterID: currentRowData.matterID,
+                            matterResponsibleAttorney: currentRowData.matterResponsibleAttorney,
+                            matterModifiedDate: currentRowData.matterModifiedDate,
+                            matterGuid: currentRowData.matterGuid,
+                            pinType:'unpin'
                         }
                     }
                     pinMatter(pinRequest, function (response) {
                         if (response.isMatterPinned) {
-                            e.currentTarget.src = "../images/unpin-666.png";                          
+                            e.currentTarget.src = "../images/unpin-666.png";
+                            vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) + 1;
                         }
                     });
                 }
@@ -291,12 +300,14 @@
                             Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Need to read from config.js file
                         },
                         matterData: {
-                            matterName: vm.selectedRow.matterUrl,
+                            matterName: currentRowData.matterUrl,
                         }
                     }
                     unpinMatter(unpinRequest, function (response) {
                         if (response.isMatterUnPinned) {
-                            e.currentTarget.src = "../images/pin-666.png";                            
+                            e.currentTarget.src = "../images/pin-666.png";
+                            vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
+                            vm.matterGridOptions.data.splice(vm.matterGridOptions.data.indexOf(currentRowData), 1)
                         }
                     });
                 }
@@ -534,6 +545,53 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                 }
+            }
+            //#endregion
+
+            //#region File upload functionality
+            vm.Openuploadmodal = function (event, currentRowData) {
+                if (vm.selectedRow == undefined) {
+                    vm.selectedRow = currentRowData
+                }
+                vm.getFolderHierarchy();
+            }
+
+            vm.getFolderHierarchy = function () {
+                var matterData = {
+                    MatterName: vm.selectedRow.matterName,
+                    MatterUrl: "https://msmatter.sharepoint.com/sites/microsoft"
+                };
+                getFolderHierarchy(matterData, function (response) {
+                    vm.foldersList = response.foldersList;
+                    jQuery('#UploadMatterModal').modal("show");                    
+                });
+            }
+
+            //This function will handle the files that has been dragged from the user desktop
+            vm.handleDesktopDrop = function (targetDrop, sourceFiles) {
+                vm.isLoadingFromDesktopStarted = true;
+                vm.files = sourceFiles.files;
+                var fd = new FormData();
+                fd.append('targetDropUrl', targetDrop.url);
+                fd.append('folderUrl', targetDrop.url)
+                fd.append('documentLibraryName', vm.selectedRow.matterName)
+                fd.append('clientUrl', 'https://msmatter.sharepoint.com/sites/microsoft');
+                angular.forEach(vm.files, function (file) {
+                    fd.append('file', file);
+                })
+
+                $http.post("/api/v1/document/uploadfiles", fd, {
+                    transformRequest: angular.identity,
+                    headers: { 'Content-Type': undefined }
+                }).then(function (response) {
+                    vm.isLoadingFromDesktopStarted = false;
+                    console.log(response.data);
+                    vm.uploadedFiles = response.data;
+                }).catch(function (response) {
+                    vm.isLoadingFromDesktopStarted = false;
+                    console.error('Gists error', response.status, response.data);
+                })
+
             }
             //#endregion
 
