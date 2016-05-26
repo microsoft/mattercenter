@@ -4,7 +4,8 @@
     app.controller('DocumentDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'documentDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http',
         function documentDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, documentDashBoardResource, $rootScope, uiGridConstants, $location, $http) {
             var vm = this;
-
+            vm.selected = undefined;
+            vm.selectedAuthor = undefined;
             //#region Global Variables
             vm.documentdrop = false;
             vm.downwarddrop = true;
@@ -20,7 +21,7 @@
             //#endregion
 
             //#region Variable to show document count
-            
+
             vm.allDocumentCount = 0;
             vm.myDocumentCount = 0;
             vm.pinDocumentCount = 0;
@@ -56,7 +57,7 @@
                 multiSelect: false,
                 enableColumnMenus: false,
                 enableFiltering: false
-            }         
+            }
 
             //#region Document 
 
@@ -73,13 +74,13 @@
                 columnDefs: [
                     { field: 'checker', displayName: 'checked', width: '2%', cellTemplate: '/app/dashboard/cellCheckboxTemplate.html', headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html', enableColumnMenu: false },
                     { field: 'documentIconUrl', displayName: 'Icon', width: '2%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="{{row.entity.documentIconUrl}}"/></div>', headerCellTemplate: '<div class="ui-grid-cell-contents"><img class="docTypeIconHeader" id="docTypeIcon" style="padding:0" alt="Document type icon" src="https://msmatter.sharepoint.com/_layouts/15/images/generaldocument.png"></div>', enableColumnMenu: false },
-    	            { field: 'documentName', displayName: 'Document', width: '20%', cellTemplate:'/app/dashboard/DocumentDashboardCellTemplate.html', enableColumnMenu: false },
+    	            { field: 'documentName', displayName: 'Document', width: '20%', cellTemplate: '/app/dashboard/DocumentDashboardCellTemplate.html', enableColumnMenu: false },
                     { field: 'documentClientId', displayName: 'Client', width: '15%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>', enableColumnMenu: false },
                     { field: 'documentOwner', displayName: 'Author', width: '14%', enableColumnMenu: false },
                     { field: 'documentModifiedDate', displayName: 'Modified date', width: '20%', enableColumnMenu: false },
                     { field: 'documentId', displayName: 'Document ID', width: '10%', enableColumnMenu: false },
                     { field: 'documentVersion', displayName: 'Version', width: '6%', enableColumnMenu: false },
-                    { field: 'pin', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/pin-666.png"/></div>', enableColumnMenu: false }
+                    { field: 'pin', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/pin-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false }
                 ],
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
@@ -89,6 +90,22 @@
                     });
                 }
             }
+
+            //#region for client taxonomy
+            var optionsForClientGroup = {
+                Client: {
+                    Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                },
+                TermStoreDetails: {
+                    TermGroup: "MatterCenterTerms",
+                    TermSetName: "Clients",
+                    CustomPropertyName: "ClientURL"
+                }
+            };
+
+
+            //#endregion
+
 
             //function to toggle check all 
             vm.toggleChecker = function (checked) {
@@ -142,10 +159,41 @@
                     success: callback
                 });
             }
+
+            //Callback function for pin 
+            function pinDocuments(options, callback) {
+                api({
+                    resource: 'documentDashBoardResource',
+                    method: 'pinDocument',
+                    data: options,
+                    success: callback
+                });
+            }
+
+
+            //Callback function for unpin 
+            function UnpinDocuments(options, callback) {
+                api({
+                    resource: 'documentDashBoardResource',
+                    method: 'unPinDocument',
+                    data: options,
+                    success: callback
+                });
+            }
+
+            function getTaxonomyDetailsForClient(optionsForClientGroup, callback) {
+                api({
+                    resource: 'documentDashBoardResource',
+                    method: 'getTaxonomyDetails',
+                    data: optionsForClientGroup,
+                    success: callback
+                });
+            }
+
             //#endregion
 
             //#region function to get the documents based on search term
-            vm.getDocuments = function (searchTerm) {
+            vm.getDocuments = function () {
                 var documentRequest = {
                     Client: {
                         //ToDo: Need to read from config.js
@@ -154,7 +202,7 @@
                     SearchObject: {
                         PageNumber: 1,
                         ItemsPerPage: gridOptions.paginationPageSize,
-                        SearchTerm: searchTerm,
+                        SearchTerm: "",
                         Filters: {
                             ClientsList: [],
                             FromDate: "",
@@ -195,7 +243,7 @@
             //#endregion    	   
 
             //#region function to get the documents based on login user
-            vm.getMyDocuments = function (searchTerm) {
+            vm.getMyDocuments = function () {
                 var documentRequest = {
                     Client: {
                         //ToDo: Need to read from config.js
@@ -204,7 +252,7 @@
                     SearchObject: {
                         PageNumber: 1,
                         ItemsPerPage: gridOptions.paginationPageSize,
-                        SearchTerm: searchTerm,
+                        SearchTerm: "",
                         Filters: {
                             ClientsList: [],
                             FromDate: "",
@@ -221,18 +269,86 @@
                 get(documentRequest, function (response) {
                     vm.documentGridOptions.data = response;
                     vm.myDocumentCount = response.length;
-
                 });
             }
             //#endregion
 
             //Call all document related api if view is document
-            
-            $timeout(vm.getDocuments(),500);
-            //$timeout(vm.getPinnedDocuments(),500);
-            //$timeout(vm.getMyDocuments(),700);
-            
+
+            $timeout(vm.getDocuments(), 700);
+            //vm.getPinnedDocuments();
+            //vm.getMyDocuments();
+
             //#endregion
+
+            //This function will pin or unpin the matter based on the image button clicked
+            vm.pinorunpin = function (e, currentRowData) {
+
+                if (e.currentTarget.src.toLowerCase().indexOf("images/pin-666.png") > 0) {
+                    e.currentTarget.src = "../Images/loadingGreen.gif";
+                    var pinRequest = {
+                        Client: {
+                            Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Need to read from config.js file
+                        },
+                        documentData: {
+                            documentName: currentRowData.documentName,
+                            DocumentVersion: currentRowData.DocumentVersion,
+                            DocumentClient: currentRowData.DocumentClient,
+                            DocumentClientId: currentRowData.DocumentClientId,
+                            DocumentClientUrl: currentRowData.DocumentClientUrl,
+                            DocumentMatter: currentRowData.DocumentMatter,
+                            DocumentMatterId: currentRowData.DocumentMatterId,
+                            DocumentOwner: currentRowData.DocumentOwner,
+                            DocumentUrl: currentRowData.DocumentUrl,
+                            DocumentOWAUrl: currentRowData.DocumentOWAUrl,
+                            DocumentExtension: currentRowData.DocumentExtension,
+                            DocumentCreatedDate: currentRowData.DocumentCreatedDate,
+                            DocumentModifiedDate: currentRowData.DocumentModifiedDate,
+                            DocumentCheckoutUser: currentRowData.DocumentCheckoutUser,
+                            DocumentMatterUrl: currentRowData.DocumentMatterUrl,
+                            DocumentParentUrl: currentRowData.DocumentParentUrl,
+                            DocumentID: currentRowData.DocumentID
+                        }
+                    }
+                    pinDocuments(pinRequest, function (response) {
+                        if (response.isDocumentPinned) {
+                            e.currentTarget.src = "../images/unpin-666.png";
+                            vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) + 1;
+                        }
+                    });
+                }
+                else if (e.currentTarget.src.toLowerCase().indexOf("images/unpin-666.png") > 0) {
+                    e.currentTarget.src = "../Images/loadingGreen.gif";
+                    var unpinRequest = {
+                        Client: {
+                            Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Need to read from config.js file
+                        },
+                        matterData: {
+                            documentName: currentRowData.matterUrl,
+                        }
+                    }
+                    UnpinDocuments(unpinRequest, function (response) {
+                        if (response.isMatterUnPinned) {
+                            e.currentTarget.src = "../images/pin-666.png";
+                            vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
+                            vm.matterGridOptions.data.splice(vm.matterGridOptions.data.indexOf(currentRowData), 1)
+                        }
+                    });
+                }
+
+            }
+
+             //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
+            vm.checkAll = function (checkAll, type,$event) {
+            $event.stopPropagation();
+                if (type === 'client') {
+                    angular.forEach(vm.clients, function (client) {
+                        client.Selected = checkAll;
+                    });
+                }
+            }
+            //#endregion
+
 
             //#region Closing and Opening searchbar dropdowns
             vm.showupward = function ($event) {
@@ -265,31 +381,31 @@
 
             //#region Angular Datepicker Starts here
             //Start
-            $scope.dateOptions = {
+            vm.dateOptions = {
 
                 formatYear: 'yy',
                 maxDate: new Date()
             };
 
 
-            $scope.enddateOptions = {
+            vm.enddateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             }
 
-            $scope.$watch('startdate', function (newval, oldval) {
-                $scope.enddateOptions.minDate = newval;
+            $scope.$watch('vm.startdate', function (newval, oldval) {
+                vm.enddateOptions.minDate = newval;
             });
 
 
-            $scope.openStartDate = function ($event) {
+            vm.openStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
                 this.openedStartDate = true;
             };
-            $scope.openEndDate = function ($event) {
+            vm.openEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
@@ -297,14 +413,19 @@
                 this.openedEndDate = true;
             };
 
-            $scope.openedStartDate = false;
-            $scope.openedEndDate = false;
+            vm.openedStartDate = false;
+            vm.openedEndDate = false;
             //#endregion
 
             //#region showing and hiding client dropdown
             vm.showclientdrop = function ($event) {
                 $event.stopPropagation();
                 if (!vm.clientdropvisible) {
+                    if (vm.clients === undefined) {
+                        getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
+                            vm.clients = response.clientTerms;
+                        });
+                    }
                     vm.clientdrop = true;
                     vm.clientdropvisible = true;
                 } else {

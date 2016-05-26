@@ -79,12 +79,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 " ng-if="vm.clientdrop">
+                    <div class="col-xs-12 " ng-if="vm.clientdrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'client')">Select All</a> </div>
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'client')">Select None</a></div>
-                                <div class="col-xs-12 refinerWrapper" ng-repeat="client in vm.clients">
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'client',$event)">Select All</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'client',$event)">Select None</a></div>
+                                <div class="col-xs-12 refinerWrapper" ng-repeat="client in vm.clients" ng-click="$event.stopPropagation();">
                                     <input type="checkbox" data-clientid="{{client.id}}"
                                            data-clienturl="{{client.url}}" ng-model="client.Selected" /> <span>{{client.name}}</span>
                                 </div>
@@ -111,12 +111,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 " ng-if="vm.pgdrop">
+                    <div class="col-xs-12 " ng-if="vm.pgdrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'pg')">Select All</a> </div>
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'pg')">Select None</a></div>
-                                <div class="col-xs-12 refinerWrapper" ng-repeat="pg in vm.practiceGroups">
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'pg',$event)">Select All</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'pg',$event)">Select None</a></div>
+                                <div class="col-xs-12 refinerWrapper" ng-repeat="pg in vm.practiceGroups"  ng-click="$event.stopPropagation();">
                                     <input type="checkbox" ng-model="pg.Selected" /> <span>{{pg.termName}}</span>
                                 </div>
                                 <div class="row">
@@ -142,12 +142,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12" ng-if="vm.aoldrop">
+                    <div class="col-xs-12" ng-if="vm.aoldrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'aol')">Select All</a> </div>
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'aol')">Select None</a></div>
-                                <div class="col-xs-12 refinerWrapper" ng-repeat="aol in vm.aolTerms">
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'aol',$event)">Select All</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'aol',$event)">Select None</a></div>
+                                <div class="col-xs-12 refinerWrapper" ng-repeat="aol in vm.aolTerms"  ng-click="$event.stopPropagation();">
                                     <input type="checkbox" ng-model="aol.Selected" /> <span>{{aol.termName}}</span>
                                 </div>
                                 <div class="row">
