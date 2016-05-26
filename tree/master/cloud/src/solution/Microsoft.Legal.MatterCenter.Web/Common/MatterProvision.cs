@@ -121,6 +121,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 matterData.MatterGuid = searchResult[key].ToString();
                                 break;
                         }
+                        matterData.PinType = "Pin";
                     }
                     matterDataList.Add(matterData);
                 }

@@ -104,17 +104,17 @@ namespace Microsoft.Legal.MatterCenter.Service
                 #endregion
                 var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(client);
 
-                if (pinResponseVM != null && pinResponseVM.TotalRows == 0)
-                {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = pinResponseVM.NoPinnedMessage,
-                        ErrorCode = ((int)HttpStatusCode.NotFound).ToString(),
-                        Description = "No resource found for your search criteria"
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-                }
-                return matterCenterServiceFunctions.ServiceResponse(pinResponseVM, (int)HttpStatusCode.OK);
+                //if (pinResponseVM != null && pinResponseVM.TotalRows == 0)
+                //{
+                //    errorResponse = new ErrorResponse()
+                //    {
+                //        Message = pinResponseVM.NoPinnedMessage,
+                //        ErrorCode = ((int)HttpStatusCode.NotFound).ToString(),
+                //        Description = "No resource found for your search criteria"
+                //    };
+                //    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                //}
+                return matterCenterServiceFunctions.ServiceResponse(pinResponseVM.MatterDataList, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
             {

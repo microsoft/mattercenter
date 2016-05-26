@@ -24,5 +24,13 @@ angular.module('matterMain')
                       method: 'POST',  
                       url: '/api/v1/taxonomy/gettaxonomy'  
                   }),
+                  'UnpinMatter': auth.attachCSRF({
+				      method: 'POST',
+				      url: '/api/v1/matter/unpin'
+				  }),
+                  'PinMatter':auth.attachCSRF({
+				      method: 'POST',
+				      url: '/api/v1/matter/pin'
+                  }),
               });
       }]);

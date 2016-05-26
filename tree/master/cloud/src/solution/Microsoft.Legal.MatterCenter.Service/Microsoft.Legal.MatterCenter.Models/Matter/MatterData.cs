@@ -159,5 +159,14 @@ namespace Microsoft.Legal.MatterCenter.Models
             get;
             set;
         }
+        /// <summary>
+        /// Gets or sets the Matter GUID. Represents the GUID for the matter.
+        /// </summary>
+        /// <value>The Matter GUID.</value>
+        public string PinType
+        {
+            get;
+            set;
+        }
     }
 }
