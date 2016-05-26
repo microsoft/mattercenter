@@ -146,7 +146,7 @@
                     <div class="gutter"></div>
                     <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>Date Conducted</label>
                     <div class="gutter"></div>
-                    <label class="contentLabel mediumSmall" id="conflictIdentified">Conflict Identified?</label>
+                    <label class="contentLabel " id="conflictIdentified">Conflict Identified?</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
                     <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}"  ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text"  uib-typeahead="users.name  for users in cm.searchUsers($viewValue)"  typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser")'  typeahead-no-results="conflictUserResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
                    
@@ -209,10 +209,10 @@
                 <label class="secureMatterLabel assignTeamRadioPosition customDivCreate">Would you like this matter to be secured only to the assigned team?</label>
                 <div class="secureMatterRadioBtn assignTeamRadioPosition">
                     <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" class="matterCheckYes" type="radio" value="True">Yes
+                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" class="matterCheckYes" type="radio" ng-value=true value="true">Yes
                     </label>
                     <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" class="matterCheckNo" type="radio" value="False">No
+                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" class="matterCheckNo" type="radio" ng-value=false  value="false">No
                     </label>
                 </div>
                 <label class="contentLabel medium clear blue" id="assignTeam">Assign Team</label>
@@ -265,10 +265,7 @@
                     <div class="row customDivCreate">
                         <div class="col-sm-12">
                             You have entered all of the necessary information to create this matter.
-                            After you click Create and Notify, the matter will be created and all team members will receive
-
-
-                            an email containing a link to this matter’s location.
+                            After you click Create and Notify, the matter will be created and all team members will receive an email containing a link to this matter’s location.
                         </div>
                     </div>
                 
@@ -300,10 +297,10 @@
                     <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
                     <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">Include tasks</span></label>
                 </div>
-                <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton($event)' value="Create">{{cm.createButton}}</button>
+                <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton($event)'ng-disabled="cm.createBtnDisabled" value="Create">{{cm.createButton}}</button>
 
             </div>
-            <div class="loading hide">
+            <div class="loading " ng-show="cm.createBtnDisabled">
                 <img id="loadingImage" src="../Images/WindowsLoadingFast.GIF" alt="Loading...">
             </div>
         </section>
@@ -371,10 +368,10 @@
 
             </div>
             <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft" id="divDocTemplate">
-                <div class="errorPopUpArea  " ng-show='cm.errorPopUp'>
+                <div class="errorPopUpArea  " ng-show='cm.errorPopUp' style="">
                     <div class="errTriangleArea popUpFloatLeft"></div>
                     <div class="errTriangleBorderArea popUpFloatLeft"></div>
-                    <div class="errTextArea popUpFloatRight" style="margin:12px 25px 0px 0px;"><span class="selectDefaultContentTypeMessage" style="visibility: visible;">Please select primary matter type</span></div>
+                    <div class="errTextArea popUpFloatRight" style="margin:12px 25px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage" style="visibility: visible;">Please select primary matter type</span></div>
                 </div>
 
                 <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft customDivCreate">Matter Type</label>
@@ -399,7 +396,7 @@
                     </div>
                 </div>
             </div>
-
+           
            
             <div id="defaultMessageDiv" class="">
                 <img id="infoImg" alt="info" src="../Images/information-blue.png">

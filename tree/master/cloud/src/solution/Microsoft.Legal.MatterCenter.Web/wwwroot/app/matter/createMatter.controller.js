@@ -2,8 +2,8 @@
     'use strict';
 
     var app=  angular.module("matterMain");
-    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api','matterResource','$filter',
-        function ($scope, $state, $stateParams, api, matterResource, $filter) {
+    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api','matterResource','$filter','$window',
+        function ($scope, $state, $stateParams, api, matterResource, $filter,$window) {
             ///All Variables
             var cm = this;
             cm.selectedConflictCheckUser = undefined;
@@ -14,9 +14,18 @@
             cm.oMandatoryRoleNames = [];
             cm.bMatterLandingPage = false;
             cm.oSiteUsers = [];
-            cm.successBanner = true;
+            cm.successBanner = false;
+cm.createBtnDisabled=false;
             
             cm.createButton = "Create";
+
+
+            var w = angular.element($window);
+
+            w.bind('resize', function () {
+                cm.clearPopUp();
+                $scope.$apply();
+            });
 
             var oPageOneState={
                 ClientValue: [],
@@ -72,7 +81,7 @@
             cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber:  1 }];
             cm.assignRoles = [];
             cm.assignPermissions = [];
-            cm.secureMatterCheck = "False";
+            cm.secureMatterCheck = false;
             cm.conflictRadioCheck = true;
             cm.includeTasks = false;
             
@@ -83,6 +92,10 @@
                     return bFlag ? "-" + sCurrentGUID.substr(0, 4) + "-" + sCurrentGUID.substr(4, 4) : sCurrentGUID;
                 }
                 return create_GUID() + create_GUID(true) + create_GUID(true) + create_GUID();
+            }
+
+            cm.clearPopUp = function () {
+                cm.errorPopUpBlock = false;
             }
 
             /* Function to get the GUID by removing the hyphen character */
@@ -289,7 +302,8 @@
             }
 
             //call back function for getting the clientNamesList
-            getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {              
+        function getTaxonomyData(){
+    getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {              
 
                 cm.clientNameList = response.clientTerms;
                // jQuery('#myModal').modal('show');
@@ -345,8 +359,9 @@
                 });
 
             });
+}
 
-           
+           getTaxonomyData();
 
           
           
@@ -411,13 +426,14 @@
                             cm.checkValidMatterName();
                             cm.matterId = defaultMatterConfig.DefaultMatterId;
                             if (defaultMatterConfig.IsRestrictedAccessSelected) {
-                                cm.secureMatterCheck = "True";
+                                cm.secureMatterCheck = defaultMatterConfig.IsRestrictedAccessSelected;
                             }
                             if (defaultMatterConfig.IsCalendarSelected) {
                                 cm.includeCalendar = defaultMatterConfig.IsCalendarSelected;
                             }
                             if (defaultMatterConfig.IsEmailOptionSelected) {
                                 cm.includeEmail = defaultMatterConfig.IsEmailOptionSelected;
+                                cm.createButton = "Create and Notify";
                             }
                             if (defaultMatterConfig.IsRSSSelected) {
                                 cm.includeRssFeeds = defaultMatterConfig.IsRSSSelected;
@@ -496,7 +512,7 @@
                                     
                                 
                             });
-
+                            cm.selectedConflictCheckUser = ""; cm.blockedUserName = ""; cm.conflictDate = "";
                             //     cm.assignPermissionTeams
                             // cm.assignPermissionTeams.splice(0, 1);
                             cm.assignPermissionTeams = [];
@@ -697,6 +713,8 @@
                         cm.sectionName = sectionName;
                         oPageOneState.isNextClick = false;
                         cm.iCurrentPage = 2;
+                        localStorage.iLivePage = 2;
+                        
                     }
                 }
                 else if (sectionName == "snCreateAndShare") {
@@ -704,6 +722,7 @@
                     if (validateCurrentPage(cm.iCurrentPage)) {
                         cm.sectionName = sectionName;
                         cm.iCurrentPage = 3;
+                        localStorage.iLivePage = 3;
                     }
                   
 
@@ -727,6 +746,7 @@
                 }
                 else if (sectionName == "snOpenMatter") {
                     cm.iCurrentPage = 1; cm.sectionName = sectionName;
+ localStorage.iLivePage = 1;
 
                 }
             }
@@ -834,6 +854,8 @@
                              cm.errTextMsg = "Please enter valid team members.";
                              cm.errorBorder = "";
                              cm.errorPopUpBlock = true;
+                             showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                             cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
                              return false;
 
                          }
@@ -865,9 +887,9 @@
                  }
                 });
                
-if(keepGoing){
- return true;
-}
+                 if (keepGoing) {
+                     return true;
+                 }
             }
 
 
@@ -1082,6 +1104,9 @@ if(keepGoing){
                   cm.secureMatterCheck= (localStorage.getItem("IsRestrictedAccessSelected")==="true");
                     cm.includeRssFeeds=  (localStorage.getItem("IsRSSSelected")==="true");
                     cm.includeEmail = (localStorage.getItem("IsEmailOptionSelected")==="true");
+                    if( cm.includeEmail){
+                     cm.createButton = "Create and Notify";
+                    }
                        cm.isMatterDescriptionMandatory= (localStorage.getItem("IsMatterDescriptionMandatory")==="true");
                        cm.chkConfilctCheck= (localStorage.getItem("IsConflictCheck")==="true");
                        cm.isMatterDescriptionMandatory  =(localStorage.getItem("IsMatterDescriptionMandatory")==="true");
@@ -1104,6 +1129,7 @@ if(keepGoing){
                   cm.secureMatterCheck = oPageData.SecureMatterCheck;
                   cm.assignPermissionTeams = oPageData.AssignPermissionTeams;
                   cm.oSiteUsers = oPageData.oSiteUsers;
+                  cm.iCurrentPage = 2;
                   cm.sectionName = "snCreateAndShare";
                   
                  // cm.navigateToSecondSection("snCreateAndShare");
@@ -1112,9 +1138,7 @@ if(keepGoing){
             }
 
           //  cm.includeEmail = true;
-            if (cm.includeEmail) {
-                cm.createButton = "Create and Notify";
-            }
+          
             cm.createAndNotify = function (value) {
                 if (value) {
                     cm.createButton = "Create and Notify";
@@ -1145,7 +1169,7 @@ if(keepGoing){
 
             cm.createMatterButton = function ($event) {
                
-                cm.popupContainerBackground = "Show";
+               // cm.popupContainerBackground = "Show";
                 var matterGUID = cm.matterGUID;
                 var arrFolderNames=[];
                 arrFolderNames = retrieveFolderStructure();
@@ -1204,10 +1228,12 @@ if(keepGoing){
                     MatterProvisionFlags: {},
                     HasErrorOccurred:false
                 };
-             
+  console.log("options for creaitn matter");
+                console.log(matterMetdataVM);
+               // sCheckBy = ""; sBlockUserName = "";
                 if ("" !== sCheckBy && "" != sBlockUserName) {
                     cm.successMsg="Step 1/3: Creating matter library and OneNote library...";
-                    cm.successBanner = true;
+                    cm.successBanner = true; cm.createBtnDisabled=true;
                     createMatter(matterMetdataVM, function (response) {
 
                         ///  cm.clientNameList = response.clientTerms;
@@ -1224,12 +1250,13 @@ if(keepGoing){
                     });
                 } else {
                    // cm.popupContainerBackground = "hide";
-                    cm.errTextMsg = "Error in creation of matter:Incorrect inputs.";
-                    showErrorNotification("mcreate"); 
+                    cm.errTextMsg = "Error in creation of matter: Incorrect inputs.";
+                    // showErrorNotification("mcreate"); 
+                    showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
                     cm.errorBorder = "";
                     cm.errorPopUpBlock = true;
                     cm.popupContainerBackground = "hide";
-                    $event.stopPropagation();
+                    $event.stopPropagation();cm.createBtnDisabled=false;  cm.successBanner = false;
                     return false;
 
                    
@@ -1295,6 +1322,9 @@ if(keepGoing){
 
                 }
 
+                console.log("options for optionsForAssignContentTypeMetadata matter");
+                console.log(optionsForAssignContentTypeMetadata);
+
                 assignContentTypeMetadata(optionsForAssignContentTypeMetadata, function (response) {
                     console.log(" assignContentTypeMetadataAPI Success");
                     console.log(response);
@@ -1331,7 +1361,8 @@ if(keepGoing){
                         IsTaskSelected: cm.includeTasks
                     }
                 }
-
+                console.log("options for assignPermission matter");
+                console.log(optionsForAssignUserPermissionMetadataVM);
                 assignUserPermissionsAPI(optionsForAssignUserPermissionMetadataVM, function (response) {
                     console.log(" assignUserPermissionsAPI Success");
                     console.log(response);
@@ -1383,6 +1414,9 @@ if(keepGoing){
                         MatterGuid: matterGUID
                     }
                 }
+
+                console.log("options for optionsForCreateMatterLandingPage matter");
+                console.log(optionsForCreateMatterLandingPage);
 
                 createMatterLandingPageAPI(optionsForCreateMatterLandingPage, function (response) {
                     console.log("createMatterLandingPageAPI Success");
@@ -1556,7 +1590,8 @@ if(keepGoing){
                         IsMatterDescriptionMandatory: true                       
                     }
                 }
-
+                console.log("options for optionsForStampMatterDetails matter");
+                console.log(optionsForStampMatterDetails);
                 updateMatterMetadataAPI(optionsForStampMatterDetails, function (response) {
                   console.log("stampProperties Success");
                   console.log(response);
@@ -1926,6 +1961,7 @@ if(keepGoing){
                 cm.activeDocumentTypeLawTerm = null;
                 cm.popupContainerBackground = "hide";
                 cm.popupContainer = "hide";
+cm.createBtnDisabled=false;
 
                 cm.sectionName = "snOpenMatter";
                 cm.removeDTItem = false;
@@ -1935,20 +1971,14 @@ if(keepGoing){
                 cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
                 cm.assignRoles = [];
                 cm.assignPermissions = [];
-                cm.secureMatterCheck = "True";
+                cm.secureMatterCheck = true;
                 cm.conflictRadioCheck = true;
                 localStorage.iLivePage = 1;
                 localStorage.removeItem("oPageOneData");
                 localStorage.removeItem("oPageTwoData");
                 getMatterGUID();
 
-                getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
-
-                    cm.clientNameList = response.clientTerms;
-                    cm.popupContainerBackground = "hide";// jQuery('#myModal').modal('show');
-
-
-                });
+               getTaxonomyData();
 
             }
 
@@ -2027,7 +2057,7 @@ if(keepGoing){
             cm.CheckPopUp = function (e) {
                 //  e.stopPropagation();
 
-               console.log(e.target);
+             
                 cm.errorPopUpBlock = false;
                 cm.errorBorder = "";
              
@@ -2310,11 +2340,24 @@ if(keepGoing){
 
             }
 
-            function showErrorNotificationAssignTeams(errorMsg,teamRowNumber,type) {
-var fieldType="";
-if(type=="user"){fieldType="txtUser"}
-else if(type=="role"){fieldType="roleUser"}
-else if(type=="perm"){fieldType="permUser"}
+            function showErrorNotificationAssignTeams(errorMsg, teamRowNumber, type)
+            {
+                var fieldType = "";
+
+                if (type == "user") {
+                    fieldType = "txtUser";
+
+                }
+
+                else if (type == "role") { fieldType = "roleUser" }
+                else if (type == "perm") {
+                    fieldType = "permUser";
+                }
+                else if (type == "btnCreateMatter") {
+                    fieldType = "btnCreateMatter";
+                    teamRowNumber = "";
+                }
+
                 var temp = document.getElementById(fieldType +teamRowNumber);
                 var matterErrorEle = document.getElementById("errorBlock");
                 var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");

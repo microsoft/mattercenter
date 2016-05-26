@@ -17,7 +17,7 @@ width:140px !important;
     max-width:140px !important; margin-left:5px;}
 
 .pagination{margin:0px !important;}
-overflowMain {overflow:auto !important;}
+.overflowMain {overflow:auto !important;}
 
 .content {
     float: left;
@@ -43,7 +43,7 @@ word-wrap: break-word !important;
 .ms-checkBox{ margin:10px 5px 0 0 !important}
 .headerClassAd{margin-top:-10px; margin-left:7px;}
 
-.errPopUpMsg{min-height: 62px; top: 11px; left: 24px;}
+.errPopUpMsg{min-height: 62px; top: 11px; left: 24px; color:red;}
 .errTrinagleBorderCustDesc{left: 50px; top: 72px;}
 .errrTriangleCustDesc{left: 50px; top: 73px;}
 .errPopUpBlockDesc {left: 389px; top: 109px;}
@@ -184,7 +184,7 @@ word-wrap: break-word !important;
 .errTringleBorderCBlockUser{left:125px;right:72px;}
 .errTextMatterCBlockUser {min-height: 55px;top: 7px !important;left: 24px;width:100%}
 
-.errPopUpCDate{left:10px;top:242px;}
+.errPopUpCDate{left:10px;top:175px;}
 .errTringleBlockCDate{left:50px;top:73px;}
 .errTringleBorderCDate{left:50px;top:72px;}
 .errTextMatterCDate {min-height: 55px;top: 19px !important;left: 24px;width:100%}
@@ -198,7 +198,7 @@ word-wrap: break-word !important;
 .errPopUpCreate{left:79px;top:282px;}
 .errTringleBlockCreate{left:50px;right:73px;}
 .errTringleBorderCreate{left:50px;right:72px;}
-.errTextMatterCreate {min-height: 55px;top: 7px !important;left: 24px;width:100%}
+.errTextMatterCreate {min-height: 55px;top: 7px !important;left: 24px;}
 }
 
 .notificationContainer .notification {
@@ -215,3 +215,134 @@ word-wrap: break-word !important;
     z-index: 99;
     pointer-events: visible;
 }
+
+#HeaderPlaceHolder {min-width:600px;
+}
+
+@media (min-width: 734px) and (max-width: 804px) {
+  #HeaderPlaceHolder {min-width:600px;
+}
+}
+
+@media (min-width: 0px) and (max-width: 734px) {
+  #HeaderPlaceHolder {min-width:250px;
+}
+.dateWidth{
+    margin-top: 4px;
+    position: absolute;
+    top: 126px;
+    width:140px !important;
+}
+}
+
+/*@media (min-width: 734px) and (max-width: 809px) {
+  .sectionStep .sectionContent {
+    max-width: 110%;
+}
+
+    .sectionStep {max-width: 110%;
+    }
+
+    .sectionContent {
+    max-width: 120%;
+}
+}*/
+
+@media (min-width: 734px){
+.col-sm-12 {
+    width: 60%;
+}
+}
+
+.popUpBodyHeader{overflow:visible}
+
+@media (max-width: 850px){
+.popUpContainer {
+    min-height: 760px;
+    max-width: 317px;
+    margin-top: 55px !important;
+    margin-right: auto;
+    margin-bottom: 55px;
+    width: calc(100% - 42px);
+    min-width: 100%;
+    margin-left:0% !important;
+}
+}
+
+@media (max-width: 734px) {
+    #infoImg {
+        vertical-align: top;
+        margin-top: 391px;
+        margin-left: -20px;
+    }
+}
+
+@media (max-width: 734px){
+#divDocTemplate {
+    position: relative;
+    left: 0;
+    top: 36px;
+    clear: both;
+}
+#defaultMessageDiv {
+    width: 161px;
+    clear: both;
+    height:100% !important;
+   
+}
+#infoImg {
+    vertical-align: top;
+     margin-top: 27px; 
+     margin-left: 0px; 
+}
+.SavePopUpEntries {
+    margin-right: 6px;
+    margin-left: 122px;
+    float: left;
+    margin-top: 0px;
+}
+
+#defaultMessage {
+    display: inline-block;
+    margin-top: -27px;
+    margin-left: 27px;
+    font-size: 9px;
+    float: left;
+}
+
+.popUpPosAbs {
+    position: relative;
+    float: left;
+    margin-top: 10px;
+}
+
+
+#loadingImageCreat {
+    margin: -23px 0 0 0px;
+    width: 25px;
+}
+}
+.clearBoth{clear:both; height:0.1px;}
+
+@media (min-width: 0px) and (max-width: 469px) {
+    .loading {left:135px !important;top:356px!important;
+    }
+}
+
+@media (min-width: 470px) and (max-width: 735px) {
+    .loading {left:135px !important;top:356px!important;
+    }
+}
+
+@media (min-width: 735px) and (max-width: 1290px) {
+    .loading {left:135px !important;top:254px!important;
+    }
+}
+@media (min-width: 1290px) and (max-width: 1366px) {
+    .loading {left:135px !important;top:215px !important;
+    }
+}
+
+
+
+
