@@ -1,0 +1,22 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "Microsoft.Legal.MatterCenter.Utility Class Library",
+  "authors": [ "v-lapedd" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "dependencies": {
+    "Microsoft.AspNet.Authorization": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+    "Microsoft.Extensions.OptionsModel": "1.0.0-rc1-final",
+    "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.9.302261508-alpha",
+    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
+    "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
+    "StackExchange.Redis": "1.0.488",
+    "WindowsAzure.Storage": "6.2.0",
+   
+  },
+  "frameworks": {
+    "dnx451": { }
+  }
+}

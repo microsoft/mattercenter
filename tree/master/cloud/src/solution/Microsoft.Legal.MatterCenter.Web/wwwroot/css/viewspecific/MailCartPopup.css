@@ -1,0 +1,939 @@
+﻿@media screen and (min-width: 712px) {
+    .selectMailFormat {
+        float: right;
+    }
+
+    .checkOut {
+        cursor: pointer;
+        margin-right: 10px;
+        text-align: left;
+        width: 201px !important;
+    }
+
+    .attachmentRemove {
+        margin-left: 40px;
+        margin-right: 20px;
+        position: relative;
+        float: left;
+        display: inline-block;
+    }
+
+    .mailLabel {
+        float: left;
+        margin-right: 10px;
+    }
+
+    .attachmentList div, .sendEmailOptions, .mailCartLogo {
+        float: left;
+    }
+
+        .sendEmailOptions div {
+            margin-right: 10px;
+            padding-top: 4px;
+        }
+
+    .mailCheck {
+        margin-right: 10px;
+        margin-top: 2px;
+        float: left;
+        display: inline-block;
+    }
+
+    .mailCartLogo {
+        margin-right: 4px;
+    }
+
+        .mailCartLogo:hover {
+            opacity: 1;
+        }
+
+    .emailDocumentNames {
+        list-style-type: none;
+        max-height: 210px;
+        padding: 0;
+    }
+
+        .emailDocumentNames li {
+            min-height: 28px;
+            padding: 0px 0 10px;
+        }
+
+            .emailDocumentNames li:last-child {
+                border-bottom: none;
+            }
+
+    .attachmentList {
+        color: #333;
+        font-family: 'Segoe UI', Calibri, 'Times New Roman';
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+        .attachmentList span {
+            display: inline-block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 255px;
+            float: left;
+            margin-top: 2px;
+        }
+
+    .popupContainerBackground {
+        background-color: #000;
+        height: 100%;
+        opacity: 0.4;
+        position: fixed;
+        width: 100%;
+        z-index: 999;
+        top: 0;
+    }
+
+    .popUpContainer {
+        background-color: #fff;
+        bottom: 0;
+        height: 362px;
+        left: 0;
+        padding: 15px;
+        position: fixed;
+        right: 0;
+        top: 160px;
+        width: inherit;
+        z-index: 1000;
+        overflow: hidden;
+    }
+
+    .popUpFloatLeft {
+        float: left;
+    }
+
+    .popUpFloatRight {
+        float: right;
+    }
+
+    .popUpCloseIcon {
+        cursor: pointer;
+    }
+
+    .popUpPracticeGroup {
+        margin-top: 10px;
+    }
+
+    .popUpBody {
+        height: 70%; /*Fallback for Safari*/
+        height: calc(100% - 70px);
+        margin-top: 15px;
+        width: 100%;
+        min-height: 235px;
+        overflow-y: auto;
+    }
+
+        .popUpBody > div {
+            width: calc(33% - 45px);
+        }
+
+    .popUpMarginRight {
+        margin-right: 34px;
+    }
+
+    .popUpMDTextArea {
+        border: 2px solid #d2d2d2;
+        font-family: 'Segoe UI', Calibri;
+        margin: 10px;
+        width: calc(100% - 20px);
+    }
+
+    .popUpBodyBlocks {
+        width: 23%;
+    }
+
+    .popUpLeftClick {
+        bottom: calc(50% + 10px);
+        cursor: pointer;
+    }
+
+    .popUpRightClick {
+        bottom: calc(50% - 50px);
+        cursor: pointer;
+    }
+
+    .popUpCommonContent > div {
+        cursor: pointer;
+    }
+
+    .popUpBodyHeader {
+        color: #0c4ca3;
+        font-family: 'Segoe UI', Calibri, 'Times New Roman';
+        font-size: 14px;
+        line-height: 18px;
+        margin: 0 5px 5px 0;
+        width: 100%;
+    }
+
+    .popUpCommonContent {
+        -ms-word-wrap: break-word;
+        font-family: 'Segoe UI', Calibri, 'Times New Roman';
+        font-size: 14px;
+        height: 195px;
+        line-height: 18px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        word-wrap: break-word;
+    }
+
+        .popUpCommonContent div {
+            padding: 5px 5px 5px 10px;
+        }
+
+    .popUpBorder {
+        border: 2px solid #d2d2d2;
+        height: 209px;
+        width: 183px;
+    }
+
+    .popUpMoveItem {
+        width: 58px;
+    }
+
+    .popUpPosAbs {
+        position: absolute;
+    }
+
+    .popUpSelected {
+        background-color: #7c7c7c;
+        color: #FFF;
+    }
+
+    .popUpPG {
+        border: 2px solid #d2d2d2;
+        font-family: 'Segoe UI', Calibri;
+        font-size: 10pt;
+        height: 28px;
+        line-height: 14px;
+        padding: 2px;
+        width: 161px;
+    }
+
+    .mailLabel, .sendEmailOptions {
+        color: #333;
+        font-family: 'Segoe UI', Calibri, 'Times New Roman';
+        font-size: 0.875em;
+        line-height: 18px;
+        margin-bottom: 5px;
+    }
+
+    #navigate {
+        position: relative;
+        width: 25px;
+    }
+
+    .popUpHeader .notificationContainerForPopup .notification {
+        color: #fff;
+        position: relative;
+        margin: 0px;
+    }
+
+    .failNotification {
+        background-color: red;
+    }
+
+    .notificationContainerForPopup .notification.successNotification {
+        background-color: #00b050;
+        font-family: "Segoe UI";
+        font-weight: 600;
+        font-size: 14px;
+        padding: 10px 10px 10px 10px;
+    }
+
+    .successNotification {
+        vertical-align: top;
+        display: table;
+    }
+
+    .notificationContainerForPopup .notification.successNotification #warningImg {
+        width: 23px;
+        margin-left: 18px;
+    }
+
+    .warningNotification {
+        background-color: #fef09e;
+        color: #333 !important;
+        min-height: 60px;
+    }
+
+    .popUpHeader .notificationContainerForPopup .errorNotification {
+        background-color: #a0003e;
+        color: #333;
+    }
+
+    .popUpHeader .notificationContainerForPopup .notification .closeNotification {
+        cursor: pointer;
+        float: right;
+        margin-left: 10px;
+    }
+
+    .popUpHeader .notificationContainerForPopup .notification .closeFailNotification {
+        cursor: pointer;
+        float: right;
+        margin-left: 10px;
+        margin-right: 20px;
+    }
+
+    .briefcaseURL {
+        color: #fff;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .notificationContainerForPopup {
+        font-size: 14px;
+        margin: -15px;
+    }
+
+    #isNotCheckedOut, #fileNotAvailable {
+        margin-right: 10px;
+        margin-top: 2px;
+    }
+
+    #fileMovedDeleted {
+        font-size: 12px;
+        margin-top: -20px;
+    }
+
+    #fileNotFound {
+        margin-right: 10px;
+        font-size: 12px;
+    }
+
+    #overWriteDocumentName {
+        color: #2b579a;
+        font-weight: 600;
+    }
+
+    #legalBriefcaseLoadingImage {
+        display: none;
+        float: left;
+    }
+
+    #mailCartLoadingImage {
+        display: none;
+        margin-left: 50%;
+        margin-top: 10%;
+    }
+
+    .checkOutInfo {
+        float: right;
+        margin-right: 10px;
+        display: inline-block;
+    }
+
+    #checkedOutBy {
+        clear: both;
+        color: #666;
+        font-style: italic;
+        margin: -20px 47px 0 0;
+    }
+
+    .checkOutPopup {
+        background-color: #FFF;
+        border: 1px solid #0072c6;
+        float: right;
+        margin-left: 394px;
+        min-height: 125px;
+        position: absolute;
+        width: 250px !important;
+        z-index: 1;
+    }
+
+    .checkOutPopupPointer {
+        -moz-transform: rotate(315deg);
+        -ms-transform: rotate(315deg);
+        -o-transform: rotate(315deg);
+        -webkit-transform: rotate(315deg);
+        background-color: #FFF;
+        border: 1px solid transparent;
+        border-bottom-color: #0072c6;
+        border-right-color: #0072c6;
+        box-shadow: 1px 1px 1px 1px #eaecee;
+        color: #fff;
+        float: right;
+        height: 25px;
+        margin: 35px -14px 0 0;
+        width: 25px;
+    }
+
+    .checkOutPopupData {
+        margin: 10px;
+    }
+
+    .sendingDocumentImg {
+        display: none;
+        margin-right: 10px;
+        float: left;
+    }
+
+    #PopupBody {
+        width: 704px;
+        height: 100%;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 711px) {
+    .attachmentRemove {
+        float: right;
+        margin-left: 50px;
+        margin-top: 30px;
+        top: 3px;
+    }
+
+    .mailLabel {
+        float: left;
+        margin-right: 10px;
+    }
+
+    .attachmentList div, .sendEmailOptions, .mailCartLogo {
+        float: left;
+    }
+
+    .sendEmailOptions {
+        margin-bottom: 15px;
+        width: 100%;
+    }
+
+        .sendEmailOptions div {
+            margin-right: 10px;
+            padding-top: 4px;
+        }
+
+    .mailCartLogo {
+        margin-right: 4px;
+    }
+
+    .mailCheck {
+        margin-right: 30px;
+        float: left;
+    }
+
+    .emailDocumentNames {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .emailDocumentNames li {
+            padding: 7px 0 10px;
+        }
+
+            .emailDocumentNames li:nth-child(n) {
+                height: 60px;
+            }
+
+            .emailDocumentNames li:last-child {
+                border-bottom: none;
+            }
+
+    .attachmentList {
+        color: #333;
+        font-family: 'Segoe UI', Calibri, 'Times New Roman';
+        font-size: 14px;
+        line-height: 18px;
+    }
+
+        .attachmentList span {
+            display: inline-block;
+            list-style: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 145px;
+            float: left;
+            margin-left: 0;
+            padding-right: 10px;
+        }
+
+    .popupContainerBackground {
+        background-color: #000;
+        height: 100%;
+        opacity: 0.4;
+        position: fixed;
+        width: 100%;
+        z-index: 999;
+    }
+
+    .popUpContainer {
+        background-color: #fff;
+        height: 392px;
+        left: 0;
+        margin: auto;
+        padding: 0 15px;
+        position: absolute;
+        right: 0;
+        top: 160px;
+        width: calc(100% - 32px);
+        z-index: 1000;
+        overflow: hidden;
+        min-width: 640px;
+    }
+
+    .mailLabel, .sendEmailOptions {
+        color: #333;
+        font-family: 'Segoe UI', Calibri, 'Times New Roman';
+        font-size: 0.875em;
+        line-height: 18px;
+        margin-bottom: 5px;
+    }
+
+    .popUpFloatLeft {
+        float: left;
+    }
+
+    .popUpFloatRight {
+        float: right;
+    }
+
+    .popUpCloseIcon {
+        cursor: pointer;
+    }
+
+    .popUpPracticeGroup {
+        margin-top: 10px;
+    }
+
+    .popUpBody {
+        height: 199px;
+        margin-top: 15px;
+        width: 100%;
+        overflow-y: auto;
+    }
+
+        .popUpBody > div {
+            width: calc(33% - 45px);
+        }
+
+    .popUpMarginRight {
+        margin-right: 34px;
+    }
+
+    .popUpMDTextArea {
+        border: 2px solid #d2d2d2;
+        font-family: 'Segoe UI', Calibri;
+        margin: 10px;
+        width: calc(100% - 20px);
+    }
+
+    .popUpBodyBlocks {
+        width: 23%;
+    }
+
+    .popUpLeftClick {
+        bottom: calc(50% + 10px);
+        cursor: pointer;
+    }
+
+    .popUpRightClick {
+        bottom: calc(50% - 50px);
+        cursor: pointer;
+    }
+
+    .popUpCommonContent > div {
+        cursor: pointer;
+    }
+
+    .popUpCommonContent div {
+        padding: 5px 5px 5px 10px;
+    }
+
+    .popUpBorder {
+        border: 2px solid #d2d2d2;
+        height: 209px;
+        width: 183px;
+    }
+
+    .popUpMoveItem {
+        width: 58px;
+    }
+
+    .popUpPosAbs {
+        position: absolute;
+    }
+
+    .popUpSelected {
+        background-color: #7c7c7c;
+        color: #FFF;
+    }
+
+    .popUpPG {
+        border: 2px solid #d2d2d2;
+        font-family: 'Segoe UI', Calibri;
+        font-size: 10pt;
+        height: 28px;
+        line-height: 14px;
+        padding: 2px;
+        width: 161px;
+    }
+
+    #navigate {
+        position: relative;
+        width: 25px;
+    }
+
+    .popUpHeader .notificationContainerForPopup .notification {
+        position: relative;
+    }
+
+    .failNotification {
+        background-color: red;
+    }
+
+    .notificationContainerForPopup .notification.successNotification {
+        background-color: #00a03e;
+        font-family: "Segoe UI";
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+        .notificationContainerForPopup .notification.successNotification #warningImg {
+            width: 23px;
+        }
+
+    .warningNotification {
+        background-color: #fef09e;
+        color: #333 !important;
+        min-height: 60px;
+    }
+
+    .popUpHeader .notificationContainerForPopup .errorNotification {
+        background-color: #a0003e;
+        color: #333;
+    }
+
+    .popUpHeader .notificationContainerForPopup .notification .closeNotification {
+        cursor: pointer;
+        float: right;
+        margin-left: 10px;
+    }
+
+    .popUpHeader .notificationContainerForPopup .notification .closeFailNotification {
+        cursor: pointer;
+        float: right;
+        margin-left: 10px;
+    }
+
+    .briefcaseURL {
+        color: #fff;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .notificationContainerForPopup {
+        margin: 0 -15px;
+        font-size: 14px;
+    }
+
+    #isNotCheckedOut, #fileNotAvailable {
+        margin-right: 10px;
+    }
+
+    #fileNotFound {
+        margin-right: 10px;
+        font-size: 12px;
+    }
+
+    #fileMovedDeleted {
+        margin-right: 10px;
+        font-size: 12px;
+        margin-top: -20px;
+    }
+
+    .askForOverwrite {
+        margin-left: 35px;
+    }
+
+    .askForOverwrite {
+        display: block;
+    }
+
+    .popUpContainer .popUpHeader .notificationContainerForPopup .askForOverwrite {
+        display: inline;
+    }
+
+    .mailContainer .notificationContainerForMailPopup .askForOverwrite input {
+        width: auto;
+    }
+
+    .askForOverwrite input {
+        background-color: #fef09e;
+        border-color: #666;
+        border-style: solid;
+        border-width: 1.5px;
+        color: #666;
+        height: 26px;
+        margin-top: 4px;
+        width: 50px;
+    }
+
+    .askForOverwrite input {
+        font-family: Segoe UI;
+        font-size: 14px !important;
+        font-weight: 600;
+        background-color: #fef09e;
+        border: 1px solid #c8c8c8;
+        color: #333;
+        height: 30px;
+        margin: 0px 10px 5px 0px;
+        cursor: pointer;
+        float: left;
+    }
+
+    .mailContainer .notificationContainerForMailPopup .uploadDocumentNotification .askForOverwrite #overWriteNo {
+        margin-left: 0px;
+        margin-top: 0px;
+    }
+
+
+    #overWriteDocumentName {
+        color: #2b579a;
+        font-family: "Segoe UI";
+        font-weight: 600;
+    }
+
+    #warningImg {
+        height: 23px;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-top: 1px;
+        vertical-align: middle;
+        width: 27px;
+    }
+
+    #warningImg {
+        float: left;
+        height: 23px;
+        margin-right: 10px;
+        width: 27px;
+    }
+
+    #legalBriefcaseLoadingImage {
+        display: none;
+        float: left;
+    }
+
+    #mailCartLoadingImage {
+        display: none;
+        margin-left: 50%;
+        margin-top: -50%;
+    }
+
+    .checkOut {
+        cursor: pointer;
+        text-align: left;
+    }
+
+    .checkOutInfo {
+        float: right;
+        margin-left: 40px;
+        margin-right: -76px;
+    }
+
+    #checkedOutBy {
+        clear: both;
+        color: #444;
+        font-style: italic;
+        margin-top: -20px;
+        margin-right: 10px;
+    }
+
+    .checkOutPopup {
+        background-color: #FFF;
+        border: 1px solid #0072c6;
+        float: right;
+        right: 70px;
+        min-height: 125px;
+        position: absolute;
+        width: 200px !important;
+        z-index: 1;
+    }
+
+    .checkOutPopupPointer {
+        -moz-transform: rotate(315deg);
+        -ms-transform: rotate(315deg);
+        -o-transform: rotate(315deg);
+        -webkit-transform: rotate(315deg);
+        background-color: #FFF;
+        border: 1px solid transparent;
+        border-bottom-color: #0072c6;
+        border-right-color: #0072c6;
+        box-shadow: 1px 1px 1px 1px #eaecee;
+        color: #fff;
+        float: right;
+        height: 25px;
+        margin: 35px -14px 0 0;
+        width: 25px;
+    }
+
+    .checkOutPopupData {
+        margin: 10px;
+    }
+
+    .sendingDocumentImg {
+        display: none;
+        margin-right: 30px;
+        float: left;
+    }
+}
+
+@media (max-width: 322px) {
+    .popUpContainer {
+        background-color: #fff;
+        height: 392px;
+        left: 0;
+        margin: 0;
+        padding: 0 15px;
+        position: absolute;
+        width: 302px;
+        z-index: 1000;
+        overflow: hidden;
+    }
+
+    .attachmentRemove {
+        margin-left: 40px;
+    }
+
+    .checkOutInfo {
+        float: right;
+        margin-right: -64px;
+    }
+
+    .checkOutPopup {
+        margin-left: 40px;
+    }
+}
+
+@media (max-height: 450px) {
+    .popUpContainer {
+        position: absolute;
+        margin-top: 0;
+        top: 34px !important;
+        overflow: hidden;
+    }
+}
+
+#fileNotFound {
+    font-size: 14px;
+}
+
+.inlineValues {
+    color: #2b579a;
+}
+
+    .inlineValues:hover {
+        text-decoration: underline;
+    }
+
+.attachmentRemove {
+    opacity: 0.665;
+}
+
+    .attachmentRemove:hover {
+        opacity: 1;
+    }
+
+.selectMailFormat {
+    padding-top: 15px;
+}
+
+.popupSP {
+    top: 150px;
+    bottom: auto;
+}
+
+.mailCartLogo {
+    opacity: 0.665;
+}
+
+    .mailCartLogo:hover {
+        opacity: 1;
+    }
+
+.sendingDocumentImg {
+    height: 19px;
+}
+
+.overWriteTextContainer {
+    display: block;
+    margin-bottom: 20px;
+    margin-left: 35px;
+}
+
+.notification .overWriteTextContainer .askForOverwrite {
+    margin-top: 20px;
+}
+
+.askForOverwrite input {
+    cursor: pointer;
+}
+
+#warningImg {
+    float: left;
+}
+
+.attachmentRemove, .checkOutInfo, .mailCartLogo {
+    width: 27px;
+}
+
+.disabledCheckbox {
+    pointer-events: none;
+}
+
+.overWriteTextContainer #overWriteDocumentName {
+    margin: 0px;
+}
+
+.notificationContainerForPopup .notification {
+    float: left;
+    font-size: 12px;
+    margin-bottom: 10px;
+    padding: 10px 10px 15px 10px;
+    text-align: left;
+    text-overflow: ellipsis;
+    width: 100%;
+    min-width: 305px;
+    word-wrap: break-word;
+    position: absolute;
+    z-index: 1;
+}
+
+.askForOverwrite input {
+    font-family: Segoe UI;
+    font-size: 14px !important;
+    font-weight: 600;
+    background-color: #fef09e;
+    border: 1px solid #c8c8c8;
+    color: #333;
+    height: 30px;
+    margin: 0px 10px 5px 0px;
+    cursor: pointer;
+    float: left;
+    width: auto;
+}
+
+.popUpContainer .popUpHeader .notificationContainerForPopup .notification .askForOverwrite input {
+    margin-top: 20px;
+}
+
+.notificationContainerForPopup .notification .overWriteTextContainer .askForOverwrite {
+    margin-left: 0px;
+}
+
+.notificationContainerForPopup .notification .overWriteTextContainer {
+    font-size: 14px;
+}
+
+.notificationContainerForMailPopup .askForOverwrite .notificationCC #cancelCC {
+    float: none;
+    margin-left: 10px;
+}
+
+.popUpHeader .notificationContainerForPopup .notification {
+    color: #fff;
+}

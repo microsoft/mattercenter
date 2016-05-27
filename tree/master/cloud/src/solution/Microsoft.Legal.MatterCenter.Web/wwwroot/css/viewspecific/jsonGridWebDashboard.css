@@ -1,0 +1,289 @@
+﻿body {
+    margin: 0 auto;
+    padding: 0;
+}
+
+.banner {
+    background-color: #fafafa;
+    float: left;
+    height: 40px;
+    width: 100%;
+    z-index: 100;
+}
+
+.appHeader {
+    color: #0c4ca3;
+    float: right;
+    font-family: 'Segoe UI Light', 'Segoe UI';
+    font-size: 18pt;
+    line-height: 40px;
+    margin: 0 15px 0 0;
+}
+
+#docNotification {
+    background-color: #00a03e;
+    clear: both;
+    color: #fff;
+    float: left;
+    padding: 5px 10px;
+    width: calc(100% - 20px);
+    z-index: 100;
+}
+
+.button {
+    background-color: #0c4ca3;
+    border: 0;
+    color: #fff;
+    float: left;
+    font-family: 'Segoe UI', Calibri, 'Times New Roman';
+    font-size: 11pt;
+    font-weight: 600;
+    height: 26px;
+    line-height: 15pt;
+    padding: 0 20px;
+}
+
+#pnlDMSSearch_Step7 {
+    float: left;
+    padding: 0 15px;
+    width: calc(100% - 30px);
+}
+
+#searchResults {
+    border: 0;
+    clear: both;
+    float: left;
+    margin: 10px 0;
+    width: 100%;
+}
+
+#libNames {
+    font-size: 10pt;
+    height: 32px;
+    line-height: 14px;
+    margin: 10px 0;
+    padding: 2px;
+    width: 400px;
+}
+
+.selectDoc {
+    clear: both;
+    float: left;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.jsonGrid {
+    border-bottom-color: silver;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: silver;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: silver;
+    border-right-style: solid;
+    border-right-width: 1px;
+}
+
+.jsonGrid, .InnerJsonGrid {
+    border-collapse: collapse;
+    width: 946px;
+}
+
+.jsonGrid, .jsonGridFooter a {
+    color: #444;
+}
+
+    .jsonGrid td {
+        border: 0;
+        padding-left: 10px;
+    }
+
+    .jsonGrid .cur-pointer {
+        cursor: pointer;
+    }
+
+    .jsonGrid .click-disabled {
+        color: #444 !important;
+        cursor: default;
+    }
+
+.jsonGridFooter div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+    .jsonGridFooter div img {
+        float: left;
+        margin: 7px 10px 0px 0px;
+    }
+
+.jsonGridFooter {
+    display: table;
+    padding: 5px 0;
+    margin-top: 20px;
+    margin-left: -10px;
+}
+
+.PaginateSpan {
+    margin-right: 10px;
+}
+
+.jsonGridOverflow {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.inlineblockdiv {
+    display: inline-block;
+}
+
+.jsonGridHeader {
+    border-right: 10px solid transparent;
+    color: #333;
+    font-family: "Segoe UI";
+    font-size: 14px !important;
+    font-weight: 600;
+}
+
+.jsonGrid .ViewRecordDiv {
+    font-family: "Segoe UI";
+    font-size: 14px;
+    margin-top: 11px;
+    text-align: center;
+}
+
+.jsonGridFooter a {
+    outline: none !important;
+}
+
+.jsonGridHeader, .OuterHead {
+    background-color: #FFF;
+    border-bottom-color: #BFBFBF !important;
+}
+
+.jsonGridHeaderAlternate {
+    background: #BFBFBF;
+}
+
+.jsonGridRow {
+    border-bottom: 0 solid #FFF;
+    border-right: 10px solid transparent;
+}
+
+.jsonGridRowTile {
+    border-bottom: 0 solid #FFF;
+    border-right: 10px solid transparent;
+    display: inline;
+    padding: 3px 5px 4px;
+}
+
+.GridRow:hover {
+    background-color: #fff;
+}
+
+.GridRowAlternate {
+    background-color: #F5FAFC;
+    color: #444;
+}
+
+.GridRowAlternateTile {
+    float: left;
+    margin-left: 5px;
+    padding-left: 0;
+}
+
+.jsongrid-last, .jsongrid-next {
+    text-align: right;
+}
+
+#grid_Grid_Prev {
+    float: right;
+}
+
+#grid_Grid_First {
+    float: left;
+}
+
+#txtSearchContent {
+    margin: 10px 0;
+    width: 400px;
+}
+
+#btnSearch {
+    margin-bottom: 10px;
+}
+
+.hide {
+    display: none;
+}
+
+#selectDoc {
+    margin-top: 20px;
+}
+
+.GridRowTile {
+    float: left;
+    margin-left: 5px;
+    padding-left: 0;
+}
+
+.GridRow, .GridRowAlternate, .GridRowTile, .GridRowAlternateTile {
+    cursor: pointer;
+    height: 30px;
+}
+
+.selectedTile {
+    border: 5px solid #fff;
+    height: 82px;
+    width: 170px;
+}
+
+    .selectedTile.activeTile {
+        border-color: #0072C6;
+    }
+
+.innerDiv {
+    height: 0;
+    overflow: visible;
+}
+
+    .innerDiv.activeTile {
+        border-color: transparent #0072C6 transparent transparent;
+        border-style: solid;
+        border-width: 0 27px 27px 0;
+        height: 0;
+        overflow: visible;
+    }
+
+.floatContentLeft {
+    float: left;
+}
+
+.halfContentWidth {
+    width: 75%;
+}
+
+.threeQuarterContentWidth {
+    width: 75%;
+}
+
+.ellipses {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.breakWord {
+    word-wrap: break-word;
+}
+
+.activeTile {
+    color: #2b579a;
+}
+
+.moveToMiddle {
+    padding-top: 5px;
+}

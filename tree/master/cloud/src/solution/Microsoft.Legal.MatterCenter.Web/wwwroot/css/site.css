@@ -1,0 +1,462 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* Carousel */
+.carousel-caption {
+    z-index: 10 !important;
+}
+
+    .carousel-caption p {
+        font-size: 20px;
+        line-height: 1.4;
+    }
+
+@media (min-width: 768px) {
+    .carousel-caption {
+        z-index: 10 !important;
+    }
+}
+
+.matters {
+    width: 500px;
+    height: 250px;
+}
+
+.ui-grid-row:hover .ui-grid-cell {
+    background-color: rgba(229, 241, 250, 1);
+}
+
+.ui-grid-row.ui-grid-row-selected > [ui-grid-row] > .ui-grid-cell {
+    background-color: rgba(229, 241, 250, 1);
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.ui-grid-cell {
+    overflow: visible;
+}
+
+.ng-scope {
+    overflow: visible;
+}
+
+#attachmentHeader {
+    color: #333;
+    float: left;
+    font-size: 1.125em;
+    font-weight: 300;
+    padding-top: 5px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: 20px !important;
+    padding-bottom: 20px;
+}
+
+.mailHeaderItems {
+    border-right: 1px solid #666;
+}
+
+.mailHeaderItems, .mailHeaderFolders {
+    border-top: 1px solid #c8c8c8;
+    border-bottom: 1px solid #c8c8c8;
+    background-color: #eaeaea;
+    color: #333;
+    font-size: 0.875em;
+    float: left;
+    height: 36px;
+}
+
+.maildata {
+    float: left;
+    overflow-y: auto;
+    border-right: 1px solid #666;
+    border-bottom: 1px solid #c8c8c8;
+    min-height: 150px;
+}
+
+.folderContent {
+    float: right;
+    padding-right: 6px;
+    height: 150px;
+    border-bottom: 1px solid #c8c8c8;
+}
+
+.mailHeaderItems div, .mailHeaderFolders div {
+    padding-left: 10px;
+    padding-top: 8px;
+}
+
+.noFilesUploaded {
+    color: #333;
+    font: normal 0.875em 'Segoe UI';
+    margin-top: 14px;
+    min-height: 50px;
+    margin-left: 10px;
+}
+
+.margin0 {
+    margin: 0px;
+}
+
+.pad0 {
+    padding: 0px;
+}
+
+.noResultsText {
+    color: #333;
+    font-weight: 200;
+    line-height: 1.5;
+    padding-left: 5px;
+    padding-right: 30px;
+}
+
+.AppMenuFlyout {
+    position: absolute;
+    z-index: 101;
+    display: none;
+    width: 250px;
+    height: 155px;
+    box-sizing: border-box;
+    background-color: #fff;
+    padding: 10px;
+    top: 44px;
+    border: 1px solid #d1d1d1;
+}
+
+.AppFlyoutLinks {
+    display: table !important;
+    padding-bottom: 20px !important;
+}
+
+.AppFlyoutLinksText {
+    font-size: 18px !important;
+    color: #2b579a !important;
+}
+
+.lazyLoading {
+    position: absolute;
+    background-color: transparent;
+    color: #6c6c6c;
+    font-weight: lighter;
+    height: 30px;
+    left: 50%;
+    text-align: center;
+    vertical-align: middle;
+    width: 30px;
+    bottom: -30px; /* Provided negative bottom for alignment of loading image for lazy loading implementation */
+}
+
+.ui-grid-header-viewport {
+    overflow: visible;
+}
+
+.ui-grid-top-panel {
+    overflow: visible;
+    background: #fff;
+}
+
+#loadingImageContainer {
+    position: absolute;
+    left: 40%;
+    top: 50%;
+}
+
+.ngViewport {
+    overflow: visible;
+}
+
+.searchPanelDropdown {
+    cursor: pointer;
+    height: 30px;
+    line-height: 29px;
+    padding-left: 9px;
+    border: none;
+}
+
+.form-control {
+    border-radius: 0;
+}
+
+#filterResultsContainer {
+    max-height: 134px !important;
+    min-height: 0;
+    overflow-y: auto;
+    clear: both;
+    position: relative;
+}
+
+    #filterResultsContainer .filterValueLabels, #filterResultsContainer .bufferElements, #filterResultsContainer .filterFlyOutNoResults {
+        margin: 10px 0 0 10px;
+    }
+
+.filterFlyOutNoResults {
+    font-family: "Segoe UI Web Semilight", "Segoe UI Semilight", "Segoe WP Semilight", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
+    width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.folderContent ul {
+    margin: 0;
+    padding-left: 0;
+    text-align: left;
+    list-style: none;
+}
+
+.ui-grid, .ui-grid-header-cell, .ui-grid-header, .ui-grid-cell {
+    border: none;
+}
+
+.ui-grid {
+    height: 520px;
+}
+
+.ui-grid-cell {
+    height: 48px;
+    white-space: normal;
+    -ms-text-overflow: clip;
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    overflow: visible;
+}
+
+.txtellipsis {
+    white-space: nowrap;
+    text-align: left;
+    text-overflow: ellipsis;
+    height: 100%;
+    overflow: hidden;
+    color: #2b579a!important;
+}
+
+.UiGrid-a {
+    text-align: center;
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+    padding: 11px 0 7px 0 !important;
+    color: black;
+    font-weight: bold;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+
+    .UiGrid-a:hover {
+        background-color: #bcd9ed;
+    }
+
+.ui-grid-row:nth-child(odd) .ui-grid-cell {
+    background-color: #fff;
+}
+
+.ui-grid-row:nth-child(even) .ui-grid-cell {
+    background-color: #fff;
+}
+
+.title {
+    margin: 0 0 0 10px;
+}
+
+.ui-grid-header-cell-label {
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.ui-grid-header-cell-wrapper {
+    color: #333;
+    font-family: 'Segoe UI Web Regular','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
+}
+
+.ui-grid-canvas {
+    color: #333;
+    font-family: 'Segoe UI Web Regular','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
+    font-size: 0.875em;
+    font-weight: 400;
+}
+
+.ui-grid-viewport {
+    overflow: hidden !important;
+}
+
+.overflowMain {
+    /*overflow: hidden !important;*/
+}
+
+.padlf10 {
+    padding-left: 10px !important;
+}
+
+#searchBarHolder input {
+    max-width: 310px;
+}
+
+.ui-grid-menu-button {
+    top: 25px;
+}
+
+.dropdown-menu .ms-ContextualMenu-item a:hover {
+    background-color: #cde6f7 !important;
+    color: #333 !important;
+    font-family: "Segoe UI Semibold","Segoe UI Web Semibold" !important;
+}
+
+.popover {
+    max-width: 400px;
+    max-height: 278px;
+    width: 350px;
+    border-radius: 2px;
+}
+
+.popover-title {
+    padding: 0;
+    margin: 0;
+    border-bottom: 0;
+}
+
+.popover-content {
+    padding: 0;
+}
+
+.UiGrid-a .dropdown-menu {
+    margin: 0;
+    padding: 0;
+}
+
+/*.ui-grid-render-container{
+    height:500px;
+}*/
+
+.padl10px {
+    padding-left: 10px;
+}
+
+#mainmenu {
+    margin: 0;
+    padding: 10px 0 0 10px;
+}
+
+    #mainmenu input {
+        max-width: none;
+    }
+
+    #mainmenu .AppMenuFlyout {
+        left: 15px;
+    }
+
+#contentDiv input {
+    max-width: none;
+}
+
+.searchdashboard {
+    padding-top: 15px;
+}
+
+.dashboarddrop {
+    position: absolute;
+    top: 48px;
+    padding: 0 7px 1px 15px;
+}
+
+.dashboarddropinner {
+    z-index: 1000;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+.pad15 {
+    padding: 15px;
+}
+
+.pad10 {
+    padding: 10px;
+}
+
+.dashboardSearch {
+    width: 80px;
+    background: #0072c6;
+    padding: 5px 0 5px 0px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 0.875em;
+    text-align: center;
+    font-weight: 600;
+    font-family: Segoe UI;
+}
+
+.clientdropinner {
+    position: absolute;
+    top: -11px;
+    left: 16.6%;
+    border: 1px solid #ccc;
+    z-index: 10;
+    background: #fff;
+    padding-bottom: 10px;
+}
+
+.sortby {
+    position: absolute;
+    top: 80px;
+    padding: 0;
+}
+
+.padtop20{
+    padding-top:20px;
+}
+
+.padtop5{
+    padding-top:5px;
+}
+
+.sortby ul{
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+    position: absolute;
+    left: 8px;
+    z-index: 1;
+    list-style: none;
+    padding: 0;
+    margin-top: 5px;
+}
+
+.sortby ul li:hover{
+    background-color: #eaecea;
+    cursor: pointer;
+}
+
+.sortby ul li{
+    padding: 5px 10px 5px 10px;
+    color: #333;
+    display: inline-block;
+    float: right;
+    font-size: 0.87em;
+    font-family: "Segoe UI";
+    text-align: left;
+    width: 118px;
+}
+
+.overflowMain a:hover{
+    text-decoration:none;
+}

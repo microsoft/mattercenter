@@ -1,0 +1,662 @@
+﻿/* Use !important to override styles provided by fabric framework */
+#gridViewPageHeaderContainer {
+    color: #333;
+    font-size: 1em;
+    font-weight: 400;
+    padding: 0 0 15px 0px;
+    border-bottom: 1px solid #c8c8c8;
+    margin-right: 10px;
+}
+
+#searchPanelDropdown {
+    float: left;
+}
+
+    #searchPanelDropdown .ms-Dropdown-title {
+        border-color: #c8c8c8;
+    }
+
+    #searchPanelDropdown .ms-Dropdown {
+        max-width: 160px;
+        min-width: 160px;
+    }
+
+    #searchPanelDropdown .ms-Dropdown-items {
+        max-height: 92px;
+        overflow-y: auto;
+        top: 39px;
+        box-shadow: none;
+        border: 1px solid #c8c8c8;
+        border-radius: 0px;
+    }
+
+
+    #searchPanelDropdown .ms-Dropdown-item, #searchPanelDropdown .ms-Dropdown-title, #gridViewPageHeaderContainer {
+        white-space: nowrap;
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+        -ms-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+    }
+
+    #searchPanelDropdown .ms-Dropdown .ms-Dropdown-items .searchPanelDropdownOption {
+        height: 30px;
+        line-height: 29px;
+        padding-left: 9px;
+        border: none;
+    }
+
+        #searchPanelDropdown .ms-Dropdown .ms-Dropdown-items .searchPanelDropdownOption:hover, .selectedDropdownOption {
+            background-color: #cde6f7;
+            font-family: "Segoe UI Semibold", "Segoe UI Web Semibold";
+            color: #333;
+        }
+
+#HeaderPlaceHolder .ms-Searchbox, #HeaderPlaceHolder .ms-TextField {
+    margin: 0 0 0 10px;
+}
+
+#HeaderPlaceHolder #searchPanelDropdown .ms-Dropdown .ms-Dropdown-title {
+    background-color: #fff;
+    color: #333;
+    font-family: "Segoe UI";
+    padding-left: 9px;
+}
+
+.autoCompleteSection, #autoCompletePlaceHolder, #autoCompleteText {
+    width: 310px;
+}
+
+.autoCompleteSection {
+    display: inline;
+    float: left;
+}
+
+#autoCompleteText {
+    border-right-width: 0;
+    padding-top: 4px;
+}
+
+.highlightTerm {
+    color: #333;
+    font-weight: normal;
+}
+
+#searchBarHolder {
+    position: relative;
+}
+
+
+    #searchBarHolder input {
+        border-radius: 0px;
+    }
+
+    #searchBarHolder .autoCompletePanel {
+        top: 30px;
+        left: 170px;
+        margin: 0;
+        padding: 0;
+        width: 338px;
+        background-color: #FFF;
+        border: 1px solid #c8c8c8;
+        -moz-border-image: none;
+        -o-border-image: none;
+        -webkit-border-image: none;
+        border-image: none;
+        border-top: 0;
+        position: absolute;
+        z-index: 100;
+    }
+
+    #searchBarHolder .autoCompleteRow {
+        padding: 5px 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        height: 20px;
+    }
+
+#glyphIcon {
+    display: none;
+    float: right;
+}
+
+#searchIcon {
+    float: left;
+}
+
+#glyphIcon, #searchIcon {
+    width: 29px;
+    height: 28px;
+    position: relative;
+    border: 1px solid #c8c8c8;
+    border-left-width: 0;
+    cursor: pointer;
+}
+
+    #glyphIcon .ms-Icon--caretDown, #glyphIcon .ms-Icon--caretUp, #searchIcon .ms-Icon--search {
+        position: absolute;
+        top: 25%;
+        left: 25%;
+        color: #666;
+    }
+
+#HeaderPlaceHolder .ms-TextField .ms-TextField-field:hover, #HeaderPlaceHolder .ms-TextField .ms-TextField-field:focus {
+    padding-top: 4px;
+    border-color: #c8c8c8;
+}
+
+#autoCompletePlaceHolder {
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    font-style: italic;
+    font-family: "Segoe UI";
+}
+
+.gridCell .ms-ChoiceField-field {
+    margin-top: 0;
+}
+
+#FlyoutPopupLoading {
+    position: absolute;
+    top: 45%;
+    left: 45%;
+}
+
+.matterPopupData {
+    margin: 3px 10px 10px 10px;
+}
+
+.InfoFlyout {
+    position: absolute;
+    height: 377px;
+    width: 290px;
+    z-index: 99;
+}
+
+.commonFlyoutContaint {
+    margin: 5px 0 0 0;
+}
+
+.FlyoutUrlText {
+    margin: 0 0 10px 0;
+    font-weight: bold;
+}
+
+.FlyoutContent {
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.FlyoutHeadingText {
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.FlyoutContentHeading {
+    margin: 0 0 3px 0;
+    padding: 0 5px 0 0;
+    float: left;
+    font-weight: bold;
+}
+
+.FlyoutHeading {
+    margin: 15px 0 15px 0;
+}
+
+.FlyoutUrlHeading {
+    margin: 15px 0 10px 0;
+}
+
+#btnSave {
+    height: 30px;
+    width: 170px;
+    margin: 5px 0 0 0;
+}
+
+.flyoutLeftarrow {
+    content: '';
+    background-color: #ffffff;
+    position: absolute;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    transform: rotate(45deg);
+    z-index: 1;
+    border-bottom: 1px solid #c8c8c8;
+    border-left: 1px solid #c8c8c8;
+    height: 16px;
+    width: 16px;
+}
+
+.flyoutToparrow {
+    content: '';
+    background-color: #ffffff;
+    position: absolute;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    transform: rotate(45deg);
+    z-index: 1;
+    border-top: 1px solid #c8c8c8;
+    border-left: 1px solid #c8c8c8;
+    height: 16px;
+    width: 16px;
+    left: 40px;
+}
+
+#uploadToMatter, #viewMatters {
+    height: 30px;
+    width: 170px;
+    margin: 0 0 10px 0;
+}
+
+#viewMatters {
+    margin-top: 10px;
+}
+
+/*dynamic position of flyout in Outlook*/
+.MatterFlyoutLeftMove {
+    left: 255px;
+}
+
+.DocumentFlyoutLeftMove {
+    left: 270px;
+}
+
+.MatterFlyoutOutlookSize {
+    height: 267px;
+    width: 350px;
+    margin: 10px 0 0 10px;
+}
+
+.WordMatterFlyoutOutlookSize {
+    height: 320px;
+}
+
+.DocumentFlyoutOutlookSize {
+    height: 292px;
+    width: 350px;
+    margin: 10px 0 0 10px;
+}
+/*dynamic position of flyout in Word*/
+.FlyoutBoxContent {
+    padding: 10px 10px 10px 20px;
+}
+
+.MatterFlyoutWordSize {
+    height: 415px;
+    width: 290px;
+    margin-left: 2px;
+}
+
+.OutlookMatterFlyoutWordSize {
+    height: 350px;
+}
+
+.DocumentFlyoutWordSize {
+    height: 405px;
+    width: 290px;
+    margin-left: 2px;
+}
+
+
+/* region - Column Picker for grid view control*/
+#columnPickerContainer, #columnPickerControl, #columnPickerStrip {
+    position: absolute;
+    right: 16px;
+    top: 38px;
+}
+
+#columnPickerContainer, #columnPickerStrip {
+    z-index: 80;
+}
+
+#columnPickerControl {
+    z-index: 85;
+}
+
+#columnPickerStrip {
+    background: #fff;
+    width: 30px;
+}
+
+#columnPickerControl, #columnPickerStrip {
+    float: right;
+    margin: 1px 1px;
+}
+
+#columnPickerIcon {
+    background: #fff;
+    float: right;
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+#columnPickerPanel {
+    width: 218px;
+    height: 363px;
+    background: #fff;
+    border: #d1d1d1 solid 1px;
+    box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.47);
+    overflow-y: hidden;
+}
+
+#columnPickerBlock {
+    margin-top: 40px;
+    width: 218px;
+    height: 323px;
+    overflow-y: auto;
+}
+
+#columnOptions {
+    padding: 0 20px 20px;
+}
+
+.columnOptionName {
+    width: 160px; /* Required width is 130px, but being Fabric component adding 30px for checkbox */
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.defaultSelection {
+    background: #c8c8c8;
+}
+
+#options-checkbox-unselected + label span {
+    font-family: "Segoe UI Web Semibold", "Segoe UI Semibold", "Segoe WP Semibold", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
+}
+
+.scrollPadding {
+    right: 16px !important;
+}
+
+.noScrollPadding {
+    right: 0 !important;
+}
+/* endregion */
+
+@media (min-width:0) and (max-width:660px) {
+    .DelveLink img {
+        display: none !important;
+    }
+
+    #HeaderPlaceHolder {
+        min-width: 240px;
+        max-width: 240px;
+    }
+
+        #HeaderPlaceHolder .autoCompleteSection, #HeaderPlaceHolder #autoCompletePlaceHolder, #HeaderPlaceHolder #autoCompleteText {
+            margin: 0;
+            float: left;
+            width: 180px;
+        }
+
+        #HeaderPlaceHolder .ms-TextField {
+            margin: 0;
+        }
+
+    #searchPanelDropdown .ms-Dropdown-title {
+        display: none;
+    }
+
+    #searchPanelDropdown .ms-Dropdown-items {
+        position: absolute;
+        top: 40px;
+        width: 240px !important; /* Required important for handling width while resizing */
+    }
+
+    #glyphIcon {
+        display: block;
+    }
+
+    #searchIcon {
+        border-right-width: 0;
+        width: 30px;
+    }
+
+    #searchBarHolder .autoCompletePanel {
+        left: 0;
+        width: 238px;
+    }
+}
+
+.okDateButton {
+    background-color: #666;
+}
+
+.activateButton {
+    background-color: #0072c6;
+}
+
+
+
+.flyoutWrapper {
+    min-width: 260px;
+    max-width: 260px;
+    min-height: 80px;
+    max-height: 273px;
+    padding: 18px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+}
+
+.filterFlyoutSection {
+    min-width: 210px;
+    max-width: 210px;
+    float: left;
+}
+
+#filterSearchBarHolder {
+    margin: 0 0 0 10px;
+}
+
+    #filterSearchBarHolder .ms-TextField .ms-TextField-field {
+        border-right-width: 0;
+    }
+
+#filterSearchIcon {
+    border: 1px solid #c8c8c8;
+    border-left-width: 0;
+    float: right;
+}
+
+.clearFilterText .clearFiltersIcon {
+    float: left;
+    margin: 0 10px 0 10px;
+}
+
+#filterSearchIcon, .clearFiltersIcon {
+    width: 29px;
+    height: 28px;
+    position: relative;
+    cursor: pointer;
+    margin: 0 10px 0 0;
+}
+
+    #filterSearchIcon .ms-Icon--search {
+        position: absolute;
+        top: 25%;
+        left: 25%;
+        color: #666;
+    }
+
+.clear {
+    clear: both;
+}
+
+#filterResultsContainer {
+    max-height: 200px;
+    min-height: 0;
+    overflow-y: auto;
+    clear: both;
+    position: relative;
+}
+
+    #filterResultsContainer .filterflyoutLoading {
+        margin-left: 45%;
+    }
+
+.clearFilterText .clearText {
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    margin: 5px 0 0 0;
+    padding: 5px 10px 0 0;
+}
+
+#textFlyoutContent #filterResultsContainer .ms-ChoiceField {
+    margin: 0 0 0 10px;
+}
+
+#filterResultsContainer .ms-ChoiceField:hover {
+    background-color: #c8c8c8;
+}
+
+#filterTextPlaceHolder {
+    font-style: italic;
+}
+
+#filterResultsContainer .ms-Label, #filterResultsContainer .filterValueLabels, #filterResultsContainer .filterFlyOutNoResults {
+    font-family: "Segoe UI Web Semilight", "Segoe UI Semilight", "Segoe WP Semilight", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
+    width: 220px;
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.flyoutWrapper .ms-TextField .ms-TextField-field:hover, .flyoutWrapper .ms-TextField .ms-TextField-field:focus {
+    border-color: #c8c8c8;
+}
+
+#filterResultsContainer .filterValueLabels, #filterResultsContainer .bufferElements, #filterResultsContainer .filterFlyOutNoResults {
+    margin: 10px 0 0 10px;
+}
+
+    #filterResultsContainer .filterValueLabels:hover {
+        background-color: #c8c8c8;
+    }
+
+#textFlyoutContent, #dateFlyoutContent {
+    position: absolute;
+    top: 40px;
+    z-index: 99;
+}
+
+    #dateFlyoutContent .dateFilter {
+        min-width: 230px;
+        max-width: 230px;
+        min-height: 130px;
+        max-height: 180px;
+        padding: 5px 0;
+    }
+
+#btnOK {
+    margin-left: 0;
+    margin-top: 10px;
+    height: 28px;
+    width: 80px;
+    color: #fff;
+    cursor: pointer;
+    font-family: "Segoe UI";
+    font-size: 0.875em;
+    padding: 5px 0 15px;
+    text-align: center;
+    font-weight: 600;
+}
+
+#dateFlyoutContent .ui-datepicker-trigger {
+    float: right;
+    margin: 5px 5px 0 0;
+}
+
+.filterFlyoutText {
+    min-width: 180px;
+    max-width: 180px;
+    min-height: 30px;
+    max-height: 30px;
+    margin: 5px 0 0 10px;
+    padding: 0 5px;
+    border: 1px solid #c8c8c8;
+}
+
+.seperator {
+    border: 0.5px solid #c8c8c8;
+    margin: 15px 0 10px 0;
+}
+
+.filterImageDatePicker {
+    margin: 5px 5px 0 0;
+    float: right;
+}
+
+:-ms-input-placeholder {
+    font-style: italic;
+    color: #666;
+}
+
+#filterResultsContainer .bufferElements {
+    width: 220px;
+    height: 30px;
+}
+
+#gridViewContainer .ms-Icon--filter {
+    margin: 5px 0 0 5px;
+}
+
+.selectedValue {
+    background-color: #c8c8c8;
+}
+
+@media (min-width:0) and (max-width:320px) {
+    #columnPickerContainer, #columnPickerControl, #columnPickerStrip {
+        display: none;
+    }
+}
+
+#viewDocumentLandingPage, #openDocument {
+    margin: 5px 0 0 0;
+    width: 190px;
+    height: 30px;
+}
+
+@-moz-document url-prefix() {
+    #uploadToMatter, #viewMatters, #viewDocumentLandingPage, #openDocument {
+        padding: 0;
+    }
+}
+
+.ms-TextField .ms-TextField-field {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid #c8c8c8;
+    border-radius: 0;
+    font-family: 'Segoe UI Web Semilight','Segoe UI Semilight','Segoe WP Semilight','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
+    font-size: 14px;
+    color: #333;
+    height: 30px;
+    padding: 6px 3px 7px 8px;
+    width: 100%;
+}

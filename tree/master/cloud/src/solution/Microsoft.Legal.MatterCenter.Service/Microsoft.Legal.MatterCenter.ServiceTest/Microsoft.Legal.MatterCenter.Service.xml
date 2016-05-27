@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Legal.MatterCenter.Service</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Legal.MatterCenter.Service.Service">
+            <summary>
+               A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Legal.MatterCenter.Service.Service.ResourceManager">
+            <summary>
+               Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Legal.MatterCenter.Service.Service.Culture">
+            <summary>
+               Overrides the current thread's CurrentUICulture property for all
+               resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.Startup.Configure(Microsoft.AspNet.Builder.IApplicationBuilder,Microsoft.AspNet.Hosting.IHostingEnvironment,Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+            <param name="loggerFactory"></param>
+        </member>
+        <member name="T:Microsoft.Legal.MatterCenter.Service.DocumentController">
+            <summary>
+            Document Controller class deals with finding document, pinning document, unpinning the document etc.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.DocumentController.#ctor(Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.DocumentSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Service.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.IDocumentRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.LogTables})">
+            <summary>
+            Constructor where all the required dependencies are injected
+            </summary>
+            <param name="errorSettings"></param>
+            <param name="documentSettings"></param>
+            <param name="spoAuthorization"></param>
+            <param name="matterCenterServiceFunctions"></param>
+            <param name="documentRepositoy"></param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.DocumentController.Get(Microsoft.Legal.MatterCenter.Models.SearchRequestVM)">
+            <summary>
+            Gets the matters based on search criteria.
+            </summary>
+            <param name="searchRequestVM"></param>
+            <returns>searchResponseVM</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.DocumentController.GetDocumentAssets(Microsoft.Legal.MatterCenter.Models.Client)">
+            <summary>
+            Returns document and list GUID
+            </summary>
+            <param name="requestObject">Request object containing SharePoint App Token</param>
+            <param name="client">Client object containing list data</param>        
+            <returns>Document and list GUID</returns>
+        </member>
+        <member name="T:Microsoft.Legal.MatterCenter.Service.MatterController">
+            <summary>
+            Matter Controller class deals with matter provisioning, finding matter, pinning matter, unpinning the matterm, updating the matter
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.#ctor(Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.MatterSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Service.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.IMatterRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.LogTables})">
+            <summary>
+            Constructor where all the required dependencies are injected
+            </summary>
+            <param name="errorSettings"></param>
+            <param name="matterSettings"></param>
+            <param name="spoAuthorization"></param>
+            <param name="matterCenterServiceFunctions"></param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.Get(Microsoft.Legal.MatterCenter.Models.SearchRequestVM)">
+            <summary>
+            Gets the matters based on search criteria.
+            </summary>
+            <param name="searchRequestVM"></param>
+            <returns>searchResponseVM</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.SharedController.#ctor(Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Service.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.LogTables},Microsoft.Legal.MatterCenter.Repository.ISharedRepository)">
+            <summary>
+            Constructor where all the required dependencies are injected
+            </summary>
+            <param name="errorSettings"></param>
+            <param name="matterSettings"></param>
+            <param name="spoAuthorization"></param>
+            <param name="matterCenterServiceFunctions"></param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.SharedController.UrlExists(Microsoft.Legal.MatterCenter.Models.Client,System.String,System.String)">
+            <summary>
+            Returns true or false based on the existence of the matter landing page and OneNote file at the URLs provided.
+            </summary>
+            <param name="requestObject">Request object containing SharePoint App Token</param>
+            <param name="client">Client object containing Client data</param>
+            <param name="requestedUrl">String object containing the OneNote file path</param>
+            <param name="requestedPageUrl">String object containing the Matter Landing Page file path</param>
+            <returns>$|$ Separated string indicating that the OneNote and the Matter Landing Page exist or not</returns>
+        </member>
+        <member name="T:Microsoft.Legal.MatterCenter.Service.Controllers.TaxonomyController">
+            <summary>
+            Taxonomy Controller will read the term store information related to matter center
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.Controllers.TaxonomyController.#ctor(Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.TaxonomySettings},Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.GeneralSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Service.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.ITaxonomyRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptions{Microsoft.Legal.MatterCenter.Utility.LogTables})">
+            <summary>
+            Constructor where all the required dependencies are injected
+            </summary>
+            <param name="errorSettings"></param>
+            <param name="taxonomySettings"></param>
+            <param name="generalSettings"></param>
+            <param name="spoAuthorization"></param>
+            <param name="matterCenterServiceFunctions"></param>
+            <param name="taxonomyRepository"></param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.Controllers.TaxonomyController.GetCurrentSiteTitle">
+            <summary>
+            This is test method for testing the contrroller
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Legal.MatterCenter.Service.HelperClasses.ValidationHelperFunctions">
+            <summary>
+            This class will be used to validate the client input values
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.HelperClasses.ValidationHelperFunctions.TaxonomyValidation(Microsoft.Legal.MatterCenter.Models.Client)">
+            <summary>
+            This method will validate the client object and if there are any errors in the client inout object, the method will
+            return ErrorResponse object or it will return null
+            </summary>
+            <param name="client">Contains the information such as ClientId, ClientUrl etc</param>
+            <returns>ErrorResponse</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.HelperClasses.ValidationHelperFunctions.ValidateClientInformation(Microsoft.Legal.MatterCenter.Models.Client,System.Int32)">
+            <summary>
+            Function to validate client information
+            </summary>
+            <param name="client">Client object</param>
+            <param name="methodNumber">Number indicating which method needs to be validated</param>
+            <returns>ErrorResponse that contains error message with error code</returns>
+        </member>
+    </members>
+</doc>

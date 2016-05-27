@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0-*",
+  "description": "Microsoft.Legal.MatterCenter.Business Class Library",
+  "authors": [ "v-lapedd" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "dependencies": {
+    "Microsoft.CSharp": "4.0.1-beta-23516",
+    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
+    "Microsoft.Legal.MatterCenter.Repository": "1.0.0-*",
+    "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*",
+    "System.Collections": "4.0.11-beta-23516",
+    "System.Linq": "4.0.1-beta-23516",
+    "System.Runtime": "4.0.21-beta-23516",
+    "System.Threading": "4.0.11-beta-23516"
+  },
+  "frameworks": {
+    "dnx451": { }
+  }
+}
