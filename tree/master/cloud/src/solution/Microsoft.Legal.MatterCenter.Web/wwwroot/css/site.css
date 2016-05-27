@@ -249,7 +249,7 @@ textarea {
     text-overflow: ellipsis;
     height: 100%;
     overflow: hidden;
-    color: #2b579a!important;
+    color: #2b579a !important;
 }
 
 .UiGrid-a {
@@ -326,7 +326,6 @@ textarea {
 .popover {
     max-width: 400px;
     max-height: 278px;
-    width: 350px;
     border-radius: 2px;
 }
 
@@ -422,15 +421,15 @@ textarea {
     padding: 0;
 }
 
-.padtop20{
-    padding-top:20px;
+.padtop20 {
+    padding-top: 20px;
 }
 
-.padtop5{
-    padding-top:5px;
+.padtop5 {
+    padding-top: 5px;
 }
 
-.sortby ul{
+.sortby ul {
     background-color: #fff;
     border: 1px solid #c8c8c8;
     position: absolute;
@@ -441,22 +440,29 @@ textarea {
     margin-top: 5px;
 }
 
-.sortby ul li:hover{
-    background-color: #eaecea;
-    cursor: pointer;
+    .sortby ul li:hover {
+        background-color: #eaecea;
+        cursor: pointer;
+    }
+
+    .sortby ul li {
+        padding: 5px 10px 5px 10px;
+        color: #333;
+        display: inline-block;
+        float: right;
+        font-size: 0.87em;
+        font-family: "Segoe UI";
+        text-align: left;
+        width: 118px;
+    }
+
+.overflowMain a:hover {
+    text-decoration: none;
 }
 
-.sortby ul li{
-    padding: 5px 10px 5px 10px;
-    color: #333;
-    display: inline-block;
-    float: right;
-    font-size: 0.87em;
-    font-family: "Segoe UI";
-    text-align: left;
-    width: 118px;
-}
-
-.overflowMain a:hover{
-    text-decoration:none;
+.cartelementpopup {
+    margin: 10px;
+    font-family: "Segoe UI Semilight", "Segoe UI";
+    font-weight: 400;
+    width: 250px !important;
 }

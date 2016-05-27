@@ -1339,7 +1339,7 @@
                 scope.$watch("details", function () {
                     var obj = eval('(' + attrs.details + ')');
                     var content = '<div class="">\
-                                   <div class="FlyoutBoxContent">\
+                                   <div class="FlyoutBoxContent" style="width: 350px;">\
                                       <div class="FlyoutContent FlyoutHeading">\
                                           <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.matterName + ' </div>\
                                        </div>\

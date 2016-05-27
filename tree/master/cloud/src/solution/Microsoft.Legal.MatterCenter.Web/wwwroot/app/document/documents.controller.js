@@ -1016,7 +1016,7 @@
 
                     var obj = eval('(' + attrs.details + ')');
                     var content = '<div class="">\
-                                   <div class="FlyoutBoxContent">\
+                                   <div class="FlyoutBoxContent" style="width: 350px;">\
                                       <div class="FlyoutContent">\
                                           <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.documentName + ' </div>\
                                        </div>\

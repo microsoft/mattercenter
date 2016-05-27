@@ -232,7 +232,7 @@
             </div>
             <div class="col-xs-12">
                 <div class="tab-content">                    
-                    <div class="tab-pane active" id="mattersGrid">
+                    <div class="tab-pane active" id="mattersGrid" ng-hide="vm.mattersdashboardGrid">
                         <div class="col-xs-12 pad0 padtop5">
                             <div class="" id="grid1" ui-grid="vm.matterGridOptions" ui-grid-exporter ui-grid-selection ui-grid-auto-resize></div>
                         </div>
@@ -341,3 +341,8 @@
         </div>
     </div>
  </div>
+<div id="loadingImageContainer">
+    <div class="lazyLoading" ng-hide="vm.lazyloaderdashboard">
+        <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+    </div>
+</div>
