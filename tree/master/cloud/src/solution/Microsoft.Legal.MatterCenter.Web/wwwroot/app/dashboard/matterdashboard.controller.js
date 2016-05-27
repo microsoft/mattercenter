@@ -19,6 +19,7 @@
             vm.sortbydropvisible = false;
             vm.sortbytext = 'None';
             vm.searchText = '';
+            vm.lazyloaderdashboard = true;
             //#endregion
             //#region Variable to show matter count            
             vm.allMatterCount = 0;
@@ -216,7 +217,8 @@
                 }
             };
 
-            vm.getMatterPinned = function () {                
+            vm.getMatterPinned = function () {
+                vm.lazyloaderdashboard = false;
                 var pinnedMattersRequest = {
                     Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Read from config.js
                 }
@@ -227,11 +229,13 @@
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
+                    vm.lazyloaderdashboard = true;
                 });  
             }
 
             //This search function will be used when the user enters some text in the search text box
             vm.searchMatters = function (val) {
+                vm.lazyloaderdashboard = false;
                 var searchRequest ={
                     Client: {                          
                         Url: configs.global.repositoryUrl
@@ -248,10 +252,12 @@
                     }
                 };                
                 return matterDashBoardResource.get(searchRequest).$promise;
+                vm.lazyloaderdashboard = true;
             }
 
             //This search function will be used for binding search results to the grid
             vm.search = function () {
+                vm.lazyloaderdashboard = false;
                 //"(MCMatterName:\"testerv123\" AND MCMatterID:\"123Test\")",
                 //test1234(test1d)
                 var searchToText = '';
@@ -263,7 +269,7 @@
                     var secondText = searchToText.split(',')[1]
                     var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
                 }
-                $scope.lazyloader = false;
+               
                 var searchRequest = {
                     Client: {
                         Url: configs.global.repositoryUrl
@@ -301,10 +307,11 @@
                                 });
                             });
                             vm.matterGridOptions.data = response;
-                            vm.allMatterCount = response.length
+                            vm.allMatterCount = response.length;
+                            vm.lazyloaderdashboard = true;
                         }
                         else {
-                            $scope.lazyloader = true;
+                            vm.lazyloaderdashboard = true;
                             vm.matterGridOptions.data = response;
                             vm.allMatterCount = response.length
                             vm.pinMatterCount = 0;
@@ -317,7 +324,7 @@
             
             //This function will pin or unpin the matter based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
-                
+                vm.lazyloaderdashboard = false;
                 if (e.currentTarget.src.toLowerCase().indexOf("images/pin-666.png")>0 ) {
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var pinRequest = {
@@ -348,6 +355,7 @@
                             e.currentTarget.src = "../images/unpin-666.png";
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) + 1;
                         }
+                        vm.lazyloaderdashboard = true;
                     });
                 }
                 else if (e.currentTarget.src.toLowerCase().indexOf("images/unpin-666.png") > 0) {
@@ -366,6 +374,7 @@
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
                             vm.matterGridOptions.data.splice(vm.matterGridOptions.data.indexOf(currentRowData), 1)
                         }
+                        vm.lazyloaderdashboard = true;
                     });
                 }
                 

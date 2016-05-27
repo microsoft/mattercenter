@@ -79,7 +79,7 @@
                     { field: 'documentClientId', displayName: 'Client', width: '15%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>', enableColumnMenu: false },
                     { field: 'documentOwner', displayName: 'Author', width: '14%', enableColumnMenu: false },
                     { field: 'documentModifiedDate', displayName: 'Modified date', width: '20%', enableColumnMenu: false },
-                    { field: 'documentId', displayName: 'Document ID', width: '10%', enableColumnMenu: false },
+                    { field: 'documentID', displayName: 'Document ID', width: '10%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentID==""?"NA":row.entity.documentID}}</div>', enableColumnMenu: false },
                     { field: 'documentVersion', displayName: 'Version', width: '6%', enableColumnMenu: false },
                     { field: 'pin', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/pin-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false }
                 ],
@@ -110,25 +110,48 @@
             vm.showMailCartModal = function () {
                 if (vm.documentsCheckedCount > 0) {
                     jQuery('#UploadMatterModal').modal("show");
-                }                
+                }
             }
 
+            //#region Cart functionality
+            vm.cartelements = [];
+
             //function to toggle check all 
-            vm.toggleChecker = function (checked) {
-                if(checked)
-                    vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) + 1
-                else
-                    vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1
-                var rows = vm.gridApi.core.getVisibleRows(vm.gridApi.grid),
-                    allChecked = true;
-                for (var r = 0; r < rows.length; r++) {
-                    if (rows[r].entity.checker !== true) {
-                        allChecked = false;
-                        break;
-                    }
+            vm.toggleChecker = function (checked, rowinfo) {
+                if (checked) {
+                    vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) + 1;
+                    vm.cartelements.push(rowinfo);
                 }
-                $("#chkAllDocCheckBox").prop('checked', allChecked);
+                else {
+                    vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1
+                    var rows = vm.gridApi.core.getVisibleRows(vm.gridApi.grid),
+                        allChecked = true;
+                    for (var r = 0; r < rows.length; r++) {
+                        if (rows[r].entity.checker !== true) {
+                            allChecked = false;
+                            break;
+                        }
+                    }
+                    $("#chkAllDocCheckBox").prop('checked', allChecked);
+                }
             };
+
+            //Removing elements from cart
+            vm.removeAttachment = function (obj) {
+                angular.forEach(vm.cartelements, function (element) {
+                    if (element.documentID == obj.documentID) {
+                        if (jQuery("#doc" + obj.documentID).is(":checked")) {
+                            jQuery("#doc" + obj.documentID).prop("checked", false);
+                        }
+                        vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1;
+                        vm.cartelements.pop(element);
+                        if (vm.cartelements.length == 0) {
+                            vm.documentsCheckedCount = 0;
+                        }
+                    }
+                });
+
+            }
 
             //function to check all checkboxes inside grid
             vm.toggleCheckerAll = function (checked) {
@@ -347,9 +370,9 @@
 
             }
 
-             //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
-            vm.checkAll = function (checkAll, type,$event) {
-            $event.stopPropagation();
+            //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
+            vm.checkAll = function (checkAll, type, $event) {
+                $event.stopPropagation();
                 if (type === 'client') {
                     angular.forEach(vm.clients, function (client) {
                         client.Selected = checkAll;
@@ -469,6 +492,22 @@
         }
     });
 
+    app.directive('infopopover', function () {
+        return {
+            restrict: 'AE',
+            link: function (scope, element, attrs) {
+                var content = "<div class='cartelementpopup' style='width:250px'>\
+                                   <div class='checkOutMetadata marginTop10'>When sending to your OneDrive the DMS version will be checked out to you until you check it back in.</div>\
+                               </div>";
+                $(element).popover({
+                    html: true,
+                    trigger: 'click',
+                    delay: 500,
+                    content: content,
+                });
+            }
+        }
+    });
 }
 
 

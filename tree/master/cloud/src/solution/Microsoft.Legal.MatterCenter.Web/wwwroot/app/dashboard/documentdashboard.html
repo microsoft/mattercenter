@@ -12,14 +12,14 @@
     <div class="documentPopup"></div>
     <div class="clear"></div>
     <!--Start Pop up conatins for documents to send documents to one drive, send email etc-->
-    
+
     <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" style="width:100%">
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="row margin0">
                         <div class="col-md-12">
-                            <img data-dismiss="modal" ng-click="vm.hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
+                            <img data-dismiss="modal" class="pull-right" src="../../images/close-666.png" />
                         </div>
                         <div id="PopupBody">
                             <div class="selectMailFormat">
@@ -34,8 +34,22 @@
                                     <img class="mailCartLogo" src="../Images/link-666.png" alt="Email as link" title="Email as link" /><div title="Email as link" class="inlineValues">Email as link</div>
                                 </div>
                             </div>
-                            <div class="popUpBody popUpFloatLeft">                                
-                                <ul class="emailDocumentNames"></ul>
+                            <div class="popUpBody popUpFloatLeft">
+                                <ul class="emailDocumentNames">
+                                    <li ng-repeat="element in vm.cartelements">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-5"><span><input type="checkbox" /></span>{{element.documentName}}</div>
+                                            <div class="col-xs-12 col-sm-1"><img src="../Images/icon-delete.png" class="" title="Remove attachment" ng-click="vm.removeAttachment(element)"></div>
+                                            <div class="col-xs-12 col-sm-5"><span class="checkOut" id="isNotCheckedOut" title="Checked out copy available">Checked out copy available</span></div>
+                                            <div class="col-xs-12 col-sm-1 pad0">
+                                                <button infopopover class="btn btn-link" type='button' style='text-align: left'
+                                                         data-toggle='popover' data-container='body' data-placement='left' data-html='true'>
+                                                    <img src="../Images/information-blue.png" />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
                                 <div class='pinLoadingImage' id='mailCartLoadingImage'>
                                     <img src='/Images/WindowsLoadingFast.GIF' title='Loading' class='LoadingImage' alt='Loading...' />
                                 </div>
@@ -43,11 +57,11 @@
                         </div>
                     </div>
                 </div>
-            </div>              
-                
             </div>
+
+        </div>
     </div>
-          
+
     <!--End Pop up conatins for documents to send documents to one drive, send email etc-->
     <div class="matterCenterHeaderBackground hide"></div>
     <!--Main dashboard content-->
@@ -87,7 +101,7 @@
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'client',$event)">Select None</a></div>
                                 <div class="col-xs-12 refinerWrapper" ng-repeat="client in vm.clients" ng-click="$event.stopPropagation();">
                                     <input type="checkbox" data-clientid="{{client.id}}"
-                                            data-clienturl="{{client.url}}" ng-model="client.Selected" /> <span>{{client.name}}</span>
+                                           data-clienturl="{{client.url}}" ng-model="client.Selected" /> <span>{{client.name}}</span>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-3">
@@ -119,12 +133,12 @@
                                 <div class="col-xs-6 col-sm-4">
                                     <div class='input-group'>
                                         <input type='text' placeholder='From' class='calendar form-control'
-                                                uib-datepicker-popup='MM/dd/yyyy'
-                                                ng-model='vm.startdate'
-                                                is-open='vm.openedStartDate'
-                                                datepicker-options='vm.dateOptions'
-                                                ng-required='true' close-text='Close'
-                                                alt-input-formats='altInputFormats' />
+                                               uib-datepicker-popup='MM/dd/yyyy'
+                                               ng-model='vm.startdate'
+                                               is-open='vm.openedStartDate'
+                                               datepicker-options='vm.dateOptions'
+                                               ng-required='true' close-text='Close'
+                                               alt-input-formats='altInputFormats' />
                                         <span class='input-group-btn'>
                                             <button type='button' class='btn btn-default' ng-click='vm.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
                                         </span>
@@ -133,12 +147,12 @@
                                 <div class="col-xs-6 col-sm-4">
                                     <div class='input-group'>
                                         <input type='text' placeholder='To' class='calendar form-control'
-                                                uib-datepicker-popup='MM/dd/yyyy'
-                                                ng-model='vm.enddate'
-                                                is-open='vm.openedEndDate'
-                                                datepicker-options='vm.enddateOptions'
-                                                ng-required='true' close-text='Close'
-                                                alt-input-formats='altInputFormats' />
+                                               uib-datepicker-popup='MM/dd/yyyy'
+                                               ng-model='vm.enddate'
+                                               is-open='vm.openedEndDate'
+                                               datepicker-options='vm.enddateOptions'
+                                               ng-required='true' close-text='Close'
+                                               alt-input-formats='altInputFormats' />
                                         <span class='input-group-btn'>
                                             <button type='button' class='btn btn-default' ng-click='vm.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
                                         </span>
@@ -175,9 +189,9 @@
                 <span id="EmailDiv" style="display: inline; cursor: default; color: rgb(68, 68, 68);">
                     <span id="EmailImg">
                         <img src="../Images/cart_icon_30px_X_30px.png"
-                                class="mailCartIcon"
-                                title="Review the contents of your mail cart and send the selected documents to your OneDrive or via email."
-                                alt="Mail Cart" ng-click="vm.showMailCartModal()">({{vm.documentsCheckedCount}})
+                             class="mailCartIcon"
+                             title="Review the contents of your mail cart and send the selected documents to your OneDrive or via email."
+                             alt="Mail Cart" ng-click="vm.showMailCartModal()">({{vm.documentsCheckedCount}})
                     </span>
                 </span>
             </div>
