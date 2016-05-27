@@ -1098,28 +1098,26 @@ cm.createBtnDisabled=false;
                     cm.removeDTItem = false;
                     cm.primaryMatterType = cm.errorPopUp = false;
                     cm.matterGUID = oPageData.matterGUID;
-                    cm.iCurrentPage = 1;
+                    cm.iCurrentPage = 2;
+                    cm.includeRssFeeds = (localStorage.getItem("IsRSSSelected") === "true");
+                    cm.includeEmail = (localStorage.getItem("IsEmailOptionSelected") === "true");
+                    cm.includeCalendar = (localStorage.getItem("IsCalendarSelected") === "true");
+                    cm.isMatterDescriptionMandatory = (localStorage.getItem("IsMatterDescriptionMandatory") === "true");
+                    cm.chkConfilctCheck = (localStorage.getItem("IsConflictCheck") === "true");
+                    cm.includeTasks = (localStorage.getItem("IsTaskSelected") === "true");
 
-                  cm.includeCalendar = (localStorage.getItem("IsCalendarSelected")==="true");
-                  cm.secureMatterCheck= (localStorage.getItem("IsRestrictedAccessSelected")==="true");
-                    cm.includeRssFeeds=  (localStorage.getItem("IsRSSSelected")==="true");
-                    cm.includeEmail = (localStorage.getItem("IsEmailOptionSelected")==="true");
-                    if( cm.includeEmail){
-                     cm.createButton = "Create and Notify";
-                    }
-                       cm.isMatterDescriptionMandatory= (localStorage.getItem("IsMatterDescriptionMandatory")==="true");
-                       cm.chkConfilctCheck= (localStorage.getItem("IsConflictCheck")==="true");
-                       cm.isMatterDescriptionMandatory  =(localStorage.getItem("IsMatterDescriptionMandatory")==="true");
-                       cm.includeTasks = (localStorage.getItem("IsTaskSelected")==="true");
+                    cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true"); 
                        oPageOneState.oValidMatterName = oPageData.oValidMatterName;
                    // cm.navigateToSecondSection("");
                    // cm.navigateToSecondSection("snConflictCheck");
                  
 
                 }
-                 if (localStorage.getItem("iLivePage") == 3) {
-                  var oPageData = JSON.parse(localStorage.getItem("oPageTwoData"));
-                  cm.chkConfilctCheck = oPageData.ChkConfilctCheck;
+                if (localStorage.getItem("iLivePage") == 3) {
+                    cm.iCurrentPage = 1;
+                     var oPageData = JSON.parse(localStorage.getItem("oPageTwoData"));
+                     if (oPageData && oPageData!==null) {
+                          cm.chkConfilctCheck = oPageData.ChkConfilctCheck;
                   cm.selectedConflictCheckUser = oPageData.SelectedConflictCheckUser;
                   cm.conflictDate = oPageData.ConflictDate;
                   cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
@@ -1127,14 +1125,23 @@ cm.createBtnDisabled=false;
                   cm.conflictRadioCheck = oPageData.ConflictRadioCheck;
                   cm.blockedUserName = oPageData.BlockedUserName;
                   cm.secureMatterCheck = oPageData.SecureMatterCheck;
+                  cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true");
                   cm.assignPermissionTeams = oPageData.AssignPermissionTeams;
                   cm.oSiteUsers = oPageData.oSiteUsers;
                   cm.iCurrentPage = 2;
+                     }
+                 
+                
+                 
+                  if (cm.includeEmail) {
+                      cm.createButton = "Create and Notify";
+                  }
+                  
                   cm.sectionName = "snCreateAndShare";
                   
                  // cm.navigateToSecondSection("snCreateAndShare");
                  }
-                 cm.navigateToSecondSection(cm.sectionName);
+                // cm.navigateToSecondSection(cm.sectionName);
             }
 
           //  cm.includeEmail = true;

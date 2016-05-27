@@ -128,10 +128,10 @@ word-wrap: break-word !important;
 .errTringleBorderCDate{left:50px;top:72px;}
 .errTextMatterCDate {min-height: 55px;top: 19px !important;left: 24px;width:100%}
 
-.errPopUpCCheck{left:227px;top:77px;}
+.errPopUpCCheck{left:100px;top:-17px;}
 .errTringleBlockCCheck{left:50px;right:73px;}
 .errTringleBorderCCheck{left:50px;right:72px;}
-.errTextMatterCCheck {min-height: 64px;top: 17px !important;left: 24px;width:100%}
+.errTextMatterCCheck {min-height: 45px;top: 17px !important;left: 24px;width:100%}
 
 
 .errPopUpCreate{left:79px;top:145px;}
@@ -249,7 +249,7 @@ word-wrap: break-word !important;
 }*/
 
 @media (min-width: 734px){
-.col-sm-12 {
+.createCol {
     width: 60%;
 }
 }
