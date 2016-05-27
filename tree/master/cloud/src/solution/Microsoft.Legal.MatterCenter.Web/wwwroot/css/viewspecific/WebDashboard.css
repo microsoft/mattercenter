@@ -983,8 +983,7 @@ h1.genericName {
 }
 
 .mailCartIcon {
-    float: none;
-    position: absolute;
+    float: none;    
     display: table-cell;
     right: 265px;
     top: 68px;

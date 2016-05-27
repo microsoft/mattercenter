@@ -18,6 +18,7 @@
             vm.sortbydrop = false;
             vm.sortbydropvisible = false;
             vm.sortbytext = 'Relevant';
+            vm.documentsCheckedCount = 0;
             //#endregion
 
             //#region Variable to show document count
@@ -106,12 +107,20 @@
 
             //#endregion
 
+            vm.showMailCartModal = function () {
+                if (vm.documentsCheckedCount > 0) {
+                    jQuery('#UploadMatterModal').modal("show");
+                }                
+            }
 
             //function to toggle check all 
             vm.toggleChecker = function (checked) {
+                if(checked)
+                    vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) + 1
+                else
+                    vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1
                 var rows = vm.gridApi.core.getVisibleRows(vm.gridApi.grid),
                     allChecked = true;
-
                 for (var r = 0; r < rows.length; r++) {
                     if (rows[r].entity.checker !== true) {
                         allChecked = false;
