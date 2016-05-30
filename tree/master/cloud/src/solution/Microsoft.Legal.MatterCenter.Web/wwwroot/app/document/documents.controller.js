@@ -42,6 +42,8 @@
         //End
 
         vm.gridOptions = {
+            enableHorizontalScrollbar: 0,
+            enableVerticalScrollbar: 0,
             enableGridMenu: true,
             enableRowHeaderSelection: true,
             enableRowSelection: true,
@@ -50,7 +52,7 @@
             columnDefs: [
                 { field: 'documentName', displayName: 'Document', width: '20%', enableHiding: false, cellTemplate: '../app/document/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentHeaderTemplate.html' },
                 { field: 'documentClientId', displayName: 'Client', width: '15%', enableCellEdit: true, headerCellTemplate: '../app/document/ClientHeaderTemplate.html' },
-                { field: 'documentClientId', displayName: 'Client.Matter ID', width: '10%', headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ngCellText">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+                { field: 'documentClientId', displayName: 'Client.Matter ID', width: '10%', headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
                 { field: 'documentModifiedDate', displayName: 'Modified Date', width: '10%', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/ModifiedDateHeaderTemplate.html' },
                 { field: 'documentOwner', displayName: 'Author', width: '20%', headerTooltip: 'Click to sort by document Author', visible: false },
                 { field: 'documentVersion', displayName: 'Document Version', width: '5%', headerTooltip: 'Click to sort by version', visible: false },
@@ -1003,7 +1005,6 @@
             }
         }
         //#endregion
-
 
     }]);
 

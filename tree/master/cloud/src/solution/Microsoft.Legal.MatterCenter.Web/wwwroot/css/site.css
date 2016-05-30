@@ -298,7 +298,8 @@ textarea {
 }
 
 .ui-grid-viewport {
-    overflow: hidden !important;
+    /*overflow: hidden !important;*/
+    max-height: 500px;
 }
 
 .overflowMain {

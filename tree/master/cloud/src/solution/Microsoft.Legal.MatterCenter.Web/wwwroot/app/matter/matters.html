@@ -62,7 +62,7 @@
 </div>
 <div class="row">
     <div class="col-sm-12" ng-if="vm.divuigrid">
-        <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection ui-grid-pagination class="grid"></div>
+        <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
     </div>
     <div class="col-sm-12" ng-if="vm.nodata">
         <hr />
@@ -173,7 +173,7 @@
                         <!--Content end to show mail attachment information-->
                         <!--Content start for showing the files which are uploaded from desktop-->
                         <div class="attachmentSection">
-                            <div ng-if="ng-if=" vm.isLoadingFromDesktopStarted"" class='attachmentSection'>
+                            <div ng-if="vm.isLoadingFromDesktopStarted" class='attachmentSection'>
                                 <img alt='Loading' class='attachmentListLoading' src='../images/loading_metro.gif' />
                             </div>
                             <div ng-repeat="uploadedFile in vm.uploadedFiles" class="attachment">
