@@ -30,7 +30,6 @@
         </div>
         <div id="ContextualHelp">
             <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
-
             <div data-class="ms-u-slideLeftIn40" class="ContextualHelpContainer ms-u-slideLeftIn40">
                 <div class="ContextualHelpFlyout">
                     <img class="closeContextualHelpFlyout" title="Close" alt="Close flyout" src="Images/contextual_help_close_icon.png" />
@@ -90,7 +89,6 @@
             </div>
         </header>
 
-
         <asp:ContentPlaceHolder ID="BodyContentPlaceHolder" runat="server">
         </asp:ContentPlaceHolder>
         <footer id="footer" class="commonContent">
@@ -121,86 +119,84 @@
         </footer>
     </div>
 </div>
-
-    <!---->
-    <div id="HomeContainer">
-        <!--    <div class="row"> -->
-                       <!--     <div class="col-xs-12"> --> 
-                <header class="WelcomeBar ms-bg-color-neutralLighterAlt">
-                    <span class="ms-font-s">
-                        Welcome to Matter Center! Upload, share, and save your documents here.
-                        <a class="LearnMoreLink" title="Learn more about Matter Center">Learn more</a> or <a class="DismissLink" title="Remove this section">dismiss</a>
-                    </span>
-                </header>
-                                        <!--     </div> -->
-                       <!--   </div> -->
-        <div class="LinkContainer">
-            <!--      <div class="row"> --> 
-                              <!--     <div class="col-xs-12 col-md-6"> -->
-                        <div class="LeftLinkContainer">
-                            <!--     <div class="row"> -->
-                                            <!--  <div class="col-xs-6"> -->  
-                                    <div class="MattersContainer" title="Search matters">
-                                        <a ui-sref='mc.matters()'>
-                                            <figure>
-                                                <img src="Images/MC_Matters.png" alt="Search Matters" />
-                                                <figcaption class="FigureCaption">Matters</figcaption>
-                                            </figure>
-                                        </a>
-                                    </div>
-                                                           <!--   </div> -->
-                                            <!-- <div class="col-xs-6"> -->
-                                    <div class="DocumentsContainer" title="Search documents">
-                                        <a ui-sref='mc.documents()'>
-                                            <figure>
-                                                <img src="Images/MC_Documents.png" alt="Search Documents" />
-                                                <figcaption class="FigureCaption">Documents</figcaption>
-                                            </figure>
-                                        </a>
-</div>
-                                                        <!-- </div> -->
-                                            <!--    </div> --> 
-                            <!--  </div> --> 
-                </div>
-                              <!--   <div class="col-xs-12 col-md-6"> -->  
-                    <div class="RightLinkContainer">
-                        <div class="SecondaryLinkContainer UploadAttachments" title="Upload documents to a matter">
-                            <a class="UploadAttachmentsLink" ui-sref='mc.matters()'>
-                                <img class="SecondaryLinksImg" src="Images/MC_Upload.png" alt="Upload attachments" />
-                            </a>
-                            <a class="UploadAttachmentsLink" ui-sref='mc.matters()'>
-                                <span class="SecondaryLinksText">Upload attachments</span>
-                            </a>
-                        </div>
-                        <div class="SecondaryLinkContainer CreateMatter" runat="server" id="CreateMatterLink" title="Create a new matter site">
-                            <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
-                                <img class="SecondaryLinksImg" src="Images/MC_Create_a_matter.png" alt="Create a new matter" />
-                            </a>
-                            <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
-                                <span class="SecondaryLinksText">Create a new matter</span>
-                            </a>
-                        </div>
-                        <div class="SecondaryLinkContainer MatterDashboard" title="Go to the web home page">
-                            <a class="MatterDashboardLink" href="{{vm.SPOHomePage}}" target="_blank">
-                                <img class="SecondaryLinksImg" src="Images/MC_Go_to_dashboard.png" alt="Go to Matter Center Home" />
-                            </a>
-                            <a class="MatterDashboardLink" href="{{vm.SPOHomePage}}" target="_blank">
-                                <span class="SecondaryLinksText">Go to Matter Center Home</span>
-                            </a>
-                        </div>
-                    </div>
-                                              <!--     </div> --> 
-                </div>
+<!---->
+<div id="HomeContainer" class="marleft10">
+    <!--    <div class="row"> -->
+    <!--     <div class="col-xs-12"> -->
+    <header class="WelcomeBar ms-bg-color-neutralLighterAlt" ng-class="{ 'RemoveWelcomeBar': vm.welcomeheader}">
+        <span class="ms-font-s" ng-hide="vm.welcomeheader">
+            Welcome to Matter Center! Upload, share, and save your documents here.
+            <a class="LearnMoreLink" href="http://www.microsoft.com/mattercenter" target="_blank" title="Learn more about Matter Center">Learn more</a> or <a class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">dismiss</a>
+        </span>
+    </header>
+    <!--     </div> -->
+    <!--   </div> -->
+    <div class="LinkContainer">
+        <!--      <div class="row"> -->
+        <!--     <div class="col-xs-12 col-md-6"> -->
+        <div class="LeftLinkContainer">
+            <!--     <div class="row"> -->
+            <!--  <div class="col-xs-6"> -->
+            <div class="MattersContainer" title="Search matters">
+                <a ui-sref='mc.matters()'>
+                    <figure>
+                        <img src="Images/MC_Matters.png" alt="Search Matters" />
+                        <figcaption class="FigureCaption">Matters</figcaption>
+                    </figure>
+                </a>
+            </div>
+            <!--   </div> -->
+            <!-- <div class="col-xs-6"> -->
+            <div class="DocumentsContainer" title="Search documents">
+                <a ui-sref='mc.documents()'>
+                    <figure>
+                        <img src="Images/MC_Documents.png" alt="Search Documents" />
+                        <figcaption class="FigureCaption">Documents</figcaption>
+                    </figure>
+                </a>
+            </div>
+            <!-- </div> -->
+            <!--    </div> -->
+            <!--  </div> -->
         </div>
-        <footer class="SupportLink" title="Write an email to Support">
-            <span class="ms-font-m ms-font-weight-semilight">Questions? Contact <a class="MatterCenterSupportLink">Matter Center Support</a></span>
-        </footer>
-        <div id="HeaderPlaceHolderContent">
-            <span class="AppLogoContainer hide" title="Matter Center home">
-                <img class="AppLogo" src="Images/MC_Logo.png" alt="Matter Center" />
-            </span>
+        <!--   <div class="col-xs-12 col-md-6"> -->
+        <div class="RightLinkContainer">
+            <div class="SecondaryLinkContainer UploadAttachments" title="Upload documents to a matter">
+                <a class="UploadAttachmentsLink" ui-sref='mc.matters()'>
+                    <img class="SecondaryLinksImg" src="Images/MC_Upload.png" alt="Upload attachments" />
+                </a>
+                <a class="UploadAttachmentsLink" ui-sref='mc.matters()'>
+                    <span class="SecondaryLinksText">Upload attachments</span>
+                </a>
+            </div>
+            <div class="SecondaryLinkContainer CreateMatter" runat="server" id="CreateMatterLink" title="Create a new matter site">
+                <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
+                    <img class="SecondaryLinksImg" src="Images/MC_Create_a_matter.png" alt="Create a new matter" />
+                </a>
+                <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
+                    <span class="SecondaryLinksText">Create a new matter</span>
+                </a>
+            </div>
+            <div class="SecondaryLinkContainer MatterDashboard" title="Go to the web home page">
+                <a class="MatterDashboardLink" href="{{vm.SPOHomePage}}" target="_blank">
+                    <img class="SecondaryLinksImg" src="Images/MC_Go_to_dashboard.png" alt="Go to Matter Center Home" />
+                </a>
+                <a class="MatterDashboardLink" href="{{vm.SPOHomePage}}" target="_blank">
+                    <span class="SecondaryLinksText">Go to Matter Center Home</span>
+                </a>
+            </div>
         </div>
+        <!--     </div> -->
     </div>
 </div>
+<footer class="marleft10" title="Write an email to Support">
+    <span class="ms-font-m ms-font-weight-semilight">Questions? Contact <a href="mailto:#" class="emailLink">Matter Center Support</a></span>
+</footer>
+<div id="HeaderPlaceHolderContent">
+    <span class="AppLogoContainer hide" title="Matter Center home">
+        <img class="AppLogo" src="Images/MC_Logo.png" alt="Matter Center" />
+    </span>
+</div>
+
 
 

@@ -298,7 +298,8 @@ textarea {
 }
 
 .ui-grid-viewport {
-    overflow: hidden !important;
+    /*overflow: hidden !important;*/
+    max-height: 500px;
 }
 
 .overflowMain {
@@ -465,4 +466,11 @@ textarea {
     font-family: "Segoe UI Semilight", "Segoe UI";
     font-weight: 400;
     width: 250px !important;
+}
+
+.marleft10{
+    margin-left:10px;
+}
+.emailLink{
+    text-decoration:none !important;
 }

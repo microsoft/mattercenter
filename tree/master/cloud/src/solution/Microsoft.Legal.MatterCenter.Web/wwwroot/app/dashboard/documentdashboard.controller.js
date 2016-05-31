@@ -64,6 +64,8 @@
 
             //#region Document Grid Functionality
             vm.documentGridOptions = {
+                enableHorizontalScrollbar: 0,
+                enableVerticalScrollbar: 0,
                 paginationPageSize: gridOptions.paginationPageSize,
                 enablePagination: false,
                 enableGridMenu: gridOptions.enableGridMenu,
@@ -470,10 +472,108 @@
             //#endregion
 
             //#region For Sorting by Alphebatical or Created date
+            var SortRequest = {
+                Client: {
+                    Id: "123456",
+                    Name: "Microsoft",
+                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                },
+                SearchObject: {
+                    PageNumber: 1,
+                    ItemsPerPage: 10,
+                    SearchTerm: "",
+                    Filters: {
+                        ClientName: "",
+                        ClientsList: [],
+                        PGList: [],
+                        AOLList: [],
+                        DateFilters: {
+                            CreatedFromDate: "",
+                            CreatedToDate: "",
+                            ModifiedFromDate: "",
+                            ModifiedToDate: "",
+                            OpenDateFrom: "",
+                            OpenDateTo: ""
+                        },
+                        DocumentAuthor: "",
+                        DocumentCheckoutUsers: "",
+                        FilterByMe: 0,
+                        FromDate: "",
+                        Name: "",
+                        ResponsibleAttorneys: "",
+                        SubareaOfLaw: "",
+                        ToDate: ""
+                    },
+                    Sort:
+                            {
+                                ByProperty: '',
+                                Direction: 0
+                            }
+                }
+            }
 
-            vm.sortyby = function (data) {
+            vm.FilterByType = function () {
+                get(SortRequest, function (response) {
+                    vm.lazyloader = true;
+                    if (response.errorCode == "404") {
+                        vm.divuigrid = false;
+                        vm.nodata = true;
+                        vm.errorMessage = response.message;
+                    } else {
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.documentGridOptions.data = response;
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
+                    }
+                });
+            }
+
+
+            vm.sortyby = function (sortexp, data) {
                 vm.sortbytext = data;
                 vm.sortbydrop = false;
+                if (sortexp == 'AlphabeticalUp') {
+                    vm.lazyloader = false;
+                    SortRequest.SearchObject.Sort.ByProperty = "FileName";
+                    SortRequest.SearchObject.Sort.Direction = 0;
+                    vm.FilterByType();
+                } else if (sortexp == 'AlphabeticalDown') {
+                    vm.lazyloader = false;
+                    SortRequest.SearchObject.Sort.ByProperty = "FileName";
+                    SortRequest.SearchObject.Sort.Direction = 1;
+                    vm.FilterByType();
+                } else if (sortexp == 'CreateddateUp') {
+                    vm.lazyloader = false;
+                    SortRequest.SearchObject.Sort.ByProperty = "Created";
+                    SortRequest.SearchObject.Sort.Direction = 0;
+                    vm.FilterByType();
+                }
+                else if (sortexp == 'CreateddateDown') {
+                    vm.lazyloader = false;
+                    SortRequest.SearchObject.Sort.ByProperty = "Created";
+                    SortRequest.SearchObject.Sort.Direction = 1;
+                    vm.FilterByType();
+                }
+                else if (sortexp == 'ModifieddateUp') {
+                    vm.lazyloader = false;
+                    SortRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                    SortRequest.SearchObject.Sort.Direction = 0;
+                    vm.FilterByType();
+                }
+                else if (sortexp == 'ModifieddateDown') {
+                    vm.lazyloader = false;
+                    SortRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                    SortRequest.SearchObject.Sort.Direction = 1;
+                    vm.FilterByType();
+                }
+                else {
+                    vm.lazyloader = false;
+                    SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    SortRequest.SearchObject.Sort.Direction = 1;
+                    vm.FilterByType();
+                }
             }
 
             //#endregion
