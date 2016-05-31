@@ -224,6 +224,14 @@ word-wrap: break-word !important;
 }
 }
 
+@media (min-width: 734px) and (max-width: 782px){
+body {
+   height: calc(100% + 50px ) !important;
+}
+
+
+}
+
 @media (min-width: 0px) and (max-width: 734px) {
   #HeaderPlaceHolder {min-width:250px;
 }
@@ -264,17 +272,43 @@ word-wrap: break-word !important;
     margin-right: auto;
     margin-bottom: 55px;
     width: calc(100% - 42px);
-    min-width: 100%;
-    margin-left:0% !important;
+   
+   
 }
 }
 
-@media (max-width: 734px) {
+@media (max-width: 850px) {
     #infoImg {
         vertical-align: top;
-        margin-top: 391px;
-        margin-left: -20px;
+        margin-top: 20px;
+        margin-left: 0px;
+           
     }
+    #divDocTemplate {
+    position: relative;
+    left: 0;
+    top: 36px;
+    clear: both;
+}
+    .SavePopUpEntries {
+    margin-right: 6px;
+    margin-left: 122px;
+    float: left;
+    margin-top: 0px;
+}
+    #defaultMessageDiv {
+    width: 161px;
+    clear: both; height: 1px !important;
+   
+   
+}
+    #defaultMessage {
+    display: inline-block;
+    margin-top: -27px;
+    margin-left: 27px;
+    font-size: 9px;
+    float: left;
+}
 }
 
 @media (max-width: 734px){
@@ -341,6 +375,26 @@ word-wrap: break-word !important;
 @media (min-width: 1290px) and (max-width: 1366px) {
     .loading {left:135px !important;top:215px !important;
     }
+}
+
+@media (min-width: 0px) and (max-width: 850px) {
+  .popUpContainer {
+    min-height: 760px;
+    max-width: 277px;
+    margin-top: 55px !important;
+    margin-right: auto;
+    margin-bottom: 55px;  
+}
+  .alignCenter{
+      margin:0px;
+  }
+  .popUpContainer{min-width:100px;}
+  .custPracticeGroup{min-width:200px !important;}
+  .popUpPosAbs {
+    position: relative;
+    float: left;
+    margin-top: 10px;
+}
 }
 
 

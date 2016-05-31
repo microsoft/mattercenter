@@ -472,7 +472,8 @@ cm.createBtnDisabled=false;
                             cm.selectMatterType();
                             cm.popupContainer = "hide";
                           
-                            getMatterGUID();                      
+                            getMatterGUID();
+                            cm.selectedDocumentTypeLawTerms = [];
                           
                             angular.forEach(cm.pracitceGroupList, function (pgTerm) {                             
                                
@@ -2113,7 +2114,9 @@ cm.createBtnDisabled=false;
                                         }
                                         if (bInValid) {
 
-                                            var sCurrentMatterDesc = cm.matterDescription;
+                                           
+                                            if (cm.isMatterDescriptionMandatory) {
+                                                var sCurrentMatterDesc = cm.matterDescription;
                                             if (undefined !== sCurrentMatterDesc && null !== sCurrentMatterDesc && "" !== sCurrentMatterDesc) {
                                                 sCurrentMatterDesc = sCurrentMatterDesc.trim(); bInValid = false;
                                                 var arrValidMatch = sCurrentMatterDesc.match(RegularExpression);
@@ -2130,6 +2133,11 @@ cm.createBtnDisabled=false;
                                                 cm.errorBorder = "matterdescription";
                                                 cm.errorPopUpBlock = true; return false;
                                             }
+                                        }
+                                            else {
+                                                cm.matterDescription = "";
+                                                bInValid = true;
+                                        }
 
                                            // if (cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
                                             if (bInValid) {
