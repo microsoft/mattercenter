@@ -23,6 +23,7 @@
                 }
             }
           
+           vm.welcomeheader=false;
 
         }]);
 })();

@@ -467,3 +467,10 @@ textarea {
     font-weight: 400;
     width: 250px !important;
 }
+
+.marleft10{
+    margin-left:10px;
+}
+.emailLink{
+    text-decoration:none !important;
+}
