@@ -7,7 +7,7 @@ angular.module('matterMain', [
   'ui.grid',
   'ui.grid.selection',
   'ui.bootstrap',
-  'ui.grid.pagination'
+  'ui.grid.pagination','ngSanitize'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {

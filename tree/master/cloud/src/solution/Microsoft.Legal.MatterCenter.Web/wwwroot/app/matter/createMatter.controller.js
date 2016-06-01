@@ -2,12 +2,13 @@
     'use strict';
 
     var app=  angular.module("matterMain");
-    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api','matterResource','$filter','$window',
+    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window',
         function ($scope, $state, $stateParams, api, matterResource, $filter,$window) {
             ///All Variables
             var cm = this;
             cm.selectedConflictCheckUser = undefined;
             cm.blockedUserName = undefined;
+            cm.defaultConfilctCheck = false;
             cm.chkConfilctCheck = undefined;
             cm.conflictRadioCheck = true;
             cm.iShowSuccessMessage = 0;
@@ -15,6 +16,7 @@
             cm.bMatterLandingPage = false;
             cm.oSiteUsers = [];
             cm.successBanner = false;
+          
 cm.createBtnDisabled=false;
             
             cm.createButton = "Create";
@@ -42,6 +44,7 @@ cm.createBtnDisabled=false;
                 isNextClick: false,
                 sectionClickName:"",
                 specialCharacterExpressionMatter: "[A-Za-z0-9_]+[-A-Za-z0-9_, ]*"
+               
                 
             }
 
@@ -81,7 +84,7 @@ cm.createBtnDisabled=false;
             cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber:  1 }];
             cm.assignRoles = [];
             cm.assignPermissions = [];
-            cm.secureMatterCheck = false;
+            cm.secureMatterCheck = true;
             cm.conflictRadioCheck = true;
             cm.includeTasks = false;
             
@@ -439,7 +442,7 @@ cm.createBtnDisabled=false;
                                 cm.includeRssFeeds = defaultMatterConfig.IsRSSSelected;
                             }
                             if (defaultMatterConfig.IsConflictCheck) {
-                                cm.chkConfilctCheck = defaultMatterConfig.IsConflictCheck;
+                                cm.defaultConfilctCheck = defaultMatterConfig.IsConflictCheck;
                             }
                             if (defaultMatterConfig.IsMatterDescriptionMandatory) {
                                 cm.isMatterDescriptionMandatory = defaultMatterConfig.IsMatterDescriptionMandatory;
@@ -531,6 +534,8 @@ cm.createBtnDisabled=false;
                                 }
                                 else {
                                     assignPermTeam.assignedUser = "";
+                                    assignPermTeam.assignedRole = cm.assignRoles[0];
+                                    assignPermTeam.assignedPermission = cm.assignPermissions[0];
                                 } 
 
 
@@ -539,7 +544,7 @@ cm.createBtnDisabled=false;
                                 angular.forEach(cm.assignRoles, function (assignRole) {
                                     if (arrDMatterRoles[aCount] == assignRole.name) {
                                         assignPermTeam.assignedRole = assignRole;
-                                    }
+                                    } 
                                 });
                                 angular.forEach(cm.assignPermissions, function (assignPermission) {
                                     if (arrDMatterPermissions[aCount] == assignPermission.name) {
@@ -709,7 +714,7 @@ cm.createBtnDisabled=false;
                 cm.errorPopUpBlock = false;
                 cm.errorBorder = "";
            oPageOneState.sectionClickName=sectionName;
-                if (sectionName == "snConflictCheck") {
+           if (sectionName == "snConflictCheck" && cm.iCurrentPage!==2) {
                     if (validateCurrentPage(cm.iCurrentPage)) {
                         cm.sectionName = sectionName;
                         oPageOneState.isNextClick = false;
@@ -718,38 +723,26 @@ cm.createBtnDisabled=false;
                         
                     }
                 }
-                else if (sectionName == "snCreateAndShare") {
+           else if (sectionName == "snCreateAndShare" && cm.iCurrentPage !== 3) {
 
-                    if (validateCurrentPage(cm.iCurrentPage)) {
+               if (validateCurrentPage(cm.iCurrentPage)) {
+                  
                         cm.sectionName = sectionName;
+                        if (cm.iCurrentPage == 2) { callCheckSecurityGroupExists("snCreateAndShare"); }
                         cm.iCurrentPage = 3;
                         localStorage.iLivePage = 3;
-                    }
-                  
+                       
+                    }                 
 
-                    //if (sectionName == "snConflictCheck") {
-                    //    if (cm.clientId != null && cm.selectedClientName != null){
-
-                    //        if()
-                    //    }
-                    //        && (cm.matterName != null || cm.matterName.trim() != '') && (cm.matterId != null || cm.matterId.trim() != '') && (cm.matterDescription != null || cm.matterDescription.trim() != '')) {
-                    //        cm.sectionName = sectionName;
-
-                    //    }
-                    //    else {
-
-                    //        alert("Incomplete");
-                    //    }
-                    //}
-                    //else {
-                    //    cm.sectionName = sectionName;
-                    //}
                 }
-                else if (sectionName == "snOpenMatter") {
+           else if (sectionName == "snOpenMatter" && cm.iCurrentPage !== 1) {
                     cm.iCurrentPage = 1; cm.sectionName = sectionName;
  localStorage.iLivePage = 1;
 
-                }
+           }
+           else {
+                cm.sectionName = sectionName;
+           }
             }
 
             var validateAttornyUserRolesAndPermissins = function () {
@@ -1054,10 +1047,19 @@ cm.createBtnDisabled=false;
             //$scope.SelectModal= function(){
             //   // jQuery('#myModal').modal('show');
             //}
+            cm.secureMatterRadioEnabled = false;
             cm.conflictRadioCheckValue = true;
             cm.conflictRadioChange = function (value) {
                 cm.blockedUserName = "";
+                if (value) {
+                    cm.secureMatterRadioEnabled = true;
+                    cm.secureMatterCheck = true;
+                }
+                else {
+                    cm.secureMatterRadioEnabled = false;
+                }
             }
+
            
             cm.addNewAssignPermissions = function () {
                 var newItemNo = cm.assignPermissionTeams.length + 1;
@@ -1104,10 +1106,14 @@ cm.createBtnDisabled=false;
                     cm.includeEmail = (localStorage.getItem("IsEmailOptionSelected") === "true");
                     cm.includeCalendar = (localStorage.getItem("IsCalendarSelected") === "true");
                     cm.isMatterDescriptionMandatory = (localStorage.getItem("IsMatterDescriptionMandatory") === "true");
-                    cm.chkConfilctCheck = (localStorage.getItem("IsConflictCheck") === "true");
+                    cm.defaultConfilctCheck = (localStorage.getItem("IsConflictCheck") === "true");
+                 
                     cm.includeTasks = (localStorage.getItem("IsTaskSelected") === "true");
 
-                    cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true"); 
+                    cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true");
+                    if (cm.includeEmail) {
+                        cm.createButton = "Create and Notify";
+                    }
                        oPageOneState.oValidMatterName = oPageData.oValidMatterName;
                    // cm.navigateToSecondSection("");
                    // cm.navigateToSecondSection("snConflictCheck");
@@ -1119,7 +1125,8 @@ cm.createBtnDisabled=false;
                      var oPageData = JSON.parse(localStorage.getItem("oPageTwoData"));
                      if (oPageData && oPageData!==null) {
                           cm.chkConfilctCheck = oPageData.ChkConfilctCheck;
-                  cm.selectedConflictCheckUser = oPageData.SelectedConflictCheckUser;
+                          cm.selectedConflictCheckUser = oPageData.SelectedConflictCheckUser;
+                          
                   cm.conflictDate = oPageData.ConflictDate;
                   cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
                   cm.conflictDate = new Date(cm.conflictDate);
@@ -1176,8 +1183,18 @@ cm.createBtnDisabled=false;
 
 
             cm.createMatterButton = function ($event) {
-               
-               // cm.popupContainerBackground = "Show";
+              var isPageValid=  validateCurrentPage(1);
+             if(isPageValid){
+                isPageValid=validateCurrentPage(2);
+                }else{
+                 cm.sectionName = "snOpenMatter";
+                 cm.iCurrentPage = 1;
+}
+
+            if(isPageValid){
+
+
+               cm.popupContainerBackground = "hide";
                 var matterGUID = cm.matterGUID;
                 var arrFolderNames=[];
                 arrFolderNames = retrieveFolderStructure();
@@ -1200,80 +1217,98 @@ cm.createBtnDisabled=false;
                 var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
                 var sCheckBy = getUserEmail(sCheckByUserEmail);
                 var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
-                var sBlockUserName =sBlockUserEmail;
-                var matterMetdataVM = {
+                var sBlockUserName = sBlockUserEmail;
+                var bValid = false;
+                if (cm.defaultConfilctCheck) {
+                    if ("" !== sCheckBy ) {
+                        if(cm.conflictRadioCheck){
+                            if ("" != sBlockUserName[0]) {
+                                bValid = true;
+                            }
+                            else {
+                                bValid = false;
+                            }
+                        } else {
+                            bValid = true;
+                        }
+                        
+                    }
+                    else {
+                         cm.popupContainerBackground = "hide";
+                            cm.errTextMsg = "Error in creation of matter: Incorrect inputs.";
+                            // showErrorNotification("mcreate"); 
+                            showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
+                            cm.errorBorder = "";
+                            cm.errorPopUpBlock = true;
+                            cm.popupContainerBackground = "hide";
+                            $event.stopPropagation(); cm.createBtnDisabled = false; cm.successBanner = false;
+                            bValid = false;
+                            return false;
+                    }
+                } else {
+                    bValid = true;
+                }
+                if (bValid) {
+                    var matterMetdataVM = {
 
-                    Matter: {
-                        Name: cm.matterName.trim(),
-                        Id: cm.matterId,
-                        Description: cm.matterDescription,
-                        Conflict: {
-                            Identified: cm.conflictRadioCheck,
-                            CheckBy: sCheckBy,
-                            CheckOn: cm.conflictDate,
-                            SecureMatter: "True"
+                        Matter: {
+                            Name: cm.matterName.trim(),
+                            Id: cm.matterId,
+                            Description: cm.matterDescription,
+                            Conflict: {
+                                Identified: cm.conflictRadioCheck,
+                                CheckBy: sCheckBy,
+                                CheckOn: cm.conflictDate,
+                                SecureMatter: "True"
+                            },
+                            BlockUserNames: sBlockUserName,
+                            AssignUserNames: cm.arrAssignedUserName,
+                            AssignUserEmails: cm.arrAssignedUserEmails,
+                            Roles: arrRoles,
+                            MatterGuid: cm.matterGUID,
+                            FolderNames: arrFolderNames
+
                         },
-                        BlockUserNames: sBlockUserName,
-                        AssignUserNames: cm.arrAssignedUserName,
-                        AssignUserEmails: cm.arrAssignedUserEmails,
-                        Roles: arrRoles,
-                        MatterGuid: cm.matterGUID,
-                        FolderNames: arrFolderNames
+                        Client: {
+                            Id: cm.clientId,
+                            Name: "Microsoft",
+                            Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                        },
+                        MatterConfigurations: {
+                            IsConflictCheck: cm.chkConfilctCheck,
+                            IsMatterDescriptionMandatory: true,
+                            IsCalendarSelected: cm.includeCalendar,
+                            IsTaskSelected: cm.includeTasks
+                        },
+                        UserIds: cm.userIDs,
+                        MatterProvisionFlags: {},
+                        HasErrorOccurred: false
+                    };
 
-                    },
-                    Client: {
-                        Id: cm.clientId,
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/microsoft"
-                    },
-                    MatterConfigurations: {
-                        IsConflictCheck: cm.chkConfilctCheck,
-                        IsMatterDescriptionMandatory: true,
-                        IsCalendarSelected: cm.includeCalendar,
-                        IsTaskSelected: cm.includeTasks
-                    },
-                    UserIds: cm.userIDs,                   
-                    MatterProvisionFlags: {},
-                    HasErrorOccurred:false
-                };
-  console.log("options for creaitn matter");
-                console.log(matterMetdataVM);
-               // sCheckBy = ""; sBlockUserName = "";
-                if ("" !== sCheckBy && "" != sBlockUserName) {
-                    cm.successMsg="Step 1/3: Creating matter library and OneNote library...";
-                    cm.successBanner = true; cm.createBtnDisabled=true;
+                    console.log(matterMetdataVM);
+                   
+                    cm.successMsg = "Step 1/3: Creating matter library and OneNote library... ";
+                    cm.successBanner = true; cm.createBtnDisabled = true;
                     createMatter(matterMetdataVM, function (response) {
 
                         ///  cm.clientNameList = response.clientTerms;
                         console.log("createMatter API success");
                         console.log(response);
 
-                       
-                        cm.successMsg="Step 2/3: Assigning permissions to matter library and OneNote library,associating Content Types, creating view and matter landing page..."
+
+                        cm.successMsg = "Step 2/3: Assigning permissions to matter library and OneNote library,associating Content Types, creating view and matter landing page..."
                         //    cm.popupContainerBackground = "show";// jQuery('#myModal').modal('show');
                         associateContentTypes();
                         assignPermission();
                         createMatterLandingPage();
 
                     });
-                } else {
-                   // cm.popupContainerBackground = "hide";
-                    cm.errTextMsg = "Error in creation of matter: Incorrect inputs.";
-                    // showErrorNotification("mcreate"); 
-                    showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
-                    cm.errorBorder = "";
-                    cm.errorPopUpBlock = true;
-                    cm.popupContainerBackground = "hide";
-                    $event.stopPropagation();cm.createBtnDisabled=false;  cm.successBanner = false;
-                    return false;
-
-                   
-
+                }            
+             } 
+             else{
+                cm.sectionName = "snConflictCheck";
+                cm.iCurrentPage = 2;
                 }
-              
-
-
-                
             }
           
             function getUserEmail(arrUsersEmails) {
@@ -1442,7 +1477,7 @@ cm.createBtnDisabled=false;
               //  alert();
                 var matterGUID = cm.matterGUID;
                 cm.successBanner = true;
-                cm.successMsg = "Step 3/3: Updating metadata of matter library and sharing matter with the users...";
+                cm.successMsg = "Step 3/3: Updating metadata of matter library and sharing matter with the users... ";
                 var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
                 var sCheckBy = getUserEmail(sCheckByUserEmail);
                 var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
@@ -1603,7 +1638,7 @@ cm.createBtnDisabled=false;
                 updateMatterMetadataAPI(optionsForStampMatterDetails, function (response) {
                   console.log("stampProperties Success");
                   console.log(response);
-                  cm.successMsg="Matter is successfully created. You can find recently created matter over here.";
+                  cm.successMsg = "Matter is successfully created. You can find recently created matter over <a target='_blank' href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/" + cm.matterGUID + ".aspx'>here</a>.";
                   clearAllProperties();
                  
                   cm.navigateToSecondSection(cm.sectionName);
@@ -2000,6 +2035,7 @@ cm.createBtnDisabled=false;
                 oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
                 oPageOneState.matterGUID = cm.matterGUID;
                 oPageOneState.oSelectedDocumentTypeLawTerms = cm.selectedDocumentTypeLawTerms;
+              //  oPageOneState.chkConflictCheck = cm.chkConfilctCheck;
               //  oPageOneState.oValidMatterName = oPageOneState.oValidMatterName;
                
                 //oPageOneState.oDefaultSecureMatterCheck = cm.secureMatterCheck;
@@ -2017,7 +2053,7 @@ cm.createBtnDisabled=false;
                     localStorage.setItem('IsRSSSelected', cm.includeRssFeeds);
                   localStorage.setItem('IsEmailOptionSelected',  cm.includeEmail);
                     localStorage.setItem('IsMatterDescriptionMandatory',  cm.isMatterDescriptionMandatory );
-                     localStorage.setItem('IsConflictCheck',  cm.chkConfilctCheck);
+                    localStorage.setItem('IsConflictCheck',cm.defaultConfilctCheck );
                     localStorage.setItem('IsMatterDescriptionMandatory',  cm.isMatterDescriptionMandatory);
                      localStorage.setItem('IsTaskSelected', cm.includeTasks);
                   
@@ -2213,41 +2249,57 @@ cm.createBtnDisabled=false;
 
                 }
                 else if (iCurrPage == 2) {
-                    if (undefined !== cm.chkConfilctCheck && true == cm.chkConfilctCheck) {
+                    if (cm.defaultConfilctCheck) {
+                        if (undefined !== cm.chkConfilctCheck && true == cm.chkConfilctCheck) {
 
-                        if (undefined !== cm.conflictDate && null !== cm.conflictDate && "" != cm.conflictDate) {
-                            // cm.conflictDate = new Date();
-                            var validUsers = validateUsers();
-                            if (validUsers) {
-                                var attornyCheck = validateAttornyUserRolesAndPermissins();
-                                if (attornyCheck) {
-                                    cm.popupContainerBackground = "Show";
-                                    storeMatterDataToLocalStorageSecondPage();
-                                    callCheckSecurityGroupExists("snCreateAndShare");
+                            if (undefined !== cm.conflictDate && null !== cm.conflictDate && "" != cm.conflictDate) {
+                                // cm.conflictDate = new Date();
+                                var validUsers = validateUsers();
+                                if (validUsers) {
+                                    var attornyCheck = validateAttornyUserRolesAndPermissins();
+                                    if (attornyCheck) {
+                                        cm.popupContainerBackground = "Show";
+                                        storeMatterDataToLocalStorageSecondPage();
+                                        return true;
 
-                                    // cm.sectionName = sectionName;
+                                        // cm.sectionName = sectionName;
+                                    }
                                 }
+
                             }
+                            else {
+                                cm.errTextMsg = "Enter the date on which the conflict check was performed ";
+                                cm.errorBorder = "cdate"; showErrorNotification("cdate");
+                                cm.errorPopUpBlock = true; return false;
+                            }
+
+
+                            // callCheckSecurityGroupExists();
+                            // console.log(getAssignedUserRoles());
+
 
                         }
                         else {
-                            cm.errTextMsg = "Enter the date on which the conflict check was performed ";
-                            cm.errorBorder = "cdate"; showErrorNotification("cdate");
-                            cm.errorPopUpBlock = true; return false;
+                            //  cm.sectionName = sectionName;
+                            cm.errTextMsg = "A confilct check must be completed prior to provisioning this matter ";
+                            cm.errorBorder = "";
+                            showErrorNotification("conflictcheck");
+                            cm.errorPopUpBlock = true;
+
                         }
+                    } else {
+                        var validUsers = validateUsers();
+                        if (validUsers) {
+                            var attornyCheck = validateAttornyUserRolesAndPermissins();
+                            if (attornyCheck) {
+                                cm.popupContainerBackground = "Show";
+                                storeMatterDataToLocalStorageSecondPage();
+                                return true;
+                               // callCheckSecurityGroupExists("snCreateAndShare");
 
-
-                        // callCheckSecurityGroupExists();
-                        // console.log(getAssignedUserRoles());
-
-
-                    }
-                    else {
-                        //  cm.sectionName = sectionName;
-                        cm.errTextMsg = "A confilct check must be completed prior to provisioning this matter ";
-                        cm.errorBorder = "";
-                        showErrorNotification("conflictcheck");
-                        cm.errorPopUpBlock = true;
+                                // cm.sectionName = sectionName;
+                            }
+                        }
 
                     }
 
@@ -2441,7 +2493,7 @@ cm.createBtnDisabled=false;
                 }
             }
 
-            cm.closeSuccessBanner = function () {
+            cm.closesuccessbanner = function () {
                 cm.successMsg = "";
                 cm.successBanner = false;
             }
@@ -2468,8 +2520,27 @@ cm.createBtnDisabled=false;
             }
         });
 
+        app.directive('showcreatesuccessbannermessage', function ($rootScope) {
+            return {
+                restrict: 'A',
+                scope: { datanotification: '@' },
+                link: function (scope, element, attrs) {
+                    scope.$watch("datanotification", function () {
+                        console.log(attrs.datanotification);
+$(element).html(attrs.datanotification);
+
+});
+                   
+                   }
+}
+
+
+        });
+
       
         
 
        
 })();
+
+

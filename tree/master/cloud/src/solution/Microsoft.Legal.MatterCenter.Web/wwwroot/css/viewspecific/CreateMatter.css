@@ -28,7 +28,7 @@ width:140px !important;
 word-wrap: break-word !important;
     padding-top: 4px;
     pointer-events: visible;
-
+    cursor:default;
     overflow: visible !important;
      margin-top: -11px;
 }
@@ -204,7 +204,10 @@ word-wrap: break-word !important;
 .notificationContainer .notification {
     font-size: .9em;
     padding: 8px 12px;
-    position: relative;
+    position: relative; float:left;
+}
+.closeNotification {
+margin-right:10px;
 }
 
  .notificationContainer {
@@ -226,7 +229,7 @@ word-wrap: break-word !important;
 
 @media (min-width: 734px) and (max-width: 782px){
 body {
-   height: calc(100% + 50px ) !important;
+   height: calc(100% + 50px ) ;
 }
 
 
