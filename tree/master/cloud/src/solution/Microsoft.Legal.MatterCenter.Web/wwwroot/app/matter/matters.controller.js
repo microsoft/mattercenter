@@ -6,7 +6,8 @@
     app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window',
         function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window) {
             var vm = this;
-            vm.selected = undefined;
+            vm.selected = "";
+            vm.mattername = "All Matters";
 
             //#region Onload show ui grid and hide error div
             //start
@@ -607,6 +608,15 @@
 
             vm.search = function () {
                 vm.lazyloader = false;
+                var searchToText = '';
+                var finalSearchText = '';
+                if (vm.selected != "") {
+                    searchToText = vm.selected.replace("(", ",")
+                    searchToText = searchToText.replace(")", "")
+                    var firstText = searchToText.split(',')[0]
+                    var secondText = searchToText.split(',')[1]
+                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                }
                 var searchRequest =
                   {
                       Client: {
@@ -617,7 +627,7 @@
                       SearchObject: {
                           PageNumber: 1,
                           ItemsPerPage: 10,
-                          SearchTerm: vm.selected,
+                          SearchTerm: finalSearchText,
                           Filters: {},
                           Sort:
                                   {
@@ -821,6 +831,15 @@
 
             //#endregion
 
+
+
+            //#region for setting the mattername in dropdown
+            vm.SetMatters = function (id, name) {
+                vm.mattername = name;
+                vm.GetMatters(id);
+            }
+
+            //#endregion
 
             //#region Hits when the Dropdown changes 
             //Start 
@@ -1337,16 +1356,36 @@
 
             //#endregion
 
+            //#region
+            vm.typeheadselect = function (index, selected) {
+                var searchToText = '';
+                var finalSearchText = '';
+                if (selected != "") {
+                    searchToText = selected.replace("(", ",")
+                    searchToText = searchToText.replace(")", "")
+                    var firstText = searchToText.split(',')[0]
+                    var secondText = searchToText.split(',')[1]
+                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                }
+                SortRequest.SearchObject.SearchTerm = finalSearchText;
+                SortRequest.SearchObject.Sort.Direction = 0;
+                $scope.FilterByType();
+            }
+
+            //#endregion
+
         }]);
 
     app.directive('popover', function () {
         return {
-            restrict: 'AE',
+            restrict: 'A',
             scope: { details: '@' },
             link: function (scope, element, attrs) {
                 scope.$watch("details", function () {
-                    var obj = eval('(' + attrs.details + ')');
-                    var content = '<div class="">\
+                    var obj = "";
+                    obj = eval('(' + attrs.details + ')');
+                    var actualcontent = "";
+                    actualcontent = '<div class="">\
                                    <div class="FlyoutBoxContent" style="width: 350px;">\
                                       <div class="FlyoutContent FlyoutHeading">\
                                           <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.matterName + ' </div>\
@@ -1375,9 +1414,9 @@
                         html: true,
                         trigger: 'click',
                         delay: 500,
-                        content: content,
+                        content: actualcontent,
                     });
-                });
+                }, true);
             }
         }
     });
@@ -1432,7 +1471,7 @@
 })();
 
 function Openuploadmodal(mattername, matterurl) {
-     jQuery('#UploadMatterModal').modal("show");
+    jQuery('#UploadMatterModal').modal("show");
     console.log(mattername);
     console.log(matterurl);
 }

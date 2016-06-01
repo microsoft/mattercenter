@@ -468,9 +468,83 @@ textarea {
     width: 250px !important;
 }
 
-.marleft10{
-    margin-left:10px;
+.marleft10 {
+    margin-left: 10px;
 }
-.emailLink{
-    text-decoration:none !important;
+
+.emailLink {
+    text-decoration: none !important;
+}
+
+.mainselect select option {
+    min-height: 100px !important;
+    font-weight: 600;
+    height: 60px !important;
+}
+
+.dpbtn {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding-right: 18px;
+    margin-left: 0 !important;
+}
+
+#mainselect .open > .dropdown-toggle.btn-default:hover, .btn-default:active:focus, .btn-default.active:focus, .open > .dropdown-toggle.btn-default:focus, .btn-default:active.focus, .btn-default.active.focus, .open > .dropdown-toggle.btn-default.focus,
+#searchBarHolder .open > .dropdown-toggle.btn-default:hover, .btn-default:active:focus, .btn-default.active:focus, .open > .dropdown-toggle.btn-default:focus, .btn-default:active.focus, .btn-default.active.focus, .open > .dropdown-toggle.btn-default.focus {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+#mainselect .btn-default:hover, #searchBarHolder .btn-default:hover {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+#mainselect ul, #searchBarHolder ul {
+    padding: 0;
+    margin-top: 0;
+    border-radius: 0;
+}
+
+    #mainselect ul li:hover, #searchBarHolder ul li:hover {
+        background-color: #cde6f7;
+        font-family: "Segoe UI Semibold", "Segoe UI Web Semibold" !important;
+        color: #333;
+    }
+
+.dpselected {
+    background-color: #cde6f7;
+    font-family: "Segoe UI Semibold", "Segoe UI Web Semibold" !important;
+    color: #333;
+}
+
+#searchmatter ul {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+}
+
+#searchmatter ul li a {
+    height: 30px;
+    padding: 5px 10px;
+}
+
+#searchmatter ul li a:hover {
+    background-color: #cde6f7 !important;
+    font-family: "Segoe UI Semibold", "Segoe UI Web Semibold" !important;
+    color: #333 !important;
+}
+
+#searchmatter .active {
+    background-color: #cde6f7 !important;
+}
+
+#searchmatter .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    color: #333;
+    text-decoration: none;
+    background-color: #cde6f7 !important;
+    outline: 0;
 }
