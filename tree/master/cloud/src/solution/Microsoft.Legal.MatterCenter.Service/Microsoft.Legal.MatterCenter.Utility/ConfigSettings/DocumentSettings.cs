@@ -18,5 +18,9 @@ namespace Microsoft.Legal.MatterCenter.Utility
     public class DocumentSettings
     {
         public string FolderStructureModified { get; set; }
+        public string TempEmailName { get; set; }
+        public string MailCartMailSubject { get; set; }
+        public string MailCartMailBody { get; set; }
+        public string SendAsEmailFormat { get; set; }
     }
 }

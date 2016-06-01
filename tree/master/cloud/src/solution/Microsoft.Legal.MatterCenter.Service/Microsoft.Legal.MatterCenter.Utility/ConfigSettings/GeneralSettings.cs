@@ -27,5 +27,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string IsReadOnlyUser { get; set; }
         public string SiteURL { get; set; }
         public string CentralRepositoryUrl { get; set; }
+        public string MailCartMailUserName { get; set; }
+        public string MailCartMailPassword { get; set; }
+        public string ExchangeServiceURL { get; set; }
     }
 }

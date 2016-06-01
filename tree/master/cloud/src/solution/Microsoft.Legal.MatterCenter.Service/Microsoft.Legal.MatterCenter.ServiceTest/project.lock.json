@@ -1218,6 +1218,17 @@
           "lib/net451/Microsoft.Dnx.Testing.Abstractions.dll": {}
         }
       },
+      "Microsoft.Exchange.WebServices/2.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        },
+        "runtime": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        }
+      },
       "Microsoft.Extensions.Caching.Abstractions/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -1800,6 +1811,7 @@
           "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
           "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
           "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+          "Microsoft.Exchange.WebServices": "2.2.0",
           "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
@@ -3582,6 +3594,17 @@
           "lib/net451/Microsoft.Dnx.Testing.Abstractions.dll": {}
         }
       },
+      "Microsoft.Exchange.WebServices/2.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        },
+        "runtime": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        }
+      },
       "Microsoft.Extensions.Caching.Abstractions/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -4164,6 +4187,7 @@
           "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
           "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
           "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+          "Microsoft.Exchange.WebServices": "2.2.0",
           "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
@@ -5952,6 +5976,17 @@
           "lib/net451/Microsoft.Dnx.Testing.Abstractions.dll": {}
         }
       },
+      "Microsoft.Exchange.WebServices/2.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        },
+        "runtime": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        }
+      },
       "Microsoft.Extensions.Caching.Abstractions/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -6534,6 +6569,7 @@
           "Microsoft.AspNet.Mvc.Core": "6.0.0-rc1-final",
           "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
           "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
+          "Microsoft.Exchange.WebServices": "2.2.0",
           "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.FileProviderExtensions": "1.0.0-rc1-final",
           "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
@@ -8119,6 +8155,24 @@
         "Microsoft.Dnx.Testing.Abstractions.1.0.0-rc1-final.nupkg",
         "Microsoft.Dnx.Testing.Abstractions.1.0.0-rc1-final.nupkg.sha512",
         "Microsoft.Dnx.Testing.Abstractions.nuspec"
+      ]
+    },
+    "Microsoft.Exchange.WebServices/2.2.0": {
+      "type": "package",
+      "sha512": "NlkaTD0uWtg9VbiWq0VDWMBPzHFknH3tmstrxt0acrT09LBGqATTjRpsGOODz6tUdX7/dehBinxsf75U5Uw/+A==",
+      "files": [
+        "doc/License Terms.rtf",
+        "doc/README.htm",
+        "doc/Redist.txt",
+        "lib/40/Microsoft.Exchange.WebServices.Auth.dll",
+        "lib/40/Microsoft.Exchange.WebServices.Auth.pdb",
+        "lib/40/Microsoft.Exchange.WebServices.Auth.xml",
+        "lib/40/Microsoft.Exchange.WebServices.dll",
+        "lib/40/Microsoft.Exchange.WebServices.pdb",
+        "lib/40/Microsoft.Exchange.WebServices.xml",
+        "Microsoft.Exchange.WebServices.2.2.0.nupkg",
+        "Microsoft.Exchange.WebServices.2.2.0.nupkg.sha512",
+        "Microsoft.Exchange.WebServices.nuspec"
       ]
     },
     "Microsoft.Extensions.Caching.Abstractions/1.0.0-rc1-final": {

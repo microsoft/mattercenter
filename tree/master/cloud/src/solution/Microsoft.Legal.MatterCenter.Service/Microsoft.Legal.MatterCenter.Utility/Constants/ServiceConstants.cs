@@ -17,6 +17,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
     /// </summary>
     public class ServiceConstants
     {
+        
 
         public const string CACHE_PERMISSIONS = "Permissions";
 

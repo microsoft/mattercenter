@@ -138,8 +138,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             spList.CreateFileInsideFolder(clientContext, folderPath, newFile);
         }
+        
 
-       
+        public Stream DownloadAttachments(string attachmentUrl)
+        {
+           return spList.DownloadAttachments(attachmentUrl);
+        }
+
+
 
         public bool FolderExists(string folderPath, ClientContext clientContext, string documentLibraryName)
         {

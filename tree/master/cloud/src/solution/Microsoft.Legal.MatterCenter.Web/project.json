@@ -28,7 +28,8 @@
     "Microsoft.AspNet.Authentication": "1.0.0-rc1-final",
     "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
     "Microsoft.Legal.MatterCenter.Repository": "1.0.0-*",
-    "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*"
+    "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*",
+    "Microsoft.Exchange.WebServices": "2.2.0"
   },
 
   "commands": {

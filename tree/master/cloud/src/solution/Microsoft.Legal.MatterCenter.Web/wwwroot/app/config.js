@@ -14,7 +14,6 @@ var configs = {
         "attachButtonText":"Attach Documents"
     },
     global:{
-        repositoryUrl:"https://msmatter.sharepoint.com/sites/catalog",
-        tenantUrl:"https://msmatter.sharepoint.com"
+        repositoryUrl:"https://msmatter.sharepoint.com/sites/catalog",        
     }
  };

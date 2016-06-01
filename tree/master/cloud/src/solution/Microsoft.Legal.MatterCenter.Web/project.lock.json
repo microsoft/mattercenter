@@ -1146,6 +1146,17 @@
           "lib/net451/Microsoft.Dnx.Compilation.CSharp.Common.dll": {}
         }
       },
+      "Microsoft.Exchange.WebServices/2.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        },
+        "runtime": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        }
+      },
       "Microsoft.Extensions.Caching.Abstractions/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -3295,6 +3306,17 @@
         },
         "runtime": {
           "lib/net451/Microsoft.Dnx.Compilation.CSharp.Common.dll": {}
+        }
+      },
+      "Microsoft.Exchange.WebServices/2.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        },
+        "runtime": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
         }
       },
       "Microsoft.Extensions.Caching.Abstractions/1.0.0-rc1-final": {
@@ -5454,6 +5476,17 @@
           "lib/net451/Microsoft.Dnx.Compilation.CSharp.Common.dll": {}
         }
       },
+      "Microsoft.Exchange.WebServices/2.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        },
+        "runtime": {
+          "lib/40/Microsoft.Exchange.WebServices.Auth.dll": {},
+          "lib/40/Microsoft.Exchange.WebServices.dll": {}
+        }
+      },
       "Microsoft.Extensions.Caching.Abstractions/1.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -7421,6 +7454,24 @@
         "Microsoft.Dnx.Compilation.CSharp.Common.nuspec"
       ]
     },
+    "Microsoft.Exchange.WebServices/2.2.0": {
+      "type": "package",
+      "sha512": "NlkaTD0uWtg9VbiWq0VDWMBPzHFknH3tmstrxt0acrT09LBGqATTjRpsGOODz6tUdX7/dehBinxsf75U5Uw/+A==",
+      "files": [
+        "doc/License Terms.rtf",
+        "doc/README.htm",
+        "doc/Redist.txt",
+        "lib/40/Microsoft.Exchange.WebServices.Auth.dll",
+        "lib/40/Microsoft.Exchange.WebServices.Auth.pdb",
+        "lib/40/Microsoft.Exchange.WebServices.Auth.xml",
+        "lib/40/Microsoft.Exchange.WebServices.dll",
+        "lib/40/Microsoft.Exchange.WebServices.pdb",
+        "lib/40/Microsoft.Exchange.WebServices.xml",
+        "Microsoft.Exchange.WebServices.2.2.0.nupkg",
+        "Microsoft.Exchange.WebServices.2.2.0.nupkg.sha512",
+        "Microsoft.Exchange.WebServices.nuspec"
+      ]
+    },
     "Microsoft.Extensions.Caching.Abstractions/1.0.0-rc1-final": {
       "type": "package",
       "serviceable": true,
@@ -9065,7 +9116,8 @@
       "Microsoft.AspNet.Authentication >= 1.0.0-rc1-final",
       "Microsoft.Legal.MatterCenter.Models >= 1.0.0-*",
       "Microsoft.Legal.MatterCenter.Repository >= 1.0.0-*",
-      "Microsoft.Legal.MatterCenter.Utility >= 1.0.0-*"
+      "Microsoft.Legal.MatterCenter.Utility >= 1.0.0-*",
+      "Microsoft.Exchange.WebServices >= 2.2.0"
     ],
     "DNX,Version=v4.5.1": []
   }

@@ -24,8 +24,7 @@
             //#region Variable to show matter count            
             vm.allMatterCount = 0;
             vm.myMatterCount = 0;
-            vm.pinMatterCount = 0;
-            vm.pinorUnPinImage = "../Images/pin-666.png"
+            vm.pinMatterCount = 0;            
             vm.Pinnedobj = [];
             //#endregion            
 
@@ -225,9 +224,17 @@
                     Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Read from config.js
                 }
                 getPinnedMatters(pinnedMattersRequest, function (response) {
-                    vm.Pinnedobj = response;
+                    var pinnedResponse = response;
+                    if (response && response.length > 0) {
+                        angular.forEach(response, function (res) {
+                            res.pinType = "unpin"
+                        })
+                    }
+                    
                     vm.pinMatterCount = response.length;
-                    vm.matterGridOptions.data = vm.Pinnedobj;
+                    vm.Pinnedobj = response
+                    vm.matterGridOptions.data.length = 0;
+                    vm.matterGridOptions.data = response;
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
@@ -278,7 +285,7 @@
                     },
                     SearchObject: {
                         PageNumber: 1,
-                        ItemsPerPage: 10,
+                        ItemsPerPage: 50,
                         SearchTerm: finalSearchText,
                         Filters: {},
                         Sort: {

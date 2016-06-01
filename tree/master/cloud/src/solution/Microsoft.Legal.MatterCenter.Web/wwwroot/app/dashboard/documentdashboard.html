@@ -22,15 +22,11 @@
                             <img data-dismiss="modal" class="pull-right" src="../../images/close-666.png" />
                         </div>
                         <div id="PopupBody">
-                            <div class="selectMailFormat">
-                                <div class="sendEmailOptions sendToOneDriveOption" onclick="sendToBriefcase();">
-                                    <img class="mailCartLogo" src="../Images/my-briefcase-666.png" alt="Send to My OneDrive for Business" title="Send to My OneDrive" />
-                                    <div title="Send to My OneDrive for Business" class="inlineValues">Send to My OneDrive for Business</div>
-                                </div>
-                                <div class="sendEmailOptions emailAttachmentOption" onclick="downloadEmail(true);">
+                            <div class="selectMailFormat">                                
+                                <div class="sendEmailOptions emailAttachmentOption" ng-click="vm.downloadEmailAsAttachment(true);">
                                     <img class="mailCartLogo" src="../Images/attach_666_27X27.png" alt="Email as attachment" title="Email as attachment" /><div title="Email as attachment" class="inlineValues">Email as attachment</div>
                                 </div>
-                                <div class="sendEmailOptions emailLinkOption" onclick="downloadEmail(false);">
+                                <div class="sendEmailOptions emailLinkOption" ng-click="vm.downloadEmailAsLink(false);">
                                     <img class="mailCartLogo" src="../Images/link-666.png" alt="Email as link" title="Email as link" /><div title="Email as link" class="inlineValues">Email as link</div>
                                 </div>
                             </div>

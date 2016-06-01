@@ -42,5 +42,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle);
         bool BreakItemPermission(ClientContext clientContext, string listName, int listItemId, bool isCopyRoleAssignment);
         GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName);
+        Stream DownloadAttachments(string attachmentUrl);
     }
 }

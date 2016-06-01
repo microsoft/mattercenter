@@ -129,6 +129,20 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return result;
         }
 
+        
+
+        public Stream DownloadAttachments(string attachmentUrl)
+        {            
+            ClientContext clientContext;            
+            clientContext = spoAuthorization.GetClientContext(attachmentUrl);
+            SharePoint.Client.File file = clientContext.Web.GetFileByServerRelativeUrl(attachmentUrl.Split(Convert.ToChar(ServiceConstants.DOLLAR, CultureInfo.InvariantCulture))[1]);
+            ClientResult<System.IO.Stream> fileStream = file.OpenBinaryStream();
+            ///// Load the Stream data for the file
+            clientContext.Load(file);
+            clientContext.ExecuteQuery();  
+            return fileStream.Value;
+        }
+
         public GenericResponseVM UploadDocument(string folderPath, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folderName, string documentLibraryName)
         {
             IList<string> listResponse = new List<string>();
