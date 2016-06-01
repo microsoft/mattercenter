@@ -309,13 +309,22 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 documentData.DocumentCreatedDate = searchResult[key].ToString();
                                 break;
                             case "fileextension":
-                                documentData.DocumentExtension = searchResult[key].ToString();                                
+                                documentData.DocumentExtension = searchResult[key].ToString();
+                                if (documentData.DocumentExtension.ToLower() != "pdf")
+                                {
+                                    documentData.DocumentIconUrl = $"{generalSettings.SiteURL}/_layouts/15/images/ic{documentData.DocumentExtension}.gif";
+                                }
+                                else
+                                {
+                                    documentData.DocumentIconUrl = $"{generalSettings.SiteURL}/_layouts/15/images/ic{documentData.DocumentExtension}.png";
+                                }
                                 break;
                             case "docid":
                                 documentData.DocumentID = searchResult[key].ToString();
                                 break;
                             case "path":
                                 documentData.DocumentOWAUrl = searchResult[key].ToString();
+                                documentData.DocumentUrl = searchResult[key].ToString();
                                 break;
                             case "lastmodifiedtime":
                                 documentData.DocumentModifiedDate= searchResult[key].ToString();
@@ -329,8 +338,10 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 documentData.DocumentMatterUrl = documentData.DocumentParentUrl.Substring(0, documentData.DocumentParentUrl.LastIndexOf("/"));
                                 break;
                                 
-                        }                        
-                        documentData.DocumentIconUrl = $"{generalSettings.SiteURL}/_layouts/15/images/ic{documentData.DocumentExtension}.gif";                       
+                        }
+                        documentData.PinType = "Pin";
+                        
+                                               
                     }
                     documentDataList.Add(documentData);
                 }

@@ -141,16 +141,16 @@ namespace Microsoft.Legal.MatterCenter.Web
                 }
                 #endregion
                 var pinResponseVM = await documentRepositoy.GetPinnedRecordsAsync(client);
-                if (pinResponseVM != null && pinResponseVM.TotalRows == 0)
-                {
-                    genericResponse = new GenericResponseVM()
-                    {
-                        Value = pinResponseVM.NoPinnedMessage,
-                        Code = ((int)HttpStatusCode.NotFound).ToString(),
-                        IsError = true
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
-                }
+                //if (pinResponseVM != null && pinResponseVM.TotalRows == 0)
+                //{
+                //    genericResponse = new GenericResponseVM()
+                //    {
+                //        Value = pinResponseVM.NoPinnedMessage,
+                //        Code = ((int)HttpStatusCode.NotFound).ToString(),
+                //        IsError = true
+                //    };
+                //    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                //}
                 return matterCenterServiceFunctions.ServiceResponse(pinResponseVM.DocumentDataList, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -206,14 +206,14 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <returns></returns>
         [HttpPost("unpindocument")]
         [SwaggerResponse(HttpStatusCode.OK)]
-        public async Task<IActionResult> UnPin([FromBody]PinRequestMatterVM pinRequestMatterVM)
+        public async Task<IActionResult> UnPin([FromBody]PinRequestDocumentVM pinRequestDocumentVM)
         {
             try
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
-                if (pinRequestMatterVM == null && pinRequestMatterVM.Client == null && pinRequestMatterVM.MatterData == null)
+                if (pinRequestDocumentVM == null && pinRequestDocumentVM.Client == null && pinRequestDocumentVM.DocumentData == null)
                 {
                     genericResponse = new GenericResponseVM()
                     {
@@ -224,7 +224,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-                var isDocumentUnPinned = await documentRepositoy.UnPinRecordAsync<PinRequestMatterVM>(pinRequestMatterVM);
+                var isDocumentUnPinned = await documentRepositoy.UnPinRecordAsync<PinRequestDocumentVM>(pinRequestDocumentVM);
                 var documentUnPinned = new
                 {
                     IsDocumentUnPinned = isDocumentUnPinned

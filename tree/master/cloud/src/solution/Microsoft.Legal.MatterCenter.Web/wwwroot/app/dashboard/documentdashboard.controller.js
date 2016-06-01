@@ -19,6 +19,7 @@
             vm.sortbydropvisible = false;
             vm.sortbytext = 'Relevant';
             vm.documentsCheckedCount = 0;
+            
             //#endregion
 
             //#region Variable to show document count
@@ -50,7 +51,7 @@
             //#endregion
 
             var gridOptions = {
-                paginationPageSize: 10,
+                paginationPageSize: 40,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
@@ -83,7 +84,7 @@
                     { field: 'documentModifiedDate', displayName: 'Modified date', width: '20%', enableColumnMenu: false },
                     { field: 'documentID', displayName: 'Document ID', width: '10%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentID==""?"NA":row.entity.documentID}}</div>', enableColumnMenu: false },
                     { field: 'documentVersion', displayName: 'Version', width: '6%', enableColumnMenu: false },
-                    { field: 'pin', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/pin-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false }
+                    { field: 'pin', width: '5%', displayName: '', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false }
                 ],
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
@@ -251,11 +252,35 @@
                           }
                     }
                 }
+
+                var pinnedDocumentsRequest = {
+                    Url: configs.global.repositoryUrl
+                }
+
                 get(documentRequest, function (response) {
-                    vm.documentGridOptions.data = response;
-                    vm.allDocumentCount = response.length;
-
-
+                    //We need to call pinned api to determine whether a matter is pinned or not
+                    getPinDocuments(pinnedDocumentsRequest, function (pinnedResponse) {
+                        if (pinnedResponse && pinnedResponse.length > 0) {
+                            vm.pinDocumentCount = pinnedResponse.length;
+                            angular.forEach(pinnedResponse, function (pinobj) {
+                                angular.forEach(response, function (res) {
+                                    if (pinobj.documentName == res.documentName) {
+                                        if (res.isDocumentDone == undefined && !res.isDocumentDone) {
+                                            res.isDocumentDone = true;
+                                            res.pinType = "unpin"
+                                        }
+                                    }
+                                });
+                            });
+                            vm.documentGridOptions.data = response;
+                            vm.allDocumentCount = response.length;
+                        }
+                        else {
+                            vm.documentGridOptions.data = response;
+                            vm.allDocumentCount = response.length;
+                        }
+                    });
+                    
                 });
             }
             //#endregion
@@ -322,32 +347,33 @@
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var pinRequest = {
                         Client: {
-                            Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Need to read from config.js file
+                            Url: configs.global.repositoryUrl
                         },
                         documentData: {
                             documentName: currentRowData.documentName,
-                            DocumentVersion: currentRowData.DocumentVersion,
-                            DocumentClient: currentRowData.DocumentClient,
-                            DocumentClientId: currentRowData.DocumentClientId,
-                            DocumentClientUrl: currentRowData.DocumentClientUrl,
-                            DocumentMatter: currentRowData.DocumentMatter,
-                            DocumentMatterId: currentRowData.DocumentMatterId,
-                            DocumentOwner: currentRowData.DocumentOwner,
-                            DocumentUrl: currentRowData.DocumentUrl,
-                            DocumentOWAUrl: currentRowData.DocumentOWAUrl,
-                            DocumentExtension: currentRowData.DocumentExtension,
-                            DocumentCreatedDate: currentRowData.DocumentCreatedDate,
-                            DocumentModifiedDate: currentRowData.DocumentModifiedDate,
-                            DocumentCheckoutUser: currentRowData.DocumentCheckoutUser,
-                            DocumentMatterUrl: currentRowData.DocumentMatterUrl,
-                            DocumentParentUrl: currentRowData.DocumentParentUrl,
-                            DocumentID: currentRowData.DocumentID
+                            documentVersion: currentRowData.documentVersion,
+                            documentClient: currentRowData.documentClient,
+                            documentClientId: currentRowData.documentClientId,
+                            documentClientUrl: currentRowData.documentClientUrl,
+                            documentMatter: currentRowData.documentMatter,
+                            documentMatterId: currentRowData.documentMatterId,
+                            documentOwner: currentRowData.documentOwner,
+                            documentUrl: currentRowData.documentUrl,
+                            documentOWAUrl: currentRowData.documentOWAUrl,
+                            documentExtension: currentRowData.documentExtension,
+                            documentCreatedDate: currentRowData.documentCreatedDate,
+                            documentModifiedDate: currentRowData.documentModifiedDate,
+                            documentCheckoutUser: currentRowData.documentCheckoutUser,
+                            documentMatterUrl: currentRowData.documentMatterUrl,
+                            documentParentUrl: currentRowData.documentParentUrl,
+                            documentID: currentRowData.documentID,
+                            pinType: 'unpin'
                         }
                     }
                     pinDocuments(pinRequest, function (response) {
                         if (response.isDocumentPinned) {
                             e.currentTarget.src = "../images/unpin-666.png";
-                            vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) + 1;
+                            vm.pinDocumentCount = parseInt(vm.pinDocumentCount, 10) + 1;
                         }
                     });
                 }
@@ -355,17 +381,17 @@
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var unpinRequest = {
                         Client: {
-                            Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Need to read from config.js file
+                            Url: configs.global.repositoryUrl
                         },
-                        matterData: {
-                            documentName: currentRowData.matterUrl,
+                        documentData: {
+                            documentUrl: currentRowData.documentUrl,
                         }
                     }
                     UnpinDocuments(unpinRequest, function (response) {
-                        if (response.isMatterUnPinned) {
+                        if (response.isDocumentUnPinned) {
                             e.currentTarget.src = "../images/pin-666.png";
-                            vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
-                            vm.matterGridOptions.data.splice(vm.matterGridOptions.data.indexOf(currentRowData), 1)
+                            vm.pinDocumentCount = parseInt(vm.pinDocumentCount, 10) - 1;
+                            vm.documentGridOptions.data.splice(vm.documentGridOptions.data.indexOf(currentRowData), 1)
                         }
                     });
                 }

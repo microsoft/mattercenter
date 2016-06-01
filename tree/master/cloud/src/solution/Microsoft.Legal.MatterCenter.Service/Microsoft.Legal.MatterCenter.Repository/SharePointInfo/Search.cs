@@ -355,7 +355,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 using (clientContext = spoAuthorization.GetClientContext(pinRequestDocumentVM.Client.Url))
                 {
-                    return UnPinThisRecord(clientContext, pinRequestDocumentVM.Client, pinRequestDocumentVM.DocumentData, true);
+                    return UnPinThisRecord(clientContext, pinRequestDocumentVM.Client, pinRequestDocumentVM.DocumentData, false);
                 }
             }
             catch (Exception ex)
