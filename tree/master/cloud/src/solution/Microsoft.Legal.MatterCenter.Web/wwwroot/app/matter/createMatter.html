@@ -57,7 +57,7 @@
             </div>
         </div>
         <div class="notificationContainer successBanner" ng-if="cm.successBanner">
-        <div class="notification">{{cm.successMsg}}<span class="closeNotification" ng-click="cm.closeSuccessBanner()">x</span></div></div>
+        <div class="notification" showcreatesuccessbannermessage datanotification="{{cm.successMsg}}"></div><span class="closeNotification" ng-click="cm.closesuccessbanner()">x</span></div>
         <div id="errorBlock" class="errorPopUp" ng-show="cm.errorPopUpBlock" >
 
           
@@ -138,7 +138,7 @@
 
 
             <div class="sectionContent">
-                <div id="conflictCheck">
+                <div id="conflictCheck" ng-show="cm.defaultConfilctCheck">
                     <label class="medium chkConflictCheckParent conflictCheckPosition customDivCreate" id="chkConflictCheckParent">
                         <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">Conflict check conducted (must be complete prior to provisioning matter)
                     </label>
@@ -209,13 +209,13 @@
                 <label class="secureMatterLabel assignTeamRadioPosition customDivCreate">Would you like this matter to be secured only to the assigned team?</label>
                 <div class="secureMatterRadioBtn assignTeamRadioPosition">
                     <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" class="matterCheckYes" type="radio" ng-value=true value="true">Yes
+                        <input name="rdbSecureMatterCheck"  ng-disabled="cm.secureMatterRadioEnabled" ng-model="cm.secureMatterCheck" class="matterCheckYes" type="radio" ng-value=true value="true">Yes
                     </label>
                     <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" disabled="disabled" ng-model="cm.secureMatterCheck" class="matterCheckNo" type="radio" ng-value=false  value="false">No
+                        <input name="rdbSecureMatterCheck"  ng-disabled="cm.secureMatterRadioEnabled" ng-model="cm.secureMatterCheck" class="matterCheckNo" type="radio" ng-value=false  value="false">No
                     </label>
                 </div>
-                <label class="contentLabel medium clear blue" id="assignTeam">Assign Team</label>
+                <label class="contentLabel medium clear blue" id="assignTeam" ng-show="cm.defaultConfilctCheck">Assign Team</label>
                 <label class="medium clear contentLabel" id="labelName"><span class="mandatory">*&nbsp;</span>Name</label>
                 <div class="gutter"></div>
                  <label class="mediumSmallRole contentLabel"><span class="mandatory">*&nbsp;</span>Role</label>
@@ -310,7 +310,7 @@
     <div class="pagination">
         <div class="nextPreviousDiv">
             <span class="Paginate" data-move="0" ng-click="cm.PreviousClick()">Previous</span>
-            <span class="Paginate active" data-move="1" ng-click="cm.NextClick()">Next</span>
+            <span class="Paginate " data-move="1" ng-click="cm.NextClick()">Next</span>
         </div>
     </div>
 
