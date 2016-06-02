@@ -134,7 +134,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public Stream DownloadAttachments(string attachmentUrl)
         {            
             ClientContext clientContext;            
-            clientContext = spoAuthorization.GetClientContext(attachmentUrl);
+            clientContext = spoAuthorization.GetClientContext(attachmentUrl.Split(Convert.ToChar(ServiceConstants.DOLLAR, CultureInfo.InvariantCulture))[0]);
             SharePoint.Client.File file = clientContext.Web.GetFileByServerRelativeUrl(attachmentUrl.Split(Convert.ToChar(ServiceConstants.DOLLAR, CultureInfo.InvariantCulture))[1]);
             ClientResult<System.IO.Stream> fileStream = file.OpenBinaryStream();
             ///// Load the Stream data for the file

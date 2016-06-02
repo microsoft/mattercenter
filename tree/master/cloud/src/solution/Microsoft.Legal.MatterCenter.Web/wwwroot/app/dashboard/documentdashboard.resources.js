@@ -31,6 +31,14 @@ angular.module('matterMain')
                   'pinDocument': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/document/pindocument'
+                  }),
+                  'downloadattachmentsasstream': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/email/downloadattachmentsasstream'
+                  }),
+                  'downloadAttachments': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/email/downloadattachments'
                   })
               });
       }]);

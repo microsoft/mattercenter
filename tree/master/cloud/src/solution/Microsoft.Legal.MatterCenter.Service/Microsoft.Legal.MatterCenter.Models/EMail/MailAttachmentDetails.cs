@@ -21,7 +21,7 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// Gets or sets overwrite option for mail attachment.
         /// </summary>
         /// <value>The overwrite.</value>
-        public int IsOverwrite
+        public string AttachmentContent
         {
             get;
             set;

@@ -19,7 +19,7 @@
             vm.sortbydropvisible = false;
             vm.sortbytext = 'Relevant';
             vm.documentsCheckedCount = 0;
-            
+            vm.enable = true;
             //#endregion
 
             //#region Variable to show document count
@@ -27,6 +27,7 @@
             vm.allDocumentCount = 0;
             vm.myDocumentCount = 0;
             vm.pinDocumentCount = 0;
+            vm.selectedDocuments = [];
             //#endregion
 
             //#region closing all dropdowns on click of page
@@ -106,17 +107,13 @@
                     CustomPropertyName: "ClientURL"
                 }
             };
-
-
             //#endregion
 
-            vm.showMailCartModal = function () {
-                if (vm.documentsCheckedCount > 0) {
-                    jQuery('#UploadMatterModal').modal("show");
-                }
-            }
+           
 
             //#region Cart functionality
+            
+
             vm.cartelements = [];
 
             //function to toggle check all 
@@ -161,7 +158,71 @@
                 for (var i = 0; i < vm.documentGridOptions.data.length; i++) {
                     vm.documentGridOptions.data[i].checker = checked;
                 }
-            };
+            };           
+
+            vm.showMailCartModal = function () {
+                if (vm.documentsCheckedCount > 0) {
+                    jQuery('#UploadMatterModal').modal("show");
+                }
+            }          
+            
+            //Event is going to fire when the user clicks on "Email as attachment" or "Email as link" in the modal window
+            vm.downloadEmailAsAttachment = function (downloadAttachmentsAsEmail) {
+                //Get all the documents which are checked
+                angular.forEach(vm.cartelements, function (selectedDocument) { 
+                    if (selectedDocument.selected) {
+                        vm.selectedDocuments.push(selectedDocument);
+                        //Display progress icon for each checked item
+                        angular.element("#document-" + selectedDocument.documentID).css("display", "block");
+                    }
+                });
+                if (vm.selectedDocuments.length > 0) {
+                    //Disbale the click event of the button. Once we get the response from the server, enable the click event again
+                    vm.enable = false;
+                }
+                else {
+                    vm.enable = true;
+                }
+                var oEmailRelativePath = '';
+                var sFileURLs = ""
+                angular.forEach(vm.selectedDocuments, function (selectedDocument) {
+                    oEmailRelativePath = trimEndChar(unescape(selectedDocument.documentUrl));
+                    oEmailRelativePath = oEmailRelativePath.replace(configs.uri.SPOsiteURL, "$") + "$";
+                    if (selectedDocument.documentClientUrl) {
+                        sFileURLs += selectedDocument.documentClientUrl + oEmailRelativePath + selectedDocument.documentName + ";";
+                    }
+                    else {
+                        sFileURLs += selectedDocument.documentTeamUrl + oEmailRelativePath + selectedDocument.documentName + ";";
+                    }
+                });
+
+                var mailAttachmentDetailsRequest = {
+                    FullUrl:sFileURLs,
+                    IsAttachmentCall: downloadAttachmentsAsEmail
+                }
+               
+                downloadAttachmentsAsStream(mailAttachmentDetailsRequest, function (response) {
+                    var result = encodeURIComponent(response);
+                    //Once we get the response, stop the progress
+                    angular.forEach(vm.selectedDocuments, function (selectedDocument) {
+                        angular.element("#document-" + selectedDocument.documentID).css("display", "none");
+                    });
+                    //clear the selectedDocuments array
+                    vm.selectedDocuments = [];
+                    //enable the vm.enable so that user can click the link again
+                    vm.enable = true; 
+                })
+            }
+
+            function trimEndChar(sOrignalString, sCharToTrim) {
+                "use strict";
+                if (sOrignalString && sCharToTrim === sOrignalString.substr(-1)) {
+                    return sOrignalString.substr(0, sOrignalString.length - 1);
+                }
+                return sOrignalString;
+            }
+            
+
             //#endregion
 
             //#region api call to get document information
@@ -170,6 +231,24 @@
                 api({
                     resource: 'documentDashBoardResource',
                     method: 'get',
+                    data: options,
+                    success: callback
+                });
+            }
+
+            function downloadAttachmentsAsStream(options, callback) {
+                api({
+                    resource: 'documentDashBoardResource',
+                    method: 'downloadattachmentsasstream',
+                    data: options,
+                    success: callback
+                });
+            }
+
+            function downloadAttachments(options, callback) {
+                api({
+                    resource: 'documentDashBoardResource',
+                    method: 'downloadAttachments',
                     data: options,
                     success: callback
                 });
@@ -232,7 +311,7 @@
                 var documentRequest = {
                     Client: {
                         //ToDo: Need to read from config.js
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                        Url: configs.global.repositoryUrl
                     },
                     SearchObject: {
                         PageNumber: 1,
@@ -289,7 +368,7 @@
             vm.getPinnedDocuments = function () {
                 var client = {
                     //ToDo: Need to read from config.js
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    Url: configs.global.repositoryUrl
                 }
 
                 getPinDocuments(client, function (response) {
@@ -306,7 +385,7 @@
                 var documentRequest = {
                     Client: {
                         //ToDo: Need to read from config.js
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                        Url: configs.global.repositoryUrl
                     },
                     SearchObject: {
                         PageNumber: 1,
@@ -335,10 +414,7 @@
             //Call all document related api if view is document
 
             $timeout(vm.getDocuments(), 700);
-            //vm.getPinnedDocuments();
-            //vm.getMyDocuments();
-
-            //#endregion
+            
 
             //This function will pin or unpin the matter based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {

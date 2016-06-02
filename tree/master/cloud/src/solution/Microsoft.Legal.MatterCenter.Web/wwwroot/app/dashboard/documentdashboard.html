@@ -23,23 +23,30 @@
                         </div>
                         <div id="PopupBody">
                             <div class="selectMailFormat">                                
-                                <div class="sendEmailOptions emailAttachmentOption" ng-click="vm.downloadEmailAsAttachment(true);">
-                                    <img class="mailCartLogo" src="../Images/attach_666_27X27.png" alt="Email as attachment" title="Email as attachment" /><div title="Email as attachment" class="inlineValues">Email as attachment</div>
+                                <div class="sendEmailOptions emailAttachmentOption" ng-click="!vm.enable||vm.downloadEmailAsAttachment(true);">
+                                    <img class="mailCartLogo" src="../Images/attach_666_27X27.png" alt="Email as attachment" ng-disabled="vm.enable"
+                                         title="Email as attachment" /><div title="Email as attachment" class="inlineValues">Email as attachment</div>
                                 </div>
-                                <div class="sendEmailOptions emailLinkOption" ng-click="vm.downloadEmailAsLink(false);">
-                                    <img class="mailCartLogo" src="../Images/link-666.png" alt="Email as link" title="Email as link" /><div title="Email as link" class="inlineValues">Email as link</div>
+                                <div class="sendEmailOptions emailLinkOption" ng-click="!vm.enable||vm.downloadEmailAsAttachment(false)">
+                                    <img class="mailCartLogo" src="../Images/link-666.png" alt="Email as link" 
+                                         title="Email as link" /><div title="Email as link" class="inlineValues">Email as link</div>
                                 </div>
                             </div>
                             <div class="popUpBody popUpFloatLeft">
                                 <ul class="emailDocumentNames">
                                     <li ng-repeat="element in vm.cartelements">
                                         <div class="row">
-                                            <div class="col-xs-12 col-sm-5"><span><input type="checkbox" /></span>{{element.documentName}}</div>
+                                            <div class="col-xs-12 col-sm-2" >
+                                                <span><img id="document-{{element.documentID}}" style="display:none" src="../Images/loadingcirclests16.gif"></span>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-8">
+                                                <span><input type="checkbox" ng-model="element.selected" /></span>{{element.documentName}}
+                                            </div>
                                             <div class="col-xs-12 col-sm-1"><img src="../Images/icon-delete.png" class="" title="Remove attachment" ng-click="vm.removeAttachment(element)"></div>
-                                            <div class="col-xs-12 col-sm-5"><span class="checkOut" id="isNotCheckedOut" title="Checked out copy available">Checked out copy available</span></div>
+                                            
                                             <div class="col-xs-12 col-sm-1 pad0">
                                                 <button infopopover class="btn btn-link" type='button' style='text-align: left'
-                                                         data-toggle='popover' data-container='body' data-placement='left' data-html='true'>
+                                                        data-toggle='popover' data-container='body' data-placement='left' data-html='true'>
                                                     <img src="../Images/information-blue.png" />
                                                 </button>
                                             </div>

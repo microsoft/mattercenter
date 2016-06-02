@@ -12,6 +12,8 @@ using Microsoft.Extensions.OptionsModel;
 using System.Globalization;
 using System.Net.Http;
 using Microsoft.Exchange.WebServices.Data;
+using Microsoft.Net.Http.Headers;
+using System.Text;
 
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
@@ -64,14 +66,18 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 mailFile.Position = 0;
                 var fileContentResponse = new HttpResponseMessage(HttpStatusCode.OK);
                 fileContentResponse.Headers.Clear();
-                fileContentResponse.Content.Headers.Add("Content-Type", ReturnExtension(string.Empty));
-                fileContentResponse.Content.Headers.ContentLength = mailFile.Length;
+
+                fileContentResponse.Content = new StreamContent(mailFile);
+
+                fileContentResponse.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(ReturnExtension(string.Empty));
+                //fileContentResponse.Headers.Add("Content-Type", ReturnExtension(string.Empty));
+                fileContentResponse.Content.Headers.Add("Content-Length", mailFile.Length.ToString());
                 fileContentResponse.Content.Headers.Add("Content-Description","File Transfer");
-                fileContentResponse.Content.Headers.Add("Content-Disposition", "attachment; filename=" + documentSettings.TempEmailName + DateTime.Now + ServiceConstants.EMAIL_FILE_EXTENSION);
+                fileContentResponse.Content.Headers.Add("Content-Disposition", "inline; filename=" + documentSettings.TempEmailName + new Guid().ToString() + ServiceConstants.EMAIL_FILE_EXTENSION);
                 fileContentResponse.Content.Headers.Add("Content-Transfer-Encoding","binary");
-                fileContentResponse.Content.Headers.Add("Expires", "0");
-                fileContentResponse.Content.Headers.Add("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
-                fileContentResponse.Content.Headers.Add("Pragma", "public");
+                fileContentResponse.Content.Headers.Expires = DateTimeOffset.Now.AddDays(-1); ;
+                fileContentResponse.Headers.Add("Cache-Control", "must-revalidate, post-check=0, pre-check=0");                
+                fileContentResponse.Headers.Add("Pragma", "public");
                 result = mailFile;
             }
             catch(Exception ex)

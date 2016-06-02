@@ -25,6 +25,8 @@ using System.Reflection;
 using System.IO;
 using System.Collections.Generic;
 using Microsoft.SharePoint.Client;
+using System.Net.Http;
+using Microsoft.Net.Http.Headers;
 
 namespace Microsoft.Legal.MatterCenter.Web
 {
@@ -41,11 +43,12 @@ namespace Microsoft.Legal.MatterCenter.Web
         private ICustomLogger customLogger;
         private LogTables logTables;
         IDocumentProvision documentProvision;
+        DocumentSettings documentSettings;
         public EmailController(IOptions<ErrorSettings> errorSettings,
             ICustomLogger customLogger, 
             ISPOAuthorization spoAuthorization, 
             IMatterCenterServiceFunctions matterCenterServiceFunctions, 
-            IOptions<LogTables> logTables, IDocumentProvision documentProvision)
+            IOptions<LogTables> logTables, IDocumentProvision documentProvision, IOptions<DocumentSettings> documentSettings)
         {
             this.spoAuthorization = spoAuthorization;
             this.errorSettings = errorSettings.Value;
@@ -53,6 +56,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
             this.documentProvision = documentProvision;
+            this.documentSettings = documentSettings.Value;
         }
 
         /// <summary>
@@ -60,9 +64,9 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        [HttpPost("DownloadAttachments")]
+        [HttpPost("downloadattachmentsasstream")]
         [SwaggerResponse(System.Net.HttpStatusCode.OK)]
-        public IActionResult DownloadAttachments(MailAttachmentDetails mailAttachmentDetails)
+        public IActionResult DownloadAttachmentsAsStream([FromBody]MailAttachmentDetails mailAttachmentDetails)
         {
             try
             {
@@ -81,6 +85,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 }
                 #endregion 
                 Stream downloadAttachments = documentProvision.DownloadAttachments(mailAttachmentDetails);
+
                 return matterCenterServiceFunctions.ServiceResponse(downloadAttachments, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -88,6 +93,76 @@ namespace Microsoft.Legal.MatterCenter.Web
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
+        }
+
+
+        /// <summary>
+        /// Gets the documents based on search criteria.
+        /// </summary>
+        /// <param name="searchRequestVM"></param>
+        /// <returns></returns>
+        [HttpPost("downloadattachments")]
+        [SwaggerResponse(System.Net.HttpStatusCode.OK)]
+        public IActionResult DownloadAttachments([FromBody]MailAttachmentDetails mailAttachmentDetails)
+        {
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
+                GenericResponseVM genericResponse = null;
+                if (mailAttachmentDetails == null && mailAttachmentDetails.AttachmentContent == null)
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                }
+                #endregion 
+                string emailText = WebUtility.UrlDecode(mailAttachmentDetails.AttachmentContent);
+                MemoryStream emailStream = GenerateStreamFromString(emailText);
+                string emailName = documentSettings.TempEmailName + new Guid().ToString() + ServiceConstants.EMAIL_FILE_EXTENSION;
+                HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);                
+                result.Content = new StreamContent(emailStream);
+                result.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+                result.Content.Headers.Add("content-disposition", "inline; filename=" + emailName);
+
+                return matterCenterServiceFunctions.ServiceResponse(result, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        ///// <summary>
+        ///// Generates the stream from mail content.
+        ///// </summary>
+        ///// <param name="streamValue">The stream value.</param>
+        ///// <returns>Memory Stream.</returns>
+        private MemoryStream GenerateStreamFromString(string streamValue)
+        {
+            MemoryStream result = null;
+            try
+            {
+                using (MemoryStream mailStream = new MemoryStream())
+                {
+                    StreamWriter mailStreamWriter = new StreamWriter(mailStream);
+                    mailStreamWriter.Write(streamValue);
+                    mailStreamWriter.Flush();
+                    mailStream.Position = 0;
+                    result = mailStream;
+                }
+            }
+            catch (Exception exception)
+            {
+                //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, UIConstantStrings.LogTableName);
+                result = new MemoryStream();
+            }
+            return result;
         }
     }
 }
