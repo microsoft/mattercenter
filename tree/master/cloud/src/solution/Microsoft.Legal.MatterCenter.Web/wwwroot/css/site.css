@@ -527,16 +527,16 @@ textarea {
     border-radius: 0;
 }
 
-#searchmatter ul li a {
-    height: 30px;
-    padding: 5px 10px;
-}
+    #searchmatter ul li a {
+        height: 30px;
+        padding: 5px 10px;
+    }
 
-#searchmatter ul li a:hover {
-    background-color: #cde6f7 !important;
-    font-family: "Segoe UI Semibold", "Segoe UI Web Semibold" !important;
-    color: #333 !important;
-}
+        #searchmatter ul li a:hover {
+            background-color: #cde6f7 !important;
+            font-family: "Segoe UI Semibold", "Segoe UI Web Semibold" !important;
+            color: #333 !important;
+        }
 
 #searchmatter .active {
     background-color: #cde6f7 !important;
@@ -548,3 +548,31 @@ textarea {
     background-color: #cde6f7 !important;
     outline: 0;
 }
+
+.PersonalInfoFlyout {
+    position: absolute;
+    z-index: 101;
+    width: 400px;
+    height: 150px;
+    background-color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    border: 1px solid #d1d1d1;
+    right: 30px;
+    top: 40px;
+    box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.47);
+}
+
+.ContextualHelp{
+    border: 1px #d1d1d1;
+    position: absolute;
+    z-index: 102;
+    max-height: 442px;
+    max-width: 370px;
+    top: 5px;
+    right: 5px;
+    background: #fff;
+    box-shadow: 0 0 7px 0 #888888;
+    overflow-y: auto;
+}
+
