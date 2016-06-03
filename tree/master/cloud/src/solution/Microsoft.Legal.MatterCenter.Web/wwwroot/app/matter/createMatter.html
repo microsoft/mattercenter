@@ -87,7 +87,7 @@
 
                 <div>
 
-                    <select class="medium clear" ng-class="{'errorBorder' :  (cm.errorBorder == 'client')}" ng-model="cm.selectedClientName" ng-change="cm.getSelectedClientValue(cm.selectedClientName)" required ng-options="client.id as client.name for client in cm.clientNameList ">
+                    <select class="medium clear" ng-class="{'errorBorder' :  (cm.errorBorder == 'client')}" ng-model="cm.selectedClient"  ng-change="cm.getSelectedClientValue(cm.selectedClient)"  ng-options='client.name for client in cm.clientNameList track by client.id' required>
                         <option value="" label="- Select a client -"></option>
                     </select>
                     
