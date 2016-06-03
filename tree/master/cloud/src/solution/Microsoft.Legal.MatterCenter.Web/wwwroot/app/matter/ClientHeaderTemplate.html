@@ -29,11 +29,7 @@
         </div>
     </div>
     <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
-
-        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by client name'>{{ col.colDef.displayName }}</span>
-        <span ui-grid-visible='col.sort.direction' aria-label='Sort None' class='ui-grid-invisible'></span>
-        <span class='sort pull-right' ng-show='grid.appScope.sortMCClient'>↑</span>
-        <span ng-show='grid.appScope.sortDownMCClient' class='sort pull-right'>↓</span>
+        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by client name'>{{ col.colDef.displayName }}<span ng-show="grid.appScope.vm.asc{{col.colDef.field}}" style="float:right" class='padl10px'>↑</span><span ng-show="grid.appScope.vm.desc{{col.colDef.field}}" style="float:right" class='padlf10'>↓</span></span>
     </div>
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>
 

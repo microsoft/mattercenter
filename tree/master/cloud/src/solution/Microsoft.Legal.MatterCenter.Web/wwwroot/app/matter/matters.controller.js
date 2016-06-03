@@ -3,11 +3,12 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window',
-        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse',
+        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse) {
             var vm = this;
             vm.selected = "";
             vm.mattername = "All Matters";
+            vm.sortname = "";
 
             //#region Onload show ui grid and hide error div
             //start
@@ -1151,8 +1152,29 @@
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
+
                     }
                 });
+            }
+
+            vm.showSortExp = function () {
+                if (localStorage.sortexp != "" || localStorage.sortexp != undefined || localStorage.sortby != "" || localStorage.sortby != undefined) {
+                    if (localStorage.sortby=="asc") {
+                        var other_string = "desc" + localStorage.sortexp;
+                        var othermodel = $parse(other_string);
+                        othermodel.assign(vm, false);
+                    } else {
+                        var asc_string = "asc" + localStorage.sortexp;
+                        var ascmodel = $parse(asc_string);
+                        ascmodel.assign(vm, false);
+                    }
+                    var the_string = localStorage.sortby + localStorage.sortexp;
+                    var model = $parse(the_string);
+                    model.assign(vm, true);
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                }
             }
 
             $scope.sortChanged = function (grid, sortColumns) {
@@ -1166,13 +1188,17 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.MatterNameSort = "desc";
+                                localStorage.MatterNameSort = "desc"; localStorage.sortby = "asc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.MatterNameSort = "asc";
+                                localStorage.MatterNameSort = "asc"; localStorage.sortby = "desc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                         } else {
                             vm.divuigrid = true;
@@ -1186,14 +1212,18 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.ClientSort = "desc";
+                                localStorage.ClientSort = "desc"; localStorage.sortby = "asc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                             else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.ClientSort = "asc";
+                                localStorage.ClientSort = "asc"; localStorage.sortby = "desc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                         } else {
                             vm.divuigrid = true;
@@ -1207,13 +1237,17 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.ClientIDSort = "desc";
+                                localStorage.ClientIDSort = "desc"; localStorage.sortby = "asc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.ClientIDSort = "asc";
+                                localStorage.ClientIDSort = "asc"; localStorage.sortby = "desc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
 
                         } else {
@@ -1228,13 +1262,17 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.ModiFiedTimeSort = "desc";
+                                localStorage.ModiFiedTimeSort = "desc"; localStorage.sortby = "asc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.ModiFiedTimeSort = "asc";
+                                localStorage.ModiFiedTimeSort = "asc"; localStorage.sortby = "desc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
 
                         } else {
@@ -1249,13 +1287,17 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.ResAttoSort = "desc";
+                                localStorage.ResAttoSort = "desc"; localStorage.sortby = "asc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.ResAttoSort = "asc";
+                                localStorage.ResAttoSort = "asc"; localStorage.sortby = "desc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                         } else {
                             vm.divuigrid = true;
@@ -1269,13 +1311,17 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.SubAreaSort = "desc";
+                                localStorage.SubAreaSort = "desc"; localStorage.sortby = "asc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.SubAreaSort = "desc";
+                                localStorage.SubAreaSort = "asc"; localStorage.sortby = "desc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                         } else {
                             vm.divuigrid = true;
@@ -1289,14 +1335,19 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.OpenDateSort = "desc"
+                                localStorage.OpenDateSort = "desc"; localStorage.sortby = "asc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.OpenDateSort = "asc"
+                                localStorage.OpenDateSort = "asc"; localStorage.sortby = "desc";
+                                localStorage.sortexp = sortColumns[0].field;
+                                $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
+
                         } else {
                             vm.divuigrid = true;
                             vm.nodata = false;
@@ -1371,6 +1422,39 @@
                 SortRequest.SearchObject.Sort.Direction = 0;
                 $scope.FilterByType();
             }
+
+            //#endregion
+
+
+            //#region for displaying the Personal Info 
+            $rootScope.displayinfo = false;
+            $rootScope.dispinner = true;
+            $rootScope.contextualhelp = false;
+            $rootScope.dispcontextualhelpinner = true;
+            $rootScope.dispPersonal = function ($event) {
+                $event.stopPropagation();
+                if ($rootScope.dispinner) {
+                    $rootScope.displayinfo = true;
+                    $rootScope.dispinner = false;
+                } else {
+                    $rootScope.displayinfo = false;
+                    $rootScope.dispinner = true;
+                }
+            }
+            //#endregion
+
+            //#region for displaying contextual help 
+            $rootScope.dispContextualHelp = function ($event) {
+                $event.stopPropagation();
+                if ($rootScope.dispcontextualhelpinner) {
+                    $rootScope.contextualhelp = true;
+                    $rootScope.dispcontextualhelpinner = false;
+                } else {
+                    $rootScope.contextualhelp = false;
+                    $rootScope.dispcontextualhelpinner = true;
+                }
+            }
+
 
             //#endregion
 

@@ -7,7 +7,9 @@ angular.module('matterMain', [
   'ui.grid',
   'ui.grid.selection',
   'ui.bootstrap',
-  'ui.grid.pagination','ngSanitize'
+  'ui.grid.pagination',
+  'ngSanitize',
+  'ngAnimate'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {
@@ -55,14 +57,14 @@ angular.module('matterMain', [
                 }
             }, requireADLogin: true
         })
-        .state('mc.createMatter', {  
-            url: "^/createMatter",  
-            views: {  
-                "contentView": {  
-                    templateUrl: '/app/matter/createMatter.html',  
-                    controller: 'createMatterController as cm'  
-                }  
-            }, requireADLogin: true  
+        .state('mc.createMatter', {
+            url: "^/createMatter",
+            views: {
+                "contentView": {
+                    templateUrl: '/app/matter/createMatter.html',
+                    controller: 'createMatterController as cm'
+                }
+            }, requireADLogin: true
         })
         .state('mc.documentdashboard', {
             url: "^/documentdashboard",
@@ -98,20 +100,25 @@ angular.module('matterMain', [
              extraQueryParameter: 'nux=1',
              cacheLocation: 'localStorage', // enable this for IE, as sessionStorage does not work for localhost.
          }, $httpProvider);
-         
 
-    }]).directive('menuclose', function () {
+
+    }]).directive('menuclose', function ($rootScope) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
                 $(element).on('click', function (event) {
-                    if (event.target.className == "AppSwitcher OpenSwitcher" || event.target.className == "AppSwitcher OpenSwitcher hide") {
+                    if (event.target.className == "AppSwitcher OpenSwitcher" || event.target.className == "AppSwitcher OpenSwitcher hide" || event.target.className == "AppHeaderProfilePict") {
 
                     } else {
                         $(".AppMenuFlyout").slideUp();
                         $(".CloseSwitcher").addClass("hide");
                         $(".OpenSwitcher").removeClass("hide");
                         $(".MenuCaption").removeClass("hideMenuCaption");
+                        $rootScope.displayinfo = false;
+                        $rootScope.dispinner = true;
+                        $rootScope.contextualhelp = false;
+                        $rootScope.dispcontextualhelpinner = true;
+                        $rootScope.$apply();
                     }
                 });
             }
