@@ -123,6 +123,50 @@ namespace Microsoft.Legal.MatterCenter.Service
             }
         }
 
+        /// <summary>
+        /// Get all counts for all matters, my matters and pinned matters
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        [HttpPost("getmattercounts")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public async Task<IActionResult> GetMatterCounts([FromBody]SearchRequestVM searchRequestVM)
+        {
+            try
+            {
+                //Get the authorization token from the Request header
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                ErrorResponse errorResponse = null;
+                #region Error Checking                
+                if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                }
+                #endregion                
+                int allMatterCounts = await matterProvision.GetMatterCounts(searchRequestVM);
+                int myMatterCounts = await matterProvision.GetMyMatterCounts(searchRequestVM);
+                int pinnedMatterCounts = await matterProvision.GetPinnedMatterCounts(searchRequestVM.Client);
+                var matterCounts = new
+                {
+                    AllMatterCounts = allMatterCounts,
+                    MyMatterCounts = myMatterCounts,
+                    PinnedMatterCounts = pinnedMatterCounts,
+                };
+                return matterCenterServiceFunctions.ServiceResponse(matterCounts, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
 
         /// <summary>
         /// pin the matter

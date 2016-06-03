@@ -86,8 +86,8 @@
                     { field: 'matterClientId', width: '15%', displayName: 'Client.Matter ID', headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false },
                     { field: 'matterModifiedDate', width: '15%', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
                     { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: 'Responsible attorney', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
-                    { field: 'pin', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
-                    { field: 'upload', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal($event, row.entity)"/></div>', enableColumnMenu: false }
+                    { field: 'pin', displayName: '',width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
+                    { field: 'upload', displayName: '', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal($event, row.entity)"/></div>', enableColumnMenu: false }
                 ],
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
@@ -137,6 +137,15 @@
                     resource: 'matterDashBoardResource',
                     method: 'getTaxonomyDetails',
                     data: optionsForPracticeGroup,
+                    success: callback
+                });
+            }
+
+            function getMatterCounts(searchRequest, callback) {
+                api({
+                    resource: 'matterDashBoardResource',
+                    method: 'getMatterCounts',
+                    data: searchRequest,
                     success: callback
                 });
             }
@@ -195,7 +204,7 @@
 
 
             //SearchRequest Object that will be filled up for different search requirements
-            var jsonMatterSearchRequest = {
+            var jsonMatterSearchRequest = {                
                 Client: {
                     Url: configs.global.repositoryUrl
                 },
@@ -209,7 +218,7 @@
                         AOLList: [""],
                         FromDate: "",
                         ToDate: "",
-                        FilterByMe: "0"
+                        FilterByMe: 0
                     },
                     Sort: {
                         ByProperty: 'LastModifiedTime',
@@ -218,6 +227,29 @@
                 }
             };
 
+            //#reion This function will get counts for all matters, my matters and pinned matters
+            vm.getMatterCounts = function () {
+                vm.lazyloaderdashboard = false;
+                var searchToText = '';
+                var finalSearchText = '';
+                if (vm.searchText != "") {
+                    searchToText = vm.searchText.replace("(", ",")
+                    searchToText = searchToText.replace(")", "")
+                    var firstText = searchToText.split(',')[0]
+                    var secondText = searchToText.split(',')[1]
+                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                }
+                jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
+                getMatterCounts(jsonMatterSearchRequest, function (response) {
+                    vm.allMatterCount = response.allMatterCounts;
+                    vm.myMatterCount = response.myMatterCounts;
+                    vm.pinMatterCount = response.pinnedMatterCounts;
+                    vm.lazyloaderdashboard = true;
+                });
+            }
+            //#endregion
+
+            //#region This api will get all matters which are pinned and this will be invoked when the user clicks on "Pinned Matters Tab"
             vm.getMatterPinned = function () {
                 vm.lazyloaderdashboard = false;
                 var pinnedMattersRequest = {
@@ -229,11 +261,9 @@
                         angular.forEach(response, function (res) {
                             res.pinType = "unpin"
                         })
-                    }
-                    
-                    vm.pinMatterCount = response.length;
-                    vm.Pinnedobj = response
-                    vm.matterGridOptions.data.length = 0;
+                    }                    
+                    vm.getMatterCounts();
+                    vm.Pinnedobj = response                    
                     vm.matterGridOptions.data = response;
                     if (!$scope.$$phase) {
                         $scope.$apply();
@@ -241,8 +271,10 @@
                     vm.lazyloaderdashboard = true;
                 });
             }
+            //#endregion
+            
 
-            //This search function will be used when the user enters some text in the search text box
+            //#regionThis search function will be used when the user enters some text in the search text box and presses search button
             vm.searchMatters = function (val) {
                 vm.lazyloaderdashboard = false;
                 var searchRequest = {
@@ -263,12 +295,32 @@
                 return matterDashBoardResource.get(searchRequest).$promise;
                 vm.lazyloaderdashboard = true;
             }
+            //#endregion
+
+            vm.myMatters = function () {
+                vm.lazyloaderdashboard = false;
+                var searchToText = '';
+                var finalSearchText = '';
+                if (vm.searchText != "") {
+                    searchToText = vm.searchText.replace("(", ",")
+                    searchToText = searchToText.replace(")", "")
+                    var firstText = searchToText.split(',')[0]
+                    var secondText = searchToText.split(',')[1]
+                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                }
+                jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
+                jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
+                get(jsonMatterSearchRequest, function (response) {
+                    vm.matterGridOptions.data = response;
+                    vm.myMatterCount = response.length;
+                    vm.lazyloaderdashboard = true;
+                });
+            }
 
             //This search function will be used for binding search results to the grid
-            vm.search = function () {
+            vm.search = function (isMy) {
                 vm.lazyloaderdashboard = false;
-                //"(MCMatterName:\"testerv123\" AND MCMatterID:\"123Test\")",
-                //test1234(test1d)
+                
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.searchText != "") {
@@ -285,9 +337,16 @@
                     },
                     SearchObject: {
                         PageNumber: 1,
-                        ItemsPerPage: 50,
+                        ItemsPerPage: 30,
                         SearchTerm: finalSearchText,
-                        Filters: {},
+                        Filters: {
+                            ClientsList:[""],
+                            PGList:[""],
+                            AOLList:[""],
+                            FromDate:"",
+                            ToDate:"",
+                            FilterByMe: 0
+                        },
                         Sort: {
                             ByProperty: "LastModifiedTime",
                             Direction: 1
@@ -316,13 +375,12 @@
                                 });
                             });
                             vm.matterGridOptions.data = response;
-                            vm.allMatterCount = response.length;
+                            
                             vm.lazyloaderdashboard = true;
                         }
                         else {
                             vm.lazyloaderdashboard = true;
-                            vm.matterGridOptions.data = response;
-                            vm.allMatterCount = response.length
+                            vm.matterGridOptions.data = response;                            
                             vm.pinMatterCount = 0;
                         }
                     });
@@ -467,11 +525,7 @@
                 vm.aoldropvisible = false;
             }
             //#endregion
-
-            //vm.getMatters();
-            //vm.getPinnedMatters();
-            //vm.getMyMatters();            
-            //vm.getPracticeGroups()
+            
 
             //#endregion 
 
@@ -672,7 +726,9 @@
             //#endregion
 
             //Call search api on page load
+            $timeout(vm.getMatterCounts(), 100);
             $timeout(vm.search(), 500);
+            
 
             //#region For Sorting by Alphebatical or Created date
             var SortRequest = {

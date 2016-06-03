@@ -51,6 +51,43 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.userRepositoy = userRepositoy;
         }
 
+        public async Task<int> GetMatterCounts(SearchRequestVM searchRequestVM)
+        {
+            searchRequestVM.SearchObject.Filters.FilterByMe = 0;
+            var searchObject = searchRequestVM.SearchObject;
+            // Encode all fields which are coming from js
+            SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
+            // Encode Search Term
+            searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
+                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
+                ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+
+            var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
+            return searchResultsVM.TotalRows;
+            
+        }
+
+        public async Task<int> GetMyMatterCounts(SearchRequestVM searchRequestVM)
+        {
+            searchRequestVM.SearchObject.Filters.FilterByMe = 1;
+            var searchObject = searchRequestVM.SearchObject;
+            // Encode all fields which are coming from js
+            SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
+            // Encode Search Term
+            searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
+                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
+                ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+
+            var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
+            return searchResultsVM.TotalRows;
+        }
+
+        public async Task<int> GetPinnedMatterCounts(Client client)
+        {
+            var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(client);
+            return pinResponseVM.TotalRows;
+        }
+
 
         public async Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM)
         {

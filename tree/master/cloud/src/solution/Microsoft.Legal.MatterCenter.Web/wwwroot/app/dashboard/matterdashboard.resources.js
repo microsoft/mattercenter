@@ -37,5 +37,10 @@ angular.module('matterMain')
                       url: '/api/v1/matter/getfolderhierarchy'
                      
                   }),
+                  'getMatterCounts': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/getmattercounts'
+                     
+                  }),
               });
       }]);

@@ -209,7 +209,7 @@
             </div>
             <div class="col-xs-12 padtop20">
                 <ul class="nav nav-tabs" toggletab>
-                    <li><a href="#MyMatters" data-toggle="tab">My matters ({{vm.myMatterCount}})</a></li>
+                    <li><a href="#MyMatters" data-toggle="tab" ng-click="vm.search('my')">My matters ({{vm.myMatterCount}})</a></li>
                     <li class="active"><a data-toggle="tab" ng-click="vm.search()">All matters ({{vm.allMatterCount}})</a></li>
                     <li><a href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">Pinned matters ({{vm.pinMatterCount}})</a></li>
                 </ul>
