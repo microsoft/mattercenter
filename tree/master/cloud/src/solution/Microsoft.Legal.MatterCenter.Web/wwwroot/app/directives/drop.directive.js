@@ -35,7 +35,8 @@ matterMain.directive('droppable', function () {
                 var sourceItems = [];
                 
                 //Check if the file has been dropped from the users desktop
-                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length != 0){
+                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length != 0) {
+                    if (e.preventDefault) { e.preventDefault(); }
                     //Need to handler files that has been dragged from the user desktop
                     var sourceFiles = {
                         files : e.dataTransfer.files,

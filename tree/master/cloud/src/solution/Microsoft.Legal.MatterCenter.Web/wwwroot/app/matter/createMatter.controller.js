@@ -16,11 +16,10 @@
             cm.bMatterLandingPage = false;
             cm.oSiteUsers = [];
             cm.successBanner = false;
-          
-cm.createBtnDisabled=false;
-            
+            cm.selectedClient = undefined;
+            cm.createBtnDisabled = false;            
             cm.createButton = "Create";
-
+           cm.clientUrl = "";
 
             var w = angular.element($window);
 
@@ -113,7 +112,8 @@ cm.createBtnDisabled=false;
             var optionsForPracticeGroup = new Object;
             var optionsForCheckMatterName = new Object;
             // var optionsForUsers = new Object;
-            var siteCollectionPath = "https://msmatter.sharepoint.com/sites/microsoft";
+            var siteCollectionPath = "";
+// "https://msmatter.sharepoint.com/sites/microsoft";
 
             ////API calling functions
 
@@ -242,7 +242,7 @@ cm.createBtnDisabled=false;
 
             optionsForClientGroup = {
                 Client: {
-                    Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                    Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
                     TermGroup: "MatterCenterTerms",
@@ -255,7 +255,7 @@ cm.createBtnDisabled=false;
             optionsForPracticeGroup = {
                 Client: {
 
-                    Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                    Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
                     TermGroup: "MatterCenterTerms",
@@ -268,7 +268,7 @@ cm.createBtnDisabled=false;
             optionsForCheckMatterName={
                 Client: {
 
-                    Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                    Url: cm.clientUrl
                 },
                 Matter: {
                     MatterGuid: "",
@@ -281,7 +281,7 @@ cm.createBtnDisabled=false;
                 var searchUserRequest = {
                     Client: {
 
-                        Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                        Url: cm.clientUrl
                     },
                     SearchObject: {
                         SearchTerm: val
@@ -294,14 +294,14 @@ cm.createBtnDisabled=false;
             var optionsForRoles = new Object;
             optionsForRoles = {
 
-                Url: "https://msmatter.sharepoint.com/sites/catalog"
+                Url: configs.global.repositoryUrl
 
             }
 
             var optionsForPermissionLevels = new Object;
             optionsForPermissionLevels = {
 
-                Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                Url: cm.clientUrl
             }
 
             //call back function for getting the clientNamesList
@@ -309,7 +309,8 @@ cm.createBtnDisabled=false;
     getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {              
 
                 cm.clientNameList = response.clientTerms;
-               // jQuery('#myModal').modal('show');
+        // jQuery('#myModal').modal('show');
+               // optionsForPracticeGroup.Client.Url=cm.clientUrl;
                 getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                     cm.pracitceGroupList = response.pgTerms;
                     // cm.popupContainerBackground = "hide";
@@ -408,10 +409,15 @@ cm.createBtnDisabled=false;
             //function to get the clientId from ClientName dropdown
             cm.getSelectedClientValue = function (client) {              
                 
-                cm.clientId = cm.selectedClientName = client;
+                
+               
               
-                if (null != cm.clientId) {
+                if (undefined !== client && null!==client) {
+                cm.clientId = client.id;
+                cm.selectedClientName = client.name;
+                cm.clientUrl = client.url;
                     cm.popupContainerBackground = "Show";
+                    siteCollectionPath = cm.clientUrl;
 
                     getDefaultMatterConfigurations(siteCollectionPath, function (result) {
                       
@@ -685,7 +691,7 @@ cm.createBtnDisabled=false;
                 }
                 if (bInValid){
                 optionsForCheckMatterName.Matter.Name = cm.matterName.trim();
-               
+                optionsForCheckMatterName.Client.Url=cm.clientUrl;
                     getCheckValidMatterName(optionsForCheckMatterName, function (response) {
                         if (response.code != 200) {
                             cm.errTextMsg = "Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
@@ -917,29 +923,34 @@ cm.createBtnDisabled=false;
                 }
             }
 
-           
-
-          var callCheckSecurityGroupExists=function(sectionName){
-                
-                cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
-                //console.log(cm.assignPermissionTeams);
-                var count=1;
+           function getArrAssignedUserNamesAndEmails(){
+            cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
+            var count=1;
                 angular.forEach(cm.assignPermissionTeams, function (team) { //For loop
                     cm.arrAssignedUserName.push(getUserName(team.assignedUser + ";", true));
                     cm.arrAssignedUserEmails.push(getUserName(team.assignedUser + ";", false));
                     cm.userIDs.push("txtAssign" +count++ );
                 });
+
+            }
+
+
+          var callCheckSecurityGroupExists=function(sectionName){
+                
+               
+                //console.log(cm.assignPermissionTeams);
+               getArrAssignedUserNamesAndEmails();
                 var optionsForSecurityGroupCheck = {
                     Client: {
 
-                        Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                        Url: cm.clientUrl
                     },
                     Matter: {
                         Name : cm.matterName.trim(),
                         AssignUserNames : cm.arrAssignedUserName,
                         AssignUserEmails :cm.arrAssignedUserEmails,
                         Conflict:{
-                            Identified : "True"
+                            Identified : cm.conflictRadioCheck
                         },
                         BlockUserNames : (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : [],
                     },
@@ -1047,7 +1058,7 @@ cm.createBtnDisabled=false;
             //$scope.SelectModal= function(){
             //   // jQuery('#myModal').modal('show');
             //}
-            cm.secureMatterRadioEnabled = false;
+            cm.secureMatterRadioEnabled = true;
             cm.conflictRadioCheckValue = true;
             cm.conflictRadioChange = function (value) {
                 cm.blockedUserName = "";
@@ -1080,7 +1091,10 @@ cm.createBtnDisabled=false;
                 if (localStorage.getItem("iLivePage") == 2 || localStorage.getItem("iLivePage") == 3) {
                     var oPageData = JSON.parse(localStorage.getItem("oPageOneData"));
                     cm.clientId = oPageData.ClientId;
-                    cm.selectedClientName = oPageData.ClientId;
+                    cm.clientUrl=oPageData.Client.url;
+
+                    cm.selectedClientName = oPageData.Client.name;
+                    cm.selectedClient = oPageData.Client;
                     cm.matterName = oPageData.MatterName;
                     cm.matterId = oPageData.MatterId;
                     cm.matterDescription = oPageData.MatterDescription;
@@ -1249,6 +1263,7 @@ cm.createBtnDisabled=false;
                     bValid = true;
                 }
                 if (bValid) {
+                    getArrAssignedUserNamesAndEmails();
                     var matterMetdataVM = {
 
                         Matter: {
@@ -1259,7 +1274,7 @@ cm.createBtnDisabled=false;
                                 Identified: cm.conflictRadioCheck,
                                 CheckBy: sCheckBy,
                                 CheckOn: cm.conflictDate,
-                                SecureMatter: "True"
+                                SecureMatter: cm.secureMatterCheck
                             },
                             BlockUserNames: sBlockUserName,
                             AssignUserNames: cm.arrAssignedUserName,
@@ -1272,7 +1287,7 @@ cm.createBtnDisabled=false;
                         Client: {
                             Id: cm.clientId,
                             Name: "Microsoft",
-                            Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                            Url: cm.clientUrl
                         },
                         MatterConfigurations: {
                             IsConflictCheck: cm.chkConfilctCheck,
@@ -1291,13 +1306,13 @@ cm.createBtnDisabled=false;
                     cm.successBanner = true; cm.createBtnDisabled = true;
                     createMatter(matterMetdataVM, function (response) {
 
-                        ///  cm.clientNameList = response.clientTerms;
+                        
                         console.log("createMatter API success");
                         console.log(response);
 
 
                         cm.successMsg = "Step 2/3: Assigning permissions to matter library and OneNote library,associating Content Types, creating view and matter landing page..."
-                        //    cm.popupContainerBackground = "show";// jQuery('#myModal').modal('show');
+                        
                         associateContentTypes();
                         assignPermission();
                         createMatterLandingPage();
@@ -1340,8 +1355,8 @@ cm.createBtnDisabled=false;
                 var optionsForAssignContentTypeMetadata = {
                     Client: {
                         Id: cm.clientId,
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                        Name: cm.selectedClientName,
+                        Url: cm.clientUrl
                     },
                     Matter: {
                         Name: cm.matterName.trim(),
@@ -1388,8 +1403,8 @@ cm.createBtnDisabled=false;
 
                     Client: {
                         Id: cm.clientId,
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                        Name: cm.selectedClientName,
+                        Url: cm.clientUrl
                     },
                     Matter: {
                         Name: cm.matterName.trim(),
@@ -1430,8 +1445,8 @@ cm.createBtnDisabled=false;
 
                     Client: {
                         Id: cm.clientId,
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                        Name: cm.selectedClientName,
+                        Url: cm.clientUrl
                     },
                     MatterConfigurations: {
 
@@ -1594,8 +1609,8 @@ cm.createBtnDisabled=false;
                 var optionsForStampMatterDetails = {
                     Client: {
                         Id: cm.clientId,
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                        Name: cm.selectedClientName,
+                        Url: cm.clientUrl
                     },
                     Matter: {
                         Name: cm.matterName.trim(),
@@ -1605,7 +1620,7 @@ cm.createBtnDisabled=false;
                             Identified: cm.conflictRadioCheck,
                             CheckBy: sCheckBy,
                             CheckOn: cm.conflictDate,
-                            SecureMatter: "True"
+                            SecureMatter: cm.secureMatterCheck
                         },
                         BlockUserNames: sBlockUserName,
                         AssignUserNames: cm.arrAssignedUserName,
@@ -1989,6 +2004,8 @@ cm.createBtnDisabled=false;
 
             function clearAllProperties(){
                 cm.clientId = "";
+cm.selectedClient="";
+cm.clientUrl="";
                 cm.selectedClientName = "";
                 cm.matterName = "";
                 cm.matterId = "";
@@ -2026,7 +2043,7 @@ cm.createBtnDisabled=false;
             }
 
             function storeMatterDataToLocalStorageFirstPage() {
-                oPageOneState.ClientValue.push({ ClientName: cm.clientNameList });
+                oPageOneState.Client= cm.selectedClient 
                 oPageOneState.ClientId = cm.clientId.trim();
                 oPageOneState.MatterName = cm.matterName.trim();
                 oPageOneState.MatterId = cm.matterId.trim();

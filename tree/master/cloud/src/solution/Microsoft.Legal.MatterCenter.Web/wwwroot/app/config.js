@@ -13,7 +13,7 @@ var configs = {
         "attachFailureMessage":"One or more of your selected documents failed to attach:",
         "attachButtonText":"Attach Documents"
     },
-    global:{
+    "global":{
         repositoryUrl:"https://msmatter.sharepoint.com/sites/catalog",        
     }
  };
