@@ -112,14 +112,13 @@
            
 
             //#region Cart functionality
-            
-
             vm.cartelements = [];
-
             //function to toggle check all 
             vm.toggleChecker = function (checked, rowinfo) {
                 if (checked) {
-                    vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) + 1;
+                    if (vm.documentsCheckedCount >= 0) {
+                        vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) + 1;
+                    }
                     vm.cartelements.push(rowinfo);
                 }
                 else {
@@ -157,7 +156,16 @@
             vm.toggleCheckerAll = function (checked) {
                 for (var i = 0; i < vm.documentGridOptions.data.length; i++) {
                     vm.documentGridOptions.data[i].checker = checked;
+                    if (checked) {
+                        vm.cartelements.push(vm.documentGridOptions.data[i]);
+                        vm.documentsCheckedCount = vm.documentGridOptions.data.length;
+                    }
+                    else {
+                        vm.cartelements = [];
+                        vm.documentsCheckedCount = 0;
+                    }
                 }
+                
             };           
 
             vm.showMailCartModal = function () {
@@ -169,13 +177,17 @@
             //Event is going to fire when the user clicks on "Email as attachment" or "Email as link" in the modal window
             vm.downloadEmailAsAttachment = function (downloadAttachmentsAsEmail) {
                 //Get all the documents which are checked
-                angular.forEach(vm.cartelements, function (selectedDocument) { 
+                var i = 0;
+                angular.forEach(vm.cartelements, function (selectedDocument) {
+                    
                     if (selectedDocument.selected) {
                         vm.selectedDocuments.push(selectedDocument);
                         //Display progress icon for each checked item
-                        angular.element("#document-" + selectedDocument.documentID).css("display", "block");
+                        angular.element("#document-" + i).css("display", "block");
                     }
+                    i = i + 1;
                 });
+                i = 0;
                 if (vm.selectedDocuments.length > 0) {
                     //Disbale the click event of the button. Once we get the response from the server, enable the click event again
                     vm.enable = false;
@@ -204,8 +216,9 @@
                 downloadAttachmentsAsStream(mailAttachmentDetailsRequest, function (response) {
                     var result = encodeURIComponent(response);
                     //Once we get the response, stop the progress
-                    angular.forEach(vm.selectedDocuments, function (selectedDocument) {
-                        angular.element("#document-" + selectedDocument.documentID).css("display", "none");
+                    angular.forEach(vm.cartelements, function (document) {
+                        angular.element("#document-" + i).css("display", "none");
+                        i = i + 1;
                     });
                     //clear the selectedDocuments array
                     vm.selectedDocuments = [];
@@ -411,10 +424,8 @@
             }
             //#endregion
 
-            //Call all document related api if view is document
-
-            $timeout(vm.getDocuments(), 700);
             
+            $timeout(vm.getDocuments(), 700);           
 
             //This function will pin or unpin the matter based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
