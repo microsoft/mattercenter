@@ -116,8 +116,35 @@
                     success: callback
                 });
             }
+
+            //Callback function for pin 
+            function getHelp(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getHelp',
+                    data: options,
+                    success: callback
+                });
+            }
+            
             //#endregion
 
+
+            //#region Help
+            vm.help = function (pageIndex) {
+                var helpRequestModel = {
+                    Client :
+                    {
+                        Url : "https://msmatter.sharepoint.com/sites/catalog"
+                    },
+                    SelectedPage: pageIndex
+                };
+                getHelp(helpRequestModel, function (response) {
+                    vm.helpData = response;
+                });
+            }
+
+            //#endregion
 
             //#region Code for Upload functionality
             vm.docUpLoadSuccess = false;
@@ -1448,6 +1475,7 @@
                 $event.stopPropagation();
                 if ($rootScope.dispcontextualhelpinner) {
                     $rootScope.contextualhelp = true;
+                    vm.help('');
                     $rootScope.dispcontextualhelpinner = false;
                 } else {
                     $rootScope.contextualhelp = false;

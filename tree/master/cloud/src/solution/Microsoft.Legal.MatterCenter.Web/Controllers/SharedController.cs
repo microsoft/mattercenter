@@ -127,8 +127,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <returns>IActionResult which return List of ContextHelpData in JSON format</returns>        
         [HttpPost("help")]
         [SwaggerResponse(HttpStatusCode.OK)]        
-        public async Task<IActionResult> Help(Client client, string selectedPage)
+        public async Task<IActionResult> Help([FromBody]HelpRequestModel helpRequestModel)
         {
+            string selectedPage = helpRequestModel.SelectedPage;
+            Client client = helpRequestModel.Client;
             string result = string.Empty;
             try
             {
