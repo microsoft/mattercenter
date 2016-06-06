@@ -9,7 +9,7 @@
             vm.selected = "";
             vm.mattername = "All Matters";
             vm.sortname = "";
-
+            $rootScope.pageIndex = "1";
             //#region Onload show ui grid and hide error div
             //start
             vm.divuigrid = true;
@@ -47,11 +47,11 @@
                 columnDefs: [
                      { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "20%", cellTemplate: '../app/matter/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterHeaderTemplate.html' },
                      { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "15%", headerCellTemplate: '../app/matter/ClientHeaderTemplate.html' },
-                     { field: 'matterClientId', displayName: 'Client.MatterID', width: "15%", headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+                     { field: 'matterClientId', displayName: 'Client.MatterID', width: "15%", headerCellTemplate: '../app/matter/ClientMatterHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
                      { field: 'matterModifiedDate', displayName: 'Modified Date', width: "10%", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/ModifiedDateTemplate.html' },
-                     { field: 'matterResponsibleAttorney', headerTooltip: 'Click to sort by attorney', width: "15%", displayName: 'Responsible attorney', visible: false },
-                     { field: 'matterSubAreaOfLaw', headerTooltip: 'Click to sort by sub area of law', width: "15%", displayName: 'Sub area of law', visible: false },
-                     { field: 'matterCreatedDate', headerTooltip: 'Click to sort by matter open date', width: "15%", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+                     { field: 'matterResponsibleAttorney', headerCellTemplate: '../app/matter/ResponsibleAttorneyHeaderTemplate.html', width: "15%", displayName: 'Responsible attorney', visible: false },
+                     { field: 'matterSubAreaOfLaw', headerCellTemplate: '../app/matter/SubAreaHeaderTemplate.html', width: "15%", displayName: 'Sub area of law', visible: false },
+                     { field: 'matterCreatedDate', headerCellTemplate: '../app/matter/OpenDateHeaderTemplate.html', width: "15%", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
                 ],
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
@@ -117,34 +117,6 @@
                 });
             }
 
-            //Callback function for pin 
-            function getHelp(options, callback) {
-                api({
-                    resource: 'matterResource',
-                    method: 'getHelp',
-                    data: options,
-                    success: callback
-                });
-            }
-            
-            //#endregion
-
-
-            //#region Help
-            vm.help = function (pageIndex) {
-                var helpRequestModel = {
-                    Client :
-                    {
-                        Url : "https://msmatter.sharepoint.com/sites/catalog"
-                    },
-                    SelectedPage: pageIndex
-                };
-                getHelp(helpRequestModel, function (response) {
-                    vm.helpData = response;
-                });
-            }
-
-            //#endregion
 
             //#region Code for Upload functionality
             vm.docUpLoadSuccess = false;
@@ -1184,20 +1156,17 @@
                 });
             }
 
+
+            vm.sortby = "";
+            vm.sortexp = "";
             vm.showSortExp = function () {
-                if (localStorage.sortexp != "" || localStorage.sortexp != undefined || localStorage.sortby != "" || localStorage.sortby != undefined) {
-                    if (localStorage.sortby=="asc") {
-                        var other_string = "desc" + localStorage.sortexp;
-                        var othermodel = $parse(other_string);
-                        othermodel.assign(vm, false);
+                if (vm.sortexp != "" || vm.sortexp != undefined || vm.sortby != "" || vm.sortby != undefined) {
+                    if (vm.sortby == "asc") {
+                        angular.element("#desc" + vm.sortexp).css("display", "none");
                     } else {
-                        var asc_string = "asc" + localStorage.sortexp;
-                        var ascmodel = $parse(asc_string);
-                        ascmodel.assign(vm, false);
+                        angular.element("#asc" + vm.sortexp).css("display", "none");
                     }
-                    var the_string = localStorage.sortby + localStorage.sortexp;
-                    var model = $parse(the_string);
-                    model.assign(vm, true);
+                    angular.element("#" + vm.sortby + vm.sortexp).css("display", "block");
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
@@ -1215,16 +1184,16 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.MatterNameSort = "desc"; localStorage.sortby = "asc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.MatterNameSort = "desc"; vm.sortby = "asc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.MatterNameSort = "asc"; localStorage.sortby = "desc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.MatterNameSort = "asc"; vm.sortby = "desc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                         } else {
@@ -1239,8 +1208,8 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.ClientSort = "desc"; localStorage.sortby = "asc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.ClientSort = "desc"; vm.sortby = "asc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                             else {
@@ -1248,8 +1217,8 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.ClientSort = "asc"; localStorage.sortby = "desc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.ClientSort = "asc"; vm.sortby = "desc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                         } else {
@@ -1264,16 +1233,16 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.ClientIDSort = "desc"; localStorage.sortby = "asc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.ClientIDSort = "desc"; vm.sortby = "asc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.ClientIDSort = "asc"; localStorage.sortby = "desc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.ClientIDSort = "asc"; vm.sortby = "desc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
 
@@ -1289,16 +1258,16 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.ModiFiedTimeSort = "desc"; localStorage.sortby = "asc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.ModiFiedTimeSort = "desc"; vm.sortby = "asc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.ModiFiedTimeSort = "asc"; localStorage.sortby = "desc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.ModiFiedTimeSort = "asc"; vm.sortby = "desc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
 
@@ -1314,16 +1283,16 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.ResAttoSort = "desc"; localStorage.sortby = "asc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.ResAttoSort = "desc"; vm.sortby = "asc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.ResAttoSort = "asc"; localStorage.sortby = "desc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.ResAttoSort = "asc"; vm.sortby = "desc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                         } else {
@@ -1338,16 +1307,16 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.SubAreaSort = "desc"; localStorage.sortby = "asc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.SubAreaSort = "desc"; vm.sortby = "asc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.SubAreaSort = "asc"; localStorage.sortby = "desc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.SubAreaSort = "asc"; vm.sortby = "desc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                         } else {
@@ -1362,16 +1331,16 @@
                                 SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
                                 SortRequest.SearchObject.Sort.Direction = 0;
                                 $scope.FilterByType();
-                                localStorage.OpenDateSort = "desc"; localStorage.sortby = "asc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.OpenDateSort = "desc"; vm.sortby = "asc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
                                 SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
                                 SortRequest.SearchObject.Sort.Direction = 1;
                                 $scope.FilterByType();
-                                localStorage.OpenDateSort = "asc"; localStorage.sortby = "desc";
-                                localStorage.sortexp = sortColumns[0].field;
+                                localStorage.OpenDateSort = "asc"; vm.sortby = "desc";
+                                vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
 
@@ -1452,40 +1421,6 @@
 
             //#endregion
 
-
-            //#region for displaying the Personal Info 
-            $rootScope.displayinfo = false;
-            $rootScope.dispinner = true;
-            $rootScope.contextualhelp = false;
-            $rootScope.dispcontextualhelpinner = true;
-            $rootScope.dispPersonal = function ($event) {
-                $event.stopPropagation();
-                if ($rootScope.dispinner) {
-                    $rootScope.displayinfo = true;
-                    $rootScope.dispinner = false;
-                } else {
-                    $rootScope.displayinfo = false;
-                    $rootScope.dispinner = true;
-                }
-            }
-            //#endregion
-
-            //#region for displaying contextual help 
-            $rootScope.dispContextualHelp = function ($event) {
-                $event.stopPropagation();
-                if ($rootScope.dispcontextualhelpinner) {
-                    $rootScope.contextualhelp = true;
-                    vm.help('');
-                    $rootScope.dispcontextualhelpinner = false;
-                } else {
-                    $rootScope.contextualhelp = false;
-                    $rootScope.dispcontextualhelpinner = true;
-                }
-            }
-
-
-            //#endregion
-
         }]);
 
     app.directive('popover', function () {
@@ -1533,6 +1468,15 @@
         }
     });
 
+    app.directive('onload', function ($timeout) {
+        return {
+            restrict: 'E',
+            link: function (scope, element, attrs) {
+                $timeout(function () { $('[id^="asc"]').hide(); }, 1000);
+                $timeout(function () { $('[id^="desc"]').hide(); }, 1000);
+            }
+        }
+    });
 
     app.directive('showbreadcrumb', function ($rootScope) {
         return {
@@ -1579,7 +1523,6 @@
             }
         }
     });
-
 })();
 
 function Openuploadmodal(mattername, matterurl) {

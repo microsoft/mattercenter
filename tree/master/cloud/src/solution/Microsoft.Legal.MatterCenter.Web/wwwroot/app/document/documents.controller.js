@@ -11,6 +11,7 @@
         documentResource, $rootScope, uiGridConstants, $location, $http) {
         var vm = this;
         vm.selected = undefined;
+        $rootScope.pageIndex = "2";
         // Onload show ui grid and hide error div
         //start
         vm.divuigrid = true;
@@ -1004,38 +1005,6 @@
                 vm.FilterByType();
             }
         }
-        //#endregion
-
-        //#region for displaying the Personal Info 
-        $rootScope.displayinfo = false;
-        $rootScope.dispinner = true;
-        $rootScope.contextualhelp = false;
-        $rootScope.dispcontextualhelpinner = true;
-        $rootScope.dispPersonal = function ($event) {
-            $event.stopPropagation();
-            if ($rootScope.dispinner) {
-                $rootScope.displayinfo = true;
-                $rootScope.dispinner = false;
-            } else {
-                $rootScope.displayinfo = false;
-                $rootScope.dispinner = true;
-            }
-        }
-        //#endregion
-
-        //#region for displaying contextual help 
-        $rootScope.dispContextualHelp = function ($event) {
-            $event.stopPropagation();
-            if ($rootScope.dispcontextualhelpinner) {
-                $rootScope.contextualhelp = true;
-                $rootScope.dispcontextualhelpinner = false;
-            } else {
-                $rootScope.contextualhelp = false;
-                $rootScope.dispcontextualhelpinner = true;
-            }
-        }
-
-
         //#endregion
 
     }]);

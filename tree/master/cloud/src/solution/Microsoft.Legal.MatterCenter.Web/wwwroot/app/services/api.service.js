@@ -1,14 +1,15 @@
 ﻿'use strict';
 
 angular.module('matterMain')
-  .factory('api', ['matterResource', 'documentResource', 'documentDashBoardResource','matterDashBoardResource',
-    function api(matterResource, documentResource, documentDashBoardResource, matterDashBoardResource) {
+  .factory('api', ['matterResource', 'documentResource', 'documentDashBoardResource','matterDashBoardResource','homeResource',
+    function api(matterResource, documentResource, documentDashBoardResource, matterDashBoardResource,homeResource) {
         var resources = {
             'matterResource': matterResource,
             'documentResource': documentResource,
             'documentDashBoardResource': documentDashBoardResource,
-            'matterDashBoardResource': matterDashBoardResource
-        };
+            'matterDashBoardResource': matterDashBoardResource,
+            'homeResource':homeResource      
+            };
 
         function callAPI(options) {
 
