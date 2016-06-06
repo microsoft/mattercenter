@@ -110,9 +110,9 @@ namespace Microsoft.Legal.MatterCenter.Web
                 int pinnedDocumentCounts = await documentProvision.GetPinnedCounts(searchRequestVM.Client);
                 var documentCounts = new
                 {
-                    AllMatterCounts = allDocumentCounts,
-                    MyMatterCounts = myDocumentCounts,
-                    PinnedMatterCounts = pinnedDocumentCounts,
+                    AllDocumentCounts = allDocumentCounts,
+                    MyDocumentCounts = myDocumentCounts,
+                    PinnedDocumentCounts = pinnedDocumentCounts,
                 };
                 return matterCenterServiceFunctions.ServiceResponse(documentCounts, (int)HttpStatusCode.OK);
             }

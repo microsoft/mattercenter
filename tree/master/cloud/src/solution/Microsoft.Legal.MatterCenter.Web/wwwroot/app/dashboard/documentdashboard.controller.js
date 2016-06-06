@@ -249,6 +249,15 @@
                 });
             }
 
+            function getDocumentCounts(options, callback) {
+                api({
+                    resource: 'documentDashBoardResource',
+                    method: 'getDocumentCounts',
+                    data: options,
+                    success: callback
+                });
+            }
+
             function downloadAttachmentsAsStream(options, callback) {
                 api({
                     resource: 'documentDashBoardResource',
@@ -317,6 +326,42 @@
                 });
             }
 
+            //#endregion
+
+            //#reion This function will get counts for all matters, my matters and pinned matters
+            vm.getDocumentCounts = function () {
+                vm.lazyloaderdashboard = false;
+                var documentRequest = {
+                    Client: {
+                        //ToDo: Need to read from config.js
+                        Url: configs.global.repositoryUrl
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: gridOptions.paginationPageSize,
+                        SearchTerm: "",
+                        Filters: {
+                            ClientsList: [],
+                            FromDate: "",
+                            ToDate: "",
+                            DocumentAuthor: "",
+                            //FilterByMe: 1
+                        },
+                        Sort:
+                          {
+                              ByProperty: "LastModifiedTime",
+                              Direction: 1
+                          }
+                    }
+                }
+                getDocumentCounts(documentRequest, function (response) {
+                    
+                    vm.allDocumentCount = response.allDocumentCounts;
+                    vm.myDocumentCount = response.myDocumentCounts;
+                    vm.pinDocumentCount = response.pinnedDocumentCounts;
+                    vm.lazyloaderdashboard = true;
+                });
+            }
             //#endregion
 
             //#region function to get the documents based on search term
@@ -424,10 +469,10 @@
             }
             //#endregion
 
-            
+            $timeout(vm.getDocumentCounts(), 100);
             $timeout(vm.getDocuments(), 700);           
 
-            //This function will pin or unpin the matter based on the image button clicked
+            //#region This function will pin or unpin the document based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
 
                 if (e.currentTarget.src.toLowerCase().indexOf("images/pin-666.png") > 0) {
@@ -482,10 +527,10 @@
                         }
                     });
                 }
-
             }
+            //#endregion
 
-            //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
+            //#region This event is going to fire when the user clicks onm "Select All" and "UnSelect All" links
             vm.checkAll = function (checkAll, type, $event) {
                 $event.stopPropagation();
                 if (type === 'client') {

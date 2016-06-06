@@ -12,8 +12,8 @@ using Microsoft.Extensions.OptionsModel;
 using System.Globalization;
 using System.Net.Http;
 using Microsoft.Exchange.WebServices.Data;
-using Microsoft.Net.Http.Headers;
-using System.Text;
+
+using System.Reflection;
 
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
@@ -24,51 +24,84 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private IUserRepository userRepository;
         private GeneralSettings generalSettings;
         private DocumentSettings documentSettings;
-        public DocumentProvision(IDocumentRepository docRepository, IUserRepository userRepository, 
-            IUploadHelperFunctions uploadHelperFunctions, IOptions<GeneralSettings> generalSettings, IOptions<DocumentSettings> documentSettings)
+        private ICustomLogger customLogger;
+        private LogTables logTables;
+        public DocumentProvision(IDocumentRepository docRepository, 
+            IUserRepository userRepository, 
+            IUploadHelperFunctions uploadHelperFunctions, 
+            IOptions<GeneralSettings> generalSettings, 
+            IOptions<DocumentSettings> documentSettings, 
+            ICustomLogger customLogger, 
+            IOptions<LogTables> logTables)
         {
             this.docRepository = docRepository;
             this.uploadHelperFunctions = uploadHelperFunctions;
             this.userRepository = userRepository;
             this.generalSettings = generalSettings.Value;
             this.documentSettings = documentSettings.Value;
+            this.customLogger = customLogger;
+            this.logTables = logTables.Value;
         }
 
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
         {
-            searchRequestVM.SearchObject.Filters.FilterByMe = 0;
-            var searchObject = searchRequestVM.SearchObject;
-            // Encode all fields which are coming from js
-            SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
-            // Encode Search Term
-            searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
-                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
-                ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+            try
+            {
+                searchRequestVM.SearchObject.Filters.FilterByMe = 0;
+                var searchObject = searchRequestVM.SearchObject;
+                // Encode all fields which are coming from js
+                SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
+                // Encode Search Term
+                searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
+                    WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
+                    ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
-            var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM);
-            return searchResultsVM.TotalRows;
+                var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM);
+                return searchResultsVM.TotalRows;
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
 
         }
 
         public async Task<int> GetMyCounts(SearchRequestVM searchRequestVM)
         {
-            searchRequestVM.SearchObject.Filters.FilterByMe = 1;
-            var searchObject = searchRequestVM.SearchObject;
-            // Encode all fields which are coming from js
-            SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
-            // Encode Search Term
-            searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
-                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
-                ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+            try
+            {
+                searchRequestVM.SearchObject.Filters.FilterByMe = 1;
+                var searchObject = searchRequestVM.SearchObject;
+                // Encode all fields which are coming from js
+                SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
+                // Encode Search Term
+                searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
+                    WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
+                    ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
-            var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM);
-            return searchResultsVM.TotalRows;
+                var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM);
+                return searchResultsVM.TotalRows;
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
 
         public async Task<int> GetPinnedCounts(Client client)
         {
-            var pinResponseVM = await docRepository.GetPinnedRecordsAsync(client);
-            return pinResponseVM.TotalRows;
+            try
+            {
+                var pinResponseVM = await docRepository.GetPinnedRecordsAsync(client);
+                return pinResponseVM.TotalRows;
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
 
         public Stream DownloadAttachments(MailAttachmentDetails mailAttachmentDetails)

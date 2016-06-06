@@ -88,64 +88,64 @@ namespace Microsoft.Legal.MatterCenter.Repository
             var searchObject = searchRequestVM.SearchObject;
             try
             {
-                using (clientContext = spoAuthorization.GetClientContext(client.Url))
+                clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(client.Url);                
+                KeywordQuery keywordQuery = new KeywordQuery(clientContext);
+                if (string.IsNullOrWhiteSpace(searchObject.SearchTerm))
                 {
-                    KeywordQuery keywordQuery = new KeywordQuery(clientContext);
-                    if (string.IsNullOrWhiteSpace(searchObject.SearchTerm))
-                    {
-                        searchObject.SearchTerm = ServiceConstants.ASTERISK;
-                    }
-
-                    if (searchObject.Filters != null)
-                    {
-                        if (searchObject.Filters.FilterByMe == 1)
-                        {
-                            
-                            Users currentUserDetail = userDetails.GetLoggedInUserDetails(clientContext);
-                            string userTitle = currentUserDetail.Name;
-                            searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, ServiceConstants.SPACE, 
-                                ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
-                                ServiceConstants.OPENING_BRACKET, searchSettings.ManagedPropertyResponsibleAttorney, 
-                                ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle, 
-                                ServiceConstants.DOUBLE_QUOTE, ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
-                                searchSettings.ManagedPropertyTeamMembers, ServiceConstants.COLON, ServiceConstants.SPACE, 
-                                ServiceConstants.DOUBLE_QUOTE, userTitle,
-                                ServiceConstants.DOUBLE_QUOTE, ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
-                        }
-
-                        keywordQuery = FilterMatters(searchObject, keywordQuery);
-
-                        keywordQuery = KeywordQueryMetrics(client, searchObject, keywordQuery, 
-                            ServiceConstants.DOCUMENT_LIBRARY_FILTER_CONDITION, 
-                            searchSettings.ManagedPropertyIsMatter, true);
-
-                        // Create a list of managed properties which are required to be present in search results
-                        List<string> managedProperties = new List<string>();
-                        managedProperties.Add(searchSettings.ManagedPropertyTitle);
-                        managedProperties.Add(searchSettings.ManagedPropertyName);
-                        managedProperties.Add(searchSettings.ManagedPropertyDescription);
-                        managedProperties.Add(searchSettings.ManagedPropertySiteName);
-                        managedProperties.Add(searchSettings.ManagedPropertyLastModifiedTime);
-                        managedProperties.Add(searchSettings.ManagedPropertyPracticeGroup);
-                        managedProperties.Add(searchSettings.ManagedPropertyAreaOfLaw);
-                        managedProperties.Add(searchSettings.ManagedPropertySubAreaOfLaw);
-                        managedProperties.Add(searchSettings.ManagedPropertyMatterId);
-                        managedProperties.Add(searchSettings.ManagedPropertyCustomTitle);
-                        managedProperties.Add(searchSettings.ManagedPropertyPath);
-                        managedProperties.Add(searchSettings.ManagedPropertyMatterName);
-                        managedProperties.Add(searchSettings.ManagedPropertyOpenDate);
-                        managedProperties.Add(searchSettings.ManagedPropertyClientName);
-                        managedProperties.Add(searchSettings.ManagedPropertyBlockedUploadUsers);
-                        managedProperties.Add(searchSettings.ManagedPropertyResponsibleAttorney);
-                        managedProperties.Add(searchSettings.ManagedPropertyClientID);
-                        managedProperties.Add(searchSettings.ManagedPropertyMatterGuid);
-                        //Filter on Result source to fetch only Matter Center specific results
-                        keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
-                        keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
-                        keywordQuery.BypassResultTypes = true;
-                        searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, true, managedProperties);
-                    }
+                    searchObject.SearchTerm = ServiceConstants.ASTERISK;
                 }
+
+                if (searchObject.Filters != null)
+                {
+                    if (searchObject.Filters.FilterByMe == 1)
+                    {
+                            
+                        Users currentUserDetail = userDetails.GetLoggedInUserDetails(clientContext);
+                        string userTitle = currentUserDetail.Name;
+                        searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, ServiceConstants.SPACE, 
+                            ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
+                            ServiceConstants.OPENING_BRACKET, searchSettings.ManagedPropertyResponsibleAttorney, 
+                            ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle, 
+                            ServiceConstants.DOUBLE_QUOTE, ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
+                            searchSettings.ManagedPropertyTeamMembers, ServiceConstants.COLON, ServiceConstants.SPACE, 
+                            ServiceConstants.DOUBLE_QUOTE, userTitle,
+                            ServiceConstants.DOUBLE_QUOTE, ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
+                    }
+
+                    keywordQuery = FilterMatters(searchObject, keywordQuery);
+
+                    keywordQuery = KeywordQueryMetrics(client, searchObject, keywordQuery, 
+                        ServiceConstants.DOCUMENT_LIBRARY_FILTER_CONDITION, 
+                        searchSettings.ManagedPropertyIsMatter, true);
+
+                    // Create a list of managed properties which are required to be present in search results
+                    List<string> managedProperties = new List<string>();
+                    managedProperties.Add(searchSettings.ManagedPropertyTitle);
+                    managedProperties.Add(searchSettings.ManagedPropertyName);
+                    managedProperties.Add(searchSettings.ManagedPropertyDescription);
+                    managedProperties.Add(searchSettings.ManagedPropertySiteName);
+                    managedProperties.Add(searchSettings.ManagedPropertyLastModifiedTime);
+                    managedProperties.Add(searchSettings.ManagedPropertyPracticeGroup);
+                    managedProperties.Add(searchSettings.ManagedPropertyAreaOfLaw);
+                    managedProperties.Add(searchSettings.ManagedPropertySubAreaOfLaw);
+                    managedProperties.Add(searchSettings.ManagedPropertyMatterId);
+                    managedProperties.Add(searchSettings.ManagedPropertyCustomTitle);
+                    managedProperties.Add(searchSettings.ManagedPropertyPath);
+                    managedProperties.Add(searchSettings.ManagedPropertyMatterName);
+                    managedProperties.Add(searchSettings.ManagedPropertyOpenDate);
+                    managedProperties.Add(searchSettings.ManagedPropertyClientName);
+                    managedProperties.Add(searchSettings.ManagedPropertyBlockedUploadUsers);
+                    managedProperties.Add(searchSettings.ManagedPropertyResponsibleAttorney);
+                    managedProperties.Add(searchSettings.ManagedPropertyClientID);
+                    managedProperties.Add(searchSettings.ManagedPropertyMatterGuid);
+                    //Filter on Result source to fetch only Matter Center specific results
+                    keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
+                    keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
+                    keywordQuery.BypassResultTypes = true;
+                    searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, true, managedProperties);
+                }
+                clientContext.Dispose();
                 return searchResponseVM;
             }
             catch(Exception ex)
@@ -168,63 +168,63 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {                
                 var client = searchRequestVM.Client;
                 var searchObject = searchRequestVM.SearchObject;
-                using (clientContext = spoAuthorization.GetClientContext(client.Url))
+                clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(client.Url);                
+                KeywordQuery keywordQuery = new KeywordQuery(clientContext);
+                if (string.IsNullOrWhiteSpace(searchObject.SearchTerm))
                 {
-                    KeywordQuery keywordQuery = new KeywordQuery(clientContext);
-                    if (string.IsNullOrWhiteSpace(searchObject.SearchTerm))
-                    {
-                        searchObject.SearchTerm = ServiceConstants.ASTERISK;
-                    }
-
-                    if (searchObject.Filters != null)
-                    {
-                        if (searchObject.Filters.FilterByMe == 1)
-                        {
-                            ////Get logged in user alias
-                            Users currentUserDetail = userDetails.GetLoggedInUserDetails(clientContext);
-                            string userTitle = currentUserDetail.Name;
-                            searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND,
-                                ServiceConstants.SPACE, ServiceConstants.OPENING_BRACKET, searchSettings.ManagedPropertyResponsibleAttorney,
-                                ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle, ServiceConstants.DOUBLE_QUOTE,
-                                ServiceConstants.SPACE, ServiceConstants.OPERATOR_OR, ServiceConstants.SPACE, searchSettings.ManagedPropertyTeamMembers,
-                                ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle, ServiceConstants.DOUBLE_QUOTE,
-                                ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
-                        }
-
-                        keywordQuery = FilterMatters(searchObject, keywordQuery);
-
-                        keywordQuery = KeywordQueryMetrics(client, searchObject, keywordQuery, ServiceConstants.DOCUMENT_ITEM_FILTER_CONDITION, 
-                            searchSettings.ManagedPropertyIsDocument, false);
-
-                        // Create a list of managed properties which are required to be present in search results
-                        List<string> managedProperties = new List<string>();
-                        managedProperties.Add(searchSettings.ManagedPropertyFileName);
-                        managedProperties.Add(searchSettings.ManagedPropertyTitle);
-                        managedProperties.Add(searchSettings.ManagedPropertyCreated);
-                        managedProperties.Add(searchSettings.ManagedPropertyUIVersionStringOWSTEXT);
-                        managedProperties.Add(searchSettings.ManagedPropertyServerRelativeUrl);
-                        managedProperties.Add(searchSettings.ManagedPropertyFileExtension);
-                        managedProperties.Add(searchSettings.ManagedPropertyDocumentMatterId);
-                        managedProperties.Add(searchSettings.ManagedPropertyDocumentLastModifiedTime);
-                        managedProperties.Add(searchSettings.ManagedPropertySiteTitle);
-                        managedProperties.Add(searchSettings.ManagedPropertyDocumentClientId);
-                        managedProperties.Add(searchSettings.ManagedPropertyDocumentClientName);
-                        managedProperties.Add(searchSettings.ManagedPropertyDocumentMatterName);
-                        managedProperties.Add(searchSettings.ManagedPropertyDocumentId);
-                        managedProperties.Add(searchSettings.ManagedPropertyCheckOutByUser);
-                        managedProperties.Add(searchSettings.ManagedPropertySiteName);
-                        managedProperties.Add(searchSettings.ManagedPropertySPWebUrl);
-                        managedProperties.Add(searchSettings.ManagedPropertyDocumentVersion);
-                        managedProperties.Add(searchSettings.ManagedPropertyDocumentCheckOutUser);
-                        managedProperties.Add(searchSettings.ManagedPropertySPWebUrl);
-                        managedProperties.Add(searchSettings.ManagedPropertyAuthor);
-                        //Filter on Result source to fetch only Matter Center specific results
-                        keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
-                        keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
-                        
-                        searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, false, managedProperties);
-                    }
+                    searchObject.SearchTerm = ServiceConstants.ASTERISK;
                 }
+
+                if (searchObject.Filters != null)
+                {
+                    if (searchObject.Filters.FilterByMe == 1)
+                    {
+                        ////Get logged in user alias
+                        Users currentUserDetail = userDetails.GetLoggedInUserDetails(clientContext);
+                        string userTitle = currentUserDetail.Name;
+                        searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND,
+                            ServiceConstants.SPACE, ServiceConstants.OPENING_BRACKET, searchSettings.ManagedPropertyResponsibleAttorney,
+                            ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle, ServiceConstants.DOUBLE_QUOTE,
+                            ServiceConstants.SPACE, ServiceConstants.OPERATOR_OR, ServiceConstants.SPACE, searchSettings.ManagedPropertyTeamMembers,
+                            ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle, ServiceConstants.DOUBLE_QUOTE,
+                            ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
+                    }
+
+                    keywordQuery = FilterMatters(searchObject, keywordQuery);
+
+                    keywordQuery = KeywordQueryMetrics(client, searchObject, keywordQuery, ServiceConstants.DOCUMENT_ITEM_FILTER_CONDITION, 
+                        searchSettings.ManagedPropertyIsDocument, false);
+
+                    // Create a list of managed properties which are required to be present in search results
+                    List<string> managedProperties = new List<string>();
+                    managedProperties.Add(searchSettings.ManagedPropertyFileName);
+                    managedProperties.Add(searchSettings.ManagedPropertyTitle);
+                    managedProperties.Add(searchSettings.ManagedPropertyCreated);
+                    managedProperties.Add(searchSettings.ManagedPropertyUIVersionStringOWSTEXT);
+                    managedProperties.Add(searchSettings.ManagedPropertyServerRelativeUrl);
+                    managedProperties.Add(searchSettings.ManagedPropertyFileExtension);
+                    managedProperties.Add(searchSettings.ManagedPropertyDocumentMatterId);
+                    managedProperties.Add(searchSettings.ManagedPropertyDocumentLastModifiedTime);
+                    managedProperties.Add(searchSettings.ManagedPropertySiteTitle);
+                    managedProperties.Add(searchSettings.ManagedPropertyDocumentClientId);
+                    managedProperties.Add(searchSettings.ManagedPropertyDocumentClientName);
+                    managedProperties.Add(searchSettings.ManagedPropertyDocumentMatterName);
+                    managedProperties.Add(searchSettings.ManagedPropertyDocumentId);
+                    managedProperties.Add(searchSettings.ManagedPropertyCheckOutByUser);
+                    managedProperties.Add(searchSettings.ManagedPropertySiteName);
+                    managedProperties.Add(searchSettings.ManagedPropertySPWebUrl);
+                    managedProperties.Add(searchSettings.ManagedPropertyDocumentVersion);
+                    managedProperties.Add(searchSettings.ManagedPropertyDocumentCheckOutUser);
+                    managedProperties.Add(searchSettings.ManagedPropertySPWebUrl);
+                    managedProperties.Add(searchSettings.ManagedPropertyAuthor);
+                    //Filter on Result source to fetch only Matter Center specific results
+                    keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
+                    keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
+                        
+                    searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, false, managedProperties);
+                    clientContext.Dispose();
+                }               
             }
             catch (Exception ex)
             {

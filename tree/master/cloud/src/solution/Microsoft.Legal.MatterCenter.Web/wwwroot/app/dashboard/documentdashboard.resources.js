@@ -39,6 +39,11 @@ angular.module('matterMain')
                   'downloadAttachments': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/email/downloadattachments'
-                  })
+                  }),
+                  'getDocumentCounts': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/document/getdocumentcounts'
+                     
+                  }),
               });
       }]);

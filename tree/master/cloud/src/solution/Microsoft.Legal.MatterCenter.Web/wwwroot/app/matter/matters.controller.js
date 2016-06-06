@@ -9,6 +9,7 @@
             vm.selected = "";
             vm.mattername = "All Matters";
             vm.sortname = "";
+            //This value is for displaying the help
             $rootScope.pageIndex = "1";
             //#region Onload show ui grid and hide error div
             //start

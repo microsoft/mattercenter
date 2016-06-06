@@ -56,7 +56,7 @@
                 $event.stopPropagation();
                 if ($rootScope.dispcontextualhelpinner) {
                     $rootScope.contextualhelp = true;
-                    vm.help('0');
+                    vm.help('');
                     $rootScope.dispcontextualhelpinner = false;
                 } else {
                     $rootScope.contextualhelp = false;
