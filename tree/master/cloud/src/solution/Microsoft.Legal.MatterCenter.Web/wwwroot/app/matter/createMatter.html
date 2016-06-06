@@ -24,38 +24,8 @@
             </div>
         </div>
 
-        <div id="ContextualHelp">
-            <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" />
-
-            <div data-class="ms-u-slideLeftIn40" class="ContextualHelpContainer ms-u-slideLeftIn40">
-                <div class="ContextualHelpFlyout">
-                    <img class="closeContextualHelpFlyout" title="Close" alt="Close flyout" src="Images/contextual_help_close_icon.png" />
-                    <div class="ContextualHelpHeader" title="Matter Center For Outlook">Matter Center For Outlook</div>
-                    <div class="contextualHelpSections">
-                    </div>
-                    <div class="ContextualHelpSupport">
-                        <span class="ContextualHelpBottomText" title="Write an email to Support">Questions? Contact <span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. mailto:support@supportsite.com]">Matter Center Support</a></span></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="ProfileSwitcher">
-            <img class="AppHeaderProfilePict" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture" runat="server" />
-        </div>
-        <div class="PersonaFlyout">
-            <div class="PersonaContainer">
-                <div class="PersonaPictureContainer">
-                    <img id="PersonaPicture" src="Images/MC_Profile_Switcher.png" alt="Profile Picture" title="Profile Picture" runat="server" />
-                </div>
-                <div class="PersonaPictureDetails">
-                    <div class="PersonaTitle" id="PersonaTitle"></div>
-                    <div class="PersonaEmail" id="PersonaEmail"></div>
-                </div>
-            </div>
-            <div class="SignOutLink">
-                <asp:LinkButton ID="SignOutLink" Text="Sign Out" OnClick="SignOutLink_Click" CssClass="" runat="server"></asp:LinkButton>
-            </div>
-        </div>
+        
+        
         <div class="notificationContainer successBanner" ng-if="cm.successBanner">
         <div class="notification" showcreatesuccessbannermessage datanotification="{{cm.successMsg}}"></div><span class="closeNotification" ng-click="cm.closesuccessbanner()">x</span></div>
         <div id="errorBlock" class="errorPopUp" ng-show="cm.errorPopUpBlock" >

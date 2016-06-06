@@ -2,10 +2,11 @@
     'use strict';
 
     var app=  angular.module("matterMain");
-    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window',
-        function ($scope, $state, $stateParams, api, matterResource, $filter,$window) {
+    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window','$rootScope',
+        function ($scope, $state, $stateParams, api, matterResource, $filter, $window, $rootScope) {
             ///All Variables
             var cm = this;
+            $rootScope.pageIndex = "4";
             cm.selectedConflictCheckUser = undefined;
             cm.blockedUserName = undefined;
             cm.defaultConfilctCheck = false;
@@ -301,7 +302,7 @@
             var optionsForPermissionLevels = new Object;
             optionsForPermissionLevels = {
 
-                Url: cm.clientUrl
+                Url: configs.global.repositoryUrl
             }
 
             //call back function for getting the clientNamesList
@@ -423,7 +424,11 @@
                       
                         if (result.isError) {
                            
-                        //    alert();
+                            //    alert();
+                            cm.errTextMsg =result.value ;
+                            cm.errorBorder = "client";
+                            showErrorNotification("client");
+                            cm.errorPopUpBlock = true;
                         }
                         else {
                             var dMatterAreaOfLaw = "", dMatterPracticeGroup = "", dMatterSubAreOfLaw = "", dMatterTypes = "", dPrimaryMatterType = "", dMatterUsers = "", dMatterUserEmails = "", dMatterPermissions = "", dMatterRoles = "";
