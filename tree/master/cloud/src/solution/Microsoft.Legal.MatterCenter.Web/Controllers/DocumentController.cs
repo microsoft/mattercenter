@@ -80,6 +80,50 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
         /// <summary>
+        /// Get all counts for all documentCounts, my documentCounts and pinned documentCounts
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        [HttpPost("getdocumentcounts")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public async Task<IActionResult> GetDocumentCounts([FromBody]SearchRequestVM searchRequestVM)
+        {
+            try
+            {
+                //Get the authorization token from the Request header
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                ErrorResponse errorResponse = null;
+                #region Error Checking                
+                if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                }
+                #endregion                
+                int allDocumentCounts = await documentProvision.GetAllCounts(searchRequestVM);
+                int myDocumentCounts = await documentProvision.GetMyCounts(searchRequestVM);
+                int pinnedDocumentCounts = await documentProvision.GetPinnedCounts(searchRequestVM.Client);
+                var documentCounts = new
+                {
+                    AllMatterCounts = allDocumentCounts,
+                    MyMatterCounts = myDocumentCounts,
+                    PinnedMatterCounts = pinnedDocumentCounts,
+                };
+                return matterCenterServiceFunctions.ServiceResponse(documentCounts, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Gets the documents based on search criteria.
         /// </summary>
         /// <param name="searchRequestVM"></param>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
-    public interface IDocumentProvision
+    public interface IDocumentProvision: ISharedProvision
     {
         GenericResponseVM UploadAttachments(AttachmentRequestVM attachmentRequestVM);
         GenericResponseVM UploadEmails(AttachmentRequestVM attachmentRequest);
@@ -16,5 +16,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         GenericResponseVM UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, 
             string folderName, string fileName, string clientUrl, string folder, string documentLibraryName);
         Stream DownloadAttachments(MailAttachmentDetails mailAttachmentDetails);
+        
     }
 }

@@ -34,6 +34,43 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.documentSettings = documentSettings.Value;
         }
 
+        public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
+        {
+            searchRequestVM.SearchObject.Filters.FilterByMe = 0;
+            var searchObject = searchRequestVM.SearchObject;
+            // Encode all fields which are coming from js
+            SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
+            // Encode Search Term
+            searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
+                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
+                ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+
+            var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM);
+            return searchResultsVM.TotalRows;
+
+        }
+
+        public async Task<int> GetMyCounts(SearchRequestVM searchRequestVM)
+        {
+            searchRequestVM.SearchObject.Filters.FilterByMe = 1;
+            var searchObject = searchRequestVM.SearchObject;
+            // Encode all fields which are coming from js
+            SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
+            // Encode Search Term
+            searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
+                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
+                ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+
+            var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM);
+            return searchResultsVM.TotalRows;
+        }
+
+        public async Task<int> GetPinnedCounts(Client client)
+        {
+            var pinResponseVM = await docRepository.GetPinnedRecordsAsync(client);
+            return pinResponseVM.TotalRows;
+        }
+
         public Stream DownloadAttachments(MailAttachmentDetails mailAttachmentDetails)
         {
             

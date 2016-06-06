@@ -51,7 +51,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.userRepositoy = userRepositoy;
         }
 
-        public async Task<int> GetMatterCounts(SearchRequestVM searchRequestVM)
+        public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
         {
             searchRequestVM.SearchObject.Filters.FilterByMe = 0;
             var searchObject = searchRequestVM.SearchObject;
@@ -67,7 +67,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             
         }
 
-        public async Task<int> GetMyMatterCounts(SearchRequestVM searchRequestVM)
+        public async Task<int> GetMyCounts(SearchRequestVM searchRequestVM)
         {
             searchRequestVM.SearchObject.Filters.FilterByMe = 1;
             var searchObject = searchRequestVM.SearchObject;
@@ -82,7 +82,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return searchResultsVM.TotalRows;
         }
 
-        public async Task<int> GetPinnedMatterCounts(Client client)
+        public async Task<int> GetPinnedCounts(Client client)
         {
             var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(client);
             return pinResponseVM.TotalRows;

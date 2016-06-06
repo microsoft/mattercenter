@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
-    public interface IMatterProvision
+    public interface IMatterProvision: ISharedProvision
     {
         GenericResponseVM UpdateMatter(MatterInformationVM matterInformation);
         GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata);        
@@ -19,8 +19,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         GenericResponseVM CheckSecurityGroupExists(MatterInformationVM matterInformationVM);
         GenericResponseVM CreateMatter(MatterMetdataVM matterMetadataVM);
         GenericResponseVM CreateMatterLandingPage(MatterMetdataVM matterMetadataVM);
-        Task<int> GetMatterCounts(SearchRequestVM searchRequestVM);
-        Task<int> GetMyMatterCounts(SearchRequestVM searchRequestVM);
-        Task<int> GetPinnedMatterCounts(Client client);
+        
     }
 }

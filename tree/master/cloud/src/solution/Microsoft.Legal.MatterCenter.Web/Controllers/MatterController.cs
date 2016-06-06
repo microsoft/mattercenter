@@ -149,9 +149,9 @@ namespace Microsoft.Legal.MatterCenter.Service
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion                
-                int allMatterCounts = await matterProvision.GetMatterCounts(searchRequestVM);
-                int myMatterCounts = await matterProvision.GetMyMatterCounts(searchRequestVM);
-                int pinnedMatterCounts = await matterProvision.GetPinnedMatterCounts(searchRequestVM.Client);
+                int allMatterCounts = await matterProvision.GetAllCounts(searchRequestVM);
+                int myMatterCounts = await matterProvision.GetMyCounts(searchRequestVM);
+                int pinnedMatterCounts = await matterProvision.GetPinnedCounts(searchRequestVM.Client);
                 var matterCounts = new
                 {
                     AllMatterCounts = allMatterCounts,
