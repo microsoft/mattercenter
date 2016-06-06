@@ -1,5 +1,4 @@
 ﻿<div ng-mouseenter='grid.appScope.vm.modifieddateDropDowm = true' ng-mouseleave='grid.appScope.vm.modifieddateDropDowm = false'>
-
     <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.vm.modifieddateDropDowm'>
 
         <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id=' acombo' dropdown-toggle' type='button' data-toggle='dropdown'>
@@ -49,14 +48,9 @@
         </div>
     </div>
     <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
-
-        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort last modified date'>{{ col.colDef.displayName }}</span>
-        <span ui-grid-visible='col.sort.direction' aria-label='Sort None' class='ui-grid-invisible'></span>
-        <span class='sort pull-right' ng-show='grid.appScope.sortMCModifiedDate'>↑</span>
-        <span ng-show='grid.appScope.sortDownMCModifiedDate' class='sort pull-right'>↓</span>
+        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort last modified date'>{{ col.colDef.displayName }}<span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span></span>
     </div>
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>
-
         <i title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>
     </div>
 </div>

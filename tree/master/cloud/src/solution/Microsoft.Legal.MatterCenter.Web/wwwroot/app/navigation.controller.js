@@ -6,6 +6,7 @@
         function ($state, $stateParams, api, $rootScope) {
 
             var vm = this;
+$rootScope.pageIndex = "0";
             vm.SPOHomePage = configs.uri.SPOsiteURL + '/SitePages/MatterCenterHome.aspx';
             vm.menuClick = function () {
                 var oAppMenuFlyout = $(".AppMenuFlyout");
@@ -25,39 +26,6 @@
 
             //#region Global Variables
             vm.welcomeheader = false;
-            $rootScope.displayinfo = false;
-            $rootScope.dispinner = true;
-            $rootScope.contextualhelp = false;
-            $rootScope.dispcontextualhelpinner = true;
-            //#endregion
-
-
-            //#region for displaying the Personal Info 
-            $rootScope.dispPersonal = function ($event) {
-                $event.stopPropagation();
-                if ($rootScope.dispinner) {
-                    $rootScope.displayinfo = true;
-                    $rootScope.dispinner = false;
-                } else {
-                    $rootScope.displayinfo = false;
-                    $rootScope.dispinner = true;
-                }
-            }
-            //#endregion
-
-            //#region for displaying contextual help 
-            $rootScope.dispContextualHelp = function ($event) {
-                $event.stopPropagation();
-                if ($rootScope.dispcontextualhelpinner) {
-                    $rootScope.contextualhelp = true;
-                    $rootScope.dispcontextualhelpinner = false;
-                } else {
-                    $rootScope.contextualhelp          = false;
-                    $rootScope.dispcontextualhelpinner = true;
-                }
-            }
-
-
             //#endregion
 
         }]);
