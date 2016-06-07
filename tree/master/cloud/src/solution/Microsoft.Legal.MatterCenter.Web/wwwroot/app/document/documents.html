@@ -1,8 +1,8 @@
 ﻿<!--<div class="container-fluid">   -->
 <div class="row">
     <div class="row" id="mainmenu">
-        <div class="col-xs-2 col-sm-1 col-md-2 pad0">
-            <div class="col-xs-3 col-sm-3" ng-click="vm.menuClick()">
+        <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
+            <div class="col-xs-8 col-sm-3" ng-click="vm.menuClick()">
                 <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
                 <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
                 <span class="MenuCaption">menu</span>
@@ -14,14 +14,26 @@
                     <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
                 </div>
             </div>
-            <div class="col-md-9 hidden-xs hidden-sm">
-                <select class="form-control" ng-model="vm.ddlDocuments" ng-options="document.Name for document in vm.Documents" ng-change="vm.GetDocuments(vm.ddlDocuments.Id)"></select>
+            <div class="col-sm-9 col-md-9 col-lg-9 hidden-xs pad0" id="mainselect">
+                <!--<select class="form-control" ng-model="vm.ddlMatters"  ng-options="matter.Name for matter in vm.Matters" ng-change="vm.GetMatters(vm.ddlMatters.Id)"></select>-->
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
+                        <span class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.documentname}}</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
+                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='All Documents'}" ng-click="vm.SetDocuments(1,'All Documents')">All Documents</li>
+                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='My Documents'}" ng-click="vm.SetDocuments(2,'My Documents')">My Documents</li>
+                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='Pinned Documents'}" ng-click="vm.SetDocuments(3,'Pinned Documents')">Pinned Documents</li>
+                    </ul>
+                </div>
+                
             </div>
         </div>
-        <div class="col-md-4 col-lg-4 hidden-xs hidden-sm">
-            <div class="input-group col-xs-12">
-                <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.matterID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-                <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-search"></i></span>
+        <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
+            <div class="input-group col-xs-10 col-sm-12" id="searchmatter">
+                <input type="text" ng-model="vm.selected" placeholder="Search by ID, document or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                 <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
             </div>
             <div class="col-xs-12">
@@ -31,17 +43,18 @@
                 </div>
             </div>
         </div>
-        <div id="searchBarHolder" class="col-xs-7 col-sm-5 hidden-md hidden-lg">
+        <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0">
             <div class="input-group col-xs-12">
-                <input type="text" ng-model="vm.selected" placeholder="Search by ID, document or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                <input type="text" ng-model="vm.selected" placeholder="Search by ID, document or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                 <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                    <ul class="dropdown-menu pull-right">
-                        <li class="searchPanelDropdown" ng-click="GetDocuments(1)">All documents</li>
-                        <li class="searchPanelDropdown" ng-click="GetDocuments(2)">My documents</li>
-                        <li class="searchPanelDropdown" ng-click="GetDocuments(3)">Pinned documents</li>
+                    <button type="button" class="btn btn-default dropdown-toggle col-xs-12" data-toggle="dropdown"><span class="caret"></span></button>
+                    <ul class="dropdown-menu pull-right col-xs-12">
+                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='All Documents'}" ng-click="vm.SetDocuments(1,'All Documents')">All Documents</li>
+                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='My Documents'}" ng-click="vm.SetDocuments(2,'My Documents')">My Documents</li>
+                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='Pinned Documents'}" ng-click="vm.SetDocuments(3,'Pinned Documents')">Pinned Documents</li>
                     </ul>
                 </div>
+                <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
             </div>
             <div class="col-xs-12">
                 <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
@@ -54,7 +67,7 @@
 </div>
 <div class="row title">
     <div class="col-sm-12" id="gridViewPageHeaderContainer">
-        <span role="heading" class="add-margin-bottom">{{vm.ddlDocuments.Name}}</span>
+        <span role="heading" class="add-margin-bottom">{{vm.documentname}}</span>
     </div>
 </div>
 <div class="row">

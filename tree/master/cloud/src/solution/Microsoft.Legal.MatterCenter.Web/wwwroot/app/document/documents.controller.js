@@ -6,11 +6,12 @@
     var app = angular.module("matterMain");
 
     app.controller('documentsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout',
-        'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http',
+        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache',
     function ($scope, $state, $interval, $stateParams, api, $timeout,
-        documentResource, $rootScope, uiGridConstants, $location, $http) {
+        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache) {
         var vm = this;
         vm.selected = undefined;
+        vm.documentname = 'All Documents'
         $rootScope.pageIndex = "2";
         // Onload show ui grid and hide error div
         //start
@@ -42,6 +43,7 @@
         vm.modifieddateDropDown = false;
         //End
 
+
         vm.gridOptions = {
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 0,
@@ -51,14 +53,14 @@
             enableSelectAll: true,
             multiSelect: true,
             columnDefs: [
-                { field: 'documentName', displayName: 'Document', width: '20%', enableHiding: false, cellTemplate: '../app/document/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentHeaderTemplate.html' },
-                { field: 'documentClientId', displayName: 'Client', width: '15%', enableCellEdit: true, headerCellTemplate: '../app/document/ClientHeaderTemplate.html' },
-                { field: 'documentClientId', displayName: 'Client.Matter ID', width: '10%', headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
-                { field: 'documentModifiedDate', displayName: 'Modified Date', width: '10%', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/ModifiedDateHeaderTemplate.html' },
-                { field: 'documentOwner', displayName: 'Author', width: '20%', headerTooltip: 'Click to sort by document Author', visible: false },
-                { field: 'documentVersion', displayName: 'Document Version', width: '5%', headerTooltip: 'Click to sort by version', visible: false },
-                { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '10%', headerTooltip: 'Click to sort by who has documents checked out', cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
-                { field: 'documentCreatedDate', displayName: 'Created date', width: '10%', headerTooltip: 'Click to sort by created date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
+                { field: 'documentName', displayName: 'Document', width: '20%', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
+                { field: 'documentClient', displayName: 'Client', width: '15%', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
+                { field: 'documentClientId', displayName: 'Client.Matter ID', width: '10%', headerCellTemplate: '../app/document/DocumentTemplates/ClientMatterHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+                { field: 'documentModifiedDate', displayName: 'Modified Date', width: '10%', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
+                { field: 'documentOwner', displayName: 'Author', width: '15%', headerCellTemplate: '../app/document/DocumentTemplates/DocumentAuthorHeaderTemplate.html', visible: false },
+                { field: 'documentVersion', displayName: 'Document Version', width: '10%', headerCellTemplate: '../app/document/DocumentTemplates/DocumentAuthorHeaderTemplate.html', visible: false },
+                { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '10%', headerCellTemplate: '../app/document/DocumentTemplates/CheckedOutHeaderTemplate.html', cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
+                { field: 'documentCreatedDate', displayName: 'Created date', width: '10%', headerCellTemplate: '../app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
             ],
             enableColumnMenus: false,
             onRegisterApi: function (gridApi) {
@@ -458,6 +460,16 @@
 
         vm.getDocumentPinned();
 
+
+        //#region for setting the document name in dropdown
+        vm.SetDocuments = function (id, name) {
+            vm.documentname = name;
+            vm.GetDocuments(id);
+        }
+
+        //#endregion
+
+
         //#region changing the grid based on the dropdown change 
         //Hits when the Dropdown changes 
         //Start 
@@ -644,7 +656,7 @@
 
 
         //To run GetDocuments function on page load 
-        vm.GetDocuments(vm.ddlDocuments.Id);
+        vm.SetDocuments(1, "All Documents");
         //End 
 
 
@@ -831,24 +843,46 @@
             });
         }
 
+        vm.sortby = "";
+        vm.sortexp = "";
+        vm.showSortExp = function () {
+            if (vm.sortexp != "" || vm.sortexp != undefined || vm.sortby != "" || vm.sortby != undefined) {
+                if (vm.sortby == "asc") {
+                    angular.element("#desc" + vm.sortexp).css("display", "none");
+                } else {
+                    angular.element("#asc" + vm.sortexp).css("display", "none");
+                }
+                angular.element("#" + vm.sortby + vm.sortexp).css("display", "block");
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            }
+        }
+
         vm.sortChangedDocument = function (grid, sortColumns) {
             vm.divuigrid = false;
             vm.nodata = true;
             if (sortColumns.length != 0) {
                 if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
                     if (sortColumns[0].sort != undefined) {
-                        if (localStorage.FileNameSort == undefined || localStorage.FileNameSort == "asc") {
+                        if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "FileName";
                             SortRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
-                            localStorage.FileNameSort = "desc";
+                            vm.FileNameSort = "desc";
+                            vm.sortby = "asc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "FileName";
                             SortRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
-                            localStorage.FileNameSort = "asc";
+                            vm.FileNameSort = "asc";
+                            vm.sortby = "desc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -857,19 +891,25 @@
                 }
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
                     if (sortColumns[0].sort != undefined) {
-                        if (localStorage.DocumentClientSort == undefined || localStorage.DocumentClientSort == "asc") {
+                        if (vm.DocumentClientSort == undefined || vm.DocumentClientSort == "asc") {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
                             SortRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
-                            localStorage.DocumentClientSort = "desc";
+                            vm.DocumentClientSort = "desc";
+                            vm.sortby = "asc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                         else {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
                             SortRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
-                            localStorage.DocumentClientSort = "asc";
+                            vm.DocumentClientSort = "asc";
+                            vm.sortby = "desc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -878,18 +918,24 @@
                 }
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
                     if (sortColumns[0].sort != undefined) {
-                        if (localStorage.DocumentClientIDSort == undefined || localStorage.DocumentClientIDSort == "asc") {
+                        if (vm.DocumentClientIDSort == undefined || vm.DocumentClientIDSort == "asc") {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MCDocumentClientID";
                             SortRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
-                            localStorage.DocumentClientIDSort = "desc";
+                            vm.DocumentClientIDSort = "desc";
+                            vm.sortby = "asc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MCDocumentClientID";
                             SortRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
-                            localStorage.DocumentClientIDSort = "asc";
+                            vm.DocumentClientIDSort = "asc";
+                            vm.sortby = "desc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
 
                     } else {
@@ -899,18 +945,24 @@
                 }
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
                     if (sortColumns[0].sort != undefined) {
-                        if (localStorage.ModiFiedDateSort == undefined || localStorage.ModiFiedDateSort == "asc") {
+                        if (vm.ModiFiedDateSort == undefined || vm.ModiFiedDateSort == "asc") {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
                             SortRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
-                            localStorage.ModiFiedDateSort = "desc";
+                            vm.ModiFiedDateSort = "desc";
+                            vm.sortby = "asc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
                             SortRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
-                            localStorage.ModiFiedDateSort = "asc";
+                            vm.ModiFiedDateSort = "asc";
+                            vm.sortby = "desc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
 
                     } else {
@@ -920,18 +972,24 @@
                 }
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
                     if (sortColumns[0].sort != undefined) {
-                        if (localStorage.AuthorSort == undefined || localStorage.AuthorSort == "asc") {
+                        if (vm.AuthorSort == undefined || vm.AuthorSort == "asc") {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MSITOfficeAuthor";
                             SortRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
-                            localStorage.AuthorSort = "desc";
+                            vm.AuthorSort = "desc";
+                            vm.sortby = "asc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MSITOfficeAuthor";
                             SortRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
-                            localStorage.AuthorSort = "asc";
+                            vm.AuthorSort = "asc";
+                            vm.sortby = "desc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -940,18 +998,24 @@
                 }
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
                     if (sortColumns[0].sort != undefined) {
-                        if (localStorage.VersionSort == undefined || localStorage.VersionSort == "asc") {
+                        if (vm.VersionSort == undefined || vm.VersionSort == "asc") {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MCVersionNumber";
                             SortRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
-                            localStorage.VersionSort = "desc";
+                            vm.VersionSort = "desc";
+                            vm.sortby = "asc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MCVersionNumber";
                             SortRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
-                            localStorage.VersionSort = "desc";
+                            vm.VersionSort = "asc";
+                            vm.sortby = "desc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -960,18 +1024,24 @@
                 }
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
                     if (sortColumns[0].sort != undefined) {
-                        if (localStorage.CheckoutSort == undefined || localStorage.CheckoutSort == "asc") {
+                        if (vm.CheckoutSort == undefined || vm.CheckoutSort == "asc") {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MCCheckoutUser";
                             SortRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
-                            localStorage.CheckoutSort = "desc"
+                            vm.CheckoutSort = "desc";
+                            vm.sortby = "asc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "MCCheckoutUser";
                             SortRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
-                            localStorage.CheckoutSort = "asc"
+                            vm.CheckoutSort = "asc";
+                            vm.sortby = "desc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -980,18 +1050,24 @@
                 }
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[7].name) {
                     if (sortColumns[0].sort != undefined) {
-                        if (localStorage.CreatedSort == undefined || localStorage.CreatedSort == "asc") {
+                        if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "Created";
                             SortRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
-                            localStorage.CreatedSort = "desc"
+                            vm.CreatedSort = "desc";
+                            vm.sortby = "asc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
                             SortRequest.SearchObject.Sort.ByProperty = "Created";
                             SortRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
-                            localStorage.CreatedSort = "asc"
+                            vm.CreatedSort = "asc";
+                            vm.sortby = "desc";
+                            vm.sortexp = sortColumns[0].field;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1007,6 +1083,24 @@
         }
         //#endregion
 
+        //#region
+        vm.typeheadselect = function (index, selected) {
+            var searchToText = '';
+            var finalSearchText = "";
+            if (selected != "") {
+                searchToText = selected.replace("(", ",")
+                searchToText = searchToText.replace(")", "")
+                var firstText = searchToText.split(',')[0]
+                var secondText = searchToText.split(',')[1]
+                var finalSearchText = '(FileName:"' + firstText.trim() + '" OR dlcDocIdOWSText:"' + firstText.trim() + '"OR MCDocumentClientName:"' + firstText.trim() + '")';
+            }
+            SortRequest.SearchObject.SearchTerm = finalSearchText;
+            SortRequest.SearchObject.Sort.Direction = 0;
+            vm.FilterByType();
+        }
+
+        //#endregion
+
     }]);
 
     app.directive('popoverdoc', function () {
@@ -1015,7 +1109,6 @@
             scope: { details: '@' },
             link: function (scope, element, attrs) {
                 scope.$watch("details", function () {
-
                     var obj = eval('(' + attrs.details + ')');
                     var content = '<div class="">\
                                    <div class="FlyoutBoxContent" style="width: 350px;">\

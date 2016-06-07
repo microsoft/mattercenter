@@ -46,13 +46,13 @@
                 enableSelectAll: false,
                 multiSelect: false,
                 columnDefs: [
-                     { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "20%", cellTemplate: '../app/matter/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterHeaderTemplate.html' },
-                     { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "15%", headerCellTemplate: '../app/matter/ClientHeaderTemplate.html' },
-                     { field: 'matterClientId', displayName: 'Client.MatterID', width: "15%", headerCellTemplate: '../app/matter/ClientMatterHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-                     { field: 'matterModifiedDate', displayName: 'Modified Date', width: "10%", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/ModifiedDateTemplate.html' },
-                     { field: 'matterResponsibleAttorney', headerCellTemplate: '../app/matter/ResponsibleAttorneyHeaderTemplate.html', width: "15%", displayName: 'Responsible attorney', visible: false },
-                     { field: 'matterSubAreaOfLaw', headerCellTemplate: '../app/matter/SubAreaHeaderTemplate.html', width: "15%", displayName: 'Sub area of law', visible: false },
-                     { field: 'matterCreatedDate', headerCellTemplate: '../app/matter/OpenDateHeaderTemplate.html', width: "15%", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+                     { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "20%", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
+                     { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "15%", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
+                     { field: 'matterClientId', displayName: 'Client.MatterID', width: "15%", headerCellTemplate: '../app/matter/MatterTemplates/ClientMatterHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+                     { field: 'matterModifiedDate', displayName: 'Modified Date', width: "10%", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
+                     { field: 'matterResponsibleAttorney', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "15%", displayName: 'Responsible attorney', visible: false },
+                     { field: 'matterSubAreaOfLaw', headerCellTemplate: '../app/matter/MatterTemplates/SubAreaHeaderTemplate.html', width: "15%", displayName: 'Sub area of law', visible: false },
+                     { field: 'matterCreatedDate', headerCellTemplate: '../app/matter/MatterTemplates/OpenDateHeaderTemplate.html', width: "15%", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
                 ],
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
@@ -581,31 +581,41 @@
             }
             //#endregion
 
+            //#region Request object for the GetMattersMethod
+            var searchRequest = {
+                Client: {
+                    Id: "123456",
+                    Name: "Microsoft",
+                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                },
+                SearchObject: {
+                    PageNumber: 1,
+                    ItemsPerPage: 10,
+                    SearchTerm: "",
+                    Filters: {
+                        AOLList: "",
+                        ClientsList: [],
+                        FilterByMe: 0,
+                        FromDate: "",
+                        PGList: "",
+                        ToDate: "",
+                    },
+                    Sort:
+                            {
+                                ByProperty: "LastModifiedTime",
+                                Direction: 1
+                            }
+                }
+            }
+
+            //#endregion
+
 
             //#region For filtering the grid when clicked on search button 
             vm.searchMatter = function (val) {
-                var searchRequest =
-                  {
-                      Client: {
-                          Id: "123456",
-                          Name: "Microsoft",
-                          Url: "https://msmatter.sharepoint.com/sites/catalog"
-                      },
-                      SearchObject: {
-                          PageNumber: 1,
-                          ItemsPerPage: 10,
-                          SearchTerm: val,
-                          Filters: {},
-                          Sort:
-                                  {
-                                      ByProperty: "LastModifiedTime",
-                                      Direction: 1
-                                  }
-                      }
-                  };
+                searchRequest.SearchObject.SearchTerm = val;
                 return matterResource.get(searchRequest).$promise;
             }
-
 
             vm.search = function () {
                 vm.lazyloader = false;
@@ -618,25 +628,7 @@
                     var secondText = searchToText.split(',')[1]
                     var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
                 }
-                var searchRequest =
-                  {
-                      Client: {
-                          Id: "123456",
-                          Name: "Microsoft",
-                          Url: "https://msmatter.sharepoint.com/sites/catalog"
-                      },
-                      SearchObject: {
-                          PageNumber: 1,
-                          ItemsPerPage: 10,
-                          SearchTerm: finalSearchText,
-                          Filters: {},
-                          Sort:
-                                  {
-                                      ByProperty: "LastModifiedTime",
-                                      Direction: 1
-                                  }
-                      }
-                  };
+                searchRequest.SearchObject.SearchTerm = finalSearchText;
                 get(searchRequest, function (response) {
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
@@ -644,87 +636,35 @@
             }
             //#endregion
 
-            //#region Searchrequest object
-            var searchRequest =
-                 {
-                     Client: {
-                         Id: "123456",
-                         Name: "Microsoft",
-                         Url: "https://msmatter.sharepoint.com/sites/catalog"
-                     },
-                     SearchObject: {
-                         PageNumber: 1,
-                         ItemsPerPage: 10,
-                         SearchTerm: vm.searchTerm,
-                         Filters: {},
-                         Sort:
-                                 {
-                                     ByProperty: "LastModifiedTime",
-                                     Direction: 0
-                                 }
-                     }
-                 };
+
+            //#region for setting the mattername in dropdown
+            vm.SetMatters = function (id, name) {
+                vm.mattername = name;
+                vm.GetMatters(id);
+            }
 
             //#endregion
 
-            //#region For Searching Matter in GridHeader Menu
-            //Start
-            vm.searchMatterGrid = function () {
+            //#region for searching matter by property and searchterm
+            vm.mattersearch = function (term, property, bool) {
                 vm.lazyloader = false;
-                searchRequest.SearchObject.SearchTerm = vm.searchTerm;
-                searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                searchRequest.SearchObject.SearchTerm = term;
+                searchRequest.SearchObject.Sort.ByProperty = property;
+                if (bool) {
+                    searchRequest.SearchObject.Sort.Direction = 1;
+                }
                 get(searchRequest, function (response) {
                     vm.lazyloader = true;
-                    vm.matters = response;
+                    if (bool) {
+                        vm.gridOptions.data = response;
+                        vm.details = [];
+                    } else {
+                        vm.details = response;
+                    }
+                    searchRequest.SearchObject.SearchTerm = "";
+                    searchRequest.SearchObject.Sort.ByProperty = "";
                 });
             }
-            //#endregion
-
-            //#region For Searching client in GridHeader Menu
-            //start
-            vm.searchClient = function () {
-                vm.lazyloader = false;
-                searchRequest.SearchObject.SearchTerm = vm.searchClientTerm;
-                searchRequest.SearchObject.Sort.ByProperty = "MCClientName";
-                get(searchRequest, function (response) {
-                    vm.lazyloader = true;
-                    vm.Clients = response;
-                });
-            }
-            //#endregion
-
-            //#region For filtering mattername 
-            //Start
-            vm.filterMatterName = function (mattername) {
-                vm.lazyloader = false;
-                searchRequest.SearchObject.SearchTerm = mattername;
-                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
-                searchRequest.SearchObject.Sort.Direction = 1;
-                get(searchRequest, function (response) {
-                    vm.lazyloader = true;
-                    vm.gridOptions.data = response;
-                    vm.matters = [];
-                });
-
-            }
-            //#endregion
-
-
-            //#region For filtering Clientname 
-            //Start
-            vm.filterClientName = function (clientname) {
-                vm.lazyloader = false;
-                searchRequest.SearchObject.SearchTerm = clientname;
-                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
-                searchRequest.SearchObject.Sort.Direction = 1;
-                get(searchRequest, function (response) {
-                    vm.lazyloader = true;
-                    vm.gridOptions.data = response;
-                    vm.Clients = [];
-                });
-
-            }
-
             //#endregion
 
 
@@ -803,52 +743,22 @@
 
             vm.getMatterPinned();
 
-            //#region Request object for the GetMattersMethod
-            var MattersRequest = {
-                Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
-                },
-                SearchObject: {
-                    PageNumber: 1,
-                    ItemsPerPage: 10,
-                    SearchTerm: "",
-                    Filters: {
-                        AOLList: "",
-                        ClientsList: [],
-                        FilterByMe: 0,
-                        FromDate: "",
-                        PGList: "",
-                        ToDate: "",
-                    },
-                    Sort:
-                            {
-                                ByProperty: "LastModifiedTime",
-                                Direction: 1
-                            }
-                }
-            }
-
-            //#endregion
-
-
-
-            //#region for setting the mattername in dropdown
-            vm.SetMatters = function (id, name) {
-                vm.mattername = name;
-                vm.GetMatters(id);
-            }
-
-            //#endregion
-
             //#region Hits when the Dropdown changes 
             //Start 
             vm.GetMatters = function (id) {
+                vm.selected = "";
+                vm.searchTerm = "";
+                vm.searchClientTerm = "";
+                vm.startdate = "";
+                vm.enddate = "";
+                vm.sortexp = "";
+                vm.sortby = "";
                 vm.lazyloader = false;
                 if (id == 1) {
-                    MattersRequest.SearchObject.Filters.FilterByMe = 0;
-                    get(MattersRequest, function (response) {
+                    searchRequest.SearchObject.SearchTerm = "";
+                    searchRequest.SearchObject.Filters.FilterByMe = 0;
+                    searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    get(searchRequest, function (response) {
                         vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;
@@ -883,8 +793,10 @@
                     });
                 } else if (id == 2) {
                     vm.lazyloader = false;
-                    MattersRequest.SearchObject.Filters.FilterByMe = 1;
-                    get(MattersRequest, function (response) {
+                    searchRequest.SearchObject.SearchTerm = "";
+                    searchRequest.SearchObject.Filters.FilterByMe = 1;
+                    searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    get(searchRequest, function (response) {
                         vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;
@@ -1112,34 +1024,9 @@
 
             //#region Custom Sorting functionality
             //Start
-            var SortRequest = {
-                Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
-                },
-                SearchObject: {
-                    PageNumber: 1,
-                    ItemsPerPage: 10,
-                    SearchTerm: "",
-                    Filters: {
-                        AOLList: "",
-                        ClientsList: [],
-                        FilterByMe: 1,
-                        FromDate: "",
-                        PGList: "",
-                        ToDate: ""
-                    },
-                    Sort:
-                            {
-                                ByProperty: '',
-                                Direction: 0
-                            }
-                }
-            }
 
-            $scope.FilterByType = function () {
-                get(SortRequest, function (response) {
+            vm.FilterByType = function () {
+                get(searchRequest, function (response) {
                     vm.lazyloader = true;
                     if (response.errorCode == "404") {
                         vm.divuigrid = false;
@@ -1156,7 +1043,6 @@
                     }
                 });
             }
-
 
             vm.sortby = "";
             vm.sortexp = "";
@@ -1177,23 +1063,24 @@
             $scope.sortChanged = function (grid, sortColumns) {
                 vm.divuigrid = false;
                 vm.nodata = true;
+                searchRequest.SearchObject.SearchTerm = "";
                 if (sortColumns.length != 0) {
                     if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
                         if (sortColumns[0].sort != undefined) {
-                            if (localStorage.MatterNameSort == undefined || localStorage.MatterNameSort == "asc") {
+                            if (vm.MatterNameSort == undefined || vm.MatterNameSort == "asc") {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
-                                SortRequest.SearchObject.Sort.Direction = 0;
-                                $scope.FilterByType();
-                                localStorage.MatterNameSort = "desc"; vm.sortby = "asc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                                searchRequest.SearchObject.Sort.Direction = 0;
+                                vm.FilterByType();
+                                vm.MatterNameSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
-                                SortRequest.SearchObject.Sort.Direction = 1;
-                                $scope.FilterByType();
-                                localStorage.MatterNameSort = "asc"; vm.sortby = "desc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                                searchRequest.SearchObject.Sort.Direction = 1;
+                                vm.FilterByType();
+                                vm.MatterNameSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
@@ -1204,21 +1091,21 @@
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
                         if (sortColumns[0].sort != undefined) {
-                            if (localStorage.ClientSort == undefined || localStorage.ClientSort == "asc") {
+                            if (vm.ClientSort == undefined || vm.ClientSort == "asc") {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
-                                SortRequest.SearchObject.Sort.Direction = 0;
-                                $scope.FilterByType();
-                                localStorage.ClientSort = "desc"; vm.sortby = "asc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCClientName";
+                                searchRequest.SearchObject.Sort.Direction = 0;
+                                vm.FilterByType();
+                                vm.ClientSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                             else {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCClientName";
-                                SortRequest.SearchObject.Sort.Direction = 1;
-                                $scope.FilterByType();
-                                localStorage.ClientSort = "asc"; vm.sortby = "desc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCClientName";
+                                searchRequest.SearchObject.Sort.Direction = 1;
+                                vm.FilterByType();
+                                vm.ClientSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
@@ -1229,20 +1116,20 @@
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
                         if (sortColumns[0].sort != undefined) {
-                            if (localStorage.ClientIDSort == undefined || localStorage.ClientIDSort == "asc") {
+                            if (vm.ClientIDSort == undefined || vm.ClientIDSort == "asc") {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
-                                SortRequest.SearchObject.Sort.Direction = 0;
-                                $scope.FilterByType();
-                                localStorage.ClientIDSort = "desc"; vm.sortby = "asc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
+                                searchRequest.SearchObject.Sort.Direction = 0;
+                                vm.FilterByType();
+                                vm.ClientIDSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCClientID";
-                                SortRequest.SearchObject.Sort.Direction = 1;
-                                $scope.FilterByType();
-                                localStorage.ClientIDSort = "asc"; vm.sortby = "desc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
+                                searchRequest.SearchObject.Sort.Direction = 1;
+                                vm.FilterByType();
+                                vm.ClientIDSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
@@ -1254,20 +1141,20 @@
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
                         if (sortColumns[0].sort != undefined) {
-                            if (localStorage.ModiFiedTimeSort == undefined || localStorage.ModiFiedTimeSort == "asc") {
+                            if (vm.ModiFiedTimeSort == undefined || vm.ModiFiedTimeSort == "asc") {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
-                                SortRequest.SearchObject.Sort.Direction = 0;
-                                $scope.FilterByType();
-                                localStorage.ModiFiedTimeSort = "desc"; vm.sortby = "asc";
+                                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                                searchRequest.SearchObject.Sort.Direction = 0;
+                                vm.FilterByType();
+                                vm.ModiFiedTimeSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
-                                SortRequest.SearchObject.Sort.Direction = 1;
-                                $scope.FilterByType();
-                                localStorage.ModiFiedTimeSort = "asc"; vm.sortby = "desc";
+                                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                                searchRequest.SearchObject.Sort.Direction = 1;
+                                vm.FilterByType();
+                                vm.ModiFiedTimeSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
@@ -1279,20 +1166,20 @@
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
                         if (sortColumns[0].sort != undefined) {
-                            if (localStorage.ResAttoSort == undefined || localStorage.ResAttoSort == "asc") {
+                            if (vm.ResAttoSort == undefined || vm.ResAttoSort == "asc") {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
-                                SortRequest.SearchObject.Sort.Direction = 0;
-                                $scope.FilterByType();
-                                localStorage.ResAttoSort = "desc"; vm.sortby = "asc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
+                                searchRequest.SearchObject.Sort.Direction = 0;
+                                vm.FilterByType();
+                                vm.ResAttoSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
-                                SortRequest.SearchObject.Sort.Direction = 1;
-                                $scope.FilterByType();
-                                localStorage.ResAttoSort = "asc"; vm.sortby = "desc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
+                                searchRequest.SearchObject.Sort.Direction = 1;
+                                vm.FilterByType();
+                                vm.ResAttoSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
@@ -1303,20 +1190,20 @@
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
                         if (sortColumns[0].sort != undefined) {
-                            if (localStorage.SubAreaSort == undefined || localStorage.SubAreaSort == "asc") {
+                            if (vm.SubAreaSort == undefined || vm.SubAreaSort == "asc") {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
-                                SortRequest.SearchObject.Sort.Direction = 0;
-                                $scope.FilterByType();
-                                localStorage.SubAreaSort = "desc"; vm.sortby = "asc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
+                                searchRequest.SearchObject.Sort.Direction = 0;
+                                vm.FilterByType();
+                                vm.SubAreaSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
-                                SortRequest.SearchObject.Sort.Direction = 1;
-                                $scope.FilterByType();
-                                localStorage.SubAreaSort = "asc"; vm.sortby = "desc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
+                                searchRequest.SearchObject.Sort.Direction = 1;
+                                vm.FilterByType();
+                                vm.SubAreaSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
@@ -1327,20 +1214,20 @@
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
                         if (sortColumns[0].sort != undefined) {
-                            if (localStorage.OpenDateSort == undefined || localStorage.OpenDateSort == "asc") {
+                            if (vm.OpenDateSort == undefined || vm.OpenDateSort == "asc") {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
-                                SortRequest.SearchObject.Sort.Direction = 0;
-                                $scope.FilterByType();
-                                localStorage.OpenDateSort = "desc"; vm.sortby = "asc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                                searchRequest.SearchObject.Sort.Direction = 0;
+                                vm.FilterByType();
+                                vm.OpenDateSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
-                                SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
-                                SortRequest.SearchObject.Sort.Direction = 1;
-                                $scope.FilterByType();
-                                localStorage.OpenDateSort = "asc"; vm.sortby = "desc";
+                                searchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                                searchRequest.SearchObject.Sort.Direction = 1;
+                                vm.FilterByType();
+                                vm.OpenDateSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
@@ -1352,9 +1239,9 @@
                     }
                 } else {
                     vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
-                    SortRequest.SearchObject.Sort.Direction = 0;
-                    $scope.FilterByType();
+                    searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    searchRequest.SearchObject.Sort.Direction = 0;
+                    vm.FilterByType();
                 }
             }
             //#endregion
@@ -1365,7 +1252,7 @@
                 if ($window.innerWidth < 340) {
                     vm.gridOptions.enableGridMenu = false;
                     vm.gridOptions.enablePaginationControls = false;
-                    vm.gridOptions.columnDefs = [{ field: 'matterName', displayName: 'Matter', enableHiding: false, width: "100%", cellTemplate: '../app/matter/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterHeaderTemplate.html' }];
+                    vm.gridOptions.columnDefs = [{ field: 'matterName', displayName: 'Matter', enableHiding: false, width: "100%", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' }];
                     $scope.$apply();
                 } else {
                     vm.gridOptions = {
@@ -1378,10 +1265,10 @@
                         multiSelect: false,
                         enablePaginationControls: true,
                         columnDefs: [
-                             { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "20%", cellTemplate: '../app/matter/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterHeaderTemplate.html' },
-                             { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "15%", headerCellTemplate: '../app/matter/ClientHeaderTemplate.html' },
+                             { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "20%", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
+                             { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "15%", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
                              { field: 'matterClientId', displayName: 'Client.MatterID', width: "15%", headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-                             { field: 'matterModifiedDate', displayName: 'Modified Date', width: "10%", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/ModifiedDateTemplate.html' },
+                             { field: 'matterModifiedDate', displayName: 'Modified Date', width: "10%", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
                              { field: 'matterResponsibleAttorney', headerTooltip: 'Click to sort by attorney', width: "15%", displayName: 'Responsible attorney', visible: false },
                              { field: 'matterSubAreaOfLaw', headerTooltip: 'Click to sort by sub area of law', width: "15%", displayName: 'Sub area of law', visible: false },
                              { field: 'matterCreatedDate', headerTooltip: 'Click to sort by matter open date', width: "15%", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
@@ -1415,9 +1302,9 @@
                     var secondText = searchToText.split(',')[1]
                     var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
                 }
-                SortRequest.SearchObject.SearchTerm = finalSearchText;
-                SortRequest.SearchObject.Sort.Direction = 0;
-                $scope.FilterByType();
+                searchRequest.SearchObject.SearchTerm = finalSearchText;
+                searchRequest.SearchObject.Sort.Direction = 0;
+                vm.FilterByType();
             }
 
             //#endregion
@@ -1528,6 +1415,4 @@
 
 function Openuploadmodal(mattername, matterurl) {
     jQuery('#UploadMatterModal').modal("show");
-    console.log(mattername);
-    console.log(matterurl);
 }
