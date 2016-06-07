@@ -13,7 +13,7 @@
                 <input class='form-control' ng-model='grid.appScope.vm.searchClientTerm' placeholder='Search' />
                 <div class='input-group-btn'>
 
-                    <button type='button' ng-click='grid.appScope.vm.searchClient()' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                    <button type='button' ng-click='grid.appScope.vm.mattersearch(grid.appScope.vm.searchClientTerm,"MCClientName",false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
                 </div>
             </div>
             <hr />
@@ -24,7 +24,7 @@
                     <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
                 </div>
                 <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Client'><span>Clear filters from </span><span class='clearFilterTitle'>Client</span></div>
-                <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.vm.Clients' ng-click='grid.appScope.vm.filterClientName(Client.matterClient)'>{{client.matterClient}}</div> </div>
+                <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.vm.details' ng-click='grid.appScope.vm.mattersearch(Client.matterClient,"LastModifiedTime",true)'>{{client.matterClient}}</div> </div>
             </div>
         </div>
     </div>

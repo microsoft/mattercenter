@@ -37,14 +37,9 @@
               title='Click to sort by document name'>
             <img class="docTypeIconHeader" id="docTypeIcon"
                  src="https://msmatter.sharepoint.com/_layouts/15/images/generaldocument.png"
-                 alt="Document type icon"/> Document
+                 alt="Document type icon"/>{{ col.colDef.displayName }}
+            <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
         </span>
-        <span ui-grid-visible='col.sort.direction' aria-label='{{getSortDirectionAriaLabel()}}'
-              class='ui-grid-invisible'>
-            <sub ui-grid-visible='isSortPriorityVisible()' class='ui-grid-sort-priority-number'>{{col.sort.priority + 1}}</sub>
-        </span>
-        <span class='sort pull-right' ng-show='grid.appScope.sortMCDocumentName'>↑</span>
-        <span ng-show='grid.appScope.sortDownMCDocumentName' class='sort pull-right'>↓</span>
     </div>
     <div class='ui-grid-column-menu-button ng-scope'
          ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false'
