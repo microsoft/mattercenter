@@ -36,7 +36,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                     new ExternalUserInfo()
                     {
                         Permission = "Full Control",
-                        Person = "premchand_102@hotmail.com",
+                        Person = "premchand104@hotmail.com",
                         Role = "Attorney Journal",
                         Status = "Pending"
                     }
@@ -67,47 +67,6 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         }
 
 
-        /// <summary>
-        /// This unit test will try to get all the users who can see a particular item
-        /// </summary>
-        [Fact]
-        public async void Get_Users()
-        {
-            SearchRequestVM searchRequestVM = new SearchRequestVM()
-            {
-                Client = new Client()
-                {
-                    Url = "https://msmatter.sharepoint.com/sites/catalog"
-                },
-                SearchObject = new SearchObject()
-                {
-                    SearchTerm = "Matter"
-                }
-            };
-            using (var client = testServer.CreateClient().AcceptJson())
-            {
-                var response = await client.PostAsJsonAsync("http://localhost:44323/api/v1/user/getusers", searchRequestVM);
-                var result = response.Content.ReadAsJsonAsync<IList<Users>>().Result;
-                Assert.NotNull(result);
-            }
-        }
-
-        /// <summary>
-        /// This unit test will try to test all the permissions levels that are configured
-        /// </summary>
-        [Fact]
-        public async void Get_Permission_Levels()
-        {
-            var matterClient = new Client()
-            {
-                Url = "https://msmatter.sharepoint.com/sites/catalog"
-            };
-            using (var client = testServer.CreateClient().AcceptJson())
-            {
-                var response = await client.PostAsJsonAsync("http://localhost:44323/api/v1/user/getpermissionlevels", matterClient);
-                var result = response.Content.ReadAsJsonAsync<IList<Role>>().Result;
-                Assert.NotNull(result);
-            }
-        }
+        
     }
 }

@@ -162,8 +162,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     }
                     matterDataList.Add(matterData);
                 }
-                searchResultsVM.MatterDataList = matterDataList;
-                
+                searchResultsVM.MatterDataList = matterDataList;                
             }
             searchResultsVM.SearchResults = null;
             return searchResultsVM;

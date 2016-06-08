@@ -3,7 +3,6 @@ using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.Sharing;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +45,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
             }
             return null;
-
         }
 
         /// <summary>
@@ -57,8 +55,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private bool CheckUserPresentInMatterCenter(ExternalSharingRequest externalSharingRequest, ExternalUserInfo userInfo)
         {
             try
-            {
-                
+            {                
                 var context = spoAuthorization.GetClientContext(externalSharingRequest.Client.Url);
                 var siteUsers = context.Web.SiteUsers;
                 string userAlias = userInfo.Person;
@@ -113,8 +110,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 var clientContext = spoAuthorization.GetClientContext(generalSettings.SiteURL + "/sites/" + externalSharingRequest.ClientName);   
                 var users = new List<UserRoleAssignment>();
                 UserRoleAssignment userRole = new UserRoleAssignment();
-                userRole.UserId = userInfo.Person;
-                
+                userRole.UserId = userInfo.Person;                
                 switch(userInfo.Permission.ToLower())
                 {
                     case "full control":
@@ -128,34 +124,27 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         break;
                 }                
                 users.Add(userRole);
-
                 //Share all the matter related documents and lists to external user
                 #region Doc Sharing API
-
                 string matterDocumentUrl = $"{clientUrl}/{externalSharingRequest.MatterId}";
                 string matterOneNoteUrl = $"{clientUrl}/{externalSharingRequest.MatterId+ matterSettings.OneNoteLibrarySuffix}";
                 string matterCalendarUrl = $"{clientUrl}/{externalSharingRequest.MatterId + matterSettings.CalendarNameSuffix}";
                 string matterTasksUrl = $"{clientUrl}/lists{externalSharingRequest.MatterId + matterSettings.TaskNameSuffix}";
-                string matterLandingPageUrl = $"{clientUrl}/sitepages/{externalSharingRequest.MatterId + ServiceConstants.ASPX_EXTENSION}"; 
-
-                DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
-                matterDocumentUrl,
-                users, true, true, true, "The following document library has been shared with you", true, true);
-                clientContext.ExecuteQuery();
-
-
-                IList<UserSharingResult> oneNoteSharingResult = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
-                matterOneNoteUrl,
-                users, true, true, true, "The following document library has been shared with you", true, true);
-                clientContext.ExecuteQuery();
-
+                string matterLandingPageUrl = $"{clientUrl}/sitepages/{externalSharingRequest.MatterId + ServiceConstants.ASPX_EXTENSION}";
 
                 IList<UserSharingResult> matterLandingPageResult = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
                 matterLandingPageUrl,
-                users, true, true, true, "The following document library has been shared with you", true, true);
+                users, true, true, true, "The following matter page has been shared with you", true, true);
+                clientContext.ExecuteQuery();
+                IList<UserSharingResult> documentPageResult =  DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
+                matterDocumentUrl,
+                users, true, true, false, "The following document library has been shared with you", true, true);
+                clientContext.ExecuteQuery();
+                IList<UserSharingResult> oneNoteSharingResult = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
+                matterOneNoteUrl,
+                users, true, true, false, "The following one note document has been shared with you", true, true);
                 clientContext.ExecuteQuery();
                 //#endregion
-
                 //#region List sharing api
                 string roleValue = ""; // int depends on the group IDs at site
                 int groupId = 0;
@@ -164,35 +153,32 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 bool includedAnonymousLinkInEmail = false;
                 string emailSubject = null;
                 string emailBody = "List shared";
-                var email = userInfo.Person.Replace('@', '_');
-                PeoplePickerUser peoplePickerUser = new PeoplePickerUser()
-                {
-                    Key = "i:0#.f|membership|" + email + "#ext#@" + generalSettings.Tenant,
-                    Description = email + "#ext#@" + generalSettings.Tenant,
-                    DisplayText = userInfo.Person,
-                    EntityType = "User",
-                    ProviderDisplayName= "Tenant",
-                    ProviderName = "Tenant",
-                    EntityData = new EntityData()
-                    {
-                        Department = "",
-                        Email = userInfo.Person,
-                        Title = userInfo.Person,
-                        PrincipalType = "GUEST_USER"
-                    }
-                };
-                string jsonResult = JsonConvert.SerializeObject(peoplePickerUser, Formatting.Indented);
-                SharingResult calendarResult = Web.ShareObject(clientContext, matterCalendarUrl, jsonResult, roleValue,
+                var email = userInfo.Person.Replace('@', '_');    
+                string peoplePickerInput = @"[{
+                                            'Key' : 'i:0#.f|membership|^#ext#@msmatter.onmicrosoft.com', 
+                                            'Description' : '^#ext#@msmatter.onmicrosoft.com', 
+                                            'DisplayText' : '', 
+                                            'EntityType' : 'User', 
+                                            'ProviderDisplayName' : 'Tenant', 
+                                            'ProviderName' : 'Tenant', 
+                                            'IsResolved' : true, 
+                                            'EntityData' : {
+                                                                'MobilePhone' : '', 
+                                                                'Email' : '@', 
+                                                                'Department' : '', 
+                                                                'Title' : '@', 
+                                                                'PrincipalType' : 'GUEST_USER'}, 
+                                            'MultipleMatches' : []}]";
+                peoplePickerInput = peoplePickerInput.Replace("^", email);
+                peoplePickerInput = peoplePickerInput.Replace("@", userInfo.Person);
+                SharingResult calendarResult = Web.ShareObject(clientContext, matterCalendarUrl, peoplePickerInput, roleValue,
                 groupId, propageAcl, sendEmail, includedAnonymousLinkInEmail, emailSubject, emailBody, true);
                 clientContext.Load(calendarResult);
                 clientContext.ExecuteQuery();
-
-                SharingResult taskResult = Web.ShareObject(clientContext, matterTasksUrl, jsonResult, roleValue,
+                SharingResult taskResult = Web.ShareObject(clientContext, matterTasksUrl, peoplePickerInput, roleValue,
                 groupId, propageAcl, sendEmail, includedAnonymousLinkInEmail, emailSubject, emailBody, true);
                 clientContext.Load(calendarResult);
                 clientContext.ExecuteQuery();
-
-
                 return null;
                 #endregion
 
@@ -201,24 +187,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 throw;
             }
-        }
-
-        
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private string MessageBodyForExternalRequest(ExternalSharingRequest externalSharingRequest)
-        {
-            try
-            {
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
+        }        
     }
 }
