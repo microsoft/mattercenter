@@ -576,3 +576,6 @@ textarea {
     overflow-y: auto;
 }
 
+#docgrid .ui-grid{
+    height:300px !important;
+}

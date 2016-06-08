@@ -20,6 +20,7 @@
             vm.sortbytext = 'Relevant';
             vm.documentsCheckedCount = 0;
             vm.enable = true;
+            vm.totalrecords = 0;
             //#endregion
 
             //#region Variable to show document count
@@ -52,7 +53,7 @@
             //#endregion
 
             var gridOptions = {
-                paginationPageSize: 40,
+                paginationPageSize: 6,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
@@ -109,7 +110,7 @@
             };
             //#endregion
 
-           
+
 
             //#region Cart functionality
             vm.cartelements = [];
@@ -165,21 +166,21 @@
                         vm.documentsCheckedCount = 0;
                     }
                 }
-                
-            };           
+
+            };
 
             vm.showMailCartModal = function () {
                 if (vm.documentsCheckedCount > 0) {
                     jQuery('#UploadMatterModal').modal("show");
                 }
-            }          
-            
+            }
+
             //Event is going to fire when the user clicks on "Email as attachment" or "Email as link" in the modal window
             vm.downloadEmailAsAttachment = function (downloadAttachmentsAsEmail) {
                 //Get all the documents which are checked
                 var i = 0;
                 angular.forEach(vm.cartelements, function (selectedDocument) {
-                    
+
                     if (selectedDocument.selected) {
                         vm.selectedDocuments.push(selectedDocument);
                         //Display progress icon for each checked item
@@ -209,10 +210,10 @@
                 });
 
                 var mailAttachmentDetailsRequest = {
-                    FullUrl:sFileURLs,
+                    FullUrl: sFileURLs,
                     IsAttachmentCall: downloadAttachmentsAsEmail
                 }
-               
+
                 downloadAttachmentsAsStream(mailAttachmentDetailsRequest, function (response) {
                     var result = encodeURIComponent(response);
                     //Once we get the response, stop the progress
@@ -223,7 +224,7 @@
                     //clear the selectedDocuments array
                     vm.selectedDocuments = [];
                     //enable the vm.enable so that user can click the link again
-                    vm.enable = true; 
+                    vm.enable = true;
                 })
             }
 
@@ -234,7 +235,7 @@
                 }
                 return sOrignalString;
             }
-            
+
 
             //#endregion
 
@@ -355,11 +356,15 @@
                     }
                 }
                 getDocumentCounts(documentRequest, function (response) {
-                    
+
                     vm.allDocumentCount = response.allDocumentCounts;
                     vm.myDocumentCount = response.myDocumentCounts;
                     vm.pinDocumentCount = response.pinnedDocumentCounts;
                     vm.lazyloaderdashboard = true;
+                    vm.totalrecords = response.allDocumentCounts;
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
                 });
             }
             //#endregion
@@ -411,13 +416,15 @@
                             });
                             vm.documentGridOptions.data = response;
                             vm.allDocumentCount = response.length;
+                            vm.totalrecords = vm.allDocumentCount;
                         }
                         else {
                             vm.documentGridOptions.data = response;
                             vm.allDocumentCount = response.length;
+                            vm.totalrecords = vm.allDocumentCount;
                         }
                     });
-                    
+
                 });
             }
             //#endregion
@@ -433,6 +440,7 @@
                     if (response) {
                         vm.documentGridOptions.data = response;
                         vm.pinDocumentCount = response.length;
+                        vm.totalrecords = vm.pinDocumentCount;
                     }
                 });
             }
@@ -465,12 +473,13 @@
                 get(documentRequest, function (response) {
                     vm.documentGridOptions.data = response;
                     vm.myDocumentCount = response.length;
+                    vm.totalrecords = vm.myDocumentCount;
                 });
             }
             //#endregion
 
             $timeout(vm.getDocumentCounts(), 100);
-            $timeout(vm.getDocuments(), 700);           
+            $timeout(vm.getDocuments(), 700);
 
             //#region This function will pin or unpin the document based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
@@ -638,7 +647,7 @@
                 },
                 SearchObject: {
                     PageNumber: 1,
-                    ItemsPerPage: 10,
+                    ItemsPerPage: 30,
                     SearchTerm: "",
                     Filters: {
                         ClientName: "",
@@ -733,6 +742,81 @@
                     vm.FilterByType();
                 }
             }
+
+            //#endregion
+
+            //#region Pagination
+
+            vm.first = 1;
+            vm.last = 6;
+            vm.total = 0;
+            vm.pagenumber = 1;
+            vm.fromtopage = vm.first + " - " + vm.last;
+
+            vm.next = function () {
+                if (vm.last < vm.totalrecords) {
+                    vm.first = vm.first + 6;
+                    vm.last = vm.last + 6;
+                    vm.total = vm.totalrecords - 6;
+                    if (vm.total < 6) {
+                        vm.fromtopage = vm.first + " - " + vm.totalrecords;
+                    } else {
+                        vm.fromtopage = vm.first + " - " + vm.last;
+                    }
+                    vm.pagenumber = vm.pagenumber + 1;
+                    SortRequest.SearchObject.PageNumber = vm.pagenumber;
+                    SortRequest.SearchObject.ItemsPerPage = 6;
+                    get(SortRequest, function (response) {
+                        vm.lazyloader = true;
+                        if (response.errorCode == "404") {
+                            vm.divuigrid = false;
+                            vm.nodata = true;
+                            vm.errorMessage = response.message;
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            vm.documentGridOptions.data = response;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                        }
+                    });
+                } else {
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                }
+            };
+
+            vm.prev = function () {
+                if (vm.last > 7) {
+                    vm.first = vm.first - 6;
+                    vm.last = vm.last - 6;
+                    vm.pagenumber = vm.pagenumber - 1;
+                    vm.fromtopage = vm.first + " - " + vm.last;
+                    SortRequest.SearchObject.PageNumber = vm.pagenumber;
+                    SortRequest.SearchObject.ItemsPerPage = 6;
+                    get(SortRequest, function (response) {
+                        vm.lazyloader = true;
+                        if (response.errorCode == "404") {
+                            vm.divuigrid = false;
+                            vm.nodata = true;
+                            vm.errorMessage = response.message;
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            vm.documentGridOptions.data = response;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                        }
+                    });
+                } else {
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                }
+            };
 
             //#endregion
         }
