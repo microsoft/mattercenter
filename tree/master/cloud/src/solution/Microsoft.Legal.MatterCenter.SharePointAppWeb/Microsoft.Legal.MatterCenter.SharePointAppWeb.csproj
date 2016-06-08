@@ -538,16 +538,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Legal.MatterCenter.Entity\Microsoft.Legal.MatterCenter.Entity.csproj">
-      <Project>{04b6e5ba-de44-4e40-9496-ee12f658de67}</Project>
-      <Name>Microsoft.Legal.MatterCenter.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Microsoft.Legal.MatterCenter.Utility\Microsoft.Legal.MatterCenter.Utility.csproj">
-      <Project>{8232f5f2-a0f9-4608-b7f3-22a321eca1b0}</Project>
-      <Name>Microsoft.Legal.MatterCenter.Utility</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="App_LocalResources\Settings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
