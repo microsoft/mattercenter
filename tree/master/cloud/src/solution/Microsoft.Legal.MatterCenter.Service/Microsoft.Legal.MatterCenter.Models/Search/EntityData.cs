@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 
 namespace Microsoft.Legal.MatterCenter.Models
 {
@@ -24,5 +21,9 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// Gets or sets the email of user or security group
         /// </summary>
         public string Email { get; set; }
+        /// <summary>
+        /// Gets or sets the email of user or security group
+        /// </summary>
+        public string PrincipalType { get; set; }
     }
 }

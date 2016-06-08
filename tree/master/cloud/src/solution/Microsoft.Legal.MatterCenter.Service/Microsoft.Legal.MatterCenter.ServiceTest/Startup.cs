@@ -204,6 +204,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.AddSingleton<IUploadHelperFunctionsUtility, UploadHelperFunctionsUtility>();
             services.AddSingleton<IDocumentProvision, DocumentProvision>();
             services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IExternalSharing, ExternalSharing>();
         }
 
         private void CheckAuthorization(IApplicationBuilder app)

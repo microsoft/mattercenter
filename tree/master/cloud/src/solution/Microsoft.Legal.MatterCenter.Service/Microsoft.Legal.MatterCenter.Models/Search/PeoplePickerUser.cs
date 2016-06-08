@@ -34,5 +34,8 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// Gets or sets the entity data returned from people picker web service
         /// </summary>
         public EntityData EntityData { get; set; }
+        public string ProviderDisplayName { get; set; }
+        public string ProviderName { get; set; }
+        public bool IsResolved { get; set; }
     }
 }

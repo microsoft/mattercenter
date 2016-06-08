@@ -1055,6 +1055,57 @@ namespace Microsoft.Legal.MatterCenter.Service
 
         }
 
+        /// <summary>
+        /// This method will assign user permission to the matter
+        /// </summary>
+        /// <param name="matterMetadataVM"></param>
+        /// <returns></returns>
+        [HttpPost("sharematter")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public IActionResult ShareMatter([FromBody] ExternalSharingRequest externalSharingRequest)
+        {
+            var client = externalSharingRequest.Client;            
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
+                ErrorResponse errorResponse = null;
+                if (externalSharingRequest==null && externalSharingRequest.Client==null && externalSharingRequest.ExternalUserInfoList==null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+
+                var genericResponseVM = matterProvision.ShareMatterToExternalUser(externalSharingRequest);
+                if (genericResponseVM != null && genericResponseVM.IsError == true)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = genericResponseVM.Value,
+                        ErrorCode = genericResponseVM.Code,
+                        Description = ""
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
+                var assignPermissions = new
+                {
+                    ReturnValue = true
+                };
+                return matterCenterServiceFunctions.ServiceResponse(assignPermissions, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
         #endregion
     }
 }

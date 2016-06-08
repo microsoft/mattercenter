@@ -180,6 +180,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
             services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"));
             services.Configure<MatterCenterApplicationInsights>(this.Configuration.GetSection("ApplicationInsights"));
+           
         }
 
         private void ConfigureMatterPackages(IServiceCollection services)
@@ -205,6 +206,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.AddSingleton<IUploadHelperFunctionsUtility, UploadHelperFunctionsUtility>();
             services.AddSingleton<IDocumentProvision, DocumentProvision>();
             services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IExternalSharing, ExternalSharing>();
         }
 
         private void CheckAuthorization(IApplicationBuilder app)

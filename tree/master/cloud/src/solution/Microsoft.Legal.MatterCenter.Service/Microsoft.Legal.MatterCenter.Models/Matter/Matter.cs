@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 namespace Microsoft.Legal.MatterCenter.Models
 {
     /// <summary>
-    /// Provides the structure required to hold matter meta-data. It includes matter ID, name, description, conflict details, allowed teams, blocked users, permissions, and content type.
+    /// Provides the structure required to hold matter meta-data. It includes matter ID, name, description, conflict details, 
+    /// allowed teams, blocked users, permissions, and content type.
     /// </summary>
     public class Matter
     {

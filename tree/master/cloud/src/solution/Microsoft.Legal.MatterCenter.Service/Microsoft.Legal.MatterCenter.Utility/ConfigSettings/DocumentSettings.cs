@@ -22,5 +22,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string MailCartMailSubject { get; set; }
         public string MailCartMailBody { get; set; }
         public string SendAsEmailFormat { get; set; }
+        public string TimeStampFormat { get; set; }
     }
 }

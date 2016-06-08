@@ -41,12 +41,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ISPPage spPage;
         private ErrorSettings errorSettings;
         private ISPContentTypes spContentTypes;
+        private IExternalSharing extrnalSharing;
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
         /// <param name="search"></param>
         public MatterRepository(ISearch search, IOptions<MatterSettings> matterSettings, 
             IOptions<SearchSettings> searchSettings, IOptions<ListNames> listNames, ISPOAuthorization spoAuthorization, ISPContentTypes spContentTypes,
+            IExternalSharing extrnalSharing,
         ISPList spList, IOptions<CamlQueries> camlQueries, IUsersDetails userdetails, IOptions<ErrorSettings> errorSettings, ISPPage spPage)
         {
             this.search = search;
@@ -60,6 +62,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spPage = spPage;
             this.errorSettings = errorSettings.Value;
             this.spContentTypes = spContentTypes;
+            this.extrnalSharing = extrnalSharing;
         }
 
         public bool CreateList(ClientContext clientContext, ListInformation listInformation)
@@ -1050,6 +1053,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName)
         {
             return spList.SetPermission(clientContext, assignUserName, permissions, listName);
+        }
+
+
+        public GenericResponseVM ShareMatterToExternalUser(ExternalSharingRequest externalSharingRequest)
+        {
+            return extrnalSharing.ShareMatter(externalSharingRequest);
         }
     }
 }

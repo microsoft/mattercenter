@@ -15,5 +15,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string DMSRoleListName { get; set; }
         public string DMSMatterListName { get; set; }
         public string MatterConfigurationsList { get; set; }
+        public string MatterCenterExternalRequests { get; set; }
     }
 }

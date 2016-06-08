@@ -26,13 +26,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private DocumentSettings documentSettings;
         private ICustomLogger customLogger;
         private LogTables logTables;
+        private ErrorSettings errorSettings;
         public DocumentProvision(IDocumentRepository docRepository, 
             IUserRepository userRepository, 
             IUploadHelperFunctions uploadHelperFunctions, 
             IOptions<GeneralSettings> generalSettings, 
             IOptions<DocumentSettings> documentSettings, 
             ICustomLogger customLogger, 
-            IOptions<LogTables> logTables)
+            IOptions<LogTables> logTables, IOptions<ErrorSettings> errorSettings)
         {
             this.docRepository = docRepository;
             this.uploadHelperFunctions = uploadHelperFunctions;
@@ -41,6 +42,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.documentSettings = documentSettings.Value;
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
+            this.errorSettings = errorSettings.Value;
         }
 
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
@@ -331,6 +333,32 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
             }
             return genericResponse;
+        }
+
+        public GenericResponseVM CheckDuplicateDocument(string clientUrl, string folderName, string documentLibraryName, IList<object> listResponse, 
+            string fileName, ContentCheckDetails contentCheck, bool allowContentCheck)
+        {
+            GenericResponseVM genericResponse = null;
+            DuplicateDocument duplicateDocument = uploadHelperFunctions.DocumentExists(clientUrl, contentCheck, documentLibraryName, folderName, false);
+            if (duplicateDocument != null && duplicateDocument.DocumentExists)
+            {
+                string documentPath = string.Concat(generalSettings.SiteURL, folderName, ServiceConstants.FORWARD_SLASH, fileName);
+                string duplicateMessage = (allowContentCheck && duplicateDocument.HasPotentialDuplicate) ? errorSettings.FilePotentialDuplicateMessage : errorSettings.FileAlreadyExistMessage;
+
+                genericResponse = new GenericResponseVM()
+                {
+                    IsError = true,
+                    Code = UploadEnums.DuplicateDocument.ToString(),
+                    Value = string.Format(CultureInfo.InvariantCulture, duplicateMessage, fileName, documentPath)
+                };
+
+            }
+            return genericResponse;
+        }
+
+        public GenericResponseVM PerformContentCheck()
+        {
+            return null;
         }
 
         public async Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM)

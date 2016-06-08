@@ -39,7 +39,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private DocumentSettings documentSettings;
         private IUploadHelperFunctionsUtility uploadHelperFunctionsUtility;
         private IUserRepository userRepositoy;
+       
         public UploadHelperFunctions(ISPOAuthorization spoAuthorization, IOptions<ErrorSettings> errorSettings, IUserRepository userRepositoy,
+            
             IDocumentRepository documentRepository, IOptions<DocumentSettings> documentSettings, IUploadHelperFunctionsUtility uploadHelperFunctionsUtility)
         {
             this.spoAuthorization = spoAuthorization;
@@ -47,8 +49,32 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.documentRepository = documentRepository;
             this.documentSettings = documentSettings.Value;
             this.uploadHelperFunctionsUtility = uploadHelperFunctionsUtility;
-            this.userRepositoy = userRepositoy;
+            this.userRepositoy = userRepositoy;            
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public DuplicateDocument DocumentExists(string clientUrl, ContentCheckDetails contentCheck, string documentLibraryName, string folderName, bool isMail)
+        {            
+            ClientContext clientContext = spoAuthorization.GetClientContext(clientUrl);
+            DuplicateDocument duplicateDocument = documentRepository.DocumentExists(clientContext, contentCheck, documentLibraryName, folderName, isMail);
+            if (duplicateDocument.DocumentExists)
+            {
+                return duplicateDocument;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public GenericResponseVM PerformContentCheck()
+        {
+            return null;
+        }
+
         /// <summary>
         /// Acts as entry point from service to place the request to upload email/attachment. Reads the web request headers and requests applicable methods based on headers.
         /// </summary>

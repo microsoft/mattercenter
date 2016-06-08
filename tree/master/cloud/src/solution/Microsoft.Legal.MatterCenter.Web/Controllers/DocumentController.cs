@@ -445,8 +445,27 @@ namespace Microsoft.Legal.MatterCenter.Web
                     else
                     {
                         string folder = folderUrl.Substring(folderUrl.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
-                        genericResponse = documentProvision.UploadFiles(uploadedFile, fileExtension, originalName, folderUrl, fileName, 
-                            clientUrl, folder, documentLibraryName);
+
+                        if (2 == isOverwrite)   //If User presses "Perform content check" option in overwrite Popup
+                        {
+                            continueUpload = false;
+                            //response = PerformContentCheck(folderName, listResponse, response, upload, clientContext);
+                        }
+                        else if (3 == isOverwrite)  //If user presses "Cancel upload" option in overwrite popup or file is being uploaded for the first time
+                        {
+                            genericResponse = documentProvision.CheckDuplicateDocument(clientUrl, folderName, documentLibraryName, listResponse, fileName, contentCheckDetails, allowContentCheck);
+                        }
+                        else if (1 == isOverwrite)  //If User presses "Append date to file name and save" option in overwrite Popup
+                        {
+                            string fileNameWithoutExt = System.IO.Path.GetFileNameWithoutExtension(fileName);
+                            string timeStampSuffix = DateTime.Now.ToString(documentSettings.TimeStampFormat, CultureInfo.InvariantCulture).Replace(":", "_");
+                            fileName = fileNameWithoutExt + "_" + timeStampSuffix + fileExtension;
+                        }
+                        if(genericResponse==null)
+                        {
+                            genericResponse = documentProvision.UploadFiles(uploadedFile, fileExtension, originalName, folderUrl, fileName,
+                                clientUrl, folder, documentLibraryName);
+                        }
                         if (genericResponse == null)
                         {
                             var successFile = new
@@ -461,15 +480,15 @@ namespace Microsoft.Legal.MatterCenter.Web
                         }
                         else
                         {
-                            var successFile = new
+                            var errorFile = new
                             {
                                 IsError = true,
-                                Code = HttpStatusCode.BadRequest.ToString(),
-                                Value = UploadEnums.UploadFailure.ToString(),
+                                Code = genericResponse.Code.ToString(),
+                                Value = genericResponse.Value.ToString(),
                                 FileName = fileName,
                                 DropFolder = folderName
                             };
-                            listResponse.Add(successFile);                           
+                            listResponse.Add(errorFile);                           
                         }                   
                     }
                 }                

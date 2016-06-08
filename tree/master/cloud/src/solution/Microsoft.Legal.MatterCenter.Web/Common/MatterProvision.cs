@@ -169,6 +169,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return searchResultsVM;
         }
 
+        public GenericResponseVM ShareMatterToExternalUser(ExternalSharingRequest externalSharingRequest)
+        {
+            return matterRepositoy.ShareMatterToExternalUser(externalSharingRequest);
+        }
+
         public GenericResponseVM UpdateMatter(MatterInformationVM matterInformation)
         {
             var matter = matterInformation.Matter;
