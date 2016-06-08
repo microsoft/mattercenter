@@ -243,59 +243,11 @@
 
 
         //#region methods for getting,filtering,pin,unpin documents
-        vm.searchDocument = function (val) {
-            var searchRequest = {
-                Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
-                },
-                SearchObject: {
-                    PageNumber: 1,
-                    ItemsPerPage: 10,
-                    SearchTerm: val,
-                    Filters: {},
-                    Sort: {
-                        ByProperty: "LastModifiedTime",
-                        Direction: 1
-                    }
-                }
-            };
-            return documentResource.get(searchRequest).$promise;
-        }
-
-
-        vm.search = function () {
-            var searchRequest =
-              {
-                  Client: {
-                      Id: "123456",
-                      Name: "Microsoft",
-                      Url: "https://msmatter.sharepoint.com/sites/catalog"
-                  },
-                  SearchObject: {
-                      PageNumber: 1,
-                      ItemsPerPage: 10,
-                      SearchTerm: vm.searchTerm,
-                      Filters: {},
-                      Sort:
-                              {
-                                  ByProperty: "LastModifiedTime",
-                                  Direction: 1
-                              }
-                  }
-              };
-            get(searchRequest, function (response) {
-                vm.gridOptions.data = response.matterDataList;
-            });
-        }
 
         //SearchRequest Object
         var searchRequest = {
             Client: {
-                Id: "123456",
-                Name: "Microsoft",
-                Url: "https://msmatter.sharepoint.com/sites/catalog"
+                Url: configs.global.repositoryUrl
             },
             SearchObject: {
                 PageNumber: 1,
@@ -331,83 +283,39 @@
             }
         };
 
+        vm.searchDocument = function (val) {
+            searchRequest.SearchObject.SearchTerm = val;
+            return documentResource.get(searchRequest).$promise;
+        }
 
-        //For Searching Matter in GridHeader Menu
-        //Start
-        vm.searchDocumentGrid = function () {
-            vm.lazyloader = false;
-
+        vm.search = function () {
             searchRequest.SearchObject.SearchTerm = vm.searchTerm;
-            searchRequest.SearchObject.Sort.ByProperty = "FileName";
-            searchRequest.SearchObject.Sort.Direction = 1;
             get(searchRequest, function (response) {
-                vm.lazyloader = true;
-                vm.documents = response;
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
+                vm.gridOptions.data = response.matterDataList;
             });
         }
-        //End
 
-        //For Searching client in GridHeader Menu
-        //start
-        vm.searchClient = function () {
+        //#region for searching matter by property and searchterm
+        vm.documentsearch = function (term, property, bool) {
             vm.lazyloader = false;
-            searchRequest.SearchObject.SearchTerm = vm.searchClientTerm;
-            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
-            searchRequest.SearchObject.Sort.Direction = 1;
+            searchRequest.SearchObject.SearchTerm = term;
+            searchRequest.SearchObject.Sort.ByProperty = property;
+            if (bool) {
+                searchRequest.SearchObject.Sort.Direction = 1;
+            }
             get(searchRequest, function (response) {
                 vm.lazyloader = true;
-                vm.Clients = response;
-                if (!$scope.$$phase) {
-                    $scope.$apply();
+                if (bool) {
+                    vm.gridOptions.data = response;
+                    vm.details = [];
+                } else {
+                    vm.details = response;
                 }
+                searchRequest.SearchObject.SearchTerm = "";
+                searchRequest.SearchObject.Sort.ByProperty = "";
             });
         }
-        //end
-
-        //For filtering documentName 
-        //Start
-        vm.filterdocumentName = function (documentName) {
-            vm.lazyloader = false;
-            searchRequest.SearchObject.SearchTerm = documentName;
-            searchRequest.SearchObject.Sort.ByProperty = "FileName";
-            searchRequest.SearchObject.Sort.Direction = 1;
-            get(searchRequest, function (response) {
-                vm.lazyloader = true;
-                vm.gridOptions.data = response;
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
-                vm.documents = [];
-            });
-
-        }
-
-        //End
-
-
-        //For filtering Clientname 
-        //Start
-        vm.filterClientName = function (clientname) {
-            vm.lazyloader = false;
-            searchRequest.SearchObject.SearchTerm = clientname;
-            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
-            searchRequest.SearchObject.Sort.Direction = 1;
-            get(searchRequest, function (response) {
-                vm.lazyloader = true;
-                vm.gridOptions.data = response;
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
-                vm.Clients = [];
-            });
-
-        }
-
-        //End
-
+        //#endregion
 
         //Code for filtering ModifiedDate
         //start
@@ -438,28 +346,9 @@
         vm.ddlDocuments = vm.Documents[0];
         //End  
 
-        vm.Pinnedobj = [];
-        vm.getDocumentPinned = function () {
-
-            var pinnedDocumentsRequest = {
-                Id: "123456",
-                Name: "Microsoft",
-                Url: "https://msmatter.sharepoint.com/sites/catalog"
-            }
-            getPinnedDocuments(pinnedDocumentsRequest, function (pinresponse) {
-                vm.Pinnedobj = [];
-                for (var i = 0; i < pinresponse.length; i++) {
-                    vm.Pinnedobj.push(pinresponse[i].documentName + "." + pinresponse[i].documentExtension);
-                }
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
-            });
-            return true;
+        var pinnedDocumentsRequest = {
+            Url: configs.global.repositoryUrl
         }
-
-        vm.getDocumentPinned();
-
 
         //#region for setting the document name in dropdown
         vm.SetDocuments = function (id, name) {
@@ -474,171 +363,101 @@
         //Hits when the Dropdown changes 
         //Start 
         vm.GetDocuments = function (id) {
+            vm.selected = "";
+            vm.searchTerm = "";
+            vm.searchClientTerm = "";
+            vm.startdate = "";
+            vm.enddate = "";
+            vm.sortexp = "";
+            vm.sortby = "";
             vm.lazyloader = false;
             if (id == 1) {
-                var AllDocRequest = {
-                    Client: {
-                        Id: "123456",
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
-                    },
-                    SearchObject: {
-                        PageNumber: 1,
-                        ItemsPerPage: 10,
-                        SearchTerm: '',
-                        Filters: {
-                            ClientName: "",
-                            ClientsList: [],
-                            PGList: [],
-                            AOLList: [],
-                            DateFilters: {
-                                CreatedFromDate: "",
-                                CreatedToDate: "",
-                                ModifiedFromDate: "",
-                                ModifiedToDate: "",
-                                OpenDateFrom: "",
-                                OpenDateTo: ""
-                            },
-                            DocumentAuthor: "",
-                            DocumentCheckoutUsers: "",
-                            FilterByMe: 0,
-                            FromDate: "",
-                            Name: "",
-                            ResponsibleAttorneys: "",
-                            SubareaOfLaw: "",
-                            ToDate: ""
-                        },
-                        Sort: {
-                            ByProperty: 'LastModifiedTime',
-                            Direction: 1
-                        }
-                    }
-                };
-                get(AllDocRequest, function (response) {
-                    vm.lazyloader = true;
+                searchRequest.SearchObject.SearchTerm = "";
+                searchRequest.SearchObject.Filters.FilterByMe = 0;
+                get(searchRequest, function (response) {
                     if (response.errorCode == "404") {
                         vm.divuigrid = false;
                         vm.nodata = true;
                         vm.errorMessage = response.message;
                     } else {
-                        vm.getDocumentPinned();
                         vm.divuigrid = true;
                         vm.nodata = false;
-                        if (vm.Pinnedobj.length > 0) {
-                            angular.forEach(vm.Pinnedobj, function (pinobj) {
-                                angular.forEach(response, function (res) {
-                                    if (pinobj == res.documentName) {
-                                        if (res.ismatterdone == undefined && !res.ismatterdone) {
-                                            res.MatterInfo = "Unpin this matter";
-                                            res.ismatterdone = true;
+                        getPinnedDocuments(pinnedDocumentsRequest, function (pinresponse) {
+                            if (pinresponse.length > 0) {
+                                angular.forEach(pinresponse, function (pinobj) {
+                                    angular.forEach(response, function (res) {
+                                        if (pinobj == res.documentName) {
+                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                res.MatterInfo = "Unpin this matter";
+                                                res.ismatterdone = true;
+                                            }
                                         }
-                                    }
+                                    });
                                 });
-                            });
-                            vm.gridOptions.data = response;
-                            if (!$scope.$$phase) {
-                                $scope.$apply();
+                                vm.gridOptions.data = response;
+                                if (!$scope.$$phase) {
+                                    $scope.$apply();
+                                }
+                            } else {
+                                vm.gridOptions.data = response;
+                                if (!$scope.$$phase) {
+                                    $scope.$apply();
+                                }
                             }
-                        } else {
-                            vm.gridOptions.data = response;
-                            if (!$scope.$$phase) {
-                                $scope.$apply();
-                            }
-                        }
+                        });
+                        $timeout(function () { vm.lazyloader = true; }, 1000);
                     }
                 });
 
-
             } else if (id == 2) {
                 vm.lazyloader = false;
-                var MyDocRequest = {
-                    Client: {
-                        Id: "123456",
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
-                    },
-                    SearchObject: {
-                        PageNumber: 1,
-                        ItemsPerPage: 10,
-                        SearchTerm: '',
-                        Filters: {
-                            ClientName: "",
-                            ClientsList: [],
-                            PGList: [],
-                            AOLList: [],
-                            DateFilters: {
-                                CreatedFromDate: "",
-                                CreatedToDate: "",
-                                ModifiedFromDate: "",
-                                ModifiedToDate: "",
-                                OpenDateFrom: "",
-                                OpenDateTo: ""
-                            },
-                            DocumentAuthor: "",
-                            DocumentCheckoutUsers: "",
-                            FilterByMe: 1,
-                            FromDate: "",
-                            Name: "",
-                            ResponsibleAttorneys: "",
-                            SubareaOfLaw: "",
-                            ToDate: ""
-                        },
-                        Sort:
-                          {
-                              ByProperty: 'LastModifiedTime',
-                              Direction: 1
-                          }
-                    }
-                };
-
-                get(MyDocRequest, function (response) {
-                    vm.lazyloader = true;
+                searchRequest.SearchObject.SearchTerm = "";
+                searchRequest.SearchObject.Filters.FilterByMe = 1;
+                get(searchRequest, function (response) {
                     if (response.errorCode == "404") {
                         vm.divuigrid = false;
                         vm.nodata = true;
                         vm.errorMessage = response.message;
                     } else {
-                        vm.getDocumentPinned();
                         vm.divuigrid = true;
                         vm.nodata = false;
-                        if (vm.Pinnedobj.length > 0) {
-                            angular.forEach(vm.Pinnedobj, function (pinobj) {
-                                angular.forEach(response, function (res) {
-                                    if (pinobj == res.documentName) {
-                                        if (res.ismatterdone == undefined && !res.ismatterdone) {
-                                            res.MatterInfo = "Unpin this matter";
-                                            res.ismatterdone = true;
+                        getPinnedDocuments(pinnedDocumentsRequest, function (pinresponse) {
+                            if (pinresponse.length > 0) {
+                                angular.forEach(pinresponse, function (pinobj) {
+                                    angular.forEach(response, function (res) {
+                                        if (pinobj == res.documentName) {
+                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                res.MatterInfo = "Unpin this matter";
+                                                res.ismatterdone = true;
+                                            }
                                         }
-                                    }
+                                    });
                                 });
-                            });
-                            vm.gridOptions.data = response;
-                            if (!$scope.$$phase) {
-                                $scope.$apply();
+                                vm.gridOptions.data = response;
+                                if (!$scope.$$phase) {
+                                    $scope.$apply();
+                                }
+                            } else {
+                                vm.gridOptions.data = response;
+                                if (!$scope.$$phase) {
+                                    $scope.$apply();
+                                }
                             }
-                        } else {
-                            vm.gridOptions.data = response;
-                            if (!$scope.$$phase) {
-                                $scope.$apply();
-                            }
-                        }
+                            $timeout(function () { vm.lazyloader = true; }, 1000);
+                        });
                     }
                 });
             } else if (id == 3) {
                 vm.lazyloader = false;
                 var pinnedMattersRequest = {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    Url: configs.global.repositoryUrl
                 }
                 getPinnedDocuments(pinnedMattersRequest, function (response) {
-                    vm.lazyloader = true;
                     if (response.errorCode == "404") {
                         vm.divuigrid = false;
                         vm.nodata = true;
                         vm.errorMessage = response.message;
                     } else {
-                        vm.getDocumentPinned();
                         vm.divuigrid = true;
                         vm.nodata = false;
                         angular.forEach(response, function (res) {
@@ -648,6 +467,7 @@
                             }
                         });
                         vm.gridOptions.data = response;
+                        vm.lazyloader = true;
                     }
                 });
             }
@@ -667,17 +487,15 @@
             var alldata = data.entity;
             var unpinRequest = {
                 Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    Url: configs.global.repositoryUrl
                 },
-                matterData: {
-                    documentName: alldata.matterUrl,
+                DocumentData: {
+                    DocumentUrl: alldata.documentUrl
                 }
             }
             UnpinDocuments(unpinRequest, function (response) {
                 if (response.isMatterUnPinned) {
-                    $timeout(function () { vm.GetDocuments(vm.ddldocuments.Id); }, 500);
+                    $timeout(function () { vm.SetDocuments(3, vm.documentname); }, 500);
                     alert("Success");
                 }
             });
@@ -691,28 +509,27 @@
             var alldata = data.entity;
             var pinRequest = {
                 Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    Url: configs.global.repositoryUrl
                 },
                 documentData: {
                     documentName: alldata.documentName,
-                    DocumentVersion: alldata.DocumentVersion,
-                    DocumentClient: alldata.DocumentClient,
-                    DocumentClientId: alldata.DocumentClientId,
-                    DocumentClientUrl: alldata.DocumentClientUrl,
-                    DocumentMatter: alldata.DocumentMatter,
-                    DocumentMatterId: alldata.DocumentMatterId,
-                    DocumentOwner: alldata.DocumentOwner,
-                    DocumentUrl: alldata.DocumentUrl,
-                    DocumentOWAUrl: alldata.DocumentOWAUrl,
-                    DocumentExtension: alldata.DocumentExtension,
-                    DocumentCreatedDate: alldata.DocumentCreatedDate,
-                    DocumentModifiedDate: alldata.DocumentModifiedDate,
-                    DocumentCheckoutUser: alldata.DocumentCheckoutUser,
-                    DocumentMatterUrl: alldata.DocumentMatterUrl,
-                    DocumentParentUrl: alldata.DocumentParentUrl,
-                    DocumentID: alldata.DocumentID
+                    DocumentVersion: alldata.documentVersion,
+                    DocumentClient: alldata.documentClient,
+                    DocumentClientId: alldata.documentClientId,
+                    DocumentClientUrl: alldata.documentClientUrl,
+                    DocumentMatter: alldata.documentMatter,
+                    DocumentMatterId: alldata.documentMatterId,
+                    DocumentOwner: alldata.documentOwner,
+                    DocumentUrl: alldata.documentUrl,
+                    DocumentOWAUrl: alldata.documentOWAUrl,
+                    DocumentExtension: alldata.documentExtension,
+                    DocumentCreatedDate: alldata.documentCreatedDate,
+                    DocumentModifiedDate: alldata.documentModifiedDate,
+                    DocumentCheckoutUser: alldata.documentCheckoutUser,
+                    DocumentMatterUrl: alldata.documentMatterUrl,
+                    DocumentParentUrl: alldata.documentParentUrl,
+                    DocumentID: alldata.documentID,
+                    DocumentIconUrl: alldata.documentIconUrl
                 }
             }
             pinDocuments(pinRequest, function (response) {
@@ -785,48 +602,9 @@
 
         //#region Custom Sorting functionality
         //Start
-        var SortRequest = {
-            Client: {
-                Id: "123456",
-                Name: "Microsoft",
-                Url: "https://msmatter.sharepoint.com/sites/catalog"
-            },
-            SearchObject: {
-                PageNumber: 1,
-                ItemsPerPage: 10,
-                SearchTerm: "",
-                Filters: {
-                    ClientName: "",
-                    ClientsList: [],
-                    PGList: [],
-                    AOLList: [],
-                    DateFilters: {
-                        CreatedFromDate: "",
-                        CreatedToDate: "",
-                        ModifiedFromDate: "",
-                        ModifiedToDate: "",
-                        OpenDateFrom: "",
-                        OpenDateTo: ""
-                    },
-                    DocumentAuthor: "",
-                    DocumentCheckoutUsers: "",
-                    FilterByMe: 0,
-                    FromDate: "",
-                    Name: "",
-                    ResponsibleAttorneys: "",
-                    SubareaOfLaw: "",
-                    ToDate: ""
-                },
-                Sort:
-                        {
-                            ByProperty: '',
-                            Direction: 0
-                        }
-            }
-        }
 
         vm.FilterByType = function () {
-            get(SortRequest, function (response) {
+            get(searchRequest, function (response) {
                 vm.lazyloader = true;
                 if (response.errorCode == "404") {
                     vm.divuigrid = false;
@@ -867,8 +645,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "FileName";
-                            SortRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByProperty = "FileName";
+                            searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.FileNameSort = "desc";
                             vm.sortby = "asc";
@@ -876,8 +654,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "FileName";
-                            SortRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByProperty = "FileName";
+                            searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.FileNameSort = "asc";
                             vm.sortby = "desc";
@@ -893,8 +671,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.DocumentClientSort == undefined || vm.DocumentClientSort == "asc") {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
-                            SortRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
+                            searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.DocumentClientSort = "desc";
                             vm.sortby = "asc";
@@ -903,8 +681,8 @@
                         }
                         else {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
-                            SortRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
+                            searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.DocumentClientSort = "asc";
                             vm.sortby = "desc";
@@ -920,8 +698,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.DocumentClientIDSort == undefined || vm.DocumentClientIDSort == "asc") {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MCDocumentClientID";
-                            SortRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientID";
+                            searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.DocumentClientIDSort = "desc";
                             vm.sortby = "asc";
@@ -929,8 +707,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MCDocumentClientID";
-                            SortRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientID";
+                            searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.DocumentClientIDSort = "asc";
                             vm.sortby = "desc";
@@ -947,8 +725,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.ModiFiedDateSort == undefined || vm.ModiFiedDateSort == "asc") {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
-                            SortRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                            searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.ModiFiedDateSort = "desc";
                             vm.sortby = "asc";
@@ -956,8 +734,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
-                            SortRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                            searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.ModiFiedDateSort = "asc";
                             vm.sortby = "desc";
@@ -974,8 +752,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.AuthorSort == undefined || vm.AuthorSort == "asc") {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MSITOfficeAuthor";
-                            SortRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByProperty = "MSITOfficeAuthor";
+                            searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.AuthorSort = "desc";
                             vm.sortby = "asc";
@@ -983,8 +761,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MSITOfficeAuthor";
-                            SortRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByProperty = "MSITOfficeAuthor";
+                            searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.AuthorSort = "asc";
                             vm.sortby = "desc";
@@ -1000,8 +778,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.VersionSort == undefined || vm.VersionSort == "asc") {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MCVersionNumber";
-                            SortRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByProperty = "MCVersionNumber";
+                            searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.VersionSort = "desc";
                             vm.sortby = "asc";
@@ -1009,8 +787,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MCVersionNumber";
-                            SortRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByProperty = "MCVersionNumber";
+                            searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.VersionSort = "asc";
                             vm.sortby = "desc";
@@ -1026,8 +804,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.CheckoutSort == undefined || vm.CheckoutSort == "asc") {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MCCheckoutUser";
-                            SortRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByProperty = "MCCheckoutUser";
+                            searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.CheckoutSort = "desc";
                             vm.sortby = "asc";
@@ -1035,8 +813,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "MCCheckoutUser";
-                            SortRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByProperty = "MCCheckoutUser";
+                            searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.CheckoutSort = "asc";
                             vm.sortby = "desc";
@@ -1052,8 +830,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "Created";
-                            SortRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByProperty = "Created";
+                            searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.CreatedSort = "desc";
                             vm.sortby = "asc";
@@ -1061,8 +839,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
-                            SortRequest.SearchObject.Sort.ByProperty = "Created";
-                            SortRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByProperty = "Created";
+                            searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.CreatedSort = "asc";
                             vm.sortby = "desc";
@@ -1076,8 +854,8 @@
                 }
             } else {
                 vm.lazyloader = false;
-                SortRequest.SearchObject.Sort.ByProperty = "FileName";
-                SortRequest.SearchObject.Sort.Direction = 0;
+                searchRequest.SearchObject.Sort.ByProperty = "FileName";
+                searchRequest.SearchObject.Sort.Direction = 0;
                 vm.FilterByType();
             }
         }
@@ -1094,8 +872,8 @@
                 var secondText = searchToText.split(',')[1]
                 var finalSearchText = '(FileName:"' + firstText.trim() + '" OR dlcDocIdOWSText:"' + firstText.trim() + '"OR MCDocumentClientName:"' + firstText.trim() + '")';
             }
-            SortRequest.SearchObject.SearchTerm = finalSearchText;
-            SortRequest.SearchObject.Sort.Direction = 0;
+            searchRequest.SearchObject.SearchTerm = finalSearchText;
+            searchRequest.SearchObject.Sort.Direction = 0;
             vm.FilterByType();
         }
 

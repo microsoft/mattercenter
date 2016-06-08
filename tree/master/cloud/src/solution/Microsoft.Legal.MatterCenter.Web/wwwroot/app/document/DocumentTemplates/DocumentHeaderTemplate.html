@@ -8,7 +8,7 @@
             <div class='input-group'>
                 <input class='form-control' ng-model='grid.appScope.vm.searchTerm' placeholder='Search' />
                 <div class='input-group-btn'>
-                    <button type='button' ng-click='grid.appScope.vm.searchDocumentGrid()'
+                    <button type='button' ng-click='grid.appScope.vm.documentsearch(grid.appScope.vm.searchTerm,"FileName",false)'
                             class='btn btn-default'>
                         <img src='../images/search-15x15-666.png' />
                     </button>
@@ -24,8 +24,8 @@
                 </div>
                 <div id='filterResultsContainer'>
                     <div class='filterValueLabels ms-font-m ms-font-weight-semilight'
-                         ng-repeat='matter in grid.appScope.vm.documents'
-                         ng-click='grid.appScope.vm.filterdocumentName(matter.documentName)'>{{matter.documentName}}</div>
+                         ng-repeat='matter in grid.appScope.vm.details'
+                         ng-click='grid.appScope.vm.documentsearch(matter.documentName,"FileName",true)'>{{matter.documentName}}</div>
                 </div>
             </div>
         </div>

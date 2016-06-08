@@ -584,9 +584,7 @@
             //#region Request object for the GetMattersMethod
             var searchRequest = {
                 Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    Url: configs.global.repositoryUrl
                 },
                 SearchObject: {
                     PageNumber: 1,
@@ -641,6 +639,7 @@
             vm.SetMatters = function (id, name) {
                 vm.mattername = name;
                 vm.GetMatters(id);
+                vm.matterid = id;
             }
 
             //#endregion
@@ -675,9 +674,7 @@
                 var ModifiedDateRequest =
                   {
                       Client: {
-                          Id: "123456",
-                          Name: "Microsoft",
-                          Url: "https://msmatter.sharepoint.com/sites/catalog"
+                          Url: configs.global.repositoryUrl
                       },
                       SearchObject: {
                           PageNumber: 1,
@@ -720,28 +717,7 @@
             //Start 
             vm.Matters = [{ Id: 1, Name: "All Matters" }, { Id: 2, Name: "My Matters" }, { Id: 3, Name: "Pinned Matters" }];
             vm.ddlMatters = vm.Matters[0];
-
-
             //#endregion  
-
-            vm.Pinnedobj = [];
-            vm.getMatterPinned = function () {
-
-                var pinnedMattersRequest = {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
-                }
-                getPinnedMatters(pinnedMattersRequest, function (response) {
-                    vm.Pinnedobj.push(response);
-                    if (!$scope.$$phase) {
-                        $scope.$apply();
-                    }
-                });
-                return true;
-            }
-
-            vm.getMatterPinned();
 
             //#region Hits when the Dropdown changes 
             //Start 
@@ -754,42 +730,47 @@
                 vm.sortexp = "";
                 vm.sortby = "";
                 vm.lazyloader = false;
+                var pinnedMattersRequest = {
+                    Url: configs.global.repositoryUrl
+                }
                 if (id == 1) {
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.FilterByMe = 0;
                     searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                     get(searchRequest, function (response) {
-                        vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;
                             vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
-                            vm.getMatterPinned();
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            if (vm.Pinnedobj.length > 0) {
-                                angular.forEach(vm.Pinnedobj, function (pinobj) {
-                                    angular.forEach(response, function (res) {
-                                        if (pinobj.matterName == res.matterName) {
-                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
-                                                res.MatterInfo = "Unpin this matter";
-                                                res.ismatterdone = true;
+                            getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            //Check if the pinned matter name is equal to search matter name
+                                            if (pinobj.matterName == res.matterName) {
+                                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                    res.MatterInfo = "Unpin this matter";
+                                                    res.ismatterdone = true;
+                                                }
                                             }
-                                        }
+                                        });
                                     });
-                                });
-                                vm.gridOptions.data = response;
-                                if (!$scope.$$phase) {
-                                    $scope.$apply();
+                                    vm.gridOptions.data = response;
+                                    if (!$scope.$$phase) {
+                                        $scope.$apply();
+                                    }
+                                } else {
+                                    vm.gridOptions.data = response;
+                                    if (!$scope.$$phase) {
+                                        $scope.$apply();
+                                    }
                                 }
-                            } else {
-                                vm.gridOptions.data = response;
-                                if (!$scope.$$phase) {
-                                    $scope.$apply();
-                                }
-                            }
+                            });
                         }
+                        $timeout(function () { vm.lazyloader = true; }, 1000);
                     });
                 } else if (id == 2) {
                     vm.lazyloader = false;
@@ -797,56 +778,54 @@
                     searchRequest.SearchObject.Filters.FilterByMe = 1;
                     searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                     get(searchRequest, function (response) {
-                        vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;
                             vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
-                            vm.getMatterPinned();
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            if (vm.Pinnedobj.length > 0) {
-                                angular.forEach(vm.Pinnedobj, function (pinobj) {
-                                    angular.forEach(response, function (res) {
-                                        if (pinobj.matterName == res.matterName) {
-                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
-                                                res.MatterInfo = "Unpin this matter";
-                                                res.ismatterdone = true;
+                            getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            //Check if the pinned matter name is equal to search matter name
+                                            if (pinobj.matterName == res.matterName) {
+                                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                    res.MatterInfo = "Unpin this matter";
+                                                    res.ismatterdone = true;
+                                                }
                                             }
-                                        }
+                                        });
                                     });
-                                });
-                                vm.gridOptions.data = response;
-                                if (!$scope.$$phase) {
-                                    $scope.$apply();
+                                    vm.gridOptions.data = response;
+                                    if (!$scope.$$phase) {
+                                        $scope.$apply();
+                                    }
+                                } else {
+                                    vm.gridOptions.data = response;
+                                    if (!$scope.$$phase) {
+                                        $scope.$apply();
+                                    }
                                 }
-                            } else {
-                                vm.gridOptions.data = response;
-                                if (!$scope.$$phase) {
-                                    $scope.$apply();
-                                }
-                            }
+                                vm.lazyloader = true;
+                            });
                         }
                     });
                 } else if (id == 3) {
                     vm.lazyloader = false;
                     var pinnedMattersRequest = {
-                        Id: "123456",
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                        Url: configs.global.repositoryUrl
                     }
                     getPinnedMatters(pinnedMattersRequest, function (response) {
-                        vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;
                             vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
-                            vm.getMatterPinned();
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            angular.forEach(response.matterDataList, function (res) {
+                            angular.forEach(response, function (res) {
                                 if (res.ismatterdone == undefined && !res.ismatterdone) {
                                     res.MatterInfo = "Unpin this matter";
                                     res.ismatterdone = true;
@@ -856,6 +835,7 @@
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
+                            vm.lazyloader = true;
                         }
                     });
                 }
@@ -874,9 +854,9 @@
                 var alldata = data.entity;
                 var unpinRequest = {
                     Client: {
-                        Id: "123456",
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+
+
+                        Url: configs.global.repositoryUrl
                     },
                     matterData: {
                         matterName: alldata.matterUrl,
@@ -884,7 +864,7 @@
                 }
                 UnpinMatters(unpinRequest, function (response) {
                     if (response.isMatterUnPinned) {
-                        $timeout(function () { vm.GetMatters(vm.ddlMatters.Id); }, 500);
+                        $timeout(vm.SetMatters(vm.matterid, vm.mattername), 500);
                         alert("Success");
                     }
                 });
@@ -898,9 +878,7 @@
                 var alldata = data.entity;
                 var pinRequest = {
                     Client: {
-                        Id: "123456",
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                        Url: configs.global.repositoryUrl
                     },
                     matterData: {
                         matterName: alldata.matterName,
@@ -922,7 +900,7 @@
                 }
                 PinMatters(pinRequest, function (response) {
                     if (response.isMatterPinned) {
-                        $timeout(function () { vm.GetMatters(vm.ddlMatters.Id); }, 500);
+                        $timeout(vm.SetMatters(vm.matterid, vm.mattername), 500);
                         alert("Success");
                     }
                 });
