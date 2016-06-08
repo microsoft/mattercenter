@@ -424,7 +424,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     continueUpload = true;
                     ContentDispositionHeaderValue fileMetadata = ContentDispositionHeaderValue.Parse(uploadedFile.ContentDisposition);
                     string fileName = originalName = fileMetadata.FileName.Trim('"');
-                    ContentCheckDetails contentCheckDetails = new ContentCheckDetails(fileMetadata.FileName, uploadedFile.Length);
+                    ContentCheckDetails contentCheckDetails = new ContentCheckDetails(fileName, uploadedFile.Length);
                     string fileExtension = System.IO.Path.GetExtension(fileName).Trim();
                     if (-1 < fileName.IndexOf('\\'))
                     {
@@ -447,13 +447,12 @@ namespace Microsoft.Legal.MatterCenter.Web
                         string folder = folderUrl.Substring(folderUrl.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
 
                         if (2 == isOverwrite)   //If User presses "Perform content check" option in overwrite Popup
-                        {
-                            continueUpload = false;
-                            //response = PerformContentCheck(folderName, listResponse, response, upload, clientContext);
+                        {                            
+                            genericResponse = documentProvision.PerformContentCheck(clientUrl, folderUrl, uploadedFile, fileName);
                         }
                         else if (3 == isOverwrite)  //If user presses "Cancel upload" option in overwrite popup or file is being uploaded for the first time
                         {
-                            genericResponse = documentProvision.CheckDuplicateDocument(clientUrl, folderName, documentLibraryName, listResponse, fileName, contentCheckDetails, allowContentCheck);
+                            genericResponse = documentProvision.CheckDuplicateDocument(clientUrl, folderUrl, documentLibraryName, fileName, contentCheckDetails, allowContentCheck);
                         }
                         else if (1 == isOverwrite)  //If User presses "Append date to file name and save" option in overwrite Popup
                         {

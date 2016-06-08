@@ -11,6 +11,7 @@
 // ***********************************************************************
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
+    using AspNet.Http;
     using Extensions.OptionsModel;
     #region using
 
@@ -64,6 +65,56 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 return duplicateDocument;
             }
             return null;
+        }
+
+        public GenericResponseVM PerformContentCheck(string clientUrl, string folderUrl, IFormFile uploadedFile, string fileName)
+        {
+            GenericResponseVM genericResponse = null;
+            ClientContext clientContext = spoAuthorization.GetClientContext(clientUrl);
+            using (MemoryStream targetStream = new MemoryStream())
+            {
+                Stream sourceStream = uploadedFile.OpenReadStream();
+                try
+                {
+                    byte[] buffer = new byte[sourceStream.Length + 1];
+                    int read = 0;
+                    while ((read = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        targetStream.Write(buffer, 0, read);
+                    }
+                    string serverFileUrl = folderUrl + ServiceConstants.FORWARD_SLASH + fileName;
+                    bool isMatched = documentRepository.PerformContentCheck(clientContext, targetStream, serverFileUrl);
+                    if (isMatched)
+                    {
+                        //listResponse.Add(string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", ConstantStrings.FoundIdenticalContent, ConstantStrings.Pipe, ConstantStrings.TRUE));
+                        genericResponse = new GenericResponseVM()
+                        {
+                            IsError = true,
+                            Code = UploadEnums.IdenticalContent.ToString(),
+                            Value = string.Format(CultureInfo.InvariantCulture, errorSettings.FoundIdenticalContent)
+                        };
+                    }
+                    else
+                    {
+                        genericResponse = new GenericResponseVM()
+                        {
+                            IsError = true,
+                            Code = UploadEnums.NonIdenticalContent.ToString(),
+                            Value = string.Format(CultureInfo.InvariantCulture, errorSettings.FoundNonIdenticalContent)
+                        };                        
+                    }
+                }
+                catch (Exception exception)
+                {
+                    //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, UIConstantStrings.LogTableName);
+                    //response = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", ConstantStrings.ContentCheckFailed, ConstantStrings.Pipe, ConstantStrings.TRUE);
+                }
+                finally
+                {
+                    sourceStream.Dispose();
+                }
+            }
+            return genericResponse;
         }
 
         /// <summary>

@@ -335,7 +335,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return genericResponse;
         }
 
-        public GenericResponseVM CheckDuplicateDocument(string clientUrl, string folderName, string documentLibraryName, IList<object> listResponse, 
+        public GenericResponseVM CheckDuplicateDocument(string clientUrl, string folderName, string documentLibraryName, 
             string fileName, ContentCheckDetails contentCheck, bool allowContentCheck)
         {
             GenericResponseVM genericResponse = null;
@@ -356,9 +356,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return genericResponse;
         }
 
-        public GenericResponseVM PerformContentCheck()
+        public GenericResponseVM PerformContentCheck(string clientUrl, string folderUrl, IFormFile uploadedFile, string fileName)
         {
-            return null;
+            GenericResponseVM genericResponse = null;
+            genericResponse = uploadHelperFunctions.PerformContentCheck(clientUrl, folderUrl, uploadedFile, fileName);            
+            return genericResponse;
         }
 
         public async Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM)
