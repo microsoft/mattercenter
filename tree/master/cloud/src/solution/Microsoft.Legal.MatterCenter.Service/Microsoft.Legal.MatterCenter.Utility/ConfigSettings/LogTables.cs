@@ -15,5 +15,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string CloudStorageConnectionString { get; set; }
         public string AzureRowKeyDateFormat { get; set; }
         public bool IsLoggingOnAzure { get; set; }
+        public string ExternalAccessRequests { get; set; }
     }
 }

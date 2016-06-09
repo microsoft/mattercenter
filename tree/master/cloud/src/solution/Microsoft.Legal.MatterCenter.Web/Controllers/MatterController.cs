@@ -1070,7 +1070,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 
                 ErrorResponse errorResponse = null;
-                if (externalSharingRequest==null && externalSharingRequest.Client==null && externalSharingRequest.ExternalUserInfoList==null)
+                if (externalSharingRequest==null && externalSharingRequest.Client==null)
                 {
                     errorResponse = new ErrorResponse()
                     {

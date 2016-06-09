@@ -31,31 +31,35 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 },
                 ClientName = "microsoft",
                 MatterId = "351085190a4ce42e2871e748b4e5d8ce",
-                ExternalUserInfoList = new List<ExternalUserInfo>()
-                {
-                    new ExternalUserInfo()
-                    {
-                        Permission = "Full Control",
-                        Person = "premchand104@hotmail.com",
-                        Role = "Attorney Journal",
-                        Status = "Pending"
-                    }
-                    //,
-                    //new ExternalUserInfo()
-                    //{
-                    //    Permission = "Contribute",
-                    //    Person = "premchand_100@hotmail.com",
-                    //    Role = "Attorney Journal",
-                    //    Status = "Pending"
-                    //},
-                    //new ExternalUserInfo()
-                    //{
-                    //    Permission = "Read",
-                    //    Person = "premchand_101@hotmail.com",
-                    //    Role = "Attorney Journal",
-                    //    Status = "Pending"
-                    //},
-                }
+                Permission = "Full Control",
+                Person = "premchand107@hotmail.com",
+                Role = "Attorney Journal",
+                Status = "Pending"
+                //ExternalUserInfoList = new List<ExternalUserInfo>()
+                //{
+                //    new ExternalUserInfo()
+                //    {
+                //        Permission = "Full Control",
+                //        Person = "premchand104@hotmail.com",
+                //        Role = "Attorney Journal",
+                //        Status = "Pending"
+                //    }
+                //    //,
+                //    //new ExternalUserInfo()
+                //    //{
+                //    //    Permission = "Contribute",
+                //    //    Person = "premchand_100@hotmail.com",
+                //    //    Role = "Attorney Journal",
+                //    //    Status = "Pending"
+                //    //},
+                //    //new ExternalUserInfo()
+                //    //{
+                //    //    Permission = "Read",
+                //    //    Person = "premchand_101@hotmail.com",
+                //    //    Role = "Attorney Journal",
+                //    //    Status = "Pending"
+                //    //},
+                //}
             };
             
             using (var client = testServer.CreateClient().AcceptJson())

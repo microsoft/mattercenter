@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "Microsoft.Legal.MatterCenter.Utility Class Library",
   "authors": [ "v-lapedd" ],
@@ -13,8 +13,7 @@
     "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
     "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
     "StackExchange.Redis": "1.0.488",
-    "WindowsAzure.Storage": "6.2.0",
-   
+    "WindowsAzure.Storage": "6.2.2-preview"
   },
   "frameworks": {
     "dnx451": { }

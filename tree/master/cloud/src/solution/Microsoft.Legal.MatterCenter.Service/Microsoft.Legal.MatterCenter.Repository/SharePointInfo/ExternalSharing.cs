@@ -6,6 +6,10 @@ using Microsoft.SharePoint.Client.Sharing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Azure;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
+using System.Globalization;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -15,13 +19,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ListNames listNames;
         private GeneralSettings generalSettings;
         private MatterSettings matterSettings;
+        private LogTables logTables;
         public ExternalSharing(ISPOAuthorization spoAuthorization, IOptions<ListNames> listNames, 
-            IOptions<GeneralSettings> generalSettings, IOptions<MatterSettings> matterSettings)
+            IOptions<GeneralSettings> generalSettings, IOptions<MatterSettings> matterSettings, IOptions<LogTables> logTables)
         {
             this.spoAuthorization = spoAuthorization;
             this.listNames = listNames.Value;
             this.generalSettings = generalSettings.Value;
             this.matterSettings = matterSettings.Value;
+            this.logTables = logTables.Value;
         }
         /// <summary>
         /// This method will store the external sharing request in a list called "MatterCenterExternalRequests"
@@ -30,20 +36,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="externalSharingRequest"></param>
         /// <returns></returns>
         public GenericResponseVM ShareMatter(ExternalSharingRequest externalSharingRequest)
-        {
-            IList<ExternalUserInfo> externalUsers = externalSharingRequest.ExternalUserInfoList;
-            foreach (ExternalUserInfo userInfo in externalUsers)
+        {           
+            
+            //First check whether the user exists in SharePoint or not
+            if (CheckUserPresentInMatterCenter(externalSharingRequest) == false)
             {
-                //First check whether the user exists in SharePoint or not
-                if (CheckUserPresentInMatterCenter(externalSharingRequest, userInfo) == false)
-                {
-                    //If not, store external request in a list
-                    SaveExternalSharingRequest(externalSharingRequest, userInfo);
-                    //Prepare message body for the email notification
-                    //Send notification to the user with appropriate information
-                    SendExternalNotification(externalSharingRequest, userInfo);
-                }
+                //If not, store external request in a list
+                SaveExternalSharingRequest(externalSharingRequest);
+                //Prepare message body for the email notification
+                //Send notification to the user with appropriate information
+                SendExternalNotification(externalSharingRequest);
             }
+           
             return null;
         }
 
@@ -52,13 +56,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="externalSharingRequest"></param>
         /// <returns></returns>
-        private bool CheckUserPresentInMatterCenter(ExternalSharingRequest externalSharingRequest, ExternalUserInfo userInfo)
+        private bool CheckUserPresentInMatterCenter(ExternalSharingRequest externalSharingRequest)
         {
             try
             {                
                 var context = spoAuthorization.GetClientContext(externalSharingRequest.Client.Url);
                 var siteUsers = context.Web.SiteUsers;
-                string userAlias = userInfo.Person;
+                string userAlias = externalSharingRequest.Person;
                 var usersResult = context.LoadQuery(siteUsers.Include(u => u.Email).Where(u => u.Email == userAlias));
                 context.ExecuteQuery();
                 return usersResult.Any();
@@ -70,26 +74,26 @@ namespace Microsoft.Legal.MatterCenter.Repository
         }
 
         /// <summary>
-        /// 
+        /// This method will store external requests information in Azure Table Storage
         /// </summary>
         /// <param name="externalSharingRequest"></param>
         /// <returns></returns>
-        private void SaveExternalSharingRequest(ExternalSharingRequest externalSharingRequest, ExternalUserInfo userInfo)
-        {
-            
+        private void SaveExternalSharingRequest(ExternalSharingRequest externalSharingRequest)
+        {            
             try
             {
-                var clientContext = spoAuthorization.GetClientContext(generalSettings.CentralRepositoryUrl);
-                var list = clientContext.Web.Lists.GetByTitle(listNames.MatterCenterExternalRequests);
-                ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
-                ListItem newItem = list.AddItem(itemCreateInfo);
-                newItem["Person"] = userInfo.Person;
-                newItem["Permission"] = userInfo.Permission;
-                newItem["Role"] = userInfo.Role;
-                newItem["Status"] = userInfo.Status;
-                newItem["MatterId"] = externalSharingRequest.MatterId;
-                newItem.Update();
-                clientContext.ExecuteQuery();              
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(logTables.CloudStorageConnectionString);
+                CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
+                // Retrieve a reference to the table.
+                CloudTable table = tableClient.GetTableReference(logTables.ExternalAccessRequests);                
+                // Create the table if it doesn't exist.
+                table.CreateIfNotExists();
+                //Insert the entity into Table Storage
+                string date = DateTime.Now.ToUniversalTime().ToString(logTables.AzureRowKeyDateFormat, CultureInfo.InvariantCulture);
+                externalSharingRequest.RowKey = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", date, Guid.NewGuid().ToString());
+                externalSharingRequest.PartitionKey = externalSharingRequest.MatterId;
+                TableOperation insertOperation = TableOperation.Insert(externalSharingRequest);
+                table.Execute(insertOperation);
             }
             catch (Exception ex)
             {
@@ -102,7 +106,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="externalSharingRequest"></param>
         /// <returns></returns>
-        private GenericResponseVM SendExternalNotification(ExternalSharingRequest externalSharingRequest, ExternalUserInfo userInfo)
+        private GenericResponseVM SendExternalNotification(ExternalSharingRequest externalSharingRequest)
         {
             var clientUrl = $"{generalSettings.SiteURL}/sites/{externalSharingRequest.ClientName}";
             try
@@ -110,8 +114,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 var clientContext = spoAuthorization.GetClientContext(generalSettings.SiteURL + "/sites/" + externalSharingRequest.ClientName);   
                 var users = new List<UserRoleAssignment>();
                 UserRoleAssignment userRole = new UserRoleAssignment();
-                userRole.UserId = userInfo.Person;                
-                switch(userInfo.Permission.ToLower())
+                userRole.UserId = externalSharingRequest.Person;                
+                switch(externalSharingRequest.Permission.ToLower())
                 {
                     case "full control":
                         userRole.Role = SharePoint.Client.Sharing.Role.Owner;
@@ -153,7 +157,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 bool includedAnonymousLinkInEmail = false;
                 string emailSubject = null;
                 string emailBody = "List shared";
-                var email = userInfo.Person.Replace('@', '_');    
+                var email = externalSharingRequest.Person.Replace('@', '_');    
                 string peoplePickerInput = @"[{
                                             'Key' : 'i:0#.f|membership|^#ext#@msmatter.onmicrosoft.com', 
                                             'Description' : '^#ext#@msmatter.onmicrosoft.com', 
@@ -170,7 +174,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                                                 'PrincipalType' : 'GUEST_USER'}, 
                                             'MultipleMatches' : []}]";
                 peoplePickerInput = peoplePickerInput.Replace("^", email);
-                peoplePickerInput = peoplePickerInput.Replace("@", userInfo.Person);
+                peoplePickerInput = peoplePickerInput.Replace("@", externalSharingRequest.Person);
                 SharingResult calendarResult = Web.ShareObject(clientContext, matterCalendarUrl, peoplePickerInput, roleValue,
                 groupId, propageAcl, sendEmail, includedAnonymousLinkInEmail, emailSubject, emailBody, true);
                 clientContext.Load(calendarResult);
@@ -181,12 +185,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 clientContext.ExecuteQuery();
                 return null;
                 #endregion
-
             }
             catch (Exception ex)
             {
                 throw;
             }
         }        
-    }
+    }    
 }

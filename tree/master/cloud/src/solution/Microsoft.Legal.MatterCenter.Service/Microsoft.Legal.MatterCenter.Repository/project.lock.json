@@ -1201,7 +1201,8 @@
           "System.Collections": "4.0.11-beta-23516",
           "System.Linq": "4.0.1-beta-23516",
           "System.Runtime": "4.0.21-beta-23516",
-          "System.Threading": "4.0.11-beta-23516"
+          "System.Threading": "4.0.11-beta-23516",
+          "WindowsAzure.Storage": "6.2.2-preview"
         }
       },
       "Microsoft.Legal.MatterCenter.Utility/1.0.0": {
@@ -1215,7 +1216,7 @@
           "Microsoft.Legal.MatterCenter.Models": "1.0.0",
           "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
           "StackExchange.Redis": "1.0.488",
-          "WindowsAzure.Storage": "6.2.0"
+          "WindowsAzure.Storage": "6.2.2-preview"
         }
       },
       "Microsoft.Net.Http.Headers/1.0.0-rc1-final": {
@@ -1528,7 +1529,7 @@
           "lib/net45/_._": {}
         }
       },
-      "WindowsAzure.Storage/6.2.0": {
+      "WindowsAzure.Storage/6.2.2-preview": {
         "type": "package",
         "dependencies": {
           "Microsoft.Azure.KeyVault.Core": "1.0.0",
@@ -2748,7 +2749,8 @@
           "System.Collections": "4.0.11-beta-23516",
           "System.Linq": "4.0.1-beta-23516",
           "System.Runtime": "4.0.21-beta-23516",
-          "System.Threading": "4.0.11-beta-23516"
+          "System.Threading": "4.0.11-beta-23516",
+          "WindowsAzure.Storage": "6.2.2-preview"
         }
       },
       "Microsoft.Legal.MatterCenter.Utility/1.0.0": {
@@ -2762,7 +2764,7 @@
           "Microsoft.Legal.MatterCenter.Models": "1.0.0",
           "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
           "StackExchange.Redis": "1.0.488",
-          "WindowsAzure.Storage": "6.2.0"
+          "WindowsAzure.Storage": "6.2.2-preview"
         }
       },
       "Microsoft.Net.Http.Headers/1.0.0-rc1-final": {
@@ -3081,7 +3083,7 @@
           "lib/net45/_._": {}
         }
       },
-      "WindowsAzure.Storage/6.2.0": {
+      "WindowsAzure.Storage/6.2.2-preview": {
         "type": "package",
         "dependencies": {
           "Microsoft.Azure.KeyVault.Core": "1.0.0",
@@ -4301,7 +4303,8 @@
           "System.Collections": "4.0.11-beta-23516",
           "System.Linq": "4.0.1-beta-23516",
           "System.Runtime": "4.0.21-beta-23516",
-          "System.Threading": "4.0.11-beta-23516"
+          "System.Threading": "4.0.11-beta-23516",
+          "WindowsAzure.Storage": "6.2.2-preview"
         }
       },
       "Microsoft.Legal.MatterCenter.Utility/1.0.0": {
@@ -4315,7 +4318,7 @@
           "Microsoft.Legal.MatterCenter.Models": "1.0.0",
           "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
           "StackExchange.Redis": "1.0.488",
-          "WindowsAzure.Storage": "6.2.0"
+          "WindowsAzure.Storage": "6.2.2-preview"
         }
       },
       "Microsoft.Net.Http.Headers/1.0.0-rc1-final": {
@@ -4634,7 +4637,7 @@
           "lib/net45/_._": {}
         }
       },
-      "WindowsAzure.Storage/6.2.0": {
+      "WindowsAzure.Storage/6.2.2-preview": {
         "type": "package",
         "dependencies": {
           "Microsoft.Azure.KeyVault.Core": "1.0.0",
@@ -6749,21 +6752,26 @@
         "System.Threading.nuspec"
       ]
     },
-    "WindowsAzure.Storage/6.2.0": {
+    "WindowsAzure.Storage/6.2.2-preview": {
       "type": "package",
-      "sha512": "goOiCbpHmw/H3CJYhWorrQ9kbLYMyqPaUi4IXE8ke0rZXeA9VuzXZe8bjQAPuoJT84sPWuXMqu5rSUBQTXN0dQ==",
+      "sha512": "UBhAaxcKpTntWL3n2+cSuOwMngGf9dyxn7q2H8gSC76KZ3SLBF+qKFTgvz41ef/77jffNJDQuElf62zGgyC7kg==",
       "files": [
+        "lib/dotnet5.4/Microsoft.WindowsAzure.Storage.dll",
+        "lib/dotnet5.4/Microsoft.WindowsAzure.Storage.pdb",
+        "lib/dotnet5.4/Microsoft.WindowsAzure.Storage.xml",
         "lib/net40/Microsoft.WindowsAzure.Storage.dll",
         "lib/net40/Microsoft.WindowsAzure.Storage.pdb",
         "lib/net40/Microsoft.WindowsAzure.Storage.xml",
+        "lib/portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1/Microsoft.WindowsAzure.Storage.dll",
+        "lib/portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1/Microsoft.WindowsAzure.Storage.pdb",
         "lib/win8/Microsoft.WindowsAzure.Storage.dll",
         "lib/win8/Microsoft.WindowsAzure.Storage.pdb",
         "lib/wp8/Microsoft.WindowsAzure.Storage.dll",
         "lib/wp8/Microsoft.WindowsAzure.Storage.pdb",
         "lib/wpa/Microsoft.WindowsAzure.Storage.dll",
         "lib/wpa/Microsoft.WindowsAzure.Storage.pdb",
-        "WindowsAzure.Storage.6.2.0.nupkg",
-        "WindowsAzure.Storage.6.2.0.nupkg.sha512",
+        "WindowsAzure.Storage.6.2.2-preview.nupkg",
+        "WindowsAzure.Storage.6.2.2-preview.nupkg.sha512",
         "WindowsAzure.Storage.nuspec"
       ]
     }
@@ -6777,7 +6785,8 @@
       "System.Linq >= 4.0.1-beta-23516",
       "System.Reflection >= 4.1.0-beta-23516",
       "System.Runtime >= 4.0.21-beta-23516",
-      "System.Threading >= 4.0.11-beta-23516"
+      "System.Threading >= 4.0.11-beta-23516",
+      "WindowsAzure.Storage >= 6.2.2-preview"
     ],
     "DNX,Version=v4.5.1": []
   }
