@@ -33,7 +33,9 @@ matterMain.directive('droppable', function () {
                 this.classList.remove('over');
                 var folderId = this.id
                 var sourceItems = [];
-                
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                e.preventDefault();
                 //Check if the file has been dropped from the users desktop
                 if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length != 0) {
                     if (e.preventDefault) { e.preventDefault(); }
