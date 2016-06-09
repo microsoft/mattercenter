@@ -356,7 +356,6 @@
                     }
                 }
                 getDocumentCounts(documentRequest, function (response) {
-
                     vm.allDocumentCount = response.allDocumentCounts;
                     vm.myDocumentCount = response.myDocumentCounts;
                     vm.pinDocumentCount = response.pinnedDocumentCounts;
@@ -365,6 +364,7 @@
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
+                    vm.pagination();
                 });
             }
             //#endregion
@@ -415,13 +415,15 @@
                                 });
                             });
                             vm.documentGridOptions.data = response;
-                            vm.allDocumentCount = response.length;
+                            //vm.allDocumentCount = response.length;
                             vm.totalrecords = vm.allDocumentCount;
+                            vm.pagination();
                         }
                         else {
                             vm.documentGridOptions.data = response;
-                            vm.allDocumentCount = response.length;
+                            //vm.allDocumentCount = response.length;
                             vm.totalrecords = vm.allDocumentCount;
+                            vm.pagination();
                         }
                     });
 
@@ -439,8 +441,9 @@
                 getPinDocuments(client, function (response) {
                     if (response) {
                         vm.documentGridOptions.data = response;
-                        vm.pinDocumentCount = response.length;
+                        //vm.pinDocumentCount = response.length;
                         vm.totalrecords = vm.pinDocumentCount;
+                        vm.pagination();
                     }
                 });
             }
@@ -472,13 +475,14 @@
                 }
                 get(documentRequest, function (response) {
                     vm.documentGridOptions.data = response;
-                    vm.myDocumentCount = response.length;
+                    //vm.myDocumentCount = response.length;
                     vm.totalrecords = vm.myDocumentCount;
+                    vm.pagination();
                 });
             }
             //#endregion
 
-            $timeout(vm.getDocumentCounts(), 100);
+            $timeout(vm.getDocumentCounts(), 800);
             $timeout(vm.getDocuments(), 700);
 
             //#region This function will pin or unpin the document based on the image button clicked
@@ -673,8 +677,8 @@
                     },
                     Sort:
                             {
-                                ByProperty: '',
-                                Direction: 0
+                                ByProperty: 'LastModifiedTime',
+                                Direction: 1
                             }
                 }
             }
@@ -748,24 +752,43 @@
             //#region Pagination
 
             vm.first = 1;
-            vm.last = 6;
+            vm.last = gridOptions.paginationPageSize;
             vm.total = 0;
             vm.pagenumber = 1;
             vm.fromtopage = vm.first + " - " + vm.last;
+            vm.displaypagination = false;
+
+            vm.pagination = function () {
+                vm.total = vm.totalrecords - gridOptions.paginationPageSize;
+                if (vm.totalrecords > gridOptions.paginationPageSize) {
+                    vm.fromtopage = vm.first + " - " + vm.last;
+                }
+                else {
+                    if (vm.total < gridOptions.paginationPageSize) { vm.fromtopage = vm.first + " - " + vm.totalrecords; } else {
+                        vm.fromtopage = vm.first + " - " + vm.last;
+                    }
+                }
+
+                if (vm.totalrecords==0) {
+                    vm.displaypagination = false;
+                } else {
+                    vm.displaypagination = true;
+                }
+            };
 
             vm.next = function () {
                 if (vm.last < vm.totalrecords) {
-                    vm.first = vm.first + 6;
-                    vm.last = vm.last + 6;
-                    vm.total = vm.totalrecords - 6;
-                    if (vm.total < 6) {
+                    vm.first = vm.first + gridOptions.paginationPageSize;
+                    vm.last = vm.last + gridOptions.paginationPageSize;
+                    vm.total = vm.totalrecords - gridOptions.paginationPageSize;
+                    if (vm.total < gridOptions.paginationPageSize) {
                         vm.fromtopage = vm.first + " - " + vm.totalrecords;
                     } else {
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
                     vm.pagenumber = vm.pagenumber + 1;
                     SortRequest.SearchObject.PageNumber = vm.pagenumber;
-                    SortRequest.SearchObject.ItemsPerPage = 6;
+                    SortRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(SortRequest, function (response) {
                         vm.lazyloader = true;
                         if (response.errorCode == "404") {
@@ -789,13 +812,13 @@
             };
 
             vm.prev = function () {
-                if (vm.last > 7) {
-                    vm.first = vm.first - 6;
-                    vm.last = vm.last - 6;
+                if (vm.last > gridOptions.paginationPageSize) {
+                    vm.first = vm.first - gridOptions.paginationPageSize;
+                    vm.last = vm.last - gridOptions.paginationPageSize;
                     vm.pagenumber = vm.pagenumber - 1;
                     vm.fromtopage = vm.first + " - " + vm.last;
                     SortRequest.SearchObject.PageNumber = vm.pagenumber;
-                    SortRequest.SearchObject.ItemsPerPage = 6;
+                    SortRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(SortRequest, function (response) {
                         vm.lazyloader = true;
                         if (response.errorCode == "404") {

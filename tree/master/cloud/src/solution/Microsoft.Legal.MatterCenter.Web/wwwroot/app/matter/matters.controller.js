@@ -3,12 +3,14 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse',
-        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse','$templateCache',
+        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse,$templateCache) {
             var vm = this;
             vm.selected = "";
             vm.mattername = "All Matters";
             vm.sortname = "";
+            vm.mattersdrop = false;
+            vm.mattersdropinner = true;
             //This value is for displaying the help
             $rootScope.pageIndex = "1";
             //#region Onload show ui grid and hide error div
@@ -33,6 +35,7 @@
 
             };
 
+            $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
             //#region Setting the options for grid
             vm.gridOptions = {
@@ -48,11 +51,11 @@
                 columnDefs: [
                      { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "20%", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
                      { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "15%", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
-                     { field: 'matterClientId', displayName: 'Client.MatterID', width: "15%", headerCellTemplate: '../app/matter/MatterTemplates/ClientMatterHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+                     { field: 'matterClientId', displayName: 'Client.MatterID', width: "15%", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
                      { field: 'matterModifiedDate', displayName: 'Modified Date', width: "10%", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
-                     { field: 'matterResponsibleAttorney', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "15%", displayName: 'Responsible attorney', visible: false },
-                     { field: 'matterSubAreaOfLaw', headerCellTemplate: '../app/matter/MatterTemplates/SubAreaHeaderTemplate.html', width: "15%", displayName: 'Sub area of law', visible: false },
-                     { field: 'matterCreatedDate', headerCellTemplate: '../app/matter/MatterTemplates/OpenDateHeaderTemplate.html', width: "15%", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+                     { field: 'matterResponsibleAttorney', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), width: "15%", displayName: 'Responsible attorney', visible: false },
+                     { field: 'matterSubAreaOfLaw', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), width: "15%", displayName: 'Sub area of law', visible: false },
+                     { field: 'matterCreatedDate', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), width: "10%", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
                 ],
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
@@ -584,9 +587,7 @@
             //#region Request object for the GetMattersMethod
             var searchRequest = {
                 Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                    Url: configs.global.repositoryUrl
                 },
                 SearchObject: {
                     PageNumber: 1,
@@ -641,6 +642,7 @@
             vm.SetMatters = function (id, name) {
                 vm.mattername = name;
                 vm.GetMatters(id);
+                vm.matterid = id;
             }
 
             //#endregion
@@ -675,9 +677,7 @@
                 var ModifiedDateRequest =
                   {
                       Client: {
-                          Id: "123456",
-                          Name: "Microsoft",
-                          Url: "https://msmatter.sharepoint.com/sites/catalog"
+                          Url: configs.global.repositoryUrl
                       },
                       SearchObject: {
                           PageNumber: 1,
@@ -720,28 +720,7 @@
             //Start 
             vm.Matters = [{ Id: 1, Name: "All Matters" }, { Id: 2, Name: "My Matters" }, { Id: 3, Name: "Pinned Matters" }];
             vm.ddlMatters = vm.Matters[0];
-
-
             //#endregion  
-
-            vm.Pinnedobj = [];
-            vm.getMatterPinned = function () {
-
-                var pinnedMattersRequest = {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
-                }
-                getPinnedMatters(pinnedMattersRequest, function (response) {
-                    vm.Pinnedobj.push(response);
-                    if (!$scope.$$phase) {
-                        $scope.$apply();
-                    }
-                });
-                return true;
-            }
-
-            vm.getMatterPinned();
 
             //#region Hits when the Dropdown changes 
             //Start 
@@ -754,42 +733,47 @@
                 vm.sortexp = "";
                 vm.sortby = "";
                 vm.lazyloader = false;
+                var pinnedMattersRequest = {
+                    Url: configs.global.repositoryUrl
+                }
                 if (id == 1) {
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.FilterByMe = 0;
                     searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                     get(searchRequest, function (response) {
-                        vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;
                             vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
-                            vm.getMatterPinned();
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            if (vm.Pinnedobj.length > 0) {
-                                angular.forEach(vm.Pinnedobj, function (pinobj) {
-                                    angular.forEach(response, function (res) {
-                                        if (pinobj.matterName == res.matterName) {
-                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
-                                                res.MatterInfo = "Unpin this matter";
-                                                res.ismatterdone = true;
+                            getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            //Check if the pinned matter name is equal to search matter name
+                                            if (pinobj.matterName == res.matterName) {
+                                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                    res.MatterInfo = "Unpin this matter";
+                                                    res.ismatterdone = true;
+                                                }
                                             }
-                                        }
+                                        });
                                     });
-                                });
-                                vm.gridOptions.data = response;
-                                if (!$scope.$$phase) {
-                                    $scope.$apply();
+                                    vm.gridOptions.data = response;
+                                    if (!$scope.$$phase) {
+                                        $scope.$apply();
+                                    }
+                                } else {
+                                    vm.gridOptions.data = response;
+                                    if (!$scope.$$phase) {
+                                        $scope.$apply();
+                                    }
                                 }
-                            } else {
-                                vm.gridOptions.data = response;
-                                if (!$scope.$$phase) {
-                                    $scope.$apply();
-                                }
-                            }
+                            });
                         }
+                        $timeout(function () { vm.lazyloader = true; }, 1000);
                     });
                 } else if (id == 2) {
                     vm.lazyloader = false;
@@ -797,56 +781,54 @@
                     searchRequest.SearchObject.Filters.FilterByMe = 1;
                     searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                     get(searchRequest, function (response) {
-                        vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;
                             vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
-                            vm.getMatterPinned();
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            if (vm.Pinnedobj.length > 0) {
-                                angular.forEach(vm.Pinnedobj, function (pinobj) {
-                                    angular.forEach(response, function (res) {
-                                        if (pinobj.matterName == res.matterName) {
-                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
-                                                res.MatterInfo = "Unpin this matter";
-                                                res.ismatterdone = true;
+                            getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            //Check if the pinned matter name is equal to search matter name
+                                            if (pinobj.matterName == res.matterName) {
+                                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                    res.MatterInfo = "Unpin this matter";
+                                                    res.ismatterdone = true;
+                                                }
                                             }
-                                        }
+                                        });
                                     });
-                                });
-                                vm.gridOptions.data = response;
-                                if (!$scope.$$phase) {
-                                    $scope.$apply();
+                                    vm.gridOptions.data = response;
+                                    if (!$scope.$$phase) {
+                                        $scope.$apply();
+                                    }
+                                } else {
+                                    vm.gridOptions.data = response;
+                                    if (!$scope.$$phase) {
+                                        $scope.$apply();
+                                    }
                                 }
-                            } else {
-                                vm.gridOptions.data = response;
-                                if (!$scope.$$phase) {
-                                    $scope.$apply();
-                                }
-                            }
+                                vm.lazyloader = true;
+                            });
                         }
                     });
                 } else if (id == 3) {
                     vm.lazyloader = false;
                     var pinnedMattersRequest = {
-                        Id: "123456",
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                        Url: configs.global.repositoryUrl
                     }
                     getPinnedMatters(pinnedMattersRequest, function (response) {
-                        vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;
                             vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
-                            vm.getMatterPinned();
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            angular.forEach(response.matterDataList, function (res) {
+                            angular.forEach(response, function (res) {
                                 if (res.ismatterdone == undefined && !res.ismatterdone) {
                                     res.MatterInfo = "Unpin this matter";
                                     res.ismatterdone = true;
@@ -856,6 +838,7 @@
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
+                            vm.lazyloader = true;
                         }
                     });
                 }
@@ -874,9 +857,9 @@
                 var alldata = data.entity;
                 var unpinRequest = {
                     Client: {
-                        Id: "123456",
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+
+
+                        Url: configs.global.repositoryUrl
                     },
                     matterData: {
                         matterName: alldata.matterUrl,
@@ -884,7 +867,7 @@
                 }
                 UnpinMatters(unpinRequest, function (response) {
                     if (response.isMatterUnPinned) {
-                        $timeout(function () { vm.GetMatters(vm.ddlMatters.Id); }, 500);
+                        $timeout(vm.SetMatters(vm.matterid, vm.mattername), 500);
                         alert("Success");
                     }
                 });
@@ -898,9 +881,7 @@
                 var alldata = data.entity;
                 var pinRequest = {
                     Client: {
-                        Id: "123456",
-                        Name: "Microsoft",
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                        Url: configs.global.repositoryUrl
                     },
                     matterData: {
                         matterName: alldata.matterName,
@@ -922,7 +903,7 @@
                 }
                 PinMatters(pinRequest, function (response) {
                     if (response.isMatterPinned) {
-                        $timeout(function () { vm.GetMatters(vm.ddlMatters.Id); }, 500);
+                        $timeout(vm.SetMatters(vm.matterid, vm.mattername), 500);
                         alert("Success");
                     }
                 });
@@ -1293,6 +1274,7 @@
 
             //#region
             vm.typeheadselect = function (index, selected) {
+                vm.SetMatters(1, "All Matters");
                 var searchToText = '';
                 var finalSearchText = '';
                 if (selected != "") {
@@ -1305,6 +1287,27 @@
                 searchRequest.SearchObject.SearchTerm = finalSearchText;
                 searchRequest.SearchObject.Sort.Direction = 0;
                 vm.FilterByType();
+            }
+
+            //#endregion
+
+            //#region for showing the matters dropdown in resposive 
+            vm.showmatterdrop = function ($event) {
+                $event.stopPropagation();
+                if (vm.mattersdropinner) {
+                    vm.mattersdrop = true;
+                    vm.mattersdropinner = false;
+                } else {
+                    vm.mattersdrop =false;
+                    vm.mattersdropinner = true;
+                }
+            }
+            //#endregion
+
+            //#region for closing all the dropdowns
+            vm.closealldrops = function () {
+                vm.mattersdrop = false;
+                vm.mattersdropinner = true;
             }
 
             //#endregion
