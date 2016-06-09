@@ -213,10 +213,26 @@
                             <div id="currentFolder" class="breadcrumbItem"></div>
                         </div>
                         <div class="folderStructureContent" showbreadcrumb ng-hide="foldercontent">
+                            <script type="text/ng-template" id="folderTree">
+                                <div  class="treeNodes" ng-show="child.active" title="" droppable drop="handleDrop()" folder="child"  data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" ng-click="vm.showSelectedFolderTree(child)" >
+                                    <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents">
+                                    {{child.name}}
+                                </div>
+                                <ul ng-if="child.children" style="margin-left:10px;">
+                                    <li ng-repeat="child in child.children" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" droppable drop="handleDrop()" folder="child"  class="childNode" ng-include="'folderTree'">
+                                       
+                                    </li>
+                                </ul>
+                            </script>
+
                             <ul>
-                                <li>
-                                    <ul ng-repeat="folder in vm.foldersList">
-                                        <li ng-if="folder.parentURL" data-client="" data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}" class="childNode"
+                                <li ng-repeat="child in vm.foldersList" ng-class='child.parentURL?"childNode":"parentNode"' data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" droppable drop="handleDrop()" folder="child"  ng-include="'folderTree'" style="display: inline-block; width: 90%; padding:0;">
+                                   
+                                 </li>
+
+                                <!--<li ng-repeat="folder in vm.foldersList">
+                                    <ul ng-repeat="child in folder.children">
+                                        <li ng-if="child.parentURL" data-client="" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" class="childNode"
                                             style="display: inline-block; width: 90%; padding:0;">
                                             <div class="treeNodes" title="Documents" droppable drop="handleDrop()" folder="folder" id="folder{{$index}}">
                                                 <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents"
@@ -225,7 +241,7 @@
                                             </div>
                                         </li>
                                     </ul>
-                                </li>
+                                </li>-->
                             </ul>
                         </div>
                     </div>

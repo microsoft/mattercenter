@@ -139,10 +139,34 @@
             vm.getFolderHierarchy = function () {
                 var matterData = {
                     MatterName: vm.selectedRow.matterName,
-                    MatterUrl: "https://msmatter.sharepoint.com/sites/microsoft"
+                    MatterUrl: vm.selectedRow.matterClientUrl
                 };
+                vm.getContentCheckConfigurations(vm.selectedRow.matterClientUrl);
                 getFolderHierarchy(matterData, function (response) {
                     vm.foldersList = response.foldersList;
+                   
+                  
+                    function getNestedChildren(arr, parent) {
+                        var parentList = []
+                        for (var i in arr) {
+                            if (arr[i].parentURL == parent) {
+                                var children = getNestedChildren(arr, arr[i].url)
+
+                                if (children.length) {
+                                    arr[i].children = children;
+                                    arr[i].active = parent==null?true:false;
+                                }
+                               
+                                parentList.push(arr[i]);
+                               
+                            }
+                        }
+                        return parentList
+                    }
+
+                    vm.foldersList = getNestedChildren(vm.foldersList, null);
+
+                    console.log(vm.foldersList);
                     jQuery('#UploadMatterModal').modal("show");
                     //Initialize Officejs library                     
                     Office.initialize = function (reason) {
@@ -232,10 +256,13 @@
                 fd.append('targetDropUrl', targetDrop.url);
                 fd.append('folderUrl', targetDrop.url)
                 fd.append('documentLibraryName', vm.selectedRow.matterName)
-                fd.append('clientUrl', 'https://msmatter.sharepoint.com/sites/microsoft');
+                fd.append('clientUrl', vm.selectedRow.matterClientUrl);
+                fd.append('AllowContentCheck', vm.bAllowContentCheck);
+                var nCount = 0, isOverwrite = "False";
                 angular.forEach(vm.files, function (file) {
                     fd.append('file', file);
-                })
+                    fd.append("Overwrite" + nCount++, isOverwrite);
+                });
 
                 $http.post("/api/v1/document/uploadfiles", fd, {
                     transformRequest: angular.identity,
@@ -243,14 +270,14 @@
                 }).then(function (response) {
                     vm.isLoadingFromDesktopStarted = false;
                     console.log(response.data);
-                    vm.uploadedFiles = response.data;
+                    vm.uploadedFiles.push(response.data);
                 }).catch(function (response) {
                     vm.isLoadingFromDesktopStarted = false;
                     console.error('Gists error', response.status, response.data);
                 })
 
             }
-
+            vm.uploadedFiles = [];
 
             //#endregion
 
@@ -1308,6 +1335,59 @@
             }
 
             //#endregion
+
+            //#region To getContentCheckConfigurations
+            //start
+            vm.bAllowContentCheck = false;
+            function getContentCheckConfigurations(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getDefaultMatterConfigurations',
+                    data: options,
+                    success: callback
+                });
+            }
+            vm.getContentCheckConfigurations = function (siteCollectionPath) {
+                siteCollectionPath = JSON.stringify(siteCollectionPath);
+                getContentCheckConfigurations(siteCollectionPath, function (response) {
+                    if (!response.isError) {
+                        var defaultMatterConfig = JSON.parse(response.code);
+                        vm.bAllowContentCheck = defaultMatterConfig.IsContentCheck;
+
+                    } else {
+                        vm.bAllowContentCheck = false;
+                    }
+
+                });
+
+            }
+          
+            vm.showSelectedFolderTree = function (folder) {
+                function setActiveItem(item) {
+                    if (item.children !== null) {
+                        angular.forEach(item.children, function (child) {
+                            if (item.parentURL !== null) {
+                                if (item.active) {
+                                    child.active = child.active ? false : true;
+                                    if (!child.active) { setActiveItem(child); }
+                                } else {
+                                    child.active = false;
+                                    setActiveItem(child);
+                                }
+                            }
+                            else {                                
+                                child.active = child.active ? false : true;
+                                if (!child.active) {
+                                    setActiveItem(child);
+                                }                               
+                            }
+                        });
+                    } 
+
+                }
+                setActiveItem(folder);
+               
+            }
 
         }]);
 
