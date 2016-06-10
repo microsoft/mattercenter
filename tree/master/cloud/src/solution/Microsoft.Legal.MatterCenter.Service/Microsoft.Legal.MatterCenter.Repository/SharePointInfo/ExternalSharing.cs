@@ -90,8 +90,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 table.CreateIfNotExists();
                 //Insert the entity into Table Storage
                 string date = DateTime.Now.ToUniversalTime().ToString(logTables.AzureRowKeyDateFormat, CultureInfo.InvariantCulture);
-                externalSharingRequest.RowKey = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", date, Guid.NewGuid().ToString());
+                externalSharingRequest.RowKey = Guid.NewGuid().ToString();
                 externalSharingRequest.PartitionKey = externalSharingRequest.MatterId;
+                externalSharingRequest.MatterUrl = $"{generalSettings.SiteURL}/sites/{externalSharingRequest.ClientName}";
                 TableOperation insertOperation = TableOperation.Insert(externalSharingRequest);
                 table.Execute(insertOperation);
             }
@@ -123,66 +124,32 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     case "contribute":
                         userRole.Role = SharePoint.Client.Sharing.Role.Edit;
                         break;
-                    case "edit":
+                    case "read":
                         userRole.Role = SharePoint.Client.Sharing.Role.View;
                         break;
                 }                
                 users.Add(userRole);
                 //Share all the matter related documents and lists to external user
                 #region Doc Sharing API
-                string matterDocumentUrl = $"{clientUrl}/{externalSharingRequest.MatterId}";
-                string matterOneNoteUrl = $"{clientUrl}/{externalSharingRequest.MatterId+ matterSettings.OneNoteLibrarySuffix}";
-                string matterCalendarUrl = $"{clientUrl}/{externalSharingRequest.MatterId + matterSettings.CalendarNameSuffix}";
-                string matterTasksUrl = $"{clientUrl}/lists{externalSharingRequest.MatterId + matterSettings.TaskNameSuffix}";
+                
                 string matterLandingPageUrl = $"{clientUrl}/sitepages/{externalSharingRequest.MatterId + ServiceConstants.ASPX_EXTENSION}";
+                string catalogSiteAssetsLibraryUrl = $"{generalSettings.CentralRepositoryUrl}/SitePages/home.aspx";
+
 
                 IList<UserSharingResult> matterLandingPageResult = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
                 matterLandingPageUrl,
                 users, true, true, true, "The following matter page has been shared with you", true, true);
                 clientContext.ExecuteQuery();
-                IList<UserSharingResult> documentPageResult =  DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
-                matterDocumentUrl,
-                users, true, true, false, "The following document library has been shared with you", true, true);
+                clientContext.Dispose();
+
+
+                clientContext = spoAuthorization.GetClientContext(generalSettings.CentralRepositoryUrl);
+                IList<UserSharingResult> catalogSiteAssetsLibrary = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
+                catalogSiteAssetsLibraryUrl,
+                users, true, true, false, "The following matter page has been shared with you", true, true);
                 clientContext.ExecuteQuery();
-                IList<UserSharingResult> oneNoteSharingResult = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
-                matterOneNoteUrl,
-                users, true, true, false, "The following one note document has been shared with you", true, true);
-                clientContext.ExecuteQuery();
-                //#endregion
-                //#region List sharing api
-                string roleValue = ""; // int depends on the group IDs at site
-                int groupId = 0;
-                bool propageAcl = true; // Not relevant for external accounts
-                bool sendEmail = true;
-                bool includedAnonymousLinkInEmail = false;
-                string emailSubject = null;
-                string emailBody = "List shared";
-                var email = externalSharingRequest.Person.Replace('@', '_');    
-                string peoplePickerInput = @"[{
-                                            'Key' : 'i:0#.f|membership|^#ext#@msmatter.onmicrosoft.com', 
-                                            'Description' : '^#ext#@msmatter.onmicrosoft.com', 
-                                            'DisplayText' : '', 
-                                            'EntityType' : 'User', 
-                                            'ProviderDisplayName' : 'Tenant', 
-                                            'ProviderName' : 'Tenant', 
-                                            'IsResolved' : true, 
-                                            'EntityData' : {
-                                                                'MobilePhone' : '', 
-                                                                'Email' : '@', 
-                                                                'Department' : '', 
-                                                                'Title' : '@', 
-                                                                'PrincipalType' : 'GUEST_USER'}, 
-                                            'MultipleMatches' : []}]";
-                peoplePickerInput = peoplePickerInput.Replace("^", email);
-                peoplePickerInput = peoplePickerInput.Replace("@", externalSharingRequest.Person);
-                SharingResult calendarResult = Web.ShareObject(clientContext, matterCalendarUrl, peoplePickerInput, roleValue,
-                groupId, propageAcl, sendEmail, includedAnonymousLinkInEmail, emailSubject, emailBody, true);
-                clientContext.Load(calendarResult);
-                clientContext.ExecuteQuery();
-                SharingResult taskResult = Web.ShareObject(clientContext, matterTasksUrl, peoplePickerInput, roleValue,
-                groupId, propageAcl, sendEmail, includedAnonymousLinkInEmail, emailSubject, emailBody, true);
-                clientContext.Load(calendarResult);
-                clientContext.ExecuteQuery();
+
+
                 return null;
                 #endregion
             }

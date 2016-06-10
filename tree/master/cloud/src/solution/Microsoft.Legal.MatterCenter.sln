@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCente
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter_Office", "Microsoft.Legal.MatterCenter_Office\Microsoft.Legal.MatterCenter_Office.csproj", "{736CED7B-2538-4C9A-ACAD-444A0917312D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.jobs", "Microsoft.Legal.MatterCenter.jobs\Microsoft.Legal.MatterCenter.jobs.csproj", "{75BBF3A0-DD06-4515-8163-551A1AD406A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,10 @@ Global
 		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{75BBF3A0-DD06-4515-8163-551A1AD406A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75BBF3A0-DD06-4515-8163-551A1AD406A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75BBF3A0-DD06-4515-8163-551A1AD406A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75BBF3A0-DD06-4515-8163-551A1AD406A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

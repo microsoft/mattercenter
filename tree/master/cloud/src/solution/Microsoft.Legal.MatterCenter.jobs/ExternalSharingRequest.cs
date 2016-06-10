@@ -3,7 +3,7 @@
 using Microsoft.WindowsAzure.Storage.Table;
 using System.Collections.Generic;
 
-namespace Microsoft.Legal.MatterCenter.Models
+namespace Microsoft.Legal.MatterCenter.Jobs
 {
     /// <summary>
     /// Provides the structure required to hold external sharing information. It includes the person name with whom the information 
