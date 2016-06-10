@@ -1,17 +1,15 @@
 ﻿using System.IO;
 using System.Linq;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Legal.MatterCenter.Jobs;
 using System;
 using System.Security;
 using Microsoft.SharePoint.Client;
-
 using Microsoft.SharePoint.Client.Sharing;
 using System.Collections.Generic;
 using Microsoft.WindowsAzure.Storage;
-using System.Configuration;
 using Microsoft.WindowsAzure.Storage.Table;
-using Microsoft.WindowsAzure;
+using Microsoft.Legal.MatterCenter.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Legal.MatterCenter.jobs
 {
@@ -28,6 +26,10 @@ namespace Microsoft.Legal.MatterCenter.jobs
             [Table("ExternalAccessRequests")] IQueryable<ExternalSharingRequest> externalSharingRequests, 
             TextWriter log)
         {
+
+            var builder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
+            var configuration = builder.Build();         
+
             var query = from p in externalSharingRequests select p;
             foreach(ExternalSharingRequest externalSharingRequest in query)
             {
@@ -35,29 +37,28 @@ namespace Microsoft.Legal.MatterCenter.jobs
                 externalSharingRequest.PartitionKey, externalSharingRequest.RowKey, externalSharingRequest.Permission);
                 if(externalSharingRequest.Status.ToLower() == "pending")
                 {
-                    GetExternalAccessRequestsFromSPO(externalSharingRequest, log);
+                    GetExternalAccessRequestsFromSPO(externalSharingRequest, log, configuration);
                 }                
             }
         }
 
-        private static void GetExternalAccessRequestsFromSPO(ExternalSharingRequest externalSharingRequest, TextWriter log)
+        private static void GetExternalAccessRequestsFromSPO(ExternalSharingRequest externalSharingRequest, TextWriter log, IConfigurationRoot configuration)
         {
             string requestedForPerson = externalSharingRequest.Person;
             string matterId = externalSharingRequest.MatterId;
-            SecureString password = GetEncryptedPassword("P@$$w0rd01");
+            SecureString password = GetEncryptedPassword(configuration["Settings:AdminPassword"]);
 
-            #region Update For Matter Client
+            
             using (var ctx = new ClientContext(externalSharingRequest.MatterUrl))
             {
-                ctx.Credentials = new SharePointOnlineCredentials("matteradmin@msmatter.onmicrosoft.com", password);
-                var listTitle = "Access Requests";                
+                ctx.Credentials = new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], password);
+                var listTitle = configuration["Settings:ExternalAccessRequests"];      
                 var list = ctx.Web.Lists.GetByTitle(listTitle);
                 CamlQuery camlQuery = CamlQuery.CreateAllItemsQuery();
                 camlQuery.ViewXml = "";
                 ListItemCollection listItemCollection = list.GetItems(camlQuery);
                 ctx.Load(listItemCollection);
                 ctx.ExecuteQuery();
-
                 foreach (ListItem listItem in listItemCollection)
                 {        
                     //The matter id for whom the request has been sent            
@@ -71,19 +72,20 @@ namespace Microsoft.Legal.MatterCenter.jobs
                     //If the status is accepted and the person and matter in table storage equals to item in Access Requests list
                     if(requestedFor == requestedForPerson && matterId == requestedObjectTitle && status == "2")
                     {
+                        #region Update For Matter Client
                         //Update item in table storage to "Accepted"
-                        UpdateTableStorageEntity(externalSharingRequest, log);
+                        //UpdateTableStorageEntity(externalSharingRequest, log, configuration);
                         //Add the user to corresponding matter document library, one note library, tasks and calendar
                         string matterDocumentUrl = $"{externalSharingRequest.MatterUrl}/{externalSharingRequest.MatterId}";
                         string matterOneNoteUrl = $"{externalSharingRequest.MatterUrl}/{externalSharingRequest.MatterId}_onenote";
-                        string matterCalendarUrl = $"{externalSharingRequest.MatterUrl}/{externalSharingRequest.MatterId}_calendar";
-                        string matterTasksUrl = $"{externalSharingRequest.MatterUrl}/lists{externalSharingRequest.MatterId}_tasks";
+                        string matterCalendarUrl = $"{externalSharingRequest.MatterUrl}/lists{externalSharingRequest.MatterId}_calendar";
+                        string matterTasksUrl = $"{externalSharingRequest.MatterUrl}/lists{externalSharingRequest.MatterId}_task";
 
 
                         var users = new List<UserRoleAssignment>();
                         UserRoleAssignment userRole = new UserRoleAssignment();
                         userRole.UserId = externalSharingRequest.Person;
-                        userRole.Role = Role.Owner;
+                        userRole.Role = SharePoint.Client.Sharing.Role.Owner;
                         users.Add(userRole);
 
                         //Give access to document library
@@ -102,18 +104,17 @@ namespace Microsoft.Legal.MatterCenter.jobs
                         users = new List<UserRoleAssignment>();
                         userRole = new UserRoleAssignment();
                         userRole.UserId = externalSharingRequest.Person;
-                        userRole.Role = Role.View;
+                        userRole.Role = SharePoint.Client.Sharing.Role.View;
                         users.Add(userRole);
                         IList<UserSharingResult> javaScriptLibrary = DocumentSharingManager.UpdateDocumentSharingInfo(ctx,
-                        "https://msmatter.sharepoint.com/sites/catalog/SiteAssets/Matter%20Center%20Assets",
+                        $"{configuration["Settings:CatalogUrl"]}/SiteAssets/Matter%20Center%20Assets",
                         users, true, true, false, "The following one note document has been shared with you", true, true);
                         ctx.ExecuteQuery();
-
 
                         string roleValue = ""; // int depends on the group IDs at site
                         int groupId = 0;
                         bool propageAcl = true; // Not relevant for external accounts
-                        bool sendEmail = true;
+                        bool sendEmail = false;
                         bool includedAnonymousLinkInEmail = false;
                         string emailSubject = null;
                         string emailBody = "List shared";
@@ -128,51 +129,49 @@ namespace Microsoft.Legal.MatterCenter.jobs
                                             'IsResolved' : true, 
                                             'EntityData' : {
                                                                 'MobilePhone' : '', 
-                                                                'Email' : '@', 
+                                                                'Email' : '$', 
                                                                 'Department' : '', 
-                                                                'Title' : '@', 
+                                                                'Title' : '$', 
                                                                 'PrincipalType' : 'GUEST_USER'}, 
                                             'MultipleMatches' : []}]";
                         peoplePickerInput = peoplePickerInput.Replace("^", email);
-                        peoplePickerInput = peoplePickerInput.Replace("@", externalSharingRequest.Person);
+                        peoplePickerInput = peoplePickerInput.Replace("$", externalSharingRequest.Person);
 
                         //Give access to calendar  list
                         SharingResult calendarResult = SharePoint.Client.Web.ShareObject(ctx, 
                             matterCalendarUrl, peoplePickerInput, roleValue,
-                        groupId, propageAcl, sendEmail, includedAnonymousLinkInEmail, emailSubject, emailBody);
+                        groupId, propageAcl, sendEmail, includedAnonymousLinkInEmail, emailSubject, emailBody, true);
                         ctx.Load(calendarResult);
                         ctx.ExecuteQuery();
 
                         //give access to task list
                         SharingResult taskResult = SharePoint.Client.Web.ShareObject(ctx, matterTasksUrl, 
                             peoplePickerInput, roleValue,
-                        groupId, propageAcl, sendEmail, includedAnonymousLinkInEmail, emailSubject, emailBody);
-                        ctx.Load(calendarResult);
+                        groupId, propageAcl, sendEmail, includedAnonymousLinkInEmail, emailSubject, emailBody, true);
+                        ctx.Load(taskResult);
                         ctx.ExecuteQuery();
+                        #endregion
+
+                        #region update for repository
+                        using (var catalogContext = new ClientContext(configuration["Settings:CatalogUrl"]))
+                        {
+                            catalogContext.Credentials = new SharePointOnlineCredentials("matteradmin@msmatter.onmicrosoft.com", password);
+                            users = new List<UserRoleAssignment>();
+                            userRole = new UserRoleAssignment();
+                            userRole.UserId = externalSharingRequest.Person;
+                            userRole.Role = SharePoint.Client.Sharing.Role.View;
+                            users.Add(userRole);
+
+                            //Give access to document library
+                            IList<UserSharingResult> documentCatalogPageResult = DocumentSharingManager.UpdateDocumentSharingInfo(catalogContext,
+                            $"{configuration["Settings:CatalogUrl"]}/SiteAssets",
+                            users, true, true, false, "The following document library has been shared with you", true, true);
+                            ctx.ExecuteQuery();
+                        }
+                        #endregion
                     }
-                    
                 }
-
-            }
-            #endregion
-
-            #region update for repository
-            using (var ctx = new ClientContext("https://msmatter.sharepoint.com/sites/catalog"))
-            {
-                ctx.Credentials = new SharePointOnlineCredentials("matteradmin@msmatter.onmicrosoft.com", password);
-                var users = new List<UserRoleAssignment>();
-                UserRoleAssignment userRole = new UserRoleAssignment();
-                userRole.UserId = externalSharingRequest.Person;
-                userRole.Role = Role.View;
-                users.Add(userRole);
-
-                //Give access to document library
-                IList<UserSharingResult> documentPageResult = DocumentSharingManager.UpdateDocumentSharingInfo(ctx,
-                "https://msmatter.sharepoint.com/sites/catalog/SiteAssets",
-                users, true, true, false, "The following document library has been shared with you", true, true);
-                ctx.ExecuteQuery();
-            }
-            #endregion
+            } 
         }
 
         private static SecureString GetEncryptedPassword(string plainTextPassword)
@@ -192,13 +191,13 @@ namespace Microsoft.Legal.MatterCenter.jobs
         /// for which the user has accepted the invitation
         /// </summary>
         /// <param name="externalSharingRequest"></param>
-        private static void UpdateTableStorageEntity(ExternalSharingRequest externalSharingRequest, TextWriter log)
+        private static void UpdateTableStorageEntity(ExternalSharingRequest externalSharingRequest, TextWriter log, IConfigurationRoot configuration)
         {
             CloudStorageAccount cloudStorageAccount = 
-                CloudStorageAccount.Parse(ConfigurationManager.ConnectionStrings["AzureWebJobsStorage"].ConnectionString);
+                CloudStorageAccount.Parse(configuration["Data:DefaultConnection:AzureStorageConnectionString"]);
             CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
             // Create the CloudTable object that represents the "people" table.
-            CloudTable table = tableClient.GetTableReference("ExternalAccessRequests");
+            CloudTable table = tableClient.GetTableReference(configuration["Settings:TableStorageForExternalRequests"]);
             // Create a retrieve operation that takes a entity.
             TableOperation retrieveOperation = 
                 TableOperation.Retrieve<ExternalSharingRequest>(externalSharingRequest.PartitionKey, externalSharingRequest.RowKey);

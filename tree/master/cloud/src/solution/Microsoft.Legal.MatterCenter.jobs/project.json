@@ -1,0 +1,38 @@
+{
+  "version": "1.0.0-*",
+  "description": "ConsoleApp1 Console Application",
+  "authors": [ "Premchand" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "compilationOptions": {
+    "emitEntryPoint": true
+  },
+
+  "dependencies": {
+    "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
+    "Microsoft.Azure.WebJobs": "1.1.2",
+    "Microsoft.Azure.WebJobs.Extensions": "1.0.1",
+    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
+    "Microsoft.CSharp": "4.0.1-beta-23516",
+    "System.Collections": "4.0.11-beta-23516",
+    "System.Console": "4.0.0-beta-23516",
+    "System.Linq": "4.0.1-beta-23516",
+    "System.Threading": "4.0.11-beta-23516",
+    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc1-final",
+    "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc1-final"
+  },
+
+  "commands": {
+    "ConsoleApp1": "ConsoleApp1"
+  },
+
+  "frameworks": {
+    "dnx451": { }
+  }
+}
+

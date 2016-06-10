@@ -1,21 +1,17 @@
-﻿using Microsoft.Azure.WebJobs.Extensions.Timers;
-using Microsoft.Azure.WebJobs;
-
-namespace Microsoft.Legal.MatterCenter.jobs
+﻿using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Configuration;
+namespace ConsoleApp1
 {
-    // To learn more about Microsoft Azure WebJobs SDK, please see http://go.microsoft.com/fwlink/?LinkID=320976
-    class Program
-    {
-        // Please set the following connection strings in app.config for this WebJob to run:
-        // AzureWebJobsDashboard and AzureWebJobsStorage
-        static void Main()
+    public class Program
+    {     
+        public static void Main(string[] args)
         {
-            JobHostConfiguration config = new JobHostConfiguration();
-            
+            var builder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
+            var configuration = builder.Build();
+            var azureStorageConnectionString = configuration["Data:DefaultConnection:AzureStorageConnectionString"];
+            JobHostConfiguration config = new JobHostConfiguration(azureStorageConnectionString);
             config.UseTimers();
-            var host = new JobHost(config);
-            // The following code ensures that the WebJob will be running continuously
-            //host.Call(typeof(Functions).GetMethod("ReadExternalAccessRequests"));
+            var host = new JobHost(config);            
             host.RunAndBlock();
         }
     }
