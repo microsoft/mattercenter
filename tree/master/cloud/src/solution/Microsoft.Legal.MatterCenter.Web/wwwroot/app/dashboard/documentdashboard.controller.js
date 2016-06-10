@@ -482,7 +482,8 @@
             }
             //#endregion
 
-            $timeout(vm.getDocumentCounts(), 800);
+            //$timeout(vm.getDocumentCounts(), 800);
+            $interval(function () { vm.getDocumentCounts() }, 800,3);
             $timeout(vm.getDocuments(), 700);
 
             //#region This function will pin or unpin the document based on the image button clicked
@@ -773,6 +774,9 @@
                     vm.displaypagination = false;
                 } else {
                     vm.displaypagination = true;
+                }
+                if (!$scope.$$phase) {
+                    $scope.$apply();
                 }
             };
 

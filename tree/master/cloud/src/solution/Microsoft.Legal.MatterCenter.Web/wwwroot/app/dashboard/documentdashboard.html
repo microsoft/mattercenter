@@ -183,7 +183,7 @@
                 </div>
             </div>
 
-            <div class="jsonGridFooter" ng-if="!vm.displaypagination">
+            <div class="jsonGridFooter" ng-if="vm.displaypagination">
                 <div ng-if="vm.totalrecords>6 && vm.first>2"> <img id="" ng-click="vm.prev()" class="first cur-pointer" src="../Images/pagination-back-Enabled.png"></div>
                 <div ng-if="vm.totalrecords<6 || vm.first<2"><img id="grid_Grid_First" class="first click-disabled" src="../Images/pagination-back-disabled.png"></div>
                 <div id="grid_Grid_ViewRecords" class="ViewRecordDiv moveToMiddle"><span class="PaginateSpan">{{vm.fromtopage}}</span></div>

@@ -54,8 +54,24 @@ textarea {
     overflow: visible;
 }
 
-.ng-scope {
+#documentgrid .ng-scope ,#mattergrid .ng-scope {
     overflow: visible;
+}
+
+#documentgrid .ui-grid-viewport,#mattergrid .ui-grid-viewport {
+    overflow: hidden !important;
+    max-width: 1350px;
+    display: table;
+}
+
+#documentgrid .ui-grid-render-container,#mattergrid .ui-grid-render-container {
+    overflow-x: scroll;
+    min-width: 275px;
+    max-width: 1370px;
+}
+
+#documentgrid .ui-grid-render-container{
+    max-width: 1399px;
 }
 
 #attachmentHeader {

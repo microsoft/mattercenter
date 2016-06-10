@@ -1,0 +1,5 @@
+﻿<div class="ngHeaderSortColumn {{col.headerClass}}" style="text-align: right;padding-right: 10px;padding-top: 8px;">
+    <div  ng-class="'colt' + col.index" class="ngHeaderText">
+        <input  type="checkbox" id="chkAllDocCheckBox"  ng-model="checker.checked" ng-change="grid.appScope.vm.toggleCheckerAll(checker.checked);">
+    </div>
+</div>

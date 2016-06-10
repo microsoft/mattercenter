@@ -27,7 +27,7 @@
                         <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='Pinned Documents'}" ng-click="vm.SetDocuments(3,'Pinned Documents')">Pinned Documents</li>
                     </ul>
                 </div>
-                
+
             </div>
         </div>
         <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
@@ -102,8 +102,10 @@
         </div>
     </div>
     <!--End For attaching documents messages to the current mail item-->
-    <div class="col-sm-12" ng-if="vm.divuigrid">
-        <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
+    <div class="row" id="documentgrid">
+        <div class="col-sm-12" ng-if="vm.divuigrid">
+            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
+        </div>
     </div>
     <div ng-if="vm.isOutlook && vm.showAttachment">
         <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
