@@ -49,19 +49,20 @@
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 0,
             enableGridMenu: true,
-            enableRowHeaderSelection: true,
-            enableRowSelection: true,
-            enableSelectAll: true,
-            multiSelect: true,
+            enableRowHeaderSelection: false,
+            enableRowSelection: false,
+            enableSelectAll: false,
+            multiSelect: false,
             columnDefs: [
-                { field: 'documentName', displayName: 'Document', width: '20%', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
-                { field: 'documentClient', displayName: 'Client', width: '15%', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
-                { field: 'documentClientId', displayName: 'Client.Matter ID', width: '10%', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
-                { field: 'documentModifiedDate', displayName: 'Modified Date', width: '10%', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
-                { field: 'documentOwner', displayName: 'Author', width: '15%', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
-                { field: 'documentVersion', displayName: 'Document Version', width: '10%', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
-                { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '10%', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
-                { field: 'documentCreatedDate', displayName: 'Created date', width: '10%', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
+                { field: 'checker', displayName: 'checked', width: '48', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
+                { field: 'documentName', displayName: 'Document', width: '300', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
+                { field: 'documentClient', displayName: 'Client', width: '200', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
+                { field: 'documentClientId', displayName: 'Client.Matter ID', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+                { field: 'documentModifiedDate', displayName: 'Modified Date', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
+                { field: 'documentOwner', displayName: 'Author', width: '140', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
+                { field: 'documentVersion', displayName: 'Document Version', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
+                { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '210', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
+                { field: 'documentCreatedDate', displayName: 'Created date', width: '190', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
             ],
             enableColumnMenus: false,
             onRegisterApi: function (gridApi) {
@@ -642,7 +643,7 @@
             vm.divuigrid = false;
             vm.nodata = true;
             if (sortColumns.length != 0) {
-                if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
+                if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
                             vm.lazyloader = false;
@@ -668,7 +669,7 @@
                         vm.nodata = false;
                     }
                 }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
+                else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.DocumentClientSort == undefined || vm.DocumentClientSort == "asc") {
                             vm.lazyloader = false;
@@ -695,7 +696,7 @@
                         vm.nodata = false;
                     }
                 }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
+                else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.DocumentClientIDSort == undefined || vm.DocumentClientIDSort == "asc") {
                             vm.lazyloader = false;
@@ -722,7 +723,7 @@
                         vm.nodata = false;
                     }
                 }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
+                else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.ModiFiedDateSort == undefined || vm.ModiFiedDateSort == "asc") {
                             vm.lazyloader = false;
@@ -749,7 +750,7 @@
                         vm.nodata = false;
                     }
                 }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
+                else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.AuthorSort == undefined || vm.AuthorSort == "asc") {
                             vm.lazyloader = false;
@@ -775,7 +776,7 @@
                         vm.nodata = false;
                     }
                 }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
+                else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.VersionSort == undefined || vm.VersionSort == "asc") {
                             vm.lazyloader = false;
@@ -801,7 +802,7 @@
                         vm.nodata = false;
                     }
                 }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
+                else if (sortColumns[0].name == vm.gridOptions.columnDefs[7].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.CheckoutSort == undefined || vm.CheckoutSort == "asc") {
                             vm.lazyloader = false;
@@ -827,7 +828,7 @@
                         vm.nodata = false;
                     }
                 }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[7].name) {
+                else if (sortColumns[0].name == vm.gridOptions.columnDefs[8].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {
                             vm.lazyloader = false;
@@ -879,6 +880,43 @@
         }
 
         //#endregion
+
+        //function to check all checkboxes inside grid
+        vm.toggleCheckerAll = function (checked) {
+            for (var i = 0; i < vm.gridOptions.data.length; i++) {
+                vm.gridOptions.data[i].checker = checked;
+                if (checked) {
+                    //    vm.cartelements.push(vm.documentGridOptions.data[i]);
+                    vm.documentsCheckedCount = vm.gridOptions.data.length;
+                }
+                else {
+                    //    vm.cartelements = [];
+                    vm.documentsCheckedCount = 0;
+                }
+            }
+
+        };
+
+        //vm.toggleChecker = function (checked, rowinfo) {
+        //    if (checked) {
+        //        if (vm.documentsCheckedCount >= 0) {
+        //            vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) + 1;
+        //        }
+        //       // vm.cartelements.push(rowinfo);
+        //    }
+        //    else {
+        //        vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1
+        //        var rows = vm.gridApi.core.getVisibleRows(vm.gridApi.grid),
+        //            allChecked = true;
+        //        for (var r = 0; r < rows.length; r++) {
+        //            if (rows[r].entity.checker !== true) {
+        //                allChecked = false;
+        //                break;
+        //            }
+        //        }
+        //        $("#chkAllDocCheckBox").prop('checked', allChecked);
+        //    }
+        //};
 
     }]);
 
