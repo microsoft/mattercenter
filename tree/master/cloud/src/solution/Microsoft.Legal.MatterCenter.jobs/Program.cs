@@ -1,6 +1,6 @@
 ﻿using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
-namespace ConsoleApp1
+namespace Microsoft.Legal.MatterCenter.Jobs
 {
     public class Program
     {     

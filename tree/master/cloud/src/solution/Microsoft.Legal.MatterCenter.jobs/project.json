@@ -24,11 +24,15 @@
     "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
     "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc1-final"
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Authorization": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+    "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.9.302261508-alpha",
+    "Microsoft.Net.Http": "2.2.22"
   },
 
   "commands": {
-    "ConsoleApp1": "ConsoleApp1"
+    "Microsoft.Legal.MatterCenter.Jobs": "Microsoft.Legal.MatterCenter.Jobs"
   },
 
   "frameworks": {

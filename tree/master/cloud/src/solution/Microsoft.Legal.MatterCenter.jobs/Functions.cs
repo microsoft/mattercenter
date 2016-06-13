@@ -10,6 +10,9 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace Microsoft.Legal.MatterCenter.jobs
 {
@@ -28,8 +31,8 @@ namespace Microsoft.Legal.MatterCenter.jobs
         {
 
             var builder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
-            var configuration = builder.Build();         
-
+            var configuration = builder.Build();
+            UpdateMatterData(configuration);
             var query = from p in externalSharingRequests select p;
             foreach(ExternalSharingRequest externalSharingRequest in query)
             {
@@ -40,6 +43,31 @@ namespace Microsoft.Legal.MatterCenter.jobs
                     GetExternalAccessRequestsFromSPO(externalSharingRequest, log, configuration);
                 }                
             }
+            
+        }
+
+        private static async Task UpdateMatterData(IConfigurationRoot configuration)
+        {
+            var authResult = GetTokenFromAAD(configuration).Result;
+            HttpClient httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri("https://localhost:44323");
+            httpClient.DefaultRequestHeaders.Accept.Clear();
+            httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
+                        authResult.AccessTokenType, authResult.AccessToken);
+
+
+            // Call the Web API to get the values          
+            HttpResponseMessage httpResponse = await httpClient.GetAsync("api/v1/taxonomy/getcurrentsitetitlev1");
+            if(httpResponse.IsSuccessStatusCode)
+            {
+                var builder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
+            }
+            else
+            {
+                var builder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
+            }
+            
         }
 
         private static void GetExternalAccessRequestsFromSPO(ExternalSharingRequest externalSharingRequest, TextWriter log, IConfigurationRoot configuration)
@@ -184,6 +212,21 @@ namespace Microsoft.Legal.MatterCenter.jobs
             }
             //while (info.Key != ConsoleKey.Enter);
             return securePassword;
+        }
+
+        private static async Task<AuthenticationResult> GetTokenFromAAD(IConfigurationRoot configuration)
+        {
+            string clientId = "78146e7f-04a6-4b67-b079-c4190113454e";    
+            string aadInstance = "https://login.windows.net/{0}";
+            string tenant = "msmatter.onmicrosoft.com";
+            string authority = String.Format(System.Globalization.CultureInfo.InvariantCulture, aadInstance, tenant);
+
+            var context = new AuthenticationContext(string.Format("https://login.windows.net/{0}", tenant));
+            var userCredential = new UserCredential(configuration["Settings:AdminUserName"], configuration["Settings:AdminPassword"]);
+            AuthenticationResult result = await context.AcquireTokenAsync("https://matterwebapp.azurewebsites.net/", clientId, userCredential);
+            //var token = result.CreateAuthorizationHeader().Substring("Bearer ".Length);
+            //return token;
+            return result;
         }
 
         /// <summary>

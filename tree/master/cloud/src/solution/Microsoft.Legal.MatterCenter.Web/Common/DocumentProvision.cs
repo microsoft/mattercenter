@@ -344,7 +344,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 string documentPath = string.Concat(generalSettings.SiteURL, folderName, ServiceConstants.FORWARD_SLASH, fileName);
                 string duplicateMessage = (allowContentCheck && duplicateDocument.HasPotentialDuplicate) ? errorSettings.FilePotentialDuplicateMessage : errorSettings.FileAlreadyExistMessage;
-
+                duplicateMessage = $"{duplicateMessage}|{duplicateDocument.HasPotentialDuplicate}";
                 genericResponse = new GenericResponseVM()
                 {
                     IsError = true,
