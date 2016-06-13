@@ -953,7 +953,7 @@
                                           <div class="ms-font-m FlyoutContent" datefilter date='+ obj.documentModifiedDate + '>' + obj.documentModifiedDate + '</div>\
                                        </div>\
                                        <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">Open document</a></button>\
-                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/catalog/SitePages/documentDetails.aspx">View document details</a></button>\
+                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/catalog/SitePages/documentDetails.aspx" target="_blank">View document details</a></button>\
                                     </div>\
                                 </div>';
                     $(element).popover({

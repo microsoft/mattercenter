@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse','$templateCache',
-        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse,$templateCache) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache',
+        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache) {
             var vm = this;
             vm.selected = "";
             vm.mattername = "All Matters";
@@ -38,6 +38,7 @@
             $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
             //#region Setting the options for grid
+
             vm.gridOptions = {
                 //paginationPageSizes: [10, 50, 100],
                 //paginationPageSize: 10,
@@ -68,14 +69,26 @@
                     });
                     $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
                     $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
-                    $scope.$watch('gridApi.grid.isScrollingVertically', watchFunc);
-                    function watchFunc(newData) {
-                        if (newData === true) {
-                            $rootScope.$broadcast('scrolled');
-                        }
-                    }
+                    //$scope.$watch('gridApi.grid.isScrollingVertically', watchFunc);
+                    //function watchFunc(newData) {
+                    //    if (newData === true) {
+                    //        $rootScope.$broadcast('scrolled');
+                    //    }
+                    //}
                 }
             };
+
+            //#endregion
+
+            //#region for setting the dynamic width to grid
+            vm.setWidth = function () {
+                var width = $window.innerWidth;
+                angular.element(".ui-grid-viewport").css('max-width', width);
+                angular.element(".ui-grid-render-container").css('max-width', width);
+            };
+
+            vm.setWidth();
+
             //#endregion
 
             //#region Setting the api calls 
@@ -147,8 +160,8 @@
                 vm.getContentCheckConfigurations(vm.selectedRow.matterClientUrl);
                 getFolderHierarchy(matterData, function (response) {
                     vm.foldersList = response.foldersList;
-                   
-                  
+
+
                     function getNestedChildren(arr, parent) {
                         var parentList = []
                         for (var i in arr) {
@@ -157,11 +170,11 @@
 
                                 if (children.length) {
                                     arr[i].children = children;
-                                    arr[i].active = parent==null?true:false;
+                                    arr[i].active = parent == null ? true : false;
                                 }
-                               
+
                                 parentList.push(arr[i]);
-                               
+
                             }
                         }
                         return parentList
@@ -1325,7 +1338,7 @@
                     vm.mattersdrop = true;
                     vm.mattersdropinner = false;
                 } else {
-                    vm.mattersdrop =false;
+                    vm.mattersdrop = false;
                     vm.mattersdropinner = true;
                 }
             }
@@ -1364,7 +1377,7 @@
                 });
 
             }
-          
+
             vm.showSelectedFolderTree = function (folder) {
                 function setActiveItem(item) {
                     if (item.children !== null) {
@@ -1378,18 +1391,18 @@
                                     setActiveItem(child);
                                 }
                             }
-                            else {                                
+                            else {
                                 child.active = child.active ? false : true;
                                 if (!child.active) {
                                     setActiveItem(child);
-                                }                               
+                                }
                             }
                         });
-                    } 
+                    }
 
                 }
                 setActiveItem(folder);
-               
+
             }
 
         }]);
