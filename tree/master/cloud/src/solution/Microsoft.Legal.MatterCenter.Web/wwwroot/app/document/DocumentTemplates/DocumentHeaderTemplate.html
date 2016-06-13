@@ -19,7 +19,7 @@
                 <div class='clearFiltersIcon'>
                     <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
                 </div>
-                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Matter'>
+                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Matter' ng-click='grid.appScope.vm.documentsearch("","LastModifiedTime",true);grid.appScope.vm.searchTerm="";'>
                     <span>Clear filters from </span><span class='clearFilterTitle'>Document</span>
                 </div>
                 <div id='filterResultsContainer'>

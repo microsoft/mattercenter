@@ -43,7 +43,7 @@
 
                     <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
                 </div>
-                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Modified Date'><span>Clear filters from </span><span class='clearFilterTitle'>Modified Date</span></div>
+                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Modified Date' ng-click='grid.appScope.vm.mattersearch("","LastModifiedTime",true);grid.appScope.$parent.vm.enddate="";grid.appScope.$parent.vm.startdate="";'><span>Clear filters from </span><span class='clearFilterTitle'>Modified Date</span></div>
             </div>
         </div>
     </div>

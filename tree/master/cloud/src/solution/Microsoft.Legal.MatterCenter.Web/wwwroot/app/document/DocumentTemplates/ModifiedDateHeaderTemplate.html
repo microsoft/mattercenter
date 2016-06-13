@@ -44,7 +44,7 @@
 
                     <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
                 </div>
-                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Modified Date'><span>Clear filters from </span><span class='clearFilterTitle'>Modified Date</span></div>
+                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Modified Date' ng-click='grid.appScope.vm.documentsearch("","LastModifiedTime",true);grid.appScope.$parent.vm.enddate="";grid.appScope.$parent.vm.startdate="";'><span>Clear filters from </span><span class='clearFilterTitle'>Modified Date</span></div>
                 <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.vm.Clients' ng-click='grid.appScope.vm.filterClientName(Client.matterClient)'>{{client.matterClient}}</div> </div>
             </div>
         </div>

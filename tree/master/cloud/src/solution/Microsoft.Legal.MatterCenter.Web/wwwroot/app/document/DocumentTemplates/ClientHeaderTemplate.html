@@ -23,7 +23,7 @@
 
                     <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
                 </div>
-                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Client'><span>Clear filters from </span><span class='clearFilterTitle'>Client</span></div>
+                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Client' ng-click='grid.appScope.vm.documentsearch("","LastModifiedTime",true);grid.appScope.vm.searchClientTerm=""'><span>Clear filters from </span><span class='clearFilterTitle'>Client</span></div>
                 <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.vm.details' ng-click='grid.appScope.vm.documentsearch(Client.documentClient,"MCDocumentClientName",true)'>{{client.documentClient}}</div> </div>
             </div>
         </div>
