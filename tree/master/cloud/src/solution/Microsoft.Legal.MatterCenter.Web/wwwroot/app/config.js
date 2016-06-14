@@ -11,7 +11,11 @@ var configs = {
         "attachSuccessMessage":"Documents successfully attached.",
         "attachInProgressMessage":"",
         "attachFailureMessage":"One or more of your selected documents failed to attach:",
-        "attachButtonText":"Attach Documents"
+        "attachButtonText":"Attach Documents",
+       "overwrite_Config_Property":"Email Only",
+       "upload_Append_Button":"Append date to file name and save",
+       "upload_Append_Button_Tooltip":"The file will be saved as new, separate document with the current date and time added to the end of the file name.",
+       "content_Check_Abort": "Content check has been aborted."
     },
     "global":{
         repositoryUrl:"https://msmatter.sharepoint.com/sites/catalog",        

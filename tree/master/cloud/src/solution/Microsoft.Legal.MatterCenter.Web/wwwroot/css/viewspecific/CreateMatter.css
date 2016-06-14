@@ -39,6 +39,16 @@ word-wrap: break-word !important;
 .content .button{
     width:150px;
 }
+.attachmentSection {
+    height: 100px;
+}
+.loadingprogressbar {height:1px;
+}
+.attachmentListLoading {
+    margin-top: -3%;
+    margin-left: 300px;
+}
+.warningNotification{height:135px !important;}
 .textAreaBlock{border:0px none;}
 .ms-checkBox{ margin:10px 5px 0 0 !important}
 .headerClassAd{margin-top:-10px; margin-left:7px;}

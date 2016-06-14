@@ -40,11 +40,12 @@ matterMain.directive('droppable', function () {
                 if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length != 0) {
                     if (e.preventDefault) { e.preventDefault(); }
                     //Need to handler files that has been dragged from the user desktop
-                    var sourceFiles = {
-                        files : e.dataTransfer.files,
-                        isOverwrite : false
-                    }                    
-                    scope.$parent.vm.handleDesktopDrop(scope.folder, sourceFiles)
+                    var sourceFiles =  e.dataTransfer.files;                       
+                    
+                    var isOverwrite = false
+                    scope.$parent.vm.clientRelativeUrl = scope.folder.url;
+                    scope.$parent.vm.files = sourceFiles;
+                    scope.$parent.vm.handleDesktopDrop(scope.folder.url, sourceFiles,isOverwrite);
                 }
                 else {
                     //Get the current item that is getting dragged
