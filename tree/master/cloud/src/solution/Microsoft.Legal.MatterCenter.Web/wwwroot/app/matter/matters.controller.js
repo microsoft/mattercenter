@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache',
-        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache','$q',
+        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache,$q) {
             var vm = this;
             vm.selected = "";
             vm.mattername = "All Matters";
@@ -29,6 +29,9 @@
             vm.matterDropDowm = false;
             vm.clientDropDowm = false;
             vm.modifieddateDropDowm = false;
+            vm.attorneyDropDowm = false;
+            vm.arealawDropDowm=false;
+            vm.opendateDropDown=false;
             //End
 
             $scope.initOfficeLibrary = function () {
@@ -54,9 +57,9 @@
                      { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
                      { field: 'matterClientId', displayName: 'Client.MatterID', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
                      { field: 'matterModifiedDate', displayName: 'Modified Date', width: "195", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
-                     { field: 'matterResponsibleAttorney', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), width: "250", displayName: 'Responsible attorney', visible: false },
-                     { field: 'matterSubAreaOfLaw', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), width: "210", displayName: 'Sub area of law', visible: false },
-                     { field: 'matterCreatedDate', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), width: "170", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+                     { field: 'matterResponsibleAttorney', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: 'Responsible attorney', visible: false },
+                     { field: 'matterSubAreaOfLaw', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: 'Sub area of law', visible: false },
+                     { field: 'matterCreatedDate', headerCellTemplate:'../app/matter/MatterTemplates/OpenDateTemplate.html', width: "170", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
                 ],
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
@@ -160,7 +163,7 @@
                 vm.getContentCheckConfigurations(vm.selectedRow.matterClientUrl);
                 getFolderHierarchy(matterData, function (response) {
                     vm.foldersList = response.foldersList;
-
+                    vm.uploadedFiles = [];
 
                     function getNestedChildren(arr, parent) {
                         var parentList = []
@@ -181,7 +184,7 @@
                     }
 
                     vm.foldersList = getNestedChildren(vm.foldersList, null);
-
+                   if(vm.foldersList[0]!==null){vm.showSelectedFolderTree(vm.foldersList[0]);}
                     console.log(vm.foldersList);
                     jQuery('#UploadMatterModal').modal("show");
                     //Initialize Officejs library                     
@@ -265,28 +268,51 @@
             }
 
             //This function will handle the files that has been dragged from the user desktop
-            vm.handleDesktopDrop = function (targetDrop, sourceFiles) {
+            vm.ducplicateSourceFile = [];
+            vm.handleDesktopDrop = function (targetDropUrl, sourceFiles,isOverwrite) {
                 vm.isLoadingFromDesktopStarted = true;
-                vm.files = sourceFiles.files;
+               // vm.files = sourceFiles.files;
                 var fd = new FormData();
-                fd.append('targetDropUrl', targetDrop.url);
-                fd.append('folderUrl', targetDrop.url)
+                fd.append('targetDropUrl', targetDropUrl);
+                fd.append('folderUrl', targetDropUrl)
                 fd.append('documentLibraryName', vm.selectedRow.matterName)
                 fd.append('clientUrl', vm.selectedRow.matterClientUrl);
-                fd.append('AllowContentCheck', vm.bAllowContentCheck);
-                var nCount = 0, isOverwrite = "False";
-                angular.forEach(vm.files, function (file) {
+                fd.append('AllowContentCheck', vm.oUploadGlobal.bAllowContentCheck);
+                var nCount = 0;
+                angular.forEach(sourceFiles, function (file) {
                     fd.append('file', file);
                     fd.append("Overwrite" + nCount++, isOverwrite);
                 });
-
+               
                 $http.post("/api/v1/document/uploadfiles", fd, {
                     transformRequest: angular.identity,
-                    headers: { 'Content-Type': undefined }
+                    headers: { 'Content-Type': undefined },
+                    timeout: vm.oUploadGlobal.canceler.promise
                 }).then(function (response) {
                     vm.isLoadingFromDesktopStarted = false;
-                    console.log(response.data);
-                    vm.uploadedFiles.push(response.data);
+                    if (response.status == 200) {
+                        if (response.data.length !== 0) {
+                            for (var i = 0; i < response.data.length; i++) {
+                                if (!response.data[i].isError) {
+                                    response.data[i].dropFolder = response.data[i].dropFolder == vm.selectedRow.matterGuid ? vm.selectedRow.matterName : response.data[i].dropFolder;
+                                    vm.uploadedFiles.push(response.data[i]);
+                                } else {
+                                    vm.IsDupliacteDocument = true;
+                                    response.data[i].contentCheck = response.data[i].value.split("|")[1];
+                                    response.data[i].saveLatestVersion = "True";
+                                    response.data[i].cancel = "True";
+                                    response.data[i].append = vm.overwriteConfiguration(response.data[i].fileName);
+                                    response.data[i].value = response.data[i].value.split("|")[0];                                    
+                                    vm.ducplicateSourceFile.push(response.data[i]);
+                                    vm.oUploadGlobal.arrFiles.push(vm.files[i]);
+                                    
+                                }
+                            }
+                            
+                        } 
+                    } else {
+                       //To Do error handling implementation
+                    }
                 }).catch(function (response) {
                     vm.isLoadingFromDesktopStarted = false;
                     console.error('Gists error', response.status, response.data);
@@ -515,7 +541,8 @@
                 bAppendOptionEnabled: false,
                 oXHR: new XMLHttpRequest(),
                 bIsAbortedCC: false,
-                bAllowContentCheck: false
+                bAllowContentCheck: false,
+                canceler:$q.defer()
             };
 
             vm.attachmentTokenCallbackEmailClient = function (asyncResult, userContext) {
@@ -1354,7 +1381,7 @@
 
             //#region To getContentCheckConfigurations
             //start
-            vm.bAllowContentCheck = false;
+           
             function getContentCheckConfigurations(options, callback) {
                 api({
                     resource: 'matterResource',
@@ -1368,16 +1395,16 @@
                 getContentCheckConfigurations(siteCollectionPath, function (response) {
                     if (!response.isError) {
                         var defaultMatterConfig = JSON.parse(response.code);
-                        vm.bAllowContentCheck = defaultMatterConfig.IsContentCheck;
+                        vm.oUploadGlobal.bAllowContentCheck = defaultMatterConfig.IsContentCheck;
 
                     } else {
-                        vm.bAllowContentCheck = false;
+                        vm.oUploadGlobal.bAllowContentCheck = false;
                     }
 
                 });
 
             }
-
+          //#region To expand and collapse the folder tree structure in upload
             vm.showSelectedFolderTree = function (folder) {
                 function setActiveItem(item) {
                     if (item.children !== null) {
@@ -1402,7 +1429,86 @@
 
                 }
                 setActiveItem(folder);
+               
+            }
+            //#endRegion
+            //#region To do contentcheck or save as latestversion
+            vm.localOverWriteDocument = function (duplicateFile, sOperation) {
+                if ("contentCheck" === sOperation) {
+                    vm.files = [vm.oUploadGlobal.arrFiles[vm.oUploadGlobal.arrFiles.length - 1]];
+                } else {
+                    vm.files = [vm.oUploadGlobal.arrFiles.pop()];
+                    duplicateFile.cancel = null;
+                }
+                
+                var nOperation = "";
+                if ("ignore" !== sOperation) {
+                    switch (sOperation) {
+                        case "overwrite":
+                            nOperation = "0";
+                            break;
+                        case "append":
+                            nOperation = "1";
+                            break;
+                        case "contentCheck":
+                            nOperation = "2";
+                            break;
+                        case "cancelContentCheck":
+                            nOperation = "3";
+                            break;
+                    }
+                    // uploadFile(oUploadGlobal.sClientRelativeUrl, oUploadGlobal.sFolderUrl, nOperation);
+                    
+                    vm.handleDesktopDrop(vm.clientRelativeUrl,vm.files,nOperation);
 
+
+
+                } else {
+                    duplicateFile.cancel = "False";
+                    if (vm.ducplicateSourceFile.length > 0) {
+                        vm.ducplicateSourceFile.pop();
+                    }
+                }
+            }
+
+            // Function to configure time stamp
+            vm.overwriteConfiguration= function (fileName) {
+                // Update the content as per the logic.
+                var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                    fileExtension = fileName.trim().substring(fileName.trim().lastIndexOf(".") + 1),
+                    bAppendEnabled = false;
+
+                switch (selectedOverwriteConfiguration) {
+                    case "BOTH":
+                        bAppendEnabled = true;
+                        break;
+                    case "DOCUMENT ONLY":
+                        bAppendEnabled = "eml" === fileExtension || "msg" === fileExtension ? false : true;
+                        break;
+                    default:
+                        bAppendEnabled = "eml" === fileExtension || "msg" === fileExtension ? true : false;
+                        break;
+                }
+                return bAppendEnabled;
+            }
+
+            vm.contentCheckNotification = function (file, isLocalUpload) {
+                file.contentCheck = "contentCheck";
+                file.saveLatestVersion="False";
+                file.cancel = "False";
+
+            }
+            vm.abortContentCheck= function (file,isLocalUpload) {
+                "use strict";
+                if (isLocalUpload) {
+                    vm.oUploadGlobal.canceler.resolve();
+                    vm.oUploadGlobal.canceler = $q.defer();
+                }
+                file.contentCheck = null;
+                file.saveLatestVersion = "True";
+                file.value = file.value +"<br/><div>"+ configs.uploadMessages.content_Check_Abort+"</div>";
+                file.cancel = "True";                  
+              
             }
 
         }]);
