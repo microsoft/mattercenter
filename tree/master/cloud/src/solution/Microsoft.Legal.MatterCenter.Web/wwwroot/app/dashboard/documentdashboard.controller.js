@@ -329,32 +329,41 @@
 
             //#endregion
 
+            //#region request object
+            var documentRequest = {
+                Client: {
+                    //ToDo: Need to read from config.js
+                    Url: configs.global.repositoryUrl
+                },
+                SearchObject: {
+                    PageNumber: 1,
+                    ItemsPerPage: gridOptions.paginationPageSize,
+                    SearchTerm: "",
+                    Filters: {
+                        ClientsList: [],
+                        FromDate: "",
+                        ToDate: "",
+                        DocumentAuthor: "",
+                        FilterByMe: 0
+                    },
+                    Sort:
+                      {
+                          ByProperty: "LastModifiedTime",
+                          Direction: 1
+                      }
+                }
+            }
+
+            //#endregion
+
+
             //#reion This function will get counts for all matters, my matters and pinned matters
             vm.getDocumentCounts = function () {
                 vm.lazyloaderdashboard = false;
-                var documentRequest = {
-                    Client: {
-                        //ToDo: Need to read from config.js
-                        Url: configs.global.repositoryUrl
-                    },
-                    SearchObject: {
-                        PageNumber: 1,
-                        ItemsPerPage: gridOptions.paginationPageSize,
-                        SearchTerm: "",
-                        Filters: {
-                            ClientsList: [],
-                            FromDate: "",
-                            ToDate: "",
-                            DocumentAuthor: "",
-                            //FilterByMe: 1
-                        },
-                        Sort:
-                          {
-                              ByProperty: "LastModifiedTime",
-                              Direction: 1
-                          }
-                    }
-                }
+                documentRequest.SearchObject.PageNumber = 1;
+                documentRequest.SearchObject.Filters.FilterByMe = 0;
+                documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
+                documentRequest.SearchObject.SearchTerm = "";
                 getDocumentCounts(documentRequest, function (response) {
                     vm.allDocumentCount = response.allDocumentCounts;
                     vm.myDocumentCount = response.myDocumentCounts;
@@ -369,36 +378,19 @@
             }
             //#endregion
 
+
+
+
             //#region function to get the documents based on search term
             vm.getDocuments = function () {
-                var documentRequest = {
-                    Client: {
-                        //ToDo: Need to read from config.js
-                        Url: configs.global.repositoryUrl
-                    },
-                    SearchObject: {
-                        PageNumber: 1,
-                        ItemsPerPage: gridOptions.paginationPageSize,
-                        SearchTerm: "",
-                        Filters: {
-                            ClientsList: [],
-                            FromDate: "",
-                            ToDate: "",
-                            DocumentAuthor: "",
-                            //FilterByMe: 1
-                        },
-                        Sort:
-                          {
-                              ByProperty: "LastModifiedTime",
-                              Direction: 1
-                          }
-                    }
-                }
 
                 var pinnedDocumentsRequest = {
                     Url: configs.global.repositoryUrl
                 }
-
+                documentRequest.SearchObject.PageNumber = 1;
+                documentRequest.SearchObject.Filters.FilterByMe = 0;
+                documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
+                documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not
                     getPinDocuments(pinnedDocumentsRequest, function (pinnedResponse) {
@@ -451,28 +443,10 @@
 
             //#region function to get the documents based on login user
             vm.getMyDocuments = function () {
-                var documentRequest = {
-                    Client: {
-                        //ToDo: Need to read from config.js
-                        Url: configs.global.repositoryUrl
-                    },
-                    SearchObject: {
-                        PageNumber: 1,
-                        ItemsPerPage: gridOptions.paginationPageSize,
-                        SearchTerm: "",
-                        Filters: {
-                            ClientsList: [],
-                            FromDate: "",
-                            ToDate: "",
-                            DocumentAuthor: "",
-                            FilterByMe: 1
-                        },
-                        Sort: {
-                            ByProperty: "LastModifiedTime",
-                            Direction: 1
-                        }
-                    }
-                }
+                documentRequest.SearchObject.PageNumber = 1;
+                documentRequest.SearchObject.Filters.FilterByMe = 1;
+                documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
+                documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
                     vm.documentGridOptions.data = response;
                     //vm.myDocumentCount = response.length;
@@ -483,7 +457,7 @@
             //#endregion
 
             //$timeout(vm.getDocumentCounts(), 800);
-            $interval(function () { vm.getDocumentCounts() }, 800,3);
+            $interval(function () { vm.getDocumentCounts() }, 800, 3);
             $timeout(vm.getDocuments(), 700);
 
             //#region This function will pin or unpin the document based on the image button clicked
@@ -652,7 +626,7 @@
                 },
                 SearchObject: {
                     PageNumber: 1,
-                    ItemsPerPage: 30,
+                    ItemsPerPage: gridOptions.paginationPageSize,
                     SearchTerm: "",
                     Filters: {
                         ClientName: "",
@@ -760,6 +734,12 @@
             vm.displaypagination = false;
 
             vm.pagination = function () {
+                vm.first = 1;
+                vm.last = gridOptions.paginationPageSize;
+                vm.total = 0;
+                vm.pagenumber = 1;
+                vm.fromtopage = vm.first + " - " + vm.last;
+                vm.displaypagination = false;
                 vm.total = vm.totalrecords - gridOptions.paginationPageSize;
                 if (vm.totalrecords > gridOptions.paginationPageSize) {
                     vm.fromtopage = vm.first + " - " + vm.last;
@@ -770,7 +750,7 @@
                     }
                 }
 
-                if (vm.totalrecords==0) {
+                if (vm.totalrecords == 0) {
                     vm.displaypagination = false;
                 } else {
                     vm.displaypagination = true;
@@ -791,9 +771,9 @@
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
                     vm.pagenumber = vm.pagenumber + 1;
-                    SortRequest.SearchObject.PageNumber = vm.pagenumber;
-                    SortRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
-                    get(SortRequest, function (response) {
+                    documentRequest.SearchObject.PageNumber = vm.pagenumber;
+                    documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
+                    get(documentRequest, function (response) {
                         vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;
@@ -821,9 +801,9 @@
                     vm.last = vm.last - gridOptions.paginationPageSize;
                     vm.pagenumber = vm.pagenumber - 1;
                     vm.fromtopage = vm.first + " - " + vm.last;
-                    SortRequest.SearchObject.PageNumber = vm.pagenumber;
-                    SortRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
-                    get(SortRequest, function (response) {
+                    documentRequest.SearchObject.PageNumber = vm.pagenumber;
+                    documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
+                    get(documentRequest, function (response) {
                         vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;

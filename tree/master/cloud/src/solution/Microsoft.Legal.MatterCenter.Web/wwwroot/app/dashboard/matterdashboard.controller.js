@@ -20,11 +20,12 @@
             vm.sortbytext = 'None';
             vm.searchText = '';
             vm.lazyloaderdashboard = true;
+            vm.totalrecords = 0;
             //#endregion
             //#region Variable to show matter count            
             vm.allMatterCount = 0;
             vm.myMatterCount = 0;
-            vm.pinMatterCount = 0;            
+            vm.pinMatterCount = 0;
             vm.Pinnedobj = [];
             //#endregion            
 
@@ -86,7 +87,7 @@
                     { field: 'matterClientId', width: '15%', displayName: 'Client.Matter ID', headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false },
                     { field: 'matterModifiedDate', width: '15%', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
                     { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: 'Responsible attorney', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
-                    { field: 'pin', displayName: '',width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
+                    { field: 'pin', displayName: '', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
                     { field: 'upload', displayName: '', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal($event, row.entity)"/></div>', enableColumnMenu: false }
                 ],
                 onRegisterApi: function (gridApi) {
@@ -204,7 +205,7 @@
 
 
             //SearchRequest Object that will be filled up for different search requirements
-            var jsonMatterSearchRequest = {                
+            var jsonMatterSearchRequest = {
                 Client: {
                     Url: configs.global.repositoryUrl
                 },
@@ -244,6 +245,11 @@
                     vm.allMatterCount = response.allMatterCounts;
                     vm.myMatterCount = response.myMatterCounts;
                     vm.pinMatterCount = response.pinnedMatterCounts;
+                    vm.totalrecords = response.allMatterCounts;
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                    vm.pagination();
                     vm.lazyloaderdashboard = true;
                 });
             }
@@ -261,18 +267,20 @@
                         angular.forEach(response, function (res) {
                             res.pinType = "unpin"
                         })
-                    }                    
-                    vm.getMatterCounts();
-                    vm.Pinnedobj = response                    
+                    }
+                    vm.Pinnedobj = response
                     vm.matterGridOptions.data = response;
+                    vm.totalrecords = vm.pinMatterCount;
+                    vm.pagination();
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
+                    
                     vm.lazyloaderdashboard = true;
                 });
             }
             //#endregion
-            
+
 
             //#regionThis search function will be used when the user enters some text in the search text box and presses search button
             vm.searchMatters = function (val) {
@@ -310,17 +318,19 @@
                 }
                 jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
+                jsonMatterSearchRequest.SearchObject.PageNumber = 1;
+                jsonMatterSearchRequest.SearchObject.ItemsPerPage = 10;
                 get(jsonMatterSearchRequest, function (response) {
                     vm.matterGridOptions.data = response;
-                    vm.myMatterCount = response.length;
                     vm.lazyloaderdashboard = true;
+                    vm.totalrecords = vm.myMatterCount;
+                    vm.pagination();
                 });
             }
 
             //This search function will be used for binding search results to the grid
             vm.search = function (isMy) {
                 vm.lazyloaderdashboard = false;
-                
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.searchText != "") {
@@ -331,33 +341,15 @@
                     var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
                 }
 
-                var searchRequest = {
-                    Client: {
-                        Url: configs.global.repositoryUrl
-                    },
-                    SearchObject: {
-                        PageNumber: 1,
-                        ItemsPerPage: 30,
-                        SearchTerm: finalSearchText,
-                        Filters: {
-                            ClientsList:[""],
-                            PGList:[""],
-                            AOLList:[""],
-                            FromDate:"",
-                            ToDate:"",
-                            FilterByMe: 0
-                        },
-                        Sort: {
-                            ByProperty: "LastModifiedTime",
-                            Direction: 1
-                        }
-                    }
-                };
                 var pinnedMattersRequest = {
                     Url: configs.global.repositoryUrl
                 }
                 var tempMatters = [];
-                get(searchRequest, function (response) {
+                jsonMatterSearchRequest.SearchObject.SearchTerm = "";
+                jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
+                jsonMatterSearchRequest.SearchObject.PageNumber = 1;
+                jsonMatterSearchRequest.SearchObject.ItemsPerPage = 10;
+                get(jsonMatterSearchRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not                    
                     getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
                         if (pinnedResponse && pinnedResponse.length > 0) {
@@ -375,12 +367,15 @@
                                 });
                             });
                             vm.matterGridOptions.data = response;
-                            
+                            vm.totalrecords = vm.allMatterCount;
+                            vm.pagination();
                             vm.lazyloaderdashboard = true;
                         }
                         else {
                             vm.lazyloaderdashboard = true;
-                            vm.matterGridOptions.data = response;                            
+                            vm.matterGridOptions.data = response;
+                            vm.totalrecords = vm.allMatterCount;
+                            vm.pagination();
                             vm.pinMatterCount = 0;
                         }
                     });
@@ -525,7 +520,7 @@
                 vm.aoldropvisible = false;
             }
             //#endregion
-            
+
 
             //#endregion 
 
@@ -726,9 +721,9 @@
             //#endregion
 
             //Call search api on page load
-            $timeout(vm.getMatterCounts(), 100);
+            $interval(function () { vm.getMatterCounts(); }, 800, 3);
             $timeout(vm.search(), 500);
-            
+
 
             //#region For Sorting by Alphebatical or Created date
             var SortRequest = {
@@ -751,8 +746,8 @@
                     },
                     Sort:
                             {
-                                ByProperty: '',
-                                Direction: 0
+                                ByProperty: 'LastModifiedTime',
+                                Direction: 1
                             }
                 }
             }
@@ -808,6 +803,110 @@
             }
 
             //#endregion
+
+            //#region Pagination
+
+            vm.first = 1;
+            vm.last = gridOptions.paginationPageSize;
+            vm.total = 0;
+            vm.pagenumber = 1;
+            vm.fromtopage = vm.first + " - " + vm.last;
+            vm.displaypagination = false;
+
+            vm.pagination = function () {
+                vm.first = 1;
+                vm.last = gridOptions.paginationPageSize;
+                vm.total = 0;
+                vm.pagenumber = 1;
+                vm.fromtopage = vm.first + " - " + vm.last;
+                vm.displaypagination = false;
+                vm.total = vm.totalrecords - gridOptions.paginationPageSize;
+                if (vm.totalrecords > gridOptions.paginationPageSize) {
+                    vm.fromtopage = vm.first + " - " + vm.last;
+                }
+                else {
+                    if (vm.total < gridOptions.paginationPageSize) { vm.fromtopage = vm.first + " - " + vm.totalrecords; } else {
+                        vm.fromtopage = vm.first + " - " + vm.last;
+                    }
+                }
+
+                if (vm.totalrecords == 0) {
+                    vm.displaypagination = false;
+                } else {
+                    vm.displaypagination = true;
+                }
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            };
+
+            vm.next = function () {
+                if (vm.last < vm.totalrecords) {
+                    vm.first = vm.first + gridOptions.paginationPageSize;
+                    vm.last = vm.last + gridOptions.paginationPageSize;
+                    vm.total = vm.totalrecords - gridOptions.paginationPageSize;
+                    if (vm.total < gridOptions.paginationPageSize) {
+                        vm.fromtopage = vm.first + " - " + vm.totalrecords;
+                    } else {
+                        vm.fromtopage = vm.first + " - " + vm.last;
+                    }
+                    vm.pagenumber = vm.pagenumber + 1;
+                    jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
+                    jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
+                    get(jsonMatterSearchRequest, function (response) {
+                        vm.lazyloader = true;
+                        if (response.errorCode == "404") {
+                            vm.divuigrid = false;
+                            vm.nodata = true;
+                            vm.errorMessage = response.message;
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            vm.matterGridOptions.data = response;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                        }
+                    });
+                } else {
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                }
+            };
+
+            vm.prev = function () {
+                if (vm.last > gridOptions.paginationPageSize) {
+                    vm.first = vm.first - gridOptions.paginationPageSize;
+                    vm.last = vm.last - gridOptions.paginationPageSize;
+                    vm.pagenumber = vm.pagenumber - 1;
+                    vm.fromtopage = vm.first + " - " + vm.last;
+                    jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
+                    jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
+                    get(jsonMatterSearchRequest, function (response) {
+                        vm.lazyloader = true;
+                        if (response.errorCode == "404") {
+                            vm.divuigrid = false;
+                            vm.nodata = true;
+                            vm.errorMessage = response.message;
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            vm.matterGridOptions.data = response;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                        }
+                    });
+                } else {
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                }
+            };
+
+            //#endregion
+
         }
     ]);
 

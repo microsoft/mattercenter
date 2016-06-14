@@ -209,7 +209,7 @@
             </div>
             <div class="col-xs-12 padtop20">
                 <ul class="nav nav-tabs" toggletab>
-                    <li><a href="#MyMatters" data-toggle="tab" ng-click="vm.search('my')">My matters ({{vm.myMatterCount}})</a></li>
+                    <li><a href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">My matters ({{vm.myMatterCount}})</a></li>
                     <li class="active"><a data-toggle="tab" ng-click="vm.search()">All matters ({{vm.allMatterCount}})</a></li>
                     <li><a href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">Pinned matters ({{vm.pinMatterCount}})</a></li>
                 </ul>
@@ -240,6 +240,14 @@
                 </div>
 
             </div>
+        </div>
+        <div class="jsonGridFooter" ng-if="vm.displaypagination">
+            <div ng-if="vm.totalrecords>6 && vm.first>2"> <img id="" ng-click="vm.prev()" class="first cur-pointer" src="../Images/pagination-back-Enabled.png"></div>
+            <div ng-if="vm.totalrecords<6 || vm.first<2"><img id="grid_Grid_First" class="first click-disabled" src="../Images/pagination-back-disabled.png"></div>
+            <div id="grid_Grid_ViewRecords" class="ViewRecordDiv moveToMiddle"><span class="PaginateSpan">{{vm.fromtopage}}</span></div>
+            <div ng-if="vm.totalrecords<=6 || vm.last>vm.totalrecords"><img id="grid_Grid_Next" class="next click-disabled" src="../Images/pagination-front-disabled.png"></div>
+            <div ng-if="vm.totalrecords>6" ng-class="{'hide':vm.last>vm.totalrecords}"><img title="Next" id="grid_Grid_Next" ng-click="vm.next()" class="next cur-pointer" active="0" src="../Images/pagination-front-Enabled.png"></div>
+
         </div>
         <div class="LeftContent">
             <div class="mailpopupContainerBackground hide"></div>
