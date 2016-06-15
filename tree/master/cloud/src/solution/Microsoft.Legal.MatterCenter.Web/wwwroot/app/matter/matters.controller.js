@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache','$q',
-        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache,$q) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache','$q','$filter',
+        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache, $q, $filter) {
             var vm = this;
             vm.selected = "";
             vm.mattername = "All Matters";
@@ -30,8 +30,8 @@
             vm.clientDropDowm = false;
             vm.modifieddateDropDowm = false;
             vm.attorneyDropDowm = false;
-            vm.arealawDropDowm=false;
-            vm.opendateDropDown=false;
+            vm.arealawDropDowm = false;
+            vm.opendateDropDown = false;
             //End
 
             $scope.initOfficeLibrary = function () {
@@ -59,7 +59,7 @@
                      { field: 'matterModifiedDate', displayName: 'Modified Date', width: "195", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
                      { field: 'matterResponsibleAttorney', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: 'Responsible attorney', visible: false },
                      { field: 'matterSubAreaOfLaw', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: 'Sub area of law', visible: false },
-                     { field: 'matterCreatedDate', headerCellTemplate:'../app/matter/MatterTemplates/OpenDateTemplate.html', width: "170", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+                     { field: 'matterCreatedDate', headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html', width: "170", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
                 ],
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
@@ -292,12 +292,17 @@
                     vm.isLoadingFromDesktopStarted = false;
                     if (response.status == 200) {
                         if (response.data.length !== 0) {
+                            var tempFile = [];
                             for (var i = 0; i < response.data.length; i++) {
                                 if (!response.data[i].isError) {
                                     response.data[i].dropFolder = response.data[i].dropFolder == vm.selectedRow.matterGuid ? vm.selectedRow.matterName : response.data[i].dropFolder;
                                     vm.uploadedFiles.push(response.data[i]);
+                                     tempFile.push(response.data[i]);
+                                    vm.oUploadGlobal.successBanner = (tempFile.length == sourceFiles.length) ? true : false;
+                                    
                                 } else {
                                     vm.IsDupliacteDocument = true;
+                                    if(response.data[i].value.split("|")[1]){
                                     response.data[i].contentCheck = response.data[i].value.split("|")[1];
                                     response.data[i].saveLatestVersion = "True";
                                     response.data[i].cancel = "True";
@@ -305,7 +310,15 @@
                                     response.data[i].value = response.data[i].value.split("|")[0];                                    
                                     vm.ducplicateSourceFile.push(response.data[i]);
                                     vm.oUploadGlobal.arrFiles.push(vm.files[i]);
-                                    
+                                    }
+                                    else {
+                                        var file = $filter("filter")(vm.ducplicateSourceFile, response.data[i].fileName);
+                                        file[0].value = file[0].value + "<br/><br/>" + response.data[i].value;
+                                        file[0].saveLatestVersion = "True";
+                                        file[0].cancel = "True";
+                                        file[0].contentCheck = "False";
+                                       
+                                    }                                    
                                 }
                             }
                             
@@ -542,7 +555,8 @@
                 oXHR: new XMLHttpRequest(),
                 bIsAbortedCC: false,
                 bAllowContentCheck: false,
-                canceler:$q.defer()
+                canceler: $q.defer(),
+                successBanner:false
             };
 
             vm.attachmentTokenCallbackEmailClient = function (asyncResult, userContext) {
@@ -721,6 +735,16 @@
                 searchRequest.SearchObject.Sort.ByProperty = property;
                 if (bool) {
                     searchRequest.SearchObject.Sort.Direction = 1;
+                    if (property == "MCResponsibleAttorney") {
+                        vm.attorneyproperty = property;
+                        searchRequest.SearchObject.Filters.ResponsibleAttorneys = vm.attorneyproperty;
+                    } else if (property == "MCSubAreaofLaw") {
+                        searchRequest.SearchObject.Filters.SubareaOfLaw = property;
+                    }
+                    else {
+                        searchRequest.SearchObject.Filters.ResponsibleAttorneys = [];
+                        searchRequest.SearchObject.Filters.SubareaOfLaw = [];
+                    }
                 }
                 get(searchRequest, function (response) {
                     vm.lazyloader = true;
@@ -1509,6 +1533,10 @@
                 file.value = file.value +"<br/><div>"+ configs.uploadMessages.content_Check_Abort+"</div>";
                 file.cancel = "True";                  
               
+            }
+
+            vm.closeSuccessBanner = function () {
+                vm.oUploadGlobal.successBanner = false;
             }
 
         }]);
