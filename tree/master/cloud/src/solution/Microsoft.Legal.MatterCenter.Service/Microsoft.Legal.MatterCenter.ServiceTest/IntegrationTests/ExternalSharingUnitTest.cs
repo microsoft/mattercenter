@@ -23,54 +23,79 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         [Fact]
         public async void Send_ExternalSharing_Notification()
         {
-            var externalSharingRequest = new ExternalSharingRequest()
-            {
-                Client = new Client()
-                {
-                    Url = "https://msmatter.sharepoint.com/sites/catalog"
-                },
-                ClientName = "microsoft",
-                MatterId = "351085190a4ce42e2871e748b4e5d8ce",
-                Permission = "Full Control",
-                Person = "premchand113@hotmail.com",
-                Role = "Attorney Journal",
-                Status = "Pending"
-                //ExternalUserInfoList = new List<ExternalUserInfo>()
-                //{
-                //    new ExternalUserInfo()
-                //    {
-                //        Permission = "Full Control",
-                //        Person = "premchand104@hotmail.com",
-                //        Role = "Attorney Journal",
-                //        Status = "Pending"
-                //    }
-                //    //,
-                //    //new ExternalUserInfo()
-                //    //{
-                //    //    Permission = "Contribute",
-                //    //    Person = "premchand_100@hotmail.com",
-                //    //    Role = "Attorney Journal",
-                //    //    Status = "Pending"
-                //    //},
-                //    //new ExternalUserInfo()
-                //    //{
-                //    //    Permission = "Read",
-                //    //    Person = "premchand_101@hotmail.com",
-                //    //    Role = "Attorney Journal",
-                //    //    Status = "Pending"
-                //    //},
-                //}
-            };
             
+
+            var assignUserEmails = new List<IList<string>>();
+            var userEmails = new List<string>();
+            userEmails.Add("matteradmin@MSmatter.onmicrosoft.com");
+            assignUserEmails.Add(userEmails);
+
+            userEmails = new List<string>();
+            userEmails.Add("tubu@hotmail.com"); 
+            assignUserEmails.Add(userEmails);
+
+            var assignUserNames = new List<IList<string>>();
+            var userNames = new List<string>();
+            userNames.Add("Wilson Gajarla");
+            userNames.Add("");
+            assignUserNames.Add(userNames);
+
+            userNames = new List<string>();
+            userNames.Add("tubu@hotmail.com");
+            userNames.Add("");
+            assignUserNames.Add(userNames);
+
+            var permissions = new List<string>();
+            permissions.Add("Full Control");
+            permissions.Add("Full Control");
+
+            var roles = new List<string>();
+            roles.Add("Responsible Attorney");
+            roles.Add("Legal Admin");
+
+            var uploadBlockedUsers = new List<string>();
+            uploadBlockedUsers.Add("premp@MSmatter.onmicrosoft.com");
+            var matterMetaInformation = new MatterInformationVM()
+            {
+                Client = new Client
+                {
+                    Url = "https://msmatter.sharepoint.com/sites/microsoft",
+                    Id = "100001",
+                    Name = "Microsoft"
+                },
+                Matter = new Matter
+                {
+                    Id= "351085190a4ce42e2871e748b4e5d8ce",
+                    Name = "vTest4",
+                    BlockUserNames = new List<string>()
+                    {
+                        "SaiG@MSmatter.onmicrosoft.com"
+                    },
+                    AssignUserNames = assignUserNames,
+                    AssignUserEmails = assignUserEmails,
+                    Permissions = permissions,
+                    Roles = roles,
+                    Conflict = new Conflict()
+                    {
+                        Identified = "True"
+                    }
+                },
+                MatterDetails = new MatterDetails
+                {
+                    ResponsibleAttorney = "Wilson Gajarla;",
+                    ResponsibleAttorneyEmail = "Wilson Gajarla;",
+                    UploadBlockedUsers = uploadBlockedUsers,
+                    TeamMembers = "Wilson Gajarla;tubu@hotmail.com",
+                    RoleInformation = "{\"Responsible Attorney\":\"Wilson Gajarla\",\"Legal Admin\":\"tubu@hotmail.com\"}"
+                },
+                EditMode = true
+            };
             using (var client = testServer.CreateClient().AcceptJson())
             {
-                var response = await client.PostAsJsonAsync("http://localhost:44323/api/v1/matter/sharematter", externalSharingRequest);
+                var response = await client.PostAsJsonAsync("http://localhost:44323/api/v1/matter/sharematter", matterMetaInformation);
                 var result = response.Content.ReadAsJsonAsync<GenericResponseVM>().Result;
                 Assert.Null(result);
             }
-        }
-
-
-        
+        }       
     }
 }

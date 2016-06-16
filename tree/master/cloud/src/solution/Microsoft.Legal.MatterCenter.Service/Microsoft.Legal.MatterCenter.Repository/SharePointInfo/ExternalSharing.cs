@@ -10,7 +10,8 @@ using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using System.Globalization;
-
+using Microsoft.SharePoint.ApplicationPages.ClientPickerQuery;
+using Microsoft.SharePoint.Client.Utilities;
 namespace Microsoft.Legal.MatterCenter.Repository
 {
     public class ExternalSharing:IExternalSharing
@@ -35,19 +36,27 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="externalSharingRequest"></param>
         /// <returns></returns>
-        public GenericResponseVM ShareMatter(ExternalSharingRequest externalSharingRequest)
-        {           
-            
-            //First check whether the user exists in SharePoint or not
-            if (CheckUserPresentInMatterCenter(externalSharingRequest) == false)
+        public GenericResponseVM ShareMatter(MatterInformationVM matterInformation)
+        {
+            var tempMatterInformation = matterInformation;
+            int index = 0;
+            foreach (var assignUserEmails in matterInformation.Matter.AssignUserEmails)
             {
-                //If not, store external request in a list
-                SaveExternalSharingRequest(externalSharingRequest);
-                //Prepare message body for the email notification
-                //Send notification to the user with appropriate information
-                SendExternalNotification(externalSharingRequest);
-            }
-           
+                
+                foreach (string email in assignUserEmails)
+                {
+                    //First check whether the user exists in SharePoint or not
+                    if (CheckUserPresentInMatterCenter(generalSettings.SiteURL, email) == false)
+                    {                        
+                        //If not, store external request in a list
+                        SaveExternalSharingRequest(matterInformation);                       
+                        //Send notification to the user with appropriate information
+                        SendExternalNotification(matterInformation, matterInformation.Matter.Permissions[index], matterInformation.Matter.AssignUserEmails[index][0]);
+                    }
+                    
+                }
+                index = index + 1;
+            }     
             return null;
         }
 
@@ -56,16 +65,26 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="externalSharingRequest"></param>
         /// <returns></returns>
-        private bool CheckUserPresentInMatterCenter(ExternalSharingRequest externalSharingRequest)
+        private bool CheckUserPresentInMatterCenter(string clientUrl,string email)
         {
             try
-            {                
-                var context = spoAuthorization.GetClientContext(externalSharingRequest.Client.Url);
-                var siteUsers = context.Web.SiteUsers;
-                string userAlias = externalSharingRequest.Person;
-                var usersResult = context.LoadQuery(siteUsers.Include(u => u.Email).Where(u => u.Email == userAlias));
-                context.ExecuteQuery();
-                return usersResult.Any();
+            {
+                var clientContext = spoAuthorization.GetClientContext(clientUrl);                
+                string userAlias = email;
+                ClientPeoplePickerQueryParameters queryParams = new ClientPeoplePickerQueryParameters();
+                queryParams.AllowMultipleEntities = false;
+                queryParams.MaximumEntitySuggestions = 500;
+                queryParams.PrincipalSource = PrincipalSource.All;
+                queryParams.PrincipalType = PrincipalType.User | PrincipalType.SecurityGroup;
+                queryParams.QueryString = userAlias; 
+                ClientResult<string> clientResult = ClientPeoplePickerWebServiceInterface.ClientPeoplePickerSearchUser(clientContext, queryParams);
+                clientContext.ExecuteQuery();
+                string results = clientResult.Value;
+                int peoplePickerMaxRecords = 30;
+                IList<PeoplePickerUser> foundUsers = Newtonsoft.Json.JsonConvert.DeserializeObject<List<PeoplePickerUser>>(results).Where(result => (string.Equals(result.EntityType, ServiceConstants.PEOPLE_PICKER_ENTITY_TYPE_USER,
+                        StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(result.Description)) || (!string.Equals(result.EntityType,
+                        ServiceConstants.PEOPLE_PICKER_ENTITY_TYPE_USER, StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(result.EntityData.Email))).Take(peoplePickerMaxRecords).ToList();
+                return foundUsers.Count>0;
             }
             catch(Exception ex)
             {
@@ -78,22 +97,27 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="externalSharingRequest"></param>
         /// <returns></returns>
-        private void SaveExternalSharingRequest(ExternalSharingRequest externalSharingRequest)
+        private void SaveExternalSharingRequest(MatterInformationVM matterInformation)
         {            
             try
             {
                 CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(logTables.CloudStorageConnectionString);
                 CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
+                tableClient.DefaultRequestOptions = new TableRequestOptions
+                {
+                    PayloadFormat = TablePayloadFormat.JsonNoMetadata
+                };
                 // Retrieve a reference to the table.
                 CloudTable table = tableClient.GetTableReference(logTables.ExternalAccessRequests);                
                 // Create the table if it doesn't exist.
                 table.CreateIfNotExists();
-                //Insert the entity into Table Storage
-                string date = DateTime.Now.ToUniversalTime().ToString(logTables.AzureRowKeyDateFormat, CultureInfo.InvariantCulture);
-                externalSharingRequest.RowKey = Guid.NewGuid().ToString();
-                externalSharingRequest.PartitionKey = externalSharingRequest.MatterId;
-                externalSharingRequest.MatterUrl = $"{generalSettings.SiteURL}/sites/{externalSharingRequest.ClientName}";
-                TableOperation insertOperation = TableOperation.Insert(externalSharingRequest);
+                //Insert the entity into Table Storage              
+                matterInformation.PartitionKey = matterInformation.Matter.Name;
+                matterInformation.RowKey = $"{Guid.NewGuid().ToString()}${matterInformation.Matter.Id}";
+                matterInformation.Status = "Pending";
+                string matterInformationObject = Newtonsoft.Json.JsonConvert.SerializeObject(matterInformation);
+                matterInformation.SerializeMatter = matterInformationObject;                
+                TableOperation insertOperation = TableOperation.Insert(matterInformation);
                 table.Execute(insertOperation);
             }
             catch (Exception ex)
@@ -107,16 +131,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="externalSharingRequest"></param>
         /// <returns></returns>
-        private GenericResponseVM SendExternalNotification(ExternalSharingRequest externalSharingRequest)
+        private GenericResponseVM SendExternalNotification(MatterInformationVM matterInformation, string permission, string externalEmail)
         {
-            var clientUrl = $"{generalSettings.SiteURL}/sites/{externalSharingRequest.ClientName}";
+            var clientUrl = $"{matterInformation.Client.Url}";
             try
-            {
-                var clientContext = spoAuthorization.GetClientContext(generalSettings.SiteURL + "/sites/" + externalSharingRequest.ClientName);   
+            {                
                 var users = new List<UserRoleAssignment>();
                 UserRoleAssignment userRole = new UserRoleAssignment();
-                userRole.UserId = externalSharingRequest.Person;                
-                switch(externalSharingRequest.Permission.ToLower())
+                userRole.UserId = externalEmail;
+                switch (permission.ToLower())
                 {
                     case "full control":
                         userRole.Role = SharePoint.Client.Sharing.Role.Owner;
@@ -127,29 +150,33 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     case "read":
                         userRole.Role = SharePoint.Client.Sharing.Role.View;
                         break;
-                }                
-                users.Add(userRole);
-                //Share all the matter related documents and lists to external user
+                }
+                users.Add(userRole);                
                 #region Doc Sharing API
-                
-                string matterLandingPageUrl = $"{clientUrl}/sitepages/{externalSharingRequest.MatterId + ServiceConstants.ASPX_EXTENSION}";
+                string matterLandingPageUrl = $"{clientUrl}/sitepages/{matterInformation.Matter.Id + ServiceConstants.ASPX_EXTENSION}";
                 string catalogSiteAssetsLibraryUrl = $"{generalSettings.CentralRepositoryUrl}/SitePages/home.aspx";
-
-
-                IList<UserSharingResult> matterLandingPageResult = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
-                matterLandingPageUrl,
-                users, true, true, true, "The following matter page has been shared with you", true, true);
-                clientContext.ExecuteQuery();
-                clientContext.Dispose();
-
-
-                clientContext = spoAuthorization.GetClientContext(generalSettings.CentralRepositoryUrl);
-                IList<UserSharingResult> catalogSiteAssetsLibrary = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
-                catalogSiteAssetsLibraryUrl,
-                users, true, true, false, "The following matter page has been shared with you", true, true);
-                clientContext.ExecuteQuery();
-
-
+                using (var clientContext = spoAuthorization.GetClientContext(clientUrl))
+                {
+                    //Send notification to the matter landing page url with permission the user has selected
+                    IList<UserSharingResult> matterLandingPageResult = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
+                    matterLandingPageUrl,
+                    users, true, true, true, "The following matter page has been shared with you", true, true);
+                    clientContext.ExecuteQuery();
+                }
+                //Need to send notification to one catalog page so that user can be added later to sharepoint groups which will be used when 
+                //rendering the matter landing page to external user
+                users = new List<UserRoleAssignment>();
+                userRole = new UserRoleAssignment();
+                userRole.UserId = externalEmail;
+                userRole.Role = SharePoint.Client.Sharing.Role.Owner;
+                users.Add(userRole);
+                using (var clientContext = spoAuthorization.GetClientContext(generalSettings.CentralRepositoryUrl))
+                {
+                    IList<UserSharingResult> catalogSiteAssetsLibrary = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
+                    catalogSiteAssetsLibraryUrl,
+                    users, true, true, true, "The following catalog page has been shared with you", true, true);
+                    clientContext.ExecuteQuery();
+                }
                 return null;
                 #endregion
             }
@@ -157,6 +184,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 throw;
             }
-        }        
+        }
     }    
 }

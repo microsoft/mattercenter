@@ -19,6 +19,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         GenericResponseVM CheckSecurityGroupExists(MatterInformationVM matterInformationVM);
         GenericResponseVM CreateMatter(MatterMetdataVM matterMetadataVM);
         GenericResponseVM CreateMatterLandingPage(MatterMetdataVM matterMetadataVM);
-        GenericResponseVM ShareMatterToExternalUser(ExternalSharingRequest externalSharingRequest);
+        GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation);
     }
 }

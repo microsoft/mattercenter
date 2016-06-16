@@ -65,6 +65,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             Web web, MatterConfigurations matterConfigurations);
         bool AddWebPart(ClientContext clientContext, LimitedWebPartManager limitedWebPartManager, WebPartDefinition webPartDefinition,
             string[] webParts, string[] zones);
-        GenericResponseVM ShareMatterToExternalUser(ExternalSharingRequest externalSharingRequest);
+        GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation);
+
+        GenericResponseVM UpdateMatter(MatterInformationVM matterInformation);
     }
 }

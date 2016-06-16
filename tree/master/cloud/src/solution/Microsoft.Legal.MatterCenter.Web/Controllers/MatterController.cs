@@ -1062,15 +1062,15 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <returns></returns>
         [HttpPost("sharematter")]
         [SwaggerResponse(HttpStatusCode.OK)]
-        public IActionResult ShareMatter([FromBody] ExternalSharingRequest externalSharingRequest)
+        public IActionResult ShareMatter([FromBody] MatterInformationVM matterInformation)
         {
-            var client = externalSharingRequest.Client;            
+            var client = matterInformation.Client;            
             try
             {
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 
                 ErrorResponse errorResponse = null;
-                if (externalSharingRequest==null && externalSharingRequest.Client==null)
+                if (matterInformation == null && matterInformation.Client==null)
                 {
                     errorResponse = new ErrorResponse()
                     {
@@ -1081,7 +1081,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
                 }
 
-                var genericResponseVM = matterProvision.ShareMatterToExternalUser(externalSharingRequest);
+                var genericResponseVM = matterProvision.ShareMatterToExternalUser(matterInformation);
                 if (genericResponseVM != null && genericResponseVM.IsError == true)
                 {
                     errorResponse = new ErrorResponse()
