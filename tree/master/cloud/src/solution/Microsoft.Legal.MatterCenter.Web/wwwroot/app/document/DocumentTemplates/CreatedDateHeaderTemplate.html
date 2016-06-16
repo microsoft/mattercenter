@@ -1,0 +1,58 @@
+﻿<div ng-mouseenter='grid.appScope.vm.createddateDropDown = true' ng-mouseleave='grid.appScope.vm.createddateDropDown = false'>
+
+    <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.vm.createddateDropDown'>
+
+        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id=' acombo' dropdown-toggle' type='button' data-toggle='dropdown'>
+
+            <img src='../images/icon-combobox.png' />
+        </a>
+        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu' aria-labelledby='acombo'>
+
+            <div class='input-group'>
+
+                <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='grid.appScope.$parent.vm.startdate'
+                       is-open='grid.appScope.vm.openedStartDate'
+                       datepicker-options='grid.appScope.vm.dateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+
+                    <button type='button' class='btn btn-default' ng-click='grid.appScope.vm.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+            <div class='input-group' style='margin-top:5px'>
+
+                <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='grid.appScope.$parent.vm.enddate'
+                       is-open='grid.appScope.vm.openedEndDate'
+                       datepicker-options='grid.appScope.vm.enddateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+
+                    <button type='button' class='btn btn-default' ng-click='grid.appScope.vm.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+            <div class='okDateButton' id='btnOK' ng-click='grid.appScope.vm.FilterModifiedDate()'>Ok</div>
+            <hr />
+            <div class='clearFilterText' data-clearfiltertype='text'>
+
+                <div class='clearFiltersIcon'>
+
+                    <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
+                </div>
+                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Modified Date' ng-click='grid.appScope.vm.documentsearch("","LastModifiedTime",true);grid.appScope.$parent.vm.enddate="";grid.appScope.$parent.vm.startdate="";'><span>Clear filters from </span><span class='clearFilterTitle'>Created Date</span></div>
+            </div>
+        </div>
+    </div>
+    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
+        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by last modified date'>{{ col.colDef.displayName }}<span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span></span>
+    </div>
+    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>
+
+        <i title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>
+    </div>
+</div>

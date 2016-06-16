@@ -907,6 +907,19 @@
 
             //#endregion
 
+            //#region 
+            vm.showclients = function ($event) {
+                $event.stopPropagation();
+                if (vm.clients === undefined) {
+                    getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
+                        vm.clients = response.clientTerms;
+                    });
+                }
+                vm.clientdrop = true;
+                vm.clientdropvisible = true;
+            }
+
+            //endregion
         }
     ]);
 
@@ -923,5 +936,21 @@
 
         }
     });
+
+    app.filter('selectclients', function () {
+        return function (input, output) {
+            var filteredresult = [];
+            for (var i = 0; i < input.length; i++) {
+                if (input[i].name.indexOf(output)) {
+                    input[i].checked = true;
+                    filteredresult.push(input[i]);
+                } else {
+                    input[i].checked = false;
+                    filteredresult.pop(input[i]);
+                }
+            }
+            return filteredresult;
+        };
+    })
 
 })();

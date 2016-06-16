@@ -79,6 +79,9 @@ textarea {
     left: 13px;
     overflow: hidden;
 }
+#documentgrid .ui-grid-menu-mid{
+     left: 0;
+}
 
 #attachmentHeader {
     color: #333;
@@ -150,6 +153,9 @@ textarea {
     line-height: 1.5;
     padding-left: 5px;
     padding-right: 30px;
+    position:absolute;
+    top:25%;
+    margin-left:1.5%
 }
 
 .AppMenuFlyout {
@@ -610,4 +616,8 @@ textarea {
     background: #fff;
     top: 33px;
     right: 0;
+}
+
+.nodata{
+
 }
