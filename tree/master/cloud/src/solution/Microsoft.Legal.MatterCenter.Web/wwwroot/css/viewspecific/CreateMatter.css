@@ -39,16 +39,43 @@ word-wrap: break-word !important;
 .content .button{
     width:150px;
 }
-.attachmentSection {
-    height: 100px;
+ .parentNode {
+    height: 145px;
+}
+@media only screen and (max-width: 567px) {
+    .folderContent {
+        padding-top: 10px;
+        width: 100%;
+        height: auto;
+        float: left;
+        border: 0;
+        overflow-y: auto;
+    }
+}
+
+.modalClose{
+        margin: 7px;
+    margin-right: 10px;
+    position: absolute;
+    right: 0;
+    top: 7px;z-index:1;
+}
+
+.successUpload{width:100%; margin-left:1px;z-index:2;position: absolute}
+
+.marginBottom15{margin-bottom:15px}
+.marginTop15{margin-top:15px;}
+
+.attachmentCustomSection {
+    height: 149px !important;
 }
 .loadingprogressbar {height:1px;
 }
 .attachmentListLoading {
     margin-top: -3%;
-    margin-left: 300px;
+    margin-left: 54%;
 }
-.warningNotification{height:135px !important;}
+.warningNotification{height:auto !important;}
 .textAreaBlock{border:0px none;}
 .ms-checkBox{ margin:10px 5px 0 0 !important}
 .headerClassAd{margin-top:-10px; margin-left:7px;}
@@ -409,6 +436,33 @@ body {
     margin-top: 10px;
 }
 }
+
+@media (max-width: 703px) {
+    .folderStructureContent {
+        width: 100%;
+        height: 149px;
+        float: left;
+    }
+}
+
+@media (min-width: 801px)  {
+    .modelbodyContainer {
+        width: 50%;
+        left: 26%;
+    }
+}
+@media (min-width: 568px) and (max-width: 800px) {
+    .modelbodyContainer {
+        width: 70%;
+        left: 16%;
+    }
+}
+
+#overWriteDocumentName {
+     color: black; 
+     font-weight: normal; 
+}
+#overWriteDocumentName span a {text-decoration:none;}
 
 
 
