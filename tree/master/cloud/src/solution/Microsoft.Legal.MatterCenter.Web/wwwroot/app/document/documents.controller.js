@@ -41,6 +41,9 @@
         vm.documentDropDown = false;
         vm.clientDropDown = false;
         vm.modifieddateDropDown = false;
+        vm.AuthorDropDown = false;
+        vm.CheckDropDown = false;
+        vm.createddateDropDown = false;
         //End
 
         $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
@@ -56,13 +59,13 @@
             columnDefs: [
                 { field: 'checker', displayName: 'checked', width: '48', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
                 { field: 'documentName', displayName: 'Document', width: '300', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
-                { field: 'documentClient', displayName: 'Client', width: '200', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
-                { field: 'documentClientId', displayName: 'Client.Matter ID', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId}}.{{row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+                { field: 'documentClient', displayName: 'Client', width: '200', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
+                { field: 'documentClientId', displayName: 'Client.Matter ID', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentCheckoutUser}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
                 { field: 'documentModifiedDate', displayName: 'Modified Date', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
-                { field: 'documentOwner', displayName: 'Author', width: '140', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
+                { field: 'documentOwner', displayName: 'Author', width: '140', headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html', visible: false },
                 { field: 'documentVersion', displayName: 'Document Version', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
-                { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '210', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ngCellText">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
-                { field: 'documentCreatedDate', displayName: 'Created date', width: '190', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
+                { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '210', headerCellTemplate:'/app/document/DocumentTemplates/CheckOutHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
+                { field: 'documentCreatedDate', displayName: 'Created date', width: '190', headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
             ],
             enableColumnMenus: false,
             onRegisterApi: function (gridApi) {
@@ -292,8 +295,19 @@
 
         vm.search = function () {
             searchRequest.SearchObject.SearchTerm = vm.searchTerm;
+            vm.lazyloader = false;
             get(searchRequest, function (response) {
-                vm.gridOptions.data = response.matterDataList;
+                if (response == "") {
+                    vm.gridOptions.data = response;
+                    vm.lazyloader = true;
+                    vm.divuigrid = true;
+                    vm.nodata = true;
+                } else {
+                    vm.divuigrid = true;
+                    vm.nodata = false;
+                    vm.lazyloader = true;
+                    vm.gridOptions.data = response.matterDataList;
+                }
             });
         }
 
@@ -304,17 +318,37 @@
             searchRequest.SearchObject.Sort.ByProperty = property;
             if (bool) {
                 searchRequest.SearchObject.Sort.Direction = 1;
+                if (property == "MSITOfficeAuthor") {
+                    searchRequest.SearchObject.SearchTerm = "";
+                    searchRequest.SearchObject.Filters.DocumentAuthor = term;
+                } else if (property == "MCCheckoutUser") {
+                    searchRequest.SearchObject.SearchTerm = "";
+                    searchRequest.SearchObject.Filters.DocumentCheckoutUsers = term;
+                }
+                else {
+                    searchRequest.SearchObject.Filters.DocumentAuthor = "";
+                    searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
+                }
             }
             get(searchRequest, function (response) {
-                vm.lazyloader = true;
-                if (bool) {
+                if (response == "") {
                     vm.gridOptions.data = response;
-                    vm.details = [];
+                    vm.lazyloader = true;
+                    vm.divuigrid = true;
+                    vm.nodata = true;
                 } else {
-                    vm.details = response;
+                    vm.divuigrid = true;
+                    vm.nodata = false;
+                    vm.lazyloader = true;
+                    if (bool) {
+                        vm.gridOptions.data = response;
+                        vm.details = [];
+                    } else {
+                        vm.details = response;
+                    }
+                    searchRequest.SearchObject.SearchTerm = "";
+                    searchRequest.SearchObject.Sort.ByProperty = "";
                 }
-                searchRequest.SearchObject.SearchTerm = "";
-                searchRequest.SearchObject.Sort.ByProperty = "";
             });
         }
         //#endregion
@@ -377,10 +411,12 @@
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Filters.FilterByMe = 0;
                 get(searchRequest, function (response) {
-                    if (response.errorCode == "404") {
-                        vm.divuigrid = false;
+                    if (response == "") {
+                        vm.gridOptions.data = response;
+                        vm.lazyloader = true;
+                        vm.divuigrid = true;
                         vm.nodata = true;
-                        vm.errorMessage = response.message;
+
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -416,10 +452,12 @@
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Filters.FilterByMe = 1;
                 get(searchRequest, function (response) {
-                    if (response.errorCode == "404") {
-                        vm.divuigrid = false;
+                    if (response == "") {
+                        vm.gridOptions.data = response;
+                        vm.lazyloader = true;
+                        vm.divuigrid = true;
                         vm.nodata = true;
-                        vm.errorMessage = response.message;
+
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -455,10 +493,12 @@
                     Url: configs.global.repositoryUrl
                 }
                 getPinnedDocuments(pinnedMattersRequest, function (response) {
-                    if (response.errorCode == "404") {
-                        vm.divuigrid = false;
+                    if (response == "") {
+                        vm.gridOptions.data = response;
+                        vm.lazyloader = true;
+                        vm.divuigrid = true;
                         vm.nodata = true;
-                        vm.errorMessage = response.message;
+
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -611,7 +651,7 @@
                 if (response.errorCode == "404") {
                     vm.divuigrid = false;
                     vm.nodata = true;
-                    vm.errorMessage = response.message;
+
                 } else {
                     vm.divuigrid = true;
                     vm.nodata = false;
@@ -952,7 +992,7 @@
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Modified date:</div>\
                                           <div class="ms-font-m FlyoutContent" datefilter date='+ obj.documentModifiedDate + '>' + obj.documentModifiedDate + '</div>\
                                        </div>\
-                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">Open document</a></button>\
+                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/Shared/' + obj.documentName + '" target="_blank">Open document</a></button>\
                                        <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/catalog/SitePages/documentDetails.aspx" target="_blank">View document details</a></button>\
                                     </div>\
                                 </div>';

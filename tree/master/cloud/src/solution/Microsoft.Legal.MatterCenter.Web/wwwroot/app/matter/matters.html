@@ -31,7 +31,7 @@
         </div>
         <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
             <div class="input-group col-xs-10 col-sm-12" id="searchmatter">
-                <input type="text" ng-model="vm.selected" placeholder="Search by ID, or matter or client name" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
+                <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="Search by ID, or matter or client name" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
                 <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
             </div>
             <div class="col-xs-12">
@@ -43,7 +43,7 @@
         </div>
         <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0">
             <div class="input-group col-xs-12">
-                <input type="text" ng-model="vm.selected" placeholder="Search by ID, document or client name" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
+                <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="Search by ID, document or client name" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
                 <div class="input-group-btn">
                     <button type="button" class="btn btn-default dropdown-toggle col-xs-12" data-toggle="dropdown"><span class="caret"></span></button>
                     <ul class="dropdown-menu pull-right col-xs-12">
@@ -71,9 +71,9 @@
     <div class="col-sm-12" ng-if="vm.divuigrid">
         <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
     </div>
-    <div class="col-sm-12" ng-if="vm.nodata">
+    <div class="col-sm-12" ng-if="vm.gridOptions.data==''">
         <hr />
-        <span class="noResultsText">{{errorMessage}}</span>
+        <span class="noResultsText">No Data</span>
     </div>
 </div>
 
