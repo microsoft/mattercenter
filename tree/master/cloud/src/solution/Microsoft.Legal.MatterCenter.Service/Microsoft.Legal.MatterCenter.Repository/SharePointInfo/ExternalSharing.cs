@@ -165,18 +165,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 //Need to send notification to one catalog page so that user can be added later to sharepoint groups which will be used when 
                 //rendering the matter landing page to external user
-                users = new List<UserRoleAssignment>();
-                userRole = new UserRoleAssignment();
-                userRole.UserId = externalEmail;
-                userRole.Role = SharePoint.Client.Sharing.Role.Owner;
-                users.Add(userRole);
-                using (var clientContext = spoAuthorization.GetClientContext(generalSettings.CentralRepositoryUrl))
-                {
-                    IList<UserSharingResult> catalogSiteAssetsLibrary = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
-                    catalogSiteAssetsLibraryUrl,
-                    users, true, true, true, "The following catalog page has been shared with you", true, true);
-                    clientContext.ExecuteQuery();
-                }
+                //users = new List<UserRoleAssignment>();
+                //userRole = new UserRoleAssignment();
+                //userRole.UserId = externalEmail;
+                //userRole.Role = SharePoint.Client.Sharing.Role.Owner;
+                //users.Add(userRole);
+                //using (var clientContext = spoAuthorization.GetClientContext(generalSettings.CentralRepositoryUrl))
+                //{
+                //    IList<UserSharingResult> catalogSiteAssetsLibrary = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
+                //    catalogSiteAssetsLibraryUrl,
+                //    users, true, true, true, "The following catalog page has been shared with you", true, true);
+                //    clientContext.ExecuteQuery();
+                //}
                 return null;
                 #endregion
             }

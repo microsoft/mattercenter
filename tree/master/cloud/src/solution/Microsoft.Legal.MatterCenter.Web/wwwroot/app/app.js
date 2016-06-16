@@ -98,7 +98,7 @@ angular.module('matterMain', [
              tenant: configs.uri.tenant,
              clientId: configs.ADAL.clientId,
              extraQueryParameter: 'nux=1',
-             cacheLocation: 'localStorage', // enable this for IE, as sessionStorage does not work for localhost.
+             //cacheLocation: 'localStorage', // enable this for IE, as sessionStorage does not work for localhost.
          }, $httpProvider);
 
 

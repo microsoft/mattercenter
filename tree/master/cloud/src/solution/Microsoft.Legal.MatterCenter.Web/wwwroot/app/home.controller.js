@@ -2,11 +2,14 @@
     'use strict';
 
     angular.module("matterMain")
-        .controller('homeController', ['$scope', '$state', '$stateParams', '$rootScope', 'api', 'homeResource',
-        function ($scope, $state, $stateParams, $rootScope, api, homeResource) {
+        .controller('homeController', ['$scope', '$state', '$stateParams', '$rootScope', 'api', 'homeResource','adalAuthenticationService',
+        function ($scope, $state, $stateParams, $rootScope, api, homeResource, adalService) {
             var vm = this;
             //header
-            vm.userName = "Wilson Reddy Gajarla"
+            vm.userName = adalService.userInfo.userName
+            vm.loginUserEmail = adalService.userInfo.userName
+            vm.fullName = adalService.userInfo.profile.given_name + ' ' + adalService.userInfo.profile.family_name
+            vm.isAuthenticated = adalService.userInfo.isAuthenticated
             // configs.name;
             vm.isDelegate = false;
             vm.isAdmin = true;
@@ -51,6 +54,7 @@
 
             //#region for displaying contextual help 
             $rootScope.dispContextualHelp = function ($event) {
+                
                 $rootScope.displayinfo = false;
                 $rootScope.dispinner = true;
                 $event.stopPropagation();
@@ -63,11 +67,11 @@
                     $rootScope.dispcontextualhelpinner = true;
                 }
             }
-
-
             //#endregion
-
-            $rootScope.pageIndex="0";
+            $rootScope.pageIndex = "0";
+            vm.signOut = function () {
+                adalService.logOut();
+            }
 
             //#region Help
             vm.help = function () {
@@ -82,8 +86,6 @@
                     vm.helpData = response;
                 });
             }
-
             //#endregion
-
         }]);
 })();

@@ -32,23 +32,30 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             [Table("ExternalAccessRequests")] IQueryable<MatterInformationVM> matterInformationVM, 
             TextWriter log)
         {
-            var builder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
-            var configuration = builder.Build();
-            //Read all rows from table storage which are in pending state
-            var query = from p in matterInformationVM select p;
-            foreach (MatterInformationVM matterInformation in query)
-            {                
-                if(matterInformation!=null)
+            try
+            {
+                var builder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
+                var configuration = builder.Build();
+                //Read all rows from table storage which are in pending state
+                var query = from p in matterInformationVM select p;
+                foreach (MatterInformationVM matterInformation in query)
                 {
-                    string serializedMatter = matterInformation.SerializeMatter;
-                    //De Serialize the matter information
-                    MatterInformationVM originalMatter = Newtonsoft.Json.JsonConvert.DeserializeObject<MatterInformationVM>(serializedMatter);
-                    if (originalMatter.Status.ToLower() == "pending")
+                    if (matterInformation != null)
                     {
-                        //Read all external access requests records from azure table storge
-                        GetExternalAccessRequestsFromSPO(originalMatter, log, configuration);
+                        string serializedMatter = matterInformation.SerializeMatter;
+                        //De Serialize the matter information
+                        MatterInformationVM originalMatter = Newtonsoft.Json.JsonConvert.DeserializeObject<MatterInformationVM>(serializedMatter);
+                        if (originalMatter.Status.ToLower() == "pending")
+                        {
+                            //Read all external access requests records from azure table storge
+                            GetExternalAccessRequestsFromSPO(originalMatter, log, configuration);
+                        }
                     }
-                }                
+                }
+            }
+            catch(Exception ex)
+            {
+                log.WriteLine($"Exception occured in the method ReadExternalAccessRequests. {ex}");
             }
         }
 
@@ -57,7 +64,8 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         /// </summary>
         /// <param name="externalSharingRequest"></param>
         /// <returns></returns>
-        private static bool CheckUserPresentInMatterCenter(ClientContext ctx, string clientUrl, string email, IConfigurationRoot configuration)
+        private static bool CheckUserPresentInMatterCenter(ClientContext ctx, string clientUrl, 
+            string email, IConfigurationRoot configuration, TextWriter log)
         {
             try
             {                
@@ -80,7 +88,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             }
             catch (Exception ex)
             {
-                //ToDo: Log the exception
+                log.WriteLine($"Exception occured in the method CheckUserPresentInMatterCenter. {ex}");
                 throw;
             }
         }
@@ -96,58 +104,64 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             TextWriter log, 
             IConfigurationRoot configuration)
         {
-            foreach (var assignUserEmails in originalMatter.Matter.AssignUserEmails)
-            {               
-                foreach (string email in assignUserEmails)
+            try
+            {
+                foreach (var assignUserEmails in originalMatter.Matter.AssignUserEmails)
                 {
-                    using (var ctx = new ClientContext(originalMatter.Client.Url))
+                    foreach (string email in assignUserEmails)
                     {
-                        SecureString password = GetEncryptedPassword(configuration["Settings:AdminPassword"]);
-                        ctx.Credentials = new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], password);
-                        //First check whether the user exists in SharePoint or not
-                        if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, email, configuration) == true)
+                        using (var ctx = new ClientContext(originalMatter.Client.Url))
                         {
-
-                            string requestedForPerson = email;
-                            string matterId = originalMatter.Matter.Id;                            
-                            var listTitle = configuration["Settings:ExternalAccessRequests"];
-                            var list = ctx.Web.Lists.GetByTitle(listTitle);
-                            CamlQuery camlQuery = CamlQuery.CreateAllItemsQuery();
-                            camlQuery.ViewXml = "";
-                            ListItemCollection listItemCollection = list.GetItems(camlQuery);
-                            ctx.Load(listItemCollection);
-                            ctx.ExecuteQuery();
-                            foreach (ListItem listItem in listItemCollection)
+                            SecureString password = GetEncryptedPassword(configuration["Settings:AdminPassword"]);
+                            ctx.Credentials = new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], password);
+                            //First check whether the user exists in SharePoint or not
+                            if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, email, configuration, log) == true)
                             {
-                                //The matter id for whom the request has been sent            
-                                string requestedObjectTitle = listItem["RequestedObjectTitle"].ToString();
-                                //The person to whom the request has been sent
-                                string requestedFor = listItem["RequestedFor"].ToString();
-                                //The matter url for which the request has been sent
-                                string url = ((FieldUrlValue)listItem["RequestedObjectUrl"]).Url;
-                                //The status of the request whether it has been in pending=0, accepeted=2 or withdrawn=5
-                                string status = listItem["Status"].ToString();
-                                //If the status is accepted and the person and matter in table storage equals to item in Access Requests list
-                                if (requestedFor == requestedForPerson && matterId == requestedObjectTitle && status == "2")
+                                string requestedForPerson = email;
+                                string matterId = originalMatter.Matter.Id;
+                                var listTitle = configuration["Settings:ExternalAccessRequests"];
+                                var list = ctx.Web.Lists.GetByTitle(listTitle);
+                                CamlQuery camlQuery = CamlQuery.CreateAllItemsQuery();
+                                camlQuery.ViewXml = "";
+                                ListItemCollection listItemCollection = list.GetItems(camlQuery);
+                                ctx.Load(listItemCollection);
+                                ctx.ExecuteQuery();
+                                foreach (ListItem listItem in listItemCollection)
                                 {
-                                    UpdateMatter umd = new UpdateMatter();
-                                    //Update all matter related lists and libraries permissions for external users
-                                    umd.UpdateUserPermissionsForMatter(originalMatter, configuration, password);
-
-                                    //Update permissions for external users in Catalog Site Collection
-                                    using (var catalogContext = new ClientContext(configuration["Catalog:CatalogUrl"]))
+                                    //The matter id for whom the request has been sent            
+                                    string requestedObjectTitle = listItem["RequestedObjectTitle"].ToString();
+                                    //The person to whom the request has been sent
+                                    string requestedFor = listItem["RequestedFor"].ToString();
+                                    //The matter url for which the request has been sent
+                                    string url = ((FieldUrlValue)listItem["RequestedObjectUrl"]).Url;
+                                    //The status of the request whether it has been in pending=0, accepeted=2 or withdrawn=5
+                                    string status = listItem["Status"].ToString();
+                                    //If the status is accepted and the person and matter in table storage equals to item in Access Requests list
+                                    if (requestedFor == requestedForPerson && matterId == requestedObjectTitle && status == "2")
                                     {
-                                        catalogContext.Credentials =
-                                            new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], password);
-                                        umd.AssignPermissionToCatalogLists(configuration["Catalog:SiteAssets"], catalogContext, 
-                                            email.Trim(), configuration["Catalog:SiteAssetsPermissions"], configuration);
+                                        UpdateMatter umd = new UpdateMatter();
+                                        //Update all matter related lists and libraries permissions for external users
+                                        umd.UpdateUserPermissionsForMatter(originalMatter, configuration, password);
+
+                                        //Update permissions for external users in Catalog Site Collection
+                                        using (var catalogContext = new ClientContext(configuration["Catalog:CatalogUrl"]))
+                                        {
+                                            catalogContext.Credentials =
+                                                new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], password);
+                                            umd.AssignPermissionToCatalogLists(configuration["Catalog:SiteAssets"], catalogContext,
+                                                email.Trim(), configuration["Catalog:SiteAssetsPermissions"], configuration);
+                                        }
+                                        UpdateTableStorageEntity(originalMatter, log, configuration);
                                     }
-                                    //UpdateTableStorageEntity(originalMatter, log, configuration);
                                 }
                             }
                         }
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                log.WriteLine($"Exception occured in the method GetExternalAccessRequestsFromSPO. {ex}");
             }
         }        
 
@@ -226,23 +240,30 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         /// <param name="externalSharingRequest"></param>
         private static void UpdateTableStorageEntity(MatterInformationVM matterInformation, TextWriter log, IConfigurationRoot configuration)
         {
-            CloudStorageAccount cloudStorageAccount = 
-                CloudStorageAccount.Parse(configuration["Data:DefaultConnection:AzureStorageConnectionString"]);
-            CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
-            // Create the CloudTable object that represents the "people" table.
-            CloudTable table = tableClient.GetTableReference(configuration["Settings:TableStorageForExternalRequests"]);
-            // Create a retrieve operation that takes a entity.
-            TableOperation retrieveOperation = 
-                TableOperation.Retrieve<MatterInformationVM>(matterInformation.PartitionKey, matterInformation.RowKey);
-            // Execute the operation.
-            TableResult retrievedResult = table.Execute(retrieveOperation);
-            // Assign the result to a ExternalSharingRequest object.
-            MatterInformationVM updateEntity = (MatterInformationVM)retrievedResult.Result;
-            if(updateEntity!=null)
+            try
+            { 
+                CloudStorageAccount cloudStorageAccount = 
+                    CloudStorageAccount.Parse(configuration["Data:DefaultConnection:AzureStorageConnectionString"]);
+                CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
+                // Create the CloudTable object that represents the "people" table.
+                CloudTable table = tableClient.GetTableReference(configuration["Settings:TableStorageForExternalRequests"]);
+                // Create a retrieve operation that takes a entity.
+                TableOperation retrieveOperation = 
+                    TableOperation.Retrieve<MatterInformationVM>(matterInformation.PartitionKey, matterInformation.RowKey);
+                // Execute the operation.
+                TableResult retrievedResult = table.Execute(retrieveOperation);
+                // Assign the result to a ExternalSharingRequest object.
+                MatterInformationVM updateEntity = (MatterInformationVM)retrievedResult.Result;
+                if(updateEntity!=null)
+                {
+                    updateEntity.Status = "Accepted";                
+                    TableOperation updateOperation = TableOperation.Replace(updateEntity);
+                    table.Execute(updateOperation);
+                }
+            }
+            catch (Exception ex)
             {
-                updateEntity.Status = "Accepted";                
-                TableOperation updateOperation = TableOperation.Replace(updateEntity);
-                table.Execute(updateOperation);
+                log.WriteLine($"Exception occured in the method UpdateTableStorageEntity. {ex}");
             }
         }
     }

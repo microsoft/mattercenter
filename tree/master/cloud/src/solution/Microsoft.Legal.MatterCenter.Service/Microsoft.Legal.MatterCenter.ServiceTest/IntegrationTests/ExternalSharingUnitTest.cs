@@ -31,7 +31,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             assignUserEmails.Add(userEmails);
 
             userEmails = new List<string>();
-            userEmails.Add("tubu@hotmail.com"); 
+            userEmails.Add("premchand200@hotmail.com"); 
             assignUserEmails.Add(userEmails);
 
             var assignUserNames = new List<IList<string>>();
@@ -41,7 +41,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             assignUserNames.Add(userNames);
 
             userNames = new List<string>();
-            userNames.Add("tubu@hotmail.com");
+            userNames.Add("premchand200@hotmail.com");
             userNames.Add("");
             assignUserNames.Add(userNames);
 
@@ -85,8 +85,8 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                     ResponsibleAttorney = "Wilson Gajarla;",
                     ResponsibleAttorneyEmail = "Wilson Gajarla;",
                     UploadBlockedUsers = uploadBlockedUsers,
-                    TeamMembers = "Wilson Gajarla;tubu@hotmail.com",
-                    RoleInformation = "{\"Responsible Attorney\":\"Wilson Gajarla\",\"Legal Admin\":\"tubu@hotmail.com\"}"
+                    TeamMembers = "Wilson Gajarla;premchand200@hotmail.com",
+                    RoleInformation = "{\"Responsible Attorney\":\"Wilson Gajarla\",\"Legal Admin\":\"premchand200@hotmail.com\"}"
                 },
                 EditMode = true
             };
@@ -94,7 +94,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             {
                 var response = await client.PostAsJsonAsync("http://localhost:44323/api/v1/matter/sharematter", matterMetaInformation);
                 var result = response.Content.ReadAsJsonAsync<GenericResponseVM>().Result;
-                Assert.Null(result);
+                Assert.NotNull(result);
             }
         }       
     }

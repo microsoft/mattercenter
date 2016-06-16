@@ -36,12 +36,13 @@
                         <img id="PersonaPicture" src="Images/MC_Profile_Switcher.png" alt="Profile Picture" title="Profile Picture" />
                     </div>
                     <div class="PersonaPictureDetails">
-                        <div class="PersonaTitle" id="PersonaTitle">Wilson Reddy</div>
-                        <div class="PersonaEmail" id="PersonaEmail">matteradmin@msmatter.onmicrosoft.com</div>
+                        <div class="PersonaTitle" id="PersonaTitle">{{vm.fullName}}</div>
+                        <div class="PersonaEmail" id="PersonaEmail">{{vm.loginUserEmail}}</div>
                     </div>
                 </div>
-                <div class="SignOutLink">
-                    <a href="#">Sign Out</a>
+                <div class="SignOutLink">                    
+                    
+                    <button class="btn btn-link" ng-show="vm.isAuthenticated" ng-click="vm.signOut()">Sign Out</button>
                 </div>
             </div>
         </div>
