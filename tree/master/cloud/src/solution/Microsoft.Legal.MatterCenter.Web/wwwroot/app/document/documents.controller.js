@@ -64,7 +64,7 @@
                 { field: 'documentModifiedDate', displayName: 'Modified Date', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
                 { field: 'documentOwner', displayName: 'Author', width: '140', headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html', visible: false },
                 { field: 'documentVersion', displayName: 'Document Version', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
-                { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '210', headerCellTemplate:'/app/document/DocumentTemplates/CheckOutHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
+                { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '210', headerCellTemplate: '/app/document/DocumentTemplates/CheckOutHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
                 { field: 'documentCreatedDate', displayName: 'Created date', width: '190', headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
             ],
             enableColumnMenus: false,
@@ -256,7 +256,7 @@
             },
             SearchObject: {
                 PageNumber: 1,
-                ItemsPerPage: 10,
+                ItemsPerPage: "10",
                 SearchTerm: '',
                 Filters: {
                     ClientName: "",
@@ -294,8 +294,15 @@
         }
 
         vm.search = function () {
-            searchRequest.SearchObject.SearchTerm = vm.searchTerm;
             vm.lazyloader = false;
+            var searchToText = '';
+            var finalSearchText = '';
+            if (vm.selected != "") {
+                finalSearchText = "('" + vm.selected + "*' OR FileName:'" + vm.selected + "*' OR dlcDocIdOWSText:'" + vm.selected + "*' OR MCDocumentClientName:'" + vm.selected + "*')";
+            }
+            searchRequest.SearchObject.SearchTerm = finalSearchText;
+            searchRequest.SearchObject.Sort.ByProperty = "FileName";
+            searchRequest.SearchObject.Sort.Direction = 0;
             get(searchRequest, function (response) {
                 if (response == "") {
                     vm.gridOptions.data = response;
@@ -306,7 +313,8 @@
                     vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
-                    vm.gridOptions.data = response.matterDataList;
+                    vm.gridOptions.data = response;
+                    searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                 }
             });
         }
@@ -959,53 +967,6 @@
         //};
 
     }]);
-
-    app.directive('popoverdoc', function () {
-        return {
-            restrict: 'AE',
-            scope: { details: '@' },
-            link: function (scope, element, attrs) {
-                scope.$watch("details", function () {
-                    var obj = eval('(' + attrs.details + ')');
-                    var content = '<div class="">\
-                                   <div class="FlyoutBoxContent" style="width: 350px;">\
-                                      <div class="FlyoutContent">\
-                                          <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.documentName + ' </div>\
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Matter:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.documentMatter + '</div>\
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.documentClient + '</div>\
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Document ID:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.documentID + '</div>\
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Author:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.documentOwner + '</div> \
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Modified date:</div>\
-                                          <div class="ms-font-m FlyoutContent" datefilter date='+ obj.documentModifiedDate + '>' + obj.documentModifiedDate + '</div>\
-                                       </div>\
-                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/Shared/' + obj.documentName + '" target="_blank">Open document</a></button>\
-                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/catalog/SitePages/documentDetails.aspx" target="_blank">View document details</a></button>\
-                                    </div>\
-                                </div>';
-                    $(element).popover({
-                        html: true,
-                        trigger: 'click',
-                        delay: 500,
-                        content: content,
-                    });
-                });
-            }
-        }
-    });
 
 })();
 

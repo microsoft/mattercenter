@@ -923,20 +923,6 @@
         }
     ]);
 
-
-    app.directive("toggletab", function () {
-        return {
-            restrict: 'A',
-            link: function (scope, element, attrs) {
-                $(element).find('a').click(function (e) {
-                    e.preventDefault()
-                    $(this).tab('show')
-                })
-            }
-
-        }
-    });
-
     app.filter('selectclients', function () {
         return function (input, output) {
             var filteredresult = [];

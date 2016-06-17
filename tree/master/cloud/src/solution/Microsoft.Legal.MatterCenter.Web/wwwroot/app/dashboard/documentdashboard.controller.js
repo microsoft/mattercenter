@@ -828,35 +828,6 @@
             //#endregion
         }
     ]);
-    app.directive("toggletab", function () {
-        return {
-            restrict: 'A',
-            link: function (scope, element, attrs) {
-                $(element).find('a').click(function (e) {
-                    e.preventDefault()
-                    $(this).tab('show')
-                })
-            }
-
-        }
-    });
-
-    app.directive('infopopover', function () {
-        return {
-            restrict: 'AE',
-            link: function (scope, element, attrs) {
-                var content = "<div class='cartelementpopup' style='width:250px'>\
-                                   <div class='checkOutMetadata marginTop10'>When sending to your OneDrive the DMS version will be checked out to you until you check it back in.</div>\
-                               </div>";
-                $(element).popover({
-                    html: true,
-                    trigger: 'click',
-                    delay: 500,
-                    content: content,
-                });
-            }
-        }
-    });
 }
 
 
