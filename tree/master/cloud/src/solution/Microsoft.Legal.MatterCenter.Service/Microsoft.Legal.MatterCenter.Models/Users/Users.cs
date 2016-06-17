@@ -58,5 +58,23 @@ namespace Microsoft.Legal.MatterCenter.Models
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets the entity type (user or security group).
+        /// </summary>
+        public string LargePictureUrl
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the entity type (user or security group).
+        /// </summary>
+        public string SmallPictureUrl
+        {
+            get;
+            set;
+        }
     }
 }

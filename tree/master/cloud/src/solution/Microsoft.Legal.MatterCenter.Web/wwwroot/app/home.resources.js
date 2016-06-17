@@ -9,6 +9,10 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/shared/help',
                       isArray: true
+                  }),
+                  'getUserProfilePicture': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/user/getuserprofilepicture'                      
                   })
               });
       }]);

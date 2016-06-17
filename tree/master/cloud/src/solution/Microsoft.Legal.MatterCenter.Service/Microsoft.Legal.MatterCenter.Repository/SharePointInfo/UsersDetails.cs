@@ -21,6 +21,9 @@ using System.Collections.Generic;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Extensions.OptionsModel;
+using Microsoft.SharePoint.Client.UserProfiles;
+using System.Globalization;
+using System.IO;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -50,6 +53,27 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
         }
+
+        public Users GetUserProfilePicture(Client client)
+        {
+            ClientContext clientContext = spoAuthorization.GetClientContext(client.Url);
+            PeopleManager peopleManager = new PeopleManager(clientContext);
+            PersonProperties personProperties = peopleManager.GetMyProperties();
+            clientContext.Load(personProperties);
+            clientContext.ExecuteQuery();
+            string personalURL = personProperties.PersonalUrl.ToUpperInvariant().TrimEnd('/');
+            string[] pictureInfo = personalURL.Split(new string[] { "/PERSONAL/" }, StringSplitOptions.None);
+            string smallProfilePicture = $"{pictureInfo[0]}/User Photos/Profile Pictures/{pictureInfo[1]}_SThumb.jpg";            
+            string mediumProfilePicture = $"{pictureInfo[0]}/User Photos/Profile Pictures/{pictureInfo[1]}_MThumb.jpg";
+            Users users = new Users();
+            users.Email = personProperties.Email;
+            users.LogOnName = personProperties.DisplayName;
+            users.SmallPictureUrl = smallProfilePicture;
+            users.LargePictureUrl = mediumProfilePicture;
+            return users;
+        }
+
+        
 
         /// <summary>
         /// This method will return the user object who has currently logged into the system

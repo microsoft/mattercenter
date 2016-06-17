@@ -28,12 +28,12 @@
                 </div>
             </div>
             <div id="ProfileSwitcher" ng-click="$root.dispPersonal($event)">
-                <img class="AppHeaderProfilePict" src="Images/MC_Profile_Switcher.png" id="AppHeaderPersona" alt="Profile Picture" />
+                <img class="AppHeaderProfilePict" src="{{vm.smallPictureUrl}}" id="AppHeaderPersona" alt="Profile Picture" />
             </div>
             <div class="PersonalInfoFlyout" ng-show="$root.displayinfo" ng-click="$event.stopPropagation();">
                 <div class="PersonaContainer">
                     <div class="PersonaPictureContainer">
-                        <img id="PersonaPicture" src="Images/MC_Profile_Switcher.png" alt="Profile Picture" title="Profile Picture" />
+                        <img id="PersonaPicture" src="{{vm.largePictureUrl}}" alt="Profile Picture" title="Profile Picture" />
                     </div>
                     <div class="PersonaPictureDetails">
                         <div class="PersonaTitle" id="PersonaTitle">{{vm.fullName}}</div>

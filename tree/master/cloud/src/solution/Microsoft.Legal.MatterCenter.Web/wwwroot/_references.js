@@ -26,6 +26,7 @@
 /// <reference path="app/document/document.resources.js" />
 /// <reference path="app/document/documents.controller.js" />
 /// <reference path="app/home.controller.js" />
+/// <reference path="app/home.resources.js" />
 /// <reference path="app/matter/createMatter.controller.js" />
 /// <reference path="app/matter/matter.resources.js" />
 /// <reference path="app/matter/matters.controller.js" />

@@ -17,5 +17,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         Task<IList<Users>> GetUsersAsync(SearchRequestVM searchRequestVM);
         Task<IList<Role>> GetRolesAsync(Client client);
         Task<IList<Role>> GetPermissionLevelsAsync(Client client);
+        Users GetUserProfilePicture(Client client);
     }
 }

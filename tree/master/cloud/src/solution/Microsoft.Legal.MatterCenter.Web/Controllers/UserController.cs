@@ -114,6 +114,31 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
         }
 
+        [HttpPost("getuserprofilepicture")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public IActionResult UserProfilePicture([FromBody]Client client)
+        {           
+            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            #region Error Checking                
+            ErrorResponse errorResponse = null;
+
+            if (client == null && string.IsNullOrWhiteSpace(client.Url))
+            {
+                errorResponse = new ErrorResponse()
+                {
+                    Message = errorSettings.MessageNoInputs,
+                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                    Description = "No input data is passed"
+                };
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+            }
+            #endregion
+            var userInfo = userRepositoy.GetUserProfilePicture(client);
+            return matterCenterServiceFunctions.ServiceResponse(userInfo, (int)HttpStatusCode.OK);
+        }
+
+
+
         /// <summary>
         /// Get all the roles that are configured for a given client
         /// </summary>

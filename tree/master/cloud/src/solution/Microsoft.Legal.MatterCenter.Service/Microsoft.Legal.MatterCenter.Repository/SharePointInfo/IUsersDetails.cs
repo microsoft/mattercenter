@@ -28,5 +28,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         IList<FieldUserValue> ResolveUserNames(Client client, IList<string> userNames);
         IList<FieldUserValue> ResolveUserNames(ClientContext clientContext, IList<string> userNames);
         List<Tuple<int, Principal>> GetUserPrincipal(Client client, Matter matter, IList<string> userIds);
+        Users GetUserProfilePicture(Client client);
     }
 }

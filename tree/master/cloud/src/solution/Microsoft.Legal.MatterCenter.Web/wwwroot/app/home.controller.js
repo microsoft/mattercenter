@@ -2,7 +2,8 @@
     'use strict';
 
     angular.module("matterMain")
-        .controller('homeController', ['$scope', '$state', '$stateParams', '$rootScope', 'api', 'homeResource','adalAuthenticationService',
+        .controller('homeController', ['$scope', '$state', '$stateParams', '$rootScope', 'api', 'homeResource',
+            'adalAuthenticationService',
         function ($scope, $state, $stateParams, $rootScope, api, homeResource, adalService) {
             var vm = this;
             //header
@@ -10,19 +11,24 @@
             vm.loginUserEmail = adalService.userInfo.userName
             vm.fullName = adalService.userInfo.profile.given_name + ' ' + adalService.userInfo.profile.family_name
             vm.isAuthenticated = adalService.userInfo.isAuthenticated
-            // configs.name;
-            vm.isDelegate = false;
-            vm.isAdmin = true;
-            vm.collapse = false;
-
-            vm.showToUser = false;
-            vm.featureEnabled = true;
-
+            vm.smallPictureUrl = 'Images/MC_Profile_Switcher.png';
+            vm.largePictureUrl = 'Images/MC_Profile_Switcher.png';
+            vm.userProfileObjectId = adalService.userInfo.profile.oid;
+             
             //Callback function for help 
             function getHelp(options, callback) {
                 api({
                     resource: 'homeResource',
                     method: 'getHelp',
+                    data: options,
+                    success: callback
+                });
+            }
+
+            function getUserProfilePicture(options, callback) {
+                api({
+                    resource: 'homeResource',
+                    method: 'getUserProfilePicture',
                     data: options,
                     success: callback
                 });
@@ -69,9 +75,24 @@
             }
             //#endregion
             $rootScope.pageIndex = "0";
+
             vm.signOut = function () {
                 adalService.logOut();
             }
+
+            vm.getUserProfilePicture = function () {
+                
+                var client = {
+                    Url: "https://msmatter.sharepoint.com"
+                }                    
+               
+                getUserProfilePicture(client, function (response) {
+                    vm.smallPictureUrl = response.smallPictureUrl;
+                    vm.largePictureUrl = response.largePictureUrl;
+                });
+            }
+
+            vm.getUserProfilePicture();
 
             //#region Help
             vm.help = function () {

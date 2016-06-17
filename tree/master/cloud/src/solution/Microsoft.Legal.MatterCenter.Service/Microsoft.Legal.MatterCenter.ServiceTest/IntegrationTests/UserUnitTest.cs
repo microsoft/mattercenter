@@ -35,6 +35,24 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             }
         }
 
+        /// <summary>
+        /// This unit test will try to get all the roles configured in matter center
+        /// </summary>
+        [Fact]
+        public async void Get_UserProfile_Picture()
+        {
+            var matterClient = new Client()
+            {
+                Url = "https://msmatter.sharepoint.com"
+            };
+            using (var client = testServer.CreateClient().AcceptJson())
+            {
+                var response = await client.PostAsJsonAsync("http://localhost:44323/api/v1/user/getuserprofilepicture", matterClient);
+                var result = response.Content.ReadAsJsonAsync<GenericResponseVM>().Result;
+                Assert.NotNull(result);
+            }
+        }
+
 
         /// <summary>
         /// This unit test will try to get all the users who can see a particular item
