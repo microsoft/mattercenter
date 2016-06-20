@@ -6,9 +6,9 @@
     var app = angular.module("matterMain");
 
     app.controller('documentsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout',
-        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache',
+        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache','$window',
     function ($scope, $state, $interval, $stateParams, api, $timeout,
-        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache) {
+        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache,$window) {
         var vm = this;
         vm.selected = undefined;
         vm.documentname = 'All Documents'
@@ -909,6 +909,70 @@
                 vm.FilterByType();
             }
         }
+        //#endregion
+
+
+        //#region setting the grid options when window is resized
+
+        angular.element($window).bind('resize', function () {
+            if ($window.innerWidth < 380) {
+                vm.gridOptions.enableHorizontalScrollbar = false;
+                vm.gridOptions.enablePaginationControls = false;
+                vm.gridOptions.columnDefs = [{ field: 'checker', displayName: 'checked', width: '48', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
+            { field: 'documentName', displayName: 'Document', width: '300', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' }];
+                $scope.$apply();
+            } else {
+                vm.gridOptions = {
+                    enableHorizontalScrollbar: 0,
+                    enableVerticalScrollbar: 0,
+                    enableGridMenu: true,
+                    enableRowHeaderSelection: false,
+                    enableRowSelection: false,
+                    enableSelectAll: false,
+                    multiSelect: false,
+                    columnDefs: [
+                        { field: 'checker', displayName: 'checked', width: '48', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
+                        { field: 'documentName', displayName: 'Document', width: '300', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
+                        { field: 'documentClient', displayName: 'Client', width: '200', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
+                        { field: 'documentClientId', displayName: 'Client.Matter ID', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentCheckoutUser}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+                        { field: 'documentModifiedDate', displayName: 'Modified Date', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
+                        { field: 'documentOwner', displayName: 'Author', width: '140', headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html', visible: false },
+                        { field: 'documentVersion', displayName: 'Document Version', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
+                        { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '210', headerCellTemplate: '/app/document/DocumentTemplates/CheckOutHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
+                        { field: 'documentCreatedDate', displayName: 'Created date', width: '190', headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
+                    ],
+                    enableColumnMenus: false,
+                    onRegisterApi: function (gridApi) {
+                        $scope.gridApi = gridApi;
+                        gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
+                            $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
+                        });
+                        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                            vm.selectedRow = row.entity
+                            //If the app is opened in outlook, then the below validation is going to be applied
+                            if (vm.isOutlook && vm.showAttachment) {
+                                vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
+                                if (vm.selectedRows && vm.selectedRows.length < 5) {
+                                    vm.enableAttachment = true
+                                    vm.showErrorAttachmentInfo = false;
+                                    vm.warningMessageText = '';
+                                }
+                                else {
+                                    vm.showErrorAttachmentInfo = true;
+                                    vm.enableAttachment = false;
+                                    vm.warningMessageText = configs.uploadMessages.maxAttachedMessage;
+                                }
+                            }
+                        });
+                        $scope.gridApi.core.on.sortChanged($scope, vm.sortChangedDocument);
+                        vm.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
+
+                    }
+                };
+                $scope.$apply();
+            }
+        });
+
         //#endregion
 
         //#region
