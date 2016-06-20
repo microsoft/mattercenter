@@ -33,10 +33,13 @@
             vm.arealawDropDowm = false;
             vm.opendateDropDown = false;
             //End
-
+            Office.initialize = function (reason) {              
+                vm.initOutlook();
+            };
             $scope.initOfficeLibrary = function () {
 
             };
+           
 
             $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
@@ -188,10 +191,11 @@
                     console.log(vm.foldersList);
                     jQuery('#UploadMatterModal').modal("show");
                     //Initialize Officejs library                     
-                    Office.initialize = function (reason) {
-
-                    };
-                    vm.initOutlook();
+                    //Office.initialize = function (reason) {
+                    //     vm.initOutlook();
+                    //};
+                     //vm.initOutlook();
+                   
                 });
             }
 
@@ -233,7 +237,7 @@
                 folders.push(targetDrop.url);
                 var attachmentRequestVM = {
                     Client: {
-                        Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                        Url: vm.selectedRow.matterClientUrl
                     },
                     ServiceRequest: {
                         AttachmentToken: vm.attachmentToken,
@@ -244,7 +248,7 @@
                         PerformContentCheck: performContentCheck,
                         Overwrite: isOverwrite,
                         Subject: vm.subject + ".eml",
-                        AllowContentCheck: performContentCheck,
+                        AllowContentCheck: vm.oUploadGlobal.bAllowContentCheck,
                         Attachments: attachments
                     }
                 }
@@ -310,6 +314,7 @@
                                         response.data[i].value = response.data[i].value.split("|")[0];
                                         vm.ducplicateSourceFile.push(response.data[i]);
                                         vm.oUploadGlobal.arrFiles.push(vm.files[i]);
+                                        vm.oUploadGlobal.successBanner = false;
                                     }
                                     else {
                                         var file = $filter("filter")(vm.ducplicateSourceFile, response.data[i].fileName);
@@ -533,6 +538,7 @@
 
             $scope.Openuploadmodal = function () {
                 vm.getFolderHierarchy();
+                vm.oUploadGlobal.successBanner = false;
             }
 
 
@@ -1040,22 +1046,25 @@
 
             //#region To display modal up in center of the screen...
             //Start 
-            function reposition() {
-                var modal = $(this),
-                dialog = modal.find('.modal-dialog');
+           
+            
+            vm.reposition = function () {
+                var modal = $(this)
+               
+                var dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
                 // Dividing by two centers the modal exactly, but dividing by three  
                 // or four works better for larger screens. 
                 dialog.css("margin-top", Math.max(0, (jQuery(window).height() - dialog.height()) / 2));
             }
             // Reposition when a modal is shown 
-            jQuery('.modal').on('show.bs.modal', reposition);
+            jQuery('.modal').on('show.bs.modal', vm.reposition);
             // Reposition when the window is resized 
             jQuery(window).on('resize', function () {
-                jQuery('.modal:visible').each(reposition);
+                jQuery('.modal:visible').each(vm.reposition);
             });
 
-            $timeout(reposition(), 100);
+            $timeout(vm.reposition(), 100);
             //#endregion 
 
             //#region For making menu visbible and hide
@@ -1356,46 +1365,46 @@
 
             //#region setting the grid options when window is resized
 
-            //angular.element($window).bind('resize', function () {
-            //    if ($window.innerWidth < 340) {
-            //        vm.gridOptions.enableGridMenu = false;
-            //        vm.gridOptions.enablePaginationControls = false;
-            //        vm.gridOptions.columnDefs = [{ field: 'matterName', displayName: 'Matter', enableHiding: false, width: "100%", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' }];
-            //        $scope.$apply();
-            //    } else {
-            //        vm.gridOptions = {
-            //            paginationPageSizes: [10, 50, 100],
-            //            paginationPageSize: 10,
-            //            enableGridMenu: true,
-            //            enableRowHeaderSelection: false,
-            //            enableRowSelection: true,
-            //            enableSelectAll: false,
-            //            multiSelect: false,
-            //            enablePaginationControls: true,
-            //            columnDefs: [
-            //                 { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "20%", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
-            //                 { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "15%", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
-            //                 { field: 'matterClientId', displayName: 'Client.MatterID', width: "15%", headerTooltip: 'Click to sort by client.matterid', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-            //                 { field: 'matterModifiedDate', displayName: 'Modified Date', width: "10%", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
-            //                 { field: 'matterResponsibleAttorney', headerTooltip: 'Click to sort by attorney', width: "15%", displayName: 'Responsible attorney', visible: false },
-            //                 { field: 'matterSubAreaOfLaw', headerTooltip: 'Click to sort by sub area of law', width: "15%", displayName: 'Sub area of law', visible: false },
-            //                 { field: 'matterCreatedDate', headerTooltip: 'Click to sort by matter open date', width: "15%", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
-            //            ],
-            //            enableColumnMenus: false,
-            //            onRegisterApi: function (gridApi) {
-            //                $scope.gridApi = gridApi;
-            //                gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
-            //                    $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
-            //                });
-            //                gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-            //                    vm.selectedRow = row.entity
-            //                });
-            //                $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
-            //                $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
-            //            }
-            //        };
-            //    }
-            //});
+            angular.element($window).bind('resize', function () {
+                if ($window.innerWidth < 360) {
+                    vm.gridOptions.enableHorizontalScrollbar = false;
+                    vm.gridOptions.enablePaginationControls = false;
+                    vm.gridOptions.columnDefs = [{ field: 'matterName', displayName: 'Matter', enableHiding: false, width: "100%", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' }];
+                    $scope.$apply();
+                } else {                   
+                    vm.gridOptions = {
+                        enableHorizontalScrollbar: 0,
+                        enableVerticalScrollbar: 1,
+                        enableGridMenu: true,
+                        enableRowHeaderSelection: false,
+                        enableRowSelection: true,
+                        enableSelectAll: false,
+                        multiSelect: false,
+                        columnDefs: [
+                             { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "245", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
+                             { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
+                             { field: 'matterClientId', displayName: 'Client.MatterID', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+                             { field: 'matterModifiedDate', displayName: 'Modified Date', width: "195", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
+                             { field: 'matterResponsibleAttorney', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: 'Responsible attorney', visible: false },
+                             { field: 'matterSubAreaOfLaw', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: 'Sub area of law', visible: false },
+                             { field: 'matterCreatedDate', headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html', width: "170", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+                        ],
+                        enableColumnMenus: false,
+                        onRegisterApi: function (gridApi) {
+                            $scope.gridApi = gridApi;
+                            gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
+                                $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
+                            });
+                            gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                                vm.selectedRow = row.entity
+                            });
+                            $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
+                            $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
+                        }
+                    };
+                    $scope.$apply();
+                }
+            });
 
             //#endregion
 
@@ -1524,7 +1533,7 @@
 
 
                 } else {
-                    duplicateFile.cancel = "False";
+                    duplicateFile.cancel = "False"; 
                     if (vm.ducplicateSourceFile.length > 0) {
                         vm.ducplicateSourceFile.pop();
                     }
