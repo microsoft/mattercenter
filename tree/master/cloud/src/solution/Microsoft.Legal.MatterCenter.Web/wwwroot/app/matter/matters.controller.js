@@ -33,10 +33,13 @@
             vm.arealawDropDowm = false;
             vm.opendateDropDown = false;
             //End
-
+            Office.initialize = function (reason) {              
+                vm.initOutlook();
+            };
             $scope.initOfficeLibrary = function () {
 
             };
+           
 
             $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
@@ -188,10 +191,11 @@
                     console.log(vm.foldersList);
                     jQuery('#UploadMatterModal').modal("show");
                     //Initialize Officejs library                     
-                    Office.initialize = function (reason) {
-
-                    };
-                    vm.initOutlook();
+                    //Office.initialize = function (reason) {
+                    //     vm.initOutlook();
+                    //};
+                     //vm.initOutlook();
+                   
                 });
             }
 
@@ -233,7 +237,7 @@
                 folders.push(targetDrop.url);
                 var attachmentRequestVM = {
                     Client: {
-                        Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                        Url: vm.selectedRow.matterClientUrl
                     },
                     ServiceRequest: {
                         AttachmentToken: vm.attachmentToken,
@@ -244,7 +248,7 @@
                         PerformContentCheck: performContentCheck,
                         Overwrite: isOverwrite,
                         Subject: vm.subject + ".eml",
-                        AllowContentCheck: performContentCheck,
+                        AllowContentCheck: vm.oUploadGlobal.bAllowContentCheck,
                         Attachments: attachments
                     }
                 }
@@ -310,6 +314,7 @@
                                         response.data[i].value = response.data[i].value.split("|")[0];
                                         vm.ducplicateSourceFile.push(response.data[i]);
                                         vm.oUploadGlobal.arrFiles.push(vm.files[i]);
+                                        vm.oUploadGlobal.successBanner = false;
                                     }
                                     else {
                                         var file = $filter("filter")(vm.ducplicateSourceFile, response.data[i].fileName);
@@ -533,6 +538,7 @@
 
             $scope.Openuploadmodal = function () {
                 vm.getFolderHierarchy();
+                vm.oUploadGlobal.successBanner = false;
             }
 
 
@@ -1040,22 +1046,25 @@
 
             //#region To display modal up in center of the screen...
             //Start 
-            function reposition() {
-                var modal = $(this),
-                dialog = modal.find('.modal-dialog');
+           
+            
+            vm.reposition = function () {
+                var modal = $(this)
+               
+                var dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
                 // Dividing by two centers the modal exactly, but dividing by three  
                 // or four works better for larger screens. 
                 dialog.css("margin-top", Math.max(0, (jQuery(window).height() - dialog.height()) / 2));
             }
             // Reposition when a modal is shown 
-            jQuery('.modal').on('show.bs.modal', reposition);
+            jQuery('.modal').on('show.bs.modal', vm.reposition);
             // Reposition when the window is resized 
             jQuery(window).on('resize', function () {
-                jQuery('.modal:visible').each(reposition);
+                jQuery('.modal:visible').each(vm.reposition);
             });
 
-            $timeout(reposition(), 100);
+            $timeout(vm.reposition(), 100);
             //#endregion 
 
             //#region For making menu visbible and hide
@@ -1524,7 +1533,7 @@
 
 
                 } else {
-                    duplicateFile.cancel = "False";
+                    duplicateFile.cancel = "False"; 
                     if (vm.ducplicateSourceFile.length > 0) {
                         vm.ducplicateSourceFile.pop();
                     }

@@ -83,11 +83,7 @@
 <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="width:100%">
         <div ng-if="vm.IsDupliacteDocument" class="notificationContainerForPopup" style="height: 80px;margin-left:0">
-           <script type="text/ng-template" id="contentPerformCheck">
-               
-               
-
-           </script>
+          
             
             <script type="text/ng-template" id="duplicateErrorDiv">
                 <div class="notification warningNotification" ng-show="duplicatefile.cancel!==null">
@@ -157,9 +153,7 @@
                                          id="{{attachmentInfo.counter}}attachment"
                                          draggable
                                          data-isEmail="{{attachmentInfo.isEmail}}"
-                                         data-attachmentid="{{attachmentInfo.attachmentId}}">
-                                        {{attachmentInfo.attachmentFileName}}
-                                    </div>
+                                         data-attachmentid="{{attachmentInfo.attachmentId}}">{{attachmentInfo.attachmentFileName}}</div>
                                     <!--If the mail upload is success, show the folder name under which the email has been dropped-->
                                     <div ng-if="vm.mailUpLoadSuccess" title="{{vm.mailUploadedFolder}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.mailUploadedFolder}}</div>
                                 </div>

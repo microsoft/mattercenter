@@ -445,16 +445,18 @@ body {
     }
 }
 
-@media (min-width: 801px)  {
+
+@media (min-width: 568px) and (max-width: 950px) {
     .modelbodyContainer {
-        width: 50%;
-        left: 26%;
+        width: 100%;
+       
     }
 }
-@media (min-width: 568px) and (max-width: 800px) {
+
+@media (min-width: 951px) {
     .modelbodyContainer {
-        width: 70%;
-        left: 16%;
+        width: 60%;left:20%;
+       
     }
 }
 
@@ -463,6 +465,13 @@ body {
      font-weight: normal; 
 }
 #overWriteDocumentName span a {text-decoration:none;}
+.attachment{height:100%;}
+
+@media only screen and (max-width: 712px) {
+    .popupName {
+        max-width: 160px;
+    }
+}
 
 
 

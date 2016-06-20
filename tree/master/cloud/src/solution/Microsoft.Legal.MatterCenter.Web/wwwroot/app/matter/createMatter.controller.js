@@ -1039,7 +1039,7 @@
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                cm.opened = true;
+                cm.opened =  cm.opened?false:true;
             };
 
             cm.opened = false;
