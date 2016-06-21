@@ -271,17 +271,53 @@
             </div>
         </div>
     </div>
+    <!--Upload Modal Screen Start-->
     <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" style="width:100%">
+            <div ng-if="vm.IsDupliacteDocument" class="notificationContainerForPopup" style="height: 80px;margin-left:0">
+
+
+                <script type="text/ng-template" id="duplicateErrorDiv">
+                    <div class="notification warningNotification" ng-show="duplicatefile.cancel!==null">
+                        <img id="warningImg" draggable="false" alt="Warning Message" src="../Images/warning-message.png">
+                        <div id="overWriteDocumentName">
+                            <div ng-bind-html="duplicatefile.value"></div>
+
+
+                        </div>
+                        <div class="notificationResult hide"></div>
+                        <div class="askForOverwrite">
+                            <input ng-show="duplicatefile.contentCheck=='True'" type="button" title="Matter Center will compare all content and data associated with the two documents. Navigating away from this screen will cancel the content check." value="Perform content check" data-operation="contentCheck" ng-click="vm.localOverWriteDocument(duplicatefile,'contentCheck');vm.contentCheckNotification(duplicatefile,true);">
+                            <input ng-show="duplicatefile.saveLatestVersion=='True'" title="The file will be saved as the latest version of the existing document that has same title. Matter Center will retain all prior versions of the document." id="overWriteYes"
+                                   ng-click="vm.localOverWriteDocument(duplicatefile,'overwrite');" type="button" value="Save as latest version" data-operation="overwrite">
+                            <input ng-show="duplicatefile.append==true" type='button' data-operation='append' title='The file will be saved as new, separate document with the current date and time added to the end of the file name.' value="Append date to file name and save" ng-click="vm.localOverWriteDocument(duplicatefile,'append')" />
+                            <input ng-show="duplicatefile.cancel=='True'" title="This document will not be uploaded and you will return to the previous screen." id="overWriteNo"
+                                   ng-click="vm.localOverWriteDocument(duplicatefile,'ignore');" type="button" value="Cancel upload" data-operation="ignore">
+                            <div ng-show="duplicatefile.contentCheck=='contentCheck'" class='notificationCC'>
+                                <img src="../Images/loadingcirclests16.gif" alt="" />Checking content  <input id='cancelCC' type='button' value='Cancel' ng-click='vm.abortContentCheck(duplicatefile,true)' />
+                            </div>
+                        </div>
+                    </div>
+                </script>
+
+                <div ng-repeat="duplicatefile in vm.ducplicateSourceFile" ng-include="'duplicateErrorDiv'"></div>
+
+            </div>
+
             <div class="modal-content">
-                <div class="modal-body">
+                <div ng-show="vm.oUploadGlobal.successBanner" class="notification successNotification ms-font-weight-semibold successUpload">Upload complete.<span class="closeNotification" ng-click="vm.closeSuccessBanner()">x</span></div>
+                <div class="row modalClose">
+                    <img data-dismiss="modal" ng-click="vm.hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
+                </div>
+                <div class="modal-body modelbodyContainer">
+                    <div class='loadingprogressbar'>
+                        <img ng-if="vm.isLoadingFromDesktopStarted" alt='Loading' class='attachmentListLoading' src='../images/loading_metro.gif' />
+                    </div>
                     <div class="row margin0">
                         <div class="col-sm-10 pad0">
-                            <div class="attachmentHeader">Drag and drop items to folders on the right</div>
+                            <div class="attachmentHeader marginBottom15">Drag and drop items to folders on the right</div>
                         </div>
-                        <div class="col-sm-2">
-                            <img data-dismiss="modal" ng-click="vm.hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
-                        </div>
+
                     </div>
                     <div class="row margin0">
                         <div class="col-sm-9 pull-left mailHeaderItems"><div>Items</div></div>
@@ -290,11 +326,61 @@
 
                     <div class="row margin0">
                         <div class="col-sm-9 maildata">
-                            <!--Content start for showing the files which are uploaded from desktop-->
-                            <div class="attachmentSection">
-                                <div ng-if="vm.isLoadingFromDesktopStarted" class='attachmentSection'>
-                                    <img alt='Loading' class='attachmentListLoading' src='../images/loading_metro.gif' />
+                            <!--Content start to show mail attachment information-->
+                            <div class="attachmentSection" ng-repeat="attachmentInfo in vm.allAttachmentDetails">
+                                <div ng-if="vm.loadingAttachments" class='attachmentSection'><img alt='Loading' class='attachmentListLoading' src='../images/loading_metro.gif' /></div>
+                                <div ng-if="attachmentInfo.isEmail" class="attachment">
+                                    <div class="attachmentName mailName">
+                                        <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
+                                             ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
+                                        <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
+                                             ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
+                                        <!--If the mail upload is success, show this div-->
+                                        <div ng-if="vm.mailUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
+                                            <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
+                                        </div>
+                                        <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
+                                        <input class="popupName editPopupContent hide ui-draggable" id="0attachmentText" type="text" maxlength="128">
+                                        <div title="Test attachments"
+                                             class="popupName ui-draggable"
+                                             id="{{attachmentInfo.counter}}attachment"
+                                             draggable
+                                             data-isEmail="{{attachmentInfo.isEmail}}"
+                                             data-attachmentid="{{attachmentInfo.attachmentId}}">{{attachmentInfo.attachmentFileName}}</div>
+                                        <!--If the mail upload is success, show the folder name under which the email has been dropped-->
+                                        <div ng-if="vm.mailUpLoadSuccess" title="{{vm.mailUploadedFolder}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.mailUploadedFolder}}</div>
+                                    </div>
                                 </div>
+
+                                <div ng-if="!attachmentInfo.isEmail" class="attachment">
+                                    <div class="attachmentName">
+                                        <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
+                                             ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
+                                        <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
+                                             ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
+                                        <div ng-if="vm.docUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
+                                            <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
+                                        </div>
+                                        <!--If the attachment upload is success, show this div-->
+                                        <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
+                                        <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
+                                        <div title="{{attachmentInfo.attachmentFileName}}"
+                                             id="{{attachmentInfo.counter}}attachment"
+                                             class="popupName ui-draggable"
+                                             draggable
+                                             data-contentType="{{attachmentInfo.contentType}}"
+                                             data-size="{{attachmentInfo.size}}"
+                                             data-isEmail="{{attachmentInfo.isEmail}}"
+                                             data-attachmentid="{{attachmentInfo.attachmentId}}">{{attachmentInfo.attachmentFileName}}</div>
+                                        <!--If the attachment upload is success, show the folder name under which the attachment has been dropped-->
+                                        <div ng-if="vm.docUpLoadSuccess" title="{{vm.docUploadedFolder}}" class="uploadSuccessMessage" id="{{attachmentInfo.counter}}attachment-Message">{{vm.docUploadedFolder}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Content end to show mail attachment information-->
+                            <!--Content start for showing the files which are uploaded from desktop-->
+                            <div class="attachmentSection folderStructureContent">
+
                                 <div ng-repeat="uploadedFile in vm.uploadedFiles" class="attachment">
                                     <div class="attachmentName mailName">
                                         <!--If the mail upload is success, show this div-->
@@ -302,17 +388,20 @@
                                             <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
                                         </div>
                                         <img class="attachIcon" id="{{uploadedFile.counter}}attachIcon"
-                                             alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
-                                        <div title="Test attachments" class="popupName">
-                                            {{uploadedFile.fileName}}
-                                        </div>
+                                             alt="attachment icon" src="{{uploadedFile.documentIconUrl}}">
+                                        <div title="Test attachments" class="popupName">{{uploadedFile.fileName}}</div>
                                         <!--If the mail upload is success, show the folder name under which the email has been dropped-->
-                                        <div ng-if="!uploadedFile.isError" title="{{uploadedFile.dropFolder}}" class="uploadSuccessMessage">
-                                            {{uploadedFile.dropFolder}}
-                                        </div>
+                                        <div ng-if="!uploadedFile.isError" title="{{uploadedFile.dropFolder}}" class="uploadSuccessMessage">({{uploadedFile.dropFolder}})</div>
+                                    </div>
+                                </div>
+                                <div ng-hide="vm.uploadedFiles.length || vm.allAttachmentDetails.length">
+                                    <div title="Test attachments" class="popupName" style="margin-left:1%;">
+                                        No files uploaded
                                     </div>
                                 </div>
                             </div>
+                            <!--Content end for showing the files which are uploaded from desktop-->
+
                             <div ng-if="vm.allAttachmentDetails.length==0" class="noFilesUploaded">No files uploaded</div>
                         </div>
                         <div class="col-sm-3 folderContent">
@@ -323,10 +412,26 @@
                                 <div id="currentFolder" class="breadcrumbItem"></div>
                             </div>
                             <div class="folderStructureContent" showbreadcrumb ng-hide="foldercontent">
+                                <script type="text/ng-template" id="folderTree">
+                                    <div ng-if="child.parentURL!==null" class="treeNodes" ng-show="child.active" title="" droppable drop="handleDrop()" folder="child" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" ng-click="vm.showSelectedFolderTree(child)">
+                                        <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents">
+                                        {{child.name}}
+                                    </div>
+                                    <ul ng-if="child.children" style="margin-left:5px;">
+                                        <li ng-repeat="child in child.children" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" droppable drop="handleDrop()" folder="child" class="childNode" ng-include="'folderTree'">
+
+                                        </li>
+                                    </ul>
+                                </script>
+
                                 <ul>
-                                    <li>
-                                        <ul ng-repeat="folder in vm.foldersList">
-                                            <li ng-if="folder.parentURL" data-client="" data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}" class="childNode"
+                                    <li ng-repeat="child in vm.foldersList" ng-class='child.parentURL?"childNode":"parentNode"' data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" droppable drop="handleDrop()" folder="child" ng-include="'folderTree'" style="display: inline-block; width: 90%; padding:0;">
+
+                                    </li>
+
+                                    <!--<li ng-repeat="folder in vm.foldersList">
+                                        <ul ng-repeat="child in folder.children">
+                                            <li ng-if="child.parentURL" data-client="" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" class="childNode"
                                                 style="display: inline-block; width: 90%; padding:0;">
                                                 <div class="treeNodes" title="Documents" droppable drop="handleDrop()" folder="folder" id="folder{{$index}}">
                                                     <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents"
@@ -335,18 +440,19 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                    </li>
+                                    </li>-->
                                 </ul>
                             </div>
                         </div>
                     </div>
-                    <div class="row margin0">
+                    <div class="row margin0 marginTop15">
                         <div class="pull-left"><img src="../../images/information-blue.png" /> You can also drag and drop files from your desktop.</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!--Upload Modal Screen Ends-->
  </div>
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-hide="vm.lazyloaderdashboard">

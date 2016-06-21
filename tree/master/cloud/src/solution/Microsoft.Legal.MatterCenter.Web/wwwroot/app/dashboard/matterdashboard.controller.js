@@ -1,8 +1,8 @@
 ﻿(function () {
     'use strict;'
     var app = angular.module("matterMain");
-    app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http',
-        function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http) {
+    app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http','$q', '$filter',
+        function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http, $q, $filter) {
             var vm = this;
             vm.downwarddrop = true;
             vm.upwarddrop = false;
@@ -679,45 +679,108 @@
                     vm.selectedRow = currentRowData
                 }
                 vm.getFolderHierarchy();
+                vm.oUploadGlobal.successBanner = false;
             }
 
             vm.getFolderHierarchy = function () {
                 var matterData = {
                     MatterName: vm.selectedRow.matterName,
-                    MatterUrl: vm.selectedRow.matterClientUrl,
+                    MatterUrl: vm.selectedRow.matterClientUrl
                 };
+                vm.getContentCheckConfigurations(vm.selectedRow.matterClientUrl);
                 getFolderHierarchy(matterData, function (response) {
                     vm.foldersList = response.foldersList;
+                    vm.uploadedFiles = [];
+                    function getNestedChildren(arr, parent) {
+                        var parentList = []
+                        for (var i in arr) {
+                            if (arr[i].parentURL == parent) {
+                                var children = getNestedChildren(arr, arr[i].url)
+
+                                if (children.length) {
+                                    arr[i].children = children;
+                                    arr[i].active = parent == null ? true : false;
+                                }
+                                parentList.push(arr[i]);
+                            }
+                        }
+                        return parentList
+                    }
+                    vm.foldersList = getNestedChildren(vm.foldersList, null);
+                    if (vm.foldersList[0] !== null) { vm.showSelectedFolderTree(vm.foldersList[0]); }
+                    console.log(vm.foldersList);
                     jQuery('#UploadMatterModal').modal("show");
                 });
             }
 
             //This function will handle the files that has been dragged from the user desktop
-            vm.handleDesktopDrop = function (targetDrop, sourceFiles) {
+            vm.ducplicateSourceFile = [];
+            vm.handleDesktopDrop = function (targetDropUrl, sourceFiles, isOverwrite) {
+                vm.oUploadGlobal.successBanner = false;
                 vm.isLoadingFromDesktopStarted = true;
-                vm.files = sourceFiles.files;
+               // vm.files = sourceFiles.files;
                 var fd = new FormData();
-                fd.append('targetDropUrl', targetDrop.url);
-                fd.append('folderUrl', targetDrop.url)
+                fd.append('targetDropUrl', targetDropUrl);
+                fd.append('folderUrl', targetDropUrl)
                 fd.append('documentLibraryName', vm.selectedRow.matterName)
                 fd.append('clientUrl', vm.selectedRow.matterClientUrl);
-                angular.forEach(vm.files, function (file) {
+                fd.append('AllowContentCheck', vm.oUploadGlobal.bAllowContentCheck);
+                var nCount = 0;
+                angular.forEach(sourceFiles, function (file) {
                     fd.append('file', file);
-                })
+                    fd.append("Overwrite" + nCount++, isOverwrite);
+                });
 
                 $http.post("/api/v1/document/uploadfiles", fd, {
                     transformRequest: angular.identity,
-                    headers: { 'Content-Type': undefined }
+                    headers: { 'Content-Type': undefined },
+                    timeout: vm.oUploadGlobal.canceler.promise
                 }).then(function (response) {
                     vm.isLoadingFromDesktopStarted = false;
-                    console.log(response.data);
-                    vm.uploadedFiles = response.data;
+                    if (response.status == 200) {
+                        if (response.data.length !== 0) {
+                            var tempFile = [];
+                            for (var i = 0; i < response.data.length; i++) {
+                                if (!response.data[i].isError) {
+                                    response.data[i].dropFolder = response.data[i].dropFolder == vm.selectedRow.matterGuid ? vm.selectedRow.matterName : response.data[i].dropFolder;
+                                    vm.uploadedFiles.push(response.data[i]);
+                                    tempFile.push(response.data[i]);
+                                    vm.oUploadGlobal.successBanner = (tempFile.length == sourceFiles.length) ? true : false;
+
+                                } else {
+                                    vm.IsDupliacteDocument = true;
+                                    if (response.data[i].value.split("|")[1]) {
+                                        response.data[i].contentCheck = response.data[i].value.split("|")[1];
+                                        response.data[i].saveLatestVersion = "True";
+                                        response.data[i].cancel = "True";
+                                        response.data[i].append = vm.overwriteConfiguration(response.data[i].fileName);
+                                        response.data[i].value = response.data[i].value.split("|")[0];
+                                        vm.ducplicateSourceFile.push(response.data[i]);
+                                        vm.oUploadGlobal.arrFiles.push(vm.files[i]);
+                                        vm.oUploadGlobal.successBanner = false;
+                                    }
+                                    else {
+                                        var file = $filter("filter")(vm.ducplicateSourceFile, response.data[i].fileName);
+                                        file[0].value = file[0].value + "<br/><br/>" + response.data[i].value;
+                                        file[0].saveLatestVersion = "True";
+                                        file[0].cancel = "True";
+                                        file[0].contentCheck = "False";
+
+                                    }
+                                }
+                            }
+
+                        }
+                    } else {
+                        //To Do error handling implementation
+                    }
                 }).catch(function (response) {
                     vm.isLoadingFromDesktopStarted = false;
                     console.error('Gists error', response.status, response.data);
                 })
 
             }
+            vm.uploadedFiles = [];
             //#endregion
 
             //Call search api on page load
@@ -920,6 +983,177 @@
             }
 
             //endregion
+
+
+            //#region upload desktop files functionality starts
+            vm.oUploadGlobal = {
+                regularInvalidCharacter: new RegExp("[\*\?\|\\\t/:\"\"'<>#{}%~&]", "g"),
+                regularStartEnd: new RegExp("^[\. ]|[\. ]$", "g"),
+                regularExtraSpace: new RegExp(" {2,}", "g"),
+                regularInvalidRule: new RegExp("[\.]{2,}", "g"),
+                oUploadParameter: [],
+                sClientRelativeUrl: "",
+                sFolderUrl: "",
+                arrContent: [],
+                arrFiles: [],
+                arrOverwrite: [],
+                src: [],
+                iActiveUploadRequest: 0,
+                oDrilldownParameter: { nCurrentLevel: 0, sCurrentParentUrl: "", sRootUrl: "" },
+                sNotificationMsg: "",
+                bAppendOptionEnabled: false,
+                oXHR: new XMLHttpRequest(),
+                bIsAbortedCC: false,
+                bAllowContentCheck: false,
+                canceler: $q.defer(),
+                successBanner: false
+            };
+             $rootScope.breadcrumb = true;
+            $rootScope.foldercontent = false;
+             vm.hideBreadCrumb = function () {
+                $rootScope.breadcrumb = true;
+                $rootScope.foldercontent = false;
+
+             }
+
+            //#region To getContentCheckConfigurations
+            //start
+
+             function getContentCheckConfigurations(options, callback) {
+                 api({
+                     resource: 'matterResource',
+                     method: 'getDefaultMatterConfigurations',
+                     data: options,
+                     success: callback
+                 });
+             }
+            
+             vm.getContentCheckConfigurations = function (siteCollectionPath) {
+                 siteCollectionPath = JSON.stringify(siteCollectionPath);
+                 getContentCheckConfigurations(siteCollectionPath, function (response) {
+                     if (!response.isError) {
+                         var defaultMatterConfig = JSON.parse(response.code);
+                         vm.oUploadGlobal.bAllowContentCheck = defaultMatterConfig.IsContentCheck;
+
+                     } else {
+                         vm.oUploadGlobal.bAllowContentCheck = false;
+                     }
+
+                 });
+
+             }
+
+            //#region To expand and collapse the folder tree structure in upload
+             vm.showSelectedFolderTree = function (folder) {
+                 function setActiveItem(item) {
+                     if (item.children !== null) {
+                         angular.forEach(item.children, function (child) {
+                             if (item.parentURL !== null) {
+                                 if (item.active) {
+                                     child.active = child.active ? false : true;
+                                     if (!child.active) { setActiveItem(child); }
+                                 } else {
+                                     child.active = false;
+                                     setActiveItem(child);
+                                 }
+                             }
+                             else {
+                                 child.active = child.active ? false : true;
+                                 if (!child.active) {
+                                     setActiveItem(child);
+                                 }
+                             }
+                         });
+                     }
+
+                 }
+                 setActiveItem(folder);
+
+             }
+            //#endRegion
+            //#region To do contentcheck or save as latestversion
+             vm.localOverWriteDocument = function (duplicateFile, sOperation) {
+                 if ("contentCheck" === sOperation) {
+                     vm.files = [vm.oUploadGlobal.arrFiles[vm.oUploadGlobal.arrFiles.length - 1]];
+                 } else {
+                     vm.files = [vm.oUploadGlobal.arrFiles.pop()];
+                     duplicateFile.cancel = null;
+                 }
+
+                 var nOperation = "";
+                 if ("ignore" !== sOperation) {
+                     switch (sOperation) {
+                         case "overwrite":
+                             nOperation = "0";
+                             break;
+                         case "append":
+                             nOperation = "1";
+                             break;
+                         case "contentCheck":
+                             nOperation = "2";
+                             break;
+                         case "cancelContentCheck":
+                             nOperation = "3";
+                             break;
+                     }
+                     // uploadFile(oUploadGlobal.sClientRelativeUrl, oUploadGlobal.sFolderUrl, nOperation);
+
+                     vm.handleDesktopDrop(vm.clientRelativeUrl, vm.files, nOperation);
+
+
+
+                 } else {
+                     duplicateFile.cancel = "False";
+                     if (vm.ducplicateSourceFile.length > 0) {
+                         vm.ducplicateSourceFile.pop();
+                     }
+                 }
+             }
+
+            // Function to configure time stamp
+             vm.overwriteConfiguration = function (fileName) {
+                 // Update the content as per the logic.
+                 var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                     fileExtension = fileName.trim().substring(fileName.trim().lastIndexOf(".") + 1),
+                     bAppendEnabled = false;
+
+                 switch (selectedOverwriteConfiguration) {
+                     case "BOTH":
+                         bAppendEnabled = true;
+                         break;
+                     case "DOCUMENT ONLY":
+                         bAppendEnabled = "eml" === fileExtension || "msg" === fileExtension ? false : true;
+                         break;
+                     default:
+                         bAppendEnabled = "eml" === fileExtension || "msg" === fileExtension ? true : false;
+                         break;
+                 }
+                 return bAppendEnabled;
+             }
+
+             vm.contentCheckNotification = function (file, isLocalUpload) {
+                 file.contentCheck = "contentCheck";
+                 file.saveLatestVersion = "False";
+                 file.cancel = "False";
+
+             }
+             vm.abortContentCheck = function (file, isLocalUpload) {
+                 "use strict";
+                 if (isLocalUpload) {
+                     vm.oUploadGlobal.canceler.resolve();
+                     vm.oUploadGlobal.canceler = $q.defer();
+                 }
+                 file.contentCheck = null;
+                 file.saveLatestVersion = "True";
+                 file.value = file.value + "<br/><div>" + configs.uploadMessages.content_Check_Abort + "</div>";
+                 file.cancel = "True";
+
+             }
+
+             vm.closeSuccessBanner = function () {
+                 vm.oUploadGlobal.successBanner = false;
+             }
+            //#end region
         }
     ]);
 
