@@ -12,6 +12,7 @@
         var vm = this;
         vm.selected = undefined;
         vm.documentname = 'All Documents'
+        vm.documentid = 1;
         $rootScope.pageIndex = "2";
         // Onload show ui grid and hide error div
         //start
@@ -397,6 +398,7 @@
         //#region for setting the document name in dropdown
         vm.SetDocuments = function (id, name) {
             vm.documentname = name;
+            vm.documentid=id;
             vm.GetDocuments(id);
         }
 
@@ -432,7 +434,7 @@
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
                                     angular.forEach(response, function (res) {
-                                        if (pinobj == res.documentName) {
+                                        if (pinobj.documentID == res.documentID) {
                                             if (res.ismatterdone == undefined && !res.ismatterdone) {
                                                 res.MatterInfo = "Unpin this matter";
                                                 res.ismatterdone = true;
@@ -473,7 +475,7 @@
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
                                     angular.forEach(response, function (res) {
-                                        if (pinobj == res.documentName) {
+                                        if (pinobj.documentID == res.documentID) {
                                             if (res.ismatterdone == undefined && !res.ismatterdone) {
                                                 res.MatterInfo = "Unpin this matter";
                                                 res.ismatterdone = true;
@@ -526,7 +528,7 @@
 
 
         //To run GetDocuments function on page load 
-        vm.SetDocuments(1, "All Documents");
+       vm.SetDocuments(vm.documentid, vm.documentname);
         //End 
 
 
@@ -544,8 +546,8 @@
                 }
             }
             UnpinDocuments(unpinRequest, function (response) {
-                if (response.isMatterUnPinned) {
-                    $timeout(function () { vm.SetDocuments(3, vm.documentname); }, 500);
+                if (response.isDocumentUnPinned) {
+                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);
                     alert("Success");
                 }
             });
@@ -584,7 +586,7 @@
             }
             pinDocuments(pinRequest, function (response) {
                 if (response.isDocumentPinned) {
-                    $timeout(function () { vm.GetDocuments(vm.ddlDocuments.Id); }, 500);
+                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);
                     alert("Success");
                 }
             });

@@ -5,11 +5,12 @@
         <a popover type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align:left;text-decoration: none;' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href=''> {{row.entity.matterName}} </a>
         <div class='popover-content'></div>
     </div>
-    <div class='col-xs-5 col-sm-3 col-md-3 col-lg-3 text-right'>
+    <div class='col-xs-5 col-sm-3 col-md-3 col-lg-3 text-right' id="matcoltemp">
 
         <div class='dropdown'>
 
-            <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a><ul style='margin:0;padding:0' class='dropdown-menu'>
+            <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a>
+            <ul style='margin:0;padding:0' class='dropdown-menu'>
 
                 <li class='ms-ContextualMenu-item' ng-click='grid.appScope.Openuploadmodal()'><a class='ECBItem ms-ContextualMenu-link upload'>Upload to this Matter</a></li>
                 <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' ng-href='{{row.entity.matterUrl}}' target='_blank'>View Matter Details</a></li>
