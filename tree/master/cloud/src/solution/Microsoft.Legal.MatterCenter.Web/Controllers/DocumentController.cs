@@ -468,6 +468,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                         if (genericResponse == null)
                         {
                             string documentIconUrl = string.Empty;
+                            fileExtension = fileExtension.Replace(".", "");
                             if (fileExtension.ToLower() != "pdf")
                             {
                                 documentIconUrl = $"{generalSettings.SiteURL}/_layouts/15/images/ic{fileExtension}.gif";
