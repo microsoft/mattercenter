@@ -467,13 +467,23 @@ namespace Microsoft.Legal.MatterCenter.Web
                         }
                         if (genericResponse == null)
                         {
+                            string documentIconUrl = string.Empty;
+                            if (fileExtension.ToLower() != "pdf")
+                            {
+                                documentIconUrl = $"{generalSettings.SiteURL}/_layouts/15/images/ic{fileExtension}.gif";
+                            }
+                            else
+                            {
+                                documentIconUrl = $"{generalSettings.SiteURL}/_layouts/15/images/ic{fileExtension}.png";
+                            }
                             var successFile = new
                             {
                                 IsError = false,
                                 Code = HttpStatusCode.OK.ToString(),
                                 Value = UploadEnums.UploadSuccess.ToString(),
                                 FileName = fileName,
-                                DropFolder = folderName
+                                DropFolder = folderName,
+                                DocumentIconUrl = documentIconUrl
                             };
                             listResponse.Add(successFile);
                         }
