@@ -138,7 +138,7 @@
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Modified date:</div>\
                                           <div class="ms-font-m FlyoutContent" datefilter date='+ obj.documentModifiedDate + '>' + obj.documentModifiedDate + '</div>\
                                        </div>\
-                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/Shared/' + obj.documentName + '" target="_blank">Open document</a></button>\
+                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="' + obj.documentUrl + '" target="_blank">Open document</a></button>\
                                        <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/catalog/SitePages/documentDetails.aspx" target="_blank">View document details</a></button>\
                                     </div>\
                                 </div>';

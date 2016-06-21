@@ -41,6 +41,11 @@ textarea {
     #documentgrid .ui-grid-render-container, #mattergrid .ui-grid-render-container {
         overflow: hidden !important;
     }
+
+   #doccelltemp .dropdown-menu,#matcoltemp .dropdown-menu{
+    width: 165px !important;
+    left: -62%;
+   }
 }
 
 .matters {
