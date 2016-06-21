@@ -274,6 +274,7 @@
             //This function will handle the files that has been dragged from the user desktop
             vm.ducplicateSourceFile = [];
             vm.handleDesktopDrop = function (targetDropUrl, sourceFiles, isOverwrite) {
+                vm.oUploadGlobal.successBanner = false;
                 vm.isLoadingFromDesktopStarted = true;
                 // vm.files = sourceFiles.files;
                 var fd = new FormData();

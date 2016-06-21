@@ -465,7 +465,8 @@ body {
      font-weight: normal; 
 }
 #overWriteDocumentName span a {text-decoration:none;}
-.attachment{height:100%;}
+.attachment{height:auto;}
+.attachmentSection{height:150px;}
 
 @media only screen and (max-width: 712px) {
     .popupName {

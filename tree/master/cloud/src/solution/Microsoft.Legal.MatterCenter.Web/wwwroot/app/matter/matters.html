@@ -195,7 +195,7 @@
                                         <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
                                     </div>
                                     <img class="attachIcon" id="{{uploadedFile.counter}}attachIcon"
-                                         alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
+                                         alt="attachment icon" src="{{uploadedFile.documentIconUrl}}">
                                     <div title="Test attachments" class="popupName">{{uploadedFile.fileName}}</div>
                                     <!--If the mail upload is success, show the folder name under which the email has been dropped-->
                                     <div ng-if="!uploadedFile.isError" title="{{uploadedFile.dropFolder}}" class="uploadSuccessMessage">({{uploadedFile.dropFolder}})</div>
