@@ -13,12 +13,35 @@
         vm.selected = undefined;
         vm.documentname = 'All Documents'
         vm.documentid = 1;
+        vm.documentsdrop = false;
+        vm.docdropinner = true;
         $rootScope.pageIndex = "2";
         // Onload show ui grid and hide error div
         //start
         vm.divuigrid = true;
         vm.nodata = false;
         //end
+
+        //#region for showing the matters dropdown in resposive 
+        vm.showdocdrop = function ($event) {
+            $event.stopPropagation();
+            if (vm.docdropinner) {
+                vm.documentsdrop = true;
+                vm.docdropinner = false;
+            } else {
+                vm.documentsdrop = false;
+                vm.docdropinner = true;
+            }
+        }
+        //#endregion
+
+        //#region for closing all the dropdowns
+        vm.closealldrops = function () {
+            vm.documentsdrop = false;
+            vm.docdropinner = true;
+        }
+
+        //#endregion
 
         //to hide lazyloader on load
         //start
@@ -295,7 +318,10 @@
         }
 
         vm.search = function () {
+            vm.documentname = 'All Documents'
+            vm.documentid = 1;
             vm.lazyloader = false;
+            vm.divuigrid = false;
             var searchToText = '';
             var finalSearchText = '';
             if (vm.selected != "") {
@@ -323,6 +349,7 @@
         //#region for searching matter by property and searchterm
         vm.documentsearch = function (term, property, bool) {
             vm.lazyloader = false;
+            vm.divuigrid = false;
             searchRequest.SearchObject.SearchTerm = term;
             searchRequest.SearchObject.Sort.ByProperty = property;
             if (bool) {
@@ -366,6 +393,7 @@
         //start
         vm.FilterModifiedDate = function () {
             vm.lazyloader = false;
+            vm.divuigrid = false;
             searchRequest.SearchObject.SearchTerm = "";
             searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = vm.startdate;
             searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = vm.enddate;
@@ -417,6 +445,7 @@
             vm.sortexp = "";
             vm.sortby = "";
             vm.lazyloader = false;
+            vm.divuigrid = false;
             if (id == 1) {
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Filters.FilterByMe = 0;
@@ -459,6 +488,7 @@
 
             } else if (id == 2) {
                 vm.lazyloader = false;
+                vm.divuigrid = false;
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Filters.FilterByMe = 1;
                 get(searchRequest, function (response) {
@@ -467,7 +497,6 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
-
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -499,6 +528,7 @@
                 });
             } else if (id == 3) {
                 vm.lazyloader = false;
+                vm.divuigrid = false;
                 var pinnedMattersRequest = {
                     Url: configs.global.repositoryUrl
                 }
@@ -508,7 +538,6 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
-
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -564,7 +593,7 @@
                     Url: configs.global.repositoryUrl
                 },
                 documentData: {
-                    documentName: alldata.documentName,
+                    DocumentName: alldata.documentName,
                     DocumentVersion: alldata.documentVersion,
                     DocumentClient: alldata.documentClient,
                     DocumentClientId: alldata.documentClientId,
@@ -581,7 +610,8 @@
                     DocumentMatterUrl: alldata.documentMatterUrl,
                     DocumentParentUrl: alldata.documentParentUrl,
                     DocumentID: alldata.documentID,
-                    DocumentIconUrl: alldata.documentIconUrl
+                    DocumentIconUrl: alldata.documentIconUrl,
+                    PinType:"unpin"
                 }
             }
             pinDocuments(pinRequest, function (response) {
@@ -691,7 +721,6 @@
 
         vm.sortChangedDocument = function (grid, sortColumns) {
             vm.divuigrid = false;
-            vm.nodata = true;
             if (sortColumns.length != 0) {
                 if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
                     if (sortColumns[0].sort != undefined) {
@@ -979,6 +1008,8 @@
 
         //#region
         vm.typeheadselect = function (index, selected) {
+            vm.documentname = 'All Documents'
+            vm.documentid = 1;
             var searchToText = '';
             var finalSearchText = "";
             if (selected != "") {

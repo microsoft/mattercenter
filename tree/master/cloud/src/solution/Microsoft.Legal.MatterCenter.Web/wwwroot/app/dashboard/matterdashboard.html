@@ -244,8 +244,8 @@
             <div ng-if="vm.totalrecords>6 && vm.first>2"> <img id="" ng-click="vm.prev()" class="first cur-pointer" src="../Images/pagination-back-Enabled.png"></div>
             <div ng-if="vm.totalrecords<6 || vm.first<2"><img id="grid_Grid_First" class="first click-disabled" src="../Images/pagination-back-disabled.png"></div>
             <div id="grid_Grid_ViewRecords" class="ViewRecordDiv moveToMiddle"><span class="PaginateSpan">{{vm.fromtopage}}</span></div>
-            <div ng-if="vm.totalrecords<=6 || vm.last>vm.totalrecords"><img id="grid_Grid_Next" class="next click-disabled" src="../Images/pagination-front-disabled.png"></div>
-            <div ng-if="vm.totalrecords>6" ng-class="{'hide':vm.last>vm.totalrecords}"><img title="Next" id="grid_Grid_Next" ng-click="vm.next()" class="next cur-pointer" active="0" src="../Images/pagination-front-Enabled.png"></div>
+            <div ng-if="vm.totalrecords<=6 || vm.last>=vm.totalrecords"><img id="grid_Grid_Next" class="next click-disabled" src="../Images/pagination-front-disabled.png"></div>
+            <div ng-if="vm.totalrecords>6" ng-class="{'hide':vm.last>=vm.totalrecords}"><img title="Next" id="grid_Grid_Next" ng-click="vm.next()" class="next cur-pointer" active="0" src="../Images/pagination-front-Enabled.png"></div>
 
         </div>
         <div class="LeftContent">
