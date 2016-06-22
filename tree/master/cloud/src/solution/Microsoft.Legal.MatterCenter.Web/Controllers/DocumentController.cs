@@ -424,6 +424,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     continueUpload = true;
                     ContentDispositionHeaderValue fileMetadata = ContentDispositionHeaderValue.Parse(uploadedFile.ContentDisposition);
                     string fileName = originalName = fileMetadata.FileName.Trim('"');
+                    fileName = System.IO.Path.GetFileName(fileName);
                     ContentCheckDetails contentCheckDetails = new ContentCheckDetails(fileName, uploadedFile.Length);
                     string fileExtension = System.IO.Path.GetExtension(fileName).Trim();
                     if (-1 < fileName.IndexOf('\\'))
