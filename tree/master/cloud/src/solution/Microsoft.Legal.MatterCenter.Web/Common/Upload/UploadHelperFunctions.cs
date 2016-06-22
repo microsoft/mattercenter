@@ -268,17 +268,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
                     genericResponse = uploadHelperFunctionsUtility.CheckDuplicateDocument(clientContext, documentLibraryName, isMailUpload, folderPath, contentCheck, uploadFileName, allowContentCheck, ref message);
 
-                    if (!isOverwrite && !isContentCheckRequired)
+                    if (!isOverwrite && !isContentCheckRequired && (genericResponse!=null && genericResponse.IsError==true))
                     {
                         return genericResponse;
                     }
                     else if (isContentCheckRequired)
                     {
                         genericResponse = uploadHelperFunctionsUtility.PerformContentCheckUtility(isMailUpload, folderPath, isMsg, xmlDocument, nsmgr, extension, uploadFileName, clientContext);
-                        if(genericResponse!=null)
-                        {
-                            return genericResponse;
-                        }
+                        return genericResponse;
                     }
                     else
                     {
@@ -346,7 +343,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             catch (Exception exception)
             {
                 //Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
-                throw;
+                genericResponse = new GenericResponseVM()
+                {
+                    IsError = true,
+                    Code = UploadEnums.UploadFailure.ToString(),
+                    Value = ""
+                };
+                
             }
             return genericResponse;
         }

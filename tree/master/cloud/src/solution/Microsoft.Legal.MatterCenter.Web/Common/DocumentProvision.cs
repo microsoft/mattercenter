@@ -301,10 +301,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             var client = attachmentRequestVM.Client;
             var serviceRequest = attachmentRequestVM.ServiceRequest;
             bool result = true;
-            GenericResponseVM genericResponse = null;
-            if (uploadHelperFunctions.Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, true,
-                        serviceRequest.Subject, serviceRequest.FolderPath[0], true, ref message,
-                        string.Empty).Equals(ServiceConstants.UPLOAD_FAILED))
+            GenericResponseVM genericResponse = uploadHelperFunctions.Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, true,
+                        serviceRequest.Subject, serviceRequest.FolderPath[0], true, ref message, string.Empty);
+            if (genericResponse!=null)
             {
                 result = false;
             }
