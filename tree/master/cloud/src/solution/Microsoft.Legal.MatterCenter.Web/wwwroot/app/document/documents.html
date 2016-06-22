@@ -1,125 +1,127 @@
 ﻿<!--<div class="container-fluid">   -->
-<div class="row">
-    <div class="row" id="mainmenu">
-        <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
-            <div class="col-xs-8 col-sm-3" ng-click="vm.menuClick()">
-                <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
-                <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
-                <span class="MenuCaption">menu</span>
-            </div>
-            <div class="AppMenuFlyout ms-shadow">
-                <div class="AppMenuFlyoutPriLinks">
-                    <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="Home"><span class="AppFlyoutLinksText">Home</span></a>
-                    <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="Search matters"><span class="AppFlyoutLinksText">Matters</span></a>
-                    <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
+<div ng-click="vm.closealldrops()">
+    <div class="row">
+        <div class="row" id="mainmenu">
+            <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
+                <div class="col-xs-8 col-sm-3" ng-click="vm.menuClick()">
+                    <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
+                    <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
+                    <span class="MenuCaption">menu</span>
                 </div>
-            </div>
-            <div class="col-sm-9 col-md-9 col-lg-9 hidden-xs pad0" id="mainselect">
-                <!--<select class="form-control" ng-model="vm.ddlMatters"  ng-options="matter.Name for matter in vm.Matters" ng-change="vm.GetMatters(vm.ddlMatters.Id)"></select>-->
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
-                        <span class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.documentname}}</span>
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
-                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='All Documents'}" ng-click="vm.SetDocuments(1,'All Documents')">All Documents</li>
-                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='My Documents'}" ng-click="vm.SetDocuments(2,'My Documents')">My Documents</li>
-                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='Pinned Documents'}" ng-click="vm.SetDocuments(3,'Pinned Documents')">Pinned Documents</li>
-                    </ul>
+                <div class="AppMenuFlyout ms-shadow">
+                    <div class="AppMenuFlyoutPriLinks">
+                        <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="Home"><span class="AppFlyoutLinksText">Home</span></a>
+                        <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="Search matters"><span class="AppFlyoutLinksText">Matters</span></a>
+                        <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
+                    </div>
                 </div>
+                <div class="col-sm-9 col-md-9 col-lg-9 hidden-xs pad0" id="mainselect">
+                    <!--<select class="form-control" ng-model="vm.ddlMatters"  ng-options="matter.Name for matter in vm.Matters" ng-change="vm.GetMatters(vm.ddlMatters.Id)"></select>-->
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
+                            <span class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.documentname}}</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
+                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='All Documents'}" ng-click="vm.SetDocuments(1,'All Documents')">All Documents</li>
+                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='My Documents'}" ng-click="vm.SetDocuments(2,'My Documents')">My Documents</li>
+                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='Pinned Documents'}" ng-click="vm.SetDocuments(3,'Pinned Documents')">Pinned Documents</li>
+                        </ul>
+                    </div>
 
-            </div>
-        </div>
-        <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
-            <div class="input-group col-xs-10 col-sm-12" id="searchmatter">
-                <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="Search by ID, document or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
-                <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
-                <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
-            </div>
-            <div class="col-xs-12">
-                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                <!--<div ng-show="noResults">
-                    <i class="glyphicon glyphicon-remove"></i> No Results Found
-                </div>-->
-            </div>
-        </div>
-        <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0">
-            <div class="input-group col-xs-12">
-                <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="Search by ID, document or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle col-xs-12" data-toggle="dropdown"><span class="caret"></span></button>
-                    <ul class="dropdown-menu pull-right col-xs-12">
-                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='All Documents'}" ng-click="vm.SetDocuments(1,'All Documents')">All Documents</li>
-                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='My Documents'}" ng-click="vm.SetDocuments(2,'My Documents')">My Documents</li>
-                        <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='Pinned Documents'}" ng-click="vm.SetDocuments(3,'Pinned Documents')">Pinned Documents</li>
-                    </ul>
-                </div>
-                <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
-            </div>
-            <div class="col-xs-12">
-                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                <!--<div ng-show="noResults">
-                    <i class="glyphicon glyphicon-remove"></i> No Results Found
-                </div>-->
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row title">
-    <div class="col-sm-12" id="gridViewPageHeaderContainer">
-        <span role="heading" class="add-margin-bottom">{{vm.documentname}}</span>
-    </div>
-</div>
-<div class="row">
-    <!--Start For attaching documents messages to the current mail item-->
-    <div class="errorAttachDocument" ng-if="vm.showErrorAttachmentInfo">
-        <img title="Warning" class="warningMessageIcon" src="../images/warning-message.png" alt="Warning icon" />
-        <div class="warningMessageText">{{vm.warningMessageText}}</div>
-    </div>
-    <div class="warningPopUpHolder" ng-if="vm.showPopUpHolder">
-        <div class="warningPopUpContainer">
-            <div class="attachedSuccessPopUp" ng-if="vm.showSuccessAttachments">
-                <div class="warningPopUpDetails"></div>
-                <div title="Close" class="warningPopUpCloseIconContainer">Close</div>
-            </div>
-            <div class="attachedProgressPopUp" ng-if="vm.showAttachmentProgress">
-                <div class="progressPopUpDetails">
-                    Attaching
-                    <span id="currentDocumentCount" />of {{vm.asyncCallCompleted}} documents...
-                    <div>Do not close Matter Center until all documents are attached.</div>
-                </div>
-                <div class="warningLoadingIcon">
-                    <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
                 </div>
             </div>
-            <div class="attachedFailedPopUp" ng-if="vm.showFailedAtachments">
-                <div class="attachedPopUpDetails">{{vm.failedHeaderMessage}}</div>
-                <div class="failureDocumentList" ng-repeat="failedFile in vm.failedFiles track by $index">
-                    <div title="{{failedFile}}" class="documentList"> {{failedFile}} </div>
+            <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
+                <div class="input-group col-xs-10 col-sm-12" id="searchmatter">
+                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="Search by ID, document or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                    <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
+                    <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
                 </div>
-                <div title="Close" class="attachedPopUpCloseIconContainer" ng-click="vm.closeNotification()">Close</div>
+                <div class="col-xs-12">
+                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <!--<div ng-show="noResults">
+                        <i class="glyphicon glyphicon-remove"></i> No Results Found
+                    </div>-->
+                </div>
+            </div>
+            <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0">
+                <div class="input-group col-xs-12">
+                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="Search by ID, document or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle col-xs-12" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></button>
+                    </div>
+                    <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
+                </div>
+                <ul class="col-xs-12 mattersdrop" ng-if="vm.documentsdrop">
+                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='All Documents'}" ng-click="vm.SetDocuments(1,'All Documents')">All Documents</li>
+                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='My Documents'}" ng-click="vm.SetDocuments(2,'My Documents')">My Documents</li>
+                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname=='Pinned Documents'}" ng-click="vm.SetDocuments(3,'Pinned Documents')">Pinned Documents</li>
+                </ul>
+                <div class="col-xs-12">
+                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <!--<div ng-show="noResults">
+                        <i class="glyphicon glyphicon-remove"></i> No Results Found
+                    </div>-->
+                </div>
             </div>
         </div>
     </div>
-    <!--End For attaching documents messages to the current mail item-->
-    <div class="row" id="documentgrid">
-        <div class="col-sm-12" ng-if="vm.divuigrid">
-            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
+    <div class="row title">
+        <div class="col-sm-12" id="gridViewPageHeaderContainer">
+            <span role="heading" class="add-margin-bottom">{{vm.documentname}}</span>
         </div>
     </div>
-    <div ng-if="vm.isOutlook && vm.showAttachment">
-        <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
-                id="attachDocuments" ng-click="vm.sendDocumentAsAttachment()()">
-            <span class="ms-Button-label" id="attachButtonText">{{vm.attachButtonText}}</span>
-            <span class="ms-Button-description"></span>
-        </button>
+    <div class="row">
+        <!--Start For attaching documents messages to the current mail item-->
+        <div class="errorAttachDocument" ng-if="vm.showErrorAttachmentInfo">
+            <img title="Warning" class="warningMessageIcon" src="../images/warning-message.png" alt="Warning icon" />
+            <div class="warningMessageText">{{vm.warningMessageText}}</div>
+        </div>
+        <div class="warningPopUpHolder" ng-if="vm.showPopUpHolder">
+            <div class="warningPopUpContainer">
+                <div class="attachedSuccessPopUp" ng-if="vm.showSuccessAttachments">
+                    <div class="warningPopUpDetails"></div>
+                    <div title="Close" class="warningPopUpCloseIconContainer">Close</div>
+                </div>
+                <div class="attachedProgressPopUp" ng-if="vm.showAttachmentProgress">
+                    <div class="progressPopUpDetails">
+                        Attaching
+                        <span id="currentDocumentCount" />of {{vm.asyncCallCompleted}} documents...
+                        <div>Do not close Matter Center until all documents are attached.</div>
+                    </div>
+                    <div class="warningLoadingIcon">
+                        <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                    </div>
+                </div>
+                <div class="attachedFailedPopUp" ng-if="vm.showFailedAtachments">
+                    <div class="attachedPopUpDetails">{{vm.failedHeaderMessage}}</div>
+                    <div class="failureDocumentList" ng-repeat="failedFile in vm.failedFiles track by $index">
+                        <div title="{{failedFile}}" class="documentList"> {{failedFile}} </div>
+                    </div>
+                    <div title="Close" class="attachedPopUpCloseIconContainer" ng-click="vm.closeNotification()">Close</div>
+                </div>
+            </div>
+        </div>
+        <!--End For attaching documents messages to the current mail item-->
+        <div class="row" id="documentgrid">
+            <div class="col-sm-12" ng-show="vm.divuigrid">
+                <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
+            </div>
+        </div>
+        <div class="col-sm-12 noResultsText" ng-show="vm.nodata">
+            Nothing matches your search term or the filter you selected. Please try again.<br>If you applied a filter, remove it to get back to your list.<br>Search suggestions:<br><ul><li>Make sure all words are spelled correctly</li><li>Try different keywords</li><li>Try searching by the matter name or client name</li><li>Try more general search terms</li></ul>
+        </div>
+        <div ng-if="vm.isOutlook && vm.showAttachment">
+            <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
+                    id="attachDocuments" ng-click="vm.sendDocumentAsAttachment()()">
+                <span class="ms-Button-label" id="attachButtonText">{{vm.attachButtonText}}</span>
+                <span class="ms-Button-description"></span>
+            </button>
+        </div>
     </div>
-    <div class="col-sm-12 noResultsText" ng-if="vm.nodata">
-        Nothing matches your search term or the filter you selected. Please try again.<br>If you applied a filter, remove it to get back to your list.<br>Search suggestions:<br><ul><li>Make sure all words are spelled correctly</li><li>Try different keywords</li><li>Try searching by the matter name or client name</li><li>Try more general search terms</li></ul>
-    </div>
-</div>
-<div id="loadingImageContainer">
-    <div class="lazyLoading" ng-hide="vm.lazyloader">
-        <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+    <div id="loadingImageContainer">
+        <div class="lazyLoading" ng-hide="vm.lazyloader">
+            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+        </div>
     </div>
 </div>

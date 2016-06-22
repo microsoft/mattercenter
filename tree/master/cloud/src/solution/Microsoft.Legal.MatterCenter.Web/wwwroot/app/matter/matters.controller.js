@@ -707,7 +707,10 @@
             }
 
             vm.search = function () {
+                vm.matterid = 1;
+                vm.mattername="All Matters";
                 vm.lazyloader = false;
+                vm.divuigrid = false;
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.selected != "") {
@@ -751,6 +754,7 @@
             //#region for searching matter by property and searchterm
             vm.mattersearch = function (term, property, bool) {
                 vm.lazyloader = false;
+                vm.divuigrid = false;
                 searchRequest.SearchObject.SearchTerm = term;
                 searchRequest.SearchObject.Sort.ByProperty = property;
                 if (bool) {
@@ -796,6 +800,7 @@
             //start
             vm.FilterModifiedDate = function () {
                 vm.lazyloader = false;
+                vm.divuigrid = false;
                 var ModifiedDateRequest =
                   {
                       Client: {
@@ -864,6 +869,7 @@
                 vm.sortexp = "";
                 vm.sortby = "";
                 vm.lazyloader = false;
+                vm.divuigrid = false;
                 var pinnedMattersRequest = {
                     Url: configs.global.repositoryUrl
                 }
@@ -878,8 +884,6 @@
                             vm.divuigrid = true;
                             vm.nodata = true;
                         } else {
-                            vm.divuigrid = true;
-                            vm.nodata = false;
                             getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
                                 if (pinnedResponse && pinnedResponse.length > 0) {
                                     angular.forEach(pinnedResponse, function (pinobj) {
@@ -905,10 +909,12 @@
                                 }
                             });
                         }
-                        $timeout(function () { vm.lazyloader = true; }, 1000);
+                        $timeout(function () { vm.lazyloader = true;      vm.divuigrid = true;
+                                vm.nodata = false; }, 1000);
                     });
                 } else if (id == 2) {
                     vm.lazyloader = false;
+                    vm.divuigrid = false;
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.FilterByMe = 1;
                     searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
@@ -919,8 +925,6 @@
                             vm.divuigrid = true;
                             vm.nodata = true;
                         } else {
-                            vm.divuigrid = true;
-                            vm.nodata = false;
                             getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
                                 if (pinnedResponse && pinnedResponse.length > 0) {
                                     angular.forEach(pinnedResponse, function (pinobj) {
@@ -945,11 +949,14 @@
                                     }
                                 }
                                 vm.lazyloader = true;
+                                vm.divuigrid = true;
+                                vm.nodata = false;
                             });
                         }
                     });
                 } else if (id == 3) {
                     vm.lazyloader = false;
+                    vm.divuigrid = false;
                     var pinnedMattersRequest = {
                         Url: configs.global.repositoryUrl
                     }
@@ -960,8 +967,6 @@
                             vm.divuigrid = true;
                             vm.nodata = true;
                         } else {
-                            vm.divuigrid = true;
-                            vm.nodata = false;
                             angular.forEach(response, function (res) {
                                 if (res.ismatterdone == undefined && !res.ismatterdone) {
                                     res.MatterInfo = "Unpin this matter";
@@ -973,6 +978,8 @@
                                 $scope.$apply();
                             }
                             vm.lazyloader = true;
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
                     });
                 }
@@ -1146,7 +1153,8 @@
             vm.FilterByType = function () {
                 get(searchRequest, function (response) {
                     vm.lazyloader = true;
-                    if (response.errorCode == "404") {
+                    if (response == "") {
+                        vm.gridOptions.data = response;
                         vm.divuigrid = false;
                         vm.nodata = true;
                         $scope.errorMessage = response.message;
@@ -1180,7 +1188,6 @@
 
             $scope.sortChanged = function (grid, sortColumns) {
                 vm.divuigrid = false;
-                vm.nodata = true;
                 searchRequest.SearchObject.SearchTerm = "";
                 if (sortColumns.length != 0) {
                     if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
@@ -1236,6 +1243,8 @@
                         if (sortColumns[0].sort != undefined) {
                             if (vm.ClientIDSort == undefined || vm.ClientIDSort == "asc") {
                                 vm.lazyloader = false;
+                                vm.divuigrid = false;
+                                vm.nodata = false;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
@@ -1411,7 +1420,8 @@
 
             //#region
             vm.typeheadselect = function (index, selected) {
-                vm.SetMatters(1, "All Matters");
+                vm.matterid = 1;
+                vm.mattername = "All Matters";
                 var searchToText = '';
                 var finalSearchText = '';
                 if (selected != "") {
