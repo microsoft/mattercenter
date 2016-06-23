@@ -1,5 +1,5 @@
 ﻿(function () {
-   
+
     'use strict';
     function popover() {
         return {
@@ -49,10 +49,13 @@
     'use strict';
     function onload($timeout) {
         return {
-            restrict: 'E',
+            restrict: 'AE',
+            scope: { sortdetails: '@' },
             link: function (scope, element, attrs) {
-                $timeout(function () { $('[id^="asc"]').hide(); }, 1000);
-                $timeout(function () { $('[id^="desc"]').hide(); }, 1000);
+                scope.$watch("sortdetails", function () {
+                    $timeout(function () { $('[id^="asc"]').hide(); }, 1000);
+                    $timeout(function () { $('[id^="desc"]').hide(); }, 1000);
+                }, true);
             }
         }
     }
@@ -187,7 +190,7 @@
 
     var app = angular.module('matterMain');
     app.directive('popover', [popover]);
-    app.directive('onload',['$timeout', [onload]]);
+    app.directive('onload', ['$timeout', [onload]]);
     app.directive('showbreadcrumb', [showbreadcrumb]);
     app.directive('datefilter', [datefilter]);
     app.directive('popoverdoc', [popoverdoc]);
