@@ -1,5 +1,5 @@
 ﻿<!--<div class="container-fluid">   -->
-<div ng-click="vm.closealldrops()">
+<div ng-click="vm.closealldrops()" class="mainMatter">
     <div class="row" ng-init="initOfficeLibrary()">
         <div class="row" id="mainmenu">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
@@ -42,11 +42,12 @@
                     </div>-->
                 </div>
             </div>
-            <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0">
+            <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth">
                 <div class="input-group col-xs-12">
                     <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="Search by ID, document or client name" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle col-xs-12" data-toggle="dropdown" ng-click="vm.showmatterdrop($event)"><span class="caret"></span></button>
+                        <button type="button" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+                        <button type="button" class="btn btn-default" data-toggle="dropdown" ng-click="vm.showmatterdrop($event)"><span class="caret"></span></button>
                     </div>
                 </div>
                 <ul class="col-xs-12 mattersdrop" ng-if="vm.mattersdrop">
@@ -69,16 +70,16 @@
         </div>
     </div>
     <div class="row" id="mattergrid">
-        <div class="col-sm-12" ng-show="vm.divuigrid">
+        <div class="col-sm-12" ng-if="vm.divuigrid">
             <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
         </div>
     </div>
 
-    <div class="col-sm-12 noResultsText" ng-show="vm.nodata">
+    <div class="col-sm-12 noResultsText" ng-if="vm.nodata">
         Nothing matches your search term or the filter you selected. Please try again.<br>If you applied a filter, remove it to get back to your list.<br>Search suggestions:<br><ul><li>Make sure all words are spelled correctly</li><li>Try different keywords</li><li>Try searching by the matter name or client name</li><li>Try more general search terms</li></ul>
     </div>
 
-    <onload></onload>
+    <onload sortdetails="{{vm.sortexp}}"></onload>
 
     <!--Upload Modal Screen Start-->
     <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

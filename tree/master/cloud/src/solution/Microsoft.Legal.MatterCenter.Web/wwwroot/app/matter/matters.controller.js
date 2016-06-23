@@ -11,6 +11,7 @@
             vm.sortname = "";
             vm.mattersdrop = false;
             vm.mattersdropinner = true;
+            $rootScope.bodyclass = "bodymain";
             //This value is for displaying the help
             $rootScope.pageIndex = "1";
             //#region Onload show ui grid and hide error div
@@ -34,12 +35,12 @@
             vm.opendateDropDown = false;
             //End
             Office.initialize = function (reason) {              
-                vm.initOutlook();
+               // vm.initOutlook();
             };
             $scope.initOfficeLibrary = function () {
 
             };
-           
+
 
             $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
@@ -75,16 +76,31 @@
                     });
                     $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
                     $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
-                    //$scope.$watch('gridApi.grid.isScrollingVertically', watchFunc);
-                    //function watchFunc(newData) {
-                    //    if (newData === true) {
-                    //        $rootScope.$broadcast('scrolled');
-                    //    }
-                    //}
+                    $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFunc);
                 }
             };
 
             //#endregion
+
+
+            vm.pagenumber = 1;
+            vm.watchFunc = function (newData) {
+                var promise = $q.defer();
+                if (newData === true) {
+                    vm.pagenumber = vm.pagenumber + 1;
+                    searchRequest.SearchObject.PageNumber = vm.pagenumber;
+                    get(searchRequest, function (response) {
+                        if (response == "") {
+
+                        } else {
+                            vm.lazyloader = true;
+                            vm.gridOptions.data = vm.gridOptions.data.concat(response);
+                        }
+                        promise.resolve();
+                    });
+                }
+                return promise.promise;
+            }
 
             //#region for setting the dynamic width to grid
             vm.setWidth = function () {
@@ -159,6 +175,7 @@
             }
 
             vm.getFolderHierarchy = function () {
+                vm.allAttachmentDetails=[];
                 var matterData = {
                     MatterName: vm.selectedRow.matterName,
                     MatterUrl: vm.selectedRow.matterClientUrl
@@ -194,7 +211,7 @@
                     //Office.initialize = function (reason) {
                     //     vm.initOutlook();
                     //};
-                     //vm.initOutlook();
+                     vm.initOutlook();
                    
                 });
             }
@@ -254,10 +271,10 @@
                 }
 
                 if (sourceFile.isEmail && sourceFile.isEmail === "true") {
-                    vm.uploadEmail(attachmentRequestVM);
+                    vm.uploadEmail(attachmentRequestVM, sourceFile);
                 }
                 if (sourceFile.isEmail && sourceFile.isEmail === "false") {
-                    vm.uploadAttachment(attachmentRequestVM);
+                    vm.uploadAttachment(attachmentRequestVM,sourceFile);
                 }
             }
 
@@ -265,9 +282,10 @@
             vm.handleOutlookDrop = function (targetDrop, sourceFile) {
                 vm.targetDrop = targetDrop;
                 vm.sourceFile = sourceFile;
+                sourceFile.uploadSuccess = false;
                 var isOverwrite = false;//Todo: Need to get from the config.js
                 var performContentCheck = false;//Todo: Need to get from the config.js
-                vm.showLoading = true;
+                vm.isLoadingFromDesktopStarted = true;
                 mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck);
             }
 
@@ -313,6 +331,7 @@
                                         response.data[i].cancel = "True";
                                         response.data[i].append = vm.overwriteConfiguration(response.data[i].fileName);
                                         response.data[i].value = response.data[i].value.split("|")[0];
+                                        response.data[i].fileType = "remotefile";
                                         vm.ducplicateSourceFile.push(response.data[i]);
                                         vm.oUploadGlobal.arrFiles.push(vm.files[i]);
                                         vm.oUploadGlobal.successBanner = false;
@@ -383,8 +402,12 @@
             //#endregion
 
             //#region Call back function when attachment gets uploaded
-            vm.uploadAttachment = function (attachmentRequestVM) {
+            vm.uploadAttachment = function (attachmentRequestVM,droppedAttachedFile) {
+                console.log("$$$$$$$$$$$$$$$$$$$$$$$$");
+                console.log(attachmentRequestVM);
+                 console.log("----------------");
                 uploadAttachment(attachmentRequestVM, function (response) {
+                    vm.isLoadingFromDesktopStarted = false;
                     vm.showLoading = false;
                     vm.oUploadGlobal.iActiveUploadRequest--;
                     var target = vm.targetDrop;
@@ -404,6 +427,7 @@
                         else {
                             vm.docUploadedFolder = vm.targetDrop.name;
                         }
+                        droppedAttachedFile.uploadSuccess = true;
                         //removeDraggableDirective();
 
                     }
@@ -411,6 +435,17 @@
                     else if (response.code === "DuplicateDocument") {
                         vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
                         vm.IsNonIdenticalContent = false;
+                        console.log(response);
+                        response.contentCheck = "False";
+                        response.saveLatestVersion = "True";
+                        response.cancel = "True";
+                        response.append ="True";
+                           
+                        var duplicFile = response;
+                        duplicFile.droppedUrl = target;
+                        duplicFile.source = source;
+                        duplicFile.fileType="attacheddocument"
+                        vm.ducplicateSourceFile.push(duplicFile);
                     }
                         //NonIdenticalContent
                     else if (response.code === "NonIdenticalContent") {
@@ -446,6 +481,7 @@
 
 
             vm.editAttachment = function (element, event) {
+               
                 //ToDo: Use Angular data binding functionality
                 var editIcon = $("#" + event.target.id);
                 var rowIndex = event.target.id.charAt(0);
@@ -570,18 +606,20 @@
                 "use strict";
                 if (asyncResult.status === "succeeded") {
                     vm.attachmentToken = asyncResult.value;
-                    vm.createMailPopup();
+                    vm.createMailPopup(); 
                     vm.loadingAttachments = false;
+                    $scope.$apply();
                 } else {
                     //showNotification(oFindMatterConstants.Fail_Attachment_Token, "failNotification");
                 }
             }
 
             vm.getIconSource = function (sExtension) {
-                //var iconSrc = configs.Upload.ImageDocumentIcon.replace("{0}", sExtension);
-                //iconSrc = (-1 < configs.Upload.PNGIconExtensions.indexOf(sExtension)) ?
-                //                iconSrc.substring(0, configs.Upload.ImageDocumentIcon.lastIndexOf(".") + 1) + "png" : iconSrc;
-                //return iconSrc;
+                var uploadImageDocumentIcon = configs.uri.SPOsiteURL + configs.uploadMessages.uploadImageDocumentIcon;
+                var iconSrc = uploadImageDocumentIcon.replace("{0}", sExtension);
+                iconSrc = (-1 < configs.uploadMessages.uploadPNGIconExtensions.indexOf(sExtension)) ?
+                                iconSrc.substring(0, uploadImageDocumentIcon.lastIndexOf(".") + 1) + "png" : iconSrc;
+                return iconSrc;
             }
 
             vm.checkEmptyorWhitespace = function (input) {
@@ -595,8 +633,10 @@
 
 
             vm.initOutlook = function () {
+                
                 vm.IsDupliacteDocument = false;
                 if (Office.context && Office.context.mailbox) {
+                    vm.loadingAttachments = true;
                     vm.attachmentToken = '';
                     vm.ewsUrl = Office.context.mailbox.ewsUrl;
                     vm.subject = Office.context.mailbox.item.subject;
@@ -619,8 +659,7 @@
             }
 
 
-            vm.createMailPopup = function () {
-                vm.loadingAttachments = true;
+            vm.createMailPopup = function () {               
                 var sImageChunk = "", nIDCounter = 0;
                 var attachmentName = "", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";
                 vm.allAttachmentDetails = []
@@ -651,7 +690,7 @@
                     var attachmentType = vm.attachments[attachment].hasOwnProperty("attachmentType") ? vm.attachments[attachment].attachmentType : "";
                     var sContentType = vm.attachments[attachment].hasOwnProperty("contentType") ? vm.attachments[attachment].contentType : "";
                     var sExtension = -1 < attachmentName.lastIndexOf(".") ? attachmentName.substring(attachmentName.lastIndexOf(".") + 1) : 1 === parseInt(attachmentType) ? "msg" : "";
-                    var iconSrc = ''; //vm.getIconSource(sExtension);
+                    var iconSrc = vm.getIconSource(sExtension);
                     //if (-1 < sContentType.indexOf(configs.Upload.ImageContentType)) {
                     //}
                     //else{
@@ -679,7 +718,7 @@
                 },
                 SearchObject: {
                     PageNumber: 1,
-                    ItemsPerPage: 10,
+                    ItemsPerPage: "17",
                     SearchTerm: "",
                     Filters: {
                         AOLList: "",
@@ -708,7 +747,7 @@
 
             vm.search = function () {
                 vm.matterid = 1;
-                vm.mattername="All Matters";
+                vm.mattername = "All Matters";
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 var searchToText = '';
@@ -909,8 +948,10 @@
                                 }
                             });
                         }
-                        $timeout(function () { vm.lazyloader = true;      vm.divuigrid = true;
-                                vm.nodata = false; }, 1000);
+                        $timeout(function () {
+                            vm.lazyloader = true; vm.divuigrid = true;
+                            vm.nodata = false;
+                        }, 1000);
                     });
                 } else if (id == 2) {
                     vm.lazyloader = false;
@@ -1054,11 +1095,11 @@
 
             //#region To display modal up in center of the screen...
             //Start 
-           
-            
+
+
             vm.reposition = function () {
                 var modal = $(this)
-               
+
                 var dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
                 // Dividing by two centers the modal exactly, but dividing by three  
@@ -1193,7 +1234,9 @@
                     if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
                         if (sortColumns[0].sort != undefined) {
                             if (vm.MatterNameSort == undefined || vm.MatterNameSort == "asc") {
+                                vm.pagenumber = 1;
                                 vm.lazyloader = false;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
@@ -1201,7 +1244,9 @@
                                 vm.sortexp = sortColumns[0].field;
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
+                                vm.pagenumber = 1;
                                 vm.lazyloader = false;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
@@ -1217,7 +1262,9 @@
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
                         if (sortColumns[0].sort != undefined) {
                             if (vm.ClientSort == undefined || vm.ClientSort == "asc") {
+                                vm.pagenumber = 1;
                                 vm.lazyloader = false;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCClientName";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
@@ -1226,7 +1273,9 @@
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             }
                             else {
+                                vm.pagenumber = 1;
                                 vm.lazyloader = false;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCClientName";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
@@ -1243,8 +1292,8 @@
                         if (sortColumns[0].sort != undefined) {
                             if (vm.ClientIDSort == undefined || vm.ClientIDSort == "asc") {
                                 vm.lazyloader = false;
-                                vm.divuigrid = false;
-                                vm.nodata = false;
+                                vm.pagenumber = 1;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
@@ -1253,6 +1302,8 @@
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
+                                vm.pagenumber = 1;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
@@ -1270,6 +1321,8 @@
                         if (sortColumns[0].sort != undefined) {
                             if (vm.ModiFiedTimeSort == undefined || vm.ModiFiedTimeSort == "asc") {
                                 vm.lazyloader = false;
+                                vm.pagenumber = 1;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
@@ -1278,6 +1331,8 @@
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
+                                vm.pagenumber = 1;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
@@ -1295,6 +1350,8 @@
                         if (sortColumns[0].sort != undefined) {
                             if (vm.ResAttoSort == undefined || vm.ResAttoSort == "asc") {
                                 vm.lazyloader = false;
+                                vm.pagenumber = 1;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
@@ -1303,6 +1360,8 @@
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
+                                vm.pagenumber = 1;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
@@ -1319,6 +1378,8 @@
                         if (sortColumns[0].sort != undefined) {
                             if (vm.SubAreaSort == undefined || vm.SubAreaSort == "asc") {
                                 vm.lazyloader = false;
+                                vm.pagenumber = 1;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
@@ -1327,6 +1388,8 @@
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
+                                vm.pagenumber = 1;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
@@ -1343,6 +1406,8 @@
                         if (sortColumns[0].sort != undefined) {
                             if (vm.OpenDateSort == undefined || vm.OpenDateSort == "asc") {
                                 vm.lazyloader = false;
+                                vm.pagenumber = 1;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
@@ -1351,6 +1416,8 @@
                                 $interval(function () { vm.showSortExp(); }, 1000, 3);
                             } else {
                                 vm.lazyloader = false;
+                                vm.pagenumber = 1;
+                                searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
@@ -1381,8 +1448,10 @@
                     vm.gridOptions.enablePaginationControls = false;
                     vm.gridOptions.columnDefs = [{ field: 'matterName', displayName: 'Matter', enableHiding: false, width: "100%", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' }];
                     $scope.$apply();
-                } else {                   
+                } else {
                     vm.gridOptions = {
+                        //paginationPageSizes: [10, 50, 100],
+                        //paginationPageSize: 10,
                         enableHorizontalScrollbar: 0,
                         enableVerticalScrollbar: 1,
                         enableGridMenu: true,
@@ -1410,9 +1479,9 @@
                             });
                             $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
                             $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
+                            $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFunc);
                         }
                     };
-                    $scope.$apply();
                 }
             });
 
@@ -1514,39 +1583,53 @@
             //#endRegion
             //#region To do contentcheck or save as latestversion
             vm.localOverWriteDocument = function (duplicateFile, sOperation) {
-                if ("contentCheck" === sOperation) {
-                    vm.files = [vm.oUploadGlobal.arrFiles[vm.oUploadGlobal.arrFiles.length - 1]];
-                } else {
-                    vm.files = [vm.oUploadGlobal.arrFiles.pop()];
-                    duplicateFile.cancel = null;
-                }
-
-                var nOperation = "";
-                if ("ignore" !== sOperation) {
-                    switch (sOperation) {
-                        case "overwrite":
-                            nOperation = "0";
-                            break;
-                        case "append":
-                            nOperation = "1";
-                            break;
-                        case "contentCheck":
-                            nOperation = "2";
-                            break;
-                        case "cancelContentCheck":
-                            nOperation = "3";
-                            break;
+                if (duplicateFile.fileType == "remotefile") {
+                    if ("contentCheck" === sOperation) {
+                        vm.files = [vm.oUploadGlobal.arrFiles[vm.oUploadGlobal.arrFiles.length - 1]];
+                    } else {
+                        vm.files = [vm.oUploadGlobal.arrFiles.pop()];
+                        duplicateFile.cancel = null;
                     }
-                    // uploadFile(oUploadGlobal.sClientRelativeUrl, oUploadGlobal.sFolderUrl, nOperation);
 
-                    vm.handleDesktopDrop(vm.clientRelativeUrl, vm.files, nOperation);
+                    var nOperation = "";
+                    if ("ignore" !== sOperation) {
+                        switch (sOperation) {
+                            case "overwrite":
+                                nOperation = "0";
+                                break;
+                            case "append":
+                                nOperation = "1";
+                                break;
+                            case "contentCheck":
+                                nOperation = "2";
+                                break;
+                            case "cancelContentCheck":
+                                nOperation = "3";
+                                break;
+                        }
+                        // uploadFile(oUploadGlobal.sClientRelativeUrl, oUploadGlobal.sFolderUrl, nOperation);
+
+                        vm.handleDesktopDrop(vm.clientRelativeUrl, vm.files, nOperation);
 
 
 
-                } else {
-                    duplicateFile.cancel = "False"; 
-                    if (vm.ducplicateSourceFile.length > 0) {
-                        vm.ducplicateSourceFile.pop();
+                    } else {
+                        duplicateFile.cancel = "False";
+                        if (vm.ducplicateSourceFile.length > 0) {
+                            vm.ducplicateSourceFile.pop();
+                        }
+                    }
+                }
+                else if (duplicateFile.fileType == "attacheddocument") {
+                    console.log("dragged attached obj");
+                    console.log(duplicateFile);
+                    if ("contentCheck"===sOperation) {
+
+                    } else {
+                        duplicateFile.cancel = "False";
+                        if (vm.ducplicateSourceFile.length > 0) {
+                            vm.ducplicateSourceFile.pop();
+                        }
                     }
                 }
             }
@@ -1596,6 +1679,18 @@
             }
 
         }]);
+    app.directive('onload', function onload($timeout) {
+        return {
+            restrict: 'AE',
+            scope: { sortdetails: '@' },
+            link: function (scope, element, attrs) {
+                scope.$watch("sortdetails", function () {
+                    $timeout(function () { jQuery('[id^="asc"]').hide(); }, 1000);
+                    $timeout(function () { jQuery('[id^="desc"]').hide(); }, 1000);
+                }, true);
+            }
+        }
+    });
 })();
 
 function Openuploadmodal(mattername, matterurl) {

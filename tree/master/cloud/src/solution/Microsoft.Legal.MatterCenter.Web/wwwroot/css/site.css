@@ -42,11 +42,21 @@ textarea {
         overflow: hidden !important;
     }
 
-   #doccelltemp .dropdown-menu,#matcoltemp .dropdown-menu{
-    width: 165px !important;
-    left: -62%;
-   }
+    #doccelltemp .dropdown-menu, #matcoltemp .dropdown-menu {
+        width: 165px !important;
+        left: -62%;
+    }
+
+    .mainMatter {
+        overflow-x: auto;
+    }
+
+    .ContextualHelpLogo {
+        margin-right: -5px;
+    }
 }
+
+
 
 .matters {
     width: 500px;
@@ -74,13 +84,15 @@ textarea {
 }
 
 #documentgrid .ui-grid-viewport, #mattergrid .ui-grid-viewport {
-    overflow: hidden !important;
+    /*overflow: hidden !important;*/
     /*max-width: 1350px;*/
-    display: table;
+    /*display: table;*/
+    overflow-y:auto !important;
+    position: relative;
 }
 
 #documentgrid .ui-grid-render-container, #mattergrid .ui-grid-render-container {
-    overflow-x: scroll;
+    overflow-x: auto;
     min-width: 275px;
     /*max-width: 1370px;*/
 }
@@ -360,6 +372,8 @@ textarea {
 
 #searchBarHolder input {
     max-width: 310px;
+    text-overflow: ellipsis;
+    border: none;
 }
 
 .ui-grid-menu-button {
@@ -551,9 +565,9 @@ textarea {
 }
 
 #mainselect ul, #searchBarHolder ul {
+    margin: 3px 0px 0px 0px;
+    border-radius: 0px;
     padding: 0;
-    margin-top: 0;
-    border-radius: 0;
 }
 
     #mainselect ul li:hover, #searchBarHolder ul li:hover {
@@ -594,7 +608,7 @@ textarea {
     color: #333;
     text-decoration: none;
     background-color: #cde6f7 !important;
-    outline: 0;
+    outline: none;
 }
 
 .PersonalInfoFlyout {
@@ -638,5 +652,22 @@ textarea {
     right: 0;
 }
 
-.nodata {
+.searchwidth {
+    min-width: 240px;
+    max-width: 240px;
+    border: 1px solid #ccc;
+}
+
+#searchBarHolder button {
+    border: none;
+    background: #fff !important;
+    outline: none;
+}
+
+#mainmenu {
+    min-width: 310px;
+}
+
+.bodymain {
+    overflow: hidden;
 }

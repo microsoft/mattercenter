@@ -1,7 +1,13 @@
 ﻿<div class='row'>
-    <div class='col-xs-7 col-sm-9 col-md-9 col-lg-10' id='documentPopup' title='{{row.entity.documentName}}'>
-        <a popoverdoc type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align: left;padding-left:0'
+    <div class='col-xs-6 col-sm-9 col-md-9 col-lg-10' id='documentPopup' title='{{row.entity.documentName}}'>
+        <a popoverdoc type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis hidden-xs' style='text-align: left;padding-left:0'
            details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right'
+           data-html='true' href=''>
+            <img class="docTypeIconHeader" id="docTypeIcon"
+                 src="{{row.entity.documentIconUrl}}" alt="Document type icon" /> {{row.entity.documentName}}
+        </a>
+        <a popoverdoc type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis visible-xs' style='text-align: left;padding-left:0'
+           details={{row.entity}} data-toggle='popover' data-container='body' data-placement='bottom'
            data-html='true' href=''>
             <img class="docTypeIconHeader" id="docTypeIcon"
                  src="{{row.entity.documentIconUrl}}" alt="Document type icon" /> {{row.entity.documentName}}

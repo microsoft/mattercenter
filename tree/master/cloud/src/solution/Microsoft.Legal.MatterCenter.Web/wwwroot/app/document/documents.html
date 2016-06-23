@@ -1,5 +1,5 @@
 ﻿<!--<div class="container-fluid">   -->
-<div ng-click="vm.closealldrops()">
+<div ng-click="vm.closealldrops()" class="mainMatter">
     <div class="row">
         <div class="row" id="mainmenu">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
@@ -44,11 +44,12 @@
                     </div>-->
                 </div>
             </div>
-            <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0">
+            <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth">
                 <div class="input-group col-xs-12">
                     <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="Search by ID, document or client name" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle col-xs-12" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></button>
+                        <button type="button" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></button>
                     </div>
                     <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
                 </div>
