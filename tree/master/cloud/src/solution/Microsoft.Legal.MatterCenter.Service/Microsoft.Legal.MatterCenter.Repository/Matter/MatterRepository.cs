@@ -10,7 +10,7 @@
 // This class deals with all the matter related functions such as finding matter, pin, unpin, update matter etc
 // ***********************************************************************
 
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 using System.Threading.Tasks;

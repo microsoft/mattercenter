@@ -20,7 +20,7 @@ using System.Collections.Generic;
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using Microsoft.SharePoint.Client.UserProfiles;
 using System.Globalization;
 using System.IO;

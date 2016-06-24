@@ -22,15 +22,15 @@ using System.Globalization;
 using System.Linq;
 
 #region Matter Namespaces
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 using System.Reflection;
 using Microsoft.SharePoint.Client.Taxonomy;
 using System.Text.RegularExpressions;
 using System.IO;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -261,7 +261,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 Uri clientUrl = new Uri(clientAddressPath);
                 //ToDo: Need to validate the url path
-                string oneNotePath = hostingEnvironment.MapPath(ServiceConstants.ONE_NOTE_RELATIVE_FILE_PATH);
+                string oneNotePath = $"{hostingEnvironment.WebRootPath}//{ServiceConstants.ONE_NOTE_RELATIVE_FILE_PATH}";
                 byte[] oneNoteFile = System.IO.File.ReadAllBytes(oneNotePath);
                 Web web = clientContext.Web;
                 Microsoft.SharePoint.Client.File file = web.GetFolderByServerRelativeUrl(oneNoteLocation).Files.Add(new FileCreationInformation()

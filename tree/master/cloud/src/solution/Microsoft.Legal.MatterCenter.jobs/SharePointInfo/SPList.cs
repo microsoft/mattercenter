@@ -24,7 +24,7 @@ using System.Linq;
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Models;
 using System.Reflection;
-using Microsoft.AspNet.Hosting;
+using Microsoft.AspNetCore.Hosting;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Jobs

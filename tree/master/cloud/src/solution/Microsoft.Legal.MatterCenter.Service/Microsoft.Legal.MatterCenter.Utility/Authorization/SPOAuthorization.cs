@@ -12,7 +12,7 @@
 
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using Microsoft.SharePoint.Client;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Globalization;

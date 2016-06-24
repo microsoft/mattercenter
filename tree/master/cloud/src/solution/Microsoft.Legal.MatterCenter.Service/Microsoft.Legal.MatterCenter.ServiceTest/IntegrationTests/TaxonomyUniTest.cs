@@ -6,7 +6,7 @@ using Microsoft.Legal.MatterCenter.Service;
 using Newtonsoft.Json;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Threading.Tasks;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Utility;
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest

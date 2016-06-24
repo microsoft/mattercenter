@@ -17,7 +17,7 @@ using System.IO;
 using System.Threading.Tasks;
 #region Matter Related Namespaces
 using Microsoft.Legal.MatterCenter.Models;
-using Microsoft.AspNet.Http;
+using Microsoft.AspNetCore.Http;
 #endregion
 
 

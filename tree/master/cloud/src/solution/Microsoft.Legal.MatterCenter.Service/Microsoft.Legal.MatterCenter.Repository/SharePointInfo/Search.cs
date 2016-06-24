@@ -9,7 +9,7 @@
 // <summary>This file provide methods to perform SharePoint search functionalities</summary>
 // ***********************************************************************
 
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.SharePoint.Client;

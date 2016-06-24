@@ -11,8 +11,8 @@
 // ***********************************************************************
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
-    using AspNet.Http;
-    using Extensions.OptionsModel;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Options;
     #region using
 
     using Microsoft.Legal.MatterCenter.Utility;

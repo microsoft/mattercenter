@@ -11,7 +11,7 @@
 // ***********************************************************************
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
-    using Extensions.OptionsModel;
+
     #region using
 
     using Microsoft.Legal.MatterCenter.Utility;
@@ -23,11 +23,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
     using System.IO;
     using System.Linq;
     using System.Net;
-    using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Xml;
     using System.Xml.Linq;
+    using Microsoft.Extensions.Options;
     #endregion
 
     /// <summary>
