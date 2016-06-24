@@ -2,11 +2,8 @@
   "version": "1.0.0-*",
   "description": "ConsoleApp1 Console Application",
   "authors": [ "Premchand" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
 
-  "compilationOptions": {
+  "buildOptions": {
     "emitEntryPoint": true
   },
 
@@ -15,19 +12,10 @@
     "Microsoft.Azure.WebJobs": "1.1.2",
     "Microsoft.Azure.WebJobs.Extensions": "1.0.1",
     "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
-    "Microsoft.CSharp": "4.0.1-beta-23516",
-    "System.Collections": "4.0.11-beta-23516",
-    "System.Linq": "4.0.1-beta-23516",
-    "System.Threading": "4.0.11-beta-23516",
-    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc1-final",
-    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Authorization": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
     "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.9.302261508-alpha",
-    "Microsoft.Net.Http": "2.2.22"
+    "Microsoft.Net.Http": "2.2.22",
+    "Microsoft.AspNetCore.Hosting": "1.0.0-rc2-final",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final"
   },
 
   "commands": {
@@ -35,7 +23,7 @@
   },
 
   "frameworks": {
-    "dnx451": { }
+    "net451": { }
   }
 }
 

@@ -14,7 +14,7 @@ using System;
 using Microsoft.Legal.MatterCenter.Models;
 using System.Diagnostics;
 using System.Globalization;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 
 namespace Microsoft.Legal.MatterCenter.Utility
 {

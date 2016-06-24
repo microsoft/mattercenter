@@ -16,7 +16,7 @@ using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.SharePoint.Client;
 using System.Threading.Tasks;
 using System;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository

@@ -1,24 +1,20 @@
-﻿using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 using System;
 using System.Threading.Tasks;
-using Swashbuckle.SwaggerGen;
-using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Net;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
-using Microsoft.Legal.MatterCenter.Service;
 using Microsoft.Legal.MatterCenter.Service.Filters;
 using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
@@ -35,22 +31,20 @@ namespace Microsoft.Legal.MatterCenter.Web
         public IHostingEnvironment HostingEnvironment { get; }
         public ILoggerFactory LoggerFactory { get; }
         public IConfigurationRoot Configuration { get; set; }
-        public IApplicationEnvironment ApplicationEnvironment { get; }
+        
         #endregion    
         
-        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv, ILoggerFactory logger)
+        public Startup(IHostingEnvironment env,  ILoggerFactory logger)
         {
             this.HostingEnvironment = env;
-            this.ApplicationEnvironment = appEnv;
             this.LoggerFactory = logger;
-
         } 
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
           
-            var builder = new ConfigurationBuilder()
+            var builder = new ConfigurationBuilder().SetBasePath(HostingEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json")
                 .AddEnvironmentVariables();
 
@@ -82,7 +76,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
-                app.UseIISPlatformHandler();
+              
                 
                 app.UseApplicationInsightsRequestTelemetry();
                 if (env.IsDevelopment())
@@ -118,8 +112,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             } 
         }
 
-        // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        // Entry point for the application.       
 
         #region Private Methods
 
@@ -129,23 +122,20 @@ namespace Microsoft.Legal.MatterCenter.Web
         private void ConfigureSwagger(IServiceCollection services)
         {
             services.AddSwaggerGen();
-            services.ConfigureSwaggerDocument(options => {
-                options.SingleApiVersion(new Info
+            services.ConfigureSwaggerGen(options => {
+                options.SingleApiVersion(new Swashbuckle.SwaggerGen.Generator.Info
                 {
                     Version = "v1",
                     Title = "Matter Center API Version V1",
                     Description = "This matter center api is for V1 release"
                 });
-                options.IgnoreObsoleteActions = true;
-                options.OperationFilter(new Swashbuckle.SwaggerGen.XmlComments.ApplyXmlActionComments(pathToDoc));
+                options.IgnoreObsoleteActions();
 
             });
-
-            services.ConfigureSwaggerSchema(options =>
+            services.ConfigureSwaggerGen(options =>
             {
-                options.DescribeAllEnumsAsStrings = true;
-                options.IgnoreObsoleteProperties = true;
-                options.ModelFilter(new Swashbuckle.SwaggerGen.XmlComments.ApplyXmlTypeComments(pathToDoc));
+                options.DescribeAllEnumsAsStrings();
+                options.IgnoreObsoleteProperties();
 
             });
         }
@@ -212,22 +202,20 @@ namespace Microsoft.Legal.MatterCenter.Web
 
         private void CheckAuthorization(IApplicationBuilder app)
         {
-            app.UseJwtBearerAuthentication(options =>
+            app.UseJwtBearerAuthentication(new JwtBearerOptions()
             {
-                options.AutomaticAuthenticate = true;
-                options.Authority = String.Format(CultureInfo.InvariantCulture,
+                AutomaticAuthenticate = true,
+                Authority = String.Format(CultureInfo.InvariantCulture,
                     this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
-                    this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString());
-                options.Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value.ToString();
-                options.Events = new JwtBearerEvents
+                    this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString()),
+                Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value.ToString(),
+                Events = new AspNetCore.Authentication.JwtBearer.JwtBearerEvents
                 {
-                    OnAuthenticationFailed = context => {
-                        return Task.FromResult(0);
-                    },
-                    OnValidatedToken = context => {
+                    OnAuthenticationFailed = context =>
+                    {
                         return Task.FromResult(0);
                     }
-                };
+                }
             });
         }
 

@@ -12,13 +12,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Models;
 using Swashbuckle.SwaggerGen.Annotations;
 using Newtonsoft.Json;
 using System.Reflection;
-using Microsoft.AspNet.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using System.Net;
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;

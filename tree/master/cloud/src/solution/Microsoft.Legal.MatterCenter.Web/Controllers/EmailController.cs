@@ -10,14 +10,14 @@
 // <summary>This file defines service for Email functionality such as download email as attachment or download attachmemt as a links</summary>
 // ***********************************************************************
 
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Legal.MatterCenter.Models;
 using Swashbuckle.SwaggerGen.Annotations;
 using System.Threading.Tasks;
 
 using Microsoft.Legal.MatterCenter.Utility;
-using Microsoft.Extensions.OptionsModel;
+using Microsoft.Extensions.Options;
 using System.Net;
 using Microsoft.Legal.MatterCenter.Web.Common;
 using System;

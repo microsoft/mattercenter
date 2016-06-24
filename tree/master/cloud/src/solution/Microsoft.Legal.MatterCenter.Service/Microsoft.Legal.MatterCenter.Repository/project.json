@@ -2,21 +2,18 @@
   "version": "1.0.0-*",
   "description": "Microsoft.Legal.MatterCenter.Repository Class Library",
   "authors": [ "v-lapedd" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+
   "dependencies": {
-    "Microsoft.CSharp": "4.0.1-beta-23516",
+    "Microsoft.Extensions.Options": "1.0.0-rc2-final",
+    "NETStandard.Library": "1.5.0-rc2-24027",
+    "System.Threading.Tasks": "4.0.11-rc2-24027",
+    "System.Xml.XDocument": "4.0.11-rc2-24027",
+    "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
+    "Newtonsoft.Json": "8.0.3",
     "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
-    "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*",
-    "System.Collections": "4.0.11-beta-23516",
-    "System.Linq": "4.0.1-beta-23516",
-    "System.Reflection": "4.1.0-beta-23516",
-    "System.Runtime": "4.0.21-beta-23516",
-    "System.Threading": "4.0.11-beta-23516",
-    "WindowsAzure.Storage": "6.2.2-preview"
+    "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*"
   },
   "frameworks": {
-    "dnx451": { }
+    "net451": { }
   }
 }
