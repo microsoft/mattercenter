@@ -12,6 +12,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
     {
         //ErrorResponse ValidateClientToken(string authToken);
         ClientContext GetClientContext(string url);     
-        string AccessToken { get; set; }   
+        string AccessToken { get; set; }
+        string AccountName { get; set; }
     }
 }

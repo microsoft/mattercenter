@@ -186,7 +186,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         genericResponse = UploadFilesMail(serviceRequest.Overwrite, serviceRequest.PerformContentCheck, 
                             serviceRequest.AllowContentCheck, documentLibraryName, webResponse, isMailUpload, client, fileName, folderPath, ref message);
                     }
-                    if (genericResponse!=null && genericResponse.IsError == true && isFirstCall)
+                    if (genericResponse!=null && genericResponse.IsError == true && genericResponse.Code==UploadEnums.UploadFailure.ToString() && isFirstCall)
                     {
                         genericResponse = Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, 
                             isMailUpload, fileName, folderPath, false, ref message, originalFileName);

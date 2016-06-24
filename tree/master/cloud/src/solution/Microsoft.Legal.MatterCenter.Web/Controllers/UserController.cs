@@ -119,6 +119,8 @@ namespace Microsoft.Legal.MatterCenter.Web
         public IActionResult UserProfilePicture([FromBody]Client client)
         {           
             spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            string accountName = $"i:0#.f|membership|{HttpContext.User.Identity.Name}";
+            spoAuthorization.AccountName = accountName;
             #region Error Checking                
             ErrorResponse errorResponse = null;
 

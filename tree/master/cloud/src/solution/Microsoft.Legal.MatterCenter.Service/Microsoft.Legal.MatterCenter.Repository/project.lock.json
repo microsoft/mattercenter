@@ -1656,7 +1656,7 @@
   },
   "libraries": {
     "MailKit/1.3.0-beta7": {
-      "sha512": "xO66P+XLWyo3/POInJpkCsA0bFI3XmDxsdR+rSXCm9d7kbPU6kFBgvXT4AxW0TaWYUcsaxJEcZdhMgOODWu/ew==",
+      "sha512": "LalD+6uE97WdfZ9Ohmz2ZeYbPXzql4VNazGO/e9PLMENKNPwENc4eSr8v/r+mHY3EsRsAH34DCkub8rA4Zwyrw==",
       "type": "package",
       "files": [
         "MailKit.1.3.0-beta7.nupkg.sha512",
@@ -2834,7 +2834,7 @@
       ]
     },
     "MimeKit/1.3.0-beta7": {
-      "sha512": "vWNZ2pDJXTFRHiErdZW6bOPej+sikIOjf8LlZSSiZXgYE2s4raQeHVQtvyGVpoQvx/PKXKoACzJDCkm9hr/OQQ==",
+      "sha512": "M7F4OnPXfcI4AljQUdvok29vz3DEruiqIBDIn6zGVdFQpNpaVbmrp80YLX9SH2hJO+8fSOX6/k3ScUXqZheFSQ==",
       "type": "package",
       "files": [
         "MimeKit.1.3.0-beta7.nupkg.sha512",
@@ -2903,7 +2903,7 @@
       ]
     },
     "StackExchange.Redis/1.1.604-alpha": {
-      "sha512": "urjRtG87pK9fQ6bGY1/KkSa/BQ0n54glPs/iHKwYyj8HFb2k+DhoDMS4O+GZJeXOm4+ci22BIN35UDkQnI5FBw==",
+      "sha512": "b4b6Vx0TyCPHiyLLOgP/UyEiKqHc3eKsNrBUg4rlOjumNkqgUT2yF7zhRf3fXMlz+DTp2ohxVQRjNGP1RF3HSA==",
       "type": "package",
       "files": [
         "StackExchange.Redis.1.1.604-alpha.nupkg.sha512",

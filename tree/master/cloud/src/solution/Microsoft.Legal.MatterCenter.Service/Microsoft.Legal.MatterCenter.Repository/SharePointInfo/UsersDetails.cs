@@ -57,20 +57,19 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public Users GetUserProfilePicture(Client client)
         {
             ClientContext clientContext = spoAuthorization.GetClientContext(client.Url);
-            PeopleManager peopleManager = new PeopleManager(clientContext);
-            PersonProperties personProperties = peopleManager.GetMyProperties();
-            clientContext.Load(personProperties);
+            PeopleManager peopleManager = new PeopleManager(clientContext);            
+            ClientResult<string> userProfile = peopleManager.GetUserProfilePropertyFor(spoAuthorization.AccountName, "PictureURL");            
             clientContext.ExecuteQuery();
-            string personalURL = personProperties.PersonalUrl.ToUpperInvariant().TrimEnd('/');
-            string[] pictureInfo = personalURL.Split(new string[] { "/PERSONAL/" }, StringSplitOptions.None);
-            string smallProfilePicture = $"{pictureInfo[0]}/User Photos/Profile Pictures/{pictureInfo[1]}_SThumb.jpg";            
-            string mediumProfilePicture = $"{pictureInfo[0]}/User Photos/Profile Pictures/{pictureInfo[1]}_MThumb.jpg";
+            string personalURL = userProfile.Value;
+            
+            string smallProfilePicture = personalURL.Replace("MThumb.jpg", "SThumb.jpg");
+            string mediumProfilePicture = personalURL;
             Users users = new Users();
-            users.Email = personProperties.Email;
-            users.LogOnName = personProperties.DisplayName;
+            
             users.SmallPictureUrl = smallProfilePicture;
             users.LargePictureUrl = mediumProfilePicture;
             return users;
+            //return null;
         }
 
         

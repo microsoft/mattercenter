@@ -37,6 +37,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         private ICustomLogger customLogger;
         private LogTables logTables;
         private string accessToken;
+        private string accountName;
         /// <summary>
         /// Constructor where GeneralSettings and ErrorSettings are injected
         /// </summary>
@@ -64,7 +65,22 @@ namespace Microsoft.Legal.MatterCenter.Utility
             {
                 accessToken = value.Split(' ')[1];
             }
-        }  
+        }
+
+        /// <summary>
+        /// Property which will set or get current logged in user
+        /// </summary>
+        public string AccountName
+        {
+            get
+            {
+                return accountName;
+            }
+            set
+            {
+                accountName = value;
+            }
+        }
 
         /// <summary>
         /// This method will get the access token for the service and creats SharePoint ClientContext object and returns that object
@@ -148,7 +164,9 @@ namespace Microsoft.Legal.MatterCenter.Utility
                 ClientCredential clientCred = new ClientCredential(clientId, appKey);
                 UserAssertion userAssertion = new UserAssertion(AccessToken);
                 string authority = String.Format(CultureInfo.InvariantCulture, aadInstance, tenant);
-                AuthenticationContext authContext = new AuthenticationContext(authority);
+                //ToDo: Set the TokenCache to null. Need to implement custom token cache to support multiple users
+                //If we dont have the custom cache, there will be some performance overhead.
+                AuthenticationContext authContext = new AuthenticationContext(authority, null);
                 AuthenticationResult result = await authContext.AcquireTokenAsync(resource, clientCred, userAssertion);
                 return result.AccessToken;
             }
