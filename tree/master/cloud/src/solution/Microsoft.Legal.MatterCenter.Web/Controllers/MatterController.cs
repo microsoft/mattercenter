@@ -76,7 +76,7 @@ namespace Microsoft.Legal.MatterCenter.Service
 
         #region Pin and UnPin
         /// <summary>
-        /// Get all pinned matters
+        /// Get all pinned matters which are pinned by the user
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
