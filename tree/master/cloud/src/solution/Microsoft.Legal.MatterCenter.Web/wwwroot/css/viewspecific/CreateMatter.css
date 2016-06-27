@@ -466,12 +466,17 @@ body {
 }
 #overWriteDocumentName span a {text-decoration:none;}
 .attachment{height:auto;}
-.attachmentSection{height:150px;}
+.attachmentSection{height:auto;}
 
 @media only screen and (max-width: 712px) {
     .popupName {
         max-width: 160px;
     }
+}
+.mailContentLoading{width:274px;}
+.mailContentDiv{height: 1px;
+    margin-top: -9px;}
+.attachIconMargin {padding-left:8px;
 }
 
 
