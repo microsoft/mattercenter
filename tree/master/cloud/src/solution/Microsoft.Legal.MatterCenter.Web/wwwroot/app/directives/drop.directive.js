@@ -57,6 +57,7 @@ matterMain.directive('droppable', function () {
                         contentType:item.dataset.contenttype,
                         size:item.dataset.size,
                         isEmail: item.dataset.isemail,
+                        attachmentType:item.dataset.attachmenttype,
                         i:item.id        
                     }                    
                     //scope.folder contains the target folder information that the current item is getting dropped to

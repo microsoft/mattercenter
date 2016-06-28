@@ -219,21 +219,23 @@
             //#region drop method will handle the file upload scenario for both email and attachment
 
             //Helper method which will handle mail or doc upload. This method will be called from inside vm.handleDrop
-            function mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck, draggedFile) {
+            function mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck, draggedFile, sOperation) {
                 vm.isLoadingFromDesktopStarted = true;
                 var attachments = [];
                 var attachmentsArray = {};
                 var mailId = '';
 
                 if (sourceFile.isEmail && sourceFile.isEmail === "true") {
-                    attachments = vm.allAttachmentDetails
+                   
+                    attachments = [];
                     mailId = Office.context.mailbox.item.itemId;
                     for (var iCounter = 0; iCounter < vm.allAttachmentDetails.length; iCounter++) {
-                        attachments = [];
+                        attachmentsArray = {};
                         attachmentsArray.attachmentType = 0;
                         attachmentsArray.name = vm.allAttachmentDetails[iCounter].attachmentFileName;
                         attachmentsArray.isInline = false;
                         attachmentsArray.contentType = vm.allAttachmentDetails[iCounter].contentType;
+                        attachmentsArray.attachmentType = vm.allAttachmentDetails[iCounter].attachmentType;
                         attachmentsArray.id = vm.allAttachmentDetails[iCounter].attachmentId;
                         attachmentsArray.size = vm.allAttachmentDetails[iCounter].size;
                         attachments.push(attachmentsArray);
@@ -268,6 +270,33 @@
                         Subject: vm.subject + ".eml",
                         AllowContentCheck: vm.oUploadGlobal.bAllowContentCheck,
                         Attachments: attachments
+                    }
+                }
+
+                if (undefined !== sOperation && sOperation == "append") {
+                    var date = new Date();
+                    date = date.toISOString();
+                    var reg = new RegExp(":", "g");
+                    date = date.replace(reg, "_").replace(".", "_");
+                    if (sourceFile.isEmail && sourceFile.isEmail === "true") {
+                        var subject = vm.subject + ".eml";
+                        var subjectNameWithoutExt = subject.substring(0, subject.lastIndexOf("."));
+                        var extMail = subject.substr(subject.lastIndexOf(".") + 1);
+                        attachmentRequestVM.ServiceRequest.Subject = subjectNameWithoutExt + "_" + date + "." + extMail;
+                    }
+                    else {
+                        
+                        for (var attachment in attachments) {
+                            var fileNameWithExt = attachments[attachment].name;
+                                if (-1 !== fileNameWithExt.lastIndexOf(".")) {
+                                    var fileNameWithoutExt = fileNameWithExt.substring(0, fileNameWithExt.lastIndexOf("."));
+                                    var ext = fileNameWithExt.substr(fileNameWithExt.lastIndexOf(".") + 1);
+                                    attachments[attachment].name = fileNameWithoutExt + "_" + date + "." + ext;
+                                } else {
+                                    attachments[attachment].name = fileNameWithExt + "_" + date;
+                                }
+                        }
+                        attachmentRequestVM.ServiceRequest.Attachments = attachments;
                     }
                 }
 
@@ -367,27 +396,39 @@
             //#region Mail Upload Methods
 
             //Call back function when the mail gets uploaded
-            vm.uploadEmail = function (attachmentRequestVM) {
+            vm.uploadEmail = function (attachmentRequestVM, droppedAttachedFile) {
                 uploadEmail(attachmentRequestVM, function (response) {
-                    vm.showLoading = false
+                    vm.showLoading = false;
+                    var target = vm.targetDrop;
+                    var source = vm.sourceFile;
                     //If the mail upload is success
                     if (response.code === "OK" && response.value === "Attachment upload success") {
-                        vm.mailUpLoadSuccess = true;
+                        
                         var subject = Office.context.mailbox.item.subject;
                         subject = subject.substring(0, subject.lastIndexOf("."));
+                        vm.mailUpLoadSuccess = true;
                         vm.mailUploadedFile = subject;
                         vm.mailUploadedFolder = vm.targetDrop.name;
                         vm.isLoadingFromDesktopStarted = false;
+                        droppedAttachedFile.uploadSuccess = true;
                         //removeDraggableDirective();
+                        vm.oUploadGlobal.successBanner = droppedAttachedFile.uploadSuccess ? true : false;
                     }
                         //If the mail upload is not success
                     else if (response.code === "DuplicateDocument") {
                         vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
-                        vm.IsNonIdenticalContent = false;
+                        vm.IsNonIdenticalContent = false;                    
+                       
+                        var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                        bAppendEnabled = false,
+                        fileExtension = "undefined" !== typeof source && source.title ? source.title.trim().substring(source.title.trim().lastIndexOf(".") + 1) : "";
+                        var isEmail = droppedAttachedFile.isEmail ? true : (1 === parseInt(droppedAttachedFile.attachmentType) || "eml" === fileExtension) ? true : false;
+                        bAppendEnabled=attachmentEmailOverwriteConfiguration(selectedOverwriteConfiguration,isEmail);
                         response.contentCheck = response.value.split("|")[1];
+                        response.value = response.value.split("|")[0];
                         response.saveLatestVersion = "True";
                         response.cancel = "True";
-                        response.append = "True";
+                        response.append = bAppendEnabled;
                         var duplicFile = response;
                         duplicFile.droppedUrl = target;
                         duplicFile.source = source;
@@ -398,9 +439,35 @@
                         vm.IsNonIdenticalContent = true; //ToDo:Set it to false on mail upload dialog open
                         vm.IsDupliacteDocument = false;
                     }
+                    else if (response.code === "IdenticalContent") {
+                        var dupliFile = vm.ducplicateSourceFile[0];
+                        dupliFile.value = dupliFile.value + "<br/><br/>" + response.value;
+                        dupliFile.saveLatestVersion = "True";
+                        dupliFile.cancel = "True";
+                        dupliFile.append = true;
+                        dupliFile.contentCheck = "False";
+                    }
                     console.log(response);
                     vm.isLoadingFromDesktopStarted = false;
                 });
+            }
+
+
+            function attachmentEmailOverwriteConfiguration(selectedOverwriteConfiguration, isEmail) {
+                var bAppendEnabled = false;
+                switch (selectedOverwriteConfiguration) {
+                    case "BOTH":
+                         bAppendEnabled = true;
+                        break;
+                    case "DOCUMENT ONLY":
+                         bAppendEnabled = isEmail ? false : true;
+                        break;
+                    default:
+                        bAppendEnabled = isEmail ? true : false;
+                        break;
+                }
+                return bAppendEnabled;
+               
             }
 
             ////Call Web API method for upload mail
@@ -441,6 +508,7 @@
                             vm.docUploadedFolder = vm.targetDrop.name;
                         }
                         droppedAttachedFile.uploadSuccess = true;
+                        console.log(droppedAttachedFile.counter);
                         vm.oUploadGlobal.successBanner = droppedAttachedFile.uploadSuccess ? true : false;
                        
                         //removeDraggableDirective();
@@ -448,22 +516,36 @@
                     }
                         //If the attachment upload is not success
                     else if (response.code === "DuplicateDocument") {
+
                         vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
-                        vm.IsNonIdenticalContent = false;                       
+                        vm.IsNonIdenticalContent = false;
+                        var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                        bAppendEnabled = false,
+                        fileExtension = "undefined" !== typeof source && source.title ? source.title.trim().substring(source.title.trim().lastIndexOf(".") + 1) : "";
+                        var isEmail = droppedAttachedFile.isEmail ? true : (1 === parseInt(droppedAttachedFile.attachmentType) || "eml" === fileExtension) ? true : false;
+                        bAppendEnabled = attachmentEmailOverwriteConfiguration(selectedOverwriteConfiguration, isEmail);
                         response.contentCheck = response.value.split("|")[1];
+                        response.value = response.value.split("|")[0];
                         response.saveLatestVersion = "True";
                         response.cancel = "True";
-                        response.append ="True";                           
+                        response.append = bAppendEnabled;
                         var duplicFile = response;
                         duplicFile.droppedUrl = target;
                         duplicFile.source = source;
-                        duplicFile.fileType="attacheddocument"
+                        duplicFile.fileType = "attacheddocument";
                         vm.ducplicateSourceFile.push(duplicFile);
                     }
                         //NonIdenticalContent
                     else if (response.code === "NonIdenticalContent") {
                         vm.IsNonIdenticalContent = true; //ToDo:Set it to false on mail upload dialog open
                         vm.IsDupliacteDocument = false;
+                    }
+                    else if (response.code === "IdenticalContent") {
+                        var dupliFile = vm.ducplicateSourceFile[0];
+                        dupliFile.value = dupliFile.value + "<br/><br/>" + response.value;
+                        dupliFile.saveLatestVersion = "True";
+                        dupliFile.cancel = "True";
+                        dupliFile.contentCheck = "False";
                     }
                 });
             }
@@ -589,6 +671,7 @@
             $scope.Openuploadmodal = function () {
                 vm.getFolderHierarchy();
                 vm.oUploadGlobal.successBanner = false;
+                vm.isLoadingFromDesktopStarted = false;
             }
 
 
@@ -619,7 +702,10 @@
                 "use strict";
                 if (asyncResult.status === "succeeded") {
                     vm.attachmentToken = asyncResult.value;
-                    vm.createMailPopup(); 
+                    vm.createMailPopup();
+                    vm.mailUpLoadSuccess = false;
+                    vm.mailUploadedFile = null;
+                    vm.mailUploadedFolder = null;;
                     vm.loadingAttachments = false;
                     $scope.$apply();
                 } else {
@@ -721,7 +807,7 @@
                     individualAttachment.isEmail = false;
                     individualAttachment.uploadSuccess = false;
                     individualAttachment.size = vm.attachments[attachment].size;
-                   
+                    individualAttachment.attachmentType = attachmentType;
                     vm.allAttachmentDetails.push(individualAttachment);
                    
                 }
@@ -1642,14 +1728,25 @@
                 else if (duplicateFile.fileType == "attacheddocument") {
                     console.log("dragged attached obj");
                     console.log(duplicateFile);
-                    if ("contentCheck"===sOperation) {
+                    var draggedFile = $filter("filter")(vm.allAttachmentDetails, vm.sourceFile.attachmentId)[0];
+                    if ("contentCheck" === sOperation) {
+                        mailOrDocUpload(vm.targetDrop, vm.sourceFile, false, true, draggedFile);
+
 
                     } else if ("overwrite" === sOperation) {
-                        var draggedFile = $filter("filter")(vm.allAttachmentDetails, vm.sourceFile.attachmentId)[0];
+                       
                         duplicateFile.cancel = null; vm.ducplicateSourceFile.pop();
                         mailOrDocUpload(vm.targetDrop, vm.sourceFile, true, undefined, draggedFile);
                     }
-                    else if ("append" === sOperation) {
+                    else if ("append" === sOperation) {                   
+                       
+                          if (vm.sourceFile.isEmail && vm.sourceFile.isEmail === "true") {
+                              mailOrDocUpload(vm.targetDrop, vm.sourceFile, true, false, draggedFile, sOperation)
+                            }
+                          if (vm.sourceFile.isEmail && vm.sourceFile.isEmail === "false") {
+                                mailOrDocUpload(vm.targetDrop, vm.sourceFile, true, false, draggedFile, sOperation)
+                          }
+                          duplicateFile.cancel = null;
                     }
                     else {
                         duplicateFile.cancel = "False";
@@ -1685,6 +1782,9 @@
                 file.contentCheck = "contentCheck";
                 file.saveLatestVersion = "False";
                 file.cancel = "False";
+                if (file.append) {
+                    file.append = false;
+                }
 
             }
             vm.abortContentCheck = function (file, isLocalUpload) {
