@@ -299,38 +299,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         {
             string message = string.Empty;
             var client = attachmentRequestVM.Client;
-            var serviceRequest = attachmentRequestVM.ServiceRequest;
-            bool result = true;
+            var serviceRequest = attachmentRequestVM.ServiceRequest;            
             GenericResponseVM genericResponse = uploadHelperFunctions.Upload(client, serviceRequest, ServiceConstants.MAIL_SOAP_REQUEST, serviceRequest.MailId, true,
-                        serviceRequest.Subject, serviceRequest.FolderPath[0], true, ref message, string.Empty);
-            if (genericResponse!=null)
-            {
-                result = false;
-            }
-
-            if (!result)
-            {
-                if (!string.IsNullOrEmpty(message))
-                {
-                    genericResponse = new GenericResponseVM()
-                    {
-                        Code = HttpStatusCode.BadRequest.ToString(),
-                        Value = message,
-                        IsError = true
-                    };
-                    return genericResponse;
-                }
-                else
-                {
-                    genericResponse = new GenericResponseVM()
-                    {
-                        Code = HttpStatusCode.BadRequest.ToString(),
-                        Value = "Attachment not uploaded",
-                        IsError = true
-                    };
-                    return genericResponse;
-                }
-            }
+                        serviceRequest.Subject, serviceRequest.FolderPath[0], true, ref message, string.Empty);            
             return genericResponse;
         }
 

@@ -65,8 +65,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 string documentPath = string.Concat(generalSettings.SiteURL, folderPath, ServiceConstants.FORWARD_SLASH, uploadFileName);
                 string duplicateMessage = (allowContentCheck && duplicateDocument.HasPotentialDuplicate) ? errorSettings.FilePotentialDuplicateMessage : errorSettings.FileAlreadyExistMessage;
-                //message = string.Format(CultureInfo.InvariantCulture, "{0}{1}{1}{1}{2}", string.Format(CultureInfo.InvariantCulture, duplicateMessage, uploadFileName, documentPath), 
-                //    ServiceConstants.SYMBOL_AT, duplicateDocument.HasPotentialDuplicate.ToString());
+                duplicateMessage = $"{duplicateMessage}|{duplicateDocument.HasPotentialDuplicate}";
                 genericResponse = new GenericResponseVM()
                 {
                     IsError = true,
