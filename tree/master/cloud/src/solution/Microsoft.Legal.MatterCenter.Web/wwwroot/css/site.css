@@ -85,7 +85,7 @@ textarea {
 
 #documentgrid .ui-grid-viewport, #mattergrid .ui-grid-viewport {
     /*overflow: hidden !important;*/
-    /*max-width: 1350px;*/
+    max-width: 1800px;
     /*display: table;*/
     overflow-y:auto !important;
     position: relative;
@@ -291,7 +291,7 @@ textarea {
 }
 
 #documentgrid .ui-grid, #mattergrid .ui-grid {
-    height: 520px;
+    height: 490px;
 }
 
 .ui-grid-cell {
@@ -355,6 +355,7 @@ textarea {
     font-family: 'Segoe UI Web Regular','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
     font-size: 0.875em;
     font-weight: 400;
+    max-width: 1900px
 }
 
 .ui-grid-viewport {
@@ -670,4 +671,11 @@ textarea {
 
 .bodymain {
     overflow: hidden;
+}
+
+#uploadToMatter, #viewMatters{
+    color:#fff !important;
+    font-family: 'Segoe UI Web Semibold','Segoe UI Semibold','Segoe WP Semibold','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
+    font-size: 14px;
+    text-decoration:none !important;
 }
