@@ -279,6 +279,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     }
                     else
                     {
+                        genericResponse = null;
                         if (isMailUpload)       //Upload entire Email
                         {
                             UploadMail(client, folderPath, fileName, documentLibraryName, xmlDocument, ref message);
