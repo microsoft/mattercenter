@@ -31,8 +31,8 @@
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible attorney:</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
                                        </div>\
-                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a></button>\
-                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" onclick="Openuploadmodal(\'' + obj.matterName + '\',\'' + obj.matterUrl + '\')" type="button">Upload to a matter</a></button>\
+                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" onclick="Openuploadmodal(\'' + obj.matterName + '\',\'' + obj.matterUrl + '\')" type="button">Upload to a matter</a>\
                                     </div>\
                                 </div>';
                     $(element).popover({
@@ -112,14 +112,25 @@
     function popoverdoc() {
         return {
             restrict: 'AE',
-            scope: { details: '@' },
+            scope: {
+                details: '@',
+                toggle: '&'
+            },
+            controller: function ($scope) {
+                $scope.toggleValue = false;
+                $scope.f = function () {
+                    console.log("hi");
+                    $scope.toggleValue = !$scope.toggleValue;
+                    $scope.toggle({ message: $scope.toggleValue });
+                };
+            },
             link: function (scope, element, attrs) {
                 scope.$watch("details", function () {
                     var obj = eval('(' + attrs.details + ')');
                     var content = '<div class="">\
                                    <div class="FlyoutBoxContent" style="width: 350px;">\
                                       <div class="FlyoutContent">\
-                                          <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.documentName + ' </div>\
+                                          <div class="ms-Callout-content FlyoutHeadingText" ng-click="$scope.f()">  ' + obj.documentName + ' </div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Matter:</div>\
@@ -135,20 +146,20 @@
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Author:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.documentOwner + '</div> \
+                                          <div class="ms-font-m FlyoutContent" toggle="parentToggle(message)">' + obj.documentOwner + '</div> \
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Modified date:</div>\
                                           <div class="ms-font-m FlyoutContent" datefilter date='+ obj.documentModifiedDate + '>' + obj.documentModifiedDate + '</div>\
                                        </div>\
-                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="viewMatters"><a class="ms-Button-label" href="' + obj.documentUrl + '" target="_blank">Open document</a></button>\
-                                       <button class="ms-Button ms-Button--primary ms-Callout-content" id="uploadToMatter"><a class="ms-Button-label" href="https://msmatter.sharepoint.com/sites/catalog/SitePages/documentDetails.aspx" target="_blank">View document details</a></button>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" href="' + obj.documentUrl + '" target="_blank">Open document</a>\
+                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/catalog/SitePages/documentDetails.aspx" target="_blank">View document details</a>\
                                     </div>\
                                 </div>';
                     $(element).popover({
                         html: true,
                         trigger: 'click',
-                        delay: 500,
+                        delay: 10000,
                         content: content,
                     });
                 });

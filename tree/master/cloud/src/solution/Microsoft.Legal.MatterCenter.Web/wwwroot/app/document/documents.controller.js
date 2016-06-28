@@ -1063,6 +1063,10 @@
         //    }
         //};
 
+        vm.parentToggle = function () {
+            console.log("Hi");
+        };
+
     }]);
 
 })();
