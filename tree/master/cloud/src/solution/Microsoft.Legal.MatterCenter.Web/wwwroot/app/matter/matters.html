@@ -142,7 +142,7 @@
                            
                                 <div ng-if="attachmentInfo.isEmail" class="attachment">
                                     <div class="attachmentName mailName">
-                                        <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
+                                        <img ng-hide="vm.mailUpLoadSuccess" title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
                                              ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
                                         <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
                                              ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
@@ -165,7 +165,7 @@
 
                                 <div ng-if="!attachmentInfo.isEmail" class="attachment">
                                     <div class="attachmentName">
-                                        <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
+                                        <img ng-hide="attachmentInfo.uploadSuccess" title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
                                              ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
                                         <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
                                              ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
