@@ -502,11 +502,14 @@
                         var extEmailOrMsg = vm.sourceFile.title.substr(vm.sourceFile.title.lastIndexOf(".") + 1);
                         if (extEmailOrMsg === "eml" || extEmailOrMsg === "msg") {
                             vm.docUploadedFolder = vm.sourceFile.title.substring(0, vm.sourceFile.title.lastIndexOf("."));
+                            
                         }
                         else {                           
                             vm.targetDrop.name = vm.targetDrop.name == vm.selectedRow.matterGuid ? vm.selectedRow.matterName : vm.targetDrop.name;
-                            vm.docUploadedFolder = vm.targetDrop.name;
+                           
                         }
+                        droppedAttachedFile.uploadedFolder = vm.targetDrop.name;
+                        vm.docUploadedFolder=vm.targetDrop.name;
                         droppedAttachedFile.uploadSuccess = true;
                         console.log(droppedAttachedFile.counter);
                         vm.oUploadGlobal.successBanner = droppedAttachedFile.uploadSuccess ? true : false;
@@ -806,13 +809,14 @@
                     individualAttachment.extension = sExtension;
                     individualAttachment.isEmail = false;
                     individualAttachment.uploadSuccess = false;
+                     individualAttachment.uploadedFolder=null;
                     individualAttachment.size = vm.attachments[attachment].size;
                     individualAttachment.attachmentType = attachmentType;
                     vm.allAttachmentDetails.push(individualAttachment);
                    
                 }
 
-                console.log(vm.allAttachmentDetails);
+               
             }
             //#endregion
 
