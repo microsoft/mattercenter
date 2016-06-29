@@ -22,16 +22,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private CamlQueries camlQueries;
         private ISPList spList;
         private IMatterRepository matterRespository;
-        public ValidationFunctions(ISPList spList, IOptions<MatterSettings> matterSettings,
-            IOptions<ErrorSettings> errorSettings, IMatterRepository matterRespository,
-            IOptions<ListNames> listNames, IOptions<CamlQueries> camlQueries)
+        public ValidationFunctions(ISPList spList, IOptionsMonitor<MatterSettings> matterSettings,
+            IOptionsMonitor<ErrorSettings> errorSettings, IMatterRepository matterRespository,
+            IOptionsMonitor<ListNames> listNames, IOptionsMonitor<CamlQueries> camlQueries)
         {
-            this.matterSettings = matterSettings.Value;
+            this.matterSettings = matterSettings.CurrentValue;
             this.spList = spList;
-            this.errorSettings = errorSettings.Value;
+            this.errorSettings = errorSettings.CurrentValue;
             this.matterRespository = matterRespository;
-            this.listNames = listNames.Value;
-            this.camlQueries = camlQueries.Value;
+            this.listNames = listNames.CurrentValue;
+            this.camlQueries = camlQueries.CurrentValue;
         }
 
         /// <summary>

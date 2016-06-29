@@ -30,19 +30,19 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         public DocumentProvision(IDocumentRepository docRepository, 
             IUserRepository userRepository, 
             IUploadHelperFunctions uploadHelperFunctions, 
-            IOptions<GeneralSettings> generalSettings, 
-            IOptions<DocumentSettings> documentSettings, 
+            IOptionsMonitor<GeneralSettings> generalSettings, 
+            IOptionsMonitor<DocumentSettings> documentSettings, 
             ICustomLogger customLogger, 
-            IOptions<LogTables> logTables, IOptions<ErrorSettings> errorSettings)
+            IOptionsMonitor<LogTables> logTables, IOptionsMonitor<ErrorSettings> errorSettings)
         {
             this.docRepository = docRepository;
             this.uploadHelperFunctions = uploadHelperFunctions;
             this.userRepository = userRepository;
-            this.generalSettings = generalSettings.Value;
-            this.documentSettings = documentSettings.Value;
+            this.generalSettings = generalSettings.CurrentValue;
+            this.documentSettings = documentSettings.CurrentValue;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
-            this.errorSettings = errorSettings.Value;
+            this.logTables = logTables.CurrentValue;
+            this.errorSettings = errorSettings.CurrentValue;
         }
 
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)

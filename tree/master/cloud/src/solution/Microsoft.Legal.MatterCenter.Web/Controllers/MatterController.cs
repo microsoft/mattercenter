@@ -51,24 +51,24 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="matterSettings"></param>
         /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
-        public MatterController(IOptions<ErrorSettings> errorSettings,
-            IOptions<MatterSettings> matterSettings,
+        public MatterController(IOptionsMonitor<ErrorSettings> errorSettings,
+            IOptionsMonitor<MatterSettings> matterSettings,
             ISPOAuthorization spoAuthorization,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IMatterRepository matterRepositoy,
-            ICustomLogger customLogger, IOptions<LogTables> logTables,
+            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables,
             IValidationFunctions validationFunctions,
             IEditFunctions editFunctions,
             IMatterProvision matterProvision
             )
         {
-            this.errorSettings = errorSettings.Value;
-            this.matterSettings = matterSettings.Value;
+            this.errorSettings = errorSettings.CurrentValue;
+            this.matterSettings = matterSettings.CurrentValue;
             this.spoAuthorization = spoAuthorization;
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.matterRepositoy = matterRepositoy;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
+            this.logTables = logTables.CurrentValue;
             this.validationFunctions = validationFunctions;
             this.editFunctions = editFunctions;
             this.matterProvision = matterProvision;

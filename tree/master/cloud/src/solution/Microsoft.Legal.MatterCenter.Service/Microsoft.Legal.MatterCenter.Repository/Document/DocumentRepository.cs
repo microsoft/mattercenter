@@ -38,17 +38,17 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
         /// <param name="search"></param>
-        public DocumentRepository(ISearch search, IOptions<SearchSettings> searchSettings, 
-            IOptions<ListNames> listNames, ISPList spList, IOptions<CamlQueries> camlQueries,  IOptions<DocumentSettings> documentSettings, IOptions<MailSettings> mailSettings)
+        public DocumentRepository(ISearch search, IOptionsMonitor<SearchSettings> searchSettings, 
+            IOptionsMonitor<ListNames> listNames, ISPList spList, IOptionsMonitor<CamlQueries> camlQueries,  IOptionsMonitor<DocumentSettings> documentSettings, IOptionsMonitor<MailSettings> mailSettings)
         {
             this.search = search;            
-            this.searchSettings = searchSettings.Value;
-            this.listNames = listNames.Value;
+            this.searchSettings = searchSettings.CurrentValue;
+            this.listNames = listNames.CurrentValue;
             this.spList = spList;
-            this.camlQueries = camlQueries.Value;
+            this.camlQueries = camlQueries.CurrentValue;
             
-            this.documentSettings = documentSettings.Value;
-            this.mailSettings = mailSettings.Value;
+            this.documentSettings = documentSettings.CurrentValue;
+            this.mailSettings = mailSettings.CurrentValue;
         }
 
         /// <summary>

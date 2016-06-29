@@ -30,24 +30,24 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private ListNames listNames;
         private SearchSettings searchSettings;
         private IUserRepository userRepositoy;
-        public MatterProvision(IMatterRepository matterRepositoy, IOptions<MatterSettings> matterSettings, IOptions<ErrorSettings> errorSettings,
+        public MatterProvision(IMatterRepository matterRepositoy, IOptionsMonitor<MatterSettings> matterSettings, IOptionsMonitor<ErrorSettings> errorSettings,
             ISPOAuthorization spoAuthorization, IEditFunctions editFunctions, IValidationFunctions validationFunctions,
-            ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<MailSettings> mailSettings, IOptions<CamlQueries> camlQueries, IOptions<ListNames> listNames,
-            IOptions<SearchSettings> searchSettings, IUserRepository userRepositoy
+            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IOptionsMonitor<MailSettings> mailSettings, IOptionsMonitor<CamlQueries> camlQueries, IOptionsMonitor<ListNames> listNames,
+            IOptionsMonitor<SearchSettings> searchSettings, IUserRepository userRepositoy
             )
         {
             this.matterRepositoy = matterRepositoy;
-            this.matterSettings = matterSettings.Value;
+            this.matterSettings = matterSettings.CurrentValue;
             this.spoAuthorization = spoAuthorization;
             this.editFunctions = editFunctions;
-            this.errorSettings = errorSettings.Value;
+            this.errorSettings = errorSettings.CurrentValue;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
+            this.logTables = logTables.CurrentValue;
             this.validationFunctions = validationFunctions;
-            this.mailSettings = mailSettings.Value;
-            this.camlQueries = camlQueries.Value;
-            this.listNames = listNames.Value;
-            this.searchSettings = searchSettings.Value;
+            this.mailSettings = mailSettings.CurrentValue;
+            this.camlQueries = camlQueries.CurrentValue;
+            this.listNames = listNames.CurrentValue;
+            this.searchSettings = searchSettings.CurrentValue;
             this.userRepositoy = userRepositoy;
         }
 

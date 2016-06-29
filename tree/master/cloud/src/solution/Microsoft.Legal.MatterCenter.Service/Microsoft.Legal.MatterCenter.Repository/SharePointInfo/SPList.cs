@@ -57,19 +57,19 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="spoAuthorization"></param>
         /// <param name="generalSettings"></param>
         public SPList(ISPOAuthorization spoAuthorization,
-            IOptions<CamlQueries> camlQueries, IOptions<ErrorSettings> errorSettings,
-            IOptions<SearchSettings> searchSettings,
-            IOptions<ContentTypesConfig> contentTypesConfig,
-            ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<MailSettings> mailSettings, IHostingEnvironment hostingEnvironment)
+            IOptionsMonitor<CamlQueries> camlQueries, IOptionsMonitor<ErrorSettings> errorSettings,
+            IOptionsMonitor<SearchSettings> searchSettings,
+            IOptionsMonitor<ContentTypesConfig> contentTypesConfig,
+            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IOptionsMonitor<MailSettings> mailSettings, IHostingEnvironment hostingEnvironment)
         {
-            this.searchSettings = searchSettings.Value;
-            this.camlQueries = camlQueries.Value;
+            this.searchSettings = searchSettings.CurrentValue;
+            this.camlQueries = camlQueries.CurrentValue;
             this.spoAuthorization = spoAuthorization;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
-            this.mailSettings = mailSettings.Value;
+            this.logTables = logTables.CurrentValue;
+            this.mailSettings = mailSettings.CurrentValue;
             this.hostingEnvironment = hostingEnvironment;
-            this.errorSettings = errorSettings.Value;
+            this.errorSettings = errorSettings.CurrentValue;
         }
 
         public bool CreateList(ClientContext clientContext, ListInformation listInfo)
