@@ -34,8 +34,8 @@
             vm.arealawDropDowm = false;
             vm.opendateDropDown = false;
             //End
-            Office.initialize = function (reason) {              
-               // vm.initOutlook();
+            Office.initialize = function (reason) {
+                // vm.initOutlook();
             };
             $scope.initOfficeLibrary = function () {
 
@@ -84,20 +84,25 @@
 
 
             vm.pagenumber = 1;
-            vm.watchFunc = function (newData) {
+            vm.responseNull = false;
+            vm.watchFunc = function (newData, oldData) {
                 var promise = $q.defer();
-                if (newData === true) {
+                if (newData === true && !vm.responseNull) {
+                    vm.lazyloader = false;
                     vm.pagenumber = vm.pagenumber + 1;
                     searchRequest.SearchObject.PageNumber = vm.pagenumber;
                     get(searchRequest, function (response) {
                         if (response == "") {
-
+                            vm.lazyloader = true;
+                            vm.responseNull = true;
                         } else {
                             vm.lazyloader = true;
                             vm.gridOptions.data = vm.gridOptions.data.concat(response);
                         }
                         promise.resolve();
                     });
+                } else {
+                    vm.lazyloader = true;
                 }
                 return promise.promise;
             }
@@ -175,7 +180,7 @@
             }
 
             vm.getFolderHierarchy = function () {
-                vm.allAttachmentDetails=[];
+                vm.allAttachmentDetails = [];
                 var matterData = {
                     MatterName: vm.selectedRow.matterName,
                     MatterUrl: vm.selectedRow.matterClientUrl
@@ -205,14 +210,14 @@
 
                     vm.foldersList = getNestedChildren(vm.foldersList, null);
                     if (vm.foldersList[0] !== null) { vm.showSelectedFolderTree(vm.foldersList[0]); }
-                  
+
                     jQuery('#UploadMatterModal').modal("show");
                     //Initialize Officejs library                     
                     //Office.initialize = function (reason) {
                     //     vm.initOutlook();
                     //};
-                     vm.initOutlook();
-                   
+                    vm.initOutlook();
+
                 });
             }
 
@@ -226,7 +231,7 @@
                 var mailId = '';
 
                 if (sourceFile.isEmail && sourceFile.isEmail === "true") {
-                   
+
                     attachments = [];
                     mailId = Office.context.mailbox.item.itemId;
                     for (var iCounter = 0; iCounter < vm.allAttachmentDetails.length; iCounter++) {
@@ -285,16 +290,16 @@
                         attachmentRequestVM.ServiceRequest.Subject = subjectNameWithoutExt + "_" + date + "." + extMail;
                     }
                     else {
-                        
+
                         for (var attachment in attachments) {
                             var fileNameWithExt = attachments[attachment].name;
-                                if (-1 !== fileNameWithExt.lastIndexOf(".")) {
-                                    var fileNameWithoutExt = fileNameWithExt.substring(0, fileNameWithExt.lastIndexOf("."));
-                                    var ext = fileNameWithExt.substr(fileNameWithExt.lastIndexOf(".") + 1);
-                                    attachments[attachment].name = fileNameWithoutExt + "_" + date + "." + ext;
-                                } else {
-                                    attachments[attachment].name = fileNameWithExt + "_" + date;
-                                }
+                            if (-1 !== fileNameWithExt.lastIndexOf(".")) {
+                                var fileNameWithoutExt = fileNameWithExt.substring(0, fileNameWithExt.lastIndexOf("."));
+                                var ext = fileNameWithExt.substr(fileNameWithExt.lastIndexOf(".") + 1);
+                                attachments[attachment].name = fileNameWithoutExt + "_" + date + "." + ext;
+                            } else {
+                                attachments[attachment].name = fileNameWithExt + "_" + date;
+                            }
                         }
                         attachmentRequestVM.ServiceRequest.Attachments = attachments;
                     }
@@ -304,7 +309,7 @@
                     vm.uploadEmail(attachmentRequestVM, draggedFile);
                 }
                 if (sourceFile.isEmail && sourceFile.isEmail === "false") {
-                    vm.uploadAttachment(attachmentRequestVM,  draggedFile);
+                    vm.uploadAttachment(attachmentRequestVM, draggedFile);
                 }
             }
 
@@ -318,7 +323,7 @@
                 var performContentCheck = false;//Todo: Need to get from the config.js
                 vm.isLoadingFromDesktopStarted = true;
                 var draggedFile = $filter("filter")(vm.allAttachmentDetails, sourceFile.attachmentId)[0];
-                mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck,draggedFile);
+                mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck, draggedFile);
             }
 
             //This function will handle the files that has been dragged from the user desktop
@@ -403,7 +408,7 @@
                     var source = vm.sourceFile;
                     //If the mail upload is success
                     if (response.code === "OK" && response.value === "Attachment upload success") {
-                        
+
                         var subject = Office.context.mailbox.item.subject;
                         subject = subject.substring(0, subject.lastIndexOf("."));
                         vm.mailUpLoadSuccess = true;
@@ -417,13 +422,13 @@
                         //If the mail upload is not success
                     else if (response.code === "DuplicateDocument") {
                         vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
-                        vm.IsNonIdenticalContent = false;                    
-                       
+                        vm.IsNonIdenticalContent = false;
+
                         var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
                         bAppendEnabled = false,
                         fileExtension = "undefined" !== typeof source && source.title ? source.title.trim().substring(source.title.trim().lastIndexOf(".") + 1) : "";
                         var isEmail = droppedAttachedFile.isEmail ? true : (1 === parseInt(droppedAttachedFile.attachmentType) || "eml" === fileExtension) ? true : false;
-                        bAppendEnabled=attachmentEmailOverwriteConfiguration(selectedOverwriteConfiguration,isEmail);
+                        bAppendEnabled = attachmentEmailOverwriteConfiguration(selectedOverwriteConfiguration, isEmail);
                         response.contentCheck = response.value.split("|")[1];
                         response.value = response.value.split("|")[0];
                         response.saveLatestVersion = "True";
@@ -457,17 +462,17 @@
                 var bAppendEnabled = false;
                 switch (selectedOverwriteConfiguration) {
                     case "BOTH":
-                         bAppendEnabled = true;
+                        bAppendEnabled = true;
                         break;
                     case "DOCUMENT ONLY":
-                         bAppendEnabled = isEmail ? false : true;
+                        bAppendEnabled = isEmail ? false : true;
                         break;
                     default:
                         bAppendEnabled = isEmail ? true : false;
                         break;
                 }
                 return bAppendEnabled;
-               
+
             }
 
             ////Call Web API method for upload mail
@@ -503,14 +508,14 @@
                         if (extEmailOrMsg === "eml" || extEmailOrMsg === "msg") {
                             vm.docUploadedFolder = vm.sourceFile.title.substring(0, vm.sourceFile.title.lastIndexOf("."));
                         }
-                        else {                           
+                        else {
                             vm.targetDrop.name = vm.targetDrop.name == vm.selectedRow.matterGuid ? vm.selectedRow.matterName : vm.targetDrop.name;
                             vm.docUploadedFolder = vm.targetDrop.name;
                         }
                         droppedAttachedFile.uploadSuccess = true;
                         console.log(droppedAttachedFile.counter);
                         vm.oUploadGlobal.successBanner = droppedAttachedFile.uploadSuccess ? true : false;
-                       
+
                         //removeDraggableDirective();
 
                     }
@@ -576,7 +581,7 @@
 
 
             vm.editAttachment = function (element, event) {
-               
+
                 //ToDo: Use Angular data binding functionality
                 var editIcon = $("#" + event.target.id);
                 var rowIndex = event.target.id.charAt(0);
@@ -732,7 +737,7 @@
 
 
             vm.initOutlook = function () {
-                
+
                 vm.IsDupliacteDocument = false;
                 if (Office.context && Office.context.mailbox) {
                     vm.loadingAttachments = true;
@@ -758,7 +763,7 @@
             }
 
 
-            vm.createMailPopup = function () {               
+            vm.createMailPopup = function () {
                 var sImageChunk = "", nIDCounter = 0;
                 var attachmentName = "", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";
                 vm.allAttachmentDetails = []
@@ -809,7 +814,7 @@
                     individualAttachment.size = vm.attachments[attachment].size;
                     individualAttachment.attachmentType = attachmentType;
                     vm.allAttachmentDetails.push(individualAttachment);
-                   
+
                 }
 
                 console.log(vm.allAttachmentDetails);
@@ -898,7 +903,6 @@
             //#region for searching matter by property and searchterm
             vm.mattersearch = function (term, property, bool) {
                 vm.lazyloader = false;
-                vm.divuigrid = false;
                 searchRequest.SearchObject.SearchTerm = term;
                 searchRequest.SearchObject.Sort.ByProperty = property;
                 if (bool) {
@@ -1018,6 +1022,9 @@
                     Url: configs.global.repositoryUrl
                 }
                 if (id == 1) {
+                    vm.pagenumber = 1;
+                    vm.responseNull = false;
+                    searchRequest.SearchObject.PageNumber = 1;
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.FilterByMe = 0;
                     searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
@@ -1062,6 +1069,9 @@
                 } else if (id == 2) {
                     vm.lazyloader = false;
                     vm.divuigrid = false;
+                    vm.pagenumber = 1;
+                    vm.responseNull = false;
+                    searchRequest.SearchObject.PageNumber = 1;
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.FilterByMe = 1;
                     searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
@@ -1732,19 +1742,19 @@
 
 
                     } else if ("overwrite" === sOperation) {
-                       
+
                         duplicateFile.cancel = null; vm.ducplicateSourceFile.pop();
                         mailOrDocUpload(vm.targetDrop, vm.sourceFile, true, undefined, draggedFile);
                     }
-                    else if ("append" === sOperation) {                   
-                       
-                          if (vm.sourceFile.isEmail && vm.sourceFile.isEmail === "true") {
-                              mailOrDocUpload(vm.targetDrop, vm.sourceFile, true, false, draggedFile, sOperation)
-                            }
-                          if (vm.sourceFile.isEmail && vm.sourceFile.isEmail === "false") {
-                                mailOrDocUpload(vm.targetDrop, vm.sourceFile, true, false, draggedFile, sOperation)
-                          }
-                          duplicateFile.cancel = null;
+                    else if ("append" === sOperation) {
+
+                        if (vm.sourceFile.isEmail && vm.sourceFile.isEmail === "true") {
+                            mailOrDocUpload(vm.targetDrop, vm.sourceFile, true, false, draggedFile, sOperation)
+                        }
+                        if (vm.sourceFile.isEmail && vm.sourceFile.isEmail === "false") {
+                            mailOrDocUpload(vm.targetDrop, vm.sourceFile, true, false, draggedFile, sOperation)
+                        }
+                        duplicateFile.cancel = null;
                     }
                     else {
                         duplicateFile.cancel = "False";
@@ -1802,6 +1812,10 @@
                 vm.oUploadGlobal.successBanner = false;
             }
 
+            vm.testFunction = function () {
+                console.log("Clicked");
+            }
+
         }]);
     app.directive('onload', function onload($timeout) {
         return {
@@ -1812,6 +1826,104 @@
                     $timeout(function () { jQuery('[id^="asc"]').hide(); }, 1000);
                     $timeout(function () { jQuery('[id^="desc"]').hide(); }, 1000);
                 }, true);
+            }
+        }
+    });
+
+    app.directive('popover', function ($compile, $templateCache) {
+        return {
+            restrict: 'A',
+            scope: {
+                details: '@'
+            },
+            link: function (scope, element, attrs) {
+                scope.$watch("details", function () {
+                    var obj = "";
+                    obj = eval('(' + attrs.details + ')');
+                    var actualcontent = "";
+                    actualcontent = '<div class="ng-scope">\
+                                   <div class="FlyoutBoxContent" style="width: 350px;">\
+                                      <div class="FlyoutContent FlyoutHeading">\
+                                          <div class="ms-Callout-content FlyoutHeadingText" ng-click="testFunction()">  ' + obj.matterName + ' </div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client.Matter ID:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Sub area of law:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible attorney:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
+                                       </div>\
+                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" onclick="Openuploadmodal(\'' + obj.matterName + '\',\'' + obj.matterUrl + '\')" type="button">Upload to a matter</a>\
+                                    </div>\
+                                </div>';
+                    $templateCache.put("test.html", actualcontent);
+                    var template = $templateCache.get("test.html");
+                    var a = $compile("<div>" + template + "</div>")(scope)
+                    $(element).popover({
+                        html: true,
+                        trigger: 'click',
+                        delay: 500,
+                        content: actualcontent
+                    });
+                }, true);
+            }
+        }
+    });
+
+    app.directive('testdirective', function ($compile, $templateCache) {
+        return {
+            restrict: 'A',
+            scope: {
+                control: '='
+            },
+            link: function (scope, element, attrs) {
+                var obj = "";
+                obj = eval('(' + attrs.details + ')');
+                var actualcontent = "";
+                actualcontent = '<div class="ng-scope">\
+                                   <div class="FlyoutBoxContent" style="width: 350px;">\
+                                      <div class="FlyoutContent FlyoutHeading">\
+                                          <div class="ms-Callout-content FlyoutHeadingText" ng-click="scope.control">  ' + obj.matterName + ' </div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client.Matter ID:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Sub area of law:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible attorney:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
+                                       </div>\
+                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" onclick="Openuploadmodal(\'' + obj.matterName + '\',\'' + obj.matterUrl + '\')" type="button">Upload to a matter</a>\
+                                    </div>\
+                                </div>';
+                $templateCache.put("test.html", actualcontent);
+                var template = $templateCache.get("test.html");
+                var a = $compile("<div>" + template + "</div>")(scope)
+                $(element).click(function (e) {
+                    var obj = $(this).parent().position();
+                    $(this).find('.test').html(a[0]);
+                    $(this).find('.test').css({ 'display': 'block', 'left': '220px' });
+                    $(this).find('.test').css('top', obj.top + "px");
+                });
             }
         }
     });
