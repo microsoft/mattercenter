@@ -478,6 +478,13 @@ body {
     margin-top: -9px;}
 .attachIconMargin {padding-left:8px;
 }
+.popUpScrollXHidden{overflow-x:hidden;overflow-y:auto;}
+.paddingRight20{padding-right:20px;}
+
+@media (max-width: 1020px){
+.maildata {
+    height: 100px;
+}
 
 
 
