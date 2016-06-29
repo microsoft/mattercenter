@@ -13,7 +13,7 @@
                     actualcontent = '<div class="">\
                                    <div class="FlyoutBoxContent" style="width: 350px;">\
                                       <div class="FlyoutContent FlyoutHeading">\
-                                          <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.matterName + ' </div>\
+                                          <div class="ms-Callout-content FlyoutHeadingText" ng-click="testFunction()">  ' + obj.matterName + ' </div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
@@ -39,9 +39,12 @@
                         html: true,
                         trigger: 'click',
                         delay: 500,
-                        content: actualcontent,
+                        content: actualcontent
                     });
                 }, true);
+                scope.testFunction = function () {
+                    console.log("maybe");
+                }
             }
         }
     }
@@ -159,7 +162,7 @@
                     $(element).popover({
                         html: true,
                         trigger: 'click',
-                        delay: 10000,
+                        delay: 500,
                         content: content,
                     });
                 });
@@ -200,8 +203,7 @@
     }
 
     var app = angular.module('matterMain');
-    app.directive('popover', [popover]);
-    app.directive('onload', ['$timeout', [onload]]);
+    //app.directive('popover',[popover]);    
     app.directive('showbreadcrumb', [showbreadcrumb]);
     app.directive('datefilter', [datefilter]);
     app.directive('popoverdoc', [popoverdoc]);

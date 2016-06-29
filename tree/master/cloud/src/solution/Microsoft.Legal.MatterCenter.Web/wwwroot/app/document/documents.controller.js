@@ -6,9 +6,9 @@
     var app = angular.module("matterMain");
 
     app.controller('documentsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout',
-        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache','$window',
+        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache', '$window','$q',
     function ($scope, $state, $interval, $stateParams, api, $timeout,
-        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache,$window) {
+        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache, $window,$q) {
         var vm = this;
         vm.selected = undefined;
         vm.documentname = 'All Documents'
@@ -116,9 +116,33 @@
                 });
                 $scope.gridApi.core.on.sortChanged($scope, vm.sortChangedDocument);
                 vm.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
-
+                $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFunc);
             }
         };
+
+        vm.pagenumber = 1;
+        vm.responseNull = false;
+        vm.watchFunc = function (newData, oldData) {
+            var promise = $q.defer();
+            if (newData === true && !vm.responseNull) {
+                vm.lazyloader = false;
+                vm.pagenumber = vm.pagenumber + 1;
+                searchRequest.SearchObject.PageNumber = vm.pagenumber;
+                get(searchRequest, function (response) {
+                    if (response == "") {
+                        vm.lazyloader = true;
+                        vm.responseNull = true;
+                    } else {
+                        vm.lazyloader = true;
+                        vm.gridOptions.data = vm.gridOptions.data.concat(response);
+                    }
+                    promise.resolve();
+                });
+            } else {
+                vm.lazyloader = true;
+            }
+            return promise.promise;
+        }
 
         //#region Code for attaching documents in compose more
         var isAppOpenedInOutlook = $location.absUrl().split('|')[0].split('=')[2];
@@ -280,7 +304,7 @@
             },
             SearchObject: {
                 PageNumber: 1,
-                ItemsPerPage: "10",
+                ItemsPerPage: "17",
                 SearchTerm: '',
                 Filters: {
                     ClientName: "",
@@ -426,7 +450,7 @@
         //#region for setting the document name in dropdown
         vm.SetDocuments = function (id, name) {
             vm.documentname = name;
-            vm.documentid=id;
+            vm.documentid = id;
             vm.GetDocuments(id);
         }
 
@@ -459,6 +483,11 @@
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
+                         vm.responseNull = false;
+                        vm.pagenumber = 1;
+                        searchRequest.SearchObject.PageNumber = 1;
+                        searchRequest.SearchObject.SearchTerm = "";
+                        searchRequest.SearchObject.Filters.FilterByMe = 0;
                         getPinnedDocuments(pinnedDocumentsRequest, function (pinresponse) {
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
@@ -489,6 +518,9 @@
             } else if (id == 2) {
                 vm.lazyloader = false;
                 vm.divuigrid = false;
+                vm.responseNull = false;
+                vm.pagenumber = 1;
+                searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Filters.FilterByMe = 1;
                 get(searchRequest, function (response) {
@@ -557,7 +589,7 @@
 
 
         //To run GetDocuments function on page load 
-       vm.SetDocuments(vm.documentid, vm.documentname);
+        vm.SetDocuments(vm.documentid, vm.documentname);
         //End 
 
 
@@ -611,7 +643,7 @@
                     DocumentParentUrl: alldata.documentParentUrl,
                     DocumentID: alldata.documentID,
                     DocumentIconUrl: alldata.documentIconUrl,
-                    PinType:"unpin"
+                    PinType: "unpin"
                 }
             }
             pinDocuments(pinRequest, function (response) {
@@ -726,6 +758,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "FileName";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
@@ -735,6 +769,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "FileName";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
@@ -752,6 +788,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.DocumentClientSort == undefined || vm.DocumentClientSort == "asc") {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
@@ -762,6 +800,8 @@
                         }
                         else {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
@@ -779,6 +819,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.DocumentClientIDSort == undefined || vm.DocumentClientIDSort == "asc") {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientID";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
@@ -788,6 +830,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientID";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
@@ -806,6 +850,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.ModiFiedDateSort == undefined || vm.ModiFiedDateSort == "asc") {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
@@ -815,6 +861,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
@@ -833,6 +881,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.AuthorSort == undefined || vm.AuthorSort == "asc") {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MSITOfficeAuthor";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
@@ -842,6 +892,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MSITOfficeAuthor";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
@@ -859,6 +911,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.VersionSort == undefined || vm.VersionSort == "asc") {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MCVersionNumber";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
@@ -868,6 +922,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MCVersionNumber";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
@@ -885,6 +941,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.CheckoutSort == undefined || vm.CheckoutSort == "asc") {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MCCheckoutUser";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
@@ -894,6 +952,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "MCCheckoutUser";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
@@ -911,6 +971,8 @@
                     if (sortColumns[0].sort != undefined) {
                         if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "Created";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
@@ -920,6 +982,8 @@
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         } else {
                             vm.lazyloader = false;
+                            vm.pagenumber = 1;
+                            searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "Created";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
@@ -953,54 +1017,54 @@
             { field: 'documentName', displayName: 'Document', width: '300', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' }];
                 $scope.$apply();
             } else {
-                vm.gridOptions = {
-                    enableHorizontalScrollbar: 0,
-                    enableVerticalScrollbar: 0,
-                    enableGridMenu: true,
-                    enableRowHeaderSelection: false,
-                    enableRowSelection: false,
-                    enableSelectAll: false,
-                    multiSelect: false,
-                    columnDefs: [
-                        { field: 'checker', displayName: 'checked', width: '48', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
-                        { field: 'documentName', displayName: 'Document', width: '300', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
-                        { field: 'documentClient', displayName: 'Client', width: '200', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
-                        { field: 'documentClientId', displayName: 'Client.Matter ID', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentCheckoutUser}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
-                        { field: 'documentModifiedDate', displayName: 'Modified Date', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
-                        { field: 'documentOwner', displayName: 'Author', width: '140', headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html', visible: false },
-                        { field: 'documentVersion', displayName: 'Document Version', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
-                        { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '210', headerCellTemplate: '/app/document/DocumentTemplates/CheckOutHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
-                        { field: 'documentCreatedDate', displayName: 'Created date', width: '190', headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
-                    ],
-                    enableColumnMenus: false,
-                    onRegisterApi: function (gridApi) {
-                        $scope.gridApi = gridApi;
-                        gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
-                            $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
-                        });
-                        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                            vm.selectedRow = row.entity
-                            //If the app is opened in outlook, then the below validation is going to be applied
-                            if (vm.isOutlook && vm.showAttachment) {
-                                vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
-                                if (vm.selectedRows && vm.selectedRows.length < 5) {
-                                    vm.enableAttachment = true
-                                    vm.showErrorAttachmentInfo = false;
-                                    vm.warningMessageText = '';
-                                }
-                                else {
-                                    vm.showErrorAttachmentInfo = true;
-                                    vm.enableAttachment = false;
-                                    vm.warningMessageText = configs.uploadMessages.maxAttachedMessage;
-                                }
-                            }
-                        });
-                        $scope.gridApi.core.on.sortChanged($scope, vm.sortChangedDocument);
-                        vm.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
+                //vm.gridOptions = {
+                //    enableHorizontalScrollbar: 0,
+                //    enableVerticalScrollbar: 0,
+                //    enableGridMenu: true,
+                //    enableRowHeaderSelection: false,
+                //    enableRowSelection: false,
+                //    enableSelectAll: false,
+                //    multiSelect: false,
+                //    columnDefs: [
+                //        { field: 'checker', displayName: 'checked', width: '48', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
+                //        { field: 'documentName', displayName: 'Document', width: '300', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
+                //        { field: 'documentClient', displayName: 'Client', width: '200', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
+                //        { field: 'documentClientId', displayName: 'Client.Matter ID', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentCheckoutUser}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+                //        { field: 'documentModifiedDate', displayName: 'Modified Date', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
+                //        { field: 'documentOwner', displayName: 'Author', width: '140', headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html', visible: false },
+                //        { field: 'documentVersion', displayName: 'Document Version', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
+                //        { field: 'documentCheckoutUser', displayName: 'Checked out to', width: '210', headerCellTemplate: '/app/document/DocumentTemplates/CheckOutHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
+                //        { field: 'documentCreatedDate', displayName: 'Created date', width: '190', headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
+                //    ],
+                //    enableColumnMenus: false,
+                //    onRegisterApi: function (gridApi) {
+                //        $scope.gridApi = gridApi;
+                //        gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
+                //            $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
+                //        });
+                //        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+                //            vm.selectedRow = row.entity
+                //            //If the app is opened in outlook, then the below validation is going to be applied
+                //            if (vm.isOutlook && vm.showAttachment) {
+                //                vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
+                //                if (vm.selectedRows && vm.selectedRows.length < 5) {
+                //                    vm.enableAttachment = true
+                //                    vm.showErrorAttachmentInfo = false;
+                //                    vm.warningMessageText = '';
+                //                }
+                //                else {
+                //                    vm.showErrorAttachmentInfo = true;
+                //                    vm.enableAttachment = false;
+                //                    vm.warningMessageText = configs.uploadMessages.maxAttachedMessage;
+                //                }
+                //            }
+                //        });
+                //        $scope.gridApi.core.on.sortChanged($scope, vm.sortChangedDocument);
+                //        vm.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
 
-                    }
-                };
-                $scope.$apply();
+                //    }
+                //};
+                //$scope.$apply();
             }
         });
 
