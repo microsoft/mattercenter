@@ -32,7 +32,7 @@
                                          title="Email as link" /><div title="Email as link" class="inlineValues">Email as link</div>
                                 </div>
                             </div>
-                            <div class="popUpBody popUpFloatLeft">
+                            <div class="popUpBody popUpFloatLeft popUpScrollXHidden">
                                 <ul class="emailDocumentNames">
                                     <li ng-repeat="element in vm.cartelements">
                                         <div class="row">
@@ -40,7 +40,7 @@
                                                 <span><img id="document-{{$index}}" style="display:none" src="../Images/loadingcirclests16.gif"></span>
                                             </div>
                                             <div class="col-xs-12 col-sm-8">
-                                                <span><input type="checkbox" ng-model="element.selected" /></span>{{element.documentName}}
+                                                <span class="paddingRight20"><input type="checkbox" ng-model="element.selected" /></span>{{element.documentName}}
                                             </div>
                                             <div class="col-xs-12 col-sm-1"><img src="../Images/icon-delete.png" class="" title="Remove attachment" ng-click="vm.removeAttachment(element)"></div>
 
