@@ -39,12 +39,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private ErrorSettings errorSettings;
         private IDocumentRepository documentRepository;
         private GeneralSettings generalSettings;
-        public UploadHelperFunctionsUtility(IOptions<MailSettings> mailSettings, IOptions<ErrorSettings> errorSettings, IDocumentRepository documentRepository, IOptions<GeneralSettings> generalSettings)
+        public UploadHelperFunctionsUtility(IOptionsMonitor<MailSettings> mailSettings, IOptionsMonitor<ErrorSettings> errorSettings, IDocumentRepository documentRepository, IOptionsMonitor<GeneralSettings> generalSettings)
         {
-            this.mailSettings = mailSettings.Value;
-            this.errorSettings = errorSettings.Value;
+            this.mailSettings = mailSettings.CurrentValue;
+            this.errorSettings = errorSettings.CurrentValue;
             this.documentRepository = documentRepository;
-            this.generalSettings = generalSettings.Value;
+            this.generalSettings = generalSettings.CurrentValue;
         }
         /// <summary>
         /// Check if duplicate document exists 

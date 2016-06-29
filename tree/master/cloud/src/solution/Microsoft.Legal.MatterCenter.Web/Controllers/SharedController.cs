@@ -48,21 +48,21 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="matterSettings"></param>
         /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
-        public SharedController(IOptions<ErrorSettings> errorSettings,
-            IOptions<SharedSettings> sharedSettings,
+        public SharedController(IOptionsMonitor<ErrorSettings> errorSettings,
+            IOptionsMonitor<SharedSettings> sharedSettings,
             ISPOAuthorization spoAuthorization,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,            
-            ICustomLogger customLogger, IOptions<LogTables> logTables,
+            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables,
             ISharedRepository sharedRepository
             )
         {
-            this.errorSettings = errorSettings.Value;            
+            this.errorSettings = errorSettings.CurrentValue;            
             this.spoAuthorization = spoAuthorization;
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.sharedRepository = sharedRepository;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
-            this.sharedSettings = sharedSettings.Value;
+            this.logTables = logTables.CurrentValue;
+            this.sharedSettings = sharedSettings.CurrentValue;
         }
 
         /// <summary>

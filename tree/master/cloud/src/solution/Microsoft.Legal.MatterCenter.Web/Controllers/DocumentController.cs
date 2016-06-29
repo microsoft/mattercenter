@@ -58,25 +58,25 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
         /// <param name="documentRepositoy"></param>
-        public DocumentController(IOptions<ErrorSettings> errorSettings,
-            IOptions<DocumentSettings> documentSettings,
+        public DocumentController(IOptionsMonitor<ErrorSettings> errorSettings,
+            IOptionsMonitor<DocumentSettings> documentSettings,
             ISPOAuthorization spoAuthorization,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IDocumentRepository documentRepositoy,
-            ICustomLogger customLogger, IOptions<LogTables> logTables, IDocumentProvision documentProvision,
-            IOptions<GeneralSettings> generalSettings
+            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IDocumentProvision documentProvision,
+            IOptionsMonitor<GeneralSettings> generalSettings
 
             )
         {
-            this.errorSettings = errorSettings.Value;
-            this.documentSettings = documentSettings.Value;
+            this.errorSettings = errorSettings.CurrentValue;
+            this.documentSettings = documentSettings.CurrentValue;
             this.spoAuthorization = spoAuthorization;
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.documentRepositoy = documentRepositoy;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
+            this.logTables = logTables.CurrentValue;
             this.documentProvision = documentProvision;
-            this.generalSettings = generalSettings.Value;
+            this.generalSettings = generalSettings.CurrentValue;
         }
 
         /// <summary>

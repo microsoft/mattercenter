@@ -23,9 +23,9 @@ namespace Microsoft.Legal.MatterCenter.Utility
     {
         private LogTables logTables;
         ErrorResponse errorResponse;
-        public CustomLogger(IOptions<LogTables> logTables)
+        public CustomLogger(IOptionsMonitor<LogTables> logTables)
         {
-            this.logTables = logTables.Value;
+            this.logTables = logTables.CurrentValue;
             
         }
         /// <summary>

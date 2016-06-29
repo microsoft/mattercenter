@@ -54,21 +54,21 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
         /// <param name="taxonomyRepository"></param>
-        public TaxonomyController(IOptions<ErrorSettings> errorSettings, 
-            IOptions<TaxonomySettings> taxonomySettings, 
-            IOptions<GeneralSettings> generalSettings,
+        public TaxonomyController(IOptionsMonitor<ErrorSettings> errorSettings, 
+            IOptionsMonitor<TaxonomySettings> taxonomySettings, 
+            IOptionsMonitor<GeneralSettings> generalSettings,
             ISPOAuthorization spoAuthorization, 
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
-            ITaxonomyRepository taxonomyRepository, ICustomLogger customLogger, IOptions<LogTables> logTables, IValidationFunctions validationFunctions)
+            ITaxonomyRepository taxonomyRepository, ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IValidationFunctions validationFunctions)
         {
-            this.errorSettings = errorSettings.Value;
-            this.taxonomySettings = taxonomySettings.Value;
-            this.generalSettings = generalSettings.Value;
+            this.errorSettings = errorSettings.CurrentValue;
+            this.taxonomySettings = taxonomySettings.CurrentValue;
+            this.generalSettings = generalSettings.CurrentValue;
             this.spoAuthorization = spoAuthorization;
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;            
             this.taxonomyRepository = taxonomyRepository;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
+            this.logTables = logTables.CurrentValue;
             this.validationFunctions = validationFunctions;
         }
          

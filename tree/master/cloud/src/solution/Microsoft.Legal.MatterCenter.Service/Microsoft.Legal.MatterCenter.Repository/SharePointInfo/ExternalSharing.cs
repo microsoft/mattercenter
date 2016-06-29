@@ -21,14 +21,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private GeneralSettings generalSettings;
         private MatterSettings matterSettings;
         private LogTables logTables;
-        public ExternalSharing(ISPOAuthorization spoAuthorization, IOptions<ListNames> listNames, 
-            IOptions<GeneralSettings> generalSettings, IOptions<MatterSettings> matterSettings, IOptions<LogTables> logTables)
+        public ExternalSharing(ISPOAuthorization spoAuthorization, IOptionsMonitor<ListNames> listNames, 
+            IOptionsMonitor<GeneralSettings> generalSettings, IOptionsMonitor<MatterSettings> matterSettings, IOptionsMonitor<LogTables> logTables)
         {
             this.spoAuthorization = spoAuthorization;
-            this.listNames = listNames.Value;
-            this.generalSettings = generalSettings.Value;
-            this.matterSettings = matterSettings.Value;
-            this.logTables = logTables.Value;
+            this.listNames = listNames.CurrentValue;
+            this.generalSettings = generalSettings.CurrentValue;
+            this.matterSettings = matterSettings.CurrentValue;
+            this.logTables = logTables.CurrentValue;
         }
         /// <summary>
         /// This method will store the external sharing request in a list called "MatterCenterExternalRequests"

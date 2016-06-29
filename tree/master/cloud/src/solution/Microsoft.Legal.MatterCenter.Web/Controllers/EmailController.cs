@@ -44,19 +44,19 @@ namespace Microsoft.Legal.MatterCenter.Web
         private LogTables logTables;
         IDocumentProvision documentProvision;
         DocumentSettings documentSettings;
-        public EmailController(IOptions<ErrorSettings> errorSettings,
+        public EmailController(IOptionsMonitor<ErrorSettings> errorSettings,
             ICustomLogger customLogger, 
             ISPOAuthorization spoAuthorization, 
             IMatterCenterServiceFunctions matterCenterServiceFunctions, 
-            IOptions<LogTables> logTables, IDocumentProvision documentProvision, IOptions<DocumentSettings> documentSettings)
+            IOptionsMonitor<LogTables> logTables, IDocumentProvision documentProvision, IOptionsMonitor<DocumentSettings> documentSettings)
         {
             this.spoAuthorization = spoAuthorization;
-            this.errorSettings = errorSettings.Value;
+            this.errorSettings = errorSettings.CurrentValue;
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
+            this.logTables = logTables.CurrentValue;
             this.documentProvision = documentProvision;
-            this.documentSettings = documentSettings.Value;
+            this.documentSettings = documentSettings.CurrentValue;
         }
 
         /// <summary>

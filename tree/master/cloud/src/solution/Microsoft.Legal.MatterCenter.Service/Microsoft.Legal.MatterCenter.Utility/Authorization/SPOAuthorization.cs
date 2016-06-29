@@ -43,13 +43,13 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// </summary>
         /// <param name="generalSettings"></param>
         /// <param name="errorSettings"></param>
-        public SPOAuthorization(IOptions<GeneralSettings> generalSettings, IOptions<ErrorSettings> errorSettings, IOptions<LogTables> logTables, 
+        public SPOAuthorization(IOptionsMonitor<GeneralSettings> generalSettings, IOptionsMonitor<ErrorSettings> errorSettings, IOptionsMonitor<LogTables> logTables, 
             ICustomLogger customLogger)
         {            
-            this.generalSettings = generalSettings.Value;
-            this.errorSettings = errorSettings.Value;
+            this.generalSettings = generalSettings.CurrentValue;
+            this.errorSettings = errorSettings.CurrentValue;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
+            this.logTables = logTables.CurrentValue;
         }
         
         /// <summary>

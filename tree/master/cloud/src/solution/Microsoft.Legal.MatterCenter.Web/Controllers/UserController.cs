@@ -39,21 +39,21 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="matterSettings"></param>
         /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
-        public UserController(IOptions<ErrorSettings> errorSettings,           
+        public UserController(IOptionsMonitor<ErrorSettings> errorSettings,           
             ISPOAuthorization spoAuthorization,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IUserRepository userRepositoy,
             ICustomLogger customLogger, 
-            IOptions<LogTables> logTables,  
-            IOptions<GeneralSettings> generalSettings
+            IOptionsMonitor<LogTables> logTables,  
+            IOptionsMonitor<GeneralSettings> generalSettings
             )
         {
-            this.errorSettings = errorSettings.Value;            
+            this.errorSettings = errorSettings.CurrentValue;            
             this.spoAuthorization = spoAuthorization;
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;            
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;             
-            this.generalSettings = generalSettings.Value;
+            this.logTables = logTables.CurrentValue;             
+            this.generalSettings = generalSettings.CurrentValue;
             this.userRepositoy = userRepositoy;
         }
 

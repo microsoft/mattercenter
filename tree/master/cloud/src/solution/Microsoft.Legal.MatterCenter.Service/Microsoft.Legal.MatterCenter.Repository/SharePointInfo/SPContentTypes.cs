@@ -20,14 +20,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private LogTables logTables;
         private CamlQueries camlQueries;
         private ISPList spList;
-        public SPContentTypes(IOptions<ContentTypesConfig> contentTypesConfig, IOptions<CamlQueries> camlQueries, ISPList spList,
-            ICustomLogger customLogger, IOptions<LogTables> logTables
+        public SPContentTypes(IOptionsMonitor<ContentTypesConfig> contentTypesConfig, IOptionsMonitor<CamlQueries> camlQueries, ISPList spList,
+            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables
             )
         {
-            this.contentTypesConfig = contentTypesConfig.Value;
+            this.contentTypesConfig = contentTypesConfig.CurrentValue;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
-            this.camlQueries = camlQueries.Value;
+            this.logTables = logTables.CurrentValue;
+            this.camlQueries = camlQueries.CurrentValue;
             this.spList = spList;
         }
         public IList<ContentType> GetContentTypeData(ClientContext clientContext, IList<string> contentTypesNames, Client client, Matter matter)

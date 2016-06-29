@@ -43,15 +43,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// Constructir where all the dependencies are injected
         /// </summary>
         /// <param name="spoAuthorization"></param>
-        public UsersDetails(IOptions<MatterSettings> matterSettings, IOptions<ListNames> listNames, 
-            ISPOAuthorization spoAuthorization, ISPList spList, ICustomLogger customLogger, IOptions<LogTables> logTables)
+        public UsersDetails(IOptionsMonitor<MatterSettings> matterSettings, IOptionsMonitor<ListNames> listNames, 
+            ISPOAuthorization spoAuthorization, ISPList spList, ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables)
         {
-            this.matterSettings = matterSettings.Value;
-            this.listNames = listNames.Value;
+            this.matterSettings = matterSettings.CurrentValue;
+            this.listNames = listNames.CurrentValue;
             this.spoAuthorization = spoAuthorization;
             this.spList = spList;
             this.customLogger = customLogger;
-            this.logTables = logTables.Value;
+            this.logTables = logTables.CurrentValue;
         }
 
         public Users GetUserProfilePicture(Client client)
