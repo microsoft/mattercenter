@@ -1,9 +1,9 @@
 ﻿<div class='row'>
 
-    <div class='col-xs-7 col-sm-9 col-md-9 col-lg-9' id='matterPopup' title='{{row.entity.matterName}}'>
-
+    <div class='col-xs-7 col-sm-9 col-md-9 col-lg-9' id='matterPopup' title='{{row.entity.matterName}}' control="testFunction()">
         <a popover type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align:left;text-decoration: none;' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href=''> {{row.entity.matterName}} </a>
-        <div class='popover-content'></div>
+        <!--<a testdirective type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align:left;text-decoration: none;' details={{row.entity}}> {{row.entity.matterName}} </a>
+        <div class='popcontent' style="display:none;position: absolute;top: 0px;background: #fff;z-index:1001;left: 50px;border: 1px solid #ccc;"></div>-->
     </div>
     <div class='col-xs-5 col-sm-3 col-md-3 col-lg-3 text-right' id="matcoltemp">
 
@@ -12,7 +12,7 @@
             <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a>
             <ul style='margin:0;padding:0' class='dropdown-menu'>
 
-                <li class='ms-ContextualMenu-item' ng-click='grid.appScope.Openuploadmodal()'><a class='ECBItem ms-ContextualMenu-link upload'>Upload to this Matter</a></li>
+                <li class='ms-ContextualMenu-item' ng-click='grid.appScope.vm.Openuploadmodal()'><a class='ECBItem ms-ContextualMenu-link upload'>Upload to this Matter</a></li>
                 <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' ng-href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'>View Matter Details</a></li>
                 <li class='ms-ContextualMenu-item'>
 

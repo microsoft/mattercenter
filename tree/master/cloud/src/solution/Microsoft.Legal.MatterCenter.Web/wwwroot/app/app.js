@@ -114,6 +114,7 @@ angular.module('matterMain', [
                         $(".CloseSwitcher").addClass("hide");
                         $(".OpenSwitcher").removeClass("hide");
                         $(".MenuCaption").removeClass("hideMenuCaption");
+                        $(".popcontent").css("display",'none');
                         $rootScope.displayinfo = false;
                         $rootScope.dispinner = true;
                         $rootScope.contextualhelp = false;

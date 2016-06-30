@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache', '$q', '$filter',
-        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache, $q, $filter) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache', '$q', '$filter', 'commonFunctions',
+        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache, $q, $filter, commonFunctions) {
             var vm = this;
             vm.selected = "";
             vm.mattername = "All Matters";
@@ -217,7 +217,7 @@
                     //     vm.initOutlook();
                     //};
                     vm.initOutlook();
-
+                    vm.lazyloader = true;
                 });
             }
 
@@ -507,14 +507,14 @@
                         var extEmailOrMsg = vm.sourceFile.title.substr(vm.sourceFile.title.lastIndexOf(".") + 1);
                         if (extEmailOrMsg === "eml" || extEmailOrMsg === "msg") {
                             vm.docUploadedFolder = vm.sourceFile.title.substring(0, vm.sourceFile.title.lastIndexOf("."));
-                            
+
                         }
                         else {
                             vm.targetDrop.name = vm.targetDrop.name == vm.selectedRow.matterGuid ? vm.selectedRow.matterName : vm.targetDrop.name;
-                           
+
                         }
                         droppedAttachedFile.uploadedFolder = vm.targetDrop.name;
-                        vm.docUploadedFolder=vm.targetDrop.name;
+                        vm.docUploadedFolder = vm.targetDrop.name;
                         droppedAttachedFile.uploadSuccess = true;
                         console.log(droppedAttachedFile.counter);
                         vm.oUploadGlobal.successBanner = droppedAttachedFile.uploadSuccess ? true : false;
@@ -676,7 +676,8 @@
             //#endregion
 
 
-            $scope.Openuploadmodal = function () {
+            vm.Openuploadmodal = function () {
+                vm.lazyloader = false;
                 vm.getFolderHierarchy();
                 vm.oUploadGlobal.successBanner = false;
                 vm.isLoadingFromDesktopStarted = false;
@@ -814,14 +815,14 @@
                     individualAttachment.extension = sExtension;
                     individualAttachment.isEmail = false;
                     individualAttachment.uploadSuccess = false;
-                     individualAttachment.uploadedFolder=null;
+                    individualAttachment.uploadedFolder = null;
                     individualAttachment.size = vm.attachments[attachment].size;
                     individualAttachment.attachmentType = attachmentType;
                     vm.allAttachmentDetails.push(individualAttachment);
 
                 }
 
-               
+
             }
             //#endregion
 
@@ -855,6 +856,7 @@
 
             //#region For filtering the grid when clicked on search button 
             vm.searchMatter = function (val) {
+                vm.pagenumber = 1;
                 searchRequest.SearchObject.SearchTerm = val;
                 return matterResource.get(searchRequest).$promise;
             }
@@ -864,6 +866,7 @@
                 vm.mattername = "All Matters";
                 vm.lazyloader = false;
                 vm.divuigrid = false;
+                vm.pagenumber = 1;
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.selected != "") {
@@ -874,10 +877,12 @@
                         var secondText = searchToText.split(',')[1]
                         finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
                     } else {
-                        finalSearchText = vm.selected;
+                        finalSearchText = commonFunctions.searchFilter(vm.selected);
                     }
                 }
                 searchRequest.SearchObject.SearchTerm = finalSearchText;
+                searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                searchRequest.SearchObject.Sort.Direction = 1;
                 get(searchRequest, function (response) {
                     if (response == "") {
                         vm.gridOptions.data = response;
@@ -1346,6 +1351,7 @@
 
             $scope.sortChanged = function (grid, sortColumns) {
                 vm.divuigrid = false;
+                vm.responseNull = false;
                 searchRequest.SearchObject.SearchTerm = "";
                 if (sortColumns.length != 0) {
                     if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
@@ -1816,7 +1822,7 @@
                 vm.oUploadGlobal.successBanner = false;
             }
 
-            vm.testFunction = function () {
+            $scope.testFunction = function () {
                 console.log("Clicked");
             }
 
@@ -1888,16 +1894,18 @@
         return {
             restrict: 'A',
             scope: {
-                control: '='
+                control: '&'
             },
             link: function (scope, element, attrs) {
-                var obj = "";
-                obj = eval('(' + attrs.details + ')');
-                var actualcontent = "";
-                actualcontent = '<div class="ng-scope">\
+                $(element).click(function (e) {
+                    var obj = "";
+                    obj = eval('(' + attrs.details + ')');
+                    var actualcontent = "";
+                    actualcontent = '<div class="" style="position:relative;" ng-click="stopEvent($event)">\
                                    <div class="FlyoutBoxContent" style="width: 350px;">\
+                                      <div class="flyoutLeftarrow" style="top: 11px;left: -9px;"></div>\
                                       <div class="FlyoutContent FlyoutHeading">\
-                                          <div class="ms-Callout-content FlyoutHeadingText" ng-click="scope.control">  ' + obj.matterName + ' </div>\
+                                          <div class="ms-Callout-content FlyoutHeadingText" ng-click="f()">  ' + obj.matterName + ' </div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
@@ -1916,18 +1924,30 @@
                                           <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
                                        </div>\
                                        <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a>\
-                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" onclick="Openuploadmodal(\'' + obj.matterName + '\',\'' + obj.matterUrl + '\')" type="button">Upload to a matter</a>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(/"' + obj.matterName + '"/,/"' + obj.matterClientUrl + '"/)" type="button">Upload to a matter</a>\
                                     </div>\
                                 </div>';
-                $templateCache.put("test.html", actualcontent);
-                var template = $templateCache.get("test.html");
-                var a = $compile("<div>" + template + "</div>")(scope)
-                $(element).click(function (e) {
+                    $templateCache.put("test.html", actualcontent);
+                    var template = $templateCache.get("test.html");
+                    var a = $compile("<div>" + template + "</div>")(scope);
+                    $('.popcontent').css('display', 'none');
+                    e.stopPropagation();
                     var obj = $(this).parent().position();
-                    $(this).find('.test').html(a[0]);
-                    $(this).find('.test').css({ 'display': 'block', 'left': '220px' });
-                    $(this).find('.test').css('top', obj.top + "px");
+                    $(this).parent().find('.popcontent').html(a[0]);
+                    $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '220px' });
+                    //$(this).parent().find('.popcontent').css('top', obj.top + "px");
                 });
+            },
+            controller: function ($scope) {
+                $scope.openUpload = function (mattername, matterurl) {
+                    $scope.$parent.$parent.$parent.grid.appScope.vm.selectedRow.matterName = mattername;
+                    $scope.$parent.$parent.$parent.grid.appScope.vm.selectedRow.matterClientUrl = matterurl;
+                    $scope.$parent.$parent.$parent.grid.appScope.vm.Openuploadmodal();
+                    $('.popcontent').css('display', 'none');
+                };
+                $scope.stopEvent = function ($event) {
+                    $event.stopPropagation();
+                };
             }
         }
     });
