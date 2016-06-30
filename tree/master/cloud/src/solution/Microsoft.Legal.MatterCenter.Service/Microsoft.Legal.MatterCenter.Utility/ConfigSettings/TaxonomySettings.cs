@@ -26,5 +26,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string SubAreaCustomPropertyisNoFolderStructurePresent { get; set; }
         public string SubAreaOfLawDocumentTemplates { get; set; }
         public string ClientCustomPropertiesId { get; set; }
+        public int Levels { get; set; }
+        
     }
 }

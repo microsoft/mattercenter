@@ -121,6 +121,7 @@ namespace Microsoft.Legal.MatterCenter.Web
 
                 ServiceUtility.RedisCacheHostName = generalSettings.RedisCacheHostName;
                 cacheValue = ServiceUtility.GetDataFromAzureRedisCache(key);
+                cacheValue = string.Empty;
                 TaxonomyResponseVM taxonomyRepositoryVM = null;
                 if (String.IsNullOrEmpty(cacheValue))
                 {
