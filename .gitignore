@@ -21,3 +21,10 @@ tree/master/cloud/src/solution/*/pkgobj/
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/bin/Debug/net451
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/obj/Debug/net451
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.ProviderService/.vs/config
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Models
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Repository/bin/Release/net451
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Repository/obj/Release/net451
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/bin/Release/net451
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/obj/Release/net451
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/wwwroot/css
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/wwwroot/js
