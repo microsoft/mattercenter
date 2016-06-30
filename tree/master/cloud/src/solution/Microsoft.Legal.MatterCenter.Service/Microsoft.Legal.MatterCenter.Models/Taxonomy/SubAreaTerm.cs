@@ -9,6 +9,8 @@
 // </copyright>
 // <summary>This file defines classes used by Taxonomy.</summary>
 // ***********************************************************************
+using System.Collections.Generic;
+
 namespace Microsoft.Legal.MatterCenter.Models
 {
     /// <summary>
@@ -91,6 +93,16 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// </summary>
         /// <value>The WssID of the term.</value>
         public int WssId
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the sub area terms. It includes the list of sub area of law falling under particular area of law.
+        /// </summary>
+        /// <value>The sub area terms.</value>
+        public IList<SubareaTerm> SubareaTerms
         {
             get;
             set;

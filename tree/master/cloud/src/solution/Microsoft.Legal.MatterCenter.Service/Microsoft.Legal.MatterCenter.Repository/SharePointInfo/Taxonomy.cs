@@ -149,6 +149,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {            
             try
             {
+
+                
                 clientContext.Load(
                                   termGroup,
                                    group => group.Name,
@@ -158,28 +160,24 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                        termSet => termSet.Terms.Include(
                                            term => term.Name,
                                            term => term.Id,
-                                           term => term.CustomProperties,
-                                           term => term.Terms.Include(
-                                               termArea => termArea.Name,
-                                               termArea => termArea.Id,
-                                               termArea => termArea.CustomProperties,
-                                               termArea => termArea.Terms.Include(
-                                                   termSubArea => termSubArea.Name,
-                                                   termSubArea => termSubArea.Id,
-                                                   termSubArea => termSubArea.CustomProperties)))));
+                                           term => term.TermsCount,
+                                           term => term.CustomProperties
+                                           )));
 
                 clientContext.ExecuteQuery();
+
+
                 foreach (TermSet termSet in termGroup.TermSets)
                 {
                     if (termSet.Name == termStoreDetails.TermSetName)
                     {
                         if (termStoreDetails.TermSetName == taxonomySettings.PracticeGroupTermSetName)
                         {
-                            taxonomyResponseVM.TermSets = GetPracticeGroupTermSetHierarchy(termSet, termStoreDetails);
+                            taxonomyResponseVM.TermSets = GetPracticeGroupTermSetHierarchy(clientContext, termSet, termStoreDetails);
                         }
                         else if (termStoreDetails.TermSetName == taxonomySettings.ClientTermSetName)
                         {
-                            taxonomyResponseVM.ClientTermSets = GetClientTermSetHierarchy(termSet, termStoreDetails);
+                            taxonomyResponseVM.ClientTermSets = GetClientTermSetHierarchy(clientContext, termSet, termStoreDetails);
                         }
                     }
                 }
@@ -192,13 +190,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return taxonomyResponseVM;
         }
 
+        
+
         /// <summary>
         /// Gets the practice group term set hierarchy.
         /// </summary>
         /// <param name="termSet">Term set object holding Practice Group terms</param>
         /// <param name="termStoreDetails">Term Store object containing Term store data</param>
         /// <returns>Serialized Object of Term Set</returns>
-        private TermSets GetPracticeGroupTermSetHierarchy(TermSet termSet, TermStoreDetails termStoreDetails)
+        private TermSets GetPracticeGroupTermSetHierarchy(ClientContext clientContext, TermSet termSet, TermStoreDetails termStoreDetails)
         {
             TermSets tempTermSet = new TermSets();
             try
@@ -221,60 +221,58 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             tempTermPG.FolderNames = customProperty.Value;
                         }
                     }
-
+                    //Add Level 1 to the term collection
                     tempTermSet.PGTerms.Add(tempTermPG);
-                    ///// Retrieve the Terms - level 2
-                    tempTermPG.AreaTerms = new List<AreaTerm>();
-                    TermCollection termCollArea = term.Terms;
-                    foreach (Term termArea in termCollArea)
+                    if(term.TermsCount>0)
                     {
-                        AreaTerm tempTermArea = new AreaTerm();
-                        tempTermArea.TermName = termArea.Name;
-                        tempTermArea.Id = Convert.ToString(termArea.Id, CultureInfo.InvariantCulture);
-                        tempTermArea.ParentTermName = term.Name;
-                        /////Retrieve the custom property for Terms at level 2
-                        foreach (KeyValuePair<string, string> customProperty in termArea.CustomProperties)
+                        TermCollection termCollLevel2 = LoadTerms(term, clientContext);
+                        tempTermPG.AreaTerms = new List<AreaTerm>();
+                        foreach (Term termLevel2 in termCollLevel2)
                         {
-                            if (customProperty.Key.Equals(taxonomySettings.AreaCustomPropertyFolderNames, StringComparison.Ordinal))
+                            AreaTerm tempTermArea = new AreaTerm();
+                            tempTermArea.TermName = termLevel2.Name;
+                            tempTermArea.Id = Convert.ToString(termLevel2.Id, CultureInfo.InvariantCulture);
+                            tempTermArea.ParentTermName = term.Name;
+                            /////Retrieve the custom property for Terms at level 2
+                            foreach (KeyValuePair<string, string> customProperty in termLevel2.CustomProperties)
                             {
-                                tempTermArea.FolderNames = customProperty.Value;
-                            }
-                        }
-
-                        tempTermPG.AreaTerms.Add(tempTermArea);
-                        /////Retrieve the Terms - level 3
-                        tempTermArea.SubareaTerms = new List<SubareaTerm>();
-                        TermCollection termCollSubArea = termArea.Terms;
-                        foreach (Term termSubArea in termCollSubArea)
-                        {
-                            SubareaTerm tempTermSubArea = new SubareaTerm();
-                            tempTermSubArea.TermName = termSubArea.Name;
-                            tempTermSubArea.Id = Convert.ToString(termSubArea.Id, CultureInfo.InvariantCulture);
-                            tempTermSubArea.ParentTermName = termArea.Name;
-                            /////Retrieve the custom property for Terms at level 3
-
-                            tempTermSubArea.DocumentTemplates = string.Empty;
-                            foreach (KeyValuePair<string, string> customProperty in termSubArea.CustomProperties)
-                            {
-                                if (customProperty.Key.Equals(termStoreDetails.CustomPropertyName, StringComparison.Ordinal))
+                                if (customProperty.Key.Equals(taxonomySettings.AreaCustomPropertyFolderNames, StringComparison.Ordinal))
                                 {
-                                    tempTermSubArea.DocumentTemplates = customProperty.Value;
-                                }
-                                else if (customProperty.Key.Equals(taxonomySettings.SubAreaCustomPropertyFolderNames, StringComparison.Ordinal))
-                                {
-                                    tempTermSubArea.FolderNames = customProperty.Value;
-                                }
-                                else if (customProperty.Key.Equals(taxonomySettings.SubAreaCustomPropertyisNoFolderStructurePresent, StringComparison.Ordinal))
-                                {
-                                    tempTermSubArea.IsNoFolderStructurePresent = customProperty.Value;
-                                }
-                                else if (customProperty.Key.Equals(taxonomySettings.SubAreaOfLawDocumentTemplates, StringComparison.Ordinal))
-                                {
-                                    tempTermSubArea.DocumentTemplateNames = customProperty.Value;
+                                    tempTermArea.FolderNames = customProperty.Value;
                                 }
                             }
+                            //Add Level 2 to the term collection
+                            tempTermPG.AreaTerms.Add(tempTermArea);
+                            if(termLevel2.TermsCount>0)
+                            {   
+                                TermCollection termCollLevel3 = LoadTerms(termLevel2, clientContext);
+                                //Add Level 3 to the term collection
+                                tempTermArea.SubareaTerms = UpdateLevelTerm(termCollLevel3, termStoreDetails);
 
-                            tempTermArea.SubareaTerms.Add(tempTermSubArea);
+                                int termCount = 0;
+                                foreach (Term termLevel3 in termCollLevel3)
+                                {
+                                    if (termLevel3.TermsCount > 0)
+                                    {
+                                        TermCollection termCollLevel4 = LoadTerms(termLevel3, clientContext);
+                                        //Add Level 4 to the term collection
+                                        tempTermArea.SubareaTerms[termCount].SubareaTerms = UpdateLevelTerm(termCollLevel4, termStoreDetails);
+                                        int termCount1 = 0;
+                                        foreach (Term termLevel4 in termCollLevel4)
+                                        {
+                                            if (termLevel4.TermsCount > 0)
+                                            {
+                                                TermCollection termCollLevel5 = LoadTerms(termLevel4, clientContext);
+                                                //Add Level 5 to the term collection
+                                                tempTermArea.SubareaTerms[termCount].SubareaTerms[termCount1].SubareaTerms = 
+                                                    UpdateLevelTerm(termCollLevel5, termStoreDetails);
+                                            }
+                                            termCount1 = termCount1 + 1;
+                                        }
+                                    }
+                                    termCount = termCount + 1;
+                                }
+                            }
                         }
                     }
                 }
@@ -289,13 +287,79 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return tempTermSet;
         }
 
+        
+        /// <summary>
+        /// This method will update the taxonomy hierarchy object with custom properties that needs to be send to client
+        /// </summary>
+        /// <param name="termCollection">The Term Collection object to which terms will be added</param>
+        /// <param name="termStoreDetails">The term store details which the client has sent</param>
+        /// <returns></returns>
+        private List<SubareaTerm> UpdateLevelTerm(TermCollection termCollection, TermStoreDetails termStoreDetails)
+        {
+            var subAreaTerms = new List<SubareaTerm>();
+            foreach (Term termLevel3 in termCollection)
+            {
+                SubareaTerm tempTermSubArea = new SubareaTerm();
+                tempTermSubArea.TermName = termLevel3.Name;
+                tempTermSubArea.Id = Convert.ToString(termLevel3.Id, CultureInfo.InvariantCulture);
+                tempTermSubArea.ParentTermName = termLevel3.Name;
+                /////Retrieve the custom property for Terms at level 3
+
+                tempTermSubArea.DocumentTemplates = string.Empty;
+                foreach (KeyValuePair<string, string> customProperty in termLevel3.CustomProperties)
+                {
+                    if (customProperty.Key.Equals(termStoreDetails.CustomPropertyName, StringComparison.Ordinal))
+                    {
+                        tempTermSubArea.DocumentTemplates = customProperty.Value;
+                    }
+                    else if (customProperty.Key.Equals(taxonomySettings.SubAreaCustomPropertyFolderNames, StringComparison.Ordinal))
+                    {
+                        tempTermSubArea.FolderNames = customProperty.Value;
+                    }
+                    else if (customProperty.Key.Equals(taxonomySettings.SubAreaCustomPropertyisNoFolderStructurePresent, StringComparison.Ordinal))
+                    {
+                        tempTermSubArea.IsNoFolderStructurePresent = customProperty.Value;
+                    }
+                    else if (customProperty.Key.Equals(taxonomySettings.SubAreaOfLawDocumentTemplates, StringComparison.Ordinal))
+                    {
+                        tempTermSubArea.DocumentTemplateNames = customProperty.Value;
+                    }
+                }
+                subAreaTerms.Add(tempTermSubArea);
+            }
+            return subAreaTerms;
+        }
+
+        
+        /// <summary>
+        /// This method will load the child terms for a particular parent term
+        /// </summary>
+        /// <param name="term">Parent Term</param>
+        /// <param name="context">SharePoint Context</param>
+        /// <returns></returns>
+        private TermCollection LoadTerms(Term term, ClientContext context)
+        {            
+            TermCollection termCollection = term.Terms;
+            context.Load(termCollection,
+                tc => tc.Include(
+                    t => t.TermsCount,
+                    t=>t.Id,
+                    t => t.Name,
+                    t => t.TermsCount,
+                    t => t.CustomProperties
+                )
+            );
+            context.ExecuteQuery();
+            return termCollection;              
+        }
+
         /// <summary>
         /// Gets the taxonomy hierarchy for client term set.
         /// </summary>
         /// <param name="termSet">Term set object holding Client terms</param>
         /// <param name="termStoreDetails">Term Store object containing Term store data</param>
         /// <returns>Serialized Object of Client Term Set</returns>
-        private ClientTermSets GetClientTermSetHierarchy(TermSet termSet, TermStoreDetails termStoreDetails)
+        private ClientTermSets GetClientTermSetHierarchy(ClientContext clientContext, TermSet termSet, TermStoreDetails termStoreDetails)
         {
             ClientTermSets tempClientTermSet = new ClientTermSets();
             try
