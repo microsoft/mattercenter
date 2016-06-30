@@ -6,7 +6,12 @@
     app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache', '$q', '$filter', 'commonFunctions',
         function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache, $q, $filter, commonFunctions) {
             var vm = this;
-            vm.selected = "";
+            vm.selected = '';
+            vm.selectedRow = {
+                matterClientUrl:'',
+                matterName: '',
+                matterGuid:''
+            };
             vm.mattername = "All Matters";
             vm.sortname = "";
             vm.mattersdrop = false;
@@ -72,7 +77,10 @@
                         $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
                     });
                     gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                        vm.selectedRow = row.entity
+                        //vm.selectedRow = row.entity
+                        vm.selectedRow.matterName = row.entity.matterName
+                        vm.selectedRow.matterClientUrl = row.entity.matterName
+                        vm.selectedRow.matterGuid = row.entity.matterGuid
                     });
                     $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
                     $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
@@ -186,6 +194,8 @@
                     matterNameToAPI = vm.selectedRow.matterName;
                 }
                 else {
+                    
+                    vm.selectedRow.matterName = matterName
                     matterNameToAPI = matterName;
                 }
 
@@ -194,6 +204,7 @@
                 }
                 else {
                     matterClientUrlToAPI = matterUrl;
+                    vm.selectedRow.matterClientUrl = matterUrl
                 }
 
                 vm.allAttachmentDetails = [];
