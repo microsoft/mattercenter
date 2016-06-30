@@ -1,9 +1,10 @@
 ﻿<div class='row'>
 
     <div class='col-xs-7 col-sm-9 col-md-9 col-lg-9' id='matterPopup' title='{{row.entity.matterName}}' control="testFunction()">
-        <a popover type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align:left;text-decoration: none;' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href=''> {{row.entity.matterName}} </a>
-        <!--<a testdirective type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align:left;text-decoration: none;' details={{row.entity}}> {{row.entity.matterName}} </a>
-        <div class='popcontent' style="display:none;position: absolute;top: 0px;background: #fff;z-index:1001;left: 50px;border: 1px solid #ccc;"></div>-->
+        <!--<a popover type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align:left;text-decoration: none;' details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right' type='button' data-html='true' href=''> {{row.entity.matterName}} </a>-->
+        <a matterflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' 
+           style='text-align:left;text-decoration: none;' details={{row.entity}}> {{row.entity.matterName}} </a>
+        <div class='popcontent' style="display:none;position: absolute;top: 0px;background: #fff;z-index:1001;left: 50px;border: 1px solid #ccc;"></div>
     </div>
     <div class='col-xs-5 col-sm-3 col-md-3 col-lg-3 text-right' id="matcoltemp">
 

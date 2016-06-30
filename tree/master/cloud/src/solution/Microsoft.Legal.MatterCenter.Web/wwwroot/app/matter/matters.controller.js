@@ -179,13 +179,29 @@
                 });
             }
 
-            vm.getFolderHierarchy = function () {
+            vm.getFolderHierarchy = function (matterName, matterUrl) {
+                var matterNameToAPI=''
+                var matterClientUrlToAPI = ''
+                if (vm.selectedRow && vm.selectedRow.matterName) {
+                    matterNameToAPI = vm.selectedRow.matterName;
+                }
+                else {
+                    matterNameToAPI = matterName;
+                }
+
+                if (vm.selectedRow && vm.selectedRow.matterClientUrl) {
+                    matterClientUrlToAPI = vm.selectedRow.matterClientUrl;
+                }
+                else {
+                    matterClientUrlToAPI = matterUrl;
+                }
+
                 vm.allAttachmentDetails = [];
                 var matterData = {
-                    MatterName: vm.selectedRow.matterName,
-                    MatterUrl: vm.selectedRow.matterClientUrl
+                    MatterName: matterNameToAPI,
+                    MatterUrl: matterClientUrlToAPI
                 };
-                vm.getContentCheckConfigurations(vm.selectedRow.matterClientUrl);
+                vm.getContentCheckConfigurations(matterClientUrlToAPI);
                 getFolderHierarchy(matterData, function (response) {
                     vm.foldersList = response.foldersList;
                     vm.uploadedFiles = [];
@@ -676,9 +692,9 @@
             //#endregion
 
 
-            vm.Openuploadmodal = function () {
+            vm.Openuploadmodal = function (matterName, matterUrl) {
                 vm.lazyloader = false;
-                vm.getFolderHierarchy();
+                vm.getFolderHierarchy(matterName, matterUrl);
                 vm.oUploadGlobal.successBanner = false;
                 vm.isLoadingFromDesktopStarted = false;
             }
@@ -1890,7 +1906,7 @@
         }
     });
 
-    app.directive('testdirective', function ($compile, $templateCache) {
+    app.directive('matterflyout', function ($compile, $templateCache) {
         return {
             restrict: 'A',
             scope: {
@@ -1924,7 +1940,7 @@
                                           <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
                                        </div>\
                                        <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a>\
-                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(/"' + obj.matterName + '"/,/"' + obj.matterClientUrl + '"/)" type="button">Upload to a matter</a>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\')" type="button">Upload to a matter</a>\
                                     </div>\
                                 </div>';
                     $templateCache.put("test.html", actualcontent);
@@ -1939,10 +1955,8 @@
                 });
             },
             controller: function ($scope) {
-                $scope.openUpload = function (mattername, matterurl) {
-                    $scope.$parent.$parent.$parent.grid.appScope.vm.selectedRow.matterName = mattername;
-                    $scope.$parent.$parent.$parent.grid.appScope.vm.selectedRow.matterClientUrl = matterurl;
-                    $scope.$parent.$parent.$parent.grid.appScope.vm.Openuploadmodal();
+                $scope.openUpload = function (matterName, matterUrl) {                    
+                    $scope.$parent.$parent.$parent.grid.appScope.vm.Openuploadmodal(matterName, matterUrl);
                     $('.popcontent').css('display', 'none');
                 };
                 $scope.stopEvent = function ($event) {
@@ -1953,6 +1967,3 @@
     });
 })();
 
-function Openuploadmodal(mattername, matterurl) {
-    jQuery('#UploadMatterModal').modal("show");
-}
