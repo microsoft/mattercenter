@@ -6,9 +6,9 @@
     var app = angular.module("matterMain");
 
     app.controller('documentsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout',
-        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache', '$window','$q',
+        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache', '$window', '$q', 'commonFunctions',
     function ($scope, $state, $interval, $stateParams, api, $timeout,
-        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache, $window,$q) {
+        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache, $window, $q, commonFunctions) {
         var vm = this;
         vm.selected = undefined;
         vm.documentname = 'All Documents'
@@ -77,14 +77,14 @@
             enableVerticalScrollbar: 0,
             enableGridMenu: true,
             enableRowHeaderSelection: false,
-            enableRowSelection: false,
-            enableSelectAll: false,
-            multiSelect: false,
+            enableRowSelection: true,
+            enableSelectAll: true,
+            multiSelect: true,
             columnDefs: [
                 { field: 'checker', displayName: 'checked', width: '48', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
                 { field: 'documentName', displayName: 'Document', width: '280', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
                 { field: 'documentClient', displayName: 'Client', width: '200', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
-                { field: 'documentClientId', displayName: 'Client.Matter ID', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentCheckoutUser}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+                { field: 'documentClientId', displayName: 'Client.Matter ID', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentClientId}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
                 { field: 'documentModifiedDate', displayName: 'Modified Date', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
                 { field: 'documentOwner', displayName: 'Author', width: '140', headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html', visible: false },
                 { field: 'documentVersion', displayName: 'Document Version', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
@@ -128,6 +128,7 @@
                 vm.lazyloader = false;
                 vm.pagenumber = vm.pagenumber + 1;
                 searchRequest.SearchObject.PageNumber = vm.pagenumber;
+                searchRequest.SearchObject.SearchTerm = "";
                 get(searchRequest, function (response) {
                     if (response == "") {
                         vm.lazyloader = true;
@@ -145,12 +146,19 @@
         }
 
         //#region Code for attaching documents in compose more
+        Office.initialize = function (reason) {
+        }
         var isAppOpenedInOutlook = $location.absUrl().split('|')[0].split('=')[2];
         if (isAppOpenedInOutlook && isAppOpenedInOutlook === "Outlook") {
-            vm.isOutlook = true;
+           
+                vm.isOutlook = true;
+              //  vm.isOutlookAsAttachment(vm.isOutlook);
+           // }
         }
-        if (vm.isOutlook) {
-            Office.initialize = function (reason) {
+       // vm.isOutlook ? vm.isOutlookAsAttachment(vm.isOutlook) : "";
+        vm.isOutlookAsAttachment = function (isOutlook) {
+            if (isOutlook) {
+                //Office.initialize = function (reason) {
                 if (Office && Office.context && Office.context.mailbox && Office.context.mailbox.item) {
                     vm.showErrorAttachmentInfo = false;
                     //vm.showFailedAtachments = false;
@@ -169,11 +177,13 @@
                         if (typeof (sEmailCreatedTime) === "undefined" && typeof (sEmailModifiedTime) === "undefined") {
                             vm.showAttachment = true;
                             vm.enableAttachment = true;
-                            vm.gridOptions.columnDefs.splice(1, 7);
+                           // vm.gridOptions.columnDefs.splice(1, 7);
                         }
                     }
                 }
-            };
+            }
+        }
+           // };
 
             vm.sendDocumentAsAttachment = function () {
                 if (vm.selectedRows && vm.selectedRows.length) {
@@ -245,7 +255,7 @@
             vm.closeNotification = function () {
                 vm.showPopUpHolder = false;
             }
-        }
+        
 
         //#endregion
 
@@ -337,11 +347,16 @@
         };
 
         vm.searchDocument = function (val) {
+            vm.pagenumber = 1;
+            searchRequest.SearchObject.PageNumber = vm.pagenumber;
             searchRequest.SearchObject.SearchTerm = val;
+            searchRequest.SearchObject.Sort.ByProperty = "FileName";
+            searchRequest.SearchObject.Sort.Direction = 0;
             return documentResource.get(searchRequest).$promise;
         }
 
         vm.search = function () {
+            vm.pagenumber = 1;
             vm.documentname = 'All Documents'
             vm.documentid = 1;
             vm.lazyloader = false;
@@ -349,8 +364,13 @@
             var searchToText = '';
             var finalSearchText = '';
             if (vm.selected != "") {
-                finalSearchText = "('" + vm.selected + "*' OR FileName:'" + vm.selected + "*' OR dlcDocIdOWSText:'" + vm.selected + "*' OR MCDocumentClientName:'" + vm.selected + "*')";
+                if (-1 !== vm.selected.indexOf(":")) {
+                    finalSearchText = commonFunctions.searchFilter(vm.selected);
+                } else {
+                    finalSearchText = "('" + vm.selected + "*' OR FileName:'" + vm.selected + "*' OR dlcDocIdOWSText:'" + vm.selected + "*' OR MCDocumentClientName:'" + vm.selected + "*')";
+                }
             }
+            searchRequest.SearchObject.PageNumber = vm.pagenumber;
             searchRequest.SearchObject.SearchTerm = finalSearchText;
             searchRequest.SearchObject.Sort.ByProperty = "FileName";
             searchRequest.SearchObject.Sort.Direction = 0;
@@ -481,9 +501,12 @@
                         vm.nodata = true;
 
                     } else {
+                        if (vm.isOutlook) {
+                            vm.isOutlookAsAttachment(vm.isOutlook);
+                        }                       
                         vm.divuigrid = true;
                         vm.nodata = false;
-                         vm.responseNull = false;
+                        vm.responseNull = false;
                         vm.pagenumber = 1;
                         searchRequest.SearchObject.PageNumber = 1;
                         searchRequest.SearchObject.SearchTerm = "";
@@ -530,6 +553,9 @@
                         vm.divuigrid = true;
                         vm.nodata = true;
                     } else {
+                        if (vm.isOutlook) {
+                            vm.isOutlookAsAttachment(vm.isOutlook);
+                        }
                         vm.divuigrid = true;
                         vm.nodata = false;
                         getPinnedDocuments(pinnedDocumentsRequest, function (pinresponse) {
@@ -571,6 +597,9 @@
                         vm.divuigrid = true;
                         vm.nodata = true;
                     } else {
+                        if (vm.isOutlook) {
+                            vm.isOutlookAsAttachment(vm.isOutlook);
+                        }
                         vm.divuigrid = true;
                         vm.nodata = false;
                         angular.forEach(response, function (res) {
@@ -753,6 +782,7 @@
 
         vm.sortChangedDocument = function (grid, sortColumns) {
             vm.divuigrid = false;
+            vm.responseNull = false;
             if (sortColumns.length != 0) {
                 if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
                     if (sortColumns[0].sort != undefined) {
