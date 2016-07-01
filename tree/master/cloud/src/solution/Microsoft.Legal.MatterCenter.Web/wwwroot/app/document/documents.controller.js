@@ -637,8 +637,7 @@
             }
             UnpinDocuments(unpinRequest, function (response) {
                 if (response.isDocumentUnPinned) {
-                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);
-                    alert("Success");
+                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);                    
                 }
             });
         }
@@ -677,8 +676,7 @@
             }
             pinDocuments(pinRequest, function (response) {
                 if (response.isDocumentPinned) {
-                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);
-                    alert("Success");
+                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);                    
                 }
             });
         }

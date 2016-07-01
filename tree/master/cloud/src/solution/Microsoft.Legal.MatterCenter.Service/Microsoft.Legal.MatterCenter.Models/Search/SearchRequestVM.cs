@@ -8,6 +8,9 @@ namespace Microsoft.Legal.MatterCenter.Models
     public class SearchRequestVM
     {
         public SearchObject SearchObject { get; set; }
+        /// <summary>
+        /// Client info object
+        /// </summary>
         public Client Client { get; set; }
     }
 }
