@@ -82,38 +82,43 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <summary>
         /// Get all counts for all documentCounts, my documentCounts and pinned documentCounts
         /// </summary>
-        /// <param name="client"></param>
-        /// <returns></returns>
+        /// <param name="searchRequestVM">The search request object that has been find by the user to get results back for search criteria</param>
+        /// <returns>IActionResult with proper http status code</returns>
         [HttpPost("getdocumentcounts")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> GetDocumentCounts([FromBody]SearchRequestVM searchRequestVM)
         {
             try
             {
-                //Get the authorization token from the Request header
+                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
-                ErrorResponse errorResponse = null;
-                #region Error Checking                
+                GenericResponseVM genericResponse = null;
+                #region Error Checking    
+                //Input validation
                 if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion                
+                //For a given search request entered by the user, this api will get all documents that has been 
+                //uploaded by him, all documents that are assigned to him and all the documents which are pinned by him
                 int allDocumentCounts = await documentProvision.GetAllCounts(searchRequestVM);
                 int myDocumentCounts = await documentProvision.GetMyCounts(searchRequestVM);
                 int pinnedDocumentCounts = await documentProvision.GetPinnedCounts(searchRequestVM.Client);
+                //The object count information that will be sent to the user
                 var documentCounts = new
                 {
                     AllDocumentCounts = allDocumentCounts,
                     MyDocumentCounts = myDocumentCounts,
                     PinnedDocumentCounts = pinnedDocumentCounts,
                 };
+                //If the input validation is failed, send GenericResponseVM which contains the error information
                 return matterCenterServiceFunctions.ServiceResponse(documentCounts, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -126,17 +131,19 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <summary>
         /// Gets the documents based on search criteria.
         /// </summary>
-        /// <param name="searchRequestVM"></param>
-        /// <returns></returns>
+        /// <param name="searchRequestVM">The search request object that has been find by the user to get results back for search criteria</param>
+        /// <returns>IActionResult with proper http status code</returns>
         [HttpPost("getdocuments")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> Get([FromBody]SearchRequestVM searchRequestVM)
         {
             try
             {
+                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
+                //Input validation
                 if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
                 {
                     genericResponse = new GenericResponseVM()
@@ -145,6 +152,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                         Code = HttpStatusCode.BadRequest.ToString(),
                         IsError = true
                     };
+                    //If the input validation is failed, send GenericResponseVM which contains the error information
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion 
@@ -159,20 +167,21 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
         /// <summary>
-        /// Get all the documents which are pinned
+        /// Get all the documents which are pinned by the logged in user
         /// </summary>
-        /// <param name="client"></param>
-        /// <returns></returns>
+        /// <param name="client">The SPO client url from which to retrieve all the documents which are pinnned by the requested user</param>
+        /// <returns>IActionResult with proper http status code</returns>
         [HttpPost("getpinneddocuments")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> GetPin([FromBody]Client client)
         {
             try
             {
+                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
-                #region Error Checking                
-                GenericResponseVM genericResponse = null;
-                //if the token is not valid, immediately return no authorization error to the user                
+                #region Error Checking    
+                //Input validation            
+                GenericResponseVM genericResponse = null;                                
                 if (client == null)
                 {
                     genericResponse = new GenericResponseVM()
@@ -181,20 +190,13 @@ namespace Microsoft.Legal.MatterCenter.Web
                         Code = HttpStatusCode.BadRequest.ToString(),
                         IsError = true
                     };
+                    //If the input validation is failed, send GenericResponseVM which contains the error information
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-                var pinResponseVM = await documentRepositoy.GetPinnedRecordsAsync(client);
-                //if (pinResponseVM != null && pinResponseVM.TotalRows == 0)
-                //{
-                //    genericResponse = new GenericResponseVM()
-                //    {
-                //        Value = pinResponseVM.NoPinnedMessage,
-                //        Code = ((int)HttpStatusCode.NotFound).ToString(),
-                //        IsError = true
-                //    };
-                //    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
-                //}
+                //Get the documents which are pinned by the user
+                var pinResponseVM = await documentRepositoy.GetPinnedRecordsAsync(client);  
+                //Return the response with proper http status code              
                 return matterCenterServiceFunctions.ServiceResponse(pinResponseVM.DocumentDataList, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -205,7 +207,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
         /// <summary>
-        /// Pin a new document
+        /// This api will store the metadata of the document in a sharepoint list as a JSON object which is getting pinned
         /// </summary>
         /// <param name="pinRequestDocumentVM"></param>
         /// <returns></returns>
@@ -215,8 +217,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
+                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
-                #region Error Checking                
+                #region Error Checking       
+                //Input validation         
                 GenericResponseVM genericResponse = null;
                 if (pinRequestDocumentVM == null && pinRequestDocumentVM.Client == null && pinRequestDocumentVM.DocumentData == null)
                 {
@@ -226,6 +230,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                         Code = HttpStatusCode.BadRequest.ToString(),
                         IsError = true
                     };
+                    //If the input validation is failed, send GenericResponseVM which contains the error information
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
@@ -234,6 +239,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 {
                     IsDocumentPinned = isDocumentPinned
                 };
+                //Return the response with proper http status code and proper response object
                 return matterCenterServiceFunctions.ServiceResponse(documentPinned, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -244,7 +250,8 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
         /// <summary>
-        /// Unpin the document which is already pinned
+        /// This api will unpin the document which is already pinned and the unpinned document will be removed from the sharepoint 
+        /// list object
         /// </summary>
         /// <param name="pinRequestMatterVM"></param>
         /// <returns></returns>
@@ -254,6 +261,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
+                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
@@ -265,6 +273,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                         Code = HttpStatusCode.BadRequest.ToString(),
                         IsError = true
                     };
+                    //If the input validation is failed, send GenericResponseVM which contains the error information
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
@@ -273,6 +282,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 {
                     IsDocumentUnPinned = isDocumentUnPinned
                 };
+                //Return the response with proper http status code and proper response object
                 return matterCenterServiceFunctions.ServiceResponse(documentUnPinned, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -284,8 +294,7 @@ namespace Microsoft.Legal.MatterCenter.Web
 
         /// <summary>
         /// Returns document and list GUID
-        /// </summary>
-        /// <param name="requestObject">Request object containing SharePoint App Token</param>
+        /// </summary>        
         /// <param name="client">Client object containing list data</param>        
         /// <returns>Document and list GUID</returns>
         [HttpPost("getassets")]
@@ -294,6 +303,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
+                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
@@ -305,10 +315,12 @@ namespace Microsoft.Legal.MatterCenter.Web
                         Code = HttpStatusCode.BadRequest.ToString(),
                         IsError = true
                     };
+                    //If the input validation is failed, send GenericResponseVM which contains the error information
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 var documentAsset = await documentRepositoy.GetDocumentAndClientGUIDAsync(client);
+                //Return the response with proper http status code and proper response object
                 return matterCenterServiceFunctions.ServiceResponse(documentAsset, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -321,7 +333,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <summary>
         /// Uploads attachment which are there in the current mail item to SharePoint library.
         /// </summary>
-        /// <param name="attachmentRequestVM"></param>
+        /// <param name="attachmentRequestVM">This object contains information </param>
         /// <returns></returns>
         [HttpPost("uploadattachments")]
         [SwaggerResponse(HttpStatusCode.OK)]
@@ -329,6 +341,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {            
             try
             {
+                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 var client = attachmentRequestVM.Client;
                 var serviceRequest = attachmentRequestVM.ServiceRequest;
@@ -337,35 +350,41 @@ namespace Microsoft.Legal.MatterCenter.Web
                 ErrorResponse errorResponse = null;
                 if (client == null && serviceRequest==null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
+                    //If the input validation is failed, send GenericResponseVM which contains the error information
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 if (serviceRequest.FolderPath.Count != serviceRequest.Attachments.Count)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = "Folder path count and attachment count are not same",
-                        ErrorCode = HttpStatusCode.BadRequest.ToString()                        
+                        Value = "Folder path count and attachment count are not same",
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
+                    //If the input validation is failed, send GenericResponseVM which contains the error information
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
-                
+                //Upload attachments to the sharepoint document library the user has choosen
                 genericResponse = documentProvision.UploadAttachments(attachmentRequestVM);
+                //If there is any error in uploading the attachment, send that error information to the UI
                 if(genericResponse!=null && genericResponse.IsError==true)
                 {
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
+                //
                 genericResponse = new GenericResponseVM()
                 {
                     Code = HttpStatusCode.OK.ToString(),
                     Value = "Attachment upload success"
                 };
+                //Return the response with proper http status code and proper response object
                 return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -398,7 +417,8 @@ namespace Microsoft.Legal.MatterCenter.Web
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 string originalName = string.Empty;
                 bool allowContentCheck = Convert.ToBoolean(Request.Form["AllowContentCheck"], CultureInfo.InvariantCulture);
-                Int16 isOverwrite = 3;                
+                Int16 isOverwrite = 3;     
+                //Input validation           
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 IList<object> listResponse = new List<object>();
@@ -413,7 +433,8 @@ namespace Microsoft.Legal.MatterCenter.Web
                     };
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
-
+                #endregion
+                //Get all the files which are uploaded by the user
                 for (int fileCounter = 0; fileCounter < fileCollection.Count; fileCounter++)
                 {
                     IFormFile uploadedFile = fileCollection[fileCounter];
@@ -446,16 +467,18 @@ namespace Microsoft.Legal.MatterCenter.Web
                     else
                     {
                         string folder = folderUrl.Substring(folderUrl.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
-
-                        if (2 == isOverwrite)   //If User presses "Perform content check" option in overwrite Popup
+                        //If User presses "Perform content check" option in overwrite Popup
+                        if (2 == isOverwrite)   
                         {                            
                             genericResponse = documentProvision.PerformContentCheck(clientUrl, folderUrl, uploadedFile, fileName);
                         }
-                        else if (3 == isOverwrite)  //If user presses "Cancel upload" option in overwrite popup or file is being uploaded for the first time
+                        //If user presses "Cancel upload" option in overwrite popup or file is being uploaded for the first time
+                        else if (3 == isOverwrite)  
                         {
                             genericResponse = documentProvision.CheckDuplicateDocument(clientUrl, folderUrl, documentLibraryName, fileName, contentCheckDetails, allowContentCheck);
                         }
-                        else if (1 == isOverwrite)  //If User presses "Append date to file name and save" option in overwrite Popup
+                        //If User presses "Append date to file name and save" option in overwrite Popup
+                        else if (1 == isOverwrite)  
                         {
                             string fileNameWithoutExt = System.IO.Path.GetFileNameWithoutExtension(fileName);
                             string timeStampSuffix = DateTime.Now.ToString(documentSettings.TimeStampFormat, CultureInfo.InvariantCulture).Replace(":", "_");
@@ -478,6 +501,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                             {
                                 documentIconUrl = $"{generalSettings.SiteURL}/_layouts/15/images/ic{fileExtension}.png";
                             }
+                            //Create a json object with file upload success
                             var successFile = new
                             {
                                 IsError = false,
@@ -491,6 +515,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                         }
                         else
                         {
+                            //Create a json object with file upload failure
                             var errorFile = new
                             {
                                 IsError = true,
@@ -502,9 +527,10 @@ namespace Microsoft.Legal.MatterCenter.Web
                             listResponse.Add(errorFile);                           
                         }                   
                     }
-                }                
+                }
+                //Return the response with proper http status code and proper response object     
                 return matterCenterServiceFunctions.ServiceResponse(listResponse, (int)HttpStatusCode.OK);
-                #endregion
+                
             }
             catch (Exception ex)
             {
@@ -514,7 +540,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
         /// <summary>
-        /// Uploads mail to SharePoint library.
+        /// Uploads user selected email from outlook to SharePoint library with all the attachments
         /// </summary>
         /// <param name="attachmentRequestVM"></param>
         /// <returns></returns>
@@ -524,34 +550,40 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
+                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
                 spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 var client = attachmentRequestVM.Client;
                 var serviceRequest = attachmentRequestVM.ServiceRequest;
                 GenericResponseVM genericResponse = null;
 
-                #region Error Checking                
+                #region Error Checking   
+                //Input validation             
                 ErrorResponse errorResponse = null;
                 if (client == null && serviceRequest==null && string.IsNullOrWhiteSpace(serviceRequest.MailId))
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
+                //Upload email to the share point library
                 genericResponse = documentProvision.UploadEmails(attachmentRequestVM);
+                //If there is any error in uploading the email attachment, send that error information to the UI
                 if (genericResponse != null && genericResponse.IsError == true)
                 {                                
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
+                //If the email attachment is success, send the success response to the user
                 genericResponse = new GenericResponseVM()
                 {
                     Code = HttpStatusCode.OK.ToString(),
                     Value = "Attachment upload success"
                 };
+                //Return the response with proper http status code and proper response object
                 return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
 
             }
