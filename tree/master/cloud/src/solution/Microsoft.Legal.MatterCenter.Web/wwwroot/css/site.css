@@ -56,7 +56,20 @@ textarea {
     }
 }
 
+@media screen and (max-width:767px) and (min-width: 268px) {
+    .popcontent {
+        position: absolute;
+        top: 31px !important;
+        background: #fff;
+        z-index: 1001;
+        border: 1px solid #ccc;
+        left: 27px!important;
+    }
 
+    .flyoutwidth {
+        width: 290px!important;
+    }
+}
 
 .matters {
     width: 500px;
@@ -355,7 +368,7 @@ textarea {
     font-family: 'Segoe UI Web Regular','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
     font-size: 0.875em;
     font-weight: 400;
-    max-width: 1900px
+    max-width: 1900px;
 }
 
 .ui-grid-viewport {
@@ -679,3 +692,15 @@ textarea {
     font-size: 14px;
     text-decoration:none !important;
 }
+
+ .popcontent{
+     position: absolute;
+     top: 0px;
+     background: #fff;
+     z-index:1001;
+     border: 1px solid #ccc;
+ }
+
+ .flyoutwidth{
+     width:350px;
+ }

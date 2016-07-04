@@ -202,15 +202,234 @@
         }
     }
 
+    'use strict';
+    function matterflyout($compile, $templateCache) {
+        return {
+            restrict: 'A',
+            scope: {
+                control: '&'
+            },
+            link: function (scope, element, attrs) {
+                $(element).click(function (e) {
+                    var obj = "";
+                    obj = eval('(' + attrs.details + ')');
+                    var actualcontent = "";
+                    actualcontent = '<div class="" style="position:relative;" ng-click="stopEvent($event)">\
+                                   <div class="FlyoutBoxContent flyoutwidth">\
+                                      <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
+                                      <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
+                                      <div class="FlyoutContent FlyoutHeading">\
+                                          <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.matterName + ' </div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client.Matter ID:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Sub area of law:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible attorney:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
+                                       </div>\
+                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">Upload to a matter</a>\
+                                    </div>\
+                                </div>';
+                    $templateCache.put("test.html", actualcontent);
+                    var template = $templateCache.get("test.html");
+                    var a = $compile("<div>" + template + "</div>")(scope);
+                    $('.popcontent').css('display', 'none');
+                    e.stopPropagation();
+                    var obj = $(this).parent().position();
+                    $(this).parent().find('.popcontent').html(a[0]);
+                    $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '220px' });
+                    //$(this).parent().find('.popcontent').css('top', obj.top + "px");
+                });
+            },
+            controller: function ($scope) {
+                $scope.openUpload = function (matterName, matterUrl, matterGUID) {
+                    $scope.$parent.$parent.$parent.grid.appScope.vm.Openuploadmodal(matterName, matterUrl, matterGUID);
+                    $('.popcontent').css('display', 'none');
+                };
+                $scope.stopEvent = function ($event) {
+                    $event.stopPropagation();
+                };
+            }
+        }
+    };
+
+    'use strict';
+    function documentflyout($compile, $templateCache) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                $(element).click(function (e) {
+                    var obj = "";
+                    obj = eval('(' + attrs.details + ')');
+                    if (obj.documentMatter == "") {
+                        obj.documentMatter = "NA";
+                    }
+                    if (obj.documentClient == "") {
+                        obj.documentClient = "NA";
+                    }
+                    if (obj.documentID == "") {
+                        obj.documentID = "NA";
+                    }
+                    if (obj.documentOwner == "") {
+                        obj.documentOwner = "NA";
+                    }
+                    if (obj.documentModifiedDate == "") {
+                        obj.documentModifiedDate = "NA";
+                    }
+                    var actualcontent = "";
+                    actualcontent = '<div class="" ng-click="stopEvent($event)">\
+                                   <div class="FlyoutBoxContent flyoutwidth">\
+                                      <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
+                                       <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
+                                      <div class="FlyoutContent">\
+                                          <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.documentName + ' </div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Matter:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.documentMatter + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.documentClient + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Document ID:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.documentID + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Author:</div>\
+                                          <div class="ms-font-m FlyoutContent" toggle="parentToggle(message)">' + obj.documentOwner + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Modified date:</div>\
+                                          <div class="ms-font-m FlyoutContent" datefilter date='+ obj.documentModifiedDate + '>' + obj.documentModifiedDate + '</div>\
+                                       </div>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" style="width:190px;padding-left: 12.5%;" href="' + obj.documentUrl + '" target="_blank">Open document</a>\
+                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" style="width:190px" href="https://msmatter.sharepoint.com/sites/catalog/SitePages/documentDetails.aspx" target="_blank">View document details</a>\
+                                    </div>\
+                                </div>';
+                    $templateCache.put("test.html", actualcontent);
+                    var template = $templateCache.get("test.html");
+                    var a = $compile("<div>" + template + "</div>")(scope);
+                    $('.popcontent').css('display', 'none');
+                    e.stopPropagation();
+                    var obj = $(this).parent().position();
+                    $(this).parent().find('.popcontent').html(a[0]);
+                    $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px' });
+                    //$(this).parent().find('.popcontent').css('top', obj.top + "px");
+                });
+            },
+            controller: function ($scope) {
+                $scope.stopEvent = function ($event) {
+                    $event.stopPropagation();
+                };
+            }
+        }
+    };
+
+
+    'use strict';
+    function onload($timeout) {
+        return {
+            restrict: 'AE',
+            scope: { sortdetails: '@' },
+            link: function (scope, element, attrs) {
+                scope.$watch("sortdetails", function () {
+                    $timeout(function () { jQuery('[id^="asc"]').hide(); }, 1500);
+                    $timeout(function () { jQuery('[id^="desc"]').hide(); }, 1500);
+                }, true);
+            }
+        }
+    };
+
+    'use strict';
+    function popover($compile, $templateCache) {
+        return {
+            restrict: 'A',
+            scope: {
+                details: '@'
+            },
+            link: function (scope, element, attrs) {
+                scope.$watch("details", function () {
+                    var obj = "";
+                    obj = eval('(' + attrs.details + ')');
+                    var actualcontent = "";
+                    actualcontent = '<div class="ng-scope">\
+                                   <div class="FlyoutBoxContent" style="width: 350px;">\
+                                      <div class="FlyoutContent FlyoutHeading">\
+                                          <div class="ms-Callout-content FlyoutHeadingText" ng-click="testFunction()">  ' + obj.matterName + ' </div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client.Matter ID:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Sub area of law:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible attorney:</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
+                                       </div>\
+                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" onclick="Openuploadmodal(\'' + obj.matterName + '\',\'' + obj.matterUrl + '\')" type="button">Upload to a matter</a>\
+                                    </div>\
+                                </div>';
+                    $templateCache.put("test.html", actualcontent);
+                    var template = $templateCache.get("test.html");
+                    var a = $compile("<div>" + template + "</div>")(scope)
+                    $(element).popover({
+                        html: true,
+                        trigger: 'click',
+                        delay: 500,
+                        content: actualcontent
+                    });
+                }, true);
+            }
+        }
+    };
+
+    'use strict';
+    function fallbacksrc() {
+        return {
+            restrict: 'A',
+            link: function postLink(scope, iElement, iAttrs) {
+                iElement.bind('error', function () {
+                    var arrelement = iAttrs.src.split("'\'");
+                    console.log(arrelement);
+                    angular.element(this).attr("src", iAttrs.fallbackSrc);
+                });
+            }
+        }
+    };
+
+
     var app = angular.module('matterMain');
     //app.directive('popover',[popover]);    
+    app.directive('onload', ['$timeout', onload]);
     app.directive('showbreadcrumb', [showbreadcrumb]);
     app.directive('datefilter', [datefilter]);
     app.directive('popoverdoc', [popoverdoc]);
     app.directive("toggletab", [toggletab]);
     app.directive('infopopover', [infopopover]);
-
-
+    app.directive('matterflyout', ['$compile', '$templateCache', matterflyout]);
+    app.directive('documentflyout', ['$compile', '$templateCache', documentflyout]);
+    app.directive('fallbacksrc', [fallbacksrc]);
 })();
 
 
