@@ -9,7 +9,9 @@ angular.module('matterMain', [
   'ui.bootstrap',
   'ui.grid.pagination',
   'ngSanitize',
-  'ngAnimate'
+  'ngAnimate',
+  'ui.grid.infiniteScroll',
+  'ui.grid.autoResize'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {

@@ -73,6 +73,7 @@
         $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
         vm.gridOptions = {
+            infiniteScrollDown: true,
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 0,
             enableGridMenu: true,
@@ -116,15 +117,16 @@
                 });
                 $scope.gridApi.core.on.sortChanged($scope, vm.sortChangedDocument);
                 vm.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
-                $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFunc);
+                //$scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFunc);
+                gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
             }
         };
 
         vm.pagenumber = 1;
         vm.responseNull = false;
-        vm.watchFunc = function (newData, oldData) {
+        vm.watchFunc = function () {
             var promise = $q.defer();
-            if (newData === true && !vm.responseNull) {
+            if (!vm.responseNull) {
                 vm.lazyloader = false;
                 vm.pagenumber = vm.pagenumber + 1;
                 searchRequest.SearchObject.PageNumber = vm.pagenumber;
@@ -138,6 +140,7 @@
                         vm.gridOptions.data = vm.gridOptions.data.concat(response);
                     }
                     promise.resolve();
+                    $scope.gridApi.infiniteScroll.dataLoaded();
                 });
             } else {
                 vm.lazyloader = true;
@@ -361,6 +364,7 @@
             vm.documentid = 1;
             vm.lazyloader = false;
             vm.divuigrid = false;
+            vm.responseNull=false;
             var searchToText = '';
             var finalSearchText = '';
             if (vm.selected != "") {
@@ -394,6 +398,8 @@
         vm.documentsearch = function (term, property, bool) {
             vm.lazyloader = false;
             vm.divuigrid = false;
+            vm.responseNull = false;
+            searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.SearchTerm = term;
             searchRequest.SearchObject.Sort.ByProperty = property;
             if (bool) {
@@ -491,6 +497,8 @@
             vm.lazyloader = false;
             vm.divuigrid = false;
             if (id == 1) {
+                vm.responseNull = false;
+                searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Filters.FilterByMe = 0;
                 get(searchRequest, function (response) {

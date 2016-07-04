@@ -106,7 +106,7 @@
         <!--End For attaching documents messages to the current mail item-->
         <div class="row" id="documentgrid">
             <div class="col-sm-12" ng-show="vm.divuigrid">
-                <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
+                <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid"></div>
             </div>
         </div>
         <div class="col-sm-12 noResultsText" ng-show="vm.nodata">
