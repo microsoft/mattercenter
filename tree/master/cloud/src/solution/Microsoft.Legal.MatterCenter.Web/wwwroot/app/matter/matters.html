@@ -72,7 +72,7 @@
     </div>
     <div class="row" id="mattergrid">
         <div class="col-sm-12" ng-if="vm.divuigrid">
-            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection class="grid">
+            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll ui-grid-auto-resize class="grid">
             </div>
         </div>
     </div>
@@ -175,7 +175,7 @@
                                             <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
                                         </div>
                                         <!--If the attachment upload is success, show this div-->
-                                        <img class="attachIcon attachIconMargin" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="{{attachmentInfo.iconSrc}}">
+                                        <img class="attachIcon attachIconMargin" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="{{attachmentInfo.iconSrc}}" fallbacksrc>
                                         <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
                                         <div title="{{attachmentInfo.attachmentFileName}}"
                                              id="{{attachmentInfo.counter}}attachment"
@@ -199,8 +199,7 @@
                                         <div ng-if="!uploadedFile.isError" class="uploadSuccessStatus">
                                             <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
                                         </div>
-                                        <img class="attachIcon" id="{{uploadedFile.counter
-}}attachIcon"
+                                        <img class="attachIcon" id="{{uploadedFile.counter}}attachIcon"
                                              alt="attachment icon" src="{{uploadedFile.documentIconUrl}}">
                                         <div title="Test attachments" class="popupName">{{uploadedFile.fileName}}</div>
                                         <!--If the mail upload is success, show the folder name under which the email has been dropped-->

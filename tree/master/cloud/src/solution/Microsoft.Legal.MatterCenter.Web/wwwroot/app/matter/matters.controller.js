@@ -8,9 +8,9 @@
             var vm = this;
             vm.selected = '';
             vm.selectedRow = {
-                matterClientUrl:'',
+                matterClientUrl: '',
                 matterName: '',
-                matterGuid:''
+                matterGuid: ''
             };
             vm.mattername = "All Matters";
             vm.sortname = "";
@@ -54,6 +54,7 @@
             vm.gridOptions = {
                 //paginationPageSizes: [10, 50, 100],
                 //paginationPageSize: 10,
+                infiniteScrollDown: true,
                 enableHorizontalScrollbar: 0,
                 enableVerticalScrollbar: 1,
                 enableGridMenu: true,
@@ -79,23 +80,34 @@
                     gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                         //vm.selectedRow = row.entity
                         vm.selectedRow.matterName = row.entity.matterName
-                        vm.selectedRow.matterClientUrl = row.entity.matterName
+                        vm.selectedRow.matterClientUrl = row.entity.matterClientUrl
                         vm.selectedRow.matterGuid = row.entity.matterGuid
                     });
                     $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
                     $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
-                    $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFunc);
+                    $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFuncscroll);
+                    gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
                 }
             };
 
             //#endregion
 
+            vm.watchFuncscroll = function () {
+                //var element = 0;
+                //var topelement = angular.element('.ui-grid-viewport').scrollTop();
+                //angular.element('.popcontent').css({ 'top': element - topelement });
+                //if (!$scope.$$phase) {
+                //    $scope.$apply();
+                //}
+            }
+
 
             vm.pagenumber = 1;
             vm.responseNull = false;
-            vm.watchFunc = function (newData, oldData) {
+            vm.watchFunc = function () {
+
                 var promise = $q.defer();
-                if (newData === true && !vm.responseNull) {
+                if (!vm.responseNull) {
                     vm.lazyloader = false;
                     vm.pagenumber = vm.pagenumber + 1;
                     searchRequest.SearchObject.PageNumber = vm.pagenumber;
@@ -108,6 +120,7 @@
                             vm.gridOptions.data = vm.gridOptions.data.concat(response);
                         }
                         promise.resolve();
+                        $scope.gridApi.infiniteScroll.dataLoaded();
                     });
                 } else {
                     vm.lazyloader = true;
@@ -187,32 +200,22 @@
                 });
             }
 
-            vm.getFolderHierarchy = function (matterName, matterUrl) {
-                var matterNameToAPI=''
-                var matterClientUrlToAPI = ''
-                if (vm.selectedRow && vm.selectedRow.matterName) {
-                    matterNameToAPI = vm.selectedRow.matterName;
-                }
-                else {
-                    
-                    vm.selectedRow.matterName = matterName
-                    matterNameToAPI = matterName;
+            vm.getFolderHierarchy = function (matterName, matterUrl, matterGUID) {
+
+                if ((matterName && matterName !== "") && (matterUrl && matterUrl !== "") && (matterGUID && matterGUID !== "")) {
+
+                    vm.selectedRow.matterName = matterName;
+                    vm.selectedRow.matterClientUrl = matterUrl;
+                    vm.selectedRow.matterGuid = matterGUID;
                 }
 
-                if (vm.selectedRow && vm.selectedRow.matterClientUrl) {
-                    matterClientUrlToAPI = vm.selectedRow.matterClientUrl;
-                }
-                else {
-                    matterClientUrlToAPI = matterUrl;
-                    vm.selectedRow.matterClientUrl = matterUrl
-                }
 
                 vm.allAttachmentDetails = [];
                 var matterData = {
-                    MatterName: matterNameToAPI,
-                    MatterUrl: matterClientUrlToAPI
+                    MatterName: vm.selectedRow.matterName,
+                    MatterUrl: vm.selectedRow.matterClientUrl
                 };
-                vm.getContentCheckConfigurations(matterClientUrlToAPI);
+                vm.getContentCheckConfigurations(vm.selectedRow.matterClientUrl);
                 getFolderHierarchy(matterData, function (response) {
                     vm.foldersList = response.foldersList;
                     vm.uploadedFiles = [];
@@ -703,9 +706,9 @@
             //#endregion
 
 
-            vm.Openuploadmodal = function (matterName, matterUrl) {
+            vm.Openuploadmodal = function (matterName, matterUrl, matterGUID) {
                 vm.lazyloader = false;
-                vm.getFolderHierarchy(matterName, matterUrl);
+                vm.getFolderHierarchy(matterName, matterUrl, matterGUID);
                 vm.oUploadGlobal.successBanner = false;
                 vm.isLoadingFromDesktopStarted = false;
             }
@@ -1380,7 +1383,7 @@
                 vm.divuigrid = false;
                 vm.responseNull = false;
                 searchRequest.SearchObject.SearchTerm = "";
-                if (sortColumns.length != 0) {
+                if (sortColumns.length != 0 && sortColumns[0] != undefined) {
                     if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
                         if (sortColumns[0].sort != undefined) {
                             if (vm.MatterNameSort == undefined || vm.MatterNameSort == "asc") {
@@ -1392,7 +1395,7 @@
                                 vm.FilterByType();
                                 vm.MatterNameSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             } else {
                                 vm.pagenumber = 1;
                                 vm.lazyloader = false;
@@ -1402,7 +1405,7 @@
                                 vm.FilterByType();
                                 vm.MatterNameSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             }
                         } else {
                             vm.divuigrid = true;
@@ -1420,7 +1423,7 @@
                                 vm.FilterByType();
                                 vm.ClientSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             }
                             else {
                                 vm.pagenumber = 1;
@@ -1431,7 +1434,7 @@
                                 vm.FilterByType();
                                 vm.ClientSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             }
                         } else {
                             vm.divuigrid = true;
@@ -1449,7 +1452,7 @@
                                 vm.FilterByType();
                                 vm.ClientIDSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             } else {
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
@@ -1459,7 +1462,7 @@
                                 vm.FilterByType();
                                 vm.ClientIDSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             }
 
                         } else {
@@ -1478,7 +1481,7 @@
                                 vm.FilterByType();
                                 vm.ModiFiedTimeSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             } else {
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
@@ -1488,7 +1491,7 @@
                                 vm.FilterByType();
                                 vm.ModiFiedTimeSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             }
 
                         } else {
@@ -1507,7 +1510,7 @@
                                 vm.FilterByType();
                                 vm.ResAttoSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             } else {
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
@@ -1517,7 +1520,7 @@
                                 vm.FilterByType();
                                 vm.ResAttoSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             }
                         } else {
                             vm.divuigrid = true;
@@ -1535,7 +1538,7 @@
                                 vm.FilterByType();
                                 vm.SubAreaSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             } else {
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
@@ -1545,7 +1548,7 @@
                                 vm.FilterByType();
                                 vm.SubAreaSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             }
                         } else {
                             vm.divuigrid = true;
@@ -1563,7 +1566,7 @@
                                 vm.FilterByType();
                                 vm.OpenDateSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             } else {
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
@@ -1573,7 +1576,7 @@
                                 vm.FilterByType();
                                 vm.OpenDateSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1000, 3);
+                                $interval(function () { vm.showSortExp(); }, 1200, 3);
                             }
 
                         } else {
@@ -1582,10 +1585,27 @@
                         }
                     }
                 } else {
-                    vm.lazyloader = false;
-                    searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
-                    searchRequest.SearchObject.Sort.Direction = 0;
-                    vm.FilterByType();
+                    //if (vm.MatterNameSort == undefined || vm.MatterNameSort == "asc") {
+                    //    vm.pagenumber = 1;
+                    //    vm.lazyloader = false;
+                    //    searchRequest.SearchObject.PageNumber = 1;
+                    //    searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    //    searchRequest.SearchObject.Sort.Direction = 0;
+                    //    vm.FilterByType();
+                    //    vm.MatterNameSort = "desc"; vm.sortby = "asc";
+                    //    vm.sortexp = "matterName";
+                    //    $interval(function () { vm.showSortExp(); }, 1200, 3);
+                    //} else {
+                    //    vm.pagenumber = 1;
+                    //    vm.lazyloader = false;
+                    //    searchRequest.SearchObject.PageNumber = 1;
+                    //    searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    //    searchRequest.SearchObject.Sort.Direction = 1;
+                    //    vm.FilterByType();
+                    //    vm.MatterNameSort = "asc"; vm.sortby = "desc";
+                    //    vm.sortexp = "matterName";
+                    //    $interval(function () { vm.showSortExp(); }, 1200, 3);
+                    //}
                 }
             }
             //#endregion
@@ -1596,7 +1616,7 @@
                 if ($window.innerWidth < 360) {
                     vm.gridOptions.enableHorizontalScrollbar = false;
                     vm.gridOptions.enablePaginationControls = false;
-                    vm.gridOptions.columnDefs = [{ field: 'matterName', displayName: 'Matter', enableHiding: false, width: "100%", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' }];
+                    vm.gridOptions.columnDefs = [{ field: 'matterName', displayName: 'Matter', enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' }];
                     $scope.$apply();
                 } else {
                     //vm.gridOptions = {
@@ -1853,128 +1873,13 @@
                 console.log("Clicked");
             }
 
+            $scope.errorImage = function (image) {
+                "use strict";
+                if (image && image.iconSrc && image.iconSrc != "") {
+
+                }
+            }
+
         }]);
-    app.directive('onload', function onload($timeout) {
-        return {
-            restrict: 'AE',
-            scope: { sortdetails: '@' },
-            link: function (scope, element, attrs) {
-                scope.$watch("sortdetails", function () {
-                    $timeout(function () { jQuery('[id^="asc"]').hide(); }, 1000);
-                    $timeout(function () { jQuery('[id^="desc"]').hide(); }, 1000);
-                }, true);
-            }
-        }
-    });
-
-    app.directive('popover', function ($compile, $templateCache) {
-        return {
-            restrict: 'A',
-            scope: {
-                details: '@'
-            },
-            link: function (scope, element, attrs) {
-                scope.$watch("details", function () {
-                    var obj = "";
-                    obj = eval('(' + attrs.details + ')');
-                    var actualcontent = "";
-                    actualcontent = '<div class="ng-scope">\
-                                   <div class="FlyoutBoxContent" style="width: 350px;">\
-                                      <div class="FlyoutContent FlyoutHeading">\
-                                          <div class="ms-Callout-content FlyoutHeadingText" ng-click="testFunction()">  ' + obj.matterName + ' </div>\
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client.Matter ID:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Sub area of law:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible attorney:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
-                                       </div>\
-                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a>\
-                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" onclick="Openuploadmodal(\'' + obj.matterName + '\',\'' + obj.matterUrl + '\')" type="button">Upload to a matter</a>\
-                                    </div>\
-                                </div>';
-                    $templateCache.put("test.html", actualcontent);
-                    var template = $templateCache.get("test.html");
-                    var a = $compile("<div>" + template + "</div>")(scope)
-                    $(element).popover({
-                        html: true,
-                        trigger: 'click',
-                        delay: 500,
-                        content: actualcontent
-                    });
-                }, true);
-            }
-        }
-    });
-
-    app.directive('matterflyout', function ($compile, $templateCache) {
-        return {
-            restrict: 'A',
-            scope: {
-                control: '&'
-            },
-            link: function (scope, element, attrs) {
-                $(element).click(function (e) {
-                    var obj = "";
-                    obj = eval('(' + attrs.details + ')');
-                    var actualcontent = "";
-                    actualcontent = '<div class="" style="position:relative;" ng-click="stopEvent($event)">\
-                                   <div class="FlyoutBoxContent" style="width: 350px;">\
-                                      <div class="flyoutLeftarrow" style="top: 11px;left: -9px;"></div>\
-                                      <div class="FlyoutContent FlyoutHeading">\
-                                          <div class="ms-Callout-content FlyoutHeadingText" ng-click="f()">  ' + obj.matterName + ' </div>\
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client.Matter ID:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Sub area of law:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible attorney:</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
-                                       </div>\
-                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a>\
-                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\')" type="button">Upload to a matter</a>\
-                                    </div>\
-                                </div>';
-                    $templateCache.put("test.html", actualcontent);
-                    var template = $templateCache.get("test.html");
-                    var a = $compile("<div>" + template + "</div>")(scope);
-                    $('.popcontent').css('display', 'none');
-                    e.stopPropagation();
-                    var obj = $(this).parent().position();
-                    $(this).parent().find('.popcontent').html(a[0]);
-                    $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '220px' });
-                    //$(this).parent().find('.popcontent').css('top', obj.top + "px");
-                });
-            },
-            controller: function ($scope) {
-                $scope.openUpload = function (matterName, matterUrl) {                    
-                    $scope.$parent.$parent.$parent.grid.appScope.vm.Openuploadmodal(matterName, matterUrl);
-                    $('.popcontent').css('display', 'none');
-                };
-                $scope.stopEvent = function ($event) {
-                    $event.stopPropagation();
-                };
-            }
-        }
-    });
 })();
 

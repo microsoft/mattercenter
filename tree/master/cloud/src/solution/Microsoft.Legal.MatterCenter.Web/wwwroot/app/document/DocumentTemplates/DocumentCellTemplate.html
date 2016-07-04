@@ -1,18 +1,15 @@
 ﻿<div class='row'>
-    <div class='col-xs-6 col-sm-9 col-md-9 col-lg-10' id='documentPopup' title='{{row.entity.documentName}}' ng-click="vm.parentToggle()">
-        <a popoverdoc type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis hidden-xs' style='text-align: left;padding-left:0'
-           details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right'
-           data-html='true' href='' toggle="vm.parentToggle()">
+    <div class='col-xs-6 col-sm-9 col-md-9 col-lg-10' id='documentPopup' title='{{row.entity.documentName}}'>
+        <a documentflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis hidden-xs' style='text-align: left;padding-left:0' details={{row.entity}}>
             <img class="docTypeIconHeader" id="docTypeIcon"
                  src="{{row.entity.documentIconUrl}}" alt="Document type icon" /> {{row.entity.documentName}}
         </a>
-        <a popoverdoc type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis visible-xs' style='text-align: left;padding-left:0'
-           details={{row.entity}} data-toggle='popover' data-container='body' data-placement='bottom'
-           data-html='true' href=''>
+        <a documentflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis visible-xs' style='text-align: left;padding-left:0'
+           details={{row.entity}} >
             <img class="docTypeIconHeader" id="docTypeIcon"
                  src="{{row.entity.documentIconUrl}}" alt="Document type icon" /> {{row.entity.documentName}}
         </a>
-        <div class='popover-content'></div>
+        <div class='popcontent' style="display:none;"></div>
     </div>
     <div class='col-xs-5 col-sm-3 col-md-3 col-lg-2 text-right' id="doccelltemp">
         <div class='dropdown'>
