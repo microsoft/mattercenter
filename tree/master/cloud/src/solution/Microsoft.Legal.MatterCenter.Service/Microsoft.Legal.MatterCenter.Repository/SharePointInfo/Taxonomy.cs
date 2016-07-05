@@ -25,6 +25,7 @@ using System.Reflection;
 using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
+using Microsoft.Legal.MatterCenter.Repository.Extensions;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -38,7 +39,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         #region Properties
         private GeneralSettings generalSettings;
         private LogTables logTables;
-        private TaxonomySettings taxonomySettings;
+        private readonly TaxonomySettings taxonomySettings;
         private ISPOAuthorization spoAuthorization;
         private ClientContext clientContext;
         private TaxonomyResponseVM taxonomyResponseVM;
@@ -53,7 +54,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="logTables"></param>
         /// <param name="spoAuthorization"></param>
         /// <param name="customLogger"></param>
-        public Taxonomy(IOptionsMonitor<GeneralSettings> generalSettings, IOptionsMonitor<TaxonomySettings> taxonomySettings, IOptionsMonitor<LogTables> logTables,
+        public Taxonomy(IOptionsMonitor<GeneralSettings> generalSettings, 
+            IOptionsMonitor<TaxonomySettings> taxonomySettings, 
+            IOptionsMonitor<LogTables> logTables,
             ISPOAuthorization spoAuthorization, ICustomLogger customLogger)
         {
             this.generalSettings = generalSettings.CurrentValue;
@@ -90,7 +93,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         store => store.Groups.Include(
                             group => group.Name));
                     clientContext.ExecuteQuery();
-                    taxonomyResponseVM = GetReturnFlag(termStore, termStoreDetails);
+                    taxonomyResponseVM = GetTaxonomyHierarchy(termStore, termStoreDetails);
                 }
             }
             catch(Exception ex)
@@ -108,7 +111,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="termStore">Term Store object</param>
         /// <param name="termStoreDetails">Term Store object containing Term store data</param>
         /// <returns>Fetch Group Terms Status</returns>
-        private TaxonomyResponseVM GetReturnFlag (TermStore termStore, TermStoreDetails termStoreDetails)
+        private TaxonomyResponseVM GetTaxonomyHierarchy (TermStore termStore, TermStoreDetails termStoreDetails)
         {
             try {
                 if (generalSettings.IsTenantDeployment)
@@ -149,8 +152,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {            
             try
             {
-
-                
+                //As a first step, load Practice Group Term set and anf its child terms only and not its child child terms                
                 clientContext.Load(
                                   termGroup,
                                    group => group.Name,
@@ -166,19 +168,38 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                 clientContext.ExecuteQuery();
 
-
+                //This loop of the term set will get all the client termset and practice group term sets
                 foreach (TermSet termSet in termGroup.TermSets)
                 {
                     if (termSet.Name == termStoreDetails.TermSetName)
                     {
+                        //This condition is if the UI is requesting practice group terms
                         if (termStoreDetails.TermSetName == taxonomySettings.PracticeGroupTermSetName)
                         {
                             taxonomyResponseVM.TermSets = GetPracticeGroupTermSetHierarchy(clientContext, termSet, termStoreDetails);
                         }
-                        else if (termStoreDetails.TermSetName == taxonomySettings.ClientTermSetName)
+                        //This condition is if the UI is requesting client terms and the clients are defined as term set and not terms
+                        else if (termStoreDetails.TermSetName == taxonomySettings.ClientTermSetName && 
+                            taxonomySettings.ClientTermPath==ServiceConstants.CLIENT_TERM_PATH)
+                        {                            
+                            taxonomyResponseVM.ClientTermSets = GetClientTermSetHierarchy(clientContext, termSet, termStoreDetails);    
+                        }                       
+                        
+                    }
+                }
+
+                if (termStoreDetails.TermSetName == taxonomySettings.ClientTermSetName &&
+                            taxonomySettings.ClientTermPath != ServiceConstants.CLIENT_TERM_PATH)
+                {
+                    //This condition is if the UI is requesting client terms and the clients are defined as terms and not term sets
+                    foreach (TermSet termSet in termGroup.TermSets)
+                    {                        
+                        Term term = null;
+                        if (termSet.TermExists(clientContext, termStoreDetails.TermSetName, ref term))
                         {
-                            taxonomyResponseVM.ClientTermSets = GetClientTermSetHierarchy(clientContext, termSet, termStoreDetails);
-                        }
+                            taxonomyResponseVM.ClientTermSets = GetClientTerms(clientContext, term, termStoreDetails);
+                            break;
+                        }                       
                     }
                 }
             }
@@ -225,7 +246,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     tempTermSet.PGTerms.Add(tempTermPG);
                     if(term.TermsCount>0)
                     {
-                        TermCollection termCollLevel2 = LoadTerms(term, clientContext);
+                        TermCollection termCollLevel2 = term.LoadTerms(clientContext);
                         tempTermPG.AreaTerms = new List<AreaTerm>();
                         foreach (Term termLevel2 in termCollLevel2)
                         {
@@ -245,7 +266,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             tempTermPG.AreaTerms.Add(tempTermArea);
                             if(termLevel2.TermsCount>0)
                             {   
-                                TermCollection termCollLevel3 = LoadTerms(termLevel2, clientContext);
+                                TermCollection termCollLevel3 = termLevel2.LoadTerms(clientContext);
                                 //Add Level 3 to the term collection
                                 tempTermArea.SubareaTerms = UpdateLevelTerm(termCollLevel3, termStoreDetails);
 
@@ -254,7 +275,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 {
                                     if (termLevel3.TermsCount > 0)
                                     {
-                                        TermCollection termCollLevel4 = LoadTerms(termLevel3, clientContext);
+                                        TermCollection termCollLevel4 = termLevel3.LoadTerms(clientContext);
                                         //Add Level 4 to the term collection
                                         tempTermArea.SubareaTerms[termCount].SubareaTerms = UpdateLevelTerm(termCollLevel4, termStoreDetails);
                                         int termCount1 = 0;
@@ -262,7 +283,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                         {
                                             if (termLevel4.TermsCount > 0)
                                             {
-                                                TermCollection termCollLevel5 = LoadTerms(termLevel4, clientContext);
+                                                TermCollection termCollLevel5 = termLevel4.LoadTerms(clientContext);
                                                 //Add Level 5 to the term collection
                                                 tempTermArea.SubareaTerms[termCount].SubareaTerms[termCount1].SubareaTerms = 
                                                     UpdateLevelTerm(termCollLevel5, termStoreDetails);
@@ -296,65 +317,79 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns></returns>
         private List<SubareaTerm> UpdateLevelTerm(TermCollection termCollection, TermStoreDetails termStoreDetails)
         {
-            var subAreaTerms = new List<SubareaTerm>();
-            foreach (Term termLevel3 in termCollection)
+            try
             {
-                SubareaTerm tempTermSubArea = new SubareaTerm();
-                tempTermSubArea.TermName = termLevel3.Name;
-                tempTermSubArea.Id = Convert.ToString(termLevel3.Id, CultureInfo.InvariantCulture);
-                tempTermSubArea.ParentTermName = termLevel3.Name;
-                /////Retrieve the custom property for Terms at level 3
-
-                tempTermSubArea.DocumentTemplates = string.Empty;
-                foreach (KeyValuePair<string, string> customProperty in termLevel3.CustomProperties)
+                var subAreaTerms = new List<SubareaTerm>();
+                foreach (Term termLevel3 in termCollection)
                 {
-                    if (customProperty.Key.Equals(termStoreDetails.CustomPropertyName, StringComparison.Ordinal))
-                    {
-                        tempTermSubArea.DocumentTemplates = customProperty.Value;
-                    }
-                    else if (customProperty.Key.Equals(taxonomySettings.SubAreaCustomPropertyFolderNames, StringComparison.Ordinal))
-                    {
-                        tempTermSubArea.FolderNames = customProperty.Value;
-                    }
-                    else if (customProperty.Key.Equals(taxonomySettings.SubAreaCustomPropertyisNoFolderStructurePresent, StringComparison.Ordinal))
-                    {
-                        tempTermSubArea.IsNoFolderStructurePresent = customProperty.Value;
-                    }
-                    else if (customProperty.Key.Equals(taxonomySettings.SubAreaOfLawDocumentTemplates, StringComparison.Ordinal))
-                    {
-                        tempTermSubArea.DocumentTemplateNames = customProperty.Value;
-                    }
-                }
-                subAreaTerms.Add(tempTermSubArea);
-            }
-            return subAreaTerms;
-        }
+                    SubareaTerm tempTermSubArea = new SubareaTerm();
+                    tempTermSubArea.TermName = termLevel3.Name;
+                    tempTermSubArea.Id = Convert.ToString(termLevel3.Id, CultureInfo.InvariantCulture);
+                    tempTermSubArea.ParentTermName = termLevel3.Name;
+                    /////Retrieve the custom property for Terms at level 3
 
+                    tempTermSubArea.DocumentTemplates = string.Empty;
+                    foreach (KeyValuePair<string, string> customProperty in termLevel3.CustomProperties)
+                    {
+                        if (customProperty.Key.Equals(termStoreDetails.CustomPropertyName, StringComparison.Ordinal))
+                        {
+                            tempTermSubArea.DocumentTemplates = customProperty.Value;
+                        }
+                        else if (customProperty.Key.Equals(taxonomySettings.SubAreaCustomPropertyFolderNames, StringComparison.Ordinal))
+                        {
+                            tempTermSubArea.FolderNames = customProperty.Value;
+                        }
+                        else if (customProperty.Key.Equals(taxonomySettings.SubAreaCustomPropertyisNoFolderStructurePresent, StringComparison.Ordinal))
+                        {
+                            tempTermSubArea.IsNoFolderStructurePresent = customProperty.Value;
+                        }
+                        else if (customProperty.Key.Equals(taxonomySettings.SubAreaOfLawDocumentTemplates, StringComparison.Ordinal))
+                        {
+                            tempTermSubArea.DocumentTemplateNames = customProperty.Value;
+                        }
+                    }
+                    subAreaTerms.Add(tempTermSubArea);
+                }
+                return subAreaTerms;
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
         
         /// <summary>
-        /// This method will load the child terms for a particular parent term
+        /// This method will be called if the clients are defined as terms and not as term sets
         /// </summary>
-        /// <param name="term">Parent Term</param>
-        /// <param name="context">SharePoint Context</param>
+        /// <param name="clientContext">The sharepoint client context</param>
+        /// <param name="term"></param>
+        /// <param name="termStoreDetails"></param>
         /// <returns></returns>
-        private TermCollection LoadTerms(Term term, ClientContext context)
-        {            
-            TermCollection termCollection = term.Terms;
-            context.Load(termCollection,
-                tc => tc.Include(
-                    t => t.TermsCount,
-                    t=>t.Id,
-                    t => t.Name,
-                    t => t.TermsCount,
-                    t => t.CustomProperties
-                )
-            );
-            context.ExecuteQuery();
-            return termCollection;              
-        }
+        private ClientTermSets GetClientTerms(ClientContext clientContext, Term term, TermStoreDetails termStoreDetails)
+        {
+            ClientTermSets tempClientTermSet = new ClientTermSets();
+            try
+            {
+                tempClientTermSet.Name = taxonomySettings.ClientTermSetName;
+                /////Retrieve the Terms - level 1
+                tempClientTermSet.ClientTerms = new List<Client>();
+                TermCollection termColl = null;
+                termColl = term.LoadTerms(clientContext);
 
+                return GetClientTermProperties(termColl, termStoreDetails, tempClientTermSet);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name,
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+
+        }
+    
         /// <summary>
-        /// Gets the taxonomy hierarchy for client term set.
+        /// This method will be called if the clients are defined as term set and not as terms
         /// </summary>
         /// <param name="termSet">Term set object holding Client terms</param>
         /// <param name="termStoreDetails">Term Store object containing Term store data</param>
@@ -364,10 +399,33 @@ namespace Microsoft.Legal.MatterCenter.Repository
             ClientTermSets tempClientTermSet = new ClientTermSets();
             try
             {
-                tempClientTermSet.Name = termSet.Name;
+                tempClientTermSet.Name = taxonomySettings.ClientTermSetName;
                 /////Retrieve the Terms - level 1
                 tempClientTermSet.ClientTerms = new List<Client>();
-                TermCollection termColl = termSet.Terms;
+                TermCollection termColl = null;  
+                termColl = termSet.Terms;
+                return GetClientTermProperties(termColl, termStoreDetails, tempClientTermSet);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, 
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }            
+            
+        }
+
+        /// <summary>
+        /// This method will get all client term properties such as ID and URL
+        /// </summary>
+        /// <param name="termColl">The taxonomy client terms</param>
+        /// <param name="termStoreDetails">The term store details which the UI has sent to the clients</param>
+        /// <param name="clientTermSet">The ClientTermSets object to which all the client terms are added</param>
+        /// <returns></returns>
+        private ClientTermSets GetClientTermProperties(TermCollection termColl, TermStoreDetails termStoreDetails, ClientTermSets clientTermSet)
+        {
+            try
+            {
                 foreach (Term term in termColl)
                 {
                     Client tempTermPG = new Client();
@@ -389,15 +447,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             }
                         }
                     }
-                    tempClientTermSet.ClientTerms.Add(tempTermPG);
+                    clientTermSet.ClientTerms.Add(tempTermPG);
                 }
+                return clientTermSet;
             }
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
-            }            
-            return tempClientTermSet;
-        }       
-    }
+            }
+        }
+    }  
 }

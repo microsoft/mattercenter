@@ -17,8 +17,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
     /// </summary>
     public class ServiceConstants
     {
-        
 
+        public const string CLIENT_TERM_PATH = "/";
         public const string CACHE_PERMISSIONS = "Permissions";
 
         public const string SUCCESS = "200";
