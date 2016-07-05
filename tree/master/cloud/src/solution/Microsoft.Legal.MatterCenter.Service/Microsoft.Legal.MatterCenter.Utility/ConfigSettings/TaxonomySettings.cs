@@ -18,7 +18,13 @@ namespace Microsoft.Legal.MatterCenter.Utility
     /// </summary>
     public class TaxonomySettings
     {        
+        /// <summary>
+        /// Practice Group Term Set name that is configured
+        /// </summary>
         public string PracticeGroupTermSetName { get; set; }
+        /// <summary>
+        /// Client Term Set Name that is configured
+        /// </summary>
         public string ClientTermSetName { get; set; }
         public string PracticeGroupCustomPropertyFolderNames { get; set; }
         public string AreaCustomPropertyFolderNames { get; set; }
@@ -26,7 +32,14 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string SubAreaCustomPropertyisNoFolderStructurePresent { get; set; }
         public string SubAreaOfLawDocumentTemplates { get; set; }
         public string ClientCustomPropertiesId { get; set; }
+        /// <summary>
+        /// Number of level that are configured - Taxonomy Hierarchy
+        /// </summary>
         public int Levels { get; set; }
-        
+        /// <summary>
+        /// Client term location in the taxonomy hierarchy
+        /// </summary>
+        public string ClientTermPath { get; set; }
+
     }
 }

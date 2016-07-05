@@ -30,6 +30,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.camlQueries = camlQueries.CurrentValue;
             this.spList = spList;
         }
+
+        /// <summary>
+        /// This method will get all content types from the specified content type group and will filter out the content types that user has selected 
+        /// when creating the matter
+        /// </summary>
+        /// <param name="clientContext">The sharepoint context object</param>
+        /// <param name="contentTypesNames">Content Type Names that user selected in the create matter screen</param>
+        /// <param name="client">The client object which contains information for which client the matter is getting created and the url of the client</param>
+        /// <param name="matter">The matter information that is getting created</param>
+        /// <returns></returns>
         public IList<ContentType> GetContentTypeData(ClientContext clientContext, IList<string> contentTypesNames, Client client, Matter matter)
         {
             ContentTypeCollection contentTypeCollection = null;
@@ -37,13 +47,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             try
             {
                 if (null != clientContext && null != contentTypesNames)
-                {
-                    //Web web = clientContext.Web;
-                    //contentTypeCollection = web.ContentTypes;
-                    //clientContext.Load(contentTypeCollection, contentType => contentType.Include(thisContentType => thisContentType.Name).
-                    //            Where(currContentType => currContentType.Group == contentTypesConfig.OneDriveContentTypeGroup));
-                    //clientContext.ExecuteQuery();
-                    //selectedContentTypeCollection = GetContentTypeList(contentTypesNames, contentTypeCollection.ToList());
+                {                   
 
                     Web web = clientContext.Web;
                     string contentTypeName = contentTypesConfig.OneDriveContentTypeGroup.Trim();
@@ -62,10 +66,21 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return selectedContentTypeCollection;
         }
 
+
+        /// <summary>
+        /// This method will assign content types to the matter that is getting created
+        /// </summary>
+        /// <param name="matterMetadata"></param>
+        /// <param name="clientContext"></param>
+        /// <param name="contentTypeCollection"></param>
+        /// <param name="client"></param>
+        /// <param name="matter"></param>
+        /// <returns></returns>
         public GenericResponseVM AssignContentTypeHelper(MatterMetadata matterMetadata, ClientContext clientContext,
             IList<ContentType> contentTypeCollection, Client client, Matter matter)
         {
-            try {
+            try
+            {
                 Web web = clientContext.Web;
                 List matterList = web.Lists.GetByTitle(matter.Name);
                 SetFieldValues(clientContext, contentTypeCollection, matterList, matterMetadata);
@@ -74,18 +89,19 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 string[] viewColumnList = contentTypesConfig.ViewColumnList.Split(new string[] { ServiceConstants.SEMICOLON }, StringSplitOptions.RemoveEmptyEntries).Select(listEntry => listEntry.Trim()).ToArray();
                 string strQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.ViewOrderByQuery, contentTypesConfig.ViewOrderByColumn);
                 bool isViewCreated = spList.AddView(clientContext, matterList, viewColumnList, contentTypesConfig.ViewName, strQuery);
-
-                return ServiceUtility.GenericResponse(string.Empty, Convert.ToString(isViewCreated, CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
+                return ServiceUtility.GenericResponse(string.Empty, 
+                    Convert.ToString(isViewCreated, CultureInfo.CurrentCulture).ToLower(CultureInfo.CurrentCulture));
             }
             catch (Exception exception)
             {
-                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, 
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
         }
 
         /// <summary>
-        /// Sets the default content type based on user selection.
+        /// Sets the default content type based on user selection for the new matter that is getting created
         /// </summary>
         /// <param name="clientContext">SP client context</param>
         /// <param name="list">Name of the list</param>
@@ -140,7 +156,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="contentTypeCollection">Collection of content types</param>
         /// <param name="matterList">List containing matters</param>
         /// <param name="matterMetadata">Object containing metadata for Matter</param>
-        private void SetFieldValues(ClientContext clientContext, IList<ContentType> contentTypeCollection, List matterList, MatterMetadata matterMetadata)
+        private void SetFieldValues(ClientContext clientContext, IList<ContentType> contentTypeCollection, List matterList, 
+            MatterMetadata matterMetadata)
         {
             FieldCollection fields = GetContentType(clientContext, contentTypeCollection, matterList);
             if (null != fields)
