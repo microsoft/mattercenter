@@ -16,7 +16,7 @@
             vm.sortname = "";
             vm.mattersdrop = false;
             vm.mattersdropinner = true;
-            $rootScope.bodyclass = "bodymain";
+            //$rootScope.bodyclass = "bodymain";
             //This value is for displaying the help
             $rootScope.pageIndex = "1";
             //#region Onload show ui grid and hide error div
