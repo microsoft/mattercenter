@@ -97,16 +97,15 @@ textarea {
 }
 
 #documentgrid .ui-grid-viewport, #mattergrid .ui-grid-viewport {
-    /*overflow: hidden !important;*/
-    max-width: 1800px;
+    overflow: auto !important;
+    /*max-width: 1800px;*/
     /*display: table;*/
-    overflow-y:auto !important;
     position: relative;
 }
 
 #documentgrid .ui-grid-render-container, #mattergrid .ui-grid-render-container {
-    overflow-x: auto;
-    min-width: 275px;
+    /*overflow-x: auto;
+    min-width: 275px;*/
     /*max-width: 1370px;*/
 }
 
@@ -240,11 +239,11 @@ textarea {
 }
 
 .ui-grid-header-viewport {
-    overflow: visible;
+    overflow: hidden;
 }
 
 .ui-grid-top-panel {
-    overflow: visible;
+    overflow: hidden;
     background: #fff;
 }
 
@@ -304,7 +303,7 @@ textarea {
 }
 
 #documentgrid .ui-grid, #mattergrid .ui-grid {
-    height: 490px;
+    height: 520px;
 }
 
 .ui-grid-cell {
@@ -368,12 +367,13 @@ textarea {
     font-family: 'Segoe UI Web Regular','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
     font-size: 0.875em;
     font-weight: 400;
-    max-width: 1900px;
+    /*max-width: 1900px;*/
 }
 
 .ui-grid-viewport {
     /*overflow: hidden !important;*/
-    max-height: 500px;
+    /*max-height: 500px;*/
+    min-height: 20px;
 }
 
 .overflowMain {

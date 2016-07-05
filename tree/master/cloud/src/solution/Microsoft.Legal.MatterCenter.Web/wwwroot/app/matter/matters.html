@@ -72,12 +72,12 @@
     </div>
     <div class="row" id="mattergrid">
         <div class="col-sm-12" ng-if="vm.divuigrid">
-            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll ui-grid-auto-resize class="grid">
+            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid">
             </div>
         </div>
     </div>
 
-    <div class="col-sm-12 noResultsText" ng-if="vm.nodata">
+    <div class="col-sm-12 noResultsText" ng-if="vm.nodata" >
         Nothing matches your search term or the filter you selected. Please try again.<br>If you applied a filter, remove it to get back to your list.<br>Search suggestions:<br><ul><li>Make sure all words are spelled correctly</li><li>Try different keywords</li><li>Try searching by the matter name or client name</li><li>Try more general search terms</li></ul>
     </div>
 

@@ -16,7 +16,7 @@
             vm.sortname = "";
             vm.mattersdrop = false;
             vm.mattersdropinner = true;
-            $rootScope.bodyclass = "bodymain";
+            //$rootScope.bodyclass = "bodymain";
             //This value is for displaying the help
             $rootScope.pageIndex = "1";
             //#region Onload show ui grid and hide error div
@@ -87,6 +87,7 @@
                     $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
                     $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFuncscroll);
                     gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
+                    $interval(function () { $scope.gridApi.core.handleWindowResize(); }, 200);
                 }
             };
 
