@@ -1,7 +1,8 @@
 ﻿using Xunit;
-using Microsoft.AspNet.TestHost;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Legal.MatterCenter.Models;
 using System.Net.Http;
+using Microsoft.AspNetCore.Hosting;
 
 using System.Collections.Generic;
 
@@ -14,7 +15,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest.IntegrationTests
 
         public AttachmentUnitTest()
         {
-            testServer = new TestServer(TestServer.CreateBuilder().UseStartup<Startup>());
+            testServer = new TestServer(new WebHostBuilder()); //.UseStartup<Startup>());
         }
 
         [Fact]

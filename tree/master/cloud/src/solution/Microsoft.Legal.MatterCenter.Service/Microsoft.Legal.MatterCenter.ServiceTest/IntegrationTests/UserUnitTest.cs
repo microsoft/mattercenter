@@ -1,9 +1,10 @@
 ﻿using Xunit;
-using Microsoft.AspNet.TestHost;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Legal.MatterCenter.Models;
 using System.Net.Http;
 
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
 {
@@ -14,7 +15,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
         public UserUnitTest()
         {
-            testServer = new TestServer(TestServer.CreateBuilder().UseStartup<Startup>());
+            testServer = new TestServer(new WebHostBuilder());
         }
 
         /// <summary>
