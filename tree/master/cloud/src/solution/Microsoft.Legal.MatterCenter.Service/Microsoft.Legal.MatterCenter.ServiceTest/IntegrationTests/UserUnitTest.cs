@@ -15,7 +15,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
         public UserUnitTest()
         {
-            testServer = new TestServer(new WebHostBuilder());
+            testServer = new TestServer(new WebHostBuilder().UseStartup<Startup>());
         }
 
         /// <summary>

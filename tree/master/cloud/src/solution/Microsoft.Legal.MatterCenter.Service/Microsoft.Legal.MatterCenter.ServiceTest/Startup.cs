@@ -10,6 +10,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
@@ -19,6 +20,7 @@ using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
 
 using System.IO;
+using Microsoft.Extensions.Options;
 #endregion
 
 
@@ -36,16 +38,11 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         public Startup(IHostingEnvironment env, ILoggerFactory logger)
         {
             this.HostingEnvironment = env;
-
             this.LoggerFactory = logger;
-        }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
 
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .SetBasePath(@"C:\mc\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.ServiceTest")
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             if (HostingEnvironment.IsDevelopment())
@@ -55,6 +52,12 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             }
 
             Configuration = builder.Build();
+        }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSingleton(Configuration);
             ConfigureSettings(services);
             services.AddCors();
             services.AddLogging();
@@ -67,7 +70,21 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            IOptionsMonitor<GeneralSettings> generalSettings,
+            IOptionsMonitor<TaxonomySettings> taxonomySettings,
+            IOptionsMonitor<MatterSettings> matterSettings,
+            IOptionsMonitor<DocumentSettings> documentSettings,
+            IOptionsMonitor<SharedSettings> sharedSettings,
+            IOptionsMonitor<MailSettings> mailSettings,
+            IOptionsMonitor<ListNames> listNames,
+            IOptionsMonitor<LogTables> logTables,
+            IOptionsMonitor<SearchSettings> searchSettings,
+            IOptionsMonitor<CamlQueries> camlQueries,
+            IOptionsMonitor<ContentTypesConfig> contentTypesConfig,
+            IOptionsMonitor<MatterCenterApplicationInsights> matterCenterApplicationInsights
+
+            )
         {
             //CreateConfig(env);
 
@@ -77,6 +94,70 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
                 loggerFactory.AddDebug();
 
+
+                generalSettings.OnChange(genSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<GeneralSettings>>()
+                        .LogDebug($"Config changed: {string.Join(", ", genSettings)}");
+
+                });
+                taxonomySettings.OnChange(taxSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<TaxonomySettings>>()
+                        .LogDebug($"Config changed: {string.Join(", ", taxSettings)}");
+                });
+                matterSettings.OnChange(matSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<MatterSettings>>()
+                        .LogDebug($"Config changed: {string.Join(", ", matSettings)}");
+                });
+                documentSettings.OnChange(docSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<DocumentSettings>>()
+                        .LogDebug($"Config changed: {string.Join(", ", docSettings)}");
+                });
+                sharedSettings.OnChange(shrdSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<SharedSettings>>()
+                        .LogDebug($"Config changed: {string.Join(", ", shrdSettings)}");
+                });
+                mailSettings.OnChange(mlSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<MailSettings>>()
+                        .LogDebug($"Config changed: {string.Join(", ", mlSettings)}");
+                });
+                listNames.OnChange(lstNames => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<ListNames>>()
+                        .LogDebug($"Config changed: {string.Join(", ", lstNames)}");
+                });
+                logTables.OnChange(logSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<LogTables>>()
+                        .LogDebug($"Config changed: {string.Join(", ", logSettings)}");
+                });
+                searchSettings.OnChange(srchSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<SearchSettings>>()
+                        .LogDebug($"Config changed: {string.Join(", ", srchSettings)}");
+                });
+                camlQueries.OnChange(camlSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<CamlQueries>>()
+                        .LogDebug($"Config changed: {string.Join(", ", camlSettings)}");
+                });
+                contentTypesConfig.OnChange(ctpSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<ContentTypesConfig>>()
+                        .LogDebug($"Config changed: {string.Join(", ", ctpSettings)}");
+                });
+
+
+                matterCenterApplicationInsights.OnChange(appInsightSettings => {
+                    loggerFactory
+                        .CreateLogger<IOptionsMonitor<MatterCenterApplicationInsights>>()
+                        .LogDebug($"Config changed: {string.Join(", ", appInsightSettings)}");
+                });
                 app.UseApplicationInsightsRequestTelemetry();
                 if (env.IsDevelopment())
                 {
@@ -111,8 +192,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             }
         }
 
-        // Entry point for the application.
-        // public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        // Entry point for the application.       
 
         #region Private Methods
 
@@ -158,19 +238,20 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
         private void ConfigureSettings(IServiceCollection services)
         {
-            services.Configure<GeneralSettings>(this.Configuration.GetSection("General"));
-            services.Configure<TaxonomySettings>(this.Configuration.GetSection("Taxonomy"));
-            services.Configure<MatterSettings>(this.Configuration.GetSection("Matter"));
-            services.Configure<DocumentSettings>(this.Configuration.GetSection("Document"));
-            services.Configure<SharedSettings>(this.Configuration.GetSection("Shared"));
-            services.Configure<MailSettings>(this.Configuration.GetSection("Mail"));
-            services.Configure<ErrorSettings>(this.Configuration.GetSection("ErrorMessages"));
-            services.Configure<ListNames>(this.Configuration.GetSection("ListNames"));
-            services.Configure<LogTables>(this.Configuration.GetSection("LogTables"));
-            services.Configure<SearchSettings>(this.Configuration.GetSection("Search"));
-            services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
-            services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"));
-            services.Configure<MatterCenterApplicationInsights>(this.Configuration.GetSection("ApplicationInsights"));
+            services.Configure<GeneralSettings>(this.Configuration.GetSection("General"), trackConfigChanges: true);
+            services.Configure<TaxonomySettings>(this.Configuration.GetSection("Taxonomy"), trackConfigChanges: true);
+            services.Configure<MatterSettings>(this.Configuration.GetSection("Matter"), trackConfigChanges: true);
+            services.Configure<DocumentSettings>(this.Configuration.GetSection("Document"), trackConfigChanges: true);
+            services.Configure<SharedSettings>(this.Configuration.GetSection("Shared"), trackConfigChanges: true);
+            services.Configure<MailSettings>(this.Configuration.GetSection("Mail"), trackConfigChanges: true);
+            services.Configure<ErrorSettings>(this.Configuration.GetSection("ErrorMessages"), trackConfigChanges: true);
+            services.Configure<ListNames>(this.Configuration.GetSection("ListNames"), trackConfigChanges: true);
+            services.Configure<LogTables>(this.Configuration.GetSection("LogTables"), trackConfigChanges: true);
+            services.Configure<SearchSettings>(this.Configuration.GetSection("Search"), trackConfigChanges: true);
+            services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"), trackConfigChanges: true);
+            services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"), trackConfigChanges: true);
+            services.Configure<MatterCenterApplicationInsights>(this.Configuration.GetSection("ApplicationInsights"), trackConfigChanges: true);
+
         }
 
         private void ConfigureMatterPackages(IServiceCollection services)
@@ -205,8 +286,8 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             {
                 AutomaticAuthenticate = true,
                 Authority = String.Format(CultureInfo.InvariantCulture,
-                     this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
-                     this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString()),
+                    this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
+                    this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString()),
                 Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value.ToString(),
                 Events = new AspNetCore.Authentication.JwtBearer.JwtBearerEvents
                 {

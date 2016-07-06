@@ -13,7 +13,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         private readonly TestServer testServer;
         public MatterUnitTest()
         {
-            testServer = new TestServer(new WebHostBuilder());
+            testServer = new TestServer(new WebHostBuilder().UseStartup<Startup>());
         }
 
         /// <summary>

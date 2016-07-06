@@ -15,7 +15,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest.IntegrationTests
 
         public AttachmentUnitTest()
         {
-            testServer = new TestServer(new WebHostBuilder()); //.UseStartup<Startup>());
+            testServer = new TestServer(new WebHostBuilder().UseStartup<Startup>()); //.UseStartup<Startup>());
         }
 
         [Fact]
