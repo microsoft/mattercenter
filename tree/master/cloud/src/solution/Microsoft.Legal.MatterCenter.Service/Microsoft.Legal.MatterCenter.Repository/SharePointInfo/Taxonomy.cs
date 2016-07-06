@@ -211,7 +211,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return taxonomyResponseVM;
         }
 
-        
+
 
         /// <summary>
         /// Gets the practice group term set hierarchy.
@@ -244,7 +244,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                     //Add Level 1 to the term collection
                     tempTermSet.PGTerms.Add(tempTermPG);
-                    if(term.TermsCount>0)
+                    if (term.TermsCount > 0)
                     {
                         TermCollection termCollLevel2 = term.LoadTerms(clientContext);
                         tempTermPG.AreaTerms = new List<AreaTerm>();
@@ -264,11 +264,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             }
                             //Add Level 2 to the term collection
                             tempTermPG.AreaTerms.Add(tempTermArea);
-                            if(termLevel2.TermsCount>0)
-                            {   
+                            if (termLevel2.TermsCount > 0)
+                            {
                                 TermCollection termCollLevel3 = termLevel2.LoadTerms(clientContext);
                                 //Add Level 3 to the term collection
-                                tempTermArea.SubareaTerms = UpdateLevelTerm(termCollLevel3, termStoreDetails);
+                                tempTermArea.SubareaTerms = UpdateTermWithCustomProperties(termCollLevel3, termStoreDetails, termLevel2);
 
                                 int termCount = 0;
                                 foreach (Term termLevel3 in termCollLevel3)
@@ -277,7 +277,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                     {
                                         TermCollection termCollLevel4 = termLevel3.LoadTerms(clientContext);
                                         //Add Level 4 to the term collection
-                                        tempTermArea.SubareaTerms[termCount].SubareaTerms = UpdateLevelTerm(termCollLevel4, termStoreDetails);
+                                        tempTermArea.SubareaTerms[termCount].SubareaTerms = 
+                                            UpdateTermWithCustomProperties(termCollLevel4, termStoreDetails, termLevel3);
                                         int termCount1 = 0;
                                         foreach (Term termLevel4 in termCollLevel4)
                                         {
@@ -285,8 +286,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                             {
                                                 TermCollection termCollLevel5 = termLevel4.LoadTerms(clientContext);
                                                 //Add Level 5 to the term collection
-                                                tempTermArea.SubareaTerms[termCount].SubareaTerms[termCount1].SubareaTerms = 
-                                                    UpdateLevelTerm(termCollLevel5, termStoreDetails);
+                                                tempTermArea.SubareaTerms[termCount].SubareaTerms[termCount1].SubareaTerms =
+                                                    UpdateTermWithCustomProperties(termCollLevel5, termStoreDetails, termLevel4);
                                             }
                                             termCount1 = termCount1 + 1;
                                         }
@@ -304,32 +305,61 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
-            
+
             return tempTermSet;
         }
 
-        
+
         /// <summary>
         /// This method will update the taxonomy hierarchy object with custom properties that needs to be send to client
         /// </summary>
         /// <param name="termCollection">The Term Collection object to which terms will be added</param>
         /// <param name="termStoreDetails">The term store details which the client has sent</param>
+        /// <param name="parentTerm">The parent term from where the custom properties are read and assign to its child terms</param>
         /// <returns></returns>
-        private List<SubareaTerm> UpdateLevelTerm(TermCollection termCollection, TermStoreDetails termStoreDetails)
+        private List<SubareaTerm> UpdateTermWithCustomProperties(TermCollection termCollection, TermStoreDetails termStoreDetails, Term parentTerm)
         {
             try
             {
                 var subAreaTerms = new List<SubareaTerm>();
-                foreach (Term termLevel3 in termCollection)
+                foreach (Term term in termCollection)
                 {
                     SubareaTerm tempTermSubArea = new SubareaTerm();
-                    tempTermSubArea.TermName = termLevel3.Name;
-                    tempTermSubArea.Id = Convert.ToString(termLevel3.Id, CultureInfo.InvariantCulture);
-                    tempTermSubArea.ParentTermName = termLevel3.Name;
-                    /////Retrieve the custom property for Terms at level 3
+                    tempTermSubArea.TermName = term.Name;
+                    tempTermSubArea.Id = Convert.ToString(term.Id, CultureInfo.InvariantCulture);
+                    tempTermSubArea.ParentTermName = parentTerm.Name;
+                    IDictionary<string, string> childCustomProperties = term.CustomProperties;
+                    IDictionary<string, string> parentCustomProperties = parentTerm.CustomProperties;
 
-                    tempTermSubArea.DocumentTemplates = string.Empty;
-                    foreach (KeyValuePair<string, string> customProperty in termLevel3.CustomProperties)
+                    foreach (KeyValuePair<string, string> parentProperty in parentTerm.CustomProperties)
+                    {
+                        //if the key is present in the parent and not in the child, add that key value to the child custom properties
+                        if (!childCustomProperties.Keys.Contains(parentProperty.Key))
+                        {
+                            if (parentProperty.Key.Equals(termStoreDetails.CustomPropertyName, StringComparison.Ordinal))
+                            {
+                                childCustomProperties.Add(parentProperty.Key, parentProperty.Value);
+                            }
+                            else if (parentProperty.Key.Equals(taxonomySettings.SubAreaOfLawDocumentTemplates, StringComparison.Ordinal))
+                            {
+                                childCustomProperties.Add(parentProperty.Key, parentProperty.Value);
+                            }
+                            else
+                            {
+                                childCustomProperties.Add(parentProperty.Key, parentProperty.Value);
+                            }
+                        }
+
+                        //If the key is present in both and parent and, child value is empty and the parent value is not empty,
+                        //update the child value with the parent value for the same key
+                        if (childCustomProperties.Keys.Contains(parentProperty.Key) && childCustomProperties[parentProperty.Key] == string.Empty)
+                        {
+                            childCustomProperties[parentProperty.Key] = parentProperty.Value;
+                        }
+                    }
+
+                    //Add the custom properties to the subAreaTerms list collection
+                    foreach (KeyValuePair<string, string> customProperty in childCustomProperties)
                     {
                         if (customProperty.Key.Equals(termStoreDetails.CustomPropertyName, StringComparison.Ordinal))
                         {
@@ -358,7 +388,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 throw;
             }
         }
-        
+
         /// <summary>
         /// This method will be called if the clients are defined as terms and not as term sets
         /// </summary>
