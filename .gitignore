@@ -29,3 +29,5 @@ tree/master/cloud/src/solution/*/pkgobj/
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/obj/Release/net451
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/wwwroot/css
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/wwwroot/js
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.ServiceTest/bin/Debug/net451
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.ServiceTest/obj/Debug/net451
