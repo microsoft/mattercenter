@@ -12,7 +12,7 @@ Where is Matter Center going in the future?
 ### User Experience 
 * Create and finalize design to enhance login experience [adopt ADAL]
 * Create configuration tool for taxonomy 
-* Enable UI branding
+* Enable UI branding 
 * Add landing page to Matter Center app
 * Allow for editing existing Matters
 
