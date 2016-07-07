@@ -63,11 +63,11 @@ textarea {
         background: #fff;
         z-index: 1001;
         border: 1px solid #ccc;
-        left: 27px!important;
+        left: 27px !important;
     }
 
     .flyoutwidth {
-        width: 290px!important;
+        width: 290px !important;
     }
 }
 
@@ -97,16 +97,15 @@ textarea {
 }
 
 #documentgrid .ui-grid-viewport, #mattergrid .ui-grid-viewport {
-    /*overflow: hidden !important;*/
-    max-width: 1800px;
+    overflow: auto !important;
+    /*max-width: 1800px;*/
     /*display: table;*/
-    overflow-y:auto !important;
     position: relative;
 }
 
 #documentgrid .ui-grid-render-container, #mattergrid .ui-grid-render-container {
-    overflow-x: auto;
-    min-width: 275px;
+    /*overflow-x: auto;
+    min-width: 275px;*/
     /*max-width: 1370px;*/
 }
 
@@ -240,11 +239,11 @@ textarea {
 }
 
 .ui-grid-header-viewport {
-    overflow: visible;
+    overflow: hidden;
 }
 
 .ui-grid-top-panel {
-    overflow: visible;
+    overflow: hidden;
     background: #fff;
 }
 
@@ -304,7 +303,7 @@ textarea {
 }
 
 #documentgrid .ui-grid, #mattergrid .ui-grid {
-    height: 490px;
+    height: 520px;
 }
 
 .ui-grid-cell {
@@ -368,12 +367,13 @@ textarea {
     font-family: 'Segoe UI Web Regular','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
     font-size: 0.875em;
     font-weight: 400;
-    max-width: 1900px;
+    /*max-width: 1900px;*/
 }
 
 .ui-grid-viewport {
     /*overflow: hidden !important;*/
-    max-height: 500px;
+    /*max-height: 500px;*/
+    min-height: 20px;
 }
 
 .overflowMain {
@@ -596,23 +596,27 @@ textarea {
     color: #333;
 }
 
-#searchmatter ul {
+#searchmatter ul, #docsearchmatter ul {
     width: 100%;
     padding: 0;
     margin: 0;
     border-radius: 0;
 }
 
-    #searchmatter ul li a {
-        height: 30px;
-        padding: 5px 10px;
-    }
+#docsearchmatter ul {
+    width: 83.3%;
+}
 
-        #searchmatter ul li a:hover {
-            background-color: #cde6f7 !important;
-            font-family: "Segoe UI Semibold", "Segoe UI Web Semibold" !important;
-            color: #333 !important;
-        }
+#searchmatter ul li a {
+    height: 30px;
+    padding: 5px 10px;
+}
+
+    #searchmatter ul li a:hover {
+        background-color: #cde6f7 !important;
+        font-family: "Segoe UI Semibold", "Segoe UI Web Semibold" !important;
+        color: #333 !important;
+    }
 
 #searchmatter .active {
     background-color: #cde6f7 !important;
@@ -686,21 +690,21 @@ textarea {
     overflow: hidden;
 }
 
-#uploadToMatter, #viewMatters{
-    color:#fff !important;
+#uploadToMatter, #viewMatters {
+    color: #fff !important;
     font-family: 'Segoe UI Web Semibold','Segoe UI Semibold','Segoe WP Semibold','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
     font-size: 14px;
-    text-decoration:none !important;
+    text-decoration: none !important;
 }
 
- .popcontent{
-     position: absolute;
-     top: 0px;
-     background: #fff;
-     z-index:1001;
-     border: 1px solid #ccc;
- }
+.popcontent {
+    position: absolute;
+    top: 0px;
+    background: #fff;
+    z-index: 1001;
+    border: 1px solid #ccc;
+}
 
- .flyoutwidth{
-     width:350px;
- }
+.flyoutwidth {
+    width: 350px;
+}

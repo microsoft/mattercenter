@@ -63,7 +63,7 @@
                 enableSelectAll: false,
                 multiSelect: false,
                 columnDefs: [
-                     { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "245", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
+                     { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
                      { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
                      { field: 'matterClientId', displayName: 'Client.MatterID', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
                      { field: 'matterModifiedDate', displayName: 'Modified Date', width: "195", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
@@ -898,16 +898,20 @@
 
             //#region For filtering the grid when clicked on search button 
             vm.searchMatter = function (val) {
+                var finalSearchText = "";
+                if (val != "") {
+                    finalSearchText = "(MCMatterName:" + val + "* OR MCMatterID:" + val + "*)";
+                }
                 vm.pagenumber = 1;
-                searchRequest.SearchObject.SearchTerm = val;
+                searchRequest.SearchObject.PageNumber = vm.pagenumber;
+                searchRequest.SearchObject.SearchTerm = finalSearchText;
+                searchRequest.SearchObject.Sort.Direction = 1;
                 return matterResource.get(searchRequest).$promise;
             }
 
             vm.search = function () {
                 vm.matterid = 1;
                 vm.mattername = "All Matters";
-                vm.lazyloader = false;
-                vm.divuigrid = false;
                 vm.pagenumber = 1;
                 var searchToText = '';
                 var finalSearchText = '';
@@ -923,7 +927,7 @@
                     }
                 }
                 searchRequest.SearchObject.SearchTerm = finalSearchText;
-                searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 get(searchRequest, function (response) {
                     if (response == "") {
@@ -950,7 +954,6 @@
             }
 
             //#endregion
-
             //#region for searching matter by property and searchterm
             vm.mattersearch = function (term, property, bool) {
                 vm.lazyloader = false;
@@ -984,8 +987,15 @@
                         if (bool) {
                             vm.gridOptions.data = response;
                             vm.details = [];
+                            if(!$scope.$$phase){
+                                $scope.$apply();
+                            }
                         } else {
                             vm.details = response;
+                            $scope.$broadcast('setFilter', response);
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
                         }
                         searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Sort.ByProperty = "";

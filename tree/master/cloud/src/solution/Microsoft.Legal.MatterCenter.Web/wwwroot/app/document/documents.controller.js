@@ -153,12 +153,12 @@
         }
         var isAppOpenedInOutlook = $location.absUrl().split('|')[0].split('=')[2];
         if (isAppOpenedInOutlook && isAppOpenedInOutlook === "Outlook") {
-           
-                vm.isOutlook = true;
-              //  vm.isOutlookAsAttachment(vm.isOutlook);
-           // }
+
+            vm.isOutlook = true;
+            //  vm.isOutlookAsAttachment(vm.isOutlook);
+            // }
         }
-       // vm.isOutlook ? vm.isOutlookAsAttachment(vm.isOutlook) : "";
+        // vm.isOutlook ? vm.isOutlookAsAttachment(vm.isOutlook) : "";
         vm.isOutlookAsAttachment = function (isOutlook) {
             if (isOutlook) {
                 //Office.initialize = function (reason) {
@@ -180,85 +180,85 @@
                         if (typeof (sEmailCreatedTime) === "undefined" && typeof (sEmailModifiedTime) === "undefined") {
                             vm.showAttachment = true;
                             vm.enableAttachment = true;
-                           // vm.gridOptions.columnDefs.splice(1, 7);
+                            // vm.gridOptions.columnDefs.splice(1, 7);
                         }
                     }
                 }
             }
         }
-           // };
+        // };
 
-            vm.sendDocumentAsAttachment = function () {
-                if (vm.selectedRows && vm.selectedRows.length) {
-                    vm.showFailedAtachments = false;
-                    vm.failedFiles = [];
-                    vm.showPopUpHolder = true;
-                    vm.attachedProgressPopUp = true;
-                    vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", 1);
-                    angular.forEach(vm.selectedRows, function (selRow) {
-                        var documentPath = trimEndChar(selRow.documentOWAUrl, "/");
-                        var documentName = '';
-                        if (documentPath) {
-                            documentPath = trimEndChar(documentPath.trim(), "/");
-                            documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1);
-                            if (documentPath && documentName) {
-                                vm.showAttachmentProgress = true;
-                                sendAttachmentAsync(decodeURIComponent(documentPath), decodeURIComponent(documentName));
-                            }
+        vm.sendDocumentAsAttachment = function () {
+            if (vm.selectedRows && vm.selectedRows.length) {
+                vm.showFailedAtachments = false;
+                vm.failedFiles = [];
+                vm.showPopUpHolder = true;
+                vm.attachedProgressPopUp = true;
+                vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", 1);
+                angular.forEach(vm.selectedRows, function (selRow) {
+                    var documentPath = trimEndChar(selRow.documentOWAUrl, "/");
+                    var documentName = '';
+                    if (documentPath) {
+                        documentPath = trimEndChar(documentPath.trim(), "/");
+                        documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1);
+                        if (documentPath && documentName) {
+                            vm.showAttachmentProgress = true;
+                            sendAttachmentAsync(decodeURIComponent(documentPath), decodeURIComponent(documentName));
                         }
-                    });
-                }
-            }
-
-
-            /* Send asynchronous calls to send each document as attachment */
-            function sendAttachmentAsync(sDocumentPath, sDocumentName) {
-                Office.context.mailbox.item.addFileAttachmentAsync(sDocumentPath, sDocumentName, {
-                    asyncContext: {
-                        sCurrentDocumentPath: sDocumentPath,
-                        sCurrentDocumentName: sDocumentName
                     }
-                },
-                function (asyncResult) {
-                    if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-                        vm.failedFiles.push(asyncResult.asyncContext.sCurrentDocumentName)
-                        vm.showFailedAtachments = true;
-                    }
-                    vm.asyncCallCompleted = vm.asyncCallCompleted + 1;
-                    if (vm.asyncCallCompleted === vm.selectedRows.length) {
-                        vm.showAttachmentProgress = false;
-                        vm.asyncCallCompleted = 0;
-                        notifyAttachmentResult();
-                    }
-
                 });
             }
+        }
 
-            function notifyAttachmentResult() {
-                if (vm.showFailedAtachments) {
-                    vm.showSuccessAttachments = false;
+
+        /* Send asynchronous calls to send each document as attachment */
+        function sendAttachmentAsync(sDocumentPath, sDocumentName) {
+            Office.context.mailbox.item.addFileAttachmentAsync(sDocumentPath, sDocumentName, {
+                asyncContext: {
+                    sCurrentDocumentPath: sDocumentPath,
+                    sCurrentDocumentName: sDocumentName
+                }
+            },
+            function (asyncResult) {
+                if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+                    vm.failedFiles.push(asyncResult.asyncContext.sCurrentDocumentName)
                     vm.showFailedAtachments = true;
-                    vm.failedHeaderMessage = configs.uploadMessages.attachFailureMessage;
-                } else {
-                    vm.showFailedAtachments = false;
-                    vm.showSuccessAttachments = true;
-                    vm.failedHeaderMessage = '';
-                    vm.failedFiles = [];
                 }
-                vm.showPopUpHolder = true;
-            }
-            function trimEndChar(sOrignalString, sCharToTrim) {
-                "use strict";
-                if (sOrignalString && sCharToTrim === sOrignalString.substr(-1)) {
-                    return sOrignalString.substr(0, sOrignalString.length - 1);
+                vm.asyncCallCompleted = vm.asyncCallCompleted + 1;
+                if (vm.asyncCallCompleted === vm.selectedRows.length) {
+                    vm.showAttachmentProgress = false;
+                    vm.asyncCallCompleted = 0;
+                    notifyAttachmentResult();
                 }
-                return sOrignalString;
-            }
 
-            vm.closeNotification = function () {
-                vm.showPopUpHolder = false;
+            });
+        }
+
+        function notifyAttachmentResult() {
+            if (vm.showFailedAtachments) {
+                vm.showSuccessAttachments = false;
+                vm.showFailedAtachments = true;
+                vm.failedHeaderMessage = configs.uploadMessages.attachFailureMessage;
+            } else {
+                vm.showFailedAtachments = false;
+                vm.showSuccessAttachments = true;
+                vm.failedHeaderMessage = '';
+                vm.failedFiles = [];
             }
-        
+            vm.showPopUpHolder = true;
+        }
+        function trimEndChar(sOrignalString, sCharToTrim) {
+            "use strict";
+            if (sOrignalString && sCharToTrim === sOrignalString.substr(-1)) {
+                return sOrignalString.substr(0, sOrignalString.length - 1);
+            }
+            return sOrignalString;
+        }
+
+        vm.closeNotification = function () {
+            vm.showPopUpHolder = false;
+        }
+
 
         //#endregion
 
@@ -350,9 +350,13 @@
         };
 
         vm.searchDocument = function (val) {
+            var finalSearchText = "";
+            if (val != "") {
+                finalSearchText = "(FileName:" + val + "* OR dlcDocIdOWSText:" + val + "*)"
+            }
             vm.pagenumber = 1;
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
-            searchRequest.SearchObject.SearchTerm = val;
+            searchRequest.SearchObject.SearchTerm = finalSearchText;
             searchRequest.SearchObject.Sort.ByProperty = "FileName";
             searchRequest.SearchObject.Sort.Direction = 0;
             return documentResource.get(searchRequest).$promise;
@@ -364,7 +368,7 @@
             vm.documentid = 1;
             vm.lazyloader = false;
             vm.divuigrid = false;
-            vm.responseNull=false;
+            vm.responseNull = false;
             var searchToText = '';
             var finalSearchText = '';
             if (vm.selected != "") {
@@ -511,7 +515,7 @@
                     } else {
                         if (vm.isOutlook) {
                             vm.isOutlookAsAttachment(vm.isOutlook);
-                        }                       
+                        }
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.responseNull = false;
@@ -645,7 +649,7 @@
             }
             UnpinDocuments(unpinRequest, function (response) {
                 if (response.isDocumentUnPinned) {
-                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);                    
+                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);
                 }
             });
         }
@@ -684,7 +688,7 @@
             }
             pinDocuments(pinRequest, function (response) {
                 if (response.isDocumentPinned) {
-                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);                    
+                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);
                 }
             });
         }
