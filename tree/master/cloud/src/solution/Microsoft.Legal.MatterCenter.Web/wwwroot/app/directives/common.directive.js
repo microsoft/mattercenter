@@ -214,7 +214,7 @@
                     var obj = "";
                     obj = eval('(' + attrs.details + ')');
                     var actualcontent = "";
-                    actualcontent = '<div class="" style="position:relative;" ng-click="stopEvent($event)">\
+                    actualcontent = '<div class="" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
                                    <div class="FlyoutBoxContent flyoutwidth">\
                                       <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
                                       <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
@@ -237,7 +237,7 @@
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible attorney:</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
                                        </div>\
-                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a>\
+                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="https://msmatter.sharepoint.com/sites/microsoft/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a><br/>\
                                        <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">Upload to a matter</a>\
                                     </div>\
                                 </div>';
@@ -249,7 +249,7 @@
                     var obj = $(this).parent().position();
                     $(this).parent().find('.popcontent').html(a[0]);
                     $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '220px' });
-                    //$(this).parent().find('.popcontent').css('top', obj.top + "px");
+                    $(this).parent().find('.popcontent').css('top', "0");
                 });
             },
             controller: function ($scope) {
@@ -327,7 +327,7 @@
                     var obj = $(this).parent().position();
                     $(this).parent().find('.popcontent').html(a[0]);
                     $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px' });
-                    //$(this).parent().find('.popcontent').css('top', obj.top + "px");
+                    $(this).parent().find('.popcontent').css('top', "0");
                 });
             },
             controller: function ($scope) {
@@ -418,6 +418,31 @@
         }
     };
 
+    //'use strict';
+    //function dropdown($compile) {
+    //    return {
+    //        restrict: 'A',
+    //        scope: {
+    //            details: '@'
+    //        },
+    //        link: function (scope, element, attrs) {
+    //            $(element).click(function (e) {
+    //                var mainhtml = $(this).parent().find('.flyoutWrapper').html();
+    //                $('.test').css('display', 'block');
+    //                var a = $compile("<div>" + mainhtml + "</div>")(scope);
+    //                $('.test').html(a[0]);
+    //            });
+    //            scope.$on('setFilter', function (e, res) {
+    //                scope.details = res[0].Resource;
+    //                console.log(scope.details);
+    //            });
+    //            scope.searchmatter = function (matterName, matterUrl, matterGUID) {
+    //                scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent.vm.mattersearch(matterName, matterUrl, matterGUID);
+    //                $('.popcontent').css('display', 'none');
+    //            };
+    //        },
+    //    }
+    //}
 
     var app = angular.module('matterMain');
     //app.directive('popover',[popover]);    
@@ -430,6 +455,7 @@
     app.directive('matterflyout', ['$compile', '$templateCache', matterflyout]);
     app.directive('documentflyout', ['$compile', '$templateCache', documentflyout]);
     app.directive('fallbacksrc', [fallbacksrc]);
+    //app.directive('dropdown', ['$compile', dropdown]);
 })();
 
 
