@@ -481,11 +481,14 @@ body {
 .popUpScrollXHidden{overflow-x:hidden;overflow-y:auto;}
 .paddingRight20{padding-right:20px;}
 
-@media (max-width: 1020px){
-.maildata {
-    height: 100px;
+@media (max-width: 1020px) {
+    .maildata {
+        height: 100px;
+    }
 }
-
+.maildata {
+        height: 100px;
+    }
 
 
 

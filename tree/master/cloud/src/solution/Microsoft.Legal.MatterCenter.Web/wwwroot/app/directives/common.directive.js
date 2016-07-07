@@ -409,10 +409,12 @@
         return {
             restrict: 'A',
             link: function postLink(scope, iElement, iAttrs) {
-                iElement.bind('error', function () {
-                    var arrelement = iAttrs.src.split("'\'");
-                    console.log(arrelement);
-                    angular.element(this).attr("src", iAttrs.fallbackSrc);
+                iElement.bind('error', function () {                   
+                    var rest = iAttrs.src.substring(0, iAttrs.src.lastIndexOf("/") + 1);
+                    var last = iAttrs.src.substring(iAttrs.src.lastIndexOf("/") + 1, iAttrs.src.length);
+                    last = "generaldocument.png";
+                    iAttrs.src = rest + last;
+                    angular.element(this).attr("src", iAttrs.src);
                 });
             }
         }
