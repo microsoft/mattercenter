@@ -21,14 +21,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private GeneralSettings generalSettings;
         private MatterSettings matterSettings;
         private LogTables logTables;
+        private IUsersDetails userDetails;
         public ExternalSharing(ISPOAuthorization spoAuthorization, IOptionsMonitor<ListNames> listNames, 
-            IOptionsMonitor<GeneralSettings> generalSettings, IOptionsMonitor<MatterSettings> matterSettings, IOptionsMonitor<LogTables> logTables)
+            IOptionsMonitor<GeneralSettings> generalSettings, 
+            IOptionsMonitor<MatterSettings> matterSettings, 
+            IOptionsMonitor<LogTables> logTables, IUsersDetails userDetails)
         {
             this.spoAuthorization = spoAuthorization;
             this.listNames = listNames.CurrentValue;
             this.generalSettings = generalSettings.CurrentValue;
             this.matterSettings = matterSettings.CurrentValue;
             this.logTables = logTables.CurrentValue;
+            this.userDetails = userDetails;
         }
         /// <summary>
         /// This method will store the external sharing request in a list called "MatterCenterExternalRequests"
@@ -41,17 +45,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
             var tempMatterInformation = matterInformation;
             int index = 0;
             foreach (var assignUserEmails in matterInformation.Matter.AssignUserEmails)
-            {
-                
+            {                
                 foreach (string email in assignUserEmails)
                 {
                     //First check whether the user exists in SharePoint or not
-                    if (CheckUserPresentInMatterCenter(generalSettings.SiteURL, email) == false)
+                    if (!string.IsNullOrWhiteSpace(email) && userDetails.CheckUserPresentInMatterCenter(generalSettings.SiteURL, email) == false)
                     {                        
                         //If not, store external request in a list
                         SaveExternalSharingRequest(matterInformation);                       
                         //Send notification to the user with appropriate information
-                        SendExternalNotification(matterInformation, matterInformation.Matter.Permissions[index], matterInformation.Matter.AssignUserEmails[index][0]);
+                        SendExternalNotification(matterInformation, 
+                            matterInformation.Matter.Permissions[index], 
+                            matterInformation.Matter.AssignUserEmails[index][0]);
                     }
                     
                 }
@@ -60,37 +65,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return null;
         }
 
-        /// <summary>
-        /// This method will check whether user exists in a sharepoint site or not
-        /// </summary>
-        /// <param name="externalSharingRequest"></param>
-        /// <returns></returns>
-        private bool CheckUserPresentInMatterCenter(string clientUrl,string email)
-        {
-            try
-            {
-                var clientContext = spoAuthorization.GetClientContext(clientUrl);                
-                string userAlias = email;
-                ClientPeoplePickerQueryParameters queryParams = new ClientPeoplePickerQueryParameters();
-                queryParams.AllowMultipleEntities = false;
-                queryParams.MaximumEntitySuggestions = 500;
-                queryParams.PrincipalSource = PrincipalSource.All;
-                queryParams.PrincipalType = PrincipalType.User | PrincipalType.SecurityGroup;
-                queryParams.QueryString = userAlias; 
-                ClientResult<string> clientResult = ClientPeoplePickerWebServiceInterface.ClientPeoplePickerSearchUser(clientContext, queryParams);
-                clientContext.ExecuteQuery();
-                string results = clientResult.Value;
-                int peoplePickerMaxRecords = 30;
-                IList<PeoplePickerUser> foundUsers = Newtonsoft.Json.JsonConvert.DeserializeObject<List<PeoplePickerUser>>(results).Where(result => (string.Equals(result.EntityType, ServiceConstants.PEOPLE_PICKER_ENTITY_TYPE_USER,
-                        StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(result.Description)) || (!string.Equals(result.EntityType,
-                        ServiceConstants.PEOPLE_PICKER_ENTITY_TYPE_USER, StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(result.EntityData.Email))).Take(peoplePickerMaxRecords).ToList();
-                return foundUsers.Count>0;
-            }
-            catch(Exception ex)
-            {
-                throw;
-            }
-        }
+        
 
         /// <summary>
         /// This method will store external requests information in Azure Table Storage
@@ -162,21 +137,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     matterLandingPageUrl,
                     users, true, true, true, "The following matter page has been shared with you", true, true);
                     clientContext.ExecuteQuery();
-                }
-                //Need to send notification to one catalog page so that user can be added later to sharepoint groups which will be used when 
-                //rendering the matter landing page to external user
-                //users = new List<UserRoleAssignment>();
-                //userRole = new UserRoleAssignment();
-                //userRole.UserId = externalEmail;
-                //userRole.Role = SharePoint.Client.Sharing.Role.Owner;
-                //users.Add(userRole);
-                //using (var clientContext = spoAuthorization.GetClientContext(generalSettings.CentralRepositoryUrl))
-                //{
-                //    IList<UserSharingResult> catalogSiteAssetsLibrary = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
-                //    catalogSiteAssetsLibraryUrl,
-                //    users, true, true, true, "The following catalog page has been shared with you", true, true);
-                //    clientContext.ExecuteQuery();
-                //}
+                }                
                 return null;
                 #endregion
             }

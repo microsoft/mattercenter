@@ -49,6 +49,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private MailSettings mailSettings;
         private IHostingEnvironment hostingEnvironment;
         private ErrorSettings errorSettings;
+        private IUsersDetails userDetails;        
         #endregion
 
         /// <summary>
@@ -57,10 +58,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="spoAuthorization"></param>
         /// <param name="generalSettings"></param>
         public SPList(ISPOAuthorization spoAuthorization,
-            IOptionsMonitor<CamlQueries> camlQueries, IOptionsMonitor<ErrorSettings> errorSettings,
+            IOptionsMonitor<CamlQueries> camlQueries, 
+            IOptionsMonitor<ErrorSettings> errorSettings,
             IOptionsMonitor<SearchSettings> searchSettings,
             IOptionsMonitor<ContentTypesConfig> contentTypesConfig,
-            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IOptionsMonitor<MailSettings> mailSettings, IHostingEnvironment hostingEnvironment)
+            ICustomLogger customLogger, 
+            IOptionsMonitor<LogTables> logTables, 
+            IOptionsMonitor<MailSettings> mailSettings,           
+            IHostingEnvironment hostingEnvironment, 
+            IUsersDetails userDetails)
         {
             this.searchSettings = searchSettings.CurrentValue;
             this.camlQueries = camlQueries.CurrentValue;
@@ -70,6 +76,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.mailSettings = mailSettings.CurrentValue;
             this.hostingEnvironment = hostingEnvironment;
             this.errorSettings = errorSettings.CurrentValue;
+            this.userDetails = userDetails;
         }
 
         public bool CreateList(ClientContext clientContext, ListInformation listInfo)
@@ -1013,6 +1020,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clientContext"></param>
+        /// <param name="libraryname"></param>
+        /// <returns></returns>
         public IEnumerable<RoleAssignment> FetchUserPermissionForLibrary(ClientContext clientContext, string libraryname)
         {
             IEnumerable<RoleAssignment> userPermissionCollection = null;
@@ -1069,16 +1082,20 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 RoleDefinition roleDefinition = clientContext.Web.RoleDefinitions.GetByName(roleName);
                                 foreach (string user in userName)
                                 {
-                                    if (!string.IsNullOrWhiteSpace(user))
+                                    //check whether is present in the organization before giving permissiosn to him
+                                    if (!string.IsNullOrWhiteSpace(user) && userDetails.CheckUserPresentInMatterCenter(clientContext, user))
                                     {
-                                        /////get the user object
-                                        Principal userPrincipal = clientContext.Web.EnsureUser(user.Trim());
-                                        /////create the role definition binding collection
-                                        RoleDefinitionBindingCollection roleDefinitionBindingCollection = new RoleDefinitionBindingCollection(clientRuntimeContext);
-                                        /////add the role definition to the collection
-                                        roleDefinitionBindingCollection.Add(roleDefinition);
-                                        /////create a RoleAssigment with the user and role definition
-                                        list.RoleAssignments.Add(userPrincipal, roleDefinitionBindingCollection);
+                                        if (!string.IsNullOrWhiteSpace(user))
+                                        {
+                                            /////get the user object
+                                            Principal userPrincipal = clientContext.Web.EnsureUser(user.Trim());
+                                            /////create the role definition binding collection
+                                            RoleDefinitionBindingCollection roleDefinitionBindingCollection = new RoleDefinitionBindingCollection(clientRuntimeContext);
+                                            /////add the role definition to the collection
+                                            roleDefinitionBindingCollection.Add(roleDefinition);
+                                            /////create a RoleAssigment with the user and role definition
+                                            list.RoleAssignments.Add(userPrincipal, roleDefinitionBindingCollection);
+                                        }
                                     }
                                 }
                                 /////execute the query to add everything
