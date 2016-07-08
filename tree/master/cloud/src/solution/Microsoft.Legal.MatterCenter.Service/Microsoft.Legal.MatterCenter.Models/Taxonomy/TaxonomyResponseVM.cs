@@ -7,7 +7,7 @@ namespace Microsoft.Legal.MatterCenter.Models
 {
     public class TaxonomyResponseVM
     {
-        public TermSets TermSets { get; set; }
+        public string TermSets { get; set; }
         public ClientTermSets ClientTermSets { get; set; }
         public ErrorResponse ErrorResponse { get; set; }
     }

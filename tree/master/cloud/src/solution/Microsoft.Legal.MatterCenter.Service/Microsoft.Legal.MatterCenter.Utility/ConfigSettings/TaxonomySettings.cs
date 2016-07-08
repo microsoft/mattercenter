@@ -40,6 +40,10 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// Client term location in the taxonomy hierarchy
         /// </summary>
         public string ClientTermPath { get; set; }
-
+        public string Level1Name { get; set; }
+        public string Level2Name { get; set; }
+        public string Level3Name { get; set; }
+        public string Level4Name { get; set; }
+        public string Level5Name { get; set; }
     }
 }

@@ -128,7 +128,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     taxonomyRepositoryVM = await taxonomyRepository.GetTaxonomyHierarchyAsync(termStoreViewModel);
                     if (termStoreViewModel.TermStoreDetails.TermSetName == taxonomySettings.PracticeGroupTermSetName && taxonomyRepositoryVM.TermSets!=null)
                     {                        
-                        ServiceUtility.SetDataIntoAzureRedisCache<TermSets>(key, taxonomyRepositoryVM.TermSets);
+                        ServiceUtility.SetDataIntoAzureRedisCache<string>(key, taxonomyRepositoryVM.TermSets);
                         return matterCenterServiceFunctions.ServiceResponse(taxonomyRepositoryVM.TermSets, (int)HttpStatusCode.OK);
                     }
                     if (termStoreViewModel.TermStoreDetails.TermSetName == taxonomySettings.ClientTermSetName && taxonomyRepositoryVM.ClientTermSets != null)

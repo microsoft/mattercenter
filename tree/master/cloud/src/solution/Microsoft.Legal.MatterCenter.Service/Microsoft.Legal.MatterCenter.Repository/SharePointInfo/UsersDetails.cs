@@ -24,6 +24,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.SharePoint.Client.UserProfiles;
 using System.Globalization;
 using System.IO;
+using Microsoft.SharePoint.ApplicationPages.ClientPickerQuery;
+using Microsoft.SharePoint.Client.Utilities;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -35,7 +37,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
     {
         private MatterSettings matterSettings;
         private ISPOAuthorization spoAuthorization;
-        private ISPList spList;
+        
         private ListNames listNames;
         private ICustomLogger customLogger;
         private LogTables logTables;
@@ -43,36 +45,89 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// Constructir where all the dependencies are injected
         /// </summary>
         /// <param name="spoAuthorization"></param>
-        public UsersDetails(IOptionsMonitor<MatterSettings> matterSettings, IOptionsMonitor<ListNames> listNames, 
-            ISPOAuthorization spoAuthorization, ISPList spList, ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables)
+        public UsersDetails(IOptionsMonitor<MatterSettings> matterSettings, IOptionsMonitor<ListNames> listNames,
+            ISPOAuthorization spoAuthorization, ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables)
         {
             this.matterSettings = matterSettings.CurrentValue;
             this.listNames = listNames.CurrentValue;
             this.spoAuthorization = spoAuthorization;
-            this.spList = spList;
+            //this.spList = spList;
             this.customLogger = customLogger;
             this.logTables = logTables.CurrentValue;
         }
 
+
+        /// <summary>
+        /// This method will get user profile picture of the login user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public Users GetUserProfilePicture(Client client)
         {
             ClientContext clientContext = spoAuthorization.GetClientContext(client.Url);
-            PeopleManager peopleManager = new PeopleManager(clientContext);            
-            ClientResult<string> userProfile = peopleManager.GetUserProfilePropertyFor(spoAuthorization.AccountName, "PictureURL");            
+            PeopleManager peopleManager = new PeopleManager(clientContext);
+            ClientResult<string> userProfile = peopleManager.GetUserProfilePropertyFor(spoAuthorization.AccountName, "PictureURL");
             clientContext.ExecuteQuery();
             string personalURL = userProfile.Value;
-            
+
             string smallProfilePicture = personalURL.Replace("MThumb.jpg", "SThumb.jpg");
             string mediumProfilePicture = personalURL;
             Users users = new Users();
-            
+
             users.SmallPictureUrl = smallProfilePicture;
             users.LargePictureUrl = mediumProfilePicture;
             return users;
             //return null;
         }
 
-        
+        /// <summary>
+        /// This method will check whether user exists in a sharepoint site or not
+        /// </summary>
+        /// <param name="externalSharingRequest"></param>
+        /// <returns></returns>
+        public bool CheckUserPresentInMatterCenter(ClientContext clientContext, string email)
+        {
+            try
+            {
+                string userAlias = email;
+                ClientPeoplePickerQueryParameters queryParams = new ClientPeoplePickerQueryParameters();
+                queryParams.AllowMultipleEntities = false;
+                queryParams.MaximumEntitySuggestions = 500;
+                queryParams.PrincipalSource = PrincipalSource.All;
+                queryParams.PrincipalType = PrincipalType.User | PrincipalType.SecurityGroup;
+                queryParams.QueryString = userAlias;
+                ClientResult<string> clientResult = ClientPeoplePickerWebServiceInterface.ClientPeoplePickerSearchUser(clientContext, queryParams);
+                clientContext.ExecuteQuery();
+                string results = clientResult.Value;
+                int peoplePickerMaxRecords = 30;
+                IList<PeoplePickerUser> foundUsers = Newtonsoft.Json.JsonConvert.DeserializeObject<List<PeoplePickerUser>>(results).Where(result => (string.Equals(result.EntityType, ServiceConstants.PEOPLE_PICKER_ENTITY_TYPE_USER,
+                        StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(result.Description)) || (!string.Equals(result.EntityType,
+                        ServiceConstants.PEOPLE_PICKER_ENTITY_TYPE_USER, StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(result.EntityData.Email))).Take(peoplePickerMaxRecords).ToList();
+                return foundUsers.Count > 0;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        ///// <summary>
+        ///// This method will check whether user exists in a sharepoint site or not
+        ///// </summary>
+        ///// <param name="externalSharingRequest"></param>
+        ///// <returns></returns>
+        public bool CheckUserPresentInMatterCenter(string clientUrl, string email)
+        {
+            try
+            {
+                var clientContext = spoAuthorization.GetClientContext(clientUrl);
+                return CheckUserPresentInMatterCenter(clientContext, email);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// This method will return the user object who has currently logged into the system
@@ -83,7 +138,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             Users currentUserDetail = new Users();
             try
-            {      
+            {
                 clientContext.Load(clientContext.Web.CurrentUser, userInfo => userInfo.Title, userInfo => userInfo.Email, userInfo => userInfo.LoginName);
                 clientContext.ExecuteQuery();
                 currentUserDetail.Name = clientContext.Web.CurrentUser.Title;
@@ -114,13 +169,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 currentUserDetail.LogOnName = currentUserDetail.LogOnName.Substring(splitPositionStart, splitPositionEnd - splitPositionStart);
                 return currentUserDetail;
             }
-           
+
             catch (Exception exception)
             {
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
-            
+
         }
 
         /// <summary>
@@ -152,7 +207,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             bool result = false;
             try
-            {                
+            {
                 if (null != matter)
                 {
                     Web web = clientContext.Web;
@@ -176,7 +231,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
-            
+
         }
 
         /// <summary>
@@ -184,7 +239,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        public bool GetUserAccess(Client client) => spList.CheckPermissionOnList(client, listNames.SendMailListName, PermissionKind.EditListItems);
+        //public bool GetUserAccess(Client client) => spList.CheckPermissionOnList(client, listNames.SendMailListName, PermissionKind.EditListItems);
 
 
         public IList<FieldUserValue> ResolveUserNames(ClientContext clientContext, IList<string> userNames)
@@ -203,7 +258,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     tempUser.LookupId = user.Id;
                     userList.Add(tempUser);
                 }
-            }           
+            }
             return userList;
         }
         /// <summary>
@@ -216,11 +271,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             {
-                
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
                     return ResolveUserNames(clientContext, userNames);
-                    
                 }
             }
             catch (Exception ex)
@@ -246,7 +299,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
                     int teamMembersRowCount = matter.AssignUserNames.Count;
-                    
+
                     List<string> blockedUsers = matter.BlockUserNames.Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
                     if (0 < teamMembersRowCount)
                     {
@@ -257,8 +310,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             foreach (string teamMember in currentRowTeamMembers)
                             {
                                 Principal teamMemberPrincipal = clientContext.Web.EnsureUser(teamMember);
-                                clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => 
-                                            teamMemberPrincipalProperties.PrincipalType, 
+                                clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties =>
+                                            teamMemberPrincipalProperties.PrincipalType,
                                             teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title);
                                 teamMemberPrincipalCollection.Add(new Tuple<int, Principal>(iterator, teamMemberPrincipal));
                             }

@@ -30,10 +30,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private ListNames listNames;
         private SearchSettings searchSettings;
         private IUserRepository userRepositoy;
+        private IExternalSharing externalSharing;
         public MatterProvision(IMatterRepository matterRepositoy, IOptionsMonitor<MatterSettings> matterSettings, IOptionsMonitor<ErrorSettings> errorSettings,
             ISPOAuthorization spoAuthorization, IEditFunctions editFunctions, IValidationFunctions validationFunctions,
             ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IOptionsMonitor<MailSettings> mailSettings, IOptionsMonitor<CamlQueries> camlQueries, IOptionsMonitor<ListNames> listNames,
-            IOptionsMonitor<SearchSettings> searchSettings, IUserRepository userRepositoy
+            IOptionsMonitor<SearchSettings> searchSettings, IUserRepository userRepositoy, IExternalSharing externalSharing
             )
         {
             this.matterRepositoy = matterRepositoy;
@@ -49,6 +50,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.listNames = listNames.CurrentValue;
             this.searchSettings = searchSettings.CurrentValue;
             this.userRepositoy = userRepositoy;
+            this.externalSharing = externalSharing;
         }
 
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
@@ -378,6 +380,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             GenericResponseVM genericResponseVM = null;
             using (clientContext = spoAuthorization.GetClientContext(client.Url))
             {
+
+                
                 MatterInformationVM matterInfo = new MatterInformationVM()
                 {
                     Client = matterMetadataVM.Client,
@@ -394,6 +398,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 if (!string.IsNullOrWhiteSpace(matter.Name))
                 {
+
+                    //This method will check if any of the matter users are external to the organization and not present in the syste
+                    externalSharing.ShareMatter(matterInfo);
+                    
+                    
                     //Assign permission for Matter library
                     matterRepositoy.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, matter.Name);
                     //Assign permission for OneNote library 
