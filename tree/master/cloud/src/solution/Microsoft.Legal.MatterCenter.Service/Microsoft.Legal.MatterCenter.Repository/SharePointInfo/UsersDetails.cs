@@ -56,6 +56,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.logTables = logTables.CurrentValue;
         }
 
+
+        /// <summary>
+        /// This method will get user profile picture of the login user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
         public Users GetUserProfilePicture(Client client)
         {
             ClientContext clientContext = spoAuthorization.GetClientContext(client.Url);
@@ -83,7 +89,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             {
-
                 string userAlias = email;
                 ClientPeoplePickerQueryParameters queryParams = new ClientPeoplePickerQueryParameters();
                 queryParams.AllowMultipleEntities = false;
@@ -266,11 +271,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             {
-
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
                     return ResolveUserNames(clientContext, userNames);
-
                 }
             }
             catch (Exception ex)
