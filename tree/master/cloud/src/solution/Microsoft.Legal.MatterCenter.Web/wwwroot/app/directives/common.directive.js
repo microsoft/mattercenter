@@ -409,7 +409,7 @@
         return {
             restrict: 'A',
             link: function postLink(scope, iElement, iAttrs) {
-                iElement.bind('error', function () {                   
+                iElement.bind('error', function () {
                     var rest = iAttrs.src.substring(0, iAttrs.src.lastIndexOf("/") + 1);
                     var last = iAttrs.src.substring(iAttrs.src.lastIndexOf("/") + 1, iAttrs.src.length);
                     last = "generaldocument.png";
@@ -419,32 +419,6 @@
             }
         }
     };
-
-    //'use strict';
-    //function dropdown($compile) {
-    //    return {
-    //        restrict: 'A',
-    //        scope: {
-    //            details: '@'
-    //        },
-    //        link: function (scope, element, attrs) {
-    //            $(element).click(function (e) {
-    //                var mainhtml = $(this).parent().find('.flyoutWrapper').html();
-    //                $('.test').css('display', 'block');
-    //                var a = $compile("<div>" + mainhtml + "</div>")(scope);
-    //                $('.test').html(a[0]);
-    //            });
-    //            scope.$on('setFilter', function (e, res) {
-    //                scope.details = res[0].Resource;
-    //                console.log(scope.details);
-    //            });
-    //            scope.searchmatter = function (matterName, matterUrl, matterGUID) {
-    //                scope.$parent.$parent.$parent.$parent.$parent.$parent.$parent.vm.mattersearch(matterName, matterUrl, matterGUID);
-    //                $('.popcontent').css('display', 'none');
-    //            };
-    //        },
-    //    }
-    //}
 
     var app = angular.module('matterMain');
     //app.directive('popover',[popover]);    
@@ -456,8 +430,7 @@
     app.directive('infopopover', [infopopover]);
     app.directive('matterflyout', ['$compile', '$templateCache', matterflyout]);
     app.directive('documentflyout', ['$compile', '$templateCache', documentflyout]);
-    app.directive('fallbacksrc', [fallbacksrc]);
-    //app.directive('dropdown', ['$compile', dropdown]);
+    app.directive('fallbacksrc', [fallbacksrc]);   
 })();
 
 

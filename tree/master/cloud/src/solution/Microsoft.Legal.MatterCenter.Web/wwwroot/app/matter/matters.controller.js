@@ -389,9 +389,9 @@
                                     vm.uploadedFiles.push(response.data[i]);
                                     tempFile.push(response.data[i]);
                                     vm.oUploadGlobal.successBanner = (tempFile.length == sourceFiles.length) ? true : false;
-                                        vm.ducplicateSourceFile = vm.ducplicateSourceFile.filter(function (item) {
-                                            return item.fileName !== response.data[i].fileName;
-                                        });
+                                    vm.ducplicateSourceFile = vm.ducplicateSourceFile.filter(function (item) {
+                                        return item.fileName !== response.data[i].fileName;
+                                    });
                                 } else {
                                     if (response.data[i].code == "DuplicateDocument" || response.data[i].code == "IdenticalContent") {
                                         vm.IsDupliacteDocument = true;
@@ -416,7 +416,7 @@
                                             }
                                         }
 
-                                    }                                   
+                                    }
                                     else {
                                         vm.IsDupliacteDocument = true;
                                         response.data[i].ok = "True";
@@ -987,15 +987,11 @@
                         if (bool) {
                             vm.gridOptions.data = response;
                             vm.details = [];
-                            if(!$scope.$$phase){
+                            if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
                         } else {
                             vm.details = response;
-                            $scope.$broadcast('setFilter', response);
-                            if (!$scope.$$phase) {
-                                $scope.$apply();
-                            }
                         }
                         searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Sort.ByProperty = "";
@@ -1023,7 +1019,7 @@
                               AOLList: "",
                               ClientName: "",
                               ClientsList: [],
-                              DateFilters: { CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: "05/02/2016", ModifiedToDate: "05/06/2016", OpenDateFrom: "", OpenDateTo: "" },
+                              DateFilters: { CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: vm.startdate.format("dd/MM/yyyy"), ModifiedToDate: vm.enddate.format("dd/MM/yyyy"), OpenDateFrom: "", OpenDateTo: "" },
                               DocumentAuthor: [],
                               DocumentCheckoutUsers: [],
                               FilterByMe: 1,
@@ -1716,6 +1712,8 @@
             vm.closealldrops = function () {
                 vm.mattersdrop = false;
                 vm.mattersdropinner = true;
+                vm.matterheader = true;
+                vm.matterdateheader = true;
             }
 
             //#endregion
@@ -1896,14 +1894,66 @@
                 vm.oUploadGlobal.successBanner = false;
             }
 
-            $scope.testFunction = function () {
-                console.log("Clicked");
-            }
 
             $scope.errorImage = function (image) {
                 "use strict";
                 if (image && image.iconSrc && image.iconSrc != "") {
 
+                }
+            }
+
+            vm.matterheader = true;
+            vm.matterdateheader = true;
+            vm.searchexp = "";
+            vm.searchName = "";
+            vm.filtername = "";
+
+            vm.openMatterHeader = function ($event, name) {
+                vm.searchTerm = "";
+                vm.details = [];
+                var dimensions = $event.target.getBoundingClientRect();
+                var top = dimensions.top + 30;
+                var left = dimensions.left - 254;
+                angular.element('.matterheader').css({ 'top': top, 'left': left });
+                angular.element('.matterheaderdates').css({ 'top': top, 'left': left });
+                if (name == "matter") {
+                    vm.searchexp = "MCMatterName";
+                    vm.searchName = vm.searchTerm;
+                    vm.filtername = "Matter";
+                }
+                if (name == "client") {
+                    vm.searchexp = "MCClientName";
+                    vm.searchName = "MCClientName:" + vm.searchTerm + "*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)";
+                    vm.filtername = "Client";
+                }
+                if (name == "Attorney") {
+                    vm.searchexp = "MCResponsibleAttorney";
+                    vm.searchName = "MCResponsibleAttorney:" + vm.searchTerm + "*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)";
+                    vm.filtername = "Responsible Attorney";
+                }
+                if (name == "AreaOfLaw") {
+                    vm.searchexp = "MCSubAreaofLaw";
+                    vm.searchName = "MCSubAreaofLaw:" + vm.searchTerm + "*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)";
+                    vm.filtername = "Area of Law";
+                }
+                if (name == "ModifiedDate") {
+                    vm.filtername = "Modified Date";
+                }
+                if (name == "OpenDate") {
+                    vm.filtername = "Open Date";
+                }
+                $timeout(function () {
+                    if (name == 'ModifiedDate' || name == 'OpenDate')
+                    {
+                        vm.matterdateheader = false;
+                    }
+                    else{
+                        vm.matterheader = false;
+                    }
+                },
+                500);
+                if (!$scope.$$phase) {
+                    $scope.$apply();
                 }
             }
 
