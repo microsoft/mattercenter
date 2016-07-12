@@ -119,8 +119,8 @@
                         var sPropertyName = arrTerm[0].trim(); // Removal of White Space
                         searchTerm = "(" + sPropertyName + ":\"" + sManagedProperty + "*\")";
                     }
-                    return searchTerm
                 }
+                return searchTerm;
             }
         }
     });

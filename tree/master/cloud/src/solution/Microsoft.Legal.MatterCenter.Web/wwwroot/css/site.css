@@ -371,8 +371,6 @@ textarea {
 }
 
 .ui-grid-viewport {
-    /*overflow: hidden !important;*/
-    /*max-height: 500px;*/
     min-height: 20px;
 }
 
