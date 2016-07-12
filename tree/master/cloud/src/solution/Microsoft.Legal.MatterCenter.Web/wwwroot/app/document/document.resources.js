@@ -23,6 +23,10 @@ angular.module('matterMain')
                   'pinDocument': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/document/pindocument'
+                  }),
+                  'getassets': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/document/getassets'
                   })
               });
       }]);

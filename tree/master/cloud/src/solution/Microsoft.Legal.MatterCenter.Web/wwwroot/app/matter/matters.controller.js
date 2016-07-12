@@ -16,7 +16,7 @@
             vm.sortname = "";
             vm.mattersdrop = false;
             vm.mattersdropinner = true;
-            //$rootScope.bodyclass = "bodymain";
+            $rootScope.bodyclass = "bodymain";
             //This value is for displaying the help
             $rootScope.pageIndex = "1";
             //#region Onload show ui grid and hide error div
@@ -46,6 +46,14 @@
 
             };
 
+          
+
+          //For setting dynamic height to the grid
+            vm.getTableHeight = function () {
+                return {
+                    height: ($window.innerHeight - 105) + "px"
+                };
+            };
 
             $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
@@ -910,6 +918,8 @@
             }
 
             vm.search = function () {
+                vm.lazyloader = false;
+                vm.divuigrid = false;
                 vm.matterid = 1;
                 vm.mattername = "All Matters";
                 vm.pagenumber = 1;
@@ -936,10 +946,10 @@
                         vm.divuigrid = true;
                         vm.nodata = true;
                     } else {
+                        vm.gridOptions.data = response;
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
-                        vm.gridOptions.data = response;
                     }
                 });
             }
@@ -1631,6 +1641,8 @@
             //#region setting the grid options when window is resized
 
             angular.element($window).bind('resize', function () {
+                angular.element('#mattergrid .ui-grid').css('height', $window.innerHeight - 110);
+
                 if ($window.innerWidth < 360) {
                     vm.gridOptions.enableHorizontalScrollbar = false;
                     vm.gridOptions.enablePaginationControls = false;
@@ -1943,11 +1955,10 @@
                     vm.filtername = "Open Date";
                 }
                 $timeout(function () {
-                    if (name == 'ModifiedDate' || name == 'OpenDate')
-                    {
+                    if (name == 'ModifiedDate' || name == 'OpenDate') {
                         vm.matterdateheader = false;
                     }
-                    else{
+                    else {
                         vm.matterheader = false;
                     }
                 },

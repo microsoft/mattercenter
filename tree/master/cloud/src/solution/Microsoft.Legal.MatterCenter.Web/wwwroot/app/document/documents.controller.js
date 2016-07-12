@@ -16,6 +16,7 @@
         vm.documentsdrop = false;
         vm.docdropinner = true;
         $rootScope.pageIndex = "2";
+        $rootScope.bodyclass = "bodymain";
         // Onload show ui grid and hide error div
         //start
         vm.divuigrid = true;
@@ -70,6 +71,13 @@
         vm.createddateDropDown = false;
         //End
 
+        //For setting dynamic height to the grid
+        vm.getTableHeight = function () {
+            return {
+                height: ($window.innerHeight - 105) + "px"
+            };
+        };
+
         $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
         vm.gridOptions = {
@@ -99,11 +107,11 @@
                     $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
                 });
                 gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                    vm.selectedRow = row.entity
+                    //vm.selectedRow = row.entity
                     //If the app is opened in outlook, then the below validation is going to be applied
                     if (vm.isOutlook && vm.showAttachment) {
                         vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
-                        if (vm.selectedRows && vm.selectedRows.length < 5) {
+                        if (vm.selectedRows && vm.selectedRows.length <= 5) {
                             vm.enableAttachment = true
                             vm.showErrorAttachmentInfo = false;
                             vm.warningMessageText = '';
@@ -158,6 +166,8 @@
             //  vm.isOutlookAsAttachment(vm.isOutlook);
             // }
         }
+        vm.isOutlook = true;
+        //vm.appType=$location.search().AppType;
         // vm.isOutlook ? vm.isOutlookAsAttachment(vm.isOutlook) : "";
         vm.isOutlookAsAttachment = function (isOutlook) {
             if (isOutlook) {
@@ -187,9 +197,13 @@
             }
         }
         // };
-
+        vm.errorAttachDocument = false;
         vm.sendDocumentAsAttachment = function () {
-            if (vm.selectedRows && vm.selectedRows.length) {
+            if (vm.selectedRows && vm.selectedRows.length <= 5) {
+                vm.enableAttachment = false;
+                vm.errorAttachDocument = false;;
+                vm.asyncCallCompleted = 1;
+               
                 vm.showFailedAtachments = false;
                 vm.failedFiles = [];
                 vm.showPopUpHolder = true;
@@ -203,16 +217,20 @@
                         documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1);
                         if (documentPath && documentName) {
                             vm.showAttachmentProgress = true;
+                           
                             sendAttachmentAsync(decodeURIComponent(documentPath), decodeURIComponent(documentName));
                         }
                     }
                 });
+            } else {
+                vm.errorAttachDocument = true;
+                vm.enableAttachment = true;
             }
         }
 
 
         /* Send asynchronous calls to send each document as attachment */
-        function sendAttachmentAsync(sDocumentPath, sDocumentName) {
+        function sendAttachmentAsync(sDocumentPath, sDocumentName) { 
             Office.context.mailbox.item.addFileAttachmentAsync(sDocumentPath, sDocumentName, {
                 asyncContext: {
                     sCurrentDocumentPath: sDocumentPath,
@@ -220,16 +238,22 @@
                 }
             },
             function (asyncResult) {
+               
                 if (asyncResult.status === Office.AsyncResultStatus.Failed) {
                     vm.failedFiles.push(asyncResult.asyncContext.sCurrentDocumentName)
                     vm.showFailedAtachments = true;
-                }
-                vm.asyncCallCompleted = vm.asyncCallCompleted + 1;
+                }              
+               
+              //  vm.asyncCallBeforeCompleted = vm.asyncCallCompleted;
+                $scope.$apply();
                 if (vm.asyncCallCompleted === vm.selectedRows.length) {
-                    vm.showAttachmentProgress = false;
-                    vm.asyncCallCompleted = 0;
+                    vm.showAttachmentProgress = false;                   
                     notifyAttachmentResult();
+                    //vm.asyncCallCompleted = 0;
+                } else {
+                    vm.asyncCallCompleted = vm.asyncCallCompleted + 1;
                 }
+                $scope.$apply();
 
             });
         }
@@ -257,6 +281,7 @@
 
         vm.closeNotification = function () {
             vm.showPopUpHolder = false;
+            vm.showSuccessAttachments = false;
         }
 
 
@@ -301,6 +326,18 @@
             api({
                 resource: 'documentResource',
                 method: 'unPinDocument',
+                data: options,
+                success: callback
+            });
+        }
+        //#endregion
+
+
+        //Callback function for document assets 
+        function GetAssets(options, callback) {
+            api({
+                resource: 'documentResource',
+                method: 'getassets',
                 data: options,
                 success: callback
             });
@@ -1050,6 +1087,7 @@
         //#region setting the grid options when window is resized
 
         angular.element($window).bind('resize', function () {
+            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 110);
             if ($window.innerWidth < 380) {
                 vm.gridOptions.enableHorizontalScrollbar = false;
                 vm.gridOptions.enablePaginationControls = false;
@@ -1171,6 +1209,28 @@
             console.log("Hi");
         };
 
+        vm.assetsuccess = false;
+        vm.getDocumentAssets = function (row) {
+            vm.assetsuccess = false;
+            var Client = {
+                Id: row.entity.documentUrl.replace("https://msmatter.sharepoint.com", ""),
+                Name: row.entity.documentMatterUrl.replace("https://msmatter.sharepoint.com", ""),
+                Url: row.entity.documentClientUrl
+            }
+            GetAssets(Client, function (response) {
+                vm.listguid = response.listInternalName;
+                vm.docguid = response.documentGuid;
+                vm.assetsuccess = true;
+            });
+        }
+
+        vm.gotoDocumentUrl = function (url) {
+            if (vm.assetsuccess) {
+                $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace("https://msmatter.sharepoint.com", "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank");
+            } else {
+                $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace("https://msmatter.sharepoint.com", "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank"); }, 1500);
+            }
+        }
     }]);
 
 })();
