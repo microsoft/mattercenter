@@ -79,7 +79,7 @@
                 enableFiltering: gridOptions.enableFiltering,
                 columnDefs: [
                     { field: 'checker', displayName: 'checked', width: '2%', cellTemplate: '/app/dashboard/cellCheckboxTemplate.html', headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html', enableColumnMenu: false },
-                    { field: 'documentIconUrl', displayName: 'Icon', width: '2%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="{{row.entity.documentIconUrl}}"/></div>', headerCellTemplate: '<div class="ui-grid-cell-contents"><img class="docTypeIconHeader" id="docTypeIcon" style="padding:0" alt="Document type icon" src="https://msmatter.sharepoint.com/_layouts/15/images/generaldocument.png"></div>', enableColumnMenu: false },
+                    { field: 'documentIconUrl', displayName: 'Icon', width: '2%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="{{row.entity.documentIconUrl}}"/></div>', headerCellTemplate: '<div class="ui-grid-cell-contents"><img class="docTypeIconHeader" id="docTypeIcon" style="padding:0" alt="Document type icon" src=' + configs.uri.SPOsiteURL + '"/_layouts/15/images/generaldocument.png"></div>', enableColumnMenu: false },
     	            { field: 'documentName', displayName: 'Document', width: '20%', cellTemplate: '/app/dashboard/DocumentDashboardCellTemplate.html', enableColumnMenu: false },
                     { field: 'documentClientId', displayName: 'Client', width: '15%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>', enableColumnMenu: false },
                     { field: 'documentOwner', displayName: 'Author', width: '14%', enableColumnMenu: false },
@@ -100,7 +100,7 @@
             //#region for client taxonomy
             var optionsForClientGroup = {
                 Client: {
-                    Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                    Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
                     TermGroup: "MatterCenterTerms",
@@ -619,10 +619,8 @@
 
             //#region For Sorting by Alphebatical or Created date
             var SortRequest = {
-                Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                Client: {                   
+                    Url: configs.global.repositoryUrl
                 },
                 SearchObject: {
                     PageNumber: 1,
