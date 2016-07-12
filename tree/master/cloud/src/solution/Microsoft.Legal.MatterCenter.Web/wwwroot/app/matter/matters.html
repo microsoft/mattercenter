@@ -72,7 +72,7 @@
     </div>
     <div class="row" id="mattergrid">
         <div class="col-sm-12" ng-if="vm.divuigrid">
-            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid">
+            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()">
             </div>
         </div>
     </div>

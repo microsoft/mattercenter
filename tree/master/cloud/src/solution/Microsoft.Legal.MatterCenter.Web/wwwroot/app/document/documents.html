@@ -1,5 +1,6 @@
 ﻿<!--<div class="container-fluid">   -->
 <div ng-click="vm.closealldrops()" class="mainMatter">
+   
     <div class="row">
         <div class="row" id="mainmenu">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
@@ -67,6 +68,11 @@
             </div>
         </div>
     </div>
+
+    <div ng-show="vm.errorAttachDocument" class="errorAttachDocument">
+        <img title="Warning" class="warningMessageIcon" src="../images/warning-message.png" alt="Warning icon">
+        <div class="warningMessageText" title=" {{vm.warningMessageText}}"> {{vm.warningMessageText}}</div>
+    </div>
     <div class="row title">
         <div class="col-sm-12" id="gridViewPageHeaderContainer">
             <span role="heading" class="add-margin-bottom">{{vm.documentname}}</span>
@@ -81,14 +87,14 @@
         <div class="warningPopUpHolder" ng-if="vm.showPopUpHolder">
             <div class="warningPopUpContainer">
                 <div class="attachedSuccessPopUp" ng-if="vm.showSuccessAttachments">
-                    <div class="warningPopUpDetails"></div>
-                    <div title="Close" class="warningPopUpCloseIconContainer">Close</div>
+                    <div class="warningPopUpDetails">Documents successfully attached.</div>
+                    <div title="Close" class="warningPopUpCloseIconContainer" ng-click="vm.closeNotification()" >Close</div>
                 </div>
                 <div class="attachedProgressPopUp" ng-if="vm.showAttachmentProgress">
                     <div class="progressPopUpDetails">
                         Attaching
-                        <span id="currentDocumentCount" />of {{vm.asyncCallCompleted}} documents...
-                        <div>Do not close Matter Center until all documents are attached.</div>
+                        <span id="currentDocumentCount" />{{ vm.asyncCallCompleted}} of {{ vm.selectedRows.length}} documents...
+                        <div>Do not close Matter Center until all documents are attached.  {{vm.asyncCallCompleted}}  </div>
                     </div>
                     <div class="warningLoadingIcon">
                         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
@@ -103,10 +109,11 @@
                 </div>
             </div>
         </div>
+       
         <!--End For attaching documents messages to the current mail item-->
         <div class="row" id="documentgrid">
             <div class="col-sm-12" ng-show="vm.divuigrid">
-                <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid"></div>
+                <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()"></div>
             </div>
         </div>
         <div class="col-sm-12 noResultsText" ng-show="vm.nodata">
