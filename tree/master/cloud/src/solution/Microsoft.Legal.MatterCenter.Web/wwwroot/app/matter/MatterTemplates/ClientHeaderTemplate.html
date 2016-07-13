@@ -1,27 +1,11 @@
 ﻿<div ng-mouseenter='grid.appScope.vm.clientDropDowm = true' ng-mouseleave='grid.appScope.vm.clientDropDowm = false'>
     <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.vm.clientDropDowm'>
-        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id=' acombo' dropdown-toggle' type='button' data-toggle='dropdown'>
+        <a href='javascript:;' class='prisma-header-dropdown-anchor id=' acombo' dropdown-toggle' ng-click="grid.appScope.vm.openMatterHeader($event,'client')" type='button' data-toggle='dropdown'>
             <img src='../images/icon-combobox.png' />
         </a>
-        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu' aria-labelledby='acombo'>
-            <div class='input-group'>
-                <input class='form-control' ng-model='grid.appScope.vm.searchClientTerm' placeholder='Search' />
-                <div class='input-group-btn'>
-                    <button type='button' ng-click='grid.appScope.vm.mattersearch("MCClientName:"+grid.appScope.vm.searchClientTerm+"*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)","MCClientName",false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                </div>
-            </div>
-            <hr />
-            <div class='clearFilterText' data-clearfiltertype='text'>
-                <div class='clearFiltersIcon'>
-                    <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
-                </div>
-                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Client' ng-click='grid.appScope.vm.mattersearch("","LastModifiedTime",true);grid.appScope.vm.searchClientTerm="";'><span>Clear filters from </span><span class='clearFilterTitle'>Client</span></div>
-                <div id='filterResultsContainer'><div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-repeat='client in grid.appScope.vm.details|limitTo:1' ng-click='grid.appScope.vm.mattersearch(Client.matterClient,"LastModifiedTime",true)'>{{client.matterClient}}</div> </div>
-            </div>
-        </div>
     </div>
     <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' style="padding-left: 4px;" col-index='renderIndex' title='Click to sort by client name'>
-        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}<span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span></span>
+        <span class='ui-grid-header-cell-label ng-binding'>{{ col.colDef.displayName }}<span class="headerfilter" ng-if="grid.appScope.vm.clientfilter"><i class="ms-Icon ms-Icon--filter"></i> </span><span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span></span>
     </div>
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>
         <i title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>

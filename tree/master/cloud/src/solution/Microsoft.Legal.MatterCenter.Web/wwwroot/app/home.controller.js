@@ -82,7 +82,7 @@
             vm.getUserProfilePicture = function () {
 
                 var client = {
-                    Url: "https://msmatter.sharepoint.com"
+                    Url:configs.uri.SPOsiteURL
                 }
 
                 getUserProfilePicture(client, function (response) {
@@ -98,7 +98,7 @@
                 var helpRequestModel = {
                     Client:
                     {
-                        Url: "https://msmatter.sharepoint.com/sites/catalog"
+                        Url: configs.global.repositoryUrl 
                     },
                     SelectedPage: $rootScope.pageIndex
                 };
@@ -119,8 +119,8 @@
                         var sPropertyName = arrTerm[0].trim(); // Removal of White Space
                         searchTerm = "(" + sPropertyName + ":\"" + sManagedProperty + "*\")";
                     }
-                    return searchTerm
                 }
+                return searchTerm;
             }
         }
     });

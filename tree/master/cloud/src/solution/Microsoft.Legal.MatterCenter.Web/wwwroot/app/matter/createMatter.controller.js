@@ -114,7 +114,6 @@
             var optionsForCheckMatterName = new Object;
             // var optionsForUsers = new Object;
             var siteCollectionPath = "";
-// "https://msmatter.sharepoint.com/sites/microsoft";
 
             ////API calling functions
 
@@ -1658,7 +1657,7 @@
                 updateMatterMetadataAPI(optionsForStampMatterDetails, function (response) {
                   console.log("stampProperties Success");
                   console.log(response);
-                  cm.successMsg = "Matter is successfully created. You can find recently created matter over <a target='_blank' href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/" + cm.matterGUID + ".aspx'>here</a>.";
+                  cm.successMsg = "Matter is successfully created. You can find recently created matter over <a target='_blank' href='"+cm.clientUrl+"/SitePages/" + cm.matterGUID + ".aspx'>here</a>.";
                   clearAllProperties();
                  
                   cm.navigateToSecondSection(cm.sectionName);
@@ -1681,7 +1680,7 @@
             //        Client: {
             //            Id: cm.clientId,
             //            Name: "Microsoft",
-            //            Url: "https://msmatter.sharepoint.com/sites/microsoft"
+            //            Url: 
             //        },
             //        MatterConfigurations: {
 

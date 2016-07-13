@@ -72,12 +72,12 @@
     </div>
     <div class="row" id="mattergrid">
         <div class="col-sm-12" ng-if="vm.divuigrid">
-            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid">
+            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()">
             </div>
         </div>
     </div>
 
-    <div class="col-sm-12 noResultsText" ng-if="vm.nodata" >
+    <div class="col-sm-12 noResultsText" ng-if="vm.nodata">
         Nothing matches your search term or the filter you selected. Please try again.<br>If you applied a filter, remove it to get back to your list.<br>Search suggestions:<br><ul><li>Make sure all words are spelled correctly</li><li>Try different keywords</li><li>Try searching by the matter name or client name</li><li>Try more general search terms</li></ul>
     </div>
 
@@ -203,7 +203,7 @@
                                             <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
                                         </div>
                                         <img class="attachIcon" id="{{uploadedFile.counter}}attachIcon"
-                                             alt="attachment icon" src="{{uploadedFile.documentIconUrl}}" fallbacksrc >
+                                             alt="attachment icon" src="{{uploadedFile.documentIconUrl}}" fallbacksrc>
                                         <div title="Test attachments" class="popupName">{{uploadedFile.fileName}}</div>
                                         <!--If the mail upload is success, show the folder name under which the email has been dropped-->
                                         <div ng-if="!uploadedFile.isError" title="{{uploadedFile.dropFolder}}" class="uploadSuccessMessage">({{uploadedFile.dropFolder}})</div>
@@ -262,18 +262,96 @@
     </div>
 
 
-    <div class="test flyoutWrapper" style="display:none;
-    position: absolute;
-    top: 128px;
-    background: #fff;
-    z-index: 5;
-    left: 10px;
-    border: 1px solid #ccc;
-    background-color: white;">
+    <div class="matterheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.matterheader">
+        <div class='input-group'>
+            <input class='form-control' ng-if="vm.filtername=='Matter'" ng-model='vm.searchTerm' placeholder='Search' />
+            <input class='form-control' ng-if="vm.filtername=='Client'" ng-model='vm.clientSearchTerm' placeholder='Search' />
+            <input class='form-control' ng-if="vm.filtername=='Responsible Attorney'" ng-model='vm.attorneySearchTerm' placeholder='Search' />
+            <input class='form-control' ng-if="vm.filtername=='Area of Law'" ng-model='vm.areaSearchTerm' placeholder='Search' />
+            <div class='input-group-btn'>
+                <button type='button' ng-if="vm.filtername=='Matter'" ng-click='vm.mattersearch("MCMatterName:"+vm.searchTerm+"*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername=='Client'" ng-click='vm.mattersearch("MCClientName:" + vm.clientSearchTerm + "*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername=='Responsible Attorney'" ng-click='vm.mattersearch("MCResponsibleAttorney:" + vm.attorneySearchTerm + "*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername=='Area of Law'" ng-click='vm.mattersearch("MCSubAreaofLaw:" + vm.areaSearchTerm + "*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+            </div>
+        </div>
+        <hr />
+        <div class='clearFilterText'>
+            <div class='clearFiltersIcon'>
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
+            </div>
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div id='filterResultsContainer'>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Matter'" ng-repeat='matter in vm.details' ng-click='vm.mattersearch(matter.matterName,"MCMatterName",true)'>{{matter.matterName}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Client'" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.mattersearch(Client.matterClient,"MCClientName",true)'>{{client.matterClient}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Responsible Attorney'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(matter.matterResponsibleAttorney,"MCResponsibleAttorney",true)'>{{matter.matterResponsibleAttorney}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Area of Law'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(matter.matterSubAreaOfLaw,"MCSubAreaofLaw",true)'>{{matter.matterSubAreaOfLaw}}</div>
+                <div title="There are no items that match this filter" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>There are no items that match this filter</span></div>
+            </div>
 
+        </div>
     </div>
 
-
+    <div class="matterheaderdates flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.matterdateheader">
+        <div ng-show="vm.filtername=='Open Date'">
+            <div class='input-group'>
+                <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.startdate'
+                       is-open='vm.openedStartDate'
+                       datepicker-options='vm.dateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+            <div class='input-group' style='margin-top:5px'>
+                <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.enddate'
+                       is-open='vm.openedEndDate'
+                       datepicker-options='vm.enddateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+        </div>
+        <div ng-show="vm.filtername=='Modified Date'">
+            <div class='input-group'>
+                <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.modstartdate'
+                       is-open='vm.modifiedStartDate'
+                       datepicker-options='vm.moddateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.modStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+            <div class='input-group' style='margin-top:5px'>
+                <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.modenddate'
+                       is-open='vm.modifiedenddate'
+                       datepicker-options='vm.modenddateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.modEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+        </div>
+        <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.matterdateheader=true;'>Ok</div>
+        <hr />
+        <div class='clearFilterText' data-clearfiltertype='text'>
+            <div class='clearFiltersIcon'>
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
+            </div>
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+        </div>
+    </div>
 </div>
-
-

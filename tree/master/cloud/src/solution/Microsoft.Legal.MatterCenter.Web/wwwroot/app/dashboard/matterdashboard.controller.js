@@ -103,7 +103,7 @@
             //#region API to get the client taxonomy and Practice Group taxonomy
             var optionsForClientGroup = {
                 Client: {
-                    Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                    Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
                     TermGroup: "MatterCenterTerms",
@@ -114,7 +114,7 @@
 
             var optionsForPracticeGroup = {
                 Client: {
-                    Url: "https://msmatter.sharepoint.com/sites/microsoft"
+                    Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
                     TermGroup: "MatterCenterTerms",
@@ -259,7 +259,7 @@
             vm.getMatterPinned = function () {
                 vm.lazyloaderdashboard = false;
                 var pinnedMattersRequest = {
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"//ToDo: Read from config.js
+                    Url: configs.global.repositoryUrl//ToDo: Read from config.js
                 }
                 getPinnedMatters(pinnedMattersRequest, function (response) {
                     var pinnedResponse = response;
@@ -790,10 +790,8 @@
 
             //#region For Sorting by Alphebatical or Created date
             var SortRequest = {
-                Client: {
-                    Id: "123456",
-                    Name: "Microsoft",
-                    Url: "https://msmatter.sharepoint.com/sites/catalog"
+                Client: {                    
+                    Url: configs.global.repositoryUrl
                 },
                 SearchObject: {
                     PageNumber: 1,

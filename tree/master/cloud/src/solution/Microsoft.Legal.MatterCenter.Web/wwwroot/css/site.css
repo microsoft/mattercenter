@@ -371,8 +371,6 @@ textarea {
 }
 
 .ui-grid-viewport {
-    /*overflow: hidden !important;*/
-    /*max-height: 500px;*/
     min-height: 20px;
 }
 
@@ -391,7 +389,7 @@ textarea {
 }
 
 .ui-grid-menu-button {
-    top: 7px;
+    top: 54px;
 }
 
 .dropdown-menu .ms-ContextualMenu-item a:hover {
@@ -707,4 +705,10 @@ textarea {
 
 .flyoutwidth {
     width: 350px;
+}
+
+.headerfilter{
+    position: absolute;
+    top: 12px;
+    padding-left: 5px;
 }
