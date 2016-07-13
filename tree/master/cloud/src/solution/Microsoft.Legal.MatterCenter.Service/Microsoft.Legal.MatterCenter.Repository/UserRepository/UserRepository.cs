@@ -80,10 +80,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
         }
 
         /// <summary>
-        /// 
+        /// Thios method will get all roles such as attorney journal etc which are configured in the catalog site collection
         /// </summary>
         /// <param name="client"></param>
-        /// <returns></returns>
+        /// <returns>async Task<IList<Role>></returns>
         public async Task<IList<Role>> GetRolesAsync(Client client)
         {
             IList<Role> roles = new List<Role>();
@@ -104,7 +104,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
 
         /// <summary>
-        /// 
+        /// This method will get all permissions levels that are configured for a given site collection
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
@@ -123,6 +123,17 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
             }
             return roles;
+        }
+
+        /// <summary>
+        /// This method will check whether user exists in a sharepoint site or not
+        /// </summary>
+        /// <param name="clientUrl"></param>
+        /// <param name="email"></param>
+        /// <returns>bool</returns>
+        public bool CheckUserPresentInMatterCenter(Client client)
+        {
+            return userDetails.CheckUserPresentInMatterCenter(client.Url, client.Name);
         }
     }
 }
