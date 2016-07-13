@@ -22,10 +22,12 @@ namespace Microsoft.Legal.MatterCenter.Utility
     public class CustomLogger :ICustomLogger
     {
         private LogTables logTables;
+        private GeneralSettings generalSettings;
         ErrorResponse errorResponse;
-        public CustomLogger(IOptionsMonitor<LogTables> logTables)
+        public CustomLogger(IOptionsMonitor<LogTables> logTables, IOptionsMonitor<GeneralSettings> generalSettings)
         {
             this.logTables = logTables.CurrentValue;
+            this.generalSettings = generalSettings.CurrentValue;
             
         }
         /// <summary>
@@ -77,7 +79,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
                     if (Convert.ToBoolean(logTables.IsLoggingOnAzure, CultureInfo.InvariantCulture))
                     {
                         //// Log to Azure table storage
-                        errorDate = AzureLogger.LogInAzure(exception, className, methodName, logTableName, lineNumber, logTables);
+                        errorDate = AzureLogger.LogInAzure(exception, className, methodName, logTableName, lineNumber, logTables, generalSettings);
                     }
                     else
                     {                        
