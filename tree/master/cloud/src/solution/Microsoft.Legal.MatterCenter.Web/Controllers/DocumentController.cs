@@ -299,7 +299,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <returns>Document and list GUID</returns>
         [HttpPost("getassets")]
         [SwaggerResponse(HttpStatusCode.OK)]
-        public async Task<IActionResult> GetDocumentAssets(Client client)
+        public async Task<IActionResult> GetDocumentAssets([FromBody]Client client)
         {
             try
             {

@@ -16,10 +16,21 @@
         vm.documentsdrop = false;
         vm.docdropinner = true;
         $rootScope.pageIndex = "2";
+        $rootScope.bodyclass = "bodymain";
         // Onload show ui grid and hide error div
         //start
         vm.divuigrid = true;
         vm.nodata = false;
+        //end
+
+        //#region scopes for displaying and hiding filter icons
+        //start
+        vm.documentfilter = false;
+        vm.moddatefilter = false;
+        vm.createddatefilter = false;
+        vm.clientfilter = false;
+        vm.authorfilter = false;
+        vm.checkoutfilter = false;
         //end
 
         //#region for showing the matters dropdown in resposive 
@@ -39,6 +50,8 @@
         vm.closealldrops = function () {
             vm.documentsdrop = false;
             vm.docdropinner = true;
+            vm.documentheader = true;
+            vm.documentdateheader = true;
         }
 
         //#endregion
@@ -70,6 +83,20 @@
         vm.createddateDropDown = false;
         //End
 
+        //For setting dynamic height to the grid
+        vm.getTableHeight = function () {
+            if (vm.isOutlook) {
+                return {
+                    height: ($window.innerHeight - 150) + "px"
+                };
+            }
+            else {
+                return {
+                    height: ($window.innerHeight - 105) + "px"
+                }
+            }
+        };
+
         $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
         vm.gridOptions = {
@@ -99,19 +126,21 @@
                     $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
                 });
                 gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                    vm.selectedRow = row.entity
+                    //vm.selectedRow = row.entity
                     //If the app is opened in outlook, then the below validation is going to be applied
                     if (vm.isOutlook && vm.showAttachment) {
                         vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
-                        if (vm.selectedRows && vm.selectedRows.length < 5) {
+                        if (vm.selectedRows.length > 0 && vm.selectedRows.length <= 5) {
                             vm.enableAttachment = true
                             vm.showErrorAttachmentInfo = false;
                             vm.warningMessageText = '';
                         }
                         else {
-                            vm.showErrorAttachmentInfo = true;
                             vm.enableAttachment = false;
-                            vm.warningMessageText = configs.uploadMessages.maxAttachedMessage;
+                            if (vm.selectedRows.length > 5) {
+                                vm.warningMessageText = configs.uploadMessages.maxAttachedMessage;
+                                vm.showErrorAttachmentInfo = true;
+                            }
                         }
                     }
                 });
@@ -158,6 +187,8 @@
             //  vm.isOutlookAsAttachment(vm.isOutlook);
             // }
         }
+        vm.isOutlook = true;
+        //vm.appType=$location.search().AppType;
         // vm.isOutlook ? vm.isOutlookAsAttachment(vm.isOutlook) : "";
         vm.isOutlookAsAttachment = function (isOutlook) {
             if (isOutlook) {
@@ -187,9 +218,13 @@
             }
         }
         // };
-
+        vm.errorAttachDocument = false;
         vm.sendDocumentAsAttachment = function () {
-            if (vm.selectedRows && vm.selectedRows.length) {
+            if (vm.selectedRows && vm.selectedRows.length <= 5) {
+                vm.enableAttachment = false;
+                vm.errorAttachDocument = false;;
+                vm.asyncCallCompleted = 1;
+
                 vm.showFailedAtachments = false;
                 vm.failedFiles = [];
                 vm.showPopUpHolder = true;
@@ -203,10 +238,14 @@
                         documentName = documentPath.substring(documentPath.lastIndexOf("/") + 1);
                         if (documentPath && documentName) {
                             vm.showAttachmentProgress = true;
+
                             sendAttachmentAsync(decodeURIComponent(documentPath), decodeURIComponent(documentName));
                         }
                     }
                 });
+            } else {
+                vm.errorAttachDocument = true;
+                vm.enableAttachment = true;
             }
         }
 
@@ -220,16 +259,22 @@
                 }
             },
             function (asyncResult) {
+
                 if (asyncResult.status === Office.AsyncResultStatus.Failed) {
                     vm.failedFiles.push(asyncResult.asyncContext.sCurrentDocumentName)
                     vm.showFailedAtachments = true;
                 }
-                vm.asyncCallCompleted = vm.asyncCallCompleted + 1;
+
+                //  vm.asyncCallBeforeCompleted = vm.asyncCallCompleted;
+                $scope.$apply();
                 if (vm.asyncCallCompleted === vm.selectedRows.length) {
                     vm.showAttachmentProgress = false;
-                    vm.asyncCallCompleted = 0;
                     notifyAttachmentResult();
+                    //vm.asyncCallCompleted = 0;
+                } else {
+                    vm.asyncCallCompleted = vm.asyncCallCompleted + 1;
                 }
+                $scope.$apply();
 
             });
         }
@@ -257,6 +302,7 @@
 
         vm.closeNotification = function () {
             vm.showPopUpHolder = false;
+            vm.showSuccessAttachments = false;
         }
 
 
@@ -308,6 +354,18 @@
         //#endregion
 
 
+        //Callback function for document assets 
+        function GetAssets(options, callback) {
+            api({
+                resource: 'documentResource',
+                method: 'getassets',
+                data: options,
+                success: callback
+            });
+        }
+        //#endregion
+
+
         //#region methods for getting,filtering,pin,unpin documents
 
         //SearchRequest Object
@@ -321,9 +379,7 @@
                 SearchTerm: '',
                 Filters: {
                     ClientName: "",
-                    ClientsList: [],
-                    PGList: [],
-                    AOLList: [],
+                    ClientsList: [],                   
                     DateFilters: {
                         CreatedFromDate: "",
                         CreatedToDate: "",
@@ -343,7 +399,7 @@
                 },
                 Sort:
                         {
-                            ByProperty: 'LastModifiedTime',
+                            ByProperty: 'MCModifiedDate',
                             Direction: 1
                         }
             }
@@ -393,7 +449,7 @@
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
-                    searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
                 }
             });
         }
@@ -401,19 +457,32 @@
         //#region for searching matter by property and searchterm
         vm.documentsearch = function (term, property, bool) {
             vm.lazyloader = false;
-            vm.divuigrid = false;
             vm.responseNull = false;
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.SearchTerm = term;
             searchRequest.SearchObject.Sort.ByProperty = property;
+            searchRequest.SearchObject.Sort.Direction = 1;
             if (bool) {
+                vm.documentheader = true;
+                vm.divuigrid = false;
+                searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Sort.Direction = 1;
-                if (property == "MSITOfficeAuthor") {
-                    searchRequest.SearchObject.SearchTerm = "";
+                if (property == "FileName") {
+                    searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                    searchRequest.SearchObject.Filters.Name = term;
+                    vm.documentfilter = true;
+                }
+                else if (property == "MCDocumentClientName") {
+                    searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                    searchRequest.SearchObject.Filters.ClientName = term;
+                    vm.clientfilter = true;
+                }
+                else if (property == "MSITOfficeAuthor") {
                     searchRequest.SearchObject.Filters.DocumentAuthor = term;
+                    vm.authorfilter = true;
                 } else if (property == "MCCheckoutUser") {
-                    searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.DocumentCheckoutUsers = term;
+                    vm.checkoutfilter = true;
                 }
                 else {
                     searchRequest.SearchObject.Filters.DocumentAuthor = "";
@@ -422,10 +491,16 @@
             }
             get(searchRequest, function (response) {
                 if (response == "") {
-                    vm.gridOptions.data = response;
+                    if (bool) {
+                        vm.gridOptions.data = response;
+                        vm.nodata = true;
+                    } else {
+                        vm.details = response;
+                        vm.nodata = false;
+                        vm.filternodata = true;
+                    }
                     vm.lazyloader = true;
                     vm.divuigrid = true;
-                    vm.nodata = true;
                 } else {
                     vm.divuigrid = true;
                     vm.nodata = false;
@@ -433,8 +508,12 @@
                     if (bool) {
                         vm.gridOptions.data = response;
                         vm.details = [];
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
                     } else {
                         vm.details = response;
+                        vm.filternodata = false;
                     }
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Sort.ByProperty = "";
@@ -445,27 +524,100 @@
 
         //Code for filtering ModifiedDate
         //start
-        vm.FilterModifiedDate = function () {
+        vm.FilterModifiedDate = function (name) {
             vm.lazyloader = false;
             vm.divuigrid = false;
+            searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.SearchTerm = "";
-            searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = vm.startdate;
-            searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = vm.enddate;
-            searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
-            searchRequest.SearchObject.Sort.Direction = 0;
+            if (name == "Modified Date") {
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = vm.modstartdate.format("yyyy-MM-dd");
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = vm.modenddate.format("yyyy-MM-dd");
+                vm.moddatefilter = true;
+            }
+            if (name == "Created Date") {
+                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = vm.startdate.format("yyyy-MM-dd");
+                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = vm.enddate.format("yyyy-MM-dd");
+                vm.createddatefilter = true;
+            }
+            searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+            searchRequest.SearchObject.Sort.Direction = 1;
             get(searchRequest, function (response) {
-                vm.lazyloader = true;
-                vm.gridOptions.data = response;
-                if (!$scope.$$phase) {
-                    $scope.$apply();
+                if (response == "") {
+                    vm.gridOptions.data = response;
+                    vm.lazyloader = true;
+                    vm.divuigrid = true;
+                    vm.nodata = true;
+                } else {
+                    vm.divuigrid = true;
+                    vm.nodata = false;
+                    vm.lazyloader = true;
+                    vm.gridOptions.data = response;
                 }
-                vm.startdate = "";
-                vm.enddate = "";
             });
 
         }
 
         //#endregion
+
+        //#region clearing all filters
+        vm.clearFilters = function (property) {
+            vm.documentheader = true;
+            vm.documentdateheader = true;
+            vm.lazyloader = false;
+            if (property == "Document") {
+                vm.searchTerm = "";
+                searchRequest.SearchObject.SearchTerm = "";
+                searchRequest.SearchObject.Filters.Name = "";
+                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                vm.documentfilter = false;
+            }
+            else if (property == "Client") {
+                vm.clientSearchTerm = "";
+                searchRequest.SearchObject.Filters.ClientName = "";
+                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                vm.clientfilter = false;
+            }
+            else if (property == "Checked out to") {
+                vm.checkedSearchTerm = "";
+                searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
+                vm.checkoutfilter = false;
+            }
+            else if (property == "Author") {
+                vm.authorSearchTerm = ""
+                searchRequest.SearchObject.Filters.DocumentAuthor = "";
+                vm.authorfilter = false;
+            }
+            else if (property == "Modified Date") {
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
+                vm.modstartdate = "";
+                vm.modenddate = "";
+                vm.moddatefilter = false;
+            } else {
+                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
+                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
+                vm.startDate = "";
+                vm.endDate = "";
+                vm.createddatefilter = false;
+            }
+
+            get(searchRequest, function (response) {
+                if (response == "") {
+                    vm.gridOptions.data = response;
+                    vm.lazyloader = true;
+                    vm.divuigrid = true;
+                    vm.nodata = true;
+                } else {
+                    vm.divuigrid = true;
+                    vm.nodata = false;
+                    vm.lazyloader = true;
+                    vm.gridOptions.data = response;
+                }
+            });
+        }
+
+        //#endregion
+
 
         //Code written for displaying types in dropdown 
         //Start 
@@ -713,6 +865,48 @@
 
         //#region  For datepickers in modifiedheadertemplate
         //Angular Datepicker Starts here
+        //Start for modified date 
+        vm.moddateOptions = {
+            formatYear: 'yy',
+            maxDate: new Date()
+        };
+
+
+        vm.modenddateOptions = {
+            formatYear: 'yy',
+            maxDate: new Date()
+        }
+
+        $scope.$watch('vm.modstartdate', function (newval, oldval) {
+            vm.modenddateOptions.minDate = newval;
+        });
+
+
+        vm.modStartDate = function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
+            this.modifiedStartDate = true;
+        };
+        vm.modEndDate = function ($event) {
+            if ($event) {
+                $event.preventDefault();
+                $event.stopPropagation();
+            }
+            this.modifiedenddate = true;
+        };
+
+        vm.modifiedStartDate = false;
+        vm.modifiedenddate = false;
+
+        vm.disabled = function (date, mode) {
+            return (mode === 'day' && (date.getDay() != 0));
+        };
+
+        //End
+
+
         //Start
         vm.dateOptions = {
             formatYear: 'yy',
@@ -751,6 +945,9 @@
         vm.disabled = function (date, mode) {
             return (mode === 'day' && (date.getDay() != 0));
         };
+
+
+
         //#endregion
 
         //#region Custom Sorting functionality
@@ -1050,6 +1247,7 @@
         //#region setting the grid options when window is resized
 
         angular.element($window).bind('resize', function () {
+            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 110);
             if ($window.innerWidth < 380) {
                 vm.gridOptions.enableHorizontalScrollbar = false;
                 vm.gridOptions.enablePaginationControls = false;
@@ -1146,6 +1344,12 @@
 
         };
 
+        vm.toggleChecker = function (checked, rowinfo) {
+            console.log(checked);
+            console.log(rowinfo);
+            $scope.gridApi.selection.selectRow(rowinfo);
+        }
+
         //vm.toggleChecker = function (checked, rowinfo) {
         //    if (checked) {
         //        if (vm.documentsCheckedCount >= 0) {
@@ -1170,6 +1374,80 @@
         vm.parentToggle = function () {
             console.log("Hi");
         };
+
+        vm.assetsuccess = false;
+        vm.getDocumentAssets = function (row) {
+            vm.assetsuccess = false;
+            var Client = {
+                Id: row.entity.documentUrl.replace("https://msmatter.sharepoint.com", ""),
+                Name: row.entity.documentMatterUrl.replace("https://msmatter.sharepoint.com", ""),
+                Url: row.entity.documentClientUrl
+            }
+            GetAssets(Client, function (response) {
+                vm.listguid = response.listInternalName;
+                vm.docguid = response.documentGuid;
+                vm.assetsuccess = true;
+            });
+        }
+
+        vm.gotoDocumentUrl = function (url) {
+            if (vm.assetsuccess) {
+                $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace("https://msmatter.sharepoint.com", "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank");
+            } else {
+                $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace("https://msmatter.sharepoint.com", "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank"); }, 1500);
+            }
+        }
+
+        //#region For displaying and setting the position of the filters name wise
+        vm.documentheader = true;
+        vm.documentdateheader = true;
+        vm.searchexp = "";
+        vm.filtername = "";
+
+        vm.openDocumentHeader = function ($event, name) {
+            vm.filternodata = false;
+            vm.details = [];
+            var dimensions = $event.target.getBoundingClientRect();
+            var top = dimensions.top + 30;
+            var left = dimensions.left - 254;
+            angular.element('.documentheader').css({ 'top': top, 'left': left });
+            angular.element('.documentheaderdates').css({ 'top': top, 'left': left });
+            if (name == "Document") {
+                vm.searchexp = "FileName";
+                vm.filtername = "Document";
+            }
+            if (name == "client") {
+                vm.searchexp = "MCDocumentClientName";
+                vm.filtername = "Client";
+            }
+            if (name == "Author") {
+                vm.searchexp = "MSITOfficeAuthor";
+                vm.filtername = "Author";
+            }
+            if (name == "checkout") {
+                vm.searchexp = "MCCheckoutUser";
+                vm.filtername = "Checked out to";
+            }
+            if (name == "ModifiedDate") {
+                vm.filtername = "Modified Date";
+            }
+            if (name == "CreatedDate") {
+                vm.filtername = "Created Date";
+            }
+            $timeout(function () {
+                if (name == 'ModifiedDate' || name == 'CreatedDate') {
+                    vm.documentdateheader = false;
+                }
+                else {
+                    vm.documentheader = false;
+                }
+            },
+            600);
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+        }
+        //#endregion
 
     }]);
 
