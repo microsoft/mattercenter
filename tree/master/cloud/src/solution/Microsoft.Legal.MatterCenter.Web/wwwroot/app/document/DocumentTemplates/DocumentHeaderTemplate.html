@@ -1,34 +1,9 @@
 ﻿<div ng-mouseenter='grid.appScope.vm.documentDropDown = true' ng-mouseleave='grid.appScope.vm.documentDropDown = false'>
     <div class='dropdown keep-open' style='float:right;' ng-show='grid.appScope.vm.documentDropDown'>
-        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor id=' acombo' dropdown-toggle'
-           type='button' data-toggle='dropdown'>
+        <a href='javascript:;' ng-click="grid.appScope.vm.openDocumentHeader($event,'Document')" class='prisma-header-dropdown-anchor'
+           type='button'>
             <img src='../images/icon-combobox.png' />
         </a>
-        <div class='dropdown-menu flyoutWrapper dropdown-menu-right' ng-click='$event.stopPropagation();' role='menu' aria-labelledby='acombo'>
-            <div class='input-group'>
-                <input class='form-control' ng-model='grid.appScope.vm.searchTerm' placeholder='Search' />
-                <div class='input-group-btn'>
-                    <button type='button' ng-click='grid.appScope.vm.documentsearch(grid.appScope.vm.searchTerm,"FileName",false)'
-                            class='btn btn-default'>
-                        <img src='../images/search-15x15-666.png' />
-                    </button>
-                </div>
-            </div>
-            <hr />
-            <div class='clearFilterText' data-clearfiltertype='text'>
-                <div class='clearFiltersIcon'>
-                    <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
-                </div>
-                <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from Matter' ng-click='grid.appScope.vm.documentsearch("","LastModifiedTime",true);grid.appScope.vm.searchTerm="";'>
-                    <span>Clear filters from </span><span class='clearFilterTitle'>Document</span>
-                </div>
-                <div id='filterResultsContainer'>
-                    <div class='filterValueLabels ms-font-m ms-font-weight-semilight'
-                         ng-repeat='matter in grid.appScope.vm.details'
-                         ng-click='grid.appScope.vm.documentsearch(matter.documentName,"FileName",true)'>{{matter.documentName}}</div>
-                </div>
-            </div>
-        </div>
     </div>
     <div role='button' style='padding-left: 0;'
          class='ui-grid-cell-contents ui-grid-header-cell-primary-focus'
@@ -37,7 +12,7 @@
               title='Click to sort by document name'>
             <img class="docTypeIconHeader" id="docTypeIcon"
                  src="https://msmatter.sharepoint.com/_layouts/15/images/generaldocument.png"
-                 alt="Document type icon"/>{{ col.colDef.displayName }}
+                 alt="Document type icon"/>{{ col.colDef.displayName }}<span class="headerfilter" ng-if="grid.appScope.vm.documentfilter"><i class="ms-Icon ms-Icon--filter"></i></span>
             <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
         </span>
     </div>

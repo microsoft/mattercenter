@@ -1,6 +1,6 @@
 ﻿<!--<div class="container-fluid">   -->
 <div ng-click="vm.closealldrops()" class="mainMatter">
-   
+
     <div class="row">
         <div class="row" id="mainmenu">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
@@ -94,7 +94,7 @@
                     <div class="progressPopUpDetails">
                         Attaching
                         <span id="currentDocumentCount" />{{ vm.asyncCallCompleted}} of {{ vm.selectedRows.length}} documents...
-                        <div>Do not close Matter Center until all documents are attached.  {{vm.asyncCallCompleted}}  </div>
+                        <div>Do not close Matter Center until all documents are attached. </div>
                     </div>
                     <div class="warningLoadingIcon">
                         <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
@@ -109,7 +109,7 @@
                 </div>
             </div>
         </div>
-       
+
         <!--End For attaching documents messages to the current mail item-->
         <div class="row" id="documentgrid">
             <div class="col-sm-12" ng-show="vm.divuigrid">
@@ -130,6 +130,98 @@
     <div id="loadingImageContainer">
         <div class="lazyLoading" ng-hide="vm.lazyloader">
             <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+        </div>
+    </div>
+
+    <div class="documentheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentheader">
+        <div class='input-group'>
+            <input class='form-control' ng-if="vm.filtername=='Document'" ng-model='vm.searchTerm' placeholder='Search' />
+            <input class='form-control' ng-if="vm.filtername=='Client'" ng-model='vm.clientSearchTerm' placeholder='Search' />
+            <input class='form-control' ng-if="vm.filtername=='Author'" ng-model='vm.authorSearchTerm' placeholder='Search' />
+            <input class='form-control' ng-if="vm.filtername=='Checked out to'" ng-model='vm.checkedSearchTerm' placeholder='Search' />
+            <div class='input-group-btn'>
+                <button type='button' ng-if="vm.filtername=='Document'" ng-click='vm.documentsearch("FileName:"+vm.searchTerm+"*(* OR FileName:* OR dlcDocIdOWSText:* OR MCDocumentClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername=='Client'" ng-click='vm.documentsearch("MCDocumentClientName:"+vm.clientSearchTerm+"*(* OR FileName:* OR dlcDocIdOWSText:* OR MCDocumentClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername=='Author'" ng-click='vm.documentsearch("MSITOfficeAuthor:"+vm.authorSearchTerm+"*(* OR FileName:* OR dlcDocIdOWSText:* OR MCDocumentClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername=='Checked out to'" ng-click='vm.documentsearch("MCCheckoutUser:"+vm.checkedSearchTerm+"*(* OR FileName:* OR dlcDocIdOWSText:* OR MCDocumentClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+            </div>
+        </div>
+        <hr />
+        <div class='clearFilterText'>
+            <div class='clearFiltersIcon'>
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
+            </div>
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div id='filterResultsContainer'>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Document'" ng-repeat='document in vm.details' ng-click='vm.documentsearch(document.documentName,"FileName",true)'>{{document.documentName}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Client'" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.documentsearch(client.documentClient,"MCDocumentClientName",true)'>{{client.documentClient}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Author'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentOwner,"MSITOfficeAuthor",true)'>{{matter.documentOwner}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Checked out to'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentCheckoutUser,"MCSubAreaofLaw",true)'>{{matter.documentCheckoutUser}}</div>
+                <div title="There are no items that match this filter" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>There are no items that match this filter</span></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="documentheaderdates flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentdateheader">
+        <div ng-show="vm.filtername=='Created Date'">
+            <div class='input-group'>
+                <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.startdate'
+                       is-open='vm.openedStartDate'
+                       datepicker-options='vm.dateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+            <div class='input-group' style='margin-top:5px'>
+                <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.enddate'
+                       is-open='vm.openedEndDate'
+                       datepicker-options='vm.enddateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+        </div>
+        <div ng-show="vm.filtername=='Modified Date'">
+            <div class='input-group'>
+                <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.modstartdate'
+                       is-open='vm.modifiedStartDate'
+                       datepicker-options='vm.moddateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.modStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+            <div class='input-group' style='margin-top:5px'>
+                <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.modenddate'
+                       is-open='vm.modifiedenddate'
+                       datepicker-options='vm.modenddateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.modEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+        </div>
+        <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.documentdateheader=true;'>Ok</div>
+        <hr />
+        <div class='clearFilterText' data-clearfiltertype='text'>
+            <div class='clearFiltersIcon'>
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
+            </div>
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
         </div>
     </div>
 </div>

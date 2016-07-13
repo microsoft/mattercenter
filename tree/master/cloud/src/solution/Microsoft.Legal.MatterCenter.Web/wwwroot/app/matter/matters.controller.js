@@ -23,12 +23,25 @@
             //start
             vm.divuigrid = true;
             vm.nodata = false;
+            vm.filternodata = false;
             //#endregion
 
             //#region To hide lazyloader on load
             //start
             vm.lazyloader = true;
             //#endregion
+
+            //#region scopes for displaying and hiding filter icons
+            //start
+            vm.matterfilter = false;
+            vm.moddatefilter = false;
+            vm.opendatefilter = false;
+            vm.clientfilter = false;
+            vm.areafilter = false;
+            vm.attorneyfilter = false;
+            //end
+
+
 
             //#region Assigning scopes for Dropdowns in headers
             //Start
@@ -46,9 +59,9 @@
 
             };
 
-          
 
-          //For setting dynamic height to the grid
+
+            //For setting dynamic height to the grid
             vm.getTableHeight = function () {
                 return {
                     height: ($window.innerHeight - 105) + "px"
@@ -886,12 +899,21 @@
                     ItemsPerPage: "17",
                     SearchTerm: "",
                     Filters: {
-                        AOLList: "",
+                        AOLList: [],
+                        ClientName: "",
                         ClientsList: [],
-                        FilterByMe: 0,
+                        DateFilters: {
+                            CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: "", ModifiedToDate: "", OpenDateFrom: "", OpenDateTo: ""
+                        },
+                        DocumentAuthor: "",
+                        DocumentCheckoutUsers: "",
+                        FilterByMe: 1,
                         FromDate: "",
-                        PGList: "",
-                        ToDate: "",
+                        Name: "",
+                        PGList: [],
+                        ResponsibleAttorneys: "",
+                        SubareaOfLaw: "",
+                        ToDate: ""
                     },
                     Sort:
                             {
@@ -967,29 +989,49 @@
             //#region for searching matter by property and searchterm
             vm.mattersearch = function (term, property, bool) {
                 vm.lazyloader = false;
+                vm.filternodata = false;
+                searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = term;
                 searchRequest.SearchObject.Sort.ByProperty = property;
+                searchRequest.SearchObject.Sort.Direction = 0;
                 if (bool) {
+                    vm.matterheader = true;
+                    vm.divuigrid = false;
+                    searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Sort.Direction = 1;
                     if (property == "MCResponsibleAttorney") {
                         vm.attorneyproperty = term;
-                        searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Filters.ResponsibleAttorneys = term;
-                    } else if (property == "MCSubAreaofLaw") {
-                        searchRequest.SearchObject.SearchTerm = "";
-                        searchRequest.SearchObject.Filters.SubareaOfLaw = term;
+                        vm.attorneyfilter = true;
                     }
-                    else {
-                        searchRequest.SearchObject.Filters.ResponsibleAttorneys = "";
-                        searchRequest.SearchObject.Filters.SubareaOfLaw = "";
+                    else if (property == "MCSubAreaofLaw") {
+                        searchRequest.SearchObject.Filters.SubareaOfLaw = term;
+                        vm.areafilter = true;
+                    }
+                    else if (property == "MCMatterName") {
+                        searchRequest.SearchObject.Filters.Name = term;
+                        searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                        vm.matterfilter = true;
+                    }
+                    else if (property == "MCClientName") {
+                        searchRequest.SearchObject.Filters.ClientName = term;
+                        searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                        vm.clientfilter = true;
                     }
                 }
                 get(searchRequest, function (response) {
                     if (response == "") {
-                        vm.gridOptions.data = response;
+                        if (bool) {
+                            vm.gridOptions.data = response;
+                            vm.nodata = true;
+                        } else {
+                            vm.details = response;
+                            vm.nodata = false;
+                            vm.filternodata = true;
+                        }
                         vm.lazyloader = true;
                         vm.divuigrid = true;
-                        vm.nodata = true;
+                       
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -1002,6 +1044,7 @@
                             }
                         } else {
                             vm.details = response;
+                            vm.filternodata = false;
                         }
                         searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Sort.ByProperty = "";
@@ -1013,41 +1056,57 @@
 
             //#region Code for filtering ModifiedDate
             //start
-            vm.FilterModifiedDate = function () {
+            vm.FilterModifiedDate = function (name) {
                 vm.lazyloader = false;
                 vm.divuigrid = false;
-                var ModifiedDateRequest =
-                  {
-                      Client: {
-                          Url: configs.global.repositoryUrl
-                      },
-                      SearchObject: {
-                          PageNumber: 1,
-                          ItemsPerPage: 10,
-                          SearchTerm: "",
-                          Filters: {
-                              AOLList: "",
-                              ClientName: "",
-                              ClientsList: [],
-                              DateFilters: { CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: vm.startdate.format("dd/MM/yyyy"), ModifiedToDate: vm.enddate.format("dd/MM/yyyy"), OpenDateFrom: "", OpenDateTo: "" },
-                              DocumentAuthor: [],
-                              DocumentCheckoutUsers: [],
-                              FilterByMe: 1,
-                              FromDate: "",
-                              Name: "",
-                              PGList: "",
-                              ResponsibleAttorneys: [],
-                              SubareaOfLaw: "",
-                              ToDate: ""
-                          },
-                          Sort:
-                                  {
-                                      ByProperty: "LastModifiedTime",
-                                      Direction: 0
-                                  }
-                      }
-                  };
-                get(ModifiedDateRequest, function (response) {
+                searchRequest.SearchObject.PageNumber = 1;
+                searchRequest.SearchObject.SearchTerm = "";
+                if (name == "Modified Date") {
+                    searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = vm.modstartdate.format("yyyy-MM-dd");
+                    searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = vm.modenddate.format("yyyy-MM-dd");
+                    vm.moddatefilter = true;
+                }
+                if (name == "Open Date") {
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = vm.startdate.format("yyyy-MM-dd");
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = vm.enddate.format("yyyy-MM-dd");
+                    vm.opendatefilter = true;
+                }
+                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                searchRequest.SearchObject.Sort.Direction = 1;
+                //var ModifiedDateRequest =
+                //  {
+                //      Client: {
+                //          Url: configs.global.repositoryUrl
+                //      },
+                //      SearchObject: {
+                //          PageNumber: 1,
+                //          ItemsPerPage: 17,
+                //          SearchTerm: "",
+                //          Filters: {
+                //              AOLList: [],
+                //              ClientName: "",
+                //              ClientsList: [],
+                //              DateFilters: {
+                //                  CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: "", ModifiedToDate: "", OpenDateFrom: "", OpenDateTo: ""
+                //              },
+                //              DocumentAuthor: "",
+                //              DocumentCheckoutUsers: "",
+                //              FilterByMe: 1,
+                //              FromDate: "",
+                //              Name: "",
+                //              PGList: [],
+                //              ResponsibleAttorneys: "",
+                //              SubareaOfLaw: "",
+                //              ToDate: ""
+                //          },
+                //          Sort:
+                //                  {
+                //                      ByProperty: "LastModifiedTime",
+                //                      Direction: 1
+                //                  }
+                //      }
+                //  };
+                get(searchRequest, function (response) {
                     if (response == "") {
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
@@ -1058,11 +1117,70 @@
                         vm.nodata = false;
                         vm.lazyloader = true;
                         vm.gridOptions.data = response;
-                        vm.startDate = "";
-                        vm.endDate = "";
                     }
                 });
 
+            }
+
+            //#endregion
+
+            //#region clearing all filters
+            vm.clearFilters = function (property) {
+                vm.matterdateheader = true;
+                vm.matterheader = true;
+                vm.lazyloader = false;
+                vm.divuigrid = false;
+                vm.nodata = false;
+                if (property == "Responsible Attorney") {
+                    vm.attorneySearchTerm="";
+                    searchRequest.SearchObject.Filters.ResponsibleAttorneys = "";
+                    vm.attorneyfilter = false;
+                }
+                else if (property == "Area of Law") {
+                    vm.areaSearchTerm = "";
+                    searchRequest.SearchObject.Filters.SubareaOfLaw = "";
+                    vm.areafilter = false;
+                }
+                else if (property == "Matter") {
+                    vm.searchTerm = "";
+                    searchRequest.SearchObject.SearchTerm = "";
+                    searchRequest.SearchObject.Filters.Name = "";
+                    searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    vm.matterfilter = false;
+                }
+                else if (property == "Client") {
+                    vm.clientSearchTerm=""
+                    searchRequest.SearchObject.Filters.ClientName = "";
+                    searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    vm.clientfilter = false;
+                }
+                else if (property == "Modified Date") {
+                    searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
+                    searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
+                    vm.modstartdate = "";
+                    vm.modenddate = "";
+                    vm.moddatefilter = false;
+                } else {
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = "";
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = "";
+                    vm.startDate = "";
+                    vm.endDate = "";
+                    vm.opendatefilter = false;
+                }
+
+                get(searchRequest, function (response) {
+                    if (response == "") {
+                        vm.gridOptions.data = response;
+                        vm.lazyloader = true;
+                        vm.divuigrid = true;
+                        vm.nodata = true;
+                    } else {
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.lazyloader = true;
+                        vm.gridOptions.data = response;
+                    }
+                });
             }
 
             //#endregion
@@ -1324,9 +1442,50 @@
             }
 
             //#region Angular Datepicker Starts here
-            //Start
-            vm.dateOptions = {
+            //Start for modified date 
+            vm.moddateOptions = {
+                formatYear: 'yy',
+                maxDate: new Date()
+            };
 
+
+            vm.modenddateOptions = {
+                formatYear: 'yy',
+                maxDate: new Date()
+            }
+
+            $scope.$watch('vm.modstartdate', function (newval, oldval) {
+                vm.modenddateOptions.minDate = newval;
+            });
+
+
+            vm.modStartDate = function ($event) {
+                if ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                }
+                this.modifiedStartDate = true;
+            };
+            vm.modEndDate = function ($event) {
+                if ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                }
+                this.modifiedenddate = true;
+            };
+
+            vm.modifiedStartDate = false;
+            vm.modifiedenddate = false;
+
+            vm.disabled = function (date, mode) {
+                return (mode === 'day' && (date.getDay() != 0));
+            };
+
+            //End
+
+
+            //Start for open date options
+            vm.dateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             };
@@ -1337,7 +1496,7 @@
                 maxDate: new Date()
             }
 
-            $scope.$watch('startdate', function (newval, oldval) {
+            $scope.$watch('vm.startdate', function (newval, oldval) {
                 vm.enddateOptions.minDate = newval;
             });
 
@@ -1914,14 +2073,15 @@
                 }
             }
 
+
+            //#region For displaying and setting the position of the filters name wise
             vm.matterheader = true;
             vm.matterdateheader = true;
             vm.searchexp = "";
-            vm.searchName = "";
             vm.filtername = "";
 
             vm.openMatterHeader = function ($event, name) {
-                vm.searchTerm = "";
+                vm.filternodata = false;
                 vm.details = [];
                 var dimensions = $event.target.getBoundingClientRect();
                 var top = dimensions.top + 30;
@@ -1930,22 +2090,18 @@
                 angular.element('.matterheaderdates').css({ 'top': top, 'left': left });
                 if (name == "matter") {
                     vm.searchexp = "MCMatterName";
-                    vm.searchName = vm.searchTerm;
                     vm.filtername = "Matter";
                 }
                 if (name == "client") {
                     vm.searchexp = "MCClientName";
-                    vm.searchName = "MCClientName:" + vm.searchTerm + "*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)";
                     vm.filtername = "Client";
                 }
                 if (name == "Attorney") {
-                    vm.searchexp = "MCResponsibleAttorney";
-                    vm.searchName = "MCResponsibleAttorney:" + vm.searchTerm + "*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)";
+                    vm.searchexp = "MCResponsibleAttorney";                    
                     vm.filtername = "Responsible Attorney";
                 }
                 if (name == "AreaOfLaw") {
                     vm.searchexp = "MCSubAreaofLaw";
-                    vm.searchName = "MCSubAreaofLaw:" + vm.searchTerm + "*(MCMatterName:* OR MCMatterID:* OR MCClientName:*)";
                     vm.filtername = "Area of Law";
                 }
                 if (name == "ModifiedDate") {
@@ -1967,6 +2123,7 @@
                     $scope.$apply();
                 }
             }
+          //#endregion
 
         }]);
 })();
