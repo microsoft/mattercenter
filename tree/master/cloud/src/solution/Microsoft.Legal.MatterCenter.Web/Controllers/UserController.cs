@@ -235,5 +235,41 @@ namespace Microsoft.Legal.MatterCenter.Web
                 throw;
             }
         }
+
+        /// <summary>
+        /// This method will check whether a given user exists in the current tenant or not
+        /// </summary>
+        /// <param name="userAlias"></param>
+        /// <returns></returns>
+        [HttpPost("userexists")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public IActionResult UserExists([FromBody]Client client)
+        {
+            try
+            {
+                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                #region Error Checking                
+                GenericResponseVM genericResponse = null;
+
+                if (client==null && string.IsNullOrWhiteSpace(client.Name))
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Value= errorSettings.MessageNoInputs ,
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                }
+                #endregion
+                bool isUserExists = userRepositoy.CheckUserPresentInMatterCenter(client);
+                return matterCenterServiceFunctions.ServiceResponse(isUserExists, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
     }
 }
