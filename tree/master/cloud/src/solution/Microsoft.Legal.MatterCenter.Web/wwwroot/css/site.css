@@ -706,3 +706,9 @@ textarea {
 .flyoutwidth {
     width: 350px;
 }
+
+.headerfilter{
+    position: absolute;
+    top: 12px;
+    padding-left: 5px;
+}
