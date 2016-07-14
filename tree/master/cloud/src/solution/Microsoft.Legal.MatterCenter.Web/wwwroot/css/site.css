@@ -42,18 +42,37 @@ textarea {
         overflow: hidden !important;
     }
 
-    #doccelltemp .dropdown-menu, #matcoltemp .dropdown-menu {
+    #doccelltemp .dropdown-menu {
         width: 165px !important;
-        left: -62%;
+        margin-left: -97px !important;
+    }
+
+    #matcoltemp .dropdown-menu {
+        width: 165px !important;
+        margin-left: -68px !important;
     }
 
     .mainMatter {
         overflow-x: auto;
+        overflow-y: hidden;
     }
 
     .ContextualHelpLogo {
         margin-right: -5px;
     }
+
+    .gridclass {
+        display: none !important;
+    }
+
+    .viewport {
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+}
+
+.viewportlg {
+    overflow: auto !important;
 }
 
 @media screen and (max-width:767px) and (min-width: 268px) {
@@ -97,7 +116,7 @@ textarea {
 }
 
 #documentgrid .ui-grid-viewport, #mattergrid .ui-grid-viewport {
-    overflow: auto !important;
+    /*overflow: auto !important;*/
     /*max-width: 1800px;*/
     /*display: table;*/
     position: relative;
