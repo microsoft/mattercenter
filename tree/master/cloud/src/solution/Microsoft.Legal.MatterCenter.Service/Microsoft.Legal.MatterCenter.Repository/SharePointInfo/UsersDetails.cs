@@ -111,11 +111,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
-        ///// <summary>
-        ///// This method will check whether user exists in a sharepoint site or not
-        ///// </summary>
-        ///// <param name="externalSharingRequest"></param>
-        ///// <returns></returns>
+        /// <summary>
+        /// This method will check whether user exists in a sharepoint site or not
+        /// </summary>
+        /// <param name="clientUrl"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
         public bool CheckUserPresentInMatterCenter(string clientUrl, string email)
         {
             try
