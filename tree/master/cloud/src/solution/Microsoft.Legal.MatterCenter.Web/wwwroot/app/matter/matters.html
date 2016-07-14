@@ -282,10 +282,10 @@
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
             <div id='filterResultsContainer'>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Matter'" ng-repeat='matter in vm.details' ng-click='vm.mattersearch(matter.matterName,"MCMatterName",true)'>{{matter.matterName}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Matter'" ng-repeat='matter in vm.details|unique:"matter.matterName"' ng-click='vm.mattersearch(matter.matterName,"MCMatterName",true)'>{{matter.matterName}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Client'" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.mattersearch(Client.matterClient,"MCClientName",true)'>{{client.matterClient}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Responsible Attorney'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(matter.matterResponsibleAttorney,"MCResponsibleAttorney",true)'>{{matter.matterResponsibleAttorney}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Area of Law'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(matter.matterSubAreaOfLaw,"MCSubAreaofLaw",true)'>{{matter.matterSubAreaOfLaw}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Responsible Attorney'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(vm.filtermatter(matter.matterResponsibleAttorney),"MCResponsibleAttorney",true)'>{{vm.filtermatter(matter.matterResponsibleAttorney)}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Area of Law'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(matter.matterSubAreaOfLaw,"MCSubAreaofLaw",true)'>{{vm.filtermatter(matter.matterSubAreaOfLaw)}}</div>
                 <div title="There are no items that match this filter" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>There are no items that match this filter</span></div>
             </div>
 
