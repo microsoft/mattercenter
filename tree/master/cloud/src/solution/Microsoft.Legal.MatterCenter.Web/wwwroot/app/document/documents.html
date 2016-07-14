@@ -153,7 +153,7 @@
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
             <div id='filterResultsContainer'>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Document'" ng-repeat='document in vm.details' ng-click='vm.documentsearch(document.documentName,"FileName",true)'>{{document.documentName}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Document'" ng-repeat='document in vm.details|unique:"document.documentName"' ng-click='vm.documentsearch(document.documentName,"FileName",true)'>{{document.documentName}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Client'" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.documentsearch(client.documentClient,"MCDocumentClientName",true)'>{{client.documentClient}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Author'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentOwner,"MSITOfficeAuthor",true)'>{{matter.documentOwner}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Checked out to'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentCheckoutUser,"MCSubAreaofLaw",true)'>{{matter.documentCheckoutUser}}</div>

@@ -85,12 +85,12 @@
                 multiSelect: false,
                 columnDefs: [
                      { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
-                     { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
-                     { field: 'matterClientId', displayName: 'Client.MatterID', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-                     { field: 'matterModifiedDate', displayName: 'Modified Date', width: "195", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
-                     { field: 'matterResponsibleAttorney', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: 'Responsible attorney', visible: false },
-                     { field: 'matterSubAreaOfLaw', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: 'Sub area of law', visible: false },
-                     { field: 'matterCreatedDate', headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html', width: "170", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+                     { field: 'matterClient', displayName: 'Client', headerCellClass: 'gridclass', cellClass: 'gridclass', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
+                     { field: 'matterClientId', displayName: 'Client.MatterID', headerCellClass: 'gridclass', cellClass: 'gridclass', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+                     { field: 'matterModifiedDate', displayName: 'Modified Date', width: "195", headerCellClass: 'gridclass', cellClass: 'gridclass', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
+                     { field: 'matterResponsibleAttorney', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: 'Responsible attorney', visible: false },
+                     { field: 'matterSubAreaOfLaw', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: 'Sub area of law', visible: false },
+                     { field: 'matterCreatedDate', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html', width: "170", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
                 ],
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
@@ -108,6 +108,7 @@
                     $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
                     $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFuncscroll);
                     gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
+                    vm.setColumns();
                 }
             };
 
@@ -123,6 +124,25 @@
             }
 
 
+            //#region for setting the classes for ui-grid based on size
+            vm.setColumns = function () {
+                if ($window.innerWidth < 360) {
+                    $interval(function () {
+                        angular.element('#mattergrid .ui-grid-viewport').addClass('viewport');
+                        angular.element('#mattergrid .ui-grid-viewport').removeClass('viewportlg');
+                    }, 1000, 2);
+                } else {
+                    $interval(function () {
+                        angular.element('#mattergrid .ui-grid-viewport').removeClass('viewport');
+                        angular.element('#mattergrid .ui-grid-viewport').addClass('viewportlg');
+                    }, 1000, 2);
+                }
+            }
+            //#endregion
+
+
+            //#region functionality for infinite scroll
+            //start
             vm.pagenumber = 1;
             vm.responseNull = false;
             vm.watchFunc = function () {
@@ -148,6 +168,7 @@
                 }
                 return promise.promise;
             }
+            //#endregion
 
             //#region for setting the dynamic width to grid
             vm.setWidth = function () {
@@ -832,13 +853,24 @@
 
             vm.createMailPopup = function () {
                 var sImageChunk = "", nIDCounter = 0;
-                var attachmentName = "", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";
+                var attachmentName = "", mailSubject="", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";
                 vm.allAttachmentDetails = []
                 var individualAttachment = {};
                 //For just email
                 individualAttachment.attachmentId = Office.context.mailbox.item.itemId;
                 individualAttachment.counter = nIDCounter;
-                individualAttachment.attachmentFileName = Office.context.mailbox.item.subject;
+                console.log("mailSubject");
+                //var mailSubject = checkEmptyorWhitespace(Office.context.mailbox.item.subject);
+                //mailSubject = mailSubject.replace(oUploadGlobal.regularExtraSpace, "").replace(oUploadGlobal.regularInvalidCharacter, "").replace(oUploadGlobal.regularInvalidRule, ".").replace(oUploadGlobal.regularStartEnd, "");
+                mailSubject = vm.checkEmptyorWhitespace(Office.context.mailbox.item.subject);
+                  console.log(mailSubject);
+                    mailSubject = mailSubject.replace(vm.oUploadGlobal.regularExtraSpace, "")
+                                                .replace(vm.oUploadGlobal.regularInvalidCharacter, "")
+                                                .replace(vm.oUploadGlobal.regularInvalidRule, ".")
+                                                .replace(vm.oUploadGlobal.regularStartEnd, "");
+                                                 console.log(mailSubject);
+                Office.context.mailbox.item.subject=mailSubject;
+                individualAttachment.attachmentFileName = mailSubject;
                 individualAttachment.isEmail = true;
                 individualAttachment.uploadSuccess = false;
                 vm.allAttachmentDetails.push(individualAttachment);
@@ -998,7 +1030,7 @@
                     vm.matterheader = true;
                     vm.divuigrid = false;
                     searchRequest.SearchObject.SearchTerm = "";
-                    searchRequest.SearchObject.Sort.Direction = 1;
+                    searchRequest.SearchObject.ItemsPerPage = 17;
                     if (property == "MCResponsibleAttorney") {
                         vm.attorneyproperty = term;
                         searchRequest.SearchObject.Filters.ResponsibleAttorneys = term;
@@ -1017,6 +1049,18 @@
                         searchRequest.SearchObject.Filters.ClientName = term;
                         searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                         vm.clientfilter = true;
+                    }
+                } else {
+                    searchRequest.SearchObject.ItemsPerPage = 50;
+                    if (property == "MCResponsibleAttorney") {
+                        searchRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
+                        searchRequest.SearchObject.Sort.Direction = 0;
+                    } else if (property == "MCSubAreaofLaw") {
+                        searchRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
+                        searchRequest.SearchObject.Sort.Direction = 0;
+                    } else {
+                        searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                        searchRequest.SearchObject.Sort.Direction = 1;
                     }
                 }
                 get(searchRequest, function (response) {
@@ -1131,6 +1175,10 @@
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
+                searchRequest.SearchObject.PageNumber = 1;
+                searchRequest.SearchObject.ItemsPerPage = 17;
+                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                searchRequest.SearchObject.Sort.Direction = 1;
                 if (property == "Responsible Attorney") {
                     vm.attorneySearchTerm="";
                     searchRequest.SearchObject.Filters.ResponsibleAttorneys = "";
@@ -1801,46 +1849,12 @@
 
             angular.element($window).bind('resize', function () {
                 angular.element('#mattergrid .ui-grid').css('height', $window.innerHeight - 110);
-
                 if ($window.innerWidth < 360) {
-                    vm.gridOptions.enableHorizontalScrollbar = false;
-                    vm.gridOptions.enablePaginationControls = false;
-                    vm.gridOptions.columnDefs = [{ field: 'matterName', displayName: 'Matter', enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' }];
-                    $scope.$apply();
+                    angular.element('#mattergrid .ui-grid-viewport').addClass('viewport');
+                    angular.element('#mattergrid .ui-grid-viewport').removeClass('viewportlg');
                 } else {
-                    //vm.gridOptions = {
-                    //    //paginationPageSizes: [10, 50, 100],
-                    //    //paginationPageSize: 10,
-                    //    enableHorizontalScrollbar: 0,
-                    //    enableVerticalScrollbar: 1,
-                    //    enableGridMenu: true,
-                    //    enableRowHeaderSelection: false,
-                    //    enableRowSelection: true,
-                    //    enableSelectAll: false,
-                    //    multiSelect: false,
-                    //    columnDefs: [
-                    //         { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "245", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
-                    //         { field: 'matterClient', displayName: 'Client', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
-                    //         { field: 'matterClientId', displayName: 'Client.MatterID', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-                    //         { field: 'matterModifiedDate', displayName: 'Modified Date', width: "195", cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
-                    //         { field: 'matterResponsibleAttorney', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: 'Responsible attorney', visible: false },
-                    //         { field: 'matterSubAreaOfLaw', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: 'Sub area of law', visible: false },
-                    //         { field: 'matterCreatedDate', headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html', width: "170", displayName: 'Open date', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
-                    //    ],
-                    //    enableColumnMenus: false,
-                    //    onRegisterApi: function (gridApi) {
-                    //        $scope.gridApi = gridApi;
-                    //        gridApi.core.on.columnVisibilityChanged($scope, function (changedColumn) {
-                    //            $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
-                    //        });
-                    //        gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                    //            vm.selectedRow = row.entity
-                    //        });
-                    //        $scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
-                    //        $scope.sortChanged($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
-                    //        $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFunc);
-                    //    }
-                    //};
+                    angular.element('#mattergrid .ui-grid-viewport').removeClass('viewport');
+                    angular.element('#mattergrid .ui-grid-viewport').addClass('viewportlg');
                 }
             });
 
@@ -2097,7 +2111,7 @@
                     vm.filtername = "Client";
                 }
                 if (name == "Attorney") {
-                    vm.searchexp = "MCResponsibleAttorney";                    
+                    vm.searchexp = "MCResponsibleAttorney";
                     vm.filtername = "Responsible Attorney";
                 }
                 if (name == "AreaOfLaw") {
@@ -2123,8 +2137,54 @@
                     $scope.$apply();
                 }
             }
-          //#endregion
+            //#endregion
+
+            //#region filtering the values as per the name
+            //start
+            vm.filtermatter = function (value) {
+                var searchTerm = "";
+                if (vm.filtername == "Matter") {
+                    searchTerm = vm.searchTerm.toLowerCase();
+                }
+                else if (vm.filtername == "Client") {
+                    searchTerm = vm.clientSearchTerm.toLowerCase();
+                }
+                else if (vm.filtername == "Responsible Attorney") {
+                    searchTerm = vm.attorneySearchTerm.toLowerCase();
+                }
+                else if (vm.filtername == "Area of Law") {
+                    searchTerm = vm.areaSearchTerm.toLowerCase();
+                }
+                var arrayItem = value.split(';');
+                var arrelements = [];
+                angular.forEach(arrayItem, function (item) {
+                    var lowerItem = item.toLowerCase();
+                    if (-1 !== lowerItem.indexOf(searchTerm)) {
+                        arrelements.push(item);
+                    }
+                });
+                return arrelements.toString();
+            }
+
+            //end
+            //#endregion
 
         }]);
+    app.filter('unique', function () {
+        return function (collection, keyname) {
+            var output = [],
+                keys = [];
+
+            angular.forEach(collection, function (item) {
+                var key = item[keyname];
+                if (keys.indexOf(key) === -1) {
+                    keys.push(key);
+                    output.push(item);
+                }
+            });
+            return output;
+        };
+    });
+
 })();
 
