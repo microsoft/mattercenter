@@ -147,10 +147,10 @@
         };
 
 
-        function isOpenedInOutlook(){
+        function isOpenedInOutlook() {
             //If the app is opened in outlook, then the below validation is going to be applied
-            if (vm.isOutlook && vm.showAttachment) {                       
-                if (vm.selectedRows.length > 0 && vm.selectedRows.length <= 5) {                           
+            if (vm.isOutlook && vm.showAttachment) {
+                if (vm.selectedRows.length > 0 && vm.selectedRows.length <= 5) {
                     vm.enableAttachment = true
                     vm.showErrorAttachmentInfo = false;
                     vm.warningMessageText = '';
@@ -163,6 +163,7 @@
                     }
                 }
             }
+        }
         //#region for setting the classes for ui-grid based on size
         vm.setColumns = function () {
             if ($window.innerWidth < 380) {
