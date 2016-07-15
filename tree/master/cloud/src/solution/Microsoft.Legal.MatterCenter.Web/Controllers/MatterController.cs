@@ -24,6 +24,7 @@ using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Legal.MatterCenter.Web.Common;
+using System.Collections.Generic;
 #endregion
 namespace Microsoft.Legal.MatterCenter.Service
 {
@@ -821,6 +822,32 @@ namespace Microsoft.Legal.MatterCenter.Service
             // Add that content Type to the Library
             Matter matter = matterMetadata.Matter;
             Client client = matterMetadata.Client;
+
+
+            //ToDo: This values will come from the client. Once the UI is implemented, 
+            //This will be removed
+            var managedColumnTerms = new Dictionary<string, ManagedColumn>();
+            managedColumnTerms.Add("PracticeGroup", new ManagedColumn() {
+                TermName= matterMetadata.PracticeGroupTerm.TermName,
+                Id = matterMetadata.PracticeGroupTerm.Id
+            });
+
+            managedColumnTerms.Add("AreaOfLaw", new ManagedColumn()
+            {
+                TermName = matterMetadata.AreaTerm.TermName,
+                Id = matterMetadata.AreaTerm.Id
+            });
+
+            managedColumnTerms.Add("SubareaOfLaw", new ManagedColumn()
+            {
+                TermName = matterMetadata.SubareaTerm.TermName,
+                Id = matterMetadata.SubareaTerm.Id
+            });
+
+            matterMetadata.ManagedColumnTerms = managedColumnTerms;
+
+
+
             var matterInformationVM = new MatterInformationVM()
             {
                 Client = client,
