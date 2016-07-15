@@ -3,6 +3,10 @@
     padding-bottom: 20px;
 }
 
+    body a {
+        text-decoration: none !important;
+    }
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -142,9 +146,9 @@ textarea {
     left: 12px !important;
 }
 
-#documentgrid .ui-grid-menu-button {
+/*#documentgrid .ui-grid-menu-button {
     right: 14px;
-}
+}*/
 
 #attachmentHeader {
     color: #333;
@@ -368,7 +372,7 @@ textarea {
 }
 
 .title {
-    margin: 0 0 0 10px;
+    margin: 0px 10px 0 10px;
 }
 
 .ui-grid-header-cell-label {
@@ -407,9 +411,9 @@ textarea {
     border: none;
 }
 
-.ui-grid-menu-button {
+/*.ui-grid-menu-button {
     top: 54px;
-}
+}*/
 
 .dropdown-menu .ms-ContextualMenu-item a:hover {
     background-color: #cde6f7 !important;
@@ -674,7 +678,11 @@ textarea {
 }
 
 #docgrid .ui-grid {
-    height: 300px !important;
+    height: 440px !important;
+}
+
+#docgrid .ui-grid-viewport {
+    overflow: auto !important;
 }
 
 .mattersdrop {
@@ -726,8 +734,15 @@ textarea {
     width: 350px;
 }
 
-.headerfilter{
+.headerfilter {
     position: absolute;
     top: 12px;
     padding-left: 5px;
+}
+
+.sorticon {
+    float: right;
+    display: block !important;
+    right: 30px;
+    position: relative;
 }

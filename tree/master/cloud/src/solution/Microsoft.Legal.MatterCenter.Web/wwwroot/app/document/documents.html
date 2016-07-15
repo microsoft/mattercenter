@@ -1,5 +1,5 @@
 ﻿<!--<div class="container-fluid">   -->
-<div ng-click="vm.closealldrops()" class="mainMatter">
+<div ng-click="vm.closealldrops()" ng-class="{'mainMatter':vm.lazyloader}">
 
     <div class="row">
         <div class="row" id="mainmenu">
@@ -111,7 +111,7 @@
         </div>
 
         <!--End For attaching documents messages to the current mail item-->
-        <div class="row" id="documentgrid">
+        <div class="row" id="documentgrid" style="margin-left:5px;margin-right: 5px;">
             <div class="col-sm-12" ng-show="vm.divuigrid">
                 <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()"></div>
             </div>

@@ -191,7 +191,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
                     }
 
-                    keywordQuery = FilterMatters(searchObject, keywordQuery);
+                    keywordQuery = FilterDocuments(searchObject, keywordQuery);
 
                     keywordQuery = KeywordQueryMetrics(client, searchObject, keywordQuery, ServiceConstants.DOCUMENT_ITEM_FILTER_CONDITION, 
                         searchSettings.ManagedPropertyIsDocument, false);
