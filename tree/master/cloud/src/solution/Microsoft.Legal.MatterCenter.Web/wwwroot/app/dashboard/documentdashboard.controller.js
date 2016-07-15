@@ -1,8 +1,8 @@
 ﻿(function () {
     'use strict;'
     var app = angular.module("matterMain");
-    app.controller('DocumentDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'documentDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http','commonFunctions',
-        function documentDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, documentDashBoardResource, $rootScope, uiGridConstants, $location, $http,commonFunctions) {
+    app.controller('DocumentDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'documentDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', 'commonFunctions','$window',
+        function documentDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, documentDashBoardResource, $rootScope, uiGridConstants, $location, $http, commonFunctions, $window) {
             var vm = this;
             vm.selected = undefined;
             vm.selectedAuthor = undefined;
@@ -21,6 +21,7 @@
             vm.documentsCheckedCount = 0;
             vm.enable = true;
             vm.totalrecords = 0;
+            $rootScope.bodyclass = "bodymain";
             //#endregion
 
             //#region Variable to show document count
@@ -41,6 +42,7 @@
                 vm.clientdropvisible = false;
                 vm.sortbydrop = false;
                 vm.sortbydropvisible = false;
+                angular.element('.popcontent').css('display','none');
             }
             //#endregion
 
@@ -53,7 +55,7 @@
             //#endregion
 
             var gridOptions = {
-                paginationPageSize: 6,
+                paginationPageSize: 10,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
@@ -329,6 +331,17 @@
 
             //#endregion
 
+            //Callback function for document assets 
+            function GetAssets(options, callback) {
+                api({
+                    resource: 'documentDashBoardResource',
+                    method: 'getassets',
+                    data: options,
+                    success: callback
+                });
+            }
+            //#endregion
+
             //#region request object
             var documentRequest = {
                 Client: {
@@ -458,7 +471,7 @@
 
             //$timeout(vm.getDocumentCounts(), 800);
             $interval(function () { vm.getDocumentCounts() }, 800, 3);
-            $timeout(vm.getDocuments(), 700);
+            $interval(function () { vm.getDocuments() }, 700, 3);
 
             //#region This function will pin or unpin the document based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
@@ -619,7 +632,7 @@
 
             //#region For Sorting by Alphebatical or Created date
             var SortRequest = {
-                Client: {                   
+                Client: {
                     Url: configs.global.repositoryUrl
                 },
                 SearchObject: {
@@ -824,6 +837,32 @@
             };
 
             //#endregion
+
+            //#region calling the document assets api
+            vm.assetsuccess = false;
+            vm.getDocumentAssets = function (row) {
+                vm.assetsuccess = false;
+                var Client = {
+                    Id: row.entity.documentUrl.replace("https://msmatter.sharepoint.com", ""),
+                    Name: row.entity.documentMatterUrl.replace("https://msmatter.sharepoint.com", ""),
+                    Url: row.entity.documentClientUrl
+                }
+                GetAssets(Client, function (response) {
+                    vm.listguid = response.listInternalName;
+                    vm.docguid = response.documentGuid;
+                    vm.assetsuccess = true;
+                });
+            }
+            //#endregion
+
+            vm.gotoDocumentUrl = function (url) {
+                if (vm.assetsuccess) {
+                    $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace("https://msmatter.sharepoint.com", "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank");
+                } else {
+                    $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace("https://msmatter.sharepoint.com", "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank"); }, 1500);
+                }
+            }
+
         }
     ]);
 }

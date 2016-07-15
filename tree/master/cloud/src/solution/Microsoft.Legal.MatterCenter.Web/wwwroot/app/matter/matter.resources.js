@@ -104,7 +104,11 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/shared/help',
                       isArray: true
-                  })
+                  }),
+                  'userexists': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/user/userexists'
+                  }),
               });
       }]);
 

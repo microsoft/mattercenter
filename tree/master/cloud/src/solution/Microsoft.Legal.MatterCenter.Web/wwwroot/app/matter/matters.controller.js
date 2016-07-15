@@ -64,7 +64,7 @@
             //For setting dynamic height to the grid
             vm.getTableHeight = function () {
                 return {
-                    height: ($window.innerHeight - 105) + "px"
+                    height: ($window.innerHeight - 115) + "px"
                 };
             };
 
@@ -868,7 +868,8 @@
                                             .replace(vm.oUploadGlobal.regularInvalidCharacter, "")
                                             .replace(vm.oUploadGlobal.regularInvalidRule, ".")
                                             .replace(vm.oUploadGlobal.regularStartEnd, "");
-                                                console.log(mailSubject);
+                console.log(mailSubject);
+              vm.subject=mailSubject;
                 //Office.context.mailbox.item.subject=mailSubject;
                 individualAttachment.attachmentFileName = mailSubject;
                 individualAttachment.isEmail = true;
@@ -2099,7 +2100,7 @@
                 vm.details = [];
                 var dimensions = $event.target.getBoundingClientRect();
                 var top = dimensions.top + 30;
-                var left = dimensions.left - 254;
+                var left = dimensions.left - 224;
                 angular.element('.matterheader').css({ 'top': top, 'left': left });
                 angular.element('.matterheaderdates').css({ 'top': top, 'left': left });
                 if (name == "matter") {

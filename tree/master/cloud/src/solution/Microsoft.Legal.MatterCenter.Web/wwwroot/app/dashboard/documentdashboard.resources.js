@@ -45,5 +45,9 @@ angular.module('matterMain')
                       url: '/api/v1/document/getdocumentcounts'
                      
                   }),
+                  'getassets': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/document/getassets'
+                  })
               });
       }]);
