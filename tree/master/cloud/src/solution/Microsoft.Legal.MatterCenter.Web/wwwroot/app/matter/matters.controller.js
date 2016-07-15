@@ -863,13 +863,13 @@
                 //var mailSubject = checkEmptyorWhitespace(Office.context.mailbox.item.subject);
                 //mailSubject = mailSubject.replace(oUploadGlobal.regularExtraSpace, "").replace(oUploadGlobal.regularInvalidCharacter, "").replace(oUploadGlobal.regularInvalidRule, ".").replace(oUploadGlobal.regularStartEnd, "");
                 mailSubject = vm.checkEmptyorWhitespace(Office.context.mailbox.item.subject);
-                  console.log(mailSubject);
-                    mailSubject = mailSubject.replace(vm.oUploadGlobal.regularExtraSpace, "")
-                                                .replace(vm.oUploadGlobal.regularInvalidCharacter, "")
-                                                .replace(vm.oUploadGlobal.regularInvalidRule, ".")
-                                                .replace(vm.oUploadGlobal.regularStartEnd, "");
-                                                 console.log(mailSubject);
-                Office.context.mailbox.item.subject=mailSubject;
+                console.log(mailSubject);
+                mailSubject = mailSubject.replace(vm.oUploadGlobal.regularExtraSpace, "")
+                                            .replace(vm.oUploadGlobal.regularInvalidCharacter, "")
+                                            .replace(vm.oUploadGlobal.regularInvalidRule, ".")
+                                            .replace(vm.oUploadGlobal.regularStartEnd, "");
+                                                console.log(mailSubject);
+                //Office.context.mailbox.item.subject=mailSubject;
                 individualAttachment.attachmentFileName = mailSubject;
                 individualAttachment.isEmail = true;
                 individualAttachment.uploadSuccess = false;
