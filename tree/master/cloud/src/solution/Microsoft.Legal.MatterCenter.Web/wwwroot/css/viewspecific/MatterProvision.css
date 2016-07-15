@@ -70,6 +70,7 @@ select::-ms-expand {
     margin-top: -2px;
     padding-top: 9px;
     text-decoration: none;
+    margin-top: 10px;
 }
 
 #txtBlockUser {
@@ -248,7 +249,10 @@ _::-moz-svg-foreign-content, :root .mainArea .notificationContainer {
 }
 
 .menuTextSelected {
-    color: #2b579a;
+    /*color: #2b579a;*/
+    color: rgb(0,114,198);
+text-decoration: underline;
+
 }
 
 .content {
@@ -449,13 +453,13 @@ _::-moz-svg-foreign-content, :root .mainArea .notificationContainer {
 
     .sectionStep #addMoreLink {
         bottom: -26px;
-        color: #2b579a;
+        color: rgb(0,114,198);
         cursor: pointer;
         float: right;
         font-family: 'Segoe UI', Calibri, 'Times New Roman';
-        font-size: 0.75em;
+        font-size: 1em;
         /*height: 32px;*/
-        margin-left: 492px;
+        margin-left: 0px;
         position: absolute;
         width: 108px;
         padding: 0 0 32px 0;
