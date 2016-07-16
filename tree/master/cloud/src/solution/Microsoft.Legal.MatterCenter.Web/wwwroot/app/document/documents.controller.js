@@ -483,7 +483,7 @@
                 if (-1 !== vm.selected.indexOf(":")) {
                     finalSearchText = commonFunctions.searchFilter(vm.selected);
                 } else {
-                    finalSearchText = "('" + vm.selected + "*' OR FileName:'" + vm.selected + "*' OR dlcDocIdOWSText:'" + vm.selected + "*' OR MCDocumentClientName:'" + vm.selected + "*')";
+                    finalSearchText = "(\"" + vm.selected + "*\" OR FileName:\"" + vm.selected + "*\" OR dlcDocIdOWSText:\"" + vm.selected + "*\" OR MCDocumentClientName:\"" + vm.selected + "*\")";
                 }
             }
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
