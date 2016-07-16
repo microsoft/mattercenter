@@ -11,7 +11,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 {
     public interface  IConfigRepository
     {
-        Task<ConfigEntities> GetConfigurationsAsync();
+        Task<ConfigEntities> GetConfigurationsAsync(ConfigEntities configRequest);
         ConfigEntities GetConfigEntities();
     }
 }

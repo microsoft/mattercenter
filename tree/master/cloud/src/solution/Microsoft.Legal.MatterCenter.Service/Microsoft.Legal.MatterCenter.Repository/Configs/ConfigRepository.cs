@@ -15,15 +15,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using System.Threading.Tasks;
-using System;
+
 
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.Utilities;
-using System.Globalization;
+
 using System.Collections.ObjectModel;
-using System.Linq;
+
 using System.Net;
-using Newtonsoft.Json;
+
 using System.Reflection;
 using Microsoft.SharePoint.Client.WebParts;
 
@@ -36,6 +36,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private LogTables logTables;
         private IUsersDetails userDetails;
         private IConfigRepository config;
+
+
         public ConfigRepository(
             IOptionsMonitor<GeneralSettings> generalSettings,
             IOptionsMonitor<LogTables> logTables)
@@ -43,16 +45,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
             this.generalSettings = generalSettings.CurrentValue;
             this.logTables = logTables.CurrentValue;
-
         }
 
+  
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="siteCollectionUrl"></param>
         /// <returns></returns>
-        public async Task<ConfigEntities> GetConfigurationsAsync()
+        public async Task<ConfigEntities> GetConfigurationsAsync(ConfigEntities configRequest)
         {
             return await Task.FromResult(config.GetConfigEntities());
         }
@@ -67,19 +69,27 @@ namespace Microsoft.Legal.MatterCenter.Repository
             ConfigEntity[] configs = { };
             try
             {
-                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(generalSettings.CloudStorageConnectionString);
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
                 CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
                 tableClient.DefaultRequestOptions = new TableRequestOptions
                 {
                     PayloadFormat = TablePayloadFormat.JsonNoMetadata
                 };
                 // Retrieve a reference to the table.
-                CloudTable table = tableClient.GetTableReference(logTables.MatterCenterConfiguration);
+                CloudTable table = tableClient.GetTableReference("MatterCenterConfiguration");
+             
+                TableContinuationToken token = new TableContinuationToken() { };
 
-                IQueryable<ConfigEntity> query = (from ent in table.CreateQuery<ConfigEntity>()
-                                                  select ent);
-                configs = query.ToArray();
+                //TableQuery<ConfigEntity> query = new TableQuery(from ent in table.CreateQuery<ConfigEntity>()
+                //                                  select ent);
 
+                var entities = new List<DynamicTableEntity>();
+                do
+                {
+                    var queryResult = table.ExecuteQuerySegmented(new TableQuery(), token);
+                    entities.AddRange(queryResult.Results);
+                    token = queryResult.ContinuationToken;
+                } while (token != null);
             }
             catch (Exception)
             {
