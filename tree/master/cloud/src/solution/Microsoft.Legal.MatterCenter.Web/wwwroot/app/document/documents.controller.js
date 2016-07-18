@@ -6,7 +6,7 @@
     var app = angular.module("matterMain");
 
     app.controller('documentsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout',
-        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache', '$window', '$q','$filter', 'commonFunctions',
+        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache', '$window', '$q', '$filter', 'commonFunctions',
     function ($scope, $state, $interval, $stateParams, api, $timeout,
         documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache, $window, $q, $filter, commonFunctions) {
         var vm = this;
@@ -109,7 +109,7 @@
             enableSelectAll: true,
             multiSelect: true,
             columnDefs: [
-                { field: 'checker', displayName: 'checked', width: '48', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
+                { field: 'checker', displayName: 'checked', width: '18', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
                 { field: 'documentName', displayName: 'Document', width: '280', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
                 { field: 'documentClient', displayName: 'Client', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '200', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
                 { field: 'documentClientId', displayName: 'Client.Matter ID', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentClientId}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
@@ -117,7 +117,7 @@
                 { field: 'documentOwner', displayName: 'Author', width: '140', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html', visible: false },
                 { field: 'documentVersion', displayName: 'Document Version', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
                 { field: 'documentCheckoutUser', displayName: 'Checked out to', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '210', headerCellTemplate: '/app/document/DocumentTemplates/CheckOutHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
-                { field: 'documentCreatedDate', displayName: 'Created date', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '190', headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
+                { field: 'documentCreatedDate', displayName: 'Created date', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '170', headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
             ],
             enableColumnMenus: false,
             onRegisterApi: function (gridApi) {
@@ -129,20 +129,21 @@
                     //vm.selectedRow = row.entity
                     vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
                     var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.documentID);
-                    if (isRowPresent.length>0) {
+                    if (isRowPresent.length > 0) {
                         row.entity.checker = true;
                     }
                     else {
+                        vm.checker = false;
                         row.entity.checker = false;                       
                     }
                     isOpenedInOutlook();
-                    
+
                 });
                 $scope.gridApi.core.on.sortChanged($scope, vm.sortChangedDocument);
                 vm.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
                 //$scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFunc);
                 gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
-		 vm.setColumns();
+                vm.setColumns();
             }
         };
 
@@ -180,6 +181,17 @@
         }
         //#endregion
 
+        //#region for setting the dynamic width to grid
+        vm.setWidth = function () {
+            var width = $window.innerWidth;
+            angular.element(".ui-grid-viewport").css('max-width', width);
+            angular.element(".ui-grid-render-container").css('max-width', width);
+        };
+
+        vm.setWidth();
+
+        //#endregion
+
         //#region functionality for infinite scroll
         //start
         vm.pagenumber = 1;
@@ -196,11 +208,16 @@
                         vm.lazyloader = true;
                         vm.responseNull = true;
                     } else {
-                        vm.lazyloader = true;
-                        vm.gridOptions.data = vm.gridOptions.data.concat(response);
+                        
+                        vm.gridOptions.data = vm.gridOptions.data.concat(response);                       
+                        vm.lazyloader = true;                        
                     }
                     promise.resolve();
+
                     $scope.gridApi.infiniteScroll.dataLoaded();
+                    if (vm.checker) {                       
+                        vm.toggleCheckerAll(vm.checker);
+                    }
                 });
             } else {
                 vm.lazyloader = true;
@@ -1322,20 +1339,23 @@
                     //    vm.cartelements.push(vm.documentGridOptions.data[i]);
                     vm.documentsCheckedCount = vm.gridOptions.data.length;
                     vm.selectedRows = vm.gridOptions.data;
-                   
+
                 }
-                else {
-                    //    vm.cartelements = [];
-                    vm.documentsCheckedCount = 0;
+                else {                  
+                    vm.documentsCheckedCount = 0;                                      
                 }
                 if (checked) {
                     $scope.gridApi.selection.selectAllRows();
                 }
                 else {
                     $scope.gridApi.selection.clearSelectedRows();
+                    vm.selectedRows = [];
+                     vm.showErrorAttachmentInfo = false;
+                     
                 }
             }
             isOpenedInOutlook();
+            $scope.$apply();
 
         };
 
@@ -1366,16 +1386,13 @@
         //    }
         //};
 
-        vm.parentToggle = function () {
-            console.log("Hi");
-        };
 
         vm.assetsuccess = false;
         vm.getDocumentAssets = function (row) {
             vm.assetsuccess = false;
             var Client = {
-                Id: row.entity.documentUrl.replace("https://msmatter.sharepoint.com", ""),
-                Name: row.entity.documentMatterUrl.replace("https://msmatter.sharepoint.com", ""),
+                Id: row.entity.documentUrl.replace(configs.uri.SPOsiteURL, ""),
+                Name: row.entity.documentMatterUrl.replace(configs.uri.SPOsiteURL, ""),
                 Url: row.entity.documentClientUrl
             }
             GetAssets(Client, function (response) {
@@ -1387,9 +1404,9 @@
 
         vm.gotoDocumentUrl = function (url) {
             if (vm.assetsuccess) {
-                $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace("https://msmatter.sharepoint.com", "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank");
+                $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank");
             } else {
-                $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace("https://msmatter.sharepoint.com", "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank"); }, 1500);
+                $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank"); }, 1500);
             }
         }
 
@@ -1404,7 +1421,7 @@
             vm.details = [];
             var dimensions = $event.target.getBoundingClientRect();
             var top = dimensions.top + 30;
-            var left = dimensions.left - 254;
+            var left = dimensions.left - 224;
             angular.element('.documentheader').css({ 'top': top, 'left': left });
             angular.element('.documentheaderdates').css({ 'top': top, 'left': left });
             if (name == "Document") {

@@ -1,8 +1,8 @@
 ﻿(function () {
     'use strict';
 
-    var app=  angular.module("matterMain");
-    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window','$rootScope',
+    var app = angular.module("matterMain");
+    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window', '$rootScope',
         function ($scope, $state, $stateParams, api, matterResource, $filter, $window, $rootScope) {
             ///All Variables
             var cm = this;
@@ -18,9 +18,9 @@
             cm.oSiteUsers = [];
             cm.successBanner = false;
             cm.selectedClient = undefined;
-            cm.createBtnDisabled = false;            
+            cm.createBtnDisabled = false;
             cm.createButton = "Create";
-           cm.clientUrl = "";
+            cm.clientUrl = "";
 
             var w = angular.element($window);
 
@@ -29,7 +29,7 @@
                 $scope.$apply();
             });
 
-            var oPageOneState={
+            var oPageOneState = {
                 ClientValue: [],
                 ClientId: "",
                 MatterName: "",
@@ -42,23 +42,23 @@
                 oSelectedDocumentTypeLawTerms: [],
                 oValidMatterName: undefined,
                 isNextClick: false,
-                sectionClickName:"",
+                sectionClickName: "",
                 specialCharacterExpressionMatter: "[A-Za-z0-9_]+[-A-Za-z0-9_, ]*"
-               
-                
+
+
             }
 
             var oPageTwoState = {
                 ChkConfilctCheck: false,
                 SelectedConflictCheckUser: "",
                 ConflictDate: null,
-                ConflictRadioCheck:"",
-                BlockedUserName:[],
+                ConflictRadioCheck: "",
+                BlockedUserName: [],
                 SecureMatterCheck: true,
                 AssignPermissionTeams: [],
-                oSiteUsers:[]
+                oSiteUsers: []
             }
-           
+
             cm.clientId = "";
             cm.selectedClientName = "";
             cm.matterName = "";
@@ -81,13 +81,13 @@
             cm.primaryMatterType = cm.errorPopUp = false;
             cm.matterGUID = "";
             cm.iCurrentPage = 1;
-            cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber:  1 }];
+            cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
             cm.assignRoles = [];
             cm.assignPermissions = [];
             cm.secureMatterCheck = true;
             cm.conflictRadioCheck = true;
             cm.includeTasks = false;
-            
+
             ///* Function to generate 32 bit GUID */
             function get_GUID() {
                 function create_GUID(bFlag) {
@@ -107,8 +107,8 @@
             }
 
             getMatterGUID();
-           
-           
+
+
             var optionsForClientGroup = new Object;
             var optionsForPracticeGroup = new Object;
             var optionsForCheckMatterName = new Object;
@@ -127,17 +127,17 @@
                 });
 
             }
-       
+
             function getDefaultMatterConfigurations(siteCollectionPath, callback) {
                 api({
-                    resource:'matterResource',
+                    resource: 'matterResource',
                     method: 'getDefaultMatterConfigurations',
                     data: JSON.stringify(siteCollectionPath),
-                    success:callback
+                    success: callback
                 });
             }
 
-           
+
             function getTaxonomyDetailsForPractice(optionsForPracticeGroup, callback) {
                 api({
                     resource: 'matterResource',
@@ -238,7 +238,7 @@
                 });
             }
 
-            
+
 
             optionsForClientGroup = {
                 Client: {
@@ -250,8 +250,8 @@
                     CustomPropertyName: "ClientURL"
                 }
             }
-               
-           //input parameters building here for all the api's
+
+            //input parameters building here for all the api's
             optionsForPracticeGroup = {
                 Client: {
 
@@ -261,18 +261,18 @@
                     TermGroup: "MatterCenterTerms",
                     TermSetName: "Practice Groups",
                     CustomPropertyName: "ContentTypeName",
-                    DocumentTemplatesName:"DocumentTemplates"
+                    DocumentTemplatesName: "DocumentTemplates"
                 }
             }
 
-            optionsForCheckMatterName={
+            optionsForCheckMatterName = {
                 Client: {
 
                     Url: cm.clientUrl
                 },
                 Matter: {
                     MatterGuid: "",
-                    Name:cm.matterName.trim()
+                    Name: cm.matterName.trim()
                 }
             }
             //optionsForUsers
@@ -305,83 +305,83 @@
             }
 
             //call back function for getting the clientNamesList
-        function getTaxonomyData(){
-    getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {              
+            function getTaxonomyData() {
+                getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
 
-                cm.clientNameList = response.clientTerms;
-        // jQuery('#myModal').modal('show');
-               // optionsForPracticeGroup.Client.Url=cm.clientUrl;
-                getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                    cm.pracitceGroupList = response.pgTerms;
-                    // cm.popupContainerBackground = "hide";
+                    cm.clientNameList = response.clientTerms;
+                    // jQuery('#myModal').modal('show');
+                    // optionsForPracticeGroup.Client.Url=cm.clientUrl;
+                    getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                        cm.pracitceGroupList = response.pgTerms;
+                        // cm.popupContainerBackground = "hide";
 
-                    getRoles(optionsForRoles, function (response) {
-                        //console.log("roles");
-                        //console.log(response);
-
-                        cm.assignRoles = response;
-                       
-                        angular.forEach(cm.assignPermissionTeams, function (team) { //For loop
-                            //  term.assignedRole = term.assignedRole.name;
-                            if ("" !== team.assignedRole) {
-                                angular.forEach(cm.assignRoles, function (role) {
-                                    if (role.id == team.assignedRole.id) {
-                                        team.assignedRole = role;
-
-                                    }
-                                });
-                            }
-                            else {
-                                team.assignedRole = cm.assignRoles[0];
-
-                            }
-                        });
-
-                        getPermissionLevels(optionsForPermissionLevels, function (response) {
-                            //console.log("Permission Levels");
+                        getRoles(optionsForRoles, function (response) {
+                            //console.log("roles");
                             //console.log(response);
-                            cm.assignPermissions = response;
+
+                            cm.assignRoles = response;
+
                             angular.forEach(cm.assignPermissionTeams, function (team) { //For loop
                                 //  term.assignedRole = term.assignedRole.name;
-                                if ("" !== team.assignedPermission) {
-                                    angular.forEach(cm.assignPermissions, function (permission) {
-                                        if (permission.id == team.assignedPermission.id) {
-                                            team.assignedPermission = permission;
+                                if ("" !== team.assignedRole) {
+                                    angular.forEach(cm.assignRoles, function (role) {
+                                        if (role.id == team.assignedRole.id) {
+                                            team.assignedRole = role;
 
                                         }
                                     });
                                 }
                                 else {
-                                    team.assignedPermission = cm.assignPermissions[0];
+                                    team.assignedRole = cm.assignRoles[0];
 
                                 }
+                            });
 
-                                 cm.popupContainerBackground = "hide";
+                            getPermissionLevels(optionsForPermissionLevels, function (response) {
+                                //console.log("Permission Levels");
+                                //console.log(response);
+                                cm.assignPermissions = response;
+                                angular.forEach(cm.assignPermissionTeams, function (team) { //For loop
+                                    //  term.assignedRole = term.assignedRole.name;
+                                    if ("" !== team.assignedPermission) {
+                                        angular.forEach(cm.assignPermissions, function (permission) {
+                                            if (permission.id == team.assignedPermission.id) {
+                                                team.assignedPermission = permission;
+
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        team.assignedPermission = cm.assignPermissions[0];
+
+                                    }
+
+                                    cm.popupContainerBackground = "hide";
+                                });
                             });
                         });
                     });
+
                 });
+            }
 
-            });
-}
+            getTaxonomyData();
 
-           getTaxonomyData();
 
-          
-          
+
 
             //calls this function when selectType button clicks
             cm.selectMatterType = function (value) {
-               
-                    cm.popupContainerBackground = "Show";
-                
-                if (cm.pracitceGroupList == null ) {
+
+                cm.popupContainerBackground = "Show";
+
+                if (cm.pracitceGroupList == null) {
                     getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                         cm.pracitceGroupList = response.pgTerms;
-                     
-                            cm.popupContainer = "Show";
-                            cm.popupContainerBackground = "Show";
-                       
+
+                        cm.popupContainer = "Show";
+                        cm.popupContainerBackground = "Show";
+
                     });
                 }
                 else {
@@ -389,14 +389,14 @@
                     cm.popupContainerBackground = "Show";
 
                 }
-                if(cm.pracitceGroupList[0]){
-                 cm.selectedPracticeGroup=cm.pracitceGroupList[0];
-                 cm.areaOfLawTerms=cm.pracitceGroupList[0].areaTerms;
-                 cm.subAreaOfLawTerms=cm.pracitceGroupList[0].areaTerms[0].subareaTerms;
-                 cm.activeAOLTerm=cm.pracitceGroupList[0].areaTerms[0];
-                 cm.activeSubAOLTerm = cm.pracitceGroupList[0].areaTerms[0].subareaTerms[0];
-                
-                 }
+                if (cm.pracitceGroupList[0]) {
+                    cm.selectedPracticeGroup = cm.pracitceGroupList[0];
+                    cm.areaOfLawTerms = cm.pracitceGroupList[0].areaTerms;
+                    cm.subAreaOfLawTerms = cm.pracitceGroupList[0].areaTerms[0].subareaTerms;
+                    cm.activeAOLTerm = cm.pracitceGroupList[0].areaTerms[0];
+                    cm.activeSubAOLTerm = cm.pracitceGroupList[0].areaTerms[0].subareaTerms[0];
+
+                }
             }
 
             //function for closing the popup
@@ -404,27 +404,27 @@
                 if (cm.popupContainer == "Show") {
                     cm.popupContainerBackground = "hide";
                     cm.popupContainer = "hide";
-                } 
+                }
             }
             //function to get the clientId from ClientName dropdown
-            cm.getSelectedClientValue = function (client) {              
-                
-                
-               
-              
-                if (undefined !== client && null!==client) {
-                cm.clientId = client.id;
-                cm.selectedClientName = client.name;
-                cm.clientUrl = client.url;
+            cm.getSelectedClientValue = function (client) {
+
+
+
+
+                if (undefined !== client && null !== client) {
+                    cm.clientId = client.id;
+                    cm.selectedClientName = client.name;
+                    cm.clientUrl = client.url;
                     cm.popupContainerBackground = "Show";
                     siteCollectionPath = cm.clientUrl;
 
                     getDefaultMatterConfigurations(siteCollectionPath, function (result) {
-                      
+
                         if (result.isError) {
-                           
+
                             //    alert();
-                            cm.errTextMsg =result.value ;
+                            cm.errTextMsg = result.value;
                             cm.errorBorder = "client";
                             showErrorNotification("client");
                             cm.errorPopUpBlock = true;
@@ -432,7 +432,7 @@
                         else {
                             var dMatterAreaOfLaw = "", dMatterPracticeGroup = "", dMatterSubAreOfLaw = "", dMatterTypes = "", dPrimaryMatterType = "", dMatterUsers = "", dMatterUserEmails = "", dMatterPermissions = "", dMatterRoles = "";
 
-                          
+
                             var defaultMatterConfig = JSON.parse(result.code);
 
                             cm.matterName = defaultMatterConfig.DefaultMatterName;
@@ -457,23 +457,23 @@
                             if (defaultMatterConfig.IsMatterDescriptionMandatory) {
                                 cm.isMatterDescriptionMandatory = defaultMatterConfig.IsMatterDescriptionMandatory;
                             }
-                           // if (defaultMatterConfig.IsContentCheck) {
-                               // cm.secureMatterCheck = "True";
-                           // }
+                            // if (defaultMatterConfig.IsContentCheck) {
+                            // cm.secureMatterCheck = "True";
+                            // }
                             if (defaultMatterConfig.IsTaskSelected) {
                                 cm.includeTasks = defaultMatterConfig.IsTaskSelected;
                             }
                             var arrDMatterAreaOfLaw = [];
-                            var arrDMatterPracticeGroup = [],arrDMatterUsers=[],arrDMatterUserEmails=[],arrDMatterPermissions=[],arrDMatterRoles=[];
+                            var arrDMatterPracticeGroup = [], arrDMatterUsers = [], arrDMatterUserEmails = [], arrDMatterPermissions = [], arrDMatterRoles = [];
                             arrDMatterAreaOfLaw = defaultMatterConfig.MatterAreaofLaw.split('$|$');
                             arrDMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup.split('$|$');
-                       //     dMatterAreaOfLaw = defaultMatterConfig.MatterAreaofLaw ? defaultMatterConfig.MatterAreaofLaw : "";
-                         //   dMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup?defaultMatterConfig.MatterPracticeGroup: "";
-                         //   dMatterSubAreOfLaw = defaultMatterConfig.?: "";
+                            //     dMatterAreaOfLaw = defaultMatterConfig.MatterAreaofLaw ? defaultMatterConfig.MatterAreaofLaw : "";
+                            //   dMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup?defaultMatterConfig.MatterPracticeGroup: "";
+                            //   dMatterSubAreOfLaw = defaultMatterConfig.?: "";
                             dMatterTypes = defaultMatterConfig.MatterTypes ? defaultMatterConfig.MatterTypes : "";
 
                             var arrDMatterTypes = dMatterTypes.split('$|$');
-                            dPrimaryMatterType = defaultMatterConfig.DefaultMatterType?defaultMatterConfig.DefaultMatterType: "";
+                            dPrimaryMatterType = defaultMatterConfig.DefaultMatterType ? defaultMatterConfig.DefaultMatterType : "";
                             dMatterUsers = defaultMatterConfig.MatterUsers ? defaultMatterConfig.MatterUsers : "";
                             arrDMatterUsers = dMatterUsers.split('$|$');
                             dMatterUserEmails = defaultMatterConfig.MatterUserEmails ? defaultMatterConfig.MatterUserEmails : "";
@@ -484,54 +484,55 @@
                             arrDMatterRoles = dMatterRoles.split('$|$');
                             cm.selectMatterType();
                             cm.popupContainer = "hide";
-                          
+
                             getMatterGUID();
                             cm.selectedDocumentTypeLawTerms = [];
-                          
-                            angular.forEach(cm.pracitceGroupList, function (pgTerm) {                             
-                               
-                                   
-                                        angular.forEach(pgTerm.areaTerms, function (areaTerm) {
-                                           
-                                                    angular.forEach(areaTerm.subareaTerms, function (subAreaTerm) {
+                            cm.documentTypeLawTerms = [];
 
-                                                        for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
-
-                                                            if (subAreaTerm.termName == arrDMatterTypes[iCount]) {
-                                                                //  cm.selectedDocumentTypeLawTerms = 
-                                                                var documentType = subAreaTerm;
-                                                                documentType.foldernamespg = pgTerm.folderNames;
-                                                                documentType.practicegroupId = pgTerm.id;
-                                                                documentType.foldernamesaol = areaTerm.folderNames;
-                                                                documentType.areaoflawId = areaTerm.id;
-                                                                documentType.areaoflaw = areaTerm.termName;
-                                                                documentType.practicegroup = pgTerm.termName;
-                                                                //cm.documentTypeLawTerms
-
-                                                                cm.documentTypeLawTerms.push(subAreaTerm);
-                                                                documentType.primaryMatterType = false;
-                                                                if (subAreaTerm.termName == dPrimaryMatterType) {
-                                                                    documentType.primaryMatterType = true;
-                                                                    cm.activeDocumentTypeLawTerm = subAreaTerm;
-                                                                }
-                                                                cm.selectedDocumentTypeLawTerms.push(documentType);
-                                                            }
-
-                                                        }
-                                                    });
-                                            
-                                        });
+                            angular.forEach(cm.pracitceGroupList, function (pgTerm) {
 
 
-                                    
-                                
+                                angular.forEach(pgTerm.areaTerms, function (areaTerm) {
+
+                                    angular.forEach(areaTerm.subareaTerms, function (subAreaTerm) {
+
+                                        for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
+
+                                            if (subAreaTerm.termName == arrDMatterTypes[iCount]) {
+                                                //  cm.selectedDocumentTypeLawTerms = 
+                                                var documentType = subAreaTerm;
+                                                documentType.foldernamespg = pgTerm.folderNames;
+                                                documentType.practicegroupId = pgTerm.id;
+                                                documentType.foldernamesaol = areaTerm.folderNames;
+                                                documentType.areaoflawId = areaTerm.id;
+                                                documentType.areaoflaw = areaTerm.termName;
+                                                documentType.practicegroup = pgTerm.termName;
+                                                //cm.documentTypeLawTerms
+
+                                                cm.documentTypeLawTerms.push(subAreaTerm);
+                                                documentType.primaryMatterType = false;
+                                                if (subAreaTerm.termName == dPrimaryMatterType) {
+                                                    documentType.primaryMatterType = true;
+                                                    cm.activeDocumentTypeLawTerm = subAreaTerm;
+                                                }
+                                                cm.selectedDocumentTypeLawTerms.push(documentType);
+                                            }
+
+                                        }
+                                    });
+
+                                });
+
+
+
+
                             });
                             cm.selectedConflictCheckUser = ""; cm.blockedUserName = ""; cm.conflictDate = "";
                             //     cm.assignPermissionTeams
                             // cm.assignPermissionTeams.splice(0, 1);
                             cm.assignPermissionTeams = [];
                             // cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
-                           
+
                             for (var aCount = 0; aCount < arrDMatterUsers.length; aCount++) {
                                 var assignPermTeam = {};
                                 if ("" !== arrDMatterUsers[aCount]) {
@@ -546,15 +547,15 @@
                                     assignPermTeam.assignedUser = "";
                                     assignPermTeam.assignedRole = cm.assignRoles[0];
                                     assignPermTeam.assignedPermission = cm.assignPermissions[0];
-                                } 
+                                }
 
 
-                               //cm.assignRoles   cm.assignPermissions 
+                                //cm.assignRoles   cm.assignPermissions 
                                 //assignedRole  assignedPermission
                                 angular.forEach(cm.assignRoles, function (assignRole) {
                                     if (arrDMatterRoles[aCount] == assignRole.name) {
                                         assignPermTeam.assignedRole = assignRole;
-                                    } 
+                                    }
                                 });
                                 angular.forEach(cm.assignPermissions, function (assignPermission) {
                                     if (arrDMatterPermissions[aCount] == assignPermission.name) {
@@ -562,7 +563,7 @@
                                     }
                                 });
                                 assignPermTeam.assigneTeamRowNumber = aCount + 1;
-                               
+
                                 cm.assignPermissionTeams.push(assignPermTeam);
 
                             }
@@ -584,17 +585,17 @@
                     cm.matterDescription = "";
                     cm.selectedDocumentTypeLawTerms = [];
                     cm.documentTypeLawTerms = [];
-                  
+
 
                 }
 
-              
+
 
             }
             //function to get the all AOL and SAOL terms
             cm.getSelectedPracticeGroupValue = function () {
 
-               
+
                 if (cm.selectedPracticeGroup != null) {
                     cm.areaOfLawTerms = cm.selectedPracticeGroup.areaTerms;
                     cm.subAreaOfLawTerms = cm.selectedPracticeGroup.areaTerms[0].subareaTerms;
@@ -621,7 +622,7 @@
             cm.selectSubAreaOfLawTerm = function (subAreaOfLawTerm) {
                 cm.errorPopUp = false;
                 cm.activeSubAOLTerm = subAreaOfLawTerm;
-                
+
             }
 
             cm.selectDocumentTemplateTypeLawTerm = function (documentTemplateTypeLawTerm) {
@@ -636,7 +637,7 @@
             }
 
             cm.addToDocumentTemplate = function () {
-                var   isThisNewDocTemplate = true;
+                var isThisNewDocTemplate = true;
                 if (cm.activeSubAOLTerm != null) {
                     angular.forEach(cm.documentTypeLawTerms, function (term) { //For loop
                         if (cm.activeSubAOLTerm.id == term.id) {// this line will check whether the data is existing or not
@@ -656,15 +657,15 @@
                         documentType.areaoflawId = cm.activeAOLTerm.id;
                         documentType.areaoflaw = cm.activeAOLTerm.termName;
                         documentType.practicegroup = cm.selectedPracticeGroup.termName;
-                        
+
 
 
                         cm.documentTypeLawTerms.push(documentType);
                         cm.activeDocumentTypeLawTerm = null;
-                     //   console.log("doc");
-                     //   console.log(cm.documentTypeLawTerms)
+                        //   console.log("doc");
+                        //   console.log(cm.documentTypeLawTerms)
                         //cm.primaryMatterType = true; alert(cm.primaryMatterType);
-                      //  cm.activeSubAOLTerm = null;
+                        //  cm.activeSubAOLTerm = null;
                     }
                 }
             }
@@ -678,13 +679,13 @@
                     cm.primaryMatterType = false;
                     cm.activeDocumentTypeLawTerm = null;
                 }
-               
+
             }
             cm.checkValidMatterName = function () {
                 oPageOneState.oValidMatterName = undefined;
                 var bInValid = false;
                 var RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
-                var sCurrMatterName=cm.matterName.trim();
+                var sCurrMatterName = cm.matterName.trim();
                 if (null !== sCurrMatterName && "" !== sCurrMatterName) {
                     var arrValidMatch = sCurrMatterName.match(RegularExpression);
                     if (null === arrValidMatch || arrValidMatch[0] !== sCurrMatterName) {
@@ -693,83 +694,81 @@
                         bInValid = true;
                     }
                 }
-                if (bInValid){
-                optionsForCheckMatterName.Matter.Name = cm.matterName.trim();
-                optionsForCheckMatterName.Client.Url=cm.clientUrl;
+                if (bInValid) {
+                    optionsForCheckMatterName.Matter.Name = cm.matterName.trim();
+                    optionsForCheckMatterName.Client.Url = cm.clientUrl;
                     getCheckValidMatterName(optionsForCheckMatterName, function (response) {
                         if (response.code != 200) {
                             cm.errTextMsg = "Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
                             cm.errorBorder = "mattername"; showErrorNotification("mattername");
                             cm.errorPopUpBlock = true;
                             oPageOneState.oValidMatterName = false;
-                          return false;
+                            return false;
                         } else {
                             //  alert("success");
                             oPageOneState.oValidMatterName = true;
-                            if ( oPageOneState.isNextClick) {
+                            if (oPageOneState.isNextClick) {
                                 cm.navigateToSecondSection(oPageOneState.sectionClickName);
                             }
                             return true;
                         }
                     });
-                } 
+                }
 
-            }          
+            }
 
-     
-         
-   
+
+
+
 
             cm.navigateToSecondSection = function (sectionName) {
                 cm.errorPopUpBlock = false;
                 cm.errorBorder = "";
-           oPageOneState.sectionClickName=sectionName;
-           if (sectionName == "snConflictCheck" && cm.iCurrentPage!==2) {
+                oPageOneState.sectionClickName = sectionName;
+                if (sectionName == "snConflictCheck" && cm.iCurrentPage !== 2) {
                     if (validateCurrentPage(cm.iCurrentPage)) {
                         cm.sectionName = sectionName;
                         oPageOneState.isNextClick = false;
                         cm.iCurrentPage = 2;
                         localStorage.iLivePage = 2;
-                        
                     }
                 }
-           else if (sectionName == "snCreateAndShare" && cm.iCurrentPage !== 3) {
+                else if (sectionName == "snCreateAndShare" && cm.iCurrentPage !== 3) {
 
-               if (validateCurrentPage(cm.iCurrentPage)) {
-                  
+                    if (validateCurrentPage(cm.iCurrentPage)) {
+
                         cm.sectionName = sectionName;
                         if (cm.iCurrentPage == 2) { callCheckSecurityGroupExists("snCreateAndShare"); }
                         cm.iCurrentPage = 3;
                         localStorage.iLivePage = 3;
-                       
-                    }                 
+
+                    }
 
                 }
-           else if (sectionName == "snOpenMatter" && cm.iCurrentPage !== 1) {
+                else if (sectionName == "snOpenMatter" && cm.iCurrentPage !== 1) {
                     cm.iCurrentPage = 1; cm.sectionName = sectionName;
- localStorage.iLivePage = 1;
-
-           }
-           else {
-                cm.sectionName = sectionName;
-           }
+                    localStorage.iLivePage = 1;
+                }
+                else {
+                    cm.sectionName = sectionName;
+                }
             }
 
             var validateAttornyUserRolesAndPermissins = function () {
-                var responsibleAttorny=0,fullControl=0;
+                var responsibleAttorny = 0, fullControl = 0;
                 for (var iCount = 0; iCount < cm.assignPermissionTeams.length; iCount++) {
 
                     if ("" !== cm.assignPermissionTeams[iCount].assignedUser) {
-                      
+
                         if (cm.assignPermissionTeams[iCount].assignedRole && "" !== cm.assignPermissionTeams[iCount].assignedRole.name) {
                             if (cm.assignPermissionTeams[iCount].assignedPermission && "" != cm.assignPermissionTeams[iCount].assignedPermission.name) {
                                 if (cm.assignPermissionTeams[iCount].assignedRole.mandatory) {
                                     responsibleAttorny++;
                                 }
-                                if (cm.assignPermissionTeams[iCount].assignedPermission.name=="Full Control") {
+                                if (cm.assignPermissionTeams[iCount].assignedPermission.name == "Full Control") {
                                     fullControl++;
                                 }
-                               
+
                             }
                             else {
                                 cm.errTextMsg = "Please provide at least one permission on this  matter. ";
@@ -783,58 +782,52 @@
                             cm.errorPopUpBlock = true;
                             cm.errTextMsg = "Enter at least one role for this matter.";
                             cm.errorBorder = "";
-                           
                             return false;
                         }
                     }
                     else {
-                        cm.errTextMsg =cm.assignPermissionTeams[iCount].assignedRole.name+" cannot be empty.";
+                        cm.errTextMsg = cm.assignPermissionTeams[iCount].assignedRole.name + " cannot be empty.";
                         cm.errorBorder = "";
-                        showErrorNotificationAssignTeams(cm.errTextMsg, cm.assignPermissionTeams[iCount].assigneTeamRowNumber,"user");
+                        showErrorNotificationAssignTeams(cm.errTextMsg, cm.assignPermissionTeams[iCount].assigneTeamRowNumber, "user");
                         cm.errorPopUpBlock = true;
                         return false;
                     }
-
                 }
 
                 if (responsibleAttorny >= 1) {
                     if (fullControl >= 1) {
                         return true;
-
                     }
                     else {
                         cm.errTextMsg = "Please provide at least one user who has Full Control permission on this  matter.";
-                         cm.errorBorder = "permUser1";
-                         showErrorNotificationAssignTeams( cm.errTextMsg,1,"perm");
+                        cm.errorBorder = "permUser1";
+                        showErrorNotificationAssignTeams(cm.errTextMsg, 1, "perm");
                         cm.errorPopUpBlock = true;
                         return false;
-
                     }
                 }
                 else {
                     cm.errTextMsg = "Enter at least one Responsible Attorney for this matter.";
                     cm.errorBorder = "roleUser1";
-                    showErrorNotificationAssignTeams( cm.errTextMsg,1,"role");
+                    showErrorNotificationAssignTeams(cm.errTextMsg, 1, "role");
                     cm.errorPopUpBlock = true;
                     return false;
                 }
-
             }
 
             function validateUsers() {
-                var keepGoing=true;
-
+                var keepGoing = true;
                 var username = "";
                 if (cm.selectedConflictCheckUser && "" !== cm.selectedConflictCheckUser) {
                     username = getUserName(cm.selectedConflictCheckUser + ";", false);
-                     if (-1 == cm.oSiteUsers.indexOf(username[0])) {
+                    if (-1 == cm.oSiteUsers.indexOf(username[0])) {
                         //  cm.blockedUserName.trim()
                         cm.errTextMsg = "Enter the conflict reviewers name (for auditing purposes).";
                         cm.errorBorder = "ccheckuser";
                         showErrorNotification("ccheckuser");
                         cm.errorPopUpBlock = true;
                         return false;
-                    }                   
+                    }
                 }
                 if (cm.blockedUserName && "" !== cm.blockedUserName) {
                     username = getUserName(cm.blockedUserName + ";", false);
@@ -847,53 +840,45 @@
                         return false;
                     }
                 }
-                
-                 angular.forEach(cm.assignPermissionTeams, function (team) {
-                   
-                     if (keepGoing){
-                     if (team.assignedUser && team.assignedUser != "") {//For loop
-                         username = getUserName(team.assignedUser + ";", false)
-                         if (-1 == cm.oSiteUsers.indexOf(username[0])) {
-                             //  cm.blockedUserName.trim()
-                             cm.errTextMsg = "Please enter valid team members.";
-                             cm.errorBorder = "";
-                             cm.errorPopUpBlock = true;
-                             showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
-                             cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
-                             return false;
 
-                         }
+                angular.forEach(cm.assignPermissionTeams, function (team) {
+                    if (keepGoing) {
+                        if (team.assignedUser && team.assignedUser != "") {//For loop
+                            username = getUserName(team.assignedUser + ";", false)
+                            if (-1 == cm.oSiteUsers.indexOf(username[0])) {
+                                //  cm.blockedUserName.trim()
+                                cm.errTextMsg = "Please enter valid team members.";
+                                cm.errorBorder = "";
+                                cm.errorPopUpBlock = true;
+                                showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
+                                return false;
 
-                         if (cm.blockedUserName && cm.blockedUserName != "") {
-                             if (team.assignedUser == cm.blockedUserName) {
-                                 cm.errTextMsg = "Please enter individual who is not conflicted.";
-                                 cm.errorBorder = "";
-                                 cm.errorPopUpBlock = true;
-                                 showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
-                                 cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
-                                 return false;
-                             }
-                         }
-                     }
-                     else {
-                       
-                       
-                         showErrorNotificationAssignTeams(team.assignedRole.name + " cannot be empty", team.assigneTeamRowNumber,"user")
-                     
+                            }
 
-                         //  console.log(te.offsetTop);
-                       //  cm.errTextMsg = "Enter cannot be empty.";
-                         cm.errorBorder = "txtUser"+team.assigneTeamRowNumber;
-                      //   cm.errorPopUpBlock = true;
-                      keepGoing = false;
-                         return false;
-                     }
-                 }
+                            if (cm.blockedUserName && cm.blockedUserName != "") {
+                                if (team.assignedUser == cm.blockedUserName) {
+                                    cm.errTextMsg = "Please enter individual who is not conflicted.";
+                                    cm.errorBorder = "";
+                                    cm.errorPopUpBlock = true;
+                                    showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                    cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
+                                    return false;
+                                }
+                            }
+                        }
+                        else {
+                            showErrorNotificationAssignTeams(team.assignedRole.name + " cannot be empty", team.assigneTeamRowNumber, "user")
+                            cm.errorBorder = "txtUser" + team.assigneTeamRowNumber;
+                            keepGoing = false;
+                            return false;
+                        }
+                    }
                 });
-               
-                 if (keepGoing) {
-                     return true;
-                 }
+
+                if (keepGoing) {
+                    return true;
+                }
             }
 
 
@@ -908,8 +893,8 @@
                     success: callback
                 });
             }
-            
-            cm.onSelect = function ($item, $model, $label,value) {
+
+            cm.onSelect = function ($item, $model, $label, value) {
                 if (value == "conflictcheckuser") {
                     cm.selectedConflictCheckUser = $item.name + '(' + $item.email + ')';
                 }
@@ -918,67 +903,65 @@
                 }
                 if (value == "team") {
                     $label.assignedUser = $item.name + '(' + $item.email + ')';
-                }               
+                }
                 //  console.log($item);
-              
-               
+
+
                 if (-1 == cm.oSiteUsers.indexOf($item.email)) {
                     cm.oSiteUsers.push($item.email);
                 }
             }
 
-           function getArrAssignedUserNamesAndEmails(){
-            cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
-            var count=1;
+            function getArrAssignedUserNamesAndEmails() {
+                cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
+                var count = 1;
                 angular.forEach(cm.assignPermissionTeams, function (team) { //For loop
                     cm.arrAssignedUserName.push(getUserName(team.assignedUser + ";", true));
                     cm.arrAssignedUserEmails.push(getUserName(team.assignedUser + ";", false));
-                    cm.userIDs.push("txtAssign" +count++ );
+                    cm.userIDs.push("txtAssign" + count++);
                 });
 
             }
 
 
-          var callCheckSecurityGroupExists=function(sectionName){
-                
-               
+            var callCheckSecurityGroupExists = function (sectionName) {
                 //console.log(cm.assignPermissionTeams);
-               getArrAssignedUserNamesAndEmails();
+                getArrAssignedUserNamesAndEmails();
                 var optionsForSecurityGroupCheck = {
                     Client: {
 
                         Url: cm.clientUrl
                     },
                     Matter: {
-                        Name : cm.matterName.trim(),
-                        AssignUserNames : cm.arrAssignedUserName,
-                        AssignUserEmails :cm.arrAssignedUserEmails,
-                        Conflict:{
-                            Identified : cm.conflictRadioCheck
+                        Name: cm.matterName.trim(),
+                        AssignUserNames: cm.arrAssignedUserName,
+                        AssignUserEmails: cm.arrAssignedUserEmails,
+                        Conflict: {
+                            Identified: cm.conflictRadioCheck
                         },
-                        BlockUserNames : (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : [],
+                        BlockUserNames: (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : [],
                     },
                     UserIds: cm.userIDs
-                    }
+                }
                 //optionsForSecurityGroupCheck.Matter.Name=cm.matterName.trim();
                 //optionsForSecurityGroupCheck.Matter.AssignUserNames = cm.arrAssignedUserName;
                 //optionsForSecurityGroupCheck.Matter.AssignUserEmails = cm.arrAssignedUserEmails;
                 //optionsForSecurityGroupCheck.Matter.BlockUserNames = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
-             // var value = getUserName("Venkat M (venkatm@MSmatter.onmicrosoft.com);", true);
-              // console.log(optionsForSecurityGroupCheck);
+                // var value = getUserName("Venkat M (venkatm@MSmatter.onmicrosoft.com);", true);
+                // console.log(optionsForSecurityGroupCheck);
 
                 checkSecurityGroupExists(optionsForSecurityGroupCheck, function (response) {
-                   // console.log(response);
+                    // console.log(response);
 
                     if (!response.value) {
                         alert(" Assign roles and permissions to a particular user for this matter ");
                     } else {
                         cm.iCurrentPage = 3; cm.popupContainerBackground = "hide";
-                        cm.sectionName=sectionName;
+                        cm.sectionName = sectionName;
                     }
                 });
             }
-          var getUserName = function (sUserEmails, bIsName) {
+            var getUserName = function (sUserEmails, bIsName) {
                 "use strict";
                 var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp("^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$");
                 if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
@@ -996,9 +979,9 @@
                 }
                 return arrUserNames;
             }
-           
+
             cm.saveDocumentTemplates = function () {
-               
+
                 if (cm.primaryMatterType) {
                     cm.errorPopUp = false;
                     angular.forEach(cm.documentTypeLawTerms, function (term) {
@@ -1010,26 +993,21 @@
                         term.primaryMatterType = primaryType;
                         cm.popupContainerBackground = "hide";
                         cm.popupContainer = "hide";
-                       
+
                     });
 
                     cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;
                 }
                 else {
-                    cm.errorPopUp=true;
+                    cm.errorPopUp = true;
                 }
             }
 
-
-
-
-
-
             cm.dateOptions = {
-               
+
                 formatYear: 'yy',
                 maxDate: new Date(),
-               // minDate: new Date(),
+                // minDate: new Date(),
                 startingDay: 1
             };
 
@@ -1038,27 +1016,27 @@
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                cm.opened =  cm.opened?false:true;
+                cm.opened = cm.opened ? false : true;
             };
 
             cm.opened = false;
             cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
 
-           
-                //cm.$watch('cm.conflictCheckDate', function ()
-                //{
-                //    var val = 'MM\dd\yyyy';
-                //    cm.conflictDate = $filter('date')(new Date(), val);
-                //}, true);
-            
-          
+
+            //cm.$watch('cm.conflictCheckDate', function ()
+            //{
+            //    var val = 'MM\dd\yyyy';
+            //    cm.conflictDate = $filter('date')(new Date(), val);
+            //}, true);
+
+
             function convert(str) {
                 var date = new Date(str),
                     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
                     day = ("0" + date.getDate()).slice(-2);
-                return [ mnth, day,date.getFullYear(), ].join("/");
+                return [mnth, day, date.getFullYear(), ].join("/");
             }
-           
+
             //$scope.SelectModal= function(){
             //   // jQuery('#myModal').modal('show');
             //}
@@ -1075,10 +1053,10 @@
                 }
             }
 
-           
+
             cm.addNewAssignPermissions = function () {
                 var newItemNo = cm.assignPermissionTeams.length + 1;
-                cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0],'assignedPermission':cm.assignPermissions[0] });
+                cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0] });
             };
 
             cm.removeAssignPermissionsRow = function (index) {
@@ -1086,8 +1064,8 @@
                 if (1 < remainingRows) {
 
                     cm.assignPermissionTeams.splice(index, 1);
-                  //  console.log(cm.assignPermissionTeams);
-                  //  console.log(cm.assignPermissionTeams.length);
+                    //  console.log(cm.assignPermissionTeams);
+                    //  console.log(cm.assignPermissionTeams.length);
                 }
             };
 
@@ -1095,7 +1073,7 @@
                 if (localStorage.getItem("iLivePage") == 2 || localStorage.getItem("iLivePage") == 3) {
                     var oPageData = JSON.parse(localStorage.getItem("oPageOneData"));
                     cm.clientId = oPageData.ClientId;
-                    cm.clientUrl=oPageData.Client.url;
+                    cm.clientUrl = oPageData.Client.url;
 
                     cm.selectedClientName = oPageData.Client.name;
                     cm.selectedClient = oPageData.Client;
@@ -1125,53 +1103,51 @@
                     cm.includeCalendar = (localStorage.getItem("IsCalendarSelected") === "true");
                     cm.isMatterDescriptionMandatory = (localStorage.getItem("IsMatterDescriptionMandatory") === "true");
                     cm.defaultConfilctCheck = (localStorage.getItem("IsConflictCheck") === "true");
-                 
+
                     cm.includeTasks = (localStorage.getItem("IsTaskSelected") === "true");
 
                     cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true");
                     if (cm.includeEmail) {
                         cm.createButton = "Create and Notify";
                     }
-                       oPageOneState.oValidMatterName = oPageData.oValidMatterName;
-                   // cm.navigateToSecondSection("");
-                   // cm.navigateToSecondSection("snConflictCheck");
-                 
+                    oPageOneState.oValidMatterName = oPageData.oValidMatterName;
+                    // cm.navigateToSecondSection("");
+                    // cm.navigateToSecondSection("snConflictCheck");
+
 
                 }
                 if (localStorage.getItem("iLivePage") == 3) {
                     cm.iCurrentPage = 1;
-                     var oPageData = JSON.parse(localStorage.getItem("oPageTwoData"));
-                     if (oPageData && oPageData!==null) {
-                          cm.chkConfilctCheck = oPageData.ChkConfilctCheck;
-                          cm.selectedConflictCheckUser = oPageData.SelectedConflictCheckUser;
-                          
-                  cm.conflictDate = oPageData.ConflictDate;
-                  cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
-                  cm.conflictDate = new Date(cm.conflictDate);
-                  cm.conflictRadioCheck = oPageData.ConflictRadioCheck;
-                  cm.blockedUserName = oPageData.BlockedUserName;
-                  cm.secureMatterCheck = oPageData.SecureMatterCheck;
-                  cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true");
-                  cm.assignPermissionTeams = oPageData.AssignPermissionTeams;
-                  cm.oSiteUsers = oPageData.oSiteUsers;
-                  cm.iCurrentPage = 2;
-                     }
-                 
-                
-                 
-                  if (cm.includeEmail) {
-                      cm.createButton = "Create and Notify";
-                  }
-                  
-                  cm.sectionName = "snCreateAndShare";
-                  
-                 // cm.navigateToSecondSection("snCreateAndShare");
-                 }
-                // cm.navigateToSecondSection(cm.sectionName);
-            }
+                    var oPageData = JSON.parse(localStorage.getItem("oPageTwoData"));
+                    if (oPageData && oPageData !== null) {
+                        cm.chkConfilctCheck = oPageData.ChkConfilctCheck;
+                        cm.selectedConflictCheckUser = oPageData.SelectedConflictCheckUser;
 
-          //  cm.includeEmail = true;
-          
+                        cm.conflictDate = oPageData.ConflictDate;
+                        cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
+                        cm.conflictDate = new Date(cm.conflictDate);
+                        cm.conflictRadioCheck = oPageData.ConflictRadioCheck;
+                        cm.blockedUserName = oPageData.BlockedUserName;
+                        cm.secureMatterCheck = oPageData.SecureMatterCheck;
+                        cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true");
+                        cm.assignPermissionTeams = oPageData.AssignPermissionTeams;
+                        cm.oSiteUsers = oPageData.oSiteUsers;
+                        cm.iCurrentPage = 2;
+                    }
+
+
+
+                    if (cm.includeEmail) {
+                        cm.createButton = "Create and Notify";
+                    }
+
+                    cm.sectionName = "snCreateAndShare";
+
+                    
+                }
+               
+            }          
+
             cm.createAndNotify = function (value) {
                 if (value) {
                     cm.createButton = "Create and Notify";
@@ -1197,64 +1173,91 @@
             }
 
 
-
-
-
-            cm.createMatterButton = function ($event) {
-              var isPageValid=  validateCurrentPage(1);
-             if(isPageValid){
-                isPageValid=validateCurrentPage(2);
-                }else{
-                 cm.sectionName = "snOpenMatter";
-                 cm.iCurrentPage = 1;
-}
-
-            if(isPageValid){
-
-
-               cm.popupContainerBackground = "hide";
-                var matterGUID = cm.matterGUID;
-                var arrFolderNames=[];
-                arrFolderNames = retrieveFolderStructure();
-                var arrRoles = [];
-                arrRoles = getAssignedUserRoles();
-                var arrPermissions = [];
-                arrPermissions = getAssignedUserPermissions();
-                var contentTypes = [];
-                var defaultContentType = "";
-                cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
-                contentTypes = getDefaultContentTypeValues("contenttypes");
-                cm.bMatterLandingPage = true;
-                defaultContentType = getDefaultContentTypeValues("defaultcontenttype");
-                //var sPracticeGroupName=getDefaultContentTypeValues("practicegroupname")
-                //    ,sPracticeGroupId=getDefaultContentTypeValues("practicegroupid")
-                //    ,sAreaOfLawName=getDefaultContentTypeValues("areatermname")
-                //    ,sAreaOfLawId=getDefaultContentTypeValues("areatermid"),
-                //    sSubareaOfLawName=getDefaultContentTypeValues("subareatermname"),
-                //    sSubareaOfLawId = getDefaultContentTypeValues("subareatermid");
-                var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
-                var sCheckBy = getUserEmail(sCheckByUserEmail);
-                var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
-                var sBlockUserName = sBlockUserEmail;
-                var bValid = false;
-                if (cm.defaultConfilctCheck) {
-                    if ("" !== sCheckBy ) {
-                        if(cm.conflictRadioCheck){
-                            if ("" != sBlockUserName[0]) {
-                                bValid = true;
-                            }
-                            else {
-                                bValid = false;
-                            }
-                        } else {
-                            bValid = true;
+            cm.checkUserExists = function (userMailId) {
+                function validateEmail(email) {
+                    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    return re.test(email);
+                }
+                function validate(email) {
+                    if (validateEmail(email)) {
+                        var optionsForUserExsists=new Object;
+                        optionsForUserExsists={
+                            Url: cm.clientUrl,
+                            Name:email
                         }
-                        
+                        userexists(optionsForUserExsists, function (response) {
+                            console.log(response);
+                        });
+
                     }
                     else {
-                         cm.popupContainerBackground = "hide";
-                            cm.errTextMsg = "Error in creation of matter: Incorrect inputs.";
-                            // showErrorNotification("mcreate"); 
+                        return false;
+                    }                   
+                }
+                if (userMailId && userMailId != "") {
+                    var pattern = /\(([^)]+)\)/, matches = userMailId.match(pattern);
+                    if (matches && matches.length > 0) {
+                        userMailId =  matches[1] ;
+                    }
+                    validate(userMailId);
+                }
+            }
+
+            function userexists(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'userexists',
+                    data: options,
+                    success: callback
+                });
+            }    
+            
+            cm.createMatterButton = function ($event) {
+                var isPageValid = validateCurrentPage(1);
+                if (isPageValid) {
+                    isPageValid = validateCurrentPage(2);
+                } else {
+                    cm.sectionName = "snOpenMatter";
+                    cm.iCurrentPage = 1;
+                }
+
+                if (isPageValid) {
+                    cm.popupContainerBackground = "hide";
+                    var matterGUID = cm.matterGUID;
+                    var arrFolderNames = [];
+                    arrFolderNames = retrieveFolderStructure();
+                    var arrRoles = [];
+                    arrRoles = getAssignedUserRoles();
+                    var arrPermissions = [];
+                    arrPermissions = getAssignedUserPermissions();
+                    var contentTypes = [];
+                    var defaultContentType = "";
+                    cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
+                    contentTypes = getDefaultContentTypeValues("contenttypes");
+                    cm.bMatterLandingPage = true;
+                    defaultContentType = getDefaultContentTypeValues("defaultcontenttype");                    
+                    var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
+                    var sCheckBy = getUserEmail(sCheckByUserEmail);
+                    var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
+                    var sBlockUserName = sBlockUserEmail;
+                    var bValid = false;
+                    if (cm.defaultConfilctCheck) {
+                        if ("" !== sCheckBy) {
+                            if (cm.conflictRadioCheck) {
+                                if ("" != sBlockUserName[0]) {
+                                    bValid = true;
+                                }
+                                else {
+                                    bValid = false;
+                                }
+                            } else {
+                                bValid = true;
+                            }
+
+                        }
+                        else {
+                            cm.popupContainerBackground = "hide";
+                            cm.errTextMsg = "Error in creation of matter: Incorrect inputs.";                            
                             showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
                             cm.errorBorder = "";
                             cm.errorPopUpBlock = true;
@@ -1262,74 +1265,74 @@
                             $event.stopPropagation(); cm.createBtnDisabled = false; cm.successBanner = false;
                             bValid = false;
                             return false;
+                        }
+                    } else {
+                        bValid = true;
                     }
-                } else {
-                    bValid = true;
-                }
-                if (bValid) {
-                    getArrAssignedUserNamesAndEmails();
-                    var matterMetdataVM = {
+                    if (bValid) {
+                        getArrAssignedUserNamesAndEmails();
+                        var matterMetdataVM = {
 
-                        Matter: {
-                            Name: cm.matterName.trim(),
-                            Id: cm.matterId,
-                            Description: cm.matterDescription,
-                            Conflict: {
-                                Identified: cm.conflictRadioCheck,
-                                CheckBy: sCheckBy,
-                                CheckOn: cm.conflictDate,
-                                SecureMatter: cm.secureMatterCheck
+                            Matter: {
+                                Name: cm.matterName.trim(),
+                                Id: cm.matterId,
+                                Description: cm.matterDescription,
+                                Conflict: {
+                                    Identified: cm.conflictRadioCheck,
+                                    CheckBy: sCheckBy,
+                                    CheckOn: cm.conflictDate,
+                                    SecureMatter: cm.secureMatterCheck
+                                },
+                                BlockUserNames: sBlockUserName,
+                                AssignUserNames: cm.arrAssignedUserName,
+                                AssignUserEmails: cm.arrAssignedUserEmails,
+                                Roles: arrRoles,
+                                MatterGuid: cm.matterGUID,
+                                FolderNames: arrFolderNames
+
                             },
-                            BlockUserNames: sBlockUserName,
-                            AssignUserNames: cm.arrAssignedUserName,
-                            AssignUserEmails: cm.arrAssignedUserEmails,
-                            Roles: arrRoles,
-                            MatterGuid: cm.matterGUID,
-                            FolderNames: arrFolderNames
+                            Client: {
+                                Id: cm.clientId,
+                                Name: "Microsoft",
+                                Url: cm.clientUrl
+                            },
+                            MatterConfigurations: {
+                                IsConflictCheck: cm.chkConfilctCheck,
+                                IsMatterDescriptionMandatory: true,
+                                IsCalendarSelected: cm.includeCalendar,
+                                IsTaskSelected: cm.includeTasks
+                            },
+                            UserIds: cm.userIDs,
+                            MatterProvisionFlags: {},
+                            HasErrorOccurred: false
+                        };
 
-                        },
-                        Client: {
-                            Id: cm.clientId,
-                            Name: "Microsoft",
-                            Url: cm.clientUrl
-                        },
-                        MatterConfigurations: {
-                            IsConflictCheck: cm.chkConfilctCheck,
-                            IsMatterDescriptionMandatory: true,
-                            IsCalendarSelected: cm.includeCalendar,
-                            IsTaskSelected: cm.includeTasks
-                        },
-                        UserIds: cm.userIDs,
-                        MatterProvisionFlags: {},
-                        HasErrorOccurred: false
-                    };
+                        console.log(matterMetdataVM);
 
-                    console.log(matterMetdataVM);
-                   
-                    cm.successMsg = "Step 1/3: Creating matter library and OneNote library... ";
-                    cm.successBanner = true; cm.createBtnDisabled = true;
-                    createMatter(matterMetdataVM, function (response) {
-
-                        
-                        console.log("createMatter API success");
-                        console.log(response);
+                        cm.successMsg = "Step 1/3: Creating matter library and OneNote library... ";
+                        cm.successBanner = true; cm.createBtnDisabled = true;
+                        createMatter(matterMetdataVM, function (response) {
 
 
-                        cm.successMsg = "Step 2/3: Assigning permissions to matter library and OneNote library,associating Content Types, creating view and matter landing page..."
-                        
-                        associateContentTypes();
-                        assignPermission();
-                        createMatterLandingPage();
+                            console.log("createMatter API success");
+                            console.log(response);
 
-                    });
-                }            
-             } 
-             else{
-                cm.sectionName = "snConflictCheck";
-                cm.iCurrentPage = 2;
+
+                            cm.successMsg = "Step 2/3: Assigning permissions to matter library and OneNote library,associating Content Types, creating view and matter landing page..."
+
+                            associateContentTypes();
+                            assignPermission();
+                            createMatterLandingPage();
+
+                        });
+                    }
+                }
+                else {
+                    cm.sectionName = "snConflictCheck";
+                    cm.iCurrentPage = 2;
                 }
             }
-          
+
             function getUserEmail(arrUsersEmails) {
                 var sEmail = "";
                 if (arrUsersEmails && 0 < arrUsersEmails.length) {
@@ -1390,7 +1393,7 @@
                 assignContentTypeMetadata(optionsForAssignContentTypeMetadata, function (response) {
                     console.log(" assignContentTypeMetadataAPI Success");
                     console.log(response);
-                   
+
                     cm.iShowSuccessMessage++;
                     (3 === parseInt(cm.iShowSuccessMessage, 10)) ? stampProperties() : "";
                 });
@@ -1431,7 +1434,7 @@
 
                     cm.iShowSuccessMessage++;
                     (3 === parseInt(cm.iShowSuccessMessage, 10)) ? stampProperties() : "";
-                    
+
                 });
 
             }
@@ -1485,15 +1488,15 @@
                     console.log(response);
                     cm.iShowSuccessMessage++;
                     (3 === parseInt(cm.iShowSuccessMessage, 10)) ? stampProperties() : "";
-                  
+
                 });
 
             }
-           
+
 
 
             function stampProperties() {
-              //  alert();
+                //  alert();
                 var matterGUID = cm.matterGUID;
                 cm.successBanner = true;
                 cm.successMsg = "Step 3/3: Updating metadata of matter library and sharing matter with the users... ";
@@ -1511,26 +1514,26 @@
                 defaultContentType = getDefaultContentTypeValues("defaultcontenttype");
                 var arrUserNames = [], arrUserEmails = [], arrTeamMembers = [];
                 var sPracticeGroupList = "", sAreaOfLawList = "", sSubAreaOfLawList = ""; var oMatterProvisionFlags = {};
-               
 
-                var sResponsibleAttorney = [], sResponsibleAttorneyEmail = [], arrTeamMembers = [], arrDocumentTemplatesCount=[];
+
+                var sResponsibleAttorney = [], sResponsibleAttorneyEmail = [], arrTeamMembers = [], arrDocumentTemplatesCount = [];
                 var oDocumentTemplates = cm.selectedDocumentTypeLawTerms;
                 var subAreaofLaw = "", roleInformation = {}, arrReadOnlyUsers = [];
 
-              
+
                 var User_Upload_Permissions = "Read";
                 angular.forEach(cm.assignPermissionTeams, function (item) {
-                //    arrPermissions.push($.trim($(this).val()));
+                    //    arrPermissions.push($.trim($(this).val()));
                     if (item.assignedPermission.name.toLowerCase() === User_Upload_Permissions.toLowerCase()) {
-                     
-                       
+
+
                         arrReadOnlyUsers.push(getUserName(item.assignedRole.name.trim() + ";", false).join(";"), ";");
-                        
+
                     }
                 });
                 validateTeamAssigmentRole();
                 angular.forEach(cm.assignPermissionTeams, function (item) {
-                   // var sCurrElementID = $(this).attr("id");
+                    // var sCurrElementID = $(this).attr("id");
                     if (1 <= cm.assignPermissionTeams.length) {
                         if ("" !== item.assignedRole && "" !== item.assignedPermission) {
                             if (-1 !== cm.oMandatoryRoleNames.indexOf(item.assignedRole.name)) {
@@ -1538,14 +1541,14 @@
                                 sResponsibleAttorneyEmail.push(getUserName(item.assignedUser + ";", false).join(";"));
                             }
                         }
-                       // sCurrElementID = sCurrElementID.trim().split("txtAssign")[1];
-                       // var sCurrRole = $("#ddlRoleAssign" + sCurrElementID), sCurrPermission = $("#txtAssign" + sCurrElementID);
+                        // sCurrElementID = sCurrElementID.trim().split("txtAssign")[1];
+                        // var sCurrRole = $("#ddlRoleAssign" + sCurrElementID), sCurrPermission = $("#txtAssign" + sCurrElementID);
                         //if (sCurrRole && sCurrPermission) {
-                            //if (-1 !== $.inArray(sCurrRole.val(), serviceConstants.oMandatoryRoleNames)) {
-                            //    sResponsibleAttorney.push(oCommonObject.getUserName($.trim($(this).val()), true).join(";"));
-                            //    sResponsibleAttorneyEmail.push(oCommonObject.getUserName($.trim($(this).val()), false).join(";"));
-                            //}
-                       // }
+                        //if (-1 !== $.inArray(sCurrRole.val(), serviceConstants.oMandatoryRoleNames)) {
+                        //    sResponsibleAttorney.push(oCommonObject.getUserName($.trim($(this).val()), true).join(";"));
+                        //    sResponsibleAttorneyEmail.push(oCommonObject.getUserName($.trim($(this).val()), false).join(";"));
+                        //}
+                        // }
                     }
                 });
 
@@ -1560,43 +1563,43 @@
                 });
 
                 angular.forEach(cm.assignPermissionTeams, function (item) {
-                  //  var sCurrElementID = $(this).attr("id");
+                    //  var sCurrElementID = $(this).attr("id");
                     if ("" !== item.assignedRole && "" !== item.assignedPermission) {
-                      //  sCurrElementID = sCurrElementID.trim().split("txtAssign")[1];
-                     //   var sCurrRole = $("#ddlRoleAssign" + sCurrElementID), sCurrPermission = $("#txtAssign" + sCurrElementID);
-                      //  if (sCurrRole && sCurrPermission) {
+                        //  sCurrElementID = sCurrElementID.trim().split("txtAssign")[1];
+                        //   var sCurrRole = $("#ddlRoleAssign" + sCurrElementID), sCurrPermission = $("#txtAssign" + sCurrElementID);
+                        //  if (sCurrRole && sCurrPermission) {
                         if (roleInformation.hasOwnProperty(item.assignedRole.name)) {
-                                // This role is already present. append the new role with semicolon separated value
+                            // This role is already present. append the new role with semicolon separated value
                             //   roleInformation[sCurrRole.val()] = roleInformation[sCurrRole.val()] + sCurrPermission.val();
-                            roleInformation[item.assignedRole.name] = roleInformation[item.assignedRole.name]+";" + item.assignedUser;
-                            } else {
-                                // Add this role to the object
+                            roleInformation[item.assignedRole.name] = roleInformation[item.assignedRole.name] + ";" + item.assignedUser;
+                        } else {
+                            // Add this role to the object
                             roleInformation[item.assignedRole.name] = item.assignedUser;
-                            }
+                        }
 
-                       // }
+                        // }
                     }
                 });
                 //angular.forEach(roleInformation, function (key, item) {
                 //    roleInformation[key] = item.trim();
                 //});
                 angular.forEach(cm.assignPermissionTeams, function (item) {
-                    arrUserNames.push(getUserName(item.assignedUser.trim()+ ";", true));
-                    arrUserEmails.push(getUserName(item.assignedUser.trim()+ ";", false));
-                    arrTeamMembers.push(getUserName(item.assignedUser.trim()+ ";",true).join(";"));
+                    arrUserNames.push(getUserName(item.assignedUser.trim() + ";", true));
+                    arrUserEmails.push(getUserName(item.assignedUser.trim() + ";", false));
+                    arrTeamMembers.push(getUserName(item.assignedUser.trim() + ";", true).join(";"));
                 });
                 contentTypes = subAreaofLaw.trim().split(";");
-                angular.forEach(oDocumentTemplates,  function (item) {
+                angular.forEach(oDocumentTemplates, function (item) {
                     arrDocumentTemplatesCount.push(item.documentTemplateNames.split(";").length.toString());
                 });
                 arrDocumentTemplatesCount.reverse();
 
-               
-               oMatterProvisionFlags = {
+
+                oMatterProvisionFlags = {
                     "MatterLandingFlag": cm.bMatterLandingPage,
                     "SendEmailFlag": true
                 };
-               
+
                 angular.forEach(oDocumentTemplates, function (item) {
                     if (-1 === sPracticeGroupList.indexOf(item.practicegroup)) {
                         sPracticeGroupList = item.practicegroup + "; " + sPracticeGroupList;
@@ -1605,10 +1608,10 @@
                         sAreaOfLawList = item.areaoflaw + "; " + sAreaOfLawList;
                     }
                     if (-1 === sSubAreaOfLawList.indexOf(item.documentTemplates)) {
-                        sSubAreaOfLawList =item.documentTemplates + "; " + sSubAreaOfLawList;
+                        sSubAreaOfLawList = item.documentTemplates + "; " + sSubAreaOfLawList;
                     }
                 });
-               
+
 
                 var optionsForStampMatterDetails = {
                     Client: {
@@ -1636,7 +1639,7 @@
                         DocumentTemplateCount: arrDocumentTemplatesCount,
                         MatterGuid: matterGUID
                     },
-                    MatterDetails:{
+                    MatterDetails: {
                         PracticeGroup: sPracticeGroupList,
                         AreaOfLaw: sAreaOfLawList,
                         SubareaOfLaw: subAreaofLaw,
@@ -1649,24 +1652,24 @@
                     MatterProvisionFlags: oMatterProvisionFlags,
                     MatterConfigurations: {
                         IsConflictCheck: cm.chkConfilctCheck,
-                        IsMatterDescriptionMandatory: true                       
+                        IsMatterDescriptionMandatory: true
                     }
                 }
                 console.log("options for optionsForStampMatterDetails matter");
                 console.log(optionsForStampMatterDetails);
                 updateMatterMetadataAPI(optionsForStampMatterDetails, function (response) {
-                  console.log("stampProperties Success");
-                  console.log(response);
-                  cm.successMsg = "Matter is successfully created. You can find recently created matter over <a target='_blank' href='"+cm.clientUrl+"/SitePages/" + cm.matterGUID + ".aspx'>here</a>.";
-                  clearAllProperties();
-                 
-                  cm.navigateToSecondSection(cm.sectionName);
-                  cm.popupContainerBackground = "hide";
-                //  updateMatterMetadata();
+                    console.log("stampProperties Success");
+                    console.log(response);
+                    cm.successMsg = "Matter is successfully created. You can find recently created matter over <a target='_blank' href='" + cm.clientUrl + "/SitePages/" + cm.matterGUID + ".aspx'>here</a>.";
+                    clearAllProperties();
 
-              });
+                    cm.navigateToSecondSection(cm.sectionName);
+                    cm.popupContainerBackground = "hide";
+                    //  updateMatterMetadata();
 
-               // updateMatterMetadata();
+                });
+
+                // updateMatterMetadata();
 
             }
 
@@ -1717,7 +1720,7 @@
             //    });
 
             //}
-          
+
             function validateTeamAssigmentRole() {
                 var oAssignList = cm.assignPermissionTeams
             , iExpectedCount = 0, iActualCount = 0, iIterator = 0, iLength = cm.assignRoles.length;
@@ -1728,11 +1731,11 @@
                     }
                 }
                 angular.forEach(oAssignList, function (oItem) {
-                   
+
                     if (true == oItem.assignedRole.mandatory) {
-                            iActualCount++;
-                        }
-                    
+                        iActualCount++;
+                    }
+
                 });
                 if (iExpectedCount <= iActualCount) {
                     return true;
@@ -1777,33 +1780,33 @@
             }
 
 
-            function getDefaultContentTypeValues(contentTypeValue){
+            function getDefaultContentTypeValues(contentTypeValue) {
                 var returnedValue;
                 switch (contentTypeValue) {
                     case "contenttypes":
-                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
                             for (nCount = 0; nCount < nLength; nCount++) {
                                 if ("contenttypes" == contentTypeValue) {
-                                    if(-1==arrContents.indexOf(arrContentTypes[nCount].termName)){
-                                    arrContents.push(arrContentTypes[nCount].termName);
+                                    if (-1 == arrContents.indexOf(arrContentTypes[nCount].termName)) {
+                                        arrContents.push(arrContentTypes[nCount].termName);
                                     }
-                            
-                                    var arrAssociatedDocumentTemplates=arrContentTypes[nCount].documentTemplateNames.split(";");
-                                    for(var iIterator = 0; iIterator < arrAssociatedDocumentTemplates.length; iIterator++){
-                                        if(-1==arrContents.indexOf(arrAssociatedDocumentTemplates[iIterator])){
+
+                                    var arrAssociatedDocumentTemplates = arrContentTypes[nCount].documentTemplateNames.split(";");
+                                    for (var iIterator = 0; iIterator < arrAssociatedDocumentTemplates.length; iIterator++) {
+                                        if (-1 == arrContents.indexOf(arrAssociatedDocumentTemplates[iIterator])) {
                                             arrContents.push(arrAssociatedDocumentTemplates[iIterator]);
                                         }
                                     }
                                 }
                             }
                         }
-                        returnedValue=arrContents;
+                        returnedValue = arrContents;
                         break;
                     case "defaultcontenttype":
-                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
@@ -1815,11 +1818,11 @@
                                 }
                             }
                         }
-                        returnedValue=defaultContentType;
+                        returnedValue = defaultContentType;
                         break;
                     case "practicegroupname":
-                      
-                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
@@ -1831,27 +1834,27 @@
                                 }
                             }
                         }
-                        returnedValue=defaultContentType;
+                        returnedValue = defaultContentType;
                         break;
                     case "practicegroupid":
-                      
-                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
                             for (nCount = 0; nCount < nLength; nCount++) {
-                                if ("practicegroupid"==contentTypeValue ) {
+                                if ("practicegroupid" == contentTypeValue) {
                                     if (arrContentTypes[nCount].primaryMatterType === true) {
                                         defaultContentType = arrContentTypes[nCount].practicegroupId;
                                     }
                                 }
                             }
                         }
-                        returnedValue=defaultContentType;
+                        returnedValue = defaultContentType;
                         break;
                     case "subareatermname":
-                       
-                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
@@ -1863,11 +1866,11 @@
                                 }
                             }
                         }
-                        returnedValue=defaultContentType;
+                        returnedValue = defaultContentType;
                         break;
                     case "subareatermid":
-                       
-                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
@@ -1879,11 +1882,11 @@
                                 }
                             }
                         }
-                        returnedValue=defaultContentType;
+                        returnedValue = defaultContentType;
                         break;
                     case "areatermname":
-                       
-                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
@@ -1895,11 +1898,11 @@
                                 }
                             }
                         }
-                        returnedValue=defaultContentType;
+                        returnedValue = defaultContentType;
                         break;
                     case "areatermid":
-                       
-                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
+
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
@@ -1911,14 +1914,14 @@
                                 }
                             }
                         }
-                        returnedValue=defaultContentType;
+                        returnedValue = defaultContentType;
                         break;
-                    
+
                 }
 
                 return returnedValue;
 
-               
+
             }
 
             //function getContentTypes(value) {
@@ -1931,11 +1934,11 @@
             //          //  if (arrContentTypes[nCount].primaryMatterType === true || 0 === nCount) {
             //                // Check if the isNoFolderStructurePresent flag is set to true
             //               // if (arrContentTypes[nCount].isNoFolderStructurePresent && "false" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
-                        
+
             //            // If the folder at the specific level is not present then move to the parent level
             //            if("contenttypes"==value){
             //                arrContents.push(arrContentTypes[nCount].termName);
-                            
+
             //                var arrAssociatedDocumentTemplates=arrContentTypes[nCount].documentTemplateNames.split(";");
             //                for(var iIterator = 0; iIterator < arrAssociatedDocumentTemplates.length; iIterator++){
             //                    if(-1==arrContents.indexOf(arrAssociatedDocumentTemplates[iIterator])){
@@ -1960,19 +1963,18 @@
             //    }
             //}
 
-         //  var contentTypes = getContentType("contentTypes");
-         // var  defaultContentType = getContentType("defaultcontenttype");
-         //   console.log("----");
-         ////   var obj = retrieveFolderStructure();
-         //   console.log(contentTypes);
-         //   console.log(defaultContentType);
+            //  var contentTypes = getContentType("contentTypes");
+            // var  defaultContentType = getContentType("defaultcontenttype");
+            //   console.log("----");
+            ////   var obj = retrieveFolderStructure();
+            //   console.log(contentTypes);
+            //   console.log(defaultContentType);
 
             function getAssignedUserRoles() {
                 "use strict";
-                var arrAssigneTeams = cm.assignPermissionTeams, nCount = 0, nlength ,  arrRoles = [];
-                if(arrAssigneTeams){
+                var arrAssigneTeams = cm.assignPermissionTeams, nCount = 0, nlength, arrRoles = [];
+                if (arrAssigneTeams) {
                     nlength = arrAssigneTeams.length;
-
                     for (nCount = 0; nCount < nlength; nCount++) {
                         if (arrAssigneTeams[nCount] && arrAssigneTeams[nCount].assignedRole) {
                             if (arrAssigneTeams[nCount].assignedRole && arrAssigneTeams[nCount].assignedRole.name) {
@@ -1991,7 +1993,6 @@
                 var arrAssigneTeams = cm.assignPermissionTeams, nCount = 0, nlength, arrAssignRoles, arrPermissions = [];
                 if (arrAssigneTeams) {
                     nlength = arrAssigneTeams.length;
-
                     for (nCount = 0; nCount < nlength; nCount++) {
                         if (arrAssigneTeams[nCount] && arrAssigneTeams[nCount].assignedPermission) {
                             if (arrAssigneTeams[nCount].assignedPermission && arrAssigneTeams[nCount].assignedPermission.name) {
@@ -2006,15 +2007,14 @@
             }
 
 
-            function clearAllProperties(){
+            function clearAllProperties() {
                 cm.clientId = "";
-cm.selectedClient="";
-cm.clientUrl="";
+                cm.selectedClient = "";
+                cm.clientUrl = "";
                 cm.selectedClientName = "";
                 cm.matterName = "";
                 cm.matterId = "";
                 cm.matterDescription = "";
-
                 cm.clientNameList = [];
                 cm.areaOfLawTerms = [];
                 cm.subAreaOfLawTerms = [];
@@ -2025,8 +2025,7 @@ cm.clientUrl="";
                 cm.activeDocumentTypeLawTerm = null;
                 cm.popupContainerBackground = "hide";
                 cm.popupContainer = "hide";
-cm.createBtnDisabled=false;
-
+                cm.createBtnDisabled = false;
                 cm.sectionName = "snOpenMatter";
                 cm.removeDTItem = false;
                 cm.primaryMatterType = cm.errorPopUp = false;
@@ -2041,24 +2040,22 @@ cm.createBtnDisabled=false;
                 localStorage.removeItem("oPageOneData");
                 localStorage.removeItem("oPageTwoData");
                 getMatterGUID();
-
-               getTaxonomyData();
-
+                getTaxonomyData();
             }
 
             function storeMatterDataToLocalStorageFirstPage() {
-                oPageOneState.Client= cm.selectedClient 
+                oPageOneState.Client = cm.selectedClient
                 oPageOneState.ClientId = cm.clientId.trim();
                 oPageOneState.MatterName = cm.matterName.trim();
                 oPageOneState.MatterId = cm.matterId.trim();
                 oPageOneState.MatterDescription = cm.matterDescription.trim();
-                oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms; 
+                oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
                 oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
                 oPageOneState.matterGUID = cm.matterGUID;
                 oPageOneState.oSelectedDocumentTypeLawTerms = cm.selectedDocumentTypeLawTerms;
-              //  oPageOneState.chkConflictCheck = cm.chkConfilctCheck;
-              //  oPageOneState.oValidMatterName = oPageOneState.oValidMatterName;
-               
+                //  oPageOneState.chkConflictCheck = cm.chkConfilctCheck;
+                //  oPageOneState.oValidMatterName = oPageOneState.oValidMatterName;
+
                 //oPageOneState.oDefaultSecureMatterCheck = cm.secureMatterCheck;
                 //oPageOneState.oDefaultInculdeCalendar = cm.includeCalendar;
                 //oPageOneState.oDefaultIncludeEmail = cm.includeEmail;
@@ -2069,18 +2066,18 @@ cm.createBtnDisabled=false;
 
                 //oPageOneState.oSectionName = cm.sectionName;
                 localStorage.setItem('oPageOneData', JSON.stringify(oPageOneState));
-                 localStorage.setItem('IsCalendarSelected',cm.includeCalendar);
-                  localStorage.setItem('IsRestrictedAccessSelected',  cm.secureMatterCheck);
-                    localStorage.setItem('IsRSSSelected', cm.includeRssFeeds);
-                  localStorage.setItem('IsEmailOptionSelected',  cm.includeEmail);
-                    localStorage.setItem('IsMatterDescriptionMandatory',  cm.isMatterDescriptionMandatory );
-                    localStorage.setItem('IsConflictCheck',cm.defaultConfilctCheck );
-                    localStorage.setItem('IsMatterDescriptionMandatory',  cm.isMatterDescriptionMandatory);
-                     localStorage.setItem('IsTaskSelected', cm.includeTasks);
-                  
+                localStorage.setItem('IsCalendarSelected', cm.includeCalendar);
+                localStorage.setItem('IsRestrictedAccessSelected', cm.secureMatterCheck);
+                localStorage.setItem('IsRSSSelected', cm.includeRssFeeds);
+                localStorage.setItem('IsEmailOptionSelected', cm.includeEmail);
+                localStorage.setItem('IsMatterDescriptionMandatory', cm.isMatterDescriptionMandatory);
+                localStorage.setItem('IsConflictCheck', cm.defaultConfilctCheck);
+                localStorage.setItem('IsMatterDescriptionMandatory', cm.isMatterDescriptionMandatory);
+                localStorage.setItem('IsTaskSelected', cm.includeTasks);
+
 
                 //cm.sectionName = sectionName;
-                localStorage.iLivePage =  2;
+                localStorage.iLivePage = 2;
 
             }
 
@@ -2094,7 +2091,7 @@ cm.createBtnDisabled=false;
                 oPageTwoState.AssignPermissionTeams = cm.assignPermissionTeams;
                 oPageTwoState.oSiteUsers = cm.oSiteUsers;
                 localStorage.setItem('oPageTwoData', JSON.stringify(oPageTwoState));
-                localStorage.iLivePage  = 3;
+                localStorage.iLivePage = 3;
             }
 
             cm.NextClick = function () {
@@ -2109,11 +2106,11 @@ cm.createBtnDisabled=false;
 
             cm.PreviousClick = function () {
                 if (cm.iCurrentPage == 2) {
-                cm.navigateToSecondSection("snOpenMatter");
+                    cm.navigateToSecondSection("snOpenMatter");
 
                 }
                 else if (cm.iCurrentPage == 3) {
-                 cm.navigateToSecondSection("snConflictCheck");
+                    cm.navigateToSecondSection("snConflictCheck");
                 }
 
             }
@@ -2122,20 +2119,20 @@ cm.createBtnDisabled=false;
             cm.CheckPopUp = function (e) {
                 //  e.stopPropagation();
 
-             
+
                 cm.errorPopUpBlock = false;
                 cm.errorBorder = "";
-             
+
             }
 
             function validateCurrentPage(iCurrPage) {
                 if (iCurrPage == 1) {
                     var windowWidth = GetWidth();
                     var RegularExpression;
-                    if (undefined !==cm.selectedClientName && null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
+                    if (undefined !== cm.selectedClientName && null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
                         if ("" !== cm.clientId.trim() && null !== cm.clientId) {
                             var bInValid = false;
-                             RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
+                            RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
                             var sCurrMatterName = cm.matterName.trim();
                             if (null !== sCurrMatterName && "" !== sCurrMatterName) {
                                 var arrValidMatch = sCurrMatterName.match(RegularExpression);
@@ -2150,10 +2147,10 @@ cm.createBtnDisabled=false;
                                 oPageOneState.isNextClick = true;
                                 if (undefined !== oPageOneState.oValidMatterName) {
                                     if (oPageOneState.oValidMatterName) {
-                                      //  RegularExpression = new RegExp(oMatterProvisionConstants.Special_Character_Expression_Matter_Id);
+                                        //  RegularExpression = new RegExp(oMatterProvisionConstants.Special_Character_Expression_Matter_Id);
                                         bInValid = false;
-                                       // if (cm.matterId && "" !== cm.matterId.trim() && null != cm.matterId) {
-                                        var sCurrentMatterId=cm.matterId;
+                                        // if (cm.matterId && "" !== cm.matterId.trim() && null != cm.matterId) {
+                                        var sCurrentMatterId = cm.matterId;
                                         if (undefined !== sCurrentMatterId && null !== sCurrentMatterId && "" !== sCurrentMatterId) {
                                             sCurrentMatterId = sCurrentMatterId.trim();
                                             var arrValidMatch = sCurrentMatterId.match(RegularExpression);
@@ -2170,37 +2167,35 @@ cm.createBtnDisabled=false;
                                             cm.errorPopUpBlock = true; return false;
                                         }
                                         if (bInValid) {
-
-                                           
                                             if (cm.isMatterDescriptionMandatory) {
                                                 var sCurrentMatterDesc = cm.matterDescription;
-                                            if (undefined !== sCurrentMatterDesc && null !== sCurrentMatterDesc && "" !== sCurrentMatterDesc) {
-                                                sCurrentMatterDesc = sCurrentMatterDesc.trim(); bInValid = false;
-                                                var arrValidMatch = sCurrentMatterDesc.match(RegularExpression);
-                                                if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterDesc) {
-                                                    bInValid = false;
-                                                } else {
-                                                    bInValid = true;
+                                                if (undefined !== sCurrentMatterDesc && null !== sCurrentMatterDesc && "" !== sCurrentMatterDesc) {
+                                                    sCurrentMatterDesc = sCurrentMatterDesc.trim(); bInValid = false;
+                                                    var arrValidMatch = sCurrentMatterDesc.match(RegularExpression);
+                                                    if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterDesc) {
+                                                        bInValid = false;
+                                                    } else {
+                                                        bInValid = true;
+                                                    }
+                                                }
+                                                else {
+                                                    cm.errTextMsg = "Enter a description for this matter.";
+
+                                                    showErrorNotification("matterdescription");
+                                                    cm.errorBorder = "matterdescription";
+                                                    cm.errorPopUpBlock = true; return false;
                                                 }
                                             }
                                             else {
-                                                cm.errTextMsg = "Enter a description for this matter.";
-                                              
-                                                showErrorNotification("matterdescription");
-                                                cm.errorBorder = "matterdescription";
-                                                cm.errorPopUpBlock = true; return false;
-                                            }
-                                        }
-                                            else {
                                                 cm.matterDescription = "";
                                                 bInValid = true;
-                                        }
+                                            }
 
-                                           // if (cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
+                                            // if (cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
                                             if (bInValid) {
                                                 if (cm.selectedDocumentTypeLawTerms.length > 0) {
                                                     storeMatterDataToLocalStorageFirstPage();
-                                                   
+
                                                     return true;
                                                 }
                                                 else {
@@ -2212,7 +2207,7 @@ cm.createBtnDisabled=false;
                                             else {
                                                 // alert("Enter a description for this matter");
                                                 cm.errTextMsg = "Please enter a valid text which contains only alphanumeric characters, spaces & hyphen";
-                                              //  cm.errTextMsg = "Enter a description for this matter.";
+                                                //  cm.errTextMsg = "Enter a description for this matter.";
                                                 //   cm.errorPopUpBlock = "matterDescription";
                                                 showErrorNotification("matterdescription");
                                                 cm.errorBorder = "matterdescription";
@@ -2249,7 +2244,6 @@ cm.createBtnDisabled=false;
                                 cm.errTextMsg = "Please enter a valid Matter name which contains only alphanumeric characters and spaces";
                                 cm.errorBorder = "mattername";
                                 showErrorNotification("mattername");
-                              
                                 cm.errorPopUpBlock = true; return false;
                             }
 
@@ -2262,7 +2256,7 @@ cm.createBtnDisabled=false;
                     }
                     else {
                         cm.errTextMsg = "Select a client for this matter ";
-                        cm.errorBorder = "client";                      
+                        cm.errorBorder = "client";
                         showErrorNotification("client");
                         cm.errorPopUpBlock = true;
                         return false;
@@ -2282,7 +2276,6 @@ cm.createBtnDisabled=false;
                                         cm.popupContainerBackground = "Show";
                                         storeMatterDataToLocalStorageSecondPage();
                                         return true;
-
                                         // cm.sectionName = sectionName;
                                     }
                                 }
@@ -2293,12 +2286,8 @@ cm.createBtnDisabled=false;
                                 cm.errorBorder = "cdate"; showErrorNotification("cdate");
                                 cm.errorPopUpBlock = true; return false;
                             }
-
-
                             // callCheckSecurityGroupExists();
                             // console.log(getAssignedUserRoles());
-
-
                         }
                         else {
                             //  cm.sectionName = sectionName;
@@ -2316,7 +2305,7 @@ cm.createBtnDisabled=false;
                                 cm.popupContainerBackground = "Show";
                                 storeMatterDataToLocalStorageSecondPage();
                                 return true;
-                               // callCheckSecurityGroupExists("snCreateAndShare");
+                                // callCheckSecurityGroupExists("snCreateAndShare");
 
                                 // cm.sectionName = sectionName;
                             }
@@ -2428,8 +2417,7 @@ cm.createBtnDisabled=false;
 
             }
 
-            function showErrorNotificationAssignTeams(errorMsg, teamRowNumber, type)
-            {
+            function showErrorNotificationAssignTeams(errorMsg, teamRowNumber, type) {
                 var fieldType = "";
 
                 if (type == "user") {
@@ -2446,7 +2434,7 @@ cm.createBtnDisabled=false;
                     teamRowNumber = "";
                 }
 
-                var temp = document.getElementById(fieldType +teamRowNumber);
+                var temp = document.getElementById(fieldType + teamRowNumber);
                 var matterErrorEle = document.getElementById("errorBlock");
                 var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
                 var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
@@ -2469,16 +2457,16 @@ cm.createBtnDisabled=false;
                 errTextMatterCAttorny.type = 'text/css';
 
                 var width = GetWidth();
-                var x=0,y=0;
+                var x = 0, y = 0;
                 if (width > 734) {
                     y = temp.offsetTop - 26, x = temp.offsetLeft + 45;
                 }
                 else {
-                    y = temp.offsetTop+57 , x = temp.offsetLeft+10 ;
+                    y = temp.offsetTop + 57, x = temp.offsetLeft + 10;
                 }
-               
-               
-                errPopUpCAttorny.innerHTML = ".errPopUpCAttorny{top:" + y + "px;left:" +x+ "px;}";
+
+
+                errPopUpCAttorny.innerHTML = ".errPopUpCAttorny{top:" + y + "px;left:" + x + "px;}";
                 errTringleBlockCAttorny.innerHTML = "{min-height: 40px;top: 17px !important;left: 24px;width:100%}";
                 errTringleBorderCAttorny.innerHTML = "{min-height: 40px,top: 17px !important;left: 24px;width:100%}";
                 errTextMatterCAttorny.innerHTML = "{min-height:40px;top:21px !important;left: 24px;width:100%}";
@@ -2494,8 +2482,8 @@ cm.createBtnDisabled=false;
                 //matterErrorTextEle.style.top = 12 + "px";
                 //  console.log(te.offsetTop);
                 cm.errTextMsg = errorMsg;
-               
-                   cm.errorPopUpBlock = true;
+
+                cm.errorPopUpBlock = true;
                 matterErrorEle.classList.add("errPopUpCAttorny");
                 matterErrorTrinageleBlockEle.classList.add("errTringleBlockCAttorny");
                 matterErrorTrinagleBorderEle.classList.add("errTringleBorderCAttorny");
@@ -2504,7 +2492,7 @@ cm.createBtnDisabled=false;
 
             function resizeErrorPopup() {
                 "use strict";
-                
+
                 var windowWidth = GetWidth();
                 var width;
                 cm.errorPopUpBlock = false;
@@ -2534,34 +2522,27 @@ cm.createBtnDisabled=false;
 
         }]);
 
-        app.filter('getAssociatedDocumentTemplatesCount', function () {
-            return function (input, splitChar) {
+    app.filter('getAssociatedDocumentTemplatesCount', function () {
+        return function (input, splitChar) {
 
-                return input.split(splitChar).length;;
+            return input.split(splitChar).length;;
+        }
+    });
+
+    app.directive('showcreatesuccessbannermessage', function ($rootScope) {
+        return {
+            restrict: 'A',
+            scope: { datanotification: '@' },
+            link: function (scope, element, attrs) {
+                scope.$watch("datanotification", function () {
+                    console.log(attrs.datanotification);
+                    $(element).html(attrs.datanotification);
+
+                });
+
             }
-        });
-
-        app.directive('showcreatesuccessbannermessage', function ($rootScope) {
-            return {
-                restrict: 'A',
-                scope: { datanotification: '@' },
-                link: function (scope, element, attrs) {
-                    scope.$watch("datanotification", function () {
-                        console.log(attrs.datanotification);
-$(element).html(attrs.datanotification);
-
-});
-                   
-                   }
-}
+        }
 
 
-        });
-
-      
-        
-
-       
+    });
 })();
-
-

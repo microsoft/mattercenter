@@ -1,8 +1,9 @@
 ﻿<div class='row'>
     <div class='col-xs-12' id='documentPopup' title='{{row.entity.documentName}}'>
-        <a popoverdoc type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align: left'
-           details={{row.entity}} data-toggle='popover' data-container='body' data-placement='right'
-           data-html='true' href=''>{{row.entity.documentName}}
+        <a documentflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align: left'
+           details={{row.entity}} ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess">{{row.entity.documentName}}
         </a>
+        <div class='popcontent' style="display:none;">
+        </div>
     </div>
 </div>

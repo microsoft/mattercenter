@@ -196,7 +196,7 @@
 
                     <div class="row{{$index}} assignNewPerm">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults'  typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team")' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}"  ng-blur="cm.checkUserExists(assignTeam.assignedUser)" class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults'  typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team")' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
                         <div ng-show='teamAssingnResults'>
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
                         </div>
@@ -223,7 +223,7 @@
 
                 </div>
                 <div class="clear" id="addNewAssignPerm"></div>
-                <a id="addMoreLink" ng-click="cm.addNewAssignPermissions()">Add More Names</a>
+                <a id="addMoreLink" ng-click="cm.addNewAssignPermissions()">+ Add More Names</a>
 
 
             </div>
