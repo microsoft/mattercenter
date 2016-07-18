@@ -134,7 +134,7 @@
                     }
                     else {
                         vm.checker = false;
-                        row.entity.checker = false;                       
+                        row.entity.checker = false;
                     }
                     isOpenedInOutlook();
 
@@ -165,6 +165,10 @@
                 }
             }
         }
+
+        var screenHeight = 0;
+        vm.searchResultsLength = 0;
+
         //#region for setting the classes for ui-grid based on size
         vm.setColumns = function () {
             if ($window.innerWidth < 380) {
@@ -186,6 +190,14 @@
             var width = $window.innerWidth;
             angular.element(".ui-grid-viewport").css('max-width', width);
             angular.element(".ui-grid-render-container").css('max-width', width);
+            screenHeight = $window.screen.availHeight;
+            if (screenHeight <= 768) {
+                vm.searchResultsLength = 17;
+            } else if (screenHeight <= 1024 && screenHeight >= 769) {
+                vm.searchResultsLength = 38;
+            } else if (screenHeight <= 1080 && screenHeight >= 1025) {
+                vm.searchResultsLength = 42;
+            }
         };
 
         vm.setWidth();
@@ -208,14 +220,14 @@
                         vm.lazyloader = true;
                         vm.responseNull = true;
                     } else {
-                        
-                        vm.gridOptions.data = vm.gridOptions.data.concat(response);                       
-                        vm.lazyloader = true;                        
+
+                        vm.gridOptions.data = vm.gridOptions.data.concat(response);
+                        vm.lazyloader = true;
                     }
                     promise.resolve();
 
                     $scope.gridApi.infiniteScroll.dataLoaded();
-                    if (vm.checker) {                       
+                    if (vm.checker) {
                         vm.toggleCheckerAll(vm.checker);
                     }
                 });
@@ -425,7 +437,7 @@
             },
             SearchObject: {
                 PageNumber: 1,
-                ItemsPerPage: "17",
+                ItemsPerPage: vm.searchResultsLength,
                 SearchTerm: '',
                 Filters: {
                     ClientName: "",
@@ -483,7 +495,7 @@
                 if (-1 !== vm.selected.indexOf(":")) {
                     finalSearchText = commonFunctions.searchFilter(vm.selected);
                 } else {
-                    finalSearchText = "('" + vm.selected + "*' OR FileName:'" + vm.selected + "*' OR dlcDocIdOWSText:'" + vm.selected + "*' OR MCDocumentClientName:'" + vm.selected + "*')";
+                    finalSearchText = '("' + vm.selected + '*" OR FileName:"' + vm.selected + '*" OR dlcDocIdOWSText:"' + vm.selected + '*" OR MCDocumentClientName:"' + vm.selected + '*")';
                 }
             }
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
@@ -1341,8 +1353,8 @@
                     vm.selectedRows = vm.gridOptions.data;
 
                 }
-                else {                  
-                    vm.documentsCheckedCount = 0;                                      
+                else {
+                    vm.documentsCheckedCount = 0;
                 }
                 if (checked) {
                     $scope.gridApi.selection.selectAllRows();
@@ -1350,8 +1362,8 @@
                 else {
                     $scope.gridApi.selection.clearSelectedRows();
                     vm.selectedRows = [];
-                     vm.showErrorAttachmentInfo = false;
-                     
+                    vm.showErrorAttachmentInfo = false;
+
                 }
             }
             isOpenedInOutlook();

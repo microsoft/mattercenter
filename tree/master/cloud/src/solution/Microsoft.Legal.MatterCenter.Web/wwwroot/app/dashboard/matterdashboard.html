@@ -75,7 +75,7 @@
                         <div class="col-xs-12 col-sm-2 pull-left pad15">Clients</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" value="{{vm.selectedClients}}" ng-click="$event.stopPropagation();" ng-mousedown="vm.showclients($event)" ng-mouseup="vm.showclients($event)" ng-model="vm.selclients" placeholder="Enter or select a client" class="form-control">
+                                <input type="text" value="{{vm.selectedClients}}" ng-click="$event.stopPropagation();" ng-mousedown="vm.showclients($event)" ng-mouseup="vm.showclients($event)" ng-model="vm.selectedClients" placeholder="Enter or select a client" class="form-control">
                                 <span class="input-group-addon cursor" id="basic-addon1"
                                       ng-click="vm.showClientDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
@@ -199,7 +199,7 @@
                             </div>
                         </div>
                         <div class="col-xs-5 col-sm-3 pad15">
-                            <div id="filterAdvancedSearch" class="dashboardSearch">
+                            <div id="filterAdvancedSearch" class="dashboardSearch" ng-click="vm.getSearchResults()">
                                 Search
                             </div>
                         </div>
