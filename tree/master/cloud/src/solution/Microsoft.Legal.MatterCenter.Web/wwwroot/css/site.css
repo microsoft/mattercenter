@@ -325,9 +325,9 @@ textarea {
     border: none;
 }
 
-#documentgrid .ui-grid, #mattergrid .ui-grid {
+/*#documentgrid .ui-grid, #mattergrid .ui-grid {
     height: 520px;
-}
+}*/
 
 .ui-grid-cell {
     height: 48px;
