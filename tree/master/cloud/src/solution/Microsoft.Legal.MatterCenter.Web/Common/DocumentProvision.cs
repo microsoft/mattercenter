@@ -402,6 +402,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 documentData.DocumentOWAUrl = searchResult[key].ToString();
                                 documentData.DocumentUrl = searchResult[key].ToString();
                                 break;
+                            case "serverredirectedurl":
+                                if (searchResult[key] != null)
+                                {
+                                    documentData.DocumentOWAUrl = searchResult[key].ToString();
+                                    documentData.DocumentUrl = searchResult[key].ToString();
+                                }
+                                break;
                             case "lastmodifiedtime":
                                 documentData.DocumentModifiedDate= searchResult[key].ToString();
                                 break;
