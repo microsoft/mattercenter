@@ -266,25 +266,38 @@
             //#region This api will get all matters which are pinned and this will be invoked when the user clicks on "Pinned Matters Tab"
             vm.getMatterPinned = function () {
                 vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 var pinnedMattersRequest = {
                     Url: configs.global.repositoryUrl//ToDo: Read from config.js
                 }
                 getPinnedMatters(pinnedMattersRequest, function (response) {
-                    var pinnedResponse = response;
-                    if (response && response.length > 0) {
-                        angular.forEach(response, function (res) {
-                            res.pinType = "unpin"
-                        })
+                    if (response == "") {
+                        vm.nodata = true;
+                        vm.divuigrid = false;
+                        vm.displaypagination = false;
+                        vm.lazyloaderdashboard = true;
                     }
-                    vm.Pinnedobj = response
-                    vm.matterGridOptions.data = response;
-                    vm.totalrecords = vm.pinMatterCount;
-                    vm.pagination();
-                    if (!$scope.$$phase) {
-                        $scope.$apply();
+                    else {
+                        var pinnedResponse = response;
+                        if (response && response.length > 0) {
+                            angular.forEach(response, function (res) {
+                                res.pinType = "unpin"
+                            })
+                        }
+                        vm.Pinnedobj = response
+                        vm.matterGridOptions.data = response;
+                        vm.totalrecords = vm.pinMatterCount;
+                        vm.pagination();
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
+                        vm.nodata = false;
+                        vm.divuigrid = true;
+                        vm.lazyloaderdashboard = true;
+                        vm.displaypagination = true;
                     }
-
-                    vm.lazyloaderdashboard = true;
                 });
             }
             //#endregion
@@ -315,6 +328,9 @@
 
             vm.myMatters = function () {
                 vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.searchText != "") {
@@ -329,16 +345,29 @@
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
                 jsonMatterSearchRequest.SearchObject.ItemsPerPage = 10;
                 get(jsonMatterSearchRequest, function (response) {
-                    vm.matterGridOptions.data = response;
-                    vm.lazyloaderdashboard = true;
-                    vm.totalrecords = vm.myMatterCount;
-                    vm.pagination();
+                    if (response == "") {
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = false;
+                        vm.displaypagination = false;
+                        vm.nodata = true;
+                    }
+                    else {
+                        vm.matterGridOptions.data = response;
+                        vm.lazyloaderdashboard = true;
+                        vm.totalrecords = vm.myMatterCount;
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.pagination();
+                    }
                 });
             }
-            
+
             //This search function will be used for binding search results to the grid
             vm.search = function (isMy) {
                 vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.searchText != "") {
@@ -378,6 +407,7 @@
                             vm.totalrecords = vm.allMatterCount;
                             vm.pagination();
                             vm.lazyloaderdashboard = true;
+                            vm.divuigrid = true;
                         }
                         else {
                             vm.lazyloaderdashboard = true;
@@ -385,6 +415,7 @@
                             vm.totalrecords = vm.allMatterCount;
                             vm.pagination();
                             vm.pinMatterCount = 0;
+                            vm.divuigrid = true;
                         }
                     });
 
@@ -564,33 +595,33 @@
 
             //#region Angular Datepicker Starts here
             //Start
-            $scope.dateOptions = {
+            vm.dateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             };
-            $scope.enddateOptions = {
+            vm.enddateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             }
-            $scope.$watch('startdate', function (newval, oldval) {
-                $scope.enddateOptions.minDate = newval;
+            $scope.$watch('vm.startdate', function (newval, oldval) {
+                vm.enddateOptions.minDate = newval;
             });
-            $scope.openStartDate = function ($event) {
+            vm.openStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
                 this.openedStartDate = true;
             };
-            $scope.openEndDate = function ($event) {
+            vm.openEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
                 this.openedEndDate = true;
             };
-            $scope.openedStartDate = false;
-            $scope.openedEndDate = false;
+            vm.openedStartDate = false;
+            vm.openedEndDate = false;
             //#endregion
 
             //#region showing and hiding client dropdown
@@ -614,7 +645,7 @@
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
-                    
+
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
@@ -646,8 +677,7 @@
                             vm.lazyloaderpg = true;
                         });
                     }
-                    else
-                    {
+                    else {
                         vm.pgdrop = true;
                         vm.pgdropvisible = true;
                     }
@@ -686,8 +716,7 @@
                             vm.lazyloaderaol = true;
                         });
                     }
-                    else
-                    {
+                    else {
                         vm.aoldrop = true;
                         vm.aoldropvisible = true;
                     }
@@ -841,41 +870,26 @@
 
 
             //#region For Sorting by Alphebatical or Created date
-            var SortRequest = {
-                Client: {
-                    Url: configs.global.repositoryUrl
-                },
-                SearchObject: {
-                    PageNumber: 1,
-                    ItemsPerPage: 10,
-                    SearchTerm: "",
-                    Filters: {
-                        AOLList: "",
-                        ClientsList: [],
-                        FilterByMe: 1,
-                        FromDate: "",
-                        PGList: "",
-                        ToDate: ""
-                    },
-                    Sort:
-                            {
-                                ByProperty: 'LastModifiedTime',
-                                Direction: 1
-                            }
-                }
-            }
 
             vm.FilterByType = function () {
-                get(SortRequest, function (response) {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
+                get(jsonMatterSearchRequest, function (response) {
                     vm.lazyloader = true;
-                    if (response.errorCode == "404") {
+                    if (response == "") {
                         vm.divuigrid = false;
                         vm.nodata = true;
+                        vm.lazyloaderdashboard = true;
+                        vm.displaypagination = true;
                         $scope.errorMessage = response.message;
                     } else {
+                        vm.matterGridOptions.data = response;
                         vm.divuigrid = true;
                         vm.nodata = false;
-                        vm.matterGridOptions.data = response;
+                        vm.lazyloaderdashboard = true;
+                        vm.displaypagination = true;
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
@@ -887,30 +901,30 @@
             vm.sortyby = function (sortexp, data) {
                 vm.sortbytext = data;
                 if (sortexp == 'AlphabeticalUp') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
-                    SortRequest.SearchObject.Sort.Direction = 0;
+
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 } else if (sortexp == 'AlphabeticalDown') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
-                    SortRequest.SearchObject.Sort.Direction = 1;
+
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 } else if (sortexp == 'CreateddateUp') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
-                    SortRequest.SearchObject.Sort.Direction = 0;
+
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 }
                 else if (sortexp == 'CreateddateDown') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
-                    SortRequest.SearchObject.Sort.Direction = 1;
+
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 } else {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
-                    SortRequest.SearchObject.Sort.Direction = 1;
+
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 }
             }
@@ -954,6 +968,10 @@
             };
 
             vm.next = function () {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 if (vm.last < vm.totalrecords) {
                     vm.first = vm.first + gridOptions.paginationPageSize;
                     vm.last = vm.last + gridOptions.paginationPageSize;
@@ -967,15 +985,18 @@
                     jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
                     jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(jsonMatterSearchRequest, function (response) {
-                        vm.lazyloader = true;
-                        if (response.errorCode == "404") {
+                        vm.lazyloaderdashboard = true;
+                        if (response == "") {
                             vm.divuigrid = false;
                             vm.nodata = true;
-                            vm.errorMessage = response.message;
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
                         } else {
+                            vm.matterGridOptions.data = response;
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            vm.matterGridOptions.data = response;
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -989,6 +1010,10 @@
             };
 
             vm.prev = function () {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 if (vm.last > gridOptions.paginationPageSize) {
                     vm.first = vm.first - gridOptions.paginationPageSize;
                     vm.last = vm.last - gridOptions.paginationPageSize;
@@ -997,15 +1022,18 @@
                     jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
                     jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(jsonMatterSearchRequest, function (response) {
-                        vm.lazyloader = true;
-                        if (response.errorCode == "404") {
+                        vm.lazyloaderdashboard = true;
+                        if (response == "") {
                             vm.divuigrid = false;
                             vm.nodata = true;
-                            vm.errorMessage = response.message;
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
                         } else {
+                            vm.matterGridOptions.data = response;
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            vm.matterGridOptions.data = response;
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1207,33 +1235,60 @@
 
 
             vm.getSearchResults = function () {
+                angular.element('#allMatters').addClass("active");
+                angular.element('#myMatters').removeClass("active");
+                angular.element('#pinMatters').removeClass("active");
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
+                vm.searchdrop = false;
                 var clientArray = [];
                 var aolListarray = [];
                 var pglistArray = [];
-                if (vm.selectedClients != "") {
+                var startdate = "";
+                var enddate = "";
+                if (vm.selectedClients != "" && vm.selectedClients != undefined) {
                     clientArray = vm.selectedClients.split(',');
                 }
-                if (vm.selectedPGs != "") {
+                if (vm.selectedPGs != "" && vm.selectedPGs != undefined) {
                     pglistArray = vm.selectedPGs.split(',');
                 }
-                if (vm.selectedAOLs != "") {
+                if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined) {
                     aolListarray = vm.selectedAOLs.split(',');
                 }
+                if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined) {
+                    aolListarray = vm.selectedAOLs.split(',');
+                }
+                if (vm.startdate != "" && vm.startdate != undefined) {
+                    startdate = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
+                }
+                if (vm.enddate != "" && vm.enddate != undefined) {
+                    enddate = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
+                }
+                jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.Filters.ClientsList = clientArray;
                 jsonMatterSearchRequest.SearchObject.Filters.PGList = pglistArray;
                 jsonMatterSearchRequest.SearchObject.Filters.AOLList = aolListarray;
-                jsonMatterSearchRequest.SearchObject.Filters.FromDate = $scope.startdate.format("yyyy-MM-dd");
-                jsonMatterSearchRequest.SearchObject.Filters.ToDate = $scope.enddate.format("yyyy-MM-dd");
+                jsonMatterSearchRequest.SearchObject.Filters.FromDate = startdate;
+                jsonMatterSearchRequest.SearchObject.Filters.ToDate = enddate;
                 get(jsonMatterSearchRequest, function (response) {
-                    vm.lazyloader = true;
+                    vm.lazyloaderdashboard = true;
                     if (response == "") {
+                        vm.lazyloaderdashboard = true;
                         vm.divuigrid = false;
                         vm.nodata = true;
-                        vm.errorMessage = response.message;
+                        vm.totalrecords = response.length;
+                        vm.getMatterCounts();
+                        vm.displaypagination = false;
                     } else {
+                        vm.matterGridOptions.data = response;
+                        vm.totalrecords = response.length;
+                        vm.getMatterCounts();
+                        vm.lazyloaderdashboard = true;
+                        vm.displaypagination = true;
                         vm.divuigrid = true;
                         vm.nodata = false;
-                        vm.matterGridOptions.data = response;
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
