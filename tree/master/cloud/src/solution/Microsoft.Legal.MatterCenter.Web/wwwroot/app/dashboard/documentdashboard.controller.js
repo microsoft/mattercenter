@@ -13,6 +13,7 @@
             vm.loadLocation = false;
             vm.AuthornoResults = false;
             vm.clientdrop = false;
+            vm.lazyloaderdocumentclient = true;
             vm.clientdropvisible = false;
             vm.checkClient = false;
             vm.sortbydrop = false;
@@ -645,20 +646,35 @@
                 $event.stopPropagation();
                 if (!vm.clientdropvisible) {
                     if (vm.clients === undefined) {
+                        vm.lazyloaderdocumentclient = false;
                         getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
                             vm.clients = response.clientTerms;
+                            vm.clientdrop = true;
+                            vm.clientdropvisible = true;
+                            vm.lazyloaderdocumentclient = true;
                         });
                     }
-                    vm.clientdrop = true;
-                    vm.clientdropvisible = true;
+                    else
+                    {
+                        vm.clientdrop = true;
+                        vm.clientdropvisible = true;
+                    }
+
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
+                    vm.lazyloaderdocumentclient = true;
                 }
             }
 
-
+            //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
+            vm.filterSearchCancel = function (type) {
+                vm.clientdrop = false;
+                vm.clientdropvisible = false;
+                vm.lazyloaderdocumentclient = true;
+            }
             //#endregion
+          
 
             //#region For Sorting by Alphebatical or Created date
 
