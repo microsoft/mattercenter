@@ -80,6 +80,9 @@
                                       ng-click="vm.showClientDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderclient" style="position:unset !important">
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                        </div>
                     </div>
                     <div class="col-xs-12 " ng-if="vm.clientdrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
@@ -111,6 +114,9 @@
                                       ng-click="vm.showPracticegroupDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderpg" style="position:unset !important">
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                        </div>
                     </div>
                     <div class="col-xs-12 " ng-if="vm.pgdrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
@@ -141,6 +147,9 @@
                                 <span class="input-group-addon cursor" id="basic-addon1"
                                       ng-click="vm.showAreaofLawDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderaol" style="position:unset !important">
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
                         </div>
                     </div>
                     <div class="col-xs-12" ng-if="vm.aoldrop" ng-click="$event.stopPropagation();">

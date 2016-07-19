@@ -25,6 +25,9 @@
             vm.sortbytext = 'None';
             vm.searchText = '';
             vm.lazyloaderdashboard = true;
+            vm.lazyloaderclient = true;
+            vm.lazyloaderpg = true;
+            vm.lazyloaderaol = true;
             vm.totalrecords = 0;
             //#endregion
             //#region Variable to show matter count            
@@ -332,7 +335,7 @@
                     vm.pagination();
                 });
             }
-
+            
             //This search function will be used for binding search results to the grid
             vm.search = function (isMy) {
                 vm.lazyloaderdashboard = false;
@@ -595,16 +598,23 @@
                 $event.stopPropagation();
                 if (!vm.clientdropvisible) {
                     if (vm.clients === undefined) {
+                        vm.lazyloaderclient = false;
                         getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
                             vm.clients = response.clientTerms;
+                            vm.clientdrop = true;
+                            vm.clientdropvisible = true;
+                            vm.lazyloaderclient = true;
                         });
                     }
-                    vm.clientdrop = true;
-                    vm.clientdropvisible = true;
+                    else {
+                        vm.clientdrop = true;
+                        vm.clientdropvisible = true;
+                    }
                     vm.pgdrop = false;
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
@@ -612,6 +622,7 @@
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    vm.lazyloaderclient = true;
                 }
             }
             //#endregion
@@ -621,6 +632,7 @@
                 $event.stopPropagation();
                 if (!vm.pgdropvisible) {
                     if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
+                        vm.lazyloaderpg = false;
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                             vm.practiceGroups = response.pgTerms;
                             vm.aolTerms = [];
@@ -629,10 +641,16 @@
                                     vm.aolTerms.push(areaterm);
                                 });
                             })
+                            vm.pgdrop = true;
+                            vm.pgdropvisible = true;
+                            vm.lazyloaderpg = true;
                         });
                     }
-                    vm.pgdrop = true;
-                    vm.pgdropvisible = true;
+                    else
+                    {
+                        vm.pgdrop = true;
+                        vm.pgdropvisible = true;
+                    }
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.aoldrop = false;
@@ -644,6 +662,7 @@
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    vm.lazyloaderpg = true;
                 }
             }
             //#endregion
@@ -653,6 +672,7 @@
                 $event.stopPropagation();
                 if (!vm.aoldropvisible) {
                     if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
+                        vm.lazyloaderaol = false;
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                             vm.practiceGroups = response.pgTerms;
                             vm.aolTerms = [];
@@ -661,10 +681,16 @@
                                     vm.aolTerms.push(areaterm);
                                 });
                             })
+                            vm.aoldrop = true;
+                            vm.aoldropvisible = true;
+                            vm.lazyloaderaol = true;
                         });
                     }
-                    vm.aoldrop = true;
-                    vm.aoldropvisible = true;
+                    else
+                    {
+                        vm.aoldrop = true;
+                        vm.aoldropvisible = true;
+                    }
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
@@ -676,6 +702,7 @@
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    vm.lazyloaderaol = true;
                 }
             }
             //#endregion
