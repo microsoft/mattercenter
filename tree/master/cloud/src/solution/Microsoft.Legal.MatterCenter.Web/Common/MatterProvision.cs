@@ -310,12 +310,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
         }
 
-        public PropertyValues GetStampedProperties(MatterVM matterVM)
+        public MatterStampedDetails GetStampedProperties(MatterVM matterVM)
         {
             var matter = matterVM.Matter;
             var client = matterVM.Client;
             ClientContext clientContext = null;
             PropertyValues matterStampedProperties = null;
+            MatterStampedDetails matterStampedDetails = null;
             try
             {
                 clientContext = spoAuthorization.GetClientContext(matterVM.Client.Url);
@@ -336,7 +337,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         matterCenterUserEmailsCollection = GetMatterAssignedUsers(matterCenterUserEmails);
                     }
 
-                    MatterStampedDetails matterStampedDetails = new MatterStampedDetails()
+                    matterStampedDetails = new MatterStampedDetails()
                     {
                         IsNewMatter = stampedPropertyValues.ContainsKey(matterSettings.StampedPropertyIsConflictIdentified) ? ServiceConstants.TRUE : ServiceConstants.FALSE,
                         MatterObject = new Matter()
@@ -375,7 +376,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
             }
-            return matterStampedProperties;
+            return matterStampedDetails;
         }
 
         public GenericResponseVM AssignUserPermissions(MatterMetdataVM matterMetadataVM)

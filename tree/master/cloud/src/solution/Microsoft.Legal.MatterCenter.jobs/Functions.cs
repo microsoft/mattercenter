@@ -34,9 +34,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         {
             try
             {
-                var builder = new ConfigurationBuilder()
-                    .SetBasePath(@"C:\projects\fork\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Jobs")
-                    .AddJsonFile("appSettings.json");
+                var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appSettings.json");
                 var configuration = builder.Build();
                 //Read all rows from table storage which are in pending state
                 var query = from p in matterInformationVM select p;
