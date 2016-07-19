@@ -278,6 +278,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.AddSingleton<IDocumentProvision, DocumentProvision>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IExternalSharing, ExternalSharing>();
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         private void CheckAuthorization(IApplicationBuilder app)

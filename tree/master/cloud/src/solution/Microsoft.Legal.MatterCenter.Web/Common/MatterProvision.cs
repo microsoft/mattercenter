@@ -231,6 +231,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 PropertyValues matterStampedProperties = matterRepositoy.GetStampedProperties(clientContext, matter.Name);
                 Dictionary<string, string> propertyList = SetStampProperty(client, matter, matterDetails);
                 matterRepositoy.SetPropertBagValuesForList(clientContext, matterStampedProperties, matter.Name, propertyList);
+                MatterInformationVM matterInfo = new MatterInformationVM()
+                {
+                    Client = matterMetadata.Client,
+                    Matter = matterMetadata.Matter,
+                    MatterDetails = matterMetadata.MatterDetails
+                };
+                //As part of final step in matter creation, check whether any assigned users are external to the 
+                //organization and if yes, send notification to that user to accepct the
+                //inviotation so that he can access matter center
+                externalSharing.ShareMatter(matterInfo);
                 if (matterMetadata.MatterProvisionFlags.SendEmailFlag)
                 {
                     returnFlag = ShareMatter(matterMetadata, matterMetadata.MatterProvisionFlags.MatterLandingFlag);
@@ -398,9 +408,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 if (!string.IsNullOrWhiteSpace(matter.Name))
                 {
-
-                    //This method will check if any of the matter users are external to the organization and not present in the syste
-                    externalSharing.ShareMatter(matterInfo);
+                    
                     
                     
                     //Assign permission for Matter library

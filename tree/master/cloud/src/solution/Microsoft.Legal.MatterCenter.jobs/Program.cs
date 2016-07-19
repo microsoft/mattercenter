@@ -6,7 +6,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
     {     
         public static void Main(string[] args)
         {
-            var builder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
+            var builder = new ConfigurationBuilder().SetBasePath(@"C:\projects\fork\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Jobs").AddJsonFile("appSettings.json");
             var configuration = builder.Build();
             var azureStorageConnectionString = configuration["Data:DefaultConnection:AzureStorageConnectionString"];
             JobHostConfiguration config = new JobHostConfiguration(azureStorageConnectionString);
