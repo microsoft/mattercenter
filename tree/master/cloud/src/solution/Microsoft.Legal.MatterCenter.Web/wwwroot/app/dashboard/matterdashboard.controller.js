@@ -1,9 +1,14 @@
 ﻿(function () {
     'use strict;'
     var app = angular.module("matterMain");
-    app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http','$q', '$filter','commonFunctions',
-        function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http, $q, $filter,commonFunctions) {
+    app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$q', '$filter', 'commonFunctions',
+        function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http, $q, $filter, commonFunctions) {
             var vm = this;
+            vm.selectedRow = {
+                matterClientUrl: '',
+                matterName: '',
+                matterGuid: ''
+            };
             vm.downwarddrop = true;
             vm.upwarddrop = false;
             vm.loadLocation = false;
@@ -20,6 +25,9 @@
             vm.sortbytext = 'None';
             vm.searchText = '';
             vm.lazyloaderdashboard = true;
+            vm.lazyloaderclient = true;
+            vm.lazyloaderpg = true;
+            vm.lazyloaderaol = true;
             vm.totalrecords = 0;
             //#endregion
             //#region Variable to show matter count            
@@ -88,7 +96,7 @@
                     { field: 'matterModifiedDate', width: '15%', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
                     { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: 'Responsible attorney', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
                     { field: 'pin', displayName: '', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
-                    { field: 'upload', displayName: '', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal($event, row.entity)"/></div>', enableColumnMenu: false }
+                    { field: 'upload', displayName: '', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterUrl,row.entity.matterGuid)"/></div>', enableColumnMenu: false }
                 ],
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
@@ -258,25 +266,38 @@
             //#region This api will get all matters which are pinned and this will be invoked when the user clicks on "Pinned Matters Tab"
             vm.getMatterPinned = function () {
                 vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 var pinnedMattersRequest = {
                     Url: configs.global.repositoryUrl//ToDo: Read from config.js
                 }
                 getPinnedMatters(pinnedMattersRequest, function (response) {
-                    var pinnedResponse = response;
-                    if (response && response.length > 0) {
-                        angular.forEach(response, function (res) {
-                            res.pinType = "unpin"
-                        })
+                    if (response == "") {
+                        vm.nodata = true;
+                        vm.divuigrid = false;
+                        vm.displaypagination = false;
+                        vm.lazyloaderdashboard = true;
                     }
-                    vm.Pinnedobj = response
-                    vm.matterGridOptions.data = response;
-                    vm.totalrecords = vm.pinMatterCount;
-                    vm.pagination();
-                    if (!$scope.$$phase) {
-                        $scope.$apply();
+                    else {
+                        var pinnedResponse = response;
+                        if (response && response.length > 0) {
+                            angular.forEach(response, function (res) {
+                                res.pinType = "unpin"
+                            })
+                        }
+                        vm.Pinnedobj = response
+                        vm.matterGridOptions.data = response;
+                        vm.totalrecords = vm.pinMatterCount;
+                        vm.pagination();
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
+                        vm.nodata = false;
+                        vm.divuigrid = true;
+                        vm.lazyloaderdashboard = true;
+                        vm.displaypagination = true;
                     }
-                    
-                    vm.lazyloaderdashboard = true;
                 });
             }
             //#endregion
@@ -307,6 +328,9 @@
 
             vm.myMatters = function () {
                 vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.searchText != "") {
@@ -321,16 +345,29 @@
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
                 jsonMatterSearchRequest.SearchObject.ItemsPerPage = 10;
                 get(jsonMatterSearchRequest, function (response) {
-                    vm.matterGridOptions.data = response;
-                    vm.lazyloaderdashboard = true;
-                    vm.totalrecords = vm.myMatterCount;
-                    vm.pagination();
+                    if (response == "") {
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = false;
+                        vm.displaypagination = false;
+                        vm.nodata = true;
+                    }
+                    else {
+                        vm.matterGridOptions.data = response;
+                        vm.lazyloaderdashboard = true;
+                        vm.totalrecords = vm.myMatterCount;
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.pagination();
+                    }
                 });
             }
 
             //This search function will be used for binding search results to the grid
             vm.search = function (isMy) {
                 vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.searchText != "") {
@@ -370,6 +407,7 @@
                             vm.totalrecords = vm.allMatterCount;
                             vm.pagination();
                             vm.lazyloaderdashboard = true;
+                            vm.divuigrid = true;
                         }
                         else {
                             vm.lazyloaderdashboard = true;
@@ -377,6 +415,7 @@
                             vm.totalrecords = vm.allMatterCount;
                             vm.pagination();
                             vm.pinMatterCount = 0;
+                            vm.divuigrid = true;
                         }
                     });
 
@@ -475,6 +514,7 @@
                             vm.selectedClients = vm.selectedClients + client.name + ","
                         }
                     });
+                    vm.selectedClients = vm.selectedClients.slice(0, vm.selectedClients.length - 1);
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                 }
@@ -492,7 +532,7 @@
                             });
                         }
                     });
-
+                    vm.selectedPGs = vm.selectedPGs.slice(0, vm.selectedPGs.length - 1);
                     vm.pgdrop = false;
                     vm.pgdropvisible = false;
                 }
@@ -504,6 +544,7 @@
                             vm.selectedAOLs = vm.selectedAOLs + aol.termName + ","
                         }
                     });
+                    vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                 }
@@ -554,33 +595,33 @@
 
             //#region Angular Datepicker Starts here
             //Start
-            $scope.dateOptions = {
+            vm.dateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             };
-            $scope.enddateOptions = {
+            vm.enddateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             }
-            $scope.$watch('startdate', function (newval, oldval) {
-                $scope.enddateOptions.minDate = newval;
+            $scope.$watch('vm.startdate', function (newval, oldval) {
+                vm.enddateOptions.minDate = newval;
             });
-            $scope.openStartDate = function ($event) {
+            vm.openStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
                 this.openedStartDate = true;
             };
-            $scope.openEndDate = function ($event) {
+            vm.openEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
                 this.openedEndDate = true;
             };
-            $scope.openedStartDate = false;
-            $scope.openedEndDate = false;
+            vm.openedStartDate = false;
+            vm.openedEndDate = false;
             //#endregion
 
             //#region showing and hiding client dropdown
@@ -588,16 +629,23 @@
                 $event.stopPropagation();
                 if (!vm.clientdropvisible) {
                     if (vm.clients === undefined) {
+                        vm.lazyloaderclient = false;
                         getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
                             vm.clients = response.clientTerms;
+                            vm.clientdrop = true;
+                            vm.clientdropvisible = true;
+                            vm.lazyloaderclient = true;
                         });
                     }
-                    vm.clientdrop = true;
-                    vm.clientdropvisible = true;
+                    else {
+                        vm.clientdrop = true;
+                        vm.clientdropvisible = true;
+                    }
                     vm.pgdrop = false;
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
@@ -605,6 +653,7 @@
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    vm.lazyloaderclient = true;
                 }
             }
             //#endregion
@@ -614,6 +663,7 @@
                 $event.stopPropagation();
                 if (!vm.pgdropvisible) {
                     if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
+                        vm.lazyloaderpg = false;
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                             vm.practiceGroups = response.pgTerms;
                             vm.aolTerms = [];
@@ -622,10 +672,15 @@
                                     vm.aolTerms.push(areaterm);
                                 });
                             })
+                            vm.pgdrop = true;
+                            vm.pgdropvisible = true;
+                            vm.lazyloaderpg = true;
                         });
                     }
-                    vm.pgdrop = true;
-                    vm.pgdropvisible = true;
+                    else {
+                        vm.pgdrop = true;
+                        vm.pgdropvisible = true;
+                    }
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.aoldrop = false;
@@ -637,6 +692,7 @@
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    vm.lazyloaderpg = true;
                 }
             }
             //#endregion
@@ -646,6 +702,7 @@
                 $event.stopPropagation();
                 if (!vm.aoldropvisible) {
                     if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
+                        vm.lazyloaderaol = false;
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                             vm.practiceGroups = response.pgTerms;
                             vm.aolTerms = [];
@@ -654,10 +711,15 @@
                                     vm.aolTerms.push(areaterm);
                                 });
                             })
+                            vm.aoldrop = true;
+                            vm.aoldropvisible = true;
+                            vm.lazyloaderaol = true;
                         });
                     }
-                    vm.aoldrop = true;
-                    vm.aoldropvisible = true;
+                    else {
+                        vm.aoldrop = true;
+                        vm.aoldropvisible = true;
+                    }
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
@@ -669,20 +731,29 @@
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    vm.lazyloaderaol = true;
                 }
             }
             //#endregion
 
             //#region File upload functionality
-            vm.Openuploadmodal = function (event, currentRowData) {
-                if (vm.selectedRow == undefined) {
-                    vm.selectedRow = currentRowData
-                }
-                vm.getFolderHierarchy();
+            vm.Openuploadmodal = function (matterName, matterUrl, matterGUID) {
+                vm.getFolderHierarchy(matterName, matterUrl, matterGUID);
                 vm.oUploadGlobal.successBanner = false;
+                vm.isLoadingFromDesktopStarted = false;
             }
 
-            vm.getFolderHierarchy = function () {
+            vm.getFolderHierarchy = function (matterName, matterUrl, matterGUID) {
+
+                if ((matterName && matterName !== "") && (matterUrl && matterUrl !== "") && (matterGUID && matterGUID !== "")) {
+
+                    vm.selectedRow.matterName = matterName;
+                    vm.selectedRow.matterClientUrl = matterUrl;
+                    vm.selectedRow.matterGuid = matterGUID;
+                }
+
+
+                vm.allAttachmentDetails = [];
                 var matterData = {
                     MatterName: vm.selectedRow.matterName,
                     MatterUrl: vm.selectedRow.matterClientUrl
@@ -691,6 +762,7 @@
                 getFolderHierarchy(matterData, function (response) {
                     vm.foldersList = response.foldersList;
                     vm.uploadedFiles = [];
+
                     function getNestedChildren(arr, parent) {
                         var parentList = []
                         for (var i in arr) {
@@ -701,15 +773,24 @@
                                     arr[i].children = children;
                                     arr[i].active = parent == null ? true : false;
                                 }
+
                                 parentList.push(arr[i]);
+
                             }
                         }
                         return parentList
                     }
+
                     vm.foldersList = getNestedChildren(vm.foldersList, null);
                     if (vm.foldersList[0] !== null) { vm.showSelectedFolderTree(vm.foldersList[0]); }
-                    console.log(vm.foldersList);
+
                     jQuery('#UploadMatterModal').modal("show");
+                    //Initialize Officejs library                     
+                    //Office.initialize = function (reason) {
+                    //     vm.initOutlook();
+                    //};
+                    //vm.initOutlook();
+                    vm.lazyloader = true;
                 });
             }
 
@@ -718,7 +799,7 @@
             vm.handleDesktopDrop = function (targetDropUrl, sourceFiles, isOverwrite) {
                 vm.oUploadGlobal.successBanner = false;
                 vm.isLoadingFromDesktopStarted = true;
-               // vm.files = sourceFiles.files;
+                // vm.files = sourceFiles.files;
                 var fd = new FormData();
                 fd.append('targetDropUrl', targetDropUrl);
                 fd.append('folderUrl', targetDropUrl)
@@ -785,45 +866,30 @@
 
             //Call search api on page load
             $interval(function () { vm.getMatterCounts(); }, 800, 3);
-            $timeout(vm.search(), 500);
+            $interval(function () { vm.search() }, 500, 3);
 
 
             //#region For Sorting by Alphebatical or Created date
-            var SortRequest = {
-                Client: {                    
-                    Url: configs.global.repositoryUrl
-                },
-                SearchObject: {
-                    PageNumber: 1,
-                    ItemsPerPage: 10,
-                    SearchTerm: "",
-                    Filters: {
-                        AOLList: "",
-                        ClientsList: [],
-                        FilterByMe: 1,
-                        FromDate: "",
-                        PGList: "",
-                        ToDate: ""
-                    },
-                    Sort:
-                            {
-                                ByProperty: 'LastModifiedTime',
-                                Direction: 1
-                            }
-                }
-            }
 
             vm.FilterByType = function () {
-                get(SortRequest, function (response) {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
+                get(jsonMatterSearchRequest, function (response) {
                     vm.lazyloader = true;
-                    if (response.errorCode == "404") {
+                    if (response == "") {
                         vm.divuigrid = false;
                         vm.nodata = true;
+                        vm.lazyloaderdashboard = true;
+                        vm.displaypagination = true;
                         $scope.errorMessage = response.message;
                     } else {
+                        vm.matterGridOptions.data = response;
                         vm.divuigrid = true;
                         vm.nodata = false;
-                        vm.matterGridOptions.data = response;
+                        vm.lazyloaderdashboard = true;
+                        vm.displaypagination = true;
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
@@ -835,30 +901,30 @@
             vm.sortyby = function (sortexp, data) {
                 vm.sortbytext = data;
                 if (sortexp == 'AlphabeticalUp') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
-                    SortRequest.SearchObject.Sort.Direction = 0;
+
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 } else if (sortexp == 'AlphabeticalDown') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCMatterName";
-                    SortRequest.SearchObject.Sort.Direction = 1;
+
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 } else if (sortexp == 'CreateddateUp') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
-                    SortRequest.SearchObject.Sort.Direction = 0;
+
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 }
                 else if (sortexp == 'CreateddateDown') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
-                    SortRequest.SearchObject.Sort.Direction = 1;
+
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 } else {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
-                    SortRequest.SearchObject.Sort.Direction = 1;
+
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 }
             }
@@ -902,6 +968,10 @@
             };
 
             vm.next = function () {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 if (vm.last < vm.totalrecords) {
                     vm.first = vm.first + gridOptions.paginationPageSize;
                     vm.last = vm.last + gridOptions.paginationPageSize;
@@ -915,15 +985,18 @@
                     jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
                     jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(jsonMatterSearchRequest, function (response) {
-                        vm.lazyloader = true;
-                        if (response.errorCode == "404") {
+                        vm.lazyloaderdashboard = true;
+                        if (response == "") {
                             vm.divuigrid = false;
                             vm.nodata = true;
-                            vm.errorMessage = response.message;
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
                         } else {
+                            vm.matterGridOptions.data = response;
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            vm.matterGridOptions.data = response;
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -937,6 +1010,10 @@
             };
 
             vm.prev = function () {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 if (vm.last > gridOptions.paginationPageSize) {
                     vm.first = vm.first - gridOptions.paginationPageSize;
                     vm.last = vm.last - gridOptions.paginationPageSize;
@@ -945,15 +1022,18 @@
                     jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
                     jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(jsonMatterSearchRequest, function (response) {
-                        vm.lazyloader = true;
-                        if (response.errorCode == "404") {
+                        vm.lazyloaderdashboard = true;
+                        if (response == "") {
                             vm.divuigrid = false;
                             vm.nodata = true;
-                            vm.errorMessage = response.message;
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
                         } else {
+                            vm.matterGridOptions.data = response;
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            vm.matterGridOptions.data = response;
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1006,152 +1086,215 @@
                 canceler: $q.defer(),
                 successBanner: false
             };
-             $rootScope.breadcrumb = true;
+            $rootScope.breadcrumb = true;
             $rootScope.foldercontent = false;
-             vm.hideBreadCrumb = function () {
+            vm.hideBreadCrumb = function () {
                 $rootScope.breadcrumb = true;
                 $rootScope.foldercontent = false;
 
-             }
+            }
 
             //#region To getContentCheckConfigurations
             //start
 
-             function getContentCheckConfigurations(options, callback) {
-                 api({
-                     resource: 'matterResource',
-                     method: 'getDefaultMatterConfigurations',
-                     data: options,
-                     success: callback
-                 });
-             }
-            
-             vm.getContentCheckConfigurations = function (siteCollectionPath) {
-                 siteCollectionPath = JSON.stringify(siteCollectionPath);
-                 getContentCheckConfigurations(siteCollectionPath, function (response) {
-                     if (!response.isError) {
-                         var defaultMatterConfig = JSON.parse(response.code);
-                         vm.oUploadGlobal.bAllowContentCheck = defaultMatterConfig.IsContentCheck;
+            function getContentCheckConfigurations(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getDefaultMatterConfigurations',
+                    data: options,
+                    success: callback
+                });
+            }
 
-                     } else {
-                         vm.oUploadGlobal.bAllowContentCheck = false;
-                     }
+            vm.getContentCheckConfigurations = function (siteCollectionPath) {
+                siteCollectionPath = JSON.stringify(siteCollectionPath);
+                getContentCheckConfigurations(siteCollectionPath, function (response) {
+                    if (!response.isError) {
+                        var defaultMatterConfig = JSON.parse(response.code);
+                        vm.oUploadGlobal.bAllowContentCheck = defaultMatterConfig.IsContentCheck;
 
-                 });
+                    } else {
+                        vm.oUploadGlobal.bAllowContentCheck = false;
+                    }
 
-             }
+                });
+
+            }
 
             //#region To expand and collapse the folder tree structure in upload
-             vm.showSelectedFolderTree = function (folder) {
-                 function setActiveItem(item) {
-                     if (item.children !== null) {
-                         angular.forEach(item.children, function (child) {
-                             if (item.parentURL !== null) {
-                                 if (item.active) {
-                                     child.active = child.active ? false : true;
-                                     if (!child.active) { setActiveItem(child); }
-                                 } else {
-                                     child.active = false;
-                                     setActiveItem(child);
-                                 }
-                             }
-                             else {
-                                 child.active = child.active ? false : true;
-                                 if (!child.active) {
-                                     setActiveItem(child);
-                                 }
-                             }
-                         });
-                     }
+            vm.showSelectedFolderTree = function (folder) {
+                function setActiveItem(item) {
+                    if (item.children !== null) {
+                        angular.forEach(item.children, function (child) {
+                            if (item.parentURL !== null) {
+                                if (item.active) {
+                                    child.active = child.active ? false : true;
+                                    if (!child.active) { setActiveItem(child); }
+                                } else {
+                                    child.active = false;
+                                    setActiveItem(child);
+                                }
+                            }
+                            else {
+                                child.active = child.active ? false : true;
+                                if (!child.active) {
+                                    setActiveItem(child);
+                                }
+                            }
+                        });
+                    }
 
-                 }
-                 setActiveItem(folder);
+                }
+                setActiveItem(folder);
 
-             }
+            }
             //#endRegion
             //#region To do contentcheck or save as latestversion
-             vm.localOverWriteDocument = function (duplicateFile, sOperation) {
-                 if ("contentCheck" === sOperation) {
-                     vm.files = [vm.oUploadGlobal.arrFiles[vm.oUploadGlobal.arrFiles.length - 1]];
-                 } else {
-                     vm.files = [vm.oUploadGlobal.arrFiles.pop()];
-                     duplicateFile.cancel = null;
-                 }
+            vm.localOverWriteDocument = function (duplicateFile, sOperation) {
+                if ("contentCheck" === sOperation) {
+                    vm.files = [vm.oUploadGlobal.arrFiles[vm.oUploadGlobal.arrFiles.length - 1]];
+                } else {
+                    vm.files = [vm.oUploadGlobal.arrFiles.pop()];
+                    duplicateFile.cancel = null;
+                }
 
-                 var nOperation = "";
-                 if ("ignore" !== sOperation) {
-                     switch (sOperation) {
-                         case "overwrite":
-                             nOperation = "0";
-                             break;
-                         case "append":
-                             nOperation = "1";
-                             break;
-                         case "contentCheck":
-                             nOperation = "2";
-                             break;
-                         case "cancelContentCheck":
-                             nOperation = "3";
-                             break;
-                     }
-                     // uploadFile(oUploadGlobal.sClientRelativeUrl, oUploadGlobal.sFolderUrl, nOperation);
+                var nOperation = "";
+                if ("ignore" !== sOperation) {
+                    switch (sOperation) {
+                        case "overwrite":
+                            nOperation = "0";
+                            break;
+                        case "append":
+                            nOperation = "1";
+                            break;
+                        case "contentCheck":
+                            nOperation = "2";
+                            break;
+                        case "cancelContentCheck":
+                            nOperation = "3";
+                            break;
+                    }
+                    // uploadFile(oUploadGlobal.sClientRelativeUrl, oUploadGlobal.sFolderUrl, nOperation);
 
-                     vm.handleDesktopDrop(vm.clientRelativeUrl, vm.files, nOperation);
+                    vm.handleDesktopDrop(vm.clientRelativeUrl, vm.files, nOperation);
 
 
 
-                 } else {
-                     duplicateFile.cancel = "False";
-                     if (vm.ducplicateSourceFile.length > 0) {
-                         vm.ducplicateSourceFile.pop();
-                     }
-                 }
-             }
+                } else {
+                    duplicateFile.cancel = "False";
+                    if (vm.ducplicateSourceFile.length > 0) {
+                        vm.ducplicateSourceFile.pop();
+                    }
+                }
+            }
 
             // Function to configure time stamp
-             vm.overwriteConfiguration = function (fileName) {
-                 // Update the content as per the logic.
-                 var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
-                     fileExtension = fileName.trim().substring(fileName.trim().lastIndexOf(".") + 1),
-                     bAppendEnabled = false;
+            vm.overwriteConfiguration = function (fileName) {
+                // Update the content as per the logic.
+                var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                    fileExtension = fileName.trim().substring(fileName.trim().lastIndexOf(".") + 1),
+                    bAppendEnabled = false;
 
-                 switch (selectedOverwriteConfiguration) {
-                     case "BOTH":
-                         bAppendEnabled = true;
-                         break;
-                     case "DOCUMENT ONLY":
-                         bAppendEnabled = "eml" === fileExtension || "msg" === fileExtension ? false : true;
-                         break;
-                     default:
-                         bAppendEnabled = "eml" === fileExtension || "msg" === fileExtension ? true : false;
-                         break;
-                 }
-                 return bAppendEnabled;
-             }
+                switch (selectedOverwriteConfiguration) {
+                    case "BOTH":
+                        bAppendEnabled = true;
+                        break;
+                    case "DOCUMENT ONLY":
+                        bAppendEnabled = "eml" === fileExtension || "msg" === fileExtension ? false : true;
+                        break;
+                    default:
+                        bAppendEnabled = "eml" === fileExtension || "msg" === fileExtension ? true : false;
+                        break;
+                }
+                return bAppendEnabled;
+            }
 
-             vm.contentCheckNotification = function (file, isLocalUpload) {
-                 file.contentCheck = "contentCheck";
-                 file.saveLatestVersion = "False";
-                 file.cancel = "False";
+            vm.contentCheckNotification = function (file, isLocalUpload) {
+                file.contentCheck = "contentCheck";
+                file.saveLatestVersion = "False";
+                file.cancel = "False";
 
-             }
-             vm.abortContentCheck = function (file, isLocalUpload) {
-                 "use strict";
-                 if (isLocalUpload) {
-                     vm.oUploadGlobal.canceler.resolve();
-                     vm.oUploadGlobal.canceler = $q.defer();
-                 }
-                 file.contentCheck = null;
-                 file.saveLatestVersion = "True";
-                 file.value = file.value + "<br/><div>" + configs.uploadMessages.content_Check_Abort + "</div>";
-                 file.cancel = "True";
+            }
+            vm.abortContentCheck = function (file, isLocalUpload) {
+                "use strict";
+                if (isLocalUpload) {
+                    vm.oUploadGlobal.canceler.resolve();
+                    vm.oUploadGlobal.canceler = $q.defer();
+                }
+                file.contentCheck = null;
+                file.saveLatestVersion = "True";
+                file.value = file.value + "<br/><div>" + configs.uploadMessages.content_Check_Abort + "</div>";
+                file.cancel = "True";
 
-             }
+            }
 
-             vm.closeSuccessBanner = function () {
-                 vm.oUploadGlobal.successBanner = false;
-             }
+            vm.closeSuccessBanner = function () {
+                vm.oUploadGlobal.successBanner = false;
+            }
             //#end region
+
+
+            vm.getSearchResults = function () {
+                angular.element('#allMatters').addClass("active");
+                angular.element('#myMatters').removeClass("active");
+                angular.element('#pinMatters').removeClass("active");
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
+                vm.searchdrop = false;
+                var clientArray = [];
+                var aolListarray = [];
+                var pglistArray = [];
+                var startdate = "";
+                var enddate = "";
+                if (vm.selectedClients != "" && vm.selectedClients != undefined) {
+                    clientArray = vm.selectedClients.split(',');
+                }
+                if (vm.selectedPGs != "" && vm.selectedPGs != undefined) {
+                    pglistArray = vm.selectedPGs.split(',');
+                }
+                if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined) {
+                    aolListarray = vm.selectedAOLs.split(',');
+                }
+                if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined) {
+                    aolListarray = vm.selectedAOLs.split(',');
+                }
+                if (vm.startdate != "" && vm.startdate != undefined) {
+                    startdate = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
+                }
+                if (vm.enddate != "" && vm.enddate != undefined) {
+                    enddate = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
+                }
+                jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
+                jsonMatterSearchRequest.SearchObject.Filters.ClientsList = clientArray;
+                jsonMatterSearchRequest.SearchObject.Filters.PGList = pglistArray;
+                jsonMatterSearchRequest.SearchObject.Filters.AOLList = aolListarray;
+                jsonMatterSearchRequest.SearchObject.Filters.FromDate = startdate;
+                jsonMatterSearchRequest.SearchObject.Filters.ToDate = enddate;
+                get(jsonMatterSearchRequest, function (response) {
+                    vm.lazyloaderdashboard = true;
+                    if (response == "") {
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = false;
+                        vm.nodata = true;
+                        vm.totalrecords = response.length;
+                        vm.getMatterCounts();
+                        vm.displaypagination = false;
+                    } else {
+                        vm.matterGridOptions.data = response;
+                        vm.totalrecords = response.length;
+                        vm.getMatterCounts();
+                        vm.lazyloaderdashboard = true;
+                        vm.displaypagination = true;
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
+                    }
+                });
+            }
         }
     ]);
 

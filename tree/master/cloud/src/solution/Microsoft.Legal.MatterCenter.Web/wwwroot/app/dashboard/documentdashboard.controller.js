@@ -1,7 +1,7 @@
 ﻿(function () {
     'use strict;'
     var app = angular.module("matterMain");
-    app.controller('DocumentDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'documentDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', 'commonFunctions','$window',
+    app.controller('DocumentDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'documentDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', 'commonFunctions', '$window',
         function documentDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, documentDashBoardResource, $rootScope, uiGridConstants, $location, $http, commonFunctions, $window) {
             var vm = this;
             vm.selected = undefined;
@@ -22,6 +22,7 @@
             vm.enable = true;
             vm.totalrecords = 0;
             $rootScope.bodyclass = "bodymain";
+            vm.nodata = false;
             //#endregion
 
             //#region Variable to show document count
@@ -42,7 +43,7 @@
                 vm.clientdropvisible = false;
                 vm.sortbydrop = false;
                 vm.sortbydropvisible = false;
-                angular.element('.popcontent').css('display','none');
+                angular.element('.popcontent').css('display', 'none');
             }
             //#endregion
 
@@ -373,6 +374,7 @@
             //#reion This function will get counts for all matters, my matters and pinned matters
             vm.getDocumentCounts = function () {
                 vm.lazyloaderdashboard = false;
+                vm.displaypagination = false;
                 documentRequest.SearchObject.PageNumber = 1;
                 documentRequest.SearchObject.Filters.FilterByMe = 0;
                 documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
@@ -381,8 +383,9 @@
                     vm.allDocumentCount = response.allDocumentCounts;
                     vm.myDocumentCount = response.myDocumentCounts;
                     vm.pinDocumentCount = response.pinnedDocumentCounts;
-                    vm.lazyloaderdashboard = true;
                     vm.totalrecords = response.allDocumentCounts;
+                    vm.displaypagination = true;
+                    vm.lazyloaderdashboard = true;
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
@@ -396,7 +399,10 @@
 
             //#region function to get the documents based on search term
             vm.getDocuments = function () {
-
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 var pinnedDocumentsRequest = {
                     Url: configs.global.repositoryUrl
                 }
@@ -430,6 +436,9 @@
                             vm.totalrecords = vm.allDocumentCount;
                             vm.pagination();
                         }
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = true;
+                        vm.displaypagination = true;
                     });
 
                 });
@@ -438,6 +447,10 @@
 
             //#region function to get the documents which are pinned by user
             vm.getPinnedDocuments = function () {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 var client = {
                     //ToDo: Need to read from config.js
                     Url: configs.global.repositoryUrl
@@ -449,6 +462,9 @@
                         //vm.pinDocumentCount = response.length;
                         vm.totalrecords = vm.pinDocumentCount;
                         vm.pagination();
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = true;
+                        vm.displaypagination = true;
                     }
                 });
             }
@@ -456,15 +472,29 @@
 
             //#region function to get the documents based on login user
             vm.getMyDocuments = function () {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
                 documentRequest.SearchObject.PageNumber = 1;
                 documentRequest.SearchObject.Filters.FilterByMe = 1;
                 documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
-                    vm.documentGridOptions.data = response;
-                    //vm.myDocumentCount = response.length;
-                    vm.totalrecords = vm.myDocumentCount;
-                    vm.pagination();
+                    if (response == "") {
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = false;
+                        vm.nodata = true;
+                    } else {
+                        vm.documentGridOptions.data = response;
+                        //vm.myDocumentCount = response.length;
+                        vm.totalrecords = vm.myDocumentCount;
+                        vm.pagination();
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = true;
+                        vm.displaypagination = true;
+                        vm.nodata = false;
+                    }
                 });
             }
             //#endregion
@@ -475,7 +505,6 @@
 
             //#region This function will pin or unpin the document based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
-
                 if (e.currentTarget.src.toLowerCase().indexOf("images/pin-666.png") > 0) {
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var pinRequest = {
@@ -500,6 +529,7 @@
                             documentMatterUrl: currentRowData.documentMatterUrl,
                             documentParentUrl: currentRowData.documentParentUrl,
                             documentID: currentRowData.documentID,
+                            documentIconUrl: currentRowData.documentIconUrl,
                             pinType: 'unpin'
                         }
                     }
@@ -631,58 +661,29 @@
             //#endregion
 
             //#region For Sorting by Alphebatical or Created date
-            var SortRequest = {
-                Client: {
-                    Url: configs.global.repositoryUrl
-                },
-                SearchObject: {
-                    PageNumber: 1,
-                    ItemsPerPage: gridOptions.paginationPageSize,
-                    SearchTerm: "",
-                    Filters: {
-                        ClientName: "",
-                        ClientsList: [],
-                        PGList: [],
-                        AOLList: [],
-                        DateFilters: {
-                            CreatedFromDate: "",
-                            CreatedToDate: "",
-                            ModifiedFromDate: "",
-                            ModifiedToDate: "",
-                            OpenDateFrom: "",
-                            OpenDateTo: ""
-                        },
-                        DocumentAuthor: "",
-                        DocumentCheckoutUsers: "",
-                        FilterByMe: 0,
-                        FromDate: "",
-                        Name: "",
-                        ResponsibleAttorneys: "",
-                        SubareaOfLaw: "",
-                        ToDate: ""
-                    },
-                    Sort:
-                            {
-                                ByProperty: 'LastModifiedTime',
-                                Direction: 1
-                            }
-                }
-            }
 
             vm.FilterByType = function () {
-                get(SortRequest, function (response) {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.nodata = false;
+                get(documentRequest, function (response) {
                     vm.lazyloader = true;
                     if (response.errorCode == "404") {
+                        vm.lazyloaderdashboard = true;
                         vm.divuigrid = false;
                         vm.nodata = true;
+                        vm.displaypagination = false;
                         vm.errorMessage = response.message;
                     } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
                         vm.documentGridOptions.data = response;
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
+                        vm.lazyloaderdashboard = true;
+                        vm.displaypagination = true;
+                        vm.divuigrid = true;
+                        vm.nodata = false;
                     }
                 });
             }
@@ -692,43 +693,43 @@
                 vm.sortbytext = data;
                 vm.sortbydrop = false;
                 if (sortexp == 'AlphabeticalUp') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "FileName";
-                    SortRequest.SearchObject.Sort.Direction = 0;
+                   
+                    documentRequest.SearchObject.Sort.ByProperty = "FileName";
+                    documentRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 } else if (sortexp == 'AlphabeticalDown') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "FileName";
-                    SortRequest.SearchObject.Sort.Direction = 1;
+                   
+                    documentRequest.SearchObject.Sort.ByProperty = "FileName";
+                    documentRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 } else if (sortexp == 'CreateddateUp') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "Created";
-                    SortRequest.SearchObject.Sort.Direction = 0;
+                   
+                    documentRequest.SearchObject.Sort.ByProperty = "Created";
+                    documentRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 }
                 else if (sortexp == 'CreateddateDown') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "Created";
-                    SortRequest.SearchObject.Sort.Direction = 1;
+                   
+                    documentRequest.SearchObject.Sort.ByProperty = "Created";
+                    documentRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 }
                 else if (sortexp == 'ModifieddateUp') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
-                    SortRequest.SearchObject.Sort.Direction = 0;
+                   
+                    documentRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                    documentRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 }
                 else if (sortexp == 'ModifieddateDown') {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
-                    SortRequest.SearchObject.Sort.Direction = 1;
+                   
+                    documentRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                    documentRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 }
                 else {
-                    vm.lazyloader = false;
-                    SortRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
-                    SortRequest.SearchObject.Sort.Direction = 1;
+                   
+                    documentRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    documentRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 }
             }
@@ -772,6 +773,9 @@
             };
 
             vm.next = function () {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
                 if (vm.last < vm.totalrecords) {
                     vm.first = vm.first + gridOptions.paginationPageSize;
                     vm.last = vm.last + gridOptions.paginationPageSize;
@@ -787,6 +791,7 @@
                     get(documentRequest, function (response) {
                         vm.lazyloader = true;
                         if (response.errorCode == "404") {
+                            vm.lazyloaderdashboard = true;
                             vm.divuigrid = false;
                             vm.nodata = true;
                             vm.errorMessage = response.message;
@@ -797,6 +802,8 @@
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
                         }
                     });
                 } else {
@@ -807,6 +814,9 @@
             };
 
             vm.prev = function () {
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
                 if (vm.last > gridOptions.paginationPageSize) {
                     vm.first = vm.first - gridOptions.paginationPageSize;
                     vm.last = vm.last - gridOptions.paginationPageSize;
@@ -815,11 +825,11 @@
                     documentRequest.SearchObject.PageNumber = vm.pagenumber;
                     documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(documentRequest, function (response) {
-                        vm.lazyloader = true;
                         if (response.errorCode == "404") {
                             vm.divuigrid = false;
                             vm.nodata = true;
                             vm.errorMessage = response.message;
+                            vm.lazyloaderdashboard = true;
                         } else {
                             vm.divuigrid = true;
                             vm.nodata = false;
@@ -827,6 +837,8 @@
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
                         }
                     });
                 } else {
@@ -836,6 +848,22 @@
                 }
             };
 
+            //#endregion
+
+            //#region This event is going to fire when the user clicks on "OK" button in the filter panel
+            vm.filterSearchOK = function (type) {
+                if (type === 'client') {
+                    vm.selectedClients = '';
+                    angular.forEach(vm.clients, function (client) {
+                        if (client.Selected) {
+                            vm.selectedClients = vm.selectedClients + client.name + ","
+                        }
+                    });
+                    vm.selectedClients = vm.selectedClients.slice(0, vm.selectedClients.length - 1);
+                    vm.clientdrop = false;
+                    vm.clientdropvisible = false;
+                }
+            }
             //#endregion
 
             //#region calling the document assets api
@@ -863,6 +891,57 @@
                 }
             }
 
+            vm.getSearchResults = function () {
+                angular.element('#allDocuments').addClass("active");
+                angular.element('#myDocuments').removeClass("active");
+                angular.element('#pinDocuments').removeClass("active");
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
+                vm.searchdrop = false;
+                vm.nodata = false;
+                var clientArray = [];
+                var author = "";
+                var startdate = "";
+                var enddate = "";
+                if (vm.selectedClients != "" && vm.selectedClients != undefined) {
+                    clientArray = vm.selectedClients.split(',');
+                }
+                if (vm.startdate != "" && vm.startdate != undefined) {
+                    startdate = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
+                }
+                if (vm.enddate != "" && vm.enddate != undefined) {
+                    enddate = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
+                }
+                if (vm.selectedAuthor != "" && vm.selectedAuthor != undefined) {
+                    author = vm.selectedAuthor;
+                }
+                documentRequest.SearchObject.Filters.ClientsList = clientArray;
+                documentRequest.SearchObject.Filters.DocumentAuthor = author;
+                documentRequest.SearchObject.Filters.FromDate = startdate;
+                documentRequest.SearchObject.Filters.ToDate = enddate;
+                get(documentRequest, function (response) {
+                    if (response == "") {
+                        vm.divuigrid = false;
+                        vm.nodata = true;
+                        vm.lazyloaderdashboard = true;
+                        vm.errorMessage = response.message;
+                        vm.totalrecords = response.length;
+                         vm.getDocumentCounts();
+                    } else {
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.documentGridOptions.data = response;
+                        vm.getDocumentCounts();
+                        vm.displaypagination = true;
+                        vm.lazyloaderdashboard = true;
+                        vm.totalrecords = response.length;
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
+                    }
+                });
+            }
         }
     ]);
 }

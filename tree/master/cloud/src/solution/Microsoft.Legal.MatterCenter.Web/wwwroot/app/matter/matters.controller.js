@@ -171,10 +171,20 @@
             //#endregion
 
             //#region for setting the dynamic width to grid
+            var screenHeight = 0;
+            vm.searchResultsLength=0;
             vm.setWidth = function () {
                 var width = $window.innerWidth;
                 angular.element(".ui-grid-viewport").css('max-width', width);
                 angular.element(".ui-grid-render-container").css('max-width', width);
+                screenHeight = $window.screen.availHeight;
+                if (screenHeight <= 768) {
+                    vm.searchResultsLength = 17;
+                } else if (screenHeight <= 1024 && screenHeight >= 769) {
+                    vm.searchResultsLength = 38;
+                } else if (screenHeight <= 1080 && screenHeight >= 1025) {
+                    vm.searchResultsLength = 42;
+                }
             };
 
             vm.setWidth();
@@ -853,7 +863,7 @@
 
             vm.createMailPopup = function () {
                 var sImageChunk = "", nIDCounter = 0;
-                var attachmentName = "", mailSubject="", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";
+                var attachmentName = "", mailSubject = "", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";
                 vm.allAttachmentDetails = []
                 var individualAttachment = {};
                 //For just email
@@ -869,7 +879,7 @@
                                             .replace(vm.oUploadGlobal.regularInvalidRule, ".")
                                             .replace(vm.oUploadGlobal.regularStartEnd, "");
                 console.log(mailSubject);
-              vm.subject=mailSubject;
+                vm.subject = mailSubject;
                 //Office.context.mailbox.item.subject=mailSubject;
                 individualAttachment.attachmentFileName = mailSubject;
                 individualAttachment.isEmail = true;
@@ -1076,7 +1086,7 @@
                         }
                         vm.lazyloader = true;
                         vm.divuigrid = true;
-                       
+
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -1107,50 +1117,17 @@
                 searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = "";
                 if (name == "Modified Date") {
-                    searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = vm.modstartdate.format("yyyy-MM-dd");
-                    searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = vm.modenddate.format("yyyy-MM-dd");
+                    searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = vm.modstartdate.format("yyyy-MM-ddT00:00:00Z");
+                    searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = vm.modenddate.format("yyyy-MM-ddT23:59:59Z");
                     vm.moddatefilter = true;
                 }
                 if (name == "Open Date") {
-                    searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = vm.startdate.format("yyyy-MM-dd");
-                    searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = vm.enddate.format("yyyy-MM-dd");
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
                     vm.opendatefilter = true;
                 }
                 searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                 searchRequest.SearchObject.Sort.Direction = 1;
-                //var ModifiedDateRequest =
-                //  {
-                //      Client: {
-                //          Url: configs.global.repositoryUrl
-                //      },
-                //      SearchObject: {
-                //          PageNumber: 1,
-                //          ItemsPerPage: 17,
-                //          SearchTerm: "",
-                //          Filters: {
-                //              AOLList: [],
-                //              ClientName: "",
-                //              ClientsList: [],
-                //              DateFilters: {
-                //                  CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: "", ModifiedToDate: "", OpenDateFrom: "", OpenDateTo: ""
-                //              },
-                //              DocumentAuthor: "",
-                //              DocumentCheckoutUsers: "",
-                //              FilterByMe: 1,
-                //              FromDate: "",
-                //              Name: "",
-                //              PGList: [],
-                //              ResponsibleAttorneys: "",
-                //              SubareaOfLaw: "",
-                //              ToDate: ""
-                //          },
-                //          Sort:
-                //                  {
-                //                      ByProperty: "LastModifiedTime",
-                //                      Direction: 1
-                //                  }
-                //      }
-                //  };
                 get(searchRequest, function (response) {
                     if (response == "") {
                         vm.gridOptions.data = response;
@@ -1181,7 +1158,7 @@
                 searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 if (property == "Responsible Attorney") {
-                    vm.attorneySearchTerm="";
+                    vm.attorneySearchTerm = "";
                     searchRequest.SearchObject.Filters.ResponsibleAttorneys = "";
                     vm.attorneyfilter = false;
                 }
@@ -1198,7 +1175,7 @@
                     vm.matterfilter = false;
                 }
                 else if (property == "Client") {
-                    vm.clientSearchTerm=""
+                    vm.clientSearchTerm = ""
                     searchRequest.SearchObject.Filters.ClientName = "";
                     searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                     vm.clientfilter = false;
