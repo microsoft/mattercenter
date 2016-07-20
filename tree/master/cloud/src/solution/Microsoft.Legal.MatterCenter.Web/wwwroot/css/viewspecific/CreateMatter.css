@@ -37,7 +37,7 @@ word-wrap: break-word !important;
       
 }
 .content .button{
-    width:150px;
+    width:150px;margin-left: 5px;
 }
  .parentNode {
     height: 145px;
@@ -492,6 +492,66 @@ body {
 
 .errorAttachDocument{z-index:2}
 .menuText:hover {color: rgb(0,114,198)}
+.buttonPrev {
+    background-color:  rgb(230,230,230); /* Green */
+    border: none;
+    color:  rgb(77,77,77);
+   width:100px; height:30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em; 
+    font-family:'Segoe UI';  
+    cursor: pointer;  outline: none !important;
+}
+.buttonPrev:hover{
+    background-color:  rgb(204,204,204);
+}
 
 
+.notificationTriangleBorder {
+    border: 12px solid transparent;
+    border-top: 12px solid #fff;
+    height: 0;
+    left: 45px;
+    position: absolute;
+    top: calc(50% - -35px);
+    width: 0;
+}
+.notificationPopUp {
+    height: 100px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 1000;
+}
+.notificatonTriangle {
+    border: 12px solid transparent;
+    border-top: 12px solid rgb(77,77,77);
+    height: 0;
+    left: 45px;
+    position: absolute;
+    top: calc(50% - -36px);
+    width: 0;
+}
+.notificatonText {
+    background-color: #fff;
+    border: 1px solid rgb(77,77,77);
+    color: #333;
+    font-size: .75em;
+    min-height: 50px;
+    padding: 5px 10px;
+    text-align: left;
+    width: 300px;
+    height:86px;
+}
+.notifcationrPopUpCAttorny {
+}
+.notificationBorder {
+     border: 2px solid rgb(77,77,77) !important;
+}
+.removeUser{
+    float:right; margin-right:10px; cursor:pointer
+}
+.confirmUser{float:right; margin-right:10px;cursor:pointer}
 
