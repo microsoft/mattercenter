@@ -11,9 +11,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Extensions.Logging;
 using Moq;
-
-
-
+using Microsoft.Legal.MatterCenter.Web.Common;
+using Microsoft.Legal.MatterCenter.Web.Controllers;
+using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
 {
@@ -27,11 +27,8 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         private const string authority = "https://login.windows.net/microsoft.onmicrosoft.com";
         //public ILoggerFactory LoggerFactory { get; }
         private IConfigRepository configRepository; //{ get; set; }
-        //private GeneralSettings generalSettings { get; set; }
-        //private LogTables logTables { get; set; }
-        //private IOptionsMonitor<GeneralSettings> gensettings { get; set; }
-        //private IOptionsMonitor<LogTables> logTabs { get; set; }
-
+        private IMatterCenterServiceFunctions matterCenterServiceFunctions;
+        private IHostingEnvironment hostingEnvironment;
 
         public ConfigUnitTest()
         {
@@ -41,7 +38,39 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
 
 
-        
+        [Fact]
+        public void GetConfigController()
+        {
+
+            GeneralSettings genS = new GeneralSettings();
+            genS.CloudStorageConnectionString = "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
+
+            var m = new Moq.Mock<IOptionsMonitor<ErrorSettings>>();
+            var l = new Moq.Mock<IOptionsMonitor<GeneralSettings>>();
+            var h = new Moq.Mock<IHostingEnvironment>();
+            h.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\MCFork\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
+            var ma = new Moq.Mock<IMatterCenterServiceFunctions>();
+            var r = new Moq.Mock<IConfigRepository>();
+            
+            var lo = new Moq.Mock<IOptionsMonitor<LogTables>>();
+
+
+            ConfigRepository configRepository = new ConfigRepository(l.Object, lo.Object);
+
+            l.SetupGet(g => g.CurrentValue).Returns(genS);
+            m.SetupAllProperties();
+
+          
+            DynamicTableEntity request = new DynamicTableEntity();
+                
+                ConfigController controller = new ConfigController( m.Object, l.Object, ma.Object, configRepository, h.Object);
+     
+
+            var result = controller.Get(request);
+
+           // Assert.IsTrue(result.Count > 0);
+        }
+
 
         /// This unit test will try to get all the users who can see a particular item
         /// </summary>
@@ -58,15 +87,9 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             m.SetupGet(g => g.CurrentValue).Returns(genS);
             m.SetupAllProperties();
 
-            ConfigEntities configs = new ConfigEntities()
-            {
-                ConfigEntries = new List<ConfigEntity>()
-
-            };
 
             ConfigRepository configRepository = new ConfigRepository(m.Object, l.Object);
             var response = configRepository.GetConfigEntities();
-
 
         }
 

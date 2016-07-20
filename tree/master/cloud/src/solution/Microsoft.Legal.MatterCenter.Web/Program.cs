@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+
+
 using Microsoft.AspNetCore.Builder;
 
 namespace Microsoft.Legal.MatterCenter.Web
@@ -11,6 +13,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
+                
                 var host = new WebHostBuilder()
                     .UseKestrel()
                     .UseContentRoot(Directory.GetCurrentDirectory())

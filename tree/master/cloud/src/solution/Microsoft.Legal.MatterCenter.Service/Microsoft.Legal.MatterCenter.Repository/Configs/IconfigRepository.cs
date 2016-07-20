@@ -5,13 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
     public interface  IConfigRepository
     {
-        Task<ConfigEntities> GetConfigurationsAsync(ConfigEntities configRequest);
-        ConfigEntities GetConfigEntities();
+        Task<List<DynamicTableEntity>> GetConfigurationsAsync(DynamicTableEntity configRequest);
+        List<DynamicTableEntity>  GetConfigEntities();
     }
 }

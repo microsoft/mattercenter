@@ -1,4 +1,4 @@
-﻿{
+{
   "dependencies": {
     "Swashbuckle.SwaggerUi": "6.0.0-beta9",
     "Swashbuckle.SwaggerGen": "6.0.0-beta9",

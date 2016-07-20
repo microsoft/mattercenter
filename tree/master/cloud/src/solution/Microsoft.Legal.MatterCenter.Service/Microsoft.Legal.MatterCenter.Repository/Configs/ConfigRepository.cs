@@ -54,9 +54,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="siteCollectionUrl"></param>
         /// <returns></returns>
-        public async Task<ConfigEntities> GetConfigurationsAsync(ConfigEntities configRequest)
+        public async Task<List<DynamicTableEntity>> GetConfigurationsAsync(DynamicTableEntity configRequest)
         {
-            return await Task.FromResult(config.GetConfigEntities());
+            return await Task.FromResult(this.GetConfigEntities());
         }
 
         /// <summary>
@@ -64,9 +64,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// for which the user has accepted the invitation
         /// </summary>
         /// <param name="externalSharingRequest"></param>
-        public ConfigEntities GetConfigEntities()
+        public List<DynamicTableEntity> GetConfigEntities()
         {
-            ConfigEntity[] configs = { };
+           
             try
             {
                 CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
@@ -77,95 +77,23 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 };
                 // Retrieve a reference to the table.
                 CloudTable table = tableClient.GetTableReference("MatterCenterConfiguration");
-             
-                TableContinuationToken token = new TableContinuationToken() { };
-
-                //TableQuery<ConfigEntity> query = new TableQuery(from ent in table.CreateQuery<ConfigEntity>()
-                //                                  select ent);
-
                 var entities = new List<DynamicTableEntity>();
-                do
-                {
-                    var queryResult = table.ExecuteQuerySegmented(new TableQuery(), token);
-                    entities.AddRange(queryResult.Results);
-                    token = queryResult.ContinuationToken;
-                } while (token != null);
+
+                // Construct the query operation for all  entities 
+                TableQuery<DynamicTableEntity> query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "MatterCenterConfig"));
+              
+                var queryResult = table.ExecuteQuery(query);
+                
+                entities.AddRange(queryResult);
+                return entities;
             }
             catch (Exception)
             {
                 throw;
             }
-            return new ConfigEntities() { ConfigEntries = configs };
+           
         }
 
-        //    /// <summary>
-        //    /// This method will store external requests information in Azure Table Storage
-        //    /// </summary>
-        //    /// <param name="externalSharingRequest"></param>
-        //    /// <returns></returns>
-        //    private void SaveExternalSharingRequest(MatterInformationVM matterInformation)
-        //    {
-        //        try
-        //        {
-        //            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(generalSettings.CloudStorageConnectionString);
-        //            CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
-        //            tableClient.DefaultRequestOptions = new TableRequestOptions
-        //            {
-        //                PayloadFormat = TablePayloadFormat.JsonNoMetadata
-        //            };
-        //            // Retrieve a reference to the table.
-        //            CloudTable table = tableClient.GetTableReference(logTables.ExternalAccessRequests);
-        //            // Create the table if it doesn't exist.
-        //            table.CreateIfNotExists();
-        //            //Insert the entity into Table Storage              
-        //            matterInformation.PartitionKey = matterInformation.Matter.Name;
-        //            matterInformation.RowKey = $"{Guid.NewGuid().ToString()}${matterInformation.Matter.Id}";
-        //            matterInformation.Status = "Pending";
-        //            string matterInformationObject = Newtonsoft.Json.JsonConvert.SerializeObject(matterInformation);
-        //            matterInformation.SerializeMatter = matterInformationObject;
-        //            TableOperation insertOperation = TableOperation.Insert(matterInformation);
-        //            table.Execute(insertOperation);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    /// <summary>
-        //    /// Update the status in Azure Table Storage for the corresponding Parition and Row Key
-        //    /// for which the user has accepted the invitation
-        //    /// </summary>
-        //    /// <param name="externalSharingRequest"></param>
-        //    private static void UpdateTableStorageEntity(MatterInformationVM matterInformation, TextWriter log, IConfigurationRoot configuration)
-        //    {
-        //        try
-        //        {
-        //            CloudStorageAccount cloudStorageAccount =
-        //                CloudStorageAccount.Parse(configuration["Data:DefaultConnection:AzureStorageConnectionString"]);
-        //            CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
-        //            // Create the CloudTable object that represents the "people" table.
-        //            CloudTable table = tableClient.GetTableReference(configuration["Settings:MatterCenterConfiguration"]);
-        //            // Create a retrieve operation that takes a entity.
-        //            TableOperation retrieveOperation =
-        //                TableOperation.Retrieve<MatterInformationVM>(matterInformation.PartitionKey, matterInformation.RowKey);
-        //            // Execute the operation.
-        //            TableResult retrievedResult = table.Execute(retrieveOperation);
-        //            // Assign the result to a ExternalSharingRequest object.
-        //            MatterInformationVM updateEntity = (MatterInformationVM)retrievedResult.Result;
-        //            if (updateEntity != null)
-        //            {
-        //                updateEntity.Status = "Accepted";
-        //                TableOperation updateOperation = TableOperation.Replace(updateEntity);
-        //                table.Execute(updateOperation);
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            log.WriteLine($"Exception occured in the method UpdateTableStorageEntity. {ex}");
-        //        }
-        //    }
-        //}
-    }
+        }
 }
 
