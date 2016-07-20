@@ -909,7 +909,7 @@
                 if (value == "blockuser") {
                     cm.blockedUserName = $item.name + '(' + $item.email + ')';
                 }
-                if (value == "teamuser") {
+                if (value == "team") {
                     $label.assignedUser = $item.name + '(' + $item.email + ')';
                     cm.typehead = false;
                 }
