@@ -11,7 +11,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata);        
         GenericResponseVM DeleteMatter(MatterVM matterVM);
         GenericResponseVM SavConfigurations(SaveConfigurationsVM saveConfigurationsVM);
-        PropertyValues GetStampedProperties(MatterVM matterVM);
+        MatterStampedDetails GetStampedProperties(MatterVM matterVM);
         GenericResponseVM AssignUserPermissions(MatterMetdataVM matterMetadata);
         GenericResponseVM AssignContentType(MatterMetadata matterMetadata);
         Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM);
