@@ -263,7 +263,11 @@ namespace Microsoft.Legal.MatterCenter.Web
                 }
                 #endregion
                 bool isUserExists = userRepositoy.CheckUserPresentInMatterCenter(client);
-                return matterCenterServiceFunctions.ServiceResponse(isUserExists, (int)HttpStatusCode.OK);
+                var userExists = new
+                {
+                    IsUserExistsInSite = isUserExists
+                };
+                return matterCenterServiceFunctions.ServiceResponse(userExists, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
