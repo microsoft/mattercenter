@@ -85,6 +85,15 @@ angular.module('matterMain', [
                 }
             }, requireADLogin: true
         })
+        .state('mc.matterusers', {
+            url: "^/matterusers",
+            views: {
+                "contentView": {
+                    templateUrl: '/app/matter/matterusers.html',
+                    controller: 'MatterUsersController as cm'
+                }
+            }, requireADLogin: true
+        });
         ;
 
 

@@ -31,6 +31,7 @@
 /// <reference path="app/matter/createMatter.controller.js" />
 /// <reference path="app/matter/matter.resources.js" />
 /// <reference path="app/matter/matters.controller.js" />
+/// <reference path="app/matter/matterusers.controller.js" />
 /// <reference path="app/matter/Upload.js" />
 /// <reference path="app/navigation.controller.js" />
 /// <reference path="app/services/api.service.js" />
