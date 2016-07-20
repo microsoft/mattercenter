@@ -54,8 +54,8 @@
                 <div class="input-group">
                     <input type="text" ng-model="vm.searchText" placeholder="Search by document name, document ID, or keyword" 
                            uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatters($viewValue)" 
-                           typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
-                    <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
+                           typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
+                    <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.searchByTerm()"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
             </div>
             <div class="col-xs-3 pad0">
@@ -64,9 +64,9 @@
             </div>
             <div class="col-xs-12">
                 <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                <div ng-show="noResults">
+                <!--<div ng-show="noResults">
                     <i class="glyphicon glyphicon-remove"></i> No Results Found
-                </div>
+                </div>-->
             </div>
             <div class="col-xs-9 dashboarddrop" ng-click='vm.hideinnerdrop($event)' ng-if="vm.searchdrop">
                 <div class="col-xs-12 dashboarddropinner">
