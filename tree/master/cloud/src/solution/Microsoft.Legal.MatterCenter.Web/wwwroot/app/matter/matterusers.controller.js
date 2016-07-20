@@ -8,6 +8,8 @@
             cm.arrAssignedUserEmails = [],
             cm.userIDs = [];
             cm.matterProperties = undefined;
+            cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
+
             //#region Service API Call
             //API call to get roles that are configured in the system
             function getRoles(options, callback) {
@@ -87,7 +89,8 @@
                     Url:'https://msmatter.sharepoint.com/sites/microsoft'
                 },
                 Matter: {
-                    Name:'Microsoft Matter'
+                   // Name:'Microsoft Matter'
+                    Name:'Testing Matter Users'
                 }
             }
             //endregion
@@ -96,6 +99,7 @@
             function getMatterUsers() {
                 getStampedProperties(optionsForStampedProperties, function (response) {
                     cm.matterProperties = response
+                    console.log(response);
                     //Get all roles from catalog site collection
                     getRoles(optionsForRoles, function (response) {
                         cm.assignRoles = response;

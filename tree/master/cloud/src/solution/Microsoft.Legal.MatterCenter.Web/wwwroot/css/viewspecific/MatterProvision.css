@@ -1553,7 +1553,7 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
     }
 
     #addMoreLink {
-        left: -348px;
+       /*left: -348px;*/
     }
 
     #defaultMessageDiv {

@@ -21,6 +21,8 @@
             cm.createBtnDisabled = false;
             cm.createButton = "Create";
             cm.clientUrl = "";
+            cm.errorStatus = false;
+            cm.prevButtonDisabled = true;
 
             var w = angular.element($window);
 
@@ -99,6 +101,7 @@
 
             cm.clearPopUp = function () {
                 cm.errorPopUpBlock = false;
+                cm.notificationPopUpBlock = false;
             }
 
             /* Function to get the GUID by removing the hyphen character */
@@ -278,6 +281,7 @@
             //optionsForUsers
 
             cm.searchUsers = function (val) {
+                cm.typehead=true;
                 var searchUserRequest = {
                     Client: {
 
@@ -724,13 +728,15 @@
             cm.navigateToSecondSection = function (sectionName) {
                 cm.errorPopUpBlock = false;
                 cm.errorBorder = "";
+                cm.notificationPopUpBlock = false;
+                cm.notificationBorder = "";
                 oPageOneState.sectionClickName = sectionName;
                 if (sectionName == "snConflictCheck" && cm.iCurrentPage !== 2) {
                     if (validateCurrentPage(cm.iCurrentPage)) {
                         cm.sectionName = sectionName;
                         oPageOneState.isNextClick = false;
                         cm.iCurrentPage = 2;
-                        localStorage.iLivePage = 2;
+                        localStorage.iLivePage = 2; cm.prevButtonDisabled = false; cm.nextButtonDisabled = false;
                     }
                 }
                 else if (sectionName == "snCreateAndShare" && cm.iCurrentPage !== 3) {
@@ -740,7 +746,7 @@
                         cm.sectionName = sectionName;
                         if (cm.iCurrentPage == 2) { callCheckSecurityGroupExists("snCreateAndShare"); }
                         cm.iCurrentPage = 3;
-                        localStorage.iLivePage = 3;
+                        localStorage.iLivePage = 3; cm.prevButtonDisabled = false; cm.nextButtonDisabled = true;
 
                     }
 
@@ -748,6 +754,7 @@
                 else if (sectionName == "snOpenMatter" && cm.iCurrentPage !== 1) {
                     cm.iCurrentPage = 1; cm.sectionName = sectionName;
                     localStorage.iLivePage = 1;
+                    cm.prevButtonDisabled = true; cm.nextButtonDisabled = false;
                 }
                 else {
                     cm.sectionName = sectionName;
@@ -845,16 +852,16 @@
                     if (keepGoing) {
                         if (team.assignedUser && team.assignedUser != "") {//For loop
                             username = getUserName(team.assignedUser + ";", false)
-                            if (-1 == cm.oSiteUsers.indexOf(username[0])) {
-                                //  cm.blockedUserName.trim()
-                                cm.errTextMsg = "Please enter valid team members.";
-                                cm.errorBorder = "";
-                                cm.errorPopUpBlock = true;
-                                showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
-                                cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
-                                return false;
+                            //if (99 == cm.oSiteUsers.indexOf(username[0])) {
+                            //    //  cm.blockedUserName.trim()
+                            //    cm.errTextMsg = "Please enter valid team members.";
+                            //    cm.errorBorder = "";
+                            //    cm.errorPopUpBlock = true;
+                            //    showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                            //    cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
+                            //    return false;
 
-                            }
+                            //}
 
                             if (cm.blockedUserName && cm.blockedUserName != "") {
                                 if (team.assignedUser == cm.blockedUserName) {
@@ -894,7 +901,8 @@
                 });
             }
 
-            cm.onSelect = function ($item, $model, $label, value) {
+            cm.onSelect = function ($item, $model, $label, value,fucnValue,$event) {
+                console.log(cm.typehead);
                 if (value == "conflictcheckuser") {
                     cm.selectedConflictCheckUser = $item.name + '(' + $item.email + ')';
                 }
@@ -903,12 +911,15 @@
                 }
                 if (value == "team") {
                     $label.assignedUser = $item.name + '(' + $item.email + ')';
+                    cm.typehead = false;
                 }
-                //  console.log($item);
-
-
-                if (-1 == cm.oSiteUsers.indexOf($item.email)) {
-                    cm.oSiteUsers.push($item.email);
+                console.log(cm.typehead);
+                if (fucnValue == "on-blurr" && !cm.typehead) {
+                    cm.checkUserExists($label.assignedUser, $event);
+                }else{
+                    if (-1 == cm.oSiteUsers.indexOf($item.email)) {
+                        cm.oSiteUsers.push($item.email);
+                    } 
                 }
             }
 
@@ -1111,6 +1122,7 @@
                         cm.createButton = "Create and Notify";
                     }
                     oPageOneState.oValidMatterName = oPageData.oValidMatterName;
+                    cm.nextButtonDisabled = false; cm.prevButtonDisabled = false;
                     // cm.navigateToSecondSection("");
                     // cm.navigateToSecondSection("snConflictCheck");
 
@@ -1131,22 +1143,19 @@
                         cm.secureMatterCheck = oPageData.SecureMatterCheck;
                         cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true");
                         cm.assignPermissionTeams = oPageData.AssignPermissionTeams;
-                        cm.oSiteUsers = oPageData.oSiteUsers;
+                        cm.oSiteUsers = oPageData.oSiteUsers; cm.nextButtonDisabled = true;
                         cm.iCurrentPage = 2;
                     }
-
-
-
                     if (cm.includeEmail) {
                         cm.createButton = "Create and Notify";
                     }
 
                     cm.sectionName = "snCreateAndShare";
 
-                    
+
                 }
-               
-            }          
+
+            }
 
             cm.createAndNotify = function (value) {
                 if (value) {
@@ -1172,34 +1181,127 @@
                 }
             }
 
+            function showNotificatoinMessages(teamRowNumber) {
+                var temp = document.getElementById('txtUser' + teamRowNumber);
+                var notificationEle = document.getElementById("notificationBlock");
+                var notificationTrinageleBlockEle = document.getElementById("notificatoinTrinagleBlock");
+                var notificationTrinagleBorderEle = document.getElementById("notificationTrinagleBroderBlock");
+                var notificationTextEle = document.getElementById("notificationText");
+                notificationEle.className = ""; notificationTrinageleBlockEle.className = ""; notificationTrinagleBorderEle.className = ""; notificationTextEle.className = "";
+                notificationEle.classList.add("notificationPopUp");
+                notificationTrinageleBlockEle.classList.add("notificatonTriangle");
+                notificationTrinageleBlockEle.classList.add("popUpFloatLeft");
+                notificationTrinagleBorderEle.classList.add("notificationTriangleBorder");
+                notificationTrinagleBorderEle.classList.add("popUpFloatLeft");
+                notificationTextEle.classList.add("notificatonText");
+                notificationTextEle.classList.add("popUpFloatRight");
+                var notifcationPopUpCAttorny = document.createElement('style'),
+                    notifcationTringleBlockCAttorny = document.createElement('style'),
+                    notifcationTringleBorderCAttorny = document.createElement('style'),
+                    notifcationTextMatterCAttorny = document.createElement('style');
+                notifcationPopUpCAttorny.type = 'text/css';
+                notifcationTringleBlockCAttorny.type = 'text/css';
+                notifcationTringleBorderCAttorny.type = 'text/css';
+                notifcationTextMatterCAttorny.type = 'text/css';
 
-            cm.checkUserExists = function (userMailId) {
+                var width = GetWidth();
+                var x = 0, y = 0;
+                if (width > 734) {
+                    y = temp.offsetTop - 50, x = temp.offsetLeft + 85;
+                }
+                else {
+                    y = temp.offsetTop + 32, x = temp.offsetLeft + 78;
+                }
+                cm.notificationBorder = "txtUser" + teamRowNumber;
+
+                notifcationPopUpCAttorny.innerHTML = ".notifcationPopUpCAttorny{top:" + y + "px;left:" + x + "px;}";
+                notifcationTringleBlockCAttorny.innerHTML = "{min-height: 40px;top: 17px !important;left: 24px;width:100%}";
+                notifcationTringleBorderCAttorny.innerHTML = "{min-height: 40px,top: 17px !important;left: 24px;width:100%}";
+                notifcationTextMatterCAttorny.innerHTML = "{min-height:40px;top:21px !important;left: 24px;width:100%}";
+                document.getElementsByTagName('head')[0].appendChild(notifcationPopUpCAttorny);
+                document.getElementsByTagName('head')[0].appendChild(notifcationTringleBlockCAttorny);
+                document.getElementsByTagName('head')[0].appendChild(notifcationTringleBorderCAttorny);
+                document.getElementsByTagName('head')[0].appendChild(notifcationTextMatterCAttorny);
+                // cm.errTextMsg = errorMsg;
+
+                //  cm.errorPopUpBlock = true;
+                notificationEle.classList.add("notifcationPopUpCAttorny");
+                notificationTrinageleBlockEle.classList.add("notifcationTringleBlockCAttorny");
+                notificationTrinagleBorderEle.classList.add("notifcationTringleBorderCAttorny");
+                notificationTextEle.classList.add("notifcationTextCAttorny");
+            }
+
+            cm.confirmUser = function (confirmUser) {
+                if (confirmUser) {
+                    cm.notificationPopUpBlock = false;
+                    cm.notificationBorder = "";
+                } else {
+                    cm.notificationPopUpBlock = false;
+                    cm.textInputUser.assignedUser = "";
+                    cm.notificationBorder = "";
+                }
+            }
+
+            cm.checkUserExists = function (userMailId, $event) {
+                $event.stopPropagation();
+
                 function validateEmail(email) {
                     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                     return re.test(email);
                 }
                 function validate(email) {
                     if (validateEmail(email)) {
-                        var optionsForUserExsists=new Object;
-                        optionsForUserExsists={
+                        var optionsForUserExsists = new Object;
+                        optionsForUserExsists = {
                             Url: cm.clientUrl,
-                            Name:email
+                            Name: email
                         }
                         userexists(optionsForUserExsists, function (response) {
-                            console.log(response);
+                            if (!response.isUserExistsInSite) {
+                                angular.forEach(cm.assignPermissionTeams, function (team) {
+                                    var userEmail = getUserName(team.assignedUser + ";", false)
+                                    if (userEmail[0] == email) {
+                                        cm.textInputUser=team;
+                                        // cm.errTextMsg = "Please enter a valid email address.";
+                                        //  cm.errorBorder = "";
+                                        // cm.errorStatus = true;
+                                        //  cm.errorPopUpBlock = true;
+                                        //   showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                        // cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; 
+                                        showNotificatoinMessages(team.assigneTeamRowNumber);
+                                        return false;
+                                    }
+
+                                });
+                                cm.notificationPopUpBlock = true;
+                            }
                         });
 
                     }
                     else {
-                        return false;
-                    }                   
+                        angular.forEach(cm.assignPermissionTeams, function (team) {
+                            var userEmail = getUserName(team.assignedUser + ";", false)
+                            if (userEmail[0] == email) {
+                                cm.errTextMsg = "Please enter a valid email address.";
+                                cm.errorBorder = "";
+                                cm.errorStatus = true;
+                                cm.errorPopUpBlock = true;
+                                showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                cm.errorBorder = "txtUser" + team.assigneTeamRowNumber;
+                                return false;
+                            }
+
+                        });
+
+                    }
                 }
                 if (userMailId && userMailId != "") {
                     var pattern = /\(([^)]+)\)/, matches = userMailId.match(pattern);
                     if (matches && matches.length > 0) {
-                        userMailId =  matches[1] ;
+                        userMailId = matches[1];
                     }
                     validate(userMailId);
+
                 }
             }
 
@@ -1210,8 +1312,8 @@
                     data: options,
                     success: callback
                 });
-            }    
-            
+            }
+
             cm.createMatterButton = function ($event) {
                 var isPageValid = validateCurrentPage(1);
                 if (isPageValid) {
@@ -1235,7 +1337,7 @@
                     cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
                     contentTypes = getDefaultContentTypeValues("contenttypes");
                     cm.bMatterLandingPage = true;
-                    defaultContentType = getDefaultContentTypeValues("defaultcontenttype");                    
+                    defaultContentType = getDefaultContentTypeValues("defaultcontenttype");
                     var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
                     var sCheckBy = getUserEmail(sCheckByUserEmail);
                     var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
@@ -1257,7 +1359,7 @@
                         }
                         else {
                             cm.popupContainerBackground = "hide";
-                            cm.errTextMsg = "Error in creation of matter: Incorrect inputs.";                            
+                            cm.errTextMsg = "Error in creation of matter: Incorrect inputs.";
                             showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
                             cm.errorBorder = "";
                             cm.errorPopUpBlock = true;
@@ -2094,23 +2196,26 @@
                 localStorage.iLivePage = 3;
             }
 
-            cm.NextClick = function () {
+            cm.NextClick = function ($event) {
                 if (cm.iCurrentPage == 1) {
                     cm.navigateToSecondSection("snConflictCheck");
+                    $event.stopPropagation();
                 }
                 else if (cm.iCurrentPage == 2) {
                     cm.navigateToSecondSection("snCreateAndShare");
+                    $event.stopPropagation();
                 }
 
             }
 
-            cm.PreviousClick = function () {
+            cm.PreviousClick = function ($event) {
                 if (cm.iCurrentPage == 2) {
                     cm.navigateToSecondSection("snOpenMatter");
-
+                    $event.stopPropagation();
                 }
                 else if (cm.iCurrentPage == 3) {
                     cm.navigateToSecondSection("snConflictCheck");
+                    $event.stopPropagation();
                 }
 
             }
@@ -2118,10 +2223,11 @@
 
             cm.CheckPopUp = function (e) {
                 //  e.stopPropagation();
-
-
-                cm.errorPopUpBlock = false;
-                cm.errorBorder = "";
+                if (!cm.errorStatus) {
+                    cm.errorPopUpBlock = false;
+                    cm.errorBorder = "";
+                }
+                cm.errorStatus = false;
 
             }
 
@@ -2296,6 +2402,7 @@
                             showErrorNotification("conflictcheck");
                             cm.errorPopUpBlock = true;
 
+
                         }
                     } else {
                         var validUsers = validateUsers();
@@ -2422,9 +2529,7 @@
 
                 if (type == "user") {
                     fieldType = "txtUser";
-
                 }
-
                 else if (type == "role") { fieldType = "roleUser" }
                 else if (type == "perm") {
                     fieldType = "permUser";
@@ -2492,13 +2597,13 @@
 
             function resizeErrorPopup() {
                 "use strict";
-
                 var windowWidth = GetWidth();
                 var width;
                 cm.errorPopUpBlock = false;
-
+                cm.notificationPopUpBlock=false;
                 if (windowWidth <= 734) {
                     cm.errorPopUpBlock = false;
+                   cm.notificationPopUpBlock=false;
                 }
             }
 
@@ -2519,6 +2624,7 @@
                 }
                 return x;
             }
+
 
         }]);
 

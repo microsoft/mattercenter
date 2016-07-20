@@ -239,16 +239,6 @@
             //#reion This function will get counts for all matters, my matters and pinned matters
             vm.getMatterCounts = function () {
                 vm.lazyloaderdashboard = false;
-                var searchToText = '';
-                var finalSearchText = '';
-                if (vm.searchText != "") {
-                    searchToText = vm.searchText.replace("(", ",")
-                    searchToText = searchToText.replace(")", "")
-                    var firstText = searchToText.split(',')[0]
-                    var secondText = searchToText.split(',')[1]
-                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
-                }
-                jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
                 getMatterCounts(jsonMatterSearchRequest, function (response) {
                     vm.allMatterCount = response.allMatterCounts;
                     vm.myMatterCount = response.myMatterCounts;
@@ -305,26 +295,84 @@
 
             //#regionThis search function will be used when the user enters some text in the search text box and presses search button
             vm.searchMatters = function (val) {
-                vm.lazyloaderdashboard = false;
-                var searchRequest = {
-                    Client: {
-                        Url: configs.global.repositoryUrl
-                    },
-                    SearchObject: {
-                        PageNumber: 1,
-                        ItemsPerPage: 10,
-                        SearchTerm: val,
-                        Filters: {},
-                        Sort: {
-                            ByProperty: "LastModifiedTime",
-                            Direction: 1
-                        }
-                    }
-                };
-                return matterDashBoardResource.get(searchRequest).$promise;
-                vm.lazyloaderdashboard = true;
+                var finalSearchText = "";
+                if (val != "") {
+                    finalSearchText = "(MCMatterName:" + val + "* OR MCMatterID:" + val + "*)";
+                }
+                vm.pagenumber = 1;
+                jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
+                jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
+                jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
+                return matterDashBoardResource.get(jsonMatterSearchRequest).$promise;
             }
             //#endregion
+
+            //#region
+            vm.typeheadselect = function (index, selected) {
+                var searchToText = '';
+                var finalSearchText = '';
+                vm.displaypagination = false;
+                if (selected != "") {
+                    searchToText = selected.replace("(", ",")
+                    searchToText = searchToText.replace(")", "")
+                    var firstText = searchToText.split(',')[0]
+                    var secondText = searchToText.split(',')[1]
+                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                }
+                jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
+                jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
+                vm.FilterByType();
+            }
+
+            //#endregion
+
+            //#region for searching matters when entering text in serach box
+            vm.searchText = "";
+            vm.searchByTerm = function () {
+                vm.lazyloaderdashboard = false;
+                vm.displaypagination = false;
+                vm.divuigrid = false;
+                vm.matterid = 1;
+                vm.mattername = "All Matters";
+                vm.pagenumber = 1;
+                var searchToText = '';
+                var finalSearchText = '';
+                if (vm.searchText != "") {
+                    if (vm.searchText.indexOf("(") > -1) {
+                        searchToText = vm.searchText.replace("(", ",")
+                        searchToText = searchToText.replace(")", "")
+                        var firstText = searchToText.split(',')[0]
+                        var secondText = searchToText.split(',')[1]
+                        finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                    } else {
+                        finalSearchText = commonFunctions.searchFilter(vm.searchText);
+                    }
+                }
+                jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
+                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
+                get(jsonMatterSearchRequest, function (response) {
+                    if (response == "") {
+                        vm.totalrecords = response.length;
+                        vm.getMatterCounts();
+                        vm.matterGridOptions.data = response;
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = false;
+                        vm.nodata = true;
+                        vm.pagination();
+                    } else {
+                        vm.getMatterCounts();
+                        vm.totalrecords = response.length;
+                        vm.matterGridOptions.data = response;
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.lazyloaderdashboard = true;
+                        vm.pagination();
+                    }
+                });
+            }
+            //#endregion
+
 
             vm.myMatters = function () {
                 vm.lazyloaderdashboard = false;
@@ -334,11 +382,15 @@
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.searchText != "") {
-                    searchToText = vm.searchText.replace("(", ",")
-                    searchToText = searchToText.replace(")", "")
-                    var firstText = searchToText.split(',')[0]
-                    var secondText = searchToText.split(',')[1]
-                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                    if (vm.searchText.indexOf("(") > -1) {
+                        searchToText = vm.searchText.replace("(", ",")
+                        searchToText = searchToText.replace(")", "")
+                        var firstText = searchToText.split(',')[0]
+                        var secondText = searchToText.split(',')[1]
+                        var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                    } else {
+                        finalSearchText = commonFunctions.searchFilter(vm.searchText);
+                    }
                 }
                 jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
@@ -371,18 +423,21 @@
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.searchText != "") {
-                    searchToText = vm.searchText.replace("(", ",")
-                    searchToText = searchToText.replace(")", "")
-                    var firstText = searchToText.split(',')[0]
-                    var secondText = searchToText.split(',')[1]
-                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                    if (vm.searchText.indexOf("(") > -1) {
+                        searchToText = vm.searchText.replace("(", ",")
+                        searchToText = searchToText.replace(")", "")
+                        var firstText = searchToText.split(',')[0]
+                        var secondText = searchToText.split(',')[1]
+                        var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")';
+                    } else {
+                        finalSearchText = commonFunctions.searchFilter(vm.searchText);
+                    }
                 }
 
                 var pinnedMattersRequest = {
                     Url: configs.global.repositoryUrl
                 }
                 var tempMatters = [];
-                jsonMatterSearchRequest.SearchObject.SearchTerm = "";
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
                 jsonMatterSearchRequest.SearchObject.ItemsPerPage = 10;
@@ -882,14 +937,16 @@
                         vm.divuigrid = false;
                         vm.nodata = true;
                         vm.lazyloaderdashboard = true;
-                        vm.displaypagination = true;
+                        vm.getMatterCounts();
+                        vm.pagination();
                         $scope.errorMessage = response.message;
                     } else {
                         vm.matterGridOptions.data = response;
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloaderdashboard = true;
-                        vm.displaypagination = true;
+                        vm.getMatterCounts();
+                        vm.pagination();
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }

@@ -8,32 +8,33 @@
             <label class="mediumSmallRole contentLabel"><span class="mandatory">*&nbsp;</span>Role</label>
             <div class="gutter"></div>
             <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>Permission Level</label>
-            <div data-ng-repeat="assignTeam in cm.matterProperties.matterObject.assignUserNames">
+            <div data-ng-repeat="assignTeam in cm.matterProperties.matterObject.assignUserName ">
+                <!-- cm.assignPermissionTeams-->
                 <div class="row{{$index}} assignNewPerm">
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input id='txtUser{{$index}}' 
-                           ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{$index}}')}" 
-                           ng-blur="cm.checkUserExists(assignTeam)" 
-                           class="medium clear inputAssignPerm ui-autocomplete-input commonspace" 
-                           ng-model="assignTeam" 
-                           uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" 
-                           typeahead-loading='loadingLocations' 
-                           typeahead-no-results='teamAssingnResults' 
-                           typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team")' 
-                           class="form-control" 
-                           id="txtAssign1" spellcheck="true" type="text" 
+                    <input id='txtUser{{$index}}'
+                           ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{$index}}')}"
+                           ng-blur="cm.checkUserExists(assignTeam)"
+                           class="medium clear inputAssignPerm ui-autocomplete-input commonspace"
+                           ng-model="assignTeam"
+                           uib-typeahead="users.name  for users in cm.searchUsers($viewValue)"
+                           typeahead-loading='loadingLocations'
+                           typeahead-no-results='teamAssingnResults'
+                           typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team")'
+                           class="form-control"
+                           id="txtAssign1" spellcheck="true" type="text"
                            placeholder="Enter and select names" autocomplete="off">
                     <div ng-show='teamAssingnResults'>
                         <i class="glyphicon glyphicon-remove"></i> No Results Found
                     </div>
                     <span class="pull-left"><i ng-show='loadingLocations' class="glyphicon glyphicon-refresh"></i></span>
                     <div class="gutter"></div>
-                    <!--<div class="addNewMember">
+                    <div class="addNewMember">
                         <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth">
-                            <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' 
-                                    ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}" 
-                                    class="medium clear dropdownCustom roleWidth" 
-                                    ng-model="assignTeam.assignedRole" 
+                            <select id='roleUser{{assignTeam.assigneTeamRowNumber}}'
+                                    ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}"
+                                    class="medium clear dropdownCustom roleWidth"
+                                    ng-model="assignTeam.assignedRole"
                                     ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
                         </div>
                     </div>
@@ -41,16 +42,16 @@
                     <div>
                         <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
                             <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
-                                <select id='permUser{{assignTeam.assigneTeamRowNumber}}' 
-                                        ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}" 
-                                        class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" 
+                                <select id='permUser{{assignTeam.assigneTeamRowNumber}}'
+                                        ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}"
+                                        class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission"
                                         ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
                             </div>
                         </div>
-                    </div>-->
+                    </div>
                     <div class="gutter"></div>
                     <div class="close customClose">
-                        <img ng-model="assignTeam.assigneTeamRowNumber" 
+                        <img ng-model="assignTeam.assigneTeamRowNumber"
                              ng-click="cm.removeAssignPermissionsRow($index)" title="Delete" alt="Delete" src="../Images/icon-delete.png">
                     </div>
                 </div>
@@ -58,6 +59,6 @@
             <div class="clear" id="addNewAssignPerm"></div>
             <a id="addMoreLink" ng-click="cm.addNewAssignPermissions()">Add More Names</a>
         </div>
-        </div>
     </div>
+</div>
 </div>
