@@ -91,6 +91,9 @@
                                 <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.showclientdrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderdocumentclient" style="position:unset !important">
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                        </div>
                     </div>
                     <div class="col-xs-12 " ng-if="vm.clientdrop">
                         <div class="row ">
@@ -105,7 +108,7 @@
                                         <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('client')">Ok</div></div>
                                     </div>
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch">Cancel</div></div>
+                                        <div class="filterOkButton" ng-click="vm.filterSearchCancel()" ><div class="dashboardSearch">Cancel</div></div>
                                     </div>
                                 </div>
                             </div>
