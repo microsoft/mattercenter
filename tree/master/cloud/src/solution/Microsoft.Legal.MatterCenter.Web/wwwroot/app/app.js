@@ -94,6 +94,7 @@ angular.module('matterMain', [
                 }
             }, requireADLogin: true
         });
+        ;
 
 
         $locationProvider.html5Mode({

@@ -315,6 +315,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             var matter = matterVM.Matter;
             var client = matterVM.Client;
             ClientContext clientContext = null;
+            MatterStampedDetails matterStampedDetails = null;
             PropertyValues matterStampedProperties = null;
             MatterStampedDetails matterStampedDetails = null;
             try
@@ -322,6 +323,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 clientContext = spoAuthorization.GetClientContext(matterVM.Client.Url);
                 matterStampedProperties = matterRepositoy.GetStampedProperties(clientContext, matter.Name);
                 Dictionary<string, object> stampedPropertyValues = matterStampedProperties.FieldValues;
+
                 if (stampedPropertyValues.Count>0)
                 {
                     string matterCenterUsers = GetStampPropertyValue(stampedPropertyValues, matterSettings.StampedPropertyMatterCenterUsers);

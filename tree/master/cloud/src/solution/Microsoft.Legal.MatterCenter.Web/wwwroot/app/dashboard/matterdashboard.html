@@ -80,13 +80,16 @@
                                       ng-click="vm.showClientDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderclient" style="position:unset !important">
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                        </div>
                     </div>
                     <div class="col-xs-12 " ng-if="vm.clientdrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'client',$event)">Select All</a> </div>
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'client',$event)">Select None</a></div>
-                                <div class="col-xs-12 refinerWrapper" ng-repeat="client in vm.clients| filter:vm.selclients" ng-click="$event.stopPropagation();">
+                                <div class="col-xs-12 refinerWrapper" ng-repeat="client in vm.clients" ng-click="$event.stopPropagation();">
                                     <input type="checkbox" ng-checked="client.checked"  ng-model="client.Selected" /> <span>{{client.name}}</span>
                                 </div>
                                 <div class="row">
@@ -110,6 +113,9 @@
                                 <span class="input-group-addon cursor" id="basic-addon1"
                                       ng-click="vm.showPracticegroupDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderpg" style="position:unset !important">
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
                         </div>
                     </div>
                     <div class="col-xs-12 " ng-if="vm.pgdrop" ng-click="$event.stopPropagation();">
@@ -142,6 +148,9 @@
                                       ng-click="vm.showAreaofLawDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderaol" style="position:unset !important">
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                        </div>
                     </div>
                     <div class="col-xs-12" ng-if="vm.aoldrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
@@ -172,13 +181,13 @@
                                     <div class='input-group'>
                                         <input type='text' placeholder='From' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
-                                               ng-model='startdate'
-                                               is-open='openedStartDate'
-                                               datepicker-options='dateOptions'
+                                               ng-model='vm.startdate'
+                                               is-open='vm.openedStartDate'
+                                               datepicker-options='vm.dateOptions'
                                                ng-required='true' close-text='Close'
                                                alt-input-formats='altInputFormats' />
                                         <span class='input-group-btn'>
-                                            <button type='button' class='btn btn-default' ng-click='openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                                            <button type='button' class='btn btn-default' ng-click='vm.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
                                         </span>
                                     </div>
                                 </div>
@@ -186,13 +195,13 @@
                                     <div class='input-group'>
                                         <input type='text' placeholder='To' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
-                                               ng-model='enddate'
-                                               is-open='openedEndDate'
-                                               datepicker-options='enddateOptions'
+                                               ng-model='vm.enddate'
+                                               is-open='vm.openedEndDate'
+                                               datepicker-options='vm.enddateOptions'
                                                ng-required='true' close-text='Close'
                                                alt-input-formats='altInputFormats' />
                                         <span class='input-group-btn'>
-                                            <button type='button' class='btn btn-default' ng-click='openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                                            <button type='button' class='btn btn-default' ng-click='vm.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
                                         </span>
                                     </div>
                                 </div>
@@ -208,9 +217,9 @@
             </div>
             <div class="col-xs-12 padtop20">
                 <ul class="nav nav-tabs" toggletab>
-                    <li><a href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">My matters ({{vm.myMatterCount}})</a></li>
-                    <li class="active"><a data-toggle="tab" ng-click="vm.search()">All matters ({{vm.allMatterCount}})</a></li>
-                    <li><a href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">Pinned matters ({{vm.pinMatterCount}})</a></li>
+                    <li id="myMatters"><a href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">My matters ({{vm.myMatterCount}})</a></li>
+                    <li id="allMatters" class="active cursor"><a data-toggle="tab" ng-click="vm.search()">All matters ({{vm.allMatterCount}})</a></li>
+                    <li id="pinMatters"><a href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">Pinned matters ({{vm.pinMatterCount}})</a></li>
                 </ul>
             </div>
             <div class="col-xs-offset-9 col-xs-3 sortby">
@@ -231,16 +240,19 @@
             </div>
             <div class="col-xs-12">
                 <div class="tab-content">                    
-                    <div class="tab-pane active" id="mattersGrid" ng-hide="vm.mattersdashboardGrid">
-                        <div class="col-xs-12 pad0 padtop5">
+                    <div class="tab-pane active" id="mattersGrid" >
+                        <div class="col-xs-12 pad0 padtop5" ng-if="vm.divuigrid">
                             <div class="" id="grid1" ui-grid="vm.matterGridOptions" ui-grid-exporter ui-grid-selection ui-grid-auto-resize></div>
+                        </div>
+                        <div class="col-xs-12 pad0 padtop5 text-center" ng-if="vm.nodata">
+                            No results found.
                         </div>
                     </div>                    
                 </div>
 
             </div>
         </div>
-        <div class="jsonGridFooter" ng-if="vm.displaypagination">
+        <div class="jsonGridFooter" ng-if="vm.displaypagination && vm.totalrecords>0">
             <div ng-if="vm.totalrecords>6 && vm.first>2"> <img id="" ng-click="vm.prev()" class="first cur-pointer" src="../Images/pagination-back-Enabled.png"></div>
             <div ng-if="vm.totalrecords<6 || vm.first<2"><img id="grid_Grid_First" class="first click-disabled" src="../Images/pagination-back-disabled.png"></div>
             <div id="grid_Grid_ViewRecords" class="ViewRecordDiv moveToMiddle"><span class="PaginateSpan">{{vm.fromtopage}}</span></div>
@@ -402,7 +414,7 @@
                             </div>
                             <!--Content end for showing the files which are uploaded from desktop-->
 
-                            <div ng-if="vm.allAttachmentDetails.length==0" class="noFilesUploaded">No files uploaded</div>
+                            <!--<div ng-if="vm.allAttachmentDetails.length==0" class="noFilesUploaded">No files uploaded</div>-->
                         </div>
                         <div class="col-sm-3 folderContent">
                             <div id="breadcrumb" class="breadcrumb" ng-hide="breadcrumb">
