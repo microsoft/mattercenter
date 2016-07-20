@@ -317,7 +317,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             ClientContext clientContext = null;
             MatterStampedDetails matterStampedDetails = null;
             PropertyValues matterStampedProperties = null;
-            MatterStampedDetails matterStampedDetails = null;
+            
             try
             {
                 clientContext = spoAuthorization.GetClientContext(matterVM.Client.Url);
