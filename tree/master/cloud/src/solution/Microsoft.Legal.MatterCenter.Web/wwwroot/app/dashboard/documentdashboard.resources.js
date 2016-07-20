@@ -48,6 +48,11 @@ angular.module('matterMain')
                   'getassets': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/document/getassets'
+                  }),
+                  'getUsers': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/user/getusers',
+                      isArray: true
                   })
               });
       }]);
