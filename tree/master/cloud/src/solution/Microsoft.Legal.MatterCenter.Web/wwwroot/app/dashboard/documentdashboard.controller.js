@@ -36,7 +36,9 @@
 
             //#region closing all dropdowns on click of page
             vm.closealldrops = function ($event) {
-                $event.stopPropagation();
+                if ($event !== null) {
+                    $event.stopPropagation();
+                }
                 vm.searchdrop = false;
                 vm.downwarddrop = true;
                 vm.upwarddrop = false;
@@ -334,12 +336,13 @@
             //#endregion
 
             //Callback function for document assets 
-            function GetAssets(options, callback) {
+            function GetAssets(options, callbackOnSuccess, callbackOnError) {
                 api({
                     resource: 'documentDashBoardResource',
                     method: 'getassets',
                     data: options,
-                    success: callback
+                    success: callbackOnSuccess,
+                    error: callbackOnError
                 });
             }
             //#endregion
@@ -986,6 +989,7 @@
             vm.assetsuccess = false;
             vm.getDocumentAssets = function (row) {
                 vm.assetsuccess = false;
+                vm.closealldrops(null);
                 var Client = {
                     Id: row.entity.documentUrl.replace("https://msmatter.sharepoint.com", ""),
                     Name: row.entity.documentMatterUrl.replace("https://msmatter.sharepoint.com", ""),
@@ -994,6 +998,10 @@
                 GetAssets(Client, function (response) {
                     vm.listguid = response.listInternalName;
                     vm.docguid = response.documentGuid;
+                    vm.assetsuccess = true;
+                },function (data) {
+                    vm.listguid = "";
+                    vm.docguid = "";
                     vm.assetsuccess = true;
                 });
             }
