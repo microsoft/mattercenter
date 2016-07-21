@@ -1130,12 +1130,21 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             string matterCenterRoles = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Roles);
             string documentTemplateCount = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.DocumentTemplateCount);
             string matterCenterUsers = string.Empty;
+            string matterCenterUserEmails = string.Empty;
             string separator = string.Empty;
             foreach (IList<string> userNames in matter.AssignUserNames)
             {
                 matterCenterUsers += separator + string.Join(ServiceConstants.SEMICOLON, userNames.Where(user => !string.IsNullOrWhiteSpace(user)));
                 separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
             }
+
+            foreach (IList<string> userEmails in matter.AssignUserEmails)
+            {
+                matterCenterUserEmails += string.Join(ServiceConstants.SEMICOLON, userEmails.Where(user => !string.IsNullOrWhiteSpace(user))) + separator;
+            }
+            // Removed $|$ from end of the string 
+            matterCenterUserEmails = matterCenterUserEmails.Substring(0, matterCenterUserEmails.Length - separator.Length);
+
             List<string> keys = new List<string>();
             Dictionary<string, string> propertyList = new Dictionary<string, string>();
             keys.Add(matterSettings.StampedPropertyPracticeGroup);
@@ -1162,6 +1171,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             keys.Add(matterSettings.StampedPropertyDocumentTemplateCount);
             keys.Add(matterSettings.StampedPropertyBlockedUsers);
             keys.Add(matterSettings.StampedPropertyMatterGUID);
+            keys.Add(matterSettings.StampedPropertyMatterCenterUserEmails);
 
             propertyList.Add(matterSettings.StampedPropertyPracticeGroup, WebUtility.HtmlEncode(matterDetails.PracticeGroup));
             propertyList.Add(matterSettings.StampedPropertyAreaOfLaw, WebUtility.HtmlEncode(matterDetails.AreaOfLaw));
@@ -1189,13 +1199,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             propertyList.Add(matterSettings.StampedPropertyDocumentTemplateCount, WebUtility.HtmlEncode(documentTemplateCount));
             propertyList.Add(matterSettings.StampedPropertyBlockedUsers, WebUtility.HtmlEncode(string.Join(";", matter.BlockUserNames)));
             propertyList.Add(matterSettings.StampedPropertyMatterGUID, WebUtility.HtmlEncode(matter.MatterGuid));
-            propertyList.Add(matterSettings.StampedPropertySuccess, ServiceConstants.TRUE);
+            propertyList.Add(matterSettings.StampedPropertySuccess, ServiceConstants.TRUE);   
+            propertyList.Add(matterSettings.StampedPropertyMatterCenterUserEmails, WebUtility.HtmlEncode(matterCenterUserEmails));
+            propertyList.Add(matterSettings.StampedPropertyResponsibleAttorneyEmail, WebUtility.HtmlEncode(matterDetails.ResponsibleAttorneyEmail)); 
             return propertyList;
         }
-
-        
-
-        
         #endregion
     }
 }
