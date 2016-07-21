@@ -29,6 +29,7 @@ using Microsoft.Legal.MatterCenter.Repository.Extensions;
 using System.Text;
 using Newtonsoft.Json;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -41,12 +42,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
         #region Properties
         private GeneralSettings generalSettings;
+        private ContentTypesConfig contentTypeSettings;
         private LogTables logTables;
         private readonly TaxonomySettings taxonomySettings;
         private ISPOAuthorization spoAuthorization;
         private ClientContext clientContext;
         private TaxonomyResponseVM taxonomyResponseVM;
         private ICustomLogger customLogger;
+        private IConfigurationRoot configuration;
+        //Initialize the minimum number of taxonomy levels. By default minimum levels will be 2
+        private int level = 3;
         #endregion
 
         /// <summary>
@@ -58,16 +63,21 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="spoAuthorization"></param>
         /// <param name="customLogger"></param>
         public Taxonomy(IOptionsMonitor<GeneralSettings> generalSettings, 
-            IOptionsMonitor<TaxonomySettings> taxonomySettings, 
+            IOptionsMonitor<TaxonomySettings> taxonomySettings,
+            IOptionsMonitor<ContentTypesConfig> contentTypeSettings,
             IOptionsMonitor<LogTables> logTables,
-            ISPOAuthorization spoAuthorization, ICustomLogger customLogger)
+            ISPOAuthorization spoAuthorization, ICustomLogger customLogger, 
+            IConfigurationRoot configuration)
         {
             this.generalSettings = generalSettings.CurrentValue;
             this.taxonomySettings = taxonomySettings.CurrentValue;
+            this.contentTypeSettings = contentTypeSettings.CurrentValue;
+            this.logTables = logTables.CurrentValue;
             this.spoAuthorization = spoAuthorization;
             taxonomyResponseVM = new TaxonomyResponseVM();
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
+            
+            this.configuration = configuration;
         }       
 
         /// <summary>
@@ -224,13 +234,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="termStoreDetails">Term Store object containing Term store data</param>
         /// <returns>Serialized Object of Term Set</returns>
         private string GetPracticeGroupTermSetHierarchy(ClientContext clientContext, TermSet termSet, TermStoreDetails termStoreDetails)
-        {            
+        {
             StringBuilder sb = new StringBuilder();
             JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
             jw.Formatting = Formatting.Indented;
             jw.WriteStartObject();
             jw.WritePropertyName("name");
             jw.WriteValue(termSet.Name);
+            jw.WritePropertyName("levels");
+            jw.WriteValue(taxonomySettings.Levels);
             jw.WritePropertyName(taxonomySettings.Level1Name);
             jw.WriteStartArray();
             TermCollection termColl = termSet.Terms;
@@ -243,7 +255,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 jw.WritePropertyName("id");
                 jw.WriteValue(Convert.ToString(term.Id, CultureInfo.InvariantCulture));
                 jw.WritePropertyName("parentTermName");
-                jw.WriteValue(termSet.Name);                
+                jw.WriteValue(termSet.Name);
+                jw.WritePropertyName("siteColumnName");
+                jw.WriteValue(configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName1"]);
                 foreach (KeyValuePair<string, string> customProperty in term.CustomProperties)
                 {
                     if (customProperty.Key.Equals(taxonomySettings.PracticeGroupCustomPropertyFolderNames, StringComparison.Ordinal))
@@ -269,6 +283,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             jw.WriteValue(Convert.ToString(termLevel2.Id, CultureInfo.InvariantCulture));
                             jw.WritePropertyName("parentTermName");
                             jw.WriteValue(term.Name);
+                            jw.WritePropertyName("siteColumnName");
+                            jw.WriteValue(configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName2"]);
                             foreach (KeyValuePair<string, string> customProperty in term.CustomProperties)
                             {
                                 if (customProperty.Key.Equals(taxonomySettings.PracticeGroupCustomPropertyFolderNames, StringComparison.Ordinal))
@@ -277,16 +293,24 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                     jw.WriteValue(customProperty.Value);
                                 }
                             }
-                            //Create level 3 terms - Sub Area Of LAW
-                            if (termLevel2.TermsCount > 0)
-                            {
-                                jw.WritePropertyName(taxonomySettings.Level3Name);
-                                jw.WriteStartArray();
-                                TermCollection termCollLevel3 = termLevel2.LoadTerms(clientContext);
-                                GetChildTermsWithCustomProperties(termCollLevel3, termStoreDetails, termLevel2, jw);
-                                jw.WriteEndArray();
+                            //If the number of levels that are configured are more than 2, try to get the 
+                            //3rd level hierarchy
+                            if (taxonomySettings.Levels > 2)
+                            {                                
+                                //Create level 3 terms - Sub Area Of LAW
+                                if (termLevel2.TermsCount > 0)
+                                {
+                                    jw.WritePropertyName(taxonomySettings.Level3Name);
+                                    jw.WriteStartArray();
+                                    TermCollection termCollLevel3 = termLevel2.LoadTerms(clientContext);
+                                    string siteColumnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName3"];
+                                    int termLevelHierarchyPosition = 0;
+                                    GetChildTermsWithCustomProperties(termCollLevel3, termStoreDetails, termLevel2, jw, 
+                                        siteColumnName, termLevelHierarchyPosition);
+                                    jw.WriteEndArray();
+                                }
+                                jw.WriteEndObject();
                             }
-                            jw.WriteEndObject();
                         }
                     }
                     jw.WriteEndArray();
@@ -295,12 +319,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             jw.WriteEndArray();
             jw.WriteEndObject();
-            return sb.ToString();
-            //return tempTermSet;
+            return sb.ToString();            
         }
 
         /// <summary>
-        /// This method will update the taxonomy hierarchy object with custom properties that needs to be send to client. This is a recrisive function
+        /// This method will update the taxonomy hierarchy object with custom properties that needs to be send to client. This is a recursive function
         /// and it will loop until a term does not have any child terms
         /// </summary>
         /// <param name="termCollection">The Term Collection object to which terms will be added</param>
@@ -308,7 +331,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="parentTerm">The parent term from where the custom properties are read and assign to its child terms</param>
         /// <returns></returns>
         private void GetChildTermsWithCustomProperties(TermCollection termCollection, 
-            TermStoreDetails termStoreDetails, Term parentTerm, JsonWriter jw)
+            TermStoreDetails termStoreDetails, Term parentTerm, JsonWriter jw, string siteColumnName, int termLevelHierarchyPosition)
         {
             try
             {
@@ -324,6 +347,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         jw.WriteValue(Convert.ToString(term.Id, CultureInfo.InvariantCulture));
                         jw.WritePropertyName("parentTermName");
                         jw.WriteValue(parentTerm.Name);
+                        jw.WritePropertyName("siteColumnName");
+                        jw.WriteValue(siteColumnName);
                         IDictionary<string, string> childCustomProperties = term.CustomProperties;
                         IDictionary<string, string> parentCustomProperties = parentTerm.CustomProperties;
                         foreach (KeyValuePair<string, string> parentProperty in parentTerm.CustomProperties)
@@ -379,15 +404,29 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 jw.WriteValue(customProperty.Value);
                             }
                         }
-
-                        if (term.TermsCount > 0)
+                        //Increment the level
+                        level = level + 1;
+                        //Check if we need to get more terms.
+                        if (level <= taxonomySettings.Levels)
                         {
-                            jw.WritePropertyName(taxonomySettings.Level4Name);
-                            jw.WriteStartArray();
-                            TermCollection termCollLevel4 = term.LoadTerms(clientContext);
-                            //Recursive function which will call it self untill a given term does not have any child terms
-                            GetChildTermsWithCustomProperties(termCollLevel4, termStoreDetails, term, jw);
-                            jw.WriteEndArray();
+                            if (term.TermsCount > 0)
+                            {
+                                if(level==4)
+                                {
+                                    jw.WritePropertyName(taxonomySettings.Level4Name);
+                                }
+                                //The app will support upto five level of hierarchy
+                                if (level == 5)
+                                {
+                                    jw.WritePropertyName(taxonomySettings.Level5Name);
+                                }
+                                jw.WriteStartArray();
+                                TermCollection termCollLevel4 = term.LoadTerms(clientContext);
+                                siteColumnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName"+ level];
+                                //Recursive function which will call it self until a given term does not have any child terms
+                                GetChildTermsWithCustomProperties(termCollLevel4, termStoreDetails, term, jw, siteColumnName, termLevelHierarchyPosition);
+                                jw.WriteEndArray();
+                            }
                         }
                         jw.WriteEndObject();
                     }

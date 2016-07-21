@@ -26,7 +26,7 @@ namespace Microsoft.Legal.MatterCenter.Web
     public class UserController : Controller
     {
         private ErrorSettings errorSettings;
-        private ISPOAuthorization spoAuthorization;
+        
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;        
         private IUserRepository userRepositoy;
         private ICustomLogger customLogger;
@@ -39,8 +39,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="matterSettings"></param>
         /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
-        public UserController(IOptionsMonitor<ErrorSettings> errorSettings,           
-            ISPOAuthorization spoAuthorization,
+        public UserController(IOptionsMonitor<ErrorSettings> errorSettings,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IUserRepository userRepositoy,
             ICustomLogger customLogger, 
@@ -48,8 +47,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             IOptionsMonitor<GeneralSettings> generalSettings
             )
         {
-            this.errorSettings = errorSettings.CurrentValue;            
-            this.spoAuthorization = spoAuthorization;
+            this.errorSettings = errorSettings.CurrentValue; 
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;            
             this.customLogger = customLogger;
             this.logTables = logTables.CurrentValue;             
@@ -74,7 +72,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 ErrorResponse errorResponse = null;                
                 if (searchRequestVM.Client == null && string.IsNullOrWhiteSpace(searchRequestVM.Client.Url))
@@ -117,10 +115,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("getuserprofilepicture")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public IActionResult UserProfilePicture([FromBody]Client client)
-        {           
-            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
-            string accountName = $"i:0#.f|membership|{HttpContext.User.Identity.Name}";
-            spoAuthorization.AccountName = accountName;
+        {    
             #region Error Checking                
             ErrorResponse errorResponse = null;
 
@@ -152,7 +147,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 
@@ -199,7 +194,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
 
@@ -247,7 +242,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
 
@@ -267,7 +262,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 {
                     IsUserExistsInSite = isUserExists
                 };
-                return matterCenterServiceFunctions.ServiceResponse(userExists, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(userExists, (int)HttpStatusCode.OK);                
             }
             catch (Exception ex)
             {

@@ -241,24 +241,32 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     IList<string> userNameList = matter.AssignUserNames[iCounter].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
                     foreach (string userName in userList)
                     {
-                        Principal teamMemberPrincipal = clientContext.Web.EnsureUser(userName.Trim());
-                        clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title);
-                        teamMemberPrincipalCollection.Add(teamMemberPrincipal);
-                    }
-                    clientContext.ExecuteQuery();
-                    //// Check whether the name entered by the user and the name resolved by SharePoint is same.
-                    foreach (string teamMember in userNameList)
-                    {
-                        if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[iCount].Title.Trim(), StringComparison.OrdinalIgnoreCase))
-                        {
-                            genericResponse = new GenericResponseVM();
-                            //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectTeamMembersCode, ServiceConstantStrings.IncorrectTeamMembersMessage + ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR + userId[iCounter]);
-                            genericResponse.Code = errorSettings.IncorrectTeamMembersCode;
-                            genericResponse.Code = errorSettings.IncorrectTeamMembersMessage + ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR + userId[iCounter];
-                            isInvalidUser = true;
-                            break;
+                        //Check has been made to check whether the user is present in the system as part of external sharing implementation
+                        if (!string.IsNullOrWhiteSpace(userName) && userdetails.CheckUserPresentInMatterCenter(clientContext, userName))
+                        { 
+                            Principal teamMemberPrincipal = clientContext.Web.EnsureUser(userName.Trim());
+                            clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title);
+                            teamMemberPrincipalCollection.Add(teamMemberPrincipal);
                         }
-                        iCount++;
+                    }
+                    //Check has been made to check whether the user is present in the system as part of external sharing implementation
+                    if (teamMemberPrincipalCollection.Count > 0)
+                    {
+                        clientContext.ExecuteQuery();
+                        //// Check whether the name entered by the user and the name resolved by SharePoint is same.
+                        foreach (string teamMember in userNameList)
+                        {
+                            if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[iCount].Title.Trim(), StringComparison.OrdinalIgnoreCase))
+                            {
+                                genericResponse = new GenericResponseVM();
+                                //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectTeamMembersCode, ServiceConstantStrings.IncorrectTeamMembersMessage + ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR + userId[iCounter]);
+                                genericResponse.Code = errorSettings.IncorrectTeamMembersCode;
+                                genericResponse.Code = errorSettings.IncorrectTeamMembersMessage + ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR + userId[iCounter];
+                                isInvalidUser = true;
+                                break;
+                            }
+                            iCount++;
+                        }
                     }
                     if (isInvalidUser)
                     {

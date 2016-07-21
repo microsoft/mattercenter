@@ -11,8 +11,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
     public interface ISPOAuthorization
     {
         //ErrorResponse ValidateClientToken(string authToken);
-        ClientContext GetClientContext(string url);     
-        string AccessToken { get; set; }
-        string AccountName { get; set; }
+        ClientContext GetClientContext(string url); 
     }
 }

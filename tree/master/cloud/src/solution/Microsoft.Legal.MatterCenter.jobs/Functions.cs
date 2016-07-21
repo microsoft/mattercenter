@@ -34,7 +34,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         {
             try
             {
-                var builder = new ConfigurationBuilder().AddJsonFile("appSettings.json");
+                var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appSettings.json");
                 var configuration = builder.Build();
                 //Read all rows from table storage which are in pending state
                 var query = from p in matterInformationVM select p;
@@ -118,7 +118,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                             if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, email, configuration, log) == true)
                             {
                                 string requestedForPerson = email;
-                                string matterId = originalMatter.Matter.Id;
+                                string matterId = originalMatter.Matter.MatterGuid;
                                 var listTitle = configuration["Settings:ExternalAccessRequests"];
                                 var list = ctx.Web.Lists.GetByTitle(listTitle);
                                 CamlQuery camlQuery = CamlQuery.CreateAllItemsQuery();

@@ -41,8 +41,7 @@ namespace Microsoft.Legal.MatterCenter.Web
     [Route("api/v1/document")]
     public class DocumentController : Controller
     {
-        private ErrorSettings errorSettings;
-        private ISPOAuthorization spoAuthorization;
+        private ErrorSettings errorSettings;        
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;
         private DocumentSettings documentSettings;
         private IDocumentRepository documentRepositoy;
@@ -59,8 +58,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="matterCenterServiceFunctions"></param>
         /// <param name="documentRepositoy"></param>
         public DocumentController(IOptionsMonitor<ErrorSettings> errorSettings,
-            IOptionsMonitor<DocumentSettings> documentSettings,
-            ISPOAuthorization spoAuthorization,
+            IOptionsMonitor<DocumentSettings> documentSettings,            
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IDocumentRepository documentRepositoy,
             ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IDocumentProvision documentProvision,
@@ -69,8 +67,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             )
         {
             this.errorSettings = errorSettings.CurrentValue;
-            this.documentSettings = documentSettings.CurrentValue;
-            this.spoAuthorization = spoAuthorization;
+            this.documentSettings = documentSettings.CurrentValue;            
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.documentRepositoy = documentRepositoy;
             this.customLogger = customLogger;
@@ -91,7 +88,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
                 //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 GenericResponseVM genericResponse = null;
                 #region Error Checking    
                 //Input validation
@@ -140,7 +137,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
                 //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 //Input validation
@@ -178,7 +175,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
                 //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking    
                 //Input validation            
                 GenericResponseVM genericResponse = null;                                
@@ -218,7 +215,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
                 //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking       
                 //Input validation         
                 GenericResponseVM genericResponse = null;
@@ -262,7 +259,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
                 //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 if (pinRequestDocumentVM == null && pinRequestDocumentVM.Client == null && pinRequestDocumentVM.DocumentData == null)
@@ -304,7 +301,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
                 //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 if (client == null)
@@ -342,7 +339,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
                 //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 var client = attachmentRequestVM.Client;
                 var serviceRequest = attachmentRequestVM.ServiceRequest;
                 GenericResponseVM genericResponse = null;
@@ -414,7 +411,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 string folderName = folderUrl.Substring(folderUrl.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
                 string documentLibraryName = Request.Form["documentLibraryName"];
                 bool isDeployedOnAzure = Convert.ToBoolean(generalSettings.IsTenantDeployment, CultureInfo.InvariantCulture);
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 string originalName = string.Empty;
                 bool allowContentCheck = Convert.ToBoolean(Request.Form["AllowContentCheck"], CultureInfo.InvariantCulture);
                 Int16 isOverwrite = 3;     
@@ -551,7 +548,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
                 //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 var client = attachmentRequestVM.Client;
                 var serviceRequest = attachmentRequestVM.ServiceRequest;
                 GenericResponseVM genericResponse = null;
