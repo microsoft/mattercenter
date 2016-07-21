@@ -740,7 +740,7 @@
                     vm.clientdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
-                } else {
+                       } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
