@@ -72,7 +72,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string StampedPropertyDocumentTemplateCount { get; set; }
         public string StampedPropertyBlockedUsers { get; set; }
         public string StampedPropertySuccess { get; set; }
-        
+        public string StampedPropertyResponsibleAttorneyEmail { get; set; }
+
         public string PropertyNameVtiIndexedPropertyKeys { get; set; }
         public string ValidDateFormat { get; set; }
         public string ShareListColumnMatterPath { get; set; }

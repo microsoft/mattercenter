@@ -37,7 +37,7 @@ namespace Microsoft.Legal.MatterCenter.Web
     [Route("api/v1/email")]
     public class EmailController : Controller
     {
-        private ISPOAuthorization spoAuthorization;
+        
         private ErrorSettings errorSettings;
         IMatterCenterServiceFunctions matterCenterServiceFunctions;
         private ICustomLogger customLogger;
@@ -45,12 +45,11 @@ namespace Microsoft.Legal.MatterCenter.Web
         IDocumentProvision documentProvision;
         DocumentSettings documentSettings;
         public EmailController(IOptionsMonitor<ErrorSettings> errorSettings,
-            ICustomLogger customLogger, 
-            ISPOAuthorization spoAuthorization, 
+            ICustomLogger customLogger,             
             IMatterCenterServiceFunctions matterCenterServiceFunctions, 
-            IOptionsMonitor<LogTables> logTables, IDocumentProvision documentProvision, IOptionsMonitor<DocumentSettings> documentSettings)
-        {
-            this.spoAuthorization = spoAuthorization;
+            IOptionsMonitor<LogTables> logTables, IDocumentProvision documentProvision, 
+            IOptionsMonitor<DocumentSettings> documentSettings)
+        {            
             this.errorSettings = errorSettings.CurrentValue;
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.customLogger = customLogger;
@@ -70,7 +69,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 if (mailAttachmentDetails == null && mailAttachmentDetails.FullUrl == null)
@@ -107,7 +106,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 if (mailAttachmentDetails == null && mailAttachmentDetails.AttachmentContent == null)

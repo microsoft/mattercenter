@@ -231,6 +231,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 PropertyValues matterStampedProperties = matterRepositoy.GetStampedProperties(clientContext, matter.Name);
                 Dictionary<string, string> propertyList = SetStampProperty(client, matter, matterDetails);
                 matterRepositoy.SetPropertBagValuesForList(clientContext, matterStampedProperties, matter.Name, propertyList);
+                MatterInformationVM matterInfo = new MatterInformationVM()
+                {
+                    Client = matterMetadata.Client,
+                    Matter = matterMetadata.Matter,
+                    MatterDetails = matterMetadata.MatterDetails
+                };
+                //As part of final step in matter creation, check whether any assigned users are external to the 
+                //organization and if yes, send notification to that user to accepct the
+                //inviotation so that he can access matter center
+                externalSharing.ShareMatter(matterInfo);
                 if (matterMetadata.MatterProvisionFlags.SendEmailFlag)
                 {
                     returnFlag = ShareMatter(matterMetadata, matterMetadata.MatterProvisionFlags.MatterLandingFlag);
@@ -307,6 +317,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             ClientContext clientContext = null;
             MatterStampedDetails matterStampedDetails = null;
             PropertyValues matterStampedProperties = null;
+            
             try
             {
                 clientContext = spoAuthorization.GetClientContext(matterVM.Client.Url);
@@ -400,9 +411,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 if (!string.IsNullOrWhiteSpace(matter.Name))
                 {
-
-                    //This method will check if any of the matter users are external to the organization and not present in the syste
-                    externalSharing.ShareMatter(matterInfo);
+                    
                     
                     
                     //Assign permission for Matter library
@@ -1121,12 +1130,21 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             string matterCenterRoles = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Roles);
             string documentTemplateCount = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.DocumentTemplateCount);
             string matterCenterUsers = string.Empty;
+            string matterCenterUserEmails = string.Empty;
             string separator = string.Empty;
             foreach (IList<string> userNames in matter.AssignUserNames)
             {
                 matterCenterUsers += separator + string.Join(ServiceConstants.SEMICOLON, userNames.Where(user => !string.IsNullOrWhiteSpace(user)));
                 separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
             }
+
+            foreach (IList<string> userEmails in matter.AssignUserEmails)
+            {
+                matterCenterUserEmails += string.Join(ServiceConstants.SEMICOLON, userEmails.Where(user => !string.IsNullOrWhiteSpace(user))) + separator;
+            }
+            // Removed $|$ from end of the string 
+            matterCenterUserEmails = matterCenterUserEmails.Substring(0, matterCenterUserEmails.Length - separator.Length);
+
             List<string> keys = new List<string>();
             Dictionary<string, string> propertyList = new Dictionary<string, string>();
             keys.Add(matterSettings.StampedPropertyPracticeGroup);
@@ -1153,6 +1171,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             keys.Add(matterSettings.StampedPropertyDocumentTemplateCount);
             keys.Add(matterSettings.StampedPropertyBlockedUsers);
             keys.Add(matterSettings.StampedPropertyMatterGUID);
+            keys.Add(matterSettings.StampedPropertyMatterCenterUserEmails);
 
             propertyList.Add(matterSettings.StampedPropertyPracticeGroup, WebUtility.HtmlEncode(matterDetails.PracticeGroup));
             propertyList.Add(matterSettings.StampedPropertyAreaOfLaw, WebUtility.HtmlEncode(matterDetails.AreaOfLaw));
@@ -1180,13 +1199,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             propertyList.Add(matterSettings.StampedPropertyDocumentTemplateCount, WebUtility.HtmlEncode(documentTemplateCount));
             propertyList.Add(matterSettings.StampedPropertyBlockedUsers, WebUtility.HtmlEncode(string.Join(";", matter.BlockUserNames)));
             propertyList.Add(matterSettings.StampedPropertyMatterGUID, WebUtility.HtmlEncode(matter.MatterGuid));
-            propertyList.Add(matterSettings.StampedPropertySuccess, ServiceConstants.TRUE);
+            propertyList.Add(matterSettings.StampedPropertySuccess, ServiceConstants.TRUE);   
+            propertyList.Add(matterSettings.StampedPropertyMatterCenterUserEmails, WebUtility.HtmlEncode(matterCenterUserEmails));
+            propertyList.Add(matterSettings.StampedPropertyResponsibleAttorneyEmail, WebUtility.HtmlEncode(matterDetails.ResponsibleAttorneyEmail)); 
             return propertyList;
         }
-
-        
-
-        
         #endregion
     }
 }

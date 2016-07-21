@@ -197,18 +197,20 @@ namespace Microsoft.Legal.MatterCenter.Web
         #region Private Methods
 
         #region Swagger
-        private string pathToDoc = "Microsoft.Legal.MatterCenter.Web.xml";
-
         private void ConfigureSwagger(IServiceCollection services)
         {
+            string pathToDoc = $"{System.AppDomain.CurrentDomain.BaseDirectory}Microsoft.Legal.MatterCenter.Web.xml";
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options => {
                 options.SingleApiVersion(new Swashbuckle.SwaggerGen.Generator.Info
                 {
                     Version = "v1",
                     Title = "Matter Center API Version V1",
-                    Description = "This matter center api is for V1 release"
+                    Description = "This matter center api is for V1 release",
+                    TermsOfService = "None"
                 });
+                options.IncludeXmlComments(pathToDoc);
+                options.DescribeAllEnumsAsStrings();
                 options.IgnoreObsoleteActions();
 
             });
@@ -279,6 +281,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IExternalSharing, ExternalSharing>();
             services.AddSingleton<IConfigRepository, ConfigRepository>();
+            services.AddSingleton<IExternalSharing, ExternalSharing>();
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         private void CheckAuthorization(IApplicationBuilder app)

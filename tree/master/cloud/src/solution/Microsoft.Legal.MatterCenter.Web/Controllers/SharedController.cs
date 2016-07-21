@@ -35,7 +35,7 @@ namespace Microsoft.Legal.MatterCenter.Web
     public class SharedController : Controller
     {
         private ErrorSettings errorSettings;
-        private ISPOAuthorization spoAuthorization;
+        
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;
         private SharedSettings sharedSettings;
         private ISharedRepository sharedRepository;
@@ -49,15 +49,14 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
         public SharedController(IOptionsMonitor<ErrorSettings> errorSettings,
-            IOptionsMonitor<SharedSettings> sharedSettings,
-            ISPOAuthorization spoAuthorization,
+            IOptionsMonitor<SharedSettings> sharedSettings,            
             IMatterCenterServiceFunctions matterCenterServiceFunctions,            
             ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables,
             ISharedRepository sharedRepository
             )
         {
             this.errorSettings = errorSettings.CurrentValue;            
-            this.spoAuthorization = spoAuthorization;
+            
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.sharedRepository = sharedRepository;
             this.customLogger = customLogger;
@@ -82,7 +81,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
 
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 //if the token is not valid, immediately return no authorization error to the user
@@ -135,7 +134,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
 
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 //if the token is not valid, immediately return no authorization error to the user

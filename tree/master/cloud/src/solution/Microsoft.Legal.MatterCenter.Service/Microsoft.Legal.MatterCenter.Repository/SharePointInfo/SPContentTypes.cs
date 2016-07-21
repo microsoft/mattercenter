@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.SharePoint.Client;
@@ -16,19 +17,23 @@ namespace Microsoft.Legal.MatterCenter.Repository
     {
 
         private ContentTypesConfig contentTypesConfig;
+        private TaxonomySettings taxonomySettings;
         private ICustomLogger customLogger;
         private LogTables logTables;
         private CamlQueries camlQueries;
         private ISPList spList;
+        private IConfigurationRoot configuration;
         public SPContentTypes(IOptionsMonitor<ContentTypesConfig> contentTypesConfig, IOptionsMonitor<CamlQueries> camlQueries, ISPList spList,
-            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables
+            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IOptionsMonitor<TaxonomySettings> taxonomySettings, IConfigurationRoot configuration
             )
         {
             this.contentTypesConfig = contentTypesConfig.CurrentValue;
+            this.taxonomySettings = taxonomySettings.CurrentValue;
             this.customLogger = customLogger;
             this.logTables = logTables.CurrentValue;
             this.camlQueries = camlQueries.CurrentValue;
             this.spList = spList;
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -178,21 +183,28 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).DefaultValue = matterMetadata.Matter.Name;
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).ReadOnlyField = true;
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).SetShowInDisplayForm(true);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).Update();
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnPracticeGroup).SetShowInDisplayForm(true);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnPracticeGroup).DefaultValue = string.Format(CultureInfo.InvariantCulture, ServiceConstants.MetadataDefaultValue, matterMetadata.PracticeGroupTerm.WssId, matterMetadata.PracticeGroupTerm.TermName, matterMetadata.PracticeGroupTerm.Id);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnPracticeGroup).Update();
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnAreaOfLaw).SetShowInDisplayForm(true);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnAreaOfLaw).DefaultValue = string.Format(CultureInfo.InvariantCulture, ServiceConstants.MetadataDefaultValue, matterMetadata.AreaTerm.WssId, matterMetadata.AreaTerm.TermName, matterMetadata.AreaTerm.Id);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnAreaOfLaw).Update();
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnSubareaOfLaw).SetShowInDisplayForm(true);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnSubareaOfLaw).DefaultValue = string.Format(CultureInfo.InvariantCulture, ServiceConstants.MetadataDefaultValue, matterMetadata.SubareaTerm.WssId, matterMetadata.SubareaTerm.TermName, matterMetadata.SubareaTerm.Id);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnSubareaOfLaw).Update();
+                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).Update();                
+
+                int levels = taxonomySettings.Levels;
+                //For the number of levels that are configured, get the configured column name and 
+                //update the wssid, termname and id for the managed field
+                for (int i=1;i<=levels; i++)
+                {
+                    string columnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName" + i];
+                    fields.GetByInternalNameOrTitle(columnName).SetShowInDisplayForm(true);
+                    ManagedColumn managedColumn = matterMetadata.ManagedColumnTerms[columnName];
+                    fields.GetByInternalNameOrTitle(columnName).DefaultValue =
+                                string.Format(CultureInfo.InvariantCulture, ServiceConstants.MetadataDefaultValue,
+                                managedColumn.WssId,
+                                managedColumn.TermName,
+                                managedColumn.Id);
+                    fields.GetByInternalNameOrTitle(columnName).Update();
+                } 
             }
         }
 
         /// <summary>
-        /// Function to get the WssID for the Practice group, Area of law and Sub area of law terms
+        /// Function to get the WssID for all the managed columns that user has configured
         /// </summary>
         /// <param name="clientContext">SP client context</param>
         /// <param name="matterMetadata">Object containing meta data for Matter</param>
@@ -200,21 +212,27 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns>An Object containing meta data for Matter</returns>
         private MatterMetadata GetWSSId(ClientContext clientContext, MatterMetadata matterMetadata, FieldCollection fields)
         {
-            ClientResult<TaxonomyFieldValue> practiceGroupResult = clientContext.CastTo<TaxonomyField>
-                (fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnPracticeGroup))
-                .GetFieldValueAsTaxonomyFieldValue(matterMetadata.PracticeGroupTerm.Id);
-            ClientResult<TaxonomyFieldValue> areaOfLawResult = clientContext.CastTo<TaxonomyField>
-                (fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnAreaOfLaw))
-                .GetFieldValueAsTaxonomyFieldValue(matterMetadata.AreaTerm.Id);
-            ClientResult<TaxonomyFieldValue> subareaOfLawResult = clientContext.CastTo<TaxonomyField>
-                (fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnSubareaOfLaw))
-                .GetFieldValueAsTaxonomyFieldValue(matterMetadata.SubareaTerm.Id);
-            clientContext.ExecuteQuery();
-
-            matterMetadata.PracticeGroupTerm.WssId = practiceGroupResult.Value.WssId;
-            matterMetadata.AreaTerm.WssId = areaOfLawResult.Value.WssId;
-            matterMetadata.SubareaTerm.WssId = subareaOfLawResult.Value.WssId;
-            return matterMetadata;
+            try
+            {
+                int levels = taxonomySettings.Levels;
+                //For the number of levels that are configured, get the configured column name for each level and get the wssid and 
+                //update the ManagedColumnTerms object with wssid
+                for (int i = 1; i <= levels; i++)
+                {
+                    string columnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName" + i];
+                    ClientResult<TaxonomyFieldValue> managedColumnWSSId = clientContext.CastTo<TaxonomyField>
+                    (fields.GetByInternalNameOrTitle(columnName))
+                    .GetFieldValueAsTaxonomyFieldValue(matterMetadata.ManagedColumnTerms[columnName].Id);
+                    clientContext.ExecuteQuery();
+                    matterMetadata.ManagedColumnTerms[columnName].WssId = managedColumnWSSId.Value.WssId;
+                }
+                return matterMetadata;
+            }
+            catch(Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw ex;
+            }
         }
 
         /// <summary>

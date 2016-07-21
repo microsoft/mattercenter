@@ -1083,7 +1083,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 foreach (string user in userName)
                                 {
                                     //check whether is present in the organization before giving permissiosn to him
-                                    if (!string.IsNullOrWhiteSpace(user) && userDetails.CheckUserPresentInMatterCenter(clientContext, user))
+                                    if (!string.IsNullOrWhiteSpace(user) && 
+                                        userDetails.CheckUserPresentInMatterCenter(clientContext, user))
                                     {
                                         if (!string.IsNullOrWhiteSpace(user))
                                         {
@@ -1136,7 +1137,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     ListItem listItem = clientContext.Web.Lists.GetByTitle(listName).GetItemById(listItemId);
                     clientContext.Load(listItem, item => item.HasUniqueRoleAssignments);
                     clientContext.ExecuteQuery();
-                    if (listItem.HasUniqueRoleAssignments && null != permissions && null != assignUserName && permissions.Count == assignUserName.Count)
+                    if (listItem.HasUniqueRoleAssignments && null != permissions && 
+                        null != assignUserName && permissions.Count == assignUserName.Count)
                     {
                         int position = 0;
                         foreach (string roleName in permissions)
@@ -1148,7 +1150,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 foreach (string user in userName)
                                 {
 
-                                    if (!string.IsNullOrWhiteSpace(user))
+                                    if (!string.IsNullOrWhiteSpace(user) && 
+                                        userDetails.CheckUserPresentInMatterCenter(clientContext, user))
                                     {
                                         /////get the user object
                                         Principal userPrincipal = clientContext.Web.EnsureUser(user.Trim());
