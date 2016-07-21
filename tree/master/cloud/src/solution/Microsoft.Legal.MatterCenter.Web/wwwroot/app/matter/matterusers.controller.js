@@ -8,7 +8,7 @@
             cm.arrAssignedUserEmails = [],
             cm.userIDs = [];
             cm.matterProperties = undefined;
-            cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
+            cm.assignPermissionTeams =[];
 
             //#region Service API Call
             //API call to get roles that are configured in the system
@@ -86,15 +86,15 @@
             var optionsForStampedProperties = new Object;
             optionsForStampedProperties = {
                 Client: {
-                    Url:'https://msmatter.sharepoint.com/sites/microsoft'
+                    Url: 'https://msmatter.sharepoint.com/sites/microsoft'
                 },
                 Matter: {
-                   // Name:'Microsoft Matter'
-                    Name:'Testing Matter Users'
+                    // Name:'Microsoft Matter'
+                    Name: '56Test127'
                 }
             }
             //endregion
-            
+
             //#region Main function calss
             function getMatterUsers() {
                 getStampedProperties(optionsForStampedProperties, function (response) {
@@ -106,12 +106,63 @@
                         //Get all permissions from catalog site collection
                         getPermissionLevels(optionsForPermissionLevels, function (response) {
                             cm.assignPermissions = response;
+                            getUsersRolesAndPermissions();
                         });
                     });
                 });
             }
 
             getMatterUsers();
+
+
+            function getUsersRolesAndPermissions() {
+                var tempMatterProp = cm.matterProperties;
+                var userEmails = tempMatterProp.matterObject.assignUserEmails;
+                var userNames = tempMatterProp.matterObject.assignUserNames;
+                var permissions = tempMatterProp.matterObject.permissions;
+                var roles = tempMatterProp.matterObject.roles;
+                var assigendTeams = [];
+
+                if (userEmails && userNames && permissions && roles && userEmails.length === userNames.length && userNames.length === permissions.length && permissions.length === roles.length) {
+                    for (var i = 0; i < userEmails.length; i++) {
+                        var assignedTeam = {};
+                        assignedTeam.assignedUser = userNames[i][0] + "(" + userEmails[i][0] + ")";
+                        // assignedTeam.assignedRole = roles[i];
+                        angular.forEach(cm.assignRoles, function (role) {
+                            if (role.name == roles[i]) {
+                                assignedTeam.assignedRole = role;
+
+                            }
+                        });
+                        angular.forEach(cm.assignPermissions, function (permission) {
+                            if (permission.name == permissions[i]) {
+                                assignedTeam.assignedPermission = permission;
+
+                            }
+                        });
+                        // assignedTeam.assignedPermission = permissions[i];
+                        cm.assignPermissionTeams = (cm.assignPermissionTeams.length == 1 && cm.assignPermissionTeams[0].assignedUser == "") ? [] : cm.assignPermissionTeams;
+                        assignedTeam.assigneTeamRowNumber = (cm.assignPermissionTeams.length == 1 && cm.assignPermissionTeams[0].assignedUser == "") ? 1 : cm.assignPermissionTeams.length + 1;
+                        cm.assignPermissionTeams.push(assignedTeam);
+
+                    }
+                    console.log(cm.assignPermissionTeams);
+                }
+
+            }
+
+            cm.removeAssignPermissionsRow = function (index) {
+                var remainingRows = cm.assignPermissionTeams.length;
+                if (1 < remainingRows) {
+                    cm.assignPermissionTeams.splice(index, 1);
+                    
+                }
+            };
+            cm.addNewAssignPermissions = function () {
+                var newItemNo = cm.assignPermissionTeams.length + 1;
+                cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0] });
+            };
+
             //getPermissionsAndRoles();
 
             var arrRoles = [];
@@ -120,7 +171,7 @@
             var arrPermissions = [];
             arrPermissions = getAssignedUserPermissions();
             //#endregion
-            
+
 
             cm.checkUserExists = function (userMailId) {
                 function validateEmail(email) {
@@ -247,5 +298,5 @@
                 return arrPermissions;
             }
             //#endregion
-    }]);
+        }]);
 })();

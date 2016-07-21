@@ -8,6 +8,7 @@
             var cm = this;
             $rootScope.pageIndex = "4";
             cm.selectedConflictCheckUser = undefined;
+            $rootScope.bodyclass="";
             cm.blockedUserName = undefined;
             cm.defaultConfilctCheck = false;
             cm.chkConfilctCheck = undefined;
@@ -23,6 +24,7 @@
             cm.clientUrl = "";
             cm.errorStatus = false;
             cm.prevButtonDisabled = true;
+            cm.allowAddMoreTeamMembers=false;
 
             var w = angular.element($window);
 
@@ -903,22 +905,29 @@
 
             cm.onSelect = function ($item, $model, $label, value,fucnValue,$event) {
                 console.log(cm.typehead);
-                if (value == "conflictcheckuser") {
-                    cm.selectedConflictCheckUser = $item.name + '(' + $item.email + ')';
+                if ($item && $item.name !== "No results found") {
+                    if (value == "conflictcheckuser") {
+                        cm.selectedConflictCheckUser = $item.name + '(' + $item.email + ')';
+                    }
+                    if (value == "blockuser") {
+                        cm.blockedUserName = $item.name + '(' + $item.email + ')';
+                    }
+                    if (value == "team") {
+                        $label.assignedUser = $item.name + '(' + $item.email + ')';
+                        cm.typehead = false;
+                        cm.notificationPopUpBlock = false;
+                    }
+                    console.log(cm.typehead);
+                  
+                        if (-1 == cm.oSiteUsers.indexOf($item.email)) {
+                            cm.oSiteUsers.push($item.email);
+                        }
+                        cm.checkUserExists($label.assignedUser);
+                    
                 }
-                if (value == "blockuser") {
-                    cm.blockedUserName = $item.name + '(' + $item.email + ')';
-                }
-                if (value == "teamuser") {
-                    $label.assignedUser = $item.name + '(' + $item.email + ')';
-                    cm.typehead = false;
-                }
-                console.log(cm.typehead);
-                if (fucnValue == "on-blurr" && !cm.typehead) {
-                    cm.checkUserExists($label.assignedUser, $event);
-                }else{
-                    if (-1 == cm.oSiteUsers.indexOf($item.email)) {
-                        cm.oSiteUsers.push($item.email);
+                else {
+                    if (fucnValue == "on-blurr") {
+                        cm.checkUserExists($label.assignedUser, $event);
                     } 
                 }
             }
@@ -1066,8 +1075,12 @@
 
 
             cm.addNewAssignPermissions = function () {
+                if(cm.allowAddMoreTeamMembers){
                 var newItemNo = cm.assignPermissionTeams.length + 1;
                 cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0] });
+            }
+
+            cm.allowAddMoreTeamMembers=false;
             };
 
             cm.removeAssignPermissionsRow = function (index) {
@@ -1234,6 +1247,7 @@
             cm.confirmUser = function (confirmUser) {
                 if (confirmUser) {
                     cm.notificationPopUpBlock = false;
+                    cm.allowAddMoreTeamMembers=true;
                     cm.notificationBorder = "";
                 } else {
                     cm.notificationPopUpBlock = false;
@@ -1243,8 +1257,9 @@
             }
 
             cm.checkUserExists = function (userMailId, $event) {
-                $event.stopPropagation();
-
+                if ($event) {
+                    $event.stopPropagation();
+                }
                 function validateEmail(email) {
                     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                     return re.test(email);
@@ -1274,6 +1289,10 @@
 
                                 });
                                 cm.notificationPopUpBlock = true;
+                            }
+                            else{
+                                cm.notificationPopUpBlock = false;
+                                cm.allowAddMoreTeamMembers=true;
                             }
                         });
 
