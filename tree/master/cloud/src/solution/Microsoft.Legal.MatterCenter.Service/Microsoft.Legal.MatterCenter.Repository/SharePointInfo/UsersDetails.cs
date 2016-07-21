@@ -26,6 +26,7 @@ using System.Globalization;
 using System.IO;
 using Microsoft.SharePoint.ApplicationPages.ClientPickerQuery;
 using Microsoft.SharePoint.Client.Utilities;
+using Microsoft.AspNetCore.Http;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -37,7 +38,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
     {
         private MatterSettings matterSettings;
         private ISPOAuthorization spoAuthorization;
-        
+        private IHttpContextAccessor httpContextAccessor;
         private ListNames listNames;
         private ICustomLogger customLogger;
         private LogTables logTables;
@@ -45,8 +46,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// Constructir where all the dependencies are injected
         /// </summary>
         /// <param name="spoAuthorization"></param>
-        public UsersDetails(IOptionsMonitor<MatterSettings> matterSettings, IOptionsMonitor<ListNames> listNames,
-            ISPOAuthorization spoAuthorization, ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables)
+        public UsersDetails(IOptionsMonitor<MatterSettings> matterSettings, 
+            IOptionsMonitor<ListNames> listNames,
+            ISPOAuthorization spoAuthorization, 
+            ICustomLogger customLogger, 
+            IOptionsMonitor<LogTables> logTables,
+            IHttpContextAccessor httpContextAccessor)
         {
             this.matterSettings = matterSettings.CurrentValue;
             this.listNames = listNames.CurrentValue;
@@ -54,8 +59,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
             //this.spList = spList;
             this.customLogger = customLogger;
             this.logTables = logTables.CurrentValue;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
+
+        /// <summary>
+        /// Get HttpContext object from IHttpContextAccessor to read Http Request Headers
+        /// </summary>
+        private HttpContext Context => httpContextAccessor.HttpContext;
 
         /// <summary>
         /// This method will get user profile picture of the login user
@@ -66,7 +77,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             ClientContext clientContext = spoAuthorization.GetClientContext(client.Url);
             PeopleManager peopleManager = new PeopleManager(clientContext);
-            ClientResult<string> userProfile = peopleManager.GetUserProfilePropertyFor(spoAuthorization.AccountName, "PictureURL");
+            string accountName = $"i:0#.f|membership|{Context.User.Identity.Name}";
+            ClientResult<string> userProfile = peopleManager.GetUserProfilePropertyFor(accountName, "PictureURL");
             clientContext.ExecuteQuery();
             string personalURL = userProfile.Value;
 
@@ -248,7 +260,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
             List<FieldUserValue> userList = new List<FieldUserValue>();
             foreach (string userName in userNames)
             {
-                if (!string.IsNullOrWhiteSpace(userName))
+                //Check has been made to check whether the user is present in the system as part of external sharing implementation
+                if (!string.IsNullOrWhiteSpace(userName) && 
+                    CheckUserPresentInMatterCenter(clientContext, userName))
                 {
                     User user = clientContext.Web.EnsureUser(userName.Trim());
                     ///// Only Fetch the User ID which is required
@@ -310,11 +324,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             List<string> currentRowTeamMembers = matter.AssignUserNames[iterator].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
                             foreach (string teamMember in currentRowTeamMembers)
                             {
-                                Principal teamMemberPrincipal = clientContext.Web.EnsureUser(teamMember);
-                                clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties =>
-                                            teamMemberPrincipalProperties.PrincipalType,
-                                            teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title);
-                                teamMemberPrincipalCollection.Add(new Tuple<int, Principal>(iterator, teamMemberPrincipal));
+                                //Check has been made to check whether the user is present in the system as part of external sharing implementation
+                                if (CheckUserPresentInMatterCenter(clientContext, teamMember))
+                                { 
+                                    Principal teamMemberPrincipal = clientContext.Web.EnsureUser(teamMember);
+                                    clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties =>
+                                                teamMemberPrincipalProperties.PrincipalType,
+                                                teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title);
+                                    teamMemberPrincipalCollection.Add(new Tuple<int, Principal>(iterator, teamMemberPrincipal));
+                                }
                             }
                         }
                     }

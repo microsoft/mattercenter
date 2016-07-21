@@ -27,7 +27,11 @@ namespace Microsoft.Legal.MatterCenter.Models
             get;
             set;
         }
-
+        public IDictionary<string, ManagedColumn> ManagedColumnTerms
+        {
+            get;
+            set;
+        }
         /// <summary>
         /// Gets or sets the practice group property
         /// </summary>

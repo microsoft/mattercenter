@@ -31,13 +31,12 @@ namespace Microsoft.Legal.MatterCenter.Web
     /// <summary>
     /// Taxonomy Controller will read the term store information related to matter center
     /// </summary>
-    //[Authorize]
+    [Authorize]
     [Route("api/v1/taxonomy")]
     
     public class TaxonomyController:Controller
     {
-        private ErrorSettings errorSettings;
-        private ISPOAuthorization spoAuthorization;
+        private ErrorSettings errorSettings;        
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;
         private TaxonomySettings taxonomySettings;
         private GeneralSettings generalSettings;
@@ -56,15 +55,16 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="taxonomyRepository"></param>
         public TaxonomyController(IOptionsMonitor<ErrorSettings> errorSettings, 
             IOptionsMonitor<TaxonomySettings> taxonomySettings, 
-            IOptionsMonitor<GeneralSettings> generalSettings,
-            ISPOAuthorization spoAuthorization, 
+            IOptionsMonitor<GeneralSettings> generalSettings,            
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
-            ITaxonomyRepository taxonomyRepository, ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IValidationFunctions validationFunctions)
+            ITaxonomyRepository taxonomyRepository, 
+            ICustomLogger customLogger, 
+            IOptionsMonitor<LogTables> logTables, 
+            IValidationFunctions validationFunctions)
         {
             this.errorSettings = errorSettings.CurrentValue;
             this.taxonomySettings = taxonomySettings.CurrentValue;
-            this.generalSettings = generalSettings.CurrentValue;
-            this.spoAuthorization = spoAuthorization;
+            this.generalSettings = generalSettings.CurrentValue;            
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;            
             this.taxonomyRepository = taxonomyRepository;
             this.customLogger = customLogger;
@@ -85,7 +85,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 var matterInformation = new MatterInformationVM()
@@ -212,7 +212,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             };
             
             string siteName = string.Empty;
-            spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
            
             siteName = taxonomyRepository.GetCurrentSiteName(termStoreViewModel1.Client);
             var success = new 
