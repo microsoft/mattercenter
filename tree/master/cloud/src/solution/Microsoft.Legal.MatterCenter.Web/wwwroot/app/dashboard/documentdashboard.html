@@ -64,6 +64,32 @@
     <div class="matterCenterHeaderBackground hide"></div>
     <!--Main dashboard content-->
     <div id="contentDiv">
+        <header class="commonContent" id="matterCenterHeader">
+            <div class="floatLeft" id="hamburgerConatiner">
+                <img title="View links" class="headerActions" id="openHamburger" alt="" src="../Images/MC_homepage_Hamburger.png" data-hamburger="0">
+            </div>
+            <div class="closeIcon">
+                <img title="Close" class="headerActions hide" id="closeHamburger" alt="" src="../Images/MC_Navigation_Close_icon_60px_X_60px.png" data-hamburger="1">
+            </div>
+            <div class="floatLeft" id="matterCenterHomeText">
+                <img title="Matter Center" class="floatLeft" id="matterCenterHome" alt="" src="../Images/MC_homepage_Logo.png">
+                <div class="floatRight">
+                    <div class="upperSubText">Matter Center</div>
+                    <div class="lowerSubText">for Office 365</div>
+                </div>
+            </div>
+            <div class="searchBox">
+                <input id="searchText" type="text" placeholder="Search SharePoint">
+                <div id="searchLink">
+                    <img title="Search" class="searchIcon" alt="search" src="../Images/search-15x15-666.png">
+                </div>
+            </div>
+            <div class="hide" id="headerFlyout">
+                <div class="switchAppRow headerLinks selected" id="searchMatterTab" data-attr="Matters"><span title="Matters">Matters</span></div>
+                <div class="switchAppRow headerLinks" id="searchDocumentTab" data-attr="Documents"><span title="Documents">Documents</span></div>
+                <div class="headerLinks"><a id="settingsLink" onclick="closeHamburgerMenu();" href="https://msmatter.sharepoint.com/SitePages/Settings.aspx" target="_parent"><span title="Settings">Settings</span></a></div>
+            </div>
+        </header>
         <div class="row searchdashboard">
             <div class="col-xs-9">
                 <div class="input-group">
