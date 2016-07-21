@@ -3,29 +3,13 @@ using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 
 using System;
-using System.IO;
+
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Azure;
+
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using System.Globalization;
-using Microsoft.SharePoint.ApplicationPages.ClientPickerQuery;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
 using System.Threading.Tasks;
 
-
-using Microsoft.SharePoint.Client;
-using Microsoft.SharePoint.Client.Utilities;
-
-using System.Collections.ObjectModel;
-
-using System.Net;
-
-using System.Reflection;
-using Microsoft.SharePoint.Client.WebParts;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -34,7 +18,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
         private GeneralSettings generalSettings;
         private LogTables logTables;
-        private IUsersDetails userDetails;
         private IConfigRepository config;
 
 
@@ -60,8 +43,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         }
 
         /// <summary>
-        /// Update the status in Azure Table Storage for the corresponding Parition and Row Key
-        /// for which the user has accepted the invitation
+        /// Get all the current configs from the Config Storage table
+        //
         /// </summary>
         /// <param name="externalSharingRequest"></param>
         public List<DynamicTableEntity> GetConfigEntities()
@@ -69,7 +52,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
            
             try
             {
-                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(generalSettings.CloudStorageConnectionString);
                 CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
                 tableClient.DefaultRequestOptions = new TableRequestOptions
                 {
@@ -87,7 +70,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 entities.AddRange(queryResult);
                 return entities;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 throw;
             }

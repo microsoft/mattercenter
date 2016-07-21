@@ -46,7 +46,9 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             genS.CloudStorageConnectionString = "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
 
             var m = new Moq.Mock<IOptionsMonitor<ErrorSettings>>();
+          
             var l = new Moq.Mock<IOptionsMonitor<GeneralSettings>>();
+            l.SetupGet(p => p.CurrentValue.CloudStorageConnectionString).Returns("DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ");
             var h = new Moq.Mock<IHostingEnvironment>();
             h.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\MCFork\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
             var ma = new Moq.Mock<IMatterCenterServiceFunctions>();
@@ -63,7 +65,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
           
             DynamicTableEntity request = new DynamicTableEntity();
                 
-                ConfigController controller = new ConfigController( m.Object, l.Object, ma.Object, configRepository, h.Object);
+            ConfigController controller = new ConfigController( m.Object, l.Object, ma.Object, configRepository, h.Object);
      
 
             var result = controller.Get(request);
