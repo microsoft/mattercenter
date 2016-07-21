@@ -87,7 +87,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             try
             {
                 //Get the authorization token from the Request header
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 
@@ -135,7 +135,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             try
             {
                 //Get the authorization token from the Request header
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 ErrorResponse errorResponse = null;
                 #region Error Checking                
                 if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
@@ -179,7 +179,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;                
                 if (pinRequestMatterVM == null && pinRequestMatterVM.Client == null && pinRequestMatterVM.MatterData == null)
@@ -218,7 +218,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 //if the token is not valid, immediately return no authorization error to the user
@@ -266,7 +266,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
 
                 #region Error Checking
                 ErrorResponse errorResponse = null;
@@ -305,7 +305,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;                
                 if (matterData == null && string.IsNullOrWhiteSpace(matterData.MatterUrl) && string.IsNullOrWhiteSpace(matterData.MatterName))
@@ -347,7 +347,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
 
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
@@ -391,7 +391,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 if (string.IsNullOrWhiteSpace(saveConfigurationsVM.SiteCollectionPath) && saveConfigurationsVM.MatterConfigurations == null)
@@ -427,7 +427,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 if (string.IsNullOrWhiteSpace(siteCollectionPath))
@@ -462,7 +462,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult CheckMatterExists([FromBody]MatterMetdataVM matterMetadataVM)
         {
-            //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            
             GenericResponseVM genericResponse = ServiceUtility.GenericResponse(matterSettings.DeleteMatterCode, ServiceConstants.TRUE);
             var client = matterMetadataVM.Client;
             var matter = matterMetadataVM.Matter;
@@ -543,7 +543,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult CheckSecurityGroupExists([FromBody]MatterInformationVM matterInformationVM)
         {
-            //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            
             GenericResponseVM genericResponse = null;
             var client = matterInformationVM.Client;
             var matter = matterInformationVM.Matter;
@@ -610,7 +610,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             var userid = matterInformation.UserIds;
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 if (matterInformation.Client == null && matterInformation.Matter == null && matterInformation.MatterDetails == null)
@@ -725,7 +725,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.OK)]
         public IActionResult Delete([FromBody] MatterVM matterVM)
         {
-            //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            
             ErrorResponse errorResponse = null;
             if (null == matterVM && null == matterVM.Client && null == matterVM.Matter && string.IsNullOrWhiteSpace(matterVM.Client.Url) && string.IsNullOrWhiteSpace(matterVM.Matter.Name))
             {
@@ -753,7 +753,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             ErrorResponse errorResponse = null;
             GenericResponseVM genericResponseVM = null;
-            //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            
             if (null == matterMetdataVM && null == matterMetdataVM.Client && null == matterMetdataVM.Matter && string.IsNullOrWhiteSpace(matterMetdataVM.Client.Url))
             {
                 errorResponse = new ErrorResponse()
@@ -804,7 +804,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult AssignContentType([FromBody] MatterMetadata matterMetadata)
         {
-            //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            
             ErrorResponse errorResponse = null;
             if (null == matterMetadata && null == matterMetadata.Client && null == matterMetadata.Matter )
             {                
@@ -901,7 +901,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             var matter = matterMetadataVM.Matter;
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 var matterConfigurations = matterMetadataVM.MatterConfigurations;
                 ErrorResponse errorResponse = null;
                 if (null == client && null == matter && null == client.Url && null == matterConfigurations)
@@ -950,7 +950,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult CreateLandingPage([FromBody] MatterMetdataVM matterMetdataVM)
         {
-            //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            
             ErrorResponse errorResponse = null;
             GenericResponseVM genericResponseVM = null;
             //No valid input
@@ -1011,7 +1011,7 @@ namespace Microsoft.Legal.MatterCenter.Service
 
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
 
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
@@ -1093,7 +1093,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             var client = matterInformation.Client;            
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 
                 ErrorResponse errorResponse = null;
                 if (matterInformation == null && matterInformation.Client==null)

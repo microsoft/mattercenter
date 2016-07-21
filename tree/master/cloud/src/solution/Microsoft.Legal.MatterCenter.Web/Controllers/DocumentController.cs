@@ -49,14 +49,19 @@ namespace Microsoft.Legal.MatterCenter.Web
         private LogTables logTables;
         private IDocumentProvision documentProvision;
         private GeneralSettings generalSettings;
+
         /// <summary>
-        /// Constructor where all the required dependencies are injected
+        /// DcouemtsController Constructor where all the required dependencies are injected
         /// </summary>
+        /// <remarks></remarks>        /// 
         /// <param name="errorSettings"></param>
         /// <param name="documentSettings"></param>
-        /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
         /// <param name="documentRepositoy"></param>
+        /// <param name="customLogger"></param>
+        /// <param name="logTables"></param>
+        /// <param name="documentProvision"></param>
+        /// <param name="generalSettings"></param>
         public DocumentController(IOptionsMonitor<ErrorSettings> errorSettings,
             IOptionsMonitor<DocumentSettings> documentSettings,            
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
@@ -79,16 +84,16 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <summary>
         /// Get all counts for all documentCounts, my documentCounts and pinned documentCounts
         /// </summary>
+        /// <remarks>Pass in the search request object which contains the information that will be passed to sharepoint search
+        /// to get all counts for all documents, my documents and pinned documents</remarks>
         /// <param name="searchRequestVM">The search request object that has been find by the user to get results back for search criteria</param>
-        /// <returns>IActionResult with proper http status code</returns>
+        /// <returns>IActionResult with proper http status code and the search results in JSON format</returns>
         [HttpPost("getdocumentcounts")]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(int))]        
         public async Task<IActionResult> GetDocumentCounts([FromBody]SearchRequestVM searchRequestVM)
         {
             try
-            {
-                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            {     
                 GenericResponseVM genericResponse = null;
                 #region Error Checking    
                 //Input validation
@@ -128,16 +133,17 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <summary>
         /// Gets the documents based on search criteria.
         /// </summary>
+        ///<remarks>Gets all the documents from sharepoint that has been uploaded by the user. 
+        ///The user will get only the dcouments for which he or she has got the permissions</remarks>
+        ///<example></example>
         /// <param name="searchRequestVM">The search request object that has been find by the user to get results back for search criteria</param>
-        /// <returns>IActionResult with proper http status code</returns>
+        /// <returns>IActionResult with proper http status code and the search results in JSON format</returns>
         [HttpPost("getdocuments")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> Get([FromBody]SearchRequestVM searchRequestVM)
         {
             try
-            {
-                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            {        
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 //Input validation
@@ -166,16 +172,15 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <summary>
         /// Get all the documents which are pinned by the logged in user
         /// </summary>
+        /// <remarks>Gets all the documents which are pinned by the user</remarks>
         /// <param name="client">The SPO client url from which to retrieve all the documents which are pinnned by the requested user</param>
-        /// <returns>IActionResult with proper http status code</returns>
+        /// <returns>IActionResult with proper http status code and the search results in JSON format</returns>
         [HttpPost("getpinneddocuments")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> GetPin([FromBody]Client client)
         {
             try
-            {
-                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            {   
                 #region Error Checking    
                 //Input validation            
                 GenericResponseVM genericResponse = null;                                
@@ -206,16 +211,15 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <summary>
         /// This api will store the metadata of the document in a sharepoint list as a JSON object which is getting pinned
         /// </summary>
-        /// <param name="pinRequestDocumentVM"></param>
-        /// <returns></returns>
+        /// <remarks>This api will pin a document along with its metadata</remarks>
+        /// <param name="pinRequestDocumentVM">All the metadata associated with the doccument that is getting pinned</param>
+        /// <returns>IActionResult which will return whether a document is pinned or not</returns>
         [HttpPost("pindocument")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> Pin([FromBody]PinRequestDocumentVM pinRequestDocumentVM)
         {
             try
-            {
-                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            {       
                 #region Error Checking       
                 //Input validation         
                 GenericResponseVM genericResponse = null;
@@ -250,16 +254,15 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// This api will unpin the document which is already pinned and the unpinned document will be removed from the sharepoint 
         /// list object
         /// </summary>
-        /// <param name="pinRequestMatterVM"></param>
+        /// <remarks>This api will help the user to unpin a document which is already pinned</remarks>
+        /// <param name="pinRequestDocumentVM">Information about the document which needs to be unpinned</param>
         /// <returns></returns>
         [HttpPost("unpindocument")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> UnPin([FromBody]PinRequestDocumentVM pinRequestDocumentVM)
         {
             try
-            {
-                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            {   
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 if (pinRequestDocumentVM == null && pinRequestDocumentVM.Client == null && pinRequestDocumentVM.DocumentData == null)
@@ -290,8 +293,9 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
         /// <summary>
-        /// Returns document and list GUID
-        /// </summary>        
+        /// This api will return document guid and list guid for the matter that has been selected
+        /// </summary> 
+        /// <remarks>From the document fly out menu, if the user clicks on "Open Document", this information will be used internally</remarks>
         /// <param name="client">Client object containing list data</param>        
         /// <returns>Document and list GUID</returns>
         [HttpPost("getassets")]
@@ -299,9 +303,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         public async Task<IActionResult> GetDocumentAssets([FromBody]Client client)
         {
             try
-            {
-                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            {      
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 if (client == null)
@@ -330,16 +332,15 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <summary>
         /// Uploads attachment which are there in the current mail item to SharePoint library.
         /// </summary>
-        /// <param name="attachmentRequestVM">This object contains information </param>
-        /// <returns></returns>
+        /// <remarks>When the user drag an attachment from the outlook add in, this api will be called</remarks>
+        /// <param name="attachmentRequestVM">This object contains information about the attachment that is getting uploaded to sharepoint</param>
+        /// <returns>IActionResult with file upload success or failure</returns>
         [HttpPost("uploadattachments")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public IActionResult UploadAttachments([FromBody] AttachmentRequestVM attachmentRequestVM)
         {            
             try
-            {
-                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            {        
                 var client = attachmentRequestVM.Client;
                 var serviceRequest = attachmentRequestVM.ServiceRequest;
                 GenericResponseVM genericResponse = null;
@@ -396,8 +397,8 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <summary>
         /// Uploads attachments from the user desktop to sharepoint library
         /// </summary>
-        /// <param name="attachmentRequestVM"></param>
-        /// <returns></returns>
+        /// <remarks>This api will allow the user to upload from his desktop/laptop</remarks>
+        /// <returns>IActionResult with the file upload success or failure</returns>
         [HttpPost("uploadfiles")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public IActionResult UploadFiles()
@@ -411,7 +412,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 string folderName = folderUrl.Substring(folderUrl.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
                 string documentLibraryName = Request.Form["documentLibraryName"];
                 bool isDeployedOnAzure = Convert.ToBoolean(generalSettings.IsTenantDeployment, CultureInfo.InvariantCulture);
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 string originalName = string.Empty;
                 bool allowContentCheck = Convert.ToBoolean(Request.Form["AllowContentCheck"], CultureInfo.InvariantCulture);
                 Int16 isOverwrite = 3;     
@@ -539,20 +540,18 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <summary>
         /// Uploads user selected email from outlook to SharePoint library with all the attachments
         /// </summary>
+        /// <remarks>This api will allow the user to upload mail with attachments to the sharepoint document libarary associated to the matter</remarks>
         /// <param name="attachmentRequestVM"></param>
-        /// <returns></returns>
+        /// <returns>IActionResult with mail upload failure or success</returns>
         [HttpPost("uploadmail")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public IActionResult UploadMail([FromBody] AttachmentRequestVM attachmentRequestVM)
         {
             try
-            {
-                //Get the authorization token from the Request header, which is used by sharepoint to authorize the user
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            {   
                 var client = attachmentRequestVM.Client;
                 var serviceRequest = attachmentRequestVM.ServiceRequest;
                 GenericResponseVM genericResponse = null;
-
                 #region Error Checking   
                 //Input validation             
                 ErrorResponse errorResponse = null;

@@ -69,7 +69,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 if (mailAttachmentDetails == null && mailAttachmentDetails.FullUrl == null)
@@ -106,7 +106,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
                 if (mailAttachmentDetails == null && mailAttachmentDetails.AttachmentContent == null)

@@ -81,7 +81,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
 
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 //if the token is not valid, immediately return no authorization error to the user
@@ -134,7 +134,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             try
             {
 
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 //if the token is not valid, immediately return no authorization error to the user

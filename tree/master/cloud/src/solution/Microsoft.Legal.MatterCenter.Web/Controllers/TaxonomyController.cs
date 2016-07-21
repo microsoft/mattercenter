@@ -85,7 +85,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 var matterInformation = new MatterInformationVM()
@@ -212,7 +212,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             };
             
             string siteName = string.Empty;
-            //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+            
            
             siteName = taxonomyRepository.GetCurrentSiteName(termStoreViewModel1.Client);
             var success = new 

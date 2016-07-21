@@ -72,7 +72,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;                
                 if (searchRequestVM.Client == null && string.IsNullOrWhiteSpace(searchRequestVM.Client.Url))
@@ -147,7 +147,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 
@@ -194,7 +194,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
 
@@ -242,7 +242,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
             try
             {
-                //spoAuthorization.AccessToken = HttpContext.Request.Headers["Authorization"];
+                
                 #region Error Checking                
                 GenericResponseVM genericResponse = null;
 
