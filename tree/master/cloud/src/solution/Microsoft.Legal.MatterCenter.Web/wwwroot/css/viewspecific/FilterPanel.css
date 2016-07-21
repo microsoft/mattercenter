@@ -5,7 +5,9 @@
     padding: 0;
 }
 
-
+.commonContent {
+    display: none;
+}
 
 img {
     border: none;
