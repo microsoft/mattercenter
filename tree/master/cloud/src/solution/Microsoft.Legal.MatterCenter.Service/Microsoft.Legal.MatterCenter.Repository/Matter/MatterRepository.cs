@@ -272,6 +272,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     {
                         break; // To break the outer loop as there is an invalid user
                     }
+                    teamMemberPrincipalCollection = new List<Principal>();
                 }
             }
             catch (Exception)

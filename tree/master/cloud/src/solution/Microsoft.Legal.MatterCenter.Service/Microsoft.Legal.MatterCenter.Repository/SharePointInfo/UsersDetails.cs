@@ -42,6 +42,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ListNames listNames;
         private ICustomLogger customLogger;
         private LogTables logTables;
+        private GeneralSettings generalSettings;
         /// <summary>
         /// Constructir where all the dependencies are injected
         /// </summary>
@@ -51,7 +52,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             ISPOAuthorization spoAuthorization, 
             ICustomLogger customLogger, 
             IOptionsMonitor<LogTables> logTables,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IOptionsMonitor<GeneralSettings> generalSettings)
         {
             this.matterSettings = matterSettings.CurrentValue;
             this.listNames = listNames.CurrentValue;
@@ -60,6 +62,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.customLogger = customLogger;
             this.logTables = logTables.CurrentValue;
             this.httpContextAccessor = httpContextAccessor;
+            this.generalSettings = generalSettings.CurrentValue;
         }
 
 
@@ -101,6 +104,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             {
+                //If the current email is part of current organization, no need to check for validity of the user email
+                if (email.Trim().ToLower().IndexOf(generalSettings.OrgDomainName.Trim().ToLower()) > 0)
+                {
+                    return true;
+                }
                 string userAlias = email;
                 ClientPeoplePickerQueryParameters queryParams = new ClientPeoplePickerQueryParameters();
                 queryParams.AllowMultipleEntities = false;
@@ -133,6 +141,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             {
+                //If the current email is part of current organization, no need to check for validity of the user
+                if(email.Trim().ToLower().IndexOf(generalSettings.OrgDomainName.Trim().ToLower()) >0)
+                {
+                    return true;
+                }
                 var clientContext = spoAuthorization.GetClientContext(clientUrl);
                 return CheckUserPresentInMatterCenter(clientContext, email);
             }

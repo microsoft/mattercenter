@@ -31,5 +31,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string MailCartMailPassword { get; set; }
         public string ExchangeServiceURL { get; set; }
         public virtual string  CloudStorageConnectionString { get; set; }
+        public string OrgDomainName { get; set; }
     }
 }
