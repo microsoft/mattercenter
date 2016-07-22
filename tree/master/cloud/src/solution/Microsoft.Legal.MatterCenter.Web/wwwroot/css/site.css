@@ -211,7 +211,7 @@ textarea {
 }
 
 .pad0 {
-    padding: 0px;
+    padding: 0px !important;
 }
 
 .noResultsText {
@@ -473,7 +473,7 @@ textarea {
 
 .dashboarddrop {
     position: absolute;
-    top: 108px;
+    top: 48px;
     padding: 0 7px 1px 15px;
 }
 
@@ -677,8 +677,8 @@ textarea {
     overflow-y: auto;
 }
 
-#docgrid .ui-grid {
-    height: 440px !important;
+#docgrid .ui-grid{
+    height: 920px !important;
 }
 
 #docgrid .ui-grid-viewport {
@@ -745,4 +745,18 @@ textarea {
     display: block !important;
     right: 30px;
     position: relative;
+}
+
+.marginTop20{
+    margin-top:20px !important;
+}
+
+#Flyoutheader {
+    position: absolute;
+    height: 174px;
+    width: 1150px!important;
+    background-color: #fff;
+    top: 60px;
+    padding: 22px 20px;
+    z-index: 10;
 }

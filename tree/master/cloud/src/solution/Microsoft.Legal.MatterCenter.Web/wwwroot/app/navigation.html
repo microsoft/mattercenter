@@ -31,61 +31,11 @@
     </div>
     <input type="hidden" id="requestvalidator" name="requestvalidator" runat="server" />
     <div class="AppContent">
-        <header id="matterCenterHeader" class="commonContent">
-            <div class="floatLeft" id="hamburgerConatiner">
-                <img class="headerActions" title="View links" data-hamburger="0" id="openHamburger" alt="" src="Images/MC_homepage_Hamburger.png" />
-            </div>
-            <div class="closeIcon">
-                <img class="headerActions hide" title="Close" data-hamburger="1" id="closeHamburger" alt="" src="Images/MC_Navigation_Close_icon_60px_X_60px.png" />
-            </div>
-            <div class="floatLeft" id="matterCenterHomeText">
-                <img class="floatLeft" id="matterCenterHome" title="Matter Center" alt="" src="Images/MC_homepage_Logo.png" />
-                <div class="floatRight">
-                    <div class="upperSubText">Matter Center</div>
-                    <div class="lowerSubText">for Office 365</div>
-                </div>
-            </div>
-            <div class="searchBox">
-                <input id="searchText" type="text" placeholder="Search SharePoint" />
-                <div id="searchLink">
-                    <img class="searchIcon" title="Search" alt="search" src="Images/search-15x15-666.png" />
-                </div>
-            </div>
-            <div class="hide" id="headerFlyout">
-                <div class="switchAppRow headerLinks" id="searchMatterTab" data-attr="Matters"><span title="Matters">Matters</span></div>
-                <div class="switchAppRow headerLinks" id="searchDocumentTab" data-attr="Documents"><span title="Documents">Documents</span></div>
-                <div class="headerLinks"><a id="settingsLink" onclick="closeHamburgerMenu();"><span title="Settings">Settings</span></a></div>
-            </div>
-        </header>
+        
 
         <asp:ContentPlaceHolder ID="BodyContentPlaceHolder" runat="server">
         </asp:ContentPlaceHolder>
-        <footer id="footer" class="commonContent">
-            <div class="footerContent">
-                <ul class="rightFooter">
-                    <li>
-                        <ul role="menubar">
-                            <li class="rightend" role="menuitem">
-                                <a aria-haspopup="true" href="http://www.microsoft.com/en-in/default.aspx" target="_parent">
-                                    <img title="Microsoft" class="mslogo imgNoBorder" alt="Microsoft" src="Images/microsoft-grey-logo-sm.png" />
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <br />
-                <ul class="rightFooter">
-                    <li>
-                        <ul class="footerLinks" role="menubar">
-                            <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Feedback and Support, e.g. mailto:support@supportsite.com]" target="_parent">Feedback & Support</a></li>
-                            <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Privacy terms, e.g. privacy.supportsite.com]" target="_parent">Privacy & Cookies</a></li>
-                            <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Terms of use, e.g. termofuse.supportsite.com]" target="_parent">Terms of use</a></li>
-                            <li class="rightFooterElement copyRightElement" role="menuitem">© <%= DateTime.Now.Year %> Microsoft</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </footer>
+        
     </div>
 </div>
 <!---->
