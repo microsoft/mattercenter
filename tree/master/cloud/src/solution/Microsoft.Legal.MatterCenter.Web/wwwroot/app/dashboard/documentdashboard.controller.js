@@ -755,23 +755,52 @@
                             vm.clients = response.clientTerms;
                             vm.clientdrop = true;
                             vm.clientdropvisible = true;
+                            if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
+                                vm.customSelection('client');
+                            }
                             vm.lazyloaderdocumentclient = true;
                         });
                     }
                     else {
+                        if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
+                            vm.customSelection('client');
+                        }
                         vm.clientdrop = true;
                         vm.clientdropvisible = true;
                     }
-
+                } else if (vm.clientdropvisible && $event.type === "keyup") {
+                    vm.customSelection('client');
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.lazyloaderdocumentclient = true;
                 }
             }
-
+            //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
+            vm.customSelection = function (type) {
+                if (type !== undefined && type === 'client') {
+                var selectdClients = vm.selectedClients.split(',');
+                    angular.forEach(vm.clients, function (client) {
+                    client.Selected = false;
+                        angular.forEach(selectdClients, function (clientInput) {
+                            if (clientInput.toString().length > 0 && client.name.toString().toLowerCase().indexOf(clientInput.toString().toLowerCase()) !== -1) {
+                                client.Selected = true;
+                            }
+                        })
+                    });
+                }
+            }
+            //#endRegion
             //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
             vm.filterSearchCancel = function (type) {
+                if (vm.selectedClientsForCancel !== undefined && vm.selectedClientsForCancel.toString().length > 0) {
+                    vm.selectedClients = vm.selectedClientsForCancel;
+                    angular.forEach(vm.clients, function (client) {
+                        if (vm.selectedClients.indexOf(client.name) > 0) {
+                            client.Selected = true;
+                        }
+                    });
+                }
                 vm.clientdrop = false;
                 vm.clientdropvisible = false;
                 vm.lazyloaderdocumentclient = true;
@@ -980,6 +1009,7 @@
                         }
                     });
                     vm.selectedClients = vm.selectedClients.slice(0, vm.selectedClients.length - 1);
+                    vm.selectedClientsForCancel = vm.selectedClients;
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                 }

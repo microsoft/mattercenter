@@ -92,11 +92,11 @@
                         <div class="col-xs-12 col-sm-2 pull-left pad15">Clients</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" value="{{vm.selectedClients}}" placeholder="Enter or select a client" class="form-control">
+                                <input type="text" value="{{vm.selectedClients}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedClients"  ng-keyup="vm.showclientdrop($event)" placeholder="Enter or select a client" class="form-control">
                                 <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.showclientdrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderdocumentclient" style="position:unset !important">
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderdocumentclient" style="position:static !important">
                             <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
                         </div>
                     </div>
