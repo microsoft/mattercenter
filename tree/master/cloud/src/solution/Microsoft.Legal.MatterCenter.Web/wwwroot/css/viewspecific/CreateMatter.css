@@ -554,4 +554,5 @@ body {
     float:right; margin-right:10px; cursor:pointer
 }
 .confirmUser{float:right; margin-right:10px;cursor:pointer}
+.manageUsers{max-height:400px; overflow:auto;}
 

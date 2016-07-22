@@ -2,9 +2,9 @@
     <heading employee-names="vm.userName" nav-url="vm.navUrl" nav-url-text="vm.navUrlText"></heading>
 </header>
 -->
-<div style="min-width:310px;">
-    <div class="row">
-        <div class="col-xs-offset-9 col-xs-3 pad0" style="position: absolute;padding-top: 10px;left: 1px;">
+<div >
+    <div class="row {{$root.profileClass}}" style="min-width:310px;" >
+        <div class="col-xs-offset-9 col-xs-3" style="position: absolute;padding-top: 10px;left: 1px;">
             <div id="ContextualHelp">
                 <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" ng-click="$root.dispContextualHelp($event)" />
                 <div data-class="ms-u-slideLeftIn40" class="ContextualHelp ms-u-slideLeftIn40" ng-show="$root.contextualhelp" ng-click="$event.stopPropagation();">
@@ -40,16 +40,68 @@
                         <div class="PersonaEmail" id="PersonaEmail">{{vm.loginUserEmail}}</div>
                     </div>
                 </div>
-                <div class="SignOutLink">                    
-                    
+                <div class="SignOutLink">
+
                     <button class="btn btn-link" ng-show="vm.isAuthenticated" ng-click="vm.signOut()">Sign Out</button>
                 </div>
             </div>
         </div>
     </div>
+    <header id="matterCenterHeader" class="commonContent marginTop20">
+        <div class="floatLeft" id="hamburgerConatiner" ng-click="vm.showCloseIcon()" ng-show="vm.showHamburger">
+            <img class="headerActions" title="View links" data-hamburger="0" id="openHamburger" alt="" src="Images/MC_homepage_Hamburger.png" />
+        </div>
+        <div class="closeIcon" ng-if="vm.showClose" ng-click="vm.showHamburgerIcon()">
+            <img class="headerActions" title="Close" data-hamburger="1" id="closeHamburger" alt="" src="Images/MC_Navigation_Close_icon_60px_X_60px.png" />
+        </div>
+        <div class="floatLeft buffer" id="matterCenterHomeText">
+            <img class="floatLeft" id="matterCenterHome" title="Matter Center" alt="" src="Images/MC_homepage_Logo.png" />
+            <div class="floatRight">
+                <div class="upperSubText">Matter Center</div>
+                <div class="lowerSubText">for Office 365</div>
+            </div>
+        </div>
+        <div class="searchBox">
+            <input id="searchText" type="text" placeholder="Search SharePoint" />
+            <div id="searchLink">
+                <img class="searchIcon" title="Search" alt="search" src="Images/search-15x15-666.png" />
+            </div>
+        </div>
+        <div class="" id="Flyoutheader" ng-if="vm.showHeaderFlyout">
+            <div class="cur-pointer headerLinks" id="searchMatterTab"><span title="Matters" ng-click="vm.navigateUrl('section=1')">Matters</span></div>
+            <div class="cur-pointer headerLinks" id="searchDocumentTab"><span title="Documents" ng-click="vm.navigateUrl('section=2')">Documents</span></div>
+            <div class="headerLinks"><a id="settingsLink"><span title="Settings" ng-click="vm.navigateUrl('Settings')">Settings</span></a></div>
+        </div>
+    </header>
+    <div class="matterCenterHeaderBackground" ng-if="vm.showHeaderBackground" ng-click="vm.showHamburgerIcon()"></div>
     <main ui-view="contentView">
-        
-    </main>
-</div>
 
+    </main>
+    <footer id="footer" class="commonContent">
+        <div class="footerContent">
+            <ul class="rightFooter">
+                <li>
+                    <ul role="menubar">
+                        <li class="rightend" role="menuitem">
+                            <a aria-haspopup="true" href="http://www.microsoft.com/en-in/default.aspx" target="_parent">
+                                <img title="Microsoft" class="mslogo imgNoBorder" alt="Microsoft" src="Images/microsoft-grey-logo-sm.png" />
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <br />
+            <ul class="rightFooter">
+                <li>
+                    <ul class="footerLinks" role="menubar">
+                        <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Feedback and Support, e.g. mailto:support@supportsite.com]" target="_parent">Feedback & Support</a></li>
+                        <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Privacy terms, e.g. privacy.supportsite.com]" target="_parent">Privacy & Cookies</a></li>
+                        <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Terms of use, e.g. termofuse.supportsite.com]" target="_parent">Terms of use</a></li>
+                        <li class="rightFooterElement copyRightElement" role="menuitem">©  Microsoft</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </footer>
+</div>
 

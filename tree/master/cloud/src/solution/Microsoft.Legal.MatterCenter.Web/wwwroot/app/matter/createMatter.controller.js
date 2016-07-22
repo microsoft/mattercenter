@@ -24,7 +24,7 @@
             cm.clientUrl = "";
             cm.errorStatus = false;
             cm.prevButtonDisabled = true;
-            cm.allowAddMoreTeamMembers=false;
+           
 
             var w = angular.element($window);
 
@@ -293,7 +293,8 @@
                         SearchTerm: val
                     }
                 };
-
+                //if (matterResource.getUsers(searchUserRequest).$promise)
+                //console.log(matterResource.getUsers(searchUserRequest).$promise.$$state.value);
                 return matterResource.getUsers(searchUserRequest).$promise;
             }
 
@@ -1075,12 +1076,11 @@
 
 
             cm.addNewAssignPermissions = function () {
-                if(cm.allowAddMoreTeamMembers){
+               
                 var newItemNo = cm.assignPermissionTeams.length + 1;
-                cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0] });
-            }
+                cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0] });         
 
-            cm.allowAddMoreTeamMembers=false;
+            
             };
 
             cm.removeAssignPermissionsRow = function (index) {
@@ -1246,8 +1246,7 @@
 
             cm.confirmUser = function (confirmUser) {
                 if (confirmUser) {
-                    cm.notificationPopUpBlock = false;
-                    cm.allowAddMoreTeamMembers=true;
+                    cm.notificationPopUpBlock = false;                   
                     cm.notificationBorder = "";
                 } else {
                     cm.notificationPopUpBlock = false;
@@ -1292,7 +1291,7 @@
                             }
                             else{
                                 cm.notificationPopUpBlock = false;
-                                cm.allowAddMoreTeamMembers=true;
+                                
                             }
                         });
 
