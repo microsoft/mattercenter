@@ -1,9 +1,9 @@
 ﻿(function () {
     'use strict';
     var app = angular.module("matterMain");
-    app.controller('homeController', ['$scope', '$state', '$stateParams', '$rootScope', 'api', 'homeResource',
+    app.controller('homeController', ['$scope', '$state', '$stateParams', '$rootScope', 'api', 'homeResource', '$window', '$location',
             'adalAuthenticationService',
-        function ($scope, $state, $stateParams, $rootScope, api, homeResource, adalService) {
+        function ($scope, $state, $stateParams, $rootScope, api, homeResource, $window, $location, adalService) {
             var vm = this;
             //header
             vm.userName = adalService.userInfo.userName
@@ -82,7 +82,7 @@
             vm.getUserProfilePicture = function () {
 
                 var client = {
-                    Url:configs.uri.SPOsiteURL
+                    Url: configs.uri.SPOsiteURL
                 }
 
                 getUserProfilePicture(client, function (response) {
@@ -98,7 +98,7 @@
                 var helpRequestModel = {
                     Client:
                     {
-                        Url: configs.global.repositoryUrl 
+                        Url: configs.global.repositoryUrl
                     },
                     SelectedPage: $rootScope.pageIndex
                 };
@@ -106,6 +106,38 @@
                     vm.helpData = response;
                 });
             }
+            //#endregion
+
+            //#region showing and hiding hamburger icon
+            vm.showHamburger = true;
+            vm.showClose = false;
+            vm.showHeaderFlyout = false;
+            vm.showHeaderBackground = false;
+            vm.showHamburgerIcon = function () {
+                vm.showHamburger = true;
+                vm.showClose = false;
+                vm.showHeaderFlyout = false;
+                vm.showHeaderBackground = false;
+            }
+
+            vm.showCloseIcon = function () {
+                vm.showHamburger = true;
+                vm.showClose = true;
+                vm.showHeaderFlyout = true;
+                vm.showHeaderBackground = true;
+            }
+
+            //#endregion
+
+            //#region navigating to the url based on menu click
+            vm.navigateUrl = function (data) {
+                if (data != "Settings") {
+                    $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/MatterCenterHomev1.aspx?" + data;
+                } else {
+                    $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/" + data + ".aspx";
+                }
+            }
+
             //#endregion
         }]);
 

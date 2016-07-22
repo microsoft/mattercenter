@@ -23,6 +23,7 @@
             vm.enable = true;
             vm.totalrecords = 0;
             $rootScope.bodyclass = "bodymain";
+            $rootScope.profileClass="hide";
             vm.nodata = false;
             //#endregion
 
@@ -59,7 +60,7 @@
             //#endregion
 
             var gridOptions = {
-                paginationPageSize: 10,
+                paginationPageSize: 28,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
