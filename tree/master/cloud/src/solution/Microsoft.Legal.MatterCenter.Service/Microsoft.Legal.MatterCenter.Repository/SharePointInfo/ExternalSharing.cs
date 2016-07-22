@@ -128,7 +128,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 users.Add(userRole);                
                 #region Doc Sharing API
-                string matterLandingPageUrl = $"{clientUrl}/sitepages/{matterInformation.Matter.Id + ServiceConstants.ASPX_EXTENSION}";
+                //Need to use MatterGuid instead of Id
+                string matterLandingPageUrl = $"{clientUrl}/sitepages/{matterInformation.Matter.MatterGuid + ServiceConstants.ASPX_EXTENSION}";
                 string catalogSiteAssetsLibraryUrl = $"{generalSettings.CentralRepositoryUrl}/SitePages/home.aspx";
                 using (var clientContext = spoAuthorization.GetClientContext(clientUrl))
                 {
