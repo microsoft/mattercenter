@@ -29,6 +29,8 @@
             vm.lazyloaderpg = true;
             vm.lazyloaderaol = true;
             vm.totalrecords = 0;
+            $rootScope.bodyclass = "bodymain";
+            $rootScope.profileClass = "hide";
             //#endregion
             //#region Variable to show matter count            
             vm.allMatterCount = 0;

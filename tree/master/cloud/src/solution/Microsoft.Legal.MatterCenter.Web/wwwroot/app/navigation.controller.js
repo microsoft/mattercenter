@@ -7,7 +7,7 @@
 
             var vm = this;
             $rootScope.pageIndex = "0";
-            vm.SPOHomePage = configs.uri.SPOsiteURL + '/SitePages/MatterCenterHome.aspx';
+            vm.SPOHomePage = configs.uri.SPOsiteURL + '/SitePages/MatterCenterHomev1.aspx?section=1';
             vm.menuClick = function () {
                 var oAppMenuFlyout = $(".AppMenuFlyout");
                 if (!(oAppMenuFlyout.is(":visible"))) {
