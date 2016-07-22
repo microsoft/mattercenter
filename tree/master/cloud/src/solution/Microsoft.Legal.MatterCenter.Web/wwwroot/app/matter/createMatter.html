@@ -41,8 +41,9 @@
                     The following recipent is outside your organization. Would you still like to invite them to the Assigned Team?
                 </span>
                 <br />
+                <br />
                 <div >
-                    <div class="removeUser" ng-click="cm.confirmUser(false)">Remove</div> <div class="confirmUser"  ng-click="cm.confirmUser(true)">Confirm</div>
+                    <div class="removeUser" ng-click="cm.confirmUser(false)"><a >Remove</a></div> <div class="confirmUser"  ng-click="cm.confirmUser(true)"><a>Confirm</a></div>
                 </div>
             </div>
         </div>
@@ -207,9 +208,9 @@
                     <div class="row{{$index}} assignNewPerm">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
                         <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
-                        <div ng-show='teamAssingnResults'>
+                        <!--<div ng-show='teamAssingnResults'>
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
-                        </div>
+                        </div>-->
                         <span class="pull-left"><i ng-show='loadingLocations' class="glyphicon glyphicon-refresh"></i></span>
                         <div class="gutter"></div>
                         <div class="addNewMember">
