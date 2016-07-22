@@ -21,6 +21,7 @@ using Microsoft.Legal.MatterCenter.Web.Common;
 
 using System.IO;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
 #endregion
 
 
@@ -61,6 +62,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             ConfigureSettings(services);
             services.AddCors();
             services.AddLogging();
+            
             ConfigureMvc(services, LoggerFactory);
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
@@ -283,23 +285,61 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
         }
 
+        /// <summary>
+        /// check the current request and check whether the request is having the bearer token. If bearer token
+        /// is present it will validate the same and if it is not present, the api will throw 401 unauthorized error
+        /// </summary>
+        /// <param name="app"></param>
         private void CheckAuthorization(IApplicationBuilder app)
         {
-            app.UseJwtBearerAuthentication(new JwtBearerOptions()
+            try
             {
-                AutomaticAuthenticate = true,
-                Authority = String.Format(CultureInfo.InvariantCulture,
-                    this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
-                    this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString()),
-                Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value.ToString(),
-                Events = new AspNetCore.Authentication.JwtBearer.JwtBearerEvents
+                app.UseJwtBearerAuthentication(new JwtBearerOptions()
                 {
-                    OnAuthenticationFailed = context =>
+                    //AutomaticAuthenticate flag tells the middleware to look for the Bearer token in the headers of incoming requests and, 
+                    //if one is found, validate it. If validation is successful the middleware will populate the current ClaimsPrincipal 
+                    //associated with the request with claims (and potentially roles) obtained from the token. 
+                    //It will also mark the current identity as authenticated.
+                    AutomaticAuthenticate = true,
+
+                    //AutomaticChallenge flag tells the middleware to modify 401 responses that are coming from further middleware 
+                    //(MVC) and add appropriate challenge behavior. In case of Bearer authentication it's about adding the following header to the response:
+                    //HTTP / 1.1 401 Unauthorized
+                    //WWW - Authenticate: Bearer
+                    AutomaticChallenge = true,
+                    
+                    Authority = String.Format(CultureInfo.InvariantCulture,
+                        this.Configuration.GetSection("General").GetSection("AADInstance").Value.ToString(),
+                        this.Configuration.GetSection("General").GetSection("Tenant").Value.ToString()),
+                    Audience = this.Configuration.GetSection("General").GetSection("ClientId").Value.ToString(),
+                    Events = new AspNetCore.Authentication.JwtBearer.JwtBearerEvents
                     {
-                        return Task.FromResult(0);
+                        OnTokenValidated = ctx =>
+                        {
+                            //If any claims need to read that returned by the active directory, we can read those claims here. The below code will read name 
+                            //claim from the aad token
+                            //var nameClaim = ctx.Ticket.Principal.FindFirst("name");
+                            //if (nameClaim != null)
+                            //{
+                            //    var claimsIdentity = (ClaimsIdentity)ctx.Ticket.Principal.Identity;
+                            //    claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, nameClaim.Value));
+                            //}
+                            return Task.FromResult(0);
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            //If the token is not valid, the request pipe line will be short circuited and the error response will be
+                            //sent to the client
+                            context.SkipToNextMiddleware();
+                            return Task.FromResult(0);
+                        },                        
                     }
-                }
-            });
+                });
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         private void CreateConfig(IHostingEnvironment env)
