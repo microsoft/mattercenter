@@ -763,13 +763,13 @@
                     }
                     else {
                         if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
-                            vm.clientSelection();
+                            vm.customSelection('client');
                         }
                         vm.clientdrop = true;
                         vm.clientdropvisible = true;
                     }
                 } else if (vm.clientdropvisible && $event.type === "keyup") {
-                    vm.clientSelection();
+                    vm.customSelection('client');
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
