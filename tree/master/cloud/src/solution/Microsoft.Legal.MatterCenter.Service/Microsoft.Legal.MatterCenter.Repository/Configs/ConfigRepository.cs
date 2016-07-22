@@ -70,7 +70,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 entities.AddRange(queryResult);
                 return entities;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw;
             }

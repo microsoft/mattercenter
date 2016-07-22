@@ -35,11 +35,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;
         private IConfigRepository configRepository;
         private GeneralSettings generalSettings;
-
-        private ISPOAuthorization spoAuthorization;
-
-        private SharedSettings sharedSettings;
-        private ISharedRepository sharedRepository;
         private ICustomLogger customLogger;
         private LogTables logTables;
         private IHostingEnvironment hostingEnvironment;
@@ -47,8 +42,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// Constructor where all the required dependencies are injected
         /// </summary>
         /// <param name="errorSettings"></param>
-        /// <param name="matterSettings"></param>
-        /// <param name="spoAuthorization"></param>
+        /// <param name="generalSettings"></param>
+        /// <param name="configRepository"></param>
+        ///    /// <param name="hostingEnvironment"></param>
         /// <param name="matterCenterServiceFunctions"></param>
         public ConfigController(IOptionsMonitor<ErrorSettings> errorSettings,
             IOptionsMonitor<GeneralSettings> generalSettings,
@@ -65,13 +61,10 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         }
 
         /// <summary>
-        /// Returns true or false based on the existence of the matter landing page and OneNote file at the URLs provided.
+        /// Returns all the entries for Configuring the UI
         /// </summary>
-        /// <param name="requestObject">Request object containing SharePoint App Token</param>
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="requestedUrl">String object containing the OneNote file path</param>
-        /// <param name="requestedPageUrl">String object containing the Matter Landing Page file path</param>
-        /// <returns>$|$ Separated string indicating that the OneNote and the Matter Landing Page exist or not</returns>        
+        /// <param name="configRequest">Request object for POST</param>
+    
         [HttpPost("Get")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> Get([FromBody] DynamicTableEntity configRequest)
@@ -83,8 +76,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
-                //if the token is not valid, immediately return no authorization error to the user
-
+              
                 #endregion
                 var configResultsVM = await configRepository.GetConfigurationsAsync(configRequest);
 
@@ -103,7 +95,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         private void createConfig(List<DynamicTableEntity> configs)
         {
 
-
             var configPath = Path.Combine(hostingEnvironment.WebRootPath, "app/uiconfig.js");
             if (System.IO.File.Exists(configPath))
                 System.IO.File.Delete(configPath);
@@ -111,33 +102,66 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             var configFile = System.IO.File.Open(configPath, FileMode.Create);
             var configWriter = new StreamWriter(configFile, Encoding.UTF8);
 
-            List<string> screens = new List<string>();
+            List<string> configGroup = new List<string>();
             EntityProperty value;
+
             foreach (DynamicTableEntity dt in configs)
             {
-                    
-                    bool hasKey = dt.Properties.TryGetValue("Screen", out value);
-                    if (hasKey)
-                    {
-                        screens.Add(value.StringValue);
-                    }
-                                
-            }
 
-            foreach (string str in screens)
-            {
 
-                foreach (DynamicTableEntity dt in configs)
+                bool hasKey = dt.Properties.TryGetValue("ConfigGroup", out value);
+                if (hasKey)
                 {
-                    bool scr = dt.Properties.TryGetValue("Screen", out value);
-                    if (str.Equals(value.StringValue))
+                    if (!configGroup.Contains(value.StringValue))
                     {
-                        configWriter.WriteLine(" \" + str + \": \"" + dt.Properties["Key"].StringValue + dt.Properties["Key"].StringValue + "\",");
+                        configGroup.Add(value.StringValue);
                     }
                 }
-
-                configWriter.Dispose();
             }
+
+            int groupCount = configGroup.Count;
+            int count = configs.Count;
+
+            configWriter.WriteLine("var uiconfigs = {");
+
+            int groups = 0;
+            foreach (string str in configGroup)
+            {
+              
+                configWriter.WriteLine("\"" + str + "\":  {");
+                int entityCount = 0;
+                foreach (DynamicTableEntity dt in configs)
+                {
+                    entityCount++;
+                    bool scr = dt.Properties.TryGetValue("ConfigGroup", out value);
+
+                    if (str.ToLower().Equals(value.StringValue.ToLower()))
+                    {
+                       if (entityCount < count)
+                        {
+                            configWriter.WriteLine("\"" + dt.Properties["Key"].StringValue + "\" :" + "\"" + dt.Properties["Value"].StringValue + "\",");
+                        }
+                       else
+                        {
+                            configWriter.WriteLine("\"" + dt.Properties["Key"].StringValue + "\": " + "\"" + dt.Properties["Value"].StringValue + "\"");
+                        }
+                    }
+
+                }
+
+                if (groups < count)
+                {
+                    configWriter.WriteLine("},");
+                }
+                else
+                {
+                    configWriter.WriteLine("}");
+                }
+                
+            }
+            configWriter.WriteLine("};");
+            configWriter.Dispose();
         }
     }
+
 }
