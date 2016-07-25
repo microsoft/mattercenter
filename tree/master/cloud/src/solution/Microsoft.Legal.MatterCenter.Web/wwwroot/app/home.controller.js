@@ -139,6 +139,21 @@
             }
 
             //#endregion
+
+            vm.mainheadersearch = "";
+            //#region navigates to the url with the input entered in the main search as parameter
+            vm.mainHeaderClick = function () {
+                if (vm.mainheadersearch != "" ) {
+                    $window.top.parent.location.href = configs.uri.SPOsiteURL + "/search/Pages/results.aspx?k=" + vm.mainheadersearch;
+                }
+            }
+            //#endregion
+
+            //#region setting the current year
+            var date = new Date();
+            vm.currentyear = date.getFullYear();
+            //#endregion
+
         }]);
 
     app.factory("commonFunctions", function () {

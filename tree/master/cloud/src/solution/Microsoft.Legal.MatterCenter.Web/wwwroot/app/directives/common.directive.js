@@ -270,15 +270,31 @@
         }
     };
 
+    'use strict'
+    function myEnter() {
+        return function (scope, element, attrs) {
+            element.bind("keydown keypress", function (event) {
+                if (event.which === 13) {
+                    scope.$apply(function () {
+                        scope.$eval(attrs.myEnter);
+                    });
+
+                    event.preventDefault();
+                }
+            });
+        };
+    }
+
     var app = angular.module('matterMain');
     app.directive('onload', ['$timeout', onload]);
     app.directive('showbreadcrumb', [showbreadcrumb]);
-    app.directive('datefilter', [datefilter]);   
+    app.directive('datefilter', [datefilter]);
     app.directive("toggletab", [toggletab]);
     app.directive('infopopover', [infopopover]);
     app.directive('matterflyout', ['$compile', '$templateCache', matterflyout]);
     app.directive('documentflyout', ['$http', '$compile', '$templateCache', documentflyout]);
     app.directive('fallbacksrc', [fallbacksrc]);
+    app.directive('myEnter', [myEnter])
 })();
 
 

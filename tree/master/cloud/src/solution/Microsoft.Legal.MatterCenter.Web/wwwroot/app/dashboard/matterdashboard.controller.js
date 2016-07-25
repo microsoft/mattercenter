@@ -69,7 +69,7 @@
 
 
             var gridOptions = {
-                paginationPageSize: 10,
+                paginationPageSize: 28,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
@@ -397,7 +397,7 @@
                 jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
-                jsonMatterSearchRequest.SearchObject.ItemsPerPage = 10;
+                jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 get(jsonMatterSearchRequest, function (response) {
                     if (response == "") {
                         vm.lazyloaderdashboard = true;
@@ -442,7 +442,7 @@
                 var tempMatters = [];
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
-                jsonMatterSearchRequest.SearchObject.ItemsPerPage = 10;
+                jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 get(jsonMatterSearchRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not                    
                     getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
@@ -572,6 +572,7 @@
                         }
                     });
                     vm.selectedClients = vm.selectedClients.slice(0, vm.selectedClients.length - 1);
+                    vm.selectedClientsForCancel = vm.selectedClients;
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                 }
@@ -590,6 +591,9 @@
                         }
                     });
                     vm.selectedPGs = vm.selectedPGs.slice(0, vm.selectedPGs.length - 1);
+                    vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
+                    vm.selectedPGsForCancel = vm.selectedPGs;
+                    vm.selectedAOLsForCancel = vm.selectedAOLs;
                     vm.pgdrop = false;
                     vm.pgdropvisible = false;
                 }
@@ -602,6 +606,7 @@
                         }
                     });
                     vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
+                    vm.selectedAOLsForCancel = vm.selectedAOLs;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                 }
@@ -610,6 +615,37 @@
 
             //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
             vm.filterSearchCancel = function (type) {
+                if(type !== undefined && type === 'client')
+                {
+                    if (vm.selectedClientsForCancel !== undefined && vm.selectedClientsForCancel.toString().length > 0) {
+                        vm.selectedClients = vm.selectedClientsForCancel;
+                        angular.forEach(vm.clients, function (client) {
+                            if (vm.selectedClients.indexOf(client.name) > 0) {
+                                client.Selected = true;
+                            }
+                        });
+                    }
+                }
+                if (type === 'pg') {
+                    if (vm.selectedPGsForCancel !== undefined && vm.selectedPGsForCancel.toString().length > 0) {
+                        vm.selectedPGs = vm.selectedPGsForCancel;
+                        angular.forEach(vm.practiceGroups, function (pg) {
+                            if (vm.selectedPGs.indexOf(pg.termName) > 0) {
+                                pg.Selected = true;
+                            }
+                        });
+                    }
+                }
+                if (type === 'aol') {
+                    if (vm.selectedAOLsForCancel !== undefined && vm.selectedAOLsForCancel.toString().length > 0) {
+                        vm.selectedAOLs = vm.selectedAOLsForCancel;
+                        angular.forEach(vm.aolTerms, function (aol) {
+                            if (vm.selectedAOLs.indexOf(aol.termName) > 0) {
+                                aol.Selected = true;
+                            }
+                        });
+                    }
+                }
                 vm.clientdrop = false;
                 vm.clientdropvisible = false;
                 vm.pgdrop = false;
@@ -691,10 +727,16 @@
                             vm.clients = response.clientTerms;
                             vm.clientdrop = true;
                             vm.clientdropvisible = true;
+                            if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
+                                vm.customSelection('client');
+                            }
                             vm.lazyloaderclient = true;
                         });
                     }
                     else {
+                        if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
+                            vm.customSelection('client');
+                        }
                         vm.clientdrop = true;
                         vm.clientdropvisible = true;
                     }
@@ -703,6 +745,8 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
 
+                } else if (vm.clientdropvisible && $event.type === "keyup") {
+                    vm.customSelection('client');
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
@@ -711,6 +755,42 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                     vm.lazyloaderclient = true;
+                }
+            }
+
+            //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
+            vm.customSelection = function (type) {
+
+                if (type !== undefined && type === 'client') {
+                    var selectdClients = vm.selectedClients.split(',');  //user altered text value
+                    angular.forEach(vm.clients, function (client) {
+                        client.Selected = false;
+                        angular.forEach(selectdClients, function (clientInput) {
+                            if (clientInput.toString().length > 0 && client.name.toString().toLowerCase().indexOf(clientInput.toString().toLowerCase()) !== -1) {
+                                client.Selected = true;
+                            }
+                        })
+                    });
+                } else if (type !== undefined && type === 'pg') {
+                    var selectdPGs = vm.selectedPGs.split(',');  //user altered text value
+                    angular.forEach(vm.practiceGroups, function (pgGroup) {
+                        pgGroup.Selected = false;
+                        angular.forEach(selectdPGs, function (pgInput) {
+                            if (pgInput.toString().length > 0 && pgGroup.termName.toString().toLowerCase().indexOf(pgInput.toString().toLowerCase()) !== -1) {
+                                pgGroup.Selected = true;
+                            }
+                        })
+                    });
+                } else if (type !== undefined && type === 'aol') {
+                    var selectedAOLs = vm.selectedAOLs.split(',');  //user altered text value
+                    angular.forEach(vm.aolTerms, function (aol) {
+                        aol.Selected = false;
+                        angular.forEach(selectedAOLs, function (aolInput) {
+                            if (aolInput.toString().length > 0 && aol.termName.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
+                                aol.Selected = true;
+                            }
+                        })
+                    });
                 }
             }
             //#endregion
@@ -731,18 +811,26 @@
                             })
                             vm.pgdrop = true;
                             vm.pgdropvisible = true;
+                            if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
+                                vm.customSelection('pg');
+                            }
                             vm.lazyloaderpg = true;
                         });
                     }
                     else {
+                        if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
+                            vm.customSelection('pg');
+                        }
                         vm.pgdrop = true;
                         vm.pgdropvisible = true;
                     }
-                    vm.clientdrop = false;
-                    vm.clientdropvisible = false;
-                    vm.aoldrop = false;
-                    vm.aoldropvisible = false;
-                       } else {
+                        vm.clientdrop = false;
+                        vm.clientdropvisible = false;
+                        vm.aoldrop = false;
+                        vm.aoldropvisible = false;
+                } else if (vm.pgdropvisible && $event.type === "keyup") {
+                    vm.customSelection('pg');
+                } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
@@ -770,10 +858,16 @@
                             })
                             vm.aoldrop = true;
                             vm.aoldropvisible = true;
+                            if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
+                                vm.customSelection('aol');
+                            }
                             vm.lazyloaderaol = true;
                         });
                     }
                     else {
+                        if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
+                            vm.customSelection('aol');
+                        }
                         vm.aoldrop = true;
                         vm.aoldropvisible = true;
                     }
@@ -781,6 +875,8 @@
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
                     vm.pgdropvisible = false;
+                } else if (vm.aoldropvisible && $event.type === "keyup") {
+                    vm.customSelection('aol');
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
@@ -1292,7 +1388,7 @@
             }
             //#end region
 
-
+            //#region performs action when clicked on the search button in header flyout
             vm.getSearchResults = function () {
                 angular.element('#allMatters').addClass("active");
                 angular.element('#myMatters').removeClass("active");
@@ -1354,6 +1450,7 @@
                     }
                 });
             }
+            //#endregion
         }
     ]);
 
