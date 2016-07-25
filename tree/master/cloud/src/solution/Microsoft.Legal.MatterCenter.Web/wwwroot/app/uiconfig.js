@@ -9,5 +9,5 @@
 "MatterUsers":  {
 "SearchUsersURL" :"https://msmatter.sharepoint.com/sites/client",
 "StampedPropertiesURL": "https://msmatter.sharepoint.com/sites/microsoft"
-},
+}
 };

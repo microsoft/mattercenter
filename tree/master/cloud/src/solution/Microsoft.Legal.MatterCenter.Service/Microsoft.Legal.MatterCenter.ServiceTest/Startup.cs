@@ -41,7 +41,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             this.LoggerFactory = logger;
 
             var builder = new ConfigurationBuilder()
-                .SetBasePath(@"C:\Repos\MCFork\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.ServiceTest")
+                .SetBasePath(@"C:\Repos\mattercenter3\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.ServiceTest")
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
