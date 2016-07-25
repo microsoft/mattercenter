@@ -80,12 +80,12 @@
                         <div class="col-xs-12 col-sm-2 pull-left pad15">Clients</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" value="{{vm.selectedClients}}" placeholder="Enter or select a client" class="form-control">
+                                <input type="text" value="{{vm.selectedClients}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedClients"  ng-keyup="vm.showClientDrop($event)" placeholder="Enter or select a client" class="form-control">
                                 <span class="input-group-addon cursor" id="basic-addon1"
                                       ng-click="vm.showClientDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderclient" style="position:unset !important">
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderclient" style="position:static !important">
                             <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                                         <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('client')">Ok</div></div>
                                     </div>
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel()">Cancel</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel('client')">Cancel</div></div>
                                     </div>
                                 </div>
                             </div>
@@ -114,12 +114,12 @@
                         <div class="col-xs-12 col-sm-2 pull-left pad15">Practice Group</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" value="{{vm.selectedPGs}}" placeholder="Enter or select a practice group" class="form-control">
+                                <input type="text" value="{{vm.selectedPGs}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedPGs"  ng-keyup="vm.showPracticegroupDrop($event)" placeholder="Enter or select a practice group" class="form-control">
                                 <span class="input-group-addon cursor" id="basic-addon1"
                                       ng-click="vm.showPracticegroupDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderpg" style="position:unset !important">
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderpg" style="position:static !important">
                             <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
                         </div>
                     </div>
@@ -136,7 +136,7 @@
                                         <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('pg')">Ok</div></div>
                                     </div>
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel()">Cancel</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel('pg')">Cancel</div></div>
                                     </div>
                                 </div>
                             </div>
@@ -148,12 +148,12 @@
                         <div class="col-xs-12 col-sm-2 pull-left pad15">Area of Law</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" value="{{vm.selectedAOLs}}" placeholder="Enter or select an area of law" class="form-control">
+                                <input type="text" value="{{vm.selectedAOLs}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedAOLs"  ng-keyup="vm.showAreaofLawDrop($event)"  placeholder="Enter or select an area of law" class="form-control">
                                 <span class="input-group-addon cursor" id="basic-addon1"
                                       ng-click="vm.showAreaofLawDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderaol" style="position:unset !important">
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderaol" style="position:static !important">
                             <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
                         </div>
                     </div>
@@ -170,7 +170,7 @@
                                         <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('aol')">Ok</div></div>
                                     </div>
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel()">Cancel</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel('aol')">Cancel</div></div>
                                     </div>
                                 </div>
                             </div>
