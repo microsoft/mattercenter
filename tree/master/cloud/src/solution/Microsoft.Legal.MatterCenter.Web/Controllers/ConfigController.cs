@@ -12,14 +12,12 @@ using Microsoft.AspNetCore.Hosting;
 
 using Microsoft.WindowsAzure.Storage.Table;
 using System.IO;
-using System.Linq;
 
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Models;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using System.Text;
 #endregion
@@ -63,8 +61,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// <summary>
         /// Returns all the entries for Configuring the UI
         /// </summary>
-        /// <param name="configRequest">Request object for POST</param>
-    
+        /// <param name="configRequest">Request object for POST</param>   
         [HttpPost("Get")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> Get([FromBody] DynamicTableEntity configRequest)
@@ -73,10 +70,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
             try
             {
-
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
-              
+
                 #endregion
                 var configResultsVM = await configRepository.GetConfigurationsAsync(configRequest);
 
@@ -94,7 +90,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
         private void createConfig(List<DynamicTableEntity> configs)
         {
-
             var configPath = Path.Combine(hostingEnvironment.WebRootPath, "app/uiconfig.js");
             if (System.IO.File.Exists(configPath))
                 System.IO.File.Delete(configPath);
@@ -103,12 +98,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             var configWriter = new StreamWriter(configFile, Encoding.UTF8);
 
             List<string> configGroup = new List<string>();
+            EntityProperty key;
             EntityProperty value;
 
             foreach (DynamicTableEntity dt in configs)
             {
-
-
                 bool hasKey = dt.Properties.TryGetValue("ConfigGroup", out value);
                 if (hasKey)
                 {
@@ -122,12 +116,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             int groupCount = configGroup.Count;
             int count = configs.Count;
 
-            configWriter.WriteLine("var uiconfigs = {");
-
             int groups = 0;
+            configWriter.WriteLine("var uiconfigs = {");
             foreach (string str in configGroup)
             {
-              
+                groups++;
                 configWriter.WriteLine("\"" + str + "\":  {");
                 int entityCount = 0;
                 foreach (DynamicTableEntity dt in configs)
@@ -137,19 +130,23 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
                     if (str.ToLower().Equals(value.StringValue.ToLower()))
                     {
-                       if (entityCount < count)
+                        bool hasKey = dt.Properties.TryGetValue("Key", out key);
+                        bool hasValue = dt.Properties.TryGetValue("Value", out value);
+
+                        if (hasKey && hasValue)
                         {
-                            configWriter.WriteLine("\"" + dt.Properties["Key"].StringValue + "\" :" + "\"" + dt.Properties["Value"].StringValue + "\",");
-                        }
-                       else
-                        {
-                            configWriter.WriteLine("\"" + dt.Properties["Key"].StringValue + "\": " + "\"" + dt.Properties["Value"].StringValue + "\"");
+                            if (entityCount < count)
+                            {
+                                configWriter.WriteLine("\"" + key.StringValue + "\" :" + "\"" + value.StringValue + "\",");
+                            }
+                            else
+                            {
+                                configWriter.WriteLine("\"" + key.StringValue + "\": " + "\"" + value.StringValue + "\"");
+                            }
                         }
                     }
-
                 }
-
-                if (groups < count)
+                if (groups < groupCount)
                 {
                     configWriter.WriteLine("},");
                 }
@@ -157,11 +154,10 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                 {
                     configWriter.WriteLine("}");
                 }
-                
             }
             configWriter.WriteLine("};");
             configWriter.Dispose();
         }
     }
-
 }
+

@@ -25,17 +25,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
             IOptionsMonitor<GeneralSettings> generalSettings,
             IOptionsMonitor<LogTables> logTables)
         {
-
             this.generalSettings = generalSettings.CurrentValue;
             this.logTables = logTables.CurrentValue;
         }
 
-  
+
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="siteCollectionUrl"></param>
+        /// <param name="configRequest"></param>
         /// <returns></returns>
         public async Task<List<DynamicTableEntity>> GetConfigurationsAsync(DynamicTableEntity configRequest)
         {
@@ -49,7 +48,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="externalSharingRequest"></param>
         public List<DynamicTableEntity> GetConfigEntities()
         {
-           
+            var entities = new List<DynamicTableEntity>();
             try
             {
                 CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(generalSettings.CloudStorageConnectionString);
@@ -60,23 +59,22 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 };
                 // Retrieve a reference to the table.
                 CloudTable table = tableClient.GetTableReference("MatterCenterConfiguration");
-                var entities = new List<DynamicTableEntity>();
-
+               
                 // Construct the query operation for all  entities 
                 TableQuery<DynamicTableEntity> query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "MatterCenterConfig"));
               
                 var queryResult = table.ExecuteQuery(query);
                 
                 entities.AddRange(queryResult);
-                return entities;
+                
             }
             catch (Exception)
             {
                 throw;
             }
-           
+            return entities;
         }
 
-        }
+    }
 }
 
