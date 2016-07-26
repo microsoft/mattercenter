@@ -67,7 +67,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// <param name="configRequest">Request object for POST</param>   
         [HttpPost("Get")]
         [SwaggerResponse(HttpStatusCode.OK)]
-        public async Task<IActionResult> Get([FromBody] String configRequest)
+        public async Task<IActionResult> Get([FromBody] String filter)
         {
             string result = string.Empty;
 
@@ -76,8 +76,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
 
+                if (filter == null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No filter is passed to fetch the pinned matters"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                }
                 #endregion
-                var configResultsVM = await configRepository.GetConfigurationsAsync(configRequest);
+
+
+                var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
 
                 createConfig(configResultsVM);
                 return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);

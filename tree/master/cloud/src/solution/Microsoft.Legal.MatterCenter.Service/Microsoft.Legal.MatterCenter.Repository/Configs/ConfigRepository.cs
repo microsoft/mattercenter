@@ -36,9 +36,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="configRequest"></param>
         /// <returns></returns>
-        public async Task<List<DynamicTableEntity>> GetConfigurationsAsync(String configRequest)
+        public async Task<List<DynamicTableEntity>> GetConfigurationsAsync(String filter)
         {
-            return await Task.FromResult(this.GetConfigEntities());
+            return await Task.FromResult(this.GetConfigEntities(filter));
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         //
         /// </summary>
         /// <param name="externalSharingRequest"></param>
-        public List<DynamicTableEntity> GetConfigEntities()
+        public List<DynamicTableEntity> GetConfigEntities(string filter)
         {
             var entities = new List<DynamicTableEntity>();
             try
@@ -59,10 +59,20 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 };
                 // Retrieve a reference to the table.
                 CloudTable table = tableClient.GetTableReference("MatterCenterConfiguration");
-               
-                // Construct the query operation for all  entities 
-                TableQuery<DynamicTableEntity> query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "MatterCenterConfig"));
-              
+                TableQuery<DynamicTableEntity> query = new TableQuery<DynamicTableEntity>();
+
+                if (filter == "")
+                {
+
+                    // Construct the query operation for all  entities 
+                   query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "MatterCenterConfig"));
+
+                }
+                else
+                {
+                    query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("ConfigGroup", QueryComparisons.Equal, filter));
+                }
+
                 var queryResult = table.ExecuteQuery(query);
                 
                 entities.AddRange(queryResult);
