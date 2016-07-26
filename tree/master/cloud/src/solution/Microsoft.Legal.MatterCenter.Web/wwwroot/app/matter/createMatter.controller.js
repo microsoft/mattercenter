@@ -23,8 +23,7 @@
             cm.createButton = "Create";
             cm.clientUrl = "";
             cm.errorStatus = false;
-            cm.prevButtonDisabled = true;
-           
+            cm.prevButtonDisabled = true;          
 
             var w = angular.element($window);
 
@@ -48,8 +47,6 @@
                 isNextClick: false,
                 sectionClickName: "",
                 specialCharacterExpressionMatter: "[A-Za-z0-9_]+[-A-Za-z0-9_, ]*"
-
-
             }
 
             var oPageTwoState = {
@@ -68,7 +65,6 @@
             cm.matterName = "";
             cm.matterId = "";
             cm.matterDescription = "";
-
             cm.clientNameList = [];
             cm.areaOfLawTerms = [];
             cm.subAreaOfLawTerms = [];
@@ -79,7 +75,6 @@
             cm.activeDocumentTypeLawTerm = null;
             cm.popupContainerBackground = "Show";
             cm.popupContainer = "hide";
-
             cm.sectionName = "snOpenMatter";
             cm.removeDTItem = false;
             cm.primaryMatterType = cm.errorPopUp = false;
@@ -1645,10 +1640,7 @@
                 angular.forEach(cm.assignPermissionTeams, function (item) {
                     //    arrPermissions.push($.trim($(this).val()));
                     if (item.assignedPermission.name.toLowerCase() === User_Upload_Permissions.toLowerCase()) {
-
-
                         arrReadOnlyUsers.push(getUserName(item.assignedRole.name.trim() + ";", false).join(";"), ";");
-
                     }
                 });
                 validateTeamAssigmentRole();

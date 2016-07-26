@@ -84,6 +84,10 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/matter/UpdateMetadata'
                   }),
+                   'updateMatter': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/update'
+                  }),
                   'getStampedProperties':auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/matter/getstampedproperties'
