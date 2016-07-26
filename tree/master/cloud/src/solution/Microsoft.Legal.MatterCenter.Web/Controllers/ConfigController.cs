@@ -91,7 +91,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
                 var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
 
-                createConfig(configResultsVM);
+                CreateConfig(configResultsVM);
                 return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
 
             }
@@ -103,7 +103,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         }
 
 
-        private void createConfig(List<DynamicTableEntity> configs)
+        private void CreateConfig(List<DynamicTableEntity> configs)
 
         {
             StringBuilder sb = new StringBuilder();

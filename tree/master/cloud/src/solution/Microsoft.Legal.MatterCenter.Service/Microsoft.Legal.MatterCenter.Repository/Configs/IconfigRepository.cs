@@ -1,11 +1,18 @@
-﻿using Microsoft.Legal.MatterCenter.Models;
-using Microsoft.SharePoint.Client;
-using Microsoft.SharePoint.Client.WebParts;
+﻿// ***********************************************************************
+// Assembly         : Microsoft.Legal.MatterCenter.Utility
+// Author           : aislid
+// Created          : 07-06-2016
+//
+// ***********************************************************************
+// <copyright file="IMatterRepository.cs" company="Microsoft">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// This interface contains all UI Configuration functionalities
+// ***********************************************************************
+
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
 
