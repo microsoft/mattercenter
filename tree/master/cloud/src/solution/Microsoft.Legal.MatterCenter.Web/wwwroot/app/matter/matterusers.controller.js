@@ -10,7 +10,11 @@
         cm.matterProperties = undefined;
         cm.assignPermissionTeams = [];
         $rootScope.profileClass = "hide";
-        cm.notificationPopUpBlock=false;
+        cm.notificationPopUpBlock = false;
+        cm.sConflictScenario = "";
+        cm.isEdit = "false";
+        cm.oMandatoryRoleNames = [];
+        cm.popupContainerBackground = "Show";
 
         function getParameterByName(name) {
             "use strict";
@@ -22,10 +26,12 @@
 
         cm.clientUrl = getParameterByName("clientUrl");
         cm.matterName = getParameterByName("matterName");
+        cm.isEdit = getParameterByName("IsEdit");
 
-        if (cm.clientUrl == "" && cm.matterName=="") {
+        if (cm.clientUrl == "" && cm.matterName == "") {
             cm.matterName = "56Test127";
-            cm.clientUrl="https://msmatter.sharepoint.com/sites/microsoft";
+            cm.clientUrl = "https://msmatter.sharepoint.com/sites/microsoft";
+            cm.isEdit = "true";
         }
 
         //#region Service API Call
@@ -62,7 +68,7 @@
             api({
                 resource: 'matterResource',
                 method: 'updateMatter',
-                data: '',
+                data: optionsForUsers,
                 success: callback
             });
         }
@@ -100,7 +106,7 @@
         optionsForPermissionLevels = {
             Url: configs.global.repositoryUrl
         }
-       
+
         var optionsForStampedProperties = new Object;
         optionsForStampedProperties = {
             Client: {
@@ -126,6 +132,7 @@
                         getPermissionLevels(optionsForPermissionLevels, function (response) {
                             cm.assignPermissions = response;
                             getUsersRolesAndPermissions();
+                            cm.popupContainerBackground = "hide";
                         });
                     });
                 });
@@ -133,7 +140,15 @@
         }
 
         getMatterUsers();
+cm.CheckPopUp = function (e) {
+    //  e.stopPropagation();
+    if (!cm.errorStatus) {
+                    cm.errorPopUpBlock = false;
+                    cm.errorBorder = "";
+                    }
+                cm.errorStatus = false;
 
+            }
 
         function getUsersRolesAndPermissions() {
             var tempMatterProp = cm.matterProperties;
@@ -141,6 +156,7 @@
             var userNames = tempMatterProp.matterObject.assignUserNames;
             var permissions = tempMatterProp.matterObject.permissions;
             var roles = tempMatterProp.matterObject.roles;
+            cm.sConflictScenario = 0 < tempMatterProp.matterObject.blockUserNames.length ? "True" : "False";
             var assigendTeams = [];
             if (userEmails && userNames && permissions && roles && userEmails.length === userNames.length && userNames.length === permissions.length && permissions.length === roles.length) {
                 for (var i = 0; i < userEmails.length; i++) {
@@ -157,12 +173,11 @@
                             assignedTeam.assignedPermission = permission;
                         }
                     });
-                    // assignedTeam.assignedPermission = permissions[i];
                     cm.assignPermissionTeams = (cm.assignPermissionTeams.length == 1 && cm.assignPermissionTeams[0].assignedUser == "") ? [] : cm.assignPermissionTeams;
                     assignedTeam.assigneTeamRowNumber = (cm.assignPermissionTeams.length == 1 && cm.assignPermissionTeams[0].assignedUser == "") ? 1 : cm.assignPermissionTeams.length + 1;
                     cm.assignPermissionTeams.push(assignedTeam);
 
-                }              
+                }
             }
 
         }
@@ -181,11 +196,11 @@
 
         //getPermissionsAndRoles();
 
-        var arrRoles = [];
-        arrRoles = getAssignedUserRoles();
+        //var arrRoles = [];
+        //arrRoles = getAssignedUserRoles();
 
-        var arrPermissions = [];
-        arrPermissions = getAssignedUserPermissions();
+        //var arrPermissions = [];
+        //arrPermissions = getAssignedUserPermissions();
         //#endregion
 
 
@@ -258,6 +273,8 @@
         }
 
 
+
+
         function showErrorNotificationAssignTeams(errorMsg, teamRowNumber, type) {
             var fieldType = "";
 
@@ -274,6 +291,8 @@
             }
 
             var temp = document.getElementById(fieldType + teamRowNumber);
+            
+           
             var matterErrorEle = document.getElementById("errorBlock");
             var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
             var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
@@ -301,8 +320,16 @@
                 y = temp.offsetTop + 78, x = temp.offsetLeft + 0;
             }
             else {
-                y = temp.offsetTop , x = temp.offsetLeft;
+                y = temp.offsetTop, x = temp.offsetLeft;
             }
+            //if (width > 734) {
+            //    console.log(posEle.x);
+            //    console.log(posEle.y);
+            //    y = temp.offsetTop-9 , x = temp.offsetLeft +405;
+            //}
+            //else {
+            //    y = temp.offsetTop + 57, x = temp.offsetLeft + 10;
+            //}
 
 
             errPopUpCAttorny.innerHTML = ".errPopUpCAttorny{top:" + y + "px;left:" + x + "px;}";
@@ -314,7 +341,7 @@
             document.getElementsByTagName('head')[0].appendChild(errTringleBorderCAttorny);
             document.getElementsByTagName('head')[0].appendChild(errTextMatterCAttorny);
 
-            
+
             cm.errTextMsg = errorMsg;
 
             cm.errorPopUpBlock = true;
@@ -345,7 +372,7 @@
             }
             return arrUserNames;
         }
-
+        cm.oMandatoryRoleNames = [];
         function validateTeamAssigmentRole() {
             var oAssignList = cm.assignPermissionTeams
             , iExpectedCount = 0, iActualCount = 0, iIterator = 0, iLength = cm.assignRoles.length;
@@ -458,7 +485,6 @@
                             cm.errTextMsg = "Please provide at least one permission on this  matter. ";
                             cm.errorBorder = "";
                             cm.errorPopUpBlock = true;
-
                             return false;
                         }
                     }
@@ -524,6 +550,17 @@
             }
         }
 
+        cm.confirmUser = function (confirmUser) {
+            if (confirmUser) {
+                cm.notificationPopUpBlock = false;
+                cm.notificationBorder = "";
+            } else {
+                cm.notificationPopUpBlock = false;
+                cm.textInputUser.assignedUser = "";
+                cm.notificationBorder = "";
+            }
+        }
+
         function showNotificatoinMessages(teamRowNumber) {
             var temp = document.getElementById('txtUser' + teamRowNumber);
             var notificationEle = document.getElementById("notificationBlock");
@@ -550,10 +587,10 @@
             var width = GetWidth();
             var x = 0, y = 0;
             if (width > 734) {
-                y = temp.offsetTop+53 , x = temp.offsetLeft+70 ;
+                y = temp.offsetTop + 53, x = temp.offsetLeft + 70;
             }
             else {
-                y = temp.offsetTop , x = temp.offsetLeft ;
+                y = temp.offsetTop, x = temp.offsetLeft;
             }
             cm.notificationBorder = "txtUser" + teamRowNumber;
 
@@ -565,7 +602,7 @@
             document.getElementsByTagName('head')[0].appendChild(notifcationTringleBlockCAttorny);
             document.getElementsByTagName('head')[0].appendChild(notifcationTringleBorderCAttorny);
             document.getElementsByTagName('head')[0].appendChild(notifcationTextMatterCAttorny);
-           
+
             notificationEle.classList.add("notifcationPopUpCAttorny");
             notificationTrinageleBlockEle.classList.add("notifcationTringleBlockCAttorny");
             notificationTrinagleBorderEle.classList.add("notifcationTringleBorderCAttorny");
@@ -583,6 +620,119 @@
                 x = document.body.clientWidth;
             }
             return x;
+        }
+
+
+        cm.UpdateMatter = function ($event) {
+            cm.popupContainerBackground = "Show";
+            if ($event) {
+                $event.stopPropagation();
+        }
+            var arrUserNames = [],
+                arrUserEmails = [],
+                arrTeamMembers = [],
+                roleInformation = {},
+                arrReadOnlyUsers = [],
+                sResponsibleAttorney = [],
+                sResponsibleAttorneyEmail = [];
+            var arrBlockUserNames = cm.matterProperties.matterObject.blockUserNames ? cm.matterProperties.matterObject.blockUserNames : ""
+
+            var attornyCheck = validateAttornyUserRolesAndPermissins($event);
+            if (attornyCheck) {
+                angular.forEach(cm.assignPermissionTeams, function (item) {
+                    if ("" !== item.assignedRole && "" !== item.assignedPermission) {
+                        if (roleInformation.hasOwnProperty(item.assignedRole.name)) {
+                            roleInformation[item.assignedRole.name] = roleInformation[item.assignedRole.name] + ";" + item.assignedUser;
+                        }
+                        else {
+                            roleInformation[item.assignedRole.name] = item.assignedUser;
+                        }
+                    }
+                });
+
+                angular.forEach(cm.assignPermissionTeams, function (item) {
+                    arrUserNames.push(getUserName(item.assignedUser.trim() + ";", true));
+                    arrUserEmails.push(getUserName(item.assignedUser.trim() + ";", false));
+                    arrTeamMembers.push(getUserName(item.assignedUser.trim() + ";", true).join(";"));
+                    var User_Upload_Permissions = "Read";
+                    angular.forEach(cm.assignPermissionTeams, function (item) {
+                        if (item.assignedPermission.name.toLowerCase() === User_Upload_Permissions.toLowerCase()) {
+                            arrReadOnlyUsers.push(getUserName(item.assignedRole.name.trim() + ";", false).join(";"), ";");
+                        }
+                    });
+
+                });
+
+                validateTeamAssigmentRole();
+                getArrAssignedUserNamesAndEmails();
+                var arrRoles = getAssignedUserRoles();
+                var arrPermissions = getAssignedUserPermissions();
+                angular.forEach(cm.assignPermissionTeams, function (item) {
+                    if (1 <= cm.assignPermissionTeams.length) {
+                        if ("" !== item.assignedRole && "" !== item.assignedPermission) {
+                            if (-1 !== cm.oMandatoryRoleNames.indexOf(item.assignedRole.name)) {
+                                sResponsibleAttorney.push(getUserName(item.assignedUser + ";", true).join(";"));
+                                sResponsibleAttorneyEmail.push(getUserName(item.assignedUser + ";", false).join(";"));
+                            }
+                        }
+                    }
+                });
+
+                var updatedMatterUsers = {
+                    Client: {
+                        Url: cm.clientUrl,
+                        Id: "",
+                        Name: ""
+                    },
+                    Matter: {
+                        Name: cm.matterName,
+                        BlockUserNames: arrBlockUserNames,
+                        AssignUserNames: arrUserNames,
+                        AssignUserEmails: arrUserEmails,
+                        Permissions: arrPermissions,
+                        Roles: arrRoles,
+                        Conflict: {
+                            Identified: cm.sConflictScenario
+                        },
+                        FolderNames: [],
+                        DefaultContentType: "",
+                        ContentTypes: [],
+                        Description: "",
+                        Id: ""
+
+                    },
+                    MatterDetails: {
+                        PracticeGroup: "",
+                        AreaOfLaw: "",
+                        SubareaOfLaw: "",
+                        ResponsibleAttorney: sResponsibleAttorney.join(";").replace(/;;/g, ";"),
+                        ResponsibleAttorneyEmail: sResponsibleAttorneyEmail.join(";").replace(/;;/g, ";"),
+                        UploadBlockedUsers: arrReadOnlyUsers,
+                        TeamMembers: arrTeamMembers.join(";"),
+                        RoleInformation: JSON.stringify(roleInformation)
+                    },
+                    EditMode: cm.isEdit,
+                    UserIds: cm.userIDs,
+                    SerializeMatter: "",
+                    Status: ""
+                }
+
+                updateMatterPermissions(updatedMatterUsers, function (response) {
+                    console.log(response);
+
+
+                    cm.popupContainerBackground = "hide";
+                    //                           cm.errTextMsg = "Error in updating  matter: Incorrect inputs.";
+                    //                           showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
+                    //                           cm.errorBorder = "";
+                    //                           cm.errorPopUpBlock = true;
+                    //                           cm.popupContainerBackground = "hide";
+                });
+
+            }
+            else {
+                cm.popupContainerBackground = "hide";
+}
         }
 
         //#endregion
