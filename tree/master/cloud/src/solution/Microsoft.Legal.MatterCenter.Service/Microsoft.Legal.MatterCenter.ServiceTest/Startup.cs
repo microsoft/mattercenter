@@ -40,8 +40,17 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             this.HostingEnvironment = env;
             this.LoggerFactory = logger;
 
+
+            string projectName = env.ApplicationName;
+            int projLength = projectName.Length;
+            string path = env.ContentRootPath;
+            int index = path.IndexOf(projectName);
+            int last = index + projLength;
+            string basePath = path.Remove(last);
+
             var builder = new ConfigurationBuilder()
-                .SetBasePath(@"C:\Repos\mattercenter3\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.ServiceTest")
+                 .SetBasePath(basePath)
+                //.SetBasePath(@"C:\Repos\mattercenter3\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.ServiceTest")
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 

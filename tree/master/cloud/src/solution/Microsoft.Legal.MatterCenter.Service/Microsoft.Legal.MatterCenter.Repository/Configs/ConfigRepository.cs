@@ -36,7 +36,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="configRequest"></param>
         /// <returns></returns>
-        public async Task<List<DynamicTableEntity>> GetConfigurationsAsync(DynamicTableEntity configRequest)
+        public async Task<List<DynamicTableEntity>> GetConfigurationsAsync(String configRequest)
         {
             return await Task.FromResult(this.GetConfigEntities());
         }

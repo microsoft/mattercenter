@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 
 using Microsoft.WindowsAzure.Storage.Table;
 using System.IO;
+using Newtonsoft.Json;
 
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
@@ -20,6 +21,8 @@ using Microsoft.Legal.MatterCenter.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using System.Text;
+
+
 #endregion
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -64,7 +67,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// <param name="configRequest">Request object for POST</param>   
         [HttpPost("Get")]
         [SwaggerResponse(HttpStatusCode.OK)]
-        public async Task<IActionResult> Get([FromBody] DynamicTableEntity configRequest)
+        public async Task<IActionResult> Get([FromBody] String configRequest)
         {
             string result = string.Empty;
 
@@ -89,13 +92,19 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
 
         private void createConfig(List<DynamicTableEntity> configs)
+
         {
+            StringBuilder sb = new StringBuilder();
+            JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
+            jw.Formatting = Formatting.Indented;
+
             var configPath = Path.Combine(hostingEnvironment.WebRootPath, "app/uiconfig.js");
             if (System.IO.File.Exists(configPath))
                 System.IO.File.Delete(configPath);
 
             var configFile = System.IO.File.Open(configPath, FileMode.Create);
             var configWriter = new StreamWriter(configFile, Encoding.UTF8);
+
 
             List<string> configGroup = new List<string>();
             EntityProperty key;
@@ -112,20 +121,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                     }
                 }
             }
+            configWriter.WriteLine("var uiconfigs =");
 
-            int groupCount = configGroup.Count;
-            int count = configs.Count;
-
-            int groups = 0;
-            configWriter.WriteLine("var uiconfigs = {");
+            jw.WriteStartObject();
             foreach (string str in configGroup)
             {
-                groups++;
-                configWriter.WriteLine("\"" + str + "\":  {");
-                int entityCount = 0;
+                jw.WritePropertyName(str);
+                jw.WriteStartObject();
+                               
                 foreach (DynamicTableEntity dt in configs)
-                {
-                    entityCount++;
+                {             
                     bool scr = dt.Properties.TryGetValue("ConfigGroup", out value);
 
                     if (str.ToLower().Equals(value.StringValue.ToLower()))
@@ -135,27 +140,18 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
                         if (hasKey && hasValue)
                         {
-                            if (entityCount < count)
                             {
-                                configWriter.WriteLine("\"" + key.StringValue + "\" :" + "\"" + value.StringValue + "\",");
-                            }
-                            else
-                            {
-                                configWriter.WriteLine("\"" + key.StringValue + "\": " + "\"" + value.StringValue + "\"");
+                                jw.WritePropertyName(key.StringValue.ToString());
+                                jw.WriteValue(value.StringValue.ToString());
                             }
                         }
                     }
                 }
-                if (groups < groupCount)
-                {
-                    configWriter.WriteLine("},");
-                }
-                else
-                {
-                    configWriter.WriteLine("}");
-                }
+                jw.WriteEndObject();
             }
-            configWriter.WriteLine("};");
+            jw.WriteEndObject();
+            configWriter.Write(sb.ToString());
+            configWriter.WriteLine(";");
             configWriter.Dispose();
         }
     }

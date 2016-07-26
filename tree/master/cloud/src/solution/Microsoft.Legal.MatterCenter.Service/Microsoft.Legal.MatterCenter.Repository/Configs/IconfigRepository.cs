@@ -13,7 +13,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 {
     public interface  IConfigRepository
     {
-        Task<List<DynamicTableEntity>> GetConfigurationsAsync(DynamicTableEntity configRequest);
+        Task<List<DynamicTableEntity>> GetConfigurationsAsync(String configRequest);
         List<DynamicTableEntity>  GetConfigEntities();
     }
 }
