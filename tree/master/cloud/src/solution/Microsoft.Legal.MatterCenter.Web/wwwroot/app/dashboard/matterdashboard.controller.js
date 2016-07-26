@@ -69,7 +69,7 @@
 
 
             var gridOptions = {
-                paginationPageSize: 10,
+                paginationPageSize: 28,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
@@ -397,7 +397,7 @@
                 jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
-                jsonMatterSearchRequest.SearchObject.ItemsPerPage = 10;
+                jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 get(jsonMatterSearchRequest, function (response) {
                     if (response == "") {
                         vm.lazyloaderdashboard = true;
@@ -442,7 +442,7 @@
                 var tempMatters = [];
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
-                jsonMatterSearchRequest.SearchObject.ItemsPerPage = 10;
+                jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 get(jsonMatterSearchRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not                    
                     getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
@@ -1131,7 +1131,7 @@
                     vm.first = vm.first + gridOptions.paginationPageSize;
                     vm.last = vm.last + gridOptions.paginationPageSize;
                     vm.total = vm.totalrecords - gridOptions.paginationPageSize;
-                    if (vm.total < gridOptions.paginationPageSize) {
+                    if (vm.last>vm.totalrecords) {
                         vm.fromtopage = vm.first + " - " + vm.totalrecords;
                     } else {
                         vm.fromtopage = vm.first + " - " + vm.last;
@@ -1388,7 +1388,7 @@
             }
             //#end region
 
-
+            //#region performs action when clicked on the search button in header flyout
             vm.getSearchResults = function () {
                 angular.element('#allMatters').addClass("active");
                 angular.element('#myMatters').removeClass("active");
@@ -1450,6 +1450,7 @@
                     }
                 });
             }
+            //#endregion
         }
     ]);
 

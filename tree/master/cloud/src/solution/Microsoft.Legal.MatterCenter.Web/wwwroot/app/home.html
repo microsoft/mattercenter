@@ -2,8 +2,8 @@
     <heading employee-names="vm.userName" nav-url="vm.navUrl" nav-url-text="vm.navUrlText"></heading>
 </header>
 -->
-<div >
-    <div class="row {{$root.profileClass}}" style="min-width:310px;" >
+<div>
+    <div class="row {{$root.profileClass}}" style="min-width:310px;">
         <div class="col-xs-offset-9 col-xs-3" style="position: absolute;padding-top: 10px;left: 1px;">
             <div id="ContextualHelp">
                 <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" ng-click="$root.dispContextualHelp($event)" />
@@ -47,7 +47,41 @@
             </div>
         </div>
     </div>
-    <header id="matterCenterHeader" class="commonContent marginTop20">
+
+    <div class="maincontentDiv commonContent marginTop20">
+        <div class="row pad0 mainHeader">
+            <div class="col-xs-12 col-sm-5 col-lg-6 pad0">
+                <div class="row pad0 margin0">
+                    <div class="col-xs-12 col-sm-10 col-lg-11 pad0">
+                        <div class="floatLeft" id="hamburgerConatiner" ng-click="vm.showCloseIcon()" ng-show="vm.showHamburger">
+                            <img class="headerActions pull-left" title="View links" data-hamburger="0" id="openHamburger" alt="" src="Images/MC_homepage_Hamburger.png" />
+                        </div>
+                        <div class="closeIcon" ng-if="vm.showClose" ng-click="vm.showHamburgerIcon()">
+                            <img class="headerActions pull-left" title="Close" data-hamburger="1" id="closeHamburger" alt="" src="Images/MC_Navigation_Close_icon_60px_X_60px.png" />
+                        </div>
+                        <img class="floatLeft" id="matterCenterHome" title="Matter Center" alt="" src="Images/MC_homepage_Logo.png" />
+                        <div class="floatLeft" style="color:#fff">
+                            <div class="upperSubText">Matter Center</div>
+                            <div class="lowerSubText">for Office 365</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-5 mainSearch pad0">
+                <input id="searchText" type="text" placeholder="Search SharePoint" my-enter="vm.mainHeaderClick()" ng-model="vm.mainheadersearch" />
+                <div id="searchLink">
+                    <img class="searchIcon" title="Search" alt="search" src="Images/search-15x15-666.png" ng-click="vm.mainHeaderClick()" />
+                </div>
+            </div>
+            <div class="col-xs-12" id="Mainflyout" ng-if="vm.showHeaderFlyout">
+                <div class="cur-pointer headerLinks" id="searchMatterTab"><span title="Matters" ng-click="vm.navigateUrl('section=1')">Matters</span></div>
+                <div class="cur-pointer headerLinks" id="searchDocumentTab"><span title="Documents" ng-click="vm.navigateUrl('section=2')">Documents</span></div>
+                <div class="headerLinks"><a id="settingsLink"><span title="Settings" ng-click="vm.navigateUrl('Settings')">Settings</span></a></div>
+            </div>
+        </div>
+    </div>
+
+    <!--<header id="matterCenterHeader" class="commonContent marginTop20">
         <div class="floatLeft" id="hamburgerConatiner" ng-click="vm.showCloseIcon()" ng-show="vm.showHamburger">
             <img class="headerActions" title="View links" data-hamburger="0" id="openHamburger" alt="" src="Images/MC_homepage_Hamburger.png" />
         </div>
@@ -67,25 +101,36 @@
                 <img class="searchIcon" title="Search" alt="search" src="Images/search-15x15-666.png" />
             </div>
         </div>
-        <div class="" id="Flyoutheader" ng-if="vm.showHeaderFlyout">
-            <div class="cur-pointer headerLinks" id="searchMatterTab"><span title="Matters" ng-click="vm.navigateUrl('section=1')">Matters</span></div>
-            <div class="cur-pointer headerLinks" id="searchDocumentTab"><span title="Documents" ng-click="vm.navigateUrl('section=2')">Documents</span></div>
-            <div class="headerLinks"><a id="settingsLink"><span title="Settings" ng-click="vm.navigateUrl('Settings')">Settings</span></a></div>
-        </div>
-    </header>
+
+    </header>-->
     <div class="matterCenterHeaderBackground" ng-if="vm.showHeaderBackground" ng-click="vm.showHamburgerIcon()"></div>
     <main ui-view="contentView">
 
     </main>
-    <footer id="footer" class="commonContent">
+
+    <div class="maincontentDiv commonContent">
+        <div class="row">
+            <a aria-haspopup="true" href="http://www.microsoft.com/en-in/default.aspx" target="_parent">
+                <img title="Microsoft" class="mslogo imgNoBorder pull-right" alt="Microsoft" src="Images/microsoft-grey-logo-sm.png" />
+            </a>
+        </div>
+        <div class="row text-right">
+            <ul class="footerLinks" role="menubar">
+                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Feedback and Support, e.g. mailto:support@supportsite.com]" target="_parent">Feedback & Support</a></li>
+                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Privacy terms, e.g. privacy.supportsite.com]" target="_parent">Privacy & Cookies</a></li>
+                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Terms of use, e.g. termofuse.supportsite.com]" target="_parent">Terms of use</a></li>
+                <li class="rightFooterElement copyRightElement" role="menuitem">© {{vm.currentyear}}  Microsoft</li>
+            </ul>
+        </div>
+    </div>
+
+    <!--<footer id="footer" class="commonContent">
         <div class="footerContent">
             <ul class="rightFooter">
                 <li>
                     <ul role="menubar">
                         <li class="rightend" role="menuitem">
-                            <a aria-haspopup="true" href="http://www.microsoft.com/en-in/default.aspx" target="_parent">
-                                <img title="Microsoft" class="mslogo imgNoBorder" alt="Microsoft" src="Images/microsoft-grey-logo-sm.png" />
-                            </a>
+
                         </li>
                     </ul>
                 </li>
@@ -102,6 +147,6 @@
                 </li>
             </ul>
         </div>
-    </footer>
+    </footer>-->
 </div>
 
