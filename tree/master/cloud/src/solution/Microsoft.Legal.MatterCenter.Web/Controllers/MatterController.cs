@@ -1053,6 +1053,28 @@ namespace Microsoft.Legal.MatterCenter.Service
 
                 try
                 {
+                    //ToDo: This values will come from the client. Once the UI is implemented, 
+                    //This will be removed
+                    var managedColumnTerms = new Dictionary<string, ManagedColumn>();
+                    managedColumnTerms.Add("PracticeGroup", new ManagedColumn()
+                    {
+                        TermName = matterMetdata.MatterDetails.PracticeGroup
+                    });
+
+                    managedColumnTerms.Add("AreaOfLaw", new ManagedColumn()
+                    {
+                        TermName = matterMetdata.MatterDetails.AreaOfLaw,
+
+                    });
+
+                    managedColumnTerms.Add("SubareaOfLaw", new ManagedColumn()
+                    {
+                        TermName = matterMetdata.MatterDetails.SubareaOfLaw,
+
+                    });
+
+                    matterMetdata.MatterDetails.ManagedColumnTerms = managedColumnTerms;
+
                     genericResponse = matterProvision.UpdateMatterMetadata(matterMetdata);
                     if (genericResponse == null)
                     {

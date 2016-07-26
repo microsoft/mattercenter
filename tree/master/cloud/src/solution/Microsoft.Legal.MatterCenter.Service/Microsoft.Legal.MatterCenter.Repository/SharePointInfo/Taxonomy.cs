@@ -189,7 +189,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         //This condition is if the UI is requesting practice group terms
                         if (termStoreDetails.TermSetName == taxonomySettings.PracticeGroupTermSetName)
                         {
-                            taxonomyResponseVM.TermSets = GetPracticeGroupTermSetHierarchy(clientContext, termSet, termStoreDetails);
+                            taxonomyResponseVM.TermSets = GetManagedTermSetHierarchy(clientContext, termSet, termStoreDetails);
                         }
                         //This condition is if the UI is requesting client terms and the clients are defined as term set and not terms
                         else if (termStoreDetails.TermSetName == taxonomySettings.ClientTermSetName && 
@@ -228,12 +228,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
 
         /// <summary>
-        /// Gets the practice group term set hierarchy with generic code using JSONWriter
+        /// Gets the managed term set hierarchy with generic code using JSONWriter
         /// </summary>
         /// <param name="termSet">Term set object holding Practice Group terms</param>
         /// <param name="termStoreDetails">Term Store object containing Term store data</param>
         /// <returns>Serialized Object of Term Set</returns>
-        private string GetPracticeGroupTermSetHierarchy(ClientContext clientContext, TermSet termSet, TermStoreDetails termStoreDetails)
+        private string GetManagedTermSetHierarchy(ClientContext clientContext, TermSet termSet, TermStoreDetails termStoreDetails)
         {
             StringBuilder sb = new StringBuilder();
             JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
@@ -370,7 +370,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 }
                             }
 
-                            //If the key is present in both and parent and, child value is empty and the parent value is not empty,
+                            //If the key is present in both and parent and child and if child value is empty and the parent value is not empty,
                             //update the child value with the parent value for the same key
                             if (childCustomProperties.Keys.Contains(parentProperty.Key) && childCustomProperties[parentProperty.Key] == string.Empty)
                             {
