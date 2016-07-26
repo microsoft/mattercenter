@@ -37,6 +37,7 @@ namespace Microsoft.Legal.MatterCenter.Web
     /// <summary>
     /// Document Controller class deals with finding document, 
     /// pinning document, unpinning the document etc.
+    /// 
     /// </summary>
     [Authorize]
     [Route("api/v1/document")]
