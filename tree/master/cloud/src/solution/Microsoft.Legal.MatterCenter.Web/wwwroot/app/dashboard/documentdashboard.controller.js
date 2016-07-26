@@ -932,7 +932,7 @@
                     vm.first = vm.first + gridOptions.paginationPageSize;
                     vm.last = vm.last + gridOptions.paginationPageSize;
                     vm.total = vm.totalrecords - gridOptions.paginationPageSize;
-                    if (vm.total < gridOptions.paginationPageSize) {
+                    if (vm.last > vm.totalrecords) {
                         vm.fromtopage = vm.first + " - " + vm.totalrecords;
                     } else {
                         vm.fromtopage = vm.first + " - " + vm.last;
