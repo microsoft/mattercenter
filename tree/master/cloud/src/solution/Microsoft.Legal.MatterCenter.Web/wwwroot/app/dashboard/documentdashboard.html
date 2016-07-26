@@ -48,8 +48,6 @@
                                                 <span class="paddingRight20"><input type="checkbox" ng-model="element.selected" /></span>{{element.documentName}}
                                             </div>
                                             <div class="col-xs-12 col-sm-1"><img src="../Images/icon-delete.png" class="" title="Remove attachment" ng-click="vm.removeAttachment(element)"></div>
-
-
                                         </div>
                                     </li>
                                 </ul>
@@ -124,7 +122,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">Author</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
-                            <input type="text" placeholder="Document Author" ng-model="vm.selectedAuthor" uib-typeahead="documentDataList.name + ' ('+ documentDataList.email + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="vm.loadLocation" typeahead-no-results="vm.AuthornoResults" class="form-control">
+                            <input type="text" placeholder="Document Author" ng-model="vm.selectedAuthor" class="form-control">
                         </div>
                         <div class="col-xs-12 hide">
                             <i ng-show="vm.loadLocation" class="glyphicon glyphicon-refresh"></i>
