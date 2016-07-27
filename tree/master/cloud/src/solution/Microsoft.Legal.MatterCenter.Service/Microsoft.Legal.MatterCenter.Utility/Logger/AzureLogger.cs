@@ -17,9 +17,9 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// <param name="lineNumber">Line Number of the log table.</param>
         /// <returns>Returns date of logging</returns>
         internal static string LogInAzure(Exception exception, string className, string methodName, 
-            string logTableName, int lineNumber, LogTables logTables)
+            string logTableName, int lineNumber, LogTables logTables, GeneralSettings generalSettings)
         {
-            string connStr = logTables.CloudStorageConnectionString;
+            string connStr = generalSettings.CloudStorageConnectionString;
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connStr);
             CloudTableClient client = storageAccount.CreateCloudTableClient();
             CloudTable table = client.GetTableReference(logTableName);

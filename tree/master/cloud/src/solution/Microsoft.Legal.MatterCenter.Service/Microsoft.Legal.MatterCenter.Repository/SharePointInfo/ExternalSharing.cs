@@ -76,7 +76,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {            
             try
             {
-                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(logTables.CloudStorageConnectionString);
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(generalSettings.CloudStorageConnectionString);
                 CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
                 tableClient.DefaultRequestOptions = new TableRequestOptions
                 {

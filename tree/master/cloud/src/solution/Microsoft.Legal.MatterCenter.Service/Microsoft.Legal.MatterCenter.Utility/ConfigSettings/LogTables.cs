@@ -12,9 +12,10 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string EventViewerSource { get; set; }
         public string EventViewerEventID { get; set; }
         public string EventViewerLogName { get; set; }
-        public string CloudStorageConnectionString { get; set; }
+        
         public string AzureRowKeyDateFormat { get; set; }
         public bool IsLoggingOnAzure { get; set; }
         public string ExternalAccessRequests { get; set; }
+        public string MatterCenterConfiguration { get; set; }
     }
 }
