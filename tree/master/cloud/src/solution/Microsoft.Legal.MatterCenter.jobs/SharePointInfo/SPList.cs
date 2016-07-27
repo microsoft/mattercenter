@@ -25,6 +25,7 @@ using System.Linq;
 using Microsoft.Legal.MatterCenter.Models;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
+using System.Text.RegularExpressions;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Jobs
@@ -224,6 +225,51 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                 throw;
             }
 
+        }
+
+        /// <summary>
+        /// Converts the project users emails in a form that can be stamped to library.
+        /// </summary>
+        /// <param name="clientContext">ClientContext object</param>
+        /// <param name="matter">Matter object</param>
+        /// <returns>Users that can be stamped</returns>
+        public static string GetMatterAssignedUsersEmail(ClientContext clientContext, Matter matter)
+        {
+            string currentUsers = string.Empty;
+            string separator = string.Empty;
+            if (null != matter && 0 < matter.AssignUserEmails.Count)
+            {
+                foreach (IList<string> userNames in matter.AssignUserEmails)
+                {
+                    List<string> userEmails = new List<string>();
+                    if (null != clientContext && null != userNames)
+                    {
+                        foreach (string userName in userNames)
+                        {
+                            if (!string.IsNullOrWhiteSpace(userName))
+                            {
+                                if (Regex.IsMatch(userName.Trim(), "^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$", RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250)))
+                                {
+                                    userEmails.Add(userName);
+                                }
+                                else
+                                {
+                                    User user = clientContext.Web.EnsureUser(userName.Trim());
+                                    ///// Only Fetch the User ID which is required
+                                    clientContext.Load(user, u => u.Email);
+                                    clientContext.ExecuteQuery();
+                                    ///// Add the user to the first element of the FieldUserValue array.
+                                    userEmails.Add(user.Email);
+                                }
+                            }
+                        }
+                        currentUsers += separator + string.Join(ServiceConstants.SEMICOLON, userEmails);
+                        separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                    }
+                }
+            }
+
+            return currentUsers;
         }
 
         /// <summary>
