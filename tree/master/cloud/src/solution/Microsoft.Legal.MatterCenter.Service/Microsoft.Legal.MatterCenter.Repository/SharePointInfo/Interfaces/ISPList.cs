@@ -43,5 +43,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         bool BreakItemPermission(ClientContext clientContext, string listName, int listItemId, bool isCopyRoleAssignment);
         GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, Dictionary<string, string> mailProperties, string clientUrl, string folder, string documentLibraryName);
         Stream DownloadAttachments(string attachmentUrl);
+        string GetMatterAssignedUsersEmail(ClientContext clientContext, Matter matter);
     }
 }

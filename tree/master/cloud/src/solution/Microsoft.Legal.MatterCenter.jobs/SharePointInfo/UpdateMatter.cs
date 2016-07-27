@@ -156,7 +156,8 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             catalogContext.ExecuteQuery();
         }
 
-        public bool UpdateMatterStampedProperties(ClientContext clientContext, MatterDetails matterDetails, Matter matter, PropertyValues matterStampedProperties, bool isEditMode)
+        public bool UpdateMatterStampedProperties(ClientContext clientContext, MatterDetails matterDetails, Matter matter, 
+            PropertyValues matterStampedProperties, bool isEditMode)
         {
 
             try
@@ -167,9 +168,11 @@ namespace Microsoft.Legal.MatterCenter.Jobs
 
                     // Get existing stamped properties
                     string stampedUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, "MatterCenterUsers");
+                    string stampedUserEmails = GetStampPropertyValue(matterStampedProperties.FieldValues, "MatterCenterUserEmails");
                     string stampedPermissions = GetStampPropertyValue(matterStampedProperties.FieldValues, "MatterCenterPermissions");
                     string stampedRoles = GetStampPropertyValue(matterStampedProperties.FieldValues, "MatterCenterRoles");
                     string stampedResponsibleAttorneys = GetStampPropertyValue(matterStampedProperties.FieldValues, "ResponsibleAttorney");
+                    string stampedResponsibleAttorneysEmail = GetStampPropertyValue(matterStampedProperties.FieldValues, "ResponsibleAttorneyEmail");
                     string stampedTeamMembers = GetStampPropertyValue(matterStampedProperties.FieldValues, "TeamMembers");
                     string stampedBlockedUploadUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, "BlockedUploadUsers");
 
@@ -177,6 +180,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                     string currentRoles = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Roles.Where(user => !string.IsNullOrWhiteSpace(user)));
                     string currentBlockedUploadUsers = string.Join(ServiceConstants.SEMICOLON, matterDetails.UploadBlockedUsers.Where(user => !string.IsNullOrWhiteSpace(user)));
                     string currentUsers = GetMatterAssignedUsers(matter);
+                    string currentUserEmails = SPList.GetMatterAssignedUsersEmail(clientContext, matter);
 
                     string finalMatterPermissions = string.IsNullOrWhiteSpace(stampedPermissions) || isEditMode ? currentPermissions : string.Concat(stampedPermissions, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentPermissions);
                     string finalMatterRoles = string.IsNullOrWhiteSpace(stampedRoles) || isEditMode ? currentRoles : string.Concat(stampedRoles, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentRoles);
@@ -184,13 +188,17 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                     string finalTeamMembers = string.IsNullOrWhiteSpace(stampedTeamMembers) || isEditMode ? matterDetails.TeamMembers : string.Concat(stampedTeamMembers, ServiceConstants.SEMICOLON, matterDetails.TeamMembers);
                     string finalMatterCenterUsers = string.IsNullOrWhiteSpace(stampedUsers) || isEditMode ? currentUsers : string.Concat(stampedUsers, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentUsers);
                     string finalBlockedUploadUsers = string.IsNullOrWhiteSpace(stampedBlockedUploadUsers) || isEditMode ? currentBlockedUploadUsers : string.Concat(stampedBlockedUploadUsers, ServiceConstants.SEMICOLON, currentBlockedUploadUsers);
+                    string finalMatterCenterUserEmails = string.IsNullOrWhiteSpace(stampedUserEmails) || isEditMode ? currentUserEmails : string.Concat(stampedUserEmails, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentUserEmails);
+                    string finalResponsibleAttorneysEmail = string.IsNullOrWhiteSpace(stampedResponsibleAttorneysEmail) || isEditMode ? matterDetails.ResponsibleAttorneyEmail : string.Concat(stampedResponsibleAttorneysEmail, ServiceConstants.SEMICOLON, matterDetails.ResponsibleAttorneyEmail);
 
                     propertyList.Add("ResponsibleAttorney", WebUtility.HtmlEncode(finalResponsibleAttorneys));
+                    propertyList.Add("ResponsibleAttorneyEmail", WebUtility.HtmlEncode(finalResponsibleAttorneysEmail));
                     propertyList.Add("TeamMembers", WebUtility.HtmlEncode(finalTeamMembers));
                     propertyList.Add("BlockedUploadUsers", WebUtility.HtmlEncode(finalBlockedUploadUsers));
                     propertyList.Add("MatterCenterRoles", WebUtility.HtmlEncode(finalMatterRoles));
                     propertyList.Add("MatterCenterPermissions", WebUtility.HtmlEncode(finalMatterPermissions));
                     propertyList.Add("MatterCenterUsers", WebUtility.HtmlEncode(finalMatterCenterUsers));
+                    propertyList.Add("MatterCenterUserEmails", WebUtility.HtmlEncode(finalMatterCenterUserEmails));
 
                     SPList.SetPropertBagValuesForList(clientContext, matterStampedProperties, matter.Name, propertyList);
                     return true;

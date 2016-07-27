@@ -43,6 +43,12 @@ namespace Microsoft.Legal.MatterCenter.Models
             set;
         }
 
+        public IDictionary<string, ManagedColumn> ManagedColumnTerms
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Gets or sets the responsible attorney associated with the matter.
         /// </summary>

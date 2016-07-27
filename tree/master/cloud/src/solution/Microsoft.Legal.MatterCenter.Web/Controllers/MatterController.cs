@@ -804,17 +804,19 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponse(HttpStatusCode.OK)]        
         public IActionResult AssignContentType([FromBody] MatterMetadata matterMetadata)
         {
-            
-            ErrorResponse errorResponse = null;
-            if (null == matterMetadata && null == matterMetadata.Client && null == matterMetadata.Matter )
-            {                
-                errorResponse = new ErrorResponse()
+
+            GenericResponseVM genericResponse = null;
+            if (null == matterMetadata && null == matterMetadata.Client && null == matterMetadata.Matter && 
+                matterMetadata.ManagedColumnTerms==null)
+            {
+                genericResponse = new GenericResponseVM()
                 {
-                    Message = errorSettings.MessageNoInputs,
-                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                    Description = "No input data is passed"
+                    Value = errorSettings.MessageNoInputs,
+                    Code = HttpStatusCode.BadRequest.ToString(),
+                    IsError = true
                 };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);               
+                
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);               
             }
 
             // For each value in the list of Content Type Names
@@ -822,12 +824,12 @@ namespace Microsoft.Legal.MatterCenter.Service
             Matter matter = matterMetadata.Matter;
             Client client = matterMetadata.Client;
 
-
             //ToDo: This values will come from the client. Once the UI is implemented, 
             //This will be removed
             var managedColumnTerms = new Dictionary<string, ManagedColumn>();
-            managedColumnTerms.Add("PracticeGroup", new ManagedColumn() {
-                TermName= matterMetadata.PracticeGroupTerm.TermName,
+            managedColumnTerms.Add("PracticeGroup", new ManagedColumn()
+            {
+                TermName = matterMetadata.PracticeGroupTerm.TermName,
                 Id = matterMetadata.PracticeGroupTerm.Id
             });
 
@@ -845,37 +847,39 @@ namespace Microsoft.Legal.MatterCenter.Service
 
             matterMetadata.ManagedColumnTerms = managedColumnTerms;
 
-
-
             var matterInformationVM = new MatterInformationVM()
             {
                 Client = client,
                 Matter = matter,
-
             };
             try
             {                
-                GenericResponseVM genericResponse = validationFunctions.IsMatterValid(matterInformationVM, int.Parse(ServiceConstants.ProvisionMatterAssignContentType, CultureInfo.InvariantCulture), null);
+                genericResponse = validationFunctions.IsMatterValid(matterInformationVM, int.Parse(ServiceConstants.ProvisionMatterAssignContentType, 
+                    CultureInfo.InvariantCulture), null);
                 if (genericResponse != null)
                 { 
                     matterProvision.DeleteMatter(matterInformationVM as MatterVM);
-                    errorResponse = new ErrorResponse()
+                    
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = genericResponse.Value,
-                        ErrorCode = genericResponse.Code.ToString()                       
+                        Value = genericResponse.Value,
+                        Code = genericResponse.Code.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 genericResponse = matterProvision.AssignContentType(matterMetadata);
                 if (genericResponse != null && genericResponse.IsError==true)
                 {
                     matterProvision.DeleteMatter(matterInformationVM as MatterVM);
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = genericResponse.Value,
-                        ErrorCode = genericResponse.Code.ToString()
+                        Value = genericResponse.Value,
+                        Code = genericResponse.Code.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
             }
@@ -1011,21 +1015,20 @@ namespace Microsoft.Legal.MatterCenter.Service
 
             try
             {
-                
-
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 if (matterMetdata.Client == null && matterMetdata.Matter == null &&
-                    matterMetdata.MatterDetails == null && matterMetdata.MatterProvisionFlags == null)
+                    matterMetdata.MatterDetails == null && matterMetdata.MatterProvisionFlags == null && 
+                    matterMetdata.MatterDetails.ManagedColumnTerms==null)
                 {
                     matterProvision.DeleteMatter(matterMetdata as MatterVM);
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
 
@@ -1036,23 +1039,47 @@ namespace Microsoft.Legal.MatterCenter.Service
                     Matter = matterMetdata.Matter,
                     MatterDetails = matterMetdata.MatterDetails
                 };
-                GenericResponseVM genericResponse = validationFunctions.IsMatterValid(matterInfo,
+                genericResponse = validationFunctions.IsMatterValid(matterInfo,
                     int.Parse(ServiceConstants.ProvisionMatterUpdateMetadataForList),
                     matterMetdata.MatterConfigurations);
                 if (genericResponse != null)
                 {
                     matterProvision.DeleteMatter(matterMetdata as MatterVM);
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = genericResponse.Value,
-                        ErrorCode = genericResponse.Code,
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                        Value = genericResponse.Value,
+                        Code = genericResponse.Code,
+                        IsError = true
+                    };                    
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion   
 
                 try
                 {
+
+                    //ToDo: This values will come from the client. Once the UI is implemented, 
+                    //This will be removed
+                    var managedColumnTerms = new Dictionary<string, ManagedColumn>();
+                    managedColumnTerms.Add("PracticeGroup", new ManagedColumn()
+                    {
+                        TermName = matterMetdata.MatterDetails.PracticeGroup
+                    });
+
+                    managedColumnTerms.Add("AreaOfLaw", new ManagedColumn()
+                    {
+                        TermName = matterMetdata.MatterDetails.AreaOfLaw,
+
+                    });
+
+                    managedColumnTerms.Add("SubareaOfLaw", new ManagedColumn()
+                    {
+                        TermName = matterMetdata.MatterDetails.SubareaOfLaw,
+
+                    });
+
+                    matterMetdata.MatterDetails.ManagedColumnTerms = managedColumnTerms;
+
                     genericResponse = matterProvision.UpdateMatterMetadata(matterMetdata);
                     if (genericResponse == null)
                     {
