@@ -140,15 +140,15 @@
         }
 
         getMatterUsers();
-cm.CheckPopUp = function (e) {
-    //  e.stopPropagation();
-    if (!cm.errorStatus) {
-                    cm.errorPopUpBlock = false;
-                    cm.errorBorder = "";
-                    }
-                cm.errorStatus = false;
-
+        cm.CheckPopUp = function (e) {
+            //  e.stopPropagation();
+            if (!cm.errorStatus) {
+                cm.errorPopUpBlock = false;
+                cm.errorBorder = "";
             }
+            cm.errorStatus = false;
+
+        }
 
         function getUsersRolesAndPermissions() {
             var tempMatterProp = cm.matterProperties;
@@ -290,9 +290,9 @@ cm.CheckPopUp = function (e) {
                 teamRowNumber = "";
             }
 
-            var temp = document.getElementById(fieldType + teamRowNumber);
-            
-           
+            var temp = angular.element('#' + fieldType + teamRowNumber).parent().position();
+
+
             var matterErrorEle = document.getElementById("errorBlock");
             var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
             var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
@@ -317,7 +317,7 @@ cm.CheckPopUp = function (e) {
             var width = GetWidth();
             var x = 0, y = 0;
             if (width > 734) {
-                y = temp.offsetTop + 78, x = temp.offsetLeft + 0;
+                y = temp.top - 85, x = temp.left - 25;
             }
             else {
                 y = temp.offsetTop, x = temp.offsetLeft;
@@ -664,7 +664,7 @@ cm.CheckPopUp = function (e) {
             cm.popupContainerBackground = "Show";
             if ($event) {
                 $event.stopPropagation();
-        }
+            }
             var arrUserNames = [],
                 arrUserEmails = [],
                 arrTeamMembers = [],
@@ -771,7 +771,7 @@ cm.CheckPopUp = function (e) {
             }
             else {
                 cm.popupContainerBackground = "hide";
-}
+            }
         }
 
         //#endregion
