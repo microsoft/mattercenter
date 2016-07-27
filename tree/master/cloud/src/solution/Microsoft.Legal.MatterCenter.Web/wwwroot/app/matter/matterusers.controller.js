@@ -28,8 +28,8 @@
         cm.matterName = getParameterByName("matterName");
         cm.isEdit = getParameterByName("IsEdit");
 
-        if (cm.clientUrl == "" && cm.matterName == "") {
-            cm.matterName = "56Test127";
+        if (cm.clientUrl === "" && cm.matterName === "") {
+            cm.matterName = "E2ETesting2";
             cm.clientUrl = "https://msmatter.sharepoint.com/sites/microsoft";
             cm.isEdit = "true";
         }
@@ -121,7 +121,7 @@
 
         //#region Main function calss
         function getMatterUsers() {
-            if (cm.clientUrl != "" && cm.matterName != "") {
+            if (cm.clientUrl !== "" && cm.matterName !== "") {
                 getStampedProperties(optionsForStampedProperties, function (response) {
                     cm.matterProperties = response
                     console.log(response);
@@ -140,15 +140,15 @@
         }
 
         getMatterUsers();
-cm.CheckPopUp = function (e) {
-    //  e.stopPropagation();
-    if (!cm.errorStatus) {
-                    cm.errorPopUpBlock = false;
-                    cm.errorBorder = "";
-                    }
-                cm.errorStatus = false;
-
+        cm.CheckPopUp = function (e) {
+            //  e.stopPropagation();
+            if (!cm.errorStatus) {
+                cm.errorPopUpBlock = false;
+                cm.errorBorder = "";
             }
+            cm.errorStatus = false;
+
+        }
 
         function getUsersRolesAndPermissions() {
             var tempMatterProp = cm.matterProperties;
@@ -290,9 +290,9 @@ cm.CheckPopUp = function (e) {
                 teamRowNumber = "";
             }
 
-            var temp = document.getElementById(fieldType + teamRowNumber);
-            
-           
+            var temp = angular.element('#' + fieldType + teamRowNumber).parent().position();
+
+
             var matterErrorEle = document.getElementById("errorBlock");
             var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
             var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
@@ -317,7 +317,7 @@ cm.CheckPopUp = function (e) {
             var width = GetWidth();
             var x = 0, y = 0;
             if (width > 734) {
-                y = temp.offsetTop + 78, x = temp.offsetLeft + 0;
+                y = temp.top - 85, x = temp.left - 25;
             }
             else {
                 y = temp.offsetTop, x = temp.offsetLeft;
@@ -623,11 +623,48 @@ cm.CheckPopUp = function (e) {
         }
 
 
+        function validateUsers() {
+            var keepGoing = true;
+            var blockedUserEmail = cm.matterProperties.matterObject.blockUserNames[0];
+           
+            angular.forEach(cm.assignPermissionTeams, function (team) {
+                if (keepGoing) {
+                    if (team.assignedUser && team.assignedUser != "") {//For loop                                             
+
+                        if (blockedUserEmail && blockedUserEmail != "") {
+                         var teamUserEmail= getUserName(team.assignedUser.trim() + ";", false)
+                         if (teamUserEmail[0] == blockedUserEmail) {
+                                cm.errTextMsg = "Please enter individual who is not conflicted.";
+                                cm.errorBorder = "";
+                                cm.errorPopUpBlock = true;
+                                showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
+                                return false;
+                            }
+                        }
+                    }
+                    else {
+                        showErrorNotificationAssignTeams(team.assignedRole.name + " cannot be empty", team.assigneTeamRowNumber, "user")
+                        cm.errorBorder = "txtUser" + team.assigneTeamRowNumber;
+                        keepGoing = false;
+                        return false;
+                    }
+                }
+            });
+
+            if (keepGoing) {
+                return true;
+            }
+        }
+
+
+
+
         cm.UpdateMatter = function ($event) {
             cm.popupContainerBackground = "Show";
             if ($event) {
                 $event.stopPropagation();
-        }
+            }
             var arrUserNames = [],
                 arrUserEmails = [],
                 arrTeamMembers = [],
@@ -638,7 +675,8 @@ cm.CheckPopUp = function (e) {
             var arrBlockUserNames = cm.matterProperties.matterObject.blockUserNames ? cm.matterProperties.matterObject.blockUserNames : ""
 
             var attornyCheck = validateAttornyUserRolesAndPermissins($event);
-            if (attornyCheck) {
+            var validUsersCheck=validateUsers();       
+            if (attornyCheck && validUsersCheck) {
                 angular.forEach(cm.assignPermissionTeams, function (item) {
                     if ("" !== item.assignedRole && "" !== item.assignedPermission) {
                         if (roleInformation.hasOwnProperty(item.assignedRole.name)) {
@@ -698,7 +736,8 @@ cm.CheckPopUp = function (e) {
                         DefaultContentType: "",
                         ContentTypes: [],
                         Description: "",
-                        Id: ""
+                        Id: "",
+                        MatterGuid: cm.matterProperties.matterObject.matterGuid
 
                     },
                     MatterDetails: {
@@ -732,7 +771,7 @@ cm.CheckPopUp = function (e) {
             }
             else {
                 cm.popupContainerBackground = "hide";
-}
+            }
         }
 
         //#endregion

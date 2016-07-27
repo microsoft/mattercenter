@@ -8,7 +8,7 @@
             var cm = this;
             $rootScope.pageIndex = "4";
             cm.selectedConflictCheckUser = undefined;
-            $rootScope.bodyclass="";
+            $rootScope.bodyclass = "";
             cm.blockedUserName = undefined;
             cm.defaultConfilctCheck = false;
             cm.chkConfilctCheck = undefined;
@@ -23,7 +23,7 @@
             cm.createButton = "Create";
             cm.clientUrl = "";
             cm.errorStatus = false;
-            cm.prevButtonDisabled = true;          
+            cm.prevButtonDisabled = true;
 
             var w = angular.element($window);
 
@@ -278,7 +278,7 @@
             //optionsForUsers
 
             cm.searchUsers = function (val) {
-                cm.typehead=true;
+                cm.typehead = true;
                 var searchUserRequest = {
                     Client: {
 
@@ -899,7 +899,7 @@
                 });
             }
 
-            cm.onSelect = function ($item, $model, $label, value,fucnValue,$event) {
+            cm.onSelect = function ($item, $model, $label, value, fucnValue, $event) {
                 console.log(cm.typehead);
                 if ($item && $item.name !== "No results found") {
                     if (value == "conflictcheckuser") {
@@ -914,17 +914,17 @@
                         cm.notificationPopUpBlock = false;
                     }
                     console.log(cm.typehead);
-                  
-                        if (-1 == cm.oSiteUsers.indexOf($item.email)) {
-                            cm.oSiteUsers.push($item.email);
-                        }
-                        cm.checkUserExists($label.assignedUser);
-                    
+
+                    if (-1 == cm.oSiteUsers.indexOf($item.email)) {
+                        cm.oSiteUsers.push($item.email);
+                    }
+                    cm.checkUserExists($label.assignedUser);
+
                 }
                 else {
                     if (fucnValue == "on-blurr") {
                         cm.checkUserExists($label.assignedUser, $event);
-                    } 
+                    }
                 }
             }
 
@@ -1071,11 +1071,11 @@
 
 
             cm.addNewAssignPermissions = function () {
-               
-                var newItemNo = cm.assignPermissionTeams.length + 1;
-                cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0] });         
 
-            
+                var newItemNo = cm.assignPermissionTeams.length + 1;
+                cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0] });
+
+
             };
 
             cm.removeAssignPermissionsRow = function (index) {
@@ -1241,7 +1241,7 @@
 
             cm.confirmUser = function (confirmUser) {
                 if (confirmUser) {
-                    cm.notificationPopUpBlock = false;                   
+                    cm.notificationPopUpBlock = false;
                     cm.notificationBorder = "";
                 } else {
                     cm.notificationPopUpBlock = false;
@@ -1270,7 +1270,7 @@
                                 angular.forEach(cm.assignPermissionTeams, function (team) {
                                     var userEmail = getUserName(team.assignedUser + ";", false)
                                     if (userEmail[0] == email) {
-                                        cm.textInputUser=team;
+                                        cm.textInputUser = team;
                                         // cm.errTextMsg = "Please enter a valid email address.";
                                         //  cm.errorBorder = "";
                                         // cm.errorStatus = true;
@@ -1284,9 +1284,9 @@
                                 });
                                 cm.notificationPopUpBlock = true;
                             }
-                            else{
+                            else {
                                 cm.notificationPopUpBlock = false;
-                                
+
                             }
                         });
 
@@ -1328,6 +1328,7 @@
             }
 
             cm.createMatterButton = function ($event) {
+                getMatterGUID();
                 var isPageValid = validateCurrentPage(1);
                 if (isPageValid) {
                     isPageValid = validateCurrentPage(2);
@@ -1498,6 +1499,26 @@
                     SubareaTerm: {
                         TermName: sSubareaOfLawName,
                         Id: sSubareaOfLawId
+                    },
+                    ManagedColumnTerms: {
+                        PracticeGroup: {
+                           
+                                TermName: sPracticeGroupName,
+                                Id: sPracticeGroupId
+                           
+                        },
+                        AreaOfLaw: {
+                          
+                                TermName: sAreaOfLawName,
+                                Id: sAreaOfLawId
+                           
+                        },
+                        SubareaOfLaw: {
+                          
+                                TermName: sSubareaOfLawName,
+                                Id: sSubareaOfLawId
+                           
+                        }
                     }
 
                 }
@@ -1759,7 +1780,28 @@
                         ResponsibleAttorneyEmail: sResponsibleAttorneyEmail.join(";").replace(/;;/g, ";"),
                         UploadBlockedUsers: arrReadOnlyUsers,
                         TeamMembers: arrTeamMembers.join(";"),
-                        RoleInformation: JSON.stringify(roleInformation)
+                        RoleInformation: JSON.stringify(roleInformation),
+                        ManagedColumnTerms: {
+                            PracticeGroup: {
+                               
+                                    TermName: sPracticeGroupList,
+                                    Id: "084887e6-3705-466c-823b-207563388464"//set the id
+                               
+                            },
+                            AreaOfLaw: {
+                              
+                                    TermName: sAreaOfLawList,
+                                    Id: "162fb199-2f04-498d-a7ac-329a077bca9f"//set the id
+                                
+                            },
+                            SubareaOfLaw: {
+                               
+                                    TermName: subAreaofLaw,
+                                    Id: "15c5b16c-150b-4bf5-8470-59dfa951dcf8"//set the id
+                               
+                            }
+                        }
+
                     },
                     MatterProvisionFlags: oMatterProvisionFlags,
                     MatterConfigurations: {
@@ -2610,10 +2652,10 @@
                 var windowWidth = GetWidth();
                 var width;
                 cm.errorPopUpBlock = false;
-                cm.notificationPopUpBlock=false;
+                cm.notificationPopUpBlock = false;
                 if (windowWidth <= 734) {
                     cm.errorPopUpBlock = false;
-                   cm.notificationPopUpBlock=false;
+                    cm.notificationPopUpBlock = false;
                 }
             }
 
