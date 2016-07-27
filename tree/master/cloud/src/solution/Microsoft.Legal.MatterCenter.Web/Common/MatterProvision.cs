@@ -199,8 +199,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     return ServiceUtility.GenericResponse(errorSettings.IncorrectInputSelfPermissionRemoval, 
                         errorSettings.ErrorEditMatterMandatoryPermission);
                 }
+                
+
                 genericResponse = matterRepositoy.UpdateMatter(matterInformation);
-               
+                //As part of final step in matter creation, check whether any assigned users are external to the 
+                //organization and if yes, send notification to that user to accepct the
+                //inviotation so that he can access matter center
+                externalSharing.ShareMatter(matterInformation);
+
             }
             catch(Exception ex)
             {
@@ -348,6 +354,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         MatterObject = new Matter()
                         {
                             Id = GetStampPropertyValue(stampedPropertyValues, matterSettings.StampedPropertyMatterID),
+                            MatterGuid = GetStampPropertyValue(stampedPropertyValues, matterSettings.StampedPropertyMatterGUID),
                             Name = GetStampPropertyValue(stampedPropertyValues, matterSettings.StampedPropertyMatterName),
                             Description = GetStampPropertyValue(stampedPropertyValues, matterSettings.StampedPropertyMatterDescription),
                             DefaultContentType = GetStampPropertyValue(stampedPropertyValues, matterSettings.StampedPropertyDefaultContentType),
