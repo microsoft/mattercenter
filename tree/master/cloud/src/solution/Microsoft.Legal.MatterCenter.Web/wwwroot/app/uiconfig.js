@@ -1,11 +1,11 @@
 ﻿var uiconfigs =
 {
   "Home": {
-    "UserProfilePictureURL": "https://msmatter.sharepoint.com/sites/catalog",
+    "ContextualHelpHeader": "Matter Center For Outlook",
+    "ContextualHelpBottomText": "Questions? Contact ",
     "HelpRequesURL": "https://msmatter.sharepoint.com/sites/catalog",
-    "UserProfileSmallPictureURL": "Images/MC_Profile_Switcher.png",
-    "UserProfileLargePictureURL": "Images/MC_Profile_Switcher.png",
-    "MatterCenterSupportLinkText": "Matter Center Support"
+    "MatterCenterSupportLinkText": "Matter Center Support",
+    "MatterCenterSupportLink": "mailto:support@supportsite.com"
   },
   "MatterUsers": {
     "SearchUsersURL": "https://msmatter.sharepoint.com/sites/client",
