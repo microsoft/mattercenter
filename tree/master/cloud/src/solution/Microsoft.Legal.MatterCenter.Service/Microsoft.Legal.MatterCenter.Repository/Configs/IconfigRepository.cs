@@ -18,9 +18,12 @@ using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
-    public interface  IConfigRepository
+    public interface IConfigRepository
     {
         Task<List<DynamicTableEntity>> GetConfigurationsAsync(String filter);
-        List<DynamicTableEntity>  GetConfigEntities(string filter);
+        Task<bool> InsertUpdateConfigurationsAsync(String configs);
+        List<DynamicTableEntity> GetConfigEntities(string filter);
+        bool UpdateEntityProperty(string configs);
+
     }
 }

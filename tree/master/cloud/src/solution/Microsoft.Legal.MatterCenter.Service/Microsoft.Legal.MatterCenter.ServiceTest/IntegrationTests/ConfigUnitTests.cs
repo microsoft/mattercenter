@@ -18,7 +18,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
     public class ConfigUnitTest
     {
 
-     
+
         private readonly TestServer testServer;
         private const string authority = "https://login.windows.net/microsoft.onmicrosoft.com";
 
@@ -28,7 +28,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
         public ConfigUnitTest()
         {
-        
+
             testServer = new TestServer(new WebHostBuilder().UseStartup<Startup>());
         }
 
@@ -43,15 +43,15 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
             //Need to Mock the injected services and setup any properties on these that the test requires
             var errorSettingsMoq = new Moq.Mock<IOptionsMonitor<ErrorSettings>>();
-          
+
             var generalSettingsMoq = new Moq.Mock<IOptionsMonitor<GeneralSettings>>();
             generalSettingsMoq.SetupGet(p => p.CurrentValue.CloudStorageConnectionString).Returns("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
 
-            var environmentMoq = new Moq.Mock<IHostingEnvironment>(); 
+            var environmentMoq = new Moq.Mock<IHostingEnvironment>();
             environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\mcfork\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
 
             var matterCenterServiceFunctionsMoq = new Moq.Mock<IMatterCenterServiceFunctions>();
-               
+
             var logTablesMoq = new Moq.Mock<IOptionsMonitor<LogTables>>();
 
             ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, logTablesMoq.Object);
@@ -59,9 +59,9 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             generalSettingsMoq.SetupGet(g => g.CurrentValue).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
 
-        
-            ConfigController controller = new ConfigController( errorSettingsMoq.Object, generalSettingsMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
-     
+
+            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
+
             var result = controller.Get("");
 
             Assert.True(result.Status > 0);
@@ -99,20 +99,73 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             Assert.True(result.Status > 0);
         }
 
+        [Fact]
+        public void InsertUpdateUIConfigs()
+        {
+
+            GeneralSettings genS = new GeneralSettings();
+            genS.CloudStorageConnectionString = "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
+
+            //Need to Mock the injected services and setup any properties on these that the test requires
+            var errorSettingsMoq = new Moq.Mock<IOptionsMonitor<ErrorSettings>>();
+
+            var generalSettingsMoq = new Moq.Mock<IOptionsMonitor<GeneralSettings>>();
+            generalSettingsMoq.SetupGet(p => p.CurrentValue.CloudStorageConnectionString).Returns("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
+
+            var environmentMoq = new Moq.Mock<IHostingEnvironment>();
+            environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\mcfork\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
+
+            var matterCenterServiceFunctionsMoq = new Moq.Mock<IMatterCenterServiceFunctions>();
+
+            var logTablesMoq = new Moq.Mock<IOptionsMonitor<LogTables>>();
+
+            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, logTablesMoq.Object);
+
+            generalSettingsMoq.SetupGet(g => g.CurrentValue).Returns(genS);
+            errorSettingsMoq.SetupAllProperties();
+
+            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
+
+
+            var configsStr = (@"{""Home"": {
+    ""ContextualHelpHeader"": ""Matter Center For Outlook"",
+    ""ContextualHelpBottomText"": ""Questions? Contact "",
+    ""HelpRequesURL"": ""https://msmatter.sharepoint.com/sites/catalog"",
+    ""MatterCenterSupportLinkText"": ""Matter Center Support"",
+    ""MatterCenterSupportLink"": ""mailto:support@supportsite.com""
+  },
+  ""MatterUsers"": {
+    ""SearchUsersURL"": ""https://msmatter.sharepoint.com/sites/client"",
+    ""StampedPropertiesURL"": ""https://msmatter.sharepoint.com/sites/microsoft""
+  }}");
+
+
+
+            //var 
+
+
+            //cycleJson["complexObj"] = JObject.FromObject(new { id = 1, name = "test" });
+
+            var result = controller.InsertUpdate(configsStr);
+
+            Assert.True(result.Status > 0);
+        }
+
+
 
 
         /// This unit test will try to get all the users who can see a particular item
         /// </summary>
         [Fact]
-        public  void GetConfigsFromTableRep()
+        public void GetConfigsFromTableRep()
         {
-            
+
 
             GeneralSettings genS = new GeneralSettings();
-            genS.CloudStorageConnectionString  =  "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
+            genS.CloudStorageConnectionString = "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
             var m = new Moq.Mock<IOptionsMonitor<GeneralSettings>>();
             var l = new Moq.Mock<IOptionsMonitor<LogTables>>();
-            
+
             m.SetupGet(g => g.CurrentValue).Returns(genS);
             m.SetupAllProperties();
 
@@ -125,3 +178,4 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
     }
 }
+

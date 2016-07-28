@@ -21,6 +21,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 
 #endregion
@@ -64,7 +65,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// <summary>
         /// Returns all the entries for Configuring the UI
         /// </summary>
-        /// <param name="configRequest">Request object for POST</param>   
+        /// <param name="filter">Request object for POST</param>   
         [HttpPost("Get")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> Get([FromBody] String filter)
@@ -82,7 +83,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                     {
                         Message = errorSettings.MessageNoInputs,
                         ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No filter is passed to fetch the pinned matters"
+                        Description = "No filter was passed"
                     };
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
@@ -102,6 +103,48 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             }
         }
 
+
+
+        /// <summary>
+        /// Returns all the entries for Configuring the UI
+        /// </summary>
+        /// <param name="configs">Request object for POST</param>   
+        [HttpPost("Insertupdate")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public async Task<IActionResult> InsertUpdate([FromBody] String configs)
+        {
+            string result = string.Empty;
+
+            try
+            {
+                #region Error Checking                
+                ErrorResponse errorResponse = null;
+
+                if (configs == null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No config Data was passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                }
+                #endregion
+
+
+                var configResultsVM = await configRepository.InsertUpdateConfigurationsAsync(configs);
+
+
+                return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
+
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
 
         private void CreateConfig(List<DynamicTableEntity> configs)
 
@@ -140,9 +183,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             {
                 jw.WritePropertyName(str);
                 jw.WriteStartObject();
-                               
+
                 foreach (DynamicTableEntity dt in configs)
-                {             
+                {
                     bool scr = dt.Properties.TryGetValue("ConfigGroup", out value);
 
                     if (str.ToLower().Equals(value.StringValue.ToLower()))
@@ -168,4 +211,3 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         }
     }
 }
-
