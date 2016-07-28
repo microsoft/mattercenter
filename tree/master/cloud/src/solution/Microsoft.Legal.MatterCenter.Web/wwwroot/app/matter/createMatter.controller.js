@@ -1813,19 +1813,19 @@
                             PracticeGroup: {
 
                                 TermName: sPracticeGroupList,
-                                Id: "084887e6-3705-466c-823b-207563388464"//set the id
+                                Id: ""
 
                             },
                             AreaOfLaw: {
 
                                 TermName: sAreaOfLawList,
-                                Id: "162fb199-2f04-498d-a7ac-329a077bca9f"//set the id
+                                Id: ""
 
                             },
                             SubareaOfLaw: {
 
                                 TermName: subAreaofLaw,
-                                Id: "15c5b16c-150b-4bf5-8470-59dfa951dcf8"//set the id
+                                Id: ""
 
                             }
                         }
