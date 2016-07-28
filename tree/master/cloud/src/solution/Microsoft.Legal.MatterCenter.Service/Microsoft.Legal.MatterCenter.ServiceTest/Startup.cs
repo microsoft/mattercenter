@@ -40,8 +40,17 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             this.HostingEnvironment = env;
             this.LoggerFactory = logger;
 
+
+            string projectName = env.ApplicationName;
+            int projLength = projectName.Length;
+            string path = env.ContentRootPath;
+            int index = path.IndexOf(projectName);
+            int last = index + projLength;
+            string basePath = path.Remove(last);
+
             var builder = new ConfigurationBuilder()
-                .SetBasePath(@"C:\mc\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.ServiceTest")
+                 .SetBasePath(basePath)
+                //.SetBasePath(@"C:\Repos\mattercenter3\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.ServiceTest")
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
@@ -251,6 +260,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"), trackConfigChanges: true);
             services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"), trackConfigChanges: true);
             services.Configure<MatterCenterApplicationInsights>(this.Configuration.GetSection("ApplicationInsights"), trackConfigChanges: true);
+            //services.Configure<Config>(this.Configuration.GetSection("ApplicationInsights"), trackConfigChanges: true);
 
         }
 
@@ -269,6 +279,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.AddSingleton<ISPList, SPList>();
             services.AddSingleton<ISPPage, SPPage>();
             services.AddSingleton<ISharedRepository, SharedRepository>();
+            services.AddSingleton<IConfigRepository, ConfigRepository>();
             services.AddSingleton<IValidationFunctions, ValidationFunctions>();
             services.AddSingleton<IEditFunctions, EditFunctions>();
             services.AddSingleton<IMatterProvision, MatterProvision>();

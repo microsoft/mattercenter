@@ -13,6 +13,10 @@
             vm.smallPictureUrl = 'Images/MC_Profile_Switcher.png';
             vm.largePictureUrl = 'Images/MC_Profile_Switcher.png';
             vm.userProfileObjectId = adalService.userInfo.profile.oid;
+            vm.contextualHelpHeader = uiconfigs.Home.ContextualHelpHeader;
+            vm.ContextualHelpBottomText = uiconfigs.Home.ContextualHelpBottomText;
+            vm.MatterCenterSupportLinkText = uiconfigs.Home.MatterCenterSupportLinkText;
+
 
             //Callback function for help 
             function getHelp(options, callback) {
@@ -143,7 +147,7 @@
             vm.mainheadersearch = "";
             //#region navigates to the url with the input entered in the main search as parameter
             vm.mainHeaderClick = function () {
-                if (vm.mainheadersearch != "" ) {
+                if (vm.mainheadersearch != "") {
                     $window.top.parent.location.href = configs.uri.SPOsiteURL + "/search/Pages/results.aspx?k=" + vm.mainheadersearch;
                 }
             }

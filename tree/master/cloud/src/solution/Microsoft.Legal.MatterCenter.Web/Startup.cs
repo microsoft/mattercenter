@@ -282,6 +282,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             services.AddSingleton<IDocumentProvision, DocumentProvision>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IExternalSharing, ExternalSharing>();
+            services.AddSingleton<IConfigRepository, ConfigRepository>();
+            services.AddSingleton<IExternalSharing, ExternalSharing>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
         }
 
