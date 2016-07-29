@@ -14,6 +14,8 @@ using Microsoft.WindowsAzure.Storage.Table;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Globalization;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -78,7 +80,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 if (filter == "")
                 {
 
-                    // Construct the query operation for all  entities 
+                    // Construct the queryConfigGroup operation for all  entities 
                     query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "MatterCenterConfig"));
 
                 }
@@ -109,44 +111,66 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.DevelopmentStorageAccount;
-
-                CloudTable table = storageAccount.CreateCloudTableClient().GetTableReference("MatterCenterConfiguration");
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(generalSettings.CloudStorageConnectionString);
+                CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
+                tableClient.DefaultRequestOptions = new TableRequestOptions
+                {
+                    PayloadFormat = TablePayloadFormat.JsonNoMetadata
+                };
+                // Retrieve a reference to the table.
+                CloudTable table = tableClient.GetTableReference("MatterCenterConfiguration");
+          
+                TableBatchOperation batchOperation = new TableBatchOperation();
 
                 Dictionary<string, Dictionary<string, string>> allValues = new Dictionary<string, Dictionary<string, string>>();
+                Dictionary<string,string> keyValues = new Dictionary<string, string>();
+
+                Dictionary<string, EntityProperty> newProperties = new Dictionary<string, EntityProperty>();
 
                 //add all the configsGroups and their key value pairs to a dictionary
                 allValues = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(configs);
 
                 var batch = new TableBatchOperation();
-                TableQuery<DynamicTableEntity> query = new TableQuery<DynamicTableEntity>();
-                TableQuery<DynamicTableEntity> query2 = new TableQuery<DynamicTableEntity>();
-                String key;
-
+                TableQuery<DynamicTableEntity> queryFinal = new TableQuery<DynamicTableEntity>();
+       
                 foreach (KeyValuePair<string, Dictionary<string, string>> entry in allValues)
-                {
-                    bool hasKey = entry.Value.TryGetValue("Key", out key);
-                    query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("ConfigGroup", QueryComparisons.Equal, entry.Key));
-                    query2 = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("Key", QueryComparisons.Equal, key));
-                   // query2 = new TableQuery<DynamicTableEntity>().Where(TableQuery.CombineFilters(query, QueryComparisons.Equal, key));
+                {                  
+                    foreach (KeyValuePair<string, string> keyValue in entry.Value)
+                    {
+                     
+                        TableQuery<DynamicTableEntity> entityQuery = new TableQuery<DynamicTableEntity>().Where(
+                            TableQuery.CombineFilters(
+                                TableQuery.GenerateFilterCondition("ConfigGroup", QueryComparisons.Equal, entry.Key),
+                                TableOperators.And,
+                                TableQuery.GenerateFilterCondition("Key", QueryComparisons.Equal, keyValue.Key)));
+
+                        var queryResult = table.ExecuteQuery(entityQuery);
+                        if (queryResult != null)
+                        {
+                            foreach (DynamicTableEntity entity in queryResult)
+                            {
+                                //TableOperation insertOrReplaceOperation = TableOperation.InsertOrReplace(entity);
+                                batchOperation.InsertOrReplace(entity);
+                            }
+                        }
+                        else
+                        {
+                            ConfigEntity config = new ConfigEntity();
+                            config.PartitionKey = "MatterCenterConfig";
+                            config.RowKey = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", Guid.NewGuid().ToString());
+                            config.ConfigGroup = entry.Key;
+                            config.key = keyValue.Key;
+                            config.Value = keyValue.Value;
+                            batchOperation.InsertOrReplace(config);
+                        }                    
+                       
+                    }
                 }
 
-
-                //TableOperation retrieveOperation = TableOperation.Retrieve(partitionKey, rowKey);
-                //TableResult retrievedResult = table.Execute(retrieveOperation);
-                //TableEntity entity = (TableEntity)retrievedResult.Result;
-
-
-                //TableOperation updateOperation = TableOperation.InsertOrReplace(entity);
-                //table.Execute(updateOperation);
-
-
-                //TableOperation mergeOperation = TableOperation.InsertOrMerge(entity);
-                //table.Execute(mergeOperation);
-
-
+               table.ExecuteBatch(batchOperation);
+               
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
