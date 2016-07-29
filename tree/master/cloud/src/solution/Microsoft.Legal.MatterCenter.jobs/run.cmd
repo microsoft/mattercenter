@@ -1,1 +1,1 @@
-﻿Microsoft.Legal.MatterCenter.Jobs.exe
+Microsoft.Legal.MatterCenter.Jobs.exe

@@ -45,8 +45,9 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                         string serializedMatter = matterInformation.SerializeMatter;
                         //De Serialize the matter information
                         MatterInformationVM originalMatter = Newtonsoft.Json.JsonConvert.DeserializeObject<MatterInformationVM>(serializedMatter);
-                        if (originalMatter.Status.ToLower() == "pending")
+                        if (matterInformation.Status.ToLower() == "pending")
                         {
+                            log.WriteLine($"Checking the matter name {originalMatter.Matter.Name} has been acceped by the user or not");
                             //Read all external access requests records from azure table storge
                             GetExternalAccessRequestsFromSPO(originalMatter, log, configuration);
                         }
@@ -115,8 +116,10 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                             SecureString password = GetEncryptedPassword(configuration["Settings:AdminPassword"]);
                             ctx.Credentials = new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], password);
                             //First check whether the user exists in SharePoint or not
+                            log.WriteLine($"Checking whether the user {email} has been present in the system or not");
                             if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, email, configuration, log) == true)
                             {
+                                
                                 string requestedForPerson = email;
                                 string matterId = originalMatter.Matter.MatterGuid;
                                 var listTitle = configuration["Settings:ExternalAccessRequests"];
@@ -126,6 +129,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                 ListItemCollection listItemCollection = list.GetItems(camlQuery);
                                 ctx.Load(listItemCollection);
                                 ctx.ExecuteQuery();
+                                log.WriteLine($"Looping all the records from {configuration["Settings:ExternalAccessRequests"]} lists");
                                 foreach (ListItem listItem in listItemCollection)
                                 {
                                     //The matter id for whom the request has been sent            
@@ -139,6 +143,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                     //If the status is accepted and the person and matter in table storage equals to item in Access Requests list
                                     if (requestedFor == requestedForPerson && matterId == requestedObjectTitle && status == "2")
                                     {
+                                        log.WriteLine($"The user {email} has been present in the system and he has accepted the invitation and providing permssions to  matter {originalMatter.Matter.Name} from the user {email}");
                                         UpdateMatter umd = new UpdateMatter();
                                         //Update all matter related lists and libraries permissions for external users
                                         umd.UpdateUserPermissionsForMatter(originalMatter, configuration, password);
@@ -151,6 +156,8 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                             umd.AssignPermissionToCatalogLists(configuration["Catalog:SiteAssets"], catalogContext,
                                                 email.Trim(), configuration["Catalog:SiteAssetsPermissions"], configuration);
                                         }
+                                        log.WriteLine($"The matter permissions has been updated for the user {email}");
+                                        log.WriteLine($"Updating the matter status to Accepted in Azure Table Storage");
                                         UpdateTableStorageEntity(originalMatter, log, configuration);
                                     }
                                 }
@@ -259,6 +266,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                     updateEntity.Status = "Accepted";                
                     TableOperation updateOperation = TableOperation.Replace(updateEntity);
                     table.Execute(updateOperation);
+                    log.WriteLine($"Updated the matter status to Accepted in Azure Table Storage");
                 }
             }
             catch (Exception ex)

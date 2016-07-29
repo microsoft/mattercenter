@@ -256,7 +256,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         //// Check whether the name entered by the user and the name resolved by SharePoint is same.
                         foreach (string teamMember in userNameList)
                         {
-                            if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[iCount].Title.Trim(), StringComparison.OrdinalIgnoreCase))
+                            if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[0].Title.Trim(), StringComparison.OrdinalIgnoreCase))
                             {
                                 genericResponse = new GenericResponseVM();
                                 //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectTeamMembersCode, ServiceConstantStrings.IncorrectTeamMembersMessage + ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR + userId[iCounter]);
@@ -1239,7 +1239,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="matter">Matter object</param>
         /// <returns>Users that can be stamped</returns>
-        private string GetMatterAssignedUsers(Matter matter)
+        public static string GetMatterAssignedUsers(Matter matter)
         {
             string currentUsers = string.Empty;
             string separator = string.Empty;
