@@ -907,6 +907,9 @@
                     if (angular.element('.dropdown-menu li a')[0]) {
                         if (angular.element('.dropdown-menu li a')[0].innerHTML == "No results found") {
                             noresults = false;
+                            if ($event.keyCode == 9) {
+                                cm.user = angular.element('#' + $event.currentTarget.id).val();
+                            }
                         }
                     }
                 }
