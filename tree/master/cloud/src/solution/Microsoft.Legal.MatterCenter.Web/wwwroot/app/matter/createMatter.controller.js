@@ -899,8 +899,17 @@
                 });
             }
 
-            cm.onSelect = function ($item, $model, $label, value, fucnValue, $event) {
+            cm.onSelect = function ($item, $model, $label, value, fucnValue, $event, username) {
                 console.log(cm.typehead);
+                var typeheadelelen = angular.element('.dropdown-menu li').length;
+                var noresults = true;
+                if (typeheadelelen == 1) {
+                    if (angular.element('.dropdown-menu li a')[0]) {
+                        if (angular.element('.dropdown-menu li a')[0].innerHTML == "No results found") {
+                            noresults = false;
+                        }
+                    }
+                }
                 if ($item && $item.name !== "No results found") {
                     if (value == "conflictcheckuser") {
                         cm.selectedConflictCheckUser = $item.name + '(' + $item.email + ')';
@@ -923,7 +932,14 @@
                 }
                 else {
                     if (fucnValue == "on-blurr") {
+                        cm.user = username;
+                    }
+                    if (fucnValue == "on-blurr" && typeheadelelen == 0 && noresults) {
                         cm.checkUserExists($label.assignedUser, $event);
+                    }
+                    if (!noresults) {
+                        $label.assignedUser = "";
+                        $label.assignedUser = cm.user;
                     }
                 }
             }
@@ -1243,6 +1259,7 @@
                 if (confirmUser) {
                     cm.notificationPopUpBlock = false;
                     cm.notificationBorder = "";
+                    angular.element('#txtUser' + cm.textInputUser.assigneTeamRowNumber).attr('uservalue', cm.textInputUser.assignedUser);
                 } else {
                     cm.notificationPopUpBlock = false;
                     cm.textInputUser.assignedUser = "";
@@ -1260,36 +1277,47 @@
                 }
                 function validate(email) {
                     if (validateEmail(email)) {
-                        var optionsForUserExsists = new Object;
-                        optionsForUserExsists = {
-                            Url: cm.clientUrl,
-                            Name: email
+                        var checkEmailExists = false;
+                        if (cm.textInputUser && cm.textInputUser != "") {
+                            var oldUserEmail = angular.element('#txtUser' + cm.textInputUser.assigneTeamRowNumber).attr('uservalue');
+                            if (oldUserEmail !== email) {
+                                checkEmailExists = true;
+                            }
+                        } else {
+                            checkEmailExists = true;
                         }
-                        userexists(optionsForUserExsists, function (response) {
-                            if (!response.isUserExistsInSite) {
-                                angular.forEach(cm.assignPermissionTeams, function (team) {
-                                    var userEmail = getUserName(team.assignedUser + ";", false)
-                                    if (userEmail[0] == email) {
-                                        cm.textInputUser = team;
-                                        // cm.errTextMsg = "Please enter a valid email address.";
-                                        //  cm.errorBorder = "";
-                                        // cm.errorStatus = true;
-                                        //  cm.errorPopUpBlock = true;
-                                        //   showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
-                                        // cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; 
-                                        showNotificatoinMessages(team.assigneTeamRowNumber);
-                                        return false;
-                                    }
-
-                                });
-                                cm.notificationPopUpBlock = true;
+                        if (checkEmailExists) {
+                            var optionsForUserExsists = new Object;
+                            optionsForUserExsists = {
+                                Url: cm.clientUrl,
+                                Name: email
                             }
-                            else {
-                                cm.notificationPopUpBlock = false;
+                            userexists(optionsForUserExsists, function (response) {
+                                if (!response.isUserExistsInSite) {
+                                    angular.forEach(cm.assignPermissionTeams, function (team) {
+                                        var userEmail = getUserName(team.assignedUser + ";", false)
+                                        if (userEmail[0] == email) {
+                                            cm.textInputUser = team;
+                                            // cm.errTextMsg = "Please enter a valid email address.";
+                                            //  cm.errorBorder = "";
+                                            // cm.errorStatus = true;
+                                            //  cm.errorPopUpBlock = true;
+                                            //   showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                            // cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; 
+                                            showNotificatoinMessages(team.assigneTeamRowNumber);
+                                            return false;
+                                        }
 
-                            }
-                        });
+                                    });
+                                    cm.notificationPopUpBlock = true;
+                                }
+                                else {
+                                    cm.notificationPopUpBlock = false;
 
+                                }
+
+                            });
+                        }
                     }
                     else {
                         angular.forEach(cm.assignPermissionTeams, function (team) {
@@ -1502,22 +1530,22 @@
                     },
                     ManagedColumnTerms: {
                         PracticeGroup: {
-                           
-                                TermName: sPracticeGroupName,
-                                Id: sPracticeGroupId
-                           
+
+                            TermName: sPracticeGroupName,
+                            Id: sPracticeGroupId
+
                         },
                         AreaOfLaw: {
-                          
-                                TermName: sAreaOfLawName,
-                                Id: sAreaOfLawId
-                           
+
+                            TermName: sAreaOfLawName,
+                            Id: sAreaOfLawId
+
                         },
                         SubareaOfLaw: {
-                          
-                                TermName: sSubareaOfLawName,
-                                Id: sSubareaOfLawId
-                           
+
+                            TermName: sSubareaOfLawName,
+                            Id: sSubareaOfLawId
+
                         }
                     }
 
@@ -1783,22 +1811,22 @@
                         RoleInformation: JSON.stringify(roleInformation),
                         ManagedColumnTerms: {
                             PracticeGroup: {
-                               
-                                    TermName: sPracticeGroupList,
-                                    Id: "084887e6-3705-466c-823b-207563388464"//set the id
-                               
+
+                                TermName: sPracticeGroupList,
+                                Id: ""
+
                             },
                             AreaOfLaw: {
-                              
-                                    TermName: sAreaOfLawList,
-                                    Id: "162fb199-2f04-498d-a7ac-329a077bca9f"//set the id
-                                
+
+                                TermName: sAreaOfLawList,
+                                Id: ""
+
                             },
                             SubareaOfLaw: {
-                               
-                                    TermName: subAreaofLaw,
-                                    Id: "15c5b16c-150b-4bf5-8470-59dfa951dcf8"//set the id
-                               
+
+                                TermName: subAreaofLaw,
+                                Id: ""
+
                             }
                         }
 
@@ -2677,6 +2705,20 @@
                 return x;
             }
 
+            //#region for validations in assign team
+            cm.checkAssign = function (id) {
+                var assignTeamlen = angular.element('.assignTeam').length;
+                if (assignTeamlen > 1) {
+                    var attrval = angular.element('#' + id).attr('confirm');
+                    //if (attrval == "false") {
+                    //    angular.element('#' + id).css('border-color', 'red');
+                    //} else {
+                    //    angular.element('#' + id).css('border-color', '#ccc');
+                    //}
+                }
+            }
+
+            //#endregion
 
         }]);
 
