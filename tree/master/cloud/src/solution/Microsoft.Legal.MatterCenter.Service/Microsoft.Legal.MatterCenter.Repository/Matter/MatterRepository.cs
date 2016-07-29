@@ -1239,7 +1239,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="matter">Matter object</param>
         /// <returns>Users that can be stamped</returns>
-        public static string GetMatterAssignedUsers(Matter matter)
+        private string GetMatterAssignedUsers(Matter matter)
         {
             string currentUsers = string.Empty;
             string separator = string.Empty;
