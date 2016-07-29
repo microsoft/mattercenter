@@ -13,24 +13,24 @@ matterMain.directive('droppable', function () {
             el.addEventListener('dragover', function(e){
                 e.dataTransfer.dropEffect = 'move'
                 if(e.preventDefault) e.preventDefault();
-                this.classList.add('over');
+                this.classList.add('folderDragOver');
                 return false;
             }, false);
 
 
             el.addEventListener('dragenter', function(e){
-                this.classList.add('over');
+                this.classList.add('folderDragOver');
                 return false;
             }, false);
 
             el.addEventListener('dragleave', function(e){
-                this.classList.remove('over');
+                this.classList.remove('folderDragOver');
                 return false;
             }, false);
 
             el.addEventListener('drop', function(e){
                 if(e.stopPropogation) e.stopPropogation();
-                this.classList.remove('over');
+                this.classList.remove('folderDragOver');
                 var folderId = this.id
                 var sourceItems = [];
                 e.stopPropagation();
