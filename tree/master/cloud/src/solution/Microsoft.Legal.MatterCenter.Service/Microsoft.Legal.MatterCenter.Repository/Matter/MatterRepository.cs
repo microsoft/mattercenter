@@ -256,7 +256,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         //// Check whether the name entered by the user and the name resolved by SharePoint is same.
                         foreach (string teamMember in userNameList)
                         {
-                            if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[iCount].Title.Trim(), StringComparison.OrdinalIgnoreCase))
+                            if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[0].Title.Trim(), StringComparison.OrdinalIgnoreCase))
                             {
                                 genericResponse = new GenericResponseVM();
                                 //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectTeamMembersCode, ServiceConstantStrings.IncorrectTeamMembersMessage + ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR + userId[iCounter]);

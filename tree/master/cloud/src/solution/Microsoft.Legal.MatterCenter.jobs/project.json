@@ -1,8 +1,5 @@
 {
-  "version": "1.0.0-*",
-  "description": "ConsoleApp1 Console Application",
-  "authors": [ "Premchand" ],
-
+  "version": "1.0.0-*",  
   "buildOptions": {
     "emitEntryPoint": true
   },
@@ -18,12 +15,20 @@
     "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final"
   },
 
-  "commands": {
-    "Microsoft.Legal.MatterCenter.Jobs": "Microsoft.Legal.MatterCenter.Jobs"
-  },
+  
 
   "frameworks": {
-    "net451": { }
+    "net451": {}
+  },
+  "publishOptions": {
+    "include": [
+      "run.cmd"
+    ]
+  },
+  "scripts": {
+    "postcompile": "postcompile.cmd"
   }
+
+
 }
 
