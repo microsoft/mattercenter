@@ -7,6 +7,11 @@
     "MatterCenterSupportLinkText": "Matter Center Support",
     "MatterCenterSupportLink": "mailto:support@supportsite.com"
   },
+  "Navigation": {
+    "Name": "Matter",
+    "Type1": "Matters",
+    "Type2": "Documents"
+  },
   "MatterUsers": {
     "SearchUsersURL": "https://msmatter.sharepoint.com/sites/client",
     "StampedPropertiesURL": "https://msmatter.sharepoint.com/sites/microsoft"

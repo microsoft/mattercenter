@@ -5,7 +5,7 @@
         </a>
     </div>
     <div role='button' style='padding-left: 4px;' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
-        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort open date'>{{ col.colDef.displayName }}<span class="headerfilter" ng-if="grid.appScope.vm.opendatefilter"><i class="ms-Icon ms-Icon--filter"></i> </span> 
+        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by open date'>{{ col.colDef.displayName }}<span class="headerfilter" ng-if="grid.appScope.vm.opendatefilter"><i class="ms-Icon ms-Icon--filter"></i> </span> 
             <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span></span>
     </div>
     <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>

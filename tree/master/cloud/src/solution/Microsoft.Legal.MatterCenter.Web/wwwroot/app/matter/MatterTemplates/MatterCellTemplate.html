@@ -13,15 +13,15 @@
             <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' data-toggle='dropdown'></a>
             <ul style='margin:0;padding:0' class='dropdown-menu'>
 
-                <li class='ms-ContextualMenu-item' ng-click='grid.appScope.vm.Openuploadmodal()'><a class='ECBItem ms-ContextualMenu-link upload'>Upload to this Matter</a></li>
-                <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' ng-href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'>View Matter Details</a></li>
+                <li class='ms-ContextualMenu-item' ng-click='grid.appScope.vm.Openuploadmodal()'><a class='ECBItem ms-ContextualMenu-link upload'>Upload to this {{grid.appScope.vm.navigationcontent.Name}}</a></li>
+                <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' ng-href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'>View {{grid.appScope.vm.navigationcontent.Name}} Details</a></li>
                 <li class='ms-ContextualMenu-item'>
 
                     <a class='ECBItem ms-ContextualMenu-link upload' href='https://msmatter.sharepoint.com/sites/microsoft/_layouts/WopiFrame.aspx?sourcedoc=https://msmatter.sharepoint.com/sites/microsoft/{{row.entity.matterGuid}}_OneNote/{{row.entity.matterGuid}}/{{row.entity.matterGuid}}.onetoc2' target='_blank'>
-                        Go to Matter OneNote
+                        Go to {{grid.appScope.vm.navigationcontent.Name}} OneNote
                     </a>
                 </li>
-                <li class='ms-ContextualMenu-item' ng-click='row.entity.MatterInfo===undefined?grid.appScope.vm.PinMatter(row):grid.appScope.vm.UnpinMatter(row)'><a class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?'Pin this Matter':'Unpin this matter'}}</a></li>
+                <li class='ms-ContextualMenu-item' ng-click='row.entity.MatterInfo===undefined?grid.appScope.vm.PinMatter(row):grid.appScope.vm.UnpinMatter(row)'><a class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?'Pin this matter':'Unpin this matter'}}</a></li>
             </ul>
         </div>
     </div>
