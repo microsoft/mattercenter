@@ -361,6 +361,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             var generalSettingsSection = Configuration.GetSection("General");
             var matterSettingsSection = Configuration.GetSection("Matter").GetChildren();
             var taxonomySettingsSection = Configuration.GetSection("Taxonomy");
+            var searchSettingsSection = Configuration.GetSection("Search").GetChildren();
             var contentTypeSettingsSection = Configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
 
             configWriter.WriteLine("var configs =");
@@ -406,6 +407,19 @@ namespace Microsoft.Legal.MatterCenter.Web
                 jw.WriteStartObject();
                     jw.WritePropertyName("levels");
                     jw.WriteValue(taxonomySettingsSection["Levels"]);
+                jw.WriteEndObject();
+
+            jw.WritePropertyName("search");
+                jw.WriteStartObject();
+                    foreach (var key in searchSettingsSection)
+                    {
+                        //Assuming that all the keys for the matter property bag keys will start with "StampedProperty"
+                        if (key.Key.ToString().ToLower().StartsWith("managedproperty"))
+                        {
+                            jw.WritePropertyName(key.Key);
+                            jw.WriteValue(key.Value);
+                        }
+                    }
                 jw.WriteEndObject();
 
 
