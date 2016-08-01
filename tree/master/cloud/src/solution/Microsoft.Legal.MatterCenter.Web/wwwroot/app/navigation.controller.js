@@ -28,7 +28,11 @@
             vm.welcomeheader = false;
             //#endregion
 
-            vm.emailsubject="CELA Project Center Feedback and Support request";
+            vm.emailsubject = "CELA Project Center Feedback and Support request";
 
+            //#region dynamic content
+            vm.navigationcontent = uiconfigs.Navigation;
+            vm.learnmore = configs.uri.MainURL;
+            //#endregion
         }]);
 })();

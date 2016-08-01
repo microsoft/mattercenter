@@ -17,7 +17,7 @@
             vm.mattersdrop = false;
             vm.mattersdropinner = true;
             $rootScope.bodyclass = "bodymain";
-            $rootScope.profileClass="";
+            $rootScope.profileClass = "";
             //This value is for displaying the help
             $rootScope.pageIndex = "1";
             //#region Onload show ui grid and hide error div
@@ -42,7 +42,10 @@
             vm.attorneyfilter = false;
             //end
 
+            //#region dynamic content
+            vm.navigationcontent = uiconfigs.Navigation;
 
+            //#end region
 
             //#region Assigning scopes for Dropdowns in headers
             //Start
@@ -85,9 +88,9 @@
                 enableSelectAll: false,
                 multiSelect: false,
                 columnDefs: [
-                     { field: 'matterName', displayName: 'Matter', enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
+                     { field: 'matterName', displayName: vm.navigationcontent.Name, enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
                      { field: 'matterClient', displayName: 'Client', headerCellClass: 'gridclass', cellClass: 'gridclass', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
-                     { field: 'matterClientId', displayName: 'Client.MatterID', headerCellClass: 'gridclass', cellClass: 'gridclass', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+                     { field: 'matterClientId', displayName: 'Client.' + vm.navigationcontent.Name + 'ID', headerCellClass: 'gridclass', cellClass: 'gridclass', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
                      { field: 'matterModifiedDate', displayName: 'Modified Date', width: "195", headerCellClass: 'gridclass', cellClass: 'gridclass', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
                      { field: 'matterResponsibleAttorney', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: 'Responsible attorney', visible: false },
                      { field: 'matterSubAreaOfLaw', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: 'Sub area of law', visible: false },
@@ -173,7 +176,7 @@
 
             //#region for setting the dynamic width to grid
             var screenHeight = 0;
-            vm.searchResultsLength=0;
+            vm.searchResultsLength = 0;
             vm.setWidth = function () {
                 var width = $window.innerWidth;
                 angular.element(".ui-grid-viewport").css('max-width', width);
