@@ -79,10 +79,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                 if (filter == "")
                 {
-
                     // Construct the queryConfigGroup operation for all  entities 
                     query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "MatterCenterConfig"));
-
                 }
                 else
                 {
@@ -136,46 +134,59 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 foreach (KeyValuePair<string, Dictionary<string, string>> entry in allValues)
                 {                  
                     foreach (KeyValuePair<string, string> keyValue in entry.Value)
-                    {
-                     
+                    {                 
                         TableQuery<DynamicTableEntity> entityQuery = new TableQuery<DynamicTableEntity>().Where(
                             TableQuery.CombineFilters(
-                                TableQuery.GenerateFilterCondition("ConfigGroup", QueryComparisons.Equal, entry.Key),
+                                TableQuery.GenerateFilterCondition("ConfigGroup", QueryComparisons.Equal.ToLower(), entry.Key),
                                 TableOperators.And,
                                 TableQuery.GenerateFilterCondition("Key", QueryComparisons.Equal, keyValue.Key)));
 
                         var queryResult = table.ExecuteQuery(entityQuery);
-                        if (queryResult != null)
+                        if (queryResult.Count() > 0)
                         {
-                            foreach (DynamicTableEntity entity in queryResult)
+                            foreach (DynamicTableEntity entity in queryResult)                         
                             {
-                                //TableOperation insertOrReplaceOperation = TableOperation.InsertOrReplace(entity);
-                                batchOperation.InsertOrReplace(entity);
+                                entity.Properties["ConfigGroup"].StringValue = entry.Key;
+                                entity.Properties["Key"].StringValue = keyValue.Key;
+                                entity.Properties["Value"].StringValue = keyValue.Value;
+                                batchOperation.Merge(entity);    
                             }
                         }
                         else
                         {
-                            ConfigEntity config = new ConfigEntity();
-                            config.PartitionKey = "MatterCenterConfig";
-                            config.RowKey = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", Guid.NewGuid().ToString());
-                            config.ConfigGroup = entry.Key;
-                            config.key = keyValue.Key;
-                            config.Value = keyValue.Value;
+                            DynamicTableEntity config = CreateEntity(entry, keyValue);
                             batchOperation.InsertOrReplace(config);
                         }                    
                        
                     }
                 }
 
-               table.ExecuteBatch(batchOperation);
-               
+             table.ExecuteBatch(batchOperation);
+             return true;
+                         
             }
             catch (Exception ex)
             {
                 throw;
             }
-            return true;
+     
+
         }
 
-    }
+        private DynamicTableEntity CreateEntity(KeyValuePair<string, Dictionary<string, string>> entry, KeyValuePair<string, string> keyValue)
+        {
+            DynamicTableEntity config = new DynamicTableEntity();
+            config.PartitionKey = "MatterCenterConfig";
+            config.RowKey = string.Format(CultureInfo.InvariantCulture, Guid.NewGuid().ToString());
+            config.Properties.Add("ConfigGroup", new EntityProperty(entry.Key));
+            config.Properties.Add("Key", new EntityProperty(keyValue.Key));
+            config.Properties.Add("Value", new EntityProperty(keyValue.Value));
+
+            return config;
+        }
+
+    
+   }
+
+   
 }

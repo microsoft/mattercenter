@@ -142,11 +142,6 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
 
 
-            //var 
-
-
-            //cycleJson["complexObj"] = JObject.FromObject(new { id = 1, name = "test" });
-
             var result = controller.InsertUpdate(configsStr);
 
             Assert.True(result.Status > 0);
