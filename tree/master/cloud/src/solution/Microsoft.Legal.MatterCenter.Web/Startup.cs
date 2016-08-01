@@ -22,6 +22,7 @@ using Microsoft.Legal.MatterCenter.Web.Common;
 using System.IO;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
+using System.Text;
 #endregion
 
 
@@ -88,7 +89,7 @@ namespace Microsoft.Legal.MatterCenter.Web
 
             )
         {
-            //CreateConfig(env);
+            CreateConfig(env);
 
             var log = loggerFactory.CreateLogger<Startup>();
             try
@@ -344,20 +345,112 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
         }
 
-        private void CreateConfig(IHostingEnvironment env)
-        {
+        private void CreateConfig(IHostingEnvironment hostingEnvironment)
+        { 
+            StringBuilder sb = new StringBuilder();
+            JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
+            jw.Formatting = Formatting.Indented;
 
-            string destPath = Path.Combine(env.WebRootPath, "app/config.js");
-            System.IO.File.WriteAllText(destPath, string.Empty);
-            TextWriter tw = new StreamWriter(destPath);
-            tw.WriteLine("var configs = { \"uri\":  {");
-            tw.WriteLine(" \"SPOsiteURL\": \"" + Configuration["General:SiteURL"] + "\",");
-            tw.WriteLine(" \"tenant\": \"" + Configuration["General:Tenant"] + "\",");
-            tw.WriteLine("}, \"ADAL\" : { ");
-            tw.WriteLine(" \"clientId\": \"" + Configuration["General:ClientId"] + "\"");
-            tw.WriteLine("}};");
+            var configPath = Path.Combine(hostingEnvironment.WebRootPath, "app/config.js");
+            if (System.IO.File.Exists(configPath))
+                System.IO.File.Delete(configPath);
 
-            tw.Close(); 
+            var configFile = File.Open(configPath, FileMode.Create);
+            var configWriter = new StreamWriter(configFile, Encoding.UTF8);
+
+            var generalSettingsSection = Configuration.GetSection("General");
+            var matterSettingsSection = Configuration.GetSection("Matter").GetChildren();
+            var taxonomySettingsSection = Configuration.GetSection("Taxonomy");
+            var contentTypeSettingsSection = Configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
+
+            configWriter.WriteLine("var configs =");
+            jw.WriteStartObject();
+
+            jw.WritePropertyName("uri");
+                jw.WriteStartObject();
+                    jw.WritePropertyName("SPOsiteURL");
+                    jw.WriteValue(generalSettingsSection["SiteURL"]);
+                    jw.WritePropertyName("tenant");
+                    jw.WriteValue(generalSettingsSection["OrgDomainName"]);
+                    jw.WritePropertyName("MainURL");
+                    jw.WriteValue(generalSettingsSection["MainURL"]);
+                jw.WriteEndObject();
+
+
+            jw.WritePropertyName("ADAL");
+                jw.WriteStartObject();
+                    jw.WritePropertyName("clientId");
+                    jw.WriteValue(generalSettingsSection["ClientId"]);                    
+                jw.WriteEndObject();
+
+            jw.WritePropertyName("global");
+                jw.WriteStartObject();
+                    jw.WritePropertyName("repositoryUrl");
+                    jw.WriteValue(generalSettingsSection["CentralRepositoryUrl"]);
+                jw.WriteEndObject();
+
+            jw.WritePropertyName("matter");
+                jw.WriteStartObject();
+                    foreach (var key in matterSettingsSection)
+                    {
+                        //Assuming that all the keys for the matter property bag keys will start with "StampedProperty"
+                        if (key.Key.ToString().ToLower().StartsWith("stampedproperty"))
+                        {
+                            jw.WritePropertyName(key.Key);
+                            jw.WriteValue(key.Value);
+                        }
+                    }
+                jw.WriteEndObject();
+
+            jw.WritePropertyName("taxonomy");
+                jw.WriteStartObject();
+                    jw.WritePropertyName("levels");
+                    jw.WriteValue(taxonomySettingsSection["Levels"]);
+                jw.WriteEndObject();
+
+
+            jw.WritePropertyName("contentTypes");
+                jw.WriteStartObject();
+                    jw.WritePropertyName("managedColumns");
+                        jw.WriteStartObject();
+                        foreach (var key in contentTypeSettingsSection)
+                        {                            
+                            jw.WritePropertyName(key.Key);
+                            jw.WriteValue(key.Value);                            
+                        }
+                    jw.WriteEndObject();
+                jw.WriteEndObject();
+
+            jw.WritePropertyName("uploadMessages");
+                jw.WriteStartObject();
+                    jw.WritePropertyName("maxAttachedMessage");
+                    jw.WriteValue("Do not select more than five documents to attach at one time.");
+                    jw.WritePropertyName("attachSuccessMessage");
+                    jw.WriteValue("Documents successfully attached.");
+                    jw.WritePropertyName("attachFailureMessage");
+                    jw.WriteValue("One or more of your selected documents failed to attach:");
+                    jw.WritePropertyName("attachButtonText");
+                    jw.WriteValue("Attach Documents");
+                    jw.WritePropertyName("overwrite_Config_Property");
+                    jw.WriteValue("Email Only");
+                    jw.WritePropertyName("upload_Append_Button");
+                    jw.WriteValue("Append date to file name and save");
+                    jw.WritePropertyName("upload_Append_Button_Tooltip");
+                    jw.WriteValue("The file will be saved as new, separate document with the current date and time added to the end of the file name.");
+                    jw.WritePropertyName("content_Check_Abort");
+                    jw.WriteValue("Content check has been aborted.");
+                    jw.WritePropertyName("uploadImageDocumentIcon");
+                    jw.WriteValue("/_layouts/15/images/ic{0}.gif");
+                    jw.WritePropertyName("uploadPNGIconExtensions");
+                    jw.WriteValue("pdf");
+                    jw.WritePropertyName("attachInProgressMessage");
+                    jw.WriteValue("");
+
+                jw.WriteEndObject();
+            jw.WriteEndObject();
+            configWriter.Write(sb.ToString());            
+            configWriter.Dispose();
+
         }
 
         #endregion
