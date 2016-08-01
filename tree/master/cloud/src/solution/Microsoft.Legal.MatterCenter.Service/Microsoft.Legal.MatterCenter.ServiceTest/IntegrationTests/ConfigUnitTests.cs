@@ -42,21 +42,21 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             genS.CloudStorageConnectionString = "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
 
             //Need to Mock the injected services and setup any properties on these that the test requires
-            var errorSettingsMoq = new Moq.Mock<IOptionsMonitor<ErrorSettings>>();
-
-            var generalSettingsMoq = new Moq.Mock<IOptionsMonitor<GeneralSettings>>();
-            generalSettingsMoq.SetupGet(p => p.CurrentValue.CloudStorageConnectionString).Returns("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
+            var errorSettingsMoq = new Moq.Mock<IOptions<ErrorSettings>>();
+          
+            var generalSettingsMoq = new Moq.Mock<IOptions<GeneralSettings>>();
+            generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
 
             var environmentMoq = new Moq.Mock<IHostingEnvironment>();
             environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\mcfork\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
 
             var matterCenterServiceFunctionsMoq = new Moq.Mock<IMatterCenterServiceFunctions>();
-
-            var logTablesMoq = new Moq.Mock<IOptionsMonitor<LogTables>>();
+               
+            var logTablesMoq = new Moq.Mock<IOptions<LogTables>>();
 
             ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, logTablesMoq.Object);
 
-            generalSettingsMoq.SetupGet(g => g.CurrentValue).Returns(genS);
+            generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
 
 
@@ -75,21 +75,21 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             genS.CloudStorageConnectionString = "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
 
             //Need to Mock the injected services and setup any properties on these that the test requires
-            var errorSettingsMoq = new Moq.Mock<IOptionsMonitor<ErrorSettings>>();
+            var errorSettingsMoq = new Moq.Mock<IOptions<ErrorSettings>>();
 
-            var generalSettingsMoq = new Moq.Mock<IOptionsMonitor<GeneralSettings>>();
-            generalSettingsMoq.SetupGet(p => p.CurrentValue.CloudStorageConnectionString).Returns("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
+            var generalSettingsMoq = new Moq.Mock<IOptions<GeneralSettings>>();
+            generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
 
             var environmentMoq = new Moq.Mock<IHostingEnvironment>();
             environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\mcfork\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
 
             var matterCenterServiceFunctionsMoq = new Moq.Mock<IMatterCenterServiceFunctions>();
 
-            var logTablesMoq = new Moq.Mock<IOptionsMonitor<LogTables>>();
+            var logTablesMoq = new Moq.Mock<IOptions<LogTables>>();
 
             ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, logTablesMoq.Object);
 
-            generalSettingsMoq.SetupGet(g => g.CurrentValue).Returns(genS);
+            generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
 
             ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
@@ -158,11 +158,11 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
 
             GeneralSettings genS = new GeneralSettings();
-            genS.CloudStorageConnectionString = "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
-            var m = new Moq.Mock<IOptionsMonitor<GeneralSettings>>();
-            var l = new Moq.Mock<IOptionsMonitor<LogTables>>();
-
-            m.SetupGet(g => g.CurrentValue).Returns(genS);
+            genS.CloudStorageConnectionString  =  "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
+            var m = new Moq.Mock<IOptions<GeneralSettings>>();
+            var l = new Moq.Mock<IOptions<LogTables>>();
+            
+            m.SetupGet(g => g.Value).Returns(genS);
             m.SetupAllProperties();
 
 

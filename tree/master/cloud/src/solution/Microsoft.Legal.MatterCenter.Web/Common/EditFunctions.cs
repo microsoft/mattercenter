@@ -23,16 +23,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private CamlQueries camlQueries;
         private ISPList spList;
         private IMatterRepository matterRespository;
-        public EditFunctions(ISPList spList, IOptionsMonitor<MatterSettings> matterSettings, 
-            IOptionsMonitor<ErrorSettings> errorSettings, IMatterRepository matterRespository,
-            IOptionsMonitor<ListNames> listNames, IOptionsMonitor<CamlQueries> camlQueries)
+        public EditFunctions(ISPList spList, IOptions<MatterSettings> matterSettings, 
+            IOptions<ErrorSettings> errorSettings, IMatterRepository matterRespository,
+            IOptions<ListNames> listNames, IOptions<CamlQueries> camlQueries)
         {
-            this.matterSettings = matterSettings.CurrentValue;
+            this.matterSettings = matterSettings.Value;
             this.spList = spList;
-            this.errorSettings = errorSettings.CurrentValue;
+            this.errorSettings = errorSettings.Value;
             this.matterRespository = matterRespository;
-            this.listNames = listNames.CurrentValue;
-            this.camlQueries = camlQueries.CurrentValue;
+            this.listNames = listNames.Value;
+            this.camlQueries = camlQueries.Value;
         }
 
         public GenericResponseVM CheckSecurityGroupInTeamMembers(Client client, Matter matter, IList<string> userId)

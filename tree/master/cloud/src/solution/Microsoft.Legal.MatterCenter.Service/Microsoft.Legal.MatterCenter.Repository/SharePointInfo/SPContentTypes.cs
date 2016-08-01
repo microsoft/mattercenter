@@ -23,15 +23,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private CamlQueries camlQueries;
         private ISPList spList;
         private IConfigurationRoot configuration;
-        public SPContentTypes(IOptionsMonitor<ContentTypesConfig> contentTypesConfig, IOptionsMonitor<CamlQueries> camlQueries, ISPList spList,
-            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IOptionsMonitor<TaxonomySettings> taxonomySettings, IConfigurationRoot configuration
+        public SPContentTypes(IOptions<ContentTypesConfig> contentTypesConfig, IOptions<CamlQueries> camlQueries, ISPList spList,
+            ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<TaxonomySettings> taxonomySettings, IConfigurationRoot configuration
             )
         {
-            this.contentTypesConfig = contentTypesConfig.CurrentValue;
-            this.taxonomySettings = taxonomySettings.CurrentValue;
+            this.contentTypesConfig = contentTypesConfig.Value;
+            this.taxonomySettings = taxonomySettings.Value;
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
-            this.camlQueries = camlQueries.CurrentValue;
+            this.logTables = logTables.Value;
+            this.camlQueries = camlQueries.Value;
             this.spList = spList;
             this.configuration = configuration;
         }

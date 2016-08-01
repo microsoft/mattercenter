@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Legal.MatterCenter.Models;
 using Swashbuckle.SwaggerGen.Annotations;
-using System.Threading.Tasks;
 
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Extensions.Options;
@@ -23,10 +22,7 @@ using Microsoft.Legal.MatterCenter.Web.Common;
 using System;
 using System.Reflection;
 using System.IO;
-using System.Collections.Generic;
-using Microsoft.SharePoint.Client;
 using System.Net.Http;
-using Microsoft.Net.Http.Headers;
 
 namespace Microsoft.Legal.MatterCenter.Web
 {
@@ -38,30 +34,41 @@ namespace Microsoft.Legal.MatterCenter.Web
     public class EmailController : Controller
     {
         
+        
         private ErrorSettings errorSettings;
         IMatterCenterServiceFunctions matterCenterServiceFunctions;
         private ICustomLogger customLogger;
         private LogTables logTables;
         IDocumentProvision documentProvision;
         DocumentSettings documentSettings;
-        public EmailController(IOptionsMonitor<ErrorSettings> errorSettings,
+
+        /// <summary>
+        /// Controlls the functionality for email related.
+        /// </summary>
+        /// <param name="errorSettings"></param>
+        /// <param name="customLogger"></param>
+        /// <param name="matterCenterServiceFunctions"></param>
+        /// <param name="logTables"></param>
+        /// <param name="documentProvision"></param>
+        /// <param name="documentSettings"></param>
+        public EmailController(IOptions<ErrorSettings> errorSettings,
             ICustomLogger customLogger,             
             IMatterCenterServiceFunctions matterCenterServiceFunctions, 
-            IOptionsMonitor<LogTables> logTables, IDocumentProvision documentProvision, 
-            IOptionsMonitor<DocumentSettings> documentSettings)
+            IOptions<LogTables> logTables, IDocumentProvision documentProvision, 
+            IOptions<DocumentSettings> documentSettings)
         {            
-            this.errorSettings = errorSettings.CurrentValue;
+            this.errorSettings = errorSettings.Value;
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
+            this.logTables = logTables.Value;
             this.documentProvision = documentProvision;
-            this.documentSettings = documentSettings.CurrentValue;
+            this.documentSettings = documentSettings.Value;
         }
 
         /// <summary>
-        /// Gets the documents based on search criteria.
+        ///  Gets the documents based on search criteria.
         /// </summary>
-        /// <param name="searchRequestVM"></param>
+        /// <param name="mailAttachmentDetails"></param>
         /// <returns></returns>
         [HttpPost("downloadattachmentsasstream")]
         [SwaggerResponse(System.Net.HttpStatusCode.OK)]
@@ -96,9 +103,9 @@ namespace Microsoft.Legal.MatterCenter.Web
 
 
         /// <summary>
-        /// Gets the documents based on search criteria.
+        /// For document attachment
         /// </summary>
-        /// <param name="searchRequestVM"></param>
+        /// <param name="mailAttachmentDetails"></param>
         /// <returns></returns>
         [HttpPost("downloadattachments")]
         [SwaggerResponse(System.Net.HttpStatusCode.OK)]

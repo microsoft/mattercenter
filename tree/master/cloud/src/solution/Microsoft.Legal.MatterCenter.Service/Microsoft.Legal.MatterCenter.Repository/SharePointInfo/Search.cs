@@ -53,25 +53,25 @@ namespace Microsoft.Legal.MatterCenter.Repository
             ICustomLogger customLogger,            
             IUsersDetails userDetails,
             ISPList spList,
-            IOptionsMonitor<GeneralSettings> generalSettings,
-            IOptionsMonitor<SharedSettings> sharedSettings,
-            IOptionsMonitor<LogTables> logTables,
-            IOptionsMonitor<SearchSettings> searchSettings,
-            IOptionsMonitor<CamlQueries> camlQueries, 
-            IOptionsMonitor<ListNames> listNames,
-            IOptionsMonitor<ErrorSettings> errorSettings)
+            IOptions<GeneralSettings> generalSettings,
+            IOptions<SharedSettings> sharedSettings,
+            IOptions<LogTables> logTables,
+            IOptions<SearchSettings> searchSettings,
+            IOptions<CamlQueries> camlQueries, 
+            IOptions<ListNames> listNames,
+            IOptions<ErrorSettings> errorSettings)
         {
             this.spoAuthorization = spoAuthorization;
-            this.generalSettings = generalSettings.CurrentValue;
-            this.searchSettings = searchSettings.CurrentValue;
+            this.generalSettings = generalSettings.Value;
+            this.searchSettings = searchSettings.Value;
             this.userDetails = userDetails;
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
+            this.logTables = logTables.Value;
             this.spList = spList;
-            this.camlQueries = camlQueries.CurrentValue;
-            this.listNames = listNames.CurrentValue;
-            this.sharedSettings = sharedSettings.CurrentValue;
-            this.errorSettings = errorSettings.CurrentValue;
+            this.camlQueries = camlQueries.Value;
+            this.listNames = listNames.Value;
+            this.sharedSettings = sharedSettings.Value;
+            this.errorSettings = errorSettings.Value;
         }
 
         #region Public Methods

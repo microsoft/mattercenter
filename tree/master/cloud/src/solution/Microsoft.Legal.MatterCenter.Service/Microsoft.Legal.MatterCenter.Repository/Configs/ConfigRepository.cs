@@ -1,7 +1,4 @@
-﻿
-
-
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 
@@ -12,10 +9,7 @@ using System.Collections.Generic;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Linq;
-using System.Globalization;
+
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -28,11 +22,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
 
         public ConfigRepository(
-            IOptionsMonitor<GeneralSettings> generalSettings,
-            IOptionsMonitor<LogTables> logTables)
+            IOptions<GeneralSettings> generalSettings,
+            IOptions<LogTables> logTables)
         {
-            this.generalSettings = generalSettings.CurrentValue;
-            this.logTables = logTables.CurrentValue;
+            this.generalSettings = generalSettings.Value;
+            this.logTables = logTables.Value;
         }
 
 
@@ -46,7 +40,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             return await Task.FromResult(this.GetConfigEntities(filter));
         }
-
         /// <summary>
         /// 
         /// </summary>

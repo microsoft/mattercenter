@@ -29,6 +29,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Legal.MatterCenter.Web.Controllers
 {
+    /// <summary>
+    /// Config settings
+    /// </summary>
     [Authorize(ActiveAuthenticationSchemes = "Bearer")]
     [Route("api/v1/config")]
     public class ConfigController : Controller
@@ -48,24 +51,25 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// <param name="configRepository"></param>
         ///    /// <param name="hostingEnvironment"></param>
         /// <param name="matterCenterServiceFunctions"></param>
-        public ConfigController(IOptionsMonitor<ErrorSettings> errorSettings,
-            IOptionsMonitor<GeneralSettings> generalSettings,
+        public ConfigController(IOptions<ErrorSettings> errorSettings,
+            IOptions<GeneralSettings> generalSettings,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IConfigRepository configRepository,
             IHostingEnvironment hostingEnvironment
             )
         {
-            this.errorSettings = errorSettings.CurrentValue;
+            this.errorSettings = errorSettings.Value;
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.configRepository = configRepository;
-            this.generalSettings = generalSettings.CurrentValue;
+            this.generalSettings = generalSettings.Value;
             this.hostingEnvironment = hostingEnvironment;
         }
 
         /// <summary>
         /// Returns all the entries for Configuring the UI
         /// </summary>
-        /// <param name="filter">Request object for POST</param>   
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [HttpPost("Get")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public async Task<IActionResult> Get([FromBody] String filter)

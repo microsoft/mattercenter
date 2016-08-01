@@ -4,16 +4,16 @@
   "authors": [ "v-lapedd" ],
 
   "dependencies": {
-    "Microsoft.Extensions.Options": "1.0.0-rc2-final",
-    "NETStandard.Library": "1.5.0-rc2-24027",
-    "System.Threading.Tasks": "4.0.11-rc2-24027",
-    "System.Xml.XDocument": "4.0.11-rc2-24027",
-    "Microsoft.AspNetCore.Mvc": "1.0.0-rc2-final",
-    "Newtonsoft.Json": "8.0.3",
-    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
-    "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*"
+    "Microsoft.Extensions.Options": "1.0.0",
+    "NETStandard.Library": "1.6.0",
+    "System.Threading.Tasks": "4.0.10",
+    "System.Xml.XDocument": "4.0.10",
+    "Microsoft.AspNetCore.Mvc": "1.0.0",
+    "Newtonsoft.Json": "9.0.1",
+    "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*",
+    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*"
   },
   "frameworks": {
-    "net451": { }
+    "net46": {}
   }
 }

@@ -41,14 +41,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private IUploadHelperFunctionsUtility uploadHelperFunctionsUtility;
         private IUserRepository userRepositoy;
        
-        public UploadHelperFunctions(ISPOAuthorization spoAuthorization, IOptionsMonitor<ErrorSettings> errorSettings, IUserRepository userRepositoy,
+        public UploadHelperFunctions(ISPOAuthorization spoAuthorization, IOptions<ErrorSettings> errorSettings, IUserRepository userRepositoy,
             
-            IDocumentRepository documentRepository, IOptionsMonitor<DocumentSettings> documentSettings, IUploadHelperFunctionsUtility uploadHelperFunctionsUtility)
+            IDocumentRepository documentRepository, IOptions<DocumentSettings> documentSettings, IUploadHelperFunctionsUtility uploadHelperFunctionsUtility)
         {
             this.spoAuthorization = spoAuthorization;
-            this.errorSettings = errorSettings.CurrentValue;
+            this.errorSettings = errorSettings.Value;
             this.documentRepository = documentRepository;
-            this.documentSettings = documentSettings.CurrentValue;
+            this.documentSettings = documentSettings.Value;
             this.uploadHelperFunctionsUtility = uploadHelperFunctionsUtility;
             this.userRepositoy = userRepositoy;            
         }

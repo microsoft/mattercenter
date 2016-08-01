@@ -62,17 +62,17 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="logTables"></param>
         /// <param name="spoAuthorization"></param>
         /// <param name="customLogger"></param>
-        public Taxonomy(IOptionsMonitor<GeneralSettings> generalSettings, 
-            IOptionsMonitor<TaxonomySettings> taxonomySettings,
-            IOptionsMonitor<ContentTypesConfig> contentTypeSettings,
-            IOptionsMonitor<LogTables> logTables,
+        public Taxonomy(IOptions<GeneralSettings> generalSettings, 
+            IOptions<TaxonomySettings> taxonomySettings,
+            IOptions<ContentTypesConfig> contentTypeSettings,
+            IOptions<LogTables> logTables,
             ISPOAuthorization spoAuthorization, ICustomLogger customLogger, 
             IConfigurationRoot configuration)
         {
-            this.generalSettings = generalSettings.CurrentValue;
-            this.taxonomySettings = taxonomySettings.CurrentValue;
-            this.contentTypeSettings = contentTypeSettings.CurrentValue;
-            this.logTables = logTables.CurrentValue;
+            this.generalSettings = generalSettings.Value;
+            this.taxonomySettings = taxonomySettings.Value;
+            this.contentTypeSettings = contentTypeSettings.Value;
+            this.logTables = logTables.Value;
             this.spoAuthorization = spoAuthorization;
             taxonomyResponseVM = new TaxonomyResponseVM();
             this.customLogger = customLogger;

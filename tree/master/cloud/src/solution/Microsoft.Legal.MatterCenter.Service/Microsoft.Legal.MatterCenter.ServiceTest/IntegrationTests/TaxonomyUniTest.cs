@@ -35,7 +35,8 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         {
             AuthenticationContext authContext = new AuthenticationContext(authority);
             ClientCredential clientCred = new ClientCredential("844ffb77-5bfd-403e-9285-678e2eddc90c", "IAKt/4uoQFM0UJ1Ocj//WHOg1RzLspACzPAKkkPP0kw=");            
-            UserCredential userCredential = new UserCredential("v-lapedd@microsoft.com", "feb@2016");
+            //UserCredential userCredential = new UserCredential("v-lapedd@microsoft.com", "feb@2016"); //Before RTM
+            UserCredential userCredential = new UserCredential("v-lapedd@microsoft.com");
             AuthenticationResult authResult = await authContext.AcquireTokenAsync("https://microsoft.onmicrosoft.com/mcserviceadal",
                 clientCred);
             return authResult.AccessToken;
