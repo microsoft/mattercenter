@@ -22,16 +22,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private MatterSettings matterSettings;
         private LogTables logTables;
         private IUsersDetails userDetails;
-        public ExternalSharing(ISPOAuthorization spoAuthorization, IOptionsMonitor<ListNames> listNames, 
-            IOptionsMonitor<GeneralSettings> generalSettings, 
-            IOptionsMonitor<MatterSettings> matterSettings, 
-            IOptionsMonitor<LogTables> logTables, IUsersDetails userDetails)
+        public ExternalSharing(ISPOAuthorization spoAuthorization, IOptions<ListNames> listNames, 
+            IOptions<GeneralSettings> generalSettings, 
+            IOptions<MatterSettings> matterSettings, 
+            IOptions<LogTables> logTables, IUsersDetails userDetails)
         {
             this.spoAuthorization = spoAuthorization;
-            this.listNames = listNames.CurrentValue;
-            this.generalSettings = generalSettings.CurrentValue;
-            this.matterSettings = matterSettings.CurrentValue;
-            this.logTables = logTables.CurrentValue;
+            this.listNames = listNames.Value;
+            this.generalSettings = generalSettings.Value;
+            this.matterSettings = matterSettings.Value;
+            this.logTables = logTables.Value;
             this.userDetails = userDetails;
         }
         /// <summary>

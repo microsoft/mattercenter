@@ -30,6 +30,9 @@ using Microsoft.AspNetCore.Authorization;
 #endregion
 namespace Microsoft.Legal.MatterCenter.Web
 {
+    /// <summary>
+    /// SharedController used for some common functionality.
+    /// </summary>
     [Authorize]
     [Route("api/v1/shared")]
     public class SharedController : Controller
@@ -41,37 +44,39 @@ namespace Microsoft.Legal.MatterCenter.Web
         private ISharedRepository sharedRepository;
         private ICustomLogger customLogger;
         private LogTables logTables;
-        /// <summary>
-        /// Constructor where all the required dependencies are injected
-        /// </summary>
-        /// <param name="errorSettings"></param>
-        /// <param name="matterSettings"></param>
-        /// <param name="spoAuthorization"></param>
-        /// <param name="matterCenterServiceFunctions"></param>
-        public SharedController(IOptionsMonitor<ErrorSettings> errorSettings,
-            IOptionsMonitor<SharedSettings> sharedSettings,            
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="errorSettings"></param>
+       /// <param name="sharedSettings"></param>
+       /// <param name="matterCenterServiceFunctions"></param>
+       /// <param name="customLogger"></param>
+       /// <param name="logTables"></param>
+       /// <param name="sharedRepository"></param>
+        public SharedController(IOptions<ErrorSettings> errorSettings,
+            IOptions<SharedSettings> sharedSettings,            
             IMatterCenterServiceFunctions matterCenterServiceFunctions,            
-            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables,
+            ICustomLogger customLogger, IOptions<LogTables> logTables,
             ISharedRepository sharedRepository
             )
         {
-            this.errorSettings = errorSettings.CurrentValue;            
+            this.errorSettings = errorSettings.Value;            
             
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.sharedRepository = sharedRepository;
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
-            this.sharedSettings = sharedSettings.CurrentValue;
+            this.logTables = logTables.Value;
+            this.sharedSettings = sharedSettings.Value;
         }
 
         /// <summary>
-        /// Returns true or false based on the existence of the matter landing page and OneNote file at the URLs provided.
+        /// 
         /// </summary>
-        /// <param name="requestObject">Request object containing SharePoint App Token</param>
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="requestedUrl">String object containing the OneNote file path</param>
-        /// <param name="requestedPageUrl">String object containing the Matter Landing Page file path</param>
-        /// <returns>$|$ Separated string indicating that the OneNote and the Matter Landing Page exist or not</returns>        
+        /// <param name="client"></param>
+        /// <param name="oneNoteUrl"></param>
+        /// <param name="matterLandingPageUrl"></param>
+        /// <returns></returns>
+                    
         [HttpPost("urlexists")]
         [SwaggerResponse(HttpStatusCode.OK)]        
         public async Task<IActionResult> UrlExists(Client client, string oneNoteUrl, string matterLandingPageUrl)
@@ -117,13 +122,11 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
         }
 
-        /// <summary>
-        /// Returns contextual help content in JSON format.
-        /// </summary>
-        /// <param name="requestObject">Request object containing SharePoint App Token</param>
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="selectedPage">String object containing the page number where user is on</param>
-        /// <returns>IActionResult which return List of ContextHelpData in JSON format</returns>        
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="helpRequestModel"></param>
+       /// <returns></returns>
         [HttpPost("help")]
         [SwaggerResponse(HttpStatusCode.OK)]        
         public async Task<IActionResult> Help([FromBody]HelpRequestModel helpRequestModel)

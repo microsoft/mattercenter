@@ -47,22 +47,22 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// Constructir where all the dependencies are injected
         /// </summary>
         /// <param name="spoAuthorization"></param>
-        public UsersDetails(IOptionsMonitor<MatterSettings> matterSettings, 
-            IOptionsMonitor<ListNames> listNames,
+        public UsersDetails(IOptions<MatterSettings> matterSettings, 
+            IOptions<ListNames> listNames,
             ISPOAuthorization spoAuthorization, 
             ICustomLogger customLogger, 
-            IOptionsMonitor<LogTables> logTables,
+            IOptions<LogTables> logTables,
             IHttpContextAccessor httpContextAccessor,
-            IOptionsMonitor<GeneralSettings> generalSettings)
+            IOptions<GeneralSettings> generalSettings)
         {
-            this.matterSettings = matterSettings.CurrentValue;
-            this.listNames = listNames.CurrentValue;
+            this.matterSettings = matterSettings.Value;
+            this.listNames = listNames.Value;
             this.spoAuthorization = spoAuthorization;
             //this.spList = spList;
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
+            this.logTables = logTables.Value;
             this.httpContextAccessor = httpContextAccessor;
-            this.generalSettings = generalSettings.CurrentValue;
+            this.generalSettings = generalSettings.Value;
         }
 
 

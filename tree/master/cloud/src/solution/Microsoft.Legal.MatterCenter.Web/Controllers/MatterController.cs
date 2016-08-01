@@ -50,25 +50,30 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// </summary>
         /// <param name="errorSettings"></param>
         /// <param name="matterSettings"></param>
-        /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
-        public MatterController(IOptionsMonitor<ErrorSettings> errorSettings,
-            IOptionsMonitor<MatterSettings> matterSettings,
+        /// <param name="matterRepositoy"></param>
+        /// <param name="customLogger"></param>
+        /// <param name="logTables"></param>
+        /// <param name="validationFunctions"></param>
+        /// <param name="editFunctions"></param>
+        /// <param name="matterProvision"></param>
+        public MatterController(IOptions<ErrorSettings> errorSettings,
+            IOptions<MatterSettings> matterSettings,
             
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IMatterRepository matterRepositoy,
-            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables,
+            ICustomLogger customLogger, IOptions<LogTables> logTables,
             IValidationFunctions validationFunctions,
             IEditFunctions editFunctions,
             IMatterProvision matterProvision
             )
         {
-            this.errorSettings = errorSettings.CurrentValue;
-            this.matterSettings = matterSettings.CurrentValue;            
+            this.errorSettings = errorSettings.Value;
+            this.matterSettings = matterSettings.Value;            
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.matterRepositoy = matterRepositoy;
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
+            this.logTables = logTables.Value;
             this.validationFunctions = validationFunctions;
             this.editFunctions = editFunctions;
             this.matterProvision = matterProvision;
@@ -126,7 +131,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <summary>
         /// Get all counts for all matters, my matters and pinned matters
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="searchRequestVM"></param>
         /// <returns></returns>
         [HttpPost("getmattercounts")]
         [SwaggerResponse(HttpStatusCode.OK)]

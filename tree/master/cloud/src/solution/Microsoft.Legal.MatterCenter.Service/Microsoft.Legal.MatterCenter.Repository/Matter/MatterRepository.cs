@@ -48,29 +48,29 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="search"></param>
         public MatterRepository(ISearch search, 
-            IOptionsMonitor<MatterSettings> matterSettings, 
-            IOptionsMonitor<SearchSettings> searchSettings, 
-            IOptionsMonitor<ListNames> listNames, 
+            IOptions<MatterSettings> matterSettings, 
+            IOptions<SearchSettings> searchSettings, 
+            IOptions<ListNames> listNames, 
             ISPOAuthorization spoAuthorization, 
             ISPContentTypes spContentTypes,
             IExternalSharing extrnalSharing, 
             IUserRepository userRepositoy,
             ISPList spList, 
-            IOptionsMonitor<CamlQueries> camlQueries, 
+            IOptions<CamlQueries> camlQueries, 
             IUsersDetails userdetails, 
-            IOptionsMonitor<ErrorSettings> errorSettings, 
+            IOptions<ErrorSettings> errorSettings, 
             ISPPage spPage)
         {
             this.search = search;
-            this.matterSettings = matterSettings.CurrentValue;
-            this.searchSettings = searchSettings.CurrentValue;
-            this.listNames = listNames.CurrentValue;
+            this.matterSettings = matterSettings.Value;
+            this.searchSettings = searchSettings.Value;
+            this.listNames = listNames.Value;
             this.spList = spList;
-            this.camlQueries = camlQueries.CurrentValue;
+            this.camlQueries = camlQueries.Value;
             this.userdetails = userdetails;
             this.spoAuthorization = spoAuthorization;
             this.spPage = spPage;
-            this.errorSettings = errorSettings.CurrentValue;
+            this.errorSettings = errorSettings.Value;
             this.spContentTypes = spContentTypes;
             this.extrnalSharing = extrnalSharing;
             this.userRepositoy = userRepositoy;

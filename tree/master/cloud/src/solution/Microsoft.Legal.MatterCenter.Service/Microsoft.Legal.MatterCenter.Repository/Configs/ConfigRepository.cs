@@ -22,11 +22,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
 
         public ConfigRepository(
-            IOptionsMonitor<GeneralSettings> generalSettings,
-            IOptionsMonitor<LogTables> logTables)
+            IOptions<GeneralSettings> generalSettings,
+            IOptions<LogTables> logTables)
         {
-            this.generalSettings = generalSettings.CurrentValue;
-            this.logTables = logTables.CurrentValue;
+            this.generalSettings = generalSettings.Value;
+            this.logTables = logTables.Value;
         }
 
 

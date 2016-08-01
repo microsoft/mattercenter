@@ -20,10 +20,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="spPage"></param>
         /// <param name="listNames"></param>
         /// <param name="search"></param>
-        public SharedRepository(ISPPage spPage, IOptionsMonitor<ListNames> listNames, ISearch search)
+        public SharedRepository(ISPPage spPage, IOptions<ListNames> listNames, ISearch search)
         {
             this.spPage = spPage;
-            this.listNames = listNames.CurrentValue;
+            this.listNames = listNames.Value;
             this.search = search;
         }
 

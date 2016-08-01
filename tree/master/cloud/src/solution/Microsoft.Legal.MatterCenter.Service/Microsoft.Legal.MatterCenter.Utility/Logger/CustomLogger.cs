@@ -24,10 +24,10 @@ namespace Microsoft.Legal.MatterCenter.Utility
         private LogTables logTables;
         private GeneralSettings generalSettings;
         ErrorResponse errorResponse;
-        public CustomLogger(IOptionsMonitor<LogTables> logTables, IOptionsMonitor<GeneralSettings> generalSettings)
+        public CustomLogger(IOptions<LogTables> logTables, IOptions<GeneralSettings> generalSettings)
         {
-            this.logTables = logTables.CurrentValue;
-            this.generalSettings = generalSettings.CurrentValue;
+            this.logTables = logTables.Value;
+            this.generalSettings = generalSettings.Value;
             
         }
         /// <summary>

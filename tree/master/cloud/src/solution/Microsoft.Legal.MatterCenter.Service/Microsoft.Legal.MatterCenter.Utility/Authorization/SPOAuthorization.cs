@@ -44,16 +44,16 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// </summary>
         /// <param name="generalSettings"></param>
         /// <param name="errorSettings"></param>
-        public SPOAuthorization(IOptionsMonitor<GeneralSettings> generalSettings, 
-            IOptionsMonitor<ErrorSettings> errorSettings, 
-            IOptionsMonitor<LogTables> logTables, 
+        public SPOAuthorization(IOptions<GeneralSettings> generalSettings, 
+            IOptions<ErrorSettings> errorSettings, 
+            IOptions<LogTables> logTables, 
             ICustomLogger customLogger, 
             IHttpContextAccessor httpContextAccessor)
         {            
-            this.generalSettings = generalSettings.CurrentValue;
-            this.errorSettings = errorSettings.CurrentValue;
+            this.generalSettings = generalSettings.Value;
+            this.errorSettings = errorSettings.Value;
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
+            this.logTables = logTables.Value;
             this.httpContextAccessor = httpContextAccessor;
         }
 

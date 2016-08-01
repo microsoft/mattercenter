@@ -30,15 +30,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="spoAuthorization"></param>
         /// <param name="generalSettings"></param>
-        public SPPage(ISPOAuthorization spoAuthorization, IOptionsMonitor<GeneralSettings> generalSettings, 
-            IOptionsMonitor<LogTables> logTables, ICustomLogger customLogger, ISPList spList, IOptionsMonitor<MatterSettings> matterSettings)
+        public SPPage(ISPOAuthorization spoAuthorization, IOptions<GeneralSettings> generalSettings, 
+            IOptions<LogTables> logTables, ICustomLogger customLogger, ISPList spList, IOptions<MatterSettings> matterSettings)
         {
-            this.generalSettings = generalSettings.CurrentValue;
+            this.generalSettings = generalSettings.Value;
             this.spoAuthorization = spoAuthorization;
-            this.logTables = logTables.CurrentValue;
+            this.logTables = logTables.Value;
             this.customLogger = customLogger;
             this.spList = spList;
-            this.matterSettings = matterSettings.CurrentValue;
+            this.matterSettings = matterSettings.Value;
         }
 
 

@@ -39,19 +39,26 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private ErrorSettings errorSettings;
         private IDocumentRepository documentRepository;
         private GeneralSettings generalSettings;
-        public UploadHelperFunctionsUtility(IOptionsMonitor<MailSettings> mailSettings, IOptionsMonitor<ErrorSettings> errorSettings, IDocumentRepository documentRepository, IOptionsMonitor<GeneralSettings> generalSettings)
+
+        /// <summary>
+        /// Handle the upload functionality.
+        /// </summary>
+        /// <param name="mailSettings"></param>
+        /// <param name="errorSettings"></param>
+        /// <param name="documentRepository"></param>
+        /// <param name="generalSettings"></param>
+        public UploadHelperFunctionsUtility(IOptions<MailSettings> mailSettings, IOptions<ErrorSettings> errorSettings, IDocumentRepository documentRepository, IOptions<GeneralSettings> generalSettings)
         {
-            this.mailSettings = mailSettings.CurrentValue;
-            this.errorSettings = errorSettings.CurrentValue;
+            this.mailSettings = mailSettings.Value;
+            this.errorSettings = errorSettings.Value;
             this.documentRepository = documentRepository;
-            this.generalSettings = generalSettings.CurrentValue;
+            this.generalSettings = generalSettings.Value;
         }
         /// <summary>
         /// Check if duplicate document exists 
         /// </summary>
         /// <param name="clientContext">SP client context</param>
         /// <param name="documentLibraryName">Name of the document library</param>
-        /// <param name="folderName">Name of the folder</param>
         /// <param name="isMailUpload">Mail upload check</param>
         /// <param name="folderPath">The folder path.</param>
         /// <param name="contentCheck">Content check object</param>
@@ -140,7 +147,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     return genericResponse;
                 }
             }
-            return genericResponse;
         }
 
         /// <summary>
