@@ -50,25 +50,27 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="errorSettings"></param>
         /// <param name="taxonomySettings"></param>
         /// <param name="generalSettings"></param>
-        /// <param name="spoAuthorization"></param>
         /// <param name="matterCenterServiceFunctions"></param>
         /// <param name="taxonomyRepository"></param>
-        public TaxonomyController(IOptionsMonitor<ErrorSettings> errorSettings, 
-            IOptionsMonitor<TaxonomySettings> taxonomySettings, 
-            IOptionsMonitor<GeneralSettings> generalSettings,            
+        /// <param name="customLogger"></param>
+        /// <param name="logTables"></param>
+        /// <param name="validationFunctions"></param>
+        public TaxonomyController(IOptions<ErrorSettings> errorSettings, 
+            IOptions<TaxonomySettings> taxonomySettings, 
+            IOptions<GeneralSettings> generalSettings,            
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             ITaxonomyRepository taxonomyRepository, 
             ICustomLogger customLogger, 
-            IOptionsMonitor<LogTables> logTables, 
+            IOptions<LogTables> logTables, 
             IValidationFunctions validationFunctions)
         {
-            this.errorSettings = errorSettings.CurrentValue;
-            this.taxonomySettings = taxonomySettings.CurrentValue;
-            this.generalSettings = generalSettings.CurrentValue;            
+            this.errorSettings = errorSettings.Value;
+            this.taxonomySettings = taxonomySettings.Value;
+            this.generalSettings = generalSettings.Value;            
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;            
             this.taxonomyRepository = taxonomyRepository;
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
+            this.logTables = logTables.Value;
             this.validationFunctions = validationFunctions;
         }
          

@@ -1,5 +1,8 @@
 {
-  "version": "1.0.0-*",  
+  "version": "1.0.0-*",
+  "description": "ConsoleApp1 Console Application",
+  "authors": [ "Premchand" ],
+
   "buildOptions": {
     "emitEntryPoint": true
   },
@@ -8,27 +11,19 @@
     "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
     "Microsoft.Azure.WebJobs": "1.1.2",
     "Microsoft.Azure.WebJobs.Extensions": "1.0.1",
-    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
     "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.9.302261508-alpha",
-    "Microsoft.Net.Http": "2.2.22",
-    "Microsoft.AspNetCore.Hosting": "1.0.0-rc2-final",
-    "Microsoft.Extensions.Configuration.Json": "1.0.0-rc2-final"
+    "Microsoft.Net.Http": "2.2.28",
+    "Microsoft.AspNetCore.Hosting": "1.0.0",
+    "Microsoft.Extensions.Configuration.Json": "1.0.0",
+    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*"
   },
 
-  
+  "commands": {
+    "Microsoft.Legal.MatterCenter.Jobs": "Microsoft.Legal.MatterCenter.Jobs"
+  },
 
   "frameworks": {
-    "net451": {}
-  },
-  "publishOptions": {
-    "include": [
-      "run.cmd"
-    ]
-  },
-  "scripts": {
-    "postcompile": "postcompile.cmd"
+    "net46": {}
   }
-
-
 }
 

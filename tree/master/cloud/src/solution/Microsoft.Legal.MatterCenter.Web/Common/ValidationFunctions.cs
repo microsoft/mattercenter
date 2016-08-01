@@ -22,16 +22,26 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private CamlQueries camlQueries;
         private ISPList spList;
         private IMatterRepository matterRespository;
-        public ValidationFunctions(ISPList spList, IOptionsMonitor<MatterSettings> matterSettings,
-            IOptionsMonitor<ErrorSettings> errorSettings, IMatterRepository matterRespository,
-            IOptionsMonitor<ListNames> listNames, IOptionsMonitor<CamlQueries> camlQueries)
+
+        /// <summary>
+        /// Do validation stuff
+        /// </summary>
+        /// <param name="spList"></param>
+        /// <param name="matterSettings"></param>
+        /// <param name="errorSettings"></param>
+        /// <param name="matterRespository"></param>
+        /// <param name="listNames"></param>
+        /// <param name="camlQueries"></param>
+        public ValidationFunctions(ISPList spList, IOptions<MatterSettings> matterSettings,
+            IOptions<ErrorSettings> errorSettings, IMatterRepository matterRespository,
+            IOptions<ListNames> listNames, IOptions<CamlQueries> camlQueries)
         {
-            this.matterSettings = matterSettings.CurrentValue;
+            this.matterSettings = matterSettings.Value;
             this.spList = spList;
-            this.errorSettings = errorSettings.CurrentValue;
+            this.errorSettings = errorSettings.Value;
             this.matterRespository = matterRespository;
-            this.listNames = listNames.CurrentValue;
-            this.camlQueries = camlQueries.CurrentValue;
+            this.listNames = listNames.Value;
+            this.camlQueries = camlQueries.Value;
         }
 
         /// <summary>
@@ -59,6 +69,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return listExists;
         }
 
+        /// <summary>
+        /// Check the matter is valid or not
+        /// </summary>
+        /// <param name="matterInformation"></param>
+        /// <param name="methodNumber"></param>
+        /// <param name="matterConfigurations"></param>
+        /// <returns></returns>
         public GenericResponseVM IsMatterValid(MatterInformationVM matterInformation, int methodNumber, MatterConfigurations matterConfigurations)
         {
             GenericResponseVM genericResponse = null;
@@ -149,10 +166,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <summary>
         /// Validates the roles for the matter and returns the validation status.
         /// </summary>
-        /// <param name="requestObject">Request Object containing SharePoint App Token</param>
-        /// <param name="matter">Matter object containing Matter data</param>
-        /// <param name="client">Client Object</param>
-        /// <returns>A string value indicating whether validations passed or fail</returns>
+        /// <param name="matter"></param>
+        /// <returns></returns>
         public GenericResponseVM RoleCheck(Matter matter)
         {
             GenericResponseVM genericResponse = null;
@@ -219,14 +234,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
             return response;
         }
-
         /// <summary>
         /// Validates meta-data of a matter and returns the validation status (success/failure).
         /// </summary>
-        /// <param name="matter">Matter object containing Matter data</param>
-        /// <param name="clientContext">Client context object for SharePoint</param>  
-        /// <param name="methodNumber">Number indicating which method needs to be validated</param>     
-        /// <returns>A string value indicating whether validations passed or fail</returns>
+        /// <param name="matter"></param>
+        /// <param name="client"></param>
+        /// <param name="methodNumber"></param>
+        /// <param name="matterConfigurations"></param>
+        /// <returns></returns>
         public GenericResponseVM MatterMetadataValidation(Matter matter, Client client,
             int methodNumber, MatterConfigurations matterConfigurations)
         {
@@ -329,12 +344,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         }
 
         /// <summary>
-        /// Validates details of a matter and returns the validation status.
+        ///  Validates details of a matter and returns the validation status.
         /// </summary>
-        /// <param name="matter">Matter object containing Matter data</param>
-        /// <param name="clientContext">Client context object for SharePoint</param>  
-        /// <param name="methodNumber">Number indicating which method needs to be validated</param>        
-        /// <returns>A string value indicating whether validations passed or fail</returns>
+        /// <param name="matter"></param>
+        /// <param name="client"></param>
+        /// <param name="methodNumber"></param>
+        /// <param name="matterConfigurations"></param>
+        /// <returns></returns>
         public GenericResponseVM MatterDetailsValidation(Matter matter, Client client, int methodNumber,
             MatterConfigurations matterConfigurations)
         {

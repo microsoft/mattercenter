@@ -18,15 +18,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ISearch search;
         private ListNames listNames;
 
-        public UserRepository(IUsersDetails userDetails, ISPList spList, IOptionsMonitor<ListNames> listNames, IOptionsMonitor<CamlQueries> camlQueries,
-            IOptionsMonitor<MatterSettings> matterSettings, ISearch search)
+        public UserRepository(IUsersDetails userDetails, ISPList spList, IOptions<ListNames> listNames, IOptions<CamlQueries> camlQueries,
+            IOptions<MatterSettings> matterSettings, ISearch search)
         {
             this.userDetails = userDetails;
             this.spList = spList;
-            this.matterSettings = matterSettings.CurrentValue;
-            this.camlQueries = camlQueries.CurrentValue;
+            this.matterSettings = matterSettings.Value;
+            this.camlQueries = camlQueries.Value;
             this.search = search;
-            this.listNames = listNames.CurrentValue; 
+            this.listNames = listNames.Value; 
         }
 
         /// <summary>

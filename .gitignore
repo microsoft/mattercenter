@@ -34,3 +34,10 @@ tree/master/cloud/src/solution/*/pkgobj/
 /tree/master/cloud/src/solution/TestResults
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/npm-debug.log
 
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Repository/bin/Debug/net46
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.ServiceTest/bin/Debug/net46/win7-x64
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.ServiceTest/bin/Debug/net46
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/bin/Debug/net46
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/obj/Debug/net46
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.ServiceTest/obj/Debug/net46
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Repository/obj/Debug/net46
