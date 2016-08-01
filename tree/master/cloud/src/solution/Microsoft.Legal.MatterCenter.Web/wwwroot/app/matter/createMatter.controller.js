@@ -899,7 +899,7 @@
                 });
             }
 
-           vm.externalusers=[];
+           cm.externalusers=[];
 
             cm.onSelect = function ($item, $model, $label, value, fucnValue, $event, username) {
                 console.log(cm.typehead);
