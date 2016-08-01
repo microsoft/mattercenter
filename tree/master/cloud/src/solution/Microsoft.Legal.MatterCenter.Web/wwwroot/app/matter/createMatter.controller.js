@@ -899,6 +899,8 @@
                 });
             }
 
+           cm.externalusers=[];
+
             cm.onSelect = function ($item, $model, $label, value, fucnValue, $event, username) {
                 console.log(cm.typehead);
                 var typeheadelelen = angular.element('.dropdown-menu li').length;
@@ -907,6 +909,9 @@
                     if (angular.element('.dropdown-menu li a')[0]) {
                         if (angular.element('.dropdown-menu li a')[0].innerHTML == "No results found") {
                             noresults = false;
+                            if ($event.keyCode == 9) {
+                                cm.user = angular.element('#' + $event.currentTarget.id).val();
+                            }
                         }
                     }
                 }
@@ -1260,6 +1265,8 @@
                     cm.notificationPopUpBlock = false;
                     cm.notificationBorder = "";
                     angular.element('#txtUser' + cm.textInputUser.assigneTeamRowNumber).attr('uservalue', cm.textInputUser.assignedUser);
+                    angular.element('#txtUser' + cm.textInputUser.assigneTeamRowNumber).attr('confirm', "true");
+                    angular.element('#txtUser' + cm.textInputUser.assigneTeamRowNumber).css('border-color', '#ccc');
                 } else {
                     cm.notificationPopUpBlock = false;
                     cm.textInputUser.assignedUser = "";
@@ -2710,11 +2717,18 @@
                 var assignTeamlen = angular.element('.assignTeam').length;
                 if (assignTeamlen > 1) {
                     var attrval = angular.element('#' + id).attr('confirm');
-                    //if (attrval == "false") {
-                    //    angular.element('#' + id).css('border-color', 'red');
-                    //} else {
-                    //    angular.element('#' + id).css('border-color', '#ccc');
-                    //}
+                    angular.element('.checkuser').each(function (e) {
+                        var emaillength = 1;
+                        var confirmed = this.attributes.confirm.value;
+                        //if (confirmed == "false") {
+                        //    angular.element(this).css('border-color', 'red');
+                        //    return false;
+                        //} else {
+                        //    angular.element(this).css('border-color', '#ccc');
+                        //    return true;
+                        //}
+                        emaillength++;
+                    });
                 }
             }
 
