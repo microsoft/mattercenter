@@ -9,7 +9,8 @@ using System.Collections.Generic;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json;
+using System.Globalization;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -94,10 +95,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
 
         /// <summary>
-        /// Update the status in Azure Table Storage for the corresponding Parition and Row Key
-        /// for which the user has accepted the invitation
+        /// Update  or Insert Configuration values 
         /// </summary>
-        /// <param name="partitionkey"></param>
+        /// <param name="configs"></param>
         public bool UpdateEntityProperty(string configs)
         {
             try
@@ -134,8 +134,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 TableOperators.And,
                                 TableQuery.GenerateFilterCondition("Key", QueryComparisons.Equal, keyValue.Key)));
 
-                        var queryResult = table.ExecuteQuery(entityQuery);
-                        if (queryResult.Count() > 0)
+                       IEnumerable<DynamicTableEntity> queryResult = table.ExecuteQuery(entityQuery);
+                       
+                        if (queryResult.GetEnumerator().MoveNext())
                         {
                             foreach (DynamicTableEntity entity in queryResult)                         
                             {
