@@ -899,7 +899,7 @@
                 });
             }
 
-           vm.externalusers=[];
+           cm.externalusers=[];
 
             cm.onSelect = function ($item, $model, $label, value, fucnValue, $event, username) {
                 console.log(cm.typehead);
@@ -909,7 +909,7 @@
                     if (angular.element('.dropdown-menu li a')[0]) {
                         if (angular.element('.dropdown-menu li a')[0].innerHTML == "No results found") {
                             noresults = false;
-                            if ($event.keyCode == 9) {
+                            if ($event.keyCode == 9 || $event.keyCode == 13) {
                                 cm.user = angular.element('#' + $event.currentTarget.id).val();
                             }
                         }

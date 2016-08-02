@@ -32,26 +32,29 @@ namespace Microsoft.Legal.MatterCenter.Web
         private ICustomLogger customLogger;
         private LogTables logTables;      
         private GeneralSettings generalSettings;
-        /// <summary>
-        /// Constructor where all the required dependencies are injected
-        /// </summary>
-        /// <param name="errorSettings"></param>
-        /// <param name="matterSettings"></param>
-        /// <param name="spoAuthorization"></param>
-        /// <param name="matterCenterServiceFunctions"></param>
-        public UserController(IOptionsMonitor<ErrorSettings> errorSettings,
+       
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="errorSettings"></param>
+       /// <param name="matterCenterServiceFunctions"></param>
+       /// <param name="userRepositoy"></param>
+       /// <param name="customLogger"></param>
+       /// <param name="logTables"></param>
+       /// <param name="generalSettings"></param>
+        public UserController(IOptions<ErrorSettings> errorSettings,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IUserRepository userRepositoy,
             ICustomLogger customLogger, 
-            IOptionsMonitor<LogTables> logTables,  
-            IOptionsMonitor<GeneralSettings> generalSettings
+            IOptions<LogTables> logTables,  
+            IOptions<GeneralSettings> generalSettings
             )
         {
-            this.errorSettings = errorSettings.CurrentValue; 
+            this.errorSettings = errorSettings.Value; 
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;            
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;             
-            this.generalSettings = generalSettings.CurrentValue;
+            this.logTables = logTables.Value;             
+            this.generalSettings = generalSettings.Value;
             this.userRepositoy = userRepositoy;
         }
 
@@ -112,6 +115,11 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
         [HttpPost("getuserprofilepicture")]
         [SwaggerResponse(HttpStatusCode.OK)]
         public IActionResult UserProfilePicture([FromBody]Client client)
@@ -232,9 +240,9 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
         /// <summary>
-        /// This method will check whether a given user exists in the current tenant or not
+        /// 
         /// </summary>
-        /// <param name="userAlias"></param>
+        /// <param name="client"></param>
         /// <returns></returns>
         [HttpPost("userexists")]
         [SwaggerResponse(HttpStatusCode.OK)]

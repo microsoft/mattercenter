@@ -64,23 +64,23 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="logTables"></param>
         /// <param name="documentProvision"></param>
         /// <param name="generalSettings"></param>
-        public DocumentController(IOptionsMonitor<ErrorSettings> errorSettings,
-            IOptionsMonitor<DocumentSettings> documentSettings,            
+        public DocumentController(IOptions<ErrorSettings> errorSettings,
+            IOptions<DocumentSettings> documentSettings,            
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IDocumentRepository documentRepositoy,
-            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IDocumentProvision documentProvision,
-            IOptionsMonitor<GeneralSettings> generalSettings
+            ICustomLogger customLogger, IOptions<LogTables> logTables, IDocumentProvision documentProvision,
+            IOptions<GeneralSettings> generalSettings
 
             )
         {
-            this.errorSettings = errorSettings.CurrentValue;
-            this.documentSettings = documentSettings.CurrentValue;            
+            this.errorSettings = errorSettings.Value;
+            this.documentSettings = documentSettings.Value;            
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.documentRepositoy = documentRepositoy;
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
+            this.logTables = logTables.Value;
             this.documentProvision = documentProvision;
-            this.generalSettings = generalSettings.CurrentValue;
+            this.generalSettings = generalSettings.Value;
         }
 
         /// <summary>

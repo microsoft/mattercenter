@@ -34,30 +34,35 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private IExternalSharing externalSharing;
         private IConfigurationRoot configuration;
         private IUsersDetails userDetails;
-        public MatterProvision(IMatterRepository matterRepositoy, IOptionsMonitor<MatterSettings> matterSettings, IOptionsMonitor<ErrorSettings> errorSettings,
+        public MatterProvision(IMatterRepository matterRepositoy, IOptions<MatterSettings> matterSettings, IOptions<ErrorSettings> errorSettings,
             ISPOAuthorization spoAuthorization, IEditFunctions editFunctions, IValidationFunctions validationFunctions,
-            ICustomLogger customLogger, IOptionsMonitor<LogTables> logTables, IOptionsMonitor<MailSettings> mailSettings, IOptionsMonitor<CamlQueries> camlQueries, IOptionsMonitor<ListNames> listNames,
-            IOptionsMonitor<SearchSettings> searchSettings, IUserRepository userRepositoy, IExternalSharing externalSharing, IConfigurationRoot configuration, IUsersDetails userDetails
+            ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<MailSettings> mailSettings, IOptions<CamlQueries> camlQueries, IOptions<ListNames> listNames,
+            IOptions<SearchSettings> searchSettings, IUserRepository userRepositoy, IExternalSharing externalSharing, IConfigurationRoot configuration, IUsersDetails userDetails
             )
         {
             this.matterRepositoy = matterRepositoy;
-            this.matterSettings = matterSettings.CurrentValue;
+            this.matterSettings = matterSettings.Value;
             this.spoAuthorization = spoAuthorization;
             this.editFunctions = editFunctions;
-            this.errorSettings = errorSettings.CurrentValue;
+            this.errorSettings = errorSettings.Value;
             this.customLogger = customLogger;
-            this.logTables = logTables.CurrentValue;
+            this.logTables = logTables.Value;
             this.validationFunctions = validationFunctions;
-            this.mailSettings = mailSettings.CurrentValue;
-            this.camlQueries = camlQueries.CurrentValue;
-            this.listNames = listNames.CurrentValue;
-            this.searchSettings = searchSettings.CurrentValue;
+            this.mailSettings = mailSettings.Value;
+            this.camlQueries = camlQueries.Value;
+            this.listNames = listNames.Value;
+            this.searchSettings = searchSettings.Value;
             this.userRepositoy = userRepositoy;
             this.externalSharing = externalSharing;
             this.configuration = configuration;
             this.userDetails = userDetails;
         }
 
+        /// <summary>
+        /// Getting accounts
+        /// </summary>
+        /// <param name="searchRequestVM"></param>
+        /// <returns></returns>
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
         {
             searchRequestVM.SearchObject.Filters.FilterByMe = 0;
