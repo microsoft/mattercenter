@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     'use strict';
 
     var app = angular.module("matterMain");
@@ -12,7 +12,11 @@
                 matterName: '',
                 matterGuid: ''
             };
-            vm.mattername = "All Matters";
+            //#region dynamic content
+            vm.navigationContent = uiconfigs.Navigation;
+            vm.configSearchContent = configs.search;
+            //#end region
+            vm.mattername = "All " + vm.navigationContent.Type1;
             vm.sortname = "";
             vm.mattersdrop = false;
             vm.mattersdropinner = true;
@@ -41,11 +45,6 @@
             vm.areafilter = false;
             vm.attorneyfilter = false;
             //end
-
-            //#region dynamic content
-            vm.navigationcontent = uiconfigs.Navigation;
-
-            //#end region
 
             //#region Assigning scopes for Dropdowns in headers
             //Start
@@ -88,9 +87,9 @@
                 enableSelectAll: false,
                 multiSelect: false,
                 columnDefs: [
-                     { field: 'matterName', displayName: vm.navigationcontent.Name, enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
+                     { field: 'matterName', displayName: vm.navigationContent.Name, enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
                      { field: 'matterClient', displayName: 'Client', headerCellClass: 'gridclass', cellClass: 'gridclass', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
-                     { field: 'matterClientId', displayName: 'Client.' + vm.navigationcontent.Name + 'ID', headerCellClass: 'gridclass', cellClass: 'gridclass', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+                     { field: 'matterClientId', displayName: 'Client.' + vm.navigationContent.Name + 'ID', headerCellClass: 'gridclass', cellClass: 'gridclass', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
                      { field: 'matterModifiedDate', displayName: 'Modified Date', width: "195", headerCellClass: 'gridclass', cellClass: 'gridclass', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
                      { field: 'matterResponsibleAttorney', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: 'Responsible attorney', visible: false },
                      { field: 'matterSubAreaOfLaw', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: 'Sub area of law', visible: false },
@@ -964,7 +963,7 @@
                     },
                     Sort:
                             {
-                                ByProperty: "LastModifiedTime",
+                                ByProperty: "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "",
                                 Direction: 1
                             }
                 }
@@ -977,7 +976,7 @@
             vm.searchMatter = function (val) {
                 var finalSearchText = "";
                 if (val != "") {
-                    finalSearchText = "(MCMatterName:" + val + "* OR MCMatterID:" + val + "*)";
+                    finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":" + val + "* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":" + val + "*)";
                 }
                 vm.pagenumber = 1;
                 searchRequest.SearchObject.PageNumber = vm.pagenumber;
@@ -990,7 +989,7 @@
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 vm.matterid = 1;
-                vm.mattername = "All Matters";
+                vm.mattername = "All " + vm.navigationContent.Type1;
                 vm.pagenumber = 1;
                 var searchToText = '';
                 var finalSearchText = '';
@@ -1000,13 +999,13 @@
                         searchToText = searchToText.replace(")", "")
                         var firstText = searchToText.split(',')[0]
                         var secondText = searchToText.split(',')[1]
-                        finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + secondText.trim() + '")';
                     } else {
                         finalSearchText = commonFunctions.searchFilter(vm.selected);
                     }
                 }
                 searchRequest.SearchObject.SearchTerm = finalSearchText;
-                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 get(searchRequest, function (response) {
                     if (response == "") {
@@ -1046,35 +1045,35 @@
                     vm.divuigrid = false;
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.ItemsPerPage = 17;
-                    if (property == "MCResponsibleAttorney") {
+                    if (property == "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "") {
                         vm.attorneyproperty = term;
                         searchRequest.SearchObject.Filters.ResponsibleAttorneys = term;
                         vm.attorneyfilter = true;
                     }
-                    else if (property == "MCSubAreaofLaw") {
+                    else if (property == "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "") {
                         searchRequest.SearchObject.Filters.SubareaOfLaw = term;
                         vm.areafilter = true;
                     }
-                    else if (property == "MCMatterName") {
+                    else if (property == "" + vm.configSearchContent.ManagedPropertyMatterName + "") {
                         searchRequest.SearchObject.Filters.Name = term;
-                        searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.matterfilter = true;
                     }
-                    else if (property == "MCClientName") {
+                    else if (property == "" + vm.configSearchContent.ManagedPropertyClientName + "") {
                         searchRequest.SearchObject.Filters.ClientName = term;
-                        searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.clientfilter = true;
                     }
                 } else {
                     searchRequest.SearchObject.ItemsPerPage = 50;
-                    if (property == "MCResponsibleAttorney") {
-                        searchRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
+                    if (property == "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "") {
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
                         searchRequest.SearchObject.Sort.Direction = 0;
-                    } else if (property == "MCSubAreaofLaw") {
-                        searchRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
+                    } else if (property == "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "") {
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
                         searchRequest.SearchObject.Sort.Direction = 0;
                     } else {
-                        searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         searchRequest.SearchObject.Sort.Direction = 1;
                     }
                 }
@@ -1130,7 +1129,7 @@
                     searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
                     vm.opendatefilter = true;
                 }
-                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 get(searchRequest, function (response) {
                     if (response == "") {
@@ -1157,9 +1156,10 @@
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
-                searchRequest.SearchObject.PageNumber = 1;
+                vm.pagenumber = 1;
+                searchRequest.SearchObject.PageNumber = vm.pagenumber;
                 searchRequest.SearchObject.ItemsPerPage = 17;
-                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 if (property == "Responsible Attorney") {
                     vm.attorneySearchTerm = "";
@@ -1175,13 +1175,13 @@
                     vm.searchTerm = "";
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.Name = "";
-                    searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     vm.matterfilter = false;
                 }
                 else if (property == "Client") {
                     vm.clientSearchTerm = ""
                     searchRequest.SearchObject.Filters.ClientName = "";
-                    searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     vm.clientfilter = false;
                 }
                 else if (property == "Modified Date") {
@@ -1217,7 +1217,7 @@
 
             //#region Code written for displaying types in dropdown 
             //Start 
-            vm.Matters = [{ Id: 1, Name: "All Matters" }, { Id: 2, Name: "My Matters" }, { Id: 3, Name: "Pinned Matters" }];
+            vm.Matters = [{ Id: 1, Name: "All " + vm.navigationContent.Type1 }, { Id: 2, Name: "My " + vm.navigationContent.Type1 }, { Id: 3, Name: "Pinned " + vm.navigationContent.Type1 }];
             vm.ddlMatters = vm.Matters[0];
             //#endregion  
 
@@ -1242,7 +1242,7 @@
                     searchRequest.SearchObject.PageNumber = 1;
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.FilterByMe = 0;
-                    searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     get(searchRequest, function (response) {
                         if (response == "") {
                             vm.gridOptions.data = response;
@@ -1289,7 +1289,7 @@
                     searchRequest.SearchObject.PageNumber = 1;
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.FilterByMe = 1;
-                    searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     get(searchRequest, function (response) {
                         if (response == "") {
                             vm.gridOptions.data = response;
@@ -1607,7 +1607,7 @@
                                 vm.pagenumber = 1;
                                 vm.lazyloader = false;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
                                 vm.MatterNameSort = "desc"; vm.sortby = "asc";
@@ -1617,7 +1617,7 @@
                                 vm.pagenumber = 1;
                                 vm.lazyloader = false;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
                                 vm.MatterNameSort = "asc"; vm.sortby = "desc";
@@ -1635,7 +1635,7 @@
                                 vm.pagenumber = 1;
                                 vm.lazyloader = false;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCClientName";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyClientName + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
                                 vm.ClientSort = "desc"; vm.sortby = "asc";
@@ -1646,7 +1646,7 @@
                                 vm.pagenumber = 1;
                                 vm.lazyloader = false;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCClientName";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyClientName + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
                                 vm.ClientSort = "asc"; vm.sortby = "desc";
@@ -1693,7 +1693,7 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
                                 vm.ModiFiedTimeSort = "desc"; vm.sortby = "asc";
@@ -1703,7 +1703,7 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
                                 vm.ModiFiedTimeSort = "asc"; vm.sortby = "desc";
@@ -1722,7 +1722,7 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
                                 vm.ResAttoSort = "desc"; vm.sortby = "asc";
@@ -1732,7 +1732,7 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCResponsibleAttorney";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
                                 vm.ResAttoSort = "asc"; vm.sortby = "desc";
@@ -1750,7 +1750,7 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
                                 vm.SubAreaSort = "desc"; vm.sortby = "asc";
@@ -1760,7 +1760,7 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCSubAreaofLaw";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
                                 vm.SubAreaSort = "asc"; vm.sortby = "desc";
@@ -1806,7 +1806,7 @@
                     //    vm.pagenumber = 1;
                     //    vm.lazyloader = false;
                     //    searchRequest.SearchObject.PageNumber = 1;
-                    //    searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    //    searchRequest.SearchObject.Sort.ByProperty = ""+vm.configSearchContent.ManagedPropertyMatterName+"";
                     //    searchRequest.SearchObject.Sort.Direction = 0;
                     //    vm.FilterByType();
                     //    vm.MatterNameSort = "desc"; vm.sortby = "asc";
@@ -1816,7 +1816,7 @@
                     //    vm.pagenumber = 1;
                     //    vm.lazyloader = false;
                     //    searchRequest.SearchObject.PageNumber = 1;
-                    //    searchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    //    searchRequest.SearchObject.Sort.ByProperty = ""+vm.configSearchContent.ManagedPropertyMatterName+"";
                     //    searchRequest.SearchObject.Sort.Direction = 1;
                     //    vm.FilterByType();
                     //    vm.MatterNameSort = "asc"; vm.sortby = "desc";
@@ -1845,7 +1845,7 @@
             //#region
             vm.typeheadselect = function (index, selected) {
                 vm.matterid = 1;
-                vm.mattername = "All Matters";
+                vm.mattername = "All " + vm.navigationContent.Type1;
                 var searchToText = '';
                 var finalSearchText = '';
                 if (selected != "") {
@@ -1853,7 +1853,7 @@
                     searchToText = searchToText.replace(")", "")
                     var firstText = searchToText.split(',')[0]
                     var secondText = searchToText.split(',')[1]
-                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                    var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + secondText.trim() + '")'
                 }
                 searchRequest.SearchObject.SearchTerm = finalSearchText;
                 searchRequest.SearchObject.Sort.Direction = 0;
@@ -2085,19 +2085,19 @@
                 angular.element('.matterheader').css({ 'top': top, 'left': left });
                 angular.element('.matterheaderdates').css({ 'top': top, 'left': left });
                 if (name == "matter") {
-                    vm.searchexp = "MCMatterName";
+                    vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                     vm.filtername = "Matter";
                 }
                 if (name == "client") {
-                    vm.searchexp = "MCClientName";
+                    vm.searchexp = "" + vm.configSearchContent.ManagedPropertyClientName + "";
                     vm.filtername = "Client";
                 }
                 if (name == "Attorney") {
-                    vm.searchexp = "MCResponsibleAttorney";
+                    vm.searchexp = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
                     vm.filtername = "Responsible Attorney";
                 }
                 if (name == "AreaOfLaw") {
-                    vm.searchexp = "MCSubAreaofLaw";
+                    vm.searchexp = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
                     vm.filtername = "Area of Law";
                 }
                 if (name == "ModifiedDate") {
