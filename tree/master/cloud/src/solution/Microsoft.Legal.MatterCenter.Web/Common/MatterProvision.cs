@@ -34,10 +34,15 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private IExternalSharing externalSharing;
         private IConfigurationRoot configuration;
         private IUsersDetails userDetails;
-        public MatterProvision(IMatterRepository matterRepositoy, IOptions<MatterSettings> matterSettings, IOptions<ErrorSettings> errorSettings,
+        public MatterProvision(IMatterRepository matterRepositoy, IOptions<MatterSettings> matterSettings,
+            IOptions<ErrorSettings> errorSettings,
             ISPOAuthorization spoAuthorization, IEditFunctions editFunctions, IValidationFunctions validationFunctions,
-            ICustomLogger customLogger, IOptions<LogTables> logTables, IOptions<MailSettings> mailSettings, IOptions<CamlQueries> camlQueries, IOptions<ListNames> listNames,
-            IOptions<SearchSettings> searchSettings, IUserRepository userRepositoy, IExternalSharing externalSharing, IConfigurationRoot configuration, IUsersDetails userDetails
+            ICustomLogger customLogger, IOptions<LogTables> logTables,
+            IOptions<MailSettings> mailSettings,
+            IOptions<CamlQueries> camlQueries,
+            IOptions<ListNames> listNames,
+            IOptions<SearchSettings> searchSettings, IUserRepository userRepositoy, 
+            IExternalSharing externalSharing, IConfigurationRoot configuration, IUsersDetails userDetails
             )
         {
             this.matterRepositoy = matterRepositoy;
@@ -58,11 +63,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.userDetails = userDetails;
         }
 
-        /// <summary>
-        /// Getting accounts
-        /// </summary>
-        /// <param name="searchRequestVM"></param>
-        /// <returns></returns>
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
         {
             searchRequestVM.SearchObject.Filters.FilterByMe = 0;
@@ -254,9 +254,88 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 Dictionary<string, string> propertyList = SetStampProperty(client, matter, matterDetails);
                 matterRepositoy.SetPropertBagValuesForList(clientContext, matterStampedProperties, matter.Name, propertyList);
                 //As part of final step in matter creation, check whether any assigned users are external to the 
-                //organization and if yes, send notification to that user to accepct the
-                //inviotation so that he can access matter center
-                externalSharing.ShareMatter(matterInfo);
+                //organization and if yes, send notification to that user to accepct the invitation so that he can access matter center
+
+                //Need to loop each matter information, update the table storage with that matter information, before sending
+                //notification to external user
+                if (matterInfo.Matter != null && matterInfo.Matter.Roles != null && matterInfo.Matter.Roles.Count > 0)
+                {
+                    for (int i = 0; i < matterInfo.Matter.Roles.Count; i++)
+                    {
+                        //Need to construct new MatterInformationVM object for each external user
+                        MatterInformationVM matterInfoNew = new MatterInformationVM();
+
+                        List<string> userIds = new List<string>();
+                        if (matterInfo.UserIds != null)
+                        {
+                            foreach (var userid in matterInfo.UserIds)
+                            {
+                                userIds.Add(userid);
+                            }
+                        }
+                        
+                        matterInfoNew.UserIds = userIds;
+                        Conflict conflictNew = new Conflict();
+                        conflictNew.Identified = matterInfo.Matter.Conflict.Identified;
+                        Matter matterNew = new Matter()
+                        {
+                            Id = matterInfo.Matter.Id,
+                            Name = matterInfo.Matter.Name,
+                            Description = matterInfo.Matter.Description,
+                            MatterGuid = matterInfo.Matter.MatterGuid,
+                            Conflict = conflictNew,
+                            
+                            
+                        };
+                        matterInfoNew.EditMode = matterInfo.EditMode;
+                        matterInfoNew.Client = matterInfo.Client;
+                        var roles = new List<String>();
+                        string role = matterInfo.Matter.Roles[i];
+                        roles.Add(role);
+                        matterNew.Roles = roles;
+
+
+                        var permissions = new List<String>();
+                        string permission = matterInfo.Matter.Permissions[i];
+                        permissions.Add(permission);
+                        matterNew.Permissions = permissions;
+
+                        var assignUserEmails = new List<IList<string>>();
+                        var userEmails = new List<string>();
+                        foreach (var assignUserEmail in matterInfo.Matter.AssignUserEmails[i])
+                        {
+                            userEmails.Add(assignUserEmail);
+                        }
+                        assignUserEmails.Add(userEmails);
+                        matterNew.AssignUserEmails = assignUserEmails;
+
+                        var assignUserNames = new List<IList<string>>();
+                        var userNames = new List<string>();
+                        foreach (var assignUserName in matterInfo.Matter.AssignUserNames[i])
+                        {
+                            userNames.Add(assignUserName);
+                        }
+                        assignUserNames.Add(userNames);
+                        matterNew.AssignUserNames = assignUserNames;
+
+                        matterInfoNew.Matter = matterNew;
+                        MatterDetails matterDetailsNew = new MatterDetails();
+                        if (!string.IsNullOrEmpty(matterInfo.MatterDetails.ResponsibleAttorney))
+                        {
+                            matterDetailsNew.ResponsibleAttorney = matterInfo.MatterDetails.ResponsibleAttorney.Split(';')[i];
+                        }
+                        if (!string.IsNullOrEmpty(matterInfo.MatterDetails.ResponsibleAttorneyEmail))
+                        {
+                            matterDetailsNew.ResponsibleAttorneyEmail = matterInfo.MatterDetails.ResponsibleAttorneyEmail.Split(';')[i];
+                        }
+                        matterDetailsNew.TeamMembers = matterNew.AssignUserNames[0][0];
+                        matterDetailsNew.UploadBlockedUsers = matterInfo.MatterDetails.UploadBlockedUsers;
+                        matterInfoNew.MatterDetails = matterDetailsNew;
+                        //Share the matter to external user by sending the notification
+                        externalSharing.ShareMatter(matterInfoNew);
+                    }
+                }
+                
 
                 if (matterMetadata.MatterProvisionFlags.SendEmailFlag)
                 {
@@ -1214,9 +1293,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 for (int k = 0; k < itemsToRemoveAttorneys.Count; k++)
                 {
-                    finalResponsibleAttorneysEmailList.RemoveAt(itemsToRemoveAttorneys[k]);
-                    finalResponsibleAttorneysUsersList.RemoveAt(itemsToRemoveAttorneys[k]);
+                    finalResponsibleAttorneysEmailList[k] = string.Empty ;
+                    finalResponsibleAttorneysUsersList[k] = string.Empty;
                 }
+                finalResponsibleAttorneysEmailList = finalResponsibleAttorneysEmailList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                finalResponsibleAttorneysUsersList = finalResponsibleAttorneysUsersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
             }
 
             l = 0;
@@ -1237,10 +1318,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 for (int k = 0; k < itemsToRemove.Count; k++)
                 {
-                    finalMatterPermissionsList.RemoveAt(itemsToRemove[k]);
-                    finalMatterRolesList.RemoveAt(itemsToRemove[k]);                    
-                    finalTeamMembersList.RemoveAt(itemsToRemove[k]);                    
+                    finalMatterPermissionsList[itemsToRemove[k]] = string.Empty;
+                    finalMatterRolesList[itemsToRemove[k]] = string.Empty; ;
+                    finalTeamMembersList[itemsToRemove[k]] = string.Empty; ;                    
                 }
+
+                finalMatterPermissionsList = finalMatterPermissionsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                finalMatterRolesList = finalMatterRolesList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                finalTeamMembersList = finalTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                 var finalTeamMembersArray = finalTeamMembersList.ToArray();
                 var finalMatterPermissionsArray = finalMatterPermissionsList.ToArray();
                 var finalMatterRolesArray = finalMatterRolesList.ToArray();
@@ -1346,9 +1431,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 for (int k = 0; k < itemsToRemoveAttorneys.Count; k++)
                 {
-                    finalResponsibleAttorneysUsersList.RemoveAt(itemsToRemoveAttorneys[k]);
-                    finalResponsibleAttorneysEmailList.RemoveAt(itemsToRemoveAttorneys[k]);                   
+                    finalResponsibleAttorneysUsersList[itemsToRemoveAttorneys[k]] = string.Empty;
+                    finalResponsibleAttorneysEmailList[itemsToRemoveAttorneys[k]] = string.Empty;                   
                 }
+                finalResponsibleAttorneysUsersList = finalResponsibleAttorneysUsersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                finalResponsibleAttorneysEmailList = finalResponsibleAttorneysEmailList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
             }
             itemsToRemove.Clear();
             l = 0;
@@ -1366,13 +1453,21 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 for (int k = 0; k < itemsToRemove.Count; k++)
                 {
-                    matter.Permissions.RemoveAt(itemsToRemove[k]);
-                    matter.Roles.RemoveAt(itemsToRemove[k]);
-                    matter.AssignUserEmails.RemoveAt(itemsToRemove[k]);
-                    matter.AssignUserNames.RemoveAt(itemsToRemove[k]);
-                    finalTeamMembersList.RemoveAt(itemsToRemove[k]);                    
+                    matter.Permissions[itemsToRemove[k]] = string.Empty ;
+                    matter.Roles[itemsToRemove[k]] = string.Empty;
+                    matter.AssignUserEmails[itemsToRemove[k]] = null;
+                    matter.AssignUserNames[itemsToRemove[k]] = null;
+                    finalTeamMembersList[itemsToRemove[k]] = string.Empty;                 
                 }
             }
+
+            matter.Permissions = matter.Permissions.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+            matter.Roles = matter.Roles.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+            finalTeamMembersList = finalTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+            matter.AssignUserEmails = matter.AssignUserEmails.Where(s => s!=null).ToList();
+            matter.AssignUserNames = matter.AssignUserNames.Where(s => s != null).ToList();
+
+
             matterDetails.ResponsibleAttorneyEmail= string.Empty;
             matterDetails.ResponsibleAttorney= string.Empty;
             matterDetails.TeamMembers = string.Join(";;", finalTeamMembersList.ToArray());

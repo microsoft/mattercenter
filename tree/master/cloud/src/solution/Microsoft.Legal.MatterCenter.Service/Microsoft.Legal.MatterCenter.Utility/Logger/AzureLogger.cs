@@ -29,6 +29,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
             tableEntityObj.MethodName = methodName;
             string date = DateTime.Now.ToUniversalTime().ToString(logTables.AzureRowKeyDateFormat, CultureInfo.InvariantCulture);
             tableEntityObj.RowKey = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", date, Guid.NewGuid().ToString());
+            tableEntityObj.Stacktrace = exception.StackTrace;
             tableEntityObj.LogMessage = exception.Message;
             tableEntityObj.ErrorCode = exception.HResult;
             tableEntityObj.LineNumber = lineNumber;
@@ -78,5 +79,12 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// The line number.
         /// </value>
         public int LineNumber { get; set; }
+        /// <summary>
+        /// Gets or sets the line number.
+        /// </summary>
+        /// <value>
+        /// The line number.
+        /// </value>
+        public string Stacktrace { get; set; }
     }
 }
