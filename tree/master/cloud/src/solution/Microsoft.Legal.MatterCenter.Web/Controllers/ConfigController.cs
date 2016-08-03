@@ -40,19 +40,24 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;
         private IConfigRepository configRepository;
         private GeneralSettings generalSettings;
-        private ICustomLogger customLogger;
+        private UIConfigSettings uiConfigSettings;
         private LogTables logTables;
+        private ICustomLogger customLogger;
         private IHostingEnvironment hostingEnvironment;
         /// <summary>
         /// Constructor where all the required dependencies are injected
         /// </summary>
         /// <param name="errorSettings"></param>
         /// <param name="generalSettings"></param>
+        /// <param name="uiConfigSettings"></param>
         /// <param name="configRepository"></param>
-        ///    /// <param name="hostingEnvironment"></param>
+        /// <param name="logTables"></param>
+        /// <param name="hostingEnvironment"></param>
         /// <param name="matterCenterServiceFunctions"></param>
         public ConfigController(IOptions<ErrorSettings> errorSettings,
             IOptions<GeneralSettings> generalSettings,
+            IOptions<UIConfigSettings> uiConfigSettings,
+            IOptions<LogTables> logTables,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IConfigRepository configRepository,
             IHostingEnvironment hostingEnvironment
@@ -62,6 +67,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.configRepository = configRepository;
             this.generalSettings = generalSettings.Value;
+            this.uiConfigSettings = uiConfigSettings.Value;
             this.hostingEnvironment = hostingEnvironment;
         }
 
@@ -171,7 +177,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
             foreach (DynamicTableEntity dt in configs)
             {
-                bool hasKey = dt.Properties.TryGetValue("ConfigGroup", out value);
+                bool hasKey = dt.Properties.TryGetValue(uiConfigSettings.ConfigGroup, out value);
                 if (hasKey)
                 {
                     if (!configGroup.Contains(value.StringValue))
@@ -190,12 +196,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
                 foreach (DynamicTableEntity dt in configs)
                 {
-                    bool scr = dt.Properties.TryGetValue("ConfigGroup", out value);
+                    bool scr = dt.Properties.TryGetValue(uiConfigSettings.ConfigGroup, out value);
 
                     if (str.ToLower().Equals(value.StringValue.ToLower()))
                     {
-                        bool hasKey = dt.Properties.TryGetValue("Key", out key);
-                        bool hasValue = dt.Properties.TryGetValue("Value", out value);
+                        bool hasKey = dt.Properties.TryGetValue(uiConfigSettings.Key, out key);
+                        bool hasValue = dt.Properties.TryGetValue(uiConfigSettings.Value, out value);
 
                         if (hasKey && hasValue)
                         {

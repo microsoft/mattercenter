@@ -52,15 +52,23 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
             var matterCenterServiceFunctionsMoq = new Moq.Mock<IMatterCenterServiceFunctions>();
                
-            var logTablesMoq = new Moq.Mock<IOptions<LogTables>>();
+            var uiConfigsMoq = new Moq.Mock<IOptions<UIConfigSettings>>();
+            uiConfigsMoq.SetupGet(t => t.Value.MatterCenterConfiguration).Returns("MatterCenterConfiguration");
+            uiConfigsMoq.SetupGet(p => p.Value.Partitionkey).Returns("MatterCenterConfig");
+            uiConfigsMoq.SetupGet(c => c.Value.ConfigGroup).Returns("ConfigGroup");
+            uiConfigsMoq.SetupGet(k => k.Value.Key).Returns("Key");
+            uiConfigsMoq.SetupGet(v => v.Value.Value).Returns("Value");
 
-            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, logTablesMoq.Object);
+
+            var logTableMoq = new Moq.Mock<IOptions<LogTables>>();
+
+            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, uiConfigsMoq.Object);
 
             generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
 
 
-            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
+            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, uiConfigsMoq.Object, logTableMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
 
             var result = controller.Get("");
 
@@ -85,14 +93,21 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
             var matterCenterServiceFunctionsMoq = new Moq.Mock<IMatterCenterServiceFunctions>();
 
-            var logTablesMoq = new Moq.Mock<IOptions<LogTables>>();
+            var uiConfigsMoq = new Moq.Mock<IOptions<UIConfigSettings>>();
+            uiConfigsMoq.SetupGet(t => t.Value.MatterCenterConfiguration).Returns("MatterCenterConfiguration");
+            uiConfigsMoq.SetupGet(p => p.Value.Partitionkey).Returns("MatterCenterConfig");
+            uiConfigsMoq.SetupGet(c => c.Value.ConfigGroup).Returns("ConfigGroup");
+            uiConfigsMoq.SetupGet(k => k.Value.Key).Returns("Key");
+            uiConfigsMoq.SetupGet(v => v.Value.Value).Returns("Value");
 
-            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, logTablesMoq.Object);
+            var logTableMoq = new Moq.Mock<IOptions<LogTables>>();
+
+            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, uiConfigsMoq.Object);
 
             generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
 
-            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
+            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, uiConfigsMoq.Object, logTableMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
 
             var result = controller.Get("Home");
 
@@ -117,14 +132,21 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
             var matterCenterServiceFunctionsMoq = new Moq.Mock<IMatterCenterServiceFunctions>();
 
-            var logTablesMoq = new Moq.Mock<IOptions<LogTables>>();
+            var uiConfigsMoq = new Moq.Mock<IOptions<UIConfigSettings>>();
+            uiConfigsMoq.SetupGet(t => t.Value.MatterCenterConfiguration).Returns("MatterCenterConfiguration");
+            uiConfigsMoq.SetupGet(p => p.Value.Partitionkey).Returns("MatterCenterConfig");
+            uiConfigsMoq.SetupGet(c => c.Value.ConfigGroup).Returns("ConfigGroup");
+            uiConfigsMoq.SetupGet(k => k.Value.Key).Returns("Key");
+            uiConfigsMoq.SetupGet(v => v.Value.Value).Returns("Value");
 
-            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, logTablesMoq.Object);
+            var logTableMoq = new Moq.Mock<IOptions<LogTables>>();
+
+            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, uiConfigsMoq.Object);
 
             generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
 
-            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
+            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, uiConfigsMoq.Object, logTableMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
 
 
             var configsStr = (@"{""Home"": {
@@ -161,7 +183,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             GeneralSettings genS = new GeneralSettings();
             genS.CloudStorageConnectionString  =  "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
             var m = new Moq.Mock<IOptions<GeneralSettings>>();
-            var l = new Moq.Mock<IOptions<LogTables>>();
+            var l = new Moq.Mock<IOptions<UIConfigSettings>>();
             
             m.SetupGet(g => g.Value).Returns(genS);
             m.SetupAllProperties();

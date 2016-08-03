@@ -18,16 +18,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
     {
 
         private GeneralSettings generalSettings;
-        private LogTables logTables;
+        private UIConfigSettings configSettings;
         private IConfigRepository config;
 
 
         public ConfigRepository(
             IOptions<GeneralSettings> generalSettings,
-            IOptions<LogTables> logTables)
+              IOptions<UIConfigSettings> configSettings)
         {
             this.generalSettings = generalSettings.Value;
-            this.logTables = logTables.Value;
+            this.configSettings = configSettings.Value;
         }
 
 
@@ -61,24 +61,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
             var entities = new List<DynamicTableEntity>();
             try
             {
-                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(generalSettings.CloudStorageConnectionString);
-                CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
-                tableClient.DefaultRequestOptions = new TableRequestOptions
-                {
-                    PayloadFormat = TablePayloadFormat.JsonNoMetadata
-                };
-                // Retrieve a reference to the table.
-                CloudTable table = tableClient.GetTableReference("MatterCenterConfiguration");
+
+                CloudTable table = GetTable();
                 TableQuery<DynamicTableEntity> query = new TableQuery<DynamicTableEntity>();
 
                 if (filter == "")
                 {
                     // Construct the queryConfigGroup operation for all  entities 
-                    query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, "MatterCenterConfig"));
+                    query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, configSettings.Partitionkey));
                 }
                 else
                 {
-                    query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition("ConfigGroup", QueryComparisons.Equal, filter));
+                    query = new TableQuery<DynamicTableEntity>().Where(TableQuery.GenerateFilterCondition(configSettings.ConfigGroup, QueryComparisons.Equal, filter));
                 }
 
                 var queryResult = table.ExecuteQuery(query);
@@ -90,6 +84,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 throw;
             }
+
             return entities;
         }
 
@@ -102,14 +97,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             try
             {
-                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(generalSettings.CloudStorageConnectionString);
-                CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
-                tableClient.DefaultRequestOptions = new TableRequestOptions
-                {
-                    PayloadFormat = TablePayloadFormat.JsonNoMetadata
-                };
                 // Retrieve a reference to the table.
-                CloudTable table = tableClient.GetTableReference("MatterCenterConfiguration");
+                CloudTable table = GetTable();
           
                 TableBatchOperation batchOperation = new TableBatchOperation();
 
@@ -130,9 +119,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     {                 
                         TableQuery<DynamicTableEntity> entityQuery = new TableQuery<DynamicTableEntity>().Where(
                             TableQuery.CombineFilters(
-                                TableQuery.GenerateFilterCondition("ConfigGroup", QueryComparisons.Equal.ToLower(), entry.Key),
+                                TableQuery.GenerateFilterCondition(configSettings.ConfigGroup, QueryComparisons.Equal.ToLower(), entry.Key),
                                 TableOperators.And,
-                                TableQuery.GenerateFilterCondition("Key", QueryComparisons.Equal, keyValue.Key)));
+                                TableQuery.GenerateFilterCondition(configSettings.Key, QueryComparisons.Equal, keyValue.Key)));
 
                        IEnumerable<DynamicTableEntity> queryResult = table.ExecuteQuery(entityQuery);
                        
@@ -140,9 +129,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         {
                             foreach (DynamicTableEntity entity in queryResult)                         
                             {
-                                entity.Properties["ConfigGroup"].StringValue = entry.Key;
-                                entity.Properties["Key"].StringValue = keyValue.Key;
-                                entity.Properties["Value"].StringValue = keyValue.Value;
+                                entity.Properties[configSettings.ConfigGroup].StringValue = entry.Key;
+                                entity.Properties[configSettings.Key].StringValue = keyValue.Key;
+                                entity.Properties[configSettings.Value].StringValue = keyValue.Value;
                                 batchOperation.Merge(entity);    
                             }
                         }
@@ -170,17 +159,31 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private DynamicTableEntity CreateEntity(KeyValuePair<string, Dictionary<string, string>> entry, KeyValuePair<string, string> keyValue)
         {
             DynamicTableEntity config = new DynamicTableEntity();
-            config.PartitionKey = "MatterCenterConfig";
+            config.PartitionKey = configSettings.Partitionkey;
             config.RowKey = string.Format(CultureInfo.InvariantCulture, Guid.NewGuid().ToString());
-            config.Properties.Add("ConfigGroup", new EntityProperty(entry.Key));
-            config.Properties.Add("Key", new EntityProperty(keyValue.Key));
-            config.Properties.Add("Value", new EntityProperty(keyValue.Value));
+            config.Properties.Add(configSettings.ConfigGroup, new EntityProperty(entry.Key));
+            config.Properties.Add(configSettings.Key, new EntityProperty(keyValue.Key));
+            config.Properties.Add(configSettings.Value, new EntityProperty(keyValue.Value));
 
             return config;
         }
 
-    
-   }
+        private CloudTable GetTable()
+        {
+
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(generalSettings.CloudStorageConnectionString);
+            CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
+            tableClient.DefaultRequestOptions = new TableRequestOptions
+            {
+                PayloadFormat = TablePayloadFormat.JsonNoMetadata
+            };
+            // Retrieve a reference to the table.
+            CloudTable table = tableClient.GetTableReference(configSettings.MatterCenterConfiguration);
+
+            return table;
+        }
+
+    }
 
    
 }
