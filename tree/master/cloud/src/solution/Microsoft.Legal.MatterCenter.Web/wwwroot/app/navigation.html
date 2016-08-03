@@ -18,7 +18,7 @@
         </div>
         <div class="AppMenuFlyout ms-shadow">
             <div class="AppMenuFlyoutPriLinks">
-                <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="Home"><span class="AppFlyoutLinksText">Home</span></a>
+                <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.navigationContent.HomeMenuText}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.HomeMenuText}}</span></a>
                 <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="Search {{vm.navigationContent.Type1| lowercase}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.Type1}}</span></a>
                 <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="Search {{vm.navigationContent.Type2| lowercase}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.Type2}}</span></a>
             </div>
@@ -45,7 +45,7 @@
     <header class="WelcomeBar ms-bg-color-neutralLighterAlt" ng-class="{ 'RemoveWelcomeBar': vm.welcomeheader}">
         <span class="ms-font-s" ng-hide="vm.welcomeheader">
             Welcome to {{vm.navigationContent.Name}} Center! Upload, share, and save your documents here.
-            <a class="LearnMoreLink" ng-href="{{vm.learnmore}}" target="_blank" title="Learn more about {{vm.navigationContent.Name}} Center">Learn more</a> or <a class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">dismiss</a>
+            <a class="LearnMoreLink" ng-href="{{vm.navigationContent.LearnMoreLink}}" target="_blank" title="Learn more about {{vm.navigationContent.Name}} Center">{{vm.navigationContent.LearnMoreText}}</a> or <a class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">{{vm.navigationContent.Dismiss}}</a>
         </span>
     </header>
     <!--     </div> -->
@@ -80,28 +80,28 @@
         </div>
         <!--   <div class="col-xs-12 col-md-6"> -->
         <div class="RightLinkContainer">
-            <div class="SecondaryLinkContainer UploadAttachments" title="Upload documents to a {{vm.navigationContent.Name|lowercase}}">
+            <div class="SecondaryLinkContainer UploadAttachments" title="{{vm.navigationContent.AttachmentTitle}}">
                 <a class="UploadAttachmentsLink" ui-sref='mc.matters()'>
-                    <img class="SecondaryLinksImg" src="Images/MC_Upload.png" alt="Upload attachments" />
+                    <img class="SecondaryLinksImg" src="Images/MC_Upload.png" alt="{{vm.navigationContent.AttachmentTitle}}" />
                 </a>
                 <a class="UploadAttachmentsLink" ui-sref='mc.matters()'>
-                    <span class="SecondaryLinksText">Upload attachments</span>
+                    <span class="SecondaryLinksText">{{vm.navigationContent.Attachment}}</span>
                 </a>
             </div>
-            <div class="SecondaryLinkContainer CreateMatter" runat="server" id="CreateMatterLink" title="Create a new {{vm.navigationContent.Name|lowercase}} site">
+            <div class="SecondaryLinkContainer CreateMatter" runat="server" id="CreateMatterLink" title="{{vm.navigationContent.CreationContentTitle}}">
                 <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
-                    <img class="SecondaryLinksImg" src="Images/MC_Create_a_matter.png" alt="Create a new {{vm.navigationContent.Name|lowercase}}" />
+                    <img class="SecondaryLinksImg" src="Images/MC_Create_a_matter.png" alt="{{vm.navigationContent.CreationContentTitle}}" />
                 </a>
                 <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
-                    <span class="SecondaryLinksText">Create a new {{vm.navigationContent.Name|lowercase}}</span>
+                    <span class="SecondaryLinksText">{{vm.navigationContent.CreationContent}}</span>
                 </a>
             </div>
-            <div class="SecondaryLinkContainer MatterDashboard" title="Go to the web home page">
+            <div class="SecondaryLinkContainer MatterDashboard" title="{{vm.navigationContent.HomeLinkContentTitle}}">
                 <a class="MatterDashboardLink" href="{{vm.SPOHomePage}}" target="_blank">
-                    <img class="SecondaryLinksImg" src="Images/MC_Go_to_dashboard.png" alt="Go to {{vm.navigationContent.Name}} Center Home" />
+                    <img class="SecondaryLinksImg" src="Images/MC_Go_to_dashboard.png" alt="{{vm.navigationContent.HomeLinkContentTitle}}" />
                 </a>
                 <a class="MatterDashboardLink" href="{{vm.SPOHomePage}}" target="_blank">
-                    <span class="SecondaryLinksText">Go to {{vm.navigationContent.Name}} Center Home</span>
+                    <span class="SecondaryLinksText">{{vm.navigationContent.HomeLinkContent}}</span>
                 </a>
             </div>
         </div>
@@ -109,7 +109,7 @@
     </div>
 </div>
 <footer class="marleft10" title="Write an email to Support">
-    <span class="ms-font-m ms-font-weight-semilight">Questions? Contact <a href="mailto:lcaweb2@microsoft.com?subject={{vm.emailsubject}}" class="emailLink">{{vm.navigationContent.Name}} Center Support</a></span>
+    <span class="ms-font-m ms-font-weight-semilight">Questions? Contact <a href="{{vm.navigationContent.SupportLinkUrl}}" class="emailLink">{{vm.navigationContent.SuppotLinkText}}</a></span>
 </footer>
 <div id="HeaderPlaceHolderContent">
     <span class="AppLogoContainer hide" title="{{vm.navigationContent.Name}} Center home">

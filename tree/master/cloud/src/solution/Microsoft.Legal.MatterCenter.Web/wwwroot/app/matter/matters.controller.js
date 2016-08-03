@@ -1156,6 +1156,7 @@
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
+                vm.responseNull = false;
                 vm.pagenumber = 1;
                 searchRequest.SearchObject.PageNumber = vm.pagenumber;
                 searchRequest.SearchObject.ItemsPerPage = 17;
@@ -1778,7 +1779,7 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyOpenDate + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
                                 vm.OpenDateSort = "desc"; vm.sortby = "asc";
@@ -1788,7 +1789,7 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyOpenDate + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 vm.FilterByType();
                                 vm.OpenDateSort = "asc"; vm.sortby = "desc";
