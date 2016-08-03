@@ -64,26 +64,26 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             bool isEditMode = matterInformation.EditMode;
             ClientContext clientContext = null;
             IEnumerable<RoleAssignment> userPermissionOnLibrary = null;
-            GenericResponseVM genericResponse = null;
+            //GenericResponseVM genericResponse = null;
             try
             {
                 clientContext = new ClientContext(matterInformation.Client.Url);
                 clientContext.Credentials = new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], securePassword);
 
-                if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
-                {
-                    if (Convert.ToBoolean(matter.Conflict.Identified, System.Globalization.CultureInfo.InvariantCulture))
-                    {
-                        genericResponse = CheckSecurityGroupInTeamMembers(clientContext, matter, matterInformation.UserIds);
-                    }
-                }
-                else
-                {
-                    //genericResponse = string.Format(System.Globalization.CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, TextConstants.IncorrectInputConflictIdentifiedCode, TextConstants.IncorrectInputConflictIdentifiedMessage);
-                    return;
-                }
-                if (genericResponse == null)
-                {
+                //if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
+                //{
+                //    if (Convert.ToBoolean(matter.Conflict.Identified, System.Globalization.CultureInfo.InvariantCulture))
+                //    {
+                //        genericResponse = CheckSecurityGroupInTeamMembers(clientContext, matter, matterInformation.UserIds);
+                //    }
+                //}
+                //else
+                //{
+                //    //genericResponse = string.Format(System.Globalization.CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, TextConstants.IncorrectInputConflictIdentifiedCode, TextConstants.IncorrectInputConflictIdentifiedMessage);
+                //    return;
+                //}
+                //if (genericResponse == null)
+                //{
                     PropertyValues matterStampedProperties = SPList.GetListProperties(clientContext, matter.Name);
                     loggedInUserName = SPList.GetLoggedInUserDetails(clientContext).Name;
                     // Get matter library current permissions
@@ -117,8 +117,8 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                     }
                     // Update matter metadata
                     result = UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode, configuration);
-                }
-                
+                //}
+
             }
             catch (Exception ex)
             {
