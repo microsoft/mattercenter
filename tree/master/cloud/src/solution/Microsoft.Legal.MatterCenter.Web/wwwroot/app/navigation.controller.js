@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     'use strict';
 
     angular.module("matterMain")
@@ -31,7 +31,7 @@
             vm.emailsubject = "CELA Project Center Feedback and Support request";
 
             //#region dynamic content
-            vm.navigationcontent = uiconfigs.Navigation;
+            vm.navigationContent = uiconfigs.Navigation;
             vm.learnmore = configs.uri.MainURL;
             //#endregion
         }]);
