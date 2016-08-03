@@ -11,13 +11,17 @@
         documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache, $window, $q, $filter, commonFunctions) {
         var vm = this;
         vm.selected = undefined;
+        //#region dynamic content
+        vm.navigationContent = uiconfigs.Navigation;
+        vm.configSearchContent = configs.search;
+        //#end region
         vm.documentname = 'All Documents'
         vm.documentid = 1;
         vm.documentsdrop = false;
         vm.docdropinner = true;
         $rootScope.pageIndex = "2";
         $rootScope.bodyclass = "bodymain";
-        $rootScope.profileClass="";
+        $rootScope.profileClass = "";
         // Onload show ui grid and hide error div
         //start
         vm.divuigrid = true;
@@ -103,15 +107,15 @@
         vm.gridOptions = {
             infiniteScrollDown: true,
             enableHorizontalScrollbar: 0,
-            enableVerticalScrollbar: 0,
+            enableVerticalScrollbar: 1,
             enableGridMenu: true,
             enableRowHeaderSelection: false,
             enableRowSelection: true,
             enableSelectAll: true,
             multiSelect: true,
             columnDefs: [
-                { field: 'checker', displayName: 'checked', width: '18', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
-                { field: 'documentName', displayName: 'Document', width: '280', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
+                { field: 'checker', displayName: 'checked', width: '20', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html', enableColumnMenu: false },
+                { field: 'documentName', displayName: 'Document', width: '278', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
                 { field: 'documentClient', displayName: 'Client', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '200', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
                 { field: 'documentClientId', displayName: 'Client.Matter ID', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentClientId}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
                 { field: 'documentModifiedDate', displayName: 'Modified Date', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
@@ -140,12 +144,16 @@
                     isOpenedInOutlook();
 
                 });
-                $scope.gridApi.core.on.sortChanged($scope, vm.sortChangedDocument);
-                vm.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
-                //$scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFunc);
+                $scope.gridApi.core.on.sortChanged($scope, $scope.sortChangedDocument);
+                $scope.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
+                $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFuncScroll);
                 gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
                 vm.setColumns();
             }
+        };
+
+        vm.watchFuncScroll = function () {
+
         };
 
 
@@ -226,7 +234,6 @@
                         vm.lazyloader = true;
                     }
                     promise.resolve();
-
                     $scope.gridApi.infiniteScroll.dataLoaded();
                     if (vm.checker) {
                         vm.toggleCheckerAll(vm.checker);
@@ -234,6 +241,7 @@
                 });
             } else {
                 vm.lazyloader = true;
+                $scope.gridApi.infiniteScroll.dataLoaded();
             }
             return promise.promise;
         }
@@ -464,7 +472,7 @@
                 },
                 Sort:
                         {
-                            ByProperty: 'MCModifiedDate',
+                            ByProperty: '' + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + '',
                             Direction: 1
                         }
             }
@@ -473,12 +481,12 @@
         vm.searchDocument = function (val) {
             var finalSearchText = "";
             if (val != "") {
-                finalSearchText = "(FileName:" + val + "* OR dlcDocIdOWSText:" + val + "*)"
+                finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":" + val + "* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":" + val + "*)"
             }
             vm.pagenumber = 1;
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
             searchRequest.SearchObject.SearchTerm = finalSearchText;
-            searchRequest.SearchObject.Sort.ByProperty = "FileName";
+            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
             searchRequest.SearchObject.Sort.Direction = 0;
             return documentResource.get(searchRequest).$promise;
         }
@@ -495,13 +503,20 @@
             if (vm.selected != "") {
                 if (-1 !== vm.selected.indexOf(":")) {
                     finalSearchText = commonFunctions.searchFilter(vm.selected);
-                } else {
-                    finalSearchText = '("' + vm.selected + '*" OR FileName:"' + vm.selected + '*" OR dlcDocIdOWSText:"' + vm.selected + '*" OR MCDocumentClientName:"' + vm.selected + '*")';
+                } else if (-1 !== vm.selected.indexOf("(")) {
+                    searchToText = vm.selected.replace("(", ",");
+                    searchToText = searchToText.replace(")", "");
+                    var firstText = searchToText.split(',')[0];
+                    var secondText = searchToText.split(',')[1];
+                    var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':"' + firstText.trim() + '" OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + firstText.trim() + '"OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':"' + firstText.trim() + '")';
+                }
+                else {
+                    finalSearchText = '("' + vm.selected + '*" OR ' + vm.configSearchContent.ManagedPropertyFileName + ':"' + vm.selected + '*" OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + vm.selected + '*" OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':"' + vm.selected + '*")';
                 }
             }
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
             searchRequest.SearchObject.SearchTerm = finalSearchText;
-            searchRequest.SearchObject.Sort.ByProperty = "FileName";
+            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
             searchRequest.SearchObject.Sort.Direction = 0;
             get(searchRequest, function (response) {
                 if (response == "") {
@@ -514,7 +529,7 @@
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
-                    searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                 }
             });
         }
@@ -532,20 +547,20 @@
                 vm.divuigrid = false;
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Sort.Direction = 1;
-                if (property == "FileName") {
-                    searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                if (property == "" + vm.configSearchContent.ManagedPropertyFileName + "") {
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                     searchRequest.SearchObject.Filters.Name = term;
                     vm.documentfilter = true;
                 }
-                else if (property == "MCDocumentClientName") {
-                    searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                else if (property == "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "") {
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                     searchRequest.SearchObject.Filters.ClientName = term;
                     vm.clientfilter = true;
                 }
-                else if (property == "MSITOfficeAuthor") {
+                else if (property == "" + vm.configSearchContent.ManagedPropertyAuthor + "") {
                     searchRequest.SearchObject.Filters.DocumentAuthor = term;
                     vm.authorfilter = true;
-                } else if (property == "MCCheckoutUser") {
+                } else if (property == "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "") {
                     searchRequest.SearchObject.Filters.DocumentCheckoutUsers = term;
                     vm.checkoutfilter = true;
                 }
@@ -604,7 +619,7 @@
                 searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
                 vm.createddatefilter = true;
             }
-            searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
             searchRequest.SearchObject.Sort.Direction = 1;
             get(searchRequest, function (response) {
                 if (response == "") {
@@ -629,6 +644,9 @@
             vm.documentheader = true;
             vm.documentdateheader = true;
             vm.lazyloader = false;
+            vm.nodata = false;
+            vm.pagenumber = 1;
+            searchRequest.SearchObject.PageNumber = vm.pagenumber;
             if (property == "Document") {
                 vm.searchTerm = "";
                 searchRequest.SearchObject.SearchTerm = "";
@@ -1029,9 +1047,9 @@
                     vm.divuigrid = true;
                     vm.nodata = false;
                     vm.gridOptions.data = response;
-                    if (!$scope.$$phase) {
-                        $scope.$apply();
-                    }
+                    //if (!$scope.$$phase) {
+                    //    $scope.$apply();
+                    //}
                 }
             });
         }
@@ -1052,9 +1070,11 @@
             }
         }
 
-        vm.sortChangedDocument = function (grid, sortColumns) {
+        $scope.sortChangedDocument = function (grid, sortColumns) {
             vm.divuigrid = false;
             vm.responseNull = false;
+            vm.gridOptions.data = [];
+            $scope.gridApi.infiniteScroll.resetScroll();
             if (sortColumns.length != 0) {
                 if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
                     if (sortColumns[0].sort != undefined) {
@@ -1062,24 +1082,24 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "FileName";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.FileNameSort = "desc";
                             vm.sortby = "asc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         } else {
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "FileName";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.FileNameSort = "asc";
                             vm.sortby = "desc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1092,25 +1112,25 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.DocumentClientSort = "desc";
                             vm.sortby = "asc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         }
                         else {
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientName";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.DocumentClientSort = "asc";
                             vm.sortby = "desc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1123,24 +1143,24 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientID";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientId + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.DocumentClientIDSort = "desc";
                             vm.sortby = "asc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         } else {
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MCDocumentClientID";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientId + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.DocumentClientIDSort = "asc";
                             vm.sortby = "desc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         }
 
                     } else {
@@ -1154,24 +1174,24 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.ModiFiedDateSort = "desc";
                             vm.sortby = "asc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         } else {
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.ModiFiedDateSort = "asc";
                             vm.sortby = "desc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         }
 
                     } else {
@@ -1185,24 +1205,24 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MSITOfficeAuthor";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.AuthorSort = "desc";
                             vm.sortby = "asc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         } else {
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MSITOfficeAuthor";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.AuthorSort = "asc";
                             vm.sortby = "desc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1215,24 +1235,24 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MCVersionNumber";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentVersion + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.VersionSort = "desc";
                             vm.sortby = "asc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         } else {
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MCVersionNumber";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentVersion + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.VersionSort = "asc";
                             vm.sortby = "desc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1245,24 +1265,24 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MCCheckoutUser";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.CheckoutSort = "desc";
                             vm.sortby = "asc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         } else {
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "MCCheckoutUser";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.CheckoutSort = "asc";
                             vm.sortby = "desc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1275,24 +1295,24 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "Created";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyCreated + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
                             vm.CreatedSort = "desc";
                             vm.sortby = "asc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         } else {
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "Created";
+                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyCreated + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
                             vm.CreatedSort = "asc";
                             vm.sortby = "desc";
                             vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            $interval(function () { vm.showSortExp(); }, 1500, 3);
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1300,8 +1320,10 @@
                     }
                 }
             } else {
+                vm.pagenumber = 1;
+                searchRequest.SearchObject.PageNumber = 1;
                 vm.lazyloader = false;
-                searchRequest.SearchObject.Sort.ByProperty = "FileName";
+                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
                 searchRequest.SearchObject.Sort.Direction = 0;
                 vm.FilterByType();
             }
@@ -1335,7 +1357,7 @@
                 searchToText = searchToText.replace(")", "")
                 var firstText = searchToText.split(',')[0]
                 var secondText = searchToText.split(',')[1]
-                var finalSearchText = '(FileName:"' + firstText.trim() + '" OR dlcDocIdOWSText:"' + firstText.trim() + '"OR MCDocumentClientName:"' + firstText.trim() + '")';
+                var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':"' + firstText.trim() + '" OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + firstText.trim() + '"OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':"' + firstText.trim() + '")';
             }
             searchRequest.SearchObject.SearchTerm = finalSearchText;
             searchRequest.SearchObject.Sort.Direction = 0;
@@ -1438,19 +1460,19 @@
             angular.element('.documentheader').css({ 'top': top, 'left': left });
             angular.element('.documentheaderdates').css({ 'top': top, 'left': left });
             if (name == "Document") {
-                vm.searchexp = "FileName";
+                vm.searchexp = "" + vm.configSearchContent.ManagedPropertyFileName + "";
                 vm.filtername = "Document";
             }
             if (name == "client") {
-                vm.searchexp = "MCDocumentClientName";
+                vm.searchexp = "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "";
                 vm.filtername = "Client";
             }
             if (name == "Author") {
-                vm.searchexp = "MSITOfficeAuthor";
+                vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
                 vm.filtername = "Author";
             }
             if (name == "checkout") {
-                vm.searchexp = "MCCheckoutUser";
+                vm.searchexp = "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "";
                 vm.filtername = "Checked out to";
             }
             if (name == "ModifiedDate") {

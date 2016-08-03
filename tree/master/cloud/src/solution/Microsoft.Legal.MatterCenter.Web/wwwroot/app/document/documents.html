@@ -71,7 +71,7 @@
 
     <div ng-show="vm.errorAttachDocument" class="errorAttachDocument">
         <img title="Warning" class="warningMessageIcon" src="../images/warning-message.png" alt="Warning icon">
-        <div class="warningMessageText" title=" {{vm.warningMessageText}}"> {{vm.warningMessageText}}</div>
+        <div class="warningMessageText" title="{{vm.warningMessageText}}"> {{vm.warningMessageText}}</div>
     </div>
     <div class="row title">
         <div class="col-sm-12" id="gridViewPageHeaderContainer">
@@ -88,7 +88,7 @@
             <div class="warningPopUpContainer">
                 <div class="attachedSuccessPopUp" ng-if="vm.showSuccessAttachments">
                     <div class="warningPopUpDetails">Documents successfully attached.</div>
-                    <div title="Close" class="warningPopUpCloseIconContainer" ng-click="vm.closeNotification()" >Close</div>
+                    <div title="Close" class="warningPopUpCloseIconContainer" ng-click="vm.closeNotification()">Close</div>
                 </div>
                 <div class="attachedProgressPopUp" ng-if="vm.showAttachmentProgress">
                     <div class="progressPopUpDetails">
@@ -132,7 +132,7 @@
             <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
         </div>
     </div>
-
+    <onload sortdetails="{{vm.sortexp}}"></onload>
     <div class="documentheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentheader">
         <div class='input-group'>
             <input class='form-control' ng-if="vm.filtername=='Document'" ng-model='vm.searchTerm' placeholder='Search' />
@@ -140,10 +140,10 @@
             <input class='form-control' ng-if="vm.filtername=='Author'" ng-model='vm.authorSearchTerm' placeholder='Search' />
             <input class='form-control' ng-if="vm.filtername=='Checked out to'" ng-model='vm.checkedSearchTerm' placeholder='Search' />
             <div class='input-group-btn'>
-                <button type='button' ng-if="vm.filtername=='Document'" ng-click='vm.documentsearch("FileName:"+vm.searchTerm+"*(* OR FileName:* OR dlcDocIdOWSText:* OR MCDocumentClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername=='Client'" ng-click='vm.documentsearch("MCDocumentClientName:"+vm.clientSearchTerm+"*(* OR FileName:* OR dlcDocIdOWSText:* OR MCDocumentClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername=='Author'" ng-click='vm.documentsearch("MSITOfficeAuthor:"+vm.authorSearchTerm+"*(* OR FileName:* OR dlcDocIdOWSText:* OR MCDocumentClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername=='Checked out to'" ng-click='vm.documentsearch("MCCheckoutUser:"+vm.checkedSearchTerm+"*(* OR FileName:* OR dlcDocIdOWSText:* OR MCDocumentClientName:*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername=='Document'" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername=='Client'" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername=='Author'" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername=='Checked out to'" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
             </div>
         </div>
         <hr />
@@ -153,10 +153,10 @@
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
             <div id='filterResultsContainer'>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Document'" ng-repeat='document in vm.details|unique:"document.documentName"' ng-click='vm.documentsearch(document.documentName,"FileName",true)'>{{document.documentName}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Client'" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.documentsearch(client.documentClient,"MCDocumentClientName",true)'>{{client.documentClient}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Author'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentOwner,"MSITOfficeAuthor",true)'>{{matter.documentOwner}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Checked out to'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentCheckoutUser,"MCSubAreaofLaw",true)'>{{matter.documentCheckoutUser}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Document'" ng-repeat='document in vm.details|unique:"document.documentName"' ng-click='vm.documentsearch(document.documentName,""+vm.configSearchContent.ManagedPropertyFileName+"",true)'>{{document.documentName}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Client'" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.documentsearch(client.documentClient,""+vm.configSearchContent.ManagedPropertyDocumentClientName+"",true)'>{{client.documentClient}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Author'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)'>{{matter.documentOwner}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Checked out to'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentCheckoutUser,""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+"",true)'>{{matter.documentCheckoutUser}}</div>
                 <div title="There are no items that match this filter" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>There are no items that match this filter</span></div>
             </div>
 
