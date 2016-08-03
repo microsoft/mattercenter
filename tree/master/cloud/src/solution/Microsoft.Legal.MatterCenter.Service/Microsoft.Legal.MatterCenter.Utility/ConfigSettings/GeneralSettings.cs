@@ -32,5 +32,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string ExchangeServiceURL { get; set; }
         public virtual string CloudStorageConnectionString { get; set; }
         public string OrgDomainName { get; set; }
+        public string MatterCenterConfiguration { get; set; }
     }
 }

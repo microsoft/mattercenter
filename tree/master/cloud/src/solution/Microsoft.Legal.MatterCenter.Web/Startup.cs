@@ -252,6 +252,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         private void ConfigureSettings(IServiceCollection services)
         {
             services.Configure<GeneralSettings>(this.Configuration.GetSection("General"));
+            services.Configure<UIConfigSettings>(this.Configuration.GetSection("UIConfig"));
             services.Configure<TaxonomySettings>(this.Configuration.GetSection("Taxonomy"));
             services.Configure<MatterSettings>(this.Configuration.GetSection("Matter"));
             services.Configure<DocumentSettings>(this.Configuration.GetSection("Document"));

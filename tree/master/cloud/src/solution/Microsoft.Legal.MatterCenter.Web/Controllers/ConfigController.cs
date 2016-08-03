@@ -21,6 +21,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 
 #endregion
@@ -39,19 +40,24 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;
         private IConfigRepository configRepository;
         private GeneralSettings generalSettings;
-        private ICustomLogger customLogger;
+        private UIConfigSettings uiConfigSettings;
         private LogTables logTables;
+        private ICustomLogger customLogger;
         private IHostingEnvironment hostingEnvironment;
         /// <summary>
         /// Constructor where all the required dependencies are injected
         /// </summary>
         /// <param name="errorSettings"></param>
         /// <param name="generalSettings"></param>
+        /// <param name="uiConfigSettings"></param>
         /// <param name="configRepository"></param>
-        ///    /// <param name="hostingEnvironment"></param>
+        /// <param name="logTables"></param>
+        /// <param name="hostingEnvironment"></param>
         /// <param name="matterCenterServiceFunctions"></param>
         public ConfigController(IOptions<ErrorSettings> errorSettings,
             IOptions<GeneralSettings> generalSettings,
+            IOptions<UIConfigSettings> uiConfigSettings,
+            IOptions<LogTables> logTables,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IConfigRepository configRepository,
             IHostingEnvironment hostingEnvironment
@@ -61,6 +67,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             this.matterCenterServiceFunctions = matterCenterServiceFunctions;
             this.configRepository = configRepository;
             this.generalSettings = generalSettings.Value;
+            this.uiConfigSettings = uiConfigSettings.Value;
             this.hostingEnvironment = hostingEnvironment;
         }
 
@@ -86,7 +93,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                     {
                         Message = errorSettings.MessageNoInputs,
                         ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No filter is passed to fetch the pinned matters"
+                        Description = "No filter was passed"
                     };
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
@@ -106,6 +113,48 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             }
         }
 
+
+
+        /// <summary>
+        /// Returns all the entries for Configuring the UI
+        /// </summary>
+        /// <param name="configs">Request object for POST</param>   
+        [HttpPost("Insertupdate")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public async Task<IActionResult> InsertUpdate([FromBody] String configs)
+        {
+            string result = string.Empty;
+
+            try
+            {
+                #region Error Checking                
+                ErrorResponse errorResponse = null;
+
+                if (configs == null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No config Data was passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                }
+                #endregion
+
+
+                var configResultsVM = await configRepository.InsertUpdateConfigurationsAsync(configs);
+
+
+                return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
+
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
 
         private void CreateConfig(List<DynamicTableEntity> configs)
 
@@ -128,7 +177,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
             foreach (DynamicTableEntity dt in configs)
             {
-                bool hasKey = dt.Properties.TryGetValue("ConfigGroup", out value);
+                bool hasKey = dt.Properties.TryGetValue(uiConfigSettings.ConfigGroup, out value);
                 if (hasKey)
                 {
                     if (!configGroup.Contains(value.StringValue))
@@ -144,15 +193,15 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             {
                 jw.WritePropertyName(str);
                 jw.WriteStartObject();
-                               
+
                 foreach (DynamicTableEntity dt in configs)
-                {             
-                    bool scr = dt.Properties.TryGetValue("ConfigGroup", out value);
+                {
+                    bool scr = dt.Properties.TryGetValue(uiConfigSettings.ConfigGroup, out value);
 
                     if (str.ToLower().Equals(value.StringValue.ToLower()))
                     {
-                        bool hasKey = dt.Properties.TryGetValue("Key", out key);
-                        bool hasValue = dt.Properties.TryGetValue("Value", out value);
+                        bool hasKey = dt.Properties.TryGetValue(uiConfigSettings.Key, out key);
+                        bool hasValue = dt.Properties.TryGetValue(uiConfigSettings.Value, out value);
 
                         if (hasKey && hasValue)
                         {
@@ -172,4 +221,3 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         }
     }
 }
-
