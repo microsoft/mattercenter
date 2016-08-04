@@ -715,7 +715,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 IList<string> documentLibraryFolders = new List<string>();
                 Dictionary<string, bool> documentLibraryVersioning = new Dictionary<string, bool>();
                 Uri clientUrl = new Uri(client.Url);
-                string matterOneNoteTitle = GetOneNoteName(matter.Name);
+                string matterOneNoteTitle = TrimMatterNameForOneNoteTitle(matter.Name);
                 ListInformation listInformation = new ListInformation();
                 listInformation.name = matter.Name;
                 listInformation.description = matter.Description;
@@ -828,7 +828,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// </summary>
         /// <param name="matterName">Project name</param>
         /// <returns>OneNote title for provided Project name</returns>
-        internal static string GetOneNoteName(string matterName)
+        internal static string TrimMatterNameForOneNoteTitle(string matterName)
         {
             if (matterName.Length > ServiceConstants.Matter_ONE_NOTE_LENGTH)
             {
