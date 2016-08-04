@@ -164,8 +164,63 @@ textarea {
 
 #documentgrid .ui-grid-menu-mid, #mattergrid .ui-grid-menu-mid {
     position: relative;
-    left: 13px;
-    overflow: hidden;
+    left: 11px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 215px;
+    border:none;
+    max-height: 355px;
+}
+
+#documentgrid .ui-grid-menu .ui-grid-menu-inner, #mattergrid .ui-grid-menu .ui-grid-menu-inner {
+    background: #fff;
+    border: 1px solid #d1d1d1;
+    padding: 45px 30px 50px 20px;
+    box-shadow: 0px 0px 10px #888888;
+    width: 215px;
+    height: 355px;
+}
+
+    #documentgrid .ui-grid-menu .ui-grid-menu-inner ul li:not(:last-child) > button, #mattergrid .ui-grid-menu .ui-grid-menu-inner ul li:not(:last-child) > button {
+        border-bottom: none;
+        padding: 5px 0;
+        outline: none !important;
+        font-family: 'Segoe UI Web Regular','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+    }
+
+    #documentgrid .ui-grid-menu .ui-grid-menu-inner ul li :hover, #mattergrid .ui-grid-menu .ui-grid-menu-inner ul li :hover {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+#documentgrid .ui-grid-icon-ok, #mattergrid .ui-grid-icon-ok {
+    content: url(../images/checkbox-selected.png) !important;
+    top: 4px;
+    right: 5px;
+    position: relative;
+}
+
+#documentgrid .ui-grid-icon-cancel, #mattergrid .ui-grid-icon-cancel {
+    content: url(../images/checkbox.png) !important;
+    top: 4px;
+    right: 5px;
+    position: relative;
+}
+
+#documentgrid .ui-grid-menu-button .ui-grid-menu, #mattergrid .ui-grid-menu-button .ui-grid-menu {
+    right: 15px;
+    top: 29px;
+}
+
+#documentgrid .ui-grid-menu .ui-grid-menu-inner ul li button, #mattergrid .ui-grid-menu .ui-grid-menu-inner ul li button {
+    border-bottom: none;
+    padding: 5px 0;
+    outline: none !important;
+    font-family: 'Segoe UI Web Regular','Segoe UI','Segoe WP',Tahoma,Arial,sans-serif;
+    font-weight: 400;
+    font-size: 14px;
 }
 
 #documentgrid .ui-grid-menu-mid {
@@ -626,7 +681,7 @@ textarea {
 }
 
 #mainselect ul, #searchBarHolder ul {
-    margin: 3px 0px 0px 0px;
+    margin: 0;
     border-radius: 0px;
     padding: 0;
 }
@@ -827,4 +882,3 @@ textarea {
     padding-top: 13px !important;
     margin-bottom: 44px;
 }
-
