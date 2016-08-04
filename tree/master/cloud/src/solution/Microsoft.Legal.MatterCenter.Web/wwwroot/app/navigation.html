@@ -1,26 +1,15 @@
 <div id="MasterPageContainer" class="MasterPageContent">
-    <div class="commonAppSwitch  hide">
-        <img alt="Toggle app switcher menu" class="listMenuImage" src="Images/new-app-switcher-hamburger-icon-19X16-2b579a.png" />
-        <div class="appSwitchMenu hide">
-            <ul>
-                <li class="switchAppLink" data-attr="Search {{vm.navigationContent.Type1|lowercase}}">Search {{vm.navigationContent.Type1}}</li>
-                <li class="switchAppLink" data-attr="Search {{vm.navigationContent.Type2|lowercase}}">Search {{vm.navigationContent.Type2}}</li>
-                <li runat="server" id="ProvisionMatterLink" class="switchAppLink" data-attr="Provision Matters"></li>
-            </ul>
-        </div>
-        <div class='appSwitcherName selected'><span></span></div>
-    </div>
     <div class="AppHeader">
         <div class="AppSwitcherContainer" ng-click="vm.menuClick()">
-            <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="{{vm.navigationContent.Name}} Center menu" />
+            <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="{{vm.navigationContent.MenuCaptionTitle}}" />
             <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
-            <div class="MenuCaption"><span>menu</span></div>
+            <div class="MenuCaption"><span>{{vm.navigationContent.MenuCaption}}</span></div>
         </div>
         <div class="AppMenuFlyout ms-shadow">
             <div class="AppMenuFlyoutPriLinks">
                 <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.navigationContent.HomeMenuText}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.HomeMenuText}}</span></a>
-                <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="Search {{vm.navigationContent.Type1| lowercase}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.Type1}}</span></a>
-                <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="Search {{vm.navigationContent.Type2| lowercase}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.Type2}}</span></a>
+                <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.navigationContent.Type1Title}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.Type1}}</span></a>
+                <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.navigationContent.Type2Title}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.Type2}}</span></a>
             </div>
         </div>
         <div id="HeaderPlaceHolder" class="padlf10">
@@ -31,11 +20,11 @@
     </div>
     <input type="hidden" id="requestvalidator" name="requestvalidator" runat="server" />
     <div class="AppContent">
-        
+
 
         <asp:ContentPlaceHolder ID="BodyContentPlaceHolder" runat="server">
         </asp:ContentPlaceHolder>
-        
+
     </div>
 </div>
 <!---->
@@ -44,7 +33,7 @@
     <!--     <div class="col-xs-12"> -->
     <header class="WelcomeBar ms-bg-color-neutralLighterAlt" ng-class="{ 'RemoveWelcomeBar': vm.welcomeheader}">
         <span class="ms-font-s" ng-hide="vm.welcomeheader">
-            Welcome to {{vm.navigationContent.Name}} Center! Upload, share, and save your documents here.
+            {{vm.navigationContent.WelcomeText}}
             <a class="LearnMoreLink" ng-href="{{vm.navigationContent.LearnMoreLink}}" target="_blank" title="Learn more about {{vm.navigationContent.Name}} Center">{{vm.navigationContent.LearnMoreText}}</a> or <a class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">{{vm.navigationContent.Dismiss}}</a>
         </span>
     </header>
@@ -56,20 +45,20 @@
         <div class="LeftLinkContainer">
             <!--     <div class="row"> -->
             <!--  <div class="col-xs-6"> -->
-            <div class="MattersContainer" title="Search {{vm.navigationContent.Type1|lowercase}}">
+            <div class="MattersContainer" title="{{vm.navigationContent.Type1Title}}">
                 <a ui-sref='mc.matters()'>
                     <figure>
-                        <img src="Images/MC_Matters.png" alt="Search {{vm.navigationContent.Type1|lowercase}}" />
+                        <img src="Images/MC_Matters.png" alt="{{vm.navigationContent.Type1Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Type1}}</figcaption>
                     </figure>
                 </a>
             </div>
             <!--   </div> -->
             <!-- <div class="col-xs-6"> -->
-            <div class="DocumentsContainer" title="Search {{vm.navigationContent.Type2|lowercase}}">
+            <div class="DocumentsContainer" title="{{vm.navigationContent.Type2Title}}">
                 <a ui-sref='mc.documents()'>
                     <figure>
-                        <img src="Images/MC_Documents.png" alt="Search {{vm.navigationContent.Type2|lowercase}}" />
+                        <img src="Images/MC_Documents.png" alt="{{vm.navigationContent.Type2Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Type2}}</figcaption>
                     </figure>
                 </a>
@@ -109,7 +98,7 @@
     </div>
 </div>
 <footer class="marleft10" title="Write an email to Support">
-    <span class="ms-font-m ms-font-weight-semilight">Questions? Contact <a href="{{vm.navigationContent.SupportLinkUrl}}" class="emailLink">{{vm.navigationContent.SuppotLinkText}}</a></span>
+    <span class="ms-font-m ms-font-weight-semilight">{{vm.navigationContent.ContactText}} <a href="{{vm.navigationContent.SupportLinkUrl}}" class="emailLink">{{vm.navigationContent.SuppotLinkText}}</a></span>
 </footer>
 <div id="HeaderPlaceHolderContent">
     <span class="AppLogoContainer hide" title="{{vm.navigationContent.Name}} Center home">
