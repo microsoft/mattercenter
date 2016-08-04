@@ -182,14 +182,33 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                     string currentUsers = GetMatterAssignedUsers(matter);
                     string currentUserEmails = SPList.GetMatterAssignedUsersEmail(clientContext, matter);
 
-                    string finalMatterPermissions = string.IsNullOrWhiteSpace(stampedPermissions) || isEditMode ? currentPermissions : string.Concat(stampedPermissions, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentPermissions);
-                    string finalMatterRoles = string.IsNullOrWhiteSpace(stampedRoles) || isEditMode ? currentRoles : string.Concat(stampedRoles, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentRoles);
-                    string finalResponsibleAttorneys = string.IsNullOrWhiteSpace(stampedResponsibleAttorneys) || isEditMode ? matterDetails.ResponsibleAttorney : string.Concat(stampedResponsibleAttorneys, ServiceConstants.SEMICOLON, matterDetails.ResponsibleAttorney);
-                    string finalTeamMembers = string.IsNullOrWhiteSpace(stampedTeamMembers) || isEditMode ? matterDetails.TeamMembers : string.Concat(stampedTeamMembers, ServiceConstants.SEMICOLON, matterDetails.TeamMembers);
-                    string finalMatterCenterUsers = string.IsNullOrWhiteSpace(stampedUsers) || isEditMode ? currentUsers : string.Concat(stampedUsers, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentUsers);
-                    string finalBlockedUploadUsers = string.IsNullOrWhiteSpace(stampedBlockedUploadUsers) || isEditMode ? currentBlockedUploadUsers : string.Concat(stampedBlockedUploadUsers, ServiceConstants.SEMICOLON, currentBlockedUploadUsers);
-                    string finalMatterCenterUserEmails = string.IsNullOrWhiteSpace(stampedUserEmails) || isEditMode ? currentUserEmails : string.Concat(stampedUserEmails, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentUserEmails);
-                    string finalResponsibleAttorneysEmail = string.IsNullOrWhiteSpace(stampedResponsibleAttorneysEmail) || isEditMode ? matterDetails.ResponsibleAttorneyEmail : string.Concat(stampedResponsibleAttorneysEmail, ServiceConstants.SEMICOLON, matterDetails.ResponsibleAttorneyEmail);
+                    string finalMatterPermissions = string.Concat(stampedPermissions, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentPermissions);
+                    string finalMatterRoles = string.Concat(stampedRoles, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentRoles);
+                    
+                    string finalTeamMembers = string.Concat(stampedTeamMembers, ServiceConstants.SEMICOLON, ServiceConstants.SEMICOLON, matterDetails.TeamMembers);
+                    string finalMatterCenterUsers = string.Concat(stampedUsers, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentUsers);
+                    string finalBlockedUploadUsers = string.Concat(stampedBlockedUploadUsers, ServiceConstants.SEMICOLON, currentBlockedUploadUsers);
+
+                    if(stampedUserEmails.LastIndexOf("$|$")>0)
+                    {
+                        stampedUserEmails = stampedUserEmails.Remove(stampedUserEmails.Length - 3);
+                    }
+
+                    string finalMatterCenterUserEmails = string.Concat(stampedUserEmails, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentUserEmails);
+
+
+                    string finalResponsibleAttorneysEmail = "";
+                    string finalResponsibleAttorneys = "";
+                    if (matterDetails.ResponsibleAttorneyEmail!=null)
+                    {
+                        finalResponsibleAttorneysEmail = string.IsNullOrWhiteSpace(stampedResponsibleAttorneysEmail) || isEditMode ? matterDetails.ResponsibleAttorneyEmail : string.Concat(stampedResponsibleAttorneysEmail, ServiceConstants.SEMICOLON, matterDetails.ResponsibleAttorneyEmail);
+                        finalResponsibleAttorneys = string.IsNullOrWhiteSpace(stampedResponsibleAttorneys) || isEditMode ? matterDetails.ResponsibleAttorney : string.Concat(stampedResponsibleAttorneys, ServiceConstants.SEMICOLON, matterDetails.ResponsibleAttorney);
+                    }
+                    else
+                    {
+                        finalResponsibleAttorneysEmail = stampedResponsibleAttorneysEmail;
+                        finalResponsibleAttorneys = stampedResponsibleAttorneys;
+                    }   
 
                     propertyList.Add(configuration["Matter:StampedPropertyResponsibleAttorney"], WebUtility.HtmlEncode(finalResponsibleAttorneys));
                     propertyList.Add(configuration["Matter:StampedPropertyResponsibleAttorneyEmail"], WebUtility.HtmlEncode(finalResponsibleAttorneysEmail));

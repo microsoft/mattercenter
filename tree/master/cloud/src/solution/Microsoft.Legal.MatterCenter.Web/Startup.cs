@@ -371,6 +371,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             var taxonomySettingsSection = Configuration.GetSection("Taxonomy");
             var searchSettingsSection = Configuration.GetSection("Search").GetChildren();
             var contentTypeSettingsSection = Configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
+            var appInsightsSections = Configuration.GetSection("ApplicationInsights");
 
             configWriter.WriteLine("var configs =");
             jw.WriteStartObject();
@@ -389,7 +390,13 @@ namespace Microsoft.Legal.MatterCenter.Web
             jw.WritePropertyName("ADAL");
                 jw.WriteStartObject();
                     jw.WritePropertyName("clientId");
-                    jw.WriteValue(generalSettingsSection["ClientId"]);                    
+                    jw.WriteValue(generalSettingsSection["ClientId"]);
+            jw.WriteEndObject();
+
+            jw.WritePropertyName("appInsights");
+                jw.WriteStartObject();
+                    jw.WritePropertyName("instrumentationKey");
+                    jw.WriteValue(appInsightsSections["InstrumentationKey"]);                    
                 jw.WriteEndObject();
 
             jw.WritePropertyName("global");
