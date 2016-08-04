@@ -41,3 +41,7 @@ tree/master/cloud/src/solution/*/pkgobj/
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/obj/Debug/net46
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.ServiceTest/obj/Debug/net46
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Repository/obj/Debug/net46
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Repository/bin/Release/net46
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Repository/obj/Release/net46
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/bin/Release/net46
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/obj/Release/net46
