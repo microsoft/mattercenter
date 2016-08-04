@@ -45,3 +45,4 @@ tree/master/cloud/src/solution/*/pkgobj/
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Repository/obj/Release/net46
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/bin/Release/net46
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Service/Microsoft.Legal.MatterCenter.Utility/obj/Release/net46
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/wwwroot/app/config.js

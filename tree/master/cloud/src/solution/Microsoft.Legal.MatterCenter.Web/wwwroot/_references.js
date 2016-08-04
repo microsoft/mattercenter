@@ -15,6 +15,7 @@
 /// <reference path="../bower_components/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" />
 /// <reference path="../gulpfile.js" />
 /// <reference path="app/app.js" />
+/// <reference path="app/config.js" />
 /// <reference path="app/dashboard/documentdashboard.controller.js" />
 /// <reference path="app/dashboard/documentdashboard.resources.js" />
 /// <reference path="app/dashboard/matterdashboard.controller.js" />
