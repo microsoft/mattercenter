@@ -44,6 +44,7 @@
     <script src="lib/adal-angular/dist/adal.min.js"></script>
     <script src="lib/adal-angular/dist/adal-angular.min.js"></script>
     <script src="lib/angular-ui-grid/ui-grid.min.js"></script>
+    <script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
     <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="js/site.js" asp-append-version="true"></script>
     <script src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
@@ -84,13 +85,13 @@
     -->
     <script type="text/javascript">
         var appInsights = window.appInsights || function (config) {
-            function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, u = document, e = window, o = "script", s = u.createElement(o), i, f; for (s.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js", u.getElementsByTagName(o)[0].parentNode.appendChild(s), t.cookie = u.cookie, t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace"]; i.length;) r("track" + i.pop()); return r("setAuthenticatedUserContext"), r("clearAuthenticatedUserContext"), config.disableExceptionTracking || (i = "onerror", r("_" + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t["_" + i](config, r, u, e, o), s }), t
+            function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, u = document, e = window, o = "script", s = u.createElement(o), i, f; s.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js"; u.getElementsByTagName(o)[0].parentNode.appendChild(s); try { t.cookie = u.cookie } catch (h) { } for (t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; i.length;) r("track" + i.pop()); return r("setAuthenticatedUserContext"), r("clearAuthenticatedUserContext"), config.disableExceptionTracking || (i = "onerror", r("_" + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t["_" + i](config, r, u, e, o), s }), t
         }({
-            instrumentationKey: config.appInsights.instrumentationKey
+            instrumentationKey: configs.appInsights.instrumentationKey
         });
 
         window.appInsights = appInsights;
-
+        appInsights.trackPageView();
     </script>
 
 
