@@ -6,9 +6,9 @@
     var app = angular.module("matterMain");
 
     app.controller('documentsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout',
-        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache', '$window', '$q', '$filter', 'commonFunctions',
+        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache', '$window', '$q', '$filter', 'commonFunctions', '$animate',
     function ($scope, $state, $interval, $stateParams, api, $timeout,
-        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache, $window, $q, $filter, commonFunctions) {
+        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache, $window, $q, $filter, commonFunctions, $animate) {
         var vm = this;
         vm.selected = undefined;
         //#region dynamic content
@@ -144,6 +144,7 @@
                     isOpenedInOutlook();
 
                 });
+                $animate.enabled(gridApi.grid.element, false);
                 $scope.gridApi.core.on.sortChanged($scope, $scope.sortChangedDocument);
                 $scope.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
                 $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFuncScroll);
