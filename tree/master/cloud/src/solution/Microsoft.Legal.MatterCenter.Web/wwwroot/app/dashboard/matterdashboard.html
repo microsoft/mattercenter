@@ -245,6 +245,11 @@
                     </ul>
                 </div>
             </div>
+            <div class="custom-csv-link-location">
+                <!--<label>Your CSV will show below:</label>-->
+                <span class="ui-grid-exporter-csv-link">&nbsp</span>
+            </div>
+            <button ng-click="vm.export()" style="position: absolute;right: 0;top: 13px;" class="btn btn-primary">Export</button>
             <div class="col-xs-12">
                 <div class="tab-content">                    
                     <div class="tab-pane active" id="mattersGrid" >
@@ -483,4 +488,29 @@
     <div class="row text-center" style="" ng-hide="vm.lazyloaderdashboard">
         Please wait while the Matters load.
     </div>
+</div>
+
+<!--For the export Data-->
+<div id="exportable" class="hide">
+    <table width="100%">
+        <thead>
+            <tr>
+                <th>Matter</th>
+                <th>Client</th>
+                <th>Client.Matter ID</th>
+                <th>Modified Date</th>
+                <th>Responsible attorney</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in vm.exportDate">
+                <td>{{item.matterName}}</td>
+                <td>{{item.matterClient}}</td>
+                <td>{{item.matterClientId}}</td>
+                <td>{{item.matterModifiedDate}}</td>
+                <td>{{item.matterResponsibleAttorney}}</td>
+            </tr>
+        </tbody>
+    </table>
+
 </div>
