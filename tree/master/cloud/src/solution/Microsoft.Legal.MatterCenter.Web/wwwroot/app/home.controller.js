@@ -13,9 +13,9 @@
             vm.smallPictureUrl = 'Images/MC_Profile_Switcher.png';
             vm.largePictureUrl = 'Images/MC_Profile_Switcher.png';
             vm.userProfileObjectId = adalService.userInfo.profile.oid;
-            vm.contextualHelpHeader = uiconfigs.Home.ContextualHelpHeader;
-            vm.ContextualHelpBottomText = uiconfigs.Home.ContextualHelpBottomText;
-            vm.MatterCenterSupportLinkText = uiconfigs.Home.MatterCenterSupportLinkText;
+            vm.navigation = uiconfigs.Navigation;
+            //vm.ContextualHelpBottomText = uiconfigs.Home.ContextualHelpBottomText;
+            //vm.MatterCenterSupportLinkText = uiconfigs.Home.MatterCenterSupportLinkText;
 
 
             //Callback function for help 
