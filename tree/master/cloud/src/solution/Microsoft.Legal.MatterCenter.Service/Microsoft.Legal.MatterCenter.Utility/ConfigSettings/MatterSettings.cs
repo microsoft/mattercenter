@@ -28,7 +28,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string OneNoteLibrarySuffix { get; set; }
         public string CalendarNameSuffix { get; set; }
         public string TaskNameSuffix { get; set; }
-        public string ProvisionMatterAppURL { get; set; }
+        
         public string SendMailListName { get; set; }
         public string SpecialCharacterExpressionMatterTitle { get; set; }
         public string SpecialCharacterExpressionMatterId { get; set; }
@@ -41,7 +41,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public int ContentTypeLength { get; set; }
         public int MatterDescriptionLength { get; set; }
         public string UserPermissions { get; set; }
-        public string CentralRepositoryUrl { get; set; }
+        
         public string MatterLandingPageRepositoryName { get; set; }
 
 

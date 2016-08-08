@@ -34,6 +34,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private IExternalSharing externalSharing;
         private IConfigurationRoot configuration;
         private IUsersDetails userDetails;
+        private GeneralSettings generalSettings;
         public MatterProvision(IMatterRepository matterRepositoy, IOptions<MatterSettings> matterSettings,
             IOptions<ErrorSettings> errorSettings,
             ISPOAuthorization spoAuthorization, IEditFunctions editFunctions, IValidationFunctions validationFunctions,
@@ -41,6 +42,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             IOptions<MailSettings> mailSettings,
             IOptions<CamlQueries> camlQueries,
             IOptions<ListNames> listNames,
+            IOptions<GeneralSettings> generalSettings,
             IOptions<SearchSettings> searchSettings, IUserRepository userRepositoy, 
             IExternalSharing externalSharing, IConfigurationRoot configuration, IUsersDetails userDetails
             )
@@ -61,6 +63,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.externalSharing = externalSharing;
             this.configuration = configuration;
             this.userDetails = userDetails;
+            this.generalSettings = generalSettings.Value;
         }
 
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
@@ -710,7 +713,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             try
             {
                 var matterConfiguration = matterMetadataVM.MatterConfigurations;
-                Uri centralListURL = new Uri(string.Concat(matterSettings.CentralRepositoryUrl, ServiceConstants.FORWARD_SLASH,
+                Uri centralListURL = new Uri(string.Concat(generalSettings.CentralRepositoryUrl, ServiceConstants.FORWARD_SLASH,
                     ServiceConstants.LISTS, ServiceConstants.FORWARD_SLASH, listNames.DMSMatterListName)); // Central Repository List URL  
                 IList<string> documentLibraryFolders = new List<string>();
                 Dictionary<string, bool> documentLibraryVersioning = new Dictionary<string, bool>();
@@ -981,7 +984,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 try
                 {
-                    Uri mailListURL = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", matterSettings.ProvisionMatterAppURL,
+                    Uri mailListURL = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", generalSettings.ProvisionMatterAppURL,
                         ServiceConstants.FORWARD_SLASH, ServiceConstants.LISTS, ServiceConstants.FORWARD_SLASH, matterSettings.SendMailListName));
                     string centralMailListURL = Convert.ToString(mailListURL, CultureInfo.InvariantCulture);
                     string mailSiteURL = centralMailListURL.Substring(0, centralMailListURL.LastIndexOf(string.Concat(ServiceConstants.FORWARD_SLASH,
