@@ -2,15 +2,15 @@
 
     <div class="AppHeader">
         <div class="AppSwitcherContainer" ng-click="cm.menuClick()">
-            <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{cm.createContent.MenuImageOpenTitle}}" title="{{cm.createContent.MenuImageTitle}}" />
-            <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{cm.createContent.MenuImageCloseTitle}}" title="{{cm.createContent.Tab1ButtonCloseTitle}}" />
+            <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{cm.header.MenuImageOpenTitle}}" title="{{cm.header.MenuCaptionTitle}}" />
+            <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{cm.header.MenuImageCloseTitle}}" title="{{cm.header.CloseTitle}}" />
             <div class="MenuCaption"><span>{{cm.createContent.MenuImageCaption}}</span></div>
         </div>
         <div class="AppMenuFlyout ms-shadow">
             <div class="AppMenuFlyoutPriLinks">
-                <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{cm.createContent.MenuItem1LinkTitle}}"><span class="AppFlyoutLinksText">{{cm.createContent.MenuItem1LinkText}}</span></a>
-                <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{cm.createContent.MenuItem2LinkTitle}}"><span class="AppFlyoutLinksText">{{cm.createContent.MenuItem2LinkText}}</span></a>
-                <a class="AppFlyoutLinks MatterDocumentsLink" title="{{cm.createContent.MenuItem3LinkTitle}}"><span class="AppFlyoutLinksText">{{cm.createContent.MenuItem3LinkText}}</span></a>
+                <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{cm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{cm.header.Menu1Option1Text}}</span></a>
+                <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{cm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{cm.header.Menu1Option2Text}}</span></a>
+                <a class="AppFlyoutLinks MatterDocumentsLink" title="{{cm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{cm.header.Menu1Option3Text}}</span></a>
             </div>
         </div>
 
