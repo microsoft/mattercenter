@@ -391,7 +391,9 @@ namespace Microsoft.Legal.MatterCenter.Web
                 jw.WriteStartObject();
                     jw.WritePropertyName("clientId");
                     jw.WriteValue(generalSettingsSection["ClientId"]);
-            jw.WriteEndObject();
+                    jw.WritePropertyName("authUserEmail");
+                    jw.WriteValue("");
+                jw.WriteEndObject();
 
             jw.WritePropertyName("appInsights");
                 jw.WriteStartObject();

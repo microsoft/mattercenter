@@ -10,7 +10,7 @@
                 <div data-class="ms-u-slideLeftIn40" class="ContextualHelp ms-u-slideLeftIn40" ng-show="$root.contextualhelp" ng-click="$event.stopPropagation();">
                     <div class="ContextualHelpFlyout">
                         <img class="closeContextualHelpFlyout" title="Close" alt="Close flyout" ng-click="$root.dispContextualHelp($event)" src="Images/contextual_help_close_icon.png" />
-                        <div class="ContextualHelpHeader" title="{{vm.contextualHelpHeader}}">{{vm.contextualHelpHeader}}</div>
+                        <div class="ContextualHelpHeader" title="{{vm.navigation.ContextualHelpHeader}}">{{vm.navigation.ContextualHelpHeader}}</div>
                         <div class="contextualHelpSections">
                             <div class="ContextualHelpSubSection" id="popularSearchesSection" ng-repeat="helpData in vm.helpData">
                                 <div class="ContextualHelpSectionHeader"
@@ -22,7 +22,7 @@
                             </div>
                         </div>
                         <div class="ContextualHelpSupport">
-                            <span class="ContextualHelpBottomText" title="Write an email to Support">{{vm.ContextualHelpBottomText}}<span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. mailto:support@supportsite.com]">{{vm.MatterCenterSupportLinkText}}</a></span></span>
+                            <span class="ContextualHelpBottomText" title="Write an email to Support">{{vm.navigation.ContextualHelpFooterLabel}}<span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. {{vm.navigation.MatterCenterSupportLink}}]">{{vm.navigation.ContextualHelpFooterLink1Label}}</a></span></span>
                         </div>
                     </div>
                 </div>
