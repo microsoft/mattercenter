@@ -8,6 +8,7 @@
             //header
             vm.userName = adalService.userInfo.userName
             vm.loginUserEmail = adalService.userInfo.userName
+            configs.ADAL.authUserEmail = adalService.userInfo.userName
             vm.fullName = adalService.userInfo.profile.given_name + ' ' + adalService.userInfo.profile.family_name
             vm.isAuthenticated = adalService.userInfo.isAuthenticated
             vm.smallPictureUrl = 'Images/MC_Profile_Switcher.png';
@@ -16,6 +17,8 @@
             vm.contextualHelpHeader = uiconfigs.Home.ContextualHelpHeader;
             vm.ContextualHelpBottomText = uiconfigs.Home.ContextualHelpBottomText;
             vm.MatterCenterSupportLinkText = uiconfigs.Home.MatterCenterSupportLinkText;
+
+            $rootScope.logEvent('navigation view')
 
 
             //Callback function for help 
