@@ -715,7 +715,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 IList<string> documentLibraryFolders = new List<string>();
                 Dictionary<string, bool> documentLibraryVersioning = new Dictionary<string, bool>();
                 Uri clientUrl = new Uri(client.Url);
-
+                string matterOneNoteTitle = TrimMatterNameForOneNoteTitle(matter.Name);
                 ListInformation listInformation = new ListInformation();
                 listInformation.name = matter.Name;
                 listInformation.description = matter.Description;
@@ -730,7 +730,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 matterRepositoy.CreateList(clientContext, listInformation);
 
                 documentLibraryVersioning.Add("EnableVersioning", false);
-                documentLibraryFolders.Add(matter.MatterGuid);
+                documentLibraryFolders.Add(matterOneNoteTitle);
                 listInformation.name = matter.Name + matterSettings.OneNoteLibrarySuffix;
                 listInformation.folderNames = documentLibraryFolders;
                 listInformation.versioning.EnableVersioning = false;
@@ -780,7 +780,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
 
                 string oneNoteUrl = string.Concat(clientUrl.AbsolutePath, ServiceConstants.FORWARD_SLASH,
-                    matter.MatterGuid, matterSettings.OneNoteLibrarySuffix, ServiceConstants.FORWARD_SLASH, matter.MatterGuid);
+                    matter.MatterGuid, matterSettings.OneNoteLibrarySuffix, ServiceConstants.FORWARD_SLASH, matterOneNoteTitle);
                 matterRepositoy.AddOneNote(clientContext, client.Url, oneNoteUrl, matter.MatterGuid, matter.Name);
                 if (null != matter.Conflict)
                 {
@@ -821,6 +821,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Function to prepare OneNote URL based on threshold set for OneNote title
+        /// </summary>
+        /// <param name="matterName">Project name</param>
+        /// <returns>OneNote title for provided Project name</returns>
+        internal static string TrimMatterNameForOneNoteTitle(string matterName)
+        {
+            if (matterName.Length > ServiceConstants.Matter_ONE_NOTE_LENGTH)
+            {
+                matterName = matterName.Substring(0, ServiceConstants.Matter_ONE_NOTE_LENGTH);
+            }
+            return matterName;
         }
 
 
