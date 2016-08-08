@@ -10,6 +10,9 @@
             cm.selectedConflictCheckUser = undefined;
             $rootScope.bodyclass = "";
             cm.blockedUserName = undefined;
+            //Config Region
+            cm.createContent = uiconfigs.CreateMatter;
+            //#Config region Ends
             cm.defaultConfilctCheck = false;
             cm.chkConfilctCheck = undefined;
             cm.conflictRadioCheck = true;
