@@ -77,7 +77,7 @@
                     <span class="SecondaryLinksText">{{vm.navigationContent.Image3Caption}}</span>
                 </a>
             </div>
-            <div class="SecondaryLinkContainer CreateMatter" runat="server" id="CreateMatterLink" title="{{vm.navigationContent.Image4Title}}">
+            <div class="SecondaryLinkContainer CreateMatter" runat="server" id="CreateMatterLink" title="{{vm.navigationContent.Image4Title}}" ng-if="vm.canLoginUserCreateMatter">
                 <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
                     <img class="SecondaryLinksImg" src="Images/MC_Create_a_matter.png" alt="{{vm.navigationContent.Image4Title}}" />
                 </a>

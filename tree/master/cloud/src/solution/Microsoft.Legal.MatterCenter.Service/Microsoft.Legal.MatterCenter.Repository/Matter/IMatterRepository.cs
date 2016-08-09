@@ -68,5 +68,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation);
 
         GenericResponseVM UpdateMatter(MatterInformationVM matterInformation);
+        bool CanCreateMatter(Client client);
     }
 }
