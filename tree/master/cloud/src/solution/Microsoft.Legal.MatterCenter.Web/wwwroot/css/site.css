@@ -170,7 +170,7 @@ textarea {
     width: 215px;
     border: none;
     max-height: 355px;
-    top:-29px;
+    top: -29px;
     box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.47);
 }
 
@@ -181,6 +181,7 @@ textarea {
     box-shadow: 0px 0px 10px #888888;
     width: 215px;
     height: 355px;
+    cursor: default;
 }
 
     #documentgrid .ui-grid-menu .ui-grid-menu-inner ul li:not(:last-child) > button, #mattergrid .ui-grid-menu .ui-grid-menu-inner ul li:not(:last-child) > button {
@@ -223,13 +224,14 @@ textarea {
     content: url("../Images/Column_Picker_Expand.png");
 }
 
-.closeColumnPicker:before{
-     content: url("../Images/Column_Picker_Close.png");
+.closeColumnPicker:before {
+    content: url("../Images/Column_Picker_Close.png");
 }
 
 #documentgrid .ui-grid-menu-button .ui-grid-menu, #mattergrid .ui-grid-menu-button .ui-grid-menu {
     right: 15px;
     top: 29px;
+    cursor: default;
 }
 
 #documentgrid .ui-grid-menu .ui-grid-menu-inner ul li button, #mattergrid .ui-grid-menu .ui-grid-menu-inner ul li button {
@@ -901,9 +903,29 @@ textarea {
     margin-bottom: 44px;
 }
 
-#menuitem-1 button{
-        font-family: "Segoe UI Web Semibold", "Segoe UI Semibold", "Segoe WP Semibold", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif !important;
-        font-size: 14px !important;
-        font-weight: 400 !important;
-        color: #333 !important;
+#menuitem-1 button {
+    font-family: "Segoe UI Web Semibold", "Segoe UI Semibold", "Segoe WP Semibold", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #333 !important;
+}
+
+#mainmenu .AppMenuFlyout {
+    top: 34px !important;
+}
+
+#mainmenu .btn {
+    padding: 4px 12px;
+}
+
+#mainmenu .form-control {
+    height: 30px;
+}
+
+#gridViewPageHeaderContainer {
+    margin-top: 11px;
+}
+
+.MenuCaption {
+    position: absolute;
 }

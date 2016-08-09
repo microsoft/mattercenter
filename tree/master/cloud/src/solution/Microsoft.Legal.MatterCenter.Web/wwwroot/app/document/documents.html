@@ -5,9 +5,9 @@
         <div class="row" id="mainmenu">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
                 <div class="col-xs-8 col-sm-3" ng-click="vm.menuClick()">
-                    <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuCaptionTitle}}" />
-                    <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
-                    <span class="MenuCaption">{{vm.header.MenuImageCaption}}</span>
+                    <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImage1Title}}" title="{{vm.header.MenuImage1Title}}" />
+                    <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImage1CloseTitle}}" title="{{vm.header.CloseTitle}}" />
+                    <span class="MenuCaption">{{vm.header.MenuImage1Caption}}</span>
                 </div>
                 <div class="AppMenuFlyout ms-shadow">
                     <div class="AppMenuFlyoutPriLinks">
@@ -24,9 +24,9 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
-                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==''+{{vm.documentConfigContent.Dropdown1Item1}}+''}" ng-click="vm.SetDocuments(1,''{{vm.documentConfigContent.Dropdown1Item1}}'')">{{vm.documentConfigContent.Dropdown1Item1}}</li>
-                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==''+{{vm.documentConfigContent.Dropdown1Item2}}+''}" ng-click="vm.SetDocuments(2,''{{vm.documentConfigContent.Dropdown1Item2}}'')">{{vm.documentConfigContent.Dropdown1Item2}}</li>
-                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==''+{{vm.documentConfigContent.Dropdown1Item3}}+''}" ng-click="vm.SetDocuments(3,''{{vm.documentConfigContent.Dropdown1Item3}}'')">{{vm.documentConfigContent.Dropdown1Item3}}</li>
+                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}" ng-click="vm.SetDocuments(1,vm.documentConfigContent.Dropdown1Item1)">{{vm.documentConfigContent.Dropdown1Item1}}</li>
+                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}" ng-click="vm.SetDocuments(2,vm.documentConfigContent.Dropdown1Item2)">{{vm.documentConfigContent.Dropdown1Item2}}</li>
+                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
                         </ul>
                     </div>
 
@@ -36,7 +36,7 @@
                 <div class="input-group col-xs-10 col-sm-12" id="docsearchmatter">
                     <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
-                    <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
+                    <!--<span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>-->
                 </div>
                 <div class="col-xs-12">
                     <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
@@ -55,9 +55,9 @@
                     <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
                 </div>
                 <ul class="col-xs-12 mattersdrop" ng-if="vm.documentsdrop">
-                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==''+{{vm.documentConfigContent.Dropdown1Item1}}+''}" ng-click="vm.SetDocuments(1,''{{vm.documentConfigContent.Dropdown1Item1}}'')">{{vm.documentConfigContent.Dropdown1Item1}}</li>
-                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==''+{{vm.documentConfigContent.Dropdown1Item2}}+''}" ng-click="vm.SetDocuments(2,''{{vm.documentConfigContent.Dropdown1Item2}}'')">{{vm.documentConfigContent.Dropdown1Item2}}</li>
-                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==''+{{vm.documentConfigContent.Dropdown1Item3}}+''}" ng-click="vm.SetDocuments(3,''{{vm.documentConfigContent.Dropdown1Item3}}'')">{{vm.documentConfigContent.Dropdown1Item3}}</li>
+                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}" ng-click="vm.SetDocuments(1,vm.documentConfigContent.Dropdown1Item1)">{{vm.documentConfigContent.Dropdown1Item1}}</li>
+                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}" ng-click="vm.SetDocuments(2,vm.documentConfigContent.Dropdown1Item2)">{{vm.documentConfigContent.Dropdown1Item2}}</li>
+                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
                 </ul>
                 <div class="col-xs-12">
                     <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
@@ -116,8 +116,7 @@
                 <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()"></div>
             </div>
         </div>
-        <div class="col-sm-12 noResultsText" ng-show="vm.nodata">
-            {{vm.documentConfigContent.NoDataSearchText}}
+        <div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">            
         </div>
         <div ng-if="vm.isOutlook && vm.showAttachment">
             <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"

@@ -291,7 +291,9 @@
             restrict: 'AE',
             link: function (scope, element, attrs) {
                 element.find('.ui-grid-icon-menu').addClass('showExpandIcon');
+                
                 $(element).on("click", function (e) {
+                    e.stopPropagation();
                     $timeout(function () {
                         if (element.find('.ng-isolate-scope').html() != "<!-- ngIf: shown -->") {
                             element.find('.ui-grid-icon-menu').removeClass('showExpandIcon');
@@ -300,7 +302,6 @@
                             element.find('.ui-grid-icon-menu').addClass('showExpandIcon');
                             element.find('.ui-grid-icon-menu').removeClass('closeColumnPicker');
                         }
-
                     }, 200)
 
                     if (element.find('.ui-grid-menu-mid')) {
