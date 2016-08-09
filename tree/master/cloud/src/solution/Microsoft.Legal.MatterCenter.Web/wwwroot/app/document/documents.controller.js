@@ -1433,7 +1433,7 @@
         vm.getDocumentAssets = function (row) {
             vm.assetsuccess = false;
             var Client = {
-                Id: row.entity.documentUrl.replace(configs.uri.SPOsiteURL, ""),
+                Id: (row.entity.documentParentUrl + "/" + row.entity.documentName).replace(configs.uri.SPOsiteURL, ""),
                 Name: row.entity.documentMatterUrl.replace(configs.uri.SPOsiteURL, ""),
                 Url: row.entity.documentClientUrl
             }
