@@ -15,7 +15,8 @@
             vm.largePictureUrl = 'Images/MC_Profile_Switcher.png';
             vm.userProfileObjectId = adalService.userInfo.profile.oid;
             vm.navigation = uiconfigs.Navigation;
-            
+            vm.header = uiconfigs.Header;
+
             $rootScope.logEvent('navigation view')
 
 

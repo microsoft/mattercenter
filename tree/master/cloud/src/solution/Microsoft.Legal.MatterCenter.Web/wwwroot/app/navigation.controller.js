@@ -32,6 +32,7 @@
 
             //#region dynamic content
             vm.navigationContent = uiconfigs.Navigation;
+            vm.header = uiconfigs.Header;
             vm.learnmore = configs.uri.MainURL;
             //#endregion
         }]);

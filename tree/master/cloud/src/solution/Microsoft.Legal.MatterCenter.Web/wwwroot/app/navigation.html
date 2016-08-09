@@ -1,20 +1,20 @@
 <div id="MasterPageContainer" class="MasterPageContent">
     <div class="AppHeader">
         <div class="AppSwitcherContainer" ng-click="vm.menuClick()">
-            <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.navigationContent.MenuImageOpenTitle}}" title="{{vm.navigationContent.MenuCaptionTitle}}" />
-            <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.navigationContent.MenuImageCloseTitle}}" title="Close" />
-            <div class="MenuCaption"><span>{{vm.navigationContent.MenuImageCaption}}</span></div>
+            <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuCaptionTitle}}" />
+            <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
+            <div class="MenuCaption"><span>{{vm.header.MenuImageCaption}}</span></div>
         </div>
         <div class="AppMenuFlyout ms-shadow">
             <div class="AppMenuFlyoutPriLinks">
-                <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.navigationContent.MenuItem1LinkText}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.MenuItem1LinkText}}</span></a>
-                <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.navigationContent.MenuItem2LinkText}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.MenuItem2LinkText}}</span></a>
-                <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.navigationContent.MenuItem3LinkText}}"><span class="AppFlyoutLinksText">{{vm.navigationContent.MenuItem3LinkText}}</span></a>
+                <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span></a>
+                <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
+                <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span></a>
             </div>
         </div>
         <div id="HeaderPlaceHolder" class="padlf10">
-            <span title="{{vm.navigationContent.LogoImageTitle}}" class="AppLogoContainer">
-                <img class="AppLogo" alt="{{vm.navigationContent.LogoImageTitle}}" src="Images/MC_Logo.png">
+            <span title="{{vm.header.LogoImageTitle}}" class="AppLogoContainer">
+                <img class="AppLogo" alt="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
             </span>
         </div>
     </div>
@@ -101,8 +101,8 @@
     <span class="ms-font-m ms-font-weight-semilight">{{vm.navigationContent.FooterLabel}} <a href="{{vm.navigationContent.FooterLink1URL}}" title="{{vm.navigationContent.FooterLink1Title}}" class="emailLink">{{vm.navigationContent.FooterLink1Text}}</a></span>
 </footer>
 <div id="HeaderPlaceHolderContent">
-    <span class="AppLogoContainer hide" title="{{vm.navigationContent.LogoImageTitle}}">
-        <img class="AppLogo" src="Images/MC_Logo.png" alt="{{vm.navigationContent.LogoImageTitle}}" />
+    <span class="AppLogoContainer hide" title="{{vm.header.LogoImageTitle}}">
+        <img class="AppLogo" src="Images/MC_Logo.png" alt="{{vm.header.LogoImageTitle}}" />
     </span>
 </div>
 
