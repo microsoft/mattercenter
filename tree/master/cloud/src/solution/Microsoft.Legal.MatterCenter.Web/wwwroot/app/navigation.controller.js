@@ -24,10 +24,18 @@
                 }
             }
 
+            function canCreateMatter(options, callback) {
+                api({
+                    resource: 'navigationResource',
+                    method: 'canCreateMatter',
+                    data: options,
+                    success: callback
+                });
+            }
+
             //#region Global Variables
             vm.welcomeheader = false;
             //#endregion
-
             vm.emailsubject = "CELA Project Center Feedback and Support request";
 
             //#region dynamic content
@@ -35,5 +43,16 @@
             vm.header = uiconfigs.Header;
             vm.learnmore = configs.uri.MainURL;
             //#endregion
+
+            vm.canLoginUserCreateMatter = false;
+            vm.canCreateMatter = function () {
+                var client = {
+                    Url: configs.global.repositoryUrl
+                }
+                canCreateMatter(client, function (response) {
+                    vm.canLoginUserCreateMatter = response.canCreateMatter
+                })
+            }
+            vm.canCreateMatter();
         }]);
 })();

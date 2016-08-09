@@ -20,5 +20,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         GenericResponseVM CreateMatter(MatterMetdataVM matterMetadataVM);
         GenericResponseVM CreateMatterLandingPage(MatterMetdataVM matterMetadataVM);
         GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation);
+        bool CanCreateMatter(Client client);
     }
 }

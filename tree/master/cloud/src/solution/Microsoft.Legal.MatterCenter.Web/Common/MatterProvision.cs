@@ -66,6 +66,17 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.generalSettings = generalSettings.Value;
         }
 
+
+        /// <summary>
+        /// This method will check whether login user can create matter or not
+        /// </summary>
+        /// <param name="client">The sharepoint site collection in which we need to check whether the login user is present in the sharepoint group or not</param>
+        /// <returns></returns>
+        public bool CanCreateMatter(Client client)
+        {
+            return matterRepositoy.CanCreateMatter(client);
+        }
+
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
         {
             searchRequestVM.SearchObject.Filters.FilterByMe = 0;

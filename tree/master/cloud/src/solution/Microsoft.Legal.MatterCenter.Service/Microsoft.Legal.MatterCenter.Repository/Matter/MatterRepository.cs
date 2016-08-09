@@ -79,6 +79,17 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.userRepositoy = userRepositoy;
         }
 
+
+        /// <summary>
+        /// This method will check whether login user can create matter or not
+        /// </summary>
+        /// <param name="client">The sharepoint site collection in which we need to check whether the login user is present in the sharepoint group or not</param>
+        /// <returns></returns>
+        public bool CanCreateMatter(Client client)
+        {
+            return userdetails.CheckUserPermissionsInGroup(client, "Provision Matter Users");
+        }
+
         public GenericResponseVM UpdateMatter(MatterInformationVM matterInformation)
         {
             var matter = matterInformation.Matter;

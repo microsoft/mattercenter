@@ -458,6 +458,48 @@ namespace Microsoft.Legal.MatterCenter.Service
         #endregion
 
         #region Matter Provision
+
+        /// <summary>
+        /// This method will check whether the current login user can create a matter or not
+        /// This method will check whether the user is present in the sharepoint group called "Provision Matter User"
+        /// If the user is not present in the group, then "Create Matter" link should not be visible to the user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        [HttpPost("cancreate")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public IActionResult CanCreateMatter([FromBody]Client client)
+        {
+            GenericResponseVM genericResponse = null;
+            if (null == client && null != client.Url)
+            {
+                genericResponse = new GenericResponseVM()
+                {
+                    Value = errorSettings.MessageNoInputs,
+                    Code = "",
+                    IsError = true
+                };
+                
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+            }
+            try
+            {
+                var canCreateMatter = matterRepositoy.CanCreateMatter(client);
+
+                var canLoginUserCreateMatter = new
+                {
+                    CanCreateMatter = canCreateMatter
+                };
+
+                return matterCenterServiceFunctions.ServiceResponse(canLoginUserCreateMatter, (int)HttpStatusCode.OK);
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
         /// <summary>
         /// This method will check whether a matter already exists with a given name
         /// </summary>
