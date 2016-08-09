@@ -142,6 +142,8 @@
     "CloseTitle": "Close"
   },
   "Documents": {
+    "EllipsisLink4Text": "Unpin this Document",
+    "GridColumn8Header": "Created Date",
     "Dropdown1Item1": "All Documents",
     "Dropdown1Item2": "My Documents",
     "Dropdown1Item3": "Pinned Documents",
@@ -154,7 +156,6 @@
     "GridColumn5Header": "Author",
     "GridColumn6Header": "Document Version",
     "GridColumn7Header": "Checked out to",
-    "GridColumn7Header": "Created Date",
     "HeaderText": "All Documents",
     "EllipsisLink1Text": "Open this Document",
     "EllipsisLink2Text": "View Matter Details",
@@ -163,6 +164,7 @@
     "FlyoutButton2Text": "View document details"
   },
   "Matters": {
+    "EllipsisLink5Text": "Unpin this matter",
     "GridColumn5Header": "Responsible attorney",
     "GridColumn6Header": "Sub area of law",
     "GridColumn7Header": "Open date",

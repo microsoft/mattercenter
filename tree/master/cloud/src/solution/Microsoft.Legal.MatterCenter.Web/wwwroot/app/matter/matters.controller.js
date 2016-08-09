@@ -1889,6 +1889,8 @@
                 vm.mattersdropinner = true;
                 vm.matterheader = true;
                 vm.matterdateheader = true;
+                angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
+                angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
             }
 
             //#endregion
