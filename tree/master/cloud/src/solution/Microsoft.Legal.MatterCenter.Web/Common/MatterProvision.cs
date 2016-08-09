@@ -995,7 +995,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 try
                 {
-                    Uri mailListURL = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", generalSettings.ProvisionMatterAppURL,
+                    Uri mailListURL = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", generalSettings.CentralRepositoryUrl,
                         ServiceConstants.FORWARD_SLASH, ServiceConstants.LISTS, ServiceConstants.FORWARD_SLASH, matterSettings.SendMailListName));
                     string centralMailListURL = Convert.ToString(mailListURL, CultureInfo.InvariantCulture);
                     string mailSiteURL = centralMailListURL.Substring(0, centralMailListURL.LastIndexOf(string.Concat(ServiceConstants.FORWARD_SLASH,

@@ -83,7 +83,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             var matterDetails = matterInformation.MatterDetails;
             if (int.Parse(ServiceConstants.PROVISION_MATTER_CREATEMATTER, CultureInfo.InvariantCulture) <= methodNumber &&
                 int.Parse(ServiceConstants.EditMatterPermission, CultureInfo.InvariantCulture) >= methodNumber &&
-                !spList.CheckPermissionOnList(generalSettings.ProvisionMatterAppURL, matterSettings.SendMailListName, PermissionKind.EditListItems))
+                !spList.CheckPermissionOnList(generalSettings.CentralRepositoryUrl, matterSettings.SendMailListName, PermissionKind.EditListItems))
             {
                 genericResponse = new GenericResponseVM();
                 //return string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectInputUserAccessCode, ServiceConstantStrings.IncorrectInputUserAccessMessage);
