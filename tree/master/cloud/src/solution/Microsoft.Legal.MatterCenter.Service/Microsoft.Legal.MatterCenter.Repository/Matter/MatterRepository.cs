@@ -87,7 +87,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns></returns>
         public bool CanCreateMatter(Client client)
         {
-            return userdetails.CheckUserPermissionsInGroup(client, "Provision Matter Users");
+            return spList.CheckPermissionOnList(client, matterSettings.SendMailListName, PermissionKind.EditListItems);
         }
 
         public GenericResponseVM UpdateMatter(MatterInformationVM matterInformation)

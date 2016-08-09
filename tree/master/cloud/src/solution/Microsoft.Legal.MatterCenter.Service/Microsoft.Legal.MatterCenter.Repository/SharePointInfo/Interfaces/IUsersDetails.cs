@@ -31,6 +31,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         Users GetUserProfilePicture(Client client);
         bool CheckUserPresentInMatterCenter(string clientUrl, string email);
         bool CheckUserPresentInMatterCenter(ClientContext clientContext, string email);
-        bool CheckUserPermissionsInGroup(Client client, string groupName);
+        //bool CheckUserPermissionsInGroup(Client client, string groupName);
     }
 }
