@@ -248,7 +248,19 @@
                         {{cm.createContent.Tab3SectionText}}
                     </div>
                 </div>
+                
+                <div class="gutter" style="clear:both;"></div>
+                <div class="row pull-left">
 
+                    <input id="demo-checkbox-unselected2" ng-model="cm.includeEmail" ng-init="cm.includeEmail" ng-click="cm.createAndNotify(cm.includeEmail)" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox3Text}}</span></label>
+                </div>
+                <div class="gutter" style="clear:both;"></div>
+                <div class="row pull-left">
+
+                    <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox4Text}}</span></label>
+                </div>
 
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
@@ -264,19 +276,8 @@
                     <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox2Text}}</span></label>
 
                 </div>
-                <div class="gutter" style="clear:both;"></div>
 
-                <div class="row pull-left">
 
-                    <input id="demo-checkbox-unselected2" ng-model="cm.includeEmail" ng-init="cm.includeEmail" ng-click="cm.createAndNotify(cm.includeEmail)" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox3Text}}</span></label>
-                </div>
-                <div class="gutter" style="clear:both;"></div>
-                <div class="row pull-left">
-
-                    <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox4Text}}</span></label>
-                </div>
                 <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton($event)' ng-disabled="cm.createBtnDisabled" value="Create">{{cm.createButton}}</button>
 
             </div>
