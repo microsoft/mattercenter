@@ -59,6 +59,8 @@
             vm.docdropinner = true;
             vm.documentheader = true;
             vm.documentdateheader = true;
+            angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
+            angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
         }
 
         //#endregion
@@ -738,6 +740,8 @@
             vm.sortby = "";
             vm.lazyloader = false;
             vm.divuigrid = false;
+            vm.nodata = false;
+            vm.gridOptions.data = [];
             if (id == 1) {
                 vm.responseNull = false;
                 searchRequest.SearchObject.PageNumber = 1;
