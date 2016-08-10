@@ -615,8 +615,7 @@
 
             //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
             vm.filterSearchCancel = function (type) {
-                if(type !== undefined && type === 'client')
-                {
+                if (type !== undefined && type === 'client') {
                     if (vm.selectedClientsForCancel !== undefined && vm.selectedClientsForCancel.toString().length > 0) {
                         vm.selectedClients = vm.selectedClientsForCancel;
                         angular.forEach(vm.clients, function (client) {
@@ -824,10 +823,10 @@
                         vm.pgdrop = true;
                         vm.pgdropvisible = true;
                     }
-                        vm.clientdrop = false;
-                        vm.clientdropvisible = false;
-                        vm.aoldrop = false;
-                        vm.aoldropvisible = false;
+                    vm.clientdrop = false;
+                    vm.clientdropvisible = false;
+                    vm.aoldrop = false;
+                    vm.aoldropvisible = false;
                 } else if (vm.pgdropvisible && $event.type === "keyup") {
                     vm.customSelection('pg');
                 } else {
@@ -1131,7 +1130,7 @@
                     vm.first = vm.first + gridOptions.paginationPageSize;
                     vm.last = vm.last + gridOptions.paginationPageSize;
                     vm.total = vm.totalrecords - gridOptions.paginationPageSize;
-                    if (vm.last>vm.totalrecords) {
+                    if (vm.last > vm.totalrecords) {
                         vm.fromtopage = vm.first + " - " + vm.totalrecords;
                     } else {
                         vm.fromtopage = vm.first + " - " + vm.last;
@@ -1450,6 +1449,51 @@
                     }
                 });
             }
+            //#endregion
+
+
+            //#region Exporting to Excel Test
+            vm.export = function () {
+                //vm.lazyloaderdashboard = false;
+                var exportMatterSearchRequest = {
+                    Client: {
+                        Url: configs.global.repositoryUrl
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: 500,
+                        SearchTerm: jsonMatterSearchRequest.SearchObject.SearchTerm,
+                        Filters: {
+                            ClientsList: jsonMatterSearchRequest.SearchObject.Filters.ClientsList,
+                            PGList: jsonMatterSearchRequest.SearchObject.Filters.PGList,
+                            AOLList: jsonMatterSearchRequest.SearchObject.Filters.AOLList,
+                            FromDate: jsonMatterSearchRequest.SearchObject.Filters.FromDate,
+                            ToDate: jsonMatterSearchRequest.SearchObject.Filters.ToDate,
+                            FilterByMe: jsonMatterSearchRequest.SearchObject.Filters.FilterByMe
+                        },
+                        Sort: {
+                            ByProperty: 'LastModifiedTime',
+                            Direction: 1
+                        }
+                    }
+                };
+                get(exportMatterSearchRequest, function (response) {
+                    if (response == "") {
+                        //vm.lazyloaderdashboard = true;
+                    } else {
+                        vm.exportDate = response;
+
+                        $timeout(function () {
+                            var blob = new Blob([document.getElementById('exportable').innerHTML], {
+                                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                            });
+                            saveAs(blob, "Matters.xls");
+                            //vm.lazyloaderdashboard = true;
+                        }, 1000);
+                    }
+                });
+            }
+
             //#endregion
         }
     ]);

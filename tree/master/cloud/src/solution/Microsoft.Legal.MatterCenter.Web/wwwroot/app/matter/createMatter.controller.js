@@ -11,6 +11,8 @@
             $rootScope.bodyclass = "";
             cm.blockedUserName = undefined;
             cm.defaultConfilctCheck = false;
+            cm.createContent = uiconfigs.CreateMatter;
+            cm.header = uiconfigs.Header;
             cm.chkConfilctCheck = undefined;
             cm.conflictRadioCheck = true;
             cm.iShowSuccessMessage = 0;

@@ -16,8 +16,9 @@
             vm.navigationContent = uiconfigs.Navigation;
             vm.configSearchContent = configs.search;
             vm.matterConfigContent = uiconfigs.Matters;
+            vm.header = uiconfigs.Header;
             //#end region
-            vm.mattername = ""+vm.matterConfigContent.MatterType1+"";
+            vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
             vm.sortname = "";
             vm.mattersdrop = false;
             vm.mattersdropinner = true;
@@ -88,13 +89,13 @@
                 enableSelectAll: false,
                 multiSelect: false,
                 columnDefs: [
-                     { field: 'matterName', displayName: vm.matterConfigContent.GridHeaderItem1, enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
-                     { field: 'matterClient', displayName: vm.matterConfigContent.GridHeaderItem2, headerCellClass: 'gridclass', cellClass: 'gridclass', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
-                     { field: 'matterClientId', displayName: vm.matterConfigContent.GridHeaderItem3, headerCellClass: 'gridclass', cellClass: 'gridclass', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-                     { field: 'matterModifiedDate', displayName: vm.matterConfigContent.GridHeaderItem4, width: "195", headerCellClass: 'gridclass', cellClass: 'gridclass', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
-                     { field: 'matterResponsibleAttorney', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: vm.matterConfigContent.GridHeaderItem5, visible: false },
-                     { field: 'matterSubAreaOfLaw', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: vm.matterConfigContent.GridHeaderItem6, visible: false },
-                     { field: 'matterCreatedDate', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html', width: "170", displayName: vm.matterConfigContent.GridHeaderItem7, cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
+                     { field: 'matterName', displayName: vm.matterConfigContent.GridColumn1Header, enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
+                     { field: 'matterClient', displayName: vm.matterConfigContent.GridColumn2Header, headerCellClass: 'gridclass', cellClass: 'gridclass', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
+                     { field: 'matterClientId', displayName: vm.matterConfigContent.GridColumn3Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
+                     { field: 'matterModifiedDate', displayName: vm.matterConfigContent.GridColumn4Header, width: "195", headerCellClass: 'gridclass', cellClass: 'gridclass', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
+                     { field: 'matterResponsibleAttorney', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: vm.matterConfigContent.GridColumn5Header, visible: false },
+                     { field: 'matterSubAreaOfLaw', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: vm.matterConfigContent.GridColumn6Header, visible: false },
+                     { field: 'matterCreatedDate', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html', width: "170", displayName: vm.matterConfigContent.GridColumn7Header, cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
                 ],
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
@@ -992,7 +993,7 @@
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 vm.matterid = 1;
-                vm.mattername = ""+vm.matterConfigContent.MatterType1+"";
+                vm.mattername = ""+vm.matterConfigContent.Dropdown1Item1+"";
                 vm.pagenumber = 1;
                 var searchToText = '';
                 var finalSearchText = '';
@@ -1221,7 +1222,7 @@
 
             //#region Code written for displaying types in dropdown 
             //Start 
-            vm.Matters = [{ Id: 1, Name: ""+vm.matterConfigContent.MatterType1+"" }, { Id: 2, Name: ""+vm.matterConfigContent.MatterType2+"" }, { Id: 3, Name: ""+vm.matterConfigContent.MatterType3+"" }];
+            vm.Matters = [{ Id: 1, Name: "" + vm.matterConfigContent.Dropdown1Item1 + "" }, { Id: 2, Name: "" + vm.matterConfigContent.Dropdown1Item2 + "" }, { Id: 3, Name: "" + vm.matterConfigContent.Dropdown1Item3 + "" }];
             vm.ddlMatters = vm.Matters[0];
             //#endregion  
 
@@ -1852,7 +1853,7 @@
             //#region
             vm.typeheadselect = function (index, selected) {
                 vm.matterid = 1;
-                vm.mattername = ""+vm.matterConfigContent.MatterType1+"";
+                vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
                 var searchToText = '';
                 var finalSearchText = '';
                 if (selected != "") {
@@ -1888,6 +1889,8 @@
                 vm.mattersdropinner = true;
                 vm.matterheader = true;
                 vm.matterdateheader = true;
+                angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
+                angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
             }
 
             //#endregion

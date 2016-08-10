@@ -18,6 +18,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
     public class ServiceConstants
     {
 
+        public const int Matter_ONE_NOTE_LENGTH = 120;
         public const string CLIENT_TERM_PATH = "/";
         public const string CACHE_PERMISSIONS = "Permissions";
 

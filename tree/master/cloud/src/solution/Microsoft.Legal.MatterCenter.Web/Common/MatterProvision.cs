@@ -34,6 +34,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private IExternalSharing externalSharing;
         private IConfigurationRoot configuration;
         private IUsersDetails userDetails;
+        private GeneralSettings generalSettings;
         public MatterProvision(IMatterRepository matterRepositoy, IOptions<MatterSettings> matterSettings,
             IOptions<ErrorSettings> errorSettings,
             ISPOAuthorization spoAuthorization, IEditFunctions editFunctions, IValidationFunctions validationFunctions,
@@ -41,6 +42,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             IOptions<MailSettings> mailSettings,
             IOptions<CamlQueries> camlQueries,
             IOptions<ListNames> listNames,
+            IOptions<GeneralSettings> generalSettings,
             IOptions<SearchSettings> searchSettings, IUserRepository userRepositoy, 
             IExternalSharing externalSharing, IConfigurationRoot configuration, IUsersDetails userDetails
             )
@@ -61,6 +63,18 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.externalSharing = externalSharing;
             this.configuration = configuration;
             this.userDetails = userDetails;
+            this.generalSettings = generalSettings.Value;
+        }
+
+
+        /// <summary>
+        /// This method will check whether login user can create matter or not
+        /// </summary>
+        /// <param name="client">The sharepoint site collection in which we need to check whether the login user is present in the sharepoint group or not</param>
+        /// <returns></returns>
+        public bool CanCreateMatter(Client client)
+        {
+            return matterRepositoy.CanCreateMatter(client);
         }
 
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
@@ -710,12 +724,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             try
             {
                 var matterConfiguration = matterMetadataVM.MatterConfigurations;
-                Uri centralListURL = new Uri(string.Concat(matterSettings.CentralRepositoryUrl, ServiceConstants.FORWARD_SLASH,
+                Uri centralListURL = new Uri(string.Concat(generalSettings.CentralRepositoryUrl, ServiceConstants.FORWARD_SLASH,
                     ServiceConstants.LISTS, ServiceConstants.FORWARD_SLASH, listNames.DMSMatterListName)); // Central Repository List URL  
                 IList<string> documentLibraryFolders = new List<string>();
                 Dictionary<string, bool> documentLibraryVersioning = new Dictionary<string, bool>();
                 Uri clientUrl = new Uri(client.Url);
-
+                string matterOneNoteTitle = TrimMatterNameForOneNoteTitle(matter.Name);
                 ListInformation listInformation = new ListInformation();
                 listInformation.name = matter.Name;
                 listInformation.description = matter.Description;
@@ -730,7 +744,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 matterRepositoy.CreateList(clientContext, listInformation);
 
                 documentLibraryVersioning.Add("EnableVersioning", false);
-                documentLibraryFolders.Add(matter.MatterGuid);
+                documentLibraryFolders.Add(matterOneNoteTitle);
                 listInformation.name = matter.Name + matterSettings.OneNoteLibrarySuffix;
                 listInformation.folderNames = documentLibraryFolders;
                 listInformation.versioning.EnableVersioning = false;
@@ -780,7 +794,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
 
                 string oneNoteUrl = string.Concat(clientUrl.AbsolutePath, ServiceConstants.FORWARD_SLASH,
-                    matter.MatterGuid, matterSettings.OneNoteLibrarySuffix, ServiceConstants.FORWARD_SLASH, matter.MatterGuid);
+                    matter.MatterGuid, matterSettings.OneNoteLibrarySuffix, ServiceConstants.FORWARD_SLASH, matterOneNoteTitle);
                 matterRepositoy.AddOneNote(clientContext, client.Url, oneNoteUrl, matter.MatterGuid, matter.Name);
                 if (null != matter.Conflict)
                 {
@@ -821,6 +835,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Function to prepare OneNote URL based on threshold set for OneNote title
+        /// </summary>
+        /// <param name="matterName">Project name</param>
+        /// <returns>OneNote title for provided Project name</returns>
+        internal static string TrimMatterNameForOneNoteTitle(string matterName)
+        {
+            if (matterName.Length > ServiceConstants.Matter_ONE_NOTE_LENGTH)
+            {
+                matterName = matterName.Substring(0, ServiceConstants.Matter_ONE_NOTE_LENGTH);
+            }
+            return matterName;
         }
 
 
@@ -967,7 +995,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 try
                 {
-                    Uri mailListURL = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", matterSettings.ProvisionMatterAppURL,
+                    Uri mailListURL = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", generalSettings.CentralRepositoryUrl,
                         ServiceConstants.FORWARD_SLASH, ServiceConstants.LISTS, ServiceConstants.FORWARD_SLASH, matterSettings.SendMailListName));
                     string centralMailListURL = Convert.ToString(mailListURL, CultureInfo.InvariantCulture);
                     string mailSiteURL = centralMailListURL.Substring(0, centralMailListURL.LastIndexOf(string.Concat(ServiceConstants.FORWARD_SLASH,

@@ -22,7 +22,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private CamlQueries camlQueries;
         private ISPList spList;
         private IMatterRepository matterRespository;
-
+        private GeneralSettings generalSettings;
         /// <summary>
         /// Do validation stuff
         /// </summary>
@@ -34,7 +34,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="camlQueries"></param>
         public ValidationFunctions(ISPList spList, IOptions<MatterSettings> matterSettings,
             IOptions<ErrorSettings> errorSettings, IMatterRepository matterRespository,
-            IOptions<ListNames> listNames, IOptions<CamlQueries> camlQueries)
+            IOptions<ListNames> listNames, IOptions<CamlQueries> camlQueries, IOptions<GeneralSettings> generalSettings)
         {
             this.matterSettings = matterSettings.Value;
             this.spList = spList;
@@ -42,6 +42,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.matterRespository = matterRespository;
             this.listNames = listNames.Value;
             this.camlQueries = camlQueries.Value;
+            this.generalSettings = generalSettings.Value;
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             var matterDetails = matterInformation.MatterDetails;
             if (int.Parse(ServiceConstants.PROVISION_MATTER_CREATEMATTER, CultureInfo.InvariantCulture) <= methodNumber &&
                 int.Parse(ServiceConstants.EditMatterPermission, CultureInfo.InvariantCulture) >= methodNumber &&
-                !spList.CheckPermissionOnList(matterSettings.ProvisionMatterAppURL, matterSettings.SendMailListName, PermissionKind.EditListItems))
+                !spList.CheckPermissionOnList(generalSettings.CentralRepositoryUrl, matterSettings.SendMailListName, PermissionKind.EditListItems))
             {
                 genericResponse = new GenericResponseVM();
                 //return string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectInputUserAccessCode, ServiceConstantStrings.IncorrectInputUserAccessMessage);
@@ -178,7 +179,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 {
                     return GenericResponse(errorSettings.IncorrectInputUserRolesCode, errorSettings.IncorrectInputUserRolesMessage);
                 }
-                IList<string> roles = matterRespository.RoleCheck(matterSettings.CentralRepositoryUrl, listNames.DMSRoleListName,
+                IList<string> roles = matterRespository.RoleCheck(generalSettings.CentralRepositoryUrl, listNames.DMSRoleListName,
                 camlQueries.DMSRoleQuery);
                 if (matter.Roles.Except(roles).Count() > 0)
                 {

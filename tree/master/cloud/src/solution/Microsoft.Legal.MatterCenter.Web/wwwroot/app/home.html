@@ -6,11 +6,11 @@
     <div class="row {{$root.profileClass}}" style="min-width:310px;">
         <div class="col-xs-offset-9 col-xs-3" style="position: absolute;padding-top: 10px;left: 1px;">
             <div id="ContextualHelp">
-                <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="Contextual Help" title="Matter Center help" ng-click="$root.dispContextualHelp($event)" />
+                <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="{{vm.header.ContextualHelpAltText}}" title="{{vm.header.ContextualHelpImageTitle}}" ng-click="$root.dispContextualHelp($event)" />
                 <div data-class="ms-u-slideLeftIn40" class="ContextualHelp ms-u-slideLeftIn40" ng-show="$root.contextualhelp" ng-click="$event.stopPropagation();">
                     <div class="ContextualHelpFlyout">
-                        <img class="closeContextualHelpFlyout" title="Close" alt="Close flyout" ng-click="$root.dispContextualHelp($event)" src="Images/contextual_help_close_icon.png" />
-                        <div class="ContextualHelpHeader" title="{{vm.contextualHelpHeader}}">{{vm.contextualHelpHeader}}</div>
+                        <img class="closeContextualHelpFlyout" title="{{vm.header.CloseTitle}}" alt="{{vm.header.ContextualHelpFlyoutAltText}}" ng-click="$root.dispContextualHelp($event)" src="Images/contextual_help_close_icon.png" />
+                        <div class="ContextualHelpHeader" title="{{vm.header.ContextualHelpHeader}}">{{vm.header.ContextualHelpHeader}}</div>
                         <div class="contextualHelpSections">
                             <div class="ContextualHelpSubSection" id="popularSearchesSection" ng-repeat="helpData in vm.helpData">
                                 <div class="ContextualHelpSectionHeader"
@@ -22,11 +22,11 @@
                             </div>
                         </div>
                         <div class="ContextualHelpSupport">
-                            <span class="ContextualHelpBottomText" title="Write an email to Support">{{vm.ContextualHelpBottomText}}<span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. mailto:support@supportsite.com]">{{vm.MatterCenterSupportLinkText}}</a></span></span>
+                            <span class="ContextualHelpBottomText" title="{{vm.header.ContextualHelpFooterLink1Title}}">{{vm.header.ContextualHelpFooterLabel}}<span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. {{vm.navigation.MatterCenterSupportLink}}]">{{vm.navigation.ContextualHelpFooterLink1Label}}</a></span></span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>            
             <div id="ProfileSwitcher" ng-click="$root.dispPersonal($event)">
                 <img class="AppHeaderProfilePict" src="{{vm.smallPictureUrl}}" id="AppHeaderPersona" alt="Profile Picture" />
             </div>

@@ -2,24 +2,24 @@
 
     <div class="AppHeader">
         <div class="AppSwitcherContainer" ng-click="cm.menuClick()">
-            <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="Open App Switcher" title="Matter Center menu" />
-            <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="Close App Switcher" title="Close" />
-            <div class="MenuCaption"><span>menu</span></div>
+            <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{cm.header.MenuImageOpenTitle}}" title="{{cm.header.MenuCaptionTitle}}" />
+            <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{cm.header.MenuImageCloseTitle}}" title="{{cm.header.CloseTitle}}" />
+            <div class="MenuCaption"><span>{{cm.createContent.MenuImageCaption}}</span></div>
         </div>
         <div class="AppMenuFlyout ms-shadow">
             <div class="AppMenuFlyoutPriLinks">
-                <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="Home"><span class="AppFlyoutLinksText">Home</span></a>
-                <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="Search matters"><span class="AppFlyoutLinksText">Matters</span></a>
-                <a class="AppFlyoutLinks MatterDocumentsLink" title="Search documents"><span class="AppFlyoutLinksText">Documents</span></a>
+                <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{cm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{cm.header.Menu1Option1Text}}</span></a>
+                <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{cm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{cm.header.Menu1Option2Text}}</span></a>
+                <a class="AppFlyoutLinks MatterDocumentsLink" title="{{cm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{cm.header.Menu1Option3Text}}</span></a>
             </div>
         </div>
 
         <div id="HeaderPlaceHolder" class="headerClassAd">
             <div class="menu">
                 <div class="menuTextGroup">
-                    <div><span title="Step 1: Select a client and provide basic information for your new matter." ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText " data-section-num="1" data-section-name="snOpenMatter">1 Open Matter</span></div>
-                    <div><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter." class="menuText" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 Assign Permissions</span></div>
-                    <div><span ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team." class="menuText" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 Create and Notify</span></div>
+                    <div><span title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText " data-section-num="1" data-section-name="snOpenMatter">1 {{cm.createContent.Tab1Header}}</span></div>
+                    <div><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" class="menuText" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 {{cm.createContent.Tab2Header}}</span></div>
+                    <div><span ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" class="menuText" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 {{cm.createContent.Tab3Header}}</span></div>
                 </div>
             </div>
         </div>
@@ -64,9 +64,9 @@
         <!-- Open matter section -->
         <section class="sectionStep" id="snOpenMatter" ng-show='cm.sectionName=="snOpenMatter"' style="display: block;">
             <div class="sectionContent">
-                <label class="contentLabel medium" id="selectClient"><span class="mandatory">*&nbsp;</span>Client Name</label>
+                <label class="contentLabel medium" id="selectClient"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Dropdown1Label}}</label>
                 <div class="gutter"></div>
-                <label class="contentLabel small" id="clientId">Client ID</label>
+                <label class="contentLabel small" id="clientId">{{cm.createContent.Tab1Textbox1Label}}</label>
 
 
                 <div>
@@ -80,15 +80,15 @@
                 <div class="gutter"></div>
                 <input title="Client ID" disabled="disabled" class="small" id="txtClientId" ng-model="cm.clientId" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" placeholder="">
 
-                <label class="contentLabel medium clear" id="enterMatterName"><span class="mandatory">*&nbsp;</span>Matter Name</label>
+                <label class="contentLabel medium clear" id="enterMatterName"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox2Label}}</label>
                 <div class="gutter"></div>
-                <label class="contentLabel small" id="enterMatterId"><span class="mandatory">*&nbsp;</span>Matter ID</label>
-                <input title="Matter Name" class="medium clear" id="txtMatterName" ng-blur='cm.checkValidMatterName()' ng-class="{'errorBorder' :  (cm.errorBorder == 'mattername')}" ng-model="cm.matterName" n style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="Enter a name for this matter" value="">
+                <label class="contentLabel small" id="enterMatterId"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox3Label}}</label>
+                <input title="Matter Name" class="medium clear" id="txtMatterName" ng-blur='cm.checkValidMatterName()' ng-class="{'errorBorder' :  (cm.errorBorder == 'mattername')}" ng-model="cm.matterName" n style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="{{cm.createContent.Tab1Textbox2PlaceholderText}}" value="">
                 <div class="gutter"></div>
-                <input title="Matter ID" class="small" id="txtMatterId" ng-model="cm.matterId" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterid')}" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="Enter a matter ID" value="">
-                <label class="contentLabel large clear"><span class="mandatory description">*&nbsp;</span>Matter Description</label>
-                <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterdescription')}" spellcheck="true" maxlength="255" placeholder="Enter a brief description of the matter" rows="2" cols="400"></textarea>
-                <label class="contentLabel large clear customDivCreate"><span class="mandatory">*&nbsp;</span>Matter Type (click Select to define the practice group and area of law)</label>
+                <input title="Matter ID" class="small" id="txtMatterId" ng-model="cm.matterId" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterid')}" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="{{cm.createContent.Tab1Textbox3PlaceholderText}}" value="">
+                <label class="contentLabel large clear"><span class="mandatory description">*&nbsp;</span>{{cm.createContent.Tab1Textbox4Label}}</label>
+                <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterdescription')}" spellcheck="true" maxlength="255" placeholder="{{cm.createContent.Tab1Textbox4PlaceholderText}}" rows="2" cols="400"></textarea>
+                <label class="contentLabel large clear customDivCreate"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox5Label}}</label>
                 <div class="large" id="documentTemplates">
                     <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}' ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style="cursor:default; font-weight:normal;"
                          data-value="{{$index}}"
@@ -110,7 +110,7 @@
                 <div class="gutter"></div>
                 <button class="button" id="btnLookup" type="button" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" ng-click="cm.selectMatterType()" value="Lookup">Select Type</button>
                 <div class="loadingLookUp hide">
-                    <img id="loadingLookupImage" alt="Loading..." src="../Images/WindowsLoadingFast.GIF">
+                    <img id="loadingLookupImage" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" src="../Images/WindowsLoadingFast.GIF">
                 </div>
             </div>
         </section>
@@ -120,18 +120,18 @@
             <div class="sectionContent">
                 <div id="conflictCheck" ng-show="cm.defaultConfilctCheck">
                     <label class="medium chkConflictCheckParent conflictCheckPosition customDivCreate" id="chkConflictCheckParent">
-                        <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">Conflict check conducted (must be complete prior to provisioning matter)
+                        <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">{{cm.createContent.Tab2Checkbox1Lebal}}
                     </label>
-                    <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>Who conducted the conflict check?</label>
+                    <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox1Label}}</label>
                     <div class="gutter"></div>
-                    <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>Date Conducted</label>
+                    <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2DateLabel}}</label>
                     <div class="gutter"></div>
-                    <label class="contentLabel " id="conflictIdentified">Conflict Identified?</label>
+                    <label class="contentLabel " id="conflictIdentified">{{cm.createContent.Tab2RadioButton1Label}}</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser")' typeahead-no-results="conflictUserResults" class="form-control" placeholder="Enter and select name" autocomplete="off">
+                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser")' typeahead-no-results="conflictUserResults" class="form-control" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
 
                     <div ng-show="conflictUserResults">
-                        <i class="glyphicon glyphicon-remove"></i> No Results Found
+                        <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
                     </div>
                     <span class="pull-left"> <i ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh"></i></span>
                     <div class="gutter"></div>
@@ -166,20 +166,20 @@
                     <div class="gutter"></div>
                     <div class="conflictRadioBtn">
                         <label class="smaller">
-                            <input type="radio" class="conflictradioCheck " ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-value="true" ng-model="cm.conflictRadioCheck" value=true>Yes
+                            <input type="radio" class="conflictradioCheck " ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-value="true" ng-model="cm.conflictRadioCheck" value=true>{{cm.createContent.Tab2RadioButton1Option1}}
                         </label>
                         <label class="smaller">
-                            <input type="radio" class="conflictradioCheck " ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-model="cm.conflictRadioCheck" ng-value="false" value=false>No
+                            <input type="radio" class="conflictradioCheck " ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-model="cm.conflictRadioCheck" ng-value="false" value=false>{{cm.createContent.Tab2RadioButton1Option2}}
                         </label>
                     </div>
                     <div class="clear"></div>
                     <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
-                        <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>Conflicted Users</label>
+                        <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox2Label}}</label>
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
 
                         <div ng-show="blockUserResults">
-                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                            <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
                         </div><span class="pull-left">
                             <i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh"></i>
                         </span>
@@ -187,27 +187,27 @@
                         <div class="large clear" id="areaBlockUser"></div>
                     </section>
                 </div>
-                <label class="secureMatterLabel assignTeamRadioPosition customDivCreate">Would you like this matter to be secured only to the assigned team?</label>
+                <label class="secureMatterLabel assignTeamRadioPosition customDivCreate">{{cm.createContent.Tab2RadioButton2Label}}</label>
                 <div class="secureMatterRadioBtn assignTeamRadioPosition">
                     <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" ng-disabled="cm.secureMatterRadioEnabled" ng-model="cm.secureMatterCheck" class="matterCheckYes" type="radio" ng-value=true value="true">Yes
+                        <input name="rdbSecureMatterCheck" ng-disabled="cm.secureMatterRadioEnabled" ng-model="cm.secureMatterCheck" class="matterCheckYes" type="radio" ng-value=true value="true">{{cm.createContent.Tab2RadioButton2Option1}}
                     </label>
                     <label class="rdbOptions">
-                        <input name="rdbSecureMatterCheck" ng-disabled="cm.secureMatterRadioEnabled" ng-model="cm.secureMatterCheck" class="matterCheckNo" type="radio" ng-value=false value="false">No
+                        <input name="rdbSecureMatterCheck" ng-disabled="cm.secureMatterRadioEnabled" ng-model="cm.secureMatterCheck" class="matterCheckNo" type="radio" ng-value=false value="false">{{cm.createContent.Tab2RadioButton2Option2}}
                     </label>
                 </div>
-                <label class="contentLabel medium clear blue" id="assignTeam" ng-show="cm.defaultConfilctCheck">Assign Team</label>
-                <label class="medium clear contentLabel" id="labelName"><span class="mandatory">*&nbsp;</span>Name</label>
+                <label class="contentLabel medium clear blue" id="assignTeam" ng-show="cm.defaultConfilctCheck">{{cm.createContent.Tab2TeamHeader}}</label>
+                <label class="medium clear contentLabel" id="labelName"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox3Label}}</label>
                 <div class="gutter"></div>
-                <label class="mediumSmallRole contentLabel"><span class="mandatory">*&nbsp;</span>Role</label>
+                <label class="mediumSmallRole contentLabel"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Deopdown1Label}}</label>
                 <div class="gutter"></div>
-                <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>Permission Level</label>
+                <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Deopdown2Label}}</label>
 
                 <div data-ng-repeat="assignTeam in cm.assignPermissionTeams" class="assignTeam">
 
                     <div class="row{{$index}} assignNewPerm">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' confirm="false" uservalue="" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' confirm="false" uservalue="" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" autocomplete="off">
                         <!--<div ng-show='teamAssingnResults'>
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
                         </div>-->
@@ -228,13 +228,13 @@
                         </div>
                         <div class="gutter"></div>
                         <div class="close customClose">
-                            <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="Delete" alt="Delete" src="../Images/icon-delete.png">
+                            <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="{{cm.createContent.ButtonDeleteText}}" alt="{{cm.createContent.ButtonDeleteText}}" src="../Images/icon-delete.png">
                         </div>
                     </div>
 
                 </div>
                 <div class="clear" id="addNewAssignPerm"></div>
-                <a id="addMoreLink" ng-click="cm.addNewAssignPermissions()"><span class="glyphicon glyphicon-plus"></span> Add More Names</a>
+                <a id="addMoreLink" ng-click="cm.addNewAssignPermissions()"><span class="glyphicon glyphicon-plus"></span> {{cm.createContent.Tab2AddMoreHeaderLabel}}</a>
 
 
             </div>
@@ -245,44 +245,44 @@
 
                 <div class="row customDivCreate">
                     <div class="col-sm-12 createCol">
-                        You have entered all of the necessary information to create this matter.
-                        After you click Create and Notify, the matter will be created and all team members will receive an email containing a link to this matter’s location.
+                        {{cm.createContent.Tab3SectionText}}
                     </div>
                 </div>
+                
+                <div class="gutter" style="clear:both;"></div>
+                <div class="row pull-left">
 
+                    <input id="demo-checkbox-unselected2" ng-model="cm.includeEmail" ng-init="cm.includeEmail" ng-click="cm.createAndNotify(cm.includeEmail)" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox3Text}}</span></label>
+                </div>
+                <div class="gutter" style="clear:both;"></div>
+                <div class="row pull-left">
+
+                    <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox4Text}}</span></label>
+                </div>
 
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
 
                     <input id="demo-checkbox-unselected0" ng-model="cm.includeCalendar" ng-init="cm.includeCalendar" class="ms-ChoiceField-input ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox createLable">Include calendar</span></label>
+                    <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox1Text}}</span></label>
 
                 </div>
                 <div class="gutter" style="clear:both;"></div>
                 <div class="row pull-left">
 
                     <input id="demo-checkbox-unselected1" ng-model="cm.includeRssFeeds" ng-init="cm.includeRssFeeds" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">Include RSS Feeds</span></label>
+                    <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox2Text}}</span></label>
 
                 </div>
-                <div class="gutter" style="clear:both;"></div>
 
-                <div class="row pull-left">
 
-                    <input id="demo-checkbox-unselected2" ng-model="cm.includeEmail" ng-init="cm.includeEmail" ng-click="cm.createAndNotify(cm.includeEmail)" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox createLable">Include email notification</span></label>
-                </div>
-                <div class="gutter" style="clear:both;"></div>
-                <div class="row pull-left">
-
-                    <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
-                    <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">Include tasks</span></label>
-                </div>
                 <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton($event)' ng-disabled="cm.createBtnDisabled" value="Create">{{cm.createButton}}</button>
 
             </div>
             <div class="loading " ng-show="cm.createBtnDisabled">
-                <img id="loadingImage" src="../Images/WindowsLoadingFast.GIF" alt="Loading...">
+                <img id="loadingImage" src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
             </div>
         </section>
         <div id="space"></div>
@@ -290,10 +290,10 @@
 
         <div class="row ">
             <div class="col-xs-5">
-                <button class="buttonPrev pull-right marginTop10" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">Previous</button>
+                <button class="buttonPrev pull-right marginTop10" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
             </div>
             <div class="col-xs-6">
-                <button class="buttonPrev pull-left marginTop10" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>Next</button>
+                <button class="buttonPrev pull-left marginTop10" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
             </div>
         </div>
 
@@ -317,10 +317,10 @@
 </div>
 
 <div class="popUpContainer " ng-class="cm.popupContainer" style=" bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
-    <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
+    <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="{{cm.createContent.Tab1ButtonCloseTitle}}" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
     <div class="alignCenter">
         <header class="popUpHeader">
-            <div title="Select a Practice Group" class="popUpHeaderTitle popUpFloatLeft">Select a Practice Group</div>
+            <div title="Select a Practice Group" class="popUpHeaderTitle popUpFloatLeft">{{cm.createContent.Tab1Type1Header1Label1}}</div>
             <div class="popUpPracticeGroup clear">
                 <div class="popUpPGDiv">
                     <select class="medium clear custPracticeGroup" ng-model='cm.selectedPracticeGroup' ng-change='cm.getSelectedPracticeGroupValue()' ng-options='practiceGroup.termName for practiceGroup in cm.pracitceGroupList'>
@@ -332,7 +332,7 @@
         </header>
         <div class="popUpBody popUpFloatLeft" style="overflow:hidden;">
             <div class="popUpMatterDescription popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divAOL">
-                <label title="Area of Law" class="popUpBodyHeader popUpFloatLeft">Area of Law</label>
+                <label title="Area of Law" class="popUpBodyHeader popUpFloatLeft">{{cm.createContent.Tab1SiteColumn1Caption}}</label>
                 <div class="popUpFloatLeft popUpBorder " id="popupAOLBorder" style="height:213px;width:200px;">
                     <input class="popUpMDTextArea clear" ng-model="cm.searchAOLText" style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="Search by typing">
                     <div class="popUpCommonContent popUpMD" id="popupAOLContent">
@@ -343,7 +343,7 @@
                 </div>
             </div>
             <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divSAOL" style="width:28%;">
-                <label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft">Sub Area of Law (select matter type)</label>
+                <label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft">{{cm.createContent.Tab1SiteColumn2Caption}}</label>
                 <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px;">
                     <input class="popUpMDTextArea clear" ng-model="cm.searchSubAOLText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                     <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
@@ -355,10 +355,10 @@
             </div>
             <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft" style="position:relative;margin-top:0px;" id="navigate">
                 <div class="popUpLeftClick popUpPosAbs" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
-                    <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward" style="margin:0px;" alt="Left" src="../Images/forward_666.png">
+                    <img title="{{cm.createContent.Tab1ButtonAddTitle}}" ng-click="cm.addToDocumentTemplate()" class="iconForward" style="margin:0px;" alt="{{cm.createContent.Tab1LeftButtonAltText}}" src="../Images/forward_666.png">
                 </div>
                 <div class="popUpRightClick popUpPosAbs" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
-                    <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack" alt="Right" src="../Images/back-666.png">
+                    <img ng-click="cm.removeFromDocumentTemplate()" title="{{cm.createContent.Tab1ButtonAddTitle}}" class="iconBack" alt="{{cm.createContent.Tab1RighttButtonAltText}}" src="../Images/back-666.png">
                 </div>
 
             </div>
@@ -369,7 +369,7 @@
                     <div class="errTextArea popUpFloatRight" style="margin:12px 25px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage" style="visibility: visible;">Please select primary matter type</span></div>
                 </div>
 
-                <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft customDivCreate">Matter Type</label>
+                <label title="Matter Type" class="popUpBodyHeader popUpFloatLeft customDivCreate">{{cm.createContent.Tab1SiteColumn3Caption}}</label>
                 <div class="popUpFloatLeft popUpBorder" style="height:213px; width:200px;">
                     <div class="popUpCommonContent popDT">
                         <div class="popUpDTContent" style="padding:1px !important;" ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
@@ -395,20 +395,14 @@
 
             <div id="defaultMessageDiv" class="">
                 <img id="infoImg" alt="info" src="../Images/information-blue.png">
-                <span id="defaultMessage" class="">Please select primary matter type before you save. </span>
+                <span id="defaultMessage" class="">{{cm.createContent.Tab1Type1Footer1Label1}} </span>
             </div>
-            <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries " type="button">Save</button>
+            <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries " type="button">{{cm.createContent.ButtonSaveText}}</button>
         </div>
     </div>
 </div>
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-class="cm.popupContainerBackground">
-        <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+        <img src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" title="{{cm.createContent.Tab1ImageLoadingAltText}}" />
     </div>
 </div>
-
-
-
-
-
-

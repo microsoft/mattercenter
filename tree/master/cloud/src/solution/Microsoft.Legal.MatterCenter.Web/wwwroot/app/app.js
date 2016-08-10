@@ -112,27 +112,33 @@ angular.module('matterMain', [
          }, $httpProvider);
 
 
-    }]).directive('menuclose', function ($rootScope) {
-        return {
-            restrict: 'A',
-            link: function (scope, element, attrs) {
-                $(element).on('click', function (event) {
-                    if (event.target.className == "AppSwitcher OpenSwitcher" || event.target.className == "AppSwitcher OpenSwitcher hide" || event.target.className == "AppHeaderProfilePict") {
+    }])
+.directive('menuclose', function ($rootScope) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            $(element).on('click', function (event) {
+                if (event.target.className == "AppSwitcher OpenSwitcher" || event.target.className == "AppSwitcher OpenSwitcher hide" || event.target.className == "AppHeaderProfilePict") {
 
-                    } else {
-                        $(".AppMenuFlyout").slideUp();
-                        $(".CloseSwitcher").addClass("hide");
-                        $(".OpenSwitcher").removeClass("hide");
-                        $(".MenuCaption").removeClass("hideMenuCaption");
-                        $(".popcontent").css("display",'none');
-                        $rootScope.displayinfo = false;
-                        $rootScope.dispinner = true;
-                        $rootScope.contextualhelp = false;
-                        $rootScope.dispcontextualhelpinner = true;
-                        $rootScope.$apply();
-                    }
-                });
-            }
+                } else {
+                    $(".AppMenuFlyout").slideUp();
+                    $(".CloseSwitcher").addClass("hide");
+                    $(".OpenSwitcher").removeClass("hide");
+                    $(".MenuCaption").removeClass("hideMenuCaption");
+                    $(".popcontent").css("display", 'none');
+                    $rootScope.displayinfo = false;
+                    $rootScope.dispinner = true;
+                    $rootScope.contextualhelp = false;
+                    $rootScope.dispcontextualhelpinner = true;
+                    $rootScope.$apply();
+                }
+            });
         }
-    });
-
+    }
+})
+.run(function ($rootScope) {
+    $rootScope.logEvent = function (eventName) {
+        appInsights.trackEvent(eventName);
+        appInsights.setAuthenticatedUserContext(configs.ADAL.authUserEmail);
+    };
+});

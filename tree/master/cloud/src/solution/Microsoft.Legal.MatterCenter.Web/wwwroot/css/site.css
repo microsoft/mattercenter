@@ -164,21 +164,24 @@ textarea {
 
 #documentgrid .ui-grid-menu-mid, #mattergrid .ui-grid-menu-mid {
     position: relative;
-    left: 11px;
+    left: 9px;
     overflow-y: auto;
     overflow-x: hidden;
     width: 215px;
-    border:none;
+    border: none;
     max-height: 355px;
+    top: -29px;
+    box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.47);
 }
 
 #documentgrid .ui-grid-menu .ui-grid-menu-inner, #mattergrid .ui-grid-menu .ui-grid-menu-inner {
     background: #fff;
     border: 1px solid #d1d1d1;
-    padding: 45px 30px 50px 20px;
+    padding: 30px 30px 50px 20px;
     box-shadow: 0px 0px 10px #888888;
     width: 215px;
     height: 355px;
+    cursor: default;
 }
 
     #documentgrid .ui-grid-menu .ui-grid-menu-inner ul li:not(:last-child) > button, #mattergrid .ui-grid-menu .ui-grid-menu-inner ul li:not(:last-child) > button {
@@ -195,23 +198,40 @@ textarea {
         box-shadow: none !important;
     }
 
-#documentgrid .ui-grid-icon-ok, #mattergrid .ui-grid-icon-ok {
+#documentgrid .ui-grid-icon-ok:before, #mattergrid .ui-grid-icon-ok:before {
     content: url(../images/checkbox-selected.png) !important;
     top: 4px;
     right: 5px;
     position: relative;
 }
 
-#documentgrid .ui-grid-icon-cancel, #mattergrid .ui-grid-icon-cancel {
+#documentgrid .ui-grid-icon-cancel:before, #mattergrid .ui-grid-icon-cancel:before {
     content: url(../images/checkbox.png) !important;
     top: 4px;
     right: 5px;
     position: relative;
 }
 
+#documentgrid .ui-grid-menu-button, #mattergrid .ui-grid-menu-button {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    background: #fff;
+    border: 0px solid #d4d4d4;
+}
+
+.showExpandIcon:before {
+    content: url("../Images/Column_Picker_Expand.png");
+}
+
+.closeColumnPicker:before {
+    content: url("../Images/Column_Picker_Close.png");
+}
+
 #documentgrid .ui-grid-menu-button .ui-grid-menu, #mattergrid .ui-grid-menu-button .ui-grid-menu {
     right: 15px;
     top: 29px;
+    cursor: default;
 }
 
 #documentgrid .ui-grid-menu .ui-grid-menu-inner ul li button, #mattergrid .ui-grid-menu .ui-grid-menu-inner ul li button {
@@ -224,7 +244,7 @@ textarea {
 }
 
 #documentgrid .ui-grid-menu-mid {
-    left: 12px !important;
+    left: 9px !important;
 }
 
 /*#documentgrid .ui-grid-menu-button {
@@ -881,4 +901,31 @@ textarea {
 .footerLinks {
     padding-top: 13px !important;
     margin-bottom: 44px;
+}
+
+#menuitem-1 button {
+    font-family: "Segoe UI Web Semibold", "Segoe UI Semibold", "Segoe WP Semibold", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    color: #333 !important;
+}
+
+#mainmenu .AppMenuFlyout {
+    top: 34px !important;
+}
+
+#mainmenu .btn {
+    padding: 4px 12px;
+}
+
+#mainmenu .form-control {
+    height: 30px;
+}
+
+#gridViewPageHeaderContainer {
+    margin-top: 11px;
+}
+
+.MenuCaption {
+    position: absolute;
 }

@@ -6,13 +6,15 @@
     var app = angular.module("matterMain");
 
     app.controller('documentsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout',
-        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache', '$window', '$q', '$filter', 'commonFunctions',
+        'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache', '$window', '$q', '$filter', 'commonFunctions', '$animate',
     function ($scope, $state, $interval, $stateParams, api, $timeout,
-        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache, $window, $q, $filter, commonFunctions) {
+        documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache, $window, $q, $filter, commonFunctions, $animate) {
         var vm = this;
         vm.selected = undefined;
         //#region dynamic content
         vm.navigationContent = uiconfigs.Navigation;
+        vm.header = uiconfigs.Header;
+        vm.documentConfigContent = uiconfigs.Documents;
         vm.configSearchContent = configs.search;
         //#end region
         vm.documentname = 'All Documents'
@@ -57,6 +59,8 @@
             vm.docdropinner = true;
             vm.documentheader = true;
             vm.documentdateheader = true;
+            angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
+            angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
         }
 
         //#endregion
@@ -115,14 +119,14 @@
             multiSelect: true,
             columnDefs: [
                 { field: 'checker', displayName: 'checked', width: '20', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html' },
-                { field: 'documentName', displayName: 'Document', width: '278', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
-                { field: 'documentClient', displayName: 'Client', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '200', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
-                { field: 'documentClientId', displayName: 'Client.Matter ID', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentClientId}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
-                { field: 'documentModifiedDate', displayName: 'Modified Date', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
-                { field: 'documentOwner', displayName: 'Author', width: '140', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html', visible: false },
-                { field: 'documentVersion', displayName: 'Document Version', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
-                { field: 'documentCheckoutUser', displayName: 'Checked out to', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '210', headerCellTemplate: '/app/document/DocumentTemplates/CheckOutHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
-                { field: 'documentCreatedDate', displayName: 'Created date', headerCellClass: 'gridclass', cellClass: 'gridclass', width: '170', headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
+                { field: 'documentName', displayName: vm.documentConfigContent.GridColumn1Header, width: '278', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
+                { field: 'documentClient', displayName: vm.documentConfigContent.GridColumn2Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '200', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
+                { field: 'documentClientId', displayName: vm.documentConfigContent.GridColumn3Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentClientId}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
+                { field: 'documentModifiedDate', displayName: vm.documentConfigContent.GridColumn4Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
+                { field: 'documentOwner', displayName: vm.documentConfigContent.GridColumn5Header, width: '140', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html', visible: false },
+                { field: 'documentVersion', displayName: vm.documentConfigContent.GridColumn6Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
+                { field: 'documentCheckoutUser', displayName: vm.documentConfigContent.GridColumn7Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '210', headerCellTemplate: '/app/document/DocumentTemplates/CheckOutHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
+                { field: 'documentCreatedDate', displayName: vm.documentConfigContent.GridColumn8Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '170', headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
             ],
             enableColumnMenus: false,
             onRegisterApi: function (gridApi) {
@@ -144,6 +148,7 @@
                     isOpenedInOutlook();
 
                 });
+                $animate.enabled(gridApi.grid.element, false);
                 $scope.gridApi.core.on.sortChanged($scope, $scope.sortChangedDocument);
                 $scope.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
                 $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFuncScroll);
@@ -735,6 +740,8 @@
             vm.sortby = "";
             vm.lazyloader = false;
             vm.divuigrid = false;
+            vm.nodata = false;
+            vm.gridOptions.data = [];
             if (id == 1) {
                 vm.responseNull = false;
                 searchRequest.SearchObject.PageNumber = 1;
@@ -1426,7 +1433,7 @@
         vm.getDocumentAssets = function (row) {
             vm.assetsuccess = false;
             var Client = {
-                Id: row.entity.documentUrl.replace(configs.uri.SPOsiteURL, ""),
+                Id: (row.entity.documentParentUrl + "/" + row.entity.documentName).replace(configs.uri.SPOsiteURL, ""),
                 Name: row.entity.documentMatterUrl.replace(configs.uri.SPOsiteURL, ""),
                 Url: row.entity.documentClientUrl
             }

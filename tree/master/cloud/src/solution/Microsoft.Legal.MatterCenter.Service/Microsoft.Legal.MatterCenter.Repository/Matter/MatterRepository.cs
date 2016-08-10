@@ -43,6 +43,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ISPContentTypes spContentTypes;
         private IExternalSharing extrnalSharing;
         private IUserRepository userRepositoy;
+        private GeneralSettings generalSettings;
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
@@ -56,7 +57,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             IExternalSharing extrnalSharing, 
             IUserRepository userRepositoy,
             ISPList spList, 
-            IOptions<CamlQueries> camlQueries, 
+            IOptions<CamlQueries> camlQueries,
+            IOptions<GeneralSettings> generalSettings,
             IUsersDetails userdetails, 
             IOptions<ErrorSettings> errorSettings, 
             ISPPage spPage)
@@ -71,9 +73,21 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spoAuthorization = spoAuthorization;
             this.spPage = spPage;
             this.errorSettings = errorSettings.Value;
+            this.generalSettings = generalSettings.Value;
             this.spContentTypes = spContentTypes;
             this.extrnalSharing = extrnalSharing;
             this.userRepositoy = userRepositoy;
+        }
+
+
+        /// <summary>
+        /// This method will check whether login user can create matter or not
+        /// </summary>
+        /// <param name="client">The sharepoint site collection in which we need to check whether the login user is present in the sharepoint group or not</param>
+        /// <returns></returns>
+        public bool CanCreateMatter(Client client)
+        {
+            return spList.CheckPermissionOnList(client, matterSettings.SendMailListName, PermissionKind.EditListItems);
         }
 
         public GenericResponseVM UpdateMatter(MatterInformationVM matterInformation)
@@ -518,7 +532,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
         public IList<string> RoleCheck(string url, string listName, string columnName)
         {
-            ListItemCollection collListItem = spList.GetData(matterSettings.CentralRepositoryUrl,
+            ListItemCollection collListItem = spList.GetData(generalSettings.CentralRepositoryUrl,
                 listNames.DMSRoleListName,
                 camlQueries.DMSRoleQuery);
             IList<string> roles = new List<string>();
