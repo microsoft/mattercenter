@@ -91,8 +91,17 @@
         });
         window.appInsights = appInsights;
         appInsights.trackPageView();
+        if (Office.context && Office.context.mailbox)
+        {
+            configs.appInsights.appType = 'Outlook';
+        }
+        else if (Office.context)
+        {
+            configs.appInsights.appType = 'Word';
+        }
+        else {
+            configs.appInsights.appType = 'Browser';
+        } 
     </script>
-
-
 </body>
 </html>

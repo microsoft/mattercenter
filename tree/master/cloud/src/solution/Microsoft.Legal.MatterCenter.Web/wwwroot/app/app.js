@@ -138,7 +138,12 @@ angular.module('matterMain', [
 })
 .run(function ($rootScope) {
     $rootScope.logEvent = function (eventName) {
+        
+        var appType = configs.appInsights.appType;
+        //var appType = 'test';
+        eventName = appType + "/" + eventName;
         appInsights.trackEvent(eventName);
-        appInsights.setAuthenticatedUserContext(configs.ADAL.authUserEmail);
+        appInsights.setAuthenticatedUserContext(configs.ADAL.authUserEmail)
     };
-});
+})
+;
