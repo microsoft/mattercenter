@@ -68,6 +68,41 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
 
         /// <summary>
+        /// This method will save matter configurations in sharepoint list
+        /// </summary>
+        /// <param name="matterConfigurations"></param>
+        /// <returns></returns>
+        public GenericResponseVM SaveConfigurations(MatterConfigurations matterConfigurations)
+        {
+            try
+            {
+                Matter matter = new Matter();
+                matter.AssignUserNames = GetUserList(matterConfigurations.MatterUsers);
+                matter.AssignUserEmails = GetUserList(matterConfigurations.MatterUserEmails);
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(matterConfigurations.ClientUrl);
+                GenericResponseVM genericResponseVM = null;
+                if (0 < matter.AssignUserNames.Count)
+                {
+                    genericResponseVM = matterRepositoy.ValidateTeamMembers(clientContext, matter, matterConfigurations.UserId);
+                }
+
+                if (genericResponseVM != null)
+                {
+                    return genericResponseVM;
+                }
+                genericResponseVM = matterRepositoy.SaveConfigurations(clientContext, matterConfigurations);
+                return genericResponseVM;
+            }            
+            catch (Exception ex)
+            {                
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+
+        /// <summary>
         /// This method will check whether login user can create matter or not
         /// </summary>
         /// <param name="client">The sharepoint site collection in which we need to check whether the login user is present in the sharepoint group or not</param>
@@ -1438,6 +1473,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
 
         #region Private Methods
+
+        
+
         /// <summary>
         /// This method will loop for all external users in the matterinformation object and
         /// will send notification to that external user
