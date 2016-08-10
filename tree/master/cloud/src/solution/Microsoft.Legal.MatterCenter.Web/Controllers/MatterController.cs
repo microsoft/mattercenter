@@ -421,13 +421,12 @@ namespace Microsoft.Legal.MatterCenter.Service
         }
 
         [HttpPost("getconfigurations")]
-        [SwaggerResponse(HttpStatusCode.OK)]        
+        [SwaggerResponse(HttpStatusCode.OK)]
         /// <summary>
-        /// get users
+        /// get configurations for a selected client
         /// </summary>        
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="details">Term Store object containing Term store data</param>
-        /// <returns>Returns JSON object to the client</returns>        ///
+        /// <param name="siteCollectionPath">for which client site collection, the user wants the default configurations</param>
+        /// <returns>IActionResult</returns>
         public async Task<IActionResult> GetConfigurations([FromBody]string siteCollectionPath)
         {
             try
@@ -455,9 +454,87 @@ namespace Microsoft.Legal.MatterCenter.Service
                 throw;
             }
         }
+
+
+        /// <summary>
+        /// Save configurations for a selected client
+        /// </summary>        
+        /// <param name="matterConfigurations">Client object containing Client data</param>        
+        /// <returns>Returns JSON object to the client</returns>        
+        [HttpPost("saveconfigurations")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public IActionResult SaveConfigurations([FromBody]MatterConfigurations matterConfigurations)
+        {
+            try
+            {
+                #region Error Checking                
+                GenericResponseVM genericResponse = null;
+                if (matterConfigurations==null &&  string.IsNullOrWhiteSpace(matterConfigurations.ClientUrl))
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+                GenericResponseVM genericResponseVM = matterProvision.SaveConfigurations(matterConfigurations);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
         #endregion
 
         #region Matter Provision
+
+        /// <summary>
+        /// This method will check whether the current login user can create a matter or not
+        /// This method will check whether the user is present in the sharepoint group called "Provision Matter User"
+        /// If the user is not present in the group, then "Create Matter" link should not be visible to the user
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        [HttpPost("cancreate")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public IActionResult CanCreateMatter([FromBody]Client client)
+        {
+            GenericResponseVM genericResponse = null;
+            if (null == client && null != client.Url)
+            {
+                genericResponse = new GenericResponseVM()
+                {
+                    Value = errorSettings.MessageNoInputs,
+                    Code = "",
+                    IsError = true
+                };
+                
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+            }
+            try
+            {
+                var canCreateMatter = matterRepositoy.CanCreateMatter(client);
+
+                var canLoginUserCreateMatter = new
+                {
+                    CanCreateMatter = canCreateMatter
+                };
+
+                return matterCenterServiceFunctions.ServiceResponse(canLoginUserCreateMatter, (int)HttpStatusCode.OK);
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
         /// <summary>
         /// This method will check whether a matter already exists with a given name
         /// </summary>

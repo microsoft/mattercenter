@@ -131,6 +131,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
+        
+
         /// <summary>
         /// This method will check whether user exists in a sharepoint site or not
         /// </summary>
@@ -154,6 +156,44 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 throw;
             }
         }
+
+        /// <summary>
+        /// This method will check whether the given login user is present in a 
+        /// sharepoint group or not
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        //public bool CheckUserPermissionsInGroup(Client client, string groupName)
+        //{
+        //    try
+        //    {                   
+        //        ClientContext clientContext = spoAuthorization.GetClientContext(client.Url);
+        //        Web web = clientContext.Web;
+        //        //Get the group name in which to check the user
+        //        Group group = web.SiteGroups.GetByName(groupName);
+        //        clientContext.Load(group, grp => grp.Title, grp => grp.Users);
+        //        clientContext.ExecuteQuery();
+        //        //Loop through all the users in that group
+        //        foreach (User usr in group.Users)
+        //        {
+        //            //If the user is found in that group, return true else return false
+        //            if (usr.Email.ToLower().Trim() == Context.User.Identity.Name.ToLower().Trim())
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //        return false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //If the user doesn't belong to the user, the code will throw the exception and the user may not belong to the group and 
+        //        //log the message and return false from the method
+        //        customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+        //        return false;
+                
+        //    }
+        //}
 
         /// <summary>
         /// This method will return the user object who has currently logged into the system

@@ -66,6 +66,52 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.generalSettings = generalSettings.Value;
         }
 
+
+        /// <summary>
+        /// This method will save matter configurations in sharepoint list
+        /// </summary>
+        /// <param name="matterConfigurations"></param>
+        /// <returns></returns>
+        public GenericResponseVM SaveConfigurations(MatterConfigurations matterConfigurations)
+        {
+            try
+            {
+                Matter matter = new Matter();
+                matter.AssignUserNames = GetUserList(matterConfigurations.MatterUsers);
+                matter.AssignUserEmails = GetUserList(matterConfigurations.MatterUserEmails);
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(matterConfigurations.ClientUrl);
+                GenericResponseVM genericResponseVM = null;
+                if (0 < matter.AssignUserNames.Count)
+                {
+                    genericResponseVM = matterRepositoy.ValidateTeamMembers(clientContext, matter, matterConfigurations.UserId);
+                }
+
+                if (genericResponseVM != null)
+                {
+                    return genericResponseVM;
+                }
+                genericResponseVM = matterRepositoy.SaveConfigurations(clientContext, matterConfigurations);
+                return genericResponseVM;
+            }            
+            catch (Exception ex)
+            {                
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// This method will check whether login user can create matter or not
+        /// </summary>
+        /// <param name="client">The sharepoint site collection in which we need to check whether the login user is present in the sharepoint group or not</param>
+        /// <returns></returns>
+        public bool CanCreateMatter(Client client)
+        {
+            return matterRepositoy.CanCreateMatter(client);
+        }
+
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
         {
             searchRequestVM.SearchObject.Filters.FilterByMe = 0;
@@ -984,7 +1030,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 try
                 {
-                    Uri mailListURL = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", generalSettings.ProvisionMatterAppURL,
+                    Uri mailListURL = new Uri(string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", generalSettings.CentralRepositoryUrl,
                         ServiceConstants.FORWARD_SLASH, ServiceConstants.LISTS, ServiceConstants.FORWARD_SLASH, matterSettings.SendMailListName));
                     string centralMailListURL = Convert.ToString(mailListURL, CultureInfo.InvariantCulture);
                     string mailSiteURL = centralMailListURL.Substring(0, centralMailListURL.LastIndexOf(string.Concat(ServiceConstants.FORWARD_SLASH,
@@ -1427,6 +1473,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
 
         #region Private Methods
+
+        
+
         /// <summary>
         /// This method will loop for all external users in the matterinformation object and
         /// will send notification to that external user

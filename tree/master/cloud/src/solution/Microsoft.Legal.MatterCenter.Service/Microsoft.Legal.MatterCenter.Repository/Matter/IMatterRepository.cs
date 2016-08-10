@@ -68,5 +68,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
         GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation);
 
         GenericResponseVM UpdateMatter(MatterInformationVM matterInformation);
+        bool CanCreateMatter(Client client);
+
+        /// <summary>
+        /// The implementatioon of this method will save matter configutations in sharepoint list
+        /// </summary>
+        /// <param name="matterConfigurations"></param>
+        /// <returns></returns>
+        GenericResponseVM SaveConfigurations(ClientContext clientContext, MatterConfigurations matterConfigurations);
     }
 }

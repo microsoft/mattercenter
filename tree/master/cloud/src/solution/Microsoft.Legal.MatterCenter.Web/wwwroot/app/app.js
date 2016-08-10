@@ -93,8 +93,18 @@ angular.module('matterMain', [
                     controller: 'MatterUsersController as cm'
                 }
             }, requireADLogin: true
-        });
-        ;
+        })
+        .state('mc.settings', {
+            url: "^/settings",
+            views: {
+                "contentView": {
+                    templateUrl: '/app/dashboard/settings.html',
+                    controller: 'SettingsController as vm'
+                }
+            }, requireADLogin: true
+        })
+        ;;
+
 
 
         $locationProvider.html5Mode({

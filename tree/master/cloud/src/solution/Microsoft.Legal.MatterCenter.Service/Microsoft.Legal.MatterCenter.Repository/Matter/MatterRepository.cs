@@ -44,6 +44,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private IExternalSharing extrnalSharing;
         private IUserRepository userRepositoy;
         private GeneralSettings generalSettings;
+        
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
@@ -60,7 +61,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             IOptions<CamlQueries> camlQueries,
             IOptions<GeneralSettings> generalSettings,
             IUsersDetails userdetails, 
-            IOptions<ErrorSettings> errorSettings, 
+            IOptions<ErrorSettings> errorSettings,
+            
             ISPPage spPage)
         {
             this.search = search;
@@ -77,6 +79,75 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spContentTypes = spContentTypes;
             this.extrnalSharing = extrnalSharing;
             this.userRepositoy = userRepositoy;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="clientContext"></param>
+        /// <param name="matterConfigurations"></param>
+        /// <returns></returns>
+        public GenericResponseVM SaveConfigurations(ClientContext clientContext, MatterConfigurations matterConfigurations)
+        {
+            GenericResponseVM genericResponse = null;
+            try
+            {
+                string listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery,
+                    searchSettings.ManagedPropertyTitle, searchSettings.MatterConfigurationTitleValue);
+                ListItemCollection collection = spList.GetData(clientContext, listNames.MatterConfigurationsList, listQuery);
+                // Set the default value for conflict check flag
+                matterConfigurations.IsContentCheck = matterSettings.IsContentCheck;
+                if (0 == collection.Count)
+                {
+                    List<string> columnNames = new List<string>() { searchSettings.MatterConfigurationColumn,
+                        searchSettings.ManagedPropertyTitle };
+                    List<object> columnValues = new List<object>() { WebUtility.HtmlEncode(JsonConvert.SerializeObject(matterConfigurations)),
+                        searchSettings.MatterConfigurationTitleValue };
+                    Web web = clientContext.Web;
+                    List list = web.Lists.GetByTitle(listNames.MatterConfigurationsList);
+                    spList.AddItem(clientContext, list, columnNames, columnValues);
+                }
+                else
+                {
+                    bool response = spList.CheckItemModified(collection, matterConfigurations.CachedItemModifiedDate);
+                    if (response)
+                    {
+                        foreach (ListItem item in collection)
+                        {
+                            item[searchSettings.MatterConfigurationColumn] = WebUtility.HtmlEncode(JsonConvert.SerializeObject(matterConfigurations));
+                            item.Update();
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        genericResponse = new GenericResponseVM()
+                        {
+                            Code = errorSettings.IncorrectTeamMembersCode,
+                            Value = errorSettings.IncorrectTeamMembersMessage
+                        };
+                    }
+                }
+                if (genericResponse == null)
+                {
+                    clientContext.ExecuteQuery();                    
+                }
+            }
+            catch (Exception exception)
+            {
+                //result = Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
+            }
+            return genericResponse;
+        }
+
+        /// <summary>
+        /// This method will check whether login user can create matter or not
+        /// </summary>
+        /// <param name="client">The sharepoint site collection in which we need to check whether the login user is present in the sharepoint group or not</param>
+        /// <returns></returns>
+        public bool CanCreateMatter(Client client)
+        {
+            return spList.CheckPermissionOnList(client, matterSettings.SendMailListName, PermissionKind.EditListItems);
         }
 
         public GenericResponseVM UpdateMatter(MatterInformationVM matterInformation)

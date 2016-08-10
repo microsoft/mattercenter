@@ -189,5 +189,32 @@ namespace Microsoft.Legal.MatterCenter.Models
             get;
             set;
         }
+
+        /// <summary>
+        /// The client name/url to which the settings needs to be retrieved or needs to be updated
+        /// </summary>
+        public string ClientUrl
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The date time when the matter configurations are updated
+        /// </summary>
+        public string CachedItemModifiedDate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The user who has modified the matter configurations
+        /// </summary>
+        public IList<string> UserId
+        {
+            get;
+            set;
+        }
     }
 }

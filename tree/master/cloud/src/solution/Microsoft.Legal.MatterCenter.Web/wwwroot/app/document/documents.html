@@ -5,7 +5,7 @@
         <div class="row" id="mainmenu">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
                 <div class="col-xs-8 col-sm-3" ng-click="vm.menuClick()">
-                    <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImage1Title}}" title="{{vm.header.MenuImage1Title}}" />
+                    <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImage1OpenTitle}}" title="{{vm.header.MenuImage1Title}}" />
                     <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImage1CloseTitle}}" title="{{vm.header.CloseTitle}}" />
                     <span class="MenuCaption">{{vm.header.MenuImage1Caption}}</span>
                 </div>
@@ -70,7 +70,7 @@
     </div>
 
     <div ng-show="vm.errorAttachDocument" class="errorAttachDocument">
-        <img title="Warning" class="warningMessageIcon" src="../images/warning-message.png" alt="Warning icon">
+        <img title="{{vm.documentConfigContent.ImageWarningTitle}}" class="warningMessageIcon" src="../images/warning-message.png" alt="{{vm.documentConfigContent.ImageWarningAltText}}">
         <div class="warningMessageText" title="{{vm.warningMessageText}}"> {{vm.warningMessageText}}</div>
     </div>
     <div class="row title">
@@ -81,23 +81,23 @@
     <div class="row">
         <!--Start For attaching documents messages to the current mail item-->
         <div class="errorAttachDocument" ng-if="vm.showErrorAttachmentInfo">
-            <img title="Warning" class="warningMessageIcon" src="../images/warning-message.png" alt="Warning icon" />
+            <img title="{{vm.documentConfigContent.ImageWarningTitle}}" class="warningMessageIcon" src="../images/warning-message.png" alt="{{vm.documentConfigContent.ImageWarningAltText}}" />
             <div class="warningMessageText">{{vm.warningMessageText}}</div>
         </div>
         <div class="warningPopUpHolder" ng-if="vm.showPopUpHolder">
             <div class="warningPopUpContainer">
                 <div class="attachedSuccessPopUp" ng-if="vm.showSuccessAttachments">
-                    <div class="warningPopUpDetails">Documents successfully attached.</div>
+                    <div class="warningPopUpDetails">{{vm.documentConfigContent.AttachmentSuccessfullyMsgText}}</div>
                     <div title="Close" class="warningPopUpCloseIconContainer" ng-click="vm.closeNotification()">Close</div>
                 </div>
                 <div class="attachedProgressPopUp" ng-if="vm.showAttachmentProgress">
                     <div class="progressPopUpDetails">
-                        Attaching
+                        {{vm.documentConfigContent.AttachmentProgressingText}}
                         <span id="currentDocumentCount" />{{ vm.asyncCallCompleted}} of {{ vm.selectedRows.length}} documents...
-                        <div>Do not close Matter Center until all documents are attached. </div>
+                        <div>{{vm.documentConfigContent.AttachmentProgressingWarningText}} </div>
                     </div>
                     <div class="warningLoadingIcon">
-                        <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                        <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentConfigContent.AttachmentLoadingText}}" title="{{vm.documentConfigContent.AttachmentLoadingText}}" />
                     </div>
                 </div>
                 <div class="attachedFailedPopUp" ng-if="vm.showFailedAtachments">
@@ -105,7 +105,7 @@
                     <div class="failureDocumentList" ng-repeat="failedFile in vm.failedFiles track by $index">
                         <div title="{{failedFile}}" class="documentList"> {{failedFile}} </div>
                     </div>
-                    <div title="Close" class="attachedPopUpCloseIconContainer" ng-click="vm.closeNotification()">Close</div>
+                    <div title="{{vm.documentConfigContent.LabelCloseText}}" class="attachedPopUpCloseIconContainer" ng-click="vm.closeNotification()">{{vm.documentConfigContent.LabelCloseText}}</div>
                 </div>
             </div>
         </div>
@@ -128,21 +128,21 @@
     </div>
     <div id="loadingImageContainer">
         <div class="lazyLoading" ng-hide="vm.lazyloader">
-            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentConfigContent.AttachmentLoadingText}}" title="{{vm.documentConfigContent.AttachmentLoadingText}}" />
         </div>
     </div>
     <onload sortdetails="{{vm.sortexp}}"></onload>
     <div class="documentheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentheader">
         <div class='input-group'>
-            <input class='form-control' ng-if="vm.filtername=='Document'" ng-model='vm.searchTerm' placeholder='Search' />
-            <input class='form-control' ng-if="vm.filtername=='Client'" ng-model='vm.clientSearchTerm' placeholder='Search' />
-            <input class='form-control' ng-if="vm.filtername=='Author'" ng-model='vm.authorSearchTerm' placeholder='Search' />
-            <input class='form-control' ng-if="vm.filtername=='Checked out to'" ng-model='vm.checkedSearchTerm' placeholder='Search' />
+            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-model='vm.checkedSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
             <div class='input-group-btn'>
-                <button type='button' ng-if="vm.filtername=='Document'" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername=='Client'" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername=='Author'" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername=='Checked out to'" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
             </div>
         </div>
         <hr />
@@ -150,13 +150,13 @@
             <div class='clearFiltersIcon'>
                 <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
             </div>
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.documentConfigContent.ClearFilterFromLabelText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.documentConfigContent.ClearFilterFromLabelText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
             <div id='filterResultsContainer'>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Document'" ng-repeat='document in vm.details|unique:"document.documentName"' ng-click='vm.documentsearch(document.documentName,""+vm.configSearchContent.ManagedPropertyFileName+"",true)'>{{document.documentName}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Client'" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.documentsearch(client.documentClient,""+vm.configSearchContent.ManagedPropertyDocumentClientName+"",true)'>{{client.documentClient}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Author'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)'>{{matter.documentOwner}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Checked out to'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentCheckoutUser,""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+"",true)'>{{matter.documentCheckoutUser}}</div>
-                <div title="There are no items that match this filter" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>There are no items that match this filter</span></div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-repeat='document in vm.details|unique:"document.documentName"' ng-click='vm.documentsearch(document.documentName,""+vm.configSearchContent.ManagedPropertyFileName+"",true)'>{{document.documentName}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.documentsearch(client.documentClient,""+vm.configSearchContent.ManagedPropertyDocumentClientName+"",true)'>{{client.documentClient}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)'>{{matter.documentOwner}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentCheckoutUser,""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+"",true)'>{{matter.documentCheckoutUser}}</div>
+                <div title="{{vm.documentConfigContent.NoFilterMatchMsgTitle}}" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>{{vm.documentConfigContent.NoFilterMatchMsgText}}</span></div>
             </div>
 
         </div>
@@ -164,7 +164,7 @@
     <div class="documentheaderdates flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentdateheader">
         <div ng-show="vm.filtername=='Created Date'">
             <div class='input-group'>
-                <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                <input type='text' placeholder='{{vm.documentConfigContent.StartDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.startdate'
                        is-open='vm.openedStartDate'
@@ -176,7 +176,7 @@
                 </span>
             </div>
             <div class='input-group' style='margin-top:5px'>
-                <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'
+                <input type='text' placeholder='{{vm.documentConfigContent.EndDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.enddate'
                        is-open='vm.openedEndDate'
@@ -190,7 +190,7 @@
         </div>
         <div ng-show="vm.filtername=='Modified Date'">
             <div class='input-group'>
-                <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                <input type='text' placeholder='{{vm.documentConfigContent.StartDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.modstartdate'
                        is-open='vm.modifiedStartDate'
@@ -202,7 +202,7 @@
                 </span>
             </div>
             <div class='input-group' style='margin-top:5px'>
-                <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'
+                <input type='text' placeholder='{{vm.documentConfigContent.EndDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.modenddate'
                        is-open='vm.modifiedenddate'
@@ -214,13 +214,13 @@
                 </span>
             </div>
         </div>
-        <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.documentdateheader=true;'>Ok</div>
+        <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.documentdateheader=true;'>{{vm.documentConfigContent.ButtonOkText}}</div>
         <hr />
         <div class='clearFilterText' data-clearfiltertype='text'>
             <div class='clearFiltersIcon'>
-                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='{{vm.documentConfigContent.ImageClearTitle}}' title='{{vm.documentConfigContent.ImageClearAltText}}'>
             </div>
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.documentConfigContent.ClearFilterFromLabelText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.documentConfigContent.ClearFilterFromLabelText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
         </div>
     </div>
 </div>

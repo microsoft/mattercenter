@@ -1,25 +1,22 @@
 ﻿'use strict';
 
 angular.module('matterMain')
-  .factory('api', ['matterResource', 'documentResource', 'documentDashBoardResource','matterDashBoardResource','homeResource',
-    function api(matterResource, documentResource, documentDashBoardResource, matterDashBoardResource,homeResource) {
+  .factory('api', ['matterResource', 'documentResource', 'documentDashBoardResource','matterDashBoardResource','homeResource','navigationResource','settingsResource',
+    function api(matterResource, documentResource, documentDashBoardResource, matterDashBoardResource, homeResource, navigationResource, settingsResource) {
         var resources = {
             'matterResource': matterResource,
             'documentResource': documentResource,
             'documentDashBoardResource': documentDashBoardResource,
             'matterDashBoardResource': matterDashBoardResource,
-            'homeResource':homeResource      
-            };
+            'homeResource': homeResource,
+            'navigationResource': navigationResource,
+            'settingsResource': settingsResource
+        };
 
         function callAPI(options) {
-
             var resource = resources[options.resource];
-
-
-
             resource[options.method](options.data)
-              .$promise.then(function (response) {
-                  
+              .$promise.then(function (response) {                  
                   options.success(response);
               }).catch(function (e) {
                   // $scope.$parent.vm.Error = true;
@@ -27,7 +24,7 @@ angular.module('matterMain')
                   var message = 'oops something went wrong. ';
                   if (e.data != null)
                       if (e.data.Message != undefined)
-                          message = e.data.Message;
+                          message = e.data.message;
                       else
                           message = e.data;
                   else
