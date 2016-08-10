@@ -12,6 +12,8 @@
     "Microsoft.Extensions.Options": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
     "Microsoft.AspNetCore.Mvc": "1.0.0",
+    "Microsoft.Azure.KeyVault": "1.0.0",
+    "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.1",
     "Microsoft.AspNetCore.Razor.Tools": {
       "version": "1.0.0-preview2-final",
       "type": "build"

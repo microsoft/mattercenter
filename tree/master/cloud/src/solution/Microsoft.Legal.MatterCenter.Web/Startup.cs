@@ -11,6 +11,11 @@ using Newtonsoft.Json;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Azure.KeyVault;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using System.Diagnostics;
+using System.Linq;
+
 
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
@@ -23,6 +28,8 @@ using System.IO;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text;
+using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
 #endregion
 
 
@@ -63,6 +70,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
+            AddKeyVaultSecrtesToAppSettings();
             ConfigureSettings(services);
             services.AddCors();
             services.AddLogging();
@@ -98,6 +106,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         )
         {
             CreateConfig(env);
+           
 
             var log = loggerFactory.CreateLogger<Startup>();
             try
@@ -352,6 +361,102 @@ namespace Microsoft.Legal.MatterCenter.Web
 
             }
         }
+
+
+        //// <summary>
+        ///// Gets a secret
+        ///// </summary>
+        ///// <param name="secretId"> The secret ID </param>
+        ///// <returns> The created or the updated secret </returns>
+        //private static Secret GetSecret(string secretId)
+        //{
+        //    Secret secret;
+        //    string secretVersion = inputValidator.GetSecretVersion();
+
+        //    if (secretVersion != string.Empty)
+        //    {
+        //        var vaultAddress = inputValidator.GetVaultAddress();
+        //        string secretName = inputValidator.GetSecretName(true);
+        //        secret = keyVaultClient.GetSecretAsync(vaultAddress, secretName, secretVersion).GetAwaiter().GetResult();
+        //    }
+        //    else
+        //    {
+        //        secretId = secretId ?? inputValidator.GetSecretId();
+        //        secret = keyVaultClient.GetSecretAsync(secretId).GetAwaiter().GetResult();
+        //    }
+        //    Console.Out.WriteLine("Retrieved secret:---------------");
+        //    PrintoutSecret(secret);
+
+        //    return secret;
+        //}
+
+
+        private void AddKeyVaultSecrtesToAppSettings()
+        {
+            Dictionary<string, string> keyValues = new Dictionary<string, string>();
+            keyValues = retrieveSecret();
+          
+        }
+
+        private Dictionary<String, String> retrieveSecret()
+        {
+            Dictionary<string, string> keyValues = new Dictionary<string, string>();
+            // I put my GetToken method in a Utils class. Change for wherever you placed your method.
+            var kv = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(GetToken));
+
+            List<string> secrets = new List<string>();
+
+   
+            //var adminUser = kv.GetSecretAsync("https://matterkeyvault.vault.azure.net:443/secrets/AdminPassword/6d94193d39bf4506a6fdb2f6319627a8").GetAwaiter().GetResult();
+            //var adminPassword = kv.GetSecretAsync("https://matterkeyvault.vault.azure.net:443/secrets/AdminPassword/6d94193d39bf4506a6fdb2f6319627a8").GetAwaiter().GetResult();     
+            //var keys = kv.GetKeysAsync("https://matterkeyvault.vault.azure.net:443").GetAwaiter().GetResult();
+            var values = kv.GetSecretsAsync("https://matterkeyvault.vault.azure.net:443").GetAwaiter().GetResult();
+            
+
+            if (values != null && values.Value != null)
+            {
+
+                foreach (var m in values.Value)
+                    secrets.Add(m.Identifier.Name);
+                 
+            }
+
+            while (values != null && !string.IsNullOrWhiteSpace(values.NextLink))
+            {
+                values = kv.GetSecretsNextAsync(values.NextLink).GetAwaiter().GetResult();
+                if (values != null && values.Value != null)
+                {
+                   
+                    foreach (var m in values.Value)
+                        secrets.Add(m.Identifier.Name);
+                }
+            }
+            foreach(var value in secrets)
+            {
+                var secret = kv.GetSecretAsync("https://matterkeyvault.vault.azure.net:443", value).GetAwaiter().GetResult();
+                keyValues.Add(value, secret.Value);
+            }
+         
+
+
+            //I put a variable in a Utils class to hold the secret for general  application use.
+            return keyValues;
+        }
+
+        public async Task<string> GetToken(string authority, string resource, string scope)
+        {
+
+            var authContext = new AuthenticationContext(authority);
+            ClientCredential clientCred = new ClientCredential(this.Configuration.GetSection("General").GetSection("ClientId").Value.ToString(),
+                       this.Configuration.GetSection("General").GetSection("AppKey").Value.ToString());
+            AuthenticationResult result = await authContext.AcquireTokenAsync(resource, clientCred);
+
+            if (result == null)
+                throw new InvalidOperationException("Failed to obtain the JWT token");
+
+            return result.AccessToken;
+        }
+
 
         private void CreateConfig(IHostingEnvironment hostingEnvironment)
         { 

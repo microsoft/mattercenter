@@ -8,6 +8,9 @@
   "ADAL": {
     "clientId": "b94f07df-c825-431f-b9c5-b9499e8e9ac1"
   },
+  "appInsights": {
+    "instrumentationKey": "0f913235-fa70-4fa4-ae7c-c753d2e0c35d"
+  },
   "global": {
     "repositoryUrl": "https://msmatter.sharepoint.com/sites/catalog"
   },
