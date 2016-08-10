@@ -620,6 +620,15 @@ textarea {
     padding: 0;
 }
 
+.sortby .btn{
+    padding:1px 12px;
+}
+
+.img-xls{
+    float:right;
+    padding-left:5px;
+}
+
 .padtop20 {
     padding-top: 20px;
 }
@@ -929,3 +938,4 @@ textarea {
 .MenuCaption {
     position: absolute;
 }
+
