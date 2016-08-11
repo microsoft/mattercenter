@@ -414,7 +414,9 @@ namespace Microsoft.Legal.MatterCenter.Web
             jw.WritePropertyName("appInsights");
                 jw.WriteStartObject();
                     jw.WritePropertyName("instrumentationKey");
-                    jw.WriteValue(appInsightsSections["InstrumentationKey"]);                    
+                    jw.WriteValue(appInsightsSections["InstrumentationKey"]);  
+                    jw.WritePropertyName("appType");
+                    jw.WriteValue("");                      
                 jw.WriteEndObject();
 
             jw.WritePropertyName("global");
