@@ -93,8 +93,18 @@ angular.module('matterMain', [
                     controller: 'MatterUsersController as cm'
                 }
             }, requireADLogin: true
-        });
-        ;
+        })
+        .state('mc.settings', {
+            url: "^/settings",
+            views: {
+                "contentView": {
+                    templateUrl: '/app/dashboard/settings.html',
+                    controller: 'SettingsController as vm'
+                }
+            }, requireADLogin: true
+        })
+        ;;
+
 
 
         $locationProvider.html5Mode({
@@ -138,7 +148,12 @@ angular.module('matterMain', [
 })
 .run(function ($rootScope) {
     $rootScope.logEvent = function (eventName) {
+        
+        var appType = configs.appInsights.appType;
+        //var appType = 'test';
+        eventName = appType + "/" + eventName;
         appInsights.trackEvent(eventName);
-        appInsights.setAuthenticatedUserContext(configs.ADAL.authUserEmail);
+        appInsights.setAuthenticatedUserContext(configs.ADAL.authUserEmail)
     };
-});
+})
+;

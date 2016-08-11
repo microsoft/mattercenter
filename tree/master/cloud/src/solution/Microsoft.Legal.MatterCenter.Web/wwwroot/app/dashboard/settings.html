@@ -1,0 +1,31 @@
+﻿<style>
+    .commonContent {
+        display: block !important;
+    }
+</style>
+<div id="mainDivContainer" ng-click="vm.closealldrops()">
+    <div id="contentDiv" class="pad0">
+        <div ng-if="vm.clientlist">
+            <div class="defaultFontStyle clientName" id="settingName">Settings</div>
+            <div class="defaultFontStyle contentDescription clientDescription">Click on a name to configure matter creation options for that client.</div>
+            <div class="tableContainer defaultFontStyle semiBold ClientNameTitle">Client Name</div>
+            <div class="horizontalLine"></div>
+            <div class="row margin0">
+                <div class="defaultFontStyle">
+                    <a class="col-xs-12 clientLinks clientNames" ng-repeat="client in vm.taxonomydata" ng-click="vm.showSelectedClient(client.name)">
+                        {{client.name}}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div ng-if="vm.showClientDetails">
+            {{vm.selected}}
+        </div>
+
+    </div>
+</div>
+<div id="loadingImageContainer" style="top:25%;left:47%">
+    <div class="lazyLoading" ng-hide="vm.lazyloader">
+        <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+    </div>
+</div>
