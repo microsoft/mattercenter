@@ -17,7 +17,7 @@
             vm.clientdropvisible = false;
             vm.pgdrop = false;
             vm.pgdropvisible = false;
-            vm.MatterDashboardConfigs = uiconfigs.MatterDashboard;
+            vm.matterDashboardConfigs = uiconfigs.MatterDashboard;
             vm.aoldrop = false;
             vm.aoldropvisible = false;
             vm.checkClient = false;
@@ -93,11 +93,11 @@
                 multiSelect: gridOptions.multiSelect,
                 enableFiltering: gridOptions.enableFiltering,
                 columnDefs: [
-                    { field: 'matterName', width: '20%', displayName: 'Matter', cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html', enableColumnMenu: false },
-                    { field: 'matterClient', width: '15%', displayName: 'Client', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>', enableColumnMenu: false },
-                    { field: 'matterClientId', width: '15%', displayName: 'Client.Matter ID', headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false },
-                    { field: 'matterModifiedDate', width: '15%', displayName: 'Modified Date', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
-                    { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: 'Responsible attorney', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
+                    { field: 'matterName', width: '20%', displayName: vm.matterDashboardConfigs.GridColumn1Header, cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html', enableColumnMenu: false },
+                    { field: 'matterClient', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn2Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>', enableColumnMenu: false },
+                    { field: 'matterClientId', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn3Header, headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false },
+                    { field: 'matterModifiedDate', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn4Header, cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
+                    { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: vm.matterDashboardConfigs.GridColumn5Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
                     { field: 'pin', displayName: '', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
                     { field: 'upload', displayName: '', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>', enableColumnMenu: false }
                 ],
@@ -546,17 +546,17 @@
             //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
             vm.checkAll = function (checkAll, type, $event) {
                 $event.stopPropagation();
-                if (type === 'client') {
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
                     angular.forEach(vm.clients, function (client) {
                         client.Selected = checkAll;
                     });
                 }
-                if (type === 'pg') {
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
                     angular.forEach(vm.practiceGroups, function (pg) {
                         pg.Selected = checkAll;
                     });
                 }
-                if (type === 'aol') {
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
                     angular.forEach(vm.aolTerms, function (aol) {
                         aol.Selected = checkAll;
                     });
@@ -565,7 +565,7 @@
 
             //#region This event is going to fire when the user clicks on "OK" button in the filter panel
             vm.filterSearchOK = function (type) {
-                if (type === 'client') {
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
                     vm.selectedClients = '';
                     angular.forEach(vm.clients, function (client) {
                         if (client.Selected) {
@@ -577,7 +577,7 @@
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                 }
-                if (type === 'pg') {
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
                     vm.selectedPGs = '';
                     vm.selectedAOLs = '';
                     angular.forEach(vm.practiceGroups, function (pg) {
@@ -599,7 +599,7 @@
                     vm.pgdropvisible = false;
                 }
 
-                if (type === 'aol') {
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
                     vm.selectedAOLs = '';
                     angular.forEach(vm.aolTerms, function (aol) {
                         if (aol.Selected) {
@@ -616,7 +616,7 @@
 
             //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
             vm.filterSearchCancel = function (type) {
-                if (type !== undefined && type === 'client') {
+                if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
                     if (vm.selectedClientsForCancel !== undefined && vm.selectedClientsForCancel.toString().length > 0) {
                         vm.selectedClients = vm.selectedClientsForCancel;
                         angular.forEach(vm.clients, function (client) {
@@ -626,7 +626,7 @@
                         });
                     }
                 }
-                if (type === 'pg') {
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
                     if (vm.selectedPGsForCancel !== undefined && vm.selectedPGsForCancel.toString().length > 0) {
                         vm.selectedPGs = vm.selectedPGsForCancel;
                         angular.forEach(vm.practiceGroups, function (pg) {
@@ -636,7 +636,7 @@
                         });
                     }
                 }
-                if (type === 'aol') {
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
                     if (vm.selectedAOLsForCancel !== undefined && vm.selectedAOLsForCancel.toString().length > 0) {
                         vm.selectedAOLs = vm.selectedAOLsForCancel;
                         angular.forEach(vm.aolTerms, function (aol) {
@@ -728,14 +728,14 @@
                             vm.clientdrop = true;
                             vm.clientdropvisible = true;
                             if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
-                                vm.customSelection('client');
+                                vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText);
                             }
                             vm.lazyloaderclient = true;
                         });
                     }
                     else {
                         if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
-                            vm.customSelection('client');
+                            vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText);
                         }
                         vm.clientdrop = true;
                         vm.clientdropvisible = true;
@@ -746,7 +746,7 @@
                     vm.aoldropvisible = false;
 
                 } else if (vm.clientdropvisible && $event.type === "keyup") {
-                    vm.customSelection('client');
+                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText);
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
@@ -761,7 +761,7 @@
             //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
             vm.customSelection = function (type) {
 
-                if (type !== undefined && type === 'client') {
+                if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
                     var selectdClients = vm.selectedClients.split(',');  //user altered text value
                     angular.forEach(vm.clients, function (client) {
                         client.Selected = false;
@@ -771,7 +771,7 @@
                             }
                         })
                     });
-                } else if (type !== undefined && type === 'pg') {
+                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
                     var selectdPGs = vm.selectedPGs.split(',');  //user altered text value
                     angular.forEach(vm.practiceGroups, function (pgGroup) {
                         pgGroup.Selected = false;
@@ -781,7 +781,7 @@
                             }
                         })
                     });
-                } else if (type !== undefined && type === 'aol') {
+                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
                     var selectedAOLs = vm.selectedAOLs.split(',');  //user altered text value
                     angular.forEach(vm.aolTerms, function (aol) {
                         aol.Selected = false;
@@ -812,14 +812,14 @@
                             vm.pgdrop = true;
                             vm.pgdropvisible = true;
                             if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
-                                vm.customSelection('pg');
+                                vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
                             }
                             vm.lazyloaderpg = true;
                         });
                     }
                     else {
                         if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
-                            vm.customSelection('pg');
+                            vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
                         }
                         vm.pgdrop = true;
                         vm.pgdropvisible = true;
@@ -829,7 +829,7 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                 } else if (vm.pgdropvisible && $event.type === "keyup") {
-                    vm.customSelection('pg');
+                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
@@ -859,14 +859,14 @@
                             vm.aoldrop = true;
                             vm.aoldropvisible = true;
                             if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
-                                vm.customSelection('aol');
+                                vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
                             }
                             vm.lazyloaderaol = true;
                         });
                     }
                     else {
                         if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
-                            vm.customSelection('aol');
+                            vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
                         }
                         vm.aoldrop = true;
                         vm.aoldropvisible = true;
@@ -876,7 +876,7 @@
                     vm.pgdrop = false;
                     vm.pgdropvisible = false;
                 } else if (vm.aoldropvisible && $event.type === "keyup") {
-                    vm.customSelection('aol');
+                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
