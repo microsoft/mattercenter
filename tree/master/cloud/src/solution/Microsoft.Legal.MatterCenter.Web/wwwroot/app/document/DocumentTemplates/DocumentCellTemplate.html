@@ -3,12 +3,12 @@
         <a documentflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis hidden-xs' style='text-align: left;padding-left:0' details={{row.entity}}
            ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess">
             <img class="docTypeIconHeader" id="docTypeIcon"
-                 src="{{row.entity.documentIconUrl}}" alt="Document type icon" /> {{row.entity.documentName}}
+                 src="{{row.entity.documentIconUrl}}" alt="{{grid.appScope.vm.documentConfigContent.EllipsisDocTypeIconAltText}}" /> {{row.entity.documentName}}
         </a>
         <a documentflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis visible-xs' style='text-align: left;padding-left:0'
            details={{row.entity}} ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess">
             <img class="docTypeIconHeader" id="docTypeIcon"
-                 src="{{row.entity.documentIconUrl}}" alt="Document type icon" /> {{row.entity.documentName}}
+                 src="{{row.entity.documentIconUrl}}" alt="{{grid.appScope.vm.documentConfigContent.EllipsisDocTypeIconAltText}}" /> {{row.entity.documentName}}
         </a>
         <div class='popcontent' style="display:none;">
         </div>

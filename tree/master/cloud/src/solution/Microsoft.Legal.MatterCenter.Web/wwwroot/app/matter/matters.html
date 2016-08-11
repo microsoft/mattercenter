@@ -5,7 +5,7 @@
         <div class="row" id="mainmenu">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
                 <div class="col-xs-8 col-sm-3" ng-click="vm.menuClick()">
-                    <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImage1Title}}" title="{{vm.header.MenuImage1Title}}" />
+                    <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImage1OpenTitle}}" title="{{vm.header.MenuImage1Title}}" />
                     <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImage1CloseTitle}}" title="{{vm.header.CloseTitle}}" />
                     <span class="MenuCaption">{{vm.header.MenuImage1Caption}}</span>
                 </div>
@@ -90,7 +90,7 @@
 
                 <script type="text/ng-template" id="duplicateErrorDiv">
                     <div class="notification warningNotification" ng-show="duplicatefile.cancel!==null">
-                        <img id="warningImg" draggable="false" alt="Warning Message" src="../Images/warning-message.png">
+                        <img id="warningImg" draggable="false" alt="{{vm.matterConfigContent.ImageWarningAltText}}" src="../Images/warning-message.png">
                         <div id="overWriteDocumentName">
                             <div ng-bind-html="duplicatefile.value"></div>
 
@@ -98,17 +98,17 @@
                         </div>
                         <div class="notificationResult hide"></div>
                         <div class="askForOverwrite">
-                            <input ng-show="duplicatefile.contentCheck=='True'" type="button" title="Matter Center will compare all content and data associated with the two documents. Navigating away from this screen will cancel the content check." value="Perform content check" data-operation="contentCheck" ng-click="vm.localOverWriteDocument(duplicatefile,'contentCheck');vm.contentCheckNotification(duplicatefile,true);">
-                            <input ng-show="duplicatefile.saveLatestVersion=='True'" title="The file will be saved as the latest version of the existing document that has same title. Matter Center will retain all prior versions of the document." id="overWriteYes"
-                                   ng-click="vm.localOverWriteDocument(duplicatefile,'overwrite');" type="button" value="Save as latest version" data-operation="overwrite">
-                            <input ng-show="duplicatefile.append==true" type='button' data-operation='append' title='The file will be saved as new, separate document with the current date and time added to the end of the file name.' value="Append date to file name and save" ng-click="vm.localOverWriteDocument(duplicatefile,'append')" />
-                            <input ng-show="duplicatefile.cancel=='True'" title="This document will not be uploaded and you will return to the previous screen." id="overWriteNo"
-                                   ng-click="vm.localOverWriteDocument(duplicatefile,'ignore');" type="button" value="Cancel upload" data-operation="ignore">
+                            <input ng-show="duplicatefile.contentCheck=='True'" type="button" title="{{vm.matterConfigContent.Button1DuplicateContentTitle}}" value="{{vm.matterConfigContent.Button1DuplicateContentText}}" data-operation="contentCheck" ng-click="vm.localOverWriteDocument(duplicatefile,'contentCheck');vm.contentCheckNotification(duplicatefile,true);">
+                            <input ng-show="duplicatefile.saveLatestVersion=='True'" title="{{vm.matterConfigContent.Button2SaveLatestVersionTitle}}" id="overWriteYes"
+                                   ng-click="vm.localOverWriteDocument(duplicatefile,'overwrite');" type="button" value="{{vm.matterConfigContent.Button2SaveLatestVersionText}}" data-operation="overwrite">
+                            <input ng-show="duplicatefile.append==true" type='button' data-operation='append' title='{{vm.matterConfigContent.Button3AppendDateTitle}}' value="{{vm.matterConfigContent.Button3AppendDateText}}" ng-click="vm.localOverWriteDocument(duplicatefile,'append')" />
+                            <input ng-show="duplicatefile.cancel=='True'" title="{{vm.matterConfigContent.Button4CancelUploadTitle}}" id="overWriteNo"
+                                   ng-click="vm.localOverWriteDocument(duplicatefile,'ignore');" type="button" value="{{vm.matterConfigContent.Button4CancelUploadText}}" data-operation="ignore">
 
-                            <input ng-show="duplicatefile.ok=='True'" title="This document will not be uploaded and you will return to the previous screen." id="ok"
-                                   ng-click="vm.localOverWriteDocument(duplicatefile,'ok');" type="button" value="Ok" data-operation="ignore">
+                            <input ng-show="duplicatefile.ok=='True'" title="{{vm.matterConfigContent.Button5OkTitle}}" id="ok"
+                                   ng-click="vm.localOverWriteDocument(duplicatefile,'ok');" type="button" value="{{vm.matterConfigContent.Button5OkText}}" data-operation="ignore">
                             <div ng-show="duplicatefile.contentCheck=='contentCheck'" class='notificationCC'>
-                                <img src="../Images/loadingcirclests16.gif" alt="" />Checking content  <input id='cancelCC' type='button' value='Cancel' ng-click='vm.abortContentCheck(duplicatefile,true)' />
+                                <img src="../Images/loadingcirclests16.gif" alt="" />{{vm.matterConfigContent.Image1ContentCheckText}}  <input id='cancelCC' type='button' value='{{vm.matterConfigContent.Button6CancelText}}' ng-click='vm.abortContentCheck(duplicatefile,true)' />
                             </div>
                         </div>
                     </div>
@@ -119,7 +119,7 @@
             </div>
 
             <div class="modal-content">
-                <div ng-show="vm.oUploadGlobal.successBanner" class="notification successNotification ms-font-weight-semibold successUpload">Upload complete.<span class="closeNotification" ng-click="vm.closeSuccessBanner()">x</span></div>
+              <div ng-show="vm.oUploadGlobal.successBanner" class="notification successNotification ms-font-weight-semibold successUpload">{{vm.matterConfigContent.UploadCompleteLabel1Text}}<span class="closeNotification" ng-click="vm.closeSuccessBanner()">{{vm.matterConfigContent.CloseIconText}}</span></div>
                 <div class="row modalClose">
                     <img data-dismiss="modal" ng-click="vm.hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
                 </div>
@@ -129,13 +129,13 @@
                     </div>
                     <div class="row margin0">
                         <div class="col-sm-10 pad0">
-                            <div class="attachmentHeader marginBottom15">Drag and drop items to folders on the right</div>
+                            <div class="attachmentHeader marginBottom15">{{vm.matterConfigContent.AttachmentPopupHeaderText}}</div>
                         </div>
 
                     </div>
                     <div class="row margin0">
-                        <div class="col-sm-9 pull-left mailHeaderItems"><div>Items</div></div>
-                        <div class="col-sm-3 pull-left mailHeaderFolders"><div></div>Folders</div>
+                        <div class="col-sm-9 pull-left mailHeaderItems"><div>{{vm.matterConfigContent.AttachmentPopupHeaderItem1Text}}</div></div>
+                        <div class="col-sm-3 pull-left mailHeaderFolders"><div></div>{{vm.matterConfigContent.AttachmentPopupHeaderItem2Text}}</div>
                     </div>
 
                     <div class="row margin0">
@@ -146,17 +146,17 @@
 
                                 <div ng-if="attachmentInfo.isEmail" class="attachment">
                                     <div class="attachmentName mailName">
-                                        <img ng-hide="vm.mailUpLoadSuccess" title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
-                                             ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
-                                        <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
-                                             ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
+                                        <img ng-hide="vm.mailUpLoadSuccess" title="{{vm.matterConfigContent.AttachmentEditImageTitle}}" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
+                                             ng-click="vm.editAttachment(this, $event)" alt="{{vm.matterConfigContent.AttachmentEditImageAltText}}" src="../Images/edit-666.png">
+                                        <img title="{{vm.matterConfigContent.AttachmentSaveImageTitle}}" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
+                                             ng-click="vm.saveAttachment(this, $event)" alt="{{vm.matterConfigContent.AttachmentSaveImageText}}" src="../Images/save-666.png">
                                         <!--If the mail upload is success, show this div-->
                                         <div ng-if="vm.mailUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
-                                            <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
+                                            <img class="uploadSuccessStatus" alt="{{vm.matterConfigContent.AttachmentUploadSuccessfullyImageAltText}}" src="/images/success-message.png">
                                         </div>
-                                        <img class="attachIcon attachIconMargin" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
+                                        <img class="attachIcon attachIconMargin" id="{{attachmentInfo.counter}}attachIcon" alt="{{vm.matterConfigContent.AttachmentIconImageAltText}}" src="../Images/attach_icon-15x15_666.png">
                                         <input class="popupName editPopupContent hide ui-draggable" id="0attachmentText" type="text" maxlength="128">
-                                        <div title="Test attachments"
+                                        <div title="{{vm.matterConfigContent.AttachmentTestTitle}}"
                                              class="popupName ui-draggable"
                                              id="{{attachmentInfo.counter}}attachment"
                                              draggable
@@ -169,15 +169,15 @@
 
                                 <div ng-if="!attachmentInfo.isEmail" class="attachment">
                                     <div class="attachmentName">
-                                        <img ng-hide="attachmentInfo.uploadSuccess" title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
-                                             ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
-                                        <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
-                                             ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
+                                        <img ng-hide="attachmentInfo.uploadSuccess" title="{{vm.matterConfigContent.AttachmentEditImageTitle}}" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
+                                             ng-click="vm.editAttachment(this, $event)" alt="{{vm.matterConfigContent.AttachmentEditImageAltText}}" src="../Images/edit-666.png">
+                                        <img title="{{vm.matterConfigContent.AttachmentSaveImageTitle}}" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
+                                             ng-click="vm.saveAttachment(this, $event)" alt="{{vm.matterConfigContent.AttachmentSaveImageText}}" src="../Images/save-666.png">
                                         <div ng-show="attachmentInfo.uploadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
-                                            <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
+                                            <img class="uploadSuccessStatus" alt="{{vm.matterConfigContent.AttachmentUploadSuccessfullyImageAltText}}" src="/images/success-message.png">
                                         </div>
                                         <!--If the attachment upload is success, show this div-->
-                                        <img class="attachIcon attachIconMargin" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="{{attachmentInfo.iconSrc}}" fallbacksrc>
+                                        <img class="attachIcon attachIconMargin" id="{{attachmentInfo.counter}}attachIcon" alt="{{vm.matterConfigContent.AttachmentIconImageAltText}}" src="{{attachmentInfo.iconSrc}}" fallbacksrc>
                                         <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
                                         <div title="{{attachmentInfo.attachmentFileName}}"
                                              id="{{attachmentInfo.counter}}attachment"
@@ -199,7 +199,7 @@
                                     <div class="attachmentName mailName">
                                         <!--If the mail upload is success, show this div-->
                                         <div ng-if="!uploadedFile.isError" class="uploadSuccessStatus">
-                                            <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
+                                            <img class="uploadSuccessStatus" alt="{{vm.matterConfigContent.AttachmentImage3AltText}}" src="/images/success-message.png">
                                         </div>
                                         <img class="attachIcon" id="{{uploadedFile.counter}}attachIcon"
                                              alt="attachment icon" src="{{uploadedFile.documentIconUrl}}" fallbacksrc>
@@ -210,7 +210,7 @@
                                 </div>
                                 <div ng-hide="(vm.uploadedFiles.length || vm.allAttachmentDetails.length) ">
                                     <div title="" class="popupName" style="margin-left:1%;">
-                                        No files uploaded
+                                        {{vm.matterConfigContent.AttachmentEmptyText}}
                                     </div>
                                 </div>
                             </div>
@@ -219,7 +219,7 @@
                         </div>
                         <div class="col-sm-3 folderContent">
                             <div id="breadcrumb" class="breadcrumb" ng-hide="breadcrumb">
-                                <img alt="Root" ng-click="hideBreadCrumb()" id="rootLink" src="../Images/Return_Icon_23px_23px_666.png" title="<span class=&quot;content&quot;>cv vb</span>" draggable="false">
+                                <img alt="{{vm.matterConfigContent.AttachmentBreadcrumAltText}}" ng-click="hideBreadCrumb()" id="rootLink" src="../Images/Return_Icon_23px_23px_666.png" title="<span class=&quot;content&quot;>cv vb</span>" draggable="false">
                                 <div id="parentFolder" class="breadcrumbItem"></div>
                                 <div id="breadcrumbSeparator"></div>
                                 <div id="currentFolder" class="breadcrumbItem"></div>
@@ -227,7 +227,7 @@
                             <div class="folderStructureContent" showbreadcrumb ng-hide="foldercontent">
                                 <script type="text/ng-template" id="folderTree">
                                     <div ng-if="child.parentURL!==null" class="treeNodes" ng-show="child.active" title="" droppable drop="handleDrop()" folder="child" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" ng-click="vm.showSelectedFolderTree(child)">
-                                        <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="Documents">
+                                        <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="{{vm.matterConfigContent.AttachmentFolderAltText}}">
                                         {{child.name}}
                                     </div>
                                     <ul ng-if="child.children" style="margin-left:5px;">
@@ -247,7 +247,7 @@
                         </div>
                     </div>
                     <div class="row margin0 marginTop15">
-                        <div class="pull-left"><img src="../../images/information-blue.png" /> You can also drag and drop files from your desktop.</div>
+                        <div class="pull-left"><img src="../../images/information-blue.png" /> {{vm.matterConfigContent.AttachmentPopupFooterImageCapetion}}</div>
                     </div>
                 </div>
             </div>
@@ -256,36 +256,35 @@
 
     <div id="loadingImageContainer">
         <div class="lazyLoading" ng-hide="vm.lazyloader">
-            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.matterConfigContent.AttachmentLoadingTitle}}" title="{{vm.matterConfigContent.AttachmentLoadingTitle}}" />
         </div>
     </div>
-
-
+  
     <div class="matterheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.matterheader">
         <div class='input-group'>
-            <input class='form-control' ng-if="vm.filtername=='Matter'" ng-model='vm.searchTerm' placeholder='Search' />
-            <input class='form-control' ng-if="vm.filtername=='Client'" ng-model='vm.clientSearchTerm' placeholder='Search' />
-            <input class='form-control' ng-if="vm.filtername=='Responsible Attorney'" ng-model='vm.attorneySearchTerm' placeholder='Search' />
-            <input class='form-control' ng-if="vm.filtername=='Area of Law'" ng-model='vm.areaSearchTerm' placeholder='Search' />
+            <input class='form-control' ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' ng-if="vm.filtername==vm.matterConfigContent.GridColumn5Header" ng-model='vm.attorneySearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' ng-if="vm.filtername==vm.matterConfigContent.GridColumn8Header" ng-model='vm.areaSearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
             <div class='input-group-btn'>
-                <button type='button' ng-if="vm.filtername=='Matter'" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.searchTerm+"*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername=='Client'" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyClientName+":" + vm.clientSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername=='Responsible Attorney'" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyResponsibleAttorney+":" + vm.attorneySearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername=='Area of Law'" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertySubAreaOfLaw+":" + vm.areaSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.searchTerm+"*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyClientName+":" + vm.clientSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.matterConfigContent.GridColumn5Header" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyResponsibleAttorney+":" + vm.attorneySearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.matterConfigContent.GridColumn8Header" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertySubAreaOfLaw+":" + vm.areaSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
             </div>
         </div>
         <hr />
         <div class='clearFilterText'>
             <div class='clearFiltersIcon'>
-                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='{{vm.matterConfigContent.ImageClearTitle}}' title='{{vm.matterConfigContent.ImageClearAltText}}'>
             </div>
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.matterConfigContent.ClearFilterText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.matterConfigContent.ClearFilterText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
             <div id='filterResultsContainer'>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Matter'" ng-repeat='matter in vm.details|unique:"matter.matterName"' ng-click='vm.mattersearch(matter.matterName,""+vm.configSearchContent.ManagedPropertyMatterName+"",true)'>{{matter.matterName}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Client'" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.mattersearch(client.matterClient,""+vm.configSearchContent.ManagedPropertyClientName+"",true)'>{{client.matterClient}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Responsible Attorney'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(vm.filtermatter(matter.matterResponsibleAttorney),""+vm.configSearchContent.ManagedPropertyResponsibleAttorney+"",true)'>{{vm.filtermatter(matter.matterResponsibleAttorney)}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername=='Area of Law'" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(matter.matterSubAreaOfLaw,""+vm.configSearchContent.ManagedPropertySubAreaOfLaw+"",true)'>{{vm.filtermatter(matter.matterSubAreaOfLaw)}}</div>
-                <div title="There are no items that match this filter" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>There are no items that match this filter</span></div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-repeat='matter in vm.details|unique:"matter.matterName"' ng-click='vm.mattersearch(matter.matterName,""+vm.configSearchContent.ManagedPropertyMatterName+"",true)'>{{matter.matterName}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.mattersearch(client.matterClient,""+vm.configSearchContent.ManagedPropertyClientName+"",true)'>{{client.matterClient}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn5Header" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(vm.filtermatter(matter.matterResponsibleAttorney),""+vm.configSearchContent.ManagedPropertyResponsibleAttorney+"",true)'>{{vm.filtermatter(matter.matterResponsibleAttorney)}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn8Header" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(matter.matterSubAreaOfLaw,""+vm.configSearchContent.ManagedPropertySubAreaOfLaw+"",true)'>{{vm.filtermatter(matter.matterSubAreaOfLaw)}}</div>
+                <div title="{{vm.matterConfigContent.NoFilterMatchMsgTitle}}" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>{{vm.matterConfigContent.NoFilterMatchMsgText}}</span></div>
             </div>
 
         </div>
@@ -294,7 +293,7 @@
     <div class="matterheaderdates flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.matterdateheader">
         <div ng-show="vm.filtername=='Open Date'">
             <div class='input-group'>
-                <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                <input type='text' placeholder='{{vm.matterConfigContent.StartDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.startdate'
                        is-open='vm.openedStartDate'
@@ -306,7 +305,7 @@
                 </span>
             </div>
             <div class='input-group' style='margin-top:5px'>
-                <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'
+                <input type='text' placeholder='{{vm.matterConfigContent.EndDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.enddate'
                        is-open='vm.openedEndDate'
@@ -320,7 +319,7 @@
         </div>
         <div ng-show="vm.filtername=='Modified Date'">
             <div class='input-group'>
-                <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                <input type='text' placeholder='{{vm.matterConfigContent.StartDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.modstartdate'
                        is-open='vm.modifiedStartDate'
@@ -332,7 +331,7 @@
                 </span>
             </div>
             <div class='input-group' style='margin-top:5px'>
-                <input type='text' placeholder='End mm/dd/yyyy' class='calendar form-control'
+                <input type='text' placeholder='{{vm.matterConfigContent.EndDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.modenddate'
                        is-open='vm.modifiedenddate'
@@ -344,13 +343,13 @@
                 </span>
             </div>
         </div>
-        <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.matterdateheader=true;'>Ok</div>
+        <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.matterdateheader=true;'>{{vm.matterConfigContent.Button5OkText}}</div>
         <hr />
         <div class='clearFilterText' data-clearfiltertype='text'>
             <div class='clearFiltersIcon'>
-                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='{{vm.matterConfigContent.ImageClearAltText}}'>
             </div>
-            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>Clear filters from </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.matterConfigContent.ClearFilterText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
         </div>
     </div>
 </div>
