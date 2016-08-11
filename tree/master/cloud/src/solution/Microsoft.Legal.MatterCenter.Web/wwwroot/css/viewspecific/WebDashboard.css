@@ -1798,7 +1798,7 @@ div.is-disabled {
 
 @media (max-width: 688px) {
     #matterCenterHeader {
-        width: 640px;
+        /*width: 640px;*/
         margin: 19px 15px 0 15px;
     }
 }

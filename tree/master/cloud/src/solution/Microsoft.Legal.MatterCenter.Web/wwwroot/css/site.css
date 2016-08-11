@@ -119,6 +119,11 @@ textarea {
     }
 }
 
+@media screen and (max-width:431px) and (min-width: 268px) {
+    .defaultSection {
+        height: 74px !important;
+    }
+}
 
 .matters {
     width: 500px;
@@ -620,13 +625,13 @@ textarea {
     padding: 0;
 }
 
-.sortby .btn{
-    padding:1px 12px;
-}
+    .sortby .btn {
+        padding: 1px 12px;
+    }
 
-.img-xls{
-    float:right;
-    padding-left:5px;
+.img-xls {
+    float: right;
+    padding-left: 5px;
 }
 
 .padtop20 {
@@ -939,3 +944,14 @@ textarea {
     position: absolute;
 }
 
+.marginRight10 {
+    margin-right: 10px;
+}
+
+.defaultSection {
+    width: 100% !important;
+}
+
+.mainSearch input {
+    max-width: 100% !important;
+}
