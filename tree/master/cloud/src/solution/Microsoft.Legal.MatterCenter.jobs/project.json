@@ -15,7 +15,8 @@
     "Microsoft.Net.Http": "2.2.28",
     "Microsoft.AspNetCore.Hosting": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
-    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*"
+    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
+    "Microsoft.Azure.KeyVault": "1.0.0"
   },
 
   "commands": {

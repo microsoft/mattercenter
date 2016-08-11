@@ -61,6 +61,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
 
             Configuration = builder.Build();
+           
         }
 
         /// <summary>
@@ -69,9 +70,11 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            GetKeyVaultSecrets();
             services.AddSingleton(Configuration);
-            AddKeyVaultSecrtesToAppSettings();
+            
             ConfigureSettings(services);
+        
             services.AddCors();
             services.AddLogging();
             
@@ -363,39 +366,16 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
 
-        //// <summary>
-        ///// Gets a secret
-        ///// </summary>
-        ///// <param name="secretId"> The secret ID </param>
-        ///// <returns> The created or the updated secret </returns>
-        //private static Secret GetSecret(string secretId)
-        //{
-        //    Secret secret;
-        //    string secretVersion = inputValidator.GetSecretVersion();
-
-        //    if (secretVersion != string.Empty)
-        //    {
-        //        var vaultAddress = inputValidator.GetVaultAddress();
-        //        string secretName = inputValidator.GetSecretName(true);
-        //        secret = keyVaultClient.GetSecretAsync(vaultAddress, secretName, secretVersion).GetAwaiter().GetResult();
-        //    }
-        //    else
-        //    {
-        //        secretId = secretId ?? inputValidator.GetSecretId();
-        //        secret = keyVaultClient.GetSecretAsync(secretId).GetAwaiter().GetResult();
-        //    }
-        //    Console.Out.WriteLine("Retrieved secret:---------------");
-        //    PrintoutSecret(secret);
-
-        //    return secret;
-        //}
-
-
-        private void AddKeyVaultSecrtesToAppSettings()
+        private void GetKeyVaultSecrets()
         {
             Dictionary<string, string> keyValues = new Dictionary<string, string>();
             keyValues = retrieveSecret();
-          
+
+            foreach (var ky in keyValues)
+            {
+                //config = Configuration.GetSection(ky.Key);
+                Configuration["General:"+ky.Key] = ky.Value;
+            }
         }
 
         private Dictionary<String, String> retrieveSecret()
@@ -406,7 +386,6 @@ namespace Microsoft.Legal.MatterCenter.Web
 
             List<string> secrets = new List<string>();
 
-   
             //var adminUser = kv.GetSecretAsync("https://matterkeyvault.vault.azure.net:443/secrets/AdminPassword/6d94193d39bf4506a6fdb2f6319627a8").GetAwaiter().GetResult();
             //var adminPassword = kv.GetSecretAsync("https://matterkeyvault.vault.azure.net:443/secrets/AdminPassword/6d94193d39bf4506a6fdb2f6319627a8").GetAwaiter().GetResult();     
             //var keys = kv.GetKeysAsync("https://matterkeyvault.vault.azure.net:443").GetAwaiter().GetResult();
@@ -417,8 +396,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
 
                 foreach (var m in values.Value)
-                    secrets.Add(m.Identifier.Name);
-                 
+                    secrets.Add(m.Identifier.Name);               
             }
 
             while (values != null && !string.IsNullOrWhiteSpace(values.NextLink))
@@ -436,10 +414,8 @@ namespace Microsoft.Legal.MatterCenter.Web
                 var secret = kv.GetSecretAsync("https://matterkeyvault.vault.azure.net:443", value).GetAwaiter().GetResult();
                 keyValues.Add(value, secret.Value);
             }
-         
+        
 
-
-            //I put a variable in a Utils class to hold the secret for general  application use.
             return keyValues;
         }
 
