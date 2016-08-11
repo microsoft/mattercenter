@@ -425,9 +425,7 @@
 
                     getDefaultMatterConfigurations(siteCollectionPath, function (result) {
 
-                        if (result.isError) {
-
-                            //    alert();
+                        if (result.isError) {                            
                             cm.errTextMsg = result.value;
                             cm.errorBorder = "client";
                             showErrorNotification("client");
@@ -436,35 +434,57 @@
                         else {
                             var dMatterAreaOfLaw = "", dMatterPracticeGroup = "", dMatterSubAreOfLaw = "", dMatterTypes = "", dPrimaryMatterType = "", dMatterUsers = "", dMatterUserEmails = "", dMatterPermissions = "", dMatterRoles = "";
 
-
                             var defaultMatterConfig = JSON.parse(result.code);
-
                             cm.matterName = defaultMatterConfig.DefaultMatterName;
                             cm.checkValidMatterName();
                             cm.matterId = defaultMatterConfig.DefaultMatterId;
+                            cm.secureMatterCheck = true;
                             if (defaultMatterConfig.IsRestrictedAccessSelected) {
                                 cm.secureMatterCheck = defaultMatterConfig.IsRestrictedAccessSelected;
                             }
+                            //else {
+                            //    cm.secureMatterCheck = defaultMatterConfig.IsRestrictedAccessSelected;
+                            //}
                             if (defaultMatterConfig.IsCalendarSelected) {
+                                cm.includeCalendar = defaultMatterConfig.IsCalendarSelected;
+                            }
+                            else {
                                 cm.includeCalendar = defaultMatterConfig.IsCalendarSelected;
                             }
                             if (defaultMatterConfig.IsEmailOptionSelected) {
                                 cm.includeEmail = defaultMatterConfig.IsEmailOptionSelected;
                                 cm.createButton = "Create and Notify";
                             }
+                            else {
+                                cm.includeEmail = defaultMatterConfig.IsEmailOptionSelected;
+                            }
                             if (defaultMatterConfig.IsRSSSelected) {
+                                cm.includeRssFeeds = defaultMatterConfig.IsRSSSelected;
+                            }
+                            else {
                                 cm.includeRssFeeds = defaultMatterConfig.IsRSSSelected;
                             }
                             if (defaultMatterConfig.IsConflictCheck) {
                                 cm.defaultConfilctCheck = defaultMatterConfig.IsConflictCheck;
+                                cm.secureMatterRadioEnabled = cm.defaultConfilctCheck;
+                            }
+                            else {
+                                cm.defaultConfilctCheck = defaultMatterConfig.IsConflictCheck;
+                                cm.secureMatterRadioEnabled = cm.defaultConfilctCheck;
                             }
                             if (defaultMatterConfig.IsMatterDescriptionMandatory) {
+                                cm.isMatterDescriptionMandatory = defaultMatterConfig.IsMatterDescriptionMandatory;
+                            }
+                            else {
                                 cm.isMatterDescriptionMandatory = defaultMatterConfig.IsMatterDescriptionMandatory;
                             }
                             // if (defaultMatterConfig.IsContentCheck) {
                             // cm.secureMatterCheck = "True";
                             // }
                             if (defaultMatterConfig.IsTaskSelected) {
+                                cm.includeTasks = defaultMatterConfig.IsTaskSelected;
+                            }
+                            else {
                                 cm.includeTasks = defaultMatterConfig.IsTaskSelected;
                             }
                             var arrDMatterAreaOfLaw = [];
@@ -1417,6 +1437,8 @@
                             cm.popupContainerBackground = "hide";
                             $event.stopPropagation(); cm.createBtnDisabled = false; cm.successBanner = false;
                             bValid = false;
+                            cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
+                            cm.conflictDate = new Date(cm.conflictDate);
                             return false;
                         }
                     } else {
