@@ -6,7 +6,7 @@ using Microsoft.Azure.KeyVault;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Extensions.Configuration;
 
-namespace Microsoft.Legal.MatterCenter.Jobs
+namespace Microsoft.Legal.MatterCenter.Utility
 {
     public class KeyVaultHelper
     {

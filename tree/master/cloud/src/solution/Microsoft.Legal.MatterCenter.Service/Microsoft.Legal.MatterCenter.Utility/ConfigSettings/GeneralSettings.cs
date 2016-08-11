@@ -33,6 +33,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public virtual string CloudStorageConnectionString { get; set; }
         public string OrgDomainName { get; set; }
         public string MatterCenterConfiguration { get; set; }
-        
+        public string KeyVaultURI { get; set; }
+
     }
 }
