@@ -7,8 +7,8 @@
 </script>
 <div class="popupWait hide"></div>
 <div class="loadingImage hide" id="popupWaitLoadingImage">
-    <a title="Matter Center Home" id="mcIcon" href="/sitepages/MatterCenterHome.aspx" target="_parent">
-        <img title="Matter Center" src="../Images/WindowsLoadingFast.GIF" alt="Matter Center" />
+    <a title="{{vm.MatterDashboardConfigs.LinkImageLoadingTitle}}" id="mcIcon" href="/sitepages/MatterCenterHome.aspx" target="_parent">
+        <img title="{{vm.MatterDashboardConfigs.ImageLoadingAltText}}" src="../Images/WindowsLoadingFast.GIF" alt="Matter Center" />
     </a>
 </div>
 <div class="popupContainerBackground hide"></div>
@@ -21,7 +21,7 @@
         <header class="popUpHeader">
             <div class="popUpHeaderTitle popUpFloatLeft"></div>
             <div class="notificationContainerForPopup"></div>
-            <img class="mailCartCloseIcon" alt="Close" src="../Images/close-666.png" title="Close" />
+            <img class="mailCartCloseIcon" alt="{{vm.MatterDashboardConfigs.ImageCloseTitle}}" src="../Images/close-666.png" title="{{vm.MatterDashboardConfigs.ImageCloseTitle}}" />
         </header>
         <div id="PopupBody">
             <div class="selectMailFormat">
@@ -45,7 +45,7 @@
                 </div>
                 <ul class="emailDocumentNames"></ul>
                 <div class='pinLoadingImage' id='mailCartLoadingImage'>
-                    <img src='/Images/WindowsLoadingFast.GIF' title='Loading' class='LoadingImage' alt='Loading...' />
+                    <img src='/Images/WindowsLoadingFast.GIF' title='{{vm.MatterDashboardConfigs.AttachmentLoadingText}}' class='LoadingImage' alt='{{vm.MatterDashboardConfigs.AttachmentLoadingText}}' />
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
             <div class="col-xs-9">
                 <div class="col-xs-12 padlf0">
                     <div class="input-group">
-                        <input type="text" ng-model="vm.searchText" placeholder="Search by document name, document ID, or keyword"
+                        <input type="text" ng-model="vm.searchText" placeholder="{{vm.MatterDashboardConfigs.SearchTextboxPlaceholderText}}"
                                uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatters($viewValue)"
                                typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
                         <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.searchByTerm()"><i class="glyphicon glyphicon-search"></i></span>
@@ -66,8 +66,8 @@
                 </div>
             </div>
             <div class="col-xs-3 pad0">
-                <img title="Advanced search" style="display: inline;" type='button' ng-if="vm.downwarddrop" ng-click="vm.showupward($event)" data-toggle='dropdown' alt="Drop Down" src="../Images/downward-advanced-search-29x29-666.png">
-                <img title="Advanced search" id="filterSearchDown" ng-if="vm.upwarddrop" ng-click="vm.showdownward($event)" alt="Drop Down" src="../Images/upward-advanced-search-29x29-666.png">
+                <img title="{{vm.MatterDashboardConfigs.ImageAdvanceSearchTitle}}" style="display: inline;" type='button' ng-if="vm.downwarddrop" ng-click="vm.showupward($event)" data-toggle='dropdown' alt="{{vm.MatterDashboardConfigs.ImageAdvanceSearchAltText}}" src="../Images/downward-advanced-search-29x29-666.png">
+                <img title="{{vm.MatterDashboardConfigs.ImageAdvanceSearchTitle}}" id="filterSearchDown" ng-if="vm.upwarddrop" ng-click="vm.showdownward($event)" alt="{{vm.MatterDashboardConfigs.ImageAdvanceSearchAltText}}" src="../Images/upward-advanced-search-29x29-666.png">
             </div>
             <div class="col-xs-12">
                 <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
@@ -79,32 +79,32 @@
                 <div class="col-xs-12 dashboarddropinner">
                     <!--Start Client Selection Dropdown-->
                     <div class="row">
-                        <div class="col-xs-12 col-sm-2 pull-left pad15">Clients</div>
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.MatterDashboardConfigs.AdvSearchLabel1Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" value="{{vm.selectedClients}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedClients"  ng-keyup="vm.showClientDrop($event)" placeholder="Enter or select a client" class="form-control">
+                                <input type="text" value="{{vm.selectedClients}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedClients"  ng-keyup="vm.showClientDrop($event)" placeholder="{{vm.MatterDashboardConfigs.AdvSearchTextbox1PlaceholderText}}" class="form-control">
                                 <span class="input-group-addon cursor" id="basic-addon1"
                                       ng-click="vm.showClientDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderclient" style="position:static !important">
-                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.MatterDashboardConfigs.AttachmentLoadingText}}" title="{{vm.MatterDashboardConfigs.AttachmentLoadingText}}" />
                         </div>
                     </div>
                     <div class="col-xs-12 " ng-if="vm.clientdrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'client',$event)">Select All</a> </div>
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'client',$event)">Select None</a></div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'client',$event)">{{vm.MatterDashboardConfigs.AdvSearchSelectAllLinkText}}</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'client',$event)">{{vm.MatterDashboardConfigs.AdvSearchSelectNoneLinkText}}</a></div>
                                 <div class="col-xs-12 refinerWrapper" ng-repeat="client in vm.clients" ng-click="$event.stopPropagation();">
                                     <input type="checkbox"  ng-model="client.Selected" /> <span>{{client.name}}</span>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('client')">Ok</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('client')">{{vm.MatterDashboardConfigs.AdvSearchbuttonOkText}}</div></div>
                                     </div>
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel('client')">Cancel</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel('client')">{{vm.MatterDashboardConfigs.AdvSearchbuttonCancelText}}</div></div>
                                     </div>
                                 </div>
                             </div>
@@ -113,32 +113,32 @@
                     <!--End Client Search Selection Down-->
                     <!--Start Practice Group Selection Dropdown-->
                     <div class="row">
-                        <div class="col-xs-12 col-sm-2 pull-left pad15">Practice Group</div>
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.MatterDashboardConfigs.AdvSearchLabel2Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" value="{{vm.selectedPGs}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedPGs"  ng-keyup="vm.showPracticegroupDrop($event)" placeholder="Enter or select a practice group" class="form-control">
+                                <input type="text" value="{{vm.selectedPGs}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedPGs"  ng-keyup="vm.showPracticegroupDrop($event)" placeholder="{{vm.MatterDashboardConfigs.AdvSearchTextbox2PlaceholderText}}" class="form-control">
                                 <span class="input-group-addon cursor" id="basic-addon1"
                                       ng-click="vm.showPracticegroupDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderpg" style="position:static !important">
-                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.MatterDashboardConfigs.AttachmentLoadingText}}" title="{{vm.MatterDashboardConfigs.AttachmentLoadingText}}" />
                         </div>
                     </div>
                     <div class="col-xs-12 " ng-if="vm.pgdrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'pg',$event)">Select All</a> </div>
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'pg',$event)">Select None</a></div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'pg',$event)">{{vm.MatterDashboardConfigs.AdvSearchSelectAllLinkText}}</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'pg',$event)">{{vm.MatterDashboardConfigs.AdvSearchSelectNoneLinkText}}</a></div>
                                 <div class="col-xs-12 refinerWrapper" ng-repeat="pg in vm.practiceGroups"  ng-click="$event.stopPropagation();">
                                     <input type="checkbox" ng-model="pg.Selected" /> <span>{{pg.termName}}</span>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('pg')">Ok</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('pg')">{{vm.MatterDashboardConfigs.AdvSearchbuttonOkText}}</div></div>
                                     </div>
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel('pg')">Cancel</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel('pg')">{{vm.MatterDashboardConfigs.AdvSearchbuttonCancelText}}</div></div>
                                     </div>
                                 </div>
                             </div>
@@ -147,32 +147,32 @@
                     <!--End Practive Group Selection Dropdown-->
                     <!--Start AOL Selection Dropdown-->
                     <div class="row">
-                        <div class="col-xs-12 col-sm-2 pull-left pad15">Area of Law</div>
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.MatterDashboardConfigs.AdvSearchLabel3Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" value="{{vm.selectedAOLs}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedAOLs"  ng-keyup="vm.showAreaofLawDrop($event)"  placeholder="Enter or select an area of law" class="form-control">
+                                <input type="text" value="{{vm.selectedAOLs}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedAOLs"  ng-keyup="vm.showAreaofLawDrop($event)"  placeholder="{{vm.MatterDashboardConfigs.AdvSearchTextbox3PlaceholderText}}" class="form-control">
                                 <span class="input-group-addon cursor" id="basic-addon1"
                                       ng-click="vm.showAreaofLawDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderaol" style="position:static !important">
-                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.MatterDashboardConfigs.AttachmentLoadingText}}" title="{{vm.MatterDashboardConfigs.AttachmentLoadingText}}" />
                         </div>
                     </div>
                     <div class="col-xs-12" ng-if="vm.aoldrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'aol',$event)">Select All</a> </div>
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'aol',$event)">Select None</a></div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'aol',$event)">{{vm.MatterDashboardConfigs.AdvSearchSelectAllLinkText}}</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'aol',$event)">{{vm.MatterDashboardConfigs.AdvSearchSelectNoneLinkText}}</a></div>
                                 <div class="col-xs-12 refinerWrapper" ng-repeat="aol in vm.aolTerms"  ng-click="$event.stopPropagation();">
                                     <input type="checkbox" ng-model="aol.Selected" /> <span>{{aol.termName}}</span>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('aol')">Ok</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('aol')">{{vm.MatterDashboardConfigs.AdvSearchbuttonOkText}}</div></div>
                                     </div>
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel('aol')">Cancel</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel('aol')">{{vm.MatterDashboardConfigs.AdvSearchbuttonCancelText}}</div></div>
                                     </div>
                                 </div>
                             </div>
@@ -181,12 +181,12 @@
                     <!--End AOL Selection Dropdown-->
 
                     <div class="row">
-                        <div class="col-xs-12 col-sm-2 pull-left pad15">Date</div>
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.MatterDashboardConfigs.AdvSearchLabel4Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="row">
                                 <div class="col-xs-6 col-sm-4">
                                     <div class='input-group'>
-                                        <input type='text' placeholder='From' class='calendar form-control'
+                                        <input type='text' placeholder='{{vm.MatterDashboardConfigs.AdvSearchTextbox4PlaceholderText}}' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
                                                ng-model='vm.startdate'
                                                is-open='vm.openedStartDate'
@@ -200,7 +200,7 @@
                                 </div>
                                 <div class="col-xs-6 col-sm-4">
                                     <div class='input-group'>
-                                        <input type='text' placeholder='To' class='calendar form-control'
+                                        <input type='text' placeholder='{{vm.MatterDashboardConfigs.AdvSearchTextbox5PlaceholderText}}' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
                                                ng-model='vm.enddate'
                                                is-open='vm.openedEndDate'
@@ -216,7 +216,7 @@
                         </div>
                         <div class="col-xs-5 col-sm-3 pad15">
                             <div id="filterAdvancedSearch" class="dashboardSearch" ng-click="vm.getSearchResults()">
-                                Search
+                                {{vm.MatterDashboardConfigs.AdvSearchButtonSearchText}}
                             </div>
                         </div>
                     </div>
@@ -224,9 +224,9 @@
             </div>
             <div class="col-xs-6 col-sm-8 padtop20">
                 <ul class="nav nav-tabs" toggletab>
-                    <li id="myMatters"><a href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">My matters ({{vm.myMatterCount}})</a></li>
-                    <li id="allMatters" class="active cursor"><a data-toggle="tab" ng-click="vm.search()">All matters ({{vm.allMatterCount}})</a></li>
-                    <li id="pinMatters"><a href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">Pinned matters ({{vm.pinMatterCount}})</a></li>
+                    <li id="myMatters"><a href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">{{vm.MatterDashboardConfigs.Tab1HeaderText}} ({{vm.myMatterCount}})</a></li>
+                    <li id="allMatters" class="active cursor"><a data-toggle="tab" ng-click="vm.search()">{{vm.MatterDashboardConfigs.Tab2HeaderText}} ({{vm.allMatterCount}})</a></li>
+                    <li id="pinMatters"><a href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">{{vm.MatterDashboardConfigs.Tab3HeaderText}} ({{vm.pinMatterCount}})</a></li>
                 </ul>
             </div>
             <div class="col-xs-offset-6 col-xs-6 sortby">
@@ -234,20 +234,20 @@
                     <span class="img-xls" ng-click="vm.export()">
                         <img alt="export" src="../../images/icxlsx.png" />
                     </span>
-                    <button ng-click="vm.export()" class="btn btn-primary pull-right">Export</button>
+                    <!--<button ng-click="vm.export()" class="btn btn-primary pull-right">{{vm.MatterDashboardConfigs.ButtonExportText}}</button>-->
                 </div>
                 <div class="col-xs-4 col-sm-4 col-md-3 text-right pad0">
-                    <span>Sort by: </span>
+                    <span>{{vm.MatterDashboardConfigs.LabelSortByText}} </span>
                     <span>{{vm.sortbytext}}</span>
                     <img alt="Sort By" class="" ng-click="vm.showsortby($event)" title="Sort By" src="../Images/icon-combobox.png" />
                 </div>
                 <div class="col-xs-offset-7 col-xs-5 col-sm-offset-9 col-sm-3" ng-if="vm.sortbydrop">
                     <ul>
-                        <li ng-click="vm.sortyby('Relevant','None')">None</li>
-                        <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">Alphabetical ↑</li>
-                        <li ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">Alphabetical ↓</li>
-                        <li ng-click="vm.sortyby('CreateddateUp','Created date ↑')">Created date ↑</li>
-                        <li ng-click="vm.sortyby('CreateddateDown','Created date ↓')">Created date ↓</li>
+                        <li ng-click="vm.sortyby('Relevant','None')">{{vm.MatterDashboardConfigs.DrpDownOption1Text}}</li>
+                        <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">{{vm.MatterDashboardConfigs.DrpDownOption2Text}} ↑</li>
+                        <li ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">{{vm.MatterDashboardConfigs.DrpDownOption2Text}} ↓</li>
+                        <li ng-click="vm.sortyby('CreateddateUp','Created date ↑')">{{vm.MatterDashboardConfigs.DrpDownOption3Text}} ↑</li>
+                        <li ng-click="vm.sortyby('CreateddateDown','Created date ↓')">{{vm.MatterDashboardConfigs.DrpDownOption3Text}} ↓</li>
                     </ul>
                 </div>
             </div>
@@ -262,7 +262,7 @@
                             <div class="" id="grid1" ui-grid="vm.matterGridOptions" ui-grid-exporter ui-grid-selection ui-grid-auto-resize></div>
                         </div>
                         <div class="col-xs-12 pad0 padtop5 text-center" ng-if="vm.nodata">
-                            No results found.
+                            {{vm.MatterDashboardConfigs.NoSearchResultMsgText}}
                         </div>
                     </div>                    
                 </div>
@@ -316,14 +316,14 @@
                         </div>
                         <div class="notificationResult hide"></div>
                         <div class="askForOverwrite">
-                            <input ng-show="duplicatefile.contentCheck=='True'" type="button" title="Matter Center will compare all content and data associated with the two documents. Navigating away from this screen will cancel the content check." value="Perform content check" data-operation="contentCheck" ng-click="vm.localOverWriteDocument(duplicatefile,'contentCheck');vm.contentCheckNotification(duplicatefile,true);">
-                            <input ng-show="duplicatefile.saveLatestVersion=='True'" title="The file will be saved as the latest version of the existing document that has same title. Matter Center will retain all prior versions of the document." id="overWriteYes"
-                                   ng-click="vm.localOverWriteDocument(duplicatefile,'overwrite');" type="button" value="Save as latest version" data-operation="overwrite">
-                            <input ng-show="duplicatefile.append==true" type='button' data-operation='append' title='The file will be saved as new, separate document with the current date and time added to the end of the file name.' value="Append date to file name and save" ng-click="vm.localOverWriteDocument(duplicatefile,'append')" />
-                            <input ng-show="duplicatefile.cancel=='True'" title="This document will not be uploaded and you will return to the previous screen." id="overWriteNo"
-                                   ng-click="vm.localOverWriteDocument(duplicatefile,'ignore');" type="button" value="Cancel upload" data-operation="ignore">
+                            <input ng-show="duplicatefile.contentCheck=='True'" type="button" title="{{vm.MatterDashboardConfigs.Button1DuplicateContentTitle}}" value="{{vm.MatterDashboardConfigs.Button1DuplicateContentText}}" data-operation="contentCheck" ng-click="vm.localOverWriteDocument(duplicatefile,'contentCheck');vm.contentCheckNotification(duplicatefile,true);">
+                            <input ng-show="duplicatefile.saveLatestVersion=='True'" title="{{vm.MatterDashboardConfigs.Button2SaveLatestVersionTitle}}" id="overWriteYes"
+                                   ng-click="vm.localOverWriteDocument(duplicatefile,'overwrite');" type="button" value="{{vm.MatterDashboardConfigs.Button2SaveLatestVersionText}}" data-operation="overwrite">
+                            <input ng-show="duplicatefile.append==true" type='button' data-operation='append' title='{{vm.MatterDashboardConfigs.Button3AppendDateTitle}}' value="{{vm.MatterDashboardConfigs.Button3AppendDateText}}" ng-click="vm.localOverWriteDocument(duplicatefile,'append')" />
+                            <input ng-show="duplicatefile.cancel=='True'" title="{{vm.MatterDashboardConfigs.Button4CancelUploadTitle}}" id="overWriteNo"
+                                   ng-click="vm.localOverWriteDocument(duplicatefile,'ignore');" type="button" value="{{vm.MatterDashboardConfigs.Button4CancelUploadText}}" data-operation="ignore">
                             <div ng-show="duplicatefile.contentCheck=='contentCheck'" class='notificationCC'>
-                                <img src="../Images/loadingcirclests16.gif" alt="" />Checking content  <input id='cancelCC' type='button' value='Cancel' ng-click='vm.abortContentCheck(duplicatefile,true)' />
+                                <img src="../Images/loadingcirclests16.gif" alt="" />{{vm.MatterDashboardConfigs.Image1ContentCheckText}}  <input id='cancelCC' type='button' value='Cancel' ng-click='vm.abortContentCheck(duplicatefile,true)' />
                             </div>
                         </div>
                     </div>
@@ -334,7 +334,7 @@
             </div>
 
             <div class="modal-content">
-                <div ng-show="vm.oUploadGlobal.successBanner" class="notification successNotification ms-font-weight-semibold successUpload">Upload complete.<span class="closeNotification" ng-click="vm.closeSuccessBanner()">x</span></div>
+                <div ng-show="vm.oUploadGlobal.successBanner" class="notification successNotification ms-font-weight-semibold successUpload">{{vm.MatterDashboardConfigs.UploadCompleteLabel1Text}}<span class="closeNotification" ng-click="vm.closeSuccessBanner()">{{vm.MatterDashboardConfigs.CloseIconText}}</span></div>
                 <div class="row modalClose">
                     <img data-dismiss="modal" ng-click="vm.hideBreadCrumb()" class="pull-right" src="../../images/close-666.png" />
                 </div>
@@ -344,33 +344,33 @@
                     </div>
                     <div class="row margin0">
                         <div class="col-sm-10 pad0">
-                            <div class="attachmentHeader marginBottom15">Drag and drop items to folders on the right</div>
+                            <div class="attachmentHeader marginBottom15">{{vm.MatterDashboardConfigs.AttachmentPopupHeaderText}}</div>
                         </div>
 
                     </div>
                     <div class="row margin0">
-                        <div class="col-sm-9 pull-left mailHeaderItems"><div>Items</div></div>
-                        <div class="col-sm-3 pull-left mailHeaderFolders"><div></div>Folders</div>
+                        <div class="col-sm-9 pull-left mailHeaderItems"><div>{{vm.MatterDashboardConfigs.AttachmentPopupHeaderItem1Text}}</div></div>
+                        <div class="col-sm-3 pull-left mailHeaderFolders"><div></div>{{vm.MatterDashboardConfigs.AttachmentPopupHeaderItem2Text}}</div>
                     </div>
 
                     <div class="row margin0">
                         <div class="col-sm-9 maildata">
                             <!--Content start to show mail attachment information-->
                             <div class="attachmentSection" ng-repeat="attachmentInfo in vm.allAttachmentDetails">
-                                <div ng-if="vm.loadingAttachments" class='attachmentSection'><img alt='Loading' class='attachmentListLoading' src='../images/loading_metro.gif' /></div>
+                                <div ng-if="vm.loadingAttachments" class='attachmentSection'><img alt='{{vm.MatterDashboardConfigs.AttachmentLoadingText}}' class='attachmentListLoading' src='../images/loading_metro.gif' /></div>
                                 <div ng-if="attachmentInfo.isEmail" class="attachment">
                                     <div class="attachmentName mailName">
-                                        <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
-                                             ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
-                                        <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
-                                             ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
+                                        <img title="{{vm.MatterDashboardConfigs.AttachmentEditImageTitle}}" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
+                                             ng-click="vm.editAttachment(this, $event)" alt="{{vm.MatterDashboardConfigs.AttachmentEditImageAltText}}" src="../Images/edit-666.png">
+                                        <img title="{{vm.MatterDashboardConfigs.AttachmentSaveImageTitle}}" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
+                                             ng-click="vm.saveAttachment(this, $event)" alt="{{vm.MatterDashboardConfigs.AttachmentSaveImageText}}" src="../Images/save-666.png">
                                         <!--If the mail upload is success, show this div-->
                                         <div ng-if="vm.mailUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
-                                            <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
+                                            <img class="uploadSuccessStatus" alt="{{vm.MatterDashboardConfigs.AttachmentUploadSuccessfullyImageAltText}}" src="/images/success-message.png">
                                         </div>
-                                        <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
+                                        <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="{{vm.MatterDashboardConfigs.AttachmentIconImageAltText}}" src="../Images/attach_icon-15x15_666.png">
                                         <input class="popupName editPopupContent hide ui-draggable" id="0attachmentText" type="text" maxlength="128">
-                                        <div title="Test attachments"
+                                        <div title="{{vm.MatterDashboardConfigs.AttachmentTestTitle}}"
                                              class="popupName ui-draggable"
                                              id="{{attachmentInfo.counter}}attachment"
                                              draggable
@@ -383,15 +383,15 @@
 
                                 <div ng-if="!attachmentInfo.isEmail" class="attachment">
                                     <div class="attachmentName">
-                                        <img title="Edit attachment name" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
-                                             ng-click="vm.editAttachment(this, $event)" alt="Edit" src="../Images/edit-666.png">
-                                        <img title="Save attachment name" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
-                                             ng-click="vm.saveAttachment(this, $event)" alt="Save" src="../Images/save-666.png">
+                                        <img title="{{vm.MatterDashboardConfigs.AttachmentEditImageTitle}}" class="editUploadIcon" id="{{attachmentInfo.counter}}editIcon" draggable="false"
+                                             ng-click="vm.editAttachment(this, $event)" alt="{{vm.MatterDashboardConfigs.AttachmentEditImageAltText}}" src="../Images/edit-666.png">
+                                        <img title="{{vm.MatterDashboardConfigs.AttachmentSaveImageTitle}}" class="saveUploadIcon hide" id="{{attachmentInfo.counter}}saveIcon" draggable="false"
+                                             ng-click="vm.saveAttachment(this, $event)" alt="{{vm.MatterDashboardConfigs.AttachmentSaveImageText}}" src="../Images/save-666.png">
                                         <div ng-if="vm.docUpLoadSuccess" class="uploadSuccessStatus" id="{{attachmentInfo.counter}}attachment-Status">
-                                            <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
+                                            <img class="uploadSuccessStatus" alt="{{vm.MatterDashboardConfigs.AttachmentUploadSuccessfullyImageAltText}" src="/images/success-message.png">
                                         </div>
                                         <!--If the attachment upload is success, show this div-->
-                                        <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="attachment icon" src="../Images/attach_icon-15x15_666.png">
+                                        <img class="attachIcon" id="{{attachmentInfo.counter}}attachIcon" alt="{{vm.MatterDashboardConfigs.AttachmentIconImageAltText}}" src="../Images/attach_icon-15x15_666.png">
                                         <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
                                         <div title="{{attachmentInfo.attachmentFileName}}"
                                              id="{{attachmentInfo.counter}}attachment"
@@ -414,7 +414,7 @@
                                     <div class="attachmentName mailName">
                                         <!--If the mail upload is success, show this div-->
                                         <div ng-if="!uploadedFile.isError" class="uploadSuccessStatus">
-                                            <img class="uploadSuccessStatus" alt="Uploaded successfully" src="/images/success-message.png">
+                                            <img class="uploadSuccessStatus" alt="{{vm.MatterDashboardConfigs.AttachmentUploadSuccessfullyImageAltText}}" src="/images/success-message.png">
                                         </div>
                                         <img class="attachIcon" id="{{uploadedFile.counter}}attachIcon"
                                              alt="attachment icon" src="{{uploadedFile.documentIconUrl}}">
@@ -475,7 +475,7 @@
                         </div>
                     </div>
                     <div class="row margin0 marginTop15">
-                        <div class="pull-left"><img src="../../images/information-blue.png" /> You can also drag and drop files from your desktop.</div>
+                        <div class="pull-left"><img src="../../images/information-blue.png" /> {{vm.MatterDashboardConfigs.AttachmentPopupFooterImageCapetion}}</div>
                     </div>
                 </div>
             </div>
@@ -485,13 +485,13 @@
  </div>
 <div id="loadingImageContainer" style="top:25%;left:47%">
     <div class="lazyLoading" ng-hide="vm.lazyloaderdashboard" >
-        <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+        <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.MatterDashboardConfigs.AttachmentLoadingText}}" title="{{vm.MatterDashboardConfigs.AttachmentLoadingText}}" />
     </div>
 </div>
 
 <div style="position:absolute;top:28%;left:41%">
     <div class="row text-center" style="" ng-hide="vm.lazyloaderdashboard">
-        Please wait while the Matters load.
+        {{vm.MatterDashboardConfigs.MattersPreLoadingMsgText}}
     </div>
 </div>
 
@@ -500,11 +500,11 @@
     <table width="100%">
         <thead>
             <tr>
-                <th>Matter</th>
-                <th>Client</th>
-                <th>Client.Matter ID</th>
-                <th>Modified Date</th>
-                <th>Responsible attorney</th>
+                <th>{{vm.MatterDashboardConfigs.GridColumn1Header}}</th>
+                <th>{{vm.MatterDashboardConfigs.GridColumn2Header}}</th>
+                <th>{{vm.MatterDashboardConfigs.GridColumn3Header}}</th>
+                <th>{{vm.MatterDashboardConfigs.GridColumn4Header}}</th>
+                <th>{{vm.MatterDashboardConfigs.GridColumn5Header}}</th>
             </tr>
         </thead>
         <tbody>
