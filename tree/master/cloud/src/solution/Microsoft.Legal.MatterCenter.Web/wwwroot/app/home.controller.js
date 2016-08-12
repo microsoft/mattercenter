@@ -39,6 +39,15 @@
                 });
             }
 
+            function canCreateMatter(options, callback) {
+                api({
+                    resource: 'homeResource',
+                    method: 'canCreateMatter',
+                    data: options,
+                    success: callback
+                });
+            }
+
             //#endregion
 
             if ($state.current.name === 'mc')
@@ -159,6 +168,33 @@
             var date = new Date();
             vm.currentyear = date.getFullYear();
             //#endregion
+
+            vm.menuClick = function () {
+                var oAppMenuFlyout = $(".AppMenuFlyout");
+                if (!(oAppMenuFlyout.is(":visible"))) {
+                    //// Display the close icon and close the fly out
+                    $(".OpenSwitcher").addClass("hide");
+                    $(".CloseSwitcher").removeClass("hide");
+                    $(".MenuCaption").addClass("hideMenuCaption");
+                    oAppMenuFlyout.slideDown();
+                } else {
+                    oAppMenuFlyout.slideUp();
+                    $(".CloseSwitcher").addClass("hide");
+                    $(".OpenSwitcher").removeClass("hide");
+                    $(".MenuCaption").removeClass("hideMenuCaption");
+                }
+            }
+
+            vm.canLoginUserCreateMatter = false;
+            vm.canCreateMatter = function () {
+                var client = {
+                    Url: configs.global.repositoryUrl
+                }
+                canCreateMatter(client, function (response) {
+                    vm.canLoginUserCreateMatter = response.canCreateMatter;
+                })
+            }
+            vm.canCreateMatter();
 
         }]);
 
