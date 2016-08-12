@@ -239,6 +239,7 @@
                 } else {
                     vm.matterdesc = "No";
                 }
+                vm.showmatterconfiguration = "DateTime"
             }
             //#endregion
 

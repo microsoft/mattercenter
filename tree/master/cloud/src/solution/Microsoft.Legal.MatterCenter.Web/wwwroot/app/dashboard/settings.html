@@ -246,13 +246,27 @@
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
-                                Show matter id with?
+                                Show matter id?
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
                         <span style="margin-right:10px"> <input type="radio" ng-model="vm.showmatterid" name="matterid" value="Yes" /> Yes</span>
                         <span style="margin-right:10px"><input type="radio" ng-model="vm.showmatterid" name="matterid" value="No" /> No</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0" style="margin-top:10px">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                Matter Id Configuration?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
+                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="Guid"/> Guid</span>
+                        <span style="margin-right:10px"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="DateTime" /> Date Time</span>
+                        <span style="margin-right:10px"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="Custom" /> Custom</span>
                     </div>
                 </div>
                 <div id="buttonSection">
