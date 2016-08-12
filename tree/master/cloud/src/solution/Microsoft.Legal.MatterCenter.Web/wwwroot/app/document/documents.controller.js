@@ -652,30 +652,30 @@
             vm.nodata = false;
             vm.pagenumber = 1;
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
-            if (property == "Document") {
+            if (property === vm.documentConfigContent.GridColumn1Header) {
                 vm.searchTerm = "";
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Filters.Name = "";
                 searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                 vm.documentfilter = false;
             }
-            else if (property == "Client") {
+            else if (property == vm.documentConfigContent.GridColumn2Header) {
                 vm.clientSearchTerm = "";
                 searchRequest.SearchObject.Filters.ClientName = "";
                 searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                 vm.clientfilter = false;
             }
-            else if (property == "Checked out to") {
+            else if (property == vm.documentConfigContent.GridColumn7Header) {
                 vm.checkedSearchTerm = "";
                 searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
                 vm.checkoutfilter = false;
             }
-            else if (property == "Author") {
+            else if (property == vm.documentConfigContent.GridColumn5Header) {
                 vm.authorSearchTerm = ""
                 searchRequest.SearchObject.Filters.DocumentAuthor = "";
                 vm.authorfilter = false;
             }
-            else if (property == "Modified Date") {
+            else if (property == vm.documentConfigContent.GridColumn4Header) {
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
                 vm.modstartdate = "";
@@ -1466,30 +1466,36 @@
             var left = dimensions.left - 224;
             angular.element('.documentheader').css({ 'top': top, 'left': left });
             angular.element('.documentheaderdates').css({ 'top': top, 'left': left });
-            if (name == "Document") {
+            //Document
+            if (name === vm.documentConfigContent.GridColumn1Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyFileName + "";
-                vm.filtername = "Document";
+                vm.filtername = vm.documentConfigContent.GridColumn1Header;
             }
-            if (name == "client") {
+            //ClientName
+            if (name === vm.documentConfigContent.GridColumn2Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "";
-                vm.filtername = "Client";
+                vm.filtername = vm.documentConfigContent.GridColumn2Header;
             }
-            if (name == "Author") {
+            //Author
+            if (name === vm.documentConfigContent.GridColumn5Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
-                vm.filtername = "Author";
+                vm.filtername = vm.documentConfigContent.GridColumn5Header;
             }
-            if (name == "checkout") {
+            //Check out to
+            if (name === vm.documentConfigContent.GridColumn7Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "";
-                vm.filtername = "Checked out to";
+                vm.filtername = vm.documentConfigContent.GridColumn7Header;
             }
-            if (name == "ModifiedDate") {
-                vm.filtername = "Modified Date";
+            //Modified Date
+            if (name === vm.documentConfigContent.GridColumn4Header) {
+                vm.filtername = vm.documentConfigContent.GridColumn4Header;
             }
-            if (name == "CreatedDate") {
-                vm.filtername = "Created Date";
+            //Created Date
+            if (name == vm.documentConfigContent.GridColumn8Header) {
+                vm.filtername = vm.documentConfigContent.GridColumn8Header;
             }
             $timeout(function () {
-                if (name == 'ModifiedDate' || name == 'CreatedDate') {
+                if (name == vm.documentConfigContent.GridColumn4Header || name == vm.documentConfigContent.GridColumn8Header) {
                     vm.documentdateheader = false;
                 }
                 else {

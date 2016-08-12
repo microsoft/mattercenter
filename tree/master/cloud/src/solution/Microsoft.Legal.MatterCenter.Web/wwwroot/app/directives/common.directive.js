@@ -115,23 +115,23 @@
                                           <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.matterName + ' </div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn2Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client.Matter ID:</div>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn3Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Sub area of law:</div>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn6Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Responsible attorney:</div>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn5Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
                                        </div>\
-                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="' + obj.matterClientUrl + '/SitePages/' + obj.matterGuid + '.aspx" target="_blank">View matter details</a><br/>\
-                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">Upload to a matter</a>\
+                                       <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="' + obj.matterClientUrl + '/SitePages/' + obj.matterGuid + '.aspx" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '</a><br/>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
                                     </div>\
                                 </div>';
                     $templateCache.put("test.html", actualcontent);
@@ -193,27 +193,27 @@
                                           <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.documentName + ' </div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Matter:</div>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutLable1Text + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.documentMatter + '</div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Client:</div>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.GridColumn2Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.documentClient + '</div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Document ID:</div>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutLable2Text + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.documentID + '</div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Author:</div>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.GridColumn5Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent" toggle="parentToggle(message)">' + obj.documentOwner + '</div> \
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">Modified date:</div>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.GridColumn4Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent" datefilter date='+ obj.documentModifiedDate + '>' + obj.documentModifiedDate + '</div>\
                                        </div>\
-                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" style="width:190px;padding-left: 12.5%;" href="' + obj.documentUrl + '" target="_blank">Open document</a>\
-                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" style="width:190px" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">View document details</a>\
+                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" style="width:190px;padding-left: 12.5%;" href="' + obj.documentUrl + '" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton1Text + '</a>\
+                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" style="width:190px" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
                                       </div>\
                                     </div>\
                                 </div>';
