@@ -43,6 +43,16 @@
                 });
             }
 
+            //API call to save settings
+            function saveConfigurations(options, callback) {
+                api({
+                    resource: 'settingsResource',
+                    method: 'saveConfigurations',
+                    data: options,
+                    success: callback
+                });
+            }
+
             //#region global variables
             $rootScope.bodyclass = "";
             $rootScope.profileClass = "hide";
@@ -162,16 +172,17 @@
 
             var siteCollectionPath = "";
             //#region for showing the selected clients Data
-            vm.showSelectedClient = function (name,url) {
+            vm.showSelectedClient = function (name, url) {
                 vm.lazyloader = false;
                 vm.selected = name;
                 siteCollectionPath = url;
+                vm.clienturl = url;
                 getDefaultConfigurations(siteCollectionPath, function (response) {
                     if (response != "") {
                         vm.configurations = JSON.parse(response.code);
                         vm.setClientData(vm.configurations);
-                        vm.showrole="Yes";
-                        vm.showmatterid = "Datetime";
+                        vm.showrole = "Yes";
+                        vm.showmatterid = "Yes";
                         vm.nodata = false;
                         vm.lazyloader = true;
                         vm.clientlist = false;
@@ -270,5 +281,55 @@
                 }
             }
             //#endregion
+
+            //#region for saving the settings
+            vm.saveSettings = function () {
+                vm.lazyloader = false;
+                var date = new Date();
+                var modifiedDate = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+                var settingsRequest = {
+                    DefaultMatterName: vm.mattername,
+                    DefaultMatterId: vm.matterid,
+                    DefaultMatterType: "Copyright",
+                    MatterTypes: "Copyright$|$Patent$|$Medical Device",
+                    MatterUsers: "",
+                    MatterUserEmails: "",
+                    MatterRoles: "",
+                    MatterPermissions: "",
+                    IsCalendarSelected: vm.getBoolValues(vm.calendar),
+                    IsEmailOptionSelected: vm.getBoolValues(vm.email),
+                    IsRSSSelected: vm.getBoolValues(vm.rss),
+                    IsRestrictedAccessSelected: vm.getBoolValues(vm.assignteam),
+                    IsConflictCheck: vm.getBoolValues(vm.conflict),
+                    IsMatterDescriptionMandatory: vm.getBoolValues(vm.matterdesc),
+                    MatterPracticeGroup: "Litigation$|$Litigation$|$Litigation",
+                    MatterAreaofLaw: "Intellectual Property$|$Intellectual Property$|$Products Liability",
+                    IsContentCheck: vm.getBoolValues("Yes"),
+                    IsTaskSelected: vm.getBoolValues(vm.tasks),
+                    ClientUrl: vm.clienturl,
+                    CachedItemModifiedDate: modifiedDate,
+                    UserId: []
+                }
+                saveConfigurations(settingsRequest, function (response) {
+                    if (response != "") {
+                        vm.lazyloader = true;
+                        vm.clientlist = false;
+                        vm.showClientDetails = true;
+                    } else {
+                        vm.nodata = true;
+                        vm.lazyloader = true;
+                    }
+                });
+            }
+            //#endregion
+
+            //#region to get bool values
+            vm.getBoolValues = function (value) {
+                var boolvalue = false;
+                if (value == "Yes") {
+                    boolvalue = true;
+                }
+                return boolvalue;
+            }
         }]);
 })();

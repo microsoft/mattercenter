@@ -28,5 +28,9 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/matter/getconfigurations'
                   }),
+                  'saveConfigurations': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/saveconfigurations'
+                  }),
               });
       }]);

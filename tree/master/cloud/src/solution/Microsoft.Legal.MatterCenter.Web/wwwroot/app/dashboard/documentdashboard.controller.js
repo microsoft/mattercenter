@@ -12,6 +12,7 @@
             vm.upwarddrop = false;
             vm.loadLocation = false;
             vm.AuthornoResults = false;
+            vm.documentDashboardConfigs = uiconfigs.DocumentDashboard;
             vm.clientdrop = false;
             vm.lazyloaderdocumentclient = true;
             vm.clientdropvisible = false;
@@ -87,12 +88,12 @@
                 columnDefs: [
                     { field: 'checker', displayName: 'checked', width: '2%', cellTemplate: '/app/dashboard/cellCheckboxTemplate.html', headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html', enableColumnMenu: false },
                     { field: 'documentIconUrl', displayName: 'Icon', width: '2%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="{{row.entity.documentIconUrl}}"/></div>', headerCellTemplate: '<div class="ui-grid-cell-contents"><img class="docTypeIconHeader" id="docTypeIcon" style="padding:0" alt="Document type icon" src="' + configs.uri.SPOsiteURL + '/_layouts/15/images/generaldocument.png"></div>', enableColumnMenu: false },
-    	            { field: 'documentName', displayName: 'Document', width: '20%', cellTemplate: '/app/dashboard/DocumentDashboardCellTemplate.html', enableColumnMenu: false },
-                    { field: 'documentClientId', displayName: 'Client', width: '15%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>', enableColumnMenu: false },
-                    { field: 'documentOwner', displayName: 'Author', width: '14%', enableColumnMenu: false },
-                    { field: 'documentModifiedDate', displayName: 'Modified date', width: '20%', enableColumnMenu: false },
-                    { field: 'documentID', displayName: 'Document ID', width: '10%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentID==""?"NA":row.entity.documentID}}</div>', enableColumnMenu: false },
-                    { field: 'documentVersion', displayName: 'Version', width: '6%', enableColumnMenu: false },
+    	            { field: 'documentName', displayName: vm.documentDashboardConfigs.GridColumn1Header, width: '20%', cellTemplate: '/app/dashboard/DocumentDashboardCellTemplate.html', enableColumnMenu: false },
+                    { field: 'documentClientId', displayName: vm.documentDashboardConfigs.GridColumn2Header, width: '15%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>', enableColumnMenu: false },
+                    { field: 'documentOwner', displayName: vm.documentDashboardConfigs.GridColumn3Header, width: '14%', enableColumnMenu: false },
+                    { field: 'documentModifiedDate', displayName: vm.documentDashboardConfigs.GridColumn4Header, width: '20%', enableColumnMenu: false },
+                    { field: 'documentID', displayName: vm.documentDashboardConfigs.GridColumn5Header, width: '10%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentID==""?"NA":row.entity.documentID}}</div>', enableColumnMenu: false },
+                    { field: 'documentVersion', displayName: vm.documentDashboardConfigs.GridColumn6Header, width: '6%', enableColumnMenu: false },
                     { field: 'pin', width: '5%', displayName: '', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false }
                 ],
                 onRegisterApi: function (gridApi) {
@@ -669,7 +670,7 @@
             //#region This event is going to fire when the user clicks onm "Select All" and "UnSelect All" links
             vm.checkAll = function (checkAll, type, $event) {
                 $event.stopPropagation();
-                if (type === 'client') {
+                if (type === vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText) {
                     angular.forEach(vm.clients, function (client) {
                         client.Selected = checkAll;
                     });
@@ -756,20 +757,20 @@
                             vm.clientdrop = true;
                             vm.clientdropvisible = true;
                             if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
-                                vm.customSelection('client');
+                                vm.customSelection(vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText);
                             }
                             vm.lazyloaderdocumentclient = true;
                         });
                     }
                     else {
                         if (vm.selectedClients !== undefined && vm.selectedClients.length > 0) {
-                            vm.customSelection('client');
+                            vm.customSelection(vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText);
                         }
                         vm.clientdrop = true;
                         vm.clientdropvisible = true;
                     }
                 } else if (vm.clientdropvisible && $event.type === "keyup") {
-                    vm.customSelection('client');
+                    vm.customSelection(vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText);
                 } else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
@@ -778,7 +779,7 @@
             }
             //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
             vm.customSelection = function (type) {
-                if (type !== undefined && type === 'client') {
+                if (type !== undefined && type === vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText) {
                 var selectdClients = vm.selectedClients.split(',');
                     angular.forEach(vm.clients, function (client) {
                     client.Selected = false;
@@ -1001,7 +1002,7 @@
 
             //#region This event is going to fire when the user clicks on "OK" button in the filter panel
             vm.filterSearchOK = function (type) {
-                if (type === 'client') {
+                if (type === vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText) {
                     vm.selectedClients = '';
                     angular.forEach(vm.clients, function (client) {
                         if (client.Selected) {
