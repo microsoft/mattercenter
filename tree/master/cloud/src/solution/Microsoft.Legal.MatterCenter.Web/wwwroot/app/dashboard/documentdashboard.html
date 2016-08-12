@@ -7,8 +7,8 @@
 </script>
 <div class="popupWait hide"></div>
 <div class="loadingImage hide" id="popupWaitLoadingImage">
-    <a title="Matter Center Home" id="mcIcon" href="/sitepages/MatterCenterHome.aspx" target="_parent">
-        <img title="Matter Center" src="../Images/WindowsLoadingFast.GIF" alt="Matter Center" />
+    <a title="{{vm.documentDashboardConfigs.LinkImageLoadingTitle}}" id="mcIcon" href="" target="_parent">
+        <img title="{{vm.documentDashboardConfigs.ImageLoadingAltText}}" src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentDashboardConfigs.ImageLoadingAltText}}" />
     </a>
 </div>
 <div class="popupContainerBackground hide"></div>
@@ -29,12 +29,12 @@
                         <div id="PopupBody">
                             <div class="selectMailFormat">
                                 <div class="sendEmailOptions emailAttachmentOption" ng-click="!vm.enable||vm.downloadEmailAsAttachment(true);">
-                                    <img class="mailCartLogo" src="../Images/attach_666_27X27.png" alt="Email as attachment" ng-disabled="vm.enable"
-                                         title="Email as attachment" /><div title="Email as attachment" class="inlineValues">Email as attachment</div>
+                                    <img class="mailCartLogo" src="../Images/attach_666_27X27.png" alt="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" ng-disabled="vm.enable"
+                                         title="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" /><div title="{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}" class="inlineValues">{{vm.documentDashboardConfigs.Image1EmailAttachmentText}}</div>
                                 </div>
                                 <div class="sendEmailOptions emailLinkOption" ng-click="!vm.enable||vm.downloadEmailAsAttachment(false)">
-                                    <img class="mailCartLogo" src="../Images/link-666.png" alt="Email as link"
-                                         title="Email as link" /><div title="Email as link" class="inlineValues">Email as link</div>
+                                    <img class="mailCartLogo" src="../Images/link-666.png" alt="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}"
+                                         title="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" /><div title="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" class="inlineValues">{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}</div>
                                 </div>
                             </div>
                             <div class="popUpBody popUpFloatLeft popUpScrollXHidden">
@@ -47,12 +47,12 @@
                                             <div class="col-xs-12 col-sm-8">
                                                 <span class="paddingRight20"><input type="checkbox" ng-model="element.selected" /></span>{{element.documentName}}
                                             </div>
-                                            <div class="col-xs-12 col-sm-1"><img src="../Images/icon-delete.png" class="" title="Remove attachment" ng-click="vm.removeAttachment(element)"></div>
+                                            <div class="col-xs-12 col-sm-1"><img src="../Images/icon-delete.png" class="" title="{{vm.documentDashboardConfigs.Image3EmailRemovalAttachmentLinkText}}" ng-click="vm.removeAttachment(element)"></div>
                                         </div>
                                     </li>
                                 </ul>
                                 <div class='pinLoadingImage' id='mailCartLoadingImage'>
-                                    <img src='/Images/WindowsLoadingFast.GIF' title='Loading' class='LoadingImage' alt='Loading...' />
+                                    <img src='/Images/WindowsLoadingFast.GIF' title='{{vm.documentDashboardConfigs.AttachmentLoadingText}}' class='LoadingImage' alt='{{vm.documentDashboardConfigs.AttachmentLoadingText}}' />
                                 </div>
                             </div>
                         </div>
@@ -71,14 +71,14 @@
             <div class="col-xs-9">
                 <div class="col-xs-12 padlf0">
                     <div class="input-group">
-                        <input type="text" ng-model="vm.selected" placeholder="Search by document name, document ID, or keyword" uib-typeahead="documentDataList.documentName for documentDataList in vm.searchDocumentFile($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                        <input type="text" ng-model="vm.selected" placeholder="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}" uib-typeahead="documentDataList.documentName for documentDataList in vm.searchDocumentFile($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                         <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                     </div>
                 </div>
             </div>
             <div class="col-xs-3 pad0">
-                <img title="Advanced search" style="display: inline;" type='button' ng-if="vm.downwarddrop" ng-click="vm.showupward($event)" data-toggle='dropdown' alt="Drop Down" src="../Images/downward-advanced-search-29x29-666.png">
-                <img title="Advanced search" id="filterSearchDown" ng-if="vm.upwarddrop" ng-click="vm.showdownward($event)" alt="Drop Down" src="../Images/upward-advanced-search-29x29-666.png">
+                <img title="{{vm.documentDashboardConfigs.ImageAdvanceSearchTitle}}" style="display: inline;" type='button' ng-if="vm.downwarddrop" ng-click="vm.showupward($event)" data-toggle='dropdown' alt="{{vm.documentDashboardConfigs.ImageAdvanceSearchAltText}}" src="../Images/downward-advanced-search-29x29-666.png">
+                <img title="{{vm.documentDashboardConfigs.ImageAdvanceSearchTitle}}" id="filterSearchDown" ng-if="vm.upwarddrop" ng-click="vm.showdownward($event)" alt="{{vm.documentDashboardConfigs.ImageAdvanceSearchAltText}}" src="../Images/upward-advanced-search-29x29-666.png">
             </div>
             <div class="col-xs-12">
                 <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
@@ -89,7 +89,7 @@
             <div class="col-xs-9 dashboarddrop" ng-if="vm.searchdrop">
                 <div class="col-xs-12 dashboarddropinner" ng-click='$event.stopPropagation()'>
                     <div class="row">
-                        <div class="col-xs-12 col-sm-2 pull-left pad15">Clients</div>
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.documentDashboardConfigs.AdvSearchLabel1Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
                                 <input type="text" value="{{vm.selectedClients}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedClients" ng-keyup="vm.showclientdrop($event)" placeholder="Enter or select a client" class="form-control">
@@ -97,47 +97,47 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloaderdocumentclient" style="position:static !important">
-                            <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" title="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" />
                         </div>
                     </div>
                     <div class="col-xs-12 " ng-if="vm.clientdrop">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, 'client',$event)">Select All</a> </div>
-                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, 'client',$event)">Select None</a></div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText,$event)">{{vm.documentDashboardConfigs.AdvSearchSelectAllLinkText}}</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText,$event)">{{vm.documentDashboardConfigs.AdvSearchSelectNoneLinkText}}</a></div>
                                 <div class="col-xs-12 refinerWrapper" ng-repeat="client in vm.clients" ng-click="$event.stopPropagation();">
                                     <input type="checkbox" ng-model="client.Selected" /> <span>{{client.name}}</span>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK('client')">Ok</div></div>
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK(vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText)">{{vm.documentDashboardConfigs.AdvSearchbuttonOkText}}</div></div>
                                     </div>
                                     <div class="col-xs-3">
-                                        <div class="filterOkButton" ng-click="vm.filterSearchCancel()"><div class="dashboardSearch">Cancel</div></div>
+                                        <div class="filterOkButton" ng-click="vm.filterSearchCancel()"><div class="dashboardSearch">{{vm.documentDashboardConfigs.AdvSearchbuttonCancelText}}</div></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12 col-sm-2 pull-left pad15">Author</div>
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.documentDashboardConfigs.AdvSearchLabel2Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
-                            <input type="text" placeholder="Document Author" ng-model="vm.selectedAuthor" class="form-control">
+                            <input type="text" placeholder="{{vm.documentDashboardConfigs.AdvSearchTextbox2PlaceholderText}}" ng-model="vm.selectedAuthor" class="form-control">
                         </div>
                         <div class="col-xs-12 hide">
                             <i ng-show="vm.loadLocation" class="glyphicon glyphicon-refresh"></i>
                             <div ng-show="vm.AuthornoResults">
-                                <i class="glyphicon glyphicon-remove"></i> No Results Found
+                                <i class="glyphicon glyphicon-remove"></i> {{vm.documentDashboardConfigs.NoSearchResultMsgText}}
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12 col-sm-2 pull-left pad15">Date</div>
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.documentDashboardConfigs.AdvSearchLabel3Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="row">
                                 <div class="col-xs-6 col-sm-4">
                                     <div class='input-group'>
-                                        <input type='text' placeholder='From' class='calendar form-control'
+                                        <input type='text' placeholder='{{vm.documentDashboardConfigs.AdvSearchTextbox3PlaceholderText}}' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
                                                ng-model='vm.startdate'
                                                is-open='vm.openedStartDate'
@@ -151,7 +151,7 @@
                                 </div>
                                 <div class="col-xs-6 col-sm-4">
                                     <div class='input-group'>
-                                        <input type='text' placeholder='To' class='calendar form-control'
+                                        <input type='text' placeholder='{{vm.documentDashboardConfigs.AdvSearchTextbox4PlaceholderText}}' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
                                                ng-model='vm.enddate'
                                                is-open='vm.openedEndDate'
@@ -167,7 +167,7 @@
                         </div>
                         <div class="col-xs-5 col-sm-3 pad15">
                             <div id="filterAdvancedSearch" class="dashboardSearch" ng-click="vm.getSearchResults()">
-                                Search
+                                {{vm.documentDashboardConfigs.AdvSearchButtonSearchText}}
                             </div>
                         </div>
                     </div>
@@ -175,9 +175,9 @@
             </div>
             <div class="col-xs-12 padtop20">
                 <ul class="nav nav-tabs" toggletab>
-                    <li id="myDocuments"><a href="#Documents" data-toggle="tab" ng-click="vm.getMyDocuments()">My documents({{vm.myDocumentCount}})</a></li>
-                    <li id="allDocuments" class="active"><a href="#Documents" data-toggle="tab" ng-click="vm.getDocuments()">All documents({{vm.allDocumentCount}})</a></li>
-                    <li id="pinDocuments"><a href="#Documents" data-toggle="tab" ng-click="vm.getPinnedDocuments()">Pinned documents({{vm.pinDocumentCount}})</a></li>
+                    <li id="myDocuments"><a href="#Documents" data-toggle="tab" ng-click="vm.getMyDocuments()">{{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})</a></li>
+                    <li id="allDocuments" class="active"><a href="#Documents" data-toggle="tab" ng-click="vm.getDocuments()">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a></li>
+                    <li id="pinDocuments"><a href="#Documents" data-toggle="tab" ng-click="vm.getPinnedDocuments()">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a></li>
                 </ul>
             </div>
             <div class="col-xs-12">
@@ -187,7 +187,7 @@
                             <div id="grid1" ui-grid="vm.documentGridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
                         </div>
                         <div class="col-xs-12 pad0 padtop5 text-center" id="docgrid" ng-if="vm.nodata">
-                            No results found.
+                            {{vm.documentDashboardConfigs.NoSearchResultMsgText}}
                         </div>
                     </div>
                 </div>
@@ -207,8 +207,8 @@
                     <span id="EmailImg">
                         <img src="../Images/cart_icon_30px_X_30px.png"
                              class="mailCartIcon"
-                             title="Review the contents of your mail cart and send the selected documents to your OneDrive or via email."
-                             alt="Mail Cart" ng-click="vm.showMailCartModal()">({{vm.documentsCheckedCount}})
+                             title="{{vm.documentDashboardConfigs.ImageMailCartIconTitle}}"
+                             alt="{{vm.documentDashboardConfigs.ImageMailCartIconAltText}}" ng-click="vm.showMailCartModal()">({{vm.documentsCheckedCount}})
                     </span>
                 </span>
             </div>
@@ -216,19 +216,19 @@
 
             <div class="col-xs-offset-9 col-xs-3 sortby">
                 <div class="col-xs-offset-4 col-xs-8 text-right pad0">
-                    <span>Sort by: </span>
+                    <span>{{vm.documentDashboardConfigs.LabelSortByText}} </span>
                     <span>{{vm.sortbytext}}</span>
-                    <img alt="Sort By" class="" ng-click="vm.showsortby($event)" title="Sort By" src="../Images/icon-combobox.png" />
+                    <img alt="{{vm.documentDashboardConfigs.LabelSortByTitle}}" class="" ng-click="vm.showsortby($event)" title="{{vm.documentDashboardConfigs.LabelSortByTitle}}" src="../Images/icon-combobox.png" />
                 </div>
                 <div class="col-xs-offset-7 col-xs-5" ng-if="vm.sortbydrop">
                     <ul>
-                        <li ng-click="vm.sortyby('Relevant','None')">None</li>
-                        <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">Alphabetical ↑</li>
-                        <li ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">Alphabetical ↓</li>
-                        <li ng-click="vm.sortyby('CreateddateUp','Created date ↑')">Created date ↑</li>
-                        <li ng-click="vm.sortyby('CreateddateDown','Created date ↓')">Created date ↓</li>
-                        <li ng-click="vm.sortyby('ModifieddateUp','Modified date ↑')">Modified date ↑</li>
-                        <li ng-click="vm.sortyby('ModifieddateDown','Modified date ↓')">Modified date ↓</li>
+                        <li ng-click="vm.sortyby('Relevant','None')">{{vm.documentDashboardConfigs.DrpDownOption1Text}}</li>
+                        <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↑</li>
+                        <li ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↓</li>
+                        <li ng-click="vm.sortyby('CreateddateUp','Created date ↑')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↑</li>
+                        <li ng-click="vm.sortyby('CreateddateDown','Created date ↓')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↓</li>
+                        <li ng-click="vm.sortyby('ModifieddateUp','Modified date ↑')">{{vm.documentDashboardConfigs.DrpDownOption4Text}} ↑</li>
+                        <li ng-click="vm.sortyby('ModifieddateDown','Modified date ↓')">{{vm.documentDashboardConfigs.DrpDownOption4Text}} ↓</li>
                     </ul>
                 </div>
             </div>
@@ -237,12 +237,12 @@
 </div>
 <div id="loadingImageContainer" style="top:25%;left:47%">
     <div class="lazyLoading" ng-hide="vm.lazyloaderdashboard">
-        <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+        <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" title="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" />
     </div>
 </div>
 
 <div style="position:absolute;top:28%;left:40%">
     <div class="row text-center" style="" ng-hide="vm.lazyloaderdashboard">
-        Please wait while the Documents load.
+        {{vm.documentDashboardConfigs.MattersPreLoadingMsgText}}
     </div>
 </div>
