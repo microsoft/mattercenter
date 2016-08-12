@@ -1,6 +1,6 @@
 ﻿<div ng-mouseenter='grid.appScope.vm.CheckDropDown = true' ng-mouseleave='grid.appScope.vm.CheckDropDown = false'>
     <div class='sorticon keep-open' style='float:right;' ng-show='grid.appScope.vm.CheckDropDown'>
-        <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-click="grid.appScope.vm.openDocumentHeader($event,'checkout')"
+        <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn7Header)"
            type='button'>
             <img src='../images/icon-combobox.png' />
         </a>
