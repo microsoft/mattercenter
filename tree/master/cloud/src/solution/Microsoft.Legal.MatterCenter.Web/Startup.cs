@@ -72,10 +72,13 @@ namespace Microsoft.Legal.MatterCenter.Web
         {
            // GetKeyVaultSecrets();
             KeyVaultHelper keyVaultHelper = new KeyVaultHelper(Configuration);
-            keyVaultHelper.GetKeyVaultSecrets();
+            KeyVaultHelper.GetCert(Configuration);
+            keyVaultHelper.GetKeyVaultSecretsCertificate();
+            
             services.AddSingleton(Configuration);
             
             ConfigureSettings(services);
+
         
             services.AddCors();
             services.AddLogging();
