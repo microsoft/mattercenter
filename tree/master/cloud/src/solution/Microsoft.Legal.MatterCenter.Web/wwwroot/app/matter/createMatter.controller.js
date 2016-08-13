@@ -542,16 +542,16 @@
                             cm.selectedDocumentTypeLawTerms = [];
                             cm.documentTypeLawTerms = [];
                             if (cm.taxonomyHierarchyLevels == 2) {
-                                setDefaultTaxonomyHierarchyLeveTwo(arrDMatterTypes);
+                                setDefaultTaxonomyHierarchyLeveTwo(arrDMatterTypes, dPrimaryMatterType);
                             }
                             if (cm.taxonomyHierarchyLevels == 3) {
-                                setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes);
+                                setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType);
                             }
                             if (cm.taxonomyHierarchyLevels == 4) {
-                                setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes);
+                                setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes, dPrimaryMatterType);
                             }
                             if (cm.taxonomyHierarchyLevels == 5) {
-                                setDefaultTaxonomyHierarchyLevelFive(arrDMatterTypes);
+                                setDefaultTaxonomyHierarchyLevelFive(arrDMatterTypes, dPrimaryMatterType);
                             }
 
                             cm.selectedConflictCheckUser = ""; cm.blockedUserName = ""; cm.conflictDate = "";
@@ -618,7 +618,7 @@
             }
 
 
-            function setDefaultTaxonomyHierarchyLeveTwo(arrDMatterTypes) {
+            function setDefaultTaxonomyHierarchyLeveTwo(arrDMatterTypes, dPrimaryMatterType) {
                 angular.forEach(cm.levelOneList, function (levelOneTerm) {
                     angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
 
@@ -653,7 +653,7 @@
                 });
 
             }
-            function setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes) {
+            function setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType) {
                 angular.forEach(cm.levelOneList, function (levelOneTerm) {
                     angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
 
@@ -699,7 +699,7 @@
 
                 });
             }
-            function setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes) {
+            function setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes, dPrimaryMatterType) {
                 angular.forEach(cm.levelOneList, function (levelOneTerm) {
                     angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
 
@@ -749,7 +749,7 @@
                     });
                 });
             }
-            function setDefaultTaxonomyHierarchyLevelFive(arrDMatterTypes) {
+            function setDefaultTaxonomyHierarchyLevelFive(arrDMatterTypes, dPrimaryMatterType) {
                 angular.forEach(cm.levelOneList, function (levelOneTerm) {
                     angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
 
@@ -3024,7 +3024,7 @@
                 if (cm.taxonomyHierarchyLevels >= 3) {
                     cm.levelThreeList = cm.activeLevelTwoItem.level3;
                 }
-               
+
 
             }
             //function to for seclection of subAOL items 
