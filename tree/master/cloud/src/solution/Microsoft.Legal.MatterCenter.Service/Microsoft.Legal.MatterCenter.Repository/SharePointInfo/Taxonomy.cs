@@ -235,6 +235,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns>Serialized Object of Term Set</returns>
         private string GetManagedTermSetHierarchy(ClientContext clientContext, TermSet termSet, TermStoreDetails termStoreDetails)
         {
+            level = 3;
             StringBuilder sb = new StringBuilder();
             JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
             jw.Formatting = Formatting.Indented;
