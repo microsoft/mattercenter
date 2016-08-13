@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Microsoft.Legal.MatterCenter.Utility
+namespace Microsoft.Legal.MatterCenter.Common
 {
     public class KeyVaultHelper
     {
@@ -28,10 +28,10 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// <summary>
         /// 
         /// </summary>
-        public void GetKeyVaultSecrets()
+        public void GetKeyVaultSecretsCerticate()
         {
             Dictionary<string, string> keyValues = new Dictionary<string, string>();
-            keyValues = retrieveSecretsSecret();
+            keyValues = retrieveSecrets(true);
 
             foreach (var ky in keyValues)
             {
@@ -44,10 +44,10 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// <summary>
         /// 
         /// </summary>
-        public void GetKeyVaultSecretsCertificate()
+        public void GetKeyVaultSecretsSecret()
         {
             Dictionary<string, string> keyValues = new Dictionary<string, string>();
-            keyValues = retrieveSecretsCerticiate();
+            keyValues = retrieveSecrets(false);
 
             foreach (var ky in keyValues)
             {
@@ -55,17 +55,31 @@ namespace Microsoft.Legal.MatterCenter.Utility
                 Configuration["General:" + ky.Key] = ky.Value;
             }
         }
+
+
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        private Dictionary<String, String> retrieveSecretsSecret()
+        private Dictionary<String, String> retrieveSecrets(bool cert)
         {
             Dictionary<string, string> keyValues = new Dictionary<string, string>();
             // I put my GetToken method in a Utils class. Change for wherever you placed your method.
-            var kv = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(GetToken));
-     
+
+            KeyVaultClient kv;
+
+            if (cert)
+            {
+                kv = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(GetAccessToken));
+
+            }
+            else
+            {
+               kv = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(GetToken));
+            }
+
+
             List<string> secrets = new List<string>();
 
             var values = kv.GetSecretsAsync(this.Configuration.GetSection("General").GetSection("KeyVaultURI").Value.ToString()).GetAwaiter().GetResult();
@@ -99,49 +113,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private Dictionary<String, String> retrieveSecretsCerticiate()
-        {
-            Dictionary<string, string> keyValues = new Dictionary<string, string>();
-            // I put my GetToken method in a Utils class. Change for wherever you placed your method.
-            var kv = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(GetAccessToken));
-
-            List<string> secrets = new List<string>();
-
-            var values = kv.GetSecretsAsync(this.Configuration.GetSection("General").GetSection("KeyVaultURI").Value.ToString()).GetAwaiter().GetResult();
-         
-
-            if (values != null && values.Value != null)
-            {
-
-                foreach (var m in values.Value)
-                    secrets.Add(m.Identifier.Name);
-            }
-
-            while (values != null && !string.IsNullOrWhiteSpace(values.NextLink))
-            {
-                //values = kv.GetSecretsNextAsync(values.NextLink).GetAwaiter().GetResult();
-                values = kv.GetSecretsAsync(values.NextLink).GetAwaiter().GetResult();
-                if (values != null && values.Value != null)
-                {
-
-                    foreach (var m in values.Value)
-                        secrets.Add(m.Identifier.Name);
-                }
-            }
-            foreach (var value in secrets)
-            {
-                var secret = kv.GetSecretAsync(this.Configuration.GetSection("General").GetSection("KeyVaultURI").Value.ToString(), value).GetAwaiter().GetResult();
-                keyValues.Add(value, secret.Value);
-            }
-
-
-            return keyValues;
-        }
-
+       
 
         /// <summary>
         /// 
@@ -166,7 +138,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         }
 
 
-       
+
         /// <summary>
         ///
         /// </summary>

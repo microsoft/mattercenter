@@ -17,12 +17,14 @@ using System.Diagnostics;
 using System.Linq;
 
 
+
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Service.Filters;
 using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
+using Microsoft.Legal.MatterCenter.Common;
 
 using System.IO;
 using Microsoft.Extensions.Options;
@@ -73,7 +75,7 @@ namespace Microsoft.Legal.MatterCenter.Web
            // GetKeyVaultSecrets();
             KeyVaultHelper keyVaultHelper = new KeyVaultHelper(Configuration);
             KeyVaultHelper.GetCert(Configuration);
-            keyVaultHelper.GetKeyVaultSecretsCertificate();
+            keyVaultHelper.GetKeyVaultSecretsCerticate();
             
             services.AddSingleton(Configuration);
             

@@ -1,7 +1,10 @@
 ﻿using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Microsoft.Legal.MatterCenter.Common;
 
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 namespace Microsoft.Legal.MatterCenter.Jobs
 {
     public class Program
@@ -15,7 +18,8 @@ namespace Microsoft.Legal.MatterCenter.Jobs
 
             var configuration = builder.Build();
             KeyVaultHelper kv = new KeyVaultHelper(configuration);
-            kv.GetKeyVaultSecrets();
+            KeyVaultHelper.GetCert(configuration);
+            kv.GetKeyVaultSecretsSecret();
             var azureStorageConnectionString = configuration["Data:DefaultConnection:AzureStorageConnectionString"];
             JobHostConfiguration config = new JobHostConfiguration(azureStorageConnectionString);
             config.UseTimers();
