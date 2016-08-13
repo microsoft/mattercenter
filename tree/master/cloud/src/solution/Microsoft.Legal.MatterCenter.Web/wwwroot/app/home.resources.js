@@ -12,7 +12,10 @@ angular.module('matterMain')
                   }),
                   'getUserProfilePicture': auth.attachCSRF({
                       method: 'POST',
-                      url: '/api/v1/user/getuserprofilepicture'                      
-                  })
+                      url: '/api/v1/user/getuserprofilepicture'
+                  }), 'canCreateMatter': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/cancreate'
+                  }),
               });
       }]);

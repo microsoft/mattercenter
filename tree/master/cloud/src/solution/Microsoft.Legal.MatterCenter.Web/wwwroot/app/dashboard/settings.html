@@ -2,10 +2,11 @@
     .commonContent {
         display: block !important;
     }
+
     #contentDiv {
-        height: auto !important ;
-        min-height:410px;
-        max-height:3000px !important;
+        height: auto !important;
+        min-height: 410px;
+        max-height: 3000px !important;
     }
 </style>
 <div id="mainDivContainer" ng-click="vm.closealldrops()">
@@ -126,6 +127,21 @@
 
                     </div>
                 </div>
+                <div class="col-xs-12 pad0" style="margin-top:10px">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                Include email notification?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
+                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.email" name="email" value="Yes" /> Yes</span>
+                        <span>
+                            <input type="radio" name="email" value="No" ng-model="vm.email" /> No
+                        </span>
+                    </div>
+                </div>
                 <div class="col-xs-12 pad0 marginTop15">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
@@ -145,6 +161,21 @@
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                Include tasks?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
+                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.tasks" name="tasks" value="Yes" /> Yes</span>
+                        <span>
+                            <input type="radio" name="tasks" value="No" ng-model="vm.tasks" /> No
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0" style="margin-top:10px">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
                                 Include RSS Feeds?
                             </div>
                         </div>
@@ -153,36 +184,6 @@
                         <span style="margin-right:10px"> <input type="radio" ng-model="vm.rss" name="rss" value="Yes" /> Yes</span>
                         <span>
                             <input type="radio" ng-model="vm.rss" name="rss" value="No" /> No
-                        </span>
-                    </div>
-                </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
-                    <div class="col-xs-12 col-sm-5 pad0">
-                        <div class="row margin0">
-                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
-                                Include email notification?
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.email" name="email" value="Yes" /> Yes</span>
-                        <span>
-                            <input type="radio" name="email" value="No" ng-model="vm.email"/> No
-                        </span>
-                    </div>
-                </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
-                    <div class="col-xs-12 col-sm-5 pad0">
-                        <div class="row margin0">
-                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
-                                Include tasks?
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.tasks" name="tasks" value="Yes" /> Yes</span>
-                        <span>
-                            <input type="radio" name="tasks" value="No" ng-model="vm.tasks"/> No
                         </span>
                     </div>
                 </div>
@@ -204,7 +205,7 @@
                     <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
                         <span style="margin-right:10px"> <input type="radio" ng-model="vm.matterdesc" name="matterdesc" value="Yes" /> Yes</span>
                         <span>
-                            <input type="radio" name="matterdesc" value="No" ng-model="vm.matterdesc"/> No
+                            <input type="radio" name="matterdesc" value="No" ng-model="vm.matterdesc" /> No
                         </span>
                     </div>
                 </div>
@@ -222,7 +223,7 @@
                     <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
                         <span style="margin-right:10px"> <input type="radio" ng-model="vm.conflict" name="conflict" value="Yes" /> Yes</span>
                         <span>
-                            <input type="radio" name="conflict" value="No" ng-model="vm.conflict"/> No
+                            <input type="radio" name="conflict" value="No" ng-model="vm.conflict" /> No
                         </span>
                     </div>
                 </div>
@@ -245,19 +246,32 @@
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
-                                Show matter id with?
+                                Show matter id?
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.showmatterid" name="matterid" value="Datetime" /> Datetime</span>
-                        <span style="margin-right:10px"><input type="radio" ng-model="vm.showmatterid" name="matterid" value="Guid" /> Guid</span>
-                        <span><input type="radio" name="matterid" ng-model="vm.showmatterid" value="Guid" /> Custom</span>
+                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.showmatterid" name="matterid" value="Yes" /> Yes</span>
+                        <span style="margin-right:10px"><input type="radio" ng-model="vm.showmatterid" name="matterid" value="No" /> No</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0" style="margin-top:10px">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                Matter Id Configuration?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
+                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="Guid"/> Guid</span>
+                        <span style="margin-right:10px"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="DateTime" /> Date Time</span>
+                        <span style="margin-right:10px"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="Custom" /> Custom</span>
                     </div>
                 </div>
                 <div id="buttonSection">
-                    <button class="button clear" type="button" id="saveButton" title="Save">Save</button>
-                    <button class="button" type="button" id="cancelButton" title="Cancel">Cancel</button>
+                    <button class="button clear" type="button" id="saveButton" title="Save" ng-click="vm.saveSettings()">Save</button>
+                    <button class="button" type="button" id="cancelButton" title="Cancel" ng-click="vm.showSetting()">Cancel</button>
                 </div>
             </div>
 
@@ -268,3 +282,4 @@
             <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
         </div>
     </div>
+</div>

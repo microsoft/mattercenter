@@ -336,11 +336,11 @@ textarea {
     z-index: 101;
     display: none;
     width: 250px;
-    height: 155px;
+    height: 200px !important;
     box-sizing: border-box;
     background-color: #fff;
     padding: 10px;
-    top: 44px;
+    top: 34px !important;
     border: 1px solid #d1d1d1;
 }
 
@@ -739,13 +739,11 @@ textarea {
     border-radius: 0;
 }
 
-#docsearchmatter ul {
-    width: 83.3%;
-}
-
-#searchmatter ul li a {
+#docsearchmatter ul li a, #searchmatter ul li a {
     height: 30px;
     padding: 5px 10px;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
     #searchmatter ul li a:hover {
@@ -954,4 +952,43 @@ textarea {
 
 .mainSearch input {
     max-width: 100% !important;
+}
+
+.WelcomeBar {
+    padding: 2px 10px 5px 10px !important;
+}
+
+#HeaderPlaceHolder {
+    display: none !important;
+}
+
+.topheader {
+    padding-top: 10px;
+    margin: 0 0px 0 -5px;
+    position: relative;
+    z-index: 5;
+}
+
+.padlf40 {
+    padding-left: 40px !important;
+}
+
+.AppHeader {
+    min-width: 280px !important;
+}
+
+#HeaderPlaceHolder {
+    min-width: 270px !important;
+}
+
+.zindex6 {
+    z-index: 6;
+}
+
+.height155 {
+    height: 200px !important; 
+}
+
+.height200 {
+    height: 200px !important;
 }
