@@ -1,0 +1,28 @@
+{
+  "name": "angulartics",
+  "main": [
+    "src/angulartics.js"
+  ],
+  "dependencies": {
+    "angular": ">= 1.1.5",
+    "SHA-1": "*"
+  },
+  "devDependencies": {
+    "angular-mocks": ">= 1.1.5",
+    "angular-route": "~1.2",
+    "angular-ui-router": "~0.2"
+  },
+  "ignore": [
+    ".gitignore",
+    "test",
+    "samples",
+    "LICENSE",
+    "*.md",
+    "Gruntfile.js",
+    "karma.conf.js",
+    "package.json"
+  ],
+  "resolutions": {
+    "angular": ">= 1.1.5"
+  }
+}
