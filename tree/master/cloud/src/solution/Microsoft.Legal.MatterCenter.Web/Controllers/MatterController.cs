@@ -904,30 +904,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             // For each value in the list of Content Type Names
             // Add that content Type to the Library
             Matter matter = matterMetadata.Matter;
-            Client client = matterMetadata.Client;
-
-            //ToDo: This values will come from the client. Once the UI is implemented, 
-            //This will be removed
-            var managedColumnTerms = new Dictionary<string, ManagedColumn>();
-            managedColumnTerms.Add("PracticeGroup", new ManagedColumn()
-            {
-                TermName = matterMetadata.PracticeGroupTerm.TermName,
-                Id = matterMetadata.PracticeGroupTerm.Id
-            });
-
-            managedColumnTerms.Add("AreaOfLaw", new ManagedColumn()
-            {
-                TermName = matterMetadata.AreaTerm.TermName,
-                Id = matterMetadata.AreaTerm.Id
-            });
-
-            managedColumnTerms.Add("SubareaOfLaw", new ManagedColumn()
-            {
-                TermName = matterMetadata.SubareaTerm.TermName,
-                Id = matterMetadata.SubareaTerm.Id
-            });
-
-            matterMetadata.ManagedColumnTerms = managedColumnTerms;
+            Client client = matterMetadata.Client;            
 
             var matterInformationVM = new MatterInformationVM()
             {
@@ -1138,29 +1115,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 #endregion   
 
                 try
-                {
-
-                    //ToDo: This values will come from the client. Once the UI is implemented, 
-                    //This will be removed
-                    var managedColumnTerms = new Dictionary<string, ManagedColumn>();
-                    managedColumnTerms.Add("PracticeGroup", new ManagedColumn()
-                    {
-                        TermName = matterMetdata.MatterDetails.PracticeGroup
-                    });
-
-                    managedColumnTerms.Add("AreaOfLaw", new ManagedColumn()
-                    {
-                        TermName = matterMetdata.MatterDetails.AreaOfLaw,
-
-                    });
-
-                    managedColumnTerms.Add("SubareaOfLaw", new ManagedColumn()
-                    {
-                        TermName = matterMetdata.MatterDetails.SubareaOfLaw,
-
-                    });
-
-                    matterMetdata.MatterDetails.ManagedColumnTerms = managedColumnTerms;
+                {                   
 
                     genericResponse = matterProvision.UpdateMatterMetadata(matterMetdata);
                     if (genericResponse == null)

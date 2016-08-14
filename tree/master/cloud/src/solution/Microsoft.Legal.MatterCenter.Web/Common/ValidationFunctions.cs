@@ -23,6 +23,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private ISPList spList;
         private IMatterRepository matterRespository;
         private GeneralSettings generalSettings;
+        private TaxonomySettings taxonomySettings;
         /// <summary>
         /// Do validation stuff
         /// </summary>
@@ -34,7 +35,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="camlQueries"></param>
         public ValidationFunctions(ISPList spList, IOptions<MatterSettings> matterSettings,
             IOptions<ErrorSettings> errorSettings, IMatterRepository matterRespository,
-            IOptions<ListNames> listNames, IOptions<CamlQueries> camlQueries, IOptions<GeneralSettings> generalSettings)
+            IOptions<ListNames> listNames, IOptions<CamlQueries> camlQueries, IOptions<GeneralSettings> generalSettings, IOptions<TaxonomySettings> taxonomySettings)
         {
             this.matterSettings = matterSettings.Value;
             this.spList = spList;
@@ -43,6 +44,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.listNames = listNames.Value;
             this.camlQueries = camlQueries.Value;
             this.generalSettings = generalSettings.Value;
+            this.taxonomySettings = taxonomySettings.Value;
         }
 
         /// <summary>
@@ -129,16 +131,22 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 if (null != matterDetails && !(int.Parse(ServiceConstants.EditMatterPermission, CultureInfo.InvariantCulture) == methodNumber))
                 {
-                    if (string.IsNullOrWhiteSpace(matterDetails.PracticeGroup))
-                    {
-                        return GenericResponse(errorSettings.IncorrectInputPracticeGroupCode, errorSettings.IncorrectInputPracticeGroupMessage);
-                    }
-                    if (string.IsNullOrWhiteSpace(matterDetails.AreaOfLaw))
-                    {
+                    //if (string.IsNullOrWhiteSpace(matterDetails.PracticeGroup))
+                    //{
+                    //    return GenericResponse(errorSettings.IncorrectInputPracticeGroupCode, errorSettings.IncorrectInputPracticeGroupMessage);
+                    //}
+                    //if (string.IsNullOrWhiteSpace(matterDetails.AreaOfLaw))
+                    //{
 
-                        return GenericResponse(errorSettings.IncorrectInputAreaOfLawCode, errorSettings.IncorrectInputAreaOfLawMessage);
-                    }
-                    if (string.IsNullOrWhiteSpace(matterDetails.SubareaOfLaw))
+                    //    return GenericResponse(errorSettings.IncorrectInputAreaOfLawCode, errorSettings.IncorrectInputAreaOfLawMessage);
+                    //}
+                    //if (string.IsNullOrWhiteSpace(matterDetails.SubareaOfLaw))
+                    //{
+                    //    return GenericResponse(errorSettings.IncorrectInputSubareaOfLawCode, errorSettings.IncorrectInputSubareaOfLawMessage);
+                    //}
+
+
+                    if (matterDetails.ManagedColumnTerms == null && matterDetails.ManagedColumnTerms.Count != taxonomySettings.Levels)
                     {
                         return GenericResponse(errorSettings.IncorrectInputSubareaOfLawCode, errorSettings.IncorrectInputSubareaOfLawMessage);
                     }

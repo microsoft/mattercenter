@@ -555,4 +555,22 @@ body {
 }
 .confirmUser{float:right; margin-right:10px;cursor:pointer}
 .manageUsers{max-height:400px; overflow:auto;}
-
+.segoUIFont{
+    font-family: "Segoe UI", Calibri, "Times New Roman";
+    font-size: 0.875em;
+}
+.SaveDocTypes{
+    background-color: #0072c6;
+    border: 0;
+    clear: both;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Segoe UI', Calibri, 'Times New Roman';
+    font-size: .875em;
+    font-weight: 600;
+    height: 30px;
+    line-height: 15pt;
+    min-width: 70px;
+    text-align: center;
+    width: 80px;
+}

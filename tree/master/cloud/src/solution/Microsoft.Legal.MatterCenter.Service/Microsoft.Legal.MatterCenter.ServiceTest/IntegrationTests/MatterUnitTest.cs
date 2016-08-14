@@ -504,9 +504,9 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
                 },
                 MatterDetails = new MatterDetails()
                 {
-                    PracticeGroup = "Litigation;",
-                    AreaOfLaw= "Intellectual Property;",
-                    SubareaOfLaw= "Copyright;",
+                    //PracticeGroup = "Litigation;",
+                    //AreaOfLaw= "Intellectual Property;",
+                    //SubareaOfLaw= "Copyright;",
                     ResponsibleAttorney= "SaiKiran Gudala;",
                     ResponsibleAttorneyEmail= "SaiG@MSmatter.onmicrosoft.com;",
                     UploadBlockedUsers= uploadBlockedUsers,

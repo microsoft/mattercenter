@@ -264,10 +264,13 @@
     margin-left: -4px;
 }
 
-.popUpSelected, .popUpCommonContent div:hover {
+.popUpCommonContent div:hover {
     background-color: #CDE6F7;
     color: #333;
     font-weight: 600;
+}
+.popUpSelected:hover{
+    background-color: #eaeaea !important;
 }
 
 .popUpPG {

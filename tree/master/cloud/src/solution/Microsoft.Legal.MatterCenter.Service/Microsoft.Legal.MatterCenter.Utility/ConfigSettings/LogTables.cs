@@ -17,5 +17,6 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public bool IsLoggingOnAzure { get; set; }
         public string ExternalAccessRequests { get; set; }
         public string MatterCenterConfiguration { get; set; }
+        public string MatterRequests { get; set; }
     }
 }

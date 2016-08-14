@@ -1,6 +1,6 @@
 ﻿<div ng-mouseenter='grid.appScope.vm.attorneyDropDowm = true' ng-mouseleave='grid.appScope.vm.attorneyDropDowm = false'>
     <div class='sorticon keep-open' style='float:right;' ng-show='grid.appScope.vm.attorneyDropDowm'>
-        <a href='javascript:;' class='prisma-header-dropdown-anchor dropdown-toggle' id="acombo" type='button' ng-click="grid.appScope.vm.openMatterHeader($event,'Attorney')" data-toggle='dropdown'>
+        <a href='javascript:;' class='prisma-header-dropdown-anchor dropdown-toggle' id="acombo" type='button' ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn5Header)" data-toggle='dropdown'>
             <img src='../images/icon-combobox.png' />
         </a>
     </div>

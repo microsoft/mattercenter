@@ -1,32 +1,8 @@
-<div id="MasterPageContainer" class="MasterPageContent">
-    <div class="AppHeader">
-        <div class="AppSwitcherContainer" ng-click="vm.menuClick()">
-            <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuCaptionTitle}}" />
-            <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
-            <div class="MenuCaption"><span>{{vm.header.MenuImageCaption}}</span></div>
-        </div>
-        <div class="AppMenuFlyout ms-shadow">
-            <div class="AppMenuFlyoutPriLinks">
-                <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span></a>
-                <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
-                <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span></a>
-            </div>
-        </div>
-        <div id="HeaderPlaceHolder" class="padlf10">
-            <span title="{{vm.header.LogoImageTitle}}" class="AppLogoContainer">
-                <img class="AppLogo" alt="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
-            </span>
-        </div>
-    </div>
-    <input type="hidden" id="requestvalidator" name="requestvalidator" runat="server" />
-    <div class="AppContent">
-
-
-        <asp:ContentPlaceHolder ID="BodyContentPlaceHolder" runat="server">
-        </asp:ContentPlaceHolder>
-
-    </div>
-</div>
+<style>
+    #HeaderPlaceHolder {
+        display: block !important;
+    }
+</style>
 <!---->
 <div id="HomeContainer" class="marleft10">
     <!--    <div class="row"> -->

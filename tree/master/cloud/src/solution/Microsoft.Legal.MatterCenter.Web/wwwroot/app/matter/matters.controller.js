@@ -1166,30 +1166,30 @@
                 searchRequest.SearchObject.ItemsPerPage = 17;
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
-                if (property == "Responsible Attorney") {
+                if (property == vm.matterConfigContent.GridColumn5Header) {
                     vm.attorneySearchTerm = "";
                     searchRequest.SearchObject.Filters.ResponsibleAttorneys = "";
                     vm.attorneyfilter = false;
                 }
-                else if (property == "Area of Law") {
+                else if (property == vm.matterConfigContent.GridColumn6Header) {
                     vm.areaSearchTerm = "";
                     searchRequest.SearchObject.Filters.SubareaOfLaw = "";
                     vm.areafilter = false;
                 }
-                else if (property == "Matter") {
+                else if (property == vm.matterConfigContent.GridColumn1Header) {
                     vm.searchTerm = "";
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.Name = "";
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     vm.matterfilter = false;
                 }
-                else if (property == "Client") {
+                else if (property == vm.matterConfigContent.GridColumn2Header) {
                     vm.clientSearchTerm = ""
                     searchRequest.SearchObject.Filters.ClientName = "";
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     vm.clientfilter = false;
                 }
-                else if (property == "Modified Date") {
+                else if (property == vm.matterConfigContent.GridColumn4Header) {
                     searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                     searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
                     vm.modstartdate = "";
@@ -2094,30 +2094,31 @@
                 var left = dimensions.left - 224;
                 angular.element('.matterheader').css({ 'top': top, 'left': left });
                 angular.element('.matterheaderdates').css({ 'top': top, 'left': left });
-                if (name == "matter") {
+                if (name === vm.matterConfigContent.GridColumn1Header) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
-                    vm.filtername = "Matter";
+                    vm.filtername = vm.matterConfigContent.GridColumn1Header;
                 }
-                if (name == "client") {
+                if (name === vm.matterConfigContent.GridColumn2Header) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyClientName + "";
-                    vm.filtername = "Client";
+                    vm.filtername = vm.matterConfigContent.GridColumn2Header;
                 }
-                if (name == "Attorney") {
+                if (name === vm.matterConfigContent.GridColumn5Header) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
-                    vm.filtername = "Responsible Attorney";
+                    vm.filtername = vm.matterConfigContent.GridColumn5Header;
                 }
-                if (name == "AreaOfLaw") {
+                //AOL
+                if (name === vm.matterConfigContent.GridColumn6Header) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
-                    vm.filtername = "Area of Law";
+                    vm.filtername = vm.matterConfigContent.GridColumn6Header;
                 }
-                if (name == "ModifiedDate") {
-                    vm.filtername = "Modified Date";
+                if (name === vm.matterConfigContent.GridColumn4Header) {
+                    vm.filtername = vm.matterConfigContent.GridColumn4Header;
                 }
-                if (name == "OpenDate") {
-                    vm.filtername = "Open Date";
+                if (name === vm.matterConfigContent.GridColumn7Header) {
+                    vm.filtername = vm.matterConfigContent.GridColumn7Header;
                 }
                 $timeout(function () {
-                    if (name == 'ModifiedDate' || name == 'OpenDate') {
+                    if (name == vm.matterConfigContent.GridColumn4Header || name == vm.matterConfigContent.GridColumn7Header) {
                         vm.matterdateheader = false;
                     }
                     else {
@@ -2135,16 +2136,16 @@
             //start
             vm.filtermatter = function (value) {
                 var searchTerm = "";
-                if (vm.filtername == "Matter") {
+                if (vm.filtername == vm.matterConfigContent.GridColumn1Header) {
                     searchTerm = vm.searchTerm.toLowerCase();
                 }
-                else if (vm.filtername == "Client") {
+                else if (vm.filtername == vm.matterConfigContent.GridColumn2Header) {
                     searchTerm = vm.clientSearchTerm.toLowerCase();
                 }
-                else if (vm.filtername == "Responsible Attorney") {
+                else if (vm.filtername == vm.matterConfigContent.GridColumn5Header) {
                     searchTerm = vm.attorneySearchTerm.toLowerCase();
                 }
-                else if (vm.filtername == "Area of Law") {
+                else if (vm.filtername == vm.matterConfigContent.GridColumn6Header) {
                     searchTerm = vm.areaSearchTerm.toLowerCase();
                 }
                 var arrayItem = value.split(';');

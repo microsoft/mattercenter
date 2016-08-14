@@ -8,6 +8,29 @@ angular.module('matterMain')
                   'getTaxonomyData': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/taxonomy/gettaxonomy'
-                  })
+                  }),
+                  'getRoles': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/user/getroles',
+                      isArray: true
+                  }),
+                  'getPermissionLevels': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/user/getpermissionlevels',
+                      isArray: true
+                  }),
+                  'getUsers': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/user/getusers',
+                      isArray: true
+                  }),
+                  'getDefaultConfigurations': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/getconfigurations'
+                  }),
+                  'saveConfigurations': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/saveconfigurations'
+                  }),
               });
       }]);
