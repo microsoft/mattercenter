@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.KeyVault;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace Microsoft.Legal.MatterCenter.Common
 {

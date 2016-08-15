@@ -8,12 +8,12 @@
     "Microsoft.ApplicationInsights.AspNetCore": "1.0.0",
     "Microsoft.AspNetCore.Authentication.JwtBearer": "1.0.0",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
-    "Microsoft.AspNetCore.Authorization": "1.0.0",
+    //   "Microsoft.AspNetCore.Authorization": "1.0.0",
     "Microsoft.Extensions.Options": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
     "Microsoft.AspNetCore.Mvc": "1.0.0",
-    "Microsoft.Azure.KeyVault": "1.0.0",
-    "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.1",
+    // "Microsoft.Azure.KeyVault": "1.0.0",
+    //  "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.1",
     "Microsoft.AspNetCore.Razor.Tools": {
       "version": "1.0.0-preview2-final",
       "type": "build"
@@ -26,12 +26,11 @@
     "Microsoft.Extensions.Logging": "1.0.0",
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
-    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
-    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
+    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
     "Microsoft.Legal.MatterCenter.Repository": "1.0.0-*",
     "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*",
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
     "Microsoft.Legal.MatterCenter.com": "1.0.0-*",
-    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
     "Sendgrid": "8.0.2"
   },
   "tools": {

@@ -6,12 +6,14 @@ using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Extensions.Options;
 
 using Microsoft.Legal.MatterCenter.Utility;
+using Microsoft.Legal.MatterCenter.Web;
 
 using Moq;
-using Microsoft.Legal.MatterCenter.Web.Common;
+//using Microsoft.Legal.MatterCenter.Web.Common;
 using Microsoft.Legal.MatterCenter.Web.Controllers;
 using Microsoft.WindowsAzure.Storage.Table;
 using System;
+using Microsoft.Legal.MatterCenter.Web.Common;
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
 {
