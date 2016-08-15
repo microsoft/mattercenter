@@ -16,9 +16,8 @@
             vm.userProfileObjectId = adalService.userInfo.profile.oid;
             vm.navigation = uiconfigs.Navigation;
             vm.header = uiconfigs.Header;
-
-            $rootScope.logEvent('navigation view')
-
+            
+            $rootScope.setAuthenticatedUserContext();
 
             //Callback function for help 
             function getHelp(options, callback) {

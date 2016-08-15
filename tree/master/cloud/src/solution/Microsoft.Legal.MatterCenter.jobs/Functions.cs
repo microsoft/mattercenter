@@ -35,10 +35,10 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         /// <param name="timerInfo"></param>
         /// <param name="matterInformationVM"></param>
         public static void ProcessMatter([TimerTrigger("00:00:05", RunOnStartup = true)]TimerInfo timerInfo, 
-            [Table("MatterRequests")] IQueryable<MatterInformationVM> matterInformationVM)
+            [Table("MatterRequests")] IQueryable<MatterInformationVM> matterInformationVM, TextWriter log)
         {       
             var query = from p in matterInformationVM select p;
-            if(query.Count()>0)
+            if(query.ToList().Count() > 0)
             {
                 var builder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
@@ -117,15 +117,25 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                     client.Name, client.Id, matter.Name, matter.Id,
                                     matter.Description, matterType) + string.Format(CultureInfo.InvariantCulture, matterMailBodyTeamMembers, secureMatter,
                                     mailBodyTeamInformation, blockUserNames, client.Url, oneNotePath, matter.Name, originalMatter.MatterLocation, matter.Name);
-                            }
-
+                            } 
 
                             EmailMessage email = new EmailMessage(service);
-                            email.ToRecipients.Add(originalMatter.MatterCreatorEmail);
+                            foreach(IList<string> userNames  in matter.AssignUserEmails)
+                            {
+                                foreach(string userName in userNames)
+                                {
+                                    if(!string.IsNullOrWhiteSpace(userName))
+                                    {
+                                        email.ToRecipients.Add(userName);
+                                    }
+                                }
+                            }                            
                             email.From = new EmailAddress("matteradmin@msmatter.onmicrosoft.com");
                             email.Subject = matterMailSubject;
                             email.Body = matterMailBody;
                             email.Send();
+                            Utility.UpdateTableStorageEntity(originalMatter, log, configuration["Data:DefaultConnection:AzureStorageConnectionString"],
+                                            configuration["Settings:MatterRequests"], "Accepted");
                         }
                     }
                 }
@@ -133,6 +143,8 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         }
 
         
+
+
 
         /// <summary>
         /// Provides the team members and their respective permission details.
@@ -178,7 +190,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                 foreach (MatterInformationVM matterInformation in query)
                 {
                     if (matterInformation != null)
-                    {                       
+                    {
                         if (matterInformation.Status.ToLower() == "pending")
                         {
                             string serializedMatter = matterInformation.SerializeMatter;
@@ -250,7 +262,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                     {
                         using (var ctx = new ClientContext(originalMatter.Client.Url))
                         {
-                            SecureString password = GetEncryptedPassword(configuration["Settings:AdminPassword"]);
+                            SecureString password = Utility.GetEncryptedPassword(configuration["Settings:AdminPassword"]);
                             ctx.Credentials = new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], password);
                             //First check whether the user exists in SharePoint or not
                             log.WriteLine($"Checking whether the user {email} has been present in the system or not");
@@ -295,7 +307,8 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                         }
                                         log.WriteLine($"The matter permissions has been updated for the user {email}");
                                         log.WriteLine($"Updating the matter status to Accepted in Azure Table Storage");
-                                        UpdateTableStorageEntity(originalMatter, log, configuration);
+                                        Utility.UpdateTableStorageEntity(originalMatter, log, configuration["Data:DefaultConnection:AzureStorageConnectionString"], 
+                                            configuration["Settings:TableStorageForExternalRequests"], "Accepted");
                                     }
                                 }
                             }
@@ -306,61 +319,6 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             catch(Exception ex)
             {
                 log.WriteLine($"Exception occured in the method GetExternalAccessRequestsFromSPO. {ex}");
-            }
-        }        
-
-        /// <summary>
-        /// This method will return the secure password for authentication to SharePoint Online
-        /// </summary>
-        /// <param name="plainTextPassword"></param>
-        /// <returns></returns>
-        private static SecureString GetEncryptedPassword(string plainTextPassword)
-        {      
-            //Get the user's password as a SecureString
-            SecureString securePassword = new SecureString();
-            foreach(char c in plainTextPassword)
-            {                
-                securePassword.AppendChar(c);               
-            }
-            //while (info.Key != ConsoleKey.Enter);
-            return securePassword;
-        }
-
-        
-
-
-        /// <summary>
-        /// Update the status in Azure Table Storage for the corresponding Parition and Row Key
-        /// for which the user has accepted the invitation
-        /// </summary>
-        /// <param name="externalSharingRequest"></param>
-        private static void UpdateTableStorageEntity(MatterInformationVM matterInformation, TextWriter log, IConfigurationRoot configuration)
-        {
-            try
-            { 
-                CloudStorageAccount cloudStorageAccount = 
-                    CloudStorageAccount.Parse(configuration["Data:DefaultConnection:AzureStorageConnectionString"]);
-                CloudTableClient tableClient = cloudStorageAccount.CreateCloudTableClient();
-                // Create the CloudTable object that represents the "people" table.
-                CloudTable table = tableClient.GetTableReference(configuration["Settings:TableStorageForExternalRequests"]);
-                // Create a retrieve operation that takes a entity.
-                TableOperation retrieveOperation = 
-                    TableOperation.Retrieve<MatterInformationVM>(matterInformation.PartitionKey, matterInformation.RowKey);
-                // Execute the operation.
-                TableResult retrievedResult = table.Execute(retrieveOperation);
-                // Assign the result to a ExternalSharingRequest object.
-                MatterInformationVM updateEntity = (MatterInformationVM)retrievedResult.Result;
-                if(updateEntity!=null)
-                {
-                    updateEntity.Status = "Accepted";                
-                    TableOperation updateOperation = TableOperation.Replace(updateEntity);
-                    table.Execute(updateOperation);
-                    log.WriteLine($"Updated the matter status to Accepted in Azure Table Storage");
-                }
-            }
-            catch (Exception ex)
-            {
-                log.WriteLine($"Exception occured in the method UpdateTableStorageEntity. {ex}");
             }
         }
     }

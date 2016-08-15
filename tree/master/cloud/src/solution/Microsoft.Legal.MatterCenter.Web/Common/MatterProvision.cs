@@ -333,23 +333,23 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return genericResponse;
         }
 
-        public GenericResponseVM SavConfigurations(SaveConfigurationsVM saveConfigurationsVM)
+        public GenericResponseVM SavConfigurations(MatterConfigurations matterConfiguration)
         {
             ClientContext clientContext = null;
             GenericResponseVM returnFlag = null;
             try
             {
-                clientContext = spoAuthorization.GetClientContext(saveConfigurationsVM.SiteCollectionPath);
+                clientContext = spoAuthorization.GetClientContext(matterConfiguration.ClientUrl);
                 Matter matter = new Matter();
-                matter.AssignUserNames = GetUserList(saveConfigurationsVM.MatterConfigurations.MatterUsers);
-                matter.AssignUserEmails = GetUserList(saveConfigurationsVM.MatterConfigurations.MatterUserEmails);
+                matter.AssignUserNames = GetUserList(matterConfiguration.MatterUsers);
+                matter.AssignUserEmails = GetUserList(matterConfiguration.MatterUserEmails);
                 if (0 < matter.AssignUserNames.Count)
                 {
-                    returnFlag = matterRepositoy.ValidateTeamMembers(clientContext, matter, saveConfigurationsVM.UserId);
+                    returnFlag = matterRepositoy.ValidateTeamMembers(clientContext, matter, matterConfiguration.UserId);
                 }
                 if (returnFlag != null)
                 {
-                    returnFlag = matterRepositoy.SaveConfigurationToList(saveConfigurationsVM.MatterConfigurations, clientContext, saveConfigurationsVM.CachedItemModifiedDate);
+                    returnFlag = matterRepositoy.SaveConfigurationToList(matterConfiguration, clientContext, matterConfiguration.CachedItemModifiedDate);
                     bool tempResult = false;
                     if (returnFlag != null)
                     {
@@ -360,9 +360,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                             ListItem settingsItem = matterRepositoy.GetItem(clientContext, listNames.MatterConfigurationsList, listQuery);
                             if (null != settingsItem)
                             {
-                                saveConfigurationsVM.CachedItemModifiedDate = Convert.ToString(settingsItem[matterSettings.ColumnNameModifiedDate], CultureInfo.InvariantCulture);
+                                matterConfiguration.CachedItemModifiedDate = Convert.ToString(settingsItem[matterSettings.ColumnNameModifiedDate], CultureInfo.InvariantCulture);
                             }
-                            returnFlag.Value = string.Concat(returnFlag.Value, ServiceConstants.PIPE, ServiceConstants.DOLLAR, ServiceConstants.PIPE, saveConfigurationsVM.CachedItemModifiedDate);
+                            returnFlag.Value = string.Concat(returnFlag.Value, ServiceConstants.PIPE, ServiceConstants.DOLLAR, ServiceConstants.PIPE, matterConfiguration.CachedItemModifiedDate);
 
                         }
                     }

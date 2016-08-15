@@ -393,6 +393,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             var searchSettingsSection = Configuration.GetSection("Search").GetChildren();
             var contentTypeSettingsSection = Configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
             var appInsightsSections = Configuration.GetSection("ApplicationInsights");
+            var matterSearchColumnPickerSection = Configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetChildren();
+            var documentSearchColumnPickerSection = Configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetChildren();
 
             configWriter.WriteLine("var configs =");
             jw.WriteStartObject();
@@ -460,8 +462,28 @@ namespace Microsoft.Legal.MatterCenter.Web
                             jw.WriteValue(key.Value);
                         }
                     }
-                jw.WriteEndObject();
+                
 
+                
+                    jw.WritePropertyName("searchColumnsUIPickerForMatter");
+                        jw.WriteStartObject();
+                            foreach (var key in matterSearchColumnPickerSection)
+                            {                        
+                                jw.WritePropertyName(key.Key);
+                                jw.WriteValue(key.Value);                       
+                            }
+                        jw.WriteEndObject();
+
+
+                    jw.WritePropertyName("searchColumnsUIPickerForDocument");
+                        jw.WriteStartObject();
+                            foreach (var key in documentSearchColumnPickerSection)
+                            {
+                                jw.WritePropertyName(key.Key);
+                                jw.WriteValue(key.Value);
+                            }
+                        jw.WriteEndObject();
+                    jw.WriteEndObject();
 
             jw.WritePropertyName("contentTypes");
                 jw.WriteStartObject();
