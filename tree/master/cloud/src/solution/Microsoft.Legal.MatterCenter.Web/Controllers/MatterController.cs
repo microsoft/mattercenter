@@ -392,14 +392,14 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="client">Client object containing Client data</param>
         /// <param name="details">Term Store object containing Term store data</param>
         /// <returns>Returns JSON object to the client</returns>        ///
-        public IActionResult SavConfigurations([FromBody]SaveConfigurationsVM saveConfigurationsVM)
+        public IActionResult SavConfigurations([FromBody]MatterConfigurations matterConfiguration)
         {
             try
             {
                 
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
-                if (string.IsNullOrWhiteSpace(saveConfigurationsVM.SiteCollectionPath) && saveConfigurationsVM.MatterConfigurations == null)
+                if (matterConfiguration !=null && string.IsNullOrWhiteSpace(matterConfiguration.ClientUrl))
                 {
                     errorResponse = new ErrorResponse()
                     {
@@ -410,7 +410,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-                var response = matterProvision.SavConfigurations(saveConfigurationsVM);
+                var response = matterProvision.SavConfigurations(matterConfiguration);
                 return matterCenterServiceFunctions.ServiceResponse(response, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
