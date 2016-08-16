@@ -34,7 +34,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         private GeneralSettings generalSettings;
        
        /// <summary>
-       /// 
+       /// constructor where are all the dependencies are injected
        /// </summary>
        /// <param name="errorSettings"></param>
        /// <param name="matterCenterServiceFunctions"></param>
@@ -58,38 +58,37 @@ namespace Microsoft.Legal.MatterCenter.Web
             this.userRepositoy = userRepositoy;
         }
 
+
+
         /// <summary>
         /// Get all the users that are configured for a given client
         /// </summary>
         /// <param name="searchRequestVM"></param>
-        /// <returns></returns>
+        /// <returns>IActionResult</returns>
         [HttpPost("getusers")]
-        [SwaggerResponse(HttpStatusCode.OK)]        
-        /// <summary>
-        /// get users
-        /// </summary>        
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="details">Term Store object containing Term store data</param>
-        /// <returns>Returns JSON object to the client</returns>        ///
+        [Produces(typeof(IList<Users>))]
+        [SwaggerOperation("get-users")]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which contains list of Users as Json object",  Type = typeof(IList<Users>))]
+        [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> GetUsers([FromBody]SearchRequestVM searchRequestVM)
         {
             try
-            {
-                
+            {                
                 #region Error Checking                
-                ErrorResponse errorResponse = null;                
+                GenericResponseVM genericResponse = null;                
                 if (searchRequestVM.Client == null && string.IsNullOrWhiteSpace(searchRequestVM.Client.Url))
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-                searchRequestVM.SearchObject.SearchTerm = (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm)) ? searchRequestVM.SearchObject.SearchTerm : string.Empty;
+                searchRequestVM.SearchObject.SearchTerm = (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm)) ? 
+                    searchRequestVM.SearchObject.SearchTerm : string.Empty;
                 IList<Users> users = await userRepositoy.GetUsersAsync(searchRequestVM);
                 if (users != null && users.Count != 0)
                 {
@@ -116,26 +115,31 @@ namespace Microsoft.Legal.MatterCenter.Web
         }
 
         /// <summary>
-        /// 
+        /// Api to get user profile picture for the login user
         /// </summary>
         /// <param name="client"></param>
-        /// <returns></returns>
+        /// <returns>IActionResult</returns>
         [HttpPost("getuserprofilepicture")]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [Produces(typeof(Users))]
+        [SwaggerOperation("get-user-profile-picture")]
+        [SwaggerResponse(HttpStatusCode.OK, 
+            Description ="Returns user object which contains information about the current login user such as his profile picture", 
+            Type = typeof(Users))]
+        [SwaggerResponseRemoveDefaults]
         public IActionResult UserProfilePicture([FromBody]Client client)
         {    
             #region Error Checking                
-            ErrorResponse errorResponse = null;
+            GenericResponseVM genericResponse = null;
 
             if (client == null && string.IsNullOrWhiteSpace(client.Url))
             {
-                errorResponse = new ErrorResponse()
+                genericResponse = new GenericResponseVM()
                 {
-                    Message = errorSettings.MessageNoInputs,
-                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                    Description = "No input data is passed"
+                    Value = errorSettings.MessageNoInputs,
+                    Code = HttpStatusCode.BadRequest.ToString(),
+                    IsError = true
                 };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
             }
             #endregion
             var userInfo = userRepositoy.GetUserProfilePicture(client);
@@ -150,24 +154,27 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="client"></param>
         /// <returns></returns>
         [HttpPost("getroles")]
-        [SwaggerResponse(HttpStatusCode.OK)]               
+        [Produces(typeof(IList<Role>))]
+        [SwaggerOperation("get-roles")]
+        [SwaggerResponse(HttpStatusCode.OK, 
+            Description ="Get all the roles suich as Responsible Attorney, Attorney, Para Legal etc as a JOSN object", 
+            Type = typeof(IList<Role>))]
+        [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> GetRoles([FromBody]Client client)
         {
             try
-            {
-                
+            {                
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
-                
+                GenericResponseVM genericResponse = null;                
                 if (client == null && string.IsNullOrWhiteSpace(client.Url))
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 IList<Role> roles = null;
@@ -197,24 +204,28 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="client"></param>
         /// <returns></returns>
         [HttpPost("getpermissionlevels")]
-        [SwaggerResponse(HttpStatusCode.OK)]         
+        [Produces(typeof(IList<Role>))]
+        [SwaggerOperation("get-permission-levels")]
+        [SwaggerResponse(HttpStatusCode.OK, 
+            Description ="Get all the permissions such as FullControl, Contribute, Read as a JSON object", 
+            Type=typeof(IList<Role>))]        
+        [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> GetPermissionLevels([FromBody]Client client)
         {
             try
-            {
-                
+            {                
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
 
                 if (client == null && string.IsNullOrWhiteSpace(client.Url))
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 IList<Role> roles = null;
@@ -245,7 +256,12 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="client"></param>
         /// <returns></returns>
         [HttpPost("userexists")]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [Produces(typeof(bool))]
+        [SwaggerOperation("user-exists")]
+        [SwaggerResponse(HttpStatusCode.OK, 
+            Description ="Checks whether the user exists in the teant and returns true or false", 
+            Type = typeof(bool))]
+        [SwaggerResponseRemoveDefaults]
         public IActionResult UserExists([FromBody]Client client)
         {
             try
