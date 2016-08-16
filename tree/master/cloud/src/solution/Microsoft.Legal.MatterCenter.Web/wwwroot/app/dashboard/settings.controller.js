@@ -59,6 +59,7 @@
             vm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
             vm.assignRoles = [];
             vm.assignPermissions = [];
+            vm.successmessage = false;
             //#endregion
 
             //#region for hiding the client details on load
@@ -252,6 +253,7 @@
             vm.showSetting = function () {
                 vm.clientlist = true;
                 vm.showClientDetails = false;
+                vm.successmessage = false;
             }
             //#endregion
 
@@ -324,10 +326,12 @@
                         vm.lazyloader = true;
                         vm.clientlist = false;
                         vm.showClientDetails = true;
-                        vm.cacheItemModifiedDate = response.value
+                        vm.cacheItemModifiedDate = response.value;
+                        vm.successmessage = true;
                     } else {
                         vm.nodata = true;
                         vm.lazyloader = true;
+                        vm.successmessage = false;
                     }
                 });
             }
