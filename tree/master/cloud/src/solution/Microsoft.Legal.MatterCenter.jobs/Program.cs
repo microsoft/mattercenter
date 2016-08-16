@@ -1,5 +1,8 @@
 ﻿using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
+
+
+using Microsoft.AspNetCore.Builder;
 using System.IO;
 using Microsoft.Legal.MatterCenter.Common;
 

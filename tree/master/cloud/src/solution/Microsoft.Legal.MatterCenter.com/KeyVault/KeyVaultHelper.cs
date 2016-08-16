@@ -65,7 +65,6 @@ namespace Microsoft.Legal.MatterCenter.Common
         private Dictionary<String, String> retrieveSecrets(bool cert)
         {
             Dictionary<string, string> keyValues = new Dictionary<string, string>();
-            // I put my GetToken method in a Utils class. Change for wherever you placed your method.
 
             KeyVaultClient kv;
 
