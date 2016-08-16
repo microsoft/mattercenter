@@ -58,6 +58,7 @@
             $rootScope.profileClass = "hide";
             vm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
             vm.assignRoles = [];
+            vm.settingsConfigs = uiconfigs.Settings;
             vm.assignPermissions = [];
             //#endregion
 
