@@ -18,6 +18,8 @@ using System.Linq;
 
 
 
+using Swashbuckle.Swagger.Model;
+
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
@@ -232,12 +234,17 @@ namespace Microsoft.Legal.MatterCenter.Web
             string pathToDoc = $"{System.AppDomain.CurrentDomain.BaseDirectory}Microsoft.Legal.MatterCenter.Web.xml";
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options => {
-                options.SingleApiVersion(new Swashbuckle.Swagger.Model.Info
+                options.SingleApiVersion(new Info
                 {
                     Version = "v1",
                     Title = "Matter Center API Version V1",
                     Description = "This matter center api is for V1 release",
-                    TermsOfService = "None"
+                    TermsOfService = "None",
+                    Contact = new Contact() {
+                        Name="Matter Admin",
+                        Email= "matteradmin@msmatter.onmicrosoft.com",
+                        Url = "https://www.microsoft.com/en-us/legal/productivity/mattercenter.aspx"
+                    }
                 });
                 options.IncludeXmlComments(pathToDoc);
                 options.DescribeAllEnumsAsStrings();
