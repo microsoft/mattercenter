@@ -37,24 +37,24 @@
                     <div class="defaultFontStyle titleSection">Select default values</div>
                     <div class="defaultFontStyle descriptionSection">Default selections will be editable when a new matter is created.</div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="row margin0">
                         <div class="col-xs-12 col-sm-5 pad0">
                             <div class="row margin0">
                                 <div class="col-xs-12 defaultFontStyle displayInline pad0">
                                     Matter Name
                                 </div>
-                                <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0" style="margin-top:10px">
+                                <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">
                                     Enter default text to appear when a new matter is created. For example, a matter name prefix or suffix, or naming convention instructions.This text can be removed or changed when a new matter is created.
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
+                        <div class="col-xs-12 col-sm-7 pad0 marginTop7">
                             <input type="text" class="form-control" ng-model="vm.mattername" />
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="row margin0">
                         <div class="col-xs-12 col-sm-5 pad0">
                             <div class="row margin0">
@@ -66,33 +66,33 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
+                        <div class="col-xs-12 col-sm-7 pad0 marginTop7">
                             <input type="text" class="form-control" ng-model="vm.matterid" />
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     Set a default matter type by selecting a Practice group, Area of law, and Sub areas of law below.
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
                                 Default to restricting access to an assigned team?
                             </div>
-                            <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0" style="margin-top:10px">
+                            <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">
                                 This can be changed when a new matter is created. If you select yes, you can either define a default team below or leave the team permission blank.
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.assignteam" name="assignteam" value="Yes" /> Yes</span>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.assignteam" name="assignteam" value="Yes" /> Yes</span>
                         <span>
                             <input type="radio" ng-model="vm.assignteam" name="assignteam" value="No" /> No
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="defaultFontStyle tableContainer semiBold" id="assignPermissionsTitle">Assign team permission</div>
                     <div class="col-xs-12 pad0">
                         <div class="row margin0 marginTop10">
@@ -120,14 +120,14 @@
                             </div>
                         </div>
                         <div class="col-xs-10 col-xs-offset-2 margin0 marginTop10">
-                            <div id="addMoreLink" style="float:right;margin-top:10px;padding:0px;">
-                                <a id="addMorePermissions" style="padding:0px;" ng-click="vm.addNewAssignPermissions()">Add More</a>
+                            <div id="addMoreLink" class="addMoreLinks">
+                                <a id="addMorePermissions" class="pad0" ng-click="vm.addNewAssignPermissions()">Add More</a>
                             </div>
                         </div>
 
                     </div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -135,8 +135,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.email" name="email" value="Yes" /> Yes</span>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.email" name="email" value="Yes" /> Yes</span>
                         <span>
                             <input type="radio" name="email" value="No" ng-model="vm.email" /> No
                         </span>
@@ -150,14 +150,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.calendar" name="calender" value="Yes" /> Yes</span>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.calendar" name="calender" value="Yes" /> Yes</span>
                         <span>
                             <input type="radio" ng-model="vm.calendar" name="calender" value="No" /> No
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -165,14 +165,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.tasks" name="tasks" value="Yes" /> Yes</span>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.tasks" name="tasks" value="Yes" /> Yes</span>
                         <span>
                             <input type="radio" name="tasks" value="No" ng-model="vm.tasks" /> No
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -180,8 +180,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.rss" name="rss" value="Yes" /> Yes</span>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.rss" name="rss" value="Yes" /> Yes</span>
                         <span>
                             <input type="radio" ng-model="vm.rss" name="rss" value="No" /> No
                         </span>
@@ -191,43 +191,43 @@
                     <div class="defaultFontStyle titleSection">Set matter options</div>
                     <div class="defaultFontStyle descriptionSection">These settings will not be editable when a new matter is created.</div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
                                 Make the matter description field required?
                             </div>
-                            <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0" style="margin-top:10px">
+                            <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">
                                 Selecting No will allow new matters to be saved without a description
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.matterdesc" name="matterdesc" value="Yes" /> Yes</span>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.matterdesc" name="matterdesc" value="Yes" /> Yes</span>
                         <span>
                             <input type="radio" name="matterdesc" value="No" ng-model="vm.matterdesc" /> No
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
                                 Do matters need conflict check data?
                             </div>
-                            <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0" style="margin-top:10px">
+                            <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">
                                 Selecting No will remove the conflict check declaration fields from new matters
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.conflict" name="conflict" value="Yes" /> Yes</span>
+                    <div class="col-xs-12 col-sm-7 pad0  marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.conflict" name="conflict" value="Yes" /> Yes</span>
                         <span>
                             <input type="radio" name="conflict" value="No" ng-model="vm.conflict" /> No
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -235,14 +235,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.showrole" name="showrole" value="Yes" />Yes</span>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.showrole" name="showrole" value="Yes" />Yes</span>
                         <span>
                             <input type="radio" name="showrole" ng-model="vm.showrole" value="No" /> No
                         </span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -250,12 +250,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.showmatterid" name="matterid" value="Yes" /> Yes</span>
-                        <span style="margin-right:10px"><input type="radio" ng-model="vm.showmatterid" name="matterid" value="No" /> No</span>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.showmatterid" name="matterid" value="Yes" /> Yes</span>
+                        <span class="marginRight10"><input type="radio" ng-model="vm.showmatterid" name="matterid" value="No" /> No</span>
                     </div>
                 </div>
-                <div class="col-xs-12 pad0" style="margin-top:10px">
+                <div class="col-xs-12 pad0 marginTop10">
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
@@ -263,16 +263,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-7 pad0" style="margin-top: 7px;">
-                        <span style="margin-right:10px"> <input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="Guid"/> Guid</span>
-                        <span style="margin-right:10px"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="DateTime" /> Date Time</span>
-                        <span style="margin-right:10px"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="Custom" /> Custom</span>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="Guid"/> Guid</span>
+                        <span class="marginRight10"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="DateTime" /> Date Time</span>
+                        <span class="marginRight10" ng-if="vm.showmatterid=='Yes'"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="Custom" /> Custom</span>
                     </div>
                 </div>
-                <div id="buttonSection">
+                <div id="buttonSection col-xs-12 pad0">
                     <button class="button clear" type="button" id="saveButton" title="Save" ng-click="vm.saveSettings()">Save</button>
                     <button class="button" type="button" id="cancelButton" title="Cancel" ng-click="vm.showSetting()">Cancel</button>
                 </div>
+                <div class="defaultFontStyle col-xs-12 pad0" id="successMessage" ng-if="vm.successmessage">Your changes have been saved. Go back to <span class="clientLinks" id="goToClients" ng-click="vm.showSetting()" title="Clients">Clients</span>.</div>
             </div>
 
         </div>
