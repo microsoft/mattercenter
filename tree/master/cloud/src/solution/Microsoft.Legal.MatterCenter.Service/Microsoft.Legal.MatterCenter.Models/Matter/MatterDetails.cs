@@ -10,38 +10,38 @@ namespace Microsoft.Legal.MatterCenter.Models
     /// </summary>
     public class MatterDetails
     {
-        /// <summary>
-        /// Gets or sets the practice group associated with the matter.
-        /// </summary>
-        /// <value>The practice group.</value>
+        ///// <summary>
+        ///// Gets or sets the practice group associated with the matter.
+        ///// </summary>
+        ///// <value>The practice group.</value>
 
-        public string PracticeGroup
-        {
-            get;
-            set;
-        }
+        //public string PracticeGroup
+        //{
+        //    get;
+        //    set;
+        //}
 
-        /// <summary>
-        /// Gets or sets the area of law associated with the matter.
-        /// </summary>
-        /// <value>The area of law.</value>
+        ///// <summary>
+        ///// Gets or sets the area of law associated with the matter.
+        ///// </summary>
+        ///// <value>The area of law.</value>
 
-        public string AreaOfLaw
-        {
-            get;
-            set;
-        }
+        //public string AreaOfLaw
+        //{
+        //    get;
+        //    set;
+        //}
 
-        /// <summary>
-        /// Gets or sets the sub area of law associated with the matter.
-        /// </summary>
-        /// <value>The sub area of law.</value>
+        ///// <summary>
+        ///// Gets or sets the sub area of law associated with the matter.
+        ///// </summary>
+        ///// <value>The sub area of law.</value>
 
-        public string SubareaOfLaw
-        {
-            get;
-            set;
-        }
+        //public string SubareaOfLaw
+        //{
+        //    get;
+        //    set;
+        //}
 
         public IDictionary<string, ManagedColumn> ManagedColumnTerms
         {

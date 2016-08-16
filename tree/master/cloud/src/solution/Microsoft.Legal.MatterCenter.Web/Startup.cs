@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Swashbuckle.Swagger.Model;
 
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
@@ -213,12 +214,17 @@ namespace Microsoft.Legal.MatterCenter.Web
             string pathToDoc = $"{System.AppDomain.CurrentDomain.BaseDirectory}Microsoft.Legal.MatterCenter.Web.xml";
             services.AddSwaggerGen();
             services.ConfigureSwaggerGen(options => {
-                options.SingleApiVersion(new Swashbuckle.Swagger.Model.Info
+                options.SingleApiVersion(new Info
                 {
                     Version = "v1",
                     Title = "Matter Center API Version V1",
                     Description = "This matter center api is for V1 release",
-                    TermsOfService = "None"
+                    TermsOfService = "None",
+                    Contact = new Contact() {
+                        Name="Matter Admin",
+                        Email= "matteradmin@msmatter.onmicrosoft.com",
+                        Url = "https://www.microsoft.com/en-us/legal/productivity/mattercenter.aspx"
+                    }
                 });
                 options.IncludeXmlComments(pathToDoc);
                 options.DescribeAllEnumsAsStrings();
@@ -372,6 +378,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             var searchSettingsSection = Configuration.GetSection("Search").GetChildren();
             var contentTypeSettingsSection = Configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
             var appInsightsSections = Configuration.GetSection("ApplicationInsights");
+            var matterSearchColumnPickerSection = Configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetChildren();
+            var documentSearchColumnPickerSection = Configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetChildren();
 
             configWriter.WriteLine("var configs =");
             jw.WriteStartObject();
@@ -439,8 +447,28 @@ namespace Microsoft.Legal.MatterCenter.Web
                             jw.WriteValue(key.Value);
                         }
                     }
-                jw.WriteEndObject();
+                
 
+                
+                    jw.WritePropertyName("searchColumnsUIPickerForMatter");
+                        jw.WriteStartObject();
+                            foreach (var key in matterSearchColumnPickerSection)
+                            {                        
+                                jw.WritePropertyName(key.Key);
+                                jw.WriteValue(key.Value);                       
+                            }
+                        jw.WriteEndObject();
+
+
+                    jw.WritePropertyName("searchColumnsUIPickerForDocument");
+                        jw.WriteStartObject();
+                            foreach (var key in documentSearchColumnPickerSection)
+                            {
+                                jw.WritePropertyName(key.Key);
+                                jw.WriteValue(key.Value);
+                            }
+                        jw.WriteEndObject();
+                    jw.WriteEndObject();
 
             jw.WritePropertyName("contentTypes");
                 jw.WriteStartObject();

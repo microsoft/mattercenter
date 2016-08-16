@@ -26,6 +26,30 @@
             cm.clientUrl = "";
             cm.errorStatus = false;
             cm.prevButtonDisabled = true;
+            cm.taxonomyHierarchyLevels = configs.taxonomy.levels;
+            cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);
+            if (cm.taxonomyHierarchyLevels >= 2) {
+                cm.levelOneList = [];
+                cm.levelTwoList = [];
+            }
+            if (cm.taxonomyHierarchyLevels >= 3) {
+                cm.levelThreeList = [];
+            }
+            if (cm.taxonomyHierarchyLevels >= 4) {
+                cm.levelFourList = [];
+            }
+            if (cm.taxonomyHierarchyLevels >= 5) {
+                cm.levelFiveList = [];
+            }
+
+            //var managedColumns = { }
+            //   for (var i = 0; i < cm.taxonomyHierarchyLevels; i++) {
+            //       var columnName = configs.contentTypes.managedColumns["ColumnName" +(i +1)];
+            //       managedColumns[columnName] = {};
+
+            //   }
+
+            //   console.log(managedColumns);
 
             var w = angular.element($window);
 
@@ -42,8 +66,8 @@
                 MatterDescription: "",
                 ContentTypes: [],
                 matterMandatory: "",
-                oAreaOfLawTerms: [],
-                oSubAreaOfLawTerms: [],
+                //  oAreaOfLawTerms: [],
+                // oSubAreaOfLawTerms: [],
                 oSelectedDocumentTypeLawTerms: [],
                 oValidMatterName: undefined,
                 isNextClick: false,
@@ -68,13 +92,13 @@
             cm.matterId = "";
             cm.matterDescription = "";
             cm.clientNameList = [];
-            cm.areaOfLawTerms = [];
-            cm.subAreaOfLawTerms = [];
-            cm.documentTypeLawTerms = [];
+            //cm.areaOfLawTerms = [];
+            //cm.subAreaOfLawTerms = [];
+            //cm.documentTypeLawTerms = [];
             cm.selectedDocumentTypeLawTerms = [];
-            cm.activeAOLTerm = null;
-            cm.activeSubAOLTerm = null;
-            cm.activeDocumentTypeLawTerm = null;
+            //cm.activeAOLTerm = null;
+            //cm.activeSubAOLTerm = null;
+            //cm.activeDocumentTypeLawTerm = null;
             cm.popupContainerBackground = "Show";
             cm.popupContainer = "hide";
             cm.sectionName = "snOpenMatter";
@@ -308,6 +332,11 @@
                 Url: configs.global.repositoryUrl
             }
 
+
+            function getTaxonomyHierarchy(data) {
+                var levelsDefined = data.levels;
+            }
+
             //call back function for getting the clientNamesList
             function getTaxonomyData() {
                 getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
@@ -316,13 +345,10 @@
                     // jQuery('#myModal').modal('show');
                     // optionsForPracticeGroup.Client.Url=cm.clientUrl;
                     getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                        cm.pracitceGroupList = response.pgTerms;
-                        // cm.popupContainerBackground = "hide";
-
+                        // cm.pracitceGroupList = response.pgTerms;
+                        cm.levelOneList = response.level1;
+                        getTaxonomyHierarchy(response);
                         getRoles(optionsForRoles, function (response) {
-                            //console.log("roles");
-                            //console.log(response);
-
                             cm.assignRoles = response;
 
                             angular.forEach(cm.assignPermissionTeams, function (team) { //For loop
@@ -371,37 +397,40 @@
 
             getTaxonomyData();
 
-
-
+            //cm.popupContainerBackground = "Show";
+            //cm.popupContainer = "Show";
 
             //calls this function when selectType button clicks
             cm.selectMatterType = function (value) {
-
                 cm.popupContainerBackground = "Show";
-
-                if (cm.pracitceGroupList == null) {
-                    getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                        cm.pracitceGroupList = response.pgTerms;
-
-                        cm.popupContainer = "Show";
-                        cm.popupContainerBackground = "Show";
-
-                    });
-                }
-                else {
-                    cm.popupContainer = "Show";
-                    cm.popupContainerBackground = "Show";
-
-                }
-                if (cm.pracitceGroupList[0]) {
-                    cm.selectedPracticeGroup = cm.pracitceGroupList[0];
-                    cm.areaOfLawTerms = cm.pracitceGroupList[0].areaTerms;
-                    cm.subAreaOfLawTerms = cm.pracitceGroupList[0].areaTerms[0].subareaTerms;
-                    cm.activeAOLTerm = cm.pracitceGroupList[0].areaTerms[0];
-                    cm.activeSubAOLTerm = cm.pracitceGroupList[0].areaTerms[0].subareaTerms[0];
-
-                }
+                cm.popupContainer = "Show";
             }
+
+            //calls this function when selectType button clicks
+            //cm.selectMatterType = function (value) {
+
+            //    cm.popupContainerBackground = "Show";
+
+            //    if (cm.levelOneList == null) {
+            //        getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+            //            cm.levelOneList = response.level1;
+            //            cm.popupContainer = "Show";
+            //            cm.popupContainerBackground = "Show";
+            //        });
+            //    }
+            //    else {
+            //        cm.popupContainer = "Show";
+            //        cm.popupContainerBackground = "Show";
+            //    }
+            //    if (cm.levelOneList[0]) {
+            //        cm.selectedLevelOne = cm.levelOneList[0];
+            //        cm.areaOfLawTerms = cm.levelOneList[0].level2;
+            //        cm.subAreaOfLawTerms = cm.levelOneList[0].level2[0].level3;
+            //        cm.activeAOLTerm = cm.levelOneList[0].level2[0];
+            //        cm.activeSubAOLTerm = cm.levelOneList[0].level2[0].level3[0];
+
+            //    }
+            //}
 
             //function for closing the popup
             cm.selectMatterTypePopUpClose = function () {
@@ -425,7 +454,7 @@
 
                     getDefaultMatterConfigurations(siteCollectionPath, function (result) {
 
-                        if (result.isError) {                            
+                        if (result.isError) {
                             cm.errTextMsg = result.value;
                             cm.errorBorder = "client";
                             showErrorNotification("client");
@@ -512,45 +541,19 @@
                             getMatterGUID();
                             cm.selectedDocumentTypeLawTerms = [];
                             cm.documentTypeLawTerms = [];
+                            if (cm.taxonomyHierarchyLevels == 2) {
+                                setDefaultTaxonomyHierarchyLeveTwo(arrDMatterTypes, dPrimaryMatterType);
+                            }
+                            if (cm.taxonomyHierarchyLevels == 3) {
+                                setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType);
+                            }
+                            if (cm.taxonomyHierarchyLevels == 4) {
+                                setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes, dPrimaryMatterType);
+                            }
+                            if (cm.taxonomyHierarchyLevels == 5) {
+                                setDefaultTaxonomyHierarchyLevelFive(arrDMatterTypes, dPrimaryMatterType);
+                            }
 
-                            angular.forEach(cm.pracitceGroupList, function (pgTerm) {
-
-
-                                angular.forEach(pgTerm.areaTerms, function (areaTerm) {
-
-                                    angular.forEach(areaTerm.subareaTerms, function (subAreaTerm) {
-
-                                        for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
-
-                                            if (subAreaTerm.termName == arrDMatterTypes[iCount]) {
-                                                //  cm.selectedDocumentTypeLawTerms = 
-                                                var documentType = subAreaTerm;
-                                                documentType.foldernamespg = pgTerm.folderNames;
-                                                documentType.practicegroupId = pgTerm.id;
-                                                documentType.foldernamesaol = areaTerm.folderNames;
-                                                documentType.areaoflawId = areaTerm.id;
-                                                documentType.areaoflaw = areaTerm.termName;
-                                                documentType.practicegroup = pgTerm.termName;
-                                                //cm.documentTypeLawTerms
-
-                                                cm.documentTypeLawTerms.push(subAreaTerm);
-                                                documentType.primaryMatterType = false;
-                                                if (subAreaTerm.termName == dPrimaryMatterType) {
-                                                    documentType.primaryMatterType = true;
-                                                    cm.activeDocumentTypeLawTerm = subAreaTerm;
-                                                }
-                                                cm.selectedDocumentTypeLawTerms.push(documentType);
-                                            }
-
-                                        }
-                                    });
-
-                                });
-
-
-
-
-                            });
                             cm.selectedConflictCheckUser = ""; cm.blockedUserName = ""; cm.conflictDate = "";
                             //     cm.assignPermissionTeams
                             // cm.assignPermissionTeams.splice(0, 1);
@@ -593,10 +596,7 @@
                             }
 
 
-                            //angular.forEach(cm.assignPermissionTeams, function (assignTeam) {
 
-
-                            //});
 
                         }
                         cm.popupContainerBackground = "hide";
@@ -616,95 +616,285 @@
 
 
             }
-            //function to get the all AOL and SAOL terms
-            cm.getSelectedPracticeGroupValue = function () {
 
 
-                if (cm.selectedPracticeGroup != null) {
-                    cm.areaOfLawTerms = cm.selectedPracticeGroup.areaTerms;
-                    cm.subAreaOfLawTerms = cm.selectedPracticeGroup.areaTerms[0].subareaTerms;
-                    cm.activeSubAOLTerm = cm.selectedPracticeGroup.areaTerms[0].subareaTerms[0];
-                    cm.activeAOLTerm = cm.selectedPracticeGroup.areaTerms[0];
-                    cm.errorPopUp = false;
-                } else {
-                    cm.areaOfLawTerms = cm.subAreaOfLawTerms = null;
+            function setDefaultTaxonomyHierarchyLeveTwo(arrDMatterTypes, dPrimaryMatterType) {
+                angular.forEach(cm.levelOneList, function (levelOneTerm) {
+                    angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
 
-                }
+                        for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
 
-            }
+                            if (levelTwoTerm.termName == arrDMatterTypes[iCount]) {
+                                //  cm.selectedDocumentTypeLawTerms = 
+                                var documentType = levelTwoTerm;
+                                documentType.levelOneFolderNames = levelOneTerm.folderNames;
+                                documentType.levelOneTermId = levelOneTerm.id;
+                                documentType.levelOneTermName = levelOneTerm.termName;
+                                documentType.termChainName = levelOneTerm.termName;
+                                if (cm.taxonomyHierarchyLevels >= 2) {
+                                    documentType.levelTwoFolderNames = levelTwoTerm.folderNames;
+                                    documentType.levelTwoTermId = levelTwoTerm.id;
+                                    documentType.levelTwoTermName = levelTwoTerm.termName;
+                                    documentType.termChainName = documentType.termChainName + ">" + documentType.levelTwoTermName;
+                                }
 
-            //function to get the subAOL items on selection of AOLTerm
-            cm.selectAreaOfLawTerm = function (areaOfLawTerm) {
-                cm.errorPopUp = false;
-                cm.activeAOLTerm = areaOfLawTerm;
+                                cm.documentTypeLawTerms.push(documentType);
+                                documentType.primaryMatterType = false;
+                                if (levelTwoTerm.termName == dPrimaryMatterType) {
+                                    documentType.primaryMatterType = true;
+                                    cm.activeDocumentTypeLawTerm = levelTwoTerm;
+                                }
+                                cm.selectedDocumentTypeLawTerms.push(documentType);
+                            }
 
-                cm.subAreaOfLawTerms = areaOfLawTerm.subareaTerms;
-                cm.activeSubAOLTerm = areaOfLawTerm.subareaTerms[0];
-
-            }
-            ////function to for seclection of subAOL items 
-            cm.selectSubAreaOfLawTerm = function (subAreaOfLawTerm) {
-                cm.errorPopUp = false;
-                cm.activeSubAOLTerm = subAreaOfLawTerm;
-
-            }
-
-            cm.selectDocumentTemplateTypeLawTerm = function (documentTemplateTypeLawTerm) {
-                // alert(documentTemplateTypeLawTerm);
-                if (documentTemplateTypeLawTerm != null) {
-                    cm.errorPopUp = false;;
-                    cm.removeDTItem = true;
-                    cm.activeDocumentTypeLawTerm = documentTemplateTypeLawTerm;
-                    cm.primaryMatterType = true;
-                }
-
-            }
-
-            cm.addToDocumentTemplate = function () {
-                var isThisNewDocTemplate = true;
-                if (cm.activeSubAOLTerm != null) {
-                    angular.forEach(cm.documentTypeLawTerms, function (term) { //For loop
-                        if (cm.activeSubAOLTerm.id == term.id) {// this line will check whether the data is existing or not
-                            isThisNewDocTemplate = false;
                         }
                     });
-                    if (isThisNewDocTemplate) {
-                        //console.log(cm.selectedPracticeGroup);
-                        //console.log("AOL");
-                        //console.log(cm.activeAOLTerm);
-                        //console.log("SAOL");
-                        //console.log(cm.activeSubAOLTerm);
-                        var documentType = cm.activeSubAOLTerm;
-                        documentType.foldernamespg = cm.selectedPracticeGroup.folderNames;
-                        documentType.practicegroupId = cm.selectedPracticeGroup.id;
-                        documentType.foldernamesaol = cm.activeAOLTerm.folderNames;
-                        documentType.areaoflawId = cm.activeAOLTerm.id;
-                        documentType.areaoflaw = cm.activeAOLTerm.termName;
-                        documentType.practicegroup = cm.selectedPracticeGroup.termName;
 
-
-
-                        cm.documentTypeLawTerms.push(documentType);
-                        cm.activeDocumentTypeLawTerm = null;
-                        //   console.log("doc");
-                        //   console.log(cm.documentTypeLawTerms)
-                        //cm.primaryMatterType = true; alert(cm.primaryMatterType);
-                        //  cm.activeSubAOLTerm = null;
-                    }
-                }
-            }
-
-            cm.removeFromDocumentTemplate = function () {
-                //  alert(cm.activeDocumentTypeLawTerm);
-                if (cm.removeDTItem) {
-                    var index = cm.documentTypeLawTerms.indexOf(cm.activeDocumentTypeLawTerm);
-                    cm.documentTypeLawTerms.splice(index, 1);
-                    cm.removeDTItem = false;
-                    cm.primaryMatterType = false;
-                    cm.activeDocumentTypeLawTerm = null;
-                }
+                });
 
             }
+            function setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType) {
+                angular.forEach(cm.levelOneList, function (levelOneTerm) {
+                    angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
+
+                        angular.forEach(levelTwoTerm.level3, function (levelThreeTerm) {
+
+                            for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
+
+                                if (levelThreeTerm.termName == arrDMatterTypes[iCount]) {
+                                    //  cm.selectedDocumentTypeLawTerms = 
+                                    var documentType = levelThreeTerm;
+                                    documentType.levelOneFolderNames = levelOneTerm.folderNames;
+                                    documentType.levelOneTermId = levelOneTerm.id;
+                                    documentType.levelOneTermName = levelOneTerm.termName;
+                                    documentType.termChainName = levelOneTerm.termName;
+                                    if (cm.taxonomyHierarchyLevels >= 2) {
+                                        documentType.levelTwoFolderNames = levelTwoTerm.folderNames;
+                                        documentType.levelTwoTermId = levelTwoTerm.id;
+                                        documentType.levelTwoTermName = levelTwoTerm.termName;
+                                        documentType.termChainName = documentType.termChainName + ">" + documentType.levelTwoTermName;
+                                    }
+                                    if (cm.taxonomyHierarchyLevels >= 3) {
+                                        documentType.levelThreeFolderNames = levelThreeTerm.folderNames;
+                                        documentType.levelThreeId = levelThreeTerm.id;
+                                        documentType.levelThreeTermName = levelThreeTerm.termName;
+                                        documentType.termChainName = documentType.termChainName + ">" + documentType.levelThreeTermName;
+                                    }
+                                    cm.documentTypeLawTerms.push(documentType);
+                                    documentType.primaryMatterType = false;
+                                    if (levelThreeTerm.termName == dPrimaryMatterType) {
+                                        documentType.primaryMatterType = true;
+                                        cm.activeDocumentTypeLawTerm = levelThreeTerm;
+                                    }
+                                    cm.selectedDocumentTypeLawTerms.push(documentType);
+                                }
+
+                            }
+                        });
+
+                    });
+
+
+
+
+                });
+            }
+            function setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes, dPrimaryMatterType) {
+                angular.forEach(cm.levelOneList, function (levelOneTerm) {
+                    angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
+
+                        angular.forEach(levelTwoTerm.level3, function (levelThreeTerm) {
+                            angular.forEach(levelThreeTerm.level4, function (levelFourTerm) {
+                                for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
+
+                                    if (levelFourTerm.termName == arrDMatterTypes[iCount]) {
+                                        //  cm.selectedDocumentTypeLawTerms = 
+                                        var documentType = levelFourTerm;
+                                        documentType.levelOneFolderNames = levelOneTerm.folderNames;
+                                        documentType.levelOneTermId = levelOneTerm.id;
+                                        documentType.levelOneTermName = levelOneTerm.termName;
+                                        documentType.termChainName = levelOneTerm.termName;
+                                        if (cm.taxonomyHierarchyLevels >= 2) {
+                                            documentType.levelTwoFolderNames = levelTwoTerm.folderNames;
+                                            documentType.levelTwoTermId = levelTwoTerm.id;
+                                            documentType.levelTwoTermName = levelTwoTerm.termName;
+                                            documentType.termChainName = documentType.termChainName + ">" + documentType.levelTwoTermName;
+                                        }
+                                        if (cm.taxonomyHierarchyLevels >= 3) {
+                                            documentType.levelThreeFolderNames = levelThreeTerm.folderNames;
+                                            documentType.levelThreeId = levelThreeTerm.id;
+                                            documentType.levelThreeTermName = levelThreeTerm.termName;
+                                            documentType.termChainName = documentType.termChainName + ">" + documentType.levelThreeTermName;
+                                        }
+                                        if (cm.taxonomyHierarchyLevels >= 4) {
+                                            documentType.levelFourFolderNames = levelFourTerm.folderNames;
+                                            documentType.levelFourId = levelFourTerm.id;
+                                            documentType.levelFourTermName = levelFourTerm.termName;
+                                            documentType.termChainName = documentType.termChainName + ">" + documentType.levelFourTermName;
+                                        }
+
+                                        cm.documentTypeLawTerms.push(documentType);
+                                        documentType.primaryMatterType = false;
+                                        if (levelFourTerm.termName == dPrimaryMatterType) {
+                                            documentType.primaryMatterType = true;
+                                            cm.activeDocumentTypeLawTerm = levelFourTerm;
+                                        }
+                                        cm.selectedDocumentTypeLawTerms.push(documentType);
+                                    }
+
+                                }
+                            });
+
+                        });
+                    });
+                });
+            }
+            function setDefaultTaxonomyHierarchyLevelFive(arrDMatterTypes, dPrimaryMatterType) {
+                angular.forEach(cm.levelOneList, function (levelOneTerm) {
+                    angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
+
+                        angular.forEach(levelTwoTerm.level3, function (levelThreeTerm) {
+                            angular.forEach(levelThreeTerm.level4, function (levelFourTerm) {
+                                angular.forEach(levelFourTerm.level5, function (levelFiveTerm) {
+                                    for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
+
+                                        if (levelFiveTerm.termName == arrDMatterTypes[iCount]) {
+                                            //  cm.selectedDocumentTypeLawTerms = 
+                                            var documentType = levelFiveTerm;
+                                            documentType.levelOneFolderNames = levelOneTerm.folderNames;
+                                            documentType.levelOneTermId = levelOneTerm.id;
+                                            documentType.levelOneTermName = levelOneTerm.termName;
+                                            documentType.termChainName = levelOneTerm.termName;
+                                            if (cm.taxonomyHierarchyLevels >= 2) {
+                                                documentType.levelTwoFolderNames = levelTwoTerm.folderNames;
+                                                documentType.levelTwoTermId = levelTwoTerm.id;
+                                                documentType.levelTwoTermName = levelTwoTerm.termName;
+                                                documentType.termChainName = documentType.termChainName + ">" + documentType.levelTwoTermName;
+                                            }
+                                            if (cm.taxonomyHierarchyLevels >= 3) {
+                                                documentType.levelThreeFolderNames = levelThreeTerm.folderNames;
+                                                documentType.levelThreeId = levelThreeTerm.id;
+                                                documentType.levelThreeTermName = levelThreeTerm.termName;
+                                                documentType.termChainName = documentType.termChainName + ">" + documentType.levelThreeTermName;
+                                            }
+                                            if (cm.taxonomyHierarchyLevels >= 4) {
+                                                documentType.levelFourFolderNames = levelFourTerm.folderNames;
+                                                documentType.levelFourId = levelFourTerm.id;
+                                                documentType.levelFourTermName = levelFourTerm.termName;
+                                                documentType.termChainName = documentType.termChainName + ">" + documentType.levelFourTermName;
+                                            }
+                                            if (cm.taxonomyHierarchyLevels >= 5) {
+                                                documentType.levelFiveFolderNames = levelFiveTerm.folderNames;
+                                                documentType.levelFiveId = levelFiveTerm.id;
+                                                documentType.levelFiveTermName = levelFiveTerm.termName;
+                                                documentType.termChainName = documentType.termChainName + ">" + documentType.levelFiveTermName;
+                                            }
+
+
+                                            cm.documentTypeLawTerms.push(documentType);
+                                            documentType.primaryMatterType = false;
+                                            if (levelFiveTerm.termName == dPrimaryMatterType) {
+                                                documentType.primaryMatterType = true;
+                                                cm.activeDocumentTypeLawTerm = levelFiveTerm;
+                                            }
+                                            cm.selectedDocumentTypeLawTerms.push(documentType);
+                                        }
+
+                                    }
+                                });
+
+                            });
+
+                        });
+                    });
+
+
+                });
+            }
+
+            //function to get the all AOL and SAOL terms
+            //cm.getSelectedPracticeGroupValue = function () {
+
+
+            //    if (cm.selectedLevelOne != null) {
+            //        cm.levelTwoList = cm.selectedLevelOne.level2;
+            //        cm.levelThreeList = cm.selectedLevelOne.level2[0].level3[0];
+            //      //  cm.activeSubAOLTerm = cm.selectedLevelOne.level2[0].level3[0];
+            //       // cm.activeAOLTerm = cm.selectedLevelOne.level2[0];
+            //        cm.errorPopUp = false;
+            //    } else {
+            //       // cm.areaOfLawTerms = cm.subAreaOfLawTerms = null;
+
+            //    }
+
+            //}
+
+            //function to get the subAOL items on selection of AOLTerm
+            //cm.selectAreaOfLawTerm = function (areaOfLawTerm) {
+            //    cm.errorPopUp = false;
+            //    cm.activeAOLTerm = areaOfLawTerm;
+            //  //  cm.subAreaOfLawTerms = areaOfLawTerm.subareaTerms;
+            //   // cm.activeSubAOLTerm = areaOfLawTerm.subareaTerms[0];
+
+            //}
+            ////function to for seclection of subAOL items 
+            //cm.selectSubAreaOfLawTerm = function (subAreaOfLawTerm) {
+            //    cm.errorPopUp = false;
+            //  //  cm.activeSubAOLTerm = subAreaOfLawTerm;
+
+            //}
+
+            //cm.selectDocumentTemplateTypeLawTerm = function (documentTemplateTypeLawTerm) {
+            //    // alert(documentTemplateTypeLawTerm);
+            //    if (documentTemplateTypeLawTerm != null) {
+            //        cm.errorPopUp = false;;
+            //        cm.removeDTItem = true;
+            //        cm.activeDocumentTypeLawTerm = documentTemplateTypeLawTerm;
+            //        cm.primaryMatterType = true;
+            //    }
+
+            //}
+
+            //cm.addToDocumentTemplate = function () {
+            //    var isThisNewDocTemplate = true;
+            //    if (cm.activeSubAOLTerm != null) {
+            //        angular.forEach(cm.documentTypeLawTerms, function (term) { //For loop
+            //            if (cm.activeSubAOLTerm.id == term.id) {// this line will check whether the data is existing or not
+            //                isThisNewDocTemplate = false;
+            //            }
+            //        });
+            //        if (isThisNewDocTemplate) {                        
+            //            var documentType = cm.activeSubAOLTerm;
+            //            documentType.foldernamespg = cm.selectedLevelOne.folderNames;
+            //            documentType.practicegroupId = cm.selectedLevelOne.id;
+            //            documentType.foldernamesaol = cm.activeAOLTerm.folderNames;
+            //            documentType.areaoflawId = cm.activeAOLTerm.id;
+            //            documentType.areaoflaw = cm.activeAOLTerm.termName;
+            //            documentType.practicegroup = cm.selectedLevelOne.termName;
+
+
+
+            //            cm.documentTypeLawTerms.push(documentType);
+            //            cm.activeDocumentTypeLawTerm = null;
+            //            //   console.log("doc");
+            //            //   console.log(cm.documentTypeLawTerms)
+            //            //cm.primaryMatterType = true; alert(cm.primaryMatterType);
+            //            //  cm.activeSubAOLTerm = null;
+            //        }
+            //    }
+            //}
+
+            //cm.removeFromDocumentTemplate = function () {
+            //    //  alert(cm.activeDocumentTypeLawTerm);
+            //    if (cm.removeDTItem) {
+            //        var index = cm.documentTypeLawTerms.indexOf(cm.activeDocumentTypeLawTerm);
+            //        cm.documentTypeLawTerms.splice(index, 1);
+            //        cm.removeDTItem = false;
+            //        cm.primaryMatterType = false;
+            //        cm.activeDocumentTypeLawTerm = null;
+            //    }
+
+            //}
             cm.checkValidMatterName = function () {
                 oPageOneState.oValidMatterName = undefined;
                 var bInValid = false;
@@ -921,7 +1111,7 @@
                 });
             }
 
-           cm.externalusers=[];
+            cm.externalusers = [];
 
             cm.onSelect = function ($item, $model, $label, value, fucnValue, $event, username) {
                 console.log(cm.typehead);
@@ -1144,13 +1334,13 @@
                     cm.matterDescription = oPageData.MatterDescription;
 
                     cm.clientNameList = [];
-                    cm.areaOfLawTerms = [];
-                    cm.subAreaOfLawTerms = [];
-                    cm.documentTypeLawTerms = [];
+                    //  cm.areaOfLawTerms = [];
+                    //  cm.subAreaOfLawTerms = [];
+                    //  cm.documentTypeLawTerms = [];
                     cm.selectedDocumentTypeLawTerms = [];
-                    cm.activeAOLTerm = null;
-                    cm.activeSubAOLTerm = null;
-                    cm.activeDocumentTypeLawTerm = oPageData.oSelectedDocumentTypeLawTerms;
+                    // cm.activeAOLTerm = null;
+                    // cm.activeSubAOLTerm = null;
+                    //  cm.activeDocumentTypeLawTerm = oPageData.oSelectedDocumentTypeLawTerms;
                     cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms = oPageData.oSelectedDocumentTypeLawTerms;
                     cm.popupContainerBackground = "Show";
                     cm.popupContainer = "hide";
@@ -1527,12 +1717,14 @@
                 var defaultContentType = "";
                 contentTypes = getDefaultContentTypeValues("contenttypes");
                 defaultContentType = getDefaultContentTypeValues("defaultcontenttype");
-                var sPracticeGroupName = getDefaultContentTypeValues("practicegroupname")
-                   , sPracticeGroupId = getDefaultContentTypeValues("practicegroupid")
-                   , sAreaOfLawName = getDefaultContentTypeValues("areatermname")
-                   , sAreaOfLawId = getDefaultContentTypeValues("areatermid"),
-                   sSubareaOfLawName = getDefaultContentTypeValues("subareatermname"),
-                   sSubareaOfLawId = getDefaultContentTypeValues("subareatermid");
+
+
+                var managedColumns = {}
+                for (var i = 0; i < cm.taxonomyHierarchyLevels; i++) {
+                    var columnName = configs.contentTypes.managedColumns["ColumnName" + (i + 1)];
+                    managedColumns[columnName] = { TermName: getDefaultContentTypeValues("level" + (i + 1) + "Name"), Id: getDefaultContentTypeValues("level" + (i + 1) + "Id") };
+
+                }
 
                 var optionsForAssignContentTypeMetadata = {
                     Client: {
@@ -1547,38 +1739,19 @@
                         DefaultContentType: defaultContentType,
                         MatterGuid: matterGUID
                     },
-                    PracticeGroupTerm: {
-                        TermName: sPracticeGroupName,
-                        Id: sPracticeGroupId
-                    },
-                    AreaTerm: {
-                        TermName: sAreaOfLawName,
-                        Id: sAreaOfLawId
-                    },
-                    SubareaTerm: {
-                        TermName: sSubareaOfLawName,
-                        Id: sSubareaOfLawId
-                    },
-                    ManagedColumnTerms: {
-                        PracticeGroup: {
-
-                            TermName: sPracticeGroupName,
-                            Id: sPracticeGroupId
-
-                        },
-                        AreaOfLaw: {
-
-                            TermName: sAreaOfLawName,
-                            Id: sAreaOfLawId
-
-                        },
-                        SubareaOfLaw: {
-
-                            TermName: sSubareaOfLawName,
-                            Id: sSubareaOfLawId
-
-                        }
-                    }
+                    //PracticeGroupTerm: {
+                    //    TermName: sPracticeGroupName,
+                    //    Id: sPracticeGroupId
+                    //},
+                    //AreaTerm: {
+                    //    TermName: sAreaOfLawName,
+                    //    Id: sAreaOfLawId
+                    //},
+                    //SubareaTerm: {
+                    //    TermName: sSubareaOfLawName,
+                    //    Id: sSubareaOfLawId
+                    //},
+                    ManagedColumnTerms: managedColumns
 
                 }
 
@@ -1708,8 +1881,9 @@
                 contentTypes = getDefaultContentTypeValues("contenttypes");
                 defaultContentType = getDefaultContentTypeValues("defaultcontenttype");
                 var arrUserNames = [], arrUserEmails = [], arrTeamMembers = [];
-                var sPracticeGroupList = "", sAreaOfLawList = "", sSubAreaOfLawList = ""; var oMatterProvisionFlags = {};
-
+                // var sPracticeGroupList = "", sAreaOfLawList = "", sSubAreaOfLawList = "";
+                var oMatterProvisionFlags = {};
+                var sLevel1List = "", sLevel2List = "", sLevel3List = "", sLevel4List = "", sLevel5List = "";
 
                 var sResponsibleAttorney = [], sResponsibleAttorneyEmail = [], arrTeamMembers = [], arrDocumentTemplatesCount = [];
                 var oDocumentTemplates = cm.selectedDocumentTypeLawTerms;
@@ -1745,14 +1919,14 @@
                 });
 
 
-                angular.forEach(oDocumentTemplates, function (item) {
-                    if (-1 === subAreaofLaw.indexOf(item.termName)) {
-                        subAreaofLaw += item.termName + "; ";
-                        if (item.primaryMatterType) {
-                            defaultContentType = item.termName;
-                        }
-                    }
-                });
+                //angular.forEach(oDocumentTemplates, function (item) {
+                //    if (-1 === subAreaofLaw.indexOf(item.termName)) {
+                //        subAreaofLaw += item.termName + "; ";
+                //        if (item.primaryMatterType) {
+                //            defaultContentType = item.termName;
+                //        }
+                //    }
+                //});
 
                 angular.forEach(cm.assignPermissionTeams, function (item) {
                     //  var sCurrElementID = $(this).attr("id");
@@ -1793,16 +1967,44 @@
                 };
 
                 angular.forEach(oDocumentTemplates, function (item) {
-                    if (-1 === sPracticeGroupList.indexOf(item.practicegroup)) {
-                        sPracticeGroupList = item.practicegroup + "; " + sPracticeGroupList;
+                    if (item.primaryMatterType) {
+                        defaultContentType = item.termName;
                     }
-                    if (-1 === sAreaOfLawList.indexOf(item.areaoflaw)) {
-                        sAreaOfLawList = item.areaoflaw + "; " + sAreaOfLawList;
+                    if (cm.taxonomyHierarchyLevels >= 2) {
+                        if (-1 === sLevel1List.indexOf(item.levelOneTermName)) {
+                            sLevel1List = item.levelOneTermName + "; " + sLevel1List;
+                        }
+                        if (-1 === sLevel2List.indexOf(item.levelTwoTermName)) {
+                            sLevel2List = item.levelTwoTermName + "; " + sLevel2List;
+                        }
                     }
-                    if (-1 === sSubAreaOfLawList.indexOf(item.documentTemplates)) {
-                        sSubAreaOfLawList = item.documentTemplates + "; " + sSubAreaOfLawList;
+                    if (cm.taxonomyHierarchyLevels >= 3) {
+                        if (-1 === sLevel3List.indexOf(item.levelThreeTermName)) {
+                            sLevel3List = item.levelThreeTermName + "; " + sLevel3List;
+                        }
+                    }
+                    if (cm.taxonomyHierarchyLevels >= 4) {
+                        if (-1 === sLevel4List.indexOf(item.levelFourTermName)) {
+                            sLevel4List = item.levelFourTermName + "; " + sLevel4List;
+                        }
+                    }
+                    if (cm.taxonomyHierarchyLevels >= 5) {
+                        if (-1 === sLevel5List.indexOf(item.levelFiveTermName)) {
+                            sLevel5List = item.levelFiveTermName + "; " + sLevel5List;
+                        }
                     }
                 });
+
+                var managedColumns = {}
+                for (var i = 0; i < cm.taxonomyHierarchyLevels; i++) {
+                    var columnName = configs.contentTypes.managedColumns["ColumnName" + (i + 1)];
+                    managedColumns[columnName] = { TermName: "", Id: "" };
+                    if (i === 0) { managedColumns[columnName].TermName = sLevel1List; }
+                    if (i === 1) { managedColumns[columnName].TermName = sLevel2List; }
+                    if (i === 2) { managedColumns[columnName].TermName = sLevel3List; }
+                    if (i === 3) { managedColumns[columnName].TermName = sLevel4List; }
+                    if (i === 4) { managedColumns[columnName].TermName = sLevel5List; }
+                }
 
 
                 var optionsForStampMatterDetails = {
@@ -1832,34 +2034,15 @@
                         MatterGuid: matterGUID
                     },
                     MatterDetails: {
-                        PracticeGroup: sPracticeGroupList,
-                        AreaOfLaw: sAreaOfLawList,
-                        SubareaOfLaw: subAreaofLaw,
+                        //PracticeGroup: sPracticeGroupList,
+                        //AreaOfLaw: sAreaOfLawList,
+                        //SubareaOfLaw: subAreaofLaw,
                         ResponsibleAttorney: sResponsibleAttorney.join(";").replace(/;;/g, ";"),
                         ResponsibleAttorneyEmail: sResponsibleAttorneyEmail.join(";").replace(/;;/g, ";"),
                         UploadBlockedUsers: arrReadOnlyUsers,
                         TeamMembers: arrTeamMembers.join(";"),
                         RoleInformation: JSON.stringify(roleInformation),
-                        ManagedColumnTerms: {
-                            PracticeGroup: {
-
-                                TermName: sPracticeGroupList,
-                                Id: ""
-
-                            },
-                            AreaOfLaw: {
-
-                                TermName: sAreaOfLawList,
-                                Id: ""
-
-                            },
-                            SubareaOfLaw: {
-
-                                TermName: subAreaofLaw,
-                                Id: ""
-
-                            }
-                        }
+                        ManagedColumnTerms: managedColumns
 
                     },
                     MatterProvisionFlags: oMatterProvisionFlags,
@@ -2033,96 +2216,156 @@
                         }
                         returnedValue = defaultContentType;
                         break;
-                    case "practicegroupname":
+                    case "level1Name":
 
                         var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
                             for (nCount = 0; nCount < nLength; nCount++) {
-                                if ("practicegroupname" == contentTypeValue) {
+                                if ("level1Name" == contentTypeValue) {
                                     if (arrContentTypes[nCount].primaryMatterType === true) {
-                                        defaultContentType = arrContentTypes[nCount].practicegroup;
+                                        defaultContentType = arrContentTypes[nCount].levelOneTermName;
                                     }
                                 }
                             }
                         }
                         returnedValue = defaultContentType;
                         break;
-                    case "practicegroupid":
+                    case "level1Id":
 
                         var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
                             for (nCount = 0; nCount < nLength; nCount++) {
-                                if ("practicegroupid" == contentTypeValue) {
+                                if ("level1Id" == contentTypeValue) {
                                     if (arrContentTypes[nCount].primaryMatterType === true) {
-                                        defaultContentType = arrContentTypes[nCount].practicegroupId;
+                                        defaultContentType = arrContentTypes[nCount].levelOneTermId;
                                     }
                                 }
                             }
                         }
                         returnedValue = defaultContentType;
                         break;
-                    case "subareatermname":
 
+                    case "level2Name":
                         var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
                             for (nCount = 0; nCount < nLength; nCount++) {
-                                if ("subareatermname" == contentTypeValue) {
+                                if ("level2Name" == contentTypeValue) {
                                     if (arrContentTypes[nCount].primaryMatterType === true) {
-                                        defaultContentType = arrContentTypes[nCount].termName;
+                                        defaultContentType = arrContentTypes[nCount].levelTwoTermName;
                                     }
                                 }
                             }
                         }
                         returnedValue = defaultContentType;
                         break;
-                    case "subareatermid":
-
+                    case "level2Id":
                         var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
                             for (nCount = 0; nCount < nLength; nCount++) {
-                                if ("subareatermid" == contentTypeValue) {
+                                if ("level2Id" == contentTypeValue) {
                                     if (arrContentTypes[nCount].primaryMatterType === true) {
-                                        defaultContentType = arrContentTypes[nCount].id;
+                                        defaultContentType = arrContentTypes[nCount].levelTwoTermId;
                                     }
                                 }
                             }
                         }
                         returnedValue = defaultContentType;
                         break;
-                    case "areatermname":
-
+                    case "level3Name":
                         var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
                             for (nCount = 0; nCount < nLength; nCount++) {
-                                if ("areatermname" == contentTypeValue) {
+                                if ("level3Name" == contentTypeValue) {
                                     if (arrContentTypes[nCount].primaryMatterType === true) {
-                                        defaultContentType = arrContentTypes[nCount].areaoflaw;
+                                        defaultContentType = arrContentTypes[nCount].levelThreeTermName;
                                     }
                                 }
                             }
                         }
                         returnedValue = defaultContentType;
                         break;
-                    case "areatermid":
+                    case "level3Id":
 
                         var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
                         if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
                             arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
                             nLength = arrContentTypes.length;
                             for (nCount = 0; nCount < nLength; nCount++) {
-                                if ("areatermid" == contentTypeValue) {
+                                if ("level3Id" == contentTypeValue) {
                                     if (arrContentTypes[nCount].primaryMatterType === true) {
-                                        defaultContentType = arrContentTypes[nCount].areaoflawId;
+                                        defaultContentType = arrContentTypes[nCount].levelThreeId;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue = defaultContentType;
+                        break;
+                    case "level4Name":
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("level4Name" == contentTypeValue) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].levelFourTermName;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue = defaultContentType;
+                        break;
+                    case "level4Id":
+
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("level4Id" == contentTypeValue) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].levelFourId;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue = defaultContentType;
+                        break;
+                    case "level5Name":
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("level5Name" == contentTypeValue) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].levelFiveTermName;
+                                    }
+                                }
+                            }
+                        }
+                        returnedValue = defaultContentType;
+                        break;
+                    case "level5Id":
+
+                        var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [], defaultContentType = "";
+                        if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
+                            arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
+                            nLength = arrContentTypes.length;
+                            for (nCount = 0; nCount < nLength; nCount++) {
+                                if ("level5Id" == contentTypeValue) {
+                                    if (arrContentTypes[nCount].primaryMatterType === true) {
+                                        defaultContentType = arrContentTypes[nCount].levelFiveId;
                                     }
                                 }
                             }
@@ -2229,13 +2472,13 @@
                 cm.matterId = "";
                 cm.matterDescription = "";
                 cm.clientNameList = [];
-                cm.areaOfLawTerms = [];
-                cm.subAreaOfLawTerms = [];
-                cm.documentTypeLawTerms = [];
-                cm.selectedDocumentTypeLawTerms = [];
-                cm.activeAOLTerm = null;
-                cm.activeSubAOLTerm = null;
-                cm.activeDocumentTypeLawTerm = null;
+                //cm.areaOfLawTerms = [];
+                //  cm.subAreaOfLawTerms = [];
+                //  cm.documentTypeLawTerms = [];
+                //  cm.selectedDocumentTypeLawTerms = [];
+                //  cm.activeAOLTerm = null;
+                // cm.activeSubAOLTerm = null;
+                // cm.activeDocumentTypeLawTerm = null;
                 cm.popupContainerBackground = "hide";
                 cm.popupContainer = "hide";
                 cm.createBtnDisabled = false;
@@ -2262,8 +2505,8 @@
                 oPageOneState.MatterName = cm.matterName.trim();
                 oPageOneState.MatterId = cm.matterId.trim();
                 oPageOneState.MatterDescription = cm.matterDescription.trim();
-                oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
-                oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
+                //  oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
+                //   oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
                 oPageOneState.matterGUID = cm.matterGUID;
                 oPageOneState.oSelectedDocumentTypeLawTerms = cm.selectedDocumentTypeLawTerms;
                 //  oPageOneState.chkConflictCheck = cm.chkConfilctCheck;
@@ -2344,6 +2587,7 @@
 
             function validateCurrentPage(iCurrPage) {
                 if (iCurrPage == 1) {
+
                     var windowWidth = GetWidth();
                     var RegularExpression;
                     if (undefined !== cm.selectedClientName && null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
@@ -2412,7 +2656,6 @@
                                             if (bInValid) {
                                                 if (cm.selectedDocumentTypeLawTerms.length > 0) {
                                                     storeMatterDataToLocalStorageFirstPage();
-
                                                     return true;
                                                 }
                                                 else {
@@ -2481,6 +2724,7 @@
 
                 }
                 else if (iCurrPage == 2) {
+
                     if (cm.defaultConfilctCheck) {
                         if (undefined !== cm.chkConfilctCheck && true == cm.chkConfilctCheck) {
 
@@ -2755,6 +2999,168 @@
                     });
                 }
             }
+
+            //#endregion
+
+            //#region  for taxonomy
+            cm.documentTypeLawTerms = [];
+            cm.getSelectedLevelOne = function () {
+                if (cm.selectedLevelOneItem != null) {
+                    cm.levelTwoList = cm.selectedLevelOneItem.level2;
+                    cm.activeLevelTwoItem = cm.levelTwoList[0];
+                    cm.levelThreeList = cm.selectedLevelOneItem.level2[0].level3;
+                    cm.errorPopUp = false;
+                } else {
+                    cm.levelTwoList = cm.levelThreeList = null;
+
+                }
+
+            }
+
+            // function to get the subAOL items on selection of AOLTerm
+            cm.selectLevelTwoItem = function (levelTwoItem) {
+                cm.errorPopUp = false;
+                cm.activeLevelTwoItem = levelTwoItem;
+                if (cm.taxonomyHierarchyLevels >= 3) {
+                    cm.levelThreeList = cm.activeLevelTwoItem.level3;
+                }
+
+
+            }
+            //function to for seclection of subAOL items 
+            cm.selectLevelThreeItem = function (levelThreeItem) {
+                cm.errorPopUp = false;
+                cm.activeLevelThreeItem = levelThreeItem;
+                if (cm.taxonomyHierarchyLevels >= 4) {
+                    cm.levelFourList = cm.activeLevelThreeItem.level4;
+                }
+
+            }
+
+
+            cm.selectLevelFourItem = function (levelFourItem) {
+                cm.errorPopUp = false;
+                cm.activeLevelFourItem = levelFourItem;
+                if (cm.taxonomyHierarchyLevels >= 5) {
+                    cm.levelFourList = cm.activeLevelFourItem.level4;
+                }
+
+            }
+            cm.selectLevelFiveItem = function (levelFiveItem) {
+                cm.errorPopUp = false;
+                cm.activeLevelFiveItem = levelFiveItem;
+            }
+
+            cm.addToDocumentTemplate = function () {
+                var isThisNewDocTemplate = true;
+                var selectedHighestLevelItem = null;
+                switch (cm.taxonomyHierarchyLevels) {
+                    case 2:
+                        selectedHighestLevelItem = cm.activeLevelTwoItem;
+                        break;
+                    case 3:
+                        selectedHighestLevelItem = cm.activeLevelThreeItem;
+                        break;
+                    case 4:
+                        selectedHighestLevelItem = cm.activeLevelFourItem;
+                        break;
+                    case 5:
+                        selectedHighestLevelItem = cm.activeLevelFiveItem;
+                        break;
+
+                }
+                if (selectedHighestLevelItem != null) {
+                    angular.forEach(cm.documentTypeLawTerms, function (term) { //For loop
+                        if (selectedHighestLevelItem.id == term.id) {// this line will check whether the data is existing or not
+                            isThisNewDocTemplate = false;
+                        }
+                    });
+                    if (isThisNewDocTemplate) {
+                        var documentType = selectedHighestLevelItem;
+                        documentType.levelOneFolderNames = cm.selectedLevelOneItem.folderNames;
+                        documentType.levelOneTermId = cm.selectedLevelOneItem.id;
+                        documentType.levelOneTermName = cm.selectedLevelOneItem.termName;
+                        documentType.termChainName = cm.selectedLevelOneItem.termName;
+                        if (cm.taxonomyHierarchyLevels >= 2) {
+                            documentType.levelTwoFolderNames = cm.activeLevelTwoItem.folderNames;
+                            documentType.levelTwoTermId = cm.activeLevelTwoItem.id;
+                            documentType.levelTwoTermName = cm.activeLevelTwoItem.termName;
+                            documentType.termChainName = documentType.termChainName + ">" + documentType.levelTwoTermName;
+                        }
+                        if (cm.taxonomyHierarchyLevels >= 3) {
+                            documentType.levelThreeFolderNames = cm.activeLevelThreeItem.folderNames;
+                            documentType.levelThreeId = cm.activeLevelThreeItem.id;
+                            documentType.levelThreeTermName = cm.activeLevelThreeItem.termName;
+                            documentType.termChainName = documentType.termChainName + ">" + documentType.levelThreeTermName;
+                        }
+                        if (cm.taxonomyHierarchyLevels >= 4) {
+                            documentType.levelFourFolderNames = cm.activeLevelFourItem.folderNames;
+                            documentType.levelFourId = cm.activeLevelFourItem.id;
+                            documentType.levelFourTermName = cm.activeLevelFourItem.termName;
+                            documentType.termChainName = documentType.termChainName + ">" + documentType.levelFourTermName;
+                        }
+                        if (cm.taxonomyHierarchyLevels >= 5) {
+                            documentType.levelFiveFolderNames = cm.activeLevelFiveItem.folderNames;
+                            documentType.levelFiveId = cm.activeLevelFiveItem.id;
+                            documentType.levelFiveTermName = cm.activeLevelFiveItem.termName;
+                            documentType.termChainName = documentType.termChainName + ">" + documentType.levelFiveTermName;
+                        }
+                        cm.documentTypeLawTerms.push(documentType);
+                        cm.activeDocumentTypeLawTerm = null;
+                        //   console.log("doc");
+                        //   console.log(cm.documentTypeLawTerms)
+                        //cm.primaryMatterType = true; alert(cm.primaryMatterType);
+                        //  cm.activeSubAOLTerm = null;
+                    }
+                }
+            }
+
+            cm.removeFromDocumentTemplate = function () {
+                //  alert(cm.activeDocumentTypeLawTerm);
+                if (cm.removeDTItem) {
+                    var index = cm.documentTypeLawTerms.indexOf(cm.activeDocumentTypeLawTerm);
+                    cm.documentTypeLawTerms.splice(index, 1);
+                    cm.removeDTItem = false;
+                    cm.primaryMatterType = false;
+                    cm.activeDocumentTypeLawTerm = null;
+                }
+
+            }
+
+            cm.selectDocumentTemplateTypeLawTerm = function (documentTemplateTypeLawTerm) {
+                // alert(documentTemplateTypeLawTerm);
+                if (documentTemplateTypeLawTerm != null) {
+                    cm.errorPopUp = false;;
+                    cm.removeDTItem = true;
+                    cm.activeDocumentTypeLawTerm = documentTemplateTypeLawTerm;
+                    cm.primaryMatterType = true;
+                }
+
+            }
+
+            cm.saveDocumentTemplates = function () {
+
+                if (cm.primaryMatterType) {
+                    cm.errorPopUp = false;
+                    angular.forEach(cm.documentTypeLawTerms, function (term) {
+                        var primaryType = false;
+                        //For loop
+                        if (cm.activeDocumentTypeLawTerm.id == term.id) {// this line will check whether the data is existing or not
+                            primaryType = true;
+                        }
+                        term.primaryMatterType = primaryType;
+                        cm.popupContainerBackground = "hide";
+                        cm.popupContainer = "hide";
+
+                    });
+
+                    cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;
+                }
+                else {
+                    cm.errorPopUp = true;
+                }
+            }
+
 
             //#endregion
 

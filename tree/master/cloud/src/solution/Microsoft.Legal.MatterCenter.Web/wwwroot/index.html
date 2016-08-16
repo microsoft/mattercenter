@@ -49,6 +49,9 @@
     <script src="js/site.js" asp-append-version="true"></script>
     <script src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-sanitize.js"></script>
+
+    <script src="lib/angulartics/dist/angulartics.min.js"></script>
+    <script src="js/angulartics-azure.js"></script>
 </head>
 <body ng-app="matterMain"  menuclose class="{{$root.bodyclass}}">
     <div ui-view="mainView" style=""></div>
@@ -93,12 +96,12 @@
             instrumentationKey: configs.appInsights.instrumentationKey
         });
         window.appInsights = appInsights;
-        appInsights.trackPageView();
+
         if (Office.context && Office.context.mailbox)
         {
             configs.appInsights.appType = 'Outlook';
         }
-        else if (Office.context)
+        else if (Office.context.document)
         {
             configs.appInsights.appType = 'Word';
         }

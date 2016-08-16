@@ -28,7 +28,7 @@
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
     "Microsoft.Legal.MatterCenter.Repository": "1.0.0-*",
     "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*",
-    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*"
+    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*"    
   },
   "tools": {
     "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",

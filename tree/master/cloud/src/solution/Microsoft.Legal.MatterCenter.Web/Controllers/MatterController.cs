@@ -392,14 +392,14 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <param name="client">Client object containing Client data</param>
         /// <param name="details">Term Store object containing Term store data</param>
         /// <returns>Returns JSON object to the client</returns>        ///
-        public IActionResult SavConfigurations([FromBody]SaveConfigurationsVM saveConfigurationsVM)
+        public IActionResult SavConfigurations([FromBody]MatterConfigurations matterConfiguration)
         {
             try
             {
                 
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
-                if (string.IsNullOrWhiteSpace(saveConfigurationsVM.SiteCollectionPath) && saveConfigurationsVM.MatterConfigurations == null)
+                if (matterConfiguration !=null && string.IsNullOrWhiteSpace(matterConfiguration.ClientUrl))
                 {
                     errorResponse = new ErrorResponse()
                     {
@@ -410,7 +410,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-                var response = matterProvision.SavConfigurations(saveConfigurationsVM);
+                var response = matterProvision.SavConfigurations(matterConfiguration);
                 return matterCenterServiceFunctions.ServiceResponse(response, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -904,30 +904,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             // For each value in the list of Content Type Names
             // Add that content Type to the Library
             Matter matter = matterMetadata.Matter;
-            Client client = matterMetadata.Client;
-
-            //ToDo: This values will come from the client. Once the UI is implemented, 
-            //This will be removed
-            var managedColumnTerms = new Dictionary<string, ManagedColumn>();
-            managedColumnTerms.Add("PracticeGroup", new ManagedColumn()
-            {
-                TermName = matterMetadata.PracticeGroupTerm.TermName,
-                Id = matterMetadata.PracticeGroupTerm.Id
-            });
-
-            managedColumnTerms.Add("AreaOfLaw", new ManagedColumn()
-            {
-                TermName = matterMetadata.AreaTerm.TermName,
-                Id = matterMetadata.AreaTerm.Id
-            });
-
-            managedColumnTerms.Add("SubareaOfLaw", new ManagedColumn()
-            {
-                TermName = matterMetadata.SubareaTerm.TermName,
-                Id = matterMetadata.SubareaTerm.Id
-            });
-
-            matterMetadata.ManagedColumnTerms = managedColumnTerms;
+            Client client = matterMetadata.Client;            
 
             var matterInformationVM = new MatterInformationVM()
             {
@@ -1138,29 +1115,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 #endregion   
 
                 try
-                {
-
-                    //ToDo: This values will come from the client. Once the UI is implemented, 
-                    //This will be removed
-                    var managedColumnTerms = new Dictionary<string, ManagedColumn>();
-                    managedColumnTerms.Add("PracticeGroup", new ManagedColumn()
-                    {
-                        TermName = matterMetdata.MatterDetails.PracticeGroup
-                    });
-
-                    managedColumnTerms.Add("AreaOfLaw", new ManagedColumn()
-                    {
-                        TermName = matterMetdata.MatterDetails.AreaOfLaw,
-
-                    });
-
-                    managedColumnTerms.Add("SubareaOfLaw", new ManagedColumn()
-                    {
-                        TermName = matterMetdata.MatterDetails.SubareaOfLaw,
-
-                    });
-
-                    matterMetdata.MatterDetails.ManagedColumnTerms = managedColumnTerms;
+                {                   
 
                     genericResponse = matterProvision.UpdateMatterMetadata(matterMetdata);
                     if (genericResponse == null)

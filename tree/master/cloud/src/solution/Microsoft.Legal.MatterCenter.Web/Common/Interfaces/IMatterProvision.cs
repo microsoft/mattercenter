@@ -36,7 +36,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// </summary>
         /// <param name="saveConfigurationsVM"></param>
         /// <returns></returns>
-        GenericResponseVM SavConfigurations(SaveConfigurationsVM saveConfigurationsVM);
+        GenericResponseVM SavConfigurations(MatterConfigurations matterConfiguration);
 
         /// <summary>
         /// 

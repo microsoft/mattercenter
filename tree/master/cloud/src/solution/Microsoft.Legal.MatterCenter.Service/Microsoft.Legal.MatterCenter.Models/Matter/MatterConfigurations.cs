@@ -216,5 +216,33 @@ namespace Microsoft.Legal.MatterCenter.Models
             get;
             set;
         }
+
+        /// <summary>
+        /// Property which will decide whether to show role dropdown or not when creating matter
+        /// </summary>
+        public bool ShowRole{ get; set; }
+
+
+        /// <summary>
+        /// Property which will decide whether to show matter id textbox or not when creating matter
+        /// </summary>
+        public bool ShowMatterId { get; set; }
+
+
+        /// <summary>
+        /// Property to determine the matter type(Guid or DateTime of Custom
+        /// </summary>
+        public MatterIdType MatterIdType { get; set; } 
+    }
+
+
+    /// <summary>
+    /// Enum to determine the matter type
+    /// </summary>
+    public enum MatterIdType
+    {
+        Guid,
+        DateTime,
+        Custom
     }
 }
