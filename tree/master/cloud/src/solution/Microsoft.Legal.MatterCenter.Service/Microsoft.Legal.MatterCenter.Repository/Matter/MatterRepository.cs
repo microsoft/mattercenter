@@ -132,6 +132,20 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     clientContext.ExecuteQuery();                    
                 }
+
+                listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery, 
+                    searchSettings.ManagedPropertyTitle, searchSettings.MatterConfigurationTitleValue);
+                ListItem settingsItem = spList.GetData(clientContext, listNames.MatterConfigurationsList, listQuery).FirstOrDefault();
+                if (null != settingsItem)
+                {
+                    string cachedItemModifiedDate = Convert.ToString(settingsItem[searchSettings.ColumnNameModifiedDate], CultureInfo.InvariantCulture);
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Code = "",
+                        Value = cachedItemModifiedDate,
+                        IsError = false
+                    };
+                }
             }
             catch (Exception exception)
             {

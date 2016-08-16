@@ -59,6 +59,7 @@
             vm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
             vm.assignRoles = [];
             vm.assignPermissions = [];
+            vm.successmessage = false;
             //#endregion
 
             //#region for hiding the client details on load
@@ -177,6 +178,7 @@
                 vm.selected = name;
                 siteCollectionPath = url;
                 vm.clienturl = url;
+                vm.modifiedDate = '0';
                 getDefaultConfigurations(siteCollectionPath, function (response) {
                     if (response != "") {
                         vm.configurations = JSON.parse(response.code);
@@ -187,6 +189,10 @@
                         vm.lazyloader = true;
                         vm.clientlist = false;
                         vm.showClientDetails = true;
+                        if (vm.modifiedDate === response.value)
+                            vm.cacheItemModifiedDate = vm.modifiedDate;
+                        else
+                            vm.cacheItemModifiedDate = response.value;
                     } else {
                         vm.nodata = true;
                         vm.lazyloader = true;
@@ -247,6 +253,7 @@
             vm.showSetting = function () {
                 vm.clientlist = true;
                 vm.showClientDetails = false;
+                vm.successmessage = false;
             }
             //#endregion
 
@@ -274,7 +281,7 @@
                     if (value == "team") {
                         $label.assignedUser = $item.name + '(' + $item.email + ')';
                     }
-                    if (-1 == cm.oSiteUsers.indexOf($item.email)) {
+                    if (-1 == vm.oSiteUsers.indexOf($item.email)) {
                         vm.oSiteUsers.push($item.email);
                     }
                 }
@@ -286,8 +293,8 @@
             //#region for saving the settings
             vm.saveSettings = function () {
                 vm.lazyloader = false;
-                var date = new Date();
-                var modifiedDate = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+                //var date = new Date();
+                //var modifiedDate = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
                 var settingsRequest = {
                     DefaultMatterName: vm.mattername,
                     DefaultMatterId: vm.matterid,
@@ -308,17 +315,23 @@
                     IsContentCheck: vm.getBoolValues("Yes"),
                     IsTaskSelected: vm.getBoolValues(vm.tasks),
                     ClientUrl: vm.clienturl,
-                    CachedItemModifiedDate: modifiedDate,
-                    UserId: []
+                    CachedItemModifiedDate: vm.cacheItemModifiedDate,
+                    UserId: [],                    
+                    ShowRole: vm.getBoolValues(vm.showrole),
+                    ShowMatterId: vm.getBoolValues(vm.showmatterid),
+                    MatterIdType: vm.showmatterconfiguration
                 }
                 saveConfigurations(settingsRequest, function (response) {
                     if (response != "") {
                         vm.lazyloader = true;
                         vm.clientlist = false;
                         vm.showClientDetails = true;
+                        vm.cacheItemModifiedDate = response.value;
+                        vm.successmessage = true;
                     } else {
                         vm.nodata = true;
                         vm.lazyloader = true;
+                        vm.successmessage = false;
                     }
                 });
             }
