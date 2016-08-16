@@ -68,7 +68,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         [HttpPost("getusers")]
         [Produces(typeof(IList<Users>))]
         [SwaggerOperation("get-users")]
-        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which contains list of Users as Json object",  Type = typeof(Users))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which contains list of Users as Json object",  Type = typeof(IList<Users>))]
         [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> GetUsers([FromBody]SearchRequestVM searchRequestVM)
         {
@@ -158,7 +158,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         [SwaggerOperation("get-roles")]
         [SwaggerResponse(HttpStatusCode.OK, 
             Description ="Get all the roles suich as Responsible Attorney, Attorney, Para Legal etc as a JOSN object", 
-            Type = typeof(Role))]
+            Type = typeof(IList<Role>))]
         [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> GetRoles([FromBody]Client client)
         {
@@ -208,7 +208,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         [SwaggerOperation("get-permission-levels")]
         [SwaggerResponse(HttpStatusCode.OK, 
             Description ="Get all the permissions such as FullControl, Contribute, Read as a JSON object", 
-            Type=typeof(Role))]        
+            Type=typeof(IList<Role>))]        
         [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> GetPermissionLevels([FromBody]Client client)
         {
