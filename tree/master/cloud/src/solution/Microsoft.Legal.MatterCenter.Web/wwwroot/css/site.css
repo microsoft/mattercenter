@@ -992,3 +992,11 @@ textarea {
 .height200 {
     height: 200px !important;
 }
+
+.marginTop7{
+    margin-top:7px;
+}
+
+.addMoreLinks{
+    float:right;margin-top:10px;padding:0px;
+}
