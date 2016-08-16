@@ -232,17 +232,9 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// <summary>
         /// Property to determine the matter type(Guid or DateTime of Custom
         /// </summary>
-        public MatterIdType MatterIdType { get; set; } 
+        public string MatterIdType { get; set; } 
     }
 
 
-    /// <summary>
-    /// Enum to determine the matter type
-    /// </summary>
-    public enum MatterIdType
-    {
-        Guid,
-        DateTime,
-        Custom
-    }
+   
 }
