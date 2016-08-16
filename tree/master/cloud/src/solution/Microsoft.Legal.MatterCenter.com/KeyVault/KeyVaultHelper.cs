@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Collections;
+using System.Linq;
 
 namespace Microsoft.Legal.MatterCenter.Common
 {
@@ -32,11 +34,11 @@ namespace Microsoft.Legal.MatterCenter.Common
         {
             Dictionary<string, string> keyValues = new Dictionary<string, string>();
             keyValues = retrieveSecrets(true);
-
+                
+        
             foreach (var ky in keyValues)
-            {
-                //config = Configuration.GetSection(ky.Key);
-                Configuration["General:" + ky.Key] = ky.Value;
+            {              
+                    Configuration[ky.Key] = ky.Value;          
             }
         }
 
@@ -51,8 +53,7 @@ namespace Microsoft.Legal.MatterCenter.Common
 
             foreach (var ky in keyValues)
             {
-                //config = Configuration.GetSection(ky.Key);
-                Configuration["General:" + ky.Key] = ky.Value;
+                Configuration[ky.Key] = ky.Value;
             }
         }
 
@@ -104,7 +105,7 @@ namespace Microsoft.Legal.MatterCenter.Common
             foreach (var value in secrets)
             {
                 var secret = kv.GetSecretAsync(this.Configuration.GetSection("General").GetSection("KeyVaultURI").Value.ToString(), value).GetAwaiter().GetResult();
-                keyValues.Add(value, secret.Value);
+                keyValues.Add(value.Replace("-",":"), secret.Value);
             }
 
 

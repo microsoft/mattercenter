@@ -2,7 +2,6 @@
   "dependencies": {
     "Swashbuckle.SwaggerUi": "6.0.0-beta901",
     "Swashbuckle.SwaggerGen": "6.0.0-beta901",
-    // "Microsoft.SharePointOnline.CSOM": "16.1.5026.1200",
     "Microsoft.Exchange.WebServices": "2.2.0",
     "Microsoft.ApplicationInsights": "2.1.0",
     "Microsoft.ApplicationInsights.AspNetCore": "1.0.0",
@@ -10,7 +9,6 @@
     "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
     "Microsoft.Extensions.Options": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
-    // "Microsoft.AspNetCore.Mvc": "1.0.0",
     "Microsoft.AspNetCore.Razor.Tools": {
       "version": "1.0.0-preview2-final",
       "type": "build"
@@ -23,7 +21,6 @@
     "Microsoft.Extensions.Logging": "1.0.0",
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
-    //"Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
     "Microsoft.Legal.MatterCenter.Repository": "1.0.0-*",
     "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
