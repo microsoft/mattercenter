@@ -1,13 +1,10 @@
 ﻿{
   "version": "1.0.0-*",
-  "description": "Microsoft.Legal.MatterCenter.Utility Class Library",
-  "authors": [ "v-lapedd" ],
+  "description": "Microsoft.Legal.MatterCenter.Common Class Library",
+  "authors": [ "aislid" ],
   "dependencies": {
-    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
-    "Microsoft.IdentityModel.Clients.ActiveDirectory": "3.13.1",
-    "Microsoft.AspNetCore.Authorization": "1.0.0",
     "Microsoft.Azure.KeyVault": "1.0.0",
-    "NETStandard.Library": "1.6.0"
+    "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*"
   },
   "frameworks": {
     "net46": {}
