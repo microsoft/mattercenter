@@ -555,7 +555,7 @@
                             arrDMatterPermissions = dMatterPermissions.split('$|$');
                             dMatterRoles = defaultMatterConfig.MatterRoles ? defaultMatterConfig.MatterRoles : "";
                             arrDMatterRoles = dMatterRoles.split('$|$');
-                            cm.selectMatterType();
+                            //cm.selectMatterType();
                             cm.popupContainer = "hide";
 
                             getMatterGUID();
