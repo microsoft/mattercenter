@@ -134,6 +134,7 @@ angular.module('matterMain', [
 
                 } else {
                     $(".AppMenuFlyout").slideUp();
+                    $(".topheader").css("z-index", "4");
                     $(".CloseSwitcher").addClass("hide");
                     $(".OpenSwitcher").removeClass("hide");
                     $(".MenuCaption").removeClass("hideMenuCaption");
