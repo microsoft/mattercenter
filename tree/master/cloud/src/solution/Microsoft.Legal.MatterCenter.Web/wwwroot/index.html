@@ -97,11 +97,11 @@
         });
         window.appInsights = appInsights;
 
-        if (Office.context && Office.context.mailbox)
+        if (typeof Office.context.mailbox != 'undefined')
         {
             configs.appInsights.appType = 'Outlook';
         }
-        else if (Office.context.document)
+        else if (typeof Office.context.document != 'undefined')
         {
             configs.appInsights.appType = 'Word';
         }
