@@ -175,9 +175,11 @@
                     $(".OpenSwitcher").addClass("hide");
                     $(".CloseSwitcher").removeClass("hide");
                     $(".MenuCaption").addClass("hideMenuCaption");
+                    $(".topheader").css("z-index","8");
                     oAppMenuFlyout.slideDown();
                 } else {
                     oAppMenuFlyout.slideUp();
+                    $(".topheader").css("z-index", "4");
                     $(".CloseSwitcher").addClass("hide");
                     $(".OpenSwitcher").removeClass("hide");
                     $(".MenuCaption").removeClass("hideMenuCaption");
