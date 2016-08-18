@@ -97,7 +97,7 @@
             <div class="col-xs-12" id="Mainflyout" ng-if="vm.showHeaderFlyout">
                 <div class="cur-pointer headerLinks" id="searchMatterTab"><span title="{{vm.header.Menu1Option2Text}}" ng-click="vm.navigateUrl('section=1')">{{vm.header.Menu1Option2Text}}</span></div>
                 <div class="cur-pointer headerLinks" id="searchDocumentTab"><span title="{{vm.header.Menu1Option3Text}}" ng-click="vm.navigateUrl('section=2')">{{vm.header.Menu1Option3Text}}</span></div>
-                <div class="headerLinks"><a id="settingsLink"><span title="{{vm.header.HamburgerMenuOption3Text}}" ng-click="vm.navigateUrl('{{vm.header.HamburgerMenuOption3Text}}')">{{vm.header.HamburgerMenuOption3Text}}</span></a></div>
+                <div class="headerLinks"><a id="settingsLink"><span title="{{vm.header.HamburgerMenuOption3Text}}" ng-click="vm.navigateUrl(vm.header.HamburgerMenuOption3Text)">{{vm.header.HamburgerMenuOption3Text}}</span></a></div>
             </div>
         </div>
     </div>
