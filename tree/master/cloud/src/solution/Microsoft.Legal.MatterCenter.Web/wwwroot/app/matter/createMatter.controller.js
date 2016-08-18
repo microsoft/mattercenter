@@ -12,6 +12,7 @@
             cm.blockedUserName = undefined;
             cm.defaultConfilctCheck = false;
             cm.createContent = uiconfigs.CreateMatter;
+            cm.createMatterTaxonomyColumnNames = configs.contentTypes.managedColumns;
             cm.header = uiconfigs.Header;
             cm.chkConfilctCheck = undefined;
             cm.conflictRadioCheck = true;
@@ -335,18 +336,35 @@
 
             function getTaxonomyHierarchy(data) {
                 var levelsDefined = data.levels;
+                if (levelsDefined >= 2) {
+                    cm.levelOneList = data.level1;
+                    cm.levelTwoList = cm.levelOneList[0].level2;
+                    cm.activeLevelTwoItem = cm.levelTwoList[0];
+                }
+                if (levelsDefined >= 3) {
+                    cm.levelThreeList = cm.levelTwoList[0].level3;
+                    cm.activeLevelThreeItem = cm.levelThreeList[0];
+                }
+                if (levelsDefined >= 4) {
+                    cm.levelFourList = cm.levelThreeList[0].level4;
+                    cm.activeLevelFourItem = cm.levelFourList[0];
+                }
+                if (levelsDefined >= 5) {
+                    cm.levelFiveList = cm.levelFourList[0].level5;
+                    cm.activeLevelFiveItem = cm.levelFiveList[0];
+                }
             }
 
             //call back function for getting the clientNamesList
             function getTaxonomyData() {
                 getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
-
                     cm.clientNameList = response.clientTerms;
                     // jQuery('#myModal').modal('show');
                     // optionsForPracticeGroup.Client.Url=cm.clientUrl;
                     getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                         // cm.pracitceGroupList = response.pgTerms;
                         cm.levelOneList = response.level1;
+                        cm.selectedLevelOneItem = response.level1[0];
                         getTaxonomyHierarchy(response);
                         getRoles(optionsForRoles, function (response) {
                             cm.assignRoles = response;
@@ -401,10 +419,10 @@
             //cm.popupContainer = "Show";
 
             //calls this function when selectType button clicks
-            cm.selectMatterType = function (value) {
-                cm.popupContainerBackground = "Show";
-                cm.popupContainer = "Show";
-            }
+            //cm.selectMatterType = function (value) {
+            //    //cm.popupContainerBackground = "Show";
+            //    //cm.popupContainer = "Show";
+            //}
 
             //calls this function when selectType button clicks
             //cm.selectMatterType = function (value) {
@@ -438,6 +456,8 @@
                     cm.popupContainerBackground = "hide";
                     cm.popupContainer = "hide";
                 }
+
+
             }
             //function to get the clientId from ClientName dropdown
             cm.getSelectedClientValue = function (client) {
@@ -535,7 +555,7 @@
                             arrDMatterPermissions = dMatterPermissions.split('$|$');
                             dMatterRoles = defaultMatterConfig.MatterRoles ? defaultMatterConfig.MatterRoles : "";
                             arrDMatterRoles = dMatterRoles.split('$|$');
-                            cm.selectMatterType();
+                            //cm.selectMatterType();
                             cm.popupContainer = "hide";
 
                             getMatterGUID();
@@ -1229,28 +1249,29 @@
                 return arrUserNames;
             }
 
-            cm.saveDocumentTemplates = function () {
+            //cm.saveDocumentTemplates = function () {
 
-                if (cm.primaryMatterType) {
-                    cm.errorPopUp = false;
-                    angular.forEach(cm.documentTypeLawTerms, function (term) {
-                        var primaryType = false;
-                        //For loop
-                        if (cm.activeDocumentTypeLawTerm.id == term.id) {// this line will check whether the data is existing or not
-                            primaryType = true;
-                        }
-                        term.primaryMatterType = primaryType;
-                        cm.popupContainerBackground = "hide";
-                        cm.popupContainer = "hide";
+            //    if (cm.primaryMatterType) {
+            //        cm.errorPopUp = false;
+            //        angular.forEach(cm.documentTypeLawTerms, function (term) {
+            //            var primaryType = false;
+            //            //For loop
+            //            if (cm.activeDocumentTypeLawTerm.id == term.id) {// this line will check whether the data is existing or not
+            //                primaryType = true;
+            //            }
+            //            term.primaryMatterType = primaryType;
+            //            cm.popupContainerBackground = "hide";
+            //            cm.popupContainer = "hide";
+                      
 
-                    });
+            //        });
 
-                    cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;
-                }
-                else {
-                    cm.errorPopUp = true;
-                }
-            }
+            //        cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;
+            //    }
+            //    else {
+            //        cm.errorPopUp = true;
+            //    }
+            //}
 
             cm.dateOptions = {
 
@@ -2474,8 +2495,8 @@
                 cm.clientNameList = [];
                 //cm.areaOfLawTerms = [];
                 //  cm.subAreaOfLawTerms = [];
-                //  cm.documentTypeLawTerms = [];
-                //  cm.selectedDocumentTypeLawTerms = [];
+                  cm.documentTypeLawTerms = [];
+                  cm.selectedDocumentTypeLawTerms = [];
                 //  cm.activeAOLTerm = null;
                 // cm.activeSubAOLTerm = null;
                 // cm.activeDocumentTypeLawTerm = null;
@@ -3006,13 +3027,41 @@
             cm.documentTypeLawTerms = [];
             cm.getSelectedLevelOne = function () {
                 if (cm.selectedLevelOneItem != null) {
-                    cm.levelTwoList = cm.selectedLevelOneItem.level2;
-                    cm.activeLevelTwoItem = cm.levelTwoList[0];
-                    cm.levelThreeList = cm.selectedLevelOneItem.level2[0].level3;
+                   // cm.levelTwoList = cm.selectedLevelOneItem.level2;                  
+                 //   cm.levelThreeList = cm.selectedLevelOneItem.level2[0].level3;
+                    if (cm.taxonomyHierarchyLevels >= 2) {
+                        cm.levelTwoList = cm.selectedLevelOneItem.level2;
+                        cm.activeLevelTwoItem = cm.selectedLevelOneItem.level2[0];
+                    }
+                    if (cm.taxonomyHierarchyLevels >= 3) {
+                        cm.levelThreeList = cm.levelTwoList[0].level3;
+                        cm.activeLevelThreeItem = cm.levelThreeList[0];
+                    }
+                    if (cm.taxonomyHierarchyLevels >= 4) {
+                        cm.levelFourList = cm.levelThreeList[0].level4;
+                        cm.activeLevelFourItem = cm.levelFourList[0];
+                    }
+                    if (cm.taxonomyHierarchyLevels >= 5) {
+                        cm.levelFiveList = cm.levelFourList[0].level5;
+                        cm.activeLevelFiveItem = cm.levelFiveList[0];
+                    }
+
                     cm.errorPopUp = false;
                 } else {
                     cm.levelTwoList = cm.levelThreeList = null;
-
+                    if (cm.taxonomyHierarchyLevels >= 2) {
+                        cm.levelTwoList = null;
+                       
+                    }
+                    if (cm.taxonomyHierarchyLevels >= 3) {
+                        cm.levelThreeList  = null;
+                    }
+                    if (cm.taxonomyHierarchyLevels >= 4) {
+                        cm.levelFourList = null;
+                    }
+                    if (cm.taxonomyHierarchyLevels >= 5) {
+                        cm.levelFiveList = null;
+                    }
                 }
 
             }
@@ -3023,6 +3072,15 @@
                 cm.activeLevelTwoItem = levelTwoItem;
                 if (cm.taxonomyHierarchyLevels >= 3) {
                     cm.levelThreeList = cm.activeLevelTwoItem.level3;
+                    cm.activeLevelThreeItem = cm.levelThreeList[0];
+                }
+                if (cm.taxonomyHierarchyLevels >= 4) {
+                    cm.levelFourList = cm.levelThreeList[0] != undefined && cm.levelThreeList[0].level4 ? cm.levelThreeList[0].level4 : [];
+                    cm.activeLevelFourItem = cm.levelFourList[0] != undefined ? cm.levelFourList[0] : [];
+                }
+                if (cm.taxonomyHierarchyLevels >= 5) {
+                    cm.levelFiveList = cm.levelFourList[0] != undefined && cm.levelFourList[0].level5 ? cm.levelFourList[0].level5 : [];
+                    cm.activeLevelFiveItem = cm.levelFourList[0] != undefined ? cm.levelFiveList[0] : [];
                 }
 
 
@@ -3032,7 +3090,12 @@
                 cm.errorPopUp = false;
                 cm.activeLevelThreeItem = levelThreeItem;
                 if (cm.taxonomyHierarchyLevels >= 4) {
-                    cm.levelFourList = cm.activeLevelThreeItem.level4;
+                    cm.levelFourList = cm.activeLevelThreeItem != undefined ? cm.activeLevelThreeItem.level4 : [];
+                    cm.activeLevelFourItem = cm.levelFourList[0] != undefined ? cm.levelFourList[0] : [];
+                }
+                if (cm.taxonomyHierarchyLevels >= 5) {
+                    cm.levelFiveList = cm.levelFourList[0] != undefined && cm.levelFourList[0].level5 ? cm.levelFourList[0].level5 : [];
+                    cm.activeLevelFiveItem = cm.levelFourList[0] != undefined ? cm.levelFiveList[0] : [];
                 }
 
             }
@@ -3042,7 +3105,8 @@
                 cm.errorPopUp = false;
                 cm.activeLevelFourItem = levelFourItem;
                 if (cm.taxonomyHierarchyLevels >= 5) {
-                    cm.levelFourList = cm.activeLevelFourItem.level4;
+                    cm.levelFiveList = cm.activeLevelFourItem.level5;
+                    cm.activeLevelFiveItem = cm.levelFiveList[0];
                 }
 
             }
@@ -3151,6 +3215,7 @@
                         term.primaryMatterType = primaryType;
                         cm.popupContainerBackground = "hide";
                         cm.popupContainer = "hide";
+                        angular.element('#myModal').modal("hide");
 
                     });
 
