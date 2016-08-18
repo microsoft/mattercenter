@@ -217,6 +217,16 @@
     z-index: 100;
 }
 
+.errPopUpMatterNameWithOutMatterID{
+        left: 219px;
+    top: 47px;
+    height: 50px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 100;
+    }
+
 .errTringleBlockMatterName {
     left: 50px;
     top: 73px;
@@ -292,6 +302,15 @@
     width: 264px;
     z-index: 100;
 }
+.errPopUpMatterDescrWithOutMatterID{
+        left: 389px;
+    top: 109px;
+    height: 50px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 100;
+    }
 
 .errTringleBlockMatterDescr {
     left: 50px;
@@ -315,6 +334,11 @@
     right: 264px;
     top: 276px;
 }
+ .errPopUpMatterSelectTempWithOutMatterID {
+       left: 460px;
+    right: 264px;
+    top: 276px;
+    }
 
 .errTringleBlockMatterSelectTemp {
     left: 125px;
@@ -461,6 +485,15 @@
         width: 264px;
         z-index: 100;
     }
+    .errPopUpMatterNameWithOutMatterID{
+          left: 13px;
+        top: 194px;
+        height: 50px;
+        margin: 10px;
+        position: absolute;
+        width: 264px;
+        z-index: 100;
+    }
 
     .errTringleBlockMatterName {
         left: 50px;
@@ -538,6 +571,16 @@
         z-index: 100;
     }
 
+    .errPopUpMatterDescrWithOutMatterID{
+         left: 10px;
+        top: 257px;
+        height: 50px;
+        margin: 10px;
+        position: absolute;
+        width: 264px;
+        z-index: 100;
+    }
+
     .errTringleBlockMatterDescr {
         left: 50px;
         top: 73px;
@@ -558,6 +601,10 @@
     .errPopUpMatterSelectTemp {
         left: 45px;
         top: 545px;
+    }
+     .errPopUpMatterSelectTempWithOutMatterID {
+        left: 45px;
+        top: 484px;
     }
 
     .errTringleBlockMatterSelectTemp {

@@ -1353,7 +1353,7 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
         position: absolute;
     }
 
-    #enterMatterName {
+    .enterMatterName {
         margin-top: 62px;
     }
 
