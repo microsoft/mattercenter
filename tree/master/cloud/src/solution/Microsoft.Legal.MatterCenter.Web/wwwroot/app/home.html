@@ -4,7 +4,7 @@
 -->
 <div>
     <div class="row {{$root.profileClass}} topheader">
-        <div class="col-xs-11 AppHeader">
+        <div class="col-xs-10 AppHeader">
             <div class="AppSwitcherContainer" ng-click="vm.menuClick()">
                 <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuCaptionTitle}}" />
                 <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
@@ -25,7 +25,7 @@
                 </span>
             </div>
         </div>
-        <div class="col-xs-1 pad0">
+        <div class="col-xs-2 pad0">
             <div id="ContextualHelp">
                 <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="{{vm.header.ContextualHelpAltText}}" title="{{vm.header.ContextualHelpImageTitle}}" ng-click="$root.dispContextualHelp($event)" />
                 <div data-class="ms-u-slideLeftIn40" class="ContextualHelp ms-u-slideLeftIn40" ng-show="$root.contextualhelp" ng-click="$event.stopPropagation();">
@@ -97,7 +97,7 @@
             <div class="col-xs-12" id="Mainflyout" ng-if="vm.showHeaderFlyout">
                 <div class="cur-pointer headerLinks" id="searchMatterTab"><span title="{{vm.header.Menu1Option2Text}}" ng-click="vm.navigateUrl('section=1')">{{vm.header.Menu1Option2Text}}</span></div>
                 <div class="cur-pointer headerLinks" id="searchDocumentTab"><span title="{{vm.header.Menu1Option3Text}}" ng-click="vm.navigateUrl('section=2')">{{vm.header.Menu1Option3Text}}</span></div>
-                <div class="headerLinks"><a id="settingsLink"><span title="{{vm.header.HamburgerMenuOption3Text}}" ng-click="vm.navigateUrl('{{vm.header.HamburgerMenuOption3Text}}')">{{vm.header.HamburgerMenuOption3Text}}</span></a></div>
+                <div class="headerLinks"><a id="settingsLink"><span title="{{vm.header.HamburgerMenuOption3Text}}" ng-click="vm.navigateUrl(vm.header.HamburgerMenuOption3Text)">{{vm.header.HamburgerMenuOption3Text}}</span></a></div>
             </div>
         </div>
     </div>
