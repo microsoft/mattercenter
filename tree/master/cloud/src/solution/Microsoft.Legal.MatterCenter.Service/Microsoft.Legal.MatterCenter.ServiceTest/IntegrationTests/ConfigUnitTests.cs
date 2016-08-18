@@ -9,7 +9,6 @@ using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Web;
 
 using Moq;
-//using Microsoft.Legal.MatterCenter.Web.Common;
 using Microsoft.Legal.MatterCenter.Web.Controllers;
 using Microsoft.WindowsAzure.Storage.Table;
 using System;
