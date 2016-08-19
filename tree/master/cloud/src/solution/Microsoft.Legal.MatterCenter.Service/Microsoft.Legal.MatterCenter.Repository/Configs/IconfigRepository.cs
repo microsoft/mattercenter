@@ -24,6 +24,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         Task<bool> InsertUpdateConfigurationsAsync(String configs);
         List<DynamicTableEntity> GetConfigEntities(string filter);
         bool UpdateEntityProperty(string configs);
-
+        void UploadConfigFileToSPO(string filePath, string clientUrl);
     }
 }

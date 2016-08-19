@@ -89,6 +89,52 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             Assert.True(result.Status > 0);
         }
 
+
+        [Fact]
+        public void GetAllUIConfigsForSPO()
+        {
+
+            GeneralSettings genS = new GeneralSettings();
+            genS.CloudStorageConnectionString = _fixture.Configuratuion.GetSection("General").GetSection("CloudStorageConnectionString").Value.ToString();
+            
+            //Need to Mock the injected services and setup any properties on these that the test requires
+            var errorSettingsMoq = new Moq.Mock<IOptions<ErrorSettings>>();
+
+            var generalSettingsMoq = new Moq.Mock<IOptions<GeneralSettings>>();
+            generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns(genS.CloudStorageConnectionString);
+            generalSettingsMoq.SetupGet(p => p.Value.AdminUserName).Returns(_fixture.Configuratuion.GetSection("General").GetSection("AdminUserName").Value.ToString());
+            generalSettingsMoq.SetupGet(p => p.Value.AdminPassword).Returns(_fixture.Configuratuion.GetSection("General").GetSection("AdminPassword").Value.ToString());
+            generalSettingsMoq.SetupGet(p => p.Value.CentralRepositoryUrl).Returns("https://msmatter.sharepoint.com/sites/catalog");
+
+            var environmentMoq = new Moq.Mock<IHostingEnvironment>();
+            environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
+
+            var matterCenterServiceFunctionsMoq = new Moq.Mock<IMatterCenterServiceFunctions>();
+
+            var uiConfigsMoq = new Moq.Mock<IOptions<UIConfigSettings>>();
+            uiConfigsMoq.SetupGet(t => t.Value.MatterCenterConfiguration).Returns("MatterCenterConfiguration");
+            uiConfigsMoq.SetupGet(p => p.Value.Partitionkey).Returns("MatterCenterConfig");
+            uiConfigsMoq.SetupGet(c => c.Value.ConfigGroup).Returns("ConfigGroup");
+            uiConfigsMoq.SetupGet(k => k.Value.Key).Returns("Key");
+            uiConfigsMoq.SetupGet(v => v.Value.Value).Returns("Value");
+
+
+            var logTableMoq = new Moq.Mock<IOptions<LogTables>>();
+
+            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, uiConfigsMoq.Object);
+
+            generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
+            errorSettingsMoq.SetupAllProperties();
+
+
+            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, uiConfigsMoq.Object,
+                logTableMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
+
+            var result = controller.GetConfigsForSPO("");
+
+            Assert.True(result.Status > 0);
+        }
+
         [Fact]
         public void GetSubsetUIConfigs()
         {

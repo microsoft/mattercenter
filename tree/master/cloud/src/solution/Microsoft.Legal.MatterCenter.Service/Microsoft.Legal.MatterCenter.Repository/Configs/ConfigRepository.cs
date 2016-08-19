@@ -11,7 +11,9 @@ using Microsoft.WindowsAzure.Storage.Table;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Globalization;
-
+using Microsoft.SharePoint.Client;
+using System.Security;
+using System.IO;
 namespace Microsoft.Legal.MatterCenter.Repository
 {
     public class ConfigRepository : IConfigRepository
@@ -21,16 +23,68 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private UIConfigSettings configSettings;
         private IConfigRepository config;
 
-
+        /// <summary>
+        /// ConfigRepository with all the required dependency injections inserted
+        /// </summary>
+        /// <param name="generalSettings"></param>
+        /// <param name="configSettings"></param>
         public ConfigRepository(
             IOptions<GeneralSettings> generalSettings,
               IOptions<UIConfigSettings> configSettings)
         {
             this.generalSettings = generalSettings.Value;
             this.configSettings = configSettings.Value;
+            
         }
 
 
+        /// <summary>
+        /// This method will return the secure password for authentication to SharePoint Online
+        /// </summary>
+        /// <param name="plainTextPassword"></param>
+        /// <returns></returns>
+        public static SecureString GetEncryptedPassword(string plainTextPassword)
+        {
+            //Get the user's password as a SecureString
+            SecureString securePassword = new SecureString();
+            foreach (char c in plainTextPassword)
+            {
+                securePassword.AppendChar(c);
+            }
+            //while (info.Key != ConsoleKey.Enter);
+            return securePassword;
+        }
+
+        /// <summary>
+        /// This method will upload uiconfigforspo.js into sharepoint catalog site collection
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="clientUrl"></param>
+        public void UploadConfigFileToSPO(string filePath, string clientUrl)
+        {
+            using (ClientContext clientContext = new ClientContext(generalSettings.CentralRepositoryUrl))
+            {
+                //Connec to sharepoint using admin username and password
+                SecureString password = GetEncryptedPassword(generalSettings.AdminPassword);
+                clientContext.Credentials = new SharePointOnlineCredentials(generalSettings.AdminUserName, password);
+                var web = clientContext.Web;
+                var newFile = new FileCreationInformation
+                {
+                    Content = System.IO.File.ReadAllBytes(filePath),
+                    Overwrite = true,
+                    //The root at which the uiconfigforspo.js needs to be uploaded
+                    Url = Path.Combine("SiteAssets/Matter Center Assets/Common Assets/Scripts/", Path.GetFileName(filePath))
+
+                };
+                //The document library names under which the uiconfigforspo.js has to be uploaded
+                var docs = web.Lists.GetByTitle("Site Assets");
+                Microsoft.SharePoint.Client.File uploadFile = docs.RootFolder.Files.Add(newFile);
+                clientContext.Load(uploadFile);
+                clientContext.ExecuteQuery();
+                //After uploading the file to sharepoint site collection, delete the file from the app root
+                System.IO.File.Delete(filePath);
+            }
+        }
 
         /// <summary>
         /// 
