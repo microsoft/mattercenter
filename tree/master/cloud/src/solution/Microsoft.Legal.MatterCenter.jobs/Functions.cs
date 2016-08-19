@@ -189,6 +189,10 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                     .AddJsonFile("appSettings.json")
                     .AddEnvironmentVariables();//appsettings.json will be overridden with azure web appsettings
                 var configuration = builder.Build();
+                KeyVaultHelper kv = new KeyVaultHelper(configuration);
+                KeyVaultHelper.GetCert(configuration);
+                kv.GetKeyVaultSecretsCerticate();
+                //Read all rows from table storage which
                 //Read all rows from table storage which are in pending state
                 var query = from p in matterInformationVM select p;
                 foreach (MatterInformationVM matterInformation in query)
@@ -266,8 +270,8 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                     {
                         using (var ctx = new ClientContext(originalMatter.Client.Url))
                         {
-                            SecureString password = Utility.GetEncryptedPassword(configuration["Settings:AdminPassword"]);
-                            ctx.Credentials = new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], password);
+                            SecureString password = Utility.GetEncryptedPassword(configuration["General:AdminPassword"]);
+                            ctx.Credentials = new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);
                             //First check whether the user exists in SharePoint or not
                             log.WriteLine($"Checking whether the user {email} has been present in the system or not");
                             if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, email, configuration, log) == true)
@@ -305,7 +309,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                         using (var catalogContext = new ClientContext(configuration["Catalog:CatalogUrl"]))
                                         {
                                             catalogContext.Credentials =
-                                                new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], password);
+                                                new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);
                                             umd.AssignPermissionToCatalogLists(configuration["Catalog:SiteAssets"], catalogContext,
                                                 email.Trim(), configuration["Catalog:SiteAssetsPermissions"], configuration);
                                         }
