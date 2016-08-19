@@ -16,7 +16,7 @@
     "MailKit": "1.3.0-beta7",
     "StackExchange.Redis": "1.1.604-alpha",
     "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
-    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*"
+    "Microsoft.Legal.MatterCenter.Models": "1.0.0-*",
   },
   "frameworks": {
     "net46": {}
