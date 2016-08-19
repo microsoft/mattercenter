@@ -9,7 +9,7 @@ using System.Reflection;
 using Microsoft.Legal.MatterCenter.Web.Common;
 
 using Microsoft.AspNetCore.Hosting;
-
+using System.Linq;
 using Microsoft.WindowsAzure.Storage.Table;
 using System.IO;
 using Newtonsoft.Json;
@@ -39,6 +39,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         private ErrorSettings errorSettings;
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;
         private IConfigRepository configRepository;
+        private IMatterRepository matterRepository;
         private GeneralSettings generalSettings;
         private UIConfigSettings uiConfigSettings;
         private LogTables logTables;
@@ -60,7 +61,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             IOptions<LogTables> logTables,
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IConfigRepository configRepository,
-            IHostingEnvironment hostingEnvironment
+            IHostingEnvironment hostingEnvironment           
+
             )
         {
             this.errorSettings = errorSettings.Value;
@@ -69,6 +71,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             this.generalSettings = generalSettings.Value;
             this.uiConfigSettings = uiConfigSettings.Value;
             this.hostingEnvironment = hostingEnvironment;
+            
         }
 
         /// <summary>
@@ -102,7 +105,50 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
                 var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
 
-                CreateConfig(configResultsVM);
+                CreateConfig(configResultsVM, "uiconfig.js", false);
+                return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
+
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns all the entries for Configuring the UI for sharepoint online
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        [HttpPost("getconfigsforspo")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public async Task<IActionResult> GetConfigsForSPO([FromBody] String filter)
+        {
+            string result = string.Empty;
+
+            try
+            {
+                #region Error Checking                
+                ErrorResponse errorResponse = null;
+
+                if (filter == null)
+                {
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No filter was passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                }
+                #endregion
+
+
+                var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
+
+                CreateConfig(configResultsVM, "uiconfigforspo.js", true);
                 return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
 
             }
@@ -156,14 +202,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             }
         }
 
-        private void CreateConfig(List<DynamicTableEntity> configs)
 
+        /// <summary>
+        /// Helper method which will create uiconfig.js or uiconfigforspo.js file
+        /// </summary>
+        /// <param name="configs"></param>
+        /// <param name="fileName"></param>
+        /// <param name="includeSPOLabels"></param>
+        private void CreateConfig(List<DynamicTableEntity> configs, string fileName, bool includeSPOLabels)
         {
             StringBuilder sb = new StringBuilder();
             JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
             jw.Formatting = Formatting.Indented;
 
-            var configPath = Path.Combine(hostingEnvironment.WebRootPath, "app/uiconfig.js");
+            var configPath = Path.Combine(hostingEnvironment.WebRootPath, $"app/{fileName}");
             if (System.IO.File.Exists(configPath))
                 System.IO.File.Delete(configPath);
 
@@ -189,11 +241,21 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             configWriter.WriteLine("var uiconfigs =");
 
             jw.WriteStartObject();
+
+            if(includeSPOLabels)
+            {
+                configGroup = configGroup.Where(cnfg => (cnfg.Contains("DocumentDetails") || cnfg.Contains("MatterLanding"))).ToList();
+            }
+            else
+            {
+                configGroup = configGroup.Where(cnfg => !(cnfg.Contains("DocumentDetails") || cnfg.Contains("MatterLanding"))).ToList();
+            }
+
             foreach (string str in configGroup)
             {
+                
                 jw.WritePropertyName(str);
                 jw.WriteStartObject();
-
                 foreach (DynamicTableEntity dt in configs)
                 {
                     bool scr = dt.Properties.TryGetValue(uiConfigSettings.ConfigGroup, out value);
@@ -213,11 +275,18 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                     }
                 }
                 jw.WriteEndObject();
-            }
+            }                
+            
             jw.WriteEndObject();
             configWriter.Write(sb.ToString());
             configWriter.WriteLine(";");
             configWriter.Dispose();
+
+            //If the file is for SPO, called another method in repository which will upload the file to SharePoint online
+            if(includeSPOLabels)
+            {
+                configRepository.UploadConfigFileToSPO(Path.Combine(hostingEnvironment.WebRootPath, "app/uiconfigforspo.js"), generalSettings.CentralRepositoryUrl);
+            }
         }
     }
 }
