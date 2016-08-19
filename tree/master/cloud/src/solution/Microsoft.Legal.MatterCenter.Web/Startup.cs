@@ -10,11 +10,6 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Net;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Azure.KeyVault;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using System.Diagnostics;
-using System.Linq;
 
 
 
@@ -26,14 +21,9 @@ using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Legal.MatterCenter.Service.Filters;
 using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
-using Microsoft.Legal.MatterCenter.Common;
 
 using System.IO;
-using Microsoft.Extensions.Options;
-using System.Security.Claims;
 using System.Text;
-using System.Security.Cryptography.X509Certificates;
-using System.Collections.Generic;
 #endregion
 
 
@@ -74,7 +64,6 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-           // GetKeyVaultSecrets();
             KeyVaultHelper keyVaultHelper = new KeyVaultHelper(Configuration);
             KeyVaultHelper.GetCert(Configuration);
             keyVaultHelper.GetKeyVaultSecretsCerticate();
