@@ -10,7 +10,9 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Net;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+
+
 using Swashbuckle.Swagger.Model;
 
 #region Matter Namespaces
@@ -21,8 +23,6 @@ using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
 
 using System.IO;
-using Microsoft.Extensions.Options;
-using System.Security.Claims;
 using System.Text;
 #endregion
 
@@ -55,6 +55,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
 
             Configuration = builder.Build();
+           
         }
 
         /// <summary>
@@ -63,8 +64,15 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            KeyVaultHelper keyVaultHelper = new KeyVaultHelper(Configuration);
+            KeyVaultHelper.GetCert(Configuration);
+            keyVaultHelper.GetKeyVaultSecretsCerticate();
+            
             services.AddSingleton(Configuration);
+            
             ConfigureSettings(services);
+
+        
             services.AddCors();
             services.AddLogging();
             
@@ -99,6 +107,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         )
         {
             CreateConfig(env);
+           
 
             var log = loggerFactory.CreateLogger<Startup>();
             try
@@ -358,6 +367,8 @@ namespace Microsoft.Legal.MatterCenter.Web
 
             }
         }
+
+
 
         private void CreateConfig(IHostingEnvironment hostingEnvironment)
         { 

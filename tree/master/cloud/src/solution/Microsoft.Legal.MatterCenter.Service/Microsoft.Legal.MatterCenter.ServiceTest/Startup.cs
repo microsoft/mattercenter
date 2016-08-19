@@ -10,8 +10,9 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Net;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Autofac;
 
+using Autofac.Core;
 #region Matter Namespaces
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.Repository;
@@ -20,7 +21,6 @@ using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
 
 using System.IO;
-using Microsoft.Extensions.Options;
 #endregion
 
 
@@ -50,7 +50,6 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
             var builder = new ConfigurationBuilder()
                  .SetBasePath(basePath)
-                //.SetBasePath(@"C:\Repos\mattercenter3\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.ServiceTest")
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
@@ -66,6 +65,9 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            KeyVaultHelper keyVaultHelper = new KeyVaultHelper(Configuration);
+            KeyVaultHelper.GetCert(Configuration);
+            keyVaultHelper.GetKeyVaultSecretsCerticate();
             services.AddSingleton(Configuration);
             ConfigureSettings(services);
             services.AddCors();
@@ -247,6 +249,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         private void ConfigureSettings(IServiceCollection services)
         {
             services.Configure<GeneralSettings>(this.Configuration.GetSection("General"));
+            services.Configure<UIConfigSettings>(this.Configuration.GetSection("UIConfig"));
             services.Configure<TaxonomySettings>(this.Configuration.GetSection("Taxonomy"));
             services.Configure<MatterSettings>(this.Configuration.GetSection("Matter"));
             services.Configure<DocumentSettings>(this.Configuration.GetSection("Document"));
@@ -259,7 +262,6 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             services.Configure<CamlQueries>(this.Configuration.GetSection("CamlQueries"));
             services.Configure<ContentTypesConfig>(this.Configuration.GetSection("ContentTypes"));
             services.Configure<MatterCenterApplicationInsights>(this.Configuration.GetSection("ApplicationInsights"));
-            //services.Configure<Config>(this.Configuration.GetSection("ApplicationInsights"), trackConfigChanges: true);
 
         }
 
