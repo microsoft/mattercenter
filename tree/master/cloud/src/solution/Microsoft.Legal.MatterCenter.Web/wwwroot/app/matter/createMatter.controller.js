@@ -964,6 +964,8 @@
                     optionsForCheckMatterName.Matter.Name = cm.matterName.trim();
                     optionsForCheckMatterName.Client.Url = cm.clientUrl;
                     getCheckValidMatterName(optionsForCheckMatterName, function (response) {
+                        cm.errorPopUpBlock = false;
+                        cm.errorBorder = "";
                         if (response.code != 200) {
                             cm.errTextMsg = "Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
                             cm.errorBorder = "mattername"; showErrorNotification("mattername");
@@ -1424,7 +1426,7 @@
                     cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms = oPageData.oSelectedDocumentTypeLawTerms;
                     cm.popupContainerBackground = "Show";
                     cm.popupContainer = "hide";
-
+                    cm.sectionName = "";
                     cm.sectionName = "snConflictCheck";
                     cm.removeDTItem = false;
                     cm.primaryMatterType = cm.errorPopUp = false;
@@ -1855,7 +1857,6 @@
                 var arrPermissions = [];
                 arrPermissions = getAssignedUserPermissions();
                 var optionsForAssignUserPermissionMetadataVM = {
-
                     Client: {
                         Id: cm.clientId,
                         Name: cm.selectedClientName,
@@ -3104,20 +3105,24 @@
                     // cm.levelTwoList = cm.selectedLevelOneItem.level2;                  
                     //   cm.levelThreeList = cm.selectedLevelOneItem.level2[0].level3;
                     if (cm.taxonomyHierarchyLevels >= 2) {
+                        cm.levelTwoList = [];
                         cm.levelTwoList = cm.selectedLevelOneItem.level2;
                         cm.activeLevelTwoItem = cm.selectedLevelOneItem.level2[0];
                     }
                     if (cm.taxonomyHierarchyLevels >= 3) {
+                        cm.levelThreeList = [];
                         cm.levelThreeList = cm.levelTwoList[0].level3;
                         cm.activeLevelThreeItem = cm.levelThreeList[0];
                     }
                     if (cm.taxonomyHierarchyLevels >= 4) {
+                        cm.levelFourList = [];
                         cm.levelFourList = cm.levelThreeList[0].level4;
-                        cm.activeLevelFourItem = cm.levelFourList[0];
+                        cm.activeLevelFourItem = (cm.levelFourList && cm.levelFourList[0]!=undefined) ? cm.levelFourList[0] : [];
                     }
                     if (cm.taxonomyHierarchyLevels >= 5) {
+                        cm.levelFiveList = [];
                         cm.levelFiveList = cm.levelFourList[0].level5;
-                        cm.activeLevelFiveItem = cm.levelFiveList[0];
+                        cm.activeLevelFiveItem = (cm.levelFiveList && cm.levelFiveList[0] != undefined) ? cm.levelFiveList[0] : [];
                     }
 
                     cm.errorPopUp = false;
@@ -3195,15 +3200,19 @@
                 switch (cm.taxonomyHierarchyLevels) {
                     case 2:
                         selectedHighestLevelItem = cm.activeLevelTwoItem;
+                        makeDisableSelectedItemInColumn(cm.levelTwoList, selectedHighestLevelItem);
                         break;
                     case 3:
                         selectedHighestLevelItem = cm.activeLevelThreeItem;
+                        makeDisableSelectedItemInColumn(cm.levelThreeList, selectedHighestLevelItem);
                         break;
                     case 4:
                         selectedHighestLevelItem = cm.activeLevelFourItem;
+                        makeDisableSelectedItemInColumn(cm.levelFourList, selectedHighestLevelItem);
                         break;
                     case 5:
                         selectedHighestLevelItem = cm.activeLevelFiveItem;
+                        makeDisableSelectedItemInColumn(cm.levelFiveList, selectedHighestLevelItem);
                         break;
 
                 }
@@ -3254,10 +3263,44 @@
                 }
             }
 
+
+
+            function makeDisableSelectedItemInColumn(levelList, selectedItem) {
+                angular.forEach(levelList, function (levelListItem) {
+                    if (levelListItem.termName == selectedItem.termName) {
+                        levelListItem.state = "disable";
+                    }
+                   
+                });
+            }
+            function makeEnableSelectedItemInColumn(selectedItem) {
+                var levelList = [];
+                if (cm.taxonomyHierarchyLevels == 2) {
+                    levelList = cm.levelTwoList;
+                }
+                if (cm.taxonomyHierarchyLevels == 3) {
+                    levelList = cm.levelThreeList;
+                }
+                if (cm.taxonomyHierarchyLevels == 4) {
+                    levelList = cm.levelFourList;
+                }
+                if (cm.taxonomyHierarchyLevels == 5) {
+                    levelList=cm.levelFiveList;
+                }
+
+                angular.forEach(levelList, function (levelListItem) {
+                    if (levelListItem.termName == selectedItem.termName) {
+                        levelListItem.state = "enable";
+                    }
+
+                });
+            }
+
             cm.removeFromDocumentTemplate = function () {
                 //  alert(cm.activeDocumentTypeLawTerm);
                 if (cm.removeDTItem) {
                     var index = cm.documentTypeLawTerms.indexOf(cm.activeDocumentTypeLawTerm);
+                    makeEnableSelectedItemInColumn(cm.activeDocumentTypeLawTerm);
                     cm.documentTypeLawTerms.splice(index, 1);
                     cm.removeDTItem = false;
                     cm.primaryMatterType = false;
