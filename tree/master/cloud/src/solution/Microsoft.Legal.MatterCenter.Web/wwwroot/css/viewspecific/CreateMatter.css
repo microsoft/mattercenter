@@ -330,9 +330,9 @@
 
 
 .errPopUpMatterSelectTemp {
-    left: 460px;
+       left: 12px;
     right: 264px;
-    top: 276px;
+    top: 322px;
 }
  .errPopUpMatterSelectTempWithOutMatterID {
        left: 460px;
@@ -470,11 +470,15 @@
     width: 100%;
 }
 
+.addmatterType{clear:left;  margin-top:10px; font-size:.875em; cursor:pointer; }
+
 /*.errPopUpCAttorny{left:70px;top:-20px;}
 .errTringleBlockCAttorny{left:50px;right:56px;}
 .errTringleBorderCAttorny{left:50px;right:55px;}
 .errTextMatterCAttorny {min-height: 40px;top: 17px !important;left: 24px;width:100%}*/
 @media (min-width: 0px) and (max-width: 734px) {
+    .labelRoles{    margin-left: 0px !important;
+    width: 140px;}
 
     .errPopUpMatterName {
         left: 13px;
@@ -599,8 +603,8 @@
 
 
     .errPopUpMatterSelectTemp {
-        left: 45px;
-        top: 545px;
+        left: 12px;
+        top: 550px;
     }
      .errPopUpMatterSelectTempWithOutMatterID {
         left: 45px;
@@ -1281,3 +1285,11 @@
 
 .popUpModalClose{position:absolute; top:10px; right:5px; z-index:5;}
 .docuTemplates{cursor:default; font-weight:normal;text-overflow: ellipsis;width: 100%;overflow: hidden;}
+.disableBlock{
+    /*background-color: #eaeaea;*/
+    color: rgb(210,210,210);
+}
+.loadingGlyphicon{    left: -24px;
+    top: 6px;}
+.labelRoles{    margin-left: 5px;
+    width: 140px;}
