@@ -1,22 +1,8 @@
 ﻿
 using System;
-
-using System.Collections.Generic;
-
-using System.Linq;
-
-using System.Threading.Tasks;
-
-//using ASPNETCoreAndXUnit.Services;
 using Microsoft.Extensions.Configuration;
-
-using Autofac;
-using Microsoft.Extensions.DependencyInjection;
-
-using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.Legal.MatterCenter.ServiceTest.IntegrationTests;
-using System.IO;
-using System.Reflection;
+
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
 {
