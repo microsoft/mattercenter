@@ -13,24 +13,37 @@ using Microsoft.Legal.MatterCenter.Web.Controllers;
 using Microsoft.WindowsAzure.Storage.Table;
 using System;
 using Microsoft.Legal.MatterCenter.Web.Common;
+using Microsoft.Extensions.Configuration;
+using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
 {
-    public class ConfigUnitTest
+    public class ConfigUnitTest:IClassFixture<CompositionRootFixture>
     {
 
 
         private readonly TestServer testServer;
         private const string authority = "https://login.windows.net/microsoft.onmicrosoft.com";
+        private readonly CompositionRootFixture _fixture;
 
         private IConfigRepository configRepository; //{ get; set; }
         private IMatterCenterServiceFunctions matterCenterServiceFunctions;
-        private IHostingEnvironment hostingEnvironment;
 
-        public ConfigUnitTest()
+     
+        private readonly TestServer _server;
+        private readonly HttpClient _client;
+
+        public ILoggerFactory LoggerFactory { get; }
+
+
+        public ConfigUnitTest(CompositionRootFixture fixture)
         {
 
             testServer = new TestServer(new WebHostBuilder().UseStartup<Startup>());
+            _fixture = fixture;           
+
         }
 
 
@@ -40,13 +53,13 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         {
 
             GeneralSettings genS = new GeneralSettings();
-            genS.CloudStorageConnectionString = "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
+            genS.CloudStorageConnectionString = _fixture.Configuratuion.GetSection("General").GetSection("CloudStorageConnectionString").Value.ToString();
 
             //Need to Mock the injected services and setup any properties on these that the test requires
             var errorSettingsMoq = new Moq.Mock<IOptions<ErrorSettings>>();
           
             var generalSettingsMoq = new Moq.Mock<IOptions<GeneralSettings>>();
-            generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
+            generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns(genS.CloudStorageConnectionString);
 
             var environmentMoq = new Moq.Mock<IHostingEnvironment>();
             environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\mcfork\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
@@ -81,13 +94,13 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         {
 
             GeneralSettings genS = new GeneralSettings();
-            genS.CloudStorageConnectionString = "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
+            genS.CloudStorageConnectionString = _fixture.Configuratuion.GetSection("General").GetSection("CloudStorageConnectionString").Value.ToString();
 
             //Need to Mock the injected services and setup any properties on these that the test requires
             var errorSettingsMoq = new Moq.Mock<IOptions<ErrorSettings>>();
 
             var generalSettingsMoq = new Moq.Mock<IOptions<GeneralSettings>>();
-            generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
+            generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns(genS.CloudStorageConnectionString);
 
             var environmentMoq = new Moq.Mock<IHostingEnvironment>();
             environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\mcfork\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
@@ -120,13 +133,13 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
         {
 
             GeneralSettings genS = new GeneralSettings();
-            genS.CloudStorageConnectionString = "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
+            genS.CloudStorageConnectionString = _fixture.Configuratuion.GetSection("General").GetSection("CloudStorageConnectionString").Value.ToString();
 
             //Need to Mock the injected services and setup any properties on these that the test requires
             var errorSettingsMoq = new Moq.Mock<IOptions<ErrorSettings>>();
 
             var generalSettingsMoq = new Moq.Mock<IOptions<GeneralSettings>>();
-            generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns("DefaultEndpointsProtocol=https;AccountName=mattercenterlogstoragev0;AccountKey=Y3s1Wz+u2JQ/wl5WSVB5f+31oXyBlcdFVLk99Pgo8y8/vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d/QePQ==");
+            generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns(genS.CloudStorageConnectionString);
 
             var environmentMoq = new Moq.Mock<IHostingEnvironment>();
             environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\mcfork\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
@@ -182,7 +195,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
 
             GeneralSettings genS = new GeneralSettings();
-            genS.CloudStorageConnectionString  =  "DefaultEndpointsProtocol = https; AccountName = mattercenterlogstoragev0; AccountKey = Y3s1Wz + u2JQ / wl5WSVB5f + 31oXyBlcdFVLk99Pgo8y8 / vxSO7P8wOjbbWdcS7mAZLkqv8njHROc1bQj8d / QePQ == ";
+            genS.CloudStorageConnectionString = _fixture.Configuratuion.GetSection("General").GetSection("CloudStorageConnectionString").Value.ToString();
             var m = new Moq.Mock<IOptions<GeneralSettings>>();
             var l = new Moq.Mock<IOptions<UIConfigSettings>>();
             

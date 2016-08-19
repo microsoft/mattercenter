@@ -43,13 +43,17 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                 var builder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appSettings.json")
+                    .AddInMemoryCollection()
                     .AddEnvironmentVariables();//appsettings.json will be overridden with azure web appsettings
                 ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013);
                 var configuration = builder.Build();
+                KeyVaultHelper kv = new KeyVaultHelper(configuration);
+                KeyVaultHelper.GetCert(configuration);
+                kv.GetKeyVaultSecretsCerticate();
                 //// can use on premise exchange server credentials with service.UseDefaultCredentials = true, or 
                 //explicitly specify the admin account (set default to false)
-                string adminUserName = configuration.GetSection("Settings").GetSection("AdminUserName").Value;
-                string adminPassword = configuration.GetSection("Settings").GetSection("AdminPassword").Value;
+                string adminUserName = configuration.GetSection("General").GetSection("AdminUserName").Value;
+                string adminPassword = configuration.GetSection("General").GetSection("AdminPassword").Value;
                 service.Credentials = new WebCredentials(adminUserName, adminPassword);
                 service.Url = new Uri(configuration.GetSection("Settings").GetSection("ExchangeServiceURL").Value);
                 string mailSubject = configuration.GetSection("Mail").GetSection("MatterMailSubject").Value;

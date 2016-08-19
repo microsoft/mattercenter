@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography.X509Certificates;
 
-namespace Microsoft.Legal.MatterCenter.Web.Common
+namespace Microsoft.Legal.MatterCenter.ServiceTest.IntegrationTests
 {
     public class KeyVaultHelper
     {

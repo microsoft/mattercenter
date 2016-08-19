@@ -14,6 +14,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appSettings.json")
+                .AddInMemoryCollection()
                 .AddEnvironmentVariables();//appsettings.json will be overridden with azure web appsettings
 
             var configuration = builder.Build();

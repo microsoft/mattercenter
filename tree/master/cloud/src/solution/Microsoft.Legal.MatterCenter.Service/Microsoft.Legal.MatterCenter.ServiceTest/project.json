@@ -12,7 +12,8 @@
     "xunit.runners": "2.0.0-rc4-build2924",
     "Moq": "4.6.36-alpha",
     "Microsoft.AspNet.WebApi.Client": "5.2.3",
-    "dotnet-test-xunit": "2.2.0-preview2-build1029"
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+      "Autofac": "4.0.0"
   },
   "commands": {
     "test": "xunit.runner.dnx"
