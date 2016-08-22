@@ -26,13 +26,14 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public bool IsTenantDeployment { get; set; }
         public string IsReadOnlyUser { get; set; }
         public string SiteURL { get; set; }
-        public string CentralRepositoryUrl { get; set; }
-        public string MailCartMailUserName { get; set; }
-        public string MailCartMailPassword { get; set; }
+        public virtual string CentralRepositoryUrl { get; set; }
+        public virtual string AdminUserName { get; set; }
+        public virtual string AdminPassword { get; set; }
         public string ExchangeServiceURL { get; set; }
         public virtual string CloudStorageConnectionString { get; set; }
         public string OrgDomainName { get; set; }
         public string MatterCenterConfiguration { get; set; }
-        
+        public string KeyVaultURI { get; set; }
+
     }
 }

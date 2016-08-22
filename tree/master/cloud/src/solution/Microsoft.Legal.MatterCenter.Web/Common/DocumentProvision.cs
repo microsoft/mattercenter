@@ -174,7 +174,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 // need to be able to update/configure or get current version of server
                 ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013);
                 //// can use on premise exchange server credentials with service.UseDefaultCredentials = true, or explicitly specify the admin account (set default to false)
-                service.Credentials = new WebCredentials(generalSettings.MailCartMailUserName, generalSettings.MailCartMailPassword);
+                service.Credentials = new WebCredentials(generalSettings.AdminUserName, generalSettings.AdminPassword);
                 service.Url = new Uri(generalSettings.ExchangeServiceURL);
                 Microsoft.Exchange.WebServices.Data.EmailMessage email = new Microsoft.Exchange.WebServices.Data.EmailMessage(service);
                 email.Subject = documentSettings.MailCartMailSubject;

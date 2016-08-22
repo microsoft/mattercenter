@@ -68,7 +68,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             try
             {
                 clientContext = new ClientContext(matterInformation.Client.Url);
-                clientContext.Credentials = new SharePointOnlineCredentials(configuration["Settings:AdminUserName"], securePassword);
+                clientContext.Credentials = new SharePointOnlineCredentials(configuration["General:AdminUserName"], securePassword);
 
                 //if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
                 //{
