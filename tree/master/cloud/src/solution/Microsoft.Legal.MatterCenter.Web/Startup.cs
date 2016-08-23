@@ -477,11 +477,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                                             else if (subKey.Key == "position")
                                             {
                                                 jw.WriteValue(int.Parse(subKey.Value));
-                                            }
-                                            else
-                                            {
-                                                jw.WriteValue(subKey.Value);
-                                            }                                           
+                                            }                                                                                     
                                         }
                                     jw.WriteEndObject();
                             }
@@ -505,10 +501,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                                         {
                                             jw.WriteValue(int.Parse(subKey.Value));
                                         }
-                                        else
-                                        {
-                                            jw.WriteValue(subKey.Value);
-                                        }
+                                        
                                     }
                                 jw.WriteEndObject();
                             }
