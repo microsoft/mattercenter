@@ -240,20 +240,7 @@
 
                 }
             }
-            if (key == "documentClient") {
-                if (value.displayInUI == true && value.position!=-1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn9Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',
-                        visible: false,
-                        position: value.position
-                    });
-
-                }
-            }
+            
             if (key == "sitename") {
                 if (value.displayInUI == true && value.position!=-1) {
                     columnDefs1.push({
@@ -1803,4 +1790,3 @@
     });
 
 })();
-

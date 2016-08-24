@@ -79,7 +79,247 @@
                 enableColumnMenus: false,
                 enableFiltering: false
             }
+            var columnDefs1 = [];
+            angular.forEach(configs.search.searchColumnsUIPickerForMatter, function (value, key) {
+                if (key == "matterName") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn1Header,                            
+                            enableColumnMenu: false,
+                            width: "20%",
+                            cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html',                           
+                            position: value.position
+                        });
 
+                    }
+                }
+                if (key == "matterClient") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn2Header,
+                            enableColumnMenu: false,
+                            width: "15%",
+                            cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>',
+                            position: value.position
+                        });
+                    }
+                }
+                if (key == "matterClientId") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            width: '15%',
+                            displayName: vm.matterDashboardConfigs.GridColumn3Header,
+                            headerTooltip: 'Click to sort by client.matterid', 
+                            enableCellEdit: true,
+                            cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>',
+                            enableColumnMenu: false,
+                            position: value.position
+                        });
+
+                    }
+
+                }
+                if (key == "matterModifiedDate") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            width: '15%',
+                            displayName: vm.matterDashboardConfigs.GridColumn4Header,
+                            cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>',
+                            enableColumnMenu: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterResponsibleAttorney") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            width: '15%', 
+                            headerTooltip: 'Click to sort by attorney',
+                            displayName: vm.matterDashboardConfigs.GridColumn5Header,
+                            cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>',
+                            enableColumnMenu: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterSubAreaOfLaw") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn6Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterCreatedDate") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn7Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html',
+                            width: "170",
+                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
+                            visible: false,
+                            position: value.position
+                        });
+                    }
+                }
+                if (key == "matterDescription" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn8Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterUrl" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn9Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterClientUrl" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn10Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterPracticeGroup" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn11Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+
+                if (key == "matterAreaOfLaw" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn12Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "hideUpload" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn13Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterID" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn14Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterGuid" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn15Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+
+            });
+           
+            columnDefs1.push({
+                field: 'pin',
+                displayName: '',
+                width: '5%',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
+                enableColumnMenu: false,
+                position: 75
+            });
+            columnDefs1.push({
+                field: 'upload',
+                displayName: '',
+                width: '7%',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>',
+                enableColumnMenu: false,
+                position: 76
+            });
+            function getSortFunction(fieldName) {
+                return function (col1, col2) {
+                    return col1[fieldName] > col2[fieldName];
+                }
+            }
+            console.log(columnDefs1);
+            columnDefs1.sort(getSortFunction("position"));
+            console.log(columnDefs1);
 
             //#region Matter Grid functionality
             vm.matterGridOptions = {
@@ -92,15 +332,16 @@
                 enableSelectAll: gridOptions.enableSelectAll,
                 multiSelect: gridOptions.multiSelect,
                 enableFiltering: gridOptions.enableFiltering,
-                columnDefs: [
-                    { field: 'matterName', width: '20%', displayName: vm.matterDashboardConfigs.GridColumn1Header, cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html', enableColumnMenu: false },
-                    { field: 'matterClient', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn2Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>', enableColumnMenu: false },
-                    { field: 'matterClientId', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn3Header, headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false },
-                    { field: 'matterModifiedDate', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn4Header, cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
-                    { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: vm.matterDashboardConfigs.GridColumn5Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
-                    { field: 'pin', displayName: '', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
-                    { field: 'upload', displayName: '', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>', enableColumnMenu: false }
-                ],
+                columnDefs:columnDefs1,
+                //    [
+                //    { field: 'matterName', width: '20%', displayName: vm.matterDashboardConfigs.GridColumn1Header, cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html', enableColumnMenu: false },
+                //    { field: 'matterClient', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn2Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>', enableColumnMenu: false },
+                //    { field: 'matterClientId', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn3Header, headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false },
+                //    { field: 'matterModifiedDate', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn4Header, cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
+                //    { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: vm.matterDashboardConfigs.GridColumn5Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
+                //    { field: 'pin', displayName: '', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
+                //    { field: 'upload', displayName: '', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>', enableColumnMenu: false }
+                //],
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
                     //Set the selected row of the grid to selectedRow property of the controller
@@ -1511,8 +1752,8 @@
                     filteredresult.pop(input[i]);
                 }
             }
-            return filteredresult;
+            return filteredresult;           
         };
-    })
+    })  
 
 })();
