@@ -1,5 +1,5 @@
 ﻿var oTestConfiguration = {
-    sSiteURL: "http://mattermaqdevsite.azurewebsites.net",
+    sSiteURL: "http://matterwebapp.azurewebsites.net",
     sValidMatterName: "Test Matter 112233",
     sValidMatterClientURL: "https://lcadms.sharepoint.com/sites/microsoft",
     sInvalidMatterName: "Microsoft Test",
@@ -14,7 +14,7 @@
     sActiveSubAreaOfLawTerm: "Advertising, Marketing ＆ Promotions",
     sFolderNames: "Email;Lorem;Ipsum",
     nGUIDLength: 32,
-    sLocationURL: "https://mattermaqdevsite.azurewebsites.net&test=1&attempt=2|jasminetest.html",
+    sLocationURL: "https://matterwebapp.azurewebsites.net&test=1&attempt=2|jasminetest.html",
     nDocumentCheckCount: 2,
     oClientObj: { id: 16761, name: "Microsoft", url: "https://lcadms.sharepoint.com/sites/microsoft" },
     oDocumentObject: {
