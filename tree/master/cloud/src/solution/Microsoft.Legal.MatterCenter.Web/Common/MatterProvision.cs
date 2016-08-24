@@ -15,9 +15,15 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Dynamic;
+using System.Collections;
 
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
+    /// <summary>
+    /// Matter Provision is a helper class which contains all methods related to matter such as matter search, matter provision, document upload to matter
+    /// functionality
+    /// </summary>
     public class MatterProvision : IMatterProvision
     {
         private MatterSettings matterSettings;
@@ -37,6 +43,27 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private IConfigurationRoot configuration;
         private IUsersDetails userDetails;
         private GeneralSettings generalSettings;
+
+        /// <summary>
+        /// Constructor where all the dependencies are injected
+        /// </summary>
+        /// <param name="matterRepositoy"></param>
+        /// <param name="matterSettings"></param>
+        /// <param name="errorSettings"></param>
+        /// <param name="spoAuthorization"></param>
+        /// <param name="editFunctions"></param>
+        /// <param name="validationFunctions"></param>
+        /// <param name="customLogger"></param>
+        /// <param name="logTables"></param>
+        /// <param name="mailSettings"></param>
+        /// <param name="camlQueries"></param>
+        /// <param name="listNames"></param>
+        /// <param name="generalSettings"></param>
+        /// <param name="searchSettings"></param>
+        /// <param name="userRepositoy"></param>
+        /// <param name="externalSharing"></param>
+        /// <param name="configuration"></param>
+        /// <param name="userDetails"></param>
         public MatterProvision(IMatterRepository matterRepositoy, IOptions<MatterSettings> matterSettings,
             IOptions<ErrorSettings> errorSettings,
             ISPOAuthorization spoAuthorization, IEditFunctions editFunctions, IValidationFunctions validationFunctions,
@@ -152,6 +179,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         }
 
 
+        
+
         public async Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM)
         {
             var searchObject = searchRequestVM.SearchObject;
@@ -164,64 +193,120 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
             var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
             if (searchResultsVM.TotalRows > 0)
-            {
-                IList<MatterData> matterDataList = new List<MatterData>();
+            {                
+
+                dynamic matterDataList = new List<dynamic>();
                 IEnumerable<IDictionary<string, object>> searchResults = searchResultsVM.SearchResults;
+                var searchSchema = configuration.GetSection("Search");
+                string key1 = configuration.GetSection("Search").GetSection("ManagedPropertyMatterName").Value.ToString();
                 foreach (var searchResult in searchResults)
                 {
-                    MatterData matterData = new MatterData();
+                    dynamic matterData = new ExpandoObject();                    
                     foreach (var key in searchResult.Keys)
-                    {
-                        switch (key.ToLower())
-                        {
-                            case "mcmattername":
-                                matterData.MatterName = searchResult[key].ToString();
-                                break;
-                            case "description":
-                                matterData.MatterDescription = searchResult[key].ToString();
-                                break;
-                            case "mcopendate":
-                                matterData.MatterCreatedDate = searchResult[key].ToString();
-                                break;
-                            case "path":
-                                matterData.MatterUrl = searchResult[key].ToString();
-
-                                break;
-                            case "sitename":
-                                matterData.MatterClientUrl = searchResult[key].ToString();
-                                break;
-                            case "mcpracticegroup":
-                                matterData.MatterPracticeGroup = searchResult[key].ToString();
-                                break;
-                            case "mcareaoflaw":
-                                matterData.MatterAreaOfLaw = searchResult[key].ToString();
-                                break;
-                            case "mcsubareaoflaw":
-                                matterData.MatterSubAreaOfLaw = searchResult[key].ToString();
-                                break;
-                            case "mcclientname":
-                                matterData.MatterClient = searchResult[key].ToString();
-                                break;
-                            case "mcclientid":
-                                matterData.MatterClientId = searchResult[key].ToString();
-                                break;
-                            case "mcblockeduploaduser":
-                                matterData.HideUpload = searchResult[key].ToString();
-                                break;
-                            case "mcmatterid":
-                                matterData.MatterID = searchResult[key].ToString();
-                                break;
-                            case "mcresponsibleattorney":
-                                matterData.MatterResponsibleAttorney = searchResult[key].ToString();
-                                break;
-                            case "lastmodifiedtime":
-                                matterData.MatterModifiedDate = searchResult[key].ToString();
-                                break;
-                            case "mattercentermatterguid":
-                                matterData.MatterGuid = searchResult[key].ToString();
-                                break;
+                    {                        
+                        if(key.ToString().ToLower() == searchSettings.ManagedPropertyMatterName.ToString().ToLower())
+                        {                            
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterName").Key,
+                                searchResult[key].ToString());                            
                         }
-                        matterData.PinType = "Pin";
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyDescription.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterDescription").Key,
+                                searchResult[key].ToString());
+                        }
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyOpenDate.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterCreatedDate").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyPath.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterUrl").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertySiteName.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterClientUrl").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyPracticeGroup.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterPracticeGroup").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyAreaOfLaw.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterAreaOfLaw").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterSubAreaOfLaw").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyClientName.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterClient").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyClientID.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterClientId").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyBlockedUploadUsers.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("hideUpload").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyResponsibleAttorney.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterResponsibleAttorney").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyMatterId.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterID").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyMatterGuid.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterGuid").Key,
+                                searchResult[key].ToString());
+                        }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyLastModifiedTime.ToLower())
+                        {
+                            ServiceUtility.AddProperty(matterData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterModifiedDate").Key,
+                                searchResult[key].ToString());
+                        }
+                        ServiceUtility.AddProperty(matterData,"PinType","Pin");
                     }
                     matterDataList.Add(matterData);
                 }

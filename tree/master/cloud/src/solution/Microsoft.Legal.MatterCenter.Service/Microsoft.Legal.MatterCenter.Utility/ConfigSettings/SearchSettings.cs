@@ -21,6 +21,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
 
 
         #region Matter Search Related Properties
+        public string Schema { get; set; }
         public string ManagedPropertyTitle { get; set; }
         public string ManagedPropertyName { get; set; }
         public string ManagedPropertyDescription { get; set; }

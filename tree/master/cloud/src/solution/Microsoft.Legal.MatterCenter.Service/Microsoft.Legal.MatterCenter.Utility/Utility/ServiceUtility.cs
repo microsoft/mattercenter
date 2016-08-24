@@ -7,6 +7,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
+using System.Dynamic;
 
 namespace Microsoft.Legal.MatterCenter.Utility
 {
@@ -17,6 +18,25 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public static string RedisCacheHostName
         {
             get; set;
+        }
+
+
+        /// <summary>
+        /// For matter and document search, the dynamic object would be 
+        /// created to have dynamic properties so that same code will work for project center
+        /// and matter center
+        /// </summary>
+        /// <param name="expando"></param>
+        /// <param name="propertyName"></param>
+        /// <param name="propertyValue"></param>
+        public static void AddProperty(ExpandoObject expando, string propertyName, object propertyValue)
+        {
+            var expandoDict = expando as IDictionary<string, object>;
+            if (expandoDict.ContainsKey(propertyName))
+                expandoDict[propertyName] = propertyValue;
+            else
+                expandoDict.Add(propertyName, propertyValue);
+
         }
 
         /// <summary>
