@@ -1,0 +1,58 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "StorageAccountSettings": {
+      "type": "object"
+    }
+  },
+  "variables": {
+    "StorageAccountName": "[concat(parameters('StorageAccountSettings').name, uniqueString(resourceGroup().id))]"
+  },
+  "resources": [
+    {
+      "name": "[variables('StorageAccountName')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2016-01-01",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "Infrastructure Storage Account"
+      },
+      "sku": {
+        "name": "[parameters('StorageAccountSettings').type]",
+        "tier": "[parameters('StorageAccountSettings').tier]"
+      },
+      "kind": "Storage",
+      "properties": {
+        "mode": "Incremental",
+        "encryption": {
+          "keySource": "Microsoft.Storage",
+          "services": {
+            "blob": {
+              "enabled": true
+            }
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "InfrastructureStorageAccount": {
+      "type": "object",
+      "value": {
+        "key": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), '2015-05-01-preview').key1]",
+        "Secondarykey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('StorageAccountName')), '2015-05-01-preview').key2]",
+        "name": "[variables('StorageAccountName')]",
+        "type": "[parameters('StorageAccountSettings').type]"
+      },
+      "metadata": {
+        "description": "Name & primary access key & type for the infrastructure storage account."
+      }
+    },
+    "ResourceGroupUniqueId": {
+      "value": "[uniqueString(resourceGroup().id)]",
+      "type": "string"
+    }
+  }
+}
