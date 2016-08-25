@@ -15,6 +15,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using System.Diagnostics;
 using System.Globalization;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace Microsoft.Legal.MatterCenter.Utility
 {
@@ -30,6 +31,46 @@ namespace Microsoft.Legal.MatterCenter.Utility
             this.generalSettings = generalSettings.Value;
             
         }
+
+
+        /// <summary>
+        /// This method will generate error response that will be sent to the client
+        /// </summary>
+        /// <param name="ex">Exception object that occured </param>
+        /// <returns></returns>
+        public ErrorResponse GenerateErrorResponse(Exception ex)
+        {
+            var stackTrace = new StackTrace(ex, true);
+            StackFrame stackFrameInstance = null;
+
+            if (stackTrace.GetFrames().Length > 0)
+            {
+                for (int i = 0; i < stackTrace.GetFrames().Length; i++)
+                {
+                    if (stackTrace.GetFrames()[i].ToString().Contains("Microsoft.Legal.Matter"))
+                    {
+                        stackFrameInstance = stackTrace.GetFrames()[i];
+                        break;
+                    }
+                }
+            }
+            //Create custom exception response that needs to be send to client
+            var response = new ErrorResponse()
+            {
+                Message = ex.Message,
+                StackTrace = ex.ToString(),
+                Description = "Error occured in the system. Please contact the administrator",
+                //Exception = context.Exception.ToString(),
+                LineNumber = stackFrameInstance?.GetFileLineNumber(),
+                MethodName = stackFrameInstance?.GetMethod().Name,
+                ClassName = stackFrameInstance?.GetMethod().DeclaringType.Name,
+                ErrorCode = ((int)HttpStatusCode.InternalServerError).ToString(),
+                IsErrror = true
+            };
+            return response;
+        }
+
+
         /// <summary>
         /// Gets  the line number where exception has occurred.
         /// </summary>

@@ -28,6 +28,7 @@ namespace Microsoft.Legal.MatterCenter.Models
         public int? LineNumber { get; set; }
         public string ErrorDate { get; set; }
         public Exception Exception { get; set; }
+        public bool IsErrror { get; set; }
         public override string ToString()
         {
             return $"EXCEPTION MESSAGE:{Message} CLASS NAME: {ClassName} METHOD NAME: {MethodName} LINE NUMBER: {LineNumber}";
