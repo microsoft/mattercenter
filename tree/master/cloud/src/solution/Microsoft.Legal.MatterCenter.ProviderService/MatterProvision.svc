@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Microsoft.Legal.MatterCenter.ProviderService.MatterProvision" CodeBehind="MatterProvision.svc.cs" %>
