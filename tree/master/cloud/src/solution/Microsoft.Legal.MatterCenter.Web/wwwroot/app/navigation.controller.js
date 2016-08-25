@@ -7,7 +7,7 @@
 
             var vm = this;
             $rootScope.pageIndex = "0";
-            vm.SPOHomePage = configs.uri.SPOsiteURL + '/SitePages/MatterCenterHomev1.aspx?section=1';
+            vm.SPOHomePage = configs.uri.SPOsiteURL + '/SitePages/MatterCenterHome.aspx?section=1';
             function canCreateMatter(options, callback) {
                 api({
                     resource: 'navigationResource',
