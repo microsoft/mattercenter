@@ -47,3 +47,4 @@ tree/master/cloud/src/solution/*/pkgobj/
 /tree/master/cloud/src/solution/UpgradeLog4.htm
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Jasmine/lib
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/wwwroot/lib
+/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/wwwroot/js/site.min.js

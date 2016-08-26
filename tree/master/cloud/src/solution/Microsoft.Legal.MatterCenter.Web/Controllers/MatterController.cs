@@ -271,8 +271,6 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                
-
                 #region Error Checking
                 ErrorResponse errorResponse = null;
                 if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
@@ -292,7 +290,9 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                //throw;
             }
         }
 
@@ -947,7 +947,9 @@ namespace Microsoft.Legal.MatterCenter.Service
                 ///// SharePoint Specific Exception
                 matterProvision.DeleteMatter(matterInformationVM as MatterVM);
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(exception);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                //throw;
             }
         }
 

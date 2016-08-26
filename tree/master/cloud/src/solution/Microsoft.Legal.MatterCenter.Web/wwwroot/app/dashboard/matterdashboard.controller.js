@@ -780,123 +780,6 @@
 
             }
 
-
-
-            //#endregion
-
-            //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
-            vm.checkAll = function (checkAll, type, $event) {
-                $event.stopPropagation();
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
-                    angular.forEach(vm.clients, function (client) {
-                        client.Selected = checkAll;
-                    });
-                }
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
-                    angular.forEach(vm.practiceGroups, function (pg) {
-                        pg.Selected = checkAll;
-                    });
-                }
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
-                    angular.forEach(vm.aolTerms, function (aol) {
-                        aol.Selected = checkAll;
-                    });
-                }
-            }
-
-            //#region This event is going to fire when the user clicks on "OK" button in the filter panel
-            vm.filterSearchOK = function (type) {
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
-                    vm.selectedClients = '';
-                    angular.forEach(vm.clients, function (client) {
-                        if (client.Selected) {
-                            vm.selectedClients = vm.selectedClients + client.name + ","
-                        }
-                    });
-                    vm.selectedClients = vm.selectedClients.slice(0, vm.selectedClients.length - 1);
-                    vm.selectedClientsForCancel = vm.selectedClients;
-                    vm.clientdrop = false;
-                    vm.clientdropvisible = false;
-                }
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
-                    vm.selectedPGs = '';
-                    vm.selectedAOLs = '';
-                    angular.forEach(vm.practiceGroups, function (pg) {
-                        if (pg.Selected) {
-                            vm.selectedPGs = vm.selectedPGs + pg.termName + ","
-                            //For each of the selected pg's select corresponding aol check boxes automatically and update the aol
-                            //textbox accordingly
-                            angular.forEach(pg.areaTerms, function (areaterm) {
-                                areaterm.Selected = true;
-                                vm.selectedAOLs = vm.selectedAOLs + areaterm.termName + ","
-                            });
-                        }
-                    });
-                    vm.selectedPGs = vm.selectedPGs.slice(0, vm.selectedPGs.length - 1);
-                    vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
-                    vm.selectedPGsForCancel = vm.selectedPGs;
-                    vm.selectedAOLsForCancel = vm.selectedAOLs;
-                    vm.pgdrop = false;
-                    vm.pgdropvisible = false;
-                }
-
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
-                    vm.selectedAOLs = '';
-                    angular.forEach(vm.aolTerms, function (aol) {
-                        if (aol.Selected) {
-                            vm.selectedAOLs = vm.selectedAOLs + aol.termName + ","
-                        }
-                    });
-                    vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
-                    vm.selectedAOLsForCancel = vm.selectedAOLs;
-                    vm.aoldrop = false;
-                    vm.aoldropvisible = false;
-                }
-            }
-            //#endregion
-
-            //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
-            vm.filterSearchCancel = function (type) {
-                if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
-                    if (vm.selectedClientsForCancel !== undefined && vm.selectedClientsForCancel.toString().length > 0) {
-                        vm.selectedClients = vm.selectedClientsForCancel;
-                        angular.forEach(vm.clients, function (client) {
-                            if (vm.selectedClients.indexOf(client.name) > 0) {
-                                client.Selected = true;
-                            }
-                        });
-                    }
-                }
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
-                    if (vm.selectedPGsForCancel !== undefined && vm.selectedPGsForCancel.toString().length > 0) {
-                        vm.selectedPGs = vm.selectedPGsForCancel;
-                        angular.forEach(vm.practiceGroups, function (pg) {
-                            if (vm.selectedPGs.indexOf(pg.termName) > 0) {
-                                pg.Selected = true;
-                            }
-                        });
-                    }
-                }
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
-                    if (vm.selectedAOLsForCancel !== undefined && vm.selectedAOLsForCancel.toString().length > 0) {
-                        vm.selectedAOLs = vm.selectedAOLsForCancel;
-                        angular.forEach(vm.aolTerms, function (aol) {
-                            if (vm.selectedAOLs.indexOf(aol.termName) > 0) {
-                                aol.Selected = true;
-                            }
-                        });
-                    }
-                }
-                vm.clientdrop = false;
-                vm.clientdropvisible = false;
-                vm.pgdrop = false;
-                vm.pgdropvisible = false;
-                vm.aoldrop = false;
-                vm.aoldropvisible = false;
-            }
-            //#endregion
-
-
             //#endregion 
 
             //#region Closing and Opening searchbar dropdowns
@@ -999,43 +882,6 @@
                 }
             }
 
-            //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
-            vm.customSelection = function (type) {
-
-                if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
-                    var selectdClients = vm.selectedClients.split(',');  //user altered text value
-                    angular.forEach(vm.clients, function (client) {
-                        client.Selected = false;
-                        angular.forEach(selectdClients, function (clientInput) {
-                            if (clientInput.toString().length > 0 && client.name.toString().toLowerCase().indexOf(clientInput.toString().toLowerCase()) !== -1) {
-                                client.Selected = true;
-                            }
-                        })
-                    });
-                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
-                    var selectdPGs = vm.selectedPGs.split(',');  //user altered text value
-                    angular.forEach(vm.practiceGroups, function (pgGroup) {
-                        pgGroup.Selected = false;
-                        angular.forEach(selectdPGs, function (pgInput) {
-                            if (pgInput.toString().length > 0 && pgGroup.termName.toString().toLowerCase().indexOf(pgInput.toString().toLowerCase()) !== -1) {
-                                pgGroup.Selected = true;
-                            }
-                        })
-                    });
-                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
-                    var selectedAOLs = vm.selectedAOLs.split(',');  //user altered text value
-                    angular.forEach(vm.aolTerms, function (aol) {
-                        aol.Selected = false;
-                        angular.forEach(selectedAOLs, function (aolInput) {
-                            if (aolInput.toString().length > 0 && aol.termName.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
-                                aol.Selected = true;
-                            }
-                        })
-                    });
-                }
-            }
-            //#endregion
-
             //#region showing and hiding practice group dropdown
             vm.showPracticegroupDrop = function ($event) {
                 $event.stopPropagation();
@@ -1043,10 +889,10 @@
                     if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
                         vm.lazyloaderpg = false;
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                            vm.practiceGroups = response.pgTerms;
+                            vm.practiceGroups = response.level1;
                             vm.aolTerms = [];
-                            angular.forEach(response.pgTerms, function (pgTerm) {
-                                angular.forEach(pgTerm.areaTerms, function (areaterm) {
+                            angular.forEach(response.level1, function (pgTerm) {
+                                angular.forEach(pgTerm.level2, function (areaterm) {
                                     vm.aolTerms.push(areaterm);
                                 });
                             })
@@ -1090,10 +936,10 @@
                     if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
                         vm.lazyloaderaol = false;
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                            vm.practiceGroups = response.pgTerms;
+                            vm.practiceGroups = response.level1;
                             vm.aolTerms = [];
-                            angular.forEach(response.pgTerms, function (pgTerm) {
-                                angular.forEach(pgTerm.areaTerms, function (areaterm) {
+                            angular.forEach(response.level1, function (pgTerm) {
+                                angular.forEach(pgTerm.level2, function (areaterm) {
                                     vm.aolTerms.push(areaterm);
                                 });
                             })
@@ -1130,6 +976,159 @@
             }
             //#endregion
 
+            //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
+            vm.customSelection = function (type) {
+
+                if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
+                    var selectdClients = vm.selectedClients.split(',');  //user altered text value
+                    angular.forEach(vm.clients, function (client) {
+                        client.Selected = false;
+                        angular.forEach(selectdClients, function (clientInput) {
+                            if (clientInput.toString().length > 0 && client.name.toString().toLowerCase().indexOf(clientInput.toString().toLowerCase()) !== -1) {
+                                client.Selected = true;
+                            }
+                        })
+                    });
+                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
+                    var selectdPGs = vm.selectedPGs.split(',');  //user altered text value
+                    angular.forEach(vm.practiceGroups, function (pgGroup) {
+                        pgGroup.Selected = false;
+                        angular.forEach(selectdPGs, function (pgInput) {
+                            if (pgInput.toString().length > 0 && pgGroup.termName.toString().toLowerCase().indexOf(pgInput.toString().toLowerCase()) !== -1) {
+                                pgGroup.Selected = true;
+                            }
+                        })
+                    });
+                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
+                    var selectedAOLs = vm.selectedAOLs.split(',');  //user altered text value
+                    angular.forEach(vm.aolTerms, function (aol) {
+                        aol.Selected = false;
+                        angular.forEach(selectedAOLs, function (aolInput) {
+                            if (aolInput.toString().length > 0 && aol.termName.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
+                                aol.Selected = true;
+                            }
+                        })
+                    });
+                }
+            }
+            //#endregion
+
+            //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
+            vm.checkAll = function (checkAll, type, $event) {
+                $event.stopPropagation();
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
+                    angular.forEach(vm.clients, function (client) {
+                        client.Selected = checkAll;
+                    });
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
+                    angular.forEach(vm.practiceGroups, function (pg) {
+                        pg.Selected = checkAll;
+                    });
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
+                    angular.forEach(vm.aolTerms, function (aol) {
+                        aol.Selected = checkAll;
+                    });
+                }
+            }
+
+            //#region This event is going to fire when the user clicks on "OK" button in the filter panel
+            vm.filterSearchOK = function (type) {
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
+                    vm.selectedClients = '';
+                    angular.forEach(vm.clients, function (client) {
+                        if (client.Selected) {
+                            vm.selectedClients = vm.selectedClients + client.name + ","
+                        }
+                    });
+                    vm.selectedClients = vm.selectedClients.slice(0, vm.selectedClients.length - 1);
+                    vm.selectedClientsForCancel = vm.selectedClients;
+                    vm.clientdrop = false;
+                    vm.clientdropvisible = false;
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
+                    vm.selectedPGs = '';
+                    vm.selectedAOLs = '';
+                    angular.forEach(vm.practiceGroups, function (pg) {
+                        if (pg.Selected) {
+                            vm.selectedPGs = vm.selectedPGs + pg.termName + ","
+                            //For each of the selected pg's select corresponding aol check boxes automatically and update the aol
+                            //textbox accordingly
+                            angular.forEach(pg.level2, function (areaterm) {
+                                areaterm.Selected = true;
+                                vm.selectedAOLs = vm.selectedAOLs + areaterm.termName + ","
+                            });
+                        }
+                    });
+                    vm.selectedPGs = vm.selectedPGs.slice(0, vm.selectedPGs.length - 1);
+                    vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
+                    if (vm.selectedPGs == "") {
+                        angular.forEach(vm.aolTerms, function (aol) {
+                            aol.Selected = false;
+                        });
+                    }
+                    vm.selectedPGsForCancel = vm.selectedPGs;
+                    vm.selectedAOLsForCancel = vm.selectedAOLs;
+                    vm.pgdrop = false;
+                    vm.pgdropvisible = false;
+                }
+
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
+                    vm.selectedAOLs = '';
+                    angular.forEach(vm.aolTerms, function (aol) {
+                        if (aol.Selected) {
+                            vm.selectedAOLs = vm.selectedAOLs + aol.termName + ","
+                        }
+                    });
+                    vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
+                    vm.selectedAOLsForCancel = vm.selectedAOLs;
+                    vm.aoldrop = false;
+                    vm.aoldropvisible = false;
+                }
+            }
+            //#endregion
+
+            //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
+            vm.filterSearchCancel = function (type) {
+                if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
+                    if (vm.selectedClientsForCancel !== undefined && vm.selectedClientsForCancel.toString().length > 0) {
+                        vm.selectedClients = vm.selectedClientsForCancel;
+                        angular.forEach(vm.clients, function (client) {
+                            if (vm.selectedClients.indexOf(client.name) > 0) {
+                                client.Selected = true;
+                            }
+                        });
+                    }
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
+                    if (vm.selectedPGsForCancel !== undefined && vm.selectedPGsForCancel.toString().length > 0) {
+                        vm.selectedPGs = vm.selectedPGsForCancel;
+                        angular.forEach(vm.practiceGroups, function (pg) {
+                            if (vm.selectedPGs.indexOf(pg.termName) > 0) {
+                                pg.Selected = true;
+                            }
+                        });
+                    }
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
+                    if (vm.selectedAOLsForCancel !== undefined && vm.selectedAOLsForCancel.toString().length > 0) {
+                        vm.selectedAOLs = vm.selectedAOLsForCancel;
+                        angular.forEach(vm.aolTerms, function (aol) {
+                            if (vm.selectedAOLs.indexOf(aol.termName) > 0) {
+                                aol.Selected = true;
+                            }
+                        });
+                    }
+                }
+                vm.clientdrop = false;
+                vm.clientdropvisible = false;
+                vm.pgdrop = false;
+                vm.pgdropvisible = false;
+                vm.aoldrop = false;
+                vm.aoldropvisible = false;
+            }
+            //#endregion
             //#region File upload functionality
             vm.Openuploadmodal = function (matterName, matterUrl, matterGUID) {
                 vm.getFolderHierarchy(matterName, matterUrl, matterGUID);
