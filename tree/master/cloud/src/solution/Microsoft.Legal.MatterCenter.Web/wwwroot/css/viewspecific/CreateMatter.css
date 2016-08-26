@@ -964,7 +964,7 @@
 
     .popUpModalContainer {
         max-width: 277px;
-        min-width: 100px;
+        min-width: 277px;
     }
 
     .alignCenter {
@@ -1293,3 +1293,21 @@
     top: 6px;}
 .labelRoles{    margin-left: 5px;
     width: 140px;}
+.errorModal{height:100%;}
+.modelErrorContent{
+    margin: auto;
+    padding: 20px;   
+    width: 80%;
+}
+@media (min-width: 1199px) and (max-width: 1300px) {
+    .hidelgCol {
+        display: none;
+    }
+}
+.customLevel3Margin{
+    margin-left:30px;
+}
+.customLevel4Margin{
+    margin-left:55px;
+}
+ 
