@@ -299,25 +299,36 @@
                 <div class="popUpModalContainer">
                     <img title="Close" data-dismiss="modal" class="popUpCloseIcon popUpFloatRight popUpModalClose" alt="{{cm.createContent.Tab1ButtonCloseTitle}}" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
                     <div class="row margin0 marginTop10 segoUIFontBold">
-                        <div class="col-xs-12 segoUIFont modelMarginLeft">Select a {{cm.createMatterTaxonomyColumnNames.ColumnName1}}</div>
+                        <div class="col-lg-2 customLevel3Margin " ng-class="{'customMargin':cm.taxonomyHierarchyLevels==3}" ng-show="cm.taxonomyHierarchyLevels==3"></div>
+                        <div class="col-lg-1 customLevel4Margin "  ng-show="cm.taxonomyHierarchyLevels==4"></div>
+                       
+                        <div class="col-xs-9 segoUIFont modelMarginLeft">Select a {{cm.createMatterTaxonomyColumnNames.ColumnName1}}</div>
 
 
                     </div>
                     <div class="row margin0 segoUIFont">
+                        <div class="col-lg-2 hidelgCol customLevel3Margin"  ng-show="cm.taxonomyHierarchyLevels==3"></div>
+                        <div class="col-lg-1 customLevel4Margin" ng-show="cm.taxonomyHierarchyLevels==4"></div>
+
                         <div class="col-xs-3 ">
                             <select class="dropdownLevelOne clear custPracticeGroup modelMarginLeft" ng-model='cm.selectedLevelOneItem' ng-change='cm.getSelectedLevelOne()' ng-options='levelOneItem.termName for levelOneItem in cm.levelOneList'>
                                 <option value="" label="- {{cm.createContent.Tab1DrpDownLevel1DefaultSelectOption}} -"></option>
                             </select>
 
                         </div>
-                        <div class="col-xs-2"></div>
-                        <div class="col-xs-2"></div>
+                        <div class="col-xs-2" ng-hide="(cm.taxonomyHierarchyLevels==3 ||cm.taxonomyHierarchyLevels==4)"></div>
+                        <div class="col-xs-2" ng-hide="(cm.taxonomyHierarchyLevels==3 ||cm.taxonomyHierarchyLevels==4)"></div>
                         <div class="col-xs-2"></div>
                         <div class="col-xs-1"></div>
                         <div class="col-xs-2"></div>
                     </div>
                     <div class="row margin0 marginTop10"></div>
                     <div class="row margin0">
+
+                        <div class="col-lg-2 customLevel3Margin "  ng-show="cm.taxonomyHierarchyLevels==3"></div>
+                      
+                        <div class="col-lg-1 customLevel4Margin " ng-show="cm.taxonomyHierarchyLevels==4"></div>
+
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 modalWidth segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=2">
                             <div class="row margin0 modelMarginLeft segoUIFontBold">
                                 {{cm.createMatterTaxonomyColumnNames.ColumnName2}}
@@ -464,6 +475,8 @@
 
                     <div class="row margin0 marginTop10"></div>
                     <div class="row margin0 marginTop10 marginBottom15">
+                        <div class="col-lg-2 customLevel3Margin" ng-show="cm.taxonomyHierarchyLevels==3 "></div>
+                        <div class="col-lg-1 customLevel4Margin" ng-show="cm.taxonomyHierarchyLevels==4"></div>
                         <div class="col-xs-10 col-lg-4 modalWidth segoUIFont modelMarginLeft" ng-show="cm.taxonomyHierarchyLevels>=2"><img id="" alt="info" src="../Images/information-blue.png"><span id="" class="segoUIFont">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span></div>
                         <div class="col-xs-2  col-lg-1 hidden-xs hidden-sm hidden-md segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4"></div>
                         <div class="col-xs-2  col-lg-1 hidden-xs hidden-sm hidden-md segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=5"></div>
@@ -474,7 +487,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>    
+  
+
 </div>
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-class="cm.popupContainerBackground">
