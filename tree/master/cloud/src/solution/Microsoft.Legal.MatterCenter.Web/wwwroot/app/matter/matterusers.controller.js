@@ -162,6 +162,7 @@
                 for (var i = 0; i < userEmails.length; i++) {
                     var assignedTeam = {};
                     assignedTeam.assignedUser = userNames[i][0] + "(" + userEmails[i][0] + ")";
+                    assignedTeam.userExsists = true; assignedTeam.userConfirmation = true;
                     // assignedTeam.assignedRole = roles[i];
                     angular.forEach(cm.assignRoles, function (role) {
                         if (role.name == roles[i]) {
@@ -806,7 +807,13 @@
             }
         }
 
-
+        function setTeamConfirmationValues() {
+            angular.forEach(cm.assignPermissionTeams, function (team) {
+                if (team.userConfirmation) {
+                    angular.element('#txtUser' + team.assigneTeamRowNumber).attr('confirm', "true");
+                }
+            });
+        }
 
         function validateCheckUserExisits() {
             var validUsers = false; var keepGoing = true;
