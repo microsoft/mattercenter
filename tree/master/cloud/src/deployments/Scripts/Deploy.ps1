@@ -410,11 +410,11 @@ if($IsValid -eq $true)
     #----------------------------------------------
     # Encrypt the appSettings section in web.config
     #----------------------------------------------
-    Show-Message -Message "Step 9: Encrypting the config files"
+    Show-Message -Message "Step 8: Encrypting the config files"
     . "$ScriptDirectory\EncryptDecrypt.ps1" -ToEncrypt: $true -ErrorLogPath: $ErrorLogFile
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Encryption failed..." -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 9
+        RevertAll $ScriptDirectory 8
         return
     }
     else {
@@ -424,7 +424,7 @@ if($IsValid -eq $true)
     #----------------------------------------------
     # Add Apps to SharePoint and Office
     #----------------------------------------------
-    Show-Message -Message "Step 11: Add and install apps to SharePoint and Office"
+    Show-Message -Message "Step 9: Add and install apps to SharePoint and Office"
 	. "$ScriptDirectory\AppInstall.ps1" -IsDeploy: $false
     . "$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $true -IsOfficeApp: $false
     . "$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $true -IsOfficeApp: $true    
@@ -432,7 +432,7 @@ if($IsValid -eq $true)
     
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Adding and installing apps to SharePoint and Office failed" -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 11
+        RevertAll $ScriptDirectory 9
         return
     }
     else {
@@ -443,12 +443,12 @@ if($IsValid -eq $true)
     #----------------------------------------------
     # Add Apps to Exchange
     #----------------------------------------------
-    Show-Message -Message "Step 12: Add apps to Exchange"
+    Show-Message -Message "Step 10: Add apps to Exchange"
     . "$ScriptDirectory\DeployOutlookApp.ps1" -IsDeploy: $true
     
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Adding apps to Exchange failed" -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 12
+        RevertAll $ScriptDirectory 10
         return
     }
     else {
@@ -458,13 +458,13 @@ if($IsValid -eq $true)
     #---------------------------------------------------------------------
     # Upload files required for Matter landing page to SharePoint library
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 13: Upload files to SharePoint Library"
+    Show-Message -Message "Step 11: Upload files to SharePoint Library"
     [Environment]::CurrentDirectory = Get-Location
     & "$HelperPath\Microsoft.Legal.MatterCenter.UploadFile.exe" "true" $Username $Password
 
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Uploading files to SharePoint Library failed" -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 13
+        RevertAll $ScriptDirectory 11
         return
     }
     else {
@@ -485,7 +485,7 @@ if($IsValid -eq $true)
 		}
 	}
 	
-    Show-Message -Message "Step 14: Creating Site Collection(s)"
+    Show-Message -Message "Step 12: Creating Site Collection(s)"
     . "$ScriptDirectory\CreateSiteCollection.ps1" -IsDeployedOnAzure: $IsDeployedOnAzure -Username: $Username -Password $Password
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Creating site collection failed" -Type ([MessageType]::Failure)
@@ -497,7 +497,7 @@ if($IsValid -eq $true)
     #---------------------------------------------------------------------
     # Provisioning Web Dashboard page(s) on SharePoint library
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 15: Provisioning Web dashboard"
+    Show-Message -Message "Step 13: Provisioning Web dashboard"
     & "$HelperPath\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.exe" "true" $Username $Password
 
     If ((Get-Content $ErrorLogFile) -ne $Null) {
@@ -510,13 +510,13 @@ if($IsValid -eq $true)
 	#---------------------------------------------------------------------
     # Update site pages view with fields
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 16: Update site collection view with fields"
+    Show-Message -Message "Step 14: Update site collection view with fields"
     & "$HelperPath\Microsoft.Legal.MatterCenter.UpdateView.exe" $Username $Password
 
     #---------------------------------------------------------------------
     # Creating source in event viewer
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 17: Creating source in event viewer"
+    Show-Message -Message "Step 15: Creating source in event viewer"
 	if(-not $IsDeployedOnAzure)
 	{
 		$logFileExists = Get-EventLog -list | Where-Object {$_.logdisplayname -eq $Log} 

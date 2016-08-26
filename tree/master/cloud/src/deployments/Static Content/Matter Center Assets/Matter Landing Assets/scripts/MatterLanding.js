@@ -1580,21 +1580,6 @@ function urlExists() {
     }
 }
 
-function matterDescriptionTitleClick() {
-            $(".matterDescriptionTitle").removeClass("changeSection");
-            $(".matterProfileTitle").addClass("changeSection");
-            $(".matterDescriptionBody").removeClass("hide");
-            $(".matterProfileBody").addClass("hide");
-            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterDescription);
-    }
-function matterProfileTitleClick() {
-            $(".matterDescriptionTitle").addClass("changeSection");
-            $(".matterProfileTitle").removeClass("changeSection");
-            $(".matterDescriptionBody").addClass("hide");
-            $(".matterProfileBody").removeClass("hide");
-            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterInfo);    }
-
-
 /* Log events in application insights */
 // Function to log application insight event
 function LogEvent(eventName) {
