@@ -109,7 +109,12 @@
         if (sSectionID) {
             sQueryString = sQuestionMarkChar + sSection + sEqualChar + sSectionID + sAmpersandChar;
         }
-        oWebDashboardSPGlobal.iFrame.src = "WEB_DASHBOARD_PAGE_URL" + sQueryString;
+        if(sSectionID==="1"){
+        	oWebDashboardSPGlobal.iFrame.src = "WEB_DASHBOARD_PAGE_URL/#/matterdashboard";
+        }
+        else{
+        	oWebDashboardSPGlobal.iFrame.src = "WEB_DASHBOARD_PAGE_URL/#/documentdashboard";
+        }       
     });
     // Dynamically update height of iFrame
     (function () {

@@ -70,6 +70,8 @@
     "Link2AllDocumentText": "Go to all documents",
     "LabelNoPreviewText": "There is no preview for this document",
     "ImgNoPreviewSuppoertText": "Preview not supported...",
-    "Link3ViewMoreText": "View More"
+    "Link3ViewMoreText": "View More",
+    "Label135MenuHead" : "OneDrive",
+    "Label36MenuHeaderOption7Text" : "Send to OneDrive"
   }
 };

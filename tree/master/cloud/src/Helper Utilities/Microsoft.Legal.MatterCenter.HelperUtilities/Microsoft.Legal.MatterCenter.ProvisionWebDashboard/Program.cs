@@ -249,7 +249,7 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
 
                 string pageUrlConstant = urlConstantName;
                 string sourceFileTemplatePath = string.Concat(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, Constants.Backslash, ConfigurationManager.AppSettings["staticContentFolder"], Constants.Backslash, ConfigurationManager.AppSettings["htmlFolder"], Constants.Backslash, sourceFileTemplate);
-                string pageUrl = string.Concat(configVal["UISiteURL"], pageUrlName);
+                string pageUrl = configVal["UISiteURL"];
                 // Read the content of helper file
                 pageContent = System.IO.File.ReadAllText(sourceFileTemplatePath);
                 // Set the Catalog site collection URL in the content of webdashboard helper page
