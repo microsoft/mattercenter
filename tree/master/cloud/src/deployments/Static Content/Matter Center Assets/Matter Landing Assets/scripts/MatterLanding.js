@@ -1,7 +1,9 @@
 /// <disable>JS1003,JS2005,JS2024,JS2027,JS2031,JS2032,JS2052,JS2053,JS2064,JS2073,JS2074,JS2076,JS2085,JS3054,JS3057,JS3085,JS3116,JS3056,JS3058,JS3092</disable>
 /* Matter Center constants */
+
+
 var oMatterLandingHtmlConstants = {
-    "matterInfoHtml": "<div class='documentLoadingIcon hide'><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div><div class=\"errorPopUpHolder hide\"><div class=\"errorPopupBackground\"></div><div class=\"errorPopUpContainer errorPopUpCenter\"><img title=\"Close\" class=\"errorPopUpCloseIcon popUpFloatRight\" alt=\"Close\" src=\"@@PopupCloseIcon\"><div class=\"errorPopUpMessage\"><span id=\"genericMessage\">Something went wrong</span><div class=\"clear\"></div><div id=\"expandCollapse\"><span class=\"inlineElement\" id=\"expandMessage\">+</span><span id=\"collapseMessage\" class=\"inlineElement hide\">-</span><span>Click here for details</span></div><div class=\"clear\"></div><span id=\"errorMessage\" class=\"hide ellipsis\"></span></div></div></div><div title='@@MatterName' class=\"matterName\">@@MatterName</div><div class=\"matterLink\"><a class=\"matterLinkPart\" title='My Matters' href=\"@@FindMatterUrl\" target=\"_self\"> My Matters </a> > <a class=\"matterLinkPart\" title='@@MatterName' href=\"@@MatterUrl\" target=\"_self\"> @@MatterName </a> </div><div class=\"matterAction\"><div class=\"matterView\"><div class=\"matterProfileTitle\">Matter Profile</div><div class=\"matterDescriptionTitle changeSection\">Matter Description</div></div>@@PinChunk</div><div class=\"clear\"></div><div class=\"matterDescriptionBody hide\"><div><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\" /></div></div><div class=\"matterProfileBody\"><div class=\"matterDetails\"><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\" /></div><div class=\"clear\"></div></div>",
+    "matterInfoHtml": "<div class='documentLoadingIcon hide'><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div><div class=\"errorPopUpHolder hide\"><div class=\"errorPopupBackground\"></div><div class=\"errorPopUpContainer errorPopUpCenter\"><img title=\"Close\" class=\"errorPopUpCloseIcon popUpFloatRight\" alt=\"Close\" src=\"@@PopupCloseIcon\"><div class=\"errorPopUpMessage\"><span id=\"genericMessage\">Something went wrong</span><div class=\"clear\"></div><div id=\"expandCollapse\"><span class=\"inlineElement\" id=\"expandMessage\">+</span><span id=\"collapseMessage\" class=\"inlineElement hide\">-</span><span>Click here for details</span></div><div class=\"clear\"></div><span id=\"errorMessage\" class=\"hide ellipsis\"></span></div></div></div><div title='@@MatterName' class=\"matterName\">@@MatterName</div><div class=\"matterLink\"><a class=\"matterLinkPart\" title='My Matters' href=\"@@FindMatterUrl\" target=\"_self\"> @@MyMatters </a> > <a class=\"matterLinkPart\" title='@@MatterName' href=\"@@MatterUrl\" target=\"_self\"> @@MatterName </a> </div><div class=\"matterAction\"><div class=\"matterView\"><div class=\"matterProfileTitle\">@@Label1Tab1HeaderText</div><div class=\"matterDescriptionTitle changeSection\">@@Label2Tab2HeaderText</div></div>@@PinChunk</div><div class=\"clear\"></div><div class=\"matterDescriptionBody hide\"><div><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\" /></div></div><div class=\"matterProfileBody\"><div class=\"matterDetails\"><img class=\"loadingIcon\" alt=\"Loading Image\" src=\"@@LoadingImage\" /></div><div class=\"clear\"></div></div>",
     "taskSectionHtml": "<div class=\"taskHeading\"> <div class=\"headingText\" title='Task'> Task </div> <div class=\"taskOption\"> <a href=\"@@TaskLink\" onclick=\"LogEvent(appInsightsMatterLandingText + appInsightsOperations.Task)\" title= \"View / Edit\" target =\"_self\">View / Edit </a></div> </div> <div class=\"taskBoard\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div>",
     "calendarSectionHtml": "<div class=\"calenderHeading\"> <div title='Calendar' class=\"headingText\"> Calendar Events </div><div class=\"calenderOption\"><a href=\"@@TaskLink\" title= \"View / Edit\" target =\"_self\" onclick=\"LogEvent(appInsightsMatterLandingText + appInsightsOperations.Calendar)\" >View / Edit </a></div></div><div class=\"eventBoard\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div>",
     "rssSectionHtml": "<div class=\"taskHeading\"><div title='Related News (RSS)' class=\"headingText\"> Related News (RSS) </div></div><div class=\"clear\"></div>",
@@ -180,40 +182,29 @@ oGlobalConstants.Go_To_OneNote = "GoToOneNote";
 oGlobalConstants.sAppName = "ProvisionDMSMatter";
 oGlobalConstants.sSendMailListName = "SendMail";
 oGlobalConstants.sEffectivePermissionUrl = "{0}/_api/Web/lists/getbytitle('{1}')/EffectiveBasePermissions";
-
+oGlobalConstants.matterCenterMatterList = "MatterCenterMatters";
 // Declare the element for pin
 var oElement = null;
-
+//window.location.pathname.split('/').pop().replace('.aspx', '')
 /* Function to get matter name in case if GUID is not present */
 function getMatterName() {
     return ("undefined" === typeof (documentLibraryGUID)) ? documentLibraryName : documentLibraryGUID;
+    //return documentLibraryGUID;
 }
 
 /* Document ready function */
 $(document).ready(function () {
+	
+
     "use strict";
     displayHeaderAndFooterContent();
     var clientUrl = _spPageContextInfo.webServerRelativeUrl + "/";
     LogEvent(appInsightsMatterLandingText + appInsightsOperations.PageLoad);
     /* Make a call to display content on the page */
+    //documentLibraryGUID = window.location.pathname.split('/').pop().replace('.aspx', '')
     displayContent();
     /* Register the click event for Matter Information section */
-    $(".matterDescriptionTitle,.matterProfileTitle").click(function () {
-        var className = $(this)[0].className;
-        if (-1 !== className.indexOf("matterDescriptionTitle")) {
-            $(".matterDescriptionTitle").removeClass("changeSection");
-            $(".matterProfileTitle").addClass("changeSection");
-            $(".matterDescriptionBody").removeClass("hide");
-            $(".matterProfileBody").addClass("hide");
-            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterDescription);
-        } else {
-            $(".matterDescriptionTitle").addClass("changeSection");
-            $(".matterProfileTitle").removeClass("changeSection");
-            $(".matterDescriptionBody").addClass("hide");
-            $(".matterProfileBody").removeClass("hide");
-            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterInfo);
-        }
-    });
+   
 
     $("#matterLink").click(function (event) {
         LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterLink);
@@ -311,8 +302,7 @@ $(document).ready(function () {
         $(".errorPopUpHolder").addClass("hide");
     });
 
-    // Cache the pin element
-    oElement = document.getElementById("PinMatter");
+    
 
     // Make a call to SharePoint functions
     ExecuteOrDelayUntilScriptLoaded(function () {
@@ -330,11 +320,13 @@ $(document).ready(function () {
         getCurrentUserTitle();
         retrievePinListItems();
     }, "sp.js");
+    
 });
 $(window).on("resize", function (event) {
     adjustFooter();
 
 });
+
 
 /* Close the popup if clicked outside the selected area */
 function closeAllPopup(event) {
@@ -396,6 +388,7 @@ function createModalDialog(isEdit) {
     var options = SP.UI.$create_DialogOptions();
     options.title = title;
     options.url = oGlobalModalDialog.url + "?" + querystring;
+
     options.width = oGlobalModalDialog.width;
     options.height = oGlobalModalDialog.height;
     if ("addEventListener" in window) { // All browsers except IE before version 9
@@ -429,47 +422,132 @@ function receiveMessage(event) {
 
 /* Attaches all the content on the page */
 function displayContent() {
-    "use strict";
+   "use strict";    
+   var url = "/sites/catalog/SiteAssets/Matter Center Assets/Common Assets/Scripts/uiconfigforspo.js";
+   $.getScript( url, function() {
+	    /* Remove the hierarchy div if it already exists */
+	    var hierarchyDiv = $("#documentLibraryTitle");
+	    if (hierarchyDiv) {
+	        $(hierarchyDiv).remove();
+	    }
+	
+	    var listUrl = _spPageContextInfo.webAbsoluteUrl + "/Lists";
+	    //alert(uiconfigs.MatterLanding.Label1Tab1HeaderText);
+	
+	   oMatterLandingCommonObjects.hierarchyLibraryName = uiconfigs.MatterLanding.Label19Section4Text;
+	    /* Set the matter information html */
+	    var pinChunk = oMatterLandingHtmlConstants.pinHtml.replace("@@PinIcon", oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.pinIcon);
+	    pinChunk = pinChunk.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+	    pinChunk = pinChunk.replace("@@UnpinIcon", oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.unPinIcon);
+	    var sMatterInformationText = oMatterLandingHtmlConstants.matterInfoHtml.replace("@@PinChunk", pinChunk);
+	    sMatterInformationText = sMatterInformationText.replace("@@FindMatterUrl", oFooterLinks.dashboard + oFooterLinks.matterDocumentsQueryString);
+	    sMatterInformationText = sMatterInformationText.replace("@@MatterUrl", _spPageContextInfo.siteServerRelativeUrl + "/" + getMatterName() + oGlobalConstants.sUrlExtension);
+	    sMatterInformationText = sMatterInformationText.replace(/@@MatterName/g, documentLibraryName);
+	    sMatterInformationText = sMatterInformationText.replace(/@@LoadingImage/g, oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+	    sMatterInformationText = sMatterInformationText.replace(/@@PopupCloseIcon/g, oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.popupCloseIcon);
+		
+		sMatterInformationText  = sMatterInformationText.replace("@@Label1Tab1HeaderText", uiconfigs.MatterLanding.Label1Tab1HeaderText); 
+		sMatterInformationText  = sMatterInformationText.replace("@@Label2Tab2HeaderText", uiconfigs.MatterLanding.Label2Tab2HeaderText);
+		sMatterInformationText  = sMatterInformationText.replace("@@MyMatters", uiconfigs.MatterLanding.Label18MenuText);
+        sMatterInformationText = sMatterInformationText.replace("title='My Matters'", "title='" + uiconfigs.MatterLanding.Label18MenuText + "'");
+		
 
-    /* Remove the hierarchy div if it already exists */
-    var hierarchyDiv = $("#documentLibraryTitle");
-    if (hierarchyDiv) {
-        $(hierarchyDiv).remove();
-    }
+			    	    	    	    	    	    
+	    $("#matterInfo").html(sMatterInformationText);
+	    $("#matterInfo").parent().append(oMatterLandingHtmlConstants.hierarchyHtml.replace(/@@MatterName/g, oMatterLandingCommonObjects.hierarchyLibraryName));
+	
+	    /* Set the task panel html text */
+	    var sTaskPanelText = oMatterLandingHtmlConstants.taskSectionHtml;
+	    sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+	    sTaskPanelText = sTaskPanelText.replace("@@TaskLink", listUrl + getMatterName() + libraryNameSuffix.taskSuffix);
+	    sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
+	    sTaskPanelText = sTaskPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
+	    sTaskPanelText = sTaskPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
 
-    var listUrl = _spPageContextInfo.webAbsoluteUrl + "/Lists/";
+	    
+	    $("#taskPane").html(sTaskPanelText);
+	    
+	    noItemsMessage.noTasks =  uiconfigs.MatterLanding.ErrMsg1NoTask;
+		noItemsMessage.errorMsgTask = uiconfigs.MatterLanding.ErrMsg2FetchTask;
+		noItemsMessage.errorMsgCalendar = uiconfigs.MatterLanding.ErrMsg3CreateEvent; 
+		noItemsMessage.noEvents = uiconfigs.MatterLanding.ErrMsg4ActiveEvents; 
+		noItemsMessage.noDescription = uiconfigs.MatterLanding.ErrMsg5NoMatterDescription;
+		noItemsMessage.errorRetrieveFails = uiconfigs.MatterLanding.ErrMsg6ForPinUnpinMatters; 
+		noItemsMessage.errorMatterInfo = uiconfigs.MatterLanding.ErrMsg7MatterInformation;
+		noItemsMessage.errorMatterDesc = uiconfigs.MatterLanding.ErrMsg8MatterDescription; 
+		noItemsMessage.errorPinUnpinData = uiconfigs.MatterLanding.ErrMsg9NoPinUnpinMatter;
+		
+		oPropertyNameMapping.MatterName =  uiconfigs.MatterLanding.Label1MenuText;
+		oPropertyNameMapping.ClientName = uiconfigs.MatterLanding.Label3Tab1Column1Text;
+		oPropertyNameMapping.AreaOfLaw = uiconfigs.MatterLanding.Label6Tab1Column4Text;
+		oPropertyNameMapping.ClientID = uiconfigs.MatterLanding.Label10Section1Text;
+		oPropertyNameMapping.MatterID =  uiconfigs.MatterLanding.Label9Section1Text;
+		oPropertyNameMapping.PracticeGroup= uiconfigs.MatterLanding.Label5Tab1Column3Text;
+		oPropertyNameMapping.ResponsibleAttorney = uiconfigs.MatterLanding.Label7Tab1Column5Text;
+		oPropertyNameMapping.Description = uiconfigs.MatterLanding.Label11Section1Text;
+		
+        oGlobalConstants.sMatterIdAndClientIdTitle  = uiconfigs.MatterLanding.Label4Tab1Column2Text;
 
-    /* Set the matter information html */
-    var pinChunk = oMatterLandingHtmlConstants.pinHtml.replace("@@PinIcon", oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.pinIcon);
-    pinChunk = pinChunk.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-    pinChunk = pinChunk.replace("@@UnpinIcon", oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.unPinIcon);
-    var sMatterInformationText = oMatterLandingHtmlConstants.matterInfoHtml.replace("@@PinChunk", pinChunk);
-    sMatterInformationText = sMatterInformationText.replace("@@FindMatterUrl", oFooterLinks.dashboard + oFooterLinks.matterDocumentsQueryString);
-    sMatterInformationText = sMatterInformationText.replace("@@MatterUrl", _spPageContextInfo.siteServerRelativeUrl + "/" + getMatterName() + oGlobalConstants.sUrlExtension);
-    sMatterInformationText = sMatterInformationText.replace(/@@MatterName/g, documentLibraryName);
-    sMatterInformationText = sMatterInformationText.replace(/@@LoadingImage/g, oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-    sMatterInformationText = sMatterInformationText.replace(/@@PopupCloseIcon/g, oCommonLinks.sCatalogSite + oMatterLandingCommonObjects.oMatterCenterAssetsLocation + oMatterLandingAssetsLocation.popupCloseIcon);
-    $("#matterInfo").html(sMatterInformationText);
-    $("#matterInfo").parent().append(oMatterLandingHtmlConstants.hierarchyHtml.replace(/@@MatterName/g, oMatterLandingCommonObjects.hierarchyLibraryName));
+        /* Set the calendar panel html text */
+	    var sCalendarPanelText = oMatterLandingHtmlConstants.calendarSectionHtml;
+	    sCalendarPanelText = sCalendarPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
+	    sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", listUrl + getMatterName() + libraryNameSuffix.calendarSuffix);
+	    sCalendarPanelText = sCalendarPanelText.replace("Calendar Events </div>", "" + uiconfigs.MatterLanding.Label15CalenderTitleText + " </div>");
+        sCalendarPanelText = sCalendarPanelText.replace("title= \"View / Edit\"" , "title=\"" + uiconfigs.MatterLanding.Label17EditTitleText+ "\"");
+        sCalendarPanelText = sCalendarPanelText.replace("View / Edit </a>", "" + uiconfigs.MatterLanding.Label17EditTitleText + "</a>");
 
-    /* Set the task panel html text */
-    var sTaskPanelText = oMatterLandingHtmlConstants.taskSectionHtml;
-    sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-    sTaskPanelText = sTaskPanelText.replace("@@TaskLink", listUrl + getMatterName() + libraryNameSuffix.taskSuffix);
-    $("#taskPane").html(sTaskPanelText);
 
-    /* Set the calendar panel html text */
-    var sCalendarPanelText = oMatterLandingHtmlConstants.calendarSectionHtml;
-    sCalendarPanelText = sCalendarPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
-    sCalendarPanelText = sCalendarPanelText.replace("@@TaskLink", listUrl + getMatterName() + libraryNameSuffix.calendarSuffix);
-    $("#calendarPane").html(sCalendarPanelText);
+	    $("#calendarPane").html(sCalendarPanelText);
+	
+	    /* Set the rss panel html text */
+	    var sRSSText = oMatterLandingHtmlConstants.rssSectionHtml;
+	    sRSSText = sRSSText.replace("Related News (RSS) </div>", "" + uiconfigs.MatterLanding.Label16RSSFeedTitleText+ "</a>");
+        sRSSText = sRSSText.replace("title='Related News (RSS)'", "title='" +  uiconfigs.MatterLanding.Label16RSSFeedTitleText + "'");
 
-    /* Set the rss panel html text */
-    var sRSSText = oMatterLandingHtmlConstants.rssSectionHtml;
-    $("#rssPane").html(sRSSText);
 
-    /* Add loading image to OneNote section */
-    $("#oneNotePane").html(oMatterLandingHtmlConstants.oneNoteLoadingHtml.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage));
+	    $("#rssPane").html(sRSSText);
+	
+	    /* Add loading image to OneNote section */
+	    $("#oneNotePane").html(oMatterLandingHtmlConstants.oneNoteLoadingHtml.replace("@@LoadingImage", 
+	    	oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage));
+	    // Cache the pin element
+    	oElement = $("#PinMatter");
+		$(".matterDescriptionTitle, .matterProfileTitle").click(function () {
+	        var className = $(this)[0].className;
+	        if (-1 !== className.indexOf("matterDescriptionTitle")) {
+	            $(".matterDescriptionTitle").removeClass("changeSection");
+	            $(".matterProfileTitle").addClass("changeSection");
+	            $(".matterDescriptionBody").removeClass("hide");
+	            $(".matterProfileBody").addClass("hide");
+	            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterDescription);
+	      	}
+			else {
+	            $(".matterDescriptionTitle").addClass("changeSection");
+	            $(".matterProfileTitle").removeClass("changeSection");
+	            $(".matterDescriptionBody").addClass("hide");
+	            $(".matterProfileBody").removeClass("hide");
+	            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterInfo);
+        	}
+    	});
+    	
+    	$("#matterLink").text(uiconfigs.MatterLanding.Menu1Option1Text);
+    	$("#matterLink").attr('title', uiconfigs.MatterLanding.Menu1Option1Text);
+    	
+    	$("#documentLink").text(uiconfigs.MatterLanding.Menu1Option2Text);
+    	$("#documentLink").attr('title', uiconfigs.MatterLanding.Menu1Option2Text);
+
+    	$("#settingsLink").text(uiconfigs.MatterLanding.Menu1Option3Text);
+    	$("#settingsLink").attr('title', uiconfigs.MatterLanding.Menu1Option3Text);
+    	
+    	$(".iconText .mainText")[0].innerHTML =  uiconfigs.MatterLanding.MenuImageUpperCaption;
+    	$(".iconText .subText")[0].innerHTML =  uiconfigs.MatterLanding.MenuImageLowerCaption;
+    	
+    	//$("#searchText").attr('placeholder', uiconfigs.MatterLanding.Menu1Option3Text);
+
+    	
+
+
+    });
 }
 
 // Replace query string key with value 
@@ -751,7 +829,7 @@ function getUserData() {
             arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorney.trim()), ";").split(";");
         }
         arrUserNames = $.merge(arrTeamMembers, arrResponsibleAttorney);
-        if (oPinProperties.BlockedUsers) {
+        if (oPinProperties.BlockedUsers && trimEndChar(htmlDecode(oPinProperties.BlockedUsers.trim()), ";").length > 0) {
             arrBlockUserName = trimEndChar(htmlDecode(oPinProperties.BlockedUsers.trim()), ";").split(";");
             arrBlockUserName = unique($.map(arrBlockUserName, function (item) { return item.trim(); }));
         }
@@ -861,7 +939,7 @@ function displayUserDetails(oUserArray, IsTeam) {
 // Function to check if user is exist of SharePoint Group
 function checkUserExistsInSharePointGroup() {
     "use strict";
-    var sUrl = oCommonLinks.sCatalogSite + oGlobalConstants.sEffectivePermissionUrl.replace("{0}", oGlobalConstants.sAppName).replace("{1}", oGlobalConstants.sSendMailListName);
+    var sUrl = oCommonLinks.sCatalogSite + oGlobalConstants.sEffectivePermissionUrl.replace("{0}", oGlobalConstants.matterCenterMatterList);
     $.ajax({
         url: sUrl,
         type: "GET",
@@ -1421,6 +1499,10 @@ function pinUnpinMatter(event) {
     "use strict";
     $(".pinIcon .loadingIcon").removeClass("hide");
     $("#PinMatter").addClass("hide");
+   // if( $(".pinImg").cl)
+      //  $(".pinImg").addClass("hide");
+  // $(".unPinImg").removeClass("hide");
+
     if (oElement) {
         if (oGlobalConstants.sOperationPin === $(oElement).attr("title")) {
             LogEvent(appInsightsMatterLandingText + appInsightsOperations.Pin);
@@ -1468,7 +1550,7 @@ function urlExists() {
     // Get the link from the data-href attribute
     var oOneNoteLink = $("#oneNotePane"), arrOneNoteURL;
     var sDocumentLibraryOriginalName = getMatterName();
-    var sOneNoteURL = _spPageContextInfo.siteServerRelativeUrl + oGlobalConstants.wopiFrameUrl + _spPageContextInfo.siteServerRelativeUrl + "/" + sDocumentLibraryOriginalName + libraryNameSuffix.oneNoteSuffix + "/" + sDocumentLibraryOriginalName + "/" + sDocumentLibraryOriginalName + oGlobalConstants.oneNoteExtension;
+    var sOneNoteURL = _spPageContextInfo.siteServerRelativeUrl + oGlobalConstants.wopiFrameUrl + _spPageContextInfo.siteServerRelativeUrl + "/" + sDocumentLibraryOriginalName + libraryNameSuffix.oneNoteSuffix + "/" + documentLibraryName + "/" + sDocumentLibraryOriginalName + oGlobalConstants.oneNoteExtension;
     if (sOneNoteURL && "" !== sOneNoteURL) {
         arrOneNoteURL = sOneNoteURL.split("sourcedoc=");
         if (arrOneNoteURL.length && arrOneNoteURL[1]) {
@@ -1497,6 +1579,21 @@ function urlExists() {
         oOneNoteLink.addClass("hide");
     }
 }
+
+function matterDescriptionTitleClick() {
+            $(".matterDescriptionTitle").removeClass("changeSection");
+            $(".matterProfileTitle").addClass("changeSection");
+            $(".matterDescriptionBody").removeClass("hide");
+            $(".matterProfileBody").addClass("hide");
+            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterDescription);
+    }
+function matterProfileTitleClick() {
+            $(".matterDescriptionTitle").addClass("changeSection");
+            $(".matterProfileTitle").removeClass("changeSection");
+            $(".matterDescriptionBody").addClass("hide");
+            $(".matterProfileBody").removeClass("hide");
+            LogEvent(appInsightsMatterLandingText + appInsightsOperations.MatterInfo);    }
+
 
 /* Log events in application insights */
 // Function to log application insight event

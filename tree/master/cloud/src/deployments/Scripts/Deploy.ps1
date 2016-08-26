@@ -8,17 +8,15 @@
 # Step 4: Update Office, Outlook and SharePoint App schema files
 # Step 5: Update search configuration file and upload to SharePoint
 # Step 6: Update resource and config files in build
-# Step 7: Activate SharePoint Server Publishing infrastructure feature on catalog site collection
-# Step 8: Update App files for SharePoint and OneDrive Ribbon Apps
-# Step 9: Encrypting the config files
-# Step 10: Publishing files to Azure
-# Step 11: Add and install apps to SharePoint and Office
-# Step 12: Add apps to Exchange
-# Step 13: Upload files to SharePoint Library
-# Step 14: Creating Site Collection(s)
-# Step 15: Provisioning Web dashboard
-# Step 16: Update site collection view with field(s)
-# Step 17: Creating source in event viewer
+# Step 7: Activate SharePoint Server Publishing infrastructure feature on catalog site collection 
+# Step 8: Encrypting the config files
+# Step 9: Add and install apps to SharePoint and Office
+# Step 10: Add apps to Exchange
+# Step 11: Upload files to SharePoint Library
+# Step 12: Creating Site Collection(s)
+# Step 13: Provisioning Web dashboard
+# Step 14: Update site collection view with field(s)
+# Step 15: Creating source in event viewer
 #
 # Any changes in these steps, kindly update this list. Also update the checkpoint in Revert script
 #----------------------------------------------
@@ -397,17 +395,17 @@ if($IsValid -eq $true)
 	#----------------------------------------------
 	# Update App files for SharePoint and OneDrive Ribbon Apps
 	#----------------------------------------------
-	Show-Message -Message "Step 8: Update App files for SharePoint and OneDrive Ribbon Apps"
-	. "$ScriptDirectory\UpdateAppPackage.ps1" -IsDeployedOnAzure $IsDeployedOnAzure -Credentials $SPCredential
-	    
-	If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Updating App files for SharePoint and OneDrive Ribbon Apps failed" -Type ([MessageType]::Failure)
-	    RevertAll $ScriptDirectory 3		#Revert from step 3 to 1
-	    return
-	}
-	else {
-		Show-Message -Message "Completed updating App files for SharePoint and OneDrive Ribbon Apps" -Type ([MessageType]::Success)
-	}
+ #	Show-Message -Message "Step 8: Update App files for SharePoint and OneDrive Ribbon Apps"
+ #	. "$ScriptDirectory\UpdateAppPackage.ps1" -IsDeployedOnAzure $IsDeployedOnAzure -Credentials $SPCredential
+ #	    
+ #	If ((Get-Content $ErrorLogFile) -ne $Null) {
+ #		Show-Message -Message "Updating App files for SharePoint and OneDrive Ribbon Apps failed" -Type ([MessageType]::Failure)
+ #	    RevertAll $ScriptDirectory 3		#Revert from step 3 to 1
+ #	    return
+ #	}
+ #	else {
+ #		Show-Message -Message "Completed updating App files for SharePoint and OneDrive Ribbon Apps" -Type ([MessageType]::Success)
+ #	}
 
     #----------------------------------------------
     # Encrypt the appSettings section in web.config
@@ -422,27 +420,6 @@ if($IsValid -eq $true)
     else {
 		Show-Message -Message "Config files encrypted successfully..." -Type ([MessageType]::Success)
     }
-
-    #----------------------------------------------
-    # Publish websites
-    #----------------------------------------------
-    Show-Message -Message "Step 10: Publishing files to Azure/IIS"
-   $IsOnAzure = (Read-FromExcel $ExcelFilePath "Config" ("IsDeployedOnAzure") $ErrorLogFile)
-    if($IsOnAzure[0])
-	{       
-      . "$ScriptDirectory\PublishOnAzure.ps1"   
-	  If ((Get-Content $ErrorLogFile) -ne $Null) {
-		  Show-Message -Message "Publishing files to Azure or creating Azure Redis cache failed" -Type ([MessageType]::Failure)
-		  RevertAll $ScriptDirectory 9
-		  return
-      }
-	}
-	else {	    
-       . "$ScriptDirectory\PublishInIIS.ps1"    
-	   If ((Get-Content $ErrorLogFile) -ne $Null) {
-		   Show-Message -Message "Publishing files to IIS failed" -Type ([MessageType]::Failure)           
-      }      
-	}
 
     #----------------------------------------------
     # Add Apps to SharePoint and Office
