@@ -171,7 +171,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                 // Deal with any extra special chars in thumbprint
                 string thumbprint = findValue.Replace("\u200e", string.Empty).Replace("\u200f", string.Empty).Replace(" ", string.Empty);
 
-                X509Store store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+                X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
                 try
                 {
                     store.Open(OpenFlags.ReadOnly);
