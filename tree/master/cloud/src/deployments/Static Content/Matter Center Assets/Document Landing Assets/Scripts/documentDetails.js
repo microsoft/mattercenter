@@ -1172,9 +1172,8 @@ var oDocumentLandingObject = (function () {
 	$("#viewMoreVersions").html(uiconfigs.DocumentDetails.Link3ViewMoreText);
 	
 	$("#spanDocumentName").html(uiconfigs.DocumentDetails.Label1HeaderText+ ":");
-	$("#Section1Header1").html(uiconfigs.DocumentDetails.Label2Section2HeaderText);
  
-	$("#Section1Header1").html(uiconfigs.DocumentDetails.Label2Section2HeaderText);
+	$("#filePropertiesTitle").html(uiconfigs.DocumentDetails.Label2Section2HeaderText);
 	$("#Section1Column1").html(uiconfigs.DocumentDetails.Label1HeaderText + ":");
 	$("#Section1Column1").attr("title",uiconfigs.DocumentDetails.Label1HeaderText);
 	$("#Section1Column2").html(uiconfigs.DocumentDetails.Label4Section2Column2Text+ ":");
