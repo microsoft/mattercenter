@@ -1601,6 +1601,8 @@
                 } else {
                     cm.notificationPopUpBlock = false;
                     cm.textInputUser.assignedUser = "";
+                    cm.textInputUser.userExsists = false;
+                    cm.textInputUser.userConfirmation = false;
                     cm.notificationBorder = "";
                 }
             }
