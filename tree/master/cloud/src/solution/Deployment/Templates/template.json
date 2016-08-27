@@ -1,0 +1,220 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Tenant_id": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "Redis_cache_name": {
+      "defaultValue": "MatterCenterCache",
+      "type": "String"
+    },
+    "autoscalesettings_name": {
+      "defaultValue": "MatterCenterWebPlan",
+      "type": "String"
+    },
+    "components_AppInsights_name": {
+      "defaultValue": "MatterCenterInsights",
+      "type": "String"
+    },
+    "vaults_KeyVault_name": {
+      "defaultValue": "MatterCenterKeyVault",
+      "type": "String"
+    },
+    "storageAccount_name": {
+      "defaultValue": "mattercenterstorage",
+      "type": "String"
+    },
+    "serverfarms_WebPlan_name": {
+      "defaultValue": "MatterCenterWebPlan",
+      "type": "String"
+    },
+    "webSite_name": {
+      "defaultValue": "MatterCenterWeb",
+      "type": "String"
+    },
+    "Web_ADApp_Name": {
+      "defaultValue": "MatterCenterWebApp",
+      "type": "String"
+    },
+    "KeyVault_ADApp_Name": {
+      "defaultValue": "MatterCenterKVApp",
+      "type": "String"
+    },
+    "KeyVault_certificate_expiryDate": {
+      "defaultValue": "2018-04-11",
+      "type": "String"
+    }
+  },
+    "variables": {},
+  "resources": [
+   
+    {
+      "type": "microsoft.insights/autoscalesettings",
+      "name": "[parameters('autoscalesettings_name')]",
+      "apiVersion": "2014-04-01",
+      "location": "westus",
+      "properties": {
+        "profiles": [
+          {
+            "name": "Default",
+            "capacity": {
+              "minimum": "1",
+              "maximum": "2",
+              "default": "1"
+            },
+            "rules": [
+              {
+                "metricTrigger": {
+                  "metricName": "CpuPercentage",
+                  "metricNamespace": "",
+                  "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]",
+                  "timeGrain": "PT1M",
+                  "statistic": "Average",
+                  "timeWindow": "PT10M",
+                  "timeAggregation": "Average",
+                  "operator": "GreaterThan",
+                  "threshold": 80
+                },
+                "scaleAction": {
+                  "direction": "Increase",
+                  "type": "ChangeCount",
+                  "value": "1",
+                  "cooldown": "PT10M"
+                }
+              },
+              {
+                "metricTrigger": {
+                  "metricName": "CpuPercentage",
+                  "metricNamespace": "",
+                  "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]",
+                  "timeGrain": "PT1M",
+                  "statistic": "Average",
+                  "timeWindow": "PT1H",
+                  "timeAggregation": "Average",
+                  "operator": "LessThan",
+                  "threshold": 60
+                },
+                "scaleAction": {
+                  "direction": "Decrease",
+                  "type": "ChangeCount",
+                  "value": "1",
+                  "cooldown": "PT1H"
+                }
+              }
+            ]
+          }
+        ],
+        "enabled": false,
+        "name": "[parameters('autoscalesettings_name')]",
+        "targetResourceUri": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]"
+      },
+      "resources": [],
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "kind": "web",
+      "name": "[parameters('components_AppInsights_name')]",
+      "apiVersion": "2014-04-01",
+      "location": "Central US",
+      "properties": {
+        "ApplicationId": "[parameters('components_AppInsights_name')]"
+      },
+      "resources": [],
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "name": "[parameters('vaults_KeyVault_name')]",
+      "apiVersion": "2015-06-01",
+      "location": "West US",
+      "tags": {},
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "Standard"
+        },
+        "tenantId": "[parameters('Tenant_id')]",
+        "accessPolicies": [
+
+        ],
+        "enabledForDeployment": false
+      },
+      "resources": [],
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "sku": {
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
+      },
+      "kind": "Storage",
+      "name": "[parameters('storageAccount_name')]",
+      "apiVersion": "2016-01-01",
+      "location": "westus",
+      "tags": {},
+      "properties": {},
+      "resources": [],
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "sku": {
+        "name": "F1",
+        "tier": "Free",
+        "size": "F1",
+        "family": "F",
+        "capacity": 0
+      },
+      "name": "[parameters('serverfarms_WebPlan_name')]",
+      "apiVersion": "2015-08-01",
+      "location": "West US",
+      "properties": {
+        "name": "[parameters('serverfarms_WebPlan_name')]",
+        "numberOfWorkers": 0
+      },
+      "resources": [],
+      "dependsOn": []
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "name": "[parameters('webSite_name')]",
+      "apiVersion": "2015-08-01",
+      "location": "West US",
+      "properties": {
+        "name": "[parameters('webSite_name')]",
+        "hostNames": [
+          "[concat(parameters('webSite_name'),'.azurewebsites.net')]"
+        ],
+        "enabledHostNames": [
+          "[concat(parameters('webSite_name'),'.azurewebsites.net')]",
+          "[concat(parameters('webSite_name'),'.scm.azurewebsites.net')]"
+        ],
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('webSite_name'),'.azurewebsites.net')]",
+            "sslState": 0,
+            "thumbprint": null,
+            "ipBasedSslState": 0
+          },
+          {
+            "name": "[concat(parameters('webSite_name'),'.scm.azurewebsites.net')]",
+            "sslState": 0,
+            "thumbprint": null,
+            "ipBasedSslState": 0
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]"
+      },
+      "resources": [],
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]"
+      ]
+    }
+  ]
+}

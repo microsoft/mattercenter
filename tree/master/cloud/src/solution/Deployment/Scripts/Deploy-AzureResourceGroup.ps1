@@ -9,8 +9,8 @@ Param(
     [string] $StorageAccountName,
     [string] $StorageAccountResourceGroupName, 
     [string] $StorageContainerName = $ResourceGroupName.ToLowerInvariant() + '-stageartifacts',
-    [string] $TemplateFile = '..\Templates\WebSite.json',
-    [string] $TemplateParametersFile = '..\Templates\WebSite.parameters.json',
+    [string] $TemplateFile = '..\Templates\template.json',
+    [string] $TemplateParametersFile = '..\Templates\template.parameters.json',
     [string] $ArtifactStagingDirectory = '..\bin\Debug\staging',
     [string] $AzCopyPath = '..\Tools\AzCopy.exe',
     [string] $DSCSourceFolder = '..\DSC'
@@ -101,3 +101,10 @@ New-AzureRmResourceGroupDeployment -Name ((Get-ChildItem $TemplateFile).BaseName
                                    -TemplateParameterFile $TemplateParametersFile `
                                    @OptionalParameters `
                                    -Force -Verbose
+
+$custScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'MatterCenter-Deploy.ps1')
+Invoke-Expression $custScriptFile 
+
+Invoke-Expression "$PSScriptRoot/Create-AzureStorageTable.ps1"
+
+Create-AzureTableStorage -ResourceGroupName $ResourceGroupName  -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey -TableName "MatterCenterConfiguration"

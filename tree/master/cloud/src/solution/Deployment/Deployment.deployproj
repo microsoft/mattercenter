@@ -32,13 +32,12 @@
       <Visible>False</Visible>
     </None>
     <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
-    <Content Include="Templates\WebSite.json" />
-    <Content Include="Templates\WebSite.parameters.json" />
     <None Include="Scripts\Create-AzureStorageTable.ps1" />
+    <None Include="Scripts\KeyVaultSecret.ps1" />
     <None Include="Scripts\ManageTableStorageWithCsvFile\ManageTableStorageWithCsvFile.psd1" />
     <None Include="Scripts\ManageTableStorageWithCsvFile\ManageTableStorageWithCsvFile.psm1" />
-    <None Include="Templates\storage.json" />
-    <None Include="Templates\storage.parameters.json" />
+    <None Include="Templates\template.json" />
+    <None Include="Templates\template.parameters.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Tools\AzCopy.exe" />
