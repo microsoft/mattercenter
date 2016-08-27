@@ -59,7 +59,7 @@ This project was originated by the Microsoft Matter Center Engineering team. We 
 We look forward to maturing the project with your help.
 
 ### Priorities
-We have been working on this code for some time and know its many limitations. We created an initial six (6) months list of [priorities](PRIORITIES.md) that include architectural changes we’d love your help with. Together, we are excited to see these priorities realized and to continue adding to this list. 
+We have been working on this code for some time and know its many limitations. We created an initial list of [priorities](PRIORITIES.md) that include architectural changes we’d love your help with. Together, we are excited to see these priorities realized and to continue adding to this list. 
 
 On December 17, 2015, we open sourced the project. We are thrilled to talk with as many contributors as possible to provide information and context:
 
