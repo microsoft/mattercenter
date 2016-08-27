@@ -39,6 +39,7 @@ Please note the following software must be installed before you can open and dep
 *	[Azure PowerShell](http://go.microsoft.com/?linkid=9811175)
 *	[DotNet Core](https://www.microsoft.com/net/core#windows) 
 *	 [Visual Studio 2015 (Community or Pro and above)](https://www.visualstudio.com/en-us/products/vs-2015-product-editions.aspx?wt.mc_id=github_microsoft_mattercenter)
+*	[Azure SDK](https://go.microsoft.com/fwlink/?LinkId=518003&clcid=0x409)
 *	[Office Developer Tools for VS 2015](http://www.microsoft.com/web/handlers/WebPI.ashx?command=GetInstallerRedirect&appid=OfficeToolsForVS2015) 
 
 Please find links to our additional resources:
