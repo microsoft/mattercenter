@@ -9,22 +9,28 @@ Microsoft’s Corporate, External, and Legal Affairs (CELA) group, in partnershi
 # Roadmap
 Where is Matter Center going in the future? 
 
-### User Experience 
-* Create and finalize design to enhance login experience [adopt ADAL]
-* Create configuration tool for taxonomy 
-* Enable UI branding
-* Add landing page to Matter Center app
-* Allow for editing existing Matters
+### Administration
+* Automate new client creation (new site collection)
+* Matter templates (e.g. area of law, matter type)
+* Develop matter lifecycle workflow, matter status and health indicators
+* Modify project name & description; delete matter
+* Further automate external sharing workflow
 
-### Object Lifecycle
-* Redesign the service to use REST APIs
-* Implement a generic object model
-* Adopt MVVC design pattern
-* Add Matter Status 
 
-### Integration
-* Deliver CRUD API (RESTful) for an Object (Matter) 
-* Implement REST response architecture system 
+### Extensibility & Interoperability
+* API event handlers
+* Improve OneDrive for Business integration 
+* Integration with O365 Groups
+
+
+### User Experience
+* Create matter from the web
+* Create a matter contact list
+* Work on behalf of someone. 
+* Real-time communication (email notifications); includes email links from top pages (e.g. Project Landing Page)
+* Allow Drag and Drop of Multiple Emails and/or Documents into Matter Center
+* Provide client search when creating new matter
+
 
 # Installation and build
 Please note the following software must be installed before you can open and deploy the Matter Center solution:
