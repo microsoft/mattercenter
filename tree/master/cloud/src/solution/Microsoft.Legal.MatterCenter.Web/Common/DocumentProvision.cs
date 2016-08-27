@@ -379,7 +379,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySiteName.ToString().ToLower())
                         {
                             ServiceUtility.AddProperty(documentData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("sitename").Key,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentClientUrl").Key,
                                 searchResult[key].ToString());
                         }
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentVersion.ToString().ToLower())
