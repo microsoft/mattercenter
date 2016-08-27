@@ -1,0 +1,125 @@
+﻿<!--<header id="app-header">
+    <heading employee-names="vm.userName" nav-url="vm.navUrl" nav-url-text="vm.navUrlText"></heading>
+</header>
+-->
+<div>
+    <div class="row {{$root.profileClass}} topheader">
+        <div class="col-xs-10 AppHeader">
+            <div class="AppSwitcherContainer" ng-click="vm.menuClick()">
+                <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuCaptionTitle}}" />
+                <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
+                <div class="MenuCaption"><span>{{vm.header.MenuImage1Caption}}</span></div>
+            </div>
+            <div class="AppMenuFlyout ms-shadow" ng-class="{'height155':vm.canLoginUserCreateMatter,'height200':!vm.canLoginUserCreateMatter}">
+                <div class="AppMenuFlyoutPriLinks">
+                    <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span></a>
+                    <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
+                    <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span></a>
+                    <a ui-sref='mc.createMatter()' class="AppFlyoutLinks MatterDocumentsLink" ng-if="vm.canLoginUserCreateMatter" title="Create New Matter"><span class="AppFlyoutLinksText">Create New Matter</span></a>
+
+                </div>
+            </div>
+            <div id="HeaderPlaceHolder" class="padlf40">
+                <span title="{{vm.header.LogoImageTitle}}" class="AppLogoContainer">
+                    <img class="AppLogo" alt="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
+                </span>
+            </div>
+        </div>
+        <div class="col-xs-2 pad0">
+            <div id="ContextualHelp">
+                <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="{{vm.header.ContextualHelpAltText}}" title="{{vm.header.ContextualHelpImageTitle}}" ng-click="$root.dispContextualHelp($event)" />
+                <div data-class="ms-u-slideLeftIn40" class="ContextualHelp ms-u-slideLeftIn40" ng-show="$root.contextualhelp" ng-click="$event.stopPropagation();">
+                    <div class="ContextualHelpFlyout">
+                        <img class="closeContextualHelpFlyout" title="{{vm.header.CloseTitle}}" alt="{{vm.header.ContextualHelpFlyoutAltText}}" ng-click="$root.dispContextualHelp($event)" src="Images/contextual_help_close_icon.png" />
+                        <div class="ContextualHelpHeader" title="{{vm.header.ContextualHelpHeader}}">{{vm.header.ContextualHelpHeader}}</div>
+                        <div class="contextualHelpSections">
+                            <div class="ContextualHelpSubSection" id="popularSearchesSection" ng-repeat="helpData in vm.helpData">
+                                <div class="ContextualHelpSectionHeader"
+                                     title="{{helpData.contextSection.sectionTitle}}" id="{{helpData.contextSection.sectionTitle}}">{{helpData.contextSection.sectionTitle}}</div>
+                                <div class="ContextualHelpSectionData displaySingleColumn" title="{{helpData.linkTitle}}">
+                                    <a href="{{helpData.linkURL}}"
+                                       target="_blank">{{helpData.linkTitle}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ContextualHelpSupport">
+                            <span class="ContextualHelpBottomText" title="{{vm.header.ContextualHelpFooterLink1Title}}">{{vm.header.ContextualHelpFooterLabel}}<span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. {{vm.navigation.MatterCenterSupportLink}}]">{{vm.navigation.ContextualHelpFooterLink1Label}}</a></span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="ProfileSwitcher" ng-click="$root.dispPersonal($event)">
+                <img class="AppHeaderProfilePict" src="{{vm.smallPictureUrl}}" id="AppHeaderPersona" alt="{{vm.header.ProfilePictureLabelText}}" />
+            </div>
+            <div class="PersonalInfoFlyout" ng-show="$root.displayinfo" ng-click="$event.stopPropagation();">
+                <div class="PersonaContainer">
+                    <div class="PersonaPictureContainer">
+                        <img id="PersonaPicture" src="{{vm.largePictureUrl}}" alt="{{vm.header.ProfilePictureLabelText}}" title="{{vm.header.ProfilePictureLabelText}}" />
+                    </div>
+                    <div class="PersonaPictureDetails">
+                        <div class="PersonaTitle" id="PersonaTitle">{{vm.fullName}}</div>
+                        <div class="PersonaEmail" id="PersonaEmail">{{vm.loginUserEmail}}</div>
+                    </div>
+                </div>
+                <div class="SignOutLink">
+
+                    <button class="btn btn-link" ng-show="vm.isAuthenticated" ng-click="vm.signOut()">{{vm.header.LabelSingOutText}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="maincontentDiv commonContent marginTop20" id="matterCenterHeader">
+        <div class="row pad0 mainHeader">
+            <div class="col-xs-12 col-sm-5 col-lg-6 pad0">
+                <div class="row pad0 margin0">
+                    <div class="col-xs-12 col-sm-10 col-lg-11 pad0">
+                        <div class="floatLeft" id="hamburgerConatiner" ng-click="vm.showCloseIcon()" ng-show="vm.showHamburger">
+                            <img class="headerActions pull-left" title="{{vm.header.ImageOpenHamburgerTitle}}" data-hamburger="0" id="openHamburger" alt="" src="Images/MC_homepage_Hamburger.png" />
+                        </div>
+                        <div class="closeIcon" ng-if="vm.showClose" ng-click="vm.showHamburgerIcon()">
+                            <img class="headerActions pull-left" title="{{vm.header.ImageCloseHamburgerTitle}}" data-hamburger="1" id="closeHamburger" alt="" src="Images/MC_Navigation_Close_icon_60px_X_60px.png" />
+                        </div>
+                        <img class="floatLeft" id="matterCenterHome" title="{{vm.header.DashboardMenuImageUpperCaption}}" alt="" src="Images/MC_homepage_Logo.png" />
+                        <div class="floatLeft" style="color:#fff">
+                            <div class="upperSubText">{{vm.header.DashboardMenuImageUpperCaption}}</div>
+                            <div class="lowerSubText">{{vm.header.DashboardMenuImageLowerCaption}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-lg-5 mainSearch pad0">
+                <input id="searchText" type="text" placeholder="{{vm.header.DashboardHeaderSearchPlaceholderText}}" my-enter="vm.mainHeaderClick()" ng-model="vm.mainheadersearch" />
+                <div id="searchLink">
+                    <img class="searchIcon" title="{{vm.header.DashboardSearchIconTitle}}" alt="{{vm.header.DashboardSearchIconTitle}}" src="Images/search-15x15-666.png" ng-click="vm.mainHeaderClick()" />
+                </div>
+            </div>
+            <div class="col-xs-12" id="Mainflyout" ng-if="vm.showHeaderFlyout">
+                <div class="cur-pointer headerLinks" id="searchMatterTab"><span title="{{vm.header.Menu1Option2Text}}" ng-click="vm.navigateUrl('section=1')">{{vm.header.Menu1Option2Text}}</span></div>
+                <div class="cur-pointer headerLinks" id="searchDocumentTab"><span title="{{vm.header.Menu1Option3Text}}" ng-click="vm.navigateUrl('section=2')">{{vm.header.Menu1Option3Text}}</span></div>
+                <div class="headerLinks"><a id="settingsLink"><span title="{{vm.header.HamburgerMenuOption3Text}}" ng-click="vm.navigateUrl(vm.header.HamburgerMenuOption3Text)">{{vm.header.HamburgerMenuOption3Text}}</span></a></div>
+            </div>
+        </div>
+    </div>
+    <div class="matterCenterHeaderBackground" ng-if="vm.showHeaderBackground" ng-click="vm.showHamburgerIcon()"></div>
+    <main ui-view="contentView">
+
+    </main>
+
+    <div class="maincontentDiv commonContent" id="footer">
+        <div class="row">
+            <a aria-haspopup="true" href="http://www.microsoft.com/en-in/default.aspx" target="_parent">
+                <img title="{{vm.header.FooterMenuOption4Text}}" class="mslogo imgNoBorder pull-right" alt="{{vm.header.FooterMenuOption4Text}}" src="Images/microsoft-grey-logo-sm.png" />
+            </a>
+        </div>
+        <div class="row text-right">
+            <ul class="footerLinks" role="menubar">
+                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Feedback and Support, e.g. mailto:support@supportsite.com]" target="_parent">{{vm.header.FooterMenuOption1Text}}</a></li>
+                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Privacy terms, e.g. privacy.supportsite.com]" target="_parent">{{vm.header.FooterMenuOption2Text}}</a></li>
+                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Terms of use, e.g. termofuse.supportsite.com]" target="_parent">{{vm.header.FooterMenuOption3Text}}</a></li>
+                <li class="rightFooterElement copyRightElement" role="menuitem">© {{vm.currentyear}}  {{vm.header.FooterMenuOption4Text}}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+

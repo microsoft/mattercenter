@@ -1,0 +1,591 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Legal.MatterCenter.Web</name>
+    </assembly>
+    <members>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.EditFunctions.ValidateFullControlPermission(Microsoft.Legal.MatterCenter.Models.Matter)">
+            <summary>
+            Validates if there is at-least one user with full control in assign list.
+            </summary>
+            <param name="matter">Matter object</param>
+            <returns>Status of Full Control permission</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.CopyRoleAssignment(System.String,System.String)">
+            <summary>
+            Checks whether to retain previous users while breaking permission
+            </summary>
+            <param name="conflictIdentified">Conflict identified information</param>
+            <param name="matterSecured">Security information</param>
+            <returns>Flag to indicate whether to retain the previous users</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.ExtractMatterDetails(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Extracts matter details from matter library property bag.
+            </summary>
+            <param name="stampedPropertyValues">Dictionary object containing matter property bag key/value pairs</param>
+            <returns>Matter details from matter library property bag</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.GetMatterAssignedUsers(System.String)">
+            <summary>
+            Retrieves the users assigned to matter.
+            </summary>
+            <param name="matterCenterUsers">Users tagged with matter in property bag</param>
+            <returns>Users assigned to matter</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.GetStampPropertyValue(System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <summary>
+            Checks if the property exists in property bag. Returns the value for the property from property bag.
+            </summary>
+            <param name="stampedPropertyValues">Dictionary object containing matter property bag key/value pairs</param>
+            <param name="key">Key to check in dictionary</param>
+            <returns>Property bag value for </returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.GetUserList(System.String)">
+            <summary>
+            Gets the user list from the data sent in Matter Configurations
+            </summary>
+            <param name="matterUsers">Matter Users list</param>
+            <returns>Users list</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.ShareMatter(Microsoft.Legal.MatterCenter.Models.MatterMetdataVM,System.String)" -->
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.ShareMatterUtility(Microsoft.Legal.MatterCenter.Models.Client,Microsoft.Legal.MatterCenter.Models.Matter,Microsoft.Legal.MatterCenter.Models.MatterDetails,System.String,System.String,System.String,Microsoft.Legal.MatterCenter.Models.MatterConfigurations)">
+            <summary>
+            Function to share the matter.
+            </summary>
+            <param name="requestObject">Request Object containing SharePoint App Token</param>
+            <param name="client">Client object containing Client data</param>
+            <param name="matter">Matter object containing Matter data</param>
+            <param name="subAreaOfLawList">String contains all sub area of law</param>
+            <param name="mailListURL">URL contains list of mail recipients</param>
+            <returns>Result of operation: Matter Shared successfully or not</returns>        
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.GenerateMailList(Microsoft.Legal.MatterCenter.Models.Matter,Microsoft.Legal.MatterCenter.Models.Client,System.Collections.Generic.List{Microsoft.SharePoint.Client.FieldUserValue}@)">
+            <summary>
+            Generates list of users for sending email.
+            </summary>
+            <param name="matter">Matter details</param>
+            <param name="clientContext">SharePoint client context</param>
+            <param name="userList">List of users associated with the matter</param>
+            <returns>List of users to whom mail is to be sent</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.TeamMembersPermissionInformation(Microsoft.Legal.MatterCenter.Models.MatterDetails,System.String)">
+            <summary>
+            Provides the team members and their respective permission details.
+            </summary>
+            <param name="matterDetails">Matter Details object</param>
+            <param name="mailBodyTeamInformation">Team members permission information</param>
+            <returns>Team members permission information</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.SetStampProperty(Microsoft.Legal.MatterCenter.Models.Client,Microsoft.Legal.MatterCenter.Models.Matter,Microsoft.Legal.MatterCenter.Models.MatterDetails)">
+            <summary>
+            Function to create dictionary object for stamp property 
+            </summary>
+            <param name="client">Client object containing Client data</param>
+            <param name="matter">Matter object containing Matter data</param>
+            <param name="matterDetails">Matter details object which has data of properties to be stamped</param>
+            <returns>returns dictionary object</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.RetrieveMatterUsers(System.Collections.Generic.IEnumerable{Microsoft.SharePoint.Client.RoleAssignment})">
+            <summary>
+            Gets the display name of users having permission on library.
+            </summary>
+            <param name="userPermissionOnLibrary">Users having permission on library</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.MatterProvision.CheckFullPermissionInAssignList(System.Collections.Generic.IList{System.Collections.Generic.IList{System.String}},System.Collections.Generic.IList{System.String},System.String)">
+            <summary>
+            Check Full Permission for logged in User.
+            </summary>
+            <param name="AssignUserNames">List of Assigned UserNames</param>
+            <param name="Permissions">List of Permission</param>
+            <param name="loggedInUserName">Name of logged in User</param>
+            <returns>Status of Full Permission</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.ValidationFunctions.CheckListExists(Microsoft.Legal.MatterCenter.Models.Client,System.String,Microsoft.Legal.MatterCenter.Models.MatterConfigurations)">
+            <summary>
+            Checks if the lists exist
+            </summary>
+            <param name="client"></param>
+            <param name="matterName"></param>
+            <param name="matterConfigurations"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.ValidationFunctions.RoleCheck(Microsoft.Legal.MatterCenter.Models.Matter)">
+            <summary>
+            Validates the roles for the matter and returns the validation status.
+            </summary>
+            <param name="requestObject">Request Object containing SharePoint App Token</param>
+            <param name="matter">Matter object containing Matter data</param>
+            <param name="client">Client Object</param>
+            <returns>A string value indicating whether validations passed or fail</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.ValidationFunctions.ValidateClientInformation(Microsoft.Legal.MatterCenter.Models.Client,System.Int32)">
+            <summary>
+            Function to validate client information
+            </summary>
+            <param name="client">Client object</param>
+            <param name="methodNumber">Number indicating which method needs to be validated</param>
+            <returns>String that contains error message</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.ValidationFunctions.MatterMetadataValidation(Microsoft.Legal.MatterCenter.Models.Matter,Microsoft.Legal.MatterCenter.Models.Client,System.Int32,Microsoft.Legal.MatterCenter.Models.MatterConfigurations)">
+            <summary>
+            Validates meta-data of a matter and returns the validation status (success/failure).
+            </summary>
+            <param name="matter">Matter object containing Matter data</param>
+            <param name="clientContext">Client context object for SharePoint</param>  
+            <param name="methodNumber">Number indicating which method needs to be validated</param>     
+            <returns>A string value indicating whether validations passed or fail</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.ValidationFunctions.MatterNameValidation(Microsoft.Legal.MatterCenter.Models.Matter)">
+            <summary>
+            Validates the matter name.
+            </summary>
+            <param name="matter">Matter details</param>
+            <returns>Matter details validation result</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.ValidationFunctions.MatterDetailsValidation(Microsoft.Legal.MatterCenter.Models.Matter,Microsoft.Legal.MatterCenter.Models.Client,System.Int32,Microsoft.Legal.MatterCenter.Models.MatterConfigurations)">
+            <summary>
+            Validates details of a matter and returns the validation status.
+            </summary>
+            <param name="matter">Matter object containing Matter data</param>
+            <param name="clientContext">Client context object for SharePoint</param>  
+            <param name="methodNumber">Number indicating which method needs to be validated</param>        
+            <returns>A string value indicating whether validations passed or fail</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.ValidationFunctions.CheckUserPermission(Microsoft.Legal.MatterCenter.Models.Matter)">
+            <summary>
+            Validates the permissions assigned to the users.
+            </summary>
+            <param name="matter">Matter object containing Matter data</param>
+            <returns>A string value indicating whether validations passed or fail</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.ValidationFunctions.ValidateContentType(Microsoft.Legal.MatterCenter.Models.Matter)">
+            <summary>
+            Validates content type for the matter.
+            </summary>
+            <param name="matter">Matter object containing Matter data</param>
+            <returns>A string value indicating whether validations passed or fail</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.ValidationFunctions.ValidateFullControlPermission(Microsoft.Legal.MatterCenter.Models.Matter)">
+            <summary>
+            Validates if there is at-least one user with full control in assign list.
+            </summary>
+            <param name="matter">Matter object</param>
+            <returns>Status of Full Control permission</returns>
+        </member>
+        <member name="T:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions">
+            <summary>
+            Provide methods to perform document transfer functionalities.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.Upload(Microsoft.Legal.MatterCenter.Models.Client,Microsoft.Legal.MatterCenter.Models.ServiceRequest,System.String,System.String,System.Boolean,System.String,System.String,System.Boolean,System.String@,System.String)">
+            <summary>
+            Acts as entry point from service to place the request to upload email/attachment. Reads the web request headers and requests applicable methods based on headers.
+            </summary>
+            <param name="requestObject">The request object.</param>
+            <param name="client">The client object</param>
+            <param name="serviceRequest">The Service request object</param>
+            <param name="soapRequest">The SOAP request</param>
+            <param name="attachmentOrMailID">The attachment or mail identifier.</param>
+            <param name="isMailUpload">Mail upload check</param>
+            <param name="fileName">Name of the file.</param>
+            <param name="folderPath">The folder path.</param>
+            <param name="isFirstCall">Determines if it is first call or not</param>
+            <param name="message">Reference object for the message to be returned</param>
+            <param name="originalFileName">Original file name of the attachment</param>
+            <returns>It returns a string object, that contains the execution status of the function.</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.UploadFilesMail(System.Boolean,System.Boolean,System.Boolean,System.String,System.Net.HttpWebResponse,System.Boolean,Microsoft.Legal.MatterCenter.Models.Client,System.String,System.String,System.String@)">
+            <summary>
+            Reads the XMLDocument and determines whether the request is to upload entire mail/attachment/.eml file/.msg file and calls respective method.
+            </summary>
+            <param name="isOverwrite">Overwrite check</param>
+            <param name="documentLibraryName">Name of the document library</param>
+            <param name="folderName">Name of the folder</param>
+            <param name="webResponse">HTTP web response to get the response stream</param>
+            <param name="isMailUpload">Mail Upload Flag</param>
+            <param name="requestObject">request object for web</param>
+            <param name="client">Service Client Object</param>
+            <param name="fileName">Name of the file</param>
+            <param name="folderPath">upload folder path</param>
+            <param name="message">Reference object for the message to be returned</param>
+            <returns>Returns whether File Uploaded successfully or failed</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.RetrieveNodeValue(System.Xml.XmlDocument,System.Xml.XmlNamespaceManager,System.String,System.Boolean)" -->
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.RetrieveXMLDocument(System.Net.HttpWebResponse)">
+            <summary>
+            Retrieves stream from web page and loads in XML document.
+            </summary>
+            <param name="webResponse">HTTP web response to get the response stream</param>
+            <returns>XML Document containing read values from Request</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.UploadEMLFile(System.String,Microsoft.Legal.MatterCenter.Models.Client,System.String,System.String,System.String@,System.Xml.XmlDocument,System.Xml.XmlNamespaceManager,Microsoft.Legal.MatterCenter.Models.MailMetaData@,System.Object@,System.String)">
+            <summary>
+            Uploads the .eml file to specified folder in matter library.
+            </summary>
+            <param name="documentLibraryName">Name of the document library</param>
+            <param name="requestObject">web request object</param>
+            <param name="client">Provider Service client Object</param>
+            <param name="folderPath">target folder path for upload</param>
+            <param name="fileName">File name</param>
+            <param name="message">Reference object for the message to be returned</param>
+            <param name="xmlDocument">XML document object having information for the attachment</param>
+            <param name="nsmgr">XML Namespace object</param>
+            <param name="mailMetaData">Mail metadata object storing property values</param>
+            <param name="bytes">Array of bytes</param>
+            <param name="extension">File extension object contains extension of file to be uploaded.</param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.UploadMail(Microsoft.Legal.MatterCenter.Models.Client,System.String,System.String,System.String,System.Xml.XmlDocument,System.String@)">
+            <summary>
+            Uploads the email to specified folder in matter library.
+            </summary>
+            <param name="requestObject">web request object</param>
+            <param name="client">Provider Service client Object</param>
+            <param name="folderPath">target folder path for upload</param>
+            <param name="filename">Name of the file</param>
+            <param name="documentLibraryName">Name of the document library</param>
+            <param name="xmlDocument">Mail XML Content</param>
+            <param name="message">Reference object for the message to be returned</param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.GetEmailProperties(System.Xml.XmlDocument,Microsoft.Legal.MatterCenter.Models.MailMetaData@)">
+            <summary>
+            Get properties of the Email being uploaded
+            </summary>
+            <param name="xmlDocument">XML Document containing read values from Request</param>
+            <param name="mailMetaData">Mail metadata object</param>
+            <returns>Array of bytes</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.UploadAttachedMailExtBlank(Microsoft.Legal.MatterCenter.Models.Client,System.String,System.String,System.String,System.Xml.XmlDocument,System.String@)">
+            <summary>
+            Uploads the .msg file to specified folder in matter library.
+            </summary>
+            <param name="requestObject">web request object</param>
+            <param name="client">service client object</param>
+            <param name="folderPath">target folder path</param>
+            <param name="fileName">Name of the file.</param>
+            <param name="documentLibraryName">Name of the document library</param>
+            <param name="xmlDocument">XML Document containing read values from Request</param>
+            <param name="message">Reference object for the message to be returned</param> 
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.GetMailProperties(Microsoft.Legal.MatterCenter.Models.MailXPath,Microsoft.Legal.MatterCenter.Models.MailMetaData@,System.Xml.XmlDocument)">
+            <summary>
+            Get properties of the mail file to be uploaded
+            </summary>
+            <param name="mailXPath">Mail Xpath object</param>
+            <param name="mailMetaData">Mail metadata object</param>
+            <param name="xmlDocument">XML Document containing read values from Request</param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.GetRecipientsField(System.Xml.XmlNodeList)">
+            <summary>
+            To get recipients field from the Email headers
+            </summary>
+            <param name="xmlNodeList">Collection of nodes</param>
+            <returns>Property value</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.GetPropertyValueFromXml(System.String,System.Xml.XmlDocument,System.Xml.XmlNamespaceManager)">
+            <summary>
+            To get property value from the XML node
+            </summary>
+            <param name="xPath">XPath query</param>
+            <param name="document">XML Document containing read values from Request</param>
+            <param name="namespaceManager">Namespace manager object</param>
+            <returns>Property value</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.GetShortDateFromField(System.String)">
+            <summary>
+            To get the short date from the field retrieved from headers
+            </summary>        
+            <param name="xmlNode">Representing node from XML document</param>
+            <returns>Short date format</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.UploadToFolder(Microsoft.Legal.MatterCenter.Models.Client,System.String,System.String,System.String,System.IO.MemoryStream,System.String,Microsoft.Legal.MatterCenter.Models.MailMetaData,System.String@)">
+            <summary>
+            Validates the email/attachment and request call to upload the content to specified folder in matter library.
+            </summary>
+            <param name="requestObject">The Web request object.</param>
+            <param name="client">The Service client.</param>
+            <param name="folderPath">The folder path.</param>
+            <param name="filename">The filename</param>
+            <param name="extension">File extension</param>
+            <param name="memoryStream">Memory stream object</param>
+            <param name="mailMetaData">MailMetadata object</param>
+            <param name="documentLibraryName">Name of the document library</param>
+            <param name="message">Reference object for the message to be returned</param>
+            <returns>
+            Returns True if upload is successful or False if upload fails
+            </returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.UploadFolderUtility(Microsoft.Legal.MatterCenter.Models.Client,System.String,System.String@,System.String,System.IO.MemoryStream,Microsoft.Legal.MatterCenter.Models.MailMetaData,System.String,System.String@,Microsoft.SharePoint.Client.ClientContext)" -->
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.CreateFileInsideFolder(System.String,System.String,System.String,System.IO.MemoryStream,Microsoft.SharePoint.Client.ClientContext)">
+            <summary>
+            To create file inside SharePoint folder
+            </summary>
+            <param name="folderPath">Folder path</param>
+            <param name="filename">Filename</param>
+            <param name="extension">Extension</param>
+            <param name="memoryStream">Stream of the memory</param>
+            <param name="clientContext">ClientContext object</param>
+            <returns>filename</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctions.SaveFields(Microsoft.Legal.MatterCenter.Models.Client,System.String,System.String,Microsoft.Legal.MatterCenter.Models.MailMetaData,System.String)">
+            <summary>
+            Saves the fields for uploaded item in SharePoint library.
+            </summary>
+            <param name="requestObject">Web request object</param>
+            <param name="client">Provider Service client</param>
+            <param name="folderPath"> folder path</param>
+            <param name="fileName">Name of the file</param>
+            <param name="mailMetadata">MailMetadata object</param>
+            <param name="documentLibraryName">Name of the document library</param>
+        </member>
+        <member name="T:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctionsUtility">
+            <summary>
+            Provide methods to perform document transfer functionalities.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctionsUtility.CheckDuplicateDocument(Microsoft.SharePoint.Client.ClientContext,System.String,System.Boolean,System.String,Microsoft.Legal.MatterCenter.Models.ContentCheckDetails,System.String,System.Boolean,System.String@)">
+            <summary>
+            Check if duplicate document exists 
+            </summary>
+            <param name="clientContext">SP client context</param>
+            <param name="documentLibraryName">Name of the document library</param>
+            <param name="folderName">Name of the folder</param>
+            <param name="isMailUpload">Mail upload check</param>
+            <param name="folderPath">The folder path.</param>
+            <param name="contentCheck">Content check object</param>
+            <param name="uploadFileName">Name of the file.</param>
+            <returns>message as per duplicate exists or not</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctionsUtility.PerformContentCheckUtility(System.Boolean,System.String,System.Boolean,System.Xml.XmlDocument,System.Xml.XmlNamespaceManager,System.String,System.String,Microsoft.SharePoint.Client.ClientContext)">
+            <summary>
+            Performs content check
+            </summary>
+            <param name="isMailUpload">Mail upload check</param>
+            <param name="folderPath">The folder path.</param>
+            <param name="isMsg">Is .msg file</param>
+            <param name="xmlDocument">XML document object having information for the attachment</param>
+            <param name="nsmgr">XML Namespace object</param>
+            <param name="extension">File extension</param>
+            <param name="uploadFileName">Name of the file.</param>
+            <param name="clientContext">SP client context</param>
+            <returns>result message as per document matches or not</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctionsUtility.GetStream(System.Xml.XmlDocument,System.Xml.XmlNamespaceManager,System.Boolean,System.String,System.Boolean)">
+            <summary>
+            returns stream from exchange
+            </summary>
+            <param name="xmlDocument">XML document object having information for the attachment</param>
+            <param name="nsmgr">XML Namespace object</param>
+            <param name="isMailUpload">Mail upload check</param>
+            <param name="extension">File extension</param>
+            <param name="isMsg">Is .msg file</param>
+            <returns>stream in byte array</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctionsUtility.GetWebResponse(System.Uri,System.String,System.String,System.String)">
+            <summary>
+            Make the request to the Exchange server and get the response.
+            </summary>
+            <param name="ewsUrl">Exchange Web Service URL.</param>
+            <param name="attachmentToken">The attachment token.</param>
+            <param name="soapRequest">The SOAP request.</param>
+            <param name="attachmentOrMailID">The attachment or mail identifier.</param>
+            <returns>HTTP-specific response from Exchange server</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctionsUtility.GetAttachmentID(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Get the Attachment ID from the web response
+            </summary>
+            <param name="xmlDocument">XML document object having information for mail contents</param>
+            <param name="fileName">Name of the file.</param>
+            <returns>The attachment identifier retrieved from the web response.</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.Common.Upload.UploadHelperFunctionsUtility.RemoveSpecialChar(System.String)">
+            <summary>
+            Removes not allowed characters from SharePoint file name.
+            </summary>
+            <param name="filename">file name to be updated</param>
+            <returns>Updated file name</returns>
+        </member>
+        <member name="T:Microsoft.Legal.MatterCenter.Web.DocumentController">
+            <summary>
+            Document Controller class deals with finding document, pinning document, unpinning the document etc.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.DocumentController.#ctor(Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.DocumentSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Web.Common.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.IDocumentRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.LogTables},Microsoft.Legal.MatterCenter.Web.Common.IDocumentProvision)">
+            <summary>
+            Constructor where all the required dependencies are injected
+            </summary>
+            <param name="errorSettings"></param>
+            <param name="documentSettings"></param>
+            <param name="spoAuthorization"></param>
+            <param name="matterCenterServiceFunctions"></param>
+            <param name="documentRepositoy"></param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.DocumentController.Get(Microsoft.Legal.MatterCenter.Models.SearchRequestVM)">
+            <summary>
+            Gets the matters based on search criteria.
+            </summary>
+            <param name="searchRequestVM"></param>
+            <returns>searchResponseVM</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.DocumentController.GetDocumentAssets(Microsoft.Legal.MatterCenter.Models.Client)">
+            <summary>
+            Returns document and list GUID
+            </summary>
+            <param name="requestObject">Request object containing SharePoint App Token</param>
+            <param name="client">Client object containing list data</param>        
+            <returns>Document and list GUID</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.SharedController.#ctor(Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.SharedSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Web.Common.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.LogTables},Microsoft.Legal.MatterCenter.Repository.ISharedRepository)">
+            <summary>
+            Constructor where all the required dependencies are injected
+            </summary>
+            <param name="errorSettings"></param>
+            <param name="matterSettings"></param>
+            <param name="spoAuthorization"></param>
+            <param name="matterCenterServiceFunctions"></param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.SharedController.UrlExists(Microsoft.Legal.MatterCenter.Models.Client,System.String,System.String)">
+            <summary>
+            Returns true or false based on the existence of the matter landing page and OneNote file at the URLs provided.
+            </summary>
+            <param name="requestObject">Request object containing SharePoint App Token</param>
+            <param name="client">Client object containing Client data</param>
+            <param name="requestedUrl">String object containing the OneNote file path</param>
+            <param name="requestedPageUrl">String object containing the Matter Landing Page file path</param>
+            <returns>$|$ Separated string indicating that the OneNote and the Matter Landing Page exist or not</returns>        
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.SharedController.Help(Microsoft.Legal.MatterCenter.Models.Client,System.String)">
+            <summary>
+            Returns contextual help content in JSON format.
+            </summary>
+            <param name="requestObject">Request object containing SharePoint App Token</param>
+            <param name="client">Client object containing Client data</param>
+            <param name="selectedPage">String object containing the page number where user is on</param>
+            <returns>IActionResult which return List of ContextHelpData in JSON format</returns>        
+        </member>
+        <member name="T:Microsoft.Legal.MatterCenter.Web.TaxonomyController">
+            <summary>
+            Taxonomy Controller will read the term store information related to matter center
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.TaxonomyController.#ctor(Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.TaxonomySettings},Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.GeneralSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Web.Common.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.ITaxonomyRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.LogTables})">
+            <summary>
+            Constructor where all the required dependencies are injected
+            </summary>
+            <param name="errorSettings"></param>
+            <param name="taxonomySettings"></param>
+            <param name="generalSettings"></param>
+            <param name="spoAuthorization"></param>
+            <param name="matterCenterServiceFunctions"></param>
+            <param name="taxonomyRepository"></param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.TaxonomyController.GetCurrentSiteTitle">
+            <summary>
+            This is test method for testing the contrroller
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.TaxonomyController.TestWebApi">
+            <summary>
+            This is test method for testing the contrroller
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Web.UserController.#ctor(Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.MatterSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Web.Common.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.IMatterRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.LogTables},Microsoft.Legal.MatterCenter.Web.Common.IValidationFunctions,Microsoft.Legal.MatterCenter.Web.Common.IEditFunctions,Microsoft.Legal.MatterCenter.Web.Common.IMatterProvision)">
+            <summary>
+            Constructor where all the required dependencies are injected
+            </summary>
+            <param name="errorSettings"></param>
+            <param name="matterSettings"></param>
+            <param name="spoAuthorization"></param>
+            <param name="matterCenterServiceFunctions"></param>
+        </member>
+        <member name="T:Microsoft.Legal.MatterCenter.Service.MatterController">
+            <summary>
+            Matter Controller class deals with matter provisioning, finding matter, pinning matter, unpinning the matterm, updating the matter
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.#ctor(Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.ErrorSettings},Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.MatterSettings},Microsoft.Legal.MatterCenter.Utility.ISPOAuthorization,Microsoft.Legal.MatterCenter.Web.Common.IMatterCenterServiceFunctions,Microsoft.Legal.MatterCenter.Repository.IMatterRepository,Microsoft.Legal.MatterCenter.Utility.ICustomLogger,Microsoft.Extensions.OptionsModel.IOptionsMonitor{Microsoft.Legal.MatterCenter.Utility.LogTables},Microsoft.Legal.MatterCenter.Web.Common.IValidationFunctions,Microsoft.Legal.MatterCenter.Web.Common.IEditFunctions,Microsoft.Legal.MatterCenter.Web.Common.IMatterProvision)">
+            <summary>
+            Constructor where all the required dependencies are injected
+            </summary>
+            <param name="errorSettings"></param>
+            <param name="matterSettings"></param>
+            <param name="spoAuthorization"></param>
+            <param name="matterCenterServiceFunctions"></param>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.GetPin(Microsoft.Legal.MatterCenter.Models.Client)">
+            <summary>
+            Get all pinned matters
+            </summary>
+            <param name="client"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.Pin(Microsoft.Legal.MatterCenter.Models.PinRequestMatterVM)">
+            <summary>
+            pin the matter
+            </summary>
+            <param name="pinRequestMatterVM"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.UnPin(Microsoft.Legal.MatterCenter.Models.PinRequestMatterVM)">
+            <summary>
+            Unpin the matter
+            </summary>
+            <param name="pinRequestMatterVM"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.Get(Microsoft.Legal.MatterCenter.Models.SearchRequestVM)">
+            <summary>
+            Gets the matters based on search criteria.
+            </summary>
+            <param name="searchRequestVM"></param>
+            <returns>searchResponseVM</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.AssignContentType(Microsoft.Legal.MatterCenter.Models.MatterMetadata)">
+            <summary>
+            Assigns specified content types to the specified matter (document library).
+            </summary>
+            <param name="requestObject">Request Object containing SharePoint App Token</param>
+            <param name="matterMetadata">Object containing metadata for Matter</param>
+            <returns>true if success else false</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.Create(Microsoft.Legal.MatterCenter.Models.MatterMetdataVM)">
+            <summary>
+            Create a new matter
+            </summary>
+            <param name="matterMetdataVM"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.MatterController.CreateLandingPage(Microsoft.Legal.MatterCenter.Models.MatterMetdataVM)">
+            <summary>
+            Creates matter landing page. If there is any error in creating the landing page, the whole matter will get deleted along with docunment libraries
+            </summary>
+            <param name="matterMetdataVM"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Microsoft.Legal.MatterCenter.Service.HelperClasses.ValidationHelperFunctions">
+            <summary>
+            This class will be used to validate the client input values
+            </summary>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.HelperClasses.ValidationHelperFunctions.TaxonomyValidation(Microsoft.Legal.MatterCenter.Models.Client)">
+            <summary>
+            This method will validate the client object and if there are any errors in the client inout object, the method will
+            return ErrorResponse object or it will return null
+            </summary>
+            <param name="client">Contains the information such as ClientId, ClientUrl etc</param>
+            <returns>ErrorResponse</returns>
+        </member>
+        <member name="M:Microsoft.Legal.MatterCenter.Service.HelperClasses.ValidationHelperFunctions.ValidateClientInformation(Microsoft.Legal.MatterCenter.Models.Client,System.Int32)">
+            <summary>
+            Function to validate client information
+            </summary>
+            <param name="client">Client object</param>
+            <param name="methodNumber">Number indicating which method needs to be validated</param>
+            <returns>ErrorResponse that contains error message with error code</returns>
+        </member>
+    </members>
+</doc>

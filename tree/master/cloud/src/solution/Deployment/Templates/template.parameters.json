@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Redis_cache_name": {
+      "value": "MatterCenterAug2614"
+    },
+    "autoscalesettings_name": {
+      "value": "MatterCenterAug2614"
+    },
+    "components_AppInsights_name": {
+      "value": "MatterCenterAug2614"
+    },
+    "vaults_KeyVault_name": {
+      "value": "MatterCenterAug2614"
+    },
+    "storageAccount_name": {
+      "value": "mattercenteraug2614"
+    },
+    "serverfarms_WebPlan_name": {
+      "value": "MatterCenterAug2614"
+    },
+    "webSite_name": {
+      "value": "MatterCenterAug2614"
+    },
+    "Tenant_id": {
+      "value": "3c4562ca-39a4-4d8b-91ff-6d3eefab5c1d"
+    },
+    "Web_ADApp_Name": {
+      "value": "MatterCenterWebAppAD1"
+    },
+    "KeyVault_ADApp_Name": {
+      "value": "MatterCenterKVApp1"
+    },
+    "KeyVault_certificate_expiryDate": {
+      "value": "2018-04-11"
+    }
+  }
+}

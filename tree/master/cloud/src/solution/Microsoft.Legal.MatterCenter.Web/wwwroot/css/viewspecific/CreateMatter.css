@@ -1,0 +1,1313 @@
+﻿.commonspace {
+    margin-right: 5px;
+    margin-top: 1px;
+}
+
+.dateWidth {
+    width: 140px !important;
+}
+
+.commonwidth {
+    width: 200px !important;
+}
+
+.roleWidth {
+    min-width: 140px !important;
+    max-width: 140px !important;
+}
+
+.customClose {
+    margin-left: 5px;
+    float: left !important;
+}
+
+.mediumSmallPermission {
+    min-width: 140px !important;
+    max-width: 140px !important;
+    margin-left: 5px;
+}
+
+.pagination {
+    margin: 0px !important;
+}
+
+.overflowMain {
+    overflow: auto !important;
+}
+
+.content {
+    float: left;
+    height: 100%;
+    margin-left: 62px;
+    width: 100%;
+    width: calc(100% - 150px);
+    word-wrap: break-word !important;
+    padding-top: 4px;
+    pointer-events: visible;
+    cursor: default;
+    overflow: visible !important;
+    margin-top: -11px;
+}
+
+.sectionStep {
+    height: calc(100% + 120px);
+}
+
+.content .button {
+    width: 150px;
+    margin-left: 5px;
+}
+
+.parentNode {
+    height: 145px;
+}
+
+@media only screen and (max-width: 567px) {
+    .folderContent {
+        padding-top: 10px;
+        width: 100%;
+        height: auto;
+        float: left;
+        border: 0;
+        overflow-y: auto;
+    }
+}
+
+.modalClose {
+    margin: 7px;
+    margin-right: 10px;
+    position: absolute;
+    right: 0;
+    top: 7px;
+    z-index: 1;
+}
+
+.successUpload {
+    width: 100%;
+    margin-left: 1px;
+    z-index: 2;
+    position: absolute;
+}
+
+.marginBottom15 {
+    margin-bottom: 15px;
+}
+
+.marginTop15 {
+    margin-top: 15px;
+}
+
+.attachmentCustomSection {
+    height: 149px !important;
+}
+
+.loadingprogressbar {
+    height: 1px;
+}
+
+.attachmentListLoading {
+    margin-top: -3%;
+    margin-left: 54%;
+}
+
+.warningNotification {
+    height: auto !important;
+}
+
+.textAreaBlock {
+    border: 0px none;
+}
+
+.ms-checkBox {
+    margin: 10px 5px 0 0 !important;
+}
+
+.headerClassAd {
+    margin-top: -10px;
+    margin-left: 7px;
+}
+
+.errPopUpMsg {
+    min-height: 62px;
+    top: 11px;
+    left: 24px;
+    color: red;
+}
+
+.errTrinagleBorderCustDesc {
+    left: 50px;
+    top: 72px;
+}
+
+.errrTriangleCustDesc {
+    left: 50px;
+    top: 73px;
+}
+
+.errPopUpBlockDesc {
+    left: 389px;
+    top: 109px;
+}
+
+.errorBorder {
+    border: 2px solid red !important;
+}
+
+.errorPopUp .errText {
+    color: red;
+    left: 40px;
+    top: 11px;
+}
+
+.conflictradioCheck {
+    margin-left: 5px !important;
+}
+
+.createLable {
+    position: absolute;
+    font-size: 14px;
+}
+
+.customDivCreate {
+    white-space: normal;
+    font-size: .875em;
+}
+
+.sectionStep .sectionContent {
+    width: 100%;
+}
+
+.menu {
+    height: 100%;
+    max-height: 146px;
+}
+/*
+    cm.errorPopUpBlock
+    cm.errTrinagleBlock
+    cm.errTrinagleBroderBlock
+    cm.errorPopUpMsgBlock
+*/
+.error-messages.ng-active {
+    background: maroon;
+    color: black;
+    padding: 5px;
+    border-radius: 5px;
+    margin-top: 25px;
+    position: relative;
+    width: 100px;
+}
+
+    .error-messages.ng-active:after {
+        position: absolute;
+        top: -10px;
+        content: "";
+        left: 20px;
+        border-style: solid;
+        border-color: transparent transparent maroon;
+        border-width: 5px;
+    }
+
+.errPopUpMatterName {
+    left: 219px;
+    top: 47px;
+    height: 50px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 100;
+}
+
+.errPopUpMatterNameWithOutMatterID{
+        left: 219px;
+    top: 47px;
+    height: 50px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 100;
+    }
+
+.errTringleBlockMatterName {
+    left: 50px;
+    top: 73px;
+}
+
+.errTringleBorderBlockMatterName {
+    left: 50px;
+    top: 72px;
+}
+
+.errTextMatterName {
+    min-height: 55px;
+    top: 14px !important;
+    left: 24px;
+}
+
+.errPopUpMatterClient {
+    left: 234px;
+    top: -15px;
+    height: 50px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 100;
+}
+
+.errTringleBlockMatterClient {
+    left: 50px;
+    top: 73px;
+}
+
+.errTringleBorderBlockMatterClient {
+    left: 50px;
+    top: 72px;
+}
+
+.errTextMatterClient {
+    min-height: 55px;
+    top: 19px !important;
+    left: 24px;
+}
+
+
+.errPopUpMatterId {
+    left: 345px;
+    right: 47px;
+}
+
+.errTringleBlockMatterId {
+    left: 50px;
+    right: 73px;
+}
+
+.errTringleBorderBlockMatterId {
+    left: 50px;
+    right: 72px;
+}
+
+.errTextMatterId {
+    min-height: 55px;
+    top: 7px !important;
+    left: 24px;
+    width: 100%;
+}
+
+
+.errPopUpMatterDescr {
+    left: 389px;
+    top: 109px;
+    height: 50px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 100;
+}
+.errPopUpMatterDescrWithOutMatterID{
+        left: 389px;
+    top: 109px;
+    height: 50px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 100;
+    }
+
+.errTringleBlockMatterDescr {
+    left: 50px;
+    top: 73px;
+}
+
+.errTringleBorderBlockMatterDescr {
+    left: 50px;
+    top: 72px;
+}
+
+.errTextMatterDescr {
+    min-height: 62px;
+    top: 12px !important;
+    left: 24px;
+}
+
+
+.errPopUpMatterSelectTemp {
+       left: 12px;
+    right: 264px;
+    top: 322px;
+}
+ .errPopUpMatterSelectTempWithOutMatterID {
+       left: 460px;
+    right: 264px;
+    top: 276px;
+    }
+
+.errTringleBlockMatterSelectTemp {
+    left: 125px;
+    right: 73px;
+}
+
+.errTringleBorderBlockSelectTemp {
+    left: 125px;
+    right: 72px;
+}
+
+.errTextMatterSelectTemp {
+    min-height: 55px;
+    top: 7px !important;
+    left: 24px;
+    width: 100%;
+}
+
+.errPopUpCCheckUser {
+    left: 234px;
+    right: 264px;
+    top: 27px;
+}
+
+.errTringleBlockCCheckUser {
+    left: 50px;
+    right: 73px;
+}
+
+.errTringleBorderCCheckUser {
+    left: 50px;
+    right: 72px;
+}
+
+.errTextMatterCCheckUser {
+    min-height: 55px;
+    top: 7px !important;
+    left: 24px;
+    width: 100%;
+}
+
+.errPopUpCBlockUser {
+    left: 160px;
+    right: 264px;
+    top: 89px;
+}
+
+.errTringleBlockCBlockUser {
+    left: 125px;
+    right: 73px;
+}
+
+.errTringleBorderCBlockUser {
+    left: 125px;
+    right: 72px;
+}
+
+.errTextMatterCBlockUser {
+    min-height: 55px;
+    top: 7px !important;
+    left: 24px;
+    width: 100%;
+}
+
+.errPopUpCDate {
+    left: 414px;
+    top: 16px;
+}
+
+.errTringleBlockCDate {
+    left: 50px;
+    top: 73px;
+}
+
+.errTringleBorderCDate {
+    left: 50px;
+    top: 72px;
+}
+
+.errTextMatterCDate {
+    min-height: 55px;
+    top: 19px !important;
+    left: 24px;
+    width: 100%;
+}
+
+.errPopUpCCheck {
+    left: 100px;
+    top: -17px;
+}
+
+.errTringleBlockCCheck {
+    left: 50px;
+    right: 73px;
+}
+
+.errTringleBorderCCheck {
+    left: 50px;
+    right: 72px;
+}
+
+.errTextMatterCCheck {
+    min-height: 45px;
+    top: 17px !important;
+    left: 24px;
+    width: 100%;
+}
+
+
+.errPopUpCreate {
+    left: 79px;
+    top: 145px;
+}
+
+.errTringleBlockCreate {
+    left: 50px;
+    right: 73px;
+}
+
+.errTringleBorderCreate {
+    left: 50px;
+    right: 72px;
+}
+
+.errTextMatterCreate {
+    min-height: 55px;
+    top: 7px !important;
+    left: 24px;
+    width: 100%;
+}
+
+.addmatterType{clear:left;  margin-top:10px; font-size:.875em; cursor:pointer; }
+
+/*.errPopUpCAttorny{left:70px;top:-20px;}
+.errTringleBlockCAttorny{left:50px;right:56px;}
+.errTringleBorderCAttorny{left:50px;right:55px;}
+.errTextMatterCAttorny {min-height: 40px;top: 17px !important;left: 24px;width:100%}*/
+@media (min-width: 0px) and (max-width: 734px) {
+    .labelRoles{    margin-left: 0px !important;
+    width: 140px;}
+
+    .errPopUpMatterName {
+        left: 13px;
+        top: 258px;
+        height: 50px;
+        margin: 10px;
+        position: absolute;
+        width: 264px;
+        z-index: 100;
+    }
+    .errPopUpMatterNameWithOutMatterID{
+          left: 13px;
+        top: 194px;
+        height: 50px;
+        margin: 10px;
+        position: absolute;
+        width: 264px;
+        z-index: 100;
+    }
+
+    .errTringleBlockMatterName {
+        left: 50px;
+        top: 73px;
+    }
+
+    .errTringleBorderBlockMatterName {
+        left: 50px;
+        top: 72px;
+    }
+
+    .errTextMatterName {
+        min-height: 55px;
+        top: 14px !important;
+        left: 24px;
+    }
+
+    .errPopUpMatterClient {
+        left: 10px;
+        top: 132px;
+        height: 50px;
+        margin: 10px;
+        position: absolute;
+        width: 264px;
+        z-index: 100;
+    }
+
+    .errTringleBlockMatterClient {
+        left: 50px;
+        top: 73px;
+    }
+
+    .errTringleBorderBlockMatterClient {
+        left: 50px;
+        top: 72px;
+    }
+
+    .errTextMatterClient {
+        min-height: 55px;
+        top: 19px !important;
+        left: 24px;
+    }
+
+
+    .errPopUpMatterId {
+        left: 10px;
+        top: 204px;
+    }
+
+    .errTringleBlockMatterId {
+        left: 50px;
+        right: 73px;
+    }
+
+    .errTringleBorderBlockMatterId {
+        left: 50px;
+        right: 72px;
+    }
+
+    .errTextMatterId {
+        min-height: 55px;
+        top: 7px !important;
+        left: 24px;
+        width: 100%;
+    }
+
+
+    .errPopUpMatterDescr {
+        left: 10px;
+        top: 317px;
+        height: 50px;
+        margin: 10px;
+        position: absolute;
+        width: 264px;
+        z-index: 100;
+    }
+
+    .errPopUpMatterDescrWithOutMatterID{
+         left: 10px;
+        top: 257px;
+        height: 50px;
+        margin: 10px;
+        position: absolute;
+        width: 264px;
+        z-index: 100;
+    }
+
+    .errTringleBlockMatterDescr {
+        left: 50px;
+        top: 73px;
+    }
+
+    .errTringleBorderBlockMatterDescr {
+        left: 50px;
+        top: 72px;
+    }
+
+    .errTextMatterDescr {
+        min-height: 62px;
+        top: 12px !important;
+        left: 24px;
+    }
+
+
+    .errPopUpMatterSelectTemp {
+        left: 12px;
+        top: 550px;
+    }
+     .errPopUpMatterSelectTempWithOutMatterID {
+        left: 45px;
+        top: 484px;
+    }
+
+    .errTringleBlockMatterSelectTemp {
+        left: 125px;
+        right: 73px;
+    }
+
+    .errTringleBorderBlockSelectTemp {
+        left: 125px;
+        right: 72px;
+    }
+
+    .errTextMatterSelectTemp {
+        min-height: 55px;
+        top: 7px !important;
+        left: 24px;
+        width: 100%;
+    }
+
+    .errPopUpCCheckUser {
+        left: 10px;
+        right: 264px;
+        top: 125px;
+    }
+
+    .errTringleBlockCCheckUser {
+        left: 50px;
+        right: 73px;
+    }
+
+    .errTringleBorderCCheckUser {
+        left: 50px;
+        right: 72px;
+    }
+
+    .errTextMatterCCheckUser {
+        min-height: 55px;
+        top: 7px !important;
+        left: 24px;
+        width: 100%;
+    }
+
+    .errPopUpCBlockUser {
+        left: 10px;
+        top: 355px;
+    }
+
+    .errTringleBlockCBlockUser {
+        left: 125px;
+        right: 73px;
+    }
+
+    .errTringleBorderCBlockUser {
+        left: 125px;
+        right: 72px;
+    }
+
+    .errTextMatterCBlockUser {
+        min-height: 55px;
+        top: 7px !important;
+        left: 24px;
+        width: 100%;
+    }
+
+    .errPopUpCDate {
+        left: 10px;
+        top: 175px;
+    }
+
+    .errTringleBlockCDate {
+        left: 50px;
+        top: 73px;
+    }
+
+    .errTringleBorderCDate {
+        left: 50px;
+        top: 72px;
+    }
+
+    .errTextMatterCDate {
+        min-height: 55px;
+        top: 19px !important;
+        left: 24px;
+        width: 100%;
+    }
+
+    .errPopUpCCheck {
+        left: 10px;
+        top: 60px;
+    }
+
+    .errTringleBlockCCheck {
+        left: 50px;
+        right: 73px;
+    }
+
+    .errTringleBorderCCheck {
+        left: 50px;
+        right: 72px;
+    }
+
+    .errTextMatterCCheck {
+        min-height: 64px;
+        top: -2px !important;
+        left: 24px;
+        width: 100%;
+    }
+
+
+    .errPopUpCreate {
+        left: 79px;
+        top: 282px;
+    }
+
+    .errTringleBlockCreate {
+        left: 50px;
+        right: 73px;
+    }
+
+    .errTringleBorderCreate {
+        left: 50px;
+        right: 72px;
+    }
+
+    .errTextMatterCreate {
+        min-height: 55px;
+        top: 7px !important;
+        left: 24px;
+    }
+}
+
+.notificationContainer .notification {
+    font-size: .9em;
+    padding: 8px 12px;
+    position: relative;
+    float: left;
+}
+
+.closeNotification {
+    margin-right: 10px;
+}
+
+.notificationContainer {
+    position: absolute;
+    left: 0;
+    top: 52px;
+    width: 100%;
+    z-index: 99;
+    pointer-events: visible;
+}
+
+#HeaderPlaceHolder {
+    min-width: 600px;
+}
+
+@media (min-width: 734px) and (max-width: 804px) {
+    #HeaderPlaceHolder {
+        min-width: 600px;
+    }
+}
+
+@media (min-width: 734px) and (max-width: 782px) {
+    body {
+        height: calc(100% + 50px );
+    }
+}
+
+@media (min-width: 0px) and (max-width: 734px) {
+    #HeaderPlaceHolder {
+        min-width: 250px;
+    }
+
+    .dateWidth {
+        margin-top: 4px;
+        position: absolute;
+        top: 126px;
+        width: 140px !important;
+    }
+}
+
+/*@media (min-width: 734px) and (max-width: 809px) {
+  .sectionStep .sectionContent {
+    max-width: 110%;
+}
+
+    .sectionStep {max-width: 110%;
+    }
+
+    .sectionContent {
+    max-width: 120%;
+}
+}*/
+
+@media (min-width: 734px) {
+    .createCol {
+        width: 60%;
+    }
+}
+
+.popUpBodyHeader {
+    overflow: visible;
+}
+
+@media (max-width: 850px) {
+    .popUpContainer {
+        min-height: 760px;
+        max-width: 317px;
+        margin-top: 55px !important;
+        margin-right: auto;
+        margin-bottom: 55px;
+        width: calc(100% - 42px);
+    }
+
+    .popUpModalContainer {
+        max-width: 317px;
+        margin-top: 55px !important;
+        width: calc(100% - 42px);
+    }
+}
+
+@media (max-width: 850px) {
+    #infoImg {
+        vertical-align: top;
+        margin-top: 20px;
+        margin-left: 0px;
+    }
+
+    #divDocTemplate {
+        position: relative;
+        left: 0;
+        top: 36px;
+        clear: both;
+    }
+
+    .SavePopUpEntries {
+        margin-right: 6px;
+        margin-left: 122px;
+        float: left;
+        margin-top: 0px;
+    }
+
+    #defaultMessageDiv {
+        width: 161px;
+        clear: both;
+        height: 1px !important;
+    }
+
+    #defaultMessage {
+        display: inline-block;
+        margin-top: -27px;
+        margin-left: 27px;
+        font-size: 9px;
+        float: left;
+    }
+}
+
+@media (max-width: 734px) {
+    #divDocTemplate {
+        position: relative;
+        left: 0;
+        top: 36px;
+        clear: both;
+    }
+
+    #defaultMessageDiv {
+        width: 161px;
+        clear: both;
+        height: 100% !important;
+    }
+
+    #infoImg {
+        vertical-align: top;
+        margin-top: 27px;
+        margin-left: 0px;
+    }
+
+    .SavePopUpEntries {
+        margin-right: 6px;
+        margin-left: 122px;
+        float: left;
+        margin-top: 0px;
+    }
+
+    #defaultMessage {
+        display: inline-block;
+        margin-top: -27px;
+        margin-left: 27px;
+        font-size: 9px;
+        float: left;
+    }
+
+    .popUpPosAbs {
+        position: relative;
+        float: left;
+        margin-top: 10px;
+    }
+
+
+    #loadingImageCreat {
+        margin: -23px 0 0 0px;
+        width: 25px;
+    }
+}
+
+.clearBoth {
+    clear: both;
+    height: 0.1px;
+}
+
+@media (min-width: 0px) and (max-width: 469px) {
+    .loading {
+        left: 135px !important;
+        top: 356px !important;
+    }
+}
+
+@media (min-width: 470px) and (max-width: 735px) {
+    .loading {
+        left: 135px !important;
+        top: 356px !important;
+    }
+}
+
+@media (min-width: 0px) and (max-width: 1300px) {
+    .popUpModalContainer {
+        max-width: 277px;
+        min-width: 100px;
+    }
+}
+
+@media (min-width: 735px) and (max-width: 1290px) {
+    .loading {
+        left: 135px !important;
+        top: 254px !important;
+    }
+}
+
+@media (min-width: 1290px) and (max-width: 1366px) {
+    .loading {
+        left: 135px !important;
+        top: 215px !important;
+    }
+}
+
+@media (min-width: 0px) and (max-width: 850px) {
+    .popUpContainer {
+        min-height: 760px;
+        max-width: 277px;
+        margin-top: 55px !important;
+        margin-right: auto;
+        margin-bottom: 55px;
+    }
+
+    .popUpModalContainer {
+        max-width: 277px;
+        min-width: 277px;
+    }
+
+    .alignCenter {
+        margin: 0px;
+    }
+
+    .popUpContainer {
+        min-width: 100px;
+    }
+
+    .custPracticeGroup {
+        min-width: 200px !important;
+    }
+
+    .popUpPosAbs {
+        position: relative;
+        float: left;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 703px) {
+    .folderStructureContent {
+        width: 100%;
+        height: 149px;
+        float: left;
+    }
+}
+
+
+@media (min-width: 568px) and (max-width: 950px) {
+    .modelbodyContainer {
+        width: 100%;
+    }
+}
+
+@media (min-width: 951px) {
+    .modelbodyContainer {
+        width: 60%;
+        left: 20%;
+    }
+}
+
+#overWriteDocumentName {
+    color: black;
+    font-weight: normal;
+}
+
+    #overWriteDocumentName span a {
+        text-decoration: none;
+    }
+
+.attachment {
+    height: auto;
+}
+
+.attachmentSection {
+    height: auto;
+}
+
+@media only screen and (max-width: 712px) {
+    .popupName {
+        max-width: 160px;
+    }
+}
+
+.mailContentLoading {
+    width: 274px;
+}
+
+.mailContentDiv {
+    height: 1px;
+    margin-top: -9px;
+}
+
+.attachIconMargin {
+    padding-left: 8px;
+}
+
+.popUpScrollXHidden {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.paddingRight20 {
+    padding-right: 20px;
+}
+
+@media (max-width: 1020px) {
+    .maildata {
+        height: 100px;
+    }
+}
+
+.maildata {
+    height: 100px;
+}
+
+.errorAttachDocument {
+    z-index: 2;
+}
+
+.menuText:hover {
+    color: rgb(0,114,198);
+}
+
+.buttonPrev {
+    background-color: rgb(230,230,230); /* Green */
+    border: none;
+    color: rgb(77,77,77);
+    width: 100px;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em;
+    font-family: 'Segoe UI';
+    cursor: pointer;
+    outline: none !important;
+}
+
+    .buttonPrev:hover {
+        background-color: rgb(204,204,204);
+    }
+
+
+.notificationTriangleBorder {
+    border: 12px solid transparent;
+    border-top: 12px solid #fff;
+    height: 0;
+    left: 45px;
+    position: absolute;
+    top: calc(50% - -35px);
+    width: 0;
+}
+
+.notificationPopUp {
+    height: 100px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 1000;
+}
+
+.notificatonTriangle {
+    border: 12px solid transparent;
+    border-top: 12px solid rgb(77,77,77);
+    height: 0;
+    left: 45px;
+    position: absolute;
+    top: calc(50% - -36px);
+    width: 0;
+}
+
+.notificatonText {
+    background-color: #fff;
+    border: 1px solid rgb(77,77,77);
+    color: #333;
+    font-size: .75em;
+    min-height: 50px;
+    padding: 5px 10px;
+    text-align: left;
+    width: 300px;
+    height: 86px;
+}
+
+.notifcationrPopUpCAttorny {
+}
+
+.notificationBorder {
+    border: 2px solid rgb(77,77,77) !important;
+}
+
+.removeUser {
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.confirmUser {
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.manageUsers {
+    max-height: 400px;
+    overflow: auto;
+}
+
+.segoUIFont {
+    font-family: "Segoe UI", Calibri, "Times New Roman";
+    font-size: 0.875em;
+}
+
+.segoUIFontBold {
+    font-family: "Segoe UI", Calibri, "Times New Roman";
+    font-size: 0.875em;
+    font-weight:600;
+}
+
+.SaveDocTypes {
+    background-color: #0072c6;
+    border: 0;
+    clear: both;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Segoe UI', Calibri, 'Times New Roman';
+    font-size: .875em;
+    font-weight: 600;
+    height: 30px;
+    line-height: 15pt;
+    min-width: 70px;
+    text-align: center;
+    width: 100%;
+}
+
+.dropdownLevelOne {
+    max-width: 200px;
+    min-width: 200px;
+}
+
+@media (max-width: 1300px) {
+    .iconForward, .iconBack {
+        transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        /*margin: -5px 0 0 68px !important;*/
+        margin: 0 !important;
+    }
+
+    .modelMarginLeft {
+        margin-left: 23px !important;
+    }
+
+    .modalDialogWidth {
+        width: unset !important;
+    }
+}
+
+.modalDialogWidth {
+    width: 100%;
+}
+
+
+.modalContentMargin {
+    margin-left: 0;
+}
+
+@media (min-width: 1190px) and (max-width: 1300px) {
+    .modalWidth {
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 1300px) {
+    .modalContentMargin {
+        margin-left: 25%;
+    }
+}
+
+
+.modelMarginLeft {
+    margin-left: 0;
+}
+.modalPopupIconsDisplay{display:block;}
+@media (min-width: 1200px) and (max-width: 1300px) {
+    .modalPopupIconsDisplay {
+        display:none !important;
+    }
+}
+@media (min-width: 0px) and (max-width: 1300px)  {
+    .modalPopupDisplay {
+        display:block !important;
+    }
+}
+@media (min-width: 1301px) {
+    .modalPopupDisplay {
+        display: none !important;
+    }
+}
+
+.marginTop6{
+    margin-top:6px;
+}
+
+@media (min-width: 734px) and (max-width: 767px) {
+    .createMatterHeaderWidth {
+        width: 28% !important;
+    }
+
+    .matterContent {
+        margin-top: 0 !important;
+    }
+}
+
+@media (max-width: 734px) {
+    .matterContent {
+        margin-top: 82px !important;
+    }
+
+    .matterMarginLeft {
+        margin-left: 15px !important;
+    }
+}
+
+.matterMarginLeft {
+        margin-left: 0;
+    }
+
+.createMatterHeaderWidth {
+    width: none;
+}
+
+.matterContent {
+    margin-top: 0;
+}
+
+.popUpModalClose{position:absolute; top:10px; right:5px; z-index:5;}
+.docuTemplates{cursor:default; font-weight:normal;text-overflow: ellipsis;width: 100%;overflow: hidden;}
+.disableBlock{
+    /*background-color: #eaeaea;*/
+    color: rgb(210,210,210);
+}
+.loadingGlyphicon{    left: -24px;
+    top: 6px;}
+.labelRoles{    margin-left: 5px;
+    width: 140px;}
+.errorModal{height:100%;}
+.modelErrorContent{
+    margin: auto;
+    padding: 20px;   
+    width: 80%;
+}
+@media (min-width: 1199px) and (max-width: 1300px) {
+    .hidelgCol {
+        display: none;
+    }
+}
+.customLevel3Margin{
+    margin-left:30px;
+}
+.customLevel4Margin{
+    margin-left:55px;
+}
+ 

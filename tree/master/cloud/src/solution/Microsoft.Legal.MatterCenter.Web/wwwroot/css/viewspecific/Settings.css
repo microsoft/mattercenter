@@ -1,0 +1,739 @@
+﻿body {
+    margin-top: 20px;
+}
+
+.commonContent {
+    display: block;
+}
+
+.mainContainer {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.defaultFontStyle {
+    color: #333;
+    font-family: 'Segoe UI';
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.clientLinks {
+    text-decoration: none;
+    color: #2b579a;
+}
+
+#container, #clientContainer {
+    min-height: 500px;
+    width: 1150px;
+    margin: 0 auto;
+    height: auto;
+    padding-bottom: 10px;
+}
+
+.clientName {
+    font-weight: 100;
+    font-size: 28px;
+    margin-top: 20px;
+}
+
+.pageDescription {
+    margin: 7px 0 15px 0;
+    font-size: 18px;
+}
+
+.defaultSection {
+    background-color: #666;
+    height: 57px;
+    padding: 5px 0 0 10px;
+    width: 1140px;
+}
+
+.titleSection {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.descriptionSection {
+    color: #fff;
+    font-size: 14px;
+    margin-top: 1px;
+}
+
+.contentMatterName {
+    margin-top: 20px;
+}
+
+.userText {
+    display: inline-block;
+    height: 30px;
+    width: 720px;
+}
+
+.contentDescription {
+    color: #666;
+    font-style: italic;
+    font-size: 14px;
+    width: 380px;
+    margin: 8px 0 0 0;
+}
+
+.displayInline {
+    display: inline-block;
+}
+
+#matterIdSection {
+    margin-top: 15px;
+}
+
+.tableContainer {
+    display: table;
+    margin-top: 10px;
+}
+
+.labelSection {
+    display: table-cell;
+    width: 430px;
+}
+
+.valueSection {
+    display: table-cell;
+    width: 720px;
+    padding-top: 0;
+}
+
+.semiBold {
+    font-weight: 600;
+}
+
+.radioSpace {
+    margin-left: 40px;
+}
+
+.buttonSpace {
+    margin: 30px 0 0 5px;
+}
+
+.gutter {
+    float: left;
+    height: 1px;
+    width: 20px;
+}
+
+.contentLabel.blue {
+    color: #666;
+    float: left;
+    font-family: 'Segoe UI', Calibri, 'Times New Roman';
+    font-size: 1.125em;
+    margin-top: -2px;
+    padding-top: 9px;
+    text-decoration: none;
+}
+
+.medium {
+    max-width: 292px;
+    min-width: 292px;
+}
+
+.mediumSmallRole {
+    width: 350px;
+}
+
+.mediumSmallPermission {
+    width: 345px;
+}
+
+.floatContentLeft {
+    float: left;
+}
+
+.hide {
+    display: none;
+}
+
+.loadingImageDiv {
+    background-color: #000;
+    height: 100%;
+    opacity: 0.4;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+    left: 0%;
+    top: 0%;
+}
+
+.loadingImage img {
+    left: 50%;
+    top: 45%;
+    position: absolute;
+}
+
+.popUpHeaderTitle {
+    font-family: "Segoe UI", Calibri, "Times New Roman";
+    line-height: 15pt;
+    margin-bottom: 5px;
+}
+
+.popUpFloatLeft {
+    float: left;
+}
+
+.popUpCloseIcon {
+    cursor: pointer;
+}
+
+.popUpPracticeGroup {
+    margin-top: 10px;
+}
+
+.popUpBody {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.popUpMarginRight {
+    margin-right: 20px;
+}
+
+.popUpMDTextArea {
+    border: 1px solid #c8c8c8;
+    font-family: "Segoe UI", Calibri;
+    font-size: 0.87em;
+    height: 30px;
+    margin: 10px;
+    padding-left: 10px;
+    width: 225px;
+}
+
+.popUpBodyBlocks {
+    width: 23%;
+    margin-bottom: -5px;
+}
+
+.popUpLeftClick, .popUpRightClick {
+    cursor: pointer;
+}
+
+.popUpCommonContent > div {
+    cursor: pointer;
+}
+
+.popUpBodyHeader {
+    color: #333;
+    font-family: "Segoe UI", Calibri, "Times New Roman";
+    font-size: 0.875em;
+    line-height: 15pt;
+    margin: 0 5px 5px 0;
+    text-overflow: ellipsis;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.popUpCommonContent {
+    font-family: "Segoe UI", Calibri, "Times New Roman";
+    font-size: 0.87em;
+    height: 332px;
+    line-height: 11pt;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0 10px 0 10px;
+}
+
+    .popUpCommonContent div {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 8px 10px 8px 10px;
+    }
+
+.popUpBorder {
+    border: 1px solid #c8c8c8;
+    height: 382px;
+    width: 245px;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.popUpMoveItem {
+    width: 58px;
+}
+
+.popUpPosAbs {
+    margin-left: -4px;
+}
+
+.popUpCommonContent div:hover {
+    background-color: #CDE6F7;
+    color: #333;
+    font-weight: 600;
+}
+.popUpSelected:hover{
+    background-color: #eaeaea !important;
+}
+
+.popUpPG {
+    border: 1px solid #c8c8c8;
+    font-family: "Segoe UI", Calibri;
+    font-size: .87em;
+    height: 28px;
+    line-height: 14px;
+    padding: 2px;
+    width: 242px;
+    margin-top: -1px;
+}
+
+#navigate {
+    position: relative;
+    width: 20px;
+}
+
+#ddlClientList, #popUpPGList, .ddlRoleAssignList, .ddlPermAssignList {
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+    z-index: 1;
+}
+
+#ddlClientList, #popUpPGList {
+    position: absolute;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+#ddlClientList {
+    top: 48px;
+    max-height: 204px;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+#popUpPGList {
+    margin-top: 27px;
+    max-height: 150px;
+    overflow-y: scroll;
+    width: 365px;
+}
+
+.ddlRoleAssignList, .ddlPermAssignList {
+    width: 348px;
+    position: absolute;
+    clear: both;
+    max-height: 100px;
+    overflow-y: scroll;
+}
+
+.ddlPermAssignList {
+    left: 492px;
+}
+
+.ddListOnHover {
+    background-color: #eaeaea;
+    color: #666;
+}
+
+.ddClientIcon, .ddpopUpPGIcon, .ddlRoleAssignIcon, .ddlPermAssignIcon, .iconForward, .iconBack, .button {
+    opacity: 0.665;
+}
+
+    .ddClientIcon:hover, .ddpopUpPGIcon:hover, .ddlRoleAssignIcon:hover, .ddlPermAssignIcon:hover, .iconForward:hover, .iconBack:hover, .close:hover, .button {
+        opacity: 1;
+    }
+
+.ddpopUpPGIcon {
+    position: absolute;
+    margin: 10px 0 0 -25px;
+}
+
+#ddlClient, #popUpPG, .ddlClientListItem, .popUpOptions, .roleValue, .permValue, .assignRole, .assignPermission {
+    cursor: pointer;
+}
+
+#ddlClient, #popUpPG, .assignRoleField, .assignPermField {
+    background-color: #fff;
+    padding: 0 10px;
+}
+
+.ddlClientListItem, .popUpOptions, .roleValue, .permValue {
+    padding: 2px 10px 3px;
+    font-size: .875em;
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.ddClientIcon {
+    position: absolute;
+    left: 272px;
+    top: 32px;
+}
+
+.ddlRoleAssignIcon, .ddlPermAssignIcon {
+    position: absolute;
+    margin-top: 11px;
+    margin-left: -17px;
+}
+
+.popUpPGDiv {
+    width: 365px;
+}
+
+.iconForward, .iconBack, #infoImg, .close {
+    width: 27px;
+}
+
+.teamName {
+    height: 30px;
+    width: 350px;
+    color: #fff;
+}
+
+.teamRole, .teamPermission {
+    height: 30px;
+    width: 350px;
+}
+
+
+.sectionContent .clear {
+    color: #666;
+    line-height: 1.6;
+}
+
+.content label, .content input {
+    float: left;
+    font-family: 'Segoe UI', Calibri, 'Times New Roman';
+    color: #666;
+}
+
+.content label {
+    font-size: .875em;
+    margin-bottom: 2px;
+}
+
+.content input {
+    border: 1px solid #c8c8c8;
+    line-height: 14pt;
+    margin-bottom: 10px;
+    font-size: .87em;
+    padding: 2px 20px 2px 10px;
+}
+
+.mediumSmall {
+    max-width: 160px;
+    min-width: 160px;
+}
+
+.disable {
+    cursor: none;
+}
+
+.close {
+    margin-bottom: 16px;
+    float: left;
+    display: inline-block;
+    cursor: pointer;
+    opacity: 0.665;
+    margin-left: 20px;
+}
+
+.clear {
+    clear: both;
+}
+
+.sectionStep #addMoreLink {
+    color: #2b579a;
+    cursor: pointer;
+    float: right;
+    font-size: 12px;
+    margin-right: 20px;
+    width: 93px;
+}
+
+#addMoreLink {
+    margin-top: -10px;
+}
+
+#calendarSection {
+    margin-top: 9px;
+}
+
+#practiceGroupTitle {
+    font-size: 14px;
+}
+
+#rssSection, #emailNotificationSection, #tasksSection {
+    margin-top: 5px;
+}
+
+#conflictCheckSection {
+    margin-top: 2px;
+}
+
+.conflictCheckRadioPosition {
+    position: relative;
+    top: 5px;
+}
+
+.noSpace {
+    margin-left: 0;
+}
+
+.clientDescription {
+    width: 800px;
+    font-style: normal;
+    color: #333;
+    padding: 1px 0 1px 0;
+}
+
+.tableRow {
+    display: table-row;
+    height: 30px;
+    margin-top: 10px;
+    color: #2b579a;
+}
+
+.horizontalLine {
+    background-color: #f4f4f4;
+    height: 2px;
+    width: 1150px;
+    margin: 6px 0 10px 0;
+}
+
+.ClientNameTitle {
+    font-size: 14px;
+}
+
+.contentMatterType {
+    background-color: #f4f4f4;
+    margin-top: 11px;
+    height: 533px;
+    width: 1136px;
+    padding: 15px 0 0 14px;
+}
+
+.practiceGroup {
+    width: 365px;
+    float: left;
+}
+
+.matterTypeComplete {
+    margin-top: 400px;
+}
+
+.matterTypeGroup {
+    width: 277px;
+    height: 330px;
+}
+
+.subAreaLaw .defaultMatterType {
+    margin-left: 40px;
+}
+
+.iconForward {
+    margin: 180px 0 10px 0;
+}
+
+.popDT {
+    height: 373px;
+    padding: 10px 10px 0 10px;
+}
+
+.button {
+    background-color: #0072c6;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    float: left;
+    font-family: 'Segoe UI', Calibri, 'Times New Roman';
+    font-size: 14px;
+    font-weight: 600;
+    height: 30px;
+    line-height: 1.16em;
+    min-height: 30px;
+    width: 80px;
+    display: inline;
+}
+
+#cancelButton {
+    margin-left: 10px;
+}
+
+.button[disabled] {
+    background-color: #ECECEC;
+    color: #666;
+}
+
+#buttonSection {
+    margin-top: 27px;
+    height: 30px;
+}
+
+#container .errorPopUp {
+    height: 50px;
+    margin: 10px;
+    position: absolute;
+    width: 264px;
+    z-index: 100;
+}
+
+#container .errTriangle, #container .errTriangleBorder {
+    border: 12px solid transparent;
+    height: 0;
+    left: 45px;
+    position: absolute;
+    width: 0;
+}
+
+#container .errTriangle {
+    border-top: 12px solid red;
+    top: 149%;
+    top: calc(50% - -36px);
+}
+
+#container .errTriangleBorder {
+    border-top: 12px solid #fff;
+    top: 147%;
+    top: calc(50% - -35px);
+}
+
+#container .errText {
+    background-color: #fff;
+    border: 1px solid red;
+    color: #333;
+    font-size: .75em;
+    min-height: 50px;
+    padding: 10px 10px 0;
+    text-align: left;
+    width: 241px;
+}
+
+.hideMatterType {
+    background-color: #f4f4f4;
+    margin-top: 15px;
+    height: 40px;
+    width: 1150px;
+    padding: 15px 0 0 20px;
+}
+
+.clientLinks {
+    cursor: pointer;
+}
+
+.loadingIconContentType, .loadingIconAssignPermission {
+    position: absolute;
+}
+
+.loadingIconContentType {
+    margin-top: 5px;
+    margin-left: 380px;
+}
+
+.loadingIconAssignPermission {
+    margin-left: 200px;
+    margin-top: -18px;
+}
+
+.ms-ChoiceFieldGroup {
+    margin-bottom: 0;
+}
+
+
+.defaultMatterSection {
+    margin-top: 30px;
+}
+
+.defaultRadioPosition, .defaultMatterIdPosition, .defaultInputPosition, .defaultRadioLabel, .defaultConflictPosition, .defaultButtonPosition {
+    position: relative;
+}
+
+
+.defaultRadioPosition, .defaultMatterIdPosition {
+    top: 5px;
+}
+
+.defaultInputPosition {
+    top: 10px;
+}
+
+#successMessage {
+    margin-top: 20px;
+}
+
+.defaultRadioLabel {
+    top: -3px;
+}
+
+.defaultConflictPosition, .defaultButtonPosition {
+    top: -8px;
+}
+
+.content .defaultNamePosition {
+    width: 360px;
+    margin-bottom: 8px;
+}
+
+.defaultPermissionPosition {
+    margin-left: 318px;
+}
+
+input.ms-TextField-field.inputMatterName, input.ms-TextField-field.inputMatterId {
+    padding: 5px 3px 5px 8px;
+}
+
+input[type=text]::-webkit-input-placeholder, input[type=text]:-moz-placeholder, input[type=text]:-ms-input-placeholder, input[type=text]::-moz-placeholder {
+    font-style: italic;
+    font-size: 14px;
+    font-family: 'Segoe UI', Calibri, 'Times New Roman';
+}
+
+.redBorder {
+    border-width: 2px !important;
+    border-color: #F00 !important;
+}
+
+.iconPosition {
+    margin-left: -24px;
+}
+
+.matterTypePosition {
+    margin-left: -27px;
+}
+
+.clientNames {
+    padding: 4px 0 4px 0;
+}
+
+.rightFooter {
+    list-style-type: none;
+    margin-bottom: 0;
+}
+
+.settingLink {
+    margin-right: 10px;
+    color: #2b579a;
+    float: left;
+    font-family: 'Segoe UI';
+    font-weight: 100;
+    font-size: 28px;
+}
+
+#settingName {
+    color: #2b579a;
+}
+
+#s4-workspace {
+    overflow: hidden;
+}
+
+.AppContent { 
+    padding-left: 10px;
+ }
+
+@media all and (max-width:1150px) {
+    #footer {
+        width: 1150px;
+    }
+}

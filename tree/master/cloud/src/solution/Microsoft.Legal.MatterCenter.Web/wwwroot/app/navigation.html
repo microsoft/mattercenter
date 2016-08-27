@@ -1,0 +1,86 @@
+<style>
+    #HeaderPlaceHolder {
+        display: block !important;
+    }
+</style>
+<!---->
+<div id="HomeContainer" class="marleft10">
+    <!--    <div class="row"> -->
+    <!--     <div class="col-xs-12"> -->
+    <header class="WelcomeBar ms-bg-color-neutralLighterAlt" ng-class="{ 'RemoveWelcomeBar': vm.welcomeheader}">
+        <span class="ms-font-s" ng-hide="vm.welcomeheader">
+            {{vm.navigationContent.HeaderBarLabel}}
+            <a class="LearnMoreLink" ng-href="{{vm.navigationContent.HeaderBarLink1URL}}" target="_blank" title="Learn more about {{vm.navigationContent.Name}} Center">{{vm.navigationContent.HeaderBarLink1Text}}</a> or <a class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">{{vm.navigationContent.HeaderBarLink2Text}}</a>
+        </span>
+    </header>
+    <!--     </div> -->
+    <!--   </div> -->
+    <div class="LinkContainer">
+        <!--      <div class="row"> -->
+        <!--     <div class="col-xs-12 col-md-6"> -->
+        <div class="LeftLinkContainer">
+            <!--     <div class="row"> -->
+            <!--  <div class="col-xs-6"> -->
+            <div class="MattersContainer" title="{{vm.navigationContent.Image1Title}}">
+                <a ui-sref='mc.matters()'>
+                    <figure>
+                        <img src="Images/MC_Matters.png" alt="{{vm.navigationContent.Image1Title}}" />
+                        <figcaption class="FigureCaption">{{vm.navigationContent.Image1Caption}}</figcaption>
+                    </figure>
+                </a>
+            </div>
+            <!--   </div> -->
+            <!-- <div class="col-xs-6"> -->
+            <div class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
+                <a ui-sref='mc.documents()'>
+                    <figure>
+                        <img src="Images/MC_Documents.png" alt="{{vm.navigationContent.Image2Title}}" />
+                        <figcaption class="FigureCaption">{{vm.navigationContent.Image2Caption}}</figcaption>
+                    </figure>
+                </a>
+            </div>
+            <!-- </div> -->
+            <!--    </div> -->
+            <!--  </div> -->
+        </div>
+        <!--   <div class="col-xs-12 col-md-6"> -->
+        <div class="RightLinkContainer">
+            <div class="SecondaryLinkContainer UploadAttachments" title="{{vm.navigationContent.Image3Title}}">
+                <a class="UploadAttachmentsLink" ui-sref='mc.matters()'>
+                    <img class="SecondaryLinksImg" src="Images/MC_Upload.png" alt="{{vm.navigationContent.Image3Title}}" />
+                </a>
+                <a class="UploadAttachmentsLink" ui-sref='mc.matters()'>
+                    <span class="SecondaryLinksText">{{vm.navigationContent.Image3Caption}}</span>
+                </a>
+            </div>
+            <div class="SecondaryLinkContainer CreateMatter" runat="server" id="CreateMatterLink" title="{{vm.navigationContent.Image4Title}}" ng-if="vm.canLoginUserCreateMatter">
+                <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
+                    <img class="SecondaryLinksImg" src="Images/MC_Create_a_matter.png" alt="{{vm.navigationContent.Image4Title}}" />
+                </a>
+                <a class="CreateMatterLink" ui-sref='mc.createMatter()'>
+                    <span class="SecondaryLinksText">{{vm.navigationContent.Image4Caption}}</span>
+                </a>
+            </div>
+            <div class="SecondaryLinkContainer MatterDashboard" title="{{vm.navigationContent.Image5Title}}">
+                <a class="MatterDashboardLink" href="{{vm.SPOHomePage}}" target="_blank">
+                    <img class="SecondaryLinksImg" src="Images/MC_Go_to_dashboard.png" alt="{{vm.navigationContent.Image5Title}}" />
+                </a>
+                <a class="MatterDashboardLink" href="{{vm.SPOHomePage}}" target="_blank">
+                    <span class="SecondaryLinksText">{{vm.navigationContent.Image5Caption}}</span>
+                </a>
+            </div>
+        </div>
+        <!--     </div> -->
+    </div>
+</div>
+<footer class="marleft10" title="Write an email to Support">
+    <span class="ms-font-m ms-font-weight-semilight">{{vm.navigationContent.FooterLabel}} <a href="{{vm.navigationContent.FooterLink1URL}}" title="{{vm.navigationContent.FooterLink1Title}}" class="emailLink">{{vm.navigationContent.FooterLink1Text}}</a></span>
+</footer>
+<div id="HeaderPlaceHolderContent">
+    <span class="AppLogoContainer hide" title="{{vm.header.LogoImageTitle}}">
+        <img class="AppLogo" src="Images/MC_Logo.png" alt="{{vm.header.LogoImageTitle}}" />
+    </span>
+</div>
+
+
+

@@ -1,0 +1,182 @@
+--temp-output:C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\obj\Debug\net451\
+--out:C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\bin\Debug\net451\Microsoft.Legal.MatterCenter.Repository.dll
+--define:DEBUG
+--define:TRACE
+--define:NET451
+--suppress-warning:CS1701
+--suppress-warning:CS1702
+--suppress-warning:CS1705
+--optimize:False
+--output-name:Microsoft.Legal.MatterCenter.Repository
+--description:Microsoft.Legal.MatterCenter.Repository Class Library
+--file-version:1.0.0.0
+--version:1.0.0.0
+--informational-version:1.0.0
+--target-framework:.NETFramework,Version=v4.5.1
+--reference:C:\Users\Premchand\.nuget\packages\MailKit\1.3.0-beta7\lib\net451\MailKit.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Antiforgery\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Antiforgery.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Authorization\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Authorization.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Cors\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Cors.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Cryptography.Internal\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Cryptography.Internal.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.DataProtection\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.DataProtection.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.DataProtection.Abstractions\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.DataProtection.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Diagnostics.Abstractions\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.AspNetCore.Diagnostics.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Hosting.Abstractions\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Hosting.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Hosting.Server.Abstractions\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Hosting.Server.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Html.Abstractions\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.AspNetCore.Html.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Http\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Http.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Http.Abstractions\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Http.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Http.Extensions\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Http.Extensions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Http.Features\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Http.Features.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.JsonPatch\1.0.0-rc2-final\lib\netstandard1.1\Microsoft.AspNetCore.JsonPatch.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Localization\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Localization.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.Abstractions\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.ApiExplorer\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.ApiExplorer.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.Core\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.Core.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.Cors\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.Cors.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.DataAnnotations\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.DataAnnotations.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.Formatters.Json\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.Formatters.Json.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.Localization\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.Localization.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.Razor\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.Razor.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.Razor.Host\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.Razor.Host.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.TagHelpers\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.TagHelpers.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Mvc.ViewFeatures\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Mvc.ViewFeatures.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Razor\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Razor.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Razor.Runtime\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Razor.Runtime.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Routing\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Routing.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.Routing.Abstractions\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.Routing.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.AspNetCore.WebUtilities\1.0.0-rc2-final\lib\net451\Microsoft.AspNetCore.WebUtilities.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Azure.KeyVault.Core\1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.CodeAnalysis.Common\1.3.0-beta1-20160429-01\lib\net45\Microsoft.CodeAnalysis.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.CodeAnalysis.CSharp\1.3.0-beta1-20160429-01\lib\net45\Microsoft.CodeAnalysis.CSharp.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Microsoft.CSharp.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Data.Edm\5.6.4\lib\net40\Microsoft.Data.Edm.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Data.OData\5.6.4\lib\net40\Microsoft.Data.OData.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Data.Services.Client\5.6.4\lib\net40\Microsoft.Data.Services.Client.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.DotNet.InternalAbstractions\1.0.0-rc2-002702\lib\net451\Microsoft.DotNet.InternalAbstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Caching.Abstractions\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.Extensions.Caching.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Caching.Memory\1.0.0-rc2-final\lib\net451\Microsoft.Extensions.Caching.Memory.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Configuration\1.0.0-rc2-final\lib\netstandard1.1\Microsoft.Extensions.Configuration.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Configuration.Abstractions\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.Extensions.Configuration.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Configuration.Binder\1.0.0-rc2-final\lib\netstandard1.1\Microsoft.Extensions.Configuration.Binder.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.DependencyInjection\1.0.0-rc2-final\lib\netstandard1.1\Microsoft.Extensions.DependencyInjection.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.DependencyInjection.Abstractions\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.DependencyModel\1.0.0-rc2-final\lib\net451\Microsoft.Extensions.DependencyModel.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.FileProviders.Abstractions\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.FileProviders.Composite\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.Extensions.FileProviders.Composite.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.FileProviders.Physical\1.0.0-rc2-final\lib\net451\Microsoft.Extensions.FileProviders.Physical.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.FileSystemGlobbing\1.0.0-rc2-final\lib\net451\Microsoft.Extensions.FileSystemGlobbing.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Globalization.CultureInfoCache\1.0.0-rc2-final\lib\netstandard1.1\Microsoft.Extensions.Globalization.CultureInfoCache.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Localization\1.0.0-rc2-final\lib\net451\Microsoft.Extensions.Localization.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Localization.Abstractions\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.Extensions.Localization.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Logging.Abstractions\1.0.0-rc2-final\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.ObjectPool\1.0.0-rc2-final\lib\net451\Microsoft.Extensions.ObjectPool.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Options\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.Extensions.Options.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Options.ConfigurationExtensions\1.0.0-rc2-final\lib\netstandard1.1\Microsoft.Extensions.Options.ConfigurationExtensions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.PlatformAbstractions\1.0.0-rc2-final\lib\net451\Microsoft.Extensions.PlatformAbstractions.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.Primitives\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Extensions.WebEncoders\1.0.0-rc2-final\lib\netstandard1.0\Microsoft.Extensions.WebEncoders.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.IdentityModel.Clients.ActiveDirectory\3.9.302261508-alpha\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.IdentityModel.Clients.ActiveDirectory\3.9.302261508-alpha\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.Net.Http.Headers\1.0.0-rc2-final\lib\netstandard1.1\Microsoft.Net.Http.Headers.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.Office.Client.Policy.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.Office.Client.TranslationServices.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.Office.SharePoint.Tools.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.Online.SharePoint.Client.Tenant.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.ProjectServer.Client.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.SharePoint.Client.DocumentManagement.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.SharePoint.Client.Publishing.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.SharePoint.Client.Runtime.Windows.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.SharePoint.Client.Runtime.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.SharePoint.Client.Search.Applications.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.SharePoint.Client.Search.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.SharePoint.Client.Taxonomy.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.SharePoint.Client.UserProfiles.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.SharePoint.Client.WorkflowServices.dll
+--reference:C:\Users\Premchand\.nuget\packages\Microsoft.SharePointOnline.CSOM\16.1.5026.1200\lib\net45\Microsoft.SharePoint.Client.dll
+--reference:C:\Users\Premchand\.nuget\packages\MimeKit\1.3.0-beta7\lib\net451\BouncyCastle.dll
+--reference:C:\Users\Premchand\.nuget\packages\MimeKit\1.3.0-beta7\lib\net451\MimeKit.dll
+--reference:C:\Users\Premchand\.nuget\packages\Newtonsoft.Json\8.0.3\lib\net45\Newtonsoft.Json.dll
+--reference:C:\Users\Premchand\.nuget\packages\StackExchange.Redis\1.1.604-alpha\lib\net45\StackExchange.Redis.dll
+--reference:C:\Users\Premchand\.nuget\packages\System.Buffers\4.0.0-rc2-24027\lib\netstandard1.1\System.Buffers.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Collections.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Collections.Concurrent.dll
+--reference:C:\Users\Premchand\.nuget\packages\System.Collections.Immutable\1.1.37\lib\dotnet\System.Collections.Immutable.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.ComponentModel.dll
+--reference:C:\Users\Premchand\.nuget\packages\System.ComponentModel.Primitives\4.0.1-rc2-24027\ref\net45\System.ComponentModel.Primitives.dll
+--reference:C:\Users\Premchand\.nuget\packages\System.ComponentModel.TypeConverter\4.0.1-rc2-24027\ref\net45\System.ComponentModel.TypeConverter.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Diagnostics.Contracts.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Diagnostics.Debug.dll
+--reference:C:\Users\Premchand\.nuget\packages\System.Diagnostics.DiagnosticSource\4.0.0-rc2-24027\lib\portable-net45+win8+wpa81\System.Diagnostics.DiagnosticSource.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Diagnostics.Tools.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Diagnostics.Tracing.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Globalization.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.IO.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.IO.Compression.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Linq.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Linq.Expressions.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.Net.Http.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Net.Primitives.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.ObjectModel.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Reflection.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Reflection.Extensions.dll
+--reference:C:\Users\Premchand\.nuget\packages\System.Reflection.Metadata\1.2.0\lib\portable-net45+win8\System.Reflection.Metadata.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Reflection.Primitives.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Resources.ResourceManager.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Runtime.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Runtime.Extensions.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Runtime.InteropServices.dll
+--reference:C:\Users\Premchand\.nuget\packages\System.Runtime.InteropServices.RuntimeInformation\4.0.0-rc2-24027\ref\netstandard1.1\System.Runtime.InteropServices.RuntimeInformation.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Runtime.Numerics.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Runtime.Serialization.Primitives.dll
+--reference:C:\Users\Premchand\.nuget\packages\System.Spatial\5.6.4\lib\net40\System.Spatial.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Text.Encoding.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Text.Encoding.Extensions.dll
+--reference:C:\Users\Premchand\.nuget\packages\System.Text.Encodings.Web\4.0.0-rc2-24027\lib\netstandard1.0\System.Text.Encodings.Web.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Text.RegularExpressions.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Threading.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Threading.Tasks.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Threading.Timer.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Xml.ReaderWriter.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\Facades\System.Xml.XDocument.dll
+--reference:C:\Users\Premchand\.nuget\packages\WindowsAzure.Storage\7.0.1-preview\lib\net40\Microsoft.WindowsAzure.Storage.dll
+--reference:C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Models\bin\Debug\net451\Microsoft.Legal.MatterCenter.Models.dll
+--reference:C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Utility\bin\Debug\net451\Microsoft.Legal.MatterCenter.Utility.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\mscorlib.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.Core.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.Data.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.Security.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.Xml.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.Xml.Linq.dll
+--reference:C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.1\System.ComponentModel.DataAnnotations.dll
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\ICommonRepository.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\Document\DocumentRepository.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\Document\IDocumentRepository.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\Matter\IMatterRepository.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\Matter\MatterRepository.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\Properties\AssemblyInfo.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\Shared\ISharedRepository.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\Shared\SharedRepository.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\ExternalSharing.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Search.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Site.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\SPContentTypes.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\SPList.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\SPPage.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Taxonomy.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\UsersDetails.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Extensions\TaxonomyExtensions.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Interfaces\IExternalSharing.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Interfaces\ISearch.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Interfaces\ISite.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Interfaces\ISPContentTypes.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Interfaces\ISPList.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Interfaces\ISPPage.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Interfaces\ITaxonomy.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\SharePointInfo\Interfaces\IUsersDetails.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\Taxonomy\ITaxonomyRepository.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\Taxonomy\TaxonomyRepository.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\UserRepository\IUserRepository.cs
+C:\projects\mc2\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\UserRepository\UserRepository.cs

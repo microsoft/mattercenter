@@ -1,0 +1,286 @@
+﻿<style>
+    .commonContent {
+        display: block !important;
+    }
+
+    #contentDiv {
+        height: auto !important;
+        min-height: 410px;
+        max-height: 3000px !important;
+    }
+</style>
+<div id="mainDivContainer" ng-click="vm.closealldrops()">
+    <div id="contentDiv" class="pad0">
+        <div ng-if="vm.clientlist">
+            <div class="defaultFontStyle clientName" id="settingName">{{vm.settingsConfigs.Label1HeaderText}}</div>
+            <div class="defaultFontStyle contentDescription clientDescription">{{vm.settingsConfigs.Label2Text}}</div>
+            <div class="tableContainer defaultFontStyle semiBold ClientNameTitle">{{vm.settingsConfigs.Label3Text}}</div>
+            <div class="horizontalLine"></div>
+            <div class="row margin0">
+                <div class="defaultFontStyle">
+                    <a class="col-xs-12 clientLinks clientNames" ng-repeat="client in vm.taxonomydata" ng-click="vm.showSelectedClient(client.name,client.url)">
+                        {{client.name}}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div ng-if="vm.showClientDetails">
+            <div class="row margin0">
+                <div class="defaultFontStyle clientName">
+                    <a class="clientLinks marginRight10" ng-click="vm.showSetting()">{{vm.settingsConfigs.Label1HeaderText}} &gt;</a>
+                    {{vm.selected}}
+                </div>
+                <div class="defaultFontStyle pageDescription col-xs-12 pad0">
+                    {{vm.settingsConfigs.Label4Selection1HeaderText}}
+                </div>
+                <div class="defaultSection col-xs-12">
+                    <div class="defaultFontStyle titleSection">{{vm.settingsConfigs.Label5Section1HeaderText}}</div>
+                    <div class="defaultFontStyle descriptionSection">{{vm.settingsConfigs.Label6Section1HeaderText}}</div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="row margin0">
+                        <div class="col-xs-12 col-sm-5 pad0">
+                            <div class="row margin0">
+                                <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                    {{vm.settingsConfigs.Label7DefaultValue1TitleText}}
+                                </div>
+                                <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">
+                                    {{vm.settingsConfigs.Label8DefaultValue1TitleDescription}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                            <input type="text" class="form-control" ng-model="vm.mattername" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="row margin0">
+                        <div class="col-xs-12 col-sm-5 pad0">
+                            <div class="row margin0">
+                                <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                    {{vm.settingsConfigs.Label9DefaultValue2TitleText}}
+                                </div>
+                                <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0" style="margin-top:10px">
+                                    {{vm.settingsConfigs.Label10DefaultValue2TitleDescription}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                            <input type="text" class="form-control" ng-model="vm.matterid" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    {{vm.settingsConfigs.Label11DefaultValue3HeaderText}}
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                {{vm.settingsConfigs.Label12DefaultValue3TitleText}}
+                            </div>
+                            <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">
+                                {{vm.settingsConfigs.Label13DefaultValue3TitleDescription}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.assignteam" name="assignteam" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span>
+                            <input type="radio" ng-model="vm.assignteam" name="assignteam" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="defaultFontStyle tableContainer semiBold" id="assignPermissionsTitle">{{vm.settingsConfigs.Label14DefaultValue4HeaderText}}</div>
+                    <div class="col-xs-12 pad0">
+                        <div class="row margin0 marginTop10">
+                            <div class="col-xs-4 pad0">{{vm.settingsConfigs.Label15DefaultValue4Text}}</div>
+                            <div class="col-xs-3 ">{{vm.settingsConfigs.Label16DefaultValue4Text}}</div>
+                            <div class="col-xs-3 ">{{vm.settingsConfigs.Label17DefaultValue4Text}}</div>
+                            <div class="col-xs-2 "></div>
+                        </div>
+                        <div class="row margin0 marginTop10" data-ng-repeat="assignTeam in vm.assignPermissionTeams">
+                            <div class="col-xs-4 pad0">
+                                <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' class="form-control clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name + ' ('+ users.email + ')' for users in vm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='vm.onSelect($item, $model, assignTeam,"team","",$event)' spellcheck="true" type="text" placeholder="{{vm.settingsConfigs.Textbox1DefaultValue4PlaceholdertText}}" autocomplete="off">
+                                <div ng-show='teamAssingnResults'>
+                                    <i class="glyphicon glyphicon-remove"></i> {{vm.settingsConfigs.Label18DefaultValue4NoResultsFoundText}}
+                                </div>
+                                <span class="pull-left"><i ng-show='loadingLocations' class="glyphicon glyphicon-refresh"></i></span>
+                            </div>
+                            <div class="col-xs-3 ">
+                                <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' class="form-control clear dropdownCustom " ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in vm.assignRoles '></select>
+                            </div>
+                            <div class="col-xs-3 ">
+                                <select id='permUser{{assignTeam.assigneTeamRowNumber}}' class="form-control clear dropdownCustom " ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in vm.assignPermissions '></select>
+                            </div>
+                            <div class="col-xs-2 ">
+                                <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="vm.removeAssignPermissionsRow($index)" title="{{vm.settingsConfigs.DeleteTitleText}}" alt="{{vm.settingsConfigs.DeleteTitleText}}" src="../Images/icon-delete.png">
+                            </div>
+                        </div>
+                        <div class="col-xs-10 col-xs-offset-2 margin0 marginTop10">
+                            <div id="addMoreLink" class="addMoreLinks">
+                                <a id="addMorePermissions" class="pad0" ng-click="vm.addNewAssignPermissions()">{{vm.settingsConfigs.Label19DefaultValue4AddMoreText}}</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                {{vm.settingsConfigs.Label20DefaultValue5Text}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.email" name="email" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span>
+                            <input type="radio" name="email" value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.email" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop15">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                {{vm.settingsConfigs.Label21DefaultValue6Text}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.calendar" name="calender" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span>
+                            <input type="radio" ng-model="vm.calendar" name="calender" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                {{vm.settingsConfigs.Label22DefaultValue7Text}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.tasks" name="tasks" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span>
+                            <input type="radio" name="tasks" value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.tasks" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                {{vm.settingsConfigs.Label23DefaultValue8Text}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.rss" name="rss" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span>
+                            <input type="radio" ng-model="vm.rss" name="rss" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                        </span>
+                    </div>
+                </div>
+                <div class="defaultSection col-xs-12 marginTop20">
+                    <div class="defaultFontStyle titleSection">{{vm.settingsConfigs.Label24Section2HeaderText}}</div>
+                    <div class="defaultFontStyle descriptionSection">{{vm.settingsConfigs.Label25Section2HeaderText}}</div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                               {{vm.settingsConfigs.Label26Section2Text}}
+                            </div>
+                            <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">
+                                {{vm.settingsConfigs.Label27Section2DescriptionText}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.matterdesc" name="matterdesc" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span>
+                            <input type="radio" name="matterdesc" value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.matterdesc" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                {{vm.settingsConfigs.Label28Section2Text}}
+                            </div>
+                            <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">
+                                {{vm.settingsConfigs.Label29Section2DescriptionText}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0  marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.conflict" name="conflict" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span>
+                            <input type="radio" name="conflict" value="{{vm.settingsConfigs.Radio1Option2Text}}" ng-model="vm.conflict" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                {{vm.settingsConfigs.Label30Section2Text}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.showrole" name="showrole" value="{{vm.settingsConfigs.Radio1Option1Text}}" />{{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span>
+                            <input type="radio" name="showrole" ng-model="vm.showrole" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                {{vm.settingsConfigs.Label31Section2Text}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.showmatterid" name="matterid" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
+                        <span class="marginRight10"><input type="radio" ng-model="vm.showmatterid" name="matterid" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}</span>
+                    </div>
+                </div>
+                <div class="col-xs-12 pad0 marginTop10">
+                    <div class="col-xs-12 col-sm-5 pad0">
+                        <div class="row margin0">
+                            <div class="col-xs-12 defaultFontStyle displayInline pad0">
+                                {{vm.settingsConfigs.Label32Section2Text}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-7 pad0 marginTop7">
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option1Text}}"/> {{vm.settingsConfigs.Radio2Option1Text}}</span>
+                        <span class="marginRight10"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option2ValueText}}" /> {{vm.settingsConfigs.Radio2Option2Text}}</span>
+                        <span class="marginRight10" ng-if="vm.showmatterid=='Yes'"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option3Text}}" /> {{vm.settingsConfigs.Radio2Option3Text}}</span>
+                    </div>
+                </div>
+                <div id="buttonSection col-xs-12 pad0">
+                    <button class="button clear" type="button" id="saveButton" title="{{vm.settingsConfigs.ButtonSaveText}}" ng-click="vm.saveSettings()">{{vm.settingsConfigs.ButtonSaveText}}</button>
+                    <button class="button" type="button" id="cancelButton" title="{{vm.settingsConfigs.ButtonCancelText}}" ng-click="vm.showSetting()">{{vm.settingsConfigs.ButtonCancelText}}</button>
+                </div>
+                <div class="defaultFontStyle col-xs-12 pad0" id="successMessage" ng-if="vm.successmessage">{{vm.settingsConfigs.Label33Section2Text}} <span class="clientLinks" id="goToClients" ng-click="vm.showSetting()" title="{{vm.settingsConfigs.Label34Section2Text}}">{{vm.settingsConfigs.Label34Section2Text}}</span>.</div>
+            </div>
+
+        </div>
+    </div>
+    <div id="loadingImageContainer" style="top:25%;left:47%">
+        <div class="lazyLoading" ng-hide="vm.lazyloader">
+            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.settingsConfigs.Image.LoadingAltText}}" title="{{vm.settingsConfigs.Image.LoadingAltText}}" />
+        </div>
+    </div>
+</div>

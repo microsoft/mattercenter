@@ -1,0 +1,18 @@
+﻿<div ng-mouseenter='grid.appScope.vm.clientDropDown = true' ng-mouseleave='grid.appScope.vm.clientDropDown = false'>
+
+    <div class='sorticon keep-open' style='float:right;' ng-show='grid.appScope.vm.clientDropDown'>
+
+        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor' ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn2Header)" type='button'>
+            <img src='../images/icon-combobox.png' />
+        </a>
+    </div>
+    <div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'>
+        <span class='ui-grid-header-cell-label ng-binding' title='Click to sort by client name'>{{ col.colDef.displayName }}
+            <span class="headerfilter" ng-if="grid.appScope.vm.clientfilter"><i class="ms-Icon ms-Icon--filter"></i></span>
+        <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span></span>
+    </div>
+    <div class='ui-grid-column-menu-button ng-scope' ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false' ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>
+
+        <i title='' aria-hidden='true' class='ui-grid-icon-up-dir'>&nbsp;</i>
+    </div>
+</div>

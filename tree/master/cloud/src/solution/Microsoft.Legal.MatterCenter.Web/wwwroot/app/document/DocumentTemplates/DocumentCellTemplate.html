@@ -1,0 +1,36 @@
+﻿<div class='row' style="margin-right:0">
+    <div class='col-xs-8 col-sm-9 col-md-9 col-lg-10' id='documentPopup' title='{{row.entity.documentName}}'>
+        <a documentflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis hidden-xs' style='text-align: left;padding-left:0' details={{row.entity}}
+           ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess">
+            <img class="docTypeIconHeader" id="docTypeIcon"
+                 src="{{row.entity.documentIconUrl}}" alt="{{grid.appScope.vm.documentConfigContent.EllipsisDocTypeIconAltText}}" /> {{row.entity.documentName}}
+        </a>
+        <a documentflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis visible-xs' style='text-align: left;padding-left:0'
+           details={{row.entity}} ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess">
+            <img class="docTypeIconHeader" id="docTypeIcon"
+                 src="{{row.entity.documentIconUrl}}" alt="{{grid.appScope.vm.documentConfigContent.EllipsisDocTypeIconAltText}}" /> {{row.entity.documentName}}
+        </a>
+        <div class='popcontent' style="display:none;">
+        </div>
+    </div>
+    <div class='col-xs-4 col-sm-3 col-md-3 col-lg-2 text-right' id="doccelltemp">
+        <div class='dropdown'>
+            <a class='btn btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' href='' type='button' data-toggle='dropdown'></a>
+            <ul style='margin:0;padding:0' class='dropdown-menu'>
+
+                <li class='ms-ContextualMenu-item'>
+                    <a class='ECBItem ms-ContextualMenu-link upload' href='{{row.entity.documentOWAUrl}}.aspx'
+                       target='_blank'>{{grid.appScope.vm.documentConfigContent.EllipsisLink1Text}}</a>
+                </li>
+                <li class='ms-ContextualMenu-item'>
+                    <a class='ECBItem ms-ContextualMenu-link upload' href='{{row.entity.documentMatterUrl}}'
+                       target='_blank'>{{grid.appScope.vm.documentConfigContent.EllipsisLink2Text}}</a>
+                </li>
+                <li class='ms-ContextualMenu-item'
+                    ng-click='row.entity.MatterInfo===undefined?grid.appScope.vm.PinMatter(row):grid.appScope.vm.UnpinDocument(row)'>
+                    <a class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?grid.appScope.vm.documentConfigContent.EllipsisLink4Text:grid.appScope.vm.documentConfigContent.EllipsisLink4Text}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

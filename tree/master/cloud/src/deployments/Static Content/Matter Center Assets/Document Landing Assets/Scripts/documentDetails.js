@@ -1157,6 +1157,77 @@ var oDocumentLandingObject = (function () {
         return string.replace(new RegExp(oCommonFunctions.escapeRegExp(find), "g"), replace);
     };
 
+ oCommonFunctions.applyConfigSettings = function () {
+ 
+ 
+	$("#tabTitle").html(uiconfigs.DocumentDetails.Label1TabTitleText);
+	$("#collapseMessageDetails").html(uiconfigs.DocumentDetails.Link1ErrorDetailsCaptionText);
+	$("#gotoAllDocuments").attr("title",uiconfigs.DocumentDetails.Link2AllDocumentText);
+	$("#linkGoToAllDocument").html(uiconfigs.DocumentDetails.Link2AllDocumentText);
+	$("#previewUnsupportedText").html(uiconfigs.DocumentDetails.LabelNoPreviewText);
+	$("#imgNoPreview").attr("title",uiconfigs.DocumentDetails.ImgNoPreviewSuppoertText);
+	$("#spanViewMore").attr("title",uiconfigs.DocumentDetails.Link3ViewMoreText);
+	$("#viewMoreFileProperties").html(uiconfigs.DocumentDetails.Link3ViewMoreText); 
+	$("#viewMoreVersions").attr("title",uiconfigs.DocumentDetails.Link3ViewMoreText);
+	$("#viewMoreVersions").html(uiconfigs.DocumentDetails.Link3ViewMoreText);
+	
+	$("#spanDocumentName").html(uiconfigs.DocumentDetails.Label1HeaderText+ ":");
+ 
+	$("#filePropertiesTitle").html(uiconfigs.DocumentDetails.Label2Section2HeaderText);
+	$("#Section1Column1").html(uiconfigs.DocumentDetails.Label1HeaderText + ":");
+	$("#Section1Column1").attr("title",uiconfigs.DocumentDetails.Label1HeaderText);
+	$("#Section1Column2").html(uiconfigs.DocumentDetails.Label4Section2Column2Text+ ":");
+	$("#Section1Column2").attr("title",uiconfigs.DocumentDetails.Label4Section2Column2Text);
+	$("#Section1Column3").html(uiconfigs.DocumentDetails.Label5Section2Column3Text+ ":");
+	$("#Section1Column3").attr("title",uiconfigs.DocumentDetails.Label5Section2Column3Text);
+	$("#Section1Column4").html(uiconfigs.DocumentDetails.Label6Section2Column4Text+ ":");
+	$("#Section1Column4").attr("title",uiconfigs.DocumentDetails.Label6Section2Column4Text);
+	$("#Section1Column5").html(uiconfigs.DocumentDetails.Label7Section2Column5Text+ ":");
+	$("#Section1Column5").attr("title",uiconfigs.DocumentDetails.Label7Section2Column5Text);
+	$("#Section1Column6").html(uiconfigs.DocumentDetails.Label8Section2Column6Text+ ":");
+	$("#Section1Column6").attr("title",uiconfigs.DocumentDetails.Label8Section2Column6Text);
+	$("#Section1Column7").html(uiconfigs.DocumentDetails.Label9Section2Column7Text+ ":");
+	$("#Section1Column7").attr("title",uiconfigs.DocumentDetails.Label9Section2Column7Text);
+	$("#Section1Column8").html(uiconfigs.DocumentDetails.Label10Section2Column8Text+ ":");
+	$("#Section1Column8").attr("title",uiconfigs.DocumentDetails.Label10Section2Column8Text);
+	$("#Section1Column9").html(uiconfigs.DocumentDetails.Label11Section2Column9Text+ ":");
+	$("#Section1Column9").attr("title",uiconfigs.DocumentDetails.Label11Section2Column9Text);
+	$("#Section1Column10").html(uiconfigs.DocumentDetails.Label12Section2Column10Text+ ":");
+	$("#Section1Column10").attr("title",uiconfigs.DocumentDetails.Label12Section2Column10Text);
+	$("#Section1Column11").html(uiconfigs.DocumentDetails.Label13Section2Column11Text+ ":");
+	$("#Section1Column11").attr("title",uiconfigs.DocumentDetails.Label13Section2Column11Text);
+	$("#Section1Column12").html(uiconfigs.DocumentDetails.Label14Section2Column12Text+ ":");
+	$("#Section1Column12").attr("title",uiconfigs.DocumentDetails.Label14Section2Column12Text);
+	$("#Section1Column13").html(uiconfigs.DocumentDetails.Label15Section2Column13Text+ ":");
+	$("#Section1Column13").attr("title",uiconfigs.DocumentDetails.Label15Section2Column13Text);
+	$("#Section1Column14").html(uiconfigs.DocumentDetails.Label16Section2Column14Text+ ":");
+	$("#Section1Column14").attr("title",uiconfigs.DocumentDetails.Label16Section2Column14Text);
+ 
+  
+	$("#Section2Header").html(uiconfigs.DocumentDetails.Label17Section2HeaderText);
+	$("#Section2Column1").html(uiconfigs.DocumentDetails.Label18Section2Column1Text);
+	$("#Section2Column2").html(uiconfigs.DocumentDetails.Label19Section2Column2Text);
+	$("#Section2Column3").html(uiconfigs.DocumentDetails.Label20Section2Column3Text);
+	
+	$("#spanOpenDownload").html(uiconfigs.DocumentDetails.Label21MenuHeaderOption1Text);
+	$("#spanDownload").html(uiconfigs.DocumentDetails.Label22MenuHeaderOption2Text);
+	$("#spanShare").html(uiconfigs.DocumentDetails.Label23MenuHeaderOption3Text);
+	$("#spanCheckin").html(uiconfigs.DocumentDetails.Label24MenuHeaderOption4Text);
+	$("#spanCheckOut").html(uiconfigs.DocumentDetails.Label25MenuHeaderOption5Text);
+	$("#spanSendLink").html(uiconfigs.DocumentDetails.Label26MenuHeaderOption6Text);
+	$("#spanPin").html(uiconfigs.DocumentDetails.Label27MenuHeaderOption7Text);
+	$("#spanUnpin").html(uiconfigs.DocumentDetails.Label28MenuHeaderOption8Text);
+
+	$("#openDocument").attr("title",uiconfigs.DocumentDetails.Label21MenuHeaderOption1Text);
+	$("#download").attr("title",uiconfigs.DocumentDetails.Label22MenuHeaderOption2Text);
+	$("#shareDocument").attr("title",uiconfigs.DocumentDetails.Label23MenuHeaderOption3Text);
+	$("#checkInDocument").attr("title",uiconfigs.DocumentDetails.Label24MenuHeaderOption4Text);
+	$("#checkOutDocument").attr("title",uiconfigs.DocumentDetails.Label25MenuHeaderOption5Text);
+	$("#sendLink").attr("title",uiconfigs.DocumentDetails.Label26MenuHeaderOption6Text);
+	$("#pinDocument").attr("title",uiconfigs.DocumentDetails.Label27MenuHeaderOption7Text);
+	$("#unpinDocument").attr("title",uiconfigs.DocumentDetails.Label28MenuHeaderOption8Text);
+       
+	}
 
     /* Function to be executed once DOM loaded completely */
     $(document).ready(function () {
@@ -1166,6 +1237,7 @@ var oDocumentLandingObject = (function () {
         oDocumentLanding.sDocumentParentListId = oCommonFunctions.getParameterByName("listguid");
         oDocumentLanding.sDocumentGUID = oCommonFunctions.getParameterByName("docguid");
         oCommonFunctions.applyBindings();
+        oCommonFunctions.applyConfigSettings();
         if ("" === oDocumentLanding.sClientRelativeUrl || "" === oDocumentLanding.sDocumentParentListId || "" === oDocumentLanding.sDocumentGUID) {
             oCommonFunctions.showCommonErrorPopUp(oErrorMessages.sInsufficientParametersMessage);
         } else {

@@ -1,0 +1,232 @@
+﻿<style>
+    .topheader {
+        position: absolute !important;
+        width: 100%;
+    }
+</style>
+<!--<div class="container-fluid">   -->
+<div ng-click="vm.closealldrops()" ng-class="{'mainMatter':vm.lazyloader}">
+
+    <div class="row">
+        <div class="row" id="mainmenu">
+            <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
+                <!--<div class="col-xs-8 col-sm-3" ng-click="vm.menuClick()">
+                    <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImage1OpenTitle}}" title="{{vm.header.MenuImage1Title}}" />
+                    <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImage1CloseTitle}}" title="{{vm.header.CloseTitle}}" />
+                    <span class="MenuCaption">{{vm.header.MenuImage1Caption}}</span>
+                </div>
+                <div class="AppMenuFlyout ms-shadow">
+                    <div class="AppMenuFlyoutPriLinks">
+                        <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span></a>
+                        <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
+                        <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span></a>
+                    </div>
+                </div>-->
+                <div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-sm-9 col-md-9 col-lg-9 hidden-xs pad0" id="mainselect">
+                    <!--<select class="form-control" ng-model="vm.ddlMatters"  ng-options="matter.Name for matter in vm.Matters" ng-change="vm.GetMatters(vm.ddlMatters.Id)"></select>-->
+                    <div class="input-group-btn zindex6">
+                        <button type="button" class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
+                            <span class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.documentname}}</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
+                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}" ng-click="vm.SetDocuments(1,vm.documentConfigContent.Dropdown1Item1)">{{vm.documentConfigContent.Dropdown1Item1}}</li>
+                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}" ng-click="vm.SetDocuments(2,vm.documentConfigContent.Dropdown1Item2)">{{vm.documentConfigContent.Dropdown1Item2}}</li>
+                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
+                <div class="input-group col-xs-10 col-sm-12 zindex6" id="docsearchmatter">
+                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                    <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
+                    <!--<span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>-->
+                </div>
+                <div class="col-xs-12">
+                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <!--<div ng-show="noResults">
+                        <i class="glyphicon glyphicon-remove"></i> No Results Found
+                    </div>-->
+                </div>
+            </div>
+            <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth">
+                <div class="input-group col-xs-12 zindex6">
+                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></button>
+                    </div>
+                    <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
+                </div>
+                <ul class="col-xs-12 mattersdrop" ng-if="vm.documentsdrop">
+                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}" ng-click="vm.SetDocuments(1,vm.documentConfigContent.Dropdown1Item1)">{{vm.documentConfigContent.Dropdown1Item1}}</li>
+                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}" ng-click="vm.SetDocuments(2,vm.documentConfigContent.Dropdown1Item2)">{{vm.documentConfigContent.Dropdown1Item2}}</li>
+                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
+                </ul>
+                <div class="col-xs-12">
+                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <!--<div ng-show="noResults">
+                        <i class="glyphicon glyphicon-remove"></i> No Results Found
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="vm.errorAttachDocument" class="errorAttachDocument">
+        <img title="{{vm.documentConfigContent.ImageWarningTitle}}" class="warningMessageIcon" src="../images/warning-message.png" alt="{{vm.documentConfigContent.ImageWarningAltText}}">
+        <div class="warningMessageText" title="{{vm.warningMessageText}}"> {{vm.warningMessageText}}</div>
+    </div>
+    <div class="row title">
+        <div class="col-sm-12" id="gridViewPageHeaderContainer">
+            <span role="heading" class="add-margin-bottom">{{vm.documentname}}</span>
+        </div>
+    </div>
+    <div class="row">
+        <!--Start For attaching documents messages to the current mail item-->
+        <div class="errorAttachDocument" ng-if="vm.showErrorAttachmentInfo">
+            <img title="{{vm.documentConfigContent.ImageWarningTitle}}" class="warningMessageIcon" src="../images/warning-message.png" alt="{{vm.documentConfigContent.ImageWarningAltText}}" />
+            <div class="warningMessageText">{{vm.warningMessageText}}</div>
+        </div>
+        <div class="warningPopUpHolder" ng-if="vm.showPopUpHolder">
+            <div class="warningPopUpContainer">
+                <div class="attachedSuccessPopUp" ng-if="vm.showSuccessAttachments">
+                    <div class="warningPopUpDetails">{{vm.documentConfigContent.AttachmentSuccessfullyMsgText}}</div>
+                    <div title="Close" class="warningPopUpCloseIconContainer" ng-click="vm.closeNotification()">Close</div>
+                </div>
+                <div class="attachedProgressPopUp" ng-if="vm.showAttachmentProgress">
+                    <div class="progressPopUpDetails">
+                        {{vm.documentConfigContent.AttachmentProgressingText}}
+                        <span id="currentDocumentCount" />{{ vm.asyncCallCompleted}} of {{ vm.selectedRows.length}} documents...
+                        <div>{{vm.documentConfigContent.AttachmentProgressingWarningText}} </div>
+                    </div>
+                    <div class="warningLoadingIcon">
+                        <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentConfigContent.AttachmentLoadingText}}" title="{{vm.documentConfigContent.AttachmentLoadingText}}" />
+                    </div>
+                </div>
+                <div class="attachedFailedPopUp" ng-if="vm.showFailedAtachments">
+                    <div class="attachedPopUpDetails">{{vm.failedHeaderMessage}}</div>
+                    <div class="failureDocumentList" ng-repeat="failedFile in vm.failedFiles track by $index">
+                        <div title="{{failedFile}}" class="documentList"> {{failedFile}} </div>
+                    </div>
+                    <div title="{{vm.documentConfigContent.LabelCloseText}}" class="attachedPopUpCloseIconContainer" ng-click="vm.closeNotification()">{{vm.documentConfigContent.LabelCloseText}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!--End For attaching documents messages to the current mail item-->
+        <div class="row" id="documentgrid" style="margin-left:5px;margin-right: 5px;">
+            <div class="col-sm-12" ng-show="vm.divuigrid">
+                <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()"></div>
+            </div>
+        </div>
+        <div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">            
+        </div>
+        <div ng-if="vm.isOutlook && vm.showAttachment">
+            <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
+                    id="attachDocuments" ng-click="vm.sendDocumentAsAttachment()">
+                <span class="ms-Button-label" id="attachButtonText">{{vm.attachButtonText}}</span>
+                <span class="ms-Button-description"></span>
+            </button>
+        </div>
+    </div>
+    <div id="loadingImageContainer">
+        <div class="lazyLoading" ng-hide="vm.lazyloader">
+            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentConfigContent.AttachmentLoadingText}}" title="{{vm.documentConfigContent.AttachmentLoadingText}}" />
+        </div>
+    </div>
+    <onload sortdetails="{{vm.sortexp}}"></onload>
+    <div class="documentheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentheader">
+        <div class='input-group'>
+            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-model='vm.checkedSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <div class='input-group-btn'>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+            </div>
+        </div>
+        <hr />
+        <div class='clearFilterText'>
+            <div class='clearFiltersIcon'>
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
+            </div>
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.documentConfigContent.ClearFilterFromLabelText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.documentConfigContent.ClearFilterFromLabelText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div id='filterResultsContainer'>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-repeat='document in vm.details|unique:"document.documentName"' ng-click='vm.documentsearch(document.documentName,""+vm.configSearchContent.ManagedPropertyFileName+"",true)'>{{document.documentName}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.documentsearch(client.documentClient,""+vm.configSearchContent.ManagedPropertyDocumentClientName+"",true)'>{{client.documentClient}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)'>{{matter.documentOwner}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.documentsearch(matter.documentCheckoutUser,""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+"",true)'>{{matter.documentCheckoutUser}}</div>
+                <div title="{{vm.documentConfigContent.NoFilterMatchMsgTitle}}" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>{{vm.documentConfigContent.NoFilterMatchMsgText}}</span></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="documentheaderdates flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentdateheader">
+        <div ng-show="vm.filtername=='Created Date'">
+            <div class='input-group'>
+                <input type='text' placeholder='{{vm.documentConfigContent.StartDatePlaceHolder}}' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.startdate'
+                       is-open='vm.openedStartDate'
+                       datepicker-options='vm.dateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+            <div class='input-group' style='margin-top:5px'>
+                <input type='text' placeholder='{{vm.documentConfigContent.EndDatePlaceHolder}}' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.enddate'
+                       is-open='vm.openedEndDate'
+                       datepicker-options='vm.enddateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+        </div>
+        <div ng-show="vm.filtername=='Modified Date'">
+            <div class='input-group'>
+                <input type='text' placeholder='{{vm.documentConfigContent.StartDatePlaceHolder}}' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.modstartdate'
+                       is-open='vm.modifiedStartDate'
+                       datepicker-options='vm.moddateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.modStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+            <div class='input-group' style='margin-top:5px'>
+                <input type='text' placeholder='{{vm.documentConfigContent.EndDatePlaceHolder}}' class='calendar form-control'
+                       uib-datepicker-popup='MM/dd/yyyy'
+                       ng-model='vm.modenddate'
+                       is-open='vm.modifiedenddate'
+                       datepicker-options='vm.modenddateOptions'
+                       ng-required='true' close-text='Close'
+                       alt-input-formats='altInputFormats' />
+                <span class='input-group-btn'>
+                    <button type='button' class='btn btn-default' ng-click='vm.modEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                </span>
+            </div>
+        </div>
+        <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.documentdateheader=true;'>{{vm.documentConfigContent.ButtonOkText}}</div>
+        <hr />
+        <div class='clearFilterText' data-clearfiltertype='text'>
+            <div class='clearFiltersIcon'>
+                <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='{{vm.documentConfigContent.ImageClearTitle}}' title='{{vm.documentConfigContent.ImageClearAltText}}'>
+            </div>
+            <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.documentConfigContent.ClearFilterFromLabelText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.documentConfigContent.ClearFilterFromLabelText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+        </div>
+    </div>
+</div>

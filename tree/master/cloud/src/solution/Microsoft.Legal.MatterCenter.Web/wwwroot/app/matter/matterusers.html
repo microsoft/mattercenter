@@ -1,0 +1,84 @@
+﻿<div class="manageUsers" ng-click="cm.CheckPopUp(this)">
+    <div class="popupContainerBackground " ng-class="cm.popupContainerBackground"></div>
+
+
+    <div id="errorBlock" class="errorPopUp" ng-show="cm.errorPopUpBlock">
+        <div id="errTrinagleBlock" class="errTriangle popUpFloatLeft" ng-class="cm.errTrinagleBlock"></div>
+        <div id="errTrinagleBroderBlock" class="errTriangleBorder popUpFloatLeft" ng-class="cm.errTrinagleBroderBlock"></div>
+        <div id="errText" class="errText popUpFloatRight"> {{cm.errTextMsg}}</div>
+    </div>
+
+    <div id="notificationBlock" class="notificationPopUp" ng-show="cm.notificationPopUpBlock">
+        <div id="notificatoinTrinagleBlock" class="notificatonTriangle popUpFloatLeft " ng-class=""></div>
+        <div id="notificationTrinagleBroderBlock" class="notificationTriangleBorder popUpFloatLeft " ng-class=""></div>
+        <div id="notificationText" class="notificatonText  popUpFloatRight ">
+            <span>
+                The following recipent is outside your organization. Would you still like to invite them to the Assigned Team?
+            </span>
+            <br />
+            <br />
+            <div>
+                <div class="removeUser" ng-click="cm.confirmUser(false)"><a>Remove</a></div> <div class="confirmUser" ng-click="cm.confirmUser(true)"><a>Confirm</a></div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row margin0">
+        <div class="col-xs-4"> <span style="color:red;">* </span>  Name</div>
+        <div class="col-xs-3"><span style="color:red;">* </span>  Role</div>
+        <div class="col-xs-3"><span style="color:red;">* </span>  Permission level</div>
+        <div class="col-xs-2"></div>
+
+    </div>
+
+
+    <div class="row margin0 marginTop10" data-ng-repeat="assignTeam in cm.assignPermissionTeams">
+        <div class="col-xs-4">
+            <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' confirm="false" uservalue="" class="form-control" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event)' class="form-control" spellcheck="true" type="text" placeholder="Enter and select names" autocomplete="off">
+            <div ng-show='teamAssingnResults'>
+                <i class="glyphicon glyphicon-remove"></i> No Results Found
+            </div>
+            <span class="pull-left"><i ng-show='loadingLocations' class="glyphicon glyphicon-refresh"></i></span>
+        </div>
+        <div class="col-xs-3">
+
+            <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' class="form-control" ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
+        </div>
+        <div class="col-xs-3">
+            <select id='permUser{{assignTeam.assigneTeamRowNumber}}' class="form-control" ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
+
+
+        </div>
+        <div class="col-xs-2">
+            <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="Delete" alt="Delete" src="../Images/icon-delete.png">
+        </div>
+
+    </div>
+
+
+    <div class="row margin0 marginTop10">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-3"></div>
+        <div class="col-xs-3">
+            <div id="addMoreLink" style="float:left;margin-top:10px;padding:0px;">
+                <a id="addMorePermissions" style="padding:0px;" ng-click="cm.addNewAssignPermissions()">Add More</a>
+            </div>
+        </div>
+        <div class="col-xs-2"></div>
+    </div>
+
+    <div class="row margin0 marginTop10">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-3"></div>
+        <div class="col-xs-3"><button class="button" type="button" id="btnSave" value="Save" ng-click="cm.UpdateMatter($event)">Save</button></div>
+        <div class="col-xs-2"></div>
+    </div>
+
+
+</div>
+<div id="loadingImageContainer">
+    <div class="lazyLoading" ng-class="cm.popupContainerBackground">
+        <img src="../Images/WindowsLoadingFast.GIF" alt="Loading..." title="Loading..." />
+    </div>
+</div>

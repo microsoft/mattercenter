@@ -1,0 +1,1804 @@
+﻿body {
+    font-size: 16px !important;
+    margin-top: 20px;
+}
+
+.commonContent {
+    display: block;
+}
+
+#mainDivContainer {
+    margin: 0 auto;
+}
+
+/* #region IPad specific fix for input UI */
+input {
+    border-radius: 0;
+}
+
+    input[type="text"] {
+        -webkit-appearance: none;
+    }
+/* #endregion*/
+
+#contentDiv {
+    height: 1140px;
+    font-family: 'Segoe UI';
+    margin: 0 auto;
+    padding: 0 10px;
+    position: relative;
+    width: 1150px;
+}
+
+.docimage {
+    cursor: pointer;
+    float: left;
+    margin-right: 5px;
+    width: 16px;
+}
+
+.cliendIDMatterID, .docversion, .actionIcons {
+    margin-left: 20px;
+}
+
+.actionIcons {
+    margin-top: 5px;
+}
+
+.TopNav {
+    background-color: #fff;
+    border-bottom: 2px solid #c8c8c8;
+    color: #212121;
+    height: 50px;
+    padding-top: 15px;
+    text-align: center;
+    width: 100%;
+}
+
+.box {
+    background-color: #005a9e;
+    color: #fff;
+    height: 30px;
+    padding-right: 10px;
+    text-align: right;
+}
+
+    .box a {
+        color: #fff;
+    }
+
+#LegalDMS {
+    color: #333;
+    float: left;
+    font-family: 'Segoe UI';
+    font-size: 20px;
+    font-weight: lighter;
+    padding-right: 35px;
+}
+
+    #LegalDMS img {
+        padding-right: 10px;
+    }
+
+#TopNavElementsDashboard, #TopNavElementsTemplates, #TopNavElementsMatterCreation {
+    float: left;
+    font-family: 'Segoe UI';
+    font-size: 1em;
+    padding: 15px 30px 15px 0;
+    width: 125px;
+}
+
+#TopNavElementsConnectToPeople, #TopNavElementsMyOnedriveBriefcase {
+    float: left;
+    font-family: 'Segoe UI';
+    font-size: 1em;
+    padding: 15px 30px 15px 0;
+    width: 170px;
+}
+
+#Dashboard, #Templates, #MatterCreation, #ConnectToPeople, #MyOnedriveBriefcase {
+    color: #333;
+}
+
+.sideNav {
+    -moz-background-size: 50px 10%;
+    background-color: #fff;
+    background-image: linear-gradient(#c8c8c8,transparent),linear-gradient(#c8c8c8,transparent);
+    background-position: 100% 0;
+    background-repeat: no-repeat;
+    background-size: 2px 10%;
+    border-left: 2px;
+    height: 2364px;
+    position: absolute;
+    top: 30px;
+    width: 214px;
+}
+
+#pinnedGrid_Grid, #RecentDocumentContainer_Grid, #recentMatters_Grid {
+    border-width: 0;
+}
+
+.jsonGrid tbody tr td:first-child, .jsonGrid thead tr td:first-child {
+    padding-left: 0;
+}
+
+.selectPage {
+    background: url(../Images/icon-combobox.png) no-repeat right;
+    border: none;
+    float: right;
+    font-size: 15px;
+    margin-top: 5px;
+    width: 224px;
+}
+
+#DisplayResults {
+    height: 60px;
+    width: 100%;
+    float: left;
+}
+
+#DisplaySearchDocumentsResults, #DisplayFindMattersResults {
+    z-index: 5;
+    position: relative;
+}
+
+#DisplaySearchDocumentsResults {
+    display: none;
+}
+
+.pinnedSearch, .mySearch, .allSearch {
+    color: #666;
+    cursor: pointer;
+    float: left;
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    margin-right: 30px;
+}
+
+.active .pinnedSearch:hover, .active .mySearch:hover, .active .allSearch:hover {
+    color: #333;
+}
+
+.active {
+    color: #2b579a !important;
+}
+
+.pipe {
+    color: #999;
+    float: left;
+    font-size: 1.5em;
+    width: 50px;
+}
+
+#Email {
+    float: right;
+    margin-top: -56px;
+    padding-bottom: 10px;
+    width: 300px;
+}
+
+#EmailHeader {
+    font-size: 20px;
+    margin-left: 25px;
+}
+
+.btnCloseEmailPopup {
+    background-color: #5594E3;
+    border: none;
+    color: #FFF;
+    height: 30px;
+    margin-left: 25px;
+    width: 120px;
+}
+
+#EmailImg {
+    margin-top: 5px;
+    color: #2b579a;
+}
+
+#SortFindMatterGrid {
+    margin-right: 5px;
+}
+
+#gridViewSpan {
+    margin-right: 10px;
+    opacity: 0.665;
+    margin-left: 24px;
+    top: 4px;
+}
+
+    #gridViewSpan:hover {
+        opacity: 0.999;
+    }
+
+#gridViewSpan {
+    opacity: 0.665;
+    top: 4px;
+}
+
+    #gridViewSpan:hover {
+        opacity: 0.999;
+    }
+
+.separator {
+    color: #999;
+    font-size: 20px;
+}
+
+.headerClass {
+    padding-top: 30px;
+    position: relative;
+}
+
+.quickLinks {
+    display: inline;
+    float: left;
+    font-family: 'Segoe UI';
+    height: 100%;
+    padding-left: 15px;
+}
+
+.navDiv {
+    padding-bottom: 10px;
+}
+
+.Search {
+    padding-top: 4px;
+}
+
+::-webkit-input-placeholder {
+    color: #555;
+    font: italic 9.75pt "Segoe UI";
+}
+
+::-moz-placeholder {
+    color: #555;
+    font: italic 9.75pt "Segoe UI";
+}
+
+:-ms-input-placeholder {
+    color: #555;
+    font: italic 9.75pt "Segoe UI";
+}
+
+.Grid {
+    width: 100%;
+}
+
+#EmailDiv {
+    color: #444;
+    cursor: default;
+    display: none;
+}
+
+#gridPaginationTD {
+    margin-bottom: 25px;
+}
+
+.OverlaysBR-logoAware, .NavBar_modeSelectorControlContainer {
+    display: none;
+}
+
+.LeftContent {
+    position: relative;
+}
+
+.matterGoTo {
+    color: #0072c6;
+    font-size: 12pt;
+}
+
+.readMore {
+    color: #0072c6;
+    font-size: 12pt;
+}
+
+.matterMetadataDescription {
+    color: #333;
+    display: inline-block;
+    font-size: 9.75pt;
+    overflow: hidden;
+    text-align: justify;
+    text-overflow: ellipsis;
+    width: 230px;
+    word-wrap: break-word;
+}
+
+.leftFooter {
+    float: left;
+    padding: 30px 0;
+}
+
+    .leftFooter a {
+        color: #333;
+    }
+
+    .leftFooter ul {
+        padding-left: 0;
+    }
+
+.centreContent {
+    text-align: center;
+}
+
+#NoDataToDisplay .TextContent {
+    color: #2C96FA;
+}
+
+.sendEmailOptions {
+    cursor: pointer;
+    display: inline-block;
+}
+
+.pinnedLoading {
+    background-image: url('../Images/WindowsLoadingFast.GIF');
+    height: 27px;
+    width: 27px;
+}
+
+.MailCartImages img {
+    margin: 0 4px -4px 8px;
+}
+
+.popUpContainer {
+    height: 245px;
+    left: 562px;
+    padding: 15px;
+    top: 114px;
+    width: 710px;
+    font-family: "Segoe UI Semilight", "Segoe UI";
+    font-weight: 400;
+}
+
+hr {
+    font-size: 1px;
+    width: 99%;
+}
+
+.folderStructure {
+    background-color: #F9F9F9;
+    color: #333;
+    display: none;
+    max-width: 300px;
+    min-height: 300px;
+    padding: 0 20px 0 0;
+    position: absolute;
+    right: 0;
+    top: 93px;
+    z-index: 1;
+}
+
+    .folderStructure ul {
+        list-style: none;
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+
+    .folderStructure .folderStructureTitle {
+        border-bottom: 1px solid #999;
+        float: left;
+        margin-left: 10px;
+        width: 100%;
+    }
+
+.folderStructureTitle .matterFolderName {
+    -ms-word-wrap: break-word;
+    float: left;
+    line-height: 28px;
+    max-width: calc(100% - 60px);
+    word-wrap: break-word;
+}
+
+.folderStructure .folderStructureContent {
+    float: left;
+    width: 100%;
+}
+
+#mainDivContainer .notificationContainer {
+    position: absolute;
+    right: 0;
+    width: calc(100% - 0px);
+    z-index: 100;
+}
+
+    #mainDivContainer .notificationContainer .notification {
+        -moz-transition: all ease-in-out 1s;
+        -ms-word-wrap: break-word;
+        -o-transition: all ease-in-out 1s;
+        -webkit-transition: all ease-in-out 1s;
+        background-color: #00a03e;
+        color: #fff;
+        float: right;
+        padding: 5px 10px;
+        position: relative;
+        transition: all ease-in-out 1s;
+        width: calc(100% - 20px);
+        word-wrap: break-word;
+    }
+
+    #mainDivContainer .notificationContainer .errorNotification {
+        background-color: #a0003e;
+        color: #333;
+    }
+
+    #mainDivContainer .notificationContainer .notification .closeNotification {
+        cursor: pointer;
+        float: right;
+        margin-left: 10px;
+    }
+
+.notificationContainerForMailPopup .notification {
+    -moz-transition: all ease-in-out 1s;
+    -ms-word-wrap: break-word;
+    -o-transition: all ease-in-out 1s;
+    -webkit-transition: all ease-in-out 1s;
+    float: left;
+    font-size: .75em;
+    font-weight: normal;
+    margin-bottom: 10px;
+    padding: 10px 10px 15px 10px;
+    position: absolute;
+    text-align: left;
+    text-overflow: ellipsis;
+    transition: all ease-in-out 1s;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.matterFolderName, .folderWrapper, .dragText, .matterFolderPopupClose {
+    margin: 10px;
+}
+
+.matterFolderPopupClose {
+    float: right;
+    width: 20px;
+}
+
+.folderStructureTitle .heading {
+    background-color: transparent;
+    color: #0070C0;
+    font-size: 24px;
+    font-weight: lighter;
+    padding: 0;
+}
+
+.folderHierarchyLoading {
+    position: absolute;
+    left: 250px;
+    right: 0;
+}
+
+.uploadDocumentLoading {
+    position: relative;
+    top: -8px;
+    margin-left: -25%;
+}
+
+.jsonGrid {
+    border-collapse: collapse;
+    margin-top: -18px;
+    float: left;
+}
+
+.switchApp {
+    margin: 30px 0 0 0;
+}
+
+.prev, .first {
+    float: right;
+}
+
+.selectedPattern .searchOption {
+    font-weight: 600;
+}
+
+.checkImg {
+    visibility: hidden;
+}
+
+.selectedPattern .checkImg {
+    visibility: visible;
+}
+
+.filterAutoComplete {
+    margin-left: 0;
+    top: 58px;
+    width: 898px;
+}
+
+.filterSearchPanel {
+    width: 84.3%;
+}
+
+.filterSearchAdvance {
+    padding: 22px 6px 15px;
+    top: 74px;
+    margin-top: -16px !important;
+}
+
+.uploadDocumentLoadingImage {
+    float: left;
+}
+
+.appnames {
+    width: 20%;
+}
+
+.imageDatePickerTo {
+    margin-top: 0;
+}
+
+.separator, #EmailDiv {
+    display: none;
+    margin-right: 20px;
+}
+
+.quickLinksMenuItems {
+    background-color: #fff;
+    border: 2px solid silver;
+    border-image: none;
+    display: none;
+    margin-left: 13px;
+    padding: 5px 0;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.quickLinksMenuButton {
+    cursor: pointer;
+    display: none;
+    font-size: 2.16em;
+    font-weight: 700;
+    height: 30px;
+    line-height: 28px;
+    margin: 8px 8px 8px 3px;
+    white-space: nowrap;
+    width: 21px;
+}
+
+.filterSearchText, .filterSearchRefinerText, .filterSearchRefinerTextDate {
+    font-size: 12px;
+    border: 1px solid #c8c8c8;
+    border-right-width: 0;
+}
+
+.filterSearchText, .filterSearchAdvance {
+    margin-left: 0;
+    top: 64px;
+    font-size: .875em;
+    color: #666;
+}
+
+.filterSearchText {
+    border-right: 0;
+    border-right-width: 0;
+    box-sizing: border-box;
+    margin: 0;
+    margin-bottom: 20px;
+    padding-left: 10px;
+}
+
+#filterSearch {
+    width: 886px;
+}
+
+h1.specificName {
+    float: right;
+    margin-top: 0;
+}
+
+h1.genericName {
+    float: right;
+    font-size: 1em;
+    font-weight: lighter;
+}
+
+.resultsTab {
+    font-size: 1.125em;
+    font-family: 'Segoe UI Semilight', 'Segoe UI';
+    font-weight: 400;
+}
+
+.jsonGridHeader, .GridRow, .GridRowAlternate, .GridRowTile, .GridRowAlternateTile {
+    font-size: .875em;
+}
+
+.jsonGridHeader {
+    height: 30px;
+}
+
+.matterDesc {
+    font-size: .875em;
+}
+
+.topNavMenuButton {
+    color: #212121;
+    cursor: pointer;
+    display: none;
+    font-size: 2.16em;
+    font-weight: 700;
+    height: 30px;
+    line-height: 28px;
+    margin-left: 3px;
+    padding: 8px 15px 8px 8px;
+    white-space: nowrap;
+    width: 21px;
+}
+
+#EmailTextCount {
+    color: #2b579a;
+    cursor: pointer;
+    margin-left: 25px;
+}
+
+.responsiveMenu_topNavItems, .resopnsiveMenu_Search, .responsiveMenu_SwitchApps {
+    display: none;
+}
+
+.responsiveMenu_SwitchApps {
+    cursor: pointer;
+    max-width: 100px;
+}
+
+.pinIcon {
+    opacity: 0.665;
+    float: right;
+    color: #999;
+}
+
+    .pinIcon:hover {
+        opacity: 1;
+    }
+
+.iconUnpin, .unpinIcon {
+    opacity: 0.665;
+}
+
+.uploadImg, .uploadIcon {
+    opacity: 0.665;
+}
+
+    .uploadImg:hover, .uploadIcon:hover {
+        opacity: 1;
+    }
+
+.mailCartAddIcon {
+    opacity: 0.665;
+}
+
+    .mailCartAddIcon:hover {
+        opacity: 1;
+    }
+
+.mailCartAddIcon, .mailCartRemoveIcon {
+    margin-left: 15px;
+    width: 27px;
+}
+
+.iconUnpin:hover, .unpinIcon:hover {
+    opacity: 1;
+}
+
+.pinIcon, .iconUnpin, .unPinIcon, .uploadImg, .uploadIcon {
+    float: left;
+    width: 30px;
+}
+
+#names {
+    margin-left: 20px;
+}
+
+.matterName, .nameColumn {
+    color: #2b579a;
+    cursor: pointer;
+}
+
+.jsonGrid #pinnedGrid_Grid {
+    border-width: 0;
+}
+
+.jsonGrid, .InnerJsonGrid {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.iconPadding {
+    float: left;
+    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+.jsongrid-first #pinnedGrid_Grid_First {
+    float: right;
+}
+
+.jsongrid-prev #pinnedGrid_Grid_Prev {
+    float: right;
+}
+
+#grid_Grid_First {
+    float: right;
+}
+
+.jsonGrid #grid_Grid {
+    margin: 0;
+}
+
+#grid_Grid {
+    border: 0;
+}
+
+.attachmentList, .sendEmailOptions div {
+    font-size: .875em;
+}
+
+.fallbackFlex {
+    display: inline-block !important;
+}
+
+.imgCenterAlign {
+    margin-bottom: -5px;
+}
+
+#specificName {
+    float: left;
+}
+
+.sdBannerDropdown {
+    cursor: pointer;
+    float: right;
+}
+
+.sdBanner {
+    color: #333;
+    display: inline-block;
+    float: right;
+    font-size: 0.87em;
+    font-family: "Segoe UI";
+    text-align: left;
+    width: 192px;
+}
+
+.sdBannerText {
+    background-color: white !important;
+    color: #333 !important;
+    border: none;
+    width: 35px;
+    cursor: pointer;
+    padding: 0;
+}
+
+.sdBannerPanel {
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    top: 100px;
+}
+
+.sdBannerPanelItem {
+    padding: 5px 10px 5px 10px;
+}
+
+    .sdBannerPanelItem:hover {
+        background-color: #eaecea;
+        cursor: pointer;
+    }
+
+.sdBannerPanelFirstItem {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.sdBannerPanelLastItem {
+    padding-bottom: 2px;
+}
+
+.sdBannerLabel {
+    float: left;
+    margin-right: 10px;
+    cursor: default;
+}
+
+#recentTabSmall {
+    display: none;
+}
+
+.filterPaneltab {
+    margin-top: 14px;
+}
+
+.autoCompleteRow, .searchOptions {
+    padding: 8px 6px;
+}
+
+.filterSearch {
+    margin-right: 10px;
+}
+
+.filterWrapper {
+    height: 39px;
+}
+
+.jsonGridRow {
+    color: #333;
+    cursor: default;
+}
+
+.filterSearchDD {
+    margin-left: 40px;
+}
+
+.jsonGridFooter img[title='Last'], .jsonGridFooter img[title='First'] {
+    display: none;
+}
+
+.mailCartCloseIcon {
+    margin-top: 15px;
+    float: right;
+    right: 15px;
+}
+
+.highlightTerm {
+    color: #333;
+    font-weight: normal;
+    font-size: 0.875em;
+}
+
+.filterSearchRefinerDDL {
+    z-index: 2;
+}
+
+.selected {
+    color: #2b579a;
+}
+
+.appImage {
+    float: left;
+    padding-right: 7px;
+    padding-top: 5px;
+}
+
+.appName {
+    border-bottom-color: #c8c8c8;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    width: 100%;
+    height: 50px;
+}
+
+.templates {
+    font-family: 'Segoe UI';
+    font-size: 16px;
+    float: left;
+    padding: 0 30px 15px 0;
+    color: #333 !important;
+}
+
+.appTitle {
+    font-family: 'Segoe UI';
+    font-size: 12px;
+    color: #333;
+    padding-top: 16px;
+}
+
+.appTitleSmall {
+    font-family: 'Segoe UI';
+    font-size: 8px;
+    color: #333;
+    margin-top: -1px;
+}
+
+.searchDocumentHeader div.navDiv:hover {
+    background-color: #eaecee;
+    color: #333;
+    float: none;
+}
+
+.searchDocumentHeader {
+    position: absolute;
+}
+
+.switchTab {
+    cursor: pointer;
+    float: none;
+    font-weight: 400;
+    background-color: #fff;
+    border: 2px solid silver;
+    position: relative;
+    width: 100%;
+    z-index: 100;
+}
+
+.extraTabHolder {
+    margin-top: 0;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.webdashboardloading {
+    padding-bottom: 30px;
+}
+
+.warningNotification {
+    margin: 0px;
+}
+
+.centreContent {
+    clear: both;
+}
+
+.selectMailFormat {
+    padding-top: 0;
+}
+
+.successNotificationPopup {
+    display: table;
+    margin: 0px;
+}
+
+.appLink {
+    width: 121px;
+}
+
+.filterSearchRefinerDD {
+    position: absolute;
+}
+
+.uploadDocumentNotification {
+    margin-top: -20px !important;
+    margin-right: -15px !important;
+    margin-left: -15px !important;
+}
+
+.sendToOneDriveOption {
+    width: 225px;
+}
+
+.emailAttachmentOption {
+    width: 150px;
+}
+
+.emailLinkOption {
+    width: 110px;
+}
+
+.hideScrollSP {
+    overflow-y: hidden;
+}
+
+.uploadSuccessStatus {
+    padding-top: 3px;
+}
+
+.applyCursor {
+    cursor: pointer;
+}
+
+.mailCartIcon {
+    float: none;    
+    display: table-cell;
+    right: 265px;
+    top: 68px;
+}
+
+.pinnedDocuments {
+    margin-left: 186px;
+}
+
+.searchResults {
+    margin-left: 169px;
+}
+
+.pinnedMatters {
+    margin-left: 160px;
+}
+
+.divPinnedDocuments {
+    right: 110px;
+}
+
+.divSearchResults {
+    right: 108px;
+}
+
+.divPinnedMatters {
+    right: 138px;
+}
+
+.filterAutoComplete {
+    margin-top: -9px;
+}
+
+.documentNameEllipses {
+    width: 150px;
+}
+
+.Grid, #recentView {
+    margin-bottom: 19px;
+}
+
+@-moz-document url-prefix() {
+    h1.genericName {
+        font-size: 1em;
+        font-weight: lighter;
+        float: right;
+        margin-top: -25px;
+    }
+}
+
+#autoComplete {
+    margin-top: -10px;
+}
+
+.viewSwitcher {
+    margin-top: 5px;
+    cursor: pointer;
+    display: none;
+    float: left;
+}
+
+.jsonGridRowTile div:nth-child(3) img {
+    margin-top: 6px;
+}
+
+.hideUpload, .hideUploadLeft {
+    visibility: hidden;
+    height: 27px;
+}
+
+.hideUploadLeft, .uploadLeft, .unPinIconLeft, .uploadIconLeft, .selectedTilePara, .pinIconLeft {
+    float: left;
+}
+
+.selectedTilePara {
+    margin-top: 0;
+}
+
+.unPinIconLeft {
+    margin-left: 0;
+}
+
+.uploadIconLeft {
+    margin-left: 5px;
+}
+
+.gridTileWidth {
+    width: 180px;
+}
+
+.selectedDocumentTile {
+    float: left;
+    position: relative;
+    width: 170px;
+    height: 110px;
+    background-color: #fff;
+    margin: 4px 7px 2px 4px;
+    display: inline;
+    color: #333;
+    padding: 0 0 2px 4px;
+}
+
+.selectedTileSpan {
+    width: 160px;
+    color: #0066cc;
+    overflow: hidden;
+    font-size: 15px;
+    white-space: nowrap;
+    position: absolute;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.flyoutPositioningDefault {
+    float: left;
+    transform: rotate(134deg);
+    margin: 35px -10px 0 -10px;
+    width: 17px;
+}
+
+.flyoutPositioningForRightmost {
+    float: right;
+    transform: rotate(314deg);
+    margin: 23px -9px 0 -9px;
+}
+
+.flyoutPositioningMobileView {
+    float: right;
+    transform: rotate(224deg);
+    margin: -9px 210px 0px 35px;
+}
+
+.popupContainerBackground {
+    left: 0;
+}
+
+.imgNoBorder {
+    border: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.ui-autocomplete {
+    width: 280px !important;
+}
+
+.mailContainer .successNotification {
+    display: block;
+}
+
+#CheckBox {
+    padding-left: 0px;
+}
+
+.mslogo {
+    margin-top: 10px;
+}
+
+.placePopupWithHeight {
+    top: -580px;
+}
+
+.placePopup {
+    top: -630px;
+}
+
+.matterPopupPointer {
+    box-shadow: 2px 2px 1px 1px rgba(0,0,0,0.15);
+}
+
+.detailSeparator {
+    width: auto;
+    margin-top: 45px;
+    border-bottom-color: #c8c8c8;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+div.is-disabled {
+    background-color: #f4f4f4;
+    border-color: #f4f4f4;
+    color: #999;
+    cursor: default;
+    pointer-events: none;
+}
+
+
+@media (min-width: 1200px) {
+    .quickLinksMenuItems {
+        display: none !important;
+    }
+
+    #mainDivContainer {
+        margin: 0 auto;
+    }
+
+    .responsiveMenu_topNavItems, .resopnsiveMenu_Search, .responsiveMenu_SwitchApps {
+        display: none;
+    }
+
+    .attachmentList, .sendEmailOptions div {
+        font-size: .875em !important;
+    }
+
+    .filterSearchRefinerDDL {
+        width: 619px !important;
+    }
+
+    .filterSearchRefinerText {
+        width: 95%;
+    }
+
+    .specificName {
+        display: none;
+    }
+
+    .refinerRight {
+        width: 600px;
+        float: left;
+    }
+
+    .filterSearchRefinerDDL {
+        width: 568px !important;
+    }
+
+    .filterSearchRefinerTextDate {
+        width: 100px;
+    }
+
+    .tileWebDashboard {
+        float: right;
+    }
+
+    .tileSearch {
+        margin-left: -88px;
+        float: right;
+        margin-top: -33px;
+        margin-right: 45px;
+    }
+
+    .searchDocumentHeader {
+        display: none;
+    }
+}
+
+@media (max-width: 1199px) {
+    .switchTab {
+        top: 35px;
+    }
+
+    #mainDivContainer {
+        margin: 0 5px;
+    }
+
+    #matterCenterHeader {
+        width: auto;
+        height: 60px;
+        background-color: #0072c6;
+        position: relative;
+        margin: 0 auto;
+        margin-left: 15px;
+        margin-right: 15px;
+        margin-top: 19px;
+    }
+
+    .TopNav {
+        display: block;
+        height: 97px;
+    }
+
+    .topNavItems {
+        clear: both;
+    }
+
+    #TopNavElementsDashboard, #TopNavElementsTemplates, #TopNavElementsMatterCreation, #TopNavElementsConnectToPeople, #TopNavElementsMyOnedriveBriefcase {
+        float: left;
+        margin-left: -10px;
+        padding-right: 0;
+    }
+
+    #LegalDMS {
+        float: left;
+    }
+
+    .quickLinksMenuButton {
+        display: block;
+    }
+
+    .attachmentList, .sendEmailOptions div {
+        font-size: .875em;
+    }
+
+    .sideNav {
+        display: none;
+    }
+
+    .Search {
+        margin-left: 0;
+        padding-top: 0;
+        width: 668px;
+    }
+
+    .LeftContent {
+        margin-left: 0;
+    }
+
+    .TopNav, .LeftContent, .quickLinksMenu, #DisplayFindMattersResults, #contentDiv, #mainDivContainer, .jsonGrid {
+        width: auto;
+    }
+
+    #footer {
+        width: 100% !important;
+        overflow: hidden;
+        margin-top: -11px;
+    }
+
+    .appnames {
+        width: 25%;
+    }
+
+    .filterSearchPanel {
+        margin-top: -13px;
+        clear: both;
+    }
+
+    #filterSearch {
+        width: 490px;
+    }
+
+    .filterSearchRefinerText {
+        width: 93%;
+    }
+
+    #txtdocumentauthor {
+        width: 93%;
+    }
+
+    .refinerLeft {
+        width: 24%;
+        margin-right: 0;
+    }
+
+    .filterAutoComplete {
+        width: 502px;
+    }
+
+    .jsonGrid {
+        width: 688px;
+    }
+
+    .separator {
+        display: none;
+    }
+
+    .GridRowAlternateTile, .GridRowTile {
+        width: 224px;
+    }
+
+    .pinnedSearch, .mySearch, .allSearch {
+        color: #666;
+        margin-right: 20px;
+    }
+
+    .active {
+        color: #333;
+    }
+
+    .pipe {
+        width: 25px;
+    }
+
+    .resopnsiveMenu_Search, .responsiveMenu_SwitchApps {
+        display: none;
+    }
+
+    .quickLinksMenuItems {
+        margin-top: 0 !important;
+        display: none;
+    }
+
+    .navDiv {
+        margin-left: 0;
+        padding: 0 0 8px 5px;
+    }
+
+    .filterSearchRefinerDDL {
+        width: 310px !important;
+    }
+
+    .popUpContainer {
+        left: 0;
+        padding: 10px;
+    }
+
+    .mailContainer {
+        left: 0;
+        right: 0;
+    }
+
+    #names {
+        margin-left: 0px;
+    }
+
+    #recentTab {
+        display: none;
+    }
+
+    #recentTabSmall {
+        display: inline;
+    }
+
+    .specificName {
+        display: none;
+    }
+
+    .filterPaneltab {
+        margin-top: 15px;
+        margin-left: 4px;
+    }
+
+    .filterSearchText {
+        width: inherit;
+    }
+
+    .filterSearchText, .filterSearch, .filterSearchDD {
+        margin-top: 18px;
+    }
+
+    .appName {
+        width: 688px;
+    }
+
+    .separator, #EmailDiv {
+        margin-right: 20px;
+    }
+
+    .filterSearchRefinerDD {
+        right: 32px;
+    }
+
+    .mslogo {
+        margin-top: 6px;
+    }
+
+    .footerContent {
+        margin-right: 170px;
+        width: auto;
+        margin: 13px 15px 0 15px;
+    }
+
+    .matterPopup, .documentPopup {
+        margin-top: -14px;
+    }
+}
+
+@media (max-width: 800px) {
+    .LeftContent {
+        min-width: 640px;
+    }
+}
+
+@media (max-width: 723px) {
+    .searchBox {
+        width: 350px;
+    }
+}
+
+@media (max-width: 703px) {
+    .switchTab {
+        margin: 0;
+    }
+
+    #mainDivContainer {
+        margin: 0 5px;
+    }
+
+    .filterWrapper {
+        background-color: #FFF;
+    }
+
+    .topNavMenuButton {
+        display: block;
+        float: right;
+    }
+
+    .pinnedSearch .ResultNumbers {
+        padding-left: 5px;
+    }
+
+    #LegalDMS {
+        float: left;
+    }
+
+    .topNavItems {
+        display: none;
+    }
+
+    .responsiveMenu_topNavItems {
+        clear: both;
+        background-color: #0072c6;
+    }
+
+    .topnav {
+        height: 50px !important;
+        border-bottom: 0;
+    }
+
+    .footerContent {
+        width: 640px;
+        margin: 13px 15px 0 15px;
+    }
+
+    #responsiveMenu_TopNavElementsDashboard, #responsiveMenu_TopNavElementsTemplates, #responsiveMenu_TopNavElementsMatterCreation, #responsiveMenu_TopNavElementsConnectToPeople, #responsiveMenu_TopNavElementsMyOnedriveBriefcase {
+        clear: both;
+        width: auto;
+        margin-left: 13px;
+        padding: 5px 0;
+    }
+
+    #footer {
+        width: 100% !important;
+        overflow: hidden;
+        min-width: 656px;
+        height: 110px;
+        margin-top: -25px;
+    }
+
+    #responsiveMenu_Dashboard, #responsiveMenu_Templates, #responsiveMenu_MatterCreation, #responsiveMenu_ConnectToPeople, #responsiveMenu_MyOnedriveBriefcase {
+        color: #fff;
+    }
+
+    .resopnsiveMenu_Search, .responsiveMenu_SwitchApps {
+        display: block;
+    }
+
+    .appHeaders {
+        display: none;
+    }
+
+    .switchApp {
+        left: 0;
+        margin: -17px 0 0;
+    }
+
+    .filterSearchPanel {
+        width: 100%;
+        margin-top: -12px;
+    }
+
+    .filterSearchText {
+        width: 310px;
+        height: 30px;
+        box-sizing: border-box;
+    }
+
+    .responsiveMenu_SwitchApps {
+        padding: 5px 0 5px 13px;
+    }
+
+    #filterSearch {
+        width: 325px;
+    }
+
+    .refinerRight {
+        float: left;
+        width: 100%;
+    }
+
+    .filterSearchRefinerText {
+        width: 89%;
+    }
+
+    #txtdocumentauthor {
+        width: 89%;
+    }
+
+    .refinerLeft {
+        width: 100%;
+        font-style: normal;
+        margin-bottom: 5px;
+    }
+
+    .filterSearchRefinerTextDate {
+        margin-bottom: 10px;
+        clear: both;
+    }
+
+    .quickLinksMenuButton {
+        position: absolute;
+        margin-top: 62px;
+        z-index: 1;
+    }
+
+    .navDiv {
+        cursor: pointer;
+        padding: 0 0 8px 5px;
+        margin-left: 0;
+        display: block;
+    }
+
+        .navDiv:hover {
+            background-color: #eaecee;
+            color: #333;
+        }
+
+    .quickLinksMenuItems {
+        margin-top: 89px !important;
+        width: 138px;
+        height: 65px;
+        left: 6px;
+        margin-left: 0;
+        font-size: .87em;
+    }
+
+    #Email {
+        margin-top: -67px; /*Inorder to place div in line with the Display Results div */
+    }
+
+    .leftFooter {
+        float: left;
+        height: 20px;
+        margin-top: -62px;
+        padding-left: 5px;
+    }
+
+    .rightend {
+        margin-top: 0;
+    }
+
+    .leftFooterElement {
+        float: left;
+        font-size: 10px;
+        padding-left: 5px;
+    }
+
+    #feedbackandsupport {
+        margin-right: 5px;
+    }
+
+    .filterAutoComplete {
+        width: 337px;
+        top: 59px;
+    }
+
+    .filterSearchRefinerDDL {
+        width: 268px !important;
+    }
+
+    .popUpContainer {
+        width: 280px;
+    }
+
+    #SortSearchDocumentGrid {
+        float: left;
+    }
+
+    .Grid hide {
+        display: inline-block;
+    }
+
+    #gridViewSpan img {
+        padding-top: 7px;
+    }
+
+    .ResultNumbers {
+        color: #666;
+    }
+
+    #DisplaySearchDocumentsResults {
+        padding-top: 1px;
+        padding-left: 10px;
+        margin-left: -10px;
+    }
+
+    #DisplayFindMattersResults {
+        padding-top: 0;
+        margin-left: 0;
+        padding-bottom: 10px;
+    }
+
+    .resultsTab {
+        color: #666;
+    }
+
+    #EmailDiv {
+        float: left;
+        margin-top: 10px;
+    }
+
+    .separator {
+        display: inline-block;
+        float: left;
+    }
+
+    .jsonGrid {
+        display: inline;
+    }
+
+    .Email {
+        float: left;
+        margin-top: 10px;
+    }
+
+    .active .ResultNumbers, .active .resultsTab {
+        color: #2b579a !important;
+    }
+
+    .maildata {
+        height: 100px;
+    }
+
+    .folderStructureContent {
+        width: 100%;
+        height: 100px;
+        float: left;
+    }
+
+    .attachmentSection {
+        height: auto;
+        margin-top: 15px;
+    }
+
+    .attachmentListLoading {
+        margin-top: 30%;
+    }
+
+    #mailBody {
+        width: inherit;
+    }
+
+    .mailHeader {
+        width: inherit;
+    }
+
+    .mailContainer {
+        width: auto;
+    }
+
+    .matterPopup {
+        margin-left: 20px;
+    }
+
+    .filterPaneltab {
+        display: none;
+    }
+
+    .sdBannerLabel {
+        margin-left: 15px;
+        cursor: default;
+    }
+
+    .sdBanner {
+        float: right;
+        margin-top: 15px;
+    }
+
+    .sdBannerPanel {
+        left: auto;
+        width: 140px;
+    }
+
+    .appName {
+        width: 312px;
+    }
+
+    .TopNav, .filterWrapper, .quickLinksMenu, .jsonGrid, .LeftContent, #contentDiv, .bannerMatterWorkspace, #DisplayFindMattersResults, #DisplaySearchDocumentsResults, #footer, #mainDivContainer {
+        width: auto;
+    }
+
+    .Search {
+        width: 312px;
+    }
+
+    .filterSearchDD {
+        margin-top: -55px;
+        float: none;
+        margin-left: 350px;
+        padding-bottom: 20px;
+    }
+
+    .Grid {
+        margin-top: -20px;
+    }
+
+    .templates {
+        padding: 0;
+    }
+
+    .switchAppRow {
+        padding-right: 0;
+    }
+
+    .searchDocumentHeader {
+        display: block;
+    }
+
+    .refinerAOL .refinerWrapper {
+        height: 83px;
+    }
+
+    .refinerPG .refinerWrapper {
+        max-height: 145px;
+    }
+
+    .filterSearch {
+        left: 310px;
+    }
+}
+
+@media (max-width: 688px) {
+    #matterCenterHeader {
+        /*width: 640px;*/
+        margin: 19px 15px 0 15px;
+    }
+}

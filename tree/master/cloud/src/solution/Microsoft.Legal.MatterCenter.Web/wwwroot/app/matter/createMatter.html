@@ -1,0 +1,498 @@
+﻿<style>
+    .topheader {
+        position: absolute !important;
+        width: 100%;
+    }
+</style>
+<div class="row">
+    <div class="col-xs-10 col-sm-8 col-md-6 col-lg-5" style="margin-left: 45px;margin-top: 1px;height: 58px;">
+        <div class="col-xs-10 col-sm-4 col-md-4 col-lg-4 zindex6 menuTextSelected createMatterHeaderWidth" style="cursor: pointer;font-size: 1.125em;line-height:40px; padding: 0 11px 0 13px;text-decoration: none !important;" title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' data-section-num="1" data-section-name="snOpenMatter">1  {{cm.createContent.Tab1Header}}</div>
+        <div class="col-xs-10 col-sm-4 col-md-4 col-lg-4 zindex6 pad0 createMatterHeaderWidth matterMarginLeft" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2  {{cm.createContent.Tab2Header}}</div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 zindex6 pad0 createMatterHeaderWidth matterMarginLeft" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 {{cm.createContent.Tab3Header}}</div>
+        <!--<div><span title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText zindex6" data-section-num="1" data-section-name="snOpenMatter">1 {{cm.createContent.Tab1Header}}</span></div>
+        <div><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" class="menuText zindex6" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 {{cm.createContent.Tab2Header}}</span></div>
+        <div><span ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" class="menuText zindex6" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 {{cm.createContent.Tab3Header}}</span></div>-->
+    </div>
+</div>
+
+
+<div class="">
+    <!--<div class="AppSwitcherContainer" style="margin-top:10px" ng-click="cm.menuClick()">
+        <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{cm.header.MenuImageOpenTitle}}" title="{{cm.header.MenuCaptionTitle}}" />
+        <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{cm.header.MenuImageCloseTitle}}" title="{{cm.header.CloseTitle}}" />
+        <div class="MenuCaption"><span>{{cm.createContent.MenuImageCaption}}</span></div>
+    </div>
+    <div class="AppMenuFlyout ms-shadow">
+        <div class="AppMenuFlyoutPriLinks">
+            <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{cm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{cm.header.Menu1Option1Text}}</span></a>
+            <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{cm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{cm.header.Menu1Option2Text}}</span></a>
+            <a class="AppFlyoutLinks MatterDocumentsLink" title="{{cm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{cm.header.Menu1Option3Text}}</span></a>
+        </div>
+    </div>
+
+    <div id="HeaderPlaceHolder1" class="headerClassAd">
+        <div class="menu">
+            <div class="menuTextGroup">
+                <div><span title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText " data-section-num="1" data-section-name="snOpenMatter">1 {{cm.createContent.Tab1Header}}</span></div>
+                <div><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" class="menuText" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 {{cm.createContent.Tab2Header}}</span></div>
+                <div><span ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" class="menuText" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 {{cm.createContent.Tab3Header}}</span></div>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="notificationContainer successBanner" ng-if="cm.successBanner">
+        <div class="notification" showcreatesuccessbannermessage datanotification="{{cm.successMsg}}"></div><span class="closeNotification" ng-click="cm.closesuccessbanner()">x</span>
+    </div>
+    <div id="errorBlock" class="errorPopUp" ng-show="cm.errorPopUpBlock">
+        <div id="errTrinagleBlock" class="errTriangle popUpFloatLeft" ng-class="cm.errTrinagleBlock"></div>
+        <div id="errTrinagleBroderBlock" class="errTriangleBorder popUpFloatLeft" ng-class="cm.errTrinagleBroderBlock"></div>
+        <div id="errText" class="errText popUpFloatRight"> {{cm.errTextMsg}}</div>
+    </div>
+
+    <div id="notificationBlock" class="notificationPopUp" ng-show="cm.notificationPopUpBlock">
+        <div id="notificatoinTrinagleBlock" class="notificatonTriangle popUpFloatLeft " ng-class=""></div>
+        <div id="notificationTrinagleBroderBlock" class="notificationTriangleBorder popUpFloatLeft " ng-class=""></div>
+        <div id="notificationText" class="notificatonText  popUpFloatRight ">
+            <span>
+                {{cm.createContent.LabelNotificationPopupForExternalSharingText}}
+            </span>
+            <br />
+            <br />
+            <div>
+                <div class="removeUser" ng-click="cm.confirmUser(false)"><a>{{cm.createContent.RemoveLinkText}}</a></div> <div class="confirmUser" ng-click="cm.confirmUser(true)"><a>{{cm.createContent.ConfirmLinkText}}</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="requestvalidator" name="requestvalidator" runat="server" />
+<div resize class="matterContent" style="margin:0%;">
+    <div class="content" ng-click="cm.CheckPopUp(this)">
+        <!-- Open matter section -->
+        <section class="sectionStep" id="snOpenMatter" ng-show='cm.sectionName=="snOpenMatter"' style="display: block;">
+            <div class="sectionContent">
+                <label class="contentLabel medium" id="selectClient"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Dropdown1Label}}</label>
+                <div class="gutter"></div>
+                <label class="contentLabel small" id="clientId">{{cm.createContent.Tab1Textbox1Label}}</label>
+                <div>
+                    <select class="medium clear" ng-class="{'errorBorder' :  (cm.errorBorder == 'client')}" ng-model="cm.selectedClient" ng-change="cm.getSelectedClientValue(cm.selectedClient)" ng-options='client.name for client in cm.clientNameList track by client.id' required>
+                        <option value="" label="- Select a client -"></option>
+                    </select>
+                </div>
+                <div class="gutter"></div>
+                <input title="Client ID" disabled="disabled" class="small" id="txtClientId" ng-model="cm.clientId" style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" placeholder="">
+                <label class="contentLabel medium clear" ng-class="{'enterMatterName' :  (cm.showMatterId == true)}" id="enterMatterName"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox2Label}}</label>
+                <div class="gutter"></div>
+                <label class="contentLabel small" id="enterMatterId" ng-show="cm.showMatterId"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox3Label}}</label>
+                <input title="Matter Name" class="medium clear" id="txtMatterName" ng-blur='cm.checkValidMatterName()' ng-class="{'errorBorder' :  (cm.errorBorder == 'mattername')}" ng-model="cm.matterName" n style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="{{cm.createContent.Tab1Textbox2PlaceholderText}}" value="">
+                <div class="gutter"></div>
+                <input title="Matter ID" class="small" id="txtMatterId" ng-show="cm.showMatterId" ng-disabled="cm.matterIdType!='Custom'" ng-model="cm.matterId" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterid')}" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="{{cm.createContent.Tab1Textbox3PlaceholderText}}" value="">
+                <label class="contentLabel large clear"><span class="mandatory description">*&nbsp;</span>{{cm.createContent.Tab1Textbox4Label}}</label>
+                <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterdescription')}" spellcheck="true" maxlength="255" placeholder="{{cm.createContent.Tab1Textbox4PlaceholderText}}" rows="2" cols="400"></textarea>
+                <label class="contentLabel large clear customDivCreate"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox5Label}}</label>
+                <div class="large" id="documentTemplates">
+                    <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}' class="docuTemplates" ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style=""
+                         data-value="{{$index}}"
+                         data-foldernamespg='{{selectedDocumentTypeLawTerm.foldernamespg}}'
+                         data-practicegroup-id='{{selectedDocumentTypeLawTerm.practicegroupId}}'
+                         data-foldernamesaol='{{selectedDocumentTypeLawTerm.foldernamesaol}}'
+                         data-areaoflaw-id='{{selectedDocumentTypeLawTerm.areaoflawId}}'
+                         data-subareaoflaw-id='{{selectedDocumentTypeLawTerm.id}}'
+                         data-display-name='{{selectedDocumentTypeLawTerm.termName}}'
+                         data-isnofolderstructurepresent='{{selectedDocumentTypeLawTerm.isNoFolderStructurePresent}}'
+                         data-foldernamessal='{{selectedDocumentTypeLawTerm.folderNames}}'
+                         data-associated-document-template='{{selectedDocumentTypeLawTerm.documentTemplateNames}}'
+                         data-document-template='{{selectedDocumentTypeLawTerm.documentTemplates}}'
+                         data-areaoflaw='{{selectedDocumentTypeLawTerm.areaoflaw}}'
+                         data-practicegroup='{{selectedDocumentTypeLawTerm.practicegroup}}'
+                         title="{{selectedDocumentTypeLawTerm.termChainName}}">
+                        {{selectedDocumentTypeLawTerm.termChainName}} ({{selectedDocumentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})
+                    </div>
+                </div>
+                <div class="gutter"></div>
+
+                <!--<button class="button" id="btnLookup" type="button" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" value="Lookup">Select Type</button>-->
+                <div class="gutter"></div>
+                <div class="addmatterType">
+                    <a id="" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span> Add/Remove Types</a>
+                </div>
+                <div class="loadingLookUp hide">
+                    <img id="loadingLookupImage" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" src="../Images/WindowsLoadingFast.GIF">
+                </div>
+            </div>
+        </section>
+        <!-- Conflict check section -->
+        <section class="sectionStep " id="snConflictCheck" ng-show='cm.sectionName=="snConflictCheck"' style="display: block;">
+            <div class="sectionContent">
+                <div id="conflictCheck" ng-show="cm.defaultConfilctCheck">
+                    <label class="medium chkConflictCheckParent conflictCheckPosition customDivCreate" id="chkConflictCheckParent">
+                        <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">{{cm.createContent.Tab2Checkbox1Lebal}}
+                    </label>
+                    <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox1Label}}</label>
+                    <div class="gutter"></div>
+                    <div class="gutter"></div>
+                    <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2DateLabel}}</label>
+                    
+                    <label class="contentLabel " id="conflictIdentified">{{cm.createContent.Tab2RadioButton1Label}}</label>
+                    <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser")' typeahead-no-results="conflictUserResults" class="form-control" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
+                    <div ng-show="conflictUserResults">
+                        <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
+                    </div>
+                    <div class="gutter">
+                        <i ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh loadingGlyphicon pull-left"></i>
+                    </div>
+                    <div class="gutter"></div>
+                    <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
+                    <!--<input type="text" class="form-control" datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />-->
+                    <input type="text" class="calendar form-control dateWidth"
+                           uib-datepicker-popup='MM/dd/yyyy'
+                           ng-class="{'errorBorder' :  (cm.errorBorder == 'cdate')}"
+                           data-ng-model="cm.conflictDate"
+                           is-open="cm.opened" placeholder="mm/dd/yyyy"
+                           datepicker-options="cm.dateOptions"
+                           ng-required="true" close-text="Close" readonly
+                           ng-click="cm.open1()" alt-input-formats="['M!/d!/yyyy']" />
+                    <!--<span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="cm.open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>-->
+                    <!--<div class='input-group'>
+                        <input type='text' placeholder='Start mm/dd/yyyy' class='calendar form-control'
+                               uib-datepicker-popup='MM/dd/yyyy'
+                               ng-model='cm.conflictDate'
+                               is-open='cm.opened'
+                               datepicker-options='dateOptions'
+                               ng-required='true' close-text='Close'
+                               alt-input-formats='altInputFormats' />
+                        <span class='input-group-btn'>
+                            <button type='button' class='btn btn-default' ng-click=' cm.open1()'><i class='glyphicon glyphicon-calendar'></i></button>
+                        </span>
+                    </div>-->
+                    <div class="gutter"></div>
+                    <div class="conflictRadioBtn">
+                        <label class="smaller">
+                            <input type="radio" class="conflictradioCheck " ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-value="true" ng-model="cm.conflictRadioCheck" value=true>{{cm.createContent.Tab2RadioButton1Option1}}
+                        </label>
+                        <label class="smaller">
+                            <input type="radio" class="conflictradioCheck " ng-change='cm.conflictRadioChange(cm.conflictRadioCheck)' ng-model="cm.conflictRadioCheck" ng-value="false" value=false>{{cm.createContent.Tab2RadioButton1Option2}}
+                        </label>
+                    </div>
+                    <div class="clear"></div>
+                    <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
+                        <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox2Label}}</label>
+                        <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
+                        <div ng-show="blockUserResults">
+                            <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
+                        </div>
+                        <div class="gutter">
+                            <i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh pull-left loadingGlyphicon"></i>
+                        </div>
+                            <div class="gutter"></div>
+                            <div class="large clear" id="areaBlockUser"></div>
+</section>
+                </div>
+                <label class="secureMatterLabel assignTeamRadioPosition customDivCreate">{{cm.createContent.Tab2RadioButton2Label}}</label>
+                <div class="secureMatterRadioBtn assignTeamRadioPosition">
+                    <label class="rdbOptions">
+                        <input name="rdbSecureMatterCheck" ng-disabled="cm.secureMatterRadioEnabled" ng-model="cm.secureMatterCheck" class="matterCheckYes" type="radio" ng-value=true value="true">{{cm.createContent.Tab2RadioButton2Option1}}
+                    </label>
+                    <label class="rdbOptions">
+                        <input name="rdbSecureMatterCheck" ng-disabled="cm.secureMatterRadioEnabled" ng-model="cm.secureMatterCheck" class="matterCheckNo" type="radio" ng-value=false value="false">{{cm.createContent.Tab2RadioButton2Option2}}
+                    </label>
+                </div>
+                <label class="contentLabel medium clear blue" id="assignTeam" ng-show="cm.defaultConfilctCheck">{{cm.createContent.Tab2TeamHeader}}</label>
+                <label class="medium clear contentLabel" id="labelName"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox3Label}}</label>
+                <div class="gutter"></div>
+                <div class="gutter"></div>
+                <label class="mediumSmallRole contentLabel labelRoles" ng-show="cm.showRoles"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Deopdown1Label}}</label>
+                <div class="gutter"></div>
+                <label class="mediumSmallPermission contentLabel"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Deopdown2Label}}</label>
+                <div data-ng-repeat="assignTeam in cm.assignPermissionTeams" class="assignTeam">
+                    <div class="row{{$index}} assignNewPerm">
+                        <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
+                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' confirm="false" uservalue="" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" autocomplete="off">
+                        <!--<div ng-show='teamAssingnResults'>
+                            <i class="glyphicon glyphicon-remove"></i> No Results Found
+                        </div>-->
+                        <div class="gutter">
+                            <i ng-show='loadingLocations' class="glyphicon glyphicon-refresh pull-left loadingGlyphicon"></i>
+                        </div>
+                            <div class="gutter"></div>
+                            <div class="addNewMember" ng-show="cm.showRoles">
+                                <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth ">
+                                    <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
+                                </div>
+                            </div>
+                            <div class="gutter"></div>
+                            <div>
+                                <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
+                                    <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
+                                        <select id='permUser{{assignTeam.assigneTeamRowNumber}}' ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="gutter"></div>
+                            <div class="close customClose">
+                                <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="{{cm.createContent.ButtonDeleteText}}" alt="{{cm.createContent.ButtonDeleteText}}" src="../Images/icon-delete.png">
+                            </div>
+                        </div>
+                </div>
+                <div class="clear" id="addNewAssignPerm"></div>
+                <a id="addMoreLink" ng-click="cm.addNewAssignPermissions()"><span class="glyphicon glyphicon-plus"></span> {{cm.createContent.Tab2AddMoreHeaderLabel}}</a>
+            </div>
+        </section>
+        <!-- Create and share matter section -->
+        <section class="sectionStep " id="snCreateAndShare" ng-show='cm.sectionName=="snCreateAndShare"' style="display: block;">
+            <div class="sectionContent">
+                <div class="row customDivCreate">
+                    <div class="col-sm-12 createCol">
+                        {{cm.createContent.Tab3SectionText}}
+                    </div>
+                </div>
+                <div class="gutter" style="clear:both;"></div>
+                <div class="row pull-left">
+                    <input id="demo-checkbox-unselected2" ng-model="cm.includeEmail" ng-init="cm.includeEmail" ng-click="cm.createAndNotify(cm.includeEmail)" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected2" class="ms-ChoiceField-field"><span id="checkbox-label-text2" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox3Text}}</span></label>
+                </div>
+                <div class="gutter" style="clear:both;"></div>
+                <div class="row pull-left">
+                    <input id="demo-checkbox-unselected0" ng-model="cm.includeCalendar" ng-init="cm.includeCalendar" class="ms-ChoiceField-input ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected0" class="ms-ChoiceField-field"><span id="checkbox-label-text0" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox1Text}}</span></label>
+                </div>
+                <div class="gutter" style="clear:both;"></div>
+                <div class="row pull-left">
+                    <input id="demo-checkbox-unselected3" ng-model="cm.includeTasks" ng-init="cm.includeTasks" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected3" class="ms-ChoiceField-field"><span id="checkbox-label-text3" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox4Text}}</span></label>
+                </div>
+                <div class="gutter" style="clear:both;"></div>
+                <div class="row pull-left">
+                    <input id="demo-checkbox-unselected1" ng-model="cm.includeRssFeeds" ng-init="cm.includeRssFeeds" class="ms-ChoiceField-input  ms-checkBox" type="checkbox">
+                    <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox2Text}}</span></label>
+                </div>
+                <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton($event)' ng-disabled="cm.createBtnDisabled" value="Create">{{cm.createButton}}</button>
+            </div>
+            <div class="loading " ng-show="cm.createBtnDisabled">
+                <img id="loadingImage" src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
+            </div>
+        </section>
+        <div id="space"></div>
+        <div class="row ">
+            <div class="col-xs-5">
+                <button class="buttonPrev pull-right marginTop10" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
+            </div>
+            <div class="col-xs-6">
+                <button class="buttonPrev pull-left marginTop10" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
+            </div>
+        </div>
+    </div>
+    <!--<div class="pagination">
+        <div class="nextPreviousDiv">
+            <span class="Paginate" data-move="0" ng-click="cm.PreviousClick()">Previous</span>
+            <span class="Paginate " data-move="1" ng-click="cm.NextClick()">Next</span>
+        </div>
+    </div>-->
+    <div class="popupContainerBackground " ng-click="cm.selectMatterTypePopUpClose()" ng-class="cm.popupContainerBackground"></div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg modalDialogWidth" role="document">
+            <div class="modal-content popUpModalContainer modalContentMargin" id="myModalContent">
+                <div class="popUpModalContainer">
+                    <img title="Close" data-dismiss="modal" class="popUpCloseIcon popUpFloatRight popUpModalClose" alt="{{cm.createContent.Tab1ButtonCloseTitle}}" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
+                    <div class="row margin0 marginTop10 segoUIFontBold">
+                        <div class="col-lg-2 customLevel3Margin " ng-class="{'customMargin':cm.taxonomyHierarchyLevels==3}" ng-show="cm.taxonomyHierarchyLevels==3"></div>
+                        <div class="col-lg-1 customLevel4Margin "  ng-show="cm.taxonomyHierarchyLevels==4"></div>
+                       
+                        <div class="col-xs-9 segoUIFont modelMarginLeft">Select a {{cm.createMatterTaxonomyColumnNames.ColumnName1}}</div>
+
+
+                    </div>
+                    <div class="row margin0 segoUIFont">
+                        <div class="col-lg-2 hidelgCol customLevel3Margin"  ng-show="cm.taxonomyHierarchyLevels==3"></div>
+                        <div class="col-lg-1 customLevel4Margin" ng-show="cm.taxonomyHierarchyLevels==4"></div>
+
+                        <div class="col-xs-3 ">
+                            <select class="dropdownLevelOne clear custPracticeGroup modelMarginLeft" ng-model='cm.selectedLevelOneItem' ng-change='cm.getSelectedLevelOne()' ng-options='levelOneItem.termName for levelOneItem in cm.levelOneList'>
+                                <option value="" label="- {{cm.createContent.Tab1DrpDownLevel1DefaultSelectOption}} -"></option>
+                            </select>
+
+                        </div>
+                        <div class="col-xs-2" ng-hide="(cm.taxonomyHierarchyLevels==3 ||cm.taxonomyHierarchyLevels==4)"></div>
+                        <div class="col-xs-2" ng-hide="(cm.taxonomyHierarchyLevels==3 ||cm.taxonomyHierarchyLevels==4)"></div>
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-2"></div>
+                    </div>
+                    <div class="row margin0 marginTop10"></div>
+                    <div class="row margin0">
+
+                        <div class="col-lg-2 customLevel3Margin "  ng-show="cm.taxonomyHierarchyLevels==3"></div>
+                      
+                        <div class="col-lg-1 customLevel4Margin " ng-show="cm.taxonomyHierarchyLevels==4"></div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 modalWidth segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=2">
+                            <div class="row margin0 modelMarginLeft segoUIFontBold">
+                                {{cm.createMatterTaxonomyColumnNames.ColumnName2}}
+                            </div>
+                            <div class="row margin0 marginTop10 modelMarginLeft">
+                                <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=2">
+                                    <div class="popUpMatterDescription popUpBodyBlocks popUpMarginRight popUpFloatLeft" id="divAOL">
+
+                                        <div class="popUpFloatLeft popUpBorder " id="popupAOLBorder" style="height:213px;width:200px;">
+                                            <input class="popUpMDTextArea clear" ng-model="cm.searchLevelTwoText" style="border: 1px solid rgb(200, 200, 200); border-image: none; width:179px;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab1TermsSelectionSearchPlaceHolderText}}">
+                                            <div class="popUpCommonContent popUpMD" id="popupAOLContent">
+                                                <div class='popUpMDContent ' style="padding:0px !important;" ng-repeat="levelTwoItem in cm.levelTwoList |  filter: {termName: cm.searchLevelTwoText}">
+                                                    <div ng-class="{popUpSelected : cm.activeLevelTwoItem === levelTwoItem}" ng-click='cm.selectLevelTwoItem(levelTwoItem)' data-value='{{$index}}' documents='' data-foldernamesaol='{{levelTwoItem.folderNames}}' data-areaoflaw-id='{{levelTwoItem.id}}'>
+                                                        {{levelTwoItem.termName}}
+
+                                                        <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelTwoItem === levelTwoItem}" ng-show="cm.taxonomyHierarchyLevels>2"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 modalWidth segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=3">
+                            <div class="row margin0 modelMarginLeft segoUIFontBold">
+                                {{cm.createMatterTaxonomyColumnNames.ColumnName3}}
+                            </div>
+                            <div class="row margin0 marginTop10 modelMarginLeft">
+                                <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=3">
+                                    <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px;">
+                                        <input class="popUpMDTextArea clear" ng-model="cm.searchLeveThreeText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab1TermsSelectionSearchPlaceHolderText}}">
+                                        <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
+                                            <div class="popUpSALContent " ng-repeat='levelThreeItem in cm.levelThreeList  | filter: {termName: cm.searchLeveThreeText}' style="padding:0px !important;">
+                                                <div ng-class="{popUpSelected : ((cm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='cm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
+                                                    {{levelThreeItem.termName}}
+                                                    <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelThreeItem === levelThreeItem}" ng-show="cm.taxonomyHierarchyLevels>3" class=""></i>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 modalWidth segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4">
+                            <div class="row margin0 modelMarginLeft segoUIFontBold">
+                                {{cm.createMatterTaxonomyColumnNames.ColumnName4}}
+                            </div>
+                            <div class="row margin0 marginTop10 modelMarginLeft">
+                                <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4">
+                                    <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px;">
+                                        <input class="popUpMDTextArea clear" ng-model="cm.searchLevelFourText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab1TermsSelectionSearchPlaceHolderText}}">
+                                        <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
+                                            <div class="popUpSALContent " ng-repeat='levelFourItem in cm.levelFourList  | filter: {termName: cm.searchLevelFourText}' style="padding:0px !important;">
+                                                <div ng-class="{popUpSelected : ((cm.activeLevelFourItem === levelFourItem) && ((levelFourItem.state==undefined) ||( levelFourItem.state && levelFourItem.state=='enable' ))) , disableBlock:(levelFourItem.state && levelFourItem.state=='disable')}" ng-click='cm.selectLevelFourItem(levelFourItem)' data-value='{{$index}}' data-subareaoflaw-id='{{levelFourItem.id}}' data-display-name='{{levelFourItem.termName}}' data-isnofolderstructurepresent='{{levelFourItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFourItem.folderNames}}' data-associated-document-template='{{levelFourItem.documentTemplateNames}}' data-document-template='{{levelFourItem.documentTemplates}}'>
+                                                    {{levelFourItem.termName}}
+                                                    <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFourItem === levelFourItem}" ng-show="cm.taxonomyHierarchyLevels>4" class=""></i>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 modalWidth segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=5">
+                            <div class="row margin0 modelMarginLeft segoUIFontBold">
+                                {{cm.createMatterTaxonomyColumnNames.ColumnName5}}
+                            </div>
+                            <div class="row margin0 marginTop10 modelMarginLeft">
+                                <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=5">
+                                    <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px;">
+                                        <input class="popUpMDTextArea clear" ng-model="cm.searchLevelFiveText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab1TermsSelectionSearchPlaceHolderText}}">
+                                        <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
+                                            <div class="popUpSALContent " ng-repeat='levelFiveItem in cm.levelFiveList  | filter: {termName: cm.searchLevelFiveText}' style="padding:0px !important;">
+                                                <div ng-class="{popUpSelected : ((cm.activeLevelFiveItem === levelFiveItem) && ((levelFiveItem.state==undefined) ||( levelFiveItem.state && levelFiveItem.state=='enable' ))) , disableBlock:(levelFiveItem.state && levelFiveItem.state=='disable')}" ng-click='cm.selectLevelFiveItem(levelFiveItem)' data-value='{{$index}}' data-subareaoflaw-id='{{levelFiveItem.id}}' data-display-name='{{levelFiveItem.termName}}' data-isnofolderstructurepresent='{{levelFiveItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFiveItem.folderNames}}' data-associated-document-template='{{levelFiveItem.documentTemplateNames}}' data-document-template='{{levelFiveItem.documentTemplates}}'>
+                                                    {{levelFiveItem.termName}}
+                                                    <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFiveItem === levelFiveItem}" ng-show="cm.taxonomyHierarchyLevels>5" class=""></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1 modalWidth">
+                            <div class="row margin0 ">
+
+                            </div>
+                            <div class="row margin0 marginTop10 marginBottom15">
+                                <div class="segoUIFont">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 modalPopupDisplay">
+                                        <span ng-click="cm.addToDocumentTemplate()" class="pull-right segoUIFont marginTop6 marleft10 cursor">add</span><img title="{{cm.createContent.Tab1ButtonAddTitle}}" ng-click="cm.addToDocumentTemplate()" class="iconForward  pull-right" style="margin:0px;" alt="{{cm.createContent.Tab1LeftButtonAltText}}" src="../Images/forward_666.png">
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 modalPopupDisplay pad0">
+                                        <img ng-click="cm.removeFromDocumentTemplate()" title="{{cm.createContent.Tab1ButtonRemoveTitle}}" class="iconBack pull-left segoUIFont" alt="{{cm.createContent.Tab1RighttButtonAltText}}" src="../Images/back-666.png"><span ng-click="cm.removeFromDocumentTemplate()" class="pull-left segoUIFont marginTop6 cursor marleft10">remove</span>
+                                    </div>
+
+                                    <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft hidden-md hidden-xs hidden-sm modalPopupIconsDisplay" style="position:relative; margin-top: -17px;margin-left: 34px;" id="navigate">
+                                        <div class="popUpLeftClick popUpPosAbs" style="bottom:60%;margin-left:-4px;cursor:pointer;position:relative;">
+                                            <span ng-click="cm.addToDocumentTemplate()" class="pull-right segoUIFont">add</span>     <img title="{{cm.createContent.Tab1ButtonAddTitle}}" ng-click="cm.addToDocumentTemplate()" class="iconForward" style="margin:0px;" alt="{{cm.createContent.Tab1LeftButtonAltText}}" src="../Images/forward_666.png">
+                                        </div>
+                                        <div class="popUpRightClick popUpPosAbs" style="bottom:40%; margin-top:10px;margin-left:-4px;cursor:pointer;position:relative;">
+                                            <img ng-click="cm.removeFromDocumentTemplate()" title="{{cm.createContent.Tab1ButtonRemoveTitle}}" class="iconBack" alt="{{cm.createContent.Tab1RighttButtonAltText}}" src="../Images/back-666.png"><span ng-click="cm.removeFromDocumentTemplate()" class="pull-left segoUIFont">remove</span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 modalWidth segoUIFont">
+                            <div class="row margin0 modelMarginLeft segoUIFontBold">
+                                {{cm.createContent.Tab1LabelFinalTypeText}}
+                            </div>
+                            <div class="row margin0 marginTop10 modelMarginLeft">
+                                <div class="segoUIFont">
+                                    <div class="errorPopUpArea" ng-show="cm.errorPopUp" style="">
+                                        <div class="errTriangleArea popUpFloatLeft"></div>
+                                        <div class="errTriangleBorderArea popUpFloatLeft"></div>
+                                        <div class="errTextArea popUpFloatRight" style="margin:12px 25px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage " style="visibility: visible;">{{cm.createContent.Tab1LabelPrimaryTypeText}}</span></div>
+                                    </div>
+                                    <div class="popUpFloatLeft popUpBorder" style="height:213px; width:200px;">
+                                        <div class="popUpCommonContent popDT">
+                                            <div class="popUpDTContent" style="padding:0px !important;" ng-repeat='documentTypeLawTerm in cm.documentTypeLawTerms'>
+                                                <div ng-class='{popUpSelected : cm.activeDocumentTypeLawTerm === documentTypeLawTerm}' ng-click='cm.selectDocumentTemplateTypeLawTerm(documentTypeLawTerm)'
+                                                     data-value='{{$index}}'>{{documentTypeLawTerm.termName}}({{documentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row margin0 marginTop10"></div>
+                    <div class="row margin0 marginTop10 marginBottom15">
+                        <div class="col-lg-2 customLevel3Margin" ng-show="cm.taxonomyHierarchyLevels==3 "></div>
+                        <div class="col-lg-1 customLevel4Margin" ng-show="cm.taxonomyHierarchyLevels==4"></div>
+                        <div class="col-xs-10 col-lg-4 modalWidth segoUIFont modelMarginLeft" ng-show="cm.taxonomyHierarchyLevels>=2"><img id="" alt="info" src="../Images/information-blue.png"><span id="" class="segoUIFont">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span></div>
+                        <div class="col-xs-2  col-lg-1 hidden-xs hidden-sm hidden-md segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4"></div>
+                        <div class="col-xs-2  col-lg-1 hidden-xs hidden-sm hidden-md segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=5"></div>
+                        <div class="col-xs-1  col-lg-1 hidden-xs hidden-sm hidden-md segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4"></div>
+                        <div class="col-xs-2  col-lg-1 hidden-xs hidden-sm hidden-md segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=2"></div>
+                        <div class="col-xs-12 col-lg-2 segoUIFont  marginTop10 modalWidth"><button ng-click="cm.saveDocumentTemplates()" class="SaveDocTypes " type="button">{{cm.createContent.Tab1ButtonSaveSelectiponText}}</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+  
+
+</div>
+<div id="loadingImageContainer">
+    <div class="lazyLoading" ng-class="cm.popupContainerBackground">
+        <img src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" title="{{cm.createContent.Tab1ImageLoadingAltText}}" />
+    </div>
+</div>

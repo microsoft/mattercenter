@@ -1,140 +1,158 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter_Office", "Microsoft.Legal.MatterCenter_Office\Microsoft.Legal.MatterCenter_Office.csproj", "{736CED7B-2538-4C9A-ACAD-444A0917312D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C} = {7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF} = {EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}
-		{04B6E5BA-DE44-4E40-9496-EE12F658DE67} = {04B6E5BA-DE44-4E40-9496-EE12F658DE67}
-		{D81C60EA-B7A9-432A-B563-171997BC3A41} = {D81C60EA-B7A9-432A-B563-171997BC3A41}
-		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0} = {8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Legal.MatterCenter.Repository", "Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Repository\Microsoft.Legal.MatterCenter.Repository.xproj", "{636BC580-B03A-4523-B3CA-ECB24596560D}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Legal.MatterCenter.Models", "Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Models\Microsoft.Legal.MatterCenter.Models.xproj", "{D1EFE912-64CE-40E6-86F7-01E39CC30893}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Legal.MatterCenter.Utility", "Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.Utility\Microsoft.Legal.MatterCenter.Utility.xproj", "{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86D26D6E-2C06-4E6F-804B-4A4C540591D4}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter_Outlook", "Microsoft.Legal.MatterCenter_Outlook\Microsoft.Legal.MatterCenter_Outlook.csproj", "{0AB1971C-0D57-4CD8-8E5A-1461DA018937}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C} = {7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF} = {EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}
-		{04B6E5BA-DE44-4E40-9496-EE12F658DE67} = {04B6E5BA-DE44-4E40-9496-EE12F658DE67}
-		{D81C60EA-B7A9-432A-B563-171997BC3A41} = {D81C60EA-B7A9-432A-B563-171997BC3A41}
-		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0} = {8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter", "Microsoft.Legal.MatterCenter\Microsoft.Legal.MatterCenter.csproj", "{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C} = {7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}
-		{04B6E5BA-DE44-4E40-9496-EE12F658DE67} = {04B6E5BA-DE44-4E40-9496-EE12F658DE67}
-		{D81C60EA-B7A9-432A-B563-171997BC3A41} = {D81C60EA-B7A9-432A-B563-171997BC3A41}
-		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0} = {8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter_Office", "Microsoft.Legal.MatterCenter_Office\Microsoft.Legal.MatterCenter_Office.csproj", "{736CED7B-2538-4C9A-ACAD-444A0917312D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.SharePointAppWeb", "Microsoft.Legal.MatterCenter.SharePointAppWeb\Microsoft.Legal.MatterCenter.SharePointAppWeb.csproj", "{D81C60EA-B7A9-432A-B563-171997BC3A41}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0} = {8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}
-	EndProjectSection
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Legal.MatterCenter.Jobs", "Microsoft.Legal.MatterCenter.Jobs\Microsoft.Legal.MatterCenter.Jobs.xproj", "{B32958BF-D498-4443-BE46-58594CDF29E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.ProviderService", "Microsoft.Legal.MatterCenter.ProviderService\Microsoft.Legal.MatterCenter.ProviderService.csproj", "{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0} = {8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}
-	EndProjectSection
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Legal.MatterCenter.Web", "Microsoft.Legal.MatterCenter.Web\Microsoft.Legal.MatterCenter.Web.xproj", "{B6B6A216-BCFD-43F0-B326-E820EB4FC677}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.Utility", "Microsoft.Legal.MatterCenter.Utility\Microsoft.Legal.MatterCenter.Utility.csproj", "{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}"
-	ProjectSection(ProjectDependencies) = postProject
-		{04B6E5BA-DE44-4E40-9496-EE12F658DE67} = {04B6E5BA-DE44-4E40-9496-EE12F658DE67}
-	EndProjectSection
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Legal.MatterCenter.ServiceTest", "Microsoft.Legal.MatterCenter.Service\Microsoft.Legal.MatterCenter.ServiceTest\Microsoft.Legal.MatterCenter.ServiceTest.xproj", "{650A5A85-5956-491E-9312-5E25A27D1108}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.OneDriveRibbon", "Microsoft.Legal.MatterCenter.OneDriveRibbon\Microsoft.Legal.MatterCenter.OneDriveRibbon.csproj", "{40F9BAC5-A9C0-49F3-B550-2EC7936AC417}"
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Deployment", "Deployment\Deployment.deployproj", "{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.Entity", "Microsoft.Legal.MatterCenter.Entity\Microsoft.Legal.MatterCenter.Entity.csproj", "{04B6E5BA-DE44-4E40-9496-EE12F658DE67}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.DataLayer", "Microsoft.Legal.MatterCenter.DataLayer\Microsoft.Legal.MatterCenter.DataLayer.csproj", "{C1760739-9EB8-4F21-BB8D-14E6EACC7CE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Legal.MatterCenter.Jasmine", "Microsoft.Legal.MatterCenter.Jasmine\Microsoft.Legal.MatterCenter.Jasmine.csproj", "{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Debug|x64.Build.0 = Debug|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Debug|x86.Build.0 = Debug|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Release|x64.ActiveCfg = Release|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Release|x64.Build.0 = Release|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Release|x86.ActiveCfg = Release|Any CPU
+		{636BC580-B03A-4523-B3CA-ECB24596560D}.Release|x86.Build.0 = Release|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Debug|x64.Build.0 = Debug|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Debug|x86.Build.0 = Debug|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Release|x64.ActiveCfg = Release|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Release|x64.Build.0 = Release|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Release|x86.ActiveCfg = Release|Any CPU
+		{D1EFE912-64CE-40E6-86F7-01E39CC30893}.Release|x86.Build.0 = Release|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Debug|x64.Build.0 = Debug|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Debug|x86.Build.0 = Debug|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Release|x64.ActiveCfg = Release|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Release|x64.Build.0 = Release|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Release|x86.ActiveCfg = Release|Any CPU
+		{C72CAA85-CA6A-4540-AA43-56A4FB2B3EFE}.Release|x86.Build.0 = Release|Any CPU
 		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFF0F56F-0930-4ABB-98E2-640A8B5DA8DF}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{D81C60EA-B7A9-432A-B563-171997BC3A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D81C60EA-B7A9-432A-B563-171997BC3A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D81C60EA-B7A9-432A-B563-171997BC3A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D81C60EA-B7A9-432A-B563-171997BC3A41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7CD80126-EBC1-48CE-A0B1-4B15C42C0A4C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8232F5F2-A0F9-4608-B7F3-22A321ECA1B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{40F9BAC5-A9C0-49F3-B550-2EC7936AC417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{40F9BAC5-A9C0-49F3-B550-2EC7936AC417}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{40F9BAC5-A9C0-49F3-B550-2EC7936AC417}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{40F9BAC5-A9C0-49F3-B550-2EC7936AC417}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{40F9BAC5-A9C0-49F3-B550-2EC7936AC417}.Release|Any CPU.Build.0 = Release|Any CPU
-		{40F9BAC5-A9C0-49F3-B550-2EC7936AC417}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{04B6E5BA-DE44-4E40-9496-EE12F658DE67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04B6E5BA-DE44-4E40-9496-EE12F658DE67}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04B6E5BA-DE44-4E40-9496-EE12F658DE67}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04B6E5BA-DE44-4E40-9496-EE12F658DE67}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1760739-9EB8-4F21-BB8D-14E6EACC7CE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1760739-9EB8-4F21-BB8D-14E6EACC7CE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1760739-9EB8-4F21-BB8D-14E6EACC7CE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1760739-9EB8-4F21-BB8D-14E6EACC7CE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Release|x64.ActiveCfg = Release|Any CPU
+		{0AB1971C-0D57-4CD8-8E5A-1461DA018937}.Release|x86.ActiveCfg = Release|Any CPU
+		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|x64.ActiveCfg = Release|Any CPU
+		{736CED7B-2538-4C9A-ACAD-444A0917312D}.Release|x86.ActiveCfg = Release|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Debug|x64.Build.0 = Debug|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Debug|x86.Build.0 = Debug|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Release|x64.ActiveCfg = Release|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Release|x64.Build.0 = Release|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Release|x86.ActiveCfg = Release|Any CPU
+		{B32958BF-D498-4443-BE46-58594CDF29E1}.Release|x86.Build.0 = Release|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Debug|x64.Build.0 = Debug|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Debug|x86.Build.0 = Debug|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Release|x64.ActiveCfg = Release|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Release|x64.Build.0 = Release|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Release|x86.ActiveCfg = Release|Any CPU
+		{B6B6A216-BCFD-43F0-B326-E820EB4FC677}.Release|x86.Build.0 = Release|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Debug|x64.Build.0 = Debug|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Debug|x86.Build.0 = Debug|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Release|Any CPU.Build.0 = Release|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Release|x64.ActiveCfg = Release|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Release|x64.Build.0 = Release|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Release|x86.ActiveCfg = Release|Any CPU
+		{650A5A85-5956-491E-9312-5E25A27D1108}.Release|x86.Build.0 = Release|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Debug|x64.Build.0 = Debug|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Debug|x86.Build.0 = Debug|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Release|x64.ActiveCfg = Release|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Release|x64.Build.0 = Release|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Release|x86.ActiveCfg = Release|Any CPU
+		{AD4204FD-2F59-4A0C-868A-4A9A3C602DF1}.Release|x86.Build.0 = Release|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Debug|x64.Build.0 = Debug|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Debug|x86.Build.0 = Debug|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Release|x64.ActiveCfg = Release|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Release|x64.Build.0 = Release|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Release|x86.ActiveCfg = Release|Any CPU
+		{D6F8976C-1DC3-4106-B11E-5104B91DD9D5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://mattercenter.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Microsoft.Legal.MatterCenter.Utility\\Microsoft.Legal.MatterCenter.Utility.csproj
-		SccProjectName1 = Microsoft.Legal.MatterCenter.Utility
-		SccLocalPath1 = Microsoft.Legal.MatterCenter.Utility
-		SccProjectUniqueName2 = Microsoft.Legal.MatterCenter.ProviderService\\Microsoft.Legal.MatterCenter.ProviderService.csproj
-		SccProjectName2 = Microsoft.Legal.MatterCenter.ProviderService
-		SccLocalPath2 = Microsoft.Legal.MatterCenter.ProviderService
-		SccProjectUniqueName3 = Microsoft.Legal.MatterCenter.SharePointAppWeb\\Microsoft.Legal.MatterCenter.SharePointAppWeb.csproj
-		SccProjectName3 = Microsoft.Legal.MatterCenter.SharePointAppWeb
-		SccLocalPath3 = Microsoft.Legal.MatterCenter.SharePointAppWeb
-		SccProjectUniqueName4 = Microsoft.Legal.MatterCenter\\Microsoft.Legal.MatterCenter.csproj
-		SccProjectName4 = Microsoft.Legal.MatterCenter
-		SccLocalPath4 = Microsoft.Legal.MatterCenter
-		SccProjectUniqueName5 = Microsoft.Legal.MatterCenter_Office\\Microsoft.Legal.MatterCenter_Office.csproj
-		SccProjectName5 = Microsoft.Legal.MatterCenter_Office
-		SccLocalPath5 = Microsoft.Legal.MatterCenter_Office
-		SccProjectUniqueName6 = Microsoft.Legal.MatterCenter_Outlook\\Microsoft.Legal.MatterCenter_Outlook.csproj
-		SccProjectName6 = Microsoft.Legal.MatterCenter_Outlook
-		SccLocalPath6 = Microsoft.Legal.MatterCenter_Outlook
-		SccProjectUniqueName7 = Microsoft.Legal.MatterCenter.OneDriveRibbon\\Microsoft.Legal.MatterCenter.OneDriveRibbon.csproj
-		SccProjectName7 = Microsoft.Legal.MatterCenter.OneDriveRibbon
-		SccLocalPath7 = Microsoft.Legal.MatterCenter.OneDriveRibbon
-		SccProjectUniqueName8 = Microsoft.Legal.MatterCenter.Entity\\Microsoft.Legal.MatterCenter.Entity.csproj
-		SccProjectName8 = Microsoft.Legal.MatterCenter.Entity
-		SccLocalPath8 = Microsoft.Legal.MatterCenter.Entity
-		SccProjectUniqueName9 = Microsoft.Legal.MatterCenter.DataLayer\\Microsoft.Legal.MatterCenter.DataLayer.csproj
-		SccProjectName9 = Microsoft.Legal.MatterCenter.DataLayer
-		SccLocalPath9 = Microsoft.Legal.MatterCenter.DataLayer
 	EndGlobalSection
 EndGlobal

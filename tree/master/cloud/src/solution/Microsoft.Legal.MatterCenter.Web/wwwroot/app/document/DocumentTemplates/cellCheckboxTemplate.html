@@ -1,0 +1,5 @@
+﻿<div class="ngCellText" ng-class="col.colIndex()">
+    <div class="ui-grid-cell-contents" style="padding-top: 3px;padding-left:0" >
+        <input type="checkbox" ui-grid-editor id="doc{{row.entity.documentID}}"  ng-input="MODEL_COL_FIELD" ng-model="MODEL_COL_FIELD" ng-change="grid.appScope.vm.toggleChecker(MODEL_COL_FIELD,{{row.entity}})"> 
+    </div>
+</div>
