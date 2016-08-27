@@ -1,0 +1,479 @@
+"PartitionKey","RowKey","ConfigGroup","Key","Value"
+MatterCenterConfig,RowKey001,CreateMatter,Tab1HeaderTitle,Step 1: Select a client and provide basic information for your new matter.
+MatterCenterConfig,RowKey002,CreateMatter,Tab2HeaderTitle,Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter.
+MatterCenterConfig,RowKey003,CreateMatter,Tab3HeaderTitle,"Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team."
+MatterCenterConfig,RowKey004,CreateMatter,ButtonNextText,Next
+MatterCenterConfig,RowKey005,CreateMatter,ButtonPreviousText,Previous
+MatterCenterConfig,RowKey006,CreateMatter,ButtonCreateText,Create
+MatterCenterConfig,RowKey007,CreateMatter,Tab2NoSearchResultText,No Results Found
+MatterCenterConfig,RowKey008,CreateMatter,Tab1Type1Header1Label1,Select a Practice Group
+MatterCenterConfig,RowKey009,CreateMatter,Tab1Type1Footer1Label1,Please select primary matter type before you save.
+MatterCenterConfig,RowKey010,CreateMatter,Tab1SiteColumn1Caption,Area of Law
+MatterCenterConfig,RowKey011,CreateMatter,Tab1SiteColumn2Caption,Sub Area of Law (select matter type)
+MatterCenterConfig,RowKey012,CreateMatter,Tab1SiteColumn3Caption,Matter Type
+MatterCenterConfig,RowKey013,CreateMatter,Tab1Type1Label1,select primary matter type
+MatterCenterConfig,RowKey014,CreateMatter,Tab1ButtonAddTitle,Add
+MatterCenterConfig,RowKey015,CreateMatter,Tab1ButtonRemoveTitle,Remove
+MatterCenterConfig,RowKey016,CreateMatter,MenuImageTitle,Matter Center menu
+MatterCenterConfig,RowKey017,CreateMatter,MenuImageCaption,menu
+MatterCenterConfig,RowKey018,CreateMatter,Tab1ButtonCloseTitle,Close
+MatterCenterConfig,RowKey019,CreateMatter,Tab1ButtonSelectType,Select Type
+MatterCenterConfig,RowKey020,CreateMatter,Tab1ImageLoadingAltText,Loading...
+MatterCenterConfig,RowKey021,CreateMatter,MenuItem1LinkTitle,Home
+MatterCenterConfig,RowKey022,CreateMatter,MenuItem2LinkTitle,Search matters
+MatterCenterConfig,RowKey023,CreateMatter,MenuItem3LinkTitle,Search documents
+MatterCenterConfig,RowKey024,CreateMatter,MenuItem1LinkText,Home
+MatterCenterConfig,RowKey025,CreateMatter,MenuItem2LinkText,Matters
+MatterCenterConfig,RowKey026,CreateMatter,MenuItem3LinkText,Documents
+MatterCenterConfig,RowKey027,CreateMatter,ButtonSaveText,Save
+MatterCenterConfig,RowKey028,CreateMatter,MenuImageOpenTitle,Open App Switcher
+MatterCenterConfig,RowKey029,CreateMatter,MenuImageCloseTitle,Close App Switcher
+MatterCenterConfig,RowKey030,CreateMatter,ButtonDeleteText,Delete
+MatterCenterConfig,RowKey031,CreateMatter,Tab1LeftButtonAltText,Left
+MatterCenterConfig,RowKey032,CreateMatter,Tab1RighttButtonAltText,Right
+MatterCenterConfig,RowKey033,CreateMatter,Tab3SectionText,"You have entered all of the necessary information to create this matter. After you click Create and Notify, the matter will be created and all team members will receive an email containing a link to this matter's location. "
+MatterCenterConfig,RowKey034,CreateMatter,LabelNotificationPopupForExternalSharingText,The following recipent is outside your organization. Would you still like to invite them to the Assigned Team?
+MatterCenterConfig,RowKey035,CreateMatter,RemoveLinkText,Remove
+MatterCenterConfig,RowKey036,CreateMatter,ConfirmLinkText,Confirm
+MatterCenterConfig,RowKey037,CreateMatter,Tab1Dropdown1Label,Client Name
+MatterCenterConfig,RowKey038,CreateMatter,Tab1Header,Open Matter
+MatterCenterConfig,RowKey039,CreateMatter,Tab2Header,Assign Permission
+MatterCenterConfig,RowKey040,CreateMatter,Tab3Header,Create and Notify
+MatterCenterConfig,RowKey041,CreateMatter,Tab2Checkbox1Lebal,Conflict check conducted (must be complete prior to provisioning matter)
+MatterCenterConfig,RowKey042,CreateMatter,Tab2Textbox1Label,Who conducted the conflict check?
+MatterCenterConfig,RowKey043,CreateMatter,Tab2DateLabel,Date Conducted
+MatterCenterConfig,RowKey044,CreateMatter,Tab2RadioButton1Label,Conflict Identified?
+MatterCenterConfig,RowKey045,CreateMatter,Tab2RadioButton1Option1,Yes
+MatterCenterConfig,RowKey046,CreateMatter,Tab2RadioButton1Option2,No
+MatterCenterConfig,RowKey047,CreateMatter,Tab2Textbox2Label,Conflicted Users
+MatterCenterConfig,RowKey048,CreateMatter,Tab1Textbox1Label,Client ID
+MatterCenterConfig,RowKey049,CreateMatter,Tab2Textbox2PlaceHolder,Enter and select names
+MatterCenterConfig,RowKey050,CreateMatter,Tab2RadioButton2Label,Would you like this matter to be secured only to the assigned team?
+MatterCenterConfig,RowKey051,CreateMatter,Tab2RadioButton2Option1,Yes
+MatterCenterConfig,RowKey052,CreateMatter,Tab2RadioButton2Option2,No
+MatterCenterConfig,RowKey053,CreateMatter,Tab2TeamHeader,Assign Team
+MatterCenterConfig,RowKey054,CreateMatter,Tab2Textbox3Label,Name
+MatterCenterConfig,RowKey055,CreateMatter,Tab2Textbox3PlaceHolder,Enter and select names
+MatterCenterConfig,RowKey056,CreateMatter,Tab2Deopdown1Label,Role
+MatterCenterConfig,RowKey057,CreateMatter,Tab2Deopdown2Label,Permission Level
+MatterCenterConfig,RowKey058,CreateMatter,Tab2AddMoreHeaderLabel,Add More Names
+MatterCenterConfig,RowKey059,CreateMatter,Tab1Textbox2Label,Matter Name
+MatterCenterConfig,RowKey060,CreateMatter,Tab3CheckBox1Text,Include calendar
+MatterCenterConfig,RowKey061,CreateMatter,Tab3CheckBox2Text,Include RSS Feeds
+MatterCenterConfig,RowKey062,CreateMatter,Tab3CheckBox3Text,Include email notification
+MatterCenterConfig,RowKey063,CreateMatter,Tab3CheckBox4Text,Include Tasks
+MatterCenterConfig,RowKey064,CreateMatter,Tab3ButtonText,Create and Notify
+MatterCenterConfig,RowKey065,CreateMatter,Tab1Textbox2PlaceholderText,Enter a name for this matter
+MatterCenterConfig,RowKey066,CreateMatter,Tab1Textbox3Label,Matter ID
+MatterCenterConfig,RowKey067,CreateMatter,Tab1Textbox3PlaceholderText,Enter a matter ID
+MatterCenterConfig,RowKey068,CreateMatter,Tab1Textbox4Label,Matter Description
+MatterCenterConfig,RowKey069,CreateMatter,Tab1Textbox4PlaceholderText,Enter a brief description of the matter
+MatterCenterConfig,RowKey070,CreateMatter,Tab1Textbox5Label,Matter Type (click Select to define the practice group and area of law)
+MatterCenterConfig,RowKey071,CreateMatter,Tab1DrpDownLevel1DefaultSelectOption,Select a practice group
+MatterCenterConfig,RowKey072,CreateMatter,Tab1TermsSelectionSearchPlaceHolderText,Search by typing
+MatterCenterConfig,RowKey073,CreateMatter,Tab1LabelFinalTypeText,MatterType
+MatterCenterConfig,RowKey074,CreateMatter,Tab1LabelPrimaryTypeText,Please select primary matter type
+MatterCenterConfig,RowKey075,CreateMatter,Tab1LabelPrimaryTypeBeforeSaveText,Please select primary matter type before you save.
+MatterCenterConfig,RowKey076,CreateMatter,Tab1ButtonSaveSelectiponText,Save Selections
+MatterCenterConfig,RowKey081,DocumentDashboard,LinkImageLoadingTitle,Matter Center Home
+MatterCenterConfig,RowKey082,DocumentDashboard,ImageLoadingAltText,Matter Center
+MatterCenterConfig,RowKey083,DocumentDashboard,Image1EmailAttachmentText,Email as attachment
+MatterCenterConfig,RowKey084,DocumentDashboard,Image2EmailAttachmentLinkText,Email as link
+MatterCenterConfig,RowKey085,DocumentDashboard,Image3EmailRemovalAttachmentLinkText,Remove attachment
+MatterCenterConfig,RowKey086,DocumentDashboard,SearchDocumentPlaceholderText,"Search by document name, document ID, or keyword"
+MatterCenterConfig,RowKey087,DocumentDashboard,ImageAdvanceSearchAltText,Drop Down
+MatterCenterConfig,RowKey088,DocumentDashboard,ImageAdvanceSearchTitle,Advanced search
+MatterCenterConfig,RowKey089,DocumentDashboard,AdvSearchLabel1Text,Clients
+MatterCenterConfig,RowKey090,DocumentDashboard,AdvSearchLabel1FunctionParameterText,client
+MatterCenterConfig,RowKey091,DocumentDashboard,AdvSearchTextbox1PlaceholderText,Enter or select a client
+MatterCenterConfig,RowKey092,DocumentDashboard,AdvSearchSelectAllLinkText,Select All
+MatterCenterConfig,RowKey093,DocumentDashboard,AdvSearchSelectNoneLinkText,Select None
+MatterCenterConfig,RowKey094,DocumentDashboard,AdvSearchbuttonOkText,Ok
+MatterCenterConfig,RowKey095,DocumentDashboard,AdvSearchbuttonCancelText,Cancel
+MatterCenterConfig,RowKey096,DocumentDashboard,AdvSearchLabel2Text,Author
+MatterCenterConfig,RowKey097,DocumentDashboard,AdvSearchTextbox2PlaceholderText,Document Author
+MatterCenterConfig,RowKey098,DocumentDashboard,AdvSearchLabel3Text,Date
+MatterCenterConfig,RowKey099,DocumentDashboard,AdvSearchTextbox3PlaceholderText,From
+MatterCenterConfig,RowKey100,DocumentDashboard,AdvSearchTextbox4PlaceholderText,To
+MatterCenterConfig,RowKey101,DocumentDashboard,NoSearchResultMsgText,No Results Found
+MatterCenterConfig,RowKey102,DocumentDashboard,AdvSearchButtonSearchText,Search
+MatterCenterConfig,RowKey103,DocumentDashboard,Tab1HeaderText,My documents
+MatterCenterConfig,RowKey104,DocumentDashboard,Tab2HeaderText,All documents
+MatterCenterConfig,RowKey105,DocumentDashboard,Tab3HeaderText,Pinned documents
+MatterCenterConfig,RowKey106,DocumentDashboard,ImageMailCartIconTitle,Review the contents of your mail cart and send the selected documents to your OneDrive or via email.
+MatterCenterConfig,RowKey107,DocumentDashboard,ImageMailCartIconAltText,Mail Cart
+MatterCenterConfig,RowKey108,DocumentDashboard,LabelSortByText,Sort by:
+MatterCenterConfig,RowKey109,DocumentDashboard,LabelSortByTitle,Sort By
+MatterCenterConfig,RowKey110,DocumentDashboard,DrpDownOption1Text,None
+MatterCenterConfig,RowKey111,DocumentDashboard,DrpDownOption2Text,Alphabetical
+MatterCenterConfig,RowKey112,DocumentDashboard,DrpDownOption3Text,Created date
+MatterCenterConfig,RowKey113,DocumentDashboard,DrpDownOption4Text,Modified date
+MatterCenterConfig,RowKey114,DocumentDashboard,MattersPreLoadingMsgText, Please wait while the Documents load.
+MatterCenterConfig,RowKey115,DocumentDashboard,AttachmentLoadingText,Loading...
+MatterCenterConfig,RowKey116,DocumentDashboard,GridColumn1Header,Document
+MatterCenterConfig,RowKey117,DocumentDashboard,GridColumn2Header,Client
+MatterCenterConfig,RowKey118,DocumentDashboard,GridColumn3Header,Author
+MatterCenterConfig,RowKey119,DocumentDashboard,GridColumn4Header,Modified Date
+MatterCenterConfig,RowKey120,DocumentDashboard,GridColumn5Header,Document ID
+MatterCenterConfig,RowKey121,DocumentDashboard,GridColumn6Header,Version
+MatterCenterConfig,RowKey131,Documents,EllipsisLink4Text,Unpin this Document
+MatterCenterConfig,RowKey132,Documents,StartDatePlaceHolder,Start mm/dd/yyyy
+MatterCenterConfig,RowKey133,Documents,EndDatePlaceHolder,End mm/dd/yyyy
+MatterCenterConfig,RowKey134,Documents,ImageWarningTitle,Warning
+MatterCenterConfig,RowKey135,Documents,ImageWarningAltText,Warning icon
+MatterCenterConfig,RowKey136,Documents,AttachmentSuccessfullyMsgText,Documents successfully attached.
+MatterCenterConfig,RowKey137,Documents,AttachmentProgressingText,Attaching
+MatterCenterConfig,RowKey138,Documents,AttachmentProgressingWarningText,Do not close Matter Center until all documents are attached.
+MatterCenterConfig,RowKey139,Documents,AttachmentLoadingText,Loading...
+MatterCenterConfig,RowKey140,Documents,ButtonOkText,Ok
+MatterCenterConfig,RowKey141,Documents,ImageClearTitle,Clear
+MatterCenterConfig,RowKey142,Documents,LabelCloseText,Close
+MatterCenterConfig,RowKey143,Documents,ClearFilterFromLabelText,Clear filters from 
+MatterCenterConfig,RowKey144,Documents,NoFilterMatchMsgTitle,There are no items that match this filter
+MatterCenterConfig,RowKey145,Documents,NoFilterMatchMsgText,There are no items that match this filter
+MatterCenterConfig,RowKey146,Documents,LabelDocumentText,documents...
+MatterCenterConfig,RowKey147,Documents,LabelOfText,of
+MatterCenterConfig,RowKey148,Documents,ImageClearAltText,Clear filters
+MatterCenterConfig,RowKey149,Documents,FilterSearchPlaceholderText,Search
+MatterCenterConfig,RowKey150,Documents,EllipsisDocTypeIconAltText,Document type icon
+MatterCenterConfig,RowKey151,Documents,FlyoutLable1Text,Matter
+MatterCenterConfig,RowKey152,Documents,FlyoutLable2Text,Document ID
+MatterCenterConfig,RowKey153,Documents,GridColumn8Header,Created Date
+MatterCenterConfig,RowKey154,Documents,Dropdown1Item1,All Documents
+MatterCenterConfig,RowKey155,Documents,Dropdown1Item2,My Documents
+MatterCenterConfig,RowKey156,Documents,Dropdown1Item3,Pinned Documents
+MatterCenterConfig,RowKey157,Documents,SearchPlaceholderText,"Search by ID, or document or client name"
+MatterCenterConfig,RowKey158,Documents,NoDataSearchText,"Nothing matches your search term or the filter you selected. Please try again.<br>If you applied a filter, remove it to get back to your list.<br>Search suggestions:<br><ul><li>Make sure all words are spelled correctly</li><li>Try different keywords</li><li>Try searching by the matter name or client name</li><li>Try more general search terms</li></ul>"
+MatterCenterConfig,RowKey159,Documents,GridColumn1Header,Document
+MatterCenterConfig,RowKey160,Documents,GridColumn2Header,Client
+MatterCenterConfig,RowKey161,Documents,GridColumn3Header,Client.MatterID
+MatterCenterConfig,RowKey162,Documents,GridColumn4Header,Modified Date
+MatterCenterConfig,RowKey163,Documents,GridColumn5Header,Author
+MatterCenterConfig,RowKey164,Documents,GridColumn6Header,Document Version
+MatterCenterConfig,RowKey165,Documents,GridColumn7Header,Checked out to
+MatterCenterConfig,RowKey166,Documents,HeaderText,All Documents
+MatterCenterConfig,RowKey167,Documents,EllipsisLink1Text,Open this Document
+MatterCenterConfig,RowKey168,Documents,EllipsisLink2Text,View Matter Details
+MatterCenterConfig,RowKey169,Documents,EllipsisLink3Text,Pin this Document
+MatterCenterConfig,RowKey170,Documents,FlyoutButton1Text,Open document
+MatterCenterConfig,RowKey171,Documents,FlyoutButton2Text,View document details
+MatterCenterConfig,RowKey181,Header,MenuImage1Title,Matter center menu
+MatterCenterConfig,RowKey182,Header,MenuImage1Caption,menu
+MatterCenterConfig,RowKey183,Header,MenuImage1OpenTitle,Open App Switcher
+MatterCenterConfig,RowKey184,Header,MenuImage1CloseTitle,Close App Switcher
+MatterCenterConfig,RowKey185,Header,Menu1Option1Title,Home
+MatterCenterConfig,RowKey186,Header,Menu1Option2Title,Search matters
+MatterCenterConfig,RowKey187,Header,Menu1Option3Title,Search documents
+MatterCenterConfig,RowKey188,Header,Menu1Option1Text,Home
+MatterCenterConfig,RowKey189,Header,Menu1Option2Text,Matters
+MatterCenterConfig,RowKey190,Header,Menu1Option3Text,Documents
+MatterCenterConfig,RowKey191,Header,ContextualHelpImageTitle,Matter center help
+MatterCenterConfig,RowKey192,Header,ContextualHelpHeader,Matter Center For Outlook
+MatterCenterConfig,RowKey193,Header,ContextualHelpNoLinkText,There are no help links available.
+MatterCenterConfig,RowKey194,Header,ContextualHelpFooterLink1Label,Matter Center Aisling Support
+MatterCenterConfig,RowKey195,Header,LogoImageTitle,Matter center home
+MatterCenterConfig,RowKey196,Header,ContextualHelpLabel1,Get to know this view
+MatterCenterConfig,RowKey197,Header,ContextualHelpLabel2,How do I get Project Center on my device?
+MatterCenterConfig,RowKey198,Header,MatterCenterSupportLink,mailto:support@supportsite.com
+MatterCenterConfig,RowKey199,Header,ContextualHelpFooterLink1Title,Write an email to support
+MatterCenterConfig,RowKey200,Header,ContextualHelpFooterLabel,Questions? Contact 
+MatterCenterConfig,RowKey201,Header,ContextualHelpAltText,Contextual Help
+MatterCenterConfig,RowKey202,Header,ContextualHelpFlyoutAltText,Close flyout
+MatterCenterConfig,RowKey203,Header,CloseTitle,Close
+MatterCenterConfig,RowKey204,Header,DashboardMenuImageUpperCaption,Matter Center
+MatterCenterConfig,RowKey205,Header,DashboardMenuImageLowerCaption,for Office 365
+MatterCenterConfig,RowKey206,Header,ImageOpenHamburgerTitle,View links
+MatterCenterConfig,RowKey207,Header,DashboardHeaderSearchPlaceholderText,Search SharePoint
+MatterCenterConfig,RowKey208,Header,DashboardSearchIconTitle,Search
+MatterCenterConfig,RowKey209,Header,HamburgerMenuOption3Text,Settings
+MatterCenterConfig,RowKey210,Header,FooterMenuOption4Text,Microsoft
+MatterCenterConfig,RowKey211,Header,FooterMenuOption1Text,Feedback & Support
+MatterCenterConfig,RowKey212,Header,FooterMenuOption2Text,Privacy & Cookies
+MatterCenterConfig,RowKey213,Header,FooterMenuOption3Text,Terms of use
+MatterCenterConfig,RowKey214,Header,ProfilePictureLabelText,Profile Picture
+MatterCenterConfig,RowKey215,Header,LabelSingOutText,Sign Out
+MatterCenterConfig,RowKey216,Header,ImageCloseHamburgerTitle,Close
+MatterCenterConfig,RowKey226,MatterDashboard,LinkImageLoadingTitle,Matter Center Home
+MatterCenterConfig,RowKey227,MatterDashboard,ImageLoadingAltText,Matter Center
+MatterCenterConfig,RowKey228,MatterDashboard,ImageCloseTitle,Close
+MatterCenterConfig,RowKey229,MatterDashboard,AttachmentLoadingText,Loading...
+MatterCenterConfig,RowKey230,MatterDashboard,SearchTextboxPlaceholderText,"Search by document name, document ID, or keyword"
+MatterCenterConfig,RowKey231,MatterDashboard,ImageAdvanceSearchAltText,Drop Down
+MatterCenterConfig,RowKey232,MatterDashboard,ImageAdvanceSearchTitle,Advanced search
+MatterCenterConfig,RowKey233,MatterDashboard,AdvSearchLabel1Text,Clients
+MatterCenterConfig,RowKey234,MatterDashboard,AdvSearchTextbox1PlaceholderText,Enter or select a client
+MatterCenterConfig,RowKey235,MatterDashboard,AdvSearchSelectAllLinkText,Select All
+MatterCenterConfig,RowKey236,MatterDashboard,AdvSearchSelectNoneLinkText,Select None
+MatterCenterConfig,RowKey237,MatterDashboard,AdvSearchbuttonOkText,Ok
+MatterCenterConfig,RowKey238,MatterDashboard,AdvSearchbuttonCancelText,Cancel
+MatterCenterConfig,RowKey239,MatterDashboard,AdvSearchLabel2Text,Practice Group
+MatterCenterConfig,RowKey240,MatterDashboard,AdvSearchTextbox2PlaceholderText,Enter or select a practice group
+MatterCenterConfig,RowKey241,MatterDashboard,AdvSearchLabel3Text,Area of Law
+MatterCenterConfig,RowKey242,MatterDashboard,AdvSearchTextbox3PlaceholderText,Enter or select an area of law
+MatterCenterConfig,RowKey243,MatterDashboard,AdvSearchLabel4Text,Date
+MatterCenterConfig,RowKey244,MatterDashboard,AdvSearchTextbox4PlaceholderText,From
+MatterCenterConfig,RowKey245,MatterDashboard,AdvSearchTextbox5PlaceholderText,To
+MatterCenterConfig,RowKey246,MatterDashboard,AdvSearchButtonSearchText,Search
+MatterCenterConfig,RowKey247,MatterDashboard,Tab1HeaderText,My matters
+MatterCenterConfig,RowKey248,MatterDashboard,Tab2HeaderText,All matters 
+MatterCenterConfig,RowKey249,MatterDashboard,Tab3HeaderText,Pinned matters
+MatterCenterConfig,RowKey250,MatterDashboard,ButtonExportText,Export
+MatterCenterConfig,RowKey251,MatterDashboard,LabelSortByText,Sort by:
+MatterCenterConfig,RowKey252,MatterDashboard,DrpDownOption1Text,None
+MatterCenterConfig,RowKey253,MatterDashboard,DrpDownOption2Text,Alphabetical
+MatterCenterConfig,RowKey254,MatterDashboard,DrpDownOption3Text,Created date
+MatterCenterConfig,RowKey255,MatterDashboard,NoSearchResultMsgText,No results found.
+MatterCenterConfig,RowKey256,MatterDashboard,Button1DuplicateContentTitle,Matter Center will compare all content and data associated with the two documents. Navigating away from this screen will cancel the content check.
+MatterCenterConfig,RowKey257,MatterDashboard,Button1DuplicateContentText,Perform content check
+MatterCenterConfig,RowKey258,MatterDashboard,Button2SaveLatestVersionTitle,The file will be saved as the latest version of the existing document that has same title. Matter Center will retain all prior versions of the document.
+MatterCenterConfig,RowKey259,MatterDashboard,Button2SaveLatestVersionText,Save as latest version
+MatterCenterConfig,RowKey260,MatterDashboard,Button3AppendDateTitle,"The file will be saved as new, separate document with the current date and time added to the end of the file name."
+MatterCenterConfig,RowKey261,MatterDashboard,Button3AppendDateText,Append date to file name and save
+MatterCenterConfig,RowKey262,MatterDashboard,Button4CancelUploadTitle,This document will not be uploaded and you will return to the previous screen.
+MatterCenterConfig,RowKey263,MatterDashboard,Button4CancelUploadText,Cancel upload
+MatterCenterConfig,RowKey264,MatterDashboard,Image1ContentCheckText,Checking content
+MatterCenterConfig,RowKey265,MatterDashboard,UploadCompleteLabel1Text,Upload complete.
+MatterCenterConfig,RowKey266,MatterDashboard,CloseIconText,X
+MatterCenterConfig,RowKey267,MatterDashboard,AttachmentPopupHeaderText,Drag and drop items to folders on the right
+MatterCenterConfig,RowKey268,MatterDashboard,AttachmentPopupHeaderItem1Text,Items
+MatterCenterConfig,RowKey269,MatterDashboard,AttachmentPopupHeaderItem2Text,Folders
+MatterCenterConfig,RowKey270,MatterDashboard,AttachmentEditImageTitle,Edit attachment name
+MatterCenterConfig,RowKey271,MatterDashboard,AttachmentEditImageAltText,Edit
+MatterCenterConfig,RowKey272,MatterDashboard,AttachmentSaveImageTitle,Save attachment name
+MatterCenterConfig,RowKey273,MatterDashboard,AttachmentSaveImageText,Save
+MatterCenterConfig,RowKey274,MatterDashboard,AttachmentUploadSuccessfullyImageAltText,Uploaded successfully
+MatterCenterConfig,RowKey275,MatterDashboard,AttachmentIconImageAltText,attachment icon
+MatterCenterConfig,RowKey276,MatterDashboard,AttachmentTestTitle,Test attachments
+MatterCenterConfig,RowKey277,MatterDashboard,AttachmentEmptyText,No files uploaded
+MatterCenterConfig,RowKey278,MatterDashboard,AttachmentPopupFooterImageCapetion,You can also drag and drop files from your desktop.
+MatterCenterConfig,RowKey279,MatterDashboard,MattersPreLoadingMsgText,Please wait while the Matters load.
+MatterCenterConfig,RowKey280,MatterDashboard,GridColumn1Header,Matter
+MatterCenterConfig,RowKey281,MatterDashboard,GridColumn2Header,Client
+MatterCenterConfig,RowKey282,MatterDashboard,GridColumn3Header,Client.Matter ID
+MatterCenterConfig,RowKey283,MatterDashboard,GridColumn4Header,Modified Date
+MatterCenterConfig,RowKey284,MatterDashboard,GridColumn5Header,Responsible attorney
+MatterCenterConfig,RowKey285,MatterDashboard,AdvSearchLabel1InternalFuncParamText,client
+MatterCenterConfig,RowKey286,MatterDashboard,AdvSearchLabel2InternalFuncParamText,level1
+MatterCenterConfig,RowKey287,MatterDashboard,AdvSearchLabel3InternalFuncParamText,level2
+MatterCenterConfig,RowKey297,Matters,EllipsisLink5Text,Unpin this matter
+MatterCenterConfig,RowKey298,Matters,AttachmentEditImageTitle,Edit attachment name
+MatterCenterConfig,RowKey299,Matters,AttachmentEditImageAltText,Edit
+MatterCenterConfig,RowKey300,Matters,AttachmentSaveImageTitle,Save attachment name
+MatterCenterConfig,RowKey301,Matters,AttachmentSaveImageText,Save
+MatterCenterConfig,RowKey302,Matters,AttachmentUploadSuccessfullyImageAltText,Uploaded successfully
+MatterCenterConfig,RowKey303,Matters,AttachmentIconImageAltText,attachment icon
+MatterCenterConfig,RowKey304,Matters,AttachmentTestTitle,Test attachments
+MatterCenterConfig,RowKey305,Matters,AttachmentEmptyText,No files uploaded
+MatterCenterConfig,RowKey306,Matters,AttachmentBreadcrumAltText,Root
+MatterCenterConfig,RowKey307,Matters,AttachmentFolderAltText,Documents
+MatterCenterConfig,RowKey308,Matters,FilterSearchPlaceholderText,Search
+MatterCenterConfig,RowKey309,Matters,ClearFilterText,Clear filters from 
+MatterCenterConfig,RowKey310,Matters,NoFilterMatchMsgTitle,There are no items that match this filter
+MatterCenterConfig,RowKey311,Matters,NoFilterMatchMsgText,There are no items that match this filter
+MatterCenterConfig,RowKey312,Matters,ImageCloseText,Close
+MatterCenterConfig,RowKey313,Matters,ImageClearTitle,Clear
+MatterCenterConfig,RowKey314,Matters,ImageClearAltText,Clear filters
+MatterCenterConfig,RowKey315,Matters,ClearFilterFromLabelText,Clear filters from 
+MatterCenterConfig,RowKey316,Matters,ImageWarningAltText,Warning Message
+MatterCenterConfig,RowKey317,Matters,Button1DuplicateContentTitle,Matter Center will compare all content and data associated with the two documents. Navigating away from this screen will cancel the content check.
+MatterCenterConfig,RowKey318,Matters,Button1DuplicateContentText,Perform content check
+MatterCenterConfig,RowKey319,Matters,Button2SaveLatestVersionTitle,The file will be saved as the latest version of the existing document that has same title. Matter Center will retain all prior versions of the document.
+MatterCenterConfig,RowKey320,Matters,Button2SaveLatestVersionText,Save as latest version
+MatterCenterConfig,RowKey321,Matters,Button3AppendDateTitle,"The file will be saved as new, separate document with the current date and time added to the end of the file name."
+MatterCenterConfig,RowKey322,Matters,Button3AppendDateText,Append date to file name and save
+MatterCenterConfig,RowKey323,Matters,Button4CancelUploadTitle,This document will not be uploaded and you will return to the previous screen.
+MatterCenterConfig,RowKey324,Matters,Button4CancelUploadText,Cancel upload
+MatterCenterConfig,RowKey325,Matters,Button5OkTitle,This document will not be uploaded and you will return to the previous screen.
+MatterCenterConfig,RowKey326,Matters,Button5OkText,Ok
+MatterCenterConfig,RowKey327,Matters,Image1ContentCheckText,Checking content  
+MatterCenterConfig,RowKey328,Matters,Button6CancelText,Cancel
+MatterCenterConfig,RowKey329,Matters,UploadCompleteLabel1Text,Upload complete.
+MatterCenterConfig,RowKey330,Matters,CloseIconText,x
+MatterCenterConfig,RowKey331,Matters,StartDatePlaceHolder,Start mm/dd/yyyy
+MatterCenterConfig,RowKey332,Matters,EndDatePlaceHolder,End mm/dd/yyyy
+MatterCenterConfig,RowKey333,Matters,GridColumn8Header,Area of Law
+MatterCenterConfig,RowKey334,Matters,AttachmentLoadingText,Loading...
+MatterCenterConfig,RowKey335,Matters,GridColumn5Header,Responsible Attorney
+MatterCenterConfig,RowKey336,Matters,GridColumn6Header,Sub Area of Law
+MatterCenterConfig,RowKey337,Matters,GridColumn7Header,Open Date
+MatterCenterConfig,RowKey338,Matters,Dropdown1Item1,All Matters
+MatterCenterConfig,RowKey339,Matters,Dropdown1Item2,My Matters
+MatterCenterConfig,RowKey340,Matters,Dropdown1Item3,Pinned Matters
+MatterCenterConfig,RowKey341,Matters,SearchPlaceholderText,"Search by ID, or matter or client name"
+MatterCenterConfig,RowKey342,Matters,NoDataSearchText,"Nothing matches your search term or the filter you selected. Please try again.<br>If you applied a filter, remove it to get back to your list.<br>Search suggestions:<br><ul><li>Make sure all words are spelled correctly</li><li>Try different keywords</li><li>Try searching by the matter name or client name</li><li>Try more general search terms</li></ul>"
+MatterCenterConfig,RowKey343,Matters,GridColumn1Header,Matter
+MatterCenterConfig,RowKey344,Matters,GridColumn2Header,Client
+MatterCenterConfig,RowKey345,Matters,GridColumn3Header,Client.MatterID
+MatterCenterConfig,RowKey346,Matters,GridColumn4Header,Modified Date
+MatterCenterConfig,RowKey347,Matters,HeaderText,All Matters
+MatterCenterConfig,RowKey348,Matters,EllipsisLink1Text,Upload to this Matter
+MatterCenterConfig,RowKey349,Matters,EllipsisLink2Text,View Matter Details
+MatterCenterConfig,RowKey350,Matters,EllipsisLink3Text,Go to Matter OneNote
+MatterCenterConfig,RowKey351,Matters,EllipsisLink4Text,Pin this matter
+MatterCenterConfig,RowKey352,Matters,FlyoutButton1Text,View matter details
+MatterCenterConfig,RowKey353,Matters,FlyoutButton2Text,Upload to a matter
+MatterCenterConfig,RowKey354,Matters,AttachmentPopupHeaderText,Drag and drop items to folders on the right
+MatterCenterConfig,RowKey355,Matters,AttachmentPopupFooterImageCapetion,You can also drag and drop files from your desktop.
+MatterCenterConfig,RowKey356,Matters,AttachmentPopupHeaderItem1Text,Items
+MatterCenterConfig,RowKey357,Matters,AttachmentPopupHeaderItem2Text,Folders
+MatterCenterConfig,RowKey358,Matters,AttachmentPopupHeaderText,Upload to a matter
+MatterCenterConfig,RowKey371,Navigation,MenuItem1LinkTitle,Home
+MatterCenterConfig,RowKey372,Navigation,MenuItem1LinkTitle,Search matters
+MatterCenterConfig,RowKey373,Navigation,MenuItem1LinkTitle,Search documents
+MatterCenterConfig,RowKey374,Navigation,NameTitle,Matter
+MatterCenterConfig,RowKey375,Navigation,HeaderBarLink1Title,Learn more about matter center
+MatterCenterConfig,RowKey376,Navigation,HeaderBarLink2Title,Remove this section
+MatterCenterConfig,RowKey377,Navigation,MenuImageOpenTitle,Open App Switcher
+MatterCenterConfig,RowKey378,Navigation,MenuImageCloseTitle,Close App Switcher
+MatterCenterConfig,RowKey379,Navigation,HeaderBarLink1Text,LearnMore
+MatterCenterConfig,RowKey380,Navigation,HomeMenuText,Home
+MatterCenterConfig,RowKey381,Navigation,Image1Title,Search matters
+MatterCenterConfig,RowKey382,Navigation,Image2Title,Search documents
+MatterCenterConfig,RowKey383,Navigation,HelpRequesURL,https://msmatter.sharepoint.com/sites/catalog
+MatterCenterConfig,RowKey384,Navigation,FooterLabel,Questions? Contact
+MatterCenterConfig,RowKey385,Navigation,MenuImageCaption,menu
+MatterCenterConfig,RowKey386,Navigation,MenuImageTitle,Matter center menu
+MatterCenterConfig,RowKey387,Navigation,MenuItem1LinkText,Home
+MatterCenterConfig,RowKey388,Navigation,MenuItem2LinkText,Matters
+MatterCenterConfig,RowKey389,Navigation,MenuItem3LinkText,Documents
+MatterCenterConfig,RowKey390,Navigation,LogoImageTitle,Matter center home
+MatterCenterConfig,RowKey391,Navigation,ContextualHelpImageTitle,Matter center help
+MatterCenterConfig,RowKey392,Navigation,ContextualHelpLabel1,Get to know this view
+MatterCenterConfig,RowKey393,Navigation,ContextualHelpLink1Text,Home in Outlook and Word
+MatterCenterConfig,RowKey394,Navigation,ContextualHelpLink1URL,https://microsoft.sharepoint.com/teams/celapcconfig/Shared%20Documents/CELA%20Project%20Center%20End%20User%20Guide_24.pdf#Home_in_Outlook_and_Word 
+MatterCenterConfig,RowKey395,Navigation,ContextualHelpLabel2,How do I get Project Center on my device?
+MatterCenterConfig,RowKey396,Navigation,ContextualHelpLink2URL,https://microsoft.sharepoint.com/teams/celapcconfig/Shared%20Documents/CELA%20Project%20Center%20End%20User%20Guide_24.pdf#Enabling_Project_Center
+MatterCenterConfig,RowKey397,Navigation,ContextualHelpFooterLink1Label,Matter Center Aisling Support
+MatterCenterConfig,RowKey398,Navigation,MatterCenterSupportLink,mailto:support@supportsite.com
+MatterCenterConfig,RowKey399,Navigation,ContextualHelpFooterLink1Title,Write an email to support
+MatterCenterConfig,RowKey400,Navigation,ContextualHelpHeader,Matter Center For Outlook
+MatterCenterConfig,RowKey401,Navigation,ContextualHelpFooterLabel,Questions? Contact 
+MatterCenterConfig,RowKey402,Navigation,HeaderBarLabel,"Welcome to Matter Center! Upload, share, and save your documents here."
+MatterCenterConfig,RowKey403,Navigation,Image1Caption,Matters
+MatterCenterConfig,RowKey404,Navigation,Image2Caption,Documents
+MatterCenterConfig,RowKey405,Navigation,HeaderBarLink1URL,http://www.microsoft.com/mattercenter
+MatterCenterConfig,RowKey406,Navigation,HeaderBarLink2Text,dismiss
+MatterCenterConfig,RowKey407,Navigation,Image3Caption,Upload attachments
+MatterCenterConfig,RowKey408,Navigation,Image4Caption,Create a new matter
+MatterCenterConfig,RowKey409,Navigation,Image5Caption,Go to Matter Center Home
+MatterCenterConfig,RowKey410,Navigation,FooterLink1Title,Matter Center Support
+MatterCenterConfig,RowKey411,Navigation,FooterLink1Text,Matter Center Support
+MatterCenterConfig,RowKey412,Navigation,FooterLink1URL,mailto:lcaweb2@microsoft.com?subject=CELA Project Center Feedback and Support request
+MatterCenterConfig,RowKey413,Navigation,Image3Title,Upload documents to a matter
+MatterCenterConfig,RowKey414,Navigation,Image4Title,Create a new matter site
+MatterCenterConfig,RowKey415,Navigation,Image5Title,Go to the web home page
+MatterCenterConfig,RowKey425,Settings,Label1HeaderText,Settings
+MatterCenterConfig,RowKey426,Settings,Label2Text,Click on a name to configure matter creation options for that client.
+MatterCenterConfig,RowKey427,Settings,Label3Text,Client Name
+MatterCenterConfig,RowKey429,Settings,Label5Section1HeaderText,Select default values
+MatterCenterConfig,RowKey430,Settings,Label6Section1HeaderText,Default selections will be editable when a new matter is created.
+MatterCenterConfig,RowKey431,Settings,Label7DefaultValue1TitleText,Matter Name
+MatterCenterConfig,RowKey432,Settings,Label8DefaultValue1TitleDescription,"Enter default text to appear when a new matter is created. For example, a matter name prefix or suffix, or naming convention instructions.This text can be removed or changed when a new matter is created."
+MatterCenterConfig,RowKey433,Settings,Label9DefaultValue2TitleText,Matter ID
+MatterCenterConfig,RowKey434,Settings,Label10DefaultValue2TitleDescription,"ID numbers must be manually entered when a new matter is created. Enter default text, such as ID prefix or suffix, or numbering instructions. This text can be removed or changed when a new matter is created."
+MatterCenterConfig,RowKey435,Settings,Label11DefaultValue3HeaderText,"Set a default matter type by selecting a Practice group, Area of law, and Sub areas of law below."
+MatterCenterConfig,RowKey436,Settings,Label12DefaultValue3TitleText,Default to restricting access to an assigned team?
+MatterCenterConfig,RowKey437,Settings,Label13DefaultValue3TitleDescription,"This can be changed when a new matter is created. If you select yes, you can either define a default team below or leave the team permission blank."
+MatterCenterConfig,RowKey438,Settings,Radio1Option1Text,Yes
+MatterCenterConfig,RowKey439,Settings,Radio1Option2Text,No
+MatterCenterConfig,RowKey440,Settings,Label14DefaultValue4HeaderText,Assign team permission
+MatterCenterConfig,RowKey441,Settings,Label15DefaultValue4Text,Name
+MatterCenterConfig,RowKey442,Settings,Label16DefaultValue4Text,Role
+MatterCenterConfig,RowKey443,Settings,Label17DefaultValue4Text,Permission level
+MatterCenterConfig,RowKey444,Settings,Textbox1DefaultValue4PlaceholdertText,Enter and select names
+MatterCenterConfig,RowKey445,Settings,Label18DefaultValue4NoResultsFoundText,No Results Found
+MatterCenterConfig,RowKey446,Settings,Label19DefaultValue4AddMoreText,Add More
+MatterCenterConfig,RowKey447,Settings,Label20DefaultValue5Text,Include email notification?
+MatterCenterConfig,RowKey448,Settings,Label21DefaultValue6Text,Include calendar?
+MatterCenterConfig,RowKey449,Settings,Label22DefaultValue7Text,Include tasks?
+MatterCenterConfig,RowKey450,Settings,Label23DefaultValue8Text,Include RSS Feeds?
+MatterCenterConfig,RowKey451,Settings,Label24Section2HeaderText,Set matter options
+MatterCenterConfig,RowKey452,Settings,Label25Section2HeaderText,These settings will not be editable when a new matter is created.
+MatterCenterConfig,RowKey453,Settings,Label26Section2Text,Make the matter description field required?
+MatterCenterConfig,RowKey454,Settings,Label27Section2DescriptionText,Selecting No will allow new matters to be saved without a description
+MatterCenterConfig,RowKey455,Settings,Label28Section2Text,Do matters need conflict check data?
+MatterCenterConfig,RowKey456,Settings,Label29Section2DescriptionText,Selecting No will remove the conflict check declaration fields from new matters
+MatterCenterConfig,RowKey457,Settings,Label30Section2Text,Show or hide role?
+MatterCenterConfig,RowKey458,Settings,Label31Section2Text,Show matter id?
+MatterCenterConfig,RowKey459,Settings,Label32Section2Text,Matter Id Configuration
+MatterCenterConfig,RowKey460,Settings,Radio2Option1Text,Guid
+MatterCenterConfig,RowKey461,Settings,Radio2Option2Text,Date Time
+MatterCenterConfig,RowKey462,Settings,Radio2Option3Text,Custom
+MatterCenterConfig,RowKey463,Settings,ButtonSaveText,Save
+MatterCenterConfig,RowKey464,Settings,ButtonCancelText,Cancel
+MatterCenterConfig,RowKey465,Settings,ImageLoadingAltText,Loading...
+MatterCenterConfig,RowKey466,Settings,Label4Selection1HeaderText,"This page shows the current settings for this client's new matters. The first section allows you to set new matter default selections, which can be changed when a matter is created. The second section defines settings that can not be changed when a new matter is created. No changes are required, and any changes made will not affect existing matters."
+MatterCenterConfig,RowKey467,Settings,DeleteTitleText,Delete
+MatterCenterConfig,RowKey468,Settings,Radio2Option2ValueText,DateTime
+MatterCenterConfig,RowKey469,Settings,Label33Section2Text,Your changes have been saved. Go back to 
+MatterCenterConfig,RowKey470,Settings,Label34Section2Text,Clients
+MatterCenterConfig,RowKey481,MatterLanding,Label1Tab1HeaderText,Matter Profile
+MatterCenterConfig,RowKey482,MatterLanding,Label2Tab2HeaderText,Matter Description
+MatterCenterConfig,RowKey483,MatterLanding,Label3Tab1Column1Text,Client Name
+MatterCenterConfig,RowKey484,MatterLanding,Label4Tab1Column2Text,Client & Matter ID
+MatterCenterConfig,RowKey485,MatterLanding,Label5Tab1Column3Text,Practice Group
+MatterCenterConfig,RowKey486,MatterLanding,Label6Tab1Column4Text,Area of Law
+MatterCenterConfig,RowKey487,MatterLanding,Label7Tab1Column5Text,Responsible Attorney
+MatterCenterConfig,RowKey488,MatterLanding,Label8Tab1Section2HeaderText,Matter Library
+MatterCenterConfig,RowKey489,MatterLanding,MenuImageUpperCaption,Matter Center
+MatterCenterConfig,RowKey490,MatterLanding,MenuImageLowerCaption,for Office 365
+MatterCenterConfig,RowKey491,MatterLanding,Menu1Option1Text,Matters
+MatterCenterConfig,RowKey492,MatterLanding,Menu1Option2Text,Documents
+MatterCenterConfig,RowKey493,MatterLanding,Menu1Option3Text,Settings
+MatterCenterConfig,RowKey502,DocumentDetails,Label1HeaderText,File Name
+MatterCenterConfig,RowKey503,DocumentDetails,Label2Section2HeaderText,File Properties
+MatterCenterConfig,RowKey504,DocumentDetails,Label3Section2Column1Text,File title
+MatterCenterConfig,RowKey505,DocumentDetails,Label4Section2Column2Text,Client
+MatterCenterConfig,RowKey506,DocumentDetails,Label5Section2Column3Text,Matter
+MatterCenterConfig,RowKey507,DocumentDetails,Label6Section2Column4Text,Client.MatterID
+MatterCenterConfig,RowKey508,DocumentDetails,Label7Section2Column5Text,Document ID
+MatterCenterConfig,RowKey509,DocumentDetails,Label8Section2Column6Text,Checked out to
+MatterCenterConfig,RowKey510,DocumentDetails,Label9Section2Column7Text,Author
+MatterCenterConfig,RowKey511,DocumentDetails,Label10Section2Column8Text,Date created
+MatterCenterConfig,RowKey512,DocumentDetails,Label11Section2Column9Text,Practice group
+MatterCenterConfig,RowKey513,DocumentDetails,Label12Section2Column10Text,Area of law:
+MatterCenterConfig,RowKey514,DocumentDetails,Label13Section2Column11Text,Sub area of law
+MatterCenterConfig,RowKey515,DocumentDetails,Label14Section2Column12Text,File type
+MatterCenterConfig,RowKey516,DocumentDetails,Label15Section2Column13Text,File size
+MatterCenterConfig,RowKey517,DocumentDetails,Label16Section2Column14Text,File access
+MatterCenterConfig,RowKey518,DocumentDetails,Label17Section2HeaderText,Version history
+MatterCenterConfig,RowKey519,DocumentDetails,Label18Section2Column1Text,Version
+MatterCenterConfig,RowKey520,DocumentDetails,Label19Section2Column2Text,Modified
+MatterCenterConfig,RowKey521,DocumentDetails,Label20Section2Column3Text,Modified By
+MatterCenterConfig,RowKey522,DocumentDetails,Label21MenuHeaderOption1Text,open
+MatterCenterConfig,RowKey523,DocumentDetails,Label22MenuHeaderOption2Text,download
+MatterCenterConfig,RowKey524,DocumentDetails,Label23MenuHeaderOption3Text,share
+MatterCenterConfig,RowKey525,DocumentDetails,Label24MenuHeaderOption4Text,check in
+MatterCenterConfig,RowKey526,DocumentDetails,Label25MenuHeaderOption5Text,check out
+MatterCenterConfig,RowKey527,DocumentDetails,Label26MenuHeaderOption6Text,send link
+MatterCenterConfig,RowKey528,DocumentDetails,Label27MenuHeaderOption7Text,pin
+MatterCenterConfig,RowKey529,DocumentDetails,Label28MenuHeaderOption8Text,unpin
+MatterCenterConfig,RowKey530,DocumentDetails,Label1TabTitleText,Document Details
+MatterCenterConfig,RowKey531,DocumentDetails,Link1ErrorDetailsCaptionText,Click here for details
+MatterCenterConfig,RowKey532,DocumentDetails,Link2AllDocumentText,Go to all documents
+MatterCenterConfig,RowKey533,DocumentDetails,LabelNoPreviewText,There is no preview for this document
+MatterCenterConfig,RowKey534,DocumentDetails,ImgNoPreviewSuppoertText,Preview not supported...
+MatterCenterConfig,RowKey538,DocumentDetails,Link3ViewMoreText,View More
+MatterCenterConfig,RowKey540,MatterLanding,ErrMsg1NoTask,There are no tasks created
+MatterCenterConfig,RowKey541,MatterLanding,ErrMsg2FetchTask,Error occurred while trying to fetch tasks
+MatterCenterConfig,RowKey542,MatterLanding,ErrMsg3CreateEvent,Error occurred while trying to fetch events
+MatterCenterConfig,RowKey543,MatterLanding,ErrMsg4ActiveEvents,There are no active events
+MatterCenterConfig,RowKey544,MatterLanding,ErrMsg5NoMatterDescription,There is no description for this matter
+MatterCenterConfig,RowKey545,MatterLanding,ErrMsg6ForPinUnpinMatters,Error while trying to retrieve matter pin/unpin status
+MatterCenterConfig,RowKey546,MatterLanding,ErrMsg7MatterInformation,Error while trying to retrieve matter information
+MatterCenterConfig,RowKey547,MatterLanding,ErrMsg8MatterDescription,Error while trying to retrieve matter description
+MatterCenterConfig,RowKey548,MatterLanding,ErrMsg9NoPinUnpinMatter,Error while trying to pin/unpin matter
+MatterCenterConfig,RowKey549,MatterLanding,Label1MenuText,Matter Name
+MatterCenterConfig,RowKey550,MatterLanding,Label9Section1Text,Matter Id
+MatterCenterConfig,RowKey551,MatterLanding,Label10Section1Text,Client Id
+MatterCenterConfig,RowKey552,MatterLanding,Label11Section1Text,Description
+MatterCenterConfig,RowKey553,MatterLanding,Label12ManageUserTitleText,Manage users
+MatterCenterConfig,RowKey554,MatterLanding,Label13GotoOnnoteTitleText,Go to Matter OneNote
+MatterCenterConfig,RowKey555,MatterLanding,Label14TaskeTitleText,Task 
+MatterCenterConfig,RowKey556,MatterLanding,Label15CalenderTitleText,Calendar Events
+MatterCenterConfig,RowKey557,MatterLanding,Label16RSSFeedTitleText,Related News (RSS)
+MatterCenterConfig,RowKey558,MatterLanding,Label17EditTitleText,View / Edit
+MatterCenterConfig,RowKey561,MatterLanding,Label18MenuText,My Matters
+MatterCenterConfig,RowKey562,MatterLanding,Label19Section4Text,Matter Library
+MatterCenterConfig,RowKey570,DocumentDetails,Label135MenuHead,OneDrive
+MatterCenterConfig,RowKey571,DocumentDetails,Label36MenuHeaderOption7Text,Send to OneDrive
