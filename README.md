@@ -37,13 +37,15 @@ Please note the following software must be installed before you can open and dep
 * [SharePoint Online Management Shell](http://www.microsoft.com/en-us/download/details.aspx?id=35588)
 *	[Windows PowerShell](http://www.microsoft.com/en-in/download/details.aspx?id=2560)
 *	[Azure PowerShell](http://go.microsoft.com/?linkid=9811175)
+*	[DotNet Core](https://www.microsoft.com/net/core#windows) 
 *	 [Visual Studio 2015 (Community or Pro and above)](https://www.visualstudio.com/en-us/products/vs-2015-product-editions.aspx?wt.mc_id=github_microsoft_mattercenter)
 *	[Office Developer Tools for VS 2015](http://www.microsoft.com/web/handlers/WebPI.ashx?command=GetInstallerRedirect&appid=OfficeToolsForVS2015) 
 
 Please find links to our additional resources:
 
- 1.	[Matter Center Technical Specifications and System Architecture] (tree/master/cloud/docs/Matter%20Center%20Technical%20Specification.docx)
- 2.	[Matter Center Build and Deployment Guide (+ prerequisites)] (tree/master/cloud/docs/Matter%20Center%20Build%20and%20Deployment%20Guide.docx)
+ 1.	[Matter Center Web Application Architecture] (https://github.com/Microsoft/mattercenter/wiki/Matter-Center-Web-Site-ReArchitecture-Documentation)
+ 2.	[Matter Center Web API] (https://github.com/Microsoft/mattercenter/wiki/Matter-Center-Web-API-Documentation) 
+ 3.	[Matter Center Build and Deployment Guide (+ prerequisites)] (tree/master/cloud/docs/Matter%20Center%20Build%20and%20Deployment%20Guide.docx)
 
 
 #Questions, Issues and Feedback
