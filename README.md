@@ -26,7 +26,7 @@ Where is Matter Center going in the future?
 ### User Experience
 * Create matter from the web
 * Create a matter contact list
-* Work on behalf of someone. 
+* Work on behalf of someone 
 * Real-time communication (email notifications); includes email links from top pages (e.g. Project Landing Page)
 * Allow Drag and Drop of Multiple Emails and/or Documents into Matter Center
 * Provide client search when creating new matter
