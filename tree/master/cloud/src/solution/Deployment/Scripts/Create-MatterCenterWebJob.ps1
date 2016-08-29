@@ -10,8 +10,11 @@
 	    [Parameter(Mandatory=$true)]
         [String]$PassWord
     )  
+	Add-AzureAccount
 
-    #Import-Module "$PSScriptRoot\ManageTableStorageWithCsvFile\ManageTableStorageWithCsvFile.psm1"
+	Select-AzureSubscription
+
+	"Creating web job..."
     $webJobBinariesPath = "$PSScriptRoot\WebJob\MatterCenterWebJobs.zip"
 	$jobId = [GUID]::NewGuid()
 	$job = New-AzureWebsiteJob -Name $WebSiteName `
@@ -38,5 +41,7 @@
 		"Content-Type" = "text/plain"; `
 		"Authorization" = "Basic $encodedPair"; `
 	  };
-    
+    "Web job creation completed..."
 }
+
+Create-MatterCenterWebJob -WebSiteName $WebAppName  -UserName $creds.UserName -PassWord $creds.Password 

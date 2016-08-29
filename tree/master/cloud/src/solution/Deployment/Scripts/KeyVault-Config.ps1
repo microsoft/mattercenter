@@ -45,7 +45,6 @@ function Create-ADAppFromCert
         [Parameter(Mandatory=$true)]
 		[ValidateNotNullOrEmpty()]
 		[string]
-        #eg: "matterwebappcert"
 		$ADApplicationName,
 
         [Parameter(Mandatory=$true)]
@@ -70,15 +69,13 @@ function Create-ADAppFromCert
     $yearfromnow = [System.DateTime]::Parse($certExpiryDate)
 
     # will create a new AD ASpplication for the KeyVault and associate it with the certificate provided
-    $adapp = New-AzureRmADApplication -DisplayName $ADApplicationName -HomePage $applicationURL -IdentifierUris $applicationURL -KeyValue $credValue -KeyType "AsymmetricX509Cert" -KeyUsage "Verify" -StartDate $now -EndDate $yearfromnow
-
+    $adapp = New-AzureRmADApplication -DisplayName $ADApplicationName -HomePage $applicationURL -IdentifierUris $applicationURL -CertValue $credValue -StartDate $now -EndDate $yearfromnow
+	$adapp
     $sp = New-AzureRmADServicePrincipal -ApplicationId $adapp.ApplicationId
+	$sp
 
-    $kv =  Get-AzureRMKeyVault
-    Set-AzureRmKeyVaultAccessPolicy -VaultName $kv.VaultName -ServicePrincipalName $sp.ServicePrincipalName -PermissionsToSecrets all -ResourceGroupName $kv.ResourceGroupName
-
-    #$returnParam:KeyVaultOutputs = $kv
-    #$returnParam:ad
+    #$kv =  Get-AzureRMKeyVault 
+    Set-AzureRmKeyVaultAccessPolicy -VaultName $vaults_KeyVault_name -ServicePrincipalName $sp.ApplicationId -PermissionsToSecrets all -ResourceGroupName $ResourceGroupName
 
     return $adapp
 }
@@ -142,39 +139,32 @@ function Create-KeyVaultSecrets
 }
 
 
-#Login-AzureRmAccount
-$creds = Get-Credential
+$appURL = [string]::format("https://{0}.azurewebsites.net", $WebAppName)
 
-#$sp = Get-Location
-#$parametersJsonPath = (Get-Item $sp.Path).Parent
-
-
-$params = ConvertFrom-Json -InputObject (Get-Content -Path $TemplateParametersFile -Raw)
-#$params = ConvertFrom-Json -InputObject (Get-Content -Path (Join-Path -Path $parametersJsonPath -ChildPath "/Templates/parameters.json") -Raw)
-#$params.parameters.PlatformLoggingStorageAccountSettings.value.alertEmail = $Private:setup.Core.PlatformLoggingAlertEmail
-#Set-Content -Path (Join-Path -Path $Global:ArtifactsPath -ChildPath "Core.Storage.param.json") -Value (ConvertTo-Json -InputObject $Private:CoreStorageParams -Depth 3)
-$appURL = [string]::format("https://{0}.azurewebsites.net", $params.parameters.webSite_name.value)
-	$appURL
-	$params.parameters.Web_ADApp_Name.value
-	$creds.Password
+Write-Host "Creating AD Application for web..."
 #$webADApp = Create-ADAppWithPassword -ADApplicationName $params.parameters.Web_ADApp_Name -applicationURL $appURL -password $creds.Password
 
-$webADApp = New-AzureRmADApplication -DisplayName $params.parameters.Web_ADApp_Name.value -HomePage $appURL -IdentifierUris $appURL -Password $creds.Password
-    New-AzureRmADServicePrincipal -ApplicationId $webADApp.ApplicationId
-    
+$webADApp = New-AzureRmADApplication -DisplayName $Web_ADApp_Name -HomePage $appURL -IdentifierUris $appURL -Password $creds.Password
+$webADAppSp = New-AzureRmADServicePrincipal -ApplicationId $webADApp.ApplicationId
+
+$webADAppSp    
 
 #creating the keyVault
-#New-AzureRmKeyVault -VaultName MatterKeyVault -ResourceGroupName $ResourceGroupName -Location 'West US'
+Write-Host "Creating Keyvault..."
+New-AzureRmKeyVault -VaultName $vaults_KeyVault_name -ResourceGroupName $ResourceGroupName -Location $ResourceGroupLocation
+Write-Host "Setting access policy for AD Application for web to key vault..."
+Set-AzureRmKeyVaultAccessPolicy -VaultName $vaults_KeyVault_name -ServicePrincipalName $webADAppSp.ApplicationId -PermissionsToSecrets all -PermissionsToKeys all 
 
+$certFilePath = [System.IO.Path]::Combine($PSScriptRoot, 'MatterWebApp.cer')
 
-#Set-AzureRmKeyVaultAccessPolicy -VaultName vaults_KeyVault_name -ServicePrincipalName 'b9de791e-0b7b-402a-a3fa-d2a26f463783' -PermissionsToSecrets all -PermissionsToKeys all 
+Write-Host "Creating AD Application for key vault..."
+$KVappURL = "https://"+$WebAppName+((Get-Date).ToUniversalTime()).ToString('MMddHHmm')+".azurewebsites.net"
+$KVappURL 
+$kvADApp = Create-ADAppFromCert -certFileName $certFilePath -certExpiryDate $KeyVault_certificate_expiryDate -ADApplicationName $KeyVault_ADApp_Name -applicationURL $KVappURL 
+$kvADApp
 
-$certFilePath = [System.IO.Path]::Combine($PSScriptRoot, 'mattercentercert.pfx')
+$storageConnString =  [string]::format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", $storageAccount_name, $StorageAccountKey.Item(0).Value)
 
-$kvADApp = Create-ADAppFromCert -certFileName $certFilePath -certExpiryDate $params.parameters.KeyVault_certificate_expiryDate.value -ADApplicationName $params.parameters.KeyVault_ADApp_Name.value -applicationURL $appURL
-
-$storageKey = Get-AzureRmStorageAccountKey -Name mattercent -ResourceGroupName test26aug
-$storageConnString =  [string]::format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", $params.parameters.storageAccount_name.value, $storageKey.Item(0).Value)
-
-Create-KeyVaultSecrets -VaultName $params.parameters.vaults_KeyVault_name.value -AdminUserName $creds.UserName -AdminPassword $creds.Password [-CloudStorageConnectionString] -ClientId $kvADApp.ApplicationId -RedisCacheHostName $params.parameters.Redis_cache_name.value 
+Write-Host "Writing secrets to key vault..."
+Create-KeyVaultSecrets -VaultName $vaults_KeyVault_name -AdminUserName $creds.UserName -AdminPassword $creds.Password -CloudStorageConnectionString $storageConnString -ClientId $kvADApp.ApplicationId.Guid.ToString() -RedisCacheHostName $Redis_cache_name 
 

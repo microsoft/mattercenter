@@ -2,59 +2,50 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
   "parameters": {
-    "Tenant_id": {
-      "defaultValue": "",
-      "type": "String"
-    },
-    "Redis_cache_name": {
-      "defaultValue": "MatterCenterCache",
-      "type": "String"
-    },
-    "autoscalesettings_name": {
-      "defaultValue": "MatterCenterWebPlan",
-      "type": "String"
-    },
-    "components_AppInsights_name": {
-      "defaultValue": "MatterCenterInsights",
-      "type": "String"
-    },
-    "vaults_KeyVault_name": {
-      "defaultValue": "MatterCenterKeyVault",
-      "type": "String"
-    },
-    "storageAccount_name": {
-      "defaultValue": "mattercenterstorage",
-      "type": "String"
-    },
-    "serverfarms_WebPlan_name": {
-      "defaultValue": "MatterCenterWebPlan",
-      "type": "String"
-    },
     "webSite_name": {
       "defaultValue": "MatterCenterWeb",
       "type": "String"
-    },
-    "Web_ADApp_Name": {
-      "defaultValue": "MatterCenterWebApp",
-      "type": "String"
-    },
-    "KeyVault_ADApp_Name": {
-      "defaultValue": "MatterCenterKVApp",
-      "type": "String"
-    },
-    "KeyVault_certificate_expiryDate": {
-      "defaultValue": "2018-04-11",
-      "type": "String"
     }
   },
-    "variables": {},
+  "variables": {
+    "Redis_cache_name": "[concat(parameters('webSite_name'), 'RedisCache')]",
+    "autoscalesettings_name": "[concat(parameters('webSite_name'), 'ScaleSettings')]",
+    "components_AppInsights_name": "[concat(parameters('webSite_name'), 'AppInsights')]",
+    "vaults_KeyVault_name": "[concat(parameters('webSite_name'), 'KeyVault')]",
+    "storageAccount_name": "[concat(toLower(parameters('webSite_name')), 'stg')]",
+    "serverfarms_WebPlan_name": "[concat(parameters('webSite_name'), 'WebPlan')]",
+    "Web_ADApp_Name": "[concat(parameters('webSite_name'), 'WebADApp')]",
+    "KeyVault_ADApp_Name": "[concat(parameters('webSite_name'), 'KVADApp')]"
+  },
   "resources": [
-   
+    {
+      "type": "Microsoft.Cache/Redis",
+      "name": "[variables('Redis_cache_name')]",
+      "apiVersion": "2016-04-01",
+      "location": "[resourceGroup().location]",
+      "tags": {},
+      "properties": {
+        "redisVersion": "3.0",
+        "sku": {
+          "name": "Standard",
+          "family": "C",
+          "capacity": 0
+        },
+        "enableNonSslPort": false,
+        "redisConfiguration": {
+          "maxclients": "256",
+          "maxmemory-reserved": "2",
+          "maxmemory-delta": "2"
+        }
+      },
+      "resources": [],
+      "dependsOn": []
+    },
     {
       "type": "microsoft.insights/autoscalesettings",
-      "name": "[parameters('autoscalesettings_name')]",
+      "name": "[variables('autoscalesettings_name')]",
       "apiVersion": "2014-04-01",
-      "location": "westus",
+      "location": "[resourceGroup().location]",
       "properties": {
         "profiles": [
           {
@@ -69,7 +60,7 @@
                 "metricTrigger": {
                   "metricName": "CpuPercentage",
                   "metricNamespace": "",
-                  "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]",
+                  "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_WebPlan_name'))]",
                   "timeGrain": "PT1M",
                   "statistic": "Average",
                   "timeWindow": "PT10M",
@@ -88,7 +79,7 @@
                 "metricTrigger": {
                   "metricName": "CpuPercentage",
                   "metricNamespace": "",
-                  "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]",
+                  "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_WebPlan_name'))]",
                   "timeGrain": "PT1M",
                   "statistic": "Average",
                   "timeWindow": "PT1H",
@@ -107,45 +98,27 @@
           }
         ],
         "enabled": false,
-        "name": "[parameters('autoscalesettings_name')]",
-        "targetResourceUri": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]"
+        "name": "[variables('autoscalesettings_name')]",
+        "targetResourceUri": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_WebPlan_name'))]"
       },
       "resources": [],
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]"
+        "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_WebPlan_name'))]"
       ]
     },
     {
       "type": "Microsoft.Insights/components",
       "kind": "web",
-      "name": "[parameters('components_AppInsights_name')]",
+      "name": "[variables('components_AppInsights_name')]",
       "apiVersion": "2014-04-01",
       "location": "Central US",
       "properties": {
-        "ApplicationId": "[parameters('components_AppInsights_name')]"
+        "ApplicationId": "[variables('components_AppInsights_name')]"
       },
       "resources": [],
-      "dependsOn": []
-    },
-    {
-      "type": "Microsoft.KeyVault/vaults",
-      "name": "[parameters('vaults_KeyVault_name')]",
-      "apiVersion": "2015-06-01",
-      "location": "West US",
-      "tags": {},
-      "properties": {
-        "sku": {
-          "family": "A",
-          "name": "Standard"
-        },
-        "tenantId": "[parameters('Tenant_id')]",
-        "accessPolicies": [
-
-        ],
-        "enabledForDeployment": false
-      },
-      "resources": [],
-      "dependsOn": []
+      "dependsOn": [
+        "[concat('Microsoft.Web/sites/', parameters('webSite_name'))]"
+      ]
     },
     {
       "type": "Microsoft.Storage/storageAccounts",
@@ -154,10 +127,9 @@
         "tier": "Standard"
       },
       "kind": "Storage",
-      "name": "[parameters('storageAccount_name')]",
+      "name": "[variables('storageAccount_name')]",
       "apiVersion": "2016-01-01",
-      "location": "westus",
-      "tags": {},
+      "location": "[resourceGroup().location]",
       "properties": {},
       "resources": [],
       "dependsOn": []
@@ -171,11 +143,11 @@
         "family": "F",
         "capacity": 0
       },
-      "name": "[parameters('serverfarms_WebPlan_name')]",
+      "name": "[variables('serverfarms_WebPlan_name')]",
       "apiVersion": "2015-08-01",
-      "location": "West US",
+      "location": "[resourceGroup().location]",
       "properties": {
-        "name": "[parameters('serverfarms_WebPlan_name')]",
+        "name": "[variables('serverfarms_WebPlan_name')]",
         "numberOfWorkers": 0
       },
       "resources": [],
@@ -185,35 +157,14 @@
       "type": "Microsoft.Web/sites",
       "name": "[parameters('webSite_name')]",
       "apiVersion": "2015-08-01",
-      "location": "West US",
+      "location": "[resourceGroup().location]",
       "properties": {
         "name": "[parameters('webSite_name')]",
-        "hostNames": [
-          "[concat(parameters('webSite_name'),'.azurewebsites.net')]"
-        ],
-        "enabledHostNames": [
-          "[concat(parameters('webSite_name'),'.azurewebsites.net')]",
-          "[concat(parameters('webSite_name'),'.scm.azurewebsites.net')]"
-        ],
-        "hostNameSslStates": [
-          {
-            "name": "[concat(parameters('webSite_name'),'.azurewebsites.net')]",
-            "sslState": 0,
-            "thumbprint": null,
-            "ipBasedSslState": 0
-          },
-          {
-            "name": "[concat(parameters('webSite_name'),'.scm.azurewebsites.net')]",
-            "sslState": 0,
-            "thumbprint": null,
-            "ipBasedSslState": 0
-          }
-        ],
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]"
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_WebPlan_name'))]"
       },
       "resources": [],
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_WebPlan_name'))]"
+        "[resourceId('Microsoft.Web/serverfarms', variables('serverfarms_WebPlan_name'))]"
       ]
     }
   ]
