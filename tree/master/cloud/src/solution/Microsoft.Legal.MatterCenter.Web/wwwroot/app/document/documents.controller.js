@@ -111,6 +111,7 @@
         columnDefs1.push({
             field: 'checker',
             displayName: 'checked',
+            enableHiding: false,
             width: '20',
             cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html',
             headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html',
