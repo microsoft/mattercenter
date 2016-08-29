@@ -106,5 +106,8 @@ $custScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'MatterCenter-Deploy.
 Invoke-Expression $custScriptFile 
 
 Invoke-Expression "$PSScriptRoot/Create-AzureStorageTable.ps1"
-
 Create-AzureTableStorage -ResourceGroupName $ResourceGroupName  -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey -TableName "MatterCenterConfiguration"
+
+Invoke-Expression "$PSScriptRoot/Create-MatterCenterWebJob.ps1"
+Create-MatterCenterWebJob -WebSiteName $WebAppName  -UserName $creds.UserName -PassWord $creds.Password 
+
