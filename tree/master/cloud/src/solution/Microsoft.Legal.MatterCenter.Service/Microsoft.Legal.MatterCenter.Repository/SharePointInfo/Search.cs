@@ -183,12 +183,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         ////Get logged in user alias
                         Users currentUserDetail = userDetails.GetLoggedInUserDetails(clientContext);
                         string userTitle = currentUserDetail.Name;
-                        searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND,
-                            ServiceConstants.SPACE, ServiceConstants.OPENING_BRACKET, searchSettings.ManagedPropertyResponsibleAttorney,
-                            ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle, ServiceConstants.DOUBLE_QUOTE,
-                            ServiceConstants.SPACE, ServiceConstants.OPERATOR_OR, ServiceConstants.SPACE, searchSettings.ManagedPropertyTeamMembers,
-                            ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle, ServiceConstants.DOUBLE_QUOTE,
-                            ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
+                        searchObject.SearchTerm = String.Concat(searchObject.SearchTerm, ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, searchSettings.ManagedPropertyAuthor, ServiceConstants.COLON, userTitle);
                     }
 
                     keywordQuery = FilterDocuments(searchObject, keywordQuery);
@@ -218,6 +213,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     managedProperties.Add(searchSettings.ManagedPropertyDocumentCheckOutUser);
                     managedProperties.Add(searchSettings.ManagedPropertySPWebUrl);
                     managedProperties.Add(searchSettings.ManagedPropertyAuthor);
+                    managedProperties.Add(searchSettings.ManagedPropertyMatterGuid);
                     //Filter on Result source to fetch only Matter Center specific results
                     keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
                     keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
