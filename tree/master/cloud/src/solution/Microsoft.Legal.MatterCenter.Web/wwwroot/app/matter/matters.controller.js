@@ -307,15 +307,10 @@
             });
             function getSortFunction(fieldName) {
                 return function (col1, col2) {
-                    return col1[fieldName] > col2[fieldName];
+                    return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
                 }
-            }
-            console.log(columnDefs1);
+            }          
             columnDefs1.sort(getSortFunction("position"));
-            console.log(columnDefs1);
-
-
-
 
             //#region Setting the options for grid
 

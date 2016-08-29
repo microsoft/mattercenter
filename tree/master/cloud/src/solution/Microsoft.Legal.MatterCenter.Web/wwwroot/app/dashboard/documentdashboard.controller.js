@@ -327,7 +327,7 @@
             });
             function getSortFunction(fieldName) {
                 return function (col1, col2) {
-                    return col1[fieldName] > col2[fieldName];
+                    return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
                 }
             }
             columnDefs1.sort(getSortFunction("position"));
