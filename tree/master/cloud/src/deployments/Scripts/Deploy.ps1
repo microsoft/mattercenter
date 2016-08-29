@@ -8,17 +8,15 @@
 # Step 4: Update Office, Outlook and SharePoint App schema files
 # Step 5: Update search configuration file and upload to SharePoint
 # Step 6: Update resource and config files in build
-# Step 7: Activate SharePoint Server Publishing infrastructure feature on catalog site collection
-# Step 8: Update App files for SharePoint and OneDrive Ribbon Apps
-# Step 9: Encrypting the config files
-# Step 10: Publishing files to Azure
-# Step 11: Add and install apps to SharePoint and Office
-# Step 12: Add apps to Exchange
-# Step 13: Upload files to SharePoint Library
-# Step 14: Creating Site Collection(s)
-# Step 15: Provisioning Web dashboard
-# Step 16: Update site collection view with field(s)
-# Step 17: Creating source in event viewer
+# Step 7: Activate SharePoint Server Publishing infrastructure feature on catalog site collection 
+# Step 8: Encrypting the config files
+# Step 9: Add and install apps to SharePoint and Office
+# Step 10: Add apps to Exchange
+# Step 11: Upload files to SharePoint Library
+# Step 12: Creating Site Collection(s)
+# Step 13: Provisioning Web dashboard
+# Step 14: Update site collection view with field(s)
+# Step 15: Creating source in event viewer
 #
 # Any changes in these steps, kindly update this list. Also update the checkpoint in Revert script
 #----------------------------------------------
@@ -397,26 +395,26 @@ if($IsValid -eq $true)
 	#----------------------------------------------
 	# Update App files for SharePoint and OneDrive Ribbon Apps
 	#----------------------------------------------
-	Show-Message -Message "Step 8: Update App files for SharePoint and OneDrive Ribbon Apps"
-	. "$ScriptDirectory\UpdateAppPackage.ps1" -IsDeployedOnAzure $IsDeployedOnAzure -Credentials $SPCredential
-	    
-	If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Updating App files for SharePoint and OneDrive Ribbon Apps failed" -Type ([MessageType]::Failure)
-	    RevertAll $ScriptDirectory 3		#Revert from step 3 to 1
-	    return
-	}
-	else {
-		Show-Message -Message "Completed updating App files for SharePoint and OneDrive Ribbon Apps" -Type ([MessageType]::Success)
-	}
+ #	Show-Message -Message "Step 8: Update App files for SharePoint and OneDrive Ribbon Apps"
+ #	. "$ScriptDirectory\UpdateAppPackage.ps1" -IsDeployedOnAzure $IsDeployedOnAzure -Credentials $SPCredential
+ #	    
+ #	If ((Get-Content $ErrorLogFile) -ne $Null) {
+ #		Show-Message -Message "Updating App files for SharePoint and OneDrive Ribbon Apps failed" -Type ([MessageType]::Failure)
+ #	    RevertAll $ScriptDirectory 3		#Revert from step 3 to 1
+ #	    return
+ #	}
+ #	else {
+ #		Show-Message -Message "Completed updating App files for SharePoint and OneDrive Ribbon Apps" -Type ([MessageType]::Success)
+ #	}
 
     #----------------------------------------------
     # Encrypt the appSettings section in web.config
     #----------------------------------------------
-    Show-Message -Message "Step 9: Encrypting the config files"
+    Show-Message -Message "Step 8: Encrypting the config files"
     . "$ScriptDirectory\EncryptDecrypt.ps1" -ToEncrypt: $true -ErrorLogPath: $ErrorLogFile
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Encryption failed..." -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 9
+        RevertAll $ScriptDirectory 8
         return
     }
     else {
@@ -424,30 +422,9 @@ if($IsValid -eq $true)
     }
 
     #----------------------------------------------
-    # Publish websites
-    #----------------------------------------------
-    Show-Message -Message "Step 10: Publishing files to Azure/IIS"
-   $IsOnAzure = (Read-FromExcel $ExcelFilePath "Config" ("IsDeployedOnAzure") $ErrorLogFile)
-    if($IsOnAzure[0])
-	{       
-      . "$ScriptDirectory\PublishOnAzure.ps1"   
-	  If ((Get-Content $ErrorLogFile) -ne $Null) {
-		  Show-Message -Message "Publishing files to Azure or creating Azure Redis cache failed" -Type ([MessageType]::Failure)
-		  RevertAll $ScriptDirectory 9
-		  return
-      }
-	}
-	else {	    
-       . "$ScriptDirectory\PublishInIIS.ps1"    
-	   If ((Get-Content $ErrorLogFile) -ne $Null) {
-		   Show-Message -Message "Publishing files to IIS failed" -Type ([MessageType]::Failure)           
-      }      
-	}
-
-    #----------------------------------------------
     # Add Apps to SharePoint and Office
     #----------------------------------------------
-    Show-Message -Message "Step 11: Add and install apps to SharePoint and Office"
+    Show-Message -Message "Step 9: Add and install apps to SharePoint and Office"
 	. "$ScriptDirectory\AppInstall.ps1" -IsDeploy: $false
     . "$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $true -IsOfficeApp: $false
     . "$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $true -IsOfficeApp: $true    
@@ -455,7 +432,7 @@ if($IsValid -eq $true)
     
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Adding and installing apps to SharePoint and Office failed" -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 11
+        RevertAll $ScriptDirectory 9
         return
     }
     else {
@@ -466,12 +443,12 @@ if($IsValid -eq $true)
     #----------------------------------------------
     # Add Apps to Exchange
     #----------------------------------------------
-    Show-Message -Message "Step 12: Add apps to Exchange"
+    Show-Message -Message "Step 10: Add apps to Exchange"
     . "$ScriptDirectory\DeployOutlookApp.ps1" -IsDeploy: $true
     
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Adding apps to Exchange failed" -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 12
+        RevertAll $ScriptDirectory 10
         return
     }
     else {
@@ -481,13 +458,13 @@ if($IsValid -eq $true)
     #---------------------------------------------------------------------
     # Upload files required for Matter landing page to SharePoint library
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 13: Upload files to SharePoint Library"
+    Show-Message -Message "Step 11: Upload files to SharePoint Library"
     [Environment]::CurrentDirectory = Get-Location
     & "$HelperPath\Microsoft.Legal.MatterCenter.UploadFile.exe" "true" $Username $Password
 
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Uploading files to SharePoint Library failed" -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 13
+        RevertAll $ScriptDirectory 11
         return
     }
     else {
@@ -508,7 +485,7 @@ if($IsValid -eq $true)
 		}
 	}
 	
-    Show-Message -Message "Step 14: Creating Site Collection(s)"
+    Show-Message -Message "Step 12: Creating Site Collection(s)"
     . "$ScriptDirectory\CreateSiteCollection.ps1" -IsDeployedOnAzure: $IsDeployedOnAzure -Username: $Username -Password $Password
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Creating site collection failed" -Type ([MessageType]::Failure)
@@ -520,7 +497,7 @@ if($IsValid -eq $true)
     #---------------------------------------------------------------------
     # Provisioning Web Dashboard page(s) on SharePoint library
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 15: Provisioning Web dashboard"
+    Show-Message -Message "Step 13: Provisioning Web dashboard"
     & "$HelperPath\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.exe" "true" $Username $Password
 
     If ((Get-Content $ErrorLogFile) -ne $Null) {
@@ -533,13 +510,13 @@ if($IsValid -eq $true)
 	#---------------------------------------------------------------------
     # Update site pages view with fields
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 16: Update site collection view with fields"
+    Show-Message -Message "Step 14: Update site collection view with fields"
     & "$HelperPath\Microsoft.Legal.MatterCenter.UpdateView.exe" $Username $Password
 
     #---------------------------------------------------------------------
     # Creating source in event viewer
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 17: Creating source in event viewer"
+    Show-Message -Message "Step 15: Creating source in event viewer"
 	if(-not $IsDeployedOnAzure)
 	{
 		$logFileExists = Get-EventLog -list | Where-Object {$_.logdisplayname -eq $Log} 

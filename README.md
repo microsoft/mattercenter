@@ -9,35 +9,44 @@ Microsoft’s Corporate, External, and Legal Affairs (CELA) group, in partnershi
 # Roadmap
 Where is Matter Center going in the future? 
 
-### User Experience 
-* Create and finalize design to enhance login experience [adopt ADAL]
-* Create configuration tool for taxonomy 
-* Enable UI branding
-* Add landing page to Matter Center app
-* Allow for editing existing Matters
+### Administration
+* Automate new client creation (new site collection)
+* Matter templates (e.g. area of law, matter type)
+* Develop matter lifecycle workflow, matter status and health indicators
+* Modify project name & description; delete matter
+* Further automate external sharing workflow
 
-### Object Lifecycle
-* Redesign the service to use REST APIs
-* Implement a generic object model
-* Adopt MVVC design pattern
-* Add Matter Status 
 
-### Integration
-* Deliver CRUD API (RESTful) for an Object (Matter) 
-* Implement REST response architecture system 
+### Extensibility & Interoperability
+* API event handlers
+* Improve OneDrive for Business integration 
+* Integration with O365 Groups
+
+
+### User Experience
+* Create matter from the web
+* Create a matter contact list
+* Work on behalf of someone. 
+* Real-time communication (email notifications); includes email links from top pages (e.g. Project Landing Page)
+* Allow Drag and Drop of Multiple Emails and/or Documents into Matter Center
+* Provide client search when creating new matter
+
 
 # Installation and build
 Please note the following software must be installed before you can open and deploy the Matter Center solution:
 * [SharePoint Online Management Shell](http://www.microsoft.com/en-us/download/details.aspx?id=35588)
 *	[Windows PowerShell](http://www.microsoft.com/en-in/download/details.aspx?id=2560)
 *	[Azure PowerShell](http://go.microsoft.com/?linkid=9811175)
-*	 [Visual Studio 2015 (Community or Pro and above)](https://www.visualstudio.com/en-us/products/vs-2015-product-editions.aspx)
+*	[DotNet Core](https://www.microsoft.com/net/core#windows) 
+*	 [Visual Studio 2015 (Community or Pro and above)](https://www.visualstudio.com/en-us/products/vs-2015-product-editions.aspx?wt.mc_id=github_microsoft_mattercenter)
+*	[Azure SDK](https://go.microsoft.com/fwlink/?LinkId=518003&clcid=0x409)
 *	[Office Developer Tools for VS 2015](http://www.microsoft.com/web/handlers/WebPI.ashx?command=GetInstallerRedirect&appid=OfficeToolsForVS2015) 
 
 Please find links to our additional resources:
 
- 1.	[Matter Center Technical Specifications and System Architecture] (tree/master/cloud/docs/Matter%20Center%20Technical%20Specification.docx)
- 2.	[Matter Center Build and Deployment Guide (+ prerequisites)] (tree/master/cloud/docs/Matter%20Center%20Build%20and%20Deployment%20Guide.docx)
+ 1.	[Matter Center Web Application Architecture] (https://github.com/Microsoft/mattercenter/wiki/Matter-Center-Web-Site-ReArchitecture-Documentation)
+ 2.	[Matter Center Web API] (https://github.com/Microsoft/mattercenter/wiki/Matter-Center-Web-API-Documentation) 
+ 3.	[Matter Center Build and Deployment Guide (+ prerequisites)] (tree/master/cloud/docs/Matter%20Center%20Build%20and%20Deployment%20Guide.docx)
 
 
 #Questions, Issues and Feedback
@@ -51,7 +60,7 @@ This project was originated by the Microsoft Matter Center Engineering team. We 
 We look forward to maturing the project with your help.
 
 ### Priorities
-We have been working on this code for some time and know its many limitations. We created an initial six (6) months list of [priorities](PRIORITIES.md) that include architectural changes we’d love your help with. Together, we are excited to see these priorities realized and to continue adding to this list. 
+We have been working on this code for some time and know its many limitations. We created an initial list of [priorities](PRIORITIES.md) that include architectural changes we’d love your help with. Together, we are excited to see these priorities realized and to continue adding to this list. 
 
 On December 17, 2015, we open sourced the project. We are thrilled to talk with as many contributors as possible to provide information and context:
 
@@ -75,7 +84,7 @@ We have already pushed these ideas to [UserVoice](http://mattercenter.uservoice.
 There are currently three (3) [committers](https://github.com/Microsoft/mattercenter/graphs/contributors):
  
 1. Amitabh Mukherjee, [Amitabh.Mukherjee@microsoft.com](mailto:amitabhm@microsoft.com)
-2. Leo Conniff, [v-leconn@microsoft.com](mailto:v-leconn@microsoft.com)
+2. Wilson Reddy Gajarla, [wilg@microsoft.com](mailto:wilg@microsoft.com)
 3. Sunnykumar Mistry, [v-sumist@microsoft.com] (mailto:v-sumist@microsoft.com) 
 
 Additional committers will be added later based on interest and deep technical involvement with the project.

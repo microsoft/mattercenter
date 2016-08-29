@@ -10,7 +10,9 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Net;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+
+
 using Swashbuckle.Swagger.Model;
 
 #region Matter Namespaces
@@ -21,8 +23,6 @@ using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
 
 using System.IO;
-using Microsoft.Extensions.Options;
-using System.Security.Claims;
 using System.Text;
 #endregion
 
@@ -47,7 +47,6 @@ namespace Microsoft.Legal.MatterCenter.Web
                 .SetBasePath(HostingEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
-
             if (HostingEnvironment.IsDevelopment())
             {
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
@@ -55,6 +54,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
 
             Configuration = builder.Build();
+           
         }
 
         /// <summary>
@@ -63,8 +63,15 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            KeyVaultHelper keyVaultHelper = new KeyVaultHelper(Configuration);
+            KeyVaultHelper.GetCert(Configuration);
+            keyVaultHelper.GetKeyVaultSecretsCerticate();
+            
             services.AddSingleton(Configuration);
+            
             ConfigureSettings(services);
+
+        
             services.AddCors();
             services.AddLogging();
             
@@ -99,6 +106,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         )
         {
             CreateConfig(env);
+           
 
             var log = loggerFactory.CreateLogger<Startup>();
             try
@@ -359,6 +367,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             }
         }
 
+
+
         private void CreateConfig(IHostingEnvironment hostingEnvironment)
         { 
             StringBuilder sb = new StringBuilder();
@@ -415,6 +425,8 @@ namespace Microsoft.Legal.MatterCenter.Web
                 jw.WriteStartObject();
                     jw.WritePropertyName("repositoryUrl");
                     jw.WriteValue(generalSettingsSection["CentralRepositoryUrl"]);
+                    jw.WritePropertyName("isDevMode");
+                    jw.WriteValue(bool.Parse(generalSettingsSection["IsDevMode"]));
                 jw.WriteEndObject();
 
             jw.WritePropertyName("matter");
@@ -438,6 +450,8 @@ namespace Microsoft.Legal.MatterCenter.Web
 
             jw.WritePropertyName("search");
                 jw.WriteStartObject();
+                    jw.WritePropertyName("Schema");
+                    jw.WriteValue(Configuration.GetSection("Search").GetSection("Schema").Value);
                     foreach (var key in searchSettingsSection)
                     {
                         //Assuming that all the keys for the matter property bag keys will start with "StampedProperty"
@@ -446,8 +460,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                             jw.WritePropertyName(key.Key);
                             jw.WriteValue(key.Value);
                         }
-                    }
-                
+                    }             
 
                 
                     jw.WritePropertyName("searchColumnsUIPickerForMatter");
@@ -455,7 +468,20 @@ namespace Microsoft.Legal.MatterCenter.Web
                             foreach (var key in matterSearchColumnPickerSection)
                             {                        
                                 jw.WritePropertyName(key.Key);
-                                jw.WriteValue(key.Value);                       
+                                    jw.WriteStartObject();
+                                        foreach (var subKey in Configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection(key.Key).GetChildren())
+                                        {
+                                            jw.WritePropertyName(subKey.Key);
+                                            if (subKey.Key == "displayInUI")
+                                            {
+                                                jw.WriteValue(bool.Parse(subKey.Value));
+                                            }
+                                            else if (subKey.Key == "position")
+                                            {
+                                                jw.WriteValue(int.Parse(subKey.Value));
+                                            }                                                                                     
+                                        }
+                                    jw.WriteEndObject();
                             }
                         jw.WriteEndObject();
 
@@ -465,7 +491,21 @@ namespace Microsoft.Legal.MatterCenter.Web
                             foreach (var key in documentSearchColumnPickerSection)
                             {
                                 jw.WritePropertyName(key.Key);
-                                jw.WriteValue(key.Value);
+                                    jw.WriteStartObject();
+                                    foreach (var subKey in Configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection(key.Key).GetChildren())
+                                    {
+                                        jw.WritePropertyName(subKey.Key);
+                                        if (subKey.Key == "displayInUI")
+                                        {
+                                            jw.WriteValue(bool.Parse(subKey.Value));
+                                        }
+                                        else if (subKey.Key == "position")
+                                        {
+                                            jw.WriteValue(int.Parse(subKey.Value));
+                                        }
+                                        
+                                    }
+                                jw.WriteEndObject();
                             }
                         jw.WriteEndObject();
                     jw.WriteEndObject();

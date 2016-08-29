@@ -3,7 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>Document Details</title>
+    <title id="tabTitle"></title>
     <link rel="stylesheet" type="text/css" href="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Common%20Assets/Styles/spCommon.css?ver=21.0.0.0" />
     <link rel="stylesheet" type="text/css" href="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Styles/documentDetails.css?ver=20.0.0.0" />
 </head>
@@ -18,7 +18,7 @@
                 <div id="expandCollapse">
                     <span class="inlineElement" id="expandMessage">+</span>
                     <span id="collapseMessage" class="inlineElement hide">-</span>
-                    <span>Click here for details</span>
+                    <span id="collapseMessageDetails"></span>
                 </div>
                 <div class="clear"></div>
                 <span id="errorMessage" class="hide ellipsis"></span>
@@ -30,52 +30,53 @@
         <div id="leftSection">
             <div id="actionBarMainContainer">
                 <span class="loadingImageContainer actionChild" id="loadingActionBar"><img class="loadingImage" alt="Loading" title="Loading..." src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/WindowsLoadingFast.GIF" /></span>
-                <span id="documentName" class="actionChild hide ellipsis">File Name: <span id="documentTitle"></span></span>
-                <div id="gotoAllDocuments" class="actionChild hide" title="Go to all documents"><a>Go to all documents</a></div>
+                <span id="documentName" class="actionChild hide ellipsis"><span id="spanDocumentName"><span id="documentTitle"></span></span>
+               <div id="gotoAllDocuments" class="actionChild hide" ><a id="linkGoToAllDocument">
+				</a></div>
                 <div id="actionBar" class="actionChild hide">
-                    <span class="documentAction" id="openDocument" title="Open">
+                    <span class="documentAction" id="openDocument" >
                         <a>
                             <img alt="Open" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Open_Icon_30px_x_30px.png" />
-                            <span class="actionText">open</span>
+                            <span class="actionText" id="spanOpenDownload"></span>
                         </a>
                     </span>
-                    <span class="documentAction" id="download" title="Download">
+                    <span class="documentAction" id="download">
                         <a>
                             <img alt="Download" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Download_Icon_30px_x_30px.png" />
-                            <span class="actionText">download</span>
+                            <span class="actionText" id="spanDownload"></span>
                         </a>
                     </span>
-                    <span class="documentAction" id="shareDocument" title="Share">
+                    <span class="documentAction" id="shareDocument">
                         <img alt="Share" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Share_Icon_30px_x_30px.png" />
-                        <span class="actionText">share</span>
+                        <span class="actionText" id="spanShare"></span>
                     </span>
                     <span class="documentAction" id="checkInOut">
-                        <span id="checkInDocument" title="Check in">
+                        <span id="checkInDocument">
                             <img alt="Check in" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Check_in_Icon_30px_x_30px.png" />
-                            <span class="actionText">check in</span>
+                            <span class="actionText" id="spanCheckin"></span>
                         </span>
-                        <span id="checkOutDocument" class="hide" title="Check out">
+                        <span id="checkOutDocument" class="hide">
                             <img id="checkOutLoading" class="loadingImage hide" alt="Loading" title="Loading..." src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/loading_circles_30px_X_30px_white.gif" />
                             <img alt="Check out" id="checkOutImage" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Check_Out_Icon_30px_x_30px.png" />
-                            <span class="actionText">check out</span>
+                            <span class="actionText" id="spanCheckOut"></span>
                         </span>
                     </span>
-                    <span class="documentAction" id="sendLink" title="Send as link">
+                    <span class="documentAction" id="sendLink">
                         <img alt="Send as link" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Send_Link_Icon_30px_x_30px.png" />
-                        <span class="actionText">send link</span>
+                       <span class="actionText" id="spanSendLink" ></span>
                     </span>
-                    <span class="documentAction" id="sendToOneDrive" title="Send to OneDrive">
+                    <span class="documentAction" id="sendToOneDrive">
                         <img alt="OneDrive" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_OneDrive_Icon_30px_x_30px.png" />
-                        <span class="actionText">OneDrive</span>
+                        <span class="actionText" id="spanOneDrive" ></span>
                     </span>
-                    <span class="documentAction" id="pinUnpinDocument" title="Pin">
+                    <span class="documentAction" id="pinUnpinDocument">
                         <span id="pinDocument">
                             <img alt="Pin" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Pin_Icon_30px_x_30px.png" />
-                            <span class="actionText">pin</span>
+                            <span class="actionText" id="spanPin" ></span>
                         </span>
-                        <span id="unpinDocument" class="hide" title="Unpin">
+                        <span id="unpinDocument" class="hide">
                             <img alt="Unpin" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Unpin_Icon_30px_x_30px.png" />
-                            <span class="actionText">unpin</span>
+                           <span class="actionText" id="spanUnpin" ></span>
                         </span>
                     </span>
                 </div>
@@ -85,8 +86,8 @@
                 <iframe class="hide" name="documentPreviewSource" id="documentPreviewSource"></iframe>
                 <div id="documentPreviewNotSupported" class="hide">
                     <span class="previewContainer">
-                        <img class="previewImage" alt="Preview not supported" title="Preview not supported..." src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landingpage_No-Preview_Icon_120px_x_90px.png" />
-                        <span id="previewUnsupportedText">There is no preview for this document</span>
+                        <img class="previewImage" id="imgNoPreview" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landingpage_No-Preview_Icon_120px_x_90px.png" />
+                        <span id="previewUnsupportedText"></span>
                     </span>
                 </div>
             </div>
@@ -98,18 +99,24 @@
                         <img class="hide toggleFileSection" id="OpenFileProperties" alt="Open" title="Open" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Glyph_Open.png" />
                         <img class="toggleFileSection" id="CloseFileProperties" alt="Close" title="Close" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Glyph_Close.png" />
                         <span id="filePropertiesTitle">File Properties</span>
-                        <span class="viewMoreSection" title="View more"><a id="viewMoreFileProperties">View more</a></span>
+                       <span class="viewMoreSection" id="viewMoreVersions"></span>
                     </div>
                     <div class="separtor"></div>
                     <ul id="metadataProperties">
                         <li><span class="loadingImageContainer" id="loadingFileProperties"><img class="loadingImage" alt="Loading" title="Loading..." src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/WindowsLoadingFast.GIF" /></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="File title">File title:</span><span class="propertyValue ellipsis" id="fileTitleValue"></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="Client">Client:</span><span class="propertyValue ellipsis" id="clientValue"></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="Matter">Matter:</span><span class="propertyValue ellipsis" id="matterValue"></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="Client.MatterID">Client.MatterID:</span><span class="propertyValue ellipsis" id="clientMatterIdValue"></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="Document ID">Document ID:</span><span class="propertyValue ellipsis" id="documentIdValue"></span></li>
-                        <li class="hide">
-                            <span class="propertyName ellipsis" title="Checked out to">Checked out to:</span>
+                         <li class="hide"><span class="propertyName ellipsis" id="Section1Column1" >
+					</span><span class="propertyValue ellipsis" id="fileTitleValue"></span></li>
+                    <li class="hide"><span class="propertyName ellipsis" id="Section1Column2" >
+					</span><span class="propertyValue ellipsis" id="clientValue"></span></li>
+                    <li class="hide"><span class="propertyName ellipsis" id="Section1Column3" >
+					</span><span class="propertyValue ellipsis" id="matterValue"></span></li>
+                    <li class="hide"><span class="propertyName ellipsis" id="Section1Column4"  >
+					</span><span class="propertyValue ellipsis" id="clientMatterIdValue"></span></li>
+                    <li class="hide"><span class="propertyName ellipsis" id="Section1Column5"  >
+					</span><span class="propertyValue ellipsis" id="documentIdValue"></span></li>
+                    <li class="hide">
+                            <span class="propertyName ellipsis" id="Section1Column6" >
+						</span>
                             <span id="checkOutLyncIndicator">
                                 <span class="ms-verticalAlignTop ms-noWrap">
                                     <span class="ms-imnSpan">
@@ -124,7 +131,8 @@
                             <span class="propertyValue ellipsis" id="checkOutUserValue"></span>
                         </li>
                         <li class="hide">
-                            <span class="propertyName ellipsis" title="Author">Author:</span>
+                            <span class="propertyName ellipsis" id="Section1Column7" >
+						</span>
                             <span id="authorLyncIndicator">
                                 <span class="ms-verticalAlignTop ms-noWrap">
                                     <span class="ms-imnSpan">
@@ -138,26 +146,35 @@
                             </span>
                             <span class="propertyValue ellipsis" id="authorValue"></span>
                         </li>
-                        <li class="hide"><span class="propertyName ellipsis" title="Date created">Date created:</span><span class="propertyValue ellipsis" id="dateCreatedValue"></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="Practice group">Practice group:</span><span class="propertyValue ellipsis" id="practiceGroupValue"></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="Area of law">Area of law:</span><span class="propertyValue ellipsis" id="areaOfLawValue"></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="Sub area of law">Sub area of law:</span><span class="propertyValue ellipsis" id="subAreaOfLaw"></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="File type">File type:</span><span class="propertyValue ellipsis" id="fileTypeValue"></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="File size">File size:</span><span class="propertyValue ellipsis" id="fileSizeValue"></span></li>
-                        <li class="hide"><span class="propertyName ellipsis" title="File access">File access:</span><a class="propertyValue ellipsis" id="accessValue" title="View shared properties"></a></li>
+                         <li class="hide"><span class="propertyName ellipsis" id="Section1Column8">
+					</span><span class="propertyValue ellipsis" id="dateCreatedValue"></span></li>
+                    <li class="hide"><span class="propertyName ellipsis" id="Section1Column9">
+					</span><span class="propertyValue ellipsis" id="practiceGroupValue"></span></li>
+                    <li class="hide"><span class="propertyName ellipsis" id="Section1Column10">
+					</span><span class="propertyValue ellipsis" id="areaOfLawValue"></span></li>
+                    <li class="hide"><span class="propertyName ellipsis" id="Section1Column11">
+					</span><span class="propertyValue ellipsis" id="subAreaOfLaw"></span></li>
+                    <li class="hide"><span class="propertyName ellipsis" id="Section1Column12">
+					</span><span class="propertyValue ellipsis" id="fileTypeValue"></span></li>
+                    <li class="hide"><span class="propertyName ellipsis" id="Section1Column13">
+					</span><span class="propertyValue ellipsis" id="fileSizeValue"></span></li>
+                    <li class="hide"><span class="propertyName ellipsis" id="Section1Column14">
+					</span><a class="propertyValue ellipsis" id="accessValue" title="View shared properties"></a></li>
                     </ul>
                 </div>
                 <div id="metadataVersion">
                     <div class="viewMoreContainer">
                         <img class="hide toggleVersionSection" id="OpenVersionHistory" alt="Open" title="Open" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Glyph_Open.png" />
                         <img class="toggleVersionSection" id="CloseVersionHistory" alt="Close" title="Close" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/MC_Documents_Landing_Page_Glyph_Close.png" />
-                        <span id="versionHistoryTitle">Version history</span>
-                        <span class="viewMoreSection" id="viewMoreVersions" title="View more">View more</span>
+                        <span id="versionHistoryTitle" id="Section2Header"></span>
+                        <span class="viewMoreSection" id="viewMoreVersions"></span>
                     </div>
                     <div class="separtor"></div>
                     <div id="documentMetadataContainer">
                         <div id="versionHeader" class="hide">
-                            <span class="versionHeaders">Version</span><span class="versionHeaders">Modified</span><span class="versionHeaders">Modified By</span>
+                           <span class="versionHeaders" id="Section2Column1"></span>
+                        <span class="versionHeaders" id="Section2Column2"></span>
+                        <span class="versionHeaders" id="Section2Column3"></span>
                         </div>
                         <ul id="documentMetadata">
                             <li><span class="loadingImageContainer" id="loadingVersion"><img class="loadingImage" alt="Loading" title="Loading..." src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Images/WindowsLoadingFast.GIF" /></span></li>
@@ -170,6 +187,7 @@
     </div>
     <script type="text/javascript" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Common%20Assets/Scripts/jquery-1.11.1.min.js?ver=20.0.0.0"></script>
     <script type="text/javascript" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Common%20Assets/Scripts/spCommon.js?ver=20.0.0.0"></script>
+    <script type="text/javascript" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Common%20Assets/Scripts/uiconfigforspo.js"></script>
     <script type="text/javascript" src="CATALOG_SITE_URL/SiteAssets/Matter%20Center%20Assets/Document%20Landing%20Assets/Scripts/documentDetails.js?ver=20.0.0.0"></script>
 </body>
 </html>

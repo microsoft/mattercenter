@@ -5,7 +5,6 @@
 
   "dependencies": {
     "Microsoft.Extensions.Options": "1.0.0",
-    "NETStandard.Library": "1.6.0",
     "System.Threading.Tasks": "4.0.10",
     "System.Xml.XDocument": "4.0.10",
     "Microsoft.AspNetCore.Mvc": "1.0.0",

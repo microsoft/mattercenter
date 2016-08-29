@@ -1,18 +1,5 @@
 ﻿var uiconfigs =
 {
-  "Home": {
-    "MatterCenterSupportLink": "mailto:support@supportsite.com",
-    "MatterCenterSupportLinkText": "Matter Center Aisling Support",
-    "HelpRequesURL": "https://msmatter.sharepoint.com/sites/catalog",
-    "ContextualHelpHeader": "Matter Center For Outlook",
-    "Change": "mailto:aisling@supportsite.com",
-    "ContextualHelpBottomText": "Questions? Contact "
-  },
-  "MatterUsers": {
-    "SearchUsersURL": "https://msmatter.sharepoint.com/sites/client",
-    "StampedPropertiesURL": "https://msmatter.sharepoint.com/sites/microsoft",
-    "Add": "test"
-  },
   "CreateMatter": {
     "Tab1HeaderTitle": "Step 1: Select a client and provide basic information for your new matter.",
     "Tab2HeaderTitle": "Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter.",
@@ -83,7 +70,13 @@
     "Tab1Textbox3PlaceholderText": "Enter a matter ID",
     "Tab1Textbox4Label": "Matter Description",
     "Tab1Textbox4PlaceholderText": "Enter a brief description of the matter",
-    "Tab1Textbox5Label": "Matter Type (click Select to define the practice group and area of law)"
+    "Tab1Textbox5Label": "Matter Type (click Select to define the practice group and area of law)",
+    "Tab1DrpDownLevel1DefaultSelectOption": "Select a practice group",
+    "Tab1TermsSelectionSearchPlaceHolderText": "Search by typing",
+    "Tab1LabelFinalTypeText": "MatterType",
+    "Tab1LabelPrimaryTypeText": "Please select primary matter type",
+    "Tab1LabelPrimaryTypeBeforeSaveText": "Please select primary matter type before you save.",
+    "Tab1ButtonSaveSelectiponText": "Save Selections"
   },
   "DocumentDashboard": {
     "LinkImageLoadingTitle": "Matter Center Home",
@@ -270,8 +263,8 @@
     "GridColumn4Header": "Modified Date",
     "GridColumn5Header": "Responsible attorney",
     "AdvSearchLabel1InternalFuncParamText": "client",
-    "AdvSearchLabel2InternalFuncParamText": "pg",
-    "AdvSearchLabel3InternalFuncParamText": "aol"
+    "AdvSearchLabel2InternalFuncParamText": "level1",
+    "AdvSearchLabel3InternalFuncParamText": "level2"
   },
   "Matters": {
     "EllipsisLink5Text": "Unpin this matter",

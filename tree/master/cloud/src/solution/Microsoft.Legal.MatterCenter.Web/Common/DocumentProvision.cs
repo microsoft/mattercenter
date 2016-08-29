@@ -14,6 +14,8 @@ using System.Net.Http;
 using Microsoft.Exchange.WebServices.Data;
 
 using System.Reflection;
+using System.Dynamic;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
@@ -27,12 +29,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private ICustomLogger customLogger;
         private LogTables logTables;
         private ErrorSettings errorSettings;
+        private SearchSettings searchSettings;
+        private IConfigurationRoot configuration;
         public DocumentProvision(IDocumentRepository docRepository, 
             IUserRepository userRepository, 
             IUploadHelperFunctions uploadHelperFunctions, 
             IOptions<GeneralSettings> generalSettings, 
             IOptions<DocumentSettings> documentSettings, 
-            ICustomLogger customLogger, 
+            ICustomLogger customLogger,
+            IOptions<SearchSettings> searchSettings,
+            IConfigurationRoot configuration,
             IOptions<LogTables> logTables, IOptions<ErrorSettings> errorSettings)
         {
             this.docRepository = docRepository;
@@ -43,6 +49,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.customLogger = customLogger;
             this.logTables = logTables.Value;
             this.errorSettings = errorSettings.Value;
+            this.searchSettings = searchSettings.Value;
+            this.configuration = configuration;
         }
 
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
@@ -174,7 +182,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 // need to be able to update/configure or get current version of server
                 ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2013);
                 //// can use on premise exchange server credentials with service.UseDefaultCredentials = true, or explicitly specify the admin account (set default to false)
-                service.Credentials = new WebCredentials(generalSettings.MailCartMailUserName, generalSettings.MailCartMailPassword);
+                service.Credentials = new WebCredentials(generalSettings.AdminUserName, generalSettings.AdminPassword);
                 service.Url = new Uri(generalSettings.ExchangeServiceURL);
                 Microsoft.Exchange.WebServices.Data.EmailMessage email = new Microsoft.Exchange.WebServices.Data.EmailMessage(service);
                 email.Subject = documentSettings.MailCartMailSubject;
@@ -345,86 +353,149 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM);
 
             if (searchResultsVM.TotalRows > 0)
-            {
-                IList<DocumentData> documentDataList = new List<DocumentData>();
+            {                
+                dynamic documentDataList = new List<dynamic>();
                 IEnumerable<IDictionary<string, object>> searchResults = searchResultsVM.SearchResults;
                 foreach (var searchResult in searchResults)
                 {
-                    DocumentData documentData = new DocumentData();
+                    
+                    dynamic documentData = new ExpandoObject();
                     foreach (var key in searchResult.Keys)
                     {
                         documentData.Checker = false;
-                        switch (key.ToLower())
+                        ServiceUtility.AddProperty(documentData, "Checker", false);
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentClientName.ToString().ToLower())
                         {
-                            
-                            case "mcdocumentclientname":
-                                documentData.DocumentClient = searchResult[key].ToString();
-                                break;
-                            case "mcdocumentclientid":
-                                documentData.DocumentClientId = searchResult[key].ToString();
-                                break;
-                            case "sitename":
-                                documentData.DocumentClientUrl = searchResult[key].ToString();
-                                break;
-                            case "mcversionnumber":
-                                documentData.DocumentVersion = searchResult[key].ToString();
-                                break;
-                            case "refinablestring13":
-                                documentData.DocumentMatter = searchResult[key].ToString();
-                                break;
-                            case "refinablestring12":
-                                documentData.DocumentMatterId = searchResult[key].ToString();
-                                break;
-                            case "filename":
-                                documentData.DocumentName = searchResult[key].ToString();
-                                break;
-                            case "mccheckoutuser":
-                                documentData.DocumentCheckoutUser = searchResult[key].ToString();
-                                break;
-                            case "created":
-                                documentData.DocumentCreatedDate = searchResult[key].ToString();
-                                break;
-                            case "fileextension":
-                                documentData.DocumentExtension = searchResult[key].ToString();
-                                if (documentData.DocumentExtension.ToLower() != "pdf")
-                                {
-                                    documentData.DocumentIconUrl = $"{generalSettings.SiteURL}/_layouts/15/images/ic{documentData.DocumentExtension}.gif";
-                                }
-                                else
-                                {
-                                    documentData.DocumentIconUrl = $"{generalSettings.SiteURL}/_layouts/15/images/ic{documentData.DocumentExtension}.png";
-                                }
-                                break;
-                            case "docid":
-                                documentData.DocumentID = searchResult[key].ToString();
-                                break;
-                            case "path":
-                                documentData.DocumentOWAUrl = searchResult[key].ToString();
-                                documentData.DocumentUrl = searchResult[key].ToString();
-                                break;
-                            case "serverredirectedurl":
-                                if (searchResult[key] != null)
-                                {
-                                    documentData.DocumentOWAUrl = searchResult[key].ToString();
-                                    documentData.DocumentUrl = searchResult[key].ToString();
-                                }
-                                break;
-                            case "lastmodifiedtime":
-                                documentData.DocumentModifiedDate= searchResult[key].ToString();
-                                break;
-                            
-                            case "msitofficeauthor":
-                                documentData.DocumentOwner = searchResult[key].ToString();
-                                break;
-                            case "parentlink":
-                                documentData.DocumentParentUrl = searchResult[key].ToString();
-                                documentData.DocumentMatterUrl = documentData.DocumentParentUrl.Substring(0, documentData.DocumentParentUrl.LastIndexOf("/"));
-                                break;
-                                
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentClient").Key,
+                                searchResult[key].ToString());
                         }
-                        documentData.PinType = "Pin";
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentClientId.ToString().ToLower())
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentClientId").Key,
+                                searchResult[key].ToString());
+                        }
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertySiteName.ToString().ToLower())
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentClientUrl").Key,
+                                searchResult[key].ToString());
+                        }
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentVersion.ToString().ToLower())
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentVersion").Key,
+                                searchResult[key].ToString());
+                        }
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentMatterName.ToString().ToLower())
+                        {
+                            if(searchResult[key].ToString()!=string.Empty)
+                            { 
+                                ServiceUtility.AddProperty(documentData,
+                                    configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentName").Key,
+                                    searchResult[key].ToString());
+                            }
+                            else
+                            {
+                                ServiceUtility.AddProperty(documentData,
+                                    configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentName").Key,
+                                    searchResult["Title"].ToString());
+                            }
+                        }   
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentMatterId.ToString().ToLower())
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentMatterId").Key,
+                                searchResult[key].ToString());
+                        }                        
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentCheckOutUser.ToString().ToLower())
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentCheckoutUser").Key,
+                                searchResult[key].ToString());
+                        }
+                        //-------------------------
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyCreated.ToString().ToLower())
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentCreatedDate").Key,
+                                searchResult[key].ToString());
+                        }
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyFileExtension.ToString().ToLower())
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentExtension").Key,
+                                searchResult[key].ToString());
+                            if (searchResult[key].ToString().ToLower() == "csv")
+                            {
+                                ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentIconUrl").Key,
+                                $"{generalSettings.SiteURL}/_layouts/15/images/generaldocument.png");
+                            }
+                            else if (searchResult[key].ToString().ToLower() != "pdf")
+                            {
+                                ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentIconUrl").Key,
+                                $"{generalSettings.SiteURL}/_layouts/15/images/ic{searchResult[key].ToString().ToLower()}.gif");
+                            }
+                            else
+                            {
+                                ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentIconUrl").Key,
+                                $"{generalSettings.SiteURL}/_layouts/15/images/ic{searchResult[key].ToString().ToLower()}.png");
+                            }
+                        }
                         
-                                               
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyPath.ToString().ToLower())
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentOWAUrl").Key,
+                                searchResult[key].ToString());
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentUrl").Key,
+                                searchResult[key].ToString());
+                        }
+                        if (key.ToString().ToLower() == "serverredirectedurl")
+                        {
+                            if (searchResult[key] != null)
+                            {
+                                ServiceUtility.AddProperty(documentData,
+                                    configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentOWAUrl").Key,
+                                    searchResult[key].ToString());
+                                ServiceUtility.AddProperty(documentData,
+                                    configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentUrl").Key,
+                                    searchResult[key].ToString());
+                            }                                
+                        }
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyLastModifiedTime.ToString().ToLower())
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentModifiedDate").Key,
+                                searchResult[key].ToString());                            
+                        }
+                       
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyAuthor.ToString().ToLower())
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentOwner").Key,
+                                searchResult[key].ToString());
+                        }
+                        if (key.ToString().ToLower() == "parentlink")
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentParentUrl").Key,
+                                searchResult[key].ToString());
+                            string documentUrl = searchResult[key].ToString().Substring(0, searchResult[key].ToString().LastIndexOf("/"));
+                            string matterUrl = $"{documentUrl.Substring(0, documentUrl.LastIndexOf("/"))}/sitepages/{documentUrl.Split('/')[documentUrl.Split('/').Length - 1]}.aspx";
+
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentMatterUrl").Key,
+                                matterUrl);
+                        }  
+                        ServiceUtility.AddProperty(documentData, "PinType", "Pin");
+
+
                     }
                     documentDataList.Add(documentData);
                 }

@@ -74,9 +74,9 @@ Show-Message -Message "Adding common library functions" -Type ([MessageType]::Wa
 Show-Message -Message "Added common library functions" -Type ([MessageType]::Success)
 
 #----------------------------------------------
-# Reverting step 13
+# Reverting step 11
 #----------------------------------------------
-if (13 -le $Checkpoint)
+if (11 -le $Checkpoint)
 {
     Show-Message -Message ""
     Show-Message -Message "Deleting files from SharePoint library"
@@ -89,9 +89,9 @@ if (13 -le $Checkpoint)
 }
 
 #----------------------------------------------
-# Reverting step 12
+# Reverting step 10
 #----------------------------------------------
-if (12 -le $Checkpoint)
+if (10 -le $Checkpoint)
 {
     Show-Message -Message ""
     Show-Message -Message "Removing apps from Exchange"
@@ -104,9 +104,9 @@ if (12 -le $Checkpoint)
 }
 
 #----------------------------------------------
-# Reverting step 11
+# Reverting step 9
 #----------------------------------------------
-if (11 -le $Checkpoint)
+if (9 -le $Checkpoint)
 {
     Show-Message -Message ""
     Show-Message -Message "Removing apps from SharePoint and Office"
@@ -121,9 +121,9 @@ if (11 -le $Checkpoint)
 }
 
 #----------------------------------------------
-# Reverting Step 9
+# Reverting Step 8
 #----------------------------------------------
-if (9 -le $Checkpoint)
+if (8 -le $Checkpoint)
 {
     Show-Message -Message ""
     Show-Message -Message "Undoing Encryption"
