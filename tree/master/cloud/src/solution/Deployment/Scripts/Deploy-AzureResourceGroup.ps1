@@ -4,22 +4,45 @@
 
 Param(
     [string] [Parameter(Mandatory=$true)] $ResourceGroupLocation,
-    [string] $ResourceGroupName = 'Microsoft.Legal.MatterCenter',
+    [string] [Parameter(Mandatory=$true)] $ResourceGroupName = 'MatterCenterRG',
+    [string] [Parameter(Mandatory=$true)] $WebAppName = 'MatterCenterWeb',
+	[string] [Parameter(Mandatory=$true)] $Tenant_id,
+	[string] [Parameter(Mandatory=$true)] $KeyVault_certificate_expiryDate,
     [switch] $UploadArtifacts,
     [string] $StorageAccountName,
     [string] $StorageAccountResourceGroupName, 
     [string] $StorageContainerName = $ResourceGroupName.ToLowerInvariant() + '-stageartifacts',
-    [string] $TemplateFile = '..\Templates\WebSite.json',
-    [string] $TemplateParametersFile = '..\Templates\WebSite.parameters.json',
+    [string] $TemplateFile = '..\Templates\template.json',
+    [string] $TemplateParametersFile = '..\Templates\template.parameters.json',
     [string] $ArtifactStagingDirectory = '..\bin\Debug\staging',
     [string] $AzCopyPath = '..\Tools\AzCopy.exe',
     [string] $DSCSourceFolder = '..\DSC'
 )
 
+
+$Redis_cache_name = $WebAppName+"RedisCache"
+$autoscalesettings_name = $WebAppName+"ScaleSettings"
+$components_AppInsights_name = $WebAppName+"AppInsights"
+$vaults_KeyVault_name = $WebAppName+"KeyVault"
+$storageAccount_name = $WebAppName+"stg"
+$serverfarms_WebPlan_name = $WebAppName+"WebPlan"
+$Web_ADApp_Name = $WebAppName+"WebADApp"
+$KeyVault_ADApp_Name = $WebAppName+"KVADApp"
+
+$storageAccount_name 
+
+Write-Host "Reading from template.parameters.json file..."
+$params = ConvertFrom-Json -InputObject (Get-Content -Path $TemplateParametersFile -Raw)
+$params.parameters.webSite_name.value = $WebAppName
+Set-Content -Path $TemplateParametersFile -Value (ConvertTo-Json -InputObject $params -Depth 3)
+
+
 Import-Module Azure -ErrorAction SilentlyContinue
+#Add-AzureAccount
+Login-AzureRmAccount
 
 try {
-    [Microsoft.Azure.Common.Authentication.AzureSession]::ClientFactory.AddUserAgent("VSAzureTools-$UI$($host.name)".replace(" ","_"), "2.8")
+ #   [Microsoft.Azure.Common.Authentication.AzureSession]::ClientFactory.AddUserAgent("VSAzureTools-$UI$($host.name)".replace(" ","_"), "2.8")
 } catch { }
 
 Set-StrictMode -Version 3
@@ -101,3 +124,17 @@ New-AzureRmResourceGroupDeployment -Name ((Get-ChildItem $TemplateFile).BaseName
                                    -TemplateParameterFile $TemplateParametersFile `
                                    @OptionalParameters `
                                    -Force -Verbose
+
+$creds = Get-Credential
+
+Write-Host "Getting the storage key to write to key vault..."
+$StorageAccountKey = Get-AzureRmStorageAccountKey -Name $storageAccount_name -ResourceGroupName $ResourceGroupName
+
+$custScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'KeyVault-Config.ps1')
+Invoke-Expression $custScriptFile 
+
+$storageScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'Create-AzureStorageTable.ps1')
+Invoke-Expression $storageScriptFile
+
+$webJobScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'Create-MatterCenterWebJob.ps1')
+Invoke-Expression $webJobScriptFile

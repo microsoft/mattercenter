@@ -207,103 +207,103 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         if(key.ToString().ToLower() == searchSettings.ManagedPropertyMatterName.ToString().ToLower())
                         {                            
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column1").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterName").Key,
                                 searchResult[key].ToString());                            
                         }
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyDescription.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column8").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterDescription").Key,
                                 searchResult[key].ToString());
                         }
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyOpenDate.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column7").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterCreatedDate").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyPath.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column9").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterUrl").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySiteName.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column10").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterClientUrl").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyPracticeGroup.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column11").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterPracticeGroup").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyAreaOfLaw.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column12").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterAreaOfLaw").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column6").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterSubAreaOfLaw").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyClientName.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column2").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterClient").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyClientID.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column3").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterClientId").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyBlockedUploadUsers.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column13").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("hideUpload").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyResponsibleAttorney.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column5").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterResponsibleAttorney").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyMatterId.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column14").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterID").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyMatterGuid.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column15").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterGuid").Key,
                                 searchResult[key].ToString());
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyLastModifiedTime.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("Column4").GetSection("Field").Value,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterModifiedDate").Key,
                                 searchResult[key].ToString());
                         }
                         ServiceUtility.AddProperty(matterData,"PinType","Pin");

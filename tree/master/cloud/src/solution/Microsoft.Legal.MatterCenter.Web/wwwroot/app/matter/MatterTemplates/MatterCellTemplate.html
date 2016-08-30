@@ -17,7 +17,7 @@
                 <li class='ms-ContextualMenu-item'><a class='ECBItem ms-ContextualMenu-link upload' ng-href='https://msmatter.sharepoint.com/sites/microsoft/SitePages/{{row.entity.matterGuid}}.aspx' target='_blank'> {{grid.appScope.vm.matterConfigContent.EllipsisLink2Text}}</a></li>
                 <li class='ms-ContextualMenu-item'>
 
-                    <a class='ECBItem ms-ContextualMenu-link upload' href='https://msmatter.sharepoint.com/sites/microsoft/_layouts/WopiFrame.aspx?sourcedoc=https://msmatter.sharepoint.com/sites/microsoft/{{row.entity.matterGuid}}_OneNote/{{row.entity.matterGuid}}/{{row.entity.matterGuid}}.onetoc2' target='_blank'>
+                    <a class='ECBItem ms-ContextualMenu-link upload' href='{{row.entity.matterClientUrl}}/_layouts/WopiFrame.aspx?sourcedoc={{row.entity.matterClientUrl}}/{{row.entity.matterGuid}}_OneNote/{{row.entity.matterName}}/{{row.entity.matterGuid}}.onetoc2' target='_blank'>
                         {{grid.appScope.vm.matterConfigContent.EllipsisLink3Text}}
                     </a>
                 </li>

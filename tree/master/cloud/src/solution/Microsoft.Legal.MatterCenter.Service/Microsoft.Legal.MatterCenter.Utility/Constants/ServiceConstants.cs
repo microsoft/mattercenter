@@ -17,7 +17,10 @@ namespace Microsoft.Legal.MatterCenter.Utility
     /// </summary>
     public class ServiceConstants
     {
-
+        /// <summary>
+        /// Base64 string format for the image
+        /// </summary>
+        public const string BASE64_IMAGE_FORMAT = "data:image/png;base64, "; //ends with a space
         public const int Matter_ONE_NOTE_LENGTH = 120;
         public const string CLIENT_TERM_PATH = "/";
         public const string CACHE_PERMISSIONS = "Permissions";

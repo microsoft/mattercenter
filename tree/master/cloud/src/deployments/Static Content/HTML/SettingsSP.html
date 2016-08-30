@@ -72,7 +72,7 @@
     }, "sp.js");
 
     function preLoad() {
-        var iFrameUrl = "SETTINGS_PAGE_URL", queryString = "";
+        var iFrameUrl = "SETTINGS_PAGE_URL/#/settings", queryString = "";
         if ("/" !== _spPageContextInfo.siteServerRelativeUrl) {
             queryString = "&clientdetails=" + _spPageContextInfo.webAbsoluteUrl + "$|$" + _spPageContextInfo.webTitle;
             iFrameUrl += "?" + encodeURIComponent(queryString);

@@ -70,7 +70,13 @@
     "Tab1Textbox3PlaceholderText": "Enter a matter ID",
     "Tab1Textbox4Label": "Matter Description",
     "Tab1Textbox4PlaceholderText": "Enter a brief description of the matter",
-    "Tab1Textbox5Label": "Matter Type (click Select to define the practice group and area of law)"
+    "Tab1Textbox5Label": "Matter Type (click Select to define the practice group and area of law)",
+    "Tab1DrpDownLevel1DefaultSelectOption": "Select a practice group",
+    "Tab1TermsSelectionSearchPlaceHolderText": "Search by typing",
+    "Tab1LabelFinalTypeText": "MatterType",
+    "Tab1LabelPrimaryTypeText": "Please select primary matter type",
+    "Tab1LabelPrimaryTypeBeforeSaveText": "Please select primary matter type before you save.",
+    "Tab1ButtonSaveSelectiponText": "Save Selections"
   },
   "DocumentDashboard": {
     "LinkImageLoadingTitle": "Matter Center Home",
@@ -257,8 +263,8 @@
     "GridColumn4Header": "Modified Date",
     "GridColumn5Header": "Responsible attorney",
     "AdvSearchLabel1InternalFuncParamText": "client",
-    "AdvSearchLabel2InternalFuncParamText": "pg",
-    "AdvSearchLabel3InternalFuncParamText": "aol"
+    "AdvSearchLabel2InternalFuncParamText": "level1",
+    "AdvSearchLabel3InternalFuncParamText": "level2"
   },
   "Matters": {
     "EllipsisLink5Text": "Unpin this matter",
@@ -417,56 +423,5 @@
     "Radio2Option2ValueText": "DateTime",
     "Label33Section2Text": "Your changes have been saved. Go back to ",
     "Label34Section2Text": "Clients"
-  },
-  "MatterLanding": {
-    "Label1Tab1HeaderText": "MatterProfile",
-    "Label2Tab2HeaderText": "MatterDescription",
-    "Label3Tab1Column1Text": "Client Name",
-    "Label4Tab1Column2Text": "Client & Matter ID",
-    "Label5Tab1Column3Text": "Practice Group",
-    "Label6Tab1Column4Text": "Area of Law",
-    "Label7Tab1Column5Text": "Responsible Attorney",
-    "Label8Tab1Section2HeaderText": "Matter Library",
-    "MenuImageUpperCaption": "Matter Center",
-    "MenuImageLowerCaption": "for Office 365",
-    "Menu1Option1Text": "Matters",
-    "Menu1Option2Text": "Documents",
-    "Menu1Option3Text": "Settings"
-  },
-  "DocumentDetails": {
-    "Label1HeaderText": "File Name",
-    "Label2Section2HeaderText": "File Properties",
-    "Label3Section2Column1Text": "File title",
-    "Label4Section2Column2Text": "Client",
-    "Label5Section2Column3Text": "Matter",
-    "Label6Section2Column4Text": "Client.MatterID",
-    "Label7Section2Column5Text": "Document ID",
-    "Label8Section2Column6Text": "Checked out to",
-    "Label9Section2Column7Text": "Author",
-    "Label10Section2Column8Text": "Date created",
-    "Label11Section2Column9Text": "Practice group",
-    "Label12Section2Column10Text": "Area of law:",
-    "Label13Section2Column11Text": "Sub area of law",
-    "Label14Section2Column12Text": "File type",
-    "Label15Section2Column13Text": "File size",
-    "Label16Section2Column14Text": "File access",
-    "Label17Section2HeaderText": "Version history",
-    "Label18Section2Column1Text": "Version",
-    "Label19Section2Column2Text": "Modified",
-    "Label20Section2Column3Text": "Modified By",
-    "Label21MenuHeaderOption1Text": "open",
-    "Label22MenuHeaderOption2Text": "download",
-    "Label23MenuHeaderOption3Text": "share",
-    "Label24MenuHeaderOption4Text": "check in",
-    "Label25MenuHeaderOption5Text": "check out",
-    "Label26MenuHeaderOption6Text": "send link",
-    "Label27MenuHeaderOption7Text": "pin",
-    "Label28MenuHeaderOption8Text": "unpin",
-    "Label1TabTitleText": "Document Details",
-    "Link1ErrorDetailsCaptionText": "Click here for details",
-    "Link2AllDocumentText": "Go to all documents",
-    "LabelNoPreviewText": "There is no preview for this document",
-    "ImgNoPreviewSuppoertText": "Preview not supported...",
-    "Link3ViewMoreText": "View More"
   }
 };

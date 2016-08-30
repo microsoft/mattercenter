@@ -425,6 +425,8 @@ namespace Microsoft.Legal.MatterCenter.Web
                 jw.WriteStartObject();
                     jw.WritePropertyName("repositoryUrl");
                     jw.WriteValue(generalSettingsSection["CentralRepositoryUrl"]);
+                    jw.WritePropertyName("isDevMode");
+                    jw.WriteValue(bool.Parse(generalSettingsSection["IsDevMode"]));
                 jw.WriteEndObject();
 
             jw.WritePropertyName("matter");
@@ -477,11 +479,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                                             else if (subKey.Key == "position")
                                             {
                                                 jw.WriteValue(int.Parse(subKey.Value));
-                                            }
-                                            else
-                                            {
-                                                jw.WriteValue(subKey.Value);
-                                            }                                           
+                                            }                                                                                     
                                         }
                                     jw.WriteEndObject();
                             }
@@ -505,10 +503,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                                         {
                                             jw.WriteValue(int.Parse(subKey.Value));
                                         }
-                                        else
-                                        {
-                                            jw.WriteValue(subKey.Value);
-                                        }
+                                        
                                     }
                                 jw.WriteEndObject();
                             }

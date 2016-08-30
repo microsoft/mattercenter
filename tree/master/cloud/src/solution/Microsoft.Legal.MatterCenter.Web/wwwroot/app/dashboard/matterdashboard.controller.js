@@ -18,6 +18,7 @@
             vm.pgdrop = false;
             vm.pgdropvisible = false;
             vm.matterDashboardConfigs = uiconfigs.MatterDashboard;
+            vm.matterConfigContent = uiconfigs.Matters;
             vm.aoldrop = false;
             vm.aoldropvisible = false;
             vm.checkClient = false;
@@ -79,7 +80,247 @@
                 enableColumnMenus: false,
                 enableFiltering: false
             }
+            var columnDefs1 = [];
+            angular.forEach(configs.search.searchColumnsUIPickerForMatter, function (value, key) {
+                if (key == "matterName") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn1Header,                            
+                            enableColumnMenu: false,
+                            width: "20%",
+                            cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html',                           
+                            position: value.position
+                        });
 
+                    }
+                }
+                if (key == "matterClient") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn2Header,
+                            enableColumnMenu: false,
+                            width: "15%",
+                            cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>',
+                            position: value.position
+                        });
+                    }
+                }
+                if (key == "matterClientId") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            width: '15%',
+                            displayName: vm.matterDashboardConfigs.GridColumn3Header,
+                            headerTooltip: 'Click to sort by client.matterid', 
+                            enableCellEdit: true,
+                            cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>',
+                            enableColumnMenu: false,
+                            position: value.position
+                        });
+
+                    }
+
+                }
+                if (key == "matterModifiedDate") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            width: '15%',
+                            displayName: vm.matterDashboardConfigs.GridColumn4Header,
+                            cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>',
+                            enableColumnMenu: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterResponsibleAttorney") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            width: '15%', 
+                            headerTooltip: 'Click to sort by attorney',
+                            displayName: vm.matterDashboardConfigs.GridColumn5Header,
+                            cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>',
+                            enableColumnMenu: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterSubAreaOfLaw") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn6Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterCreatedDate") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn7Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html',
+                            width: "170",
+                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
+                            visible: false,
+                            position: value.position
+                        });
+                    }
+                }
+                if (key == "matterDescription" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn8Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterUrl" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn9Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterClientUrl" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn10Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterPracticeGroup" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn11Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+
+                if (key == "matterAreaOfLaw" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn12Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "hideUpload" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn13Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterID" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn14Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterGuid" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterDashboardConfigs.GridColumn15Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+
+            });
+           
+            columnDefs1.push({
+                field: 'pin',
+                displayName: '',
+                width: '5%',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
+                enableColumnMenu: false,
+                position: 75
+            });
+            columnDefs1.push({
+                field: 'upload',
+                displayName: '',
+                width: '7%',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>',
+                enableColumnMenu: false,
+                position: 76
+            });
+            function getSortFunction(fieldName) {
+                return function (col1, col2) {
+                    return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
+                }
+            }
+            console.log(columnDefs1);
+            columnDefs1.sort(getSortFunction("position"));
+            console.log(columnDefs1);
 
             //#region Matter Grid functionality
             vm.matterGridOptions = {
@@ -92,15 +333,16 @@
                 enableSelectAll: gridOptions.enableSelectAll,
                 multiSelect: gridOptions.multiSelect,
                 enableFiltering: gridOptions.enableFiltering,
-                columnDefs: [
-                    { field: 'matterName', width: '20%', displayName: vm.matterDashboardConfigs.GridColumn1Header, cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html', enableColumnMenu: false },
-                    { field: 'matterClient', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn2Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>', enableColumnMenu: false },
-                    { field: 'matterClientId', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn3Header, headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false },
-                    { field: 'matterModifiedDate', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn4Header, cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
-                    { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: vm.matterDashboardConfigs.GridColumn5Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
-                    { field: 'pin', displayName: '', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
-                    { field: 'upload', displayName: '', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>', enableColumnMenu: false }
-                ],
+                columnDefs:columnDefs1,
+                //    [
+                //    { field: 'matterName', width: '20%', displayName: vm.matterDashboardConfigs.GridColumn1Header, cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html', enableColumnMenu: false },
+                //    { field: 'matterClient', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn2Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>', enableColumnMenu: false },
+                //    { field: 'matterClientId', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn3Header, headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false },
+                //    { field: 'matterModifiedDate', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn4Header, cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
+                //    { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: vm.matterDashboardConfigs.GridColumn5Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
+                //    { field: 'pin', displayName: '', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
+                //    { field: 'upload', displayName: '', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>', enableColumnMenu: false }
+                //],
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
                     //Set the selected row of the grid to selectedRow property of the controller
@@ -539,123 +781,6 @@
 
             }
 
-
-
-            //#endregion
-
-            //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
-            vm.checkAll = function (checkAll, type, $event) {
-                $event.stopPropagation();
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
-                    angular.forEach(vm.clients, function (client) {
-                        client.Selected = checkAll;
-                    });
-                }
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
-                    angular.forEach(vm.practiceGroups, function (pg) {
-                        pg.Selected = checkAll;
-                    });
-                }
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
-                    angular.forEach(vm.aolTerms, function (aol) {
-                        aol.Selected = checkAll;
-                    });
-                }
-            }
-
-            //#region This event is going to fire when the user clicks on "OK" button in the filter panel
-            vm.filterSearchOK = function (type) {
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
-                    vm.selectedClients = '';
-                    angular.forEach(vm.clients, function (client) {
-                        if (client.Selected) {
-                            vm.selectedClients = vm.selectedClients + client.name + ","
-                        }
-                    });
-                    vm.selectedClients = vm.selectedClients.slice(0, vm.selectedClients.length - 1);
-                    vm.selectedClientsForCancel = vm.selectedClients;
-                    vm.clientdrop = false;
-                    vm.clientdropvisible = false;
-                }
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
-                    vm.selectedPGs = '';
-                    vm.selectedAOLs = '';
-                    angular.forEach(vm.practiceGroups, function (pg) {
-                        if (pg.Selected) {
-                            vm.selectedPGs = vm.selectedPGs + pg.termName + ","
-                            //For each of the selected pg's select corresponding aol check boxes automatically and update the aol
-                            //textbox accordingly
-                            angular.forEach(pg.areaTerms, function (areaterm) {
-                                areaterm.Selected = true;
-                                vm.selectedAOLs = vm.selectedAOLs + areaterm.termName + ","
-                            });
-                        }
-                    });
-                    vm.selectedPGs = vm.selectedPGs.slice(0, vm.selectedPGs.length - 1);
-                    vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
-                    vm.selectedPGsForCancel = vm.selectedPGs;
-                    vm.selectedAOLsForCancel = vm.selectedAOLs;
-                    vm.pgdrop = false;
-                    vm.pgdropvisible = false;
-                }
-
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
-                    vm.selectedAOLs = '';
-                    angular.forEach(vm.aolTerms, function (aol) {
-                        if (aol.Selected) {
-                            vm.selectedAOLs = vm.selectedAOLs + aol.termName + ","
-                        }
-                    });
-                    vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
-                    vm.selectedAOLsForCancel = vm.selectedAOLs;
-                    vm.aoldrop = false;
-                    vm.aoldropvisible = false;
-                }
-            }
-            //#endregion
-
-            //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
-            vm.filterSearchCancel = function (type) {
-                if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
-                    if (vm.selectedClientsForCancel !== undefined && vm.selectedClientsForCancel.toString().length > 0) {
-                        vm.selectedClients = vm.selectedClientsForCancel;
-                        angular.forEach(vm.clients, function (client) {
-                            if (vm.selectedClients.indexOf(client.name) > 0) {
-                                client.Selected = true;
-                            }
-                        });
-                    }
-                }
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
-                    if (vm.selectedPGsForCancel !== undefined && vm.selectedPGsForCancel.toString().length > 0) {
-                        vm.selectedPGs = vm.selectedPGsForCancel;
-                        angular.forEach(vm.practiceGroups, function (pg) {
-                            if (vm.selectedPGs.indexOf(pg.termName) > 0) {
-                                pg.Selected = true;
-                            }
-                        });
-                    }
-                }
-                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
-                    if (vm.selectedAOLsForCancel !== undefined && vm.selectedAOLsForCancel.toString().length > 0) {
-                        vm.selectedAOLs = vm.selectedAOLsForCancel;
-                        angular.forEach(vm.aolTerms, function (aol) {
-                            if (vm.selectedAOLs.indexOf(aol.termName) > 0) {
-                                aol.Selected = true;
-                            }
-                        });
-                    }
-                }
-                vm.clientdrop = false;
-                vm.clientdropvisible = false;
-                vm.pgdrop = false;
-                vm.pgdropvisible = false;
-                vm.aoldrop = false;
-                vm.aoldropvisible = false;
-            }
-            //#endregion
-
-
             //#endregion 
 
             //#region Closing and Opening searchbar dropdowns
@@ -758,43 +883,6 @@
                 }
             }
 
-            //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
-            vm.customSelection = function (type) {
-
-                if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
-                    var selectdClients = vm.selectedClients.split(',');  //user altered text value
-                    angular.forEach(vm.clients, function (client) {
-                        client.Selected = false;
-                        angular.forEach(selectdClients, function (clientInput) {
-                            if (clientInput.toString().length > 0 && client.name.toString().toLowerCase().indexOf(clientInput.toString().toLowerCase()) !== -1) {
-                                client.Selected = true;
-                            }
-                        })
-                    });
-                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
-                    var selectdPGs = vm.selectedPGs.split(',');  //user altered text value
-                    angular.forEach(vm.practiceGroups, function (pgGroup) {
-                        pgGroup.Selected = false;
-                        angular.forEach(selectdPGs, function (pgInput) {
-                            if (pgInput.toString().length > 0 && pgGroup.termName.toString().toLowerCase().indexOf(pgInput.toString().toLowerCase()) !== -1) {
-                                pgGroup.Selected = true;
-                            }
-                        })
-                    });
-                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
-                    var selectedAOLs = vm.selectedAOLs.split(',');  //user altered text value
-                    angular.forEach(vm.aolTerms, function (aol) {
-                        aol.Selected = false;
-                        angular.forEach(selectedAOLs, function (aolInput) {
-                            if (aolInput.toString().length > 0 && aol.termName.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
-                                aol.Selected = true;
-                            }
-                        })
-                    });
-                }
-            }
-            //#endregion
-
             //#region showing and hiding practice group dropdown
             vm.showPracticegroupDrop = function ($event) {
                 $event.stopPropagation();
@@ -802,10 +890,10 @@
                     if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
                         vm.lazyloaderpg = false;
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                            vm.practiceGroups = response.pgTerms;
+                            vm.practiceGroups = response.level1;
                             vm.aolTerms = [];
-                            angular.forEach(response.pgTerms, function (pgTerm) {
-                                angular.forEach(pgTerm.areaTerms, function (areaterm) {
+                            angular.forEach(response.level1, function (pgTerm) {
+                                angular.forEach(pgTerm.level2, function (areaterm) {
                                     vm.aolTerms.push(areaterm);
                                 });
                             })
@@ -849,10 +937,10 @@
                     if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
                         vm.lazyloaderaol = false;
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                            vm.practiceGroups = response.pgTerms;
+                            vm.practiceGroups = response.level1;
                             vm.aolTerms = [];
-                            angular.forEach(response.pgTerms, function (pgTerm) {
-                                angular.forEach(pgTerm.areaTerms, function (areaterm) {
+                            angular.forEach(response.level1, function (pgTerm) {
+                                angular.forEach(pgTerm.level2, function (areaterm) {
                                     vm.aolTerms.push(areaterm);
                                 });
                             })
@@ -889,6 +977,159 @@
             }
             //#endregion
 
+            //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
+            vm.customSelection = function (type) {
+
+                if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
+                    var selectdClients = vm.selectedClients.split(',');  //user altered text value
+                    angular.forEach(vm.clients, function (client) {
+                        client.Selected = false;
+                        angular.forEach(selectdClients, function (clientInput) {
+                            if (clientInput.toString().length > 0 && client.name.toString().toLowerCase().indexOf(clientInput.toString().toLowerCase()) !== -1) {
+                                client.Selected = true;
+                            }
+                        })
+                    });
+                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
+                    var selectdPGs = vm.selectedPGs.split(',');  //user altered text value
+                    angular.forEach(vm.practiceGroups, function (pgGroup) {
+                        pgGroup.Selected = false;
+                        angular.forEach(selectdPGs, function (pgInput) {
+                            if (pgInput.toString().length > 0 && pgGroup.termName.toString().toLowerCase().indexOf(pgInput.toString().toLowerCase()) !== -1) {
+                                pgGroup.Selected = true;
+                            }
+                        })
+                    });
+                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
+                    var selectedAOLs = vm.selectedAOLs.split(',');  //user altered text value
+                    angular.forEach(vm.aolTerms, function (aol) {
+                        aol.Selected = false;
+                        angular.forEach(selectedAOLs, function (aolInput) {
+                            if (aolInput.toString().length > 0 && aol.termName.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
+                                aol.Selected = true;
+                            }
+                        })
+                    });
+                }
+            }
+            //#endregion
+
+            //#region This event is going to file when the user clicks onm "Select All" and "UnSelect All" links
+            vm.checkAll = function (checkAll, type, $event) {
+                $event.stopPropagation();
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
+                    angular.forEach(vm.clients, function (client) {
+                        client.Selected = checkAll;
+                    });
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
+                    angular.forEach(vm.practiceGroups, function (pg) {
+                        pg.Selected = checkAll;
+                    });
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
+                    angular.forEach(vm.aolTerms, function (aol) {
+                        aol.Selected = checkAll;
+                    });
+                }
+            }
+
+            //#region This event is going to fire when the user clicks on "OK" button in the filter panel
+            vm.filterSearchOK = function (type) {
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
+                    vm.selectedClients = '';
+                    angular.forEach(vm.clients, function (client) {
+                        if (client.Selected) {
+                            vm.selectedClients = vm.selectedClients + client.name + ","
+                        }
+                    });
+                    vm.selectedClients = vm.selectedClients.slice(0, vm.selectedClients.length - 1);
+                    vm.selectedClientsForCancel = vm.selectedClients;
+                    vm.clientdrop = false;
+                    vm.clientdropvisible = false;
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
+                    vm.selectedPGs = '';
+                    vm.selectedAOLs = '';
+                    angular.forEach(vm.practiceGroups, function (pg) {
+                        if (pg.Selected) {
+                            vm.selectedPGs = vm.selectedPGs + pg.termName + ","
+                            //For each of the selected pg's select corresponding aol check boxes automatically and update the aol
+                            //textbox accordingly
+                            angular.forEach(pg.level2, function (areaterm) {
+                                areaterm.Selected = true;
+                                vm.selectedAOLs = vm.selectedAOLs + areaterm.termName + ","
+                            });
+                        }
+                    });
+                    vm.selectedPGs = vm.selectedPGs.slice(0, vm.selectedPGs.length - 1);
+                    vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
+                    if (vm.selectedPGs == "") {
+                        angular.forEach(vm.aolTerms, function (aol) {
+                            aol.Selected = false;
+                        });
+                    }
+                    vm.selectedPGsForCancel = vm.selectedPGs;
+                    vm.selectedAOLsForCancel = vm.selectedAOLs;
+                    vm.pgdrop = false;
+                    vm.pgdropvisible = false;
+                }
+
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
+                    vm.selectedAOLs = '';
+                    angular.forEach(vm.aolTerms, function (aol) {
+                        if (aol.Selected) {
+                            vm.selectedAOLs = vm.selectedAOLs + aol.termName + ","
+                        }
+                    });
+                    vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
+                    vm.selectedAOLsForCancel = vm.selectedAOLs;
+                    vm.aoldrop = false;
+                    vm.aoldropvisible = false;
+                }
+            }
+            //#endregion
+
+            //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
+            vm.filterSearchCancel = function (type) {
+                if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText) {
+                    if (vm.selectedClientsForCancel !== undefined && vm.selectedClientsForCancel.toString().length > 0) {
+                        vm.selectedClients = vm.selectedClientsForCancel;
+                        angular.forEach(vm.clients, function (client) {
+                            if (vm.selectedClients.indexOf(client.name) > 0) {
+                                client.Selected = true;
+                            }
+                        });
+                    }
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
+                    if (vm.selectedPGsForCancel !== undefined && vm.selectedPGsForCancel.toString().length > 0) {
+                        vm.selectedPGs = vm.selectedPGsForCancel;
+                        angular.forEach(vm.practiceGroups, function (pg) {
+                            if (vm.selectedPGs.indexOf(pg.termName) > 0) {
+                                pg.Selected = true;
+                            }
+                        });
+                    }
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
+                    if (vm.selectedAOLsForCancel !== undefined && vm.selectedAOLsForCancel.toString().length > 0) {
+                        vm.selectedAOLs = vm.selectedAOLsForCancel;
+                        angular.forEach(vm.aolTerms, function (aol) {
+                            if (vm.selectedAOLs.indexOf(aol.termName) > 0) {
+                                aol.Selected = true;
+                            }
+                        });
+                    }
+                }
+                vm.clientdrop = false;
+                vm.clientdropvisible = false;
+                vm.pgdrop = false;
+                vm.pgdropvisible = false;
+                vm.aoldrop = false;
+                vm.aoldropvisible = false;
+            }
+            //#endregion
             //#region File upload functionality
             vm.Openuploadmodal = function (matterName, matterUrl, matterGUID) {
                 vm.getFolderHierarchy(matterName, matterUrl, matterGUID);
@@ -1511,8 +1752,8 @@
                     filteredresult.pop(input[i]);
                 }
             }
-            return filteredresult;
+            return filteredresult;           
         };
-    })
+    })  
 
 })();

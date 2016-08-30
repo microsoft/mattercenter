@@ -146,7 +146,7 @@
             //#region navigating to the url based on menu click
             vm.navigateUrl = function (data) {
                 if (data != "Settings") {
-                    $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/MatterCenterHomev1.aspx?" + data;
+                    $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/MatterCenterHome.aspx?" + data;
                 } else {
                     $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/" + data + ".aspx";
                 }

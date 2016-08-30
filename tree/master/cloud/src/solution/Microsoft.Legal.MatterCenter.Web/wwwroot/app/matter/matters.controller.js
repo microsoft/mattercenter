@@ -77,10 +77,10 @@
 
            var columnDefs1 = [];
             angular.forEach(configs.search.searchColumnsUIPickerForMatter, function (value, key) {
-                if (key == "Column1") {
-                    if (value.displayInUI == true) {
+                if (key == "matterName") {
+                    if (value.displayInUI == true && value.position!=-1) {
                         columnDefs1.push({
-                            field: value.field,
+                            field: key,
                             displayName: vm.matterConfigContent.GridColumn1Header,
                             enableHiding: false,
                             width: "275",
@@ -91,10 +91,10 @@
                        
                     }
                 }
-                if (key == "Column2" ) {
-                    if (value.displayInUI == true) {
+                if (key == "matterClient") {
+                    if (value.displayInUI == true && value.position!=-1) {
                         columnDefs1.push({
-                            field: value.field,
+                            field: key,
                             displayName: vm.matterConfigContent.GridColumn2Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
@@ -105,8 +105,8 @@
                         });                        
                     }
                 }
-                if (key == "Column3" ) {
-                    if (value.displayInUI == true) {
+                if (key == "matterClientId") {
+                    if (value.displayInUI == true && value.position!=-1) {
                         var cellTemplateContent = "";
                         if (configs.search.Schema.toLowerCase() == "mattercenter") {
                             cellTemplateContent='<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>';
@@ -115,7 +115,7 @@
                             cellTemplateContent = '<div class="ui-grid-cell-contents" >{{row.entity.matterID}}</div>';
                         }
                         columnDefs1.push({
-                            field: value.field,
+                            field: key,
                             displayName: vm.matterConfigContent.GridColumn3Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
@@ -129,10 +129,10 @@
                     }
 
                 }
-                if (key == "Column4" ) {
-                    if (value.displayInUI == true) {                                              
+                if (key == "matterModifiedDate") {
+                    if (value.displayInUI == true && value.position!=-1) {                                              
                         columnDefs1.push({
-                            field: value.field,
+                            field: key,
                             displayName: vm.matterConfigContent.GridColumn4Header,
                             width: "195",
                             headerCellClass: 'gridclass',
@@ -144,10 +144,10 @@
                        
                     }
                 }
-                if (key == "Column5" ) {
-                    if (value.displayInUI == true) {
+                if (key == "matterResponsibleAttorney") {
+                    if (value.displayInUI == true && value.position!=-1) {
                         columnDefs1.push({
-                            field: value.field,
+                            field: key,
                             displayName: vm.matterConfigContent.GridColumn5Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
@@ -159,10 +159,10 @@
                        
                     }
                 }
-                if (key == "Column6") {
-                    if (value.displayInUI == true) {
+                if (key == "matterSubAreaOfLaw") {
+                    if (value.displayInUI == true && value.position!=-1) {
                         columnDefs1.push({
-                            field: value.field,
+                            field: key,
                             displayName: vm.matterConfigContent.GridColumn6Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
@@ -174,10 +174,10 @@
                        
                     }
                 }
-                if (key == "Column7") {
-                    if (value.displayInUI == true) {
+                if (key == "matterCreatedDate") {
+                    if (value.displayInUI == true && value.position!=-1) {
                         columnDefs1.push({
-                            field: value.field,
+                            field: key,
                             displayName: vm.matterConfigContent.GridColumn7Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
@@ -186,15 +186,71 @@
                             cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
                             visible: false,
                             position: value.position
-                        });
-                        
+                        });                        
                     }
                 }
-                if (key == "Column12") {
+                if (key == "matterDescription" && value.position != -1) {
                     if (value.displayInUI == true) {
                         columnDefs1.push({
-                            field: value.field,
-                            displayName: vm.matterConfigContent.GridColumn6Header,
+                            field: key,
+                            displayName: vm.matterConfigContent.GridColumn8Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterUrl" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterConfigContent.GridColumn9Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterClientUrl" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterConfigContent.GridColumn10Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterPracticeGroup" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterConfigContent.GridColumn11Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+
+                if (key == "matterAreaOfLaw" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterConfigContent.GridColumn12Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
@@ -205,20 +261,56 @@
 
                     }
                 }
+                if (key == "hideUpload" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterConfigContent.GridColumn13Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
 
+                    }
+                }
+                if (key == "matterID" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterConfigContent.GridColumn14Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
+                if (key == "matterGuid" && value.position != -1) {
+                    if (value.displayInUI == true) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.matterConfigContent.GridColumn15Header,
+                            headerCellClass: 'gridclass',
+                            cellClass: 'gridclass',
+                            width: "210",
+                            visible: false,
+                            position: value.position
+                        });
+
+                    }
+                }
                
             });
             function getSortFunction(fieldName) {
                 return function (col1, col2) {
-                    return col1[fieldName] > col2[fieldName];
+                    return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
                 }
-            }
-            console.log(columnDefs1);
+            }          
             columnDefs1.sort(getSortFunction("position"));
-            console.log(columnDefs1);
-
-
-
 
             //#region Setting the options for grid
 
@@ -233,16 +325,7 @@
                 enableRowSelection: true,
                 enableSelectAll: false,
                 multiSelect: false,
-                columnDefs: columnDefs1,
-                // [
-                //     { field: 'matterName', displayName: vm.matterConfigContent.GridColumn1Header, enableHiding: false, width: "275", cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html', headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html' },
-                //     { field: 'matterClient', displayName: vm.matterConfigContent.GridColumn2Header, headerCellClass: 'gridclass', cellClass: 'gridclass', enableCellEdit: true, width: "200", headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html' },
-                //     { field: 'matterClientId', displayName: vm.matterConfigContent.GridColumn3Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: "150", headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>', enableCellEdit: true, },
-                //     { field: 'matterModifiedDate', displayName: vm.matterConfigContent.GridColumn4Header, width: "195", headerCellClass: 'gridclass', cellClass: 'gridclass', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html' },
-                //     { field: 'matterResponsibleAttorney', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html', width: "250", displayName: vm.matterConfigContent.GridColumn5Header, visible: false },
-                //     { field: 'matterSubAreaOfLaw', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html', width: "210", displayName: vm.matterConfigContent.GridColumn6Header, visible: false },
-                //     { field: 'matterCreatedDate', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html', width: "170", displayName: vm.matterConfigContent.GridColumn7Header, cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>', visible: false },
-                //],
+                columnDefs:columnDefs1,
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
                     $scope.gridApi = gridApi;

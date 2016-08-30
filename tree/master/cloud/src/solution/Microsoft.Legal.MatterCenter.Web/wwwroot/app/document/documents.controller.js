@@ -107,6 +107,279 @@
         };
 
         $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
+        var columnDefs1 = [];
+        columnDefs1.push({
+            field: 'checker',
+            displayName: 'checked',
+            enableHiding: false,
+            width: '20',
+            cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html',
+            headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html',
+            position: 0
+        });
+        angular.forEach(configs.search.searchColumnsUIPickerForDocument, function (value, key) {
+            if (key == "documentName") {
+                if (value.displayInUI == true && value.position!=-1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn1Header,
+                        width: '278',
+                        enableHiding: false,
+                        cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html',
+                        headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html',
+                        position: value.position
+                    });
+
+                }
+            }
+            if (key == "documentClient") {
+                if (value.displayInUI == true && value.position != -1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn2Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '200',
+                        cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>',
+                        enableCellEdit: true,
+                        headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html',
+                        position: value.position
+                    });
+
+                }
+            }
+            if (key == "documentClientId") {
+                if (value.displayInUI == true && value.position != -1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn3Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '150',
+                        headerCellTemplate: $templateCache.get('coldefheadertemplate.html'),
+                        cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentClientId}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>',
+                        enableCellEdit: true,
+                        position: value.position
+                    });
+
+                }
+            }
+            if (key == "documentModifiedDate") {
+                if (value.displayInUI == true && value.position != -1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn4Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '195',
+                        cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>',
+                        headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html',
+                        position: value.position
+                    });
+
+                }
+            }
+            if (key == "documentOwner") {
+                if (value.displayInUI == true && value.position!=-1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn5Header,
+                        width: '140',
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html',
+                        visible: false,
+                        position: value.position
+                    });
+
+                }
+            }
+            if (key == "documentVersion") {
+                if (value.displayInUI == true && value.position != -1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn6Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '200',
+                        headerCellTemplate: $templateCache.get('coldefheadertemplate.html'),
+                        visible: false,
+                        position: value.position
+                    });
+
+                }
+            }
+            if (key == "documentCheckoutUser") {
+                if (value.displayInUI == true && value.position!=-1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn7Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '210',
+                        headerCellTemplate: '/app/document/DocumentTemplates/CheckOutHeaderTemplate.html',
+                        cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>',
+                        visible: false,
+                        position: value.position
+                    });
+
+                }
+            }
+            if (key == "documentCreatedDate") {
+                if (value.displayInUI == true && value.position!=-1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn8Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html',
+                        cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>',
+                        visible: false,
+                        position: value.position
+                    });
+
+                }
+            }
+            
+            if (key == "sitename") {
+                if (value.displayInUI == true && value.position!=-1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn10Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        visible: false,
+                        position: value.position
+                    });
+                }
+            }
+            if (key == "documentMatter") {
+                if (value.displayInUI == true && value.position!=-1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn10Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        visible: false,
+                        position: value.position
+                    });
+                }
+            }
+            if (key == "documentMatterId") {
+                if (value.displayInUI == true && value.position!=-1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn10Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        visible: false,
+                        position: value.position
+                    });
+                }
+            }
+            
+            if (key == "documentExtension") {
+                if (value.displayInUI == true && value.position != -1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn10Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        visible: false,
+                        position: value.position
+                    });
+                }
+            }
+            if (key == "documentIconUrl") {
+                if (value.displayInUI == true && value.position!=-1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn10Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        visible: false,
+                        position: value.position
+                    });
+                }
+            }
+            if (key == "documentID") {
+                if (value.displayInUI == true && value.position != -1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn10Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        visible: false,
+                        position: value.position
+                    });
+                }
+            }
+            if (key == "documentOWAUrl") {
+                if (value.displayInUI == true && value.position!=-1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn10Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        visible: false,
+                        position: value.position
+                    });
+                }
+            }
+            if (key == "documentUrl") {
+                if (value.displayInUI == true && value.position != -1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn10Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        visible: false,
+                        position: value.position
+                    });
+                }
+            }
+            if (key == "documentParentUrl" && value.position != -1) {
+                if (value.displayInUI == true) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn10Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        visible: false,
+                        position: value.position
+                    });
+                }
+            }
+            if (key == "documentMatterUrl") {
+                if (value.displayInUI == true && value.position!=-1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.documentConfigContent.GridColumn10Header,
+                        headerCellClass: 'gridclass',
+                        cellClass: 'gridclass',
+                        width: '170',
+                        visible: false,
+                        position: value.position
+                    });
+                }
+            }
+        });     
+        function getSortFunction(fieldName) {
+            return function (col1, col2) {
+                return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
+            }
+        }
+        columnDefs1.sort(getSortFunction("position"));
 
         vm.gridOptions = {
             infiniteScrollDown: true,
@@ -117,17 +390,7 @@
             enableRowSelection: true,
             enableSelectAll: true,
             multiSelect: true,
-            columnDefs: [
-                { field: 'checker', displayName: 'checked', width: '20', cellTemplate: '/app/document/DocumentTemplates/cellCheckboxTemplate.html', headerCellTemplate: '/app/document/DocumentTemplates/headerCheckboxTemplate.html' },
-                { field: 'documentName', displayName: vm.documentConfigContent.GridColumn1Header, width: '278', enableHiding: false, cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html', headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html' },
-                { field: 'documentClient', displayName: vm.documentConfigContent.GridColumn2Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '200', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>', enableCellEdit: true, headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html' },
-                { field: 'documentClientId', displayName: vm.documentConfigContent.GridColumn3Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '150', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentClientId}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>', enableCellEdit: true, },
-                { field: 'documentModifiedDate', displayName: vm.documentConfigContent.GridColumn4Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '195', cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>', headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html' },
-                { field: 'documentOwner', displayName: vm.documentConfigContent.GridColumn5Header, width: '140', headerCellClass: 'gridclass', cellClass: 'gridclass', headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html', visible: false },
-                { field: 'documentVersion', displayName: vm.documentConfigContent.GridColumn6Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '200', headerCellTemplate: $templateCache.get('coldefheadertemplate.html'), visible: false },
-                { field: 'documentCheckoutUser', displayName: vm.documentConfigContent.GridColumn7Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '210', headerCellTemplate: '/app/document/DocumentTemplates/CheckOutHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>', visible: false },
-                { field: 'documentCreatedDate', displayName: vm.documentConfigContent.GridColumn8Header, headerCellClass: 'gridclass', cellClass: 'gridclass', width: '170', headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html', cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>', visible: false },
-            ],
+            columnDefs: columnDefs1,
             enableColumnMenus: false,
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
@@ -1433,8 +1696,8 @@
         vm.getDocumentAssets = function (row) {
             vm.assetsuccess = false;
             var Client = {
-                Id: (row.entity.documentParentUrl + "/" + row.entity.documentName).replace(configs.uri.SPOsiteURL, ""),
-                Name: row.entity.documentMatterUrl.replace(configs.uri.SPOsiteURL, ""),
+                Id: (row.entity.documentParentUrl + "/" + row.entity.documentName + "." + row.entity.documentExtension).replace(configs.uri.SPOsiteURL, ""),
+                Name: row.entity.documentMatterUrl.replace(configs.uri.SPOsiteURL, "").replace(".aspx","").replace("/sitepages/", "/"),
                 Url: row.entity.documentClientUrl
             }
             GetAssets(Client, function (response) {
@@ -1528,4 +1791,3 @@
     });
 
 })();
-
