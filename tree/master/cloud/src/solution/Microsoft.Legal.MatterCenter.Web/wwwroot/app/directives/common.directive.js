@@ -194,7 +194,7 @@
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutLable1Text + ':</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.documentMatter + '</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.documentMatterName + '</div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.GridColumn2Header + ':</div>\
