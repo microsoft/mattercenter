@@ -370,6 +370,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentClient").Key,
                                 searchResult[key].ToString());
                         }
+
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyFileName.ToString().ToLower())
+                        {
+
+                            string fileNameWithOutExt = System.IO.Path.GetFileNameWithoutExtension(searchResult[key].ToString());
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentName").Key,
+                                fileNameWithOutExt);
+                        }
+
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentClientId.ToString().ToLower())
                         {
                             ServiceUtility.AddProperty(documentData,
@@ -393,13 +403,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                             if(searchResult[key].ToString()!=string.Empty)
                             { 
                                 ServiceUtility.AddProperty(documentData,
-                                    configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentName").Key,
+                                    configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentMatterName").Key,
                                     searchResult[key].ToString());
                             }
                             else
                             {
                                 ServiceUtility.AddProperty(documentData,
-                                    configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentName").Key,
+                                    configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentMatterName").Key,
                                     searchResult["Title"].ToString());
                             }
                         }   
@@ -487,8 +497,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentParentUrl").Key,
                                 searchResult[key].ToString());
                             string documentUrl = searchResult[key].ToString().Substring(0, searchResult[key].ToString().LastIndexOf("/"));
-                            string matterUrl = $"{documentUrl.Substring(0, documentUrl.LastIndexOf("/"))}/sitepages/{documentUrl.Split('/')[documentUrl.Split('/').Length - 1]}.aspx";
-
+                            string siteUrl = searchResult["SiteName"].ToString();
+                            string matterGuid = searchResult[key].ToString().ToLower().Replace(siteUrl, "").Split('/')[1];
+                            string matterUrl = $"{siteUrl}/sitepages/{matterGuid}.aspx";
                             ServiceUtility.AddProperty(documentData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentMatterUrl").Key,
                                 matterUrl);
