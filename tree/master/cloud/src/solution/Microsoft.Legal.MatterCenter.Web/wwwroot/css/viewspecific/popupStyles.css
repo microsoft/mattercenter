@@ -179,7 +179,7 @@
 
 .errorPopUpArea {
     height: 50px;
-    margin: -99px 0 0 -44px;
+    margin: -75px 0 0 -44px;
     position: absolute;
     width: 203px;
     z-index: 100;
@@ -213,8 +213,17 @@
         width: 92px;
     }
 
+    .errTextAreaLevel4 {
+        margin: 12px -24px 0px 0px !important;
+        width: 138px !important;
+    }
+
     .selectDefaultContentTypeMessage {
         width: 104px !important;
+    }
+
+    .selectDefaultContentTypeMessageLevel4 {
+        width: 120px !important;
     }
 
     .popUpCommonContent {
@@ -231,5 +240,115 @@
 @media (max-width:850px) {
     .popUpMDTextArea {
         width: 221px;
+    }
+}
+
+.matterAlignCenter {
+    width: 1280px;
+    margin: 0 auto;
+}
+
+.AlignCenterLevel4 {
+    width: 1025px;
+    margin: 0 auto;
+}
+
+.popMarginRight {
+    margin-right: 25px;
+}
+
+.matterType {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+@media (max-width: 1316px) {
+    .matterAlignCenter {
+        width: 249px;
+        margin: 0 auto;
+    }
+
+    .popUpContainerTaxLevel5 {
+        min-height: 1250px !important;
+        max-width: 277px !important;
+        margin-top: 55px !important;
+        margin-right: auto !important;
+        margin-bottom: 55px !important;
+    }
+
+    .matterType {
+        margin-bottom: 0px;
+        margin-top: 25px;
+    }
+
+    .popUpPadding {
+        padding-left: 35px !important;
+    }
+}
+
+.popUpPadding {
+    padding-left: 15px;
+}
+
+
+@media (max-width: 1066px) {
+    .matterAlignCenter {
+        width: 249px;
+        margin: 0 auto;
+    }
+
+    .popUpBodyLevel4 {
+        width: 236px !important;
+    }
+
+    .popAddLevel4 {
+        position: absolute !important;
+        width: 52px !important;
+    }
+
+    .popRemoveLevel4 {
+        position: absolute !important;
+        width: 75px !important;
+        left: 77px !important;
+    }
+
+    .popUpContainerTaxLevel4 {
+        min-height: 1025px !important;
+        max-width: 277px !important;
+        margin-top: 55px !important;
+        margin-right: auto !important;
+        margin-bottom: 55px !important;
+    }
+
+    .popUpBodyBlocksLevel4 {
+        margin-top: 23px !important;
+        width: 161px !important;
+        margin-bottom: 12px !important;
+        margin-left: 30px !important;
+    }
+
+    .defaultMessageDivLevel4 {
+        width: 214px !important;
+    }
+
+    .infoImgLevel4 {
+        margin-top: 0 !important;
+    }
+
+    .defaultMessageLevel4 {
+        width: 187px !important;
+        margin-top: 0 !important;
+        font-size: 0.87em !important;
+        margin-left: 0 !important;
+        float: right !important;
+    }
+
+    .saveDocButtonLevel4 {
+        margin-left: 46px !important;
+        margin-top: 18px !important;
+    }
+
+    .popUpBorderLevel4 {
+        height: 164px !important;
     }
 }
