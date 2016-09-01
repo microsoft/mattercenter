@@ -11,7 +11,7 @@
     },
     "skuName": {
       "type": "string",
-      "defaultValue": "S1",
+      "defaultValue": "B1",
       "allowedValues": [
         "B1",
         "B2",
@@ -38,7 +38,7 @@
     },
     "StorageAccountType": {
       "type": "string",
-      "defaultValue": "Standard_LRS",
+      "defaultValue": "Standard_RAGRS",
       "allowedValues": [
         "Standard_LRS",
         "Standard_ZRS",
