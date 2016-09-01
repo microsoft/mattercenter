@@ -6,7 +6,7 @@ Param(
     [string] [Parameter(Mandatory=$true)] $ResourceGroupLocation,
     [string] [Parameter(Mandatory=$true)] $ResourceGroupName = 'MatterCenterRG',
     [string] [Parameter(Mandatory=$true)] $WebAppName = 'MatterCenterWeb',
-	[string] [Parameter(Mandatory=$true)] $Tenant_id,
+	#[string] [Parameter(Mandatory=$true)] $Tenant_id,
 	[string] [Parameter(Mandatory=$true)] $KeyVault_certificate_expiryDate,
     [switch] $UploadArtifacts,
     [string] $StorageAccountName,
@@ -39,7 +39,8 @@ Set-Content -Path $TemplateParametersFile -Value (ConvertTo-Json -InputObject $p
 
 Import-Module Azure -ErrorAction SilentlyContinue
 #Add-AzureAccount
-Login-AzureRmAccount
+$subsc = Login-AzureRmAccount
+#$Tenant_id = $subsc.Context.Tenant.TenantId
 
 try {
  #   [Microsoft.Azure.Common.Authentication.AzureSession]::ClientFactory.AddUserAgent("VSAzureTools-$UI$($host.name)".replace(" ","_"), "2.8")
