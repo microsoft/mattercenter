@@ -251,8 +251,7 @@ _::-moz-svg-foreign-content, :root .mainArea .notificationContainer {
 .menuTextSelected {
     /*color: #2b579a;*/
     color: rgb(0,114,198);
-text-decoration: underline;
-
+    text-decoration: underline;
 }
 
 .content {
@@ -275,7 +274,7 @@ text-decoration: underline;
         font-size: .875em;
         margin-bottom: 2px;
         color: #666;
-        font-weight:normal;
+        font-weight: normal;
     }
 
     .content select, .content input, .content textarea, .content #documentTemplates {
@@ -453,8 +452,8 @@ text-decoration: underline;
 
     .sectionStep #addMoreLink {
         bottom: -26px;
-        color: rgb(0,114,198);
-        cursor: pointer;
+        color: rgb(0,114,198);
+         cursor: pointer;
         float: right;
         font-family: 'Segoe UI', Calibri, 'Times New Roman';
         font-size: 1em;
@@ -572,7 +571,7 @@ h1.specificName {
     line-height: 15pt;
     min-width: 70px;
     text-align: center;
-    width: 80px;
+    width: 110px;
     margin-left: 485px;
 }
 
@@ -1046,6 +1045,11 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
         height: calc(100% - 128px);
     }
 
+    .saveDocButtonLevel3{
+        margin-top: 10px !important;
+        margin-left: 45px !important;
+    }
+
     .SavePopUpEntries {
         margin-right: 6px;
         margin-left: 156px;
@@ -1093,6 +1097,12 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
         font-size: 9px;
     }
 
+    .defaultMessageLevel3{
+        font-size: 0.875em !important;
+        width: 183px !important;
+    }
+
+
     .popDT {
         height: 150px !important;
     }
@@ -1110,6 +1120,137 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
         margin: auto !important;
     }
 }
+
+
+@media (min-width:850px) and (max-width: 1066px) {
+    .popUpContainerLevel4 {
+        margin: 50px auto 50px auto !important;
+        height: 1046px !important;
+    }
+}
+
+@media (min-width:850px) and (max-width: 1316px) {
+    .popUpContainerLevel5 {
+        margin: 50px auto 50px auto !important;
+        height: 1550px !important;
+    }
+
+    .popAddRemove {
+        width: 161px !important;
+        margin-left: 20px !important;
+        margin-top: 33px !important;
+    }
+
+    .customMatterType {
+        margin-left: 0px !important;
+    }
+
+    .addMarginRight {
+        margin-right: 41px !important;
+    }
+
+    .removeMargin {
+        float: right !important;
+        margin: 0 !important;
+        margin-top: 3px !important;
+    }
+
+    .addMarginTop {
+        margin-top: 10px !important;
+    }
+
+    .popAddWidth {
+        width: 53px !important;
+        position: absolute !important;
+    }
+
+    .popRemoveWidth {
+        position: absolute !important;
+        width: 74px !important;
+        left: 83px;
+    }
+
+    .defaultMessage {
+        width: 216px !important;
+    }
+
+    .infoImg {
+        margin-top: 0px !important;
+    }
+
+    .spanDefaultMessage {
+        width: 188px !important;
+        margin-top: 0px !important;
+    }
+
+    .saveDocButton {
+        position: relative;
+        top: 45px;
+        left: 36px;
+        margin-left: 15px;
+    }
+
+    .iconForwardLevel5 {
+        transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        margin: 0 !important;
+    }
+
+    .iconBackLevel5 {
+        transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        margin: 0 !important;
+    }
+}
+
+.popAddRemove {
+    width: auto;
+}
+
+
+@media (min-width:850px) and (max-width: 1066px) {
+    .popUpContainerTaxLevel4 {
+        min-height: 1046px !important;
+        max-width: 277px !important;
+        margin-top: 55px !important;
+        margin-right: auto !important;
+        margin-bottom: 55px !important;
+    }
+
+    .popUpBodyBlocksLevel4 {
+        margin-top: 23px !important;
+        width: 161px !important;
+        margin-bottom: 12px !important;
+        margin-left: 30px !important;
+    }
+
+    .defaultMessageDivLevel4 {
+        width: 214px !important;
+    }
+
+    .infoImgLevel4 {
+        margin-top: 0 !important;
+    }
+
+    .defaultMessageLevel4 {
+        width: 187px !important;
+        margin-top: 0 !important;
+    }
+
+    .saveDocButtonLevel4 {
+        margin-left: 46px !important;
+        margin-top: 18px;
+    }
+
+    .popUpCommonContentLevel4 {
+        height: 114px !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+    }
+}
+
 
 @media all and (max-width:400px) {
     .popUpContainer {
@@ -1553,7 +1694,7 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
     }
 
     #addMoreLink {
-       /*left: -348px;*/
+        /*left: -348px;*/
     }
 
     #defaultMessageDiv {

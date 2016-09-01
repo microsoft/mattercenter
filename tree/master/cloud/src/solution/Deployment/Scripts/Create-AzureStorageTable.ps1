@@ -56,7 +56,7 @@
                     $StorageLibraryPath = "$env:SystemDrive\Program Files\Microsoft SDKs\Azure\.NET SDK\v2.5\ref\Microsoft.WindowsAzure.Storage.dll"
 
                     #Getting Azure storage account key
-                    
+                    $StorageAccountName = $StorageAccountName.ToLower();
                     $Creds = New-Object Microsoft.WindowsAzure.Storage.Auth.StorageCredentials("$StorageAccountName","$StorageAccountKey")
                     $CloudStorageAccount = New-Object Microsoft.WindowsAzure.Storage.CloudStorageAccount($Creds, $true)
                     $CloudTableClient = $CloudStorageAccount.CreateCloudTableClient()
