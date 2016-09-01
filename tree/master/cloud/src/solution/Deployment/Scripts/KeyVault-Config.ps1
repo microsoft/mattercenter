@@ -100,7 +100,10 @@ function Create-KeyVaultSecrets
 		#[Parameter (Mandatory=$true)] 
 		#[string] $AppKey ,
 		[Parameter (Mandatory=$true)] 
-		[string] $RedisCacheHostName 
+		[string] $RedisCacheHostName ,
+		[Parameter (Mandatory=$true)] 
+		[string] $AppInsightsInstrumentationKey
+		
 	) 
  
 	$secretvalue = ConvertTo-SecureString $AdminUserName -AsPlainText -Force
@@ -136,6 +139,10 @@ function Create-KeyVaultSecrets
 	$secretvalue = ConvertTo-SecureString $ClientId   -AsPlainText -Force
 
 	$secret = Set-AzureKeyVaultSecret -VaultName $VaultName -Name 'ADAL-clientId' -SecretValue $secretvalue
+
+	$secretvalue = ConvertTo-SecureString $AppInsightsInstrumentationKey  -AsPlainText -Force
+
+	$secret = Set-AzureKeyVaultSecret -VaultName $VaultName -Name 'ApplicationInsights-InstrumentationKey' -SecretValue $secretvalue
 }
 
 
@@ -165,6 +172,8 @@ $kvADApp
 
 $storageConnString =  [string]::format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", $storageAccount_name, $StorageAccountKey.Item(0).Value)
 
+$AppInsightsApp = Get-AzureRmResource -ResourceType "Microsoft.Insights/components" -ResourceGroupName $ResourceGroupName -ResourceName $components_AppInsights_name
+
 Write-Host "Writing secrets to key vault..."
-Create-KeyVaultSecrets -VaultName $vaults_KeyVault_name -AdminUserName $creds.UserName -AdminPassword $creds.Password -CloudStorageConnectionString $storageConnString -ClientId $kvADApp.ApplicationId.Guid.ToString() -RedisCacheHostName $Redis_cache_name 
+Create-KeyVaultSecrets -VaultName $vaults_KeyVault_name -AdminUserName $creds.UserName -AdminPassword $creds.Password -CloudStorageConnectionString $storageConnString -ClientId $kvADApp.ApplicationId.Guid.ToString() -RedisCacheHostName $Redis_cache_name -AppInsightsInstrumentationKey $AppInsightsApp.Properties.InstrumentationKey 
 
