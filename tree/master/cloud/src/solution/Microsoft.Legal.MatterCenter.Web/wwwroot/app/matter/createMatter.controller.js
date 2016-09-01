@@ -438,7 +438,10 @@
             //    //cm.popupContainerBackground = "Show";
             //    //cm.popupContainer = "Show";
             //}
-
+            cm.selectMatterType = function (value) {
+                cm.popupContainer = "Show";
+                 cm.popupContainerBackground = "Show";
+            }
             //calls this function when selectType button clicks
             //cm.selectMatterType = function (value) {
 
