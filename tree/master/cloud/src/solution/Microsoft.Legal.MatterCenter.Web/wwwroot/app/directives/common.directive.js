@@ -106,6 +106,9 @@
                 $(element).click(function (e) {
                     var obj = "";
                     obj = eval('(' + attrs.details + ')');
+                    if (obj.matterSubAreaOfLaw == "") {
+                        obj.matterSubAreaOfLaw = "NA";
+                    }
                     var actualcontent = "";
                     actualcontent = '<div class="" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
                                    <div class="FlyoutBoxContent flyoutwidth">\
