@@ -73,6 +73,9 @@
                 </div>
                 <div class="col-xs-12 pad0 marginTop10">
                     {{vm.settingsConfigs.Label11DefaultValue3HeaderText}}
+                    <!--<div class="addmatterType">
+                        <a id="" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}" ng-click="cm.selectMatterType()" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span> Add/Remove Types</a>
+                    </div>-->
                 </div>
                 <div class="col-xs-12 pad0 marginTop10">
                     <div class="col-xs-12 col-sm-5 pad0">
@@ -124,7 +127,6 @@
                                 <a id="addMorePermissions" class="pad0" ng-click="vm.addNewAssignPermissions()">{{vm.settingsConfigs.Label19DefaultValue4AddMoreText}}</a>
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="col-xs-12 pad0 marginTop10">
@@ -195,7 +197,7 @@
                     <div class="col-xs-12 col-sm-5 pad0">
                         <div class="row margin0">
                             <div class="col-xs-12 defaultFontStyle displayInline pad0">
-                               {{vm.settingsConfigs.Label26Section2Text}}
+                                {{vm.settingsConfigs.Label26Section2Text}}
                             </div>
                             <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">
                                 {{vm.settingsConfigs.Label27Section2DescriptionText}}
@@ -252,7 +254,7 @@
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
                         <span class="marginRight10"> <input type="radio" ng-model="vm.showmatterid" name="matterid" value="{{vm.settingsConfigs.Radio1Option1Text}}" /> {{vm.settingsConfigs.Radio1Option1Text}}</span>
-                        <span class="marginRight10"><input type="radio" ng-model="vm.showmatterid" name="matterid" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}</span>
+                        <span class="marginRight10" ng-click="vm.showMatterId()"><input type="radio" ng-model="vm.showmatterid" name="matterid" value="{{vm.settingsConfigs.Radio1Option2Text}}" /> {{vm.settingsConfigs.Radio1Option2Text}}</span>
                     </div>
                 </div>
                 <div class="col-xs-12 pad0 marginTop10">
@@ -264,8 +266,8 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-7 pad0 marginTop7">
-                        <span class="marginRight10"> <input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option1Text}}"/> {{vm.settingsConfigs.Radio2Option1Text}}</span>
-                        <span class="marginRight10"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option2ValueText}}" /> {{vm.settingsConfigs.Radio2Option2Text}}</span>
+                        <span class="marginRight10"> <input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option1Text}}" /> {{vm.settingsConfigs.Radio2Option1Text}}</span>
+                        <span class="marginRight10"><input type="radio"  ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option2ValueText}}" /> {{vm.settingsConfigs.Radio2Option2Text}}</span>
                         <span class="marginRight10" ng-if="vm.showmatterid=='Yes'"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option3Text}}" /> {{vm.settingsConfigs.Radio2Option3Text}}</span>
                     </div>
                 </div>
@@ -275,9 +277,9 @@
                 </div>
                 <div class="defaultFontStyle col-xs-12 pad0" id="successMessage" ng-if="vm.successmessage">{{vm.settingsConfigs.Label33Section2Text}} <span class="clientLinks" id="goToClients" ng-click="vm.showSetting()" title="{{vm.settingsConfigs.Label34Section2Text}}">{{vm.settingsConfigs.Label34Section2Text}}</span>.</div>
             </div>
-
         </div>
     </div>
+    <!--<div id="taxonomyData" ng-include src="'../app/matter/MatterTemplates/taxonomyTemplate.html'"></div>-->
     <div id="loadingImageContainer" style="top:25%;left:47%">
         <div class="lazyLoading" ng-hide="vm.lazyloader">
             <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.settingsConfigs.Image.LoadingAltText}}" title="{{vm.settingsConfigs.Image.LoadingAltText}}" />

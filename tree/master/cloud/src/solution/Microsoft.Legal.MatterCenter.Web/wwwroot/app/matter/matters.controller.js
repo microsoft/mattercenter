@@ -64,7 +64,24 @@
 
             };
 
+            //#region for setting the dynamic width to grid
+            vm.setWidth = function () {
+                var width = $window.innerWidth;
+                angular.element(".ui-grid-viewport").css('max-width', width);
+                angular.element(".ui-grid-render-container").css('max-width', width);
+                screenHeight = $window.screen.availHeight;
+                if (screenHeight <= 768) {
+                    vm.searchResultsLength = 17;
+                } else if (screenHeight <= 1024 && screenHeight >= 769) {
+                    vm.searchResultsLength = 38;
+                } else if (screenHeight <= 1080 && screenHeight >= 1025) {
+                    vm.searchResultsLength = 42;
+                }
+            };
 
+            vm.setWidth();
+
+            //#endregion
 
             //For setting dynamic height to the grid
             vm.getTableHeight = function () {
@@ -166,6 +183,7 @@
                             displayName: vm.matterConfigContent.GridColumn6Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
+                            cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterSubAreaOfLaw==""?"NA":row.entity.matterSubAreaOfLaw}}</div>',
                             headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
                             width: "210",
                             visible: false,
@@ -1175,7 +1193,7 @@
                 },
                 SearchObject: {
                     PageNumber: 1,
-                    ItemsPerPage: "17",
+                    ItemsPerPage: vm.searchResultsLength,
                     SearchTerm: "",
                     Filters: {
                         AOLList: [],
