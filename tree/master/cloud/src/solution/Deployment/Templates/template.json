@@ -4,7 +4,48 @@
   "parameters": {
     "webSite_name": {
       "defaultValue": "MatterCenterWeb",
-      "type": "String"
+      "type": "string",
+      "metadata": {
+        "description": "Enter the webapp name to be created. This will be part of the URL of your app. It should be unique across entire Azure."
+      }
+    },
+    "skuName": {
+      "type": "string",
+      "defaultValue": "S1",
+      "allowedValues": [
+        "B1",
+        "B2",
+        "B3",
+        "S1",
+        "S2",
+        "S3",
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "metadata": {
+        "description": "Describes plan's pricing tier and instance size. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+      }
+    },
+    "skuCapacity": {
+      "type": "int",
+      "defaultValue": 1,
+      "minValue": 1,
+      "metadata": {
+        "description": "Describes plan's instance count"
+      }
+    },
+    "StorageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
     }
   },
   "variables": {
@@ -123,25 +164,20 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "sku": {
-        "name": "Standard_RAGRS",
-        "tier": "Standard"
+        "name": "[parameters('StorageAccountType')]"
       },
       "kind": "Storage",
       "name": "[variables('storageAccount_name')]",
       "apiVersion": "2016-01-01",
       "location": "[resourceGroup().location]",
       "properties": {},
-      "resources": [],
       "dependsOn": []
     },
     {
       "type": "Microsoft.Web/serverfarms",
       "sku": {
-        "name": "F1",
-        "tier": "Free",
-        "size": "F1",
-        "family": "F",
-        "capacity": 0
+        "name": "[parameters('skuName')]",
+        "capacity": "[parameters('skuCapacity')]"
       },
       "name": "[variables('serverfarms_WebPlan_name')]",
       "apiVersion": "2015-08-01",
