@@ -94,7 +94,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
                 string appKey = generalSettings.AppKey;
                 string aadInstance = generalSettings.AADInstance;
                 string tenant = generalSettings.Tenant;
-                string resource = generalSettings.Resource;                
+                string resource = generalSettings.SiteURL;                
                 ClientCredential clientCred = new ClientCredential(clientId, appKey);
                 string accessToken = Context.Request.Headers["Authorization"].ToString().Split(' ')[1];
                 UserAssertion userAssertion = new UserAssertion(accessToken);
