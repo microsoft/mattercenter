@@ -6,8 +6,6 @@ Param(
     [string] [Parameter(Mandatory=$true)] $ResourceGroupLocation,
     [string] [Parameter(Mandatory=$true)] $ResourceGroupName = 'MatterCenterRG',
     [string] [Parameter(Mandatory=$true)] $WebAppName = 'MatterCenterWeb',
-	#[string] [Parameter(Mandatory=$true)] $Tenant_id,
-	[string] [Parameter(Mandatory=$true)] $KeyVault_certificate_expiryDate,
     [switch] $UploadArtifacts,
     [string] $StorageAccountName,
     [string] $StorageAccountResourceGroupName, 
@@ -19,19 +17,18 @@ Param(
     [string] $DSCSourceFolder = '..\DSC'
 )
 
-
+$WebAppName = $WebAppName + ((Get-Date).ToUniversalTime()).ToString('MMddHHmm')
 $Redis_cache_name = $WebAppName+"RedisCache"
 $autoscalesettings_name = $WebAppName+"ScaleSettings"
 $components_AppInsights_name = $WebAppName+"AppInsights"
 $vaults_KeyVault_name = $WebAppName+"KeyVault"
-$storageAccount_name = $WebAppName+"stg"
+$storageAccount_name = $WebAppName
 $serverfarms_WebPlan_name = $WebAppName+"WebPlan"
-$Web_ADApp_Name = $WebAppName+"WebADApp"
-$KeyVault_ADApp_Name = $WebAppName+"KVADApp"
+$ADApp_Name = $WebAppName+"ADApp"
 
 $storageAccount_name 
-
-Write-Host "Reading from template.parameters.json file..."
+$ADApplicationId = ""
+Write-Output "Reading from template.parameters.json file..."
 $params = ConvertFrom-Json -InputObject (Get-Content -Path $TemplateParametersFile -Raw)
 $params.parameters.webSite_name.value = $WebAppName
 Set-Content -Path $TemplateParametersFile -Value (ConvertTo-Json -InputObject $params -Depth 3)
@@ -128,7 +125,7 @@ New-AzureRmResourceGroupDeployment -Name ((Get-ChildItem $TemplateFile).BaseName
 
 $creds = Get-Credential
 
-Write-Host "Getting the storage key to write to key vault..."
+Write-Output "Getting the storage key to write to key vault..."
 $StorageAccountKey = Get-AzureRmStorageAccountKey -Name $storageAccount_name -ResourceGroupName $ResourceGroupName
 
 $custScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'KeyVault-Config.ps1')
