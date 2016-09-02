@@ -105,7 +105,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             try
             {
                 //If the current email is part of current organization, no need to check for validity of the user email
-                if (email.Trim().ToLower().IndexOf(generalSettings.OrgDomainName.Trim().ToLower()) > 0)
+                if (email.Trim().ToLower().IndexOf(generalSettings.Tenant.Trim().ToLower()) > 0)
                 {
                     return true;
                 }
@@ -144,7 +144,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             try
             {
                 //If the current email is part of current organization, no need to check for validity of the user
-                if(email.Trim().ToLower().IndexOf(generalSettings.OrgDomainName.Trim().ToLower()) >0)
+                if(email.Trim().ToLower().IndexOf(generalSettings.Tenant.Trim().ToLower()) >0)
                 {
                     return true;
                 }

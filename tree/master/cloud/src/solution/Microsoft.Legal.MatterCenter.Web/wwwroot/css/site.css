@@ -94,7 +94,7 @@ textarea {
 .viewportlg {
     overflow: auto !important;
     overflow-y:scroll !important;
-    height:510px !important;
+    /*height:510px !important;*/
 }
 
 @media screen and (max-width:767px) and (min-width: 268px) {
