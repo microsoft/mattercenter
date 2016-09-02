@@ -71,11 +71,11 @@
                 angular.element(".ui-grid-render-container").css('max-width', width);
                 screenHeight = $window.screen.availHeight;
                 if (screenHeight <= 768) {
-                    vm.searchResultsLength = 17;
+                    vm.searchResultsLength = 20;
                 } else if (screenHeight <= 1024 && screenHeight >= 769) {
-                    vm.searchResultsLength = 38;
+                    vm.searchResultsLength = 30;
                 } else if (screenHeight <= 1080 && screenHeight >= 1025) {
-                    vm.searchResultsLength = 42;
+                    vm.searchResultsLength = 40;
                 }
             };
 
@@ -426,22 +426,7 @@
             //#region for setting the dynamic width to grid
             var screenHeight = 0;
             vm.searchResultsLength = 0;
-            vm.setWidth = function () {
-                var width = $window.innerWidth;
-                angular.element(".ui-grid-viewport").css('max-width', width);
-                angular.element(".ui-grid-render-container").css('max-width', width);
-                screenHeight = $window.screen.availHeight;
-                if (screenHeight <= 768) {
-                    vm.searchResultsLength = 17;
-                } else if (screenHeight <= 1024 && screenHeight >= 769) {
-                    vm.searchResultsLength = 38;
-                } else if (screenHeight <= 1080 && screenHeight >= 1025) {
-                    vm.searchResultsLength = 42;
-                }
-                $interval(function () { angular.element('.ui-grid-menu-inner').css('height', $window.innerHeight - 300); }, 1200, 3);
-            };
-
-            vm.setWidth();
+            
 
             //#endregion
 

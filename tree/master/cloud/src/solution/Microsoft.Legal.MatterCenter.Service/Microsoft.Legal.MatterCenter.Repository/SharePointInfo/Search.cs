@@ -23,6 +23,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Microsoft.SharePoint.Client.Utilities;
 using Microsoft.SharePoint.ApplicationPages.ClientPickerQuery;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -43,13 +44,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ListNames listNames;
         private SharedSettings sharedSettings;
         private ErrorSettings errorSettings;
+        private IConfigurationRoot configuration;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="spoAuthorization"></param>
         /// <param name="generalSettings"></param>
         /// <param name="searchSettings"></param>
-        public Search(ISPOAuthorization spoAuthorization,             
+        public Search(ISPOAuthorization spoAuthorization,
+            IConfigurationRoot configuration,
             ICustomLogger customLogger,            
             IUsersDetails userDetails,
             ISPList spList,
@@ -72,6 +75,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.listNames = listNames.Value;
             this.sharedSettings = sharedSettings.Value;
             this.errorSettings = errorSettings.Value;
+            this.configuration = configuration;
         }
 
         #region Public Methods
@@ -126,9 +130,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     managedProperties.Add(searchSettings.ManagedPropertyDescription);
                     managedProperties.Add(searchSettings.ManagedPropertySiteName);
                     managedProperties.Add(searchSettings.ManagedPropertyLastModifiedTime);
-                    managedProperties.Add(searchSettings.ManagedPropertyPracticeGroup);
-                    managedProperties.Add(searchSettings.ManagedPropertyAreaOfLaw);
-                    managedProperties.Add(searchSettings.ManagedPropertySubAreaOfLaw);
+                    var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
+                    foreach (var key in managedColumns)
+                    {
+                        managedProperties.Add("MC" + key.Value);
+                    }
                     managedProperties.Add(searchSettings.ManagedPropertyMatterId);
                     managedProperties.Add(searchSettings.ManagedPropertyCustomTitle);
                     managedProperties.Add(searchSettings.ManagedPropertyPath);
@@ -1452,9 +1458,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
             matterMetadata[searchSettings.ManagedPropertyTitle] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyTitle]);
             matterMetadata[searchSettings.ManagedPropertySiteName] = DecodeValues(matterMetadata[searchSettings.ManagedPropertySiteName]);
             matterMetadata[searchSettings.ManagedPropertyDescription] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyDescription]);
-            matterMetadata[searchSettings.ManagedPropertyPracticeGroup] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyPracticeGroup]);
-            matterMetadata[searchSettings.ManagedPropertyAreaOfLaw] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyAreaOfLaw]);
-            matterMetadata[searchSettings.ManagedPropertySubAreaOfLaw] = DecodeValues(matterMetadata[searchSettings.ManagedPropertySubAreaOfLaw]);
+            var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
+            foreach (var key in managedColumns)
+            {
+                matterMetadata["MC" + key.Value] = DecodeValues(matterMetadata["MC" + key.Value]);
+            }
             matterMetadata[searchSettings.ManagedPropertyCustomTitle] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyCustomTitle]);
             matterMetadata[searchSettings.ManagedPropertyPath] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyPath]);
             matterMetadata[searchSettings.ManagedPropertyMatterName] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyMatterName]);
