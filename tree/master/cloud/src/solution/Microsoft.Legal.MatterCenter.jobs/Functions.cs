@@ -306,7 +306,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                         umd.UpdateUserPermissionsForMatter(originalMatter, configuration, password);
 
                                         //Update permissions for external users in Catalog Site Collection
-                                        using (var catalogContext = new ClientContext(configuration["Catalog:CatalogUrl"]))
+                                        using (var catalogContext = new ClientContext(configuration["General:CentralRepositoryUrl"]))
                                         {
                                             catalogContext.Credentials =
                                                 new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);

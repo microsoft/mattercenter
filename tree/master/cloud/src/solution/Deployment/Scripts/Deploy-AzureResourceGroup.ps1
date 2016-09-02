@@ -6,6 +6,10 @@ Param(
     [string] [Parameter(Mandatory=$true)] $ResourceGroupLocation,
     [string] [Parameter(Mandatory=$true)] $ResourceGroupName = 'MatterCenterRG',
     [string] [Parameter(Mandatory=$true)] $WebAppName = 'MatterCenterWeb',
+	[string] [Parameter(Mandatory=$true)] $SiteURL,
+	[string] [Parameter(Mandatory=$true)] $CentralRepositoryUrl,	
+	[string] [Parameter(Mandatory=$true)] $SearchResultSourceId,
+
     [switch] $UploadArtifacts,
     [string] $StorageAccountName,
     [string] $StorageAccountResourceGroupName, 
@@ -16,7 +20,8 @@ Param(
     [string] $AzCopyPath = '..\Tools\AzCopy.exe',
     [string] $DSCSourceFolder = '..\DSC'
 )
-
+$logFileName = "MCDeploy"+(Get-Date).ToString('yyyyMMdd-HHmmss')+".log"
+Start-Transcript -path $logFileName
 $WebAppName = $WebAppName + ((Get-Date).ToUniversalTime()).ToString('MMddHHmm')
 $Redis_cache_name = $WebAppName+"RedisCache"
 $autoscalesettings_name = $WebAppName+"ScaleSettings"
@@ -25,7 +30,7 @@ $vaults_KeyVault_name = $WebAppName+"KeyVault"
 $storageAccount_name = $WebAppName
 $serverfarms_WebPlan_name = $WebAppName+"WebPlan"
 $ADApp_Name = $WebAppName+"ADApp"
-
+$global:thumbPrint = ""
 $storageAccount_name 
 $ADApplicationId = ""
 Write-Output "Reading from template.parameters.json file..."
@@ -37,6 +42,7 @@ Set-Content -Path $TemplateParametersFile -Value (ConvertTo-Json -InputObject $p
 Import-Module Azure -ErrorAction SilentlyContinue
 #Add-AzureAccount
 $subsc = Login-AzureRmAccount
+$global:TenantName = $subsc.Context.Tenant.Domain
 #$Tenant_id = $subsc.Context.Tenant.TenantId
 
 try {
@@ -136,3 +142,5 @@ Invoke-Expression $storageScriptFile
 
 $webJobScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'Create-MatterCenterWebJob.ps1')
 Invoke-Expression $webJobScriptFile
+
+Stop-Transcript 

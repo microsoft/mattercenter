@@ -50,6 +50,7 @@ function Create-ADAppFromCert
 	$dnsname =  [string]::format("{0}.azurewebsites.net", $WebAppName)
  
     $crt = New-SelfSignedCertificate -DnsName $dnsname -CertStoreLocation cert:\CurrentUser\My
+	$global:thumbPrint = $crt.Thumbprint
     
     #$mypwd = ConvertTo-SecureString -String $creds.Password -Force –AsPlainText
  
@@ -145,8 +146,8 @@ $appURL = [string]::format("https://{0}.azurewebsites.net", $WebAppName)
 
 #creating the keyVault
 Write-Output "Creating Keyvault..."
-New-AzureRmKeyVault -VaultName $vaults_KeyVault_name -ResourceGroupName $ResourceGroupName -Location $ResourceGroupLocation
-
+$kvSettings = New-AzureRmKeyVault -VaultName $vaults_KeyVault_name -ResourceGroupName $ResourceGroupName -Location $ResourceGroupLocation
+$kvSettings
 $kvADApp = Create-ADAppFromCert -ADApplicationName $ADApp_Name -applicationURL $appURL
 
 Write-Output "END: creating AD app. Return value is ..."
@@ -164,6 +165,8 @@ For ($i=0; $i -lt $kvADApp.Length; $i++) {
 		}
     }
 
+	
+
 Write-Output "Writing for AppGuid $ADApplicationId"
 
 $storageConnString =  [string]::format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", $storageAccount_name, $StorageAccountKey.Item(0).Value)
@@ -172,4 +175,16 @@ $AppInsightsApp = Get-AzureRmResource -ResourceType "Microsoft.Insights/componen
 
 Write-Output "Writing secrets to key vault..."
 Create-KeyVaultSecrets -VaultName $vaults_KeyVault_name -AdminUserName $creds.UserName -AdminPassword $creds.Password -CloudStorageConnectionString $storageConnString -ClientId  $ADApplicationId -RedisCacheHostName $Redis_cache_name -AppInsightsInstrumentationKey $AppInsightsApp.Properties.InstrumentationKey 
+Write-Host "Updating Matter Web App Settings..."
+$appSettings = @{ `
+				"General:Tenant" = $global:TenantName; `
+				"General:SiteURL" = $SiteURL; `
+				"General:CentralRepositoryUrl" = $CentralRepositoryUrl; `
+				"General:KeyVaultURI" = $kvSettings.VaultUri; `
+				"General:KeyVaultClientID" = $ADApplicationId; `
+				"General:KeyVaultCertThumbPrint" = $global:thumbPrint;`
+				"Search:SearchResultSourceID" = $SearchResultSourceId;`
+			}
+			Set-AzureWebsite -Name $WebAppName -AppSettings $appSettings		
 
+Write-Host "Updated Matter Web App Settings"
