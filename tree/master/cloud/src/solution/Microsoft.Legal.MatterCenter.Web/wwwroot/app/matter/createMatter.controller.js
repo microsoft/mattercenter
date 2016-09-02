@@ -9,6 +9,7 @@
             $rootScope.pageIndex = "4";
             cm.selectedConflictCheckUser = undefined;
             $rootScope.bodyclass = "";
+            $rootScope.profileClass = "";
             cm.blockedUserName = undefined;
             cm.defaultConfilctCheck = false;
             cm.createContent = uiconfigs.CreateMatter;
@@ -45,6 +46,7 @@
             if (cm.taxonomyHierarchyLevels >= 5) {
                 cm.levelFiveList = [];
             }
+
 
             //var managedColumns = { }
             //   for (var i = 0; i < cm.taxonomyHierarchyLevels; i++) {

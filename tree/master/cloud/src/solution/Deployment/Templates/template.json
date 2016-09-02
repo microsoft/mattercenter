@@ -53,10 +53,8 @@
     "autoscalesettings_name": "[concat(parameters('webSite_name'), 'ScaleSettings')]",
     "components_AppInsights_name": "[concat(parameters('webSite_name'), 'AppInsights')]",
     "vaults_KeyVault_name": "[concat(parameters('webSite_name'), 'KeyVault')]",
-    "storageAccount_name": "[concat(toLower(parameters('webSite_name')), 'stg')]",
-    "serverfarms_WebPlan_name": "[concat(parameters('webSite_name'), 'WebPlan')]",
-    "Web_ADApp_Name": "[concat(parameters('webSite_name'), 'WebADApp')]",
-    "KeyVault_ADApp_Name": "[concat(parameters('webSite_name'), 'KVADApp')]"
+    "storageAccount_name": "[toLower(parameters('webSite_name'))]",
+    "serverfarms_WebPlan_name": "[concat(parameters('webSite_name'), 'WebPlan')]"
   },
   "resources": [
     {

@@ -317,7 +317,7 @@
                     IsTaskSelected: vm.getBoolValues(vm.tasks),
                     ClientUrl: vm.clienturl,
                     CachedItemModifiedDate: vm.cacheItemModifiedDate,
-                    UserId: [],                    
+                    UserId: [],
                     ShowRole: vm.getBoolValues(vm.showrole),
                     ShowMatterId: vm.getBoolValues(vm.showmatterid),
                     MatterIdType: vm.showmatterconfiguration
@@ -337,6 +337,14 @@
                 });
             }
             //#endregion
+
+            //#region for setting matter Id values
+            vm.showMatterId = function () {
+                vm.showmatterid == 'Yes';
+                vm.showmatterconfiguration = vm.settingsConfigs.Radio2Option1Text;
+            }
+
+            //#endegion
 
             //#region to get bool values
             vm.getBoolValues = function (value) {
