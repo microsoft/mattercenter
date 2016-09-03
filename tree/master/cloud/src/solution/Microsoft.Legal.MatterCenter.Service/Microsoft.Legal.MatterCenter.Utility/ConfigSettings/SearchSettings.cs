@@ -50,6 +50,8 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string MatterConfigurationTitleValue { get; set; }
         public string ColumnNameModifiedDate { get; set; }
         public string MatterConfigurationColumn { get; set; }
+        public string ManagedPropertySubAreaOfLaw1 { get; set; }
+        public string ManagedPropertySubAreaOfLaw2 { get; set; }
         #endregion
 
         #region Document Search Related Properties

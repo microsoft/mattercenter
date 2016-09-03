@@ -56,7 +56,7 @@
                     $StorageLibraryPath = "$env:SystemDrive\Program Files\Microsoft SDKs\Azure\.NET SDK\v2.5\ref\Microsoft.WindowsAzure.Storage.dll"
 
                     #Getting Azure storage account key
-                    
+                    $StorageAccountName = $StorageAccountName.ToLower();
                     $Creds = New-Object Microsoft.WindowsAzure.Storage.Auth.StorageCredentials("$StorageAccountName","$StorageAccountKey")
                     $CloudStorageAccount = New-Object Microsoft.WindowsAzure.Storage.CloudStorageAccount($Creds, $true)
                     $CloudTableClient = $CloudStorageAccount.CreateCloudTableClient()
@@ -102,31 +102,36 @@
     }
 }
 
-Function Create-AzureTableStorage
-{
-    [CmdletBinding(SupportsShouldProcess=$true)]
+Function Create-AzureStorageTable{
+	[CmdletBinding(SupportsShouldProcess=$true)]
     Param
     (
-	    [Parameter(Mandatory=$true)]
+	[Parameter(Mandatory=$true)]
         [String]$ResourceGroupName,
         [Parameter(Mandatory=$true)]
         [String]$StorageAccountName,
 	    [Parameter(Mandatory=$true)]
         [String]$StorageAccountKey,
         [Parameter(Mandatory=$true)]
-        [String]$TableName      
-	
-    )  
+        [String]$TableName
+    )
+	#Getting Azure storage account key
+    $StorageAccountName = $StorageAccountName.ToLower();
+    $Creds = New-Object Microsoft.WindowsAzure.Storage.Auth.StorageCredentials("$StorageAccountName","$StorageAccountKey")
+    $CloudStorageAccount = New-Object Microsoft.WindowsAzure.Storage.CloudStorageAccount($Creds, $true)
+    $CloudTableClient = $CloudStorageAccount.CreateCloudTableClient()
+    $Table = $CloudTableClient.GetTableReference($TableName)
 
-    #Import-Module "$PSScriptRoot\ManageTableStorageWithCsvFile\ManageTableStorageWithCsvFile.psm1"
-    $Path = "$PSScriptRoot\ManageTableStorageWithCsvFile\AzureStorageTable.csv"
-    #Get-Module -Name ManageTableStorageWithCsvFile
-    #Get-Command -Module ManageTableStorageWithCsvFile
-    Import-AzureTableStorage -ResourceGroupName $ResourceGroupName -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey -TableName $TableName -Path $Path
-    
+    #Create a Table Storage
+    Write-Verbose "Creating a table storage named '$TableName'."
+    #Try to create table if it does not exist
+    $Table.CreateIfNotExists() | Out-Null
 }
+
 
 $Path = "$PSScriptRoot\ManageTableStorageWithCsvFile\AzureStorageTable.csv"
 
 Import-AzureTableStorage -ResourceGroupName $ResourceGroupName -StorageAccountName $storageAccount_name -StorageAccountKey $StorageAccountKey.Item(0).Value -TableName "MatterCenterConfiguration" -Path $Path
-#Create-AzureTableStorage -ResourceGroupName $ResourceGroupName -StorageAccountName $storageAccount_name -StorageAccountKey $StorageAccountKey.Item(0).Value -TableName "MatterCenterConfiguration"
+Create-AzureStorageTable -ResourceGroupName $ResourceGroupName -StorageAccountName $storageAccount_name -StorageAccountKey $StorageAccountKey.Item(0).Value -TableName "ExternalAccessRequests"
+Create-AzureStorageTable -ResourceGroupName $ResourceGroupName -StorageAccountName $storageAccount_name -StorageAccountKey $StorageAccountKey.Item(0).Value -TableName "MatterRequests"
+Create-AzureStorageTable -ResourceGroupName $ResourceGroupName -StorageAccountName $storageAccount_name -StorageAccountKey $StorageAccountKey.Item(0).Value -TableName "SPOLogTable"

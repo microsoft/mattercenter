@@ -48,3 +48,6 @@ tree/master/cloud/src/solution/*/pkgobj/
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Jasmine/lib
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/wwwroot/lib
 /tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Web/wwwroot/js/site.min.js
+/tree/master/cloud/src/solution/Deployment/Scripts/MatterWebApp.cer
+*.log
+/tree/master/cloud/src/solution/Deployment/Scripts/MatterWebApp.pfx

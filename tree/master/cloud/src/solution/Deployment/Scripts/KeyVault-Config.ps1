@@ -35,16 +35,6 @@ function Create-ADAppFromCert
         [Parameter(Mandatory=$true)]
 		[ValidateNotNullOrEmpty()]
 		[string]
-		$certFileName,
-
-        [Parameter(Mandatory=$true)]
-		[ValidateNotNullOrEmpty()]
-		[string]
-		$certExpiryDate,
-        
-        [Parameter(Mandatory=$true)]
-		[ValidateNotNullOrEmpty()]
-		[string]
 		$ADApplicationName,
 
         [Parameter(Mandatory=$true)]
@@ -57,24 +47,30 @@ function Create-ADAppFromCert
 
     #$certFileName = "MCWebApp.cer"
 
-    $x509 = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
+	$dnsname =  [string]::format("{0}.azurewebsites.net", $WebAppName)
+ 
+    $crt = New-SelfSignedCertificate -DnsName $dnsname -CertStoreLocation cert:\CurrentUser\My -KeySpec KeyExchange
+	$global:thumbPrint = $crt.Thumbprint
+    
+    #$mypwd = ConvertTo-SecureString -String $creds.Password -Force –AsPlainText
+ 
+    $expfxprt = Export-PfxCertificate -cert $crt -FilePath "$PSScriptRoot\MatterWebApp.pfx" -Password  $creds.Password
+ 
+    Export-Certificate -Cert $crt -FilePath "$PSScriptRoot\MatterWebApp.cer"
+ 
+    New-AzureRmWebAppSSLBinding -ResourceGroupName $ResourceGroupName -WebAppName $WebAppName.ToLowerInvariant() -CertificateFilePath "$PSScriptRoot\MatterWebApp.pfx" -CertificatePassword $creds.GetNetworkCredential().Password -Name $dnsname -SslState Disabled
+    
+    Write-Host "Certificate uploaded successfully.."
 
-    $x509.Import($certFileName)
-
-    $credValue = [System.Convert]::ToBase64String($x509.GetRawCertData())
-
+	$credValue = [System.Convert]::ToBase64String($crt.GetRawCertData())
+ 
     $now = [System.DateTime]::Now
+	Write-Host "Creating Azure RM AD Application"
 
-    # this is where the end date from the cert above is used
-    $yearfromnow = [System.DateTime]::Parse($certExpiryDate)
-
-    # will create a new AD ASpplication for the KeyVault and associate it with the certificate provided
-    $adapp = New-AzureRmADApplication -DisplayName $ADApplicationName -HomePage $applicationURL -IdentifierUris $applicationURL -CertValue $credValue -StartDate $now -EndDate $yearfromnow
-	$adapp
-    $sp = New-AzureRmADServicePrincipal -ApplicationId $adapp.ApplicationId
-	$sp
-
-    #$kv =  Get-AzureRMKeyVault 
+	$adapp = New-AzureRmADApplication -DisplayName $ADApplicationName -HomePage $applicationURL -IdentifierUris $applicationURL -CertValue $credValue -StartDate $crt.NotBefore -EndDate $crt.NotAfter
+    
+	$sp = New-AzureRmADServicePrincipal -ApplicationId $adapp.ApplicationId
+	
     Set-AzureRmKeyVaultAccessPolicy -VaultName $vaults_KeyVault_name -ServicePrincipalName $sp.ApplicationId -PermissionsToSecrets all -ResourceGroupName $ResourceGroupName
 
     return $adapp
@@ -100,7 +96,10 @@ function Create-KeyVaultSecrets
 		#[Parameter (Mandatory=$true)] 
 		#[string] $AppKey ,
 		[Parameter (Mandatory=$true)] 
-		[string] $RedisCacheHostName 
+		[string] $RedisCacheHostName ,
+		[Parameter (Mandatory=$true)] 
+		[string] $AppInsightsInstrumentationKey
+
 	) 
  
 	$secretvalue = ConvertTo-SecureString $AdminUserName -AsPlainText -Force
@@ -136,35 +135,57 @@ function Create-KeyVaultSecrets
 	$secretvalue = ConvertTo-SecureString $ClientId   -AsPlainText -Force
 
 	$secret = Set-AzureKeyVaultSecret -VaultName $VaultName -Name 'ADAL-clientId' -SecretValue $secretvalue
+
+	$secretvalue = ConvertTo-SecureString $AppInsightsInstrumentationKey  -AsPlainText -Force
+
+	$secret = Set-AzureKeyVaultSecret -VaultName $VaultName -Name 'ApplicationInsights-InstrumentationKey' -SecretValue $secretvalue
 }
 
 
 $appURL = [string]::format("https://{0}.azurewebsites.net", $WebAppName)
 
-Write-Host "Creating AD Application for web..."
-#$webADApp = Create-ADAppWithPassword -ADApplicationName $params.parameters.Web_ADApp_Name -applicationURL $appURL -password $creds.Password
-
-$webADApp = New-AzureRmADApplication -DisplayName $Web_ADApp_Name -HomePage $appURL -IdentifierUris $appURL -Password $creds.Password
-$webADAppSp = New-AzureRmADServicePrincipal -ApplicationId $webADApp.ApplicationId
-
-$webADAppSp    
-
 #creating the keyVault
-Write-Host "Creating Keyvault..."
-New-AzureRmKeyVault -VaultName $vaults_KeyVault_name -ResourceGroupName $ResourceGroupName -Location $ResourceGroupLocation
-Write-Host "Setting access policy for AD Application for web to key vault..."
-Set-AzureRmKeyVaultAccessPolicy -VaultName $vaults_KeyVault_name -ServicePrincipalName $webADAppSp.ApplicationId -PermissionsToSecrets all -PermissionsToKeys all 
+Write-Output "Creating Keyvault..."
+$kvSettings = New-AzureRmKeyVault -VaultName $vaults_KeyVault_name -ResourceGroupName $ResourceGroupName -Location $ResourceGroupLocation
+$kvSettings
+$kvADApp = Create-ADAppFromCert -ADApplicationName $ADApp_Name -applicationURL $appURL
 
-$certFilePath = [System.IO.Path]::Combine($PSScriptRoot, 'MatterWebApp.cer')
+Write-Output "END: creating AD app. Return value is ..."
 
-Write-Host "Creating AD Application for key vault..."
-$KVappURL = "https://"+$WebAppName+((Get-Date).ToUniversalTime()).ToString('MMddHHmm')+".azurewebsites.net"
-$KVappURL 
-$kvADApp = Create-ADAppFromCert -certFileName $certFilePath -certExpiryDate $KeyVault_certificate_expiryDate -ADApplicationName $KeyVault_ADApp_Name -applicationURL $KVappURL 
-$kvADApp
+For ($i=0; $i -lt $kvADApp.Length; $i++) {
+		if ($kvADApp[$i] -ne $null)
+		{
+			if (Get-Member -InputObject $kvADApp[$i] -Name 'ApplicationId' -MemberType Properties)
+			{
+				if( $kvADApp[$i].ApplicationId -ne $null)
+				{
+					$ADApplicationId = $kvADApp[$i].ApplicationId.Guid.ToString()
+				}
+			}
+		}
+    }
+
+	
+
+Write-Output "Writing for AppGuid $ADApplicationId"
 
 $storageConnString =  [string]::format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", $storageAccount_name, $StorageAccountKey.Item(0).Value)
 
-Write-Host "Writing secrets to key vault..."
-Create-KeyVaultSecrets -VaultName $vaults_KeyVault_name -AdminUserName $creds.UserName -AdminPassword $creds.Password -CloudStorageConnectionString $storageConnString -ClientId $kvADApp.ApplicationId.Guid.ToString() -RedisCacheHostName $Redis_cache_name 
+$AppInsightsApp = Get-AzureRmResource -ResourceType "Microsoft.Insights/components" -ResourceGroupName $ResourceGroupName -ResourceName $components_AppInsights_name
 
+Write-Output "Writing secrets to key vault..."
+Create-KeyVaultSecrets -VaultName $vaults_KeyVault_name -AdminUserName $creds.UserName -AdminPassword $creds.Password -CloudStorageConnectionString $storageConnString -ClientId  $ADApplicationId -RedisCacheHostName $Redis_cache_name -AppInsightsInstrumentationKey $AppInsightsApp.Properties.InstrumentationKey 
+Write-Host "Updating Matter Web App Settings..."
+$appSettings = @{ `
+				"General:Tenant" = $global:TenantName; `
+				"General:SiteURL" = $SiteURL; `
+				"General:CentralRepositoryUrl" = $CentralRepositoryUrl; `
+				"General:KeyVaultURI" = $kvSettings.VaultUri; `
+				"General:KeyVaultClientID" = $ADApplicationId; `
+				"General:KeyVaultCertThumbPrint" = $global:thumbPrint;`
+				"Search:SearchResultSourceID" = $SearchResultSourceId;`
+				"WEBSITE_LOAD_CERTIFICATES" = $global:thumbPrint;`
+			}
+			Set-AzureWebsite -Name $WebAppName -AppSettings $appSettings		
+
+Write-Host "Updated Matter Web App Settings"

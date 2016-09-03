@@ -1,13 +1,33 @@
-﻿#Requires -Version 3.0
-#Requires -Module AzureRM.Resources
-#Requires -Module Azure.Storage
+﻿<#
+.SYNOPSIS
+    .
+.DESCRIPTION
+    .
+.PARAMETER Path
+    The path to the .
+.PARAMETER LiteralPath
+    Specifies a path to one or more locations. Unlike Path, the value of 
+    LiteralPath is used exactly as it is typed. No characters are interpreted 
+    as wildcards. If the path includes escape characters, enclose it in single
+    quotation marks. Single quotation marks tell Windows PowerShell not to 
+    interpret any characters as escape sequences.
+.EXAMPLE
+    C:\PS> 
+    <Description of example>
+.NOTES
+    Author: Matter Center Core Team
+    Date:   Sept 02, 2016    
+#>
 
 Param(
-    [string] [Parameter(Mandatory=$true)] $ResourceGroupLocation,
-    [string] [Parameter(Mandatory=$true)] $ResourceGroupName = 'MatterCenterRG',
-    [string] [Parameter(Mandatory=$true)] $WebAppName = 'MatterCenterWeb',
-	[string] [Parameter(Mandatory=$true)] $Tenant_id,
-	[string] [Parameter(Mandatory=$true)] $KeyVault_certificate_expiryDate,
+    [string] [Parameter(Mandatory=$true, HelpMessage="ex: west us")] $ResourceGroupLocation,
+    [string] [Parameter(Mandatory=$true, HelpMessage="ex: MatterCenterRG")] $ResourceGroupName = 'MatterCenterRG',
+    [string] [Parameter(Mandatory=$true, HelpMessage="ex: MatterCenterWeb")] $WebAppName = 'MatterCenterWeb',
+	[string] [Parameter(Mandatory=$true, HelpMessage="Provide the catalog site url you used during sharepoint site deployment. `
+	it will be https://<tenantname>.sharepoinT.com/sites/catalog if you didnt change default catalog site.")] $CentralRepositoryUrl,	
+	[string] [Parameter(Mandatory=$true, HelpMessage="You can get it from sharepoint catalog site collection settings -> Search Result Sources -> Matter Center. `
+	From the URL take sourceid value and replace %2D with -. ex: b31b647d-4074-43d2-a1f6-3905a7f8630b  ")] $SearchResultSourceId,
+
     [switch] $UploadArtifacts,
     [string] $StorageAccountName,
     [string] $StorageAccountResourceGroupName, 
@@ -18,20 +38,38 @@ Param(
     [string] $AzCopyPath = '..\Tools\AzCopy.exe',
     [string] $DSCSourceFolder = '..\DSC'
 )
+$logFileName = "MCDeploy"+(Get-Date).ToString('yyyyMMdd-HHmmss')+".log"
+Start-Transcript -path $logFileName
+$WebAppName = $WebAppName + ((Get-Date).ToUniversalTime()).ToString('MMddHHmm')
+if($WebAppName.Length > 60)
+{
+	$WebAppName =  $WebAppName.Substring(0,60)
+}
 
+#Get sharepoint site root url from respository
+$CentralRepositoryUrl = $CentralRepositoryUrl.ToLower()
+$indexOfSPO = $CentralRepositoryUrl.IndexOf(".com")
+$SiteURL = $CentralRepositoryUrl.Substring(0, $indexOfSPO + 4)
 
 $Redis_cache_name = $WebAppName+"RedisCache"
 $autoscalesettings_name = $WebAppName+"ScaleSettings"
 $components_AppInsights_name = $WebAppName+"AppInsights"
-$vaults_KeyVault_name = $WebAppName+"KeyVault"
-$storageAccount_name = $WebAppName+"stg"
+if($WebAppName.Length > 24)
+{
+	$vaults_KeyVault_name = $WebAppName.Substring(0,24)
+	$storageAccount_name = $WebAppName.Substring(0,24)
+}
+else
+{
+	$vaults_KeyVault_name = $WebAppName
+	$storageAccount_name = $WebAppName
+}
 $serverfarms_WebPlan_name = $WebAppName+"WebPlan"
-$Web_ADApp_Name = $WebAppName+"WebADApp"
-$KeyVault_ADApp_Name = $WebAppName+"KVADApp"
-
+$ADApp_Name = $WebAppName+"ADApp"
+$global:thumbPrint = ""
 $storageAccount_name 
-
-Write-Host "Reading from template.parameters.json file..."
+$ADApplicationId = ""
+Write-Output "Reading from template.parameters.json file..."
 $params = ConvertFrom-Json -InputObject (Get-Content -Path $TemplateParametersFile -Raw)
 $params.parameters.webSite_name.value = $WebAppName
 Set-Content -Path $TemplateParametersFile -Value (ConvertTo-Json -InputObject $params -Depth 3)
@@ -39,7 +77,9 @@ Set-Content -Path $TemplateParametersFile -Value (ConvertTo-Json -InputObject $p
 
 Import-Module Azure -ErrorAction SilentlyContinue
 #Add-AzureAccount
-Login-AzureRmAccount
+$subsc = Login-AzureRmAccount
+$global:TenantName = $subsc.Context.Tenant.Domain
+#$Tenant_id = $subsc.Context.Tenant.TenantId
 
 try {
  #   [Microsoft.Azure.Common.Authentication.AzureSession]::ClientFactory.AddUserAgent("VSAzureTools-$UI$($host.name)".replace(" ","_"), "2.8")
@@ -127,7 +167,7 @@ New-AzureRmResourceGroupDeployment -Name ((Get-ChildItem $TemplateFile).BaseName
 
 $creds = Get-Credential
 
-Write-Host "Getting the storage key to write to key vault..."
+Write-Output "Getting the storage key to write to key vault..."
 $StorageAccountKey = Get-AzureRmStorageAccountKey -Name $storageAccount_name -ResourceGroupName $ResourceGroupName
 
 $custScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'KeyVault-Config.ps1')
@@ -138,3 +178,5 @@ Invoke-Expression $storageScriptFile
 
 $webJobScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'Create-MatterCenterWebJob.ps1')
 Invoke-Expression $webJobScriptFile
+
+Stop-Transcript 

@@ -201,7 +201,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 string key1 = configuration.GetSection("Search").GetSection("ManagedPropertyMatterName").Value.ToString();
                 foreach (var searchResult in searchResults)
                 {
-                    dynamic matterData = new ExpandoObject();                    
+                    dynamic matterData = new ExpandoObject();
+                    matterData.matterSubAreaOfLaw = string.Empty;
+                    string subAreaOfLaw = "";
+                    string subAreaOfLaw1 = "";
+                    string subAreaOfLaw2 = "";
                     foreach (var key in searchResult.Keys)
                     {                        
                         if(key.ToString().ToLower() == searchSettings.ManagedPropertyMatterName.ToString().ToLower())
@@ -251,12 +255,36 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 searchResult[key].ToString());
                         }
 
+                        #region Subarea of law login
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw2.ToLower())
+                        {
+                            subAreaOfLaw2 = searchResult[key].ToString();
+                        }
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw1.ToLower())
+                        {
+                            subAreaOfLaw1 = searchResult[key].ToString();
+                        }
+
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw.ToLower())
                         {
-                            ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterSubAreaOfLaw").Key,
-                                searchResult[key].ToString());
+                            subAreaOfLaw = searchResult[key].ToString();
                         }
+
+                        if (subAreaOfLaw2 != string.Empty && subAreaOfLaw1 != string.Empty && subAreaOfLaw != string.Empty)
+                        {
+                            ServiceUtility.AddProperty(matterData, "matterSubAreaOfLaw", subAreaOfLaw2);
+                        }
+
+                        if (subAreaOfLaw2 == string.Empty && subAreaOfLaw1 != string.Empty && subAreaOfLaw != string.Empty)
+                        {
+                            ServiceUtility.AddProperty(matterData, "matterSubAreaOfLaw", subAreaOfLaw1);
+                        }
+
+                        if (subAreaOfLaw2 == string.Empty && subAreaOfLaw1 == string.Empty && subAreaOfLaw != string.Empty)
+                        {
+                            ServiceUtility.AddProperty(matterData, "matterSubAreaOfLaw", subAreaOfLaw);
+                        }
+                        #endregion
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyClientName.ToLower())
                         {
@@ -1440,14 +1468,29 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 Dictionary<string, string> propertyList = new Dictionary<string, string>();
                 //Get all the matter stamped properties from the appsettings.json file
                 var matterStampedProperties = configuration.GetSection("Matter").GetChildren();
-                foreach (var key in matterStampedProperties)
-                {
-                    //Assuming that all the keys for the matter property bag keys will start with "StampedProperty"
-                    if (key.Key.ToString().ToLower().StartsWith("stampedproperty"))
-                    {
-                        keys.Add(key.Key);
-                    }
-                }
+                keys.Add(matterSettings.StampedPropertyMatterName);
+                keys.Add(matterSettings.StampedPropertyMatterID);
+                keys.Add(matterSettings.StampedPropertyClientName);
+                keys.Add(matterSettings.StampedPropertyClientID);
+                keys.Add(matterSettings.StampedPropertyResponsibleAttorney);
+                keys.Add(matterSettings.StampedPropertyResponsibleAttorneyEmail);
+                keys.Add(matterSettings.StampedPropertyTeamMembers);
+                keys.Add(matterSettings.StampedPropertyIsMatter);
+                keys.Add(matterSettings.StampedPropertyOpenDate);
+                keys.Add(matterSettings.StampedPropertySecureMatter);
+                keys.Add(matterSettings.StampedPropertyBlockedUploadUsers);
+                keys.Add(matterSettings.StampedPropertyMatterDescription);
+                keys.Add(matterSettings.StampedPropertyConflictCheckDate);
+                keys.Add(matterSettings.StampedPropertyConflictCheckBy);
+                keys.Add(matterSettings.StampedPropertyMatterCenterRoles);
+                keys.Add(matterSettings.StampedPropertyMatterCenterPermissions);
+                keys.Add(matterSettings.StampedPropertyMatterCenterUsers);
+                keys.Add(matterSettings.StampedPropertyMatterCenterUserEmails);
+                keys.Add(matterSettings.StampedPropertyDefaultContentType);
+                keys.Add(matterSettings.StampedPropertyIsConflictIdentified);
+                keys.Add(matterSettings.StampedPropertyDocumentTemplateCount);
+                keys.Add(matterSettings.StampedPropertyBlockedUsers);
+                keys.Add(matterSettings.StampedPropertyMatterGUID);
                 /*
                  * All the managed columns need to be read from the appsettings.json file. In old implementation
                  * all the managed columns are hardcoded and that hardcoding has been removed, by reading the
@@ -1459,7 +1502,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 {
                     //Get all the managed columns from "ContentType" settings from appsettings.json file
                     string columnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName" + i];
-                    ManagedColumn managedColumn = matterDetails.ManagedColumnTerms[columnName];
+                    ManagedColumn managedColumn = matterDetails.ManagedColumnTerms[columnName];                    
                     //Add all the managed columns values to the property list of the matter document library             
                     propertyList.Add(columnName, WebUtility.HtmlEncode(managedColumn.TermName));
                     //Add all the managed columns to the Indexed Property keys of the matter document library

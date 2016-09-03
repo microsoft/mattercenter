@@ -18,6 +18,7 @@
             vm.pgdrop = false;
             vm.pgdropvisible = false;
             vm.matterDashboardConfigs = uiconfigs.MatterDashboard;
+            vm.matterConfigContent = uiconfigs.Matters;
             vm.aoldrop = false;
             vm.aoldropvisible = false;
             vm.checkClient = false;

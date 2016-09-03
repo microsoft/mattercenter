@@ -13,6 +13,7 @@
             vm.loadLocation = false;
             vm.AuthornoResults = false;
             vm.documentDashboardConfigs = uiconfigs.DocumentDashboard;
+            vm.documentConfigContent = uiconfigs.Documents;
             vm.clientdrop = false;
             vm.lazyloaderdocumentclient = true;
             vm.clientdropvisible = false;
