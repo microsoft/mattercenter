@@ -58,9 +58,7 @@ function Create-ADAppFromCert
  
     Export-Certificate -Cert $crt -FilePath "$PSScriptRoot\MatterWebApp.cer"
  
-    New-AzureRmWebAppSSLBinding -ResourceGroupName $ResourceGroupName -WebAppName $WebAppName.ToLowerInvariant() -CertificateFilePath "$PSScriptRoot\MatterWebApp.pfx" -CertificatePassword $creds.GetNetworkCredential().Password -Name $dnsname
-
-	Remove-AzureRmWebAppSSLBinding -ResourceGroupName  $ResourceGroupName -WebAppName $WebAppName.ToLowerInvariant() -Name $dnsname -DeleteCertificate $False -Force
+    New-AzureRmWebAppSSLBinding -ResourceGroupName $ResourceGroupName -WebAppName $WebAppName.ToLowerInvariant() -CertificateFilePath "$PSScriptRoot\MatterWebApp.pfx" -CertificatePassword $creds.GetNetworkCredential().Password -Name $dnsname -SslState Disabled
     
     Write-Host "Certificate uploaded successfully.."
 
