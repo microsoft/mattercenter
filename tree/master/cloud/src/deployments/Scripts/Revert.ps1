@@ -73,20 +73,6 @@ Show-Message -Message "Adding common library functions" -Type ([MessageType]::Wa
 . "$ScriptDirectory\LibraryFunctions.ps1"
 Show-Message -Message "Added common library functions" -Type ([MessageType]::Success)
 
-#----------------------------------------------
-# Reverting step 7
-#----------------------------------------------
-if (7 -le $Checkpoint)
-{
-    Show-Message -Message ""
-    Show-Message -Message "Deleting files from SharePoint library"
-    try {
-        & "$HelperPath\Microsoft.Legal.MatterCenter.UploadFile.exe" "false" $Username $Password
-    }
-    catch {        
-        Write-Log $RevertLogFile "Could not delete files from SharePoint library"
-    }
-}
 
 #----------------------------------------------
 # Reverting Step 6

@@ -8,10 +8,9 @@
 # Step 4: Update search configuration file and upload to SharePoint
 # Step 5: Activate SharePoint Server Publishing infrastructure feature on catalog site collection 
 # Step 6: Encrypting the config files
-# Step 7: Upload files to SharePoint Library
-# Step 8: Creating Site Collection(s)
-# Step 9: Provisioning Web dashboard
-# Step 10: Update site collection view with field(s)
+# Step 7: Creating Site Collection(s)
+# Step 8: Provisioning Web dashboard
+# Step 9: Update site collection view with field(s)
 #
 # Any changes in these steps, kindly update this list. Also update the checkpoint in Revert script
 #----------------------------------------------
@@ -355,23 +354,6 @@ if($IsValid -eq $true)
 		Show-Message -Message "Config files encrypted successfully..." -Type ([MessageType]::Success)
     }
    
-
-    #---------------------------------------------------------------------
-    # Upload files required for Matter landing page to SharePoint library
-    #---------------------------------------------------------------------
-    Show-Message -Message "Step 7: Upload files to SharePoint Library"
-    [Environment]::CurrentDirectory = Get-Location
-    & "$HelperPath\Microsoft.Legal.MatterCenter.UploadFile.exe" "true" $Username $Password
-
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Uploading files to SharePoint Library failed" -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 7
-        return
-    }
-    else {
-		Show-Message -Message "Completed uploading files to SharePoint library" -Type ([MessageType]::Success)
-    }
-
     #---------------------------------------------------------------------
     # Create site collection(s) on SharePoint library
     #---------------------------------------------------------------------

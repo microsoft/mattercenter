@@ -51,3 +51,4 @@ tree/master/cloud/src/solution/*/pkgobj/
 /tree/master/cloud/src/solution/Deployment/Scripts/MatterWebApp.cer
 *.log
 /tree/master/cloud/src/solution/Deployment/Scripts/MatterWebApp.pfx
+/tree/master/cloud/src/Helper Utilities/Microsoft.Legal.MatterCenter.HelperUtilities/*/bin
