@@ -1,5 +1,15 @@
 ﻿/// <disable>JS2074, JS3058</disable>
-// Test suite
+//// ***********************************************************************
+//// Author           : MAQ USER
+//// Created          : 31-08-2016
+////
+//// ***********************************************************************
+//// <copyright file="DocumentController.spec.js" company="MAQSoftware">
+////  Copyright (c) . All rights reserved.
+//// </copyright>
+//// <summary>Test suite for document controller</summary>
+//// ***********************************************************************
+
 describe("documents Controller test suite", function () {
     "use strict";
 
@@ -22,13 +32,14 @@ describe("documents Controller test suite", function () {
     }));
 
     describe("Verification of showdocdrop function", function () {
-        it("It should display document drop inner menu", function () {
+        it("It should display the matters dropdown menu with responsiveness ", function () {
             vm.docdropinner = true;
             vm.showdocdrop(event);
             expect(vm.documentsdrop).toBe(true);
             expect(vm.docdropinner).toBe(false);
         });
-        it("It should hide document drop inner menu", function () {
+
+        it("It should hide the matters dropdown  menu with responsiveness", function () {
             vm.docdropinner = false;
             vm.showdocdrop(event);
             expect(vm.documentsdrop).toBe(false);
@@ -37,7 +48,7 @@ describe("documents Controller test suite", function () {
     });
 
     describe("Verification of closealldrops function", function () {
-        it("It should close all dropdown menu", function () {
+        it("It should close the dropdown menus", function () {
             vm.closealldrops();
             expect(vm.documentsdrop).toBe(false);
             expect(vm.docdropinner).toBe(true);
@@ -53,6 +64,7 @@ describe("documents Controller test suite", function () {
             expect(oTableHeight).toBeDefined();
             expect(oTableHeight).not.toBe(null);
         });
+
         it("It should not set dynamic height of the grid", function () {
             vm.isOutlook = false;
             var oTableHeight = vm.getTableHeight();
@@ -60,6 +72,7 @@ describe("documents Controller test suite", function () {
             expect(oTableHeight).not.toBe(null);
         });
     });
+
     describe("Verification of isOutlookAsAttachment function", function () {
         it("It should show outlook as an attachment", function () {
             vm.isOutlookAsAttachment(true);
@@ -68,6 +81,7 @@ describe("documents Controller test suite", function () {
             expect(vm.enableAttachment).toBe(false);
         });
     });
+
     describe("Verification of closeNotification function", function () {
         it("It should close all the notifications", function () {
             vm.closeNotification();
@@ -106,9 +120,7 @@ describe("documents Controller test suite", function () {
         });
     });
 
-    // Test suite to execute test cases.
     describe("Verification of toggleCheckerAll function", function () {
-        // Test case to validate function.
         it("It should check all the checkboxes inside grid", function () {
             vm.gridOptions.data = obj;
             vm.toggleCheckerAll(true);
@@ -116,6 +128,7 @@ describe("documents Controller test suite", function () {
             expect(vm.documentsCheckedCount).toBe(oTestConfiguration.nDocumentCheckCount);
             expect(vm.selectedRows).toBe(obj);
         });
+
         it("It should uncheck all the checkboxes inside grid", function () {
             vm.gridOptions.data = obj;
             vm.toggleCheckerAll(false);
@@ -125,4 +138,5 @@ describe("documents Controller test suite", function () {
             expect(vm.showErrorAttachmentInfo).toBe(false);
         });
     });
+
 });
