@@ -1,5 +1,15 @@
-﻿//Test suite
-describe('Home Controller test suite', function () {
+﻿//// ***********************************************************************
+//// Author           : MAQ USER
+//// Created          : 31-08-2016
+////
+//// ***********************************************************************
+//// <copyright file="HomeController.spec.js" company="MAQSoftware">
+////  Copyright (c) . All rights reserved.
+//// </copyright>
+//// <summary>Test suite for Home Controller</summary>
+//// ***********************************************************************
+
+describe("Home Controller test suite", function () {
 
     beforeEach(module('matterMain'));
     beforeEach(module('matterMain', function ($provide) {
@@ -18,7 +28,6 @@ describe('Home Controller test suite', function () {
         rootScope = $rootScope.$new();
         dm = $controller('homeController as dm', { $scope: $scope, $state: $state, $stateParams: $stateParams, homeResource: mockhomeResource, api: mockapi, $rootScope: rootScope, $location: $location, adalAuthenticationService: adalService });
     }));
-  
 
 });
 
