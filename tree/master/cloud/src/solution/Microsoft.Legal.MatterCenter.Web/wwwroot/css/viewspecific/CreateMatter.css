@@ -1339,6 +1339,7 @@
     text-overflow: ellipsis;
     width: 100%;
     overflow: hidden;
+    white-space: nowrap;
 }
 
 .disableBlock {
@@ -1448,6 +1449,12 @@
     }
 }
 
-.settingsMatterTypeBox{
-    max-width:400px; max-height:100px; min-height:100px; min-width:400px; overflow-y:auto;border:1px solid #ccc; font-size:0.875em; 
+.settingsMatterTypeBox {
+    max-width: 400px;
+    max-height: 100px;
+    min-height: 100px;
+    min-width: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    font-size: 0.875em;
 }
