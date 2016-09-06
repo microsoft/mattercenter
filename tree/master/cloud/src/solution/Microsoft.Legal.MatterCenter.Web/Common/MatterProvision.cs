@@ -201,7 +201,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 string key1 = configuration.GetSection("Search").GetSection("ManagedPropertyMatterName").Value.ToString();
                 foreach (var searchResult in searchResults)
                 {
-                    dynamic matterData = new ExpandoObject();                    
+                    dynamic matterData = new ExpandoObject();
+                    matterData.matterSubAreaOfLaw = string.Empty;
+                    string subAreaOfLaw = "";
+                    string subAreaOfLaw1 = "";
+                    string subAreaOfLaw2 = "";
                     foreach (var key in searchResult.Keys)
                     {                        
                         if(key.ToString().ToLower() == searchSettings.ManagedPropertyMatterName.ToString().ToLower())
@@ -251,12 +255,36 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 searchResult[key].ToString());
                         }
 
+                        #region Subarea of law login
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw2.ToLower())
+                        {
+                            subAreaOfLaw2 = searchResult[key].ToString();
+                        }
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw1.ToLower())
+                        {
+                            subAreaOfLaw1 = searchResult[key].ToString();
+                        }
+
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw.ToLower())
                         {
-                            ServiceUtility.AddProperty(matterData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterSubAreaOfLaw").Key,
-                                searchResult[key].ToString());
+                            subAreaOfLaw = searchResult[key].ToString();
                         }
+
+                        if (subAreaOfLaw2 != string.Empty && subAreaOfLaw1 != string.Empty && subAreaOfLaw != string.Empty)
+                        {
+                            ServiceUtility.AddProperty(matterData, "matterSubAreaOfLaw", subAreaOfLaw2);
+                        }
+
+                        if (subAreaOfLaw2 == string.Empty && subAreaOfLaw1 != string.Empty && subAreaOfLaw != string.Empty)
+                        {
+                            ServiceUtility.AddProperty(matterData, "matterSubAreaOfLaw", subAreaOfLaw1);
+                        }
+
+                        if (subAreaOfLaw2 == string.Empty && subAreaOfLaw1 == string.Empty && subAreaOfLaw != string.Empty)
+                        {
+                            ServiceUtility.AddProperty(matterData, "matterSubAreaOfLaw", subAreaOfLaw);
+                        }
+                        #endregion
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyClientName.ToLower())
                         {
@@ -1474,10 +1502,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 {
                     //Get all the managed columns from "ContentType" settings from appsettings.json file
                     string columnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName" + i];
-                    ManagedColumn managedColumn = matterDetails.ManagedColumnTerms[columnName];
-                    string stampedColumnName = configuration.GetSection("Matter")["StampedPropertyColumnName" + i];
+                    ManagedColumn managedColumn = matterDetails.ManagedColumnTerms[columnName];                    
                     //Add all the managed columns values to the property list of the matter document library             
-                    propertyList.Add(stampedColumnName, WebUtility.HtmlEncode(managedColumn.TermName));
+                    propertyList.Add(columnName, WebUtility.HtmlEncode(managedColumn.TermName));
                     //Add all the managed columns to the Indexed Property keys of the matter document library
                     keys.Add(columnName);
                 }
