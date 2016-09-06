@@ -307,53 +307,6 @@ if($IsValid -eq $true)
     }
 }
 
-
-if($IsValid -eq $true)
-{
-if($IsDeployedOnAzure)
-{
-   Write-Output ''
-   Write-Output 'Running Azure Site and Service check...'
-   $ExcelValues = (Read-FromExcel $ExcelFilePath "Config" ("AzureWebsiteName","AzureWebServiceName") $ErrorLogFile)
-   $ExcelValues = $ExcelValues.Split(";")
-    if($ExcelValues.length -le 0)
-    {
-        Write-Log $ErrorLogFile "Error reading values from Excel file. Aborting!"
-        return $false
-    }
-   $AzureSite = $ExcelValues[0];
-   $AzureService= $ExcelValues[1];
- 
-if(Add-AzureAccount)
-    {
-        $IsValid = Test-AzureName -Website  $AzureSite
-        if($IsValid)
-        {
-			Show-Message -Message "$AzureSite Azure Web Site is present" -Type ([MessageType]::Success)
-            $IsValid = Test-AzureName -WebSite $AzureService
-            if($IsValid)
-            {
-				Show-Message -Message "$AzureService Azure Web Service is present" -Type ([MessageType]::Success)
-				Show-Message -Message "Pre-requisite check completed successfully" -Type ([MessageType]::Success)
-            }
-            else{
-				Show-Message -Message "$AzureService Azure Web Service is not present" -Type ([MessageType]::Failure)
-            }
-        }
-        else
-        {
-			Show-Message -Message "$AzureSite Azure Web Site is not present" -Type ([MessageType]::Failure)
-        }
-
-    }
-else {
-	Show-Message -Message "Failed to include Azure account, try again." -Type ([MessageType]::Failure)
-    $IsValid= $false;
-}
-}
-}
-
-
 If($IsValid -eq $false)
 {
     Show-Message -Message ""
