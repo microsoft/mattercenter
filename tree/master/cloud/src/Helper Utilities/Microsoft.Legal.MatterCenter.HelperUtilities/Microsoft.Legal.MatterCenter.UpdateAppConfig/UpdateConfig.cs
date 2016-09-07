@@ -34,11 +34,6 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
     internal class UpdateConfig
     {
         /// <summary>
-        /// Declaring the static boolean variable isDeployedOnAzure to check whether deployed on azure or not
-        /// </summary>
-        private static bool isDeployedOnAzure = false;
-
-        /// <summary>
         /// Declaring the static string variable errorPath 
         /// </summary>
         private static string errorPath = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + ConstantStrings.BACKSLASH + ConfigurationManager.AppSettings["errorFile"];
@@ -84,10 +79,9 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
             // 1. Read Configuration Excel and form Search Term            
             string clientSheetName = ConfigurationManager.AppSettings["manifestSheetname"], xmlQueryTemplate = ConfigurationManager.AppSettings["XMLNodeQueryTemplate"];
             Dictionary<string, string> constantsList = ExcelOperations.ReadFromExcel(filePath, clientSheetName);
-            isDeployedOnAzure = Convert.ToBoolean(constantsList["IsDeployedOnAzure"], CultureInfo.InvariantCulture);
 
             string updatedSearchTerm;
-            using (ClientContext context = ConfigureSharePointContext.ConfigureClientContext(constantsList[ConstantStrings.TENANT_ADMIN_URL], login, password, isDeployedOnAzure))
+            using (ClientContext context = ConfigureSharePointContext.ConfigureClientContext(constantsList[ConstantStrings.TENANT_ADMIN_URL], login, password))
             {
                 string groupName = ConfigurationManager.AppSettings["PracticeGroupName"];
                 string termSetName = ConfigurationManager.AppSettings["TermSetName"];
@@ -132,7 +126,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                 string configSheet = ConfigurationManager.AppSettings["manifestSheetname"];
                 Dictionary<string, string> configDetails = ExcelOperations.ReadFromExcel(filePath, configSheet);
                 string url = configDetails[ConfigurationManager.AppSettings["CatalogSiteUrlKey"]].TrimEnd();
-                using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(url, login, password, true))
+                using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(url, login, password))
                 {
                     ClientRuntimeContext context = clientContext;
                     SearchConfigurationPortability searchConfigPortability = new SearchConfigurationPortability(context);
@@ -144,7 +138,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
 
                 // 5. Upload Search Configuration tenant level and create managed properties
                 url = configDetails[ConstantStrings.TENANT_ADMIN_URL].Trim();
-                using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(url, login, password, true))
+                using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(url, login, password))
                 {
                     ClientRuntimeContext context = clientContext;
                     SearchConfigurationPortability searchConfigPortability = new SearchConfigurationPortability(context);
@@ -190,7 +184,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
             string resultSourceID = null;
             try
             {
-                using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(url, login, password, true))
+                using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(url, login, password))
                 {
                     ClientRuntimeContext context = clientContext;
                     SearchConfigurationPortability searchConfigPortability = new SearchConfigurationPortability(context);
@@ -806,11 +800,16 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                             // Code for updating schema files
                             Console.WriteLine("Updating app schema files");
 
+
                             string manifestSheetname = ConfigurationManager.AppSettings["manifestSheetname"];
 
                             if (!string.IsNullOrEmpty(filePath) && !string.IsNullOrEmpty(manifestSheetname))
                             {
                                 Dictionary<string, string> xmlUpdateList = ExcelOperations.ReadFromExcel(filePath, manifestSheetname);
+                                //Dictionary<string, string> xmlUpdateList = new Dictionary<string, string>();
+
+                                string azureSiteURL = args[3];
+                                xmlUpdateList.Add(ConstantStrings.AZURE_UI_SITE_URL, azureSiteURL);
                                 xmlUpdateList.Add(ConstantStrings.USERNAME, username);
                                 xmlUpdateList.Add(ConstantStrings.PASSWORD, password);
                                 if (xmlUpdateList.Count > 0)
@@ -862,17 +861,8 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                             constantUpdateListold.Add("MailCartUserName", username);
                             constantUpdateListold.Add("MailCartPassword", password);
 
-                            isDeployedOnAzure = Convert.ToBoolean(constantUpdateListold["IsDeployedOnAzure"], CultureInfo.InvariantCulture);
-
                             Dictionary<string, string> configUpdateList = new Dictionary<string, string>();
                             configUpdateList.Add("IssuerId", args[0]);
-                            if (!isDeployedOnAzure)
-                            {
-                                // Update the config for On Premise
-                                UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_ONPREMISE, ConstantStrings.UI_FOLDER_NAME);
-                                UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_ONPREMISE, ConstantStrings.SERVICE_FOLDER_NAME);
-                                Console.WriteLine("Updated Web.config");
-                            }
                             #endregion
                         }
                     }
@@ -936,8 +926,6 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                     ErrorMessage.ShowMessage("Failed to update exchange credentials into Web.Config", ErrorMessage.MessageType.Error);
                 }
 
-                isDeployedOnAzure = Convert.ToBoolean(constantUpdateListold["IsDeployedOnAzure"], CultureInfo.InvariantCulture);
-
                 foreach (string updateMapping in constantUpdateListold.Keys)
                 {
                     if (keyMapping.ContainsKey(updateMapping))
@@ -1000,20 +988,11 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                     }
                 }
 
-                if (isDeployedOnAzure)
-                {
-                    // Update the configuration for Azure
-                    UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_CLOUD, ConstantStrings.UI_FOLDER_NAME);
-                    UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_CLOUD, ConstantStrings.SERVICE_FOLDER_NAME);
-                    UpdateWebConfig(configUpdateList, ConstantStrings.APP_INSIGHTS, ConstantStrings.UI_FOLDER_NAME);
-                }
-                else
-                {
-                    // Update the configuration for On Premise
-                    UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_ONPREMISE, ConstantStrings.UI_FOLDER_NAME);
-                    UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_ONPREMISE, ConstantStrings.SERVICE_FOLDER_NAME);
-                    UpdateWebConfig(configUpdateList, ConstantStrings.APP_INSIGHTS, ConstantStrings.UI_FOLDER_NAME);
-                }
+                // Update the configuration for Azure
+                UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_CLOUD, ConstantStrings.UI_FOLDER_NAME);
+                UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_CLOUD, ConstantStrings.SERVICE_FOLDER_NAME);
+                UpdateWebConfig(configUpdateList, ConstantStrings.APP_INSIGHTS, ConstantStrings.UI_FOLDER_NAME);
+
                 Console.WriteLine("Updated Web.config");
             }
             else

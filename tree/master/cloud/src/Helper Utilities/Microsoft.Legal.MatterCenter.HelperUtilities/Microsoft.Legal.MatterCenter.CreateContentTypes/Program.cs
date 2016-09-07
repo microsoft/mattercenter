@@ -71,8 +71,7 @@ namespace Microsoft.Legal.MatterCenter.CreateContentTypes
                         if (0 != listval.Count)
                         {
                             string targetSite = listval["ContentTypeHubURL"]; // Get the URL of site collection
-                            bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture); // Get Is Deployed on Azure parameter
-                            ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password, isDeployedOnAzure);
+                            ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password);
 
                             for (int count = 0; count < contentTypeVal.Count; count++)
                             {

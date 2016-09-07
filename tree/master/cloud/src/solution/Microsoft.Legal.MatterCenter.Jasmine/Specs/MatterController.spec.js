@@ -1,5 +1,15 @@
 ﻿/// <disable>JS2074, JS3058</disable>
-// Test suite
+//// ***********************************************************************
+//// Author           : MAQ USER
+//// Created          : 31-08-2016
+////
+//// ***********************************************************************
+//// <copyright file="MatterController.spec.js" company="MAQSoftware">
+////  Copyright (c) . All rights reserved.
+//// </copyright>
+//// <summary>Test suite for Matters Controller</summary>
+//// ***********************************************************************
+
 describe("Matters Controller test suite", function () {
     "use strict";
    
@@ -32,8 +42,7 @@ describe("Matters Controller test suite", function () {
     });
 
     describe("Verification of attachmentTokenCallbackEmailClient function", function () {
-        it("It should attach the token along with EmailClient-Need to call createMailPopup", function () {
-            var asyncResult = { status: "succeeded", value: "testtoken" };
+        it("It should attach the token along with email Client-need to call create mail pop up", function () {
             vm.createMailPopup = function () { return 1; };
             vm.attachmentTokenCallbackEmailClient(asyncResult, obj);
             expect(vm.attachmentToken).toBe("testtoken");
@@ -45,7 +54,7 @@ describe("Matters Controller test suite", function () {
     });
 
     describe("Verification of getIconSource function", function () {
-        it("It should return the source of icon", function () {
+        it("It should display the source of the icon", function () {
             var source = vm.getIconSource("sourceicon");
             expect(source).toBe(oTestConfiguration.sSourceIconURL);
         });
@@ -69,7 +78,7 @@ describe("Matters Controller test suite", function () {
     });
 
     describe("Verification of hideBreadCrumb function", function () {
-        it("It should hide the bread crumb", function () {
+        it("It should hide the bread crum method", function () {
             vm.hideBreadCrumb();
             expect(rootScope.breadcrumb).toBe(true);
             expect(rootScope.foldercontent).toBe(false);
@@ -146,6 +155,7 @@ describe("Matters Controller test suite", function () {
             expect(vm.oUploadGlobal.successBanner).toBe(false);
         });
     });
+    
 });
 
 

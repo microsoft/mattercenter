@@ -1,8 +1,9 @@
 ﻿var vm, matterResource, $filter, $window, $watch, $http, $stateParams;
 var $rootScope = { logEvent: function () { }, setAuthenticatedUserContext: function () { } };
-var rootScope = {};
+var rootScope = { logEvent: function () { } };
+var rootData = { logEvent: function () { }, setAuthenticatedUserContext: function () { }};
 var $model = {};
-var $label = { assignedUser: "" };
+var $label = { "assignedUser": oEnvironmentConfiguration.loggedInUserEmail };
 var $item = {
     email: "",
     name: "No results found"
@@ -11,20 +12,20 @@ var $state = { go: function () { }, current: { "name": "" } };
 var $interval = { go: function () { } };
 var $animate = { enabled: function () { } };
 var $q = { defer: function () { return { resolve: function () { } } } };
-var $scope = { $watch: function () { }, $apply: function () { }, gridApi: { infiniteScroll: { dataLoaded: function () { } }, selection: { selectAllRows: function () { }, clearSelectedRows: function () { } } } };
+var $scope = { $watch: function () { }, $apply: function () { }, gridApi: { infiniteScroll: { dataLoaded: function () { }, resetScroll: function () { } }, selection: { selectAllRows: function () { }, clearSelectedRows: function () { } } } };
 var $location = {
     absUrl: function () {
-        var url = "https://mattermaqdevsite.azurewebsites.net&test=1&attempt=2|jasminetest.html";
+        var url = "https://" + oEnvironmentConfiguration.azureSiteName + ".azurewebsites.net&test=1&attempt=2|jasminetest.html";
         return url;
     }
 };
 
 var adalService = {
     "userInfo": {
-        "userName": "MAQUser@LCADMS.onmicrosoft.com",
+        "userName": oEnvironmentConfiguration.loggedInUserEmail,
         "profile": {
             "given_name": "MAQ",
-            "family_name": "LCADMS",
+            "family_name": oEnvironmentConfiguration.tenantUrl,
             "oid": 786
         },
         "isAuthenticated": true
@@ -73,7 +74,8 @@ var mockMatterResource = {
     'uploadEmail': '/api/v1/document/UploadMail',
     'uploadAttachment': '/api/v1/document/UploadAttachments',
     'uploadfiles': '/api/v1/document/UploadAttachments',
-    'getHelp': '/api/v1/shared/help'
+    'getHelp': '/api/v1/shared/help',
+    'userexists': '/api/v1/user/userexists'
 };
 
 var mockHomeResource = {
@@ -81,8 +83,6 @@ var mockHomeResource = {
     'getUserProfilePicture': '/api/v1/user/getuserprofilepicture',
     'canCreateMatter': '/api/v1/matter/cancreate'
 };
-
-var data = { "name": "" };
 
 var mockDocumentDashBoardResource = {
     'get': '/api/v1/document/getdocuments',
@@ -93,9 +93,10 @@ var mockDocumentDashBoardResource = {
     'pinDocument': '/api/v1/document/pindocument',
     'downloadattachmentsasstream': '/api/v1/email/downloadattachmentsasstream',
     'downloadAttachments': '/api/v1/email/downloadattachments',
-    'getDocumentCounts': '/api/v1/document/getdocumentcounts'
+    'getDocumentCounts': '/api/v1/document/getdocumentcounts',
+    'getassets': '/api/v1/document/getassets',
+    'getUsers': '/api/v1/user/getusers'
 };
-
 
 var mockDocumentResource = {
     'get': '/api/v1/document/getdocuments',
@@ -104,7 +105,6 @@ var mockDocumentResource = {
     'pinDocument': '/api/v1/document/pindocument',
     'getassets': '/api/v1/document/getassets'
 };
-
 
 var mockMatterResourceService = {
     'get': '/api/v1/matter/get',
@@ -129,6 +129,15 @@ var mockMatterResourceService = {
     'uploadAttachment': '/api/v1/document/UploadAttachments',
     'uploadfiles': '/api/v1/document/UploadAttachments',
     'getHelp': '/api/v1/shared/help'
+};
+
+var mockSettingsResource = {
+    'getTaxonomyData': '/api/v1/taxonomy/gettaxonomy',
+    'getRoles': '/api/v1/user/getroles',
+    'getPermissionLevels': '/api/v1/user/getpermissionlevels',
+    'getUsers': '/api/v1/user/getusers',
+    'getDefaultConfigurations': '/api/v1/matter/getconfigurations',
+    'saveConfigurations': '/api/v1/matter/saveconfigurations'
 };
 
 var selectedPracticeGroup = {
@@ -199,11 +208,11 @@ var subareaTerms =
        }]
 
 var item = {
-    "email": "MAQUser@LCADMS.onmicrosoft.com",
+    "email": oEnvironmentConfiguration.loggedInUserEmail,
     "entityType": "User",
     "largePictureUrl": null,
-    "logOnName": "i:0#.f|membership|maquser@lcadms.onmicrosoft.com",
-    "name": "MAQ User",
+    "logOnName": "i:0#.f|membership|" + oEnvironmentConfiguration.loggedInUserEmail,
+    "name": oEnvironmentConfiguration.loggedInUserName,
 }
 
 var obj = [{
@@ -211,21 +220,21 @@ var obj = [{
     "documentVersion": "2.0",
     "documentClient": "SubsiteClient",
     "documentClientId": "98052",
-    "documentClientUrl": "https://lcadms.sharepoint.com/sites/subsiteclient",
+    "documentClientUrl": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient",
     "documentMatter": "Default Matter",
     "documentMatterId": "11111",
-    "documentOwner": "MAQ User",
-    "documentUrl": "https://lcadms.sharepoint.com/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum/SharePoint Online is out of storage space.eml",
-    "documentOWAUrl": "https://lcadms.sharepoint.com/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum/SharePoint Online is out of storage space.eml",
+    "documentOwner": oEnvironmentConfiguration.loggedInUserName,
+    "documentUrl": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum/SharePoint Online is out of storage space.eml",
+    "documentOWAUrl": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum/SharePoint Online is out of storage space.eml",
     "documentExtension": "eml",
     "documentCreatedDate": "5/17/2016 12:41:06 PM",
     "documentModifiedDate": "5/17/2016 12:41:07 PM",
     "documentCheckoutUser": "",
-    "documentMatterUrl": "https://lcadms.sharepoint.com/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a",
-    "documentParentUrl": "https://lcadms.sharepoint.com/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum",
+    "documentMatterUrl": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a",
+    "documentParentUrl": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum",
     "documentID": "425427363",
     "checker": true,
-    "documentIconUrl": "https://lcadms.sharepoint.com/_layouts/15/images/iceml.gif",
+    "documentIconUrl": oEnvironmentConfiguration.tenantUrl + "/_layouts/15/images/iceml.gif",
     "pinType": "Pin",
     "$$hashKey": "object:286",
     "selected": true
@@ -235,21 +244,21 @@ var obj = [{
     "documentVersion": "2.0",
     "documentClient": "SubsiteClient",
     "documentClientId": "98052",
-    "documentClientUrl": "https://lcadms.sharepoint.com/sites/subsiteclient",
+    "documentClientUrl": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient",
     "documentMatter": "Default Matter",
     "documentMatterId": "11111",
-    "documentOwner": "MAQ User",
-    "documentUrl": "https://lcadms.sharepoint.com/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum/SharePoint Online is out of storage space.eml",
-    "documentOWAUrl": "https://lcadms.sharepoint.com/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum/SharePoint Online is out of storage space.eml",
+    "documentOwner": oEnvironmentConfiguration.loggedInUserName,
+    "documentUrl": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum/SharePoint Online is out of storage space.eml",
+    "documentOWAUrl": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum/SharePoint Online is out of storage space.eml",
     "documentExtension": "eml",
     "documentCreatedDate": "5/17/2016 12:41:06 PM",
     "documentModifiedDate": "5/17/2016 12:41:07 PM",
     "documentCheckoutUser": "",
-    "documentMatterUrl": "https://lcadms.sharepoint.com/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a",
-    "documentParentUrl": "https://lcadms.sharepoint.com/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum",
+    "documentMatterUrl": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a",
+    "documentParentUrl": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient/6cbca4ab447c87302d3a1f0e3c32985a/Ipsum",
     "documentID": "425427363",
     "checker": true,
-    "documentIconUrl": "https://lcadms.sharepoint.com/_layouts/15/images/iceml.gif",
+    "documentIconUrl": oEnvironmentConfiguration.tenantUrl + "/_layouts/15/images/iceml.gif",
     "pinType": "Pin",
     "$$hashKey": "object:286",
     "selected": true
@@ -258,21 +267,21 @@ var obj = [{
 var clientobj = [{
     "id": "0016765",
     "name": "A. Datum Corporation",
-    "url": "https://lcadms.sharepoint.com/sites/ADatumCorporation",
+    "url": oEnvironmentConfiguration.tenantUrl + "/sites/ADatumCorporation",
     "$$hashKey": "object:320",
     "Selected": true
 },
 	{
 	    "id": "0016761",
 	    "name": "AdventureWorks Cycles",
-	    "url": "https://lcadms.sharepoint.com/sites/AdventureWorksCycles",
+	    "url": oEnvironmentConfiguration.tenantUrl + "/sites/AdventureWorksCycles",
 	    "$$hashKey": "object:321",
 	    "Selected": false
 	},
 	{
 	    "id": "0016762",
 	    "name": "Alpine Ski House",
-	    "url": "https://lcadms.sharepoint.com/sites/AlpineSkiHouse",
+	    "url": oEnvironmentConfiguration.tenantUrl + "/sites/AlpineSkiHouse",
 	    "$$hashKey": "object:322",
 	    "Selected": false
 	}]
@@ -283,8 +292,52 @@ var event = {
     stopImmediatePropagation: function () { this.immediatePropagationStopped = true; },
     isImmediatePropagationStopped: function () { return this.immediatePropagationStopped === true; },
     stopPropagation: function () { },
-    currentTarget: { src: "" }
+    currentTarget: { src: "" },
+    target: { "getBoundingClientRect": function () { return 1; } }
 }
+
+var $itemdata = {
+    email: oEnvironmentConfiguration.loggedInUserEmail,
+    name: oEnvironmentConfiguration.loggedInUserName
+};
+
+var sortColumns = [
+    {
+        "field": "documentName", "name": "documentName", "sort": "asc"
+    }
+];
+
+var asyncResult = { status: "succeeded", value: "testtoken" };
+
+var folder = {
+    "parentURL": oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient",
+    "active": true,
+    "children": { "child": { "active": true } }
+};
+
+var data = {
+    "DefaultMatterName": "Test",
+    "DefaultMatterId": 1122,
+    "IsRestrictedAccessSelected": true,
+    "IsCalendarSelected": true,
+    "IsRSSSelected": true,
+    "IsEmailOptionSelected": true,
+    "IsTaskSelected": true,
+    "IsMatterDescriptionMandatory": true,
+    "IsConflictCheck": true,
+    "name": ""
+};
+var dataChunk = { "name": "" }; var testdata = {
+    "DefaultMatterName": "Test",
+    "DefaultMatterId": 1122,
+    "IsRestrictedAccessSelected": false,
+    "IsCalendarSelected": false,
+    "IsRSSSelected": false,
+    "IsEmailOptionSelected": false,
+    "IsTaskSelected": false,
+    "IsMatterDescriptionMandatory": false,
+    "IsConflictCheck": false
+};
 
 var practicegroup = [
 	{

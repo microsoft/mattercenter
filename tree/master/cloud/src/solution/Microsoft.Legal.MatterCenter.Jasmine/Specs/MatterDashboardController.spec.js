@@ -1,5 +1,15 @@
 ﻿/// <disable>JS2074, JS3058</disable>
-// Test suite
+//// ***********************************************************************
+//// Author           : MAQ USER
+//// Created          : 31-08-2016
+////
+//// ***********************************************************************
+//// <copyright file="MatterDashboardController.spec.js" company="MAQSoftware">
+////  Copyright (c) . All rights reserved.
+//// </copyright>
+//// <summary>Test suite for Matter Dashboard Controller</summary>
+//// ***********************************************************************
+
 describe("MatterDashBoard Controller test suite", function () {
     "use strict";
 
@@ -65,17 +75,17 @@ describe("MatterDashBoard Controller test suite", function () {
         it("It should return selected practice group", function () {
             vm.selectedPGs = "";
             vm.practiceGroups = practicegroup;
-            vm.filterSearchOK("pg");
+            vm.filterSearchOK("level1");
             expect(vm.pgdropvisible).toBe(false);
             expect(vm.pgdrop).toBe(false);
             expect(vm.selectedPGsForCancel).toBe(oTestConfiguration.sSelectedPracticeGroup);
             expect(vm.selectedPGs).toBe(oTestConfiguration.sSelectedPracticeGroup);
-
         });
+
         it("It should return selected AOL", function () {
             vm.selectedAOLs = "";
             vm.aolTerms = practicegroup;
-            vm.filterSearchOK("aol");
+            vm.filterSearchOK("level2");
             expect(vm.aoldropvisible).toBe(false);
             expect(vm.aoldrop).toBe(false);
             expect(vm.selectedAOLsForCancel).toBe(oTestConfiguration.sSelectedAreaOfLaw);
@@ -115,13 +125,13 @@ describe("MatterDashBoard Controller test suite", function () {
     });
 
     describe("Verification of showsortby function", function () {
-        it("It should show sortby box", function () {
+        it("It should show sort by box", function () {
             vm.sortbydropvisible = false;
             vm.showsortby(event);
             expect(vm.sortbydrop).toBe(true);
             expect(vm.sortbydropvisible).toBe(true);
         });
-        it("It should hide sortby box", function () {
+        it("It should hide sort by box", function () {
             vm.sortbydropvisible = true;
             vm.showsortby(event);
             expect(vm.sortbydrop).toBe(false);
@@ -180,4 +190,5 @@ describe("MatterDashBoard Controller test suite", function () {
             expect(vm.oUploadGlobal.successBanner).toBe(false);
         });
     });
+
 });

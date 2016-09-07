@@ -3,17 +3,22 @@
 
     // Enter Global Config Values & Instantiate ADAL AuthenticationContext
     window.config = {
+
+        //***************************** CONFIGURAATION VALUES ****************************//
+        tenant: appSettings.tenantId, //Enter tenant Name e.g. microsoft.onmicrosoft.com
+        clientId: appSettings.clientId, //Enter your app Client ID created in Azure Portal
+        tenantUrl: appSettings.tenantURL, //Enter your tenant url,
+        loggedInUserName: appSettings.userName, //Enter logged in user name
+        loggedInUserEmail: appSettings.userEmail, //Enter logged in user email
+        azureSiteName: appSettings.azureSiteName, //Enter Azure site name
+
         instance: 'https://login.microsoftonline.com/',
-        tenant: 'msmatter.onmicrosoft.com', //Enter tenant Name e.g. microsoft.onmicrosoft.com
-        clientId: 'b94f07df-c825-431f-b9c5-b9499e8e9ac1', //Enter your app Client ID created in Azure Portal
         postLogoutRedirectUri: window.location.origin,
-        //cacheLocation: 'localStorage', // enable this for IE, as sessionStorage does not work for localhost.
     };
 
     var authContext = new AuthenticationContext(config);
 
     // Get UI jQuery Objects
-    //var $panel = $(".panel-body");
     var $userDisplay = $(".app-user");
     var $signInButton = $(".app-login");
     var $signOutButton = $(".app-logout");

@@ -264,7 +264,6 @@ namespace Microsoft.Legal.MatterCenter.CreateSampleData
         {
             string login = configVal["Username"];
             string password = configVal["Password"];
-            bool isDeployedOnAzure = Convert.ToBoolean(configVal["IsDeployedOnAzure"], CultureInfo.InvariantCulture);
             ClientContext clientContext = null;
             try
             {
@@ -277,16 +276,8 @@ namespace Microsoft.Legal.MatterCenter.CreateSampleData
                             securePassword.AppendChar(c);
                         }
                         object onlineCredentials;
-                        if (isDeployedOnAzure)
-                        {
-                            onlineCredentials = new SharePointOnlineCredentials(login, securePassword);
-                            clientContext.Credentials = (SharePointOnlineCredentials)onlineCredentials; // Secure the crdentials and generate the SharePoint Online Credentials                    
-                        }
-                        else
-                        {
-                            onlineCredentials = new NetworkCredential(login, securePassword);
-                            clientContext.Credentials = (NetworkCredential)onlineCredentials; // Assign On Premise credentials to the Client Context
-                        }
+                        onlineCredentials = new SharePointOnlineCredentials(login, securePassword);
+                        clientContext.Credentials = (SharePointOnlineCredentials)onlineCredentials; // Secure the crdentials and generate the SharePoint Online Credentials                    
                     }
                 }
             }
