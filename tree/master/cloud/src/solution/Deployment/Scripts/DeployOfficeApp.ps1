@@ -3,10 +3,6 @@
     [parameter(Mandatory=$true)]            
     [ValidateNotNullOrEmpty()]             
     [bool] $IsDeploy
-
-    ,[parameter(Mandatory=$true)]            
-    [ValidateNotNullOrEmpty()]             
-    [bool] $IsOfficeApp
 )
 
 # Function is used to remove app from specified URL
@@ -41,15 +37,8 @@ param
             $SPCredential = Get-Credential -Message "Enter credentials to access SharePoint tenant."
         }
 
-        if($IsDeployedOnAzure)
-        {
-            $onlinecredential = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($SPCredential.UserName, $SPCredential.Password)
-        }
-        else
-        {
-            $onlinecredential = New-Object System.Net.NetworkCredential($SPCredential.UserName, $SPCredential.Password) 
-        }
-
+        $onlinecredential = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($SPCredential.UserName, $SPCredential.Password)
+        
         $context.Credentials = $onlinecredential 
         $List = $context.Web.Lists.GetByTitle($DocLibName)
         $context.Load($List)
@@ -145,16 +134,9 @@ param
         {
             $SPCredential = Get-Credential -Message "Enter credentials to access SharePoint tenant."
         }
-    
-        if($IsDeployedOnAzure)
-        {
-            $onlinecredential = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($SPCredential.UserName, $SPCredential.Password)
-        }
-        else
-        {
-            $onlinecredential = New-Object System.Net.NetworkCredential($SPCredential.UserName, $SPCredential.Password) 
-        }
-    
+
+        $onlinecredential = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($SPCredential.UserName, $SPCredential.Password)
+        
         $context.Credentials = $onlinecredential
     
 		Show-Message -Message "Fetching the Library context" -Type ( [MessageType]::Warning )
@@ -215,26 +197,15 @@ $ParentDirectory = (Get-ParentDirectory)
 # Set log file path, uncomment below line if you want to use this script separately
 #$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt"
 
-if($IsOfficeApp)
-{
-    #App Catalog URL for Office Apps
-    $DocLibName = "Apps for Office"
+#App Catalog URL for Office Apps
+$DocLibName = "Apps for Office"
 
-    #Fetch the Folder containing the XML files for Office Apps
-    $FolderPath = Join-Path $ParentDirectory "Office App"
-}
-else
-{
-    #App Catalog URL for SharePoint Apps
-    $DocLibName = "Apps for SharePoint"
-
-    #Fetch the Folder containing the APP files for SharePoint Apps
-    $FolderPath = Join-Path $ParentDirectory "SharePoint App"
-}
+#Fetch the Folder containing the XML files for Office Apps
+$FolderPath = Join-Path $DeployPath "Office App"
 
 #Fetch the Catalog URL from the Excel File
 Show-Message -Message "Fetching the Catalog URL from the Configuration File" -Type ( [MessageType]::Warning )
-$ExcelValues = Read-FromExcel $ExcelFilePath "Config" ("CatalogSiteURL", "IsDeployedOnAzure") $ErrorLogFile
+$ExcelValues = Read-FromExcel $ExcelFilePath "Config" ("CatalogSiteURL") $ErrorLogFile
 $ExcelValues = $ExcelValues.Split(";")
 if($ExcelValues.length -le 0)
 {
@@ -242,8 +213,6 @@ if($ExcelValues.length -le 0)
     return $false
 }
 $webUrl = $ExcelValues[0]
-# Set parameter based on value read from Excel
-[bool]$IsDeployedOnAzure = if("true" -eq $ExcelValues[1].ToLower()){$true} else {$false}
 if($webUrl -ne $null)
 {
 	Show-Message -Message "Successfully retrieved the Catalog URL" -Type ([MessageType]::Success)
