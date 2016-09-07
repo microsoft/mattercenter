@@ -235,7 +235,6 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
             {
                 string login = configVal["Username"]; // Get the user name
                 string password = configVal["Password"]; // Get the password
-                bool isDeployedOnAzure = Convert.ToBoolean(configVal["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture);
                 string tenantUrl = configVal["TenantURL"];
                 List<string> files = new List<string>();
                 string FileName = string.Empty;
@@ -245,7 +244,7 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
                 string catalogSiteConstant = ConfigurationManager.AppSettings["catalogSiteConstant"];
                 string tenantSettingsFileName = string.Empty;
                 string destinationFileName = string.Empty;
-                ClientContext ClientContext = ConfigureSharePointContext.ConfigureClientContext(tenantUrl, login, password, isDeployedOnAzure);
+                ClientContext ClientContext = ConfigureSharePointContext.ConfigureClientContext(tenantUrl, login, password );
 
                 string pageUrlConstant = urlConstantName;
                 string sourceFileTemplatePath = string.Concat(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, Constants.Backslash, ConfigurationManager.AppSettings["staticContentFolder"], Constants.Backslash, ConfigurationManager.AppSettings["htmlFolder"], Constants.Backslash, sourceFileTemplate);
@@ -282,7 +281,7 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
                     case Constants.DocumentDetails:
                         {
                             pageFileName = ConfigurationManager.AppSettings["DocumentLandingPageName"];
-                            ClientContext = ConfigureSharePointContext.ConfigureClientContext(catalogSiteURL, login, password, isDeployedOnAzure);
+                            ClientContext = ConfigureSharePointContext.ConfigureClientContext(catalogSiteURL, login, password );
                             FileName = string.Concat(catalogSiteURL, ConfigurationManager.AppSettings["spDocumentLanding"]);
                             Console.WriteLine(string.Concat(Constants.DeletePageSuccessMessage, catalogSiteURL));
                             destinationFileName = pageFileName;
@@ -310,7 +309,7 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
                             string clientUrl = client.ClientUrl;
                             // string fileName = clientUrl + ConfigurationManager.AppSettings["spWebDashboardPage"];
                             string settingsFileName = string.Concat(clientUrl, ConfigurationManager.AppSettings["spSettingsPage"]);
-                            ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(clientUrl, login, password, isDeployedOnAzure);
+                            ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(clientUrl, login, password );
                             // Deleting client web dashboard pages
                             Console.WriteLine(string.Concat(Constants.DeletePageMessage, clientUrl));
                             DeletePages(clientContext, files);
@@ -487,11 +486,10 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
             {
                 string login = configVal["Username"]; // Get the user name
                 string password = configVal["Password"]; // Get the password
-                bool isDeployedOnAzure = Convert.ToBoolean(configVal["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture);
                 List<string> files = new List<string>();
                 string tenantUrl = configVal["TenantURL"];
                 string tenantDashboardFileName, oldWebdashboard, catalogSiteURL, FileName = string.Empty;
-                ClientContext siteClientContext = ConfigureSharePointContext.ConfigureClientContext(tenantUrl, login, password, isDeployedOnAzure);
+                ClientContext siteClientContext = ConfigureSharePointContext.ConfigureClientContext(tenantUrl, login, password );
                 switch (Convert.ToString(pageType, CultureInfo.InvariantCulture).ToUpperInvariant())
                 {
                     case Constants.MatterCenterHome:
@@ -512,7 +510,7 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
                     case Constants.DocumentDetails:
                         {
                             catalogSiteURL = configVal["CatalogSiteURL"];
-                            siteClientContext = ConfigureSharePointContext.ConfigureClientContext(catalogSiteURL, login, password, isDeployedOnAzure);
+                            siteClientContext = ConfigureSharePointContext.ConfigureClientContext(catalogSiteURL, login, password );
                             FileName = ConfigurationManager.AppSettings["DocumentLandingPageName"];
                             Console.WriteLine(string.Concat(Constants.DeletePageSuccessMessage + catalogSiteURL));
                             break;
@@ -535,7 +533,7 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
                             try
                             {
                                 string clientUrl = client.ClientUrl;
-                                ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(clientUrl, login, password, isDeployedOnAzure);
+                                ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(clientUrl, login, password );
                                 Console.WriteLine(string.Concat(Constants.DeletePageSuccessMessage, clientUrl));
                                 DeletePages(clientContext, files);
                                 DeleteList(clientContext);

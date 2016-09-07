@@ -73,17 +73,6 @@ Show-Message -Message "Adding common library functions" -Type ([MessageType]::Wa
 . "$ScriptDirectory\LibraryFunctions.ps1"
 Show-Message -Message "Added common library functions" -Type ([MessageType]::Success)
 
-
-#----------------------------------------------
-# Reverting Step 6
-#----------------------------------------------
-if (6 -le $Checkpoint)
-{
-    Show-Message -Message ""
-    Show-Message -Message "Undoing Encryption"
-    . "$ScriptDirectory\EncryptDecrypt.ps1" -ToEncrypt: $false -ErrorLogPath: $RevertLogFile
-}
-
 #----------------------------------------------
 # Reverting step 3
 #----------------------------------------------

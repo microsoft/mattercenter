@@ -326,9 +326,8 @@ namespace Microsoft.Legal.MatterCenter.CreateTerm
                 string targetSite = listval["CatalogSiteURL"]; // Get the URL of site collection
                 string login = listval["Username"]; // Get the user name
                 string password = listval["Password"]; // Get the password
-                bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture); // Get Is Deployed on Azure parameter
 
-                using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password, isDeployedOnAzure))
+                using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password ))
                 {
                     CreateTermsForClients(TermsData, clientContext);
                 }
@@ -389,9 +388,8 @@ namespace Microsoft.Legal.MatterCenter.CreateTerm
             string targetSite = listval["CatalogSiteURL"]; // Get the URL of site collection
             string login = listval["Username"]; // Get the user name
             string password = listval["Password"]; // Get the password
-            bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture); // Get Is Deployed on Azure parameter
 
-            using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password, isDeployedOnAzure))
+            using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password ))
             {
                 try
                 {
@@ -554,9 +552,8 @@ namespace Microsoft.Legal.MatterCenter.CreateTerm
             string targetSite = listval["CatalogSiteURL"]; // Get the URL of site collection
             string login = listval["Username"]; // Get the user name
             string password = listval["Password"]; // Get the password
-            bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture); // Get Is Deployed on Azure parameter
 
-            using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password, isDeployedOnAzure))
+            using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password ))
             {
                 try
                 {

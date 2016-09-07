@@ -270,10 +270,9 @@ namespace Microsoft.Legal.MatterCenter.UploadFile
                         string password = args[2]; // Get the password
                         string catalogURL = listval["CatalogSiteURL"];
                         string matterCenterAssetsFolder = ConfigurationManager.AppSettings["AssetsFolder"];
-                        bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"], CultureInfo.InvariantCulture);
                         parentPath = Convert.ToString(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, CultureInfo.InvariantCulture);
 
-                        using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(catalogURL, login, password, isDeployedOnAzure))
+                        using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(catalogURL, login, password ))
                         {
                             List siteAssets;
                             ListItemCollection matterCenterFolder;

@@ -57,9 +57,8 @@ namespace Microsoft.Legal.MatterCenter.UpdateLists
                     if (listval.Count() > 0)
                     {
                         // Get Is Deployed on Azure parameter
-                        bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture);
                         // Get the Client Context
-                        using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(listval["CatalogSiteURL"], username, password, isDeployedOnAzure))  
+                        using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(listval["CatalogSiteURL"], username, password ))  
                         {
                             try
                             {
