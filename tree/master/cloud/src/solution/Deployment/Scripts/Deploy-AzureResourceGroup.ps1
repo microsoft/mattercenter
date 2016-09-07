@@ -41,7 +41,7 @@ Param(
 $logFileName = "MCDeploy"+(Get-Date).ToString('yyyyMMdd-HHmmss')+".log"
 Start-Transcript -path $logFileName
 $WebAppName = $WebAppName + ((Get-Date).ToUniversalTime()).ToString('MMddHHmm')
-if($WebAppName.Length > 60)
+if($WebAppName.Length -gt 60)
 {
 	$WebAppName =  $WebAppName.Substring(0,60)
 }
@@ -54,7 +54,7 @@ $SiteURL = $CentralRepositoryUrl.Substring(0, $indexOfSPO + 4)
 $Redis_cache_name = $WebAppName+"RedisCache"
 $autoscalesettings_name = $WebAppName+"ScaleSettings"
 $components_AppInsights_name = $WebAppName+"AppInsights"
-if($WebAppName.Length > 24)
+if($WebAppName.Length -gt 24)
 {
 	$vaults_KeyVault_name = $WebAppName.Substring(0,24)
 	$storageAccount_name = $WebAppName.Substring(0,24)
