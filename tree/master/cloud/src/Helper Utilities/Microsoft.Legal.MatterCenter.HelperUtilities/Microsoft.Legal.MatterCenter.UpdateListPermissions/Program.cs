@@ -51,7 +51,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateListPermissions
                 try
                 {
                     string targetSite = configVal["CatalogSiteURL"] + "/" + ConfigurationManager.AppSettings["ProvisionMatterAppName"];
-                    using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, username, password, Convert.ToBoolean(configVal["IsDeployedOnAzure"], CultureInfo.InvariantCulture)))
+                    using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, username, password))
                     {
                         UpdateSendMailListPermissions(clientContext, configVal);
                     }

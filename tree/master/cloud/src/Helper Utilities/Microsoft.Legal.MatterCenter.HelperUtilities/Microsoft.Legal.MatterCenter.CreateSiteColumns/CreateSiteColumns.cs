@@ -292,14 +292,13 @@ namespace Microsoft.Legal.MatterCenter.CreateSiteColumns
                 string targetSite = listval["ContentTypeHubURL"]; // Get the URL of site collection
                 string contentType = ConfigurationManager.AppSettings["ContentTypeValue"]; // Get Content Type DMS from Excel
                 string contentTypegroup = ConfigurationManager.AppSettings["ContentTypeGroupValue"]; // Get Group of Content Type
-                bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture); // Get Is Deployed on Azure parameter
 
                 try
                 {
                     string siteColNames = GetConfigDataFromResource("SiteColumn_Config", "SiteColumnNames");
                     List<string> siteColumns = siteColNames.Split(new char[] { ',' }).ToList();
 
-                    using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password, isDeployedOnAzure))
+                    using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password ))
                     {
                         try
                         {

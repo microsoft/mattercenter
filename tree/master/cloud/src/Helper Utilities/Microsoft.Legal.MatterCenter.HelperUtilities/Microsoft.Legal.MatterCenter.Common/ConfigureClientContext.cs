@@ -28,9 +28,8 @@ namespace Microsoft.Legal.MatterCenter.Common
         /// <param name="url">Site URL</param>
         /// <param name="userId">User id</param>
         /// <param name="password">Password to authenticate</param>
-        /// <param name="isDeployedOnAzure">To resolve what kind of credentials are to be use</param>
         /// <returns>Client context</returns>
-        public static ClientContext ConfigureClientContext(string url, string userId, string password, bool isDeployedOnAzure)
+        public static ClientContext ConfigureClientContext(string url, string userId, string password)
         {
             using (var securePassword = new SecureString())
             {
@@ -43,16 +42,9 @@ namespace Microsoft.Legal.MatterCenter.Common
                     using (ClientContext clientContext = new ClientContext(url))
                     {
                         object onlineCredentials;
-                        if (isDeployedOnAzure)
-                        {
-                            onlineCredentials = new SharePointOnlineCredentials(userId, securePassword);
-                            clientContext.Credentials = (SharePointOnlineCredentials)onlineCredentials; // Secure the credentials and generate the SharePoint Online Credentials                    
-                        }
-                        else
-                        {
-                            onlineCredentials = new NetworkCredential(userId, securePassword);
-                            clientContext.Credentials = (NetworkCredential)onlineCredentials; // Assign On Premise credentials to the Client Context
-                        }
+                        onlineCredentials = new SharePointOnlineCredentials(userId, securePassword);
+                        clientContext.Credentials = (SharePointOnlineCredentials)onlineCredentials; // Secure the credentials and generate the SharePoint Online Credentials                    
+
                         clientContext.ExecuteQuery();
                         return clientContext;
                     }

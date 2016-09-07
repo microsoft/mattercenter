@@ -41,12 +41,11 @@ namespace Microsoft.Legal.MatterCenter.UpdateView
                     string filePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + "\\" + ConfigurationManager.AppSettings["filename"];
                     string sheetName = ConfigurationManager.AppSettings["SheetName"];
                     Dictionary<string, string> listval = ExcelOperations.ReadFromExcel(filePath, sheetName);
-                    bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"], CultureInfo.InvariantCulture);
                     string username = args[0].Trim();
                     string password = args[1].Trim();
 
                     // Read client context for Tenant URL
-                    using (ClientContext userClientContext = ConfigureSharePointContext.ConfigureClientContext(listval["CatalogSiteURL"], username, password, isDeployedOnAzure))
+                    using (ClientContext userClientContext = ConfigureSharePointContext.ConfigureClientContext(listval["CatalogSiteURL"], username, password ))
                     {
                         // Reading SharePoint properties
                         string groupName = ConfigurationManager.AppSettings["PracticeGroupName"]; // Get Practice Group Name
@@ -67,7 +66,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateView
                                 clientUrl = client.ClientUrl;
                                 if (!string.IsNullOrEmpty(clientUrl))
                                 {
-                                    ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(clientUrl, username, password, isDeployedOnAzure);
+                                    ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(clientUrl, username, password );
                                     List list = clientContext.Web.Lists.GetByTitle(ConfigurationManager.AppSettings["ListName"]);
                                     ViewCollection viewFields = list.Views;
                                     View targetView = viewFields.GetByTitle(ConfigurationManager.AppSettings["ViewName"]);

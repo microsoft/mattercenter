@@ -7,10 +7,9 @@
 # Step 3: Create site columns and content types
 # Step 4: Update search configuration file and upload to SharePoint
 # Step 5: Activate SharePoint Server Publishing infrastructure feature on catalog site collection 
-# Step 6: Encrypting the config files
-# Step 7: Creating Site Collection(s)
-# Step 8: Provisioning Web dashboard
-# Step 9: Update site collection view with field(s)
+# Step 6: Creating Site Collection(s)
+# Step 7: Provisioning Web dashboard
+# Step 8: Update site collection view with field(s)
 #
 # Any changes in these steps, kindly update this list. Also update the checkpoint in Revert script
 #----------------------------------------------
@@ -193,7 +192,7 @@ If ($Null -eq $SPCredential -or $Null -eq $ExchangeCredential) {
 Show-Message -Message ""
 . "$ScriptDirectory\PreRequisitesScript.ps1"
 
-$ExcelValues = (Read-FromExcel $ExcelFilePath "Config" ("TenantURL", "IsDeployedOnAzure", "TenantAdminURL", "CatalogSiteURL") $ErrorLogFile)
+$ExcelValues = (Read-FromExcel $ExcelFilePath "Config" ("TenantURL", "TenantAdminURL", "CatalogSiteURL") $ErrorLogFile)
 $ExcelValues = $ExcelValues.Split(";")
 if($ExcelValues.length -le 0)
 {
@@ -201,29 +200,14 @@ if($ExcelValues.length -le 0)
     return $false
 }
 $TenantUrl = $ExcelValues[0]
-$IsDeployedOnAzure = [System.Convert]::ToBoolean($ExcelValues[1])
-$TenantAdminURL=$ExcelValues[2]
-$CatalogSiteUrl=$ExcelValues[3]
+$TenantAdminURL=$ExcelValues[1]
+$CatalogSiteUrl=$ExcelValues[2]
 $Username = $SPCredential.UserName
 $Password = $SPCredential.GetNetworkCredential().Password
 
 if($IsValid -eq $true)
 {
     Show-Message -Message "Starting deployment..."
-
-    #----------------------------------------------
-    # Create crawled and managed properties and add mapping
-    #----------------------------------------------
-    Show-Message -Message ""
-	Show-Message -Message "Create Managed Properties"
-    . "$ScriptDirectory\CreateProperties.ps1"
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Failed to create Managed Properties" -Type ([MessageType]::Failure)
-        return
-    }
-    else {
-		Show-Message -Message "Successfully created Managed Properties" -Type ([MessageType]::Success)
-    }
 
 	# Setting current location to "Helper Utilities" folder, in order to run the utility applications
     cd $HelperPath
@@ -339,37 +323,20 @@ if($IsValid -eq $true)
 	finally {
         $Context.Dispose()
     }
-
-    #----------------------------------------------
-    # Encrypt the appSettings section in web.config
-    #----------------------------------------------
-    Show-Message -Message "Step 6: Encrypting the config files"
-    . "$ScriptDirectory\EncryptDecrypt.ps1" -ToEncrypt: $true -ErrorLogPath: $ErrorLogFile
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Encryption failed..." -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 6
-        return
-    }
-    else {
-		Show-Message -Message "Config files encrypted successfully..." -Type ([MessageType]::Success)
-    }
    
     #---------------------------------------------------------------------
     # Create site collection(s) on SharePoint library
     #---------------------------------------------------------------------
-	if($IsDeployedOnAzure)
+	Connect-SPOService -url $TenantAdminUrl -Credential $SPCredential
+	$Rootsite = Get-SPOSite($TenantUrl)
+	$ReturnedValue = [string[]]$Rootsite.DenyAddAndCustomizePages
+	If("false" -ne $ReturnedValue.ToLower())
 	{
-		Connect-SPOService -url $TenantAdminUrl -Credential $SPCredential
-		$Rootsite = Get-SPOSite($TenantUrl)
-		$ReturnedValue = [string[]]$Rootsite.DenyAddAndCustomizePages
-		If("false" -ne $ReturnedValue.ToLower())
-		{
-			Set-SPOSite -Identity $TenantUrl -DenyAddAndCustomizePages $false
-		}
+		Set-SPOSite -Identity $TenantUrl -DenyAddAndCustomizePages $false
 	}
 	
-    Show-Message -Message "Step 8: Creating Site Collection(s)"
-    . "$ScriptDirectory\CreateSiteCollection.ps1" -IsDeployedOnAzure: $IsDeployedOnAzure -Username: $Username -Password $Password
+    Show-Message -Message "Step 6: Creating Site Collection(s)"
+    . "$ScriptDirectory\CreateSiteCollection.ps1" -Username: $Username -Password $Password
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Creating site collection failed" -Type ([MessageType]::Failure)
     }
@@ -380,7 +347,7 @@ if($IsValid -eq $true)
     #---------------------------------------------------------------------
     # Provisioning Web Dashboard page(s) on SharePoint library
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 9: Provisioning Web dashboard"
+    Show-Message -Message "Step 7: Provisioning Web dashboard"
     & "$HelperPath\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.exe" "true" $Username $Password
 
     If ((Get-Content $ErrorLogFile) -ne $Null) {
@@ -393,7 +360,7 @@ if($IsValid -eq $true)
 	#---------------------------------------------------------------------
     # Update site pages view with fields
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 10: Update site collection view with fields"
+    Show-Message -Message "Step 8: Update site collection view with fields"
     & "$HelperPath\Microsoft.Legal.MatterCenter.UpdateView.exe" $Username $Password
 
     #----------------------------------------------

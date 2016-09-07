@@ -4,7 +4,6 @@
 $objSheet
 [bool] $IsValid = $false
 [string] $SharePointURL = ''
-[bool] $IsDeployedOnAzure = $true
 [string] $PublishingFeatureGuid = "f6924d36-2fa8-4f0b-b16d-06b7250180fa"
 
 #--------------------------------------------------------
@@ -174,7 +173,7 @@ if($IsValid -eq $true){
     $ExcelValues = ""
 	Show-Message -Message "Configuration Excel file exists" -Type ([MessageType]::Success)
     Show-Message -Message "Reading parameters from Excel file..."    
-    $ExcelValues = (Read-FromExcel $ExcelFilePath "Config" ("TenantURL", "IsDeployedOnAzure") $ErrorLogFile)
+    $ExcelValues = (Read-FromExcel $ExcelFilePath "Config" ("TenantURL") $ErrorLogFile)
     $ExcelValues = $ExcelValues.Split(";")
     if($ExcelValues.length -le 0)
     {
@@ -182,12 +181,6 @@ if($IsValid -eq $true){
         return $false
     }
     $SharePointURL = $ExcelValues[0]   
-    if ("false" -eq $ExcelValues[1].ToLowerInvariant()) {
-        $IsDeployedOnAzure = $false
-    }
-    else {
-        $IsDeployedOnAzure = $true
-    }
 }
 else
 {    
@@ -208,24 +201,13 @@ if($IsValid -eq $true)
 
 # Perform IIS version check if previous check is successful
 if($IsValid -eq $true){
-	Show-Message -Message ".NET Framework Version 4.0 or greater exists" -Type ([MessageType]::Success)
-    
-    if(!($IsDeployedOnAzure))
-    {
-        Show-Message -Message ""
-        Show-Message -Message "Running IIS Version check... "
-        $IsValid = DisplayIISVersion 'HKLM:\Software\Microsoft\InetStp' 'SetupString'
-    }
-    
+	Show-Message -Message ".NET Framework Version 4.0 or greater exists" -Type ([MessageType]::Success)    
 }
 
 # Perform SharePoint version check if previous check is successful
 if($IsValid -eq $true)
 {    
-    if(!($IsDeployedOnAzure))
-    {
-		Show-Message -Message "IIS version 7.0 or greater exists" -Type ([MessageType]::Success)
-    }
+
     Show-Message -Message ""
     Show-Message -Message "Running SharePoint Version check for $SharePointURL..."
 
@@ -235,8 +217,6 @@ if($IsValid -eq $true)
 if($IsValid -eq $true)
 {
 	Show-Message -Message "Current SharePoint version is 2013" -Type ([MessageType]::Success)
-   if($IsDeployedOnAzure)
-   {
        Show-Message -Message ""
        Show-Message -Message "Running check for SharePoint Online library..." 
        $IsValid = Test-Command "Connect-SPOService"
@@ -244,34 +224,28 @@ if($IsValid -eq $true)
        {
 		   Show-Message -Message "PowerShell SharePoint Online Library is not present, you can download it from following URL: http://www.microsoft.com/en-us/download/confirmation.aspx?id=35588" -Type ([MessageType]::Failure)
        }
-   }
 }
 
 # Final check to see whether all checks have completed successfully or error has been encountered
 if($IsValid -eq $true)
 {    
-    if($IsDeployedOnAzure)
-    {
+
 		Show-Message -Message "PowerShell SharePoint Online library is present" -Type ([MessageType]::Success)
-    }
 }
 
 # Check for Azure PowerShell cmdlets
 if($IsValid -eq $true)
 {  
-	if($IsDeployedOnAzure)
+	Show-Message -Message ""
+	Show-Message -Message "Running check for Azure PowerShell..." 
+	$IsValid = Test-Command "Get-AzureWebsite"
+	if(!($IsValid))
 	{
-		Show-Message -Message ""
-		Show-Message -Message "Running check for Azure PowerShell..." 
-		$IsValid = Test-Command "Get-AzureWebsite"
-		if(!($IsValid))
-		{
-			Show-Message -Message "Azure PowerShell is not present, you can download it from following URL: http://go.microsoft.com/?linkid=9811175 " -Type ([MessageType]::Failure)
-		}
-		else
-		{
-			Show-Message -Message "Azure PowerShell is present" -Type ([MessageType]::Success)
-		}
+		Show-Message -Message "Azure PowerShell is not present, you can download it from following URL: http://go.microsoft.com/?linkid=9811175 " -Type ([MessageType]::Failure)
+	}
+	else
+	{
+		Show-Message -Message "Azure PowerShell is present" -Type ([MessageType]::Success)
 	}
 }
 
@@ -279,36 +253,4 @@ if($IsValid -eq $true)
 {
     Show-Message -Message ""
     Show-Message -Message "Running check for Workflow Service Application Check..."
-    if(!($IsDeployedOnAzure))
-    {
-        Add-PSSnapin "Microsoft.SharePoint.PowerShell"
-        $IsValid = Test-Command "Get-SPWorkflowServiceApplicationProxy"
-        if($IsValid) 
-        {
-            $IsWorkFlow = Get-SPWorkflowServiceApplicationProxy
-            if($IsWorkFlow)
-            {
-				Show-Message -Message "Workflow Service Application present..." -Type ([MessageType]::Success)
-                Show-Message -Message ""
-				Show-Message -Message "Pre-requisite check completed successfully" -Type ([MessageType]::Success)
-            }
-            else
-            {
-				Show-Message -Message "Workflow Service Application not present..." -Type ([MessageType]::Failure)
-                Show-Message -Message ""
-				Show-Message -Message "Pre-requisite check failed, Aborting process" -Type ([MessageType]::Failure)
-            }
-        }
-    }
-    else
-    {
-        Show-Message -Message ""
-		Show-Message -Message "Skipping check for Workflow Service application as it is SharePoint Online Deployment"
-    }
-}
-
-If($IsValid -eq $false)
-{
-    Show-Message -Message ""
-	Show-Message -Message "Pre-requisite check failed, Aborting process" -Type ([MessageType]::Failure)
-}
+ }

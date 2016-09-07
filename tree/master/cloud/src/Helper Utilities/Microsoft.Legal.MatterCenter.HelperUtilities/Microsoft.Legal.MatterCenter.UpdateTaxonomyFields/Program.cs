@@ -200,8 +200,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateTaxonomyFields
             // Read from Excel
             Dictionary<string, string> listval = ExcelOperations.ReadFromExcel(filePath, sheetName);
             string catalogSiteURL = listval["TenantURL"];
-            bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"], CultureInfo.InvariantCulture);
-            return ConfigureSharePointContext.ConfigureClientContext(catalogSiteURL, login, password, isDeployedOnAzure);
+            return ConfigureSharePointContext.ConfigureClientContext(catalogSiteURL, login, password );
         }
     }
 }
