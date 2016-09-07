@@ -1032,7 +1032,7 @@
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
                                     angular.forEach(response, function (res) {
-                                        if (pinobj.documentID == res.documentID) {
+                                        if (pinobj.documentCreatedDate == res.documentCreatedDate) {
                                             if (res.ismatterdone == undefined && !res.ismatterdone) {
                                                 res.MatterInfo = "Unpin this matter";
                                                 res.ismatterdone = true;
@@ -1079,7 +1079,7 @@
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
                                     angular.forEach(response, function (res) {
-                                        if (pinobj.documentID == res.documentID) {
+                                        if (pinobj.documentCreatedDate == res.documentCreatedDate) {
                                             if (res.ismatterdone == undefined && !res.ismatterdone) {
                                                 res.MatterInfo = "Unpin this matter";
                                                 res.ismatterdone = true;
