@@ -54,8 +54,7 @@ namespace Microsoft.Legal.MatterCenter.ConfigureLists
                     if (listval.Count() > 0)
                     {
                         string targetSite = listval["CatalogSiteURL"]; // Get the URL of site collection
-                        bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture); // Get Is Deployed on Azure parameter                                  
-                        using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password, isDeployedOnAzure))
+                        using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password))
                         {
                             int listCount = 0;
                             try

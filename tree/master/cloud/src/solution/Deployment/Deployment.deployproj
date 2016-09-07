@@ -35,6 +35,7 @@
     <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
     <None Include="Scripts\Create-MatterCenterWebJob.ps1" />
     <None Include="Scripts\Create-AzureStorageTable.ps1" />
+    <None Include="Scripts\Deploy-SPOFiles.ps1" />
     <None Include="Scripts\KeyVault-Config.ps1" />
     <None Include="Scripts\KeyVaultSecret.ps1" />
     <None Include="Scripts\WebJob\MatterCenterWebJobs.zip" />

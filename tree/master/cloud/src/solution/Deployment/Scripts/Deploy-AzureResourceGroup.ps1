@@ -67,6 +67,7 @@ else
 $serverfarms_WebPlan_name = $WebAppName+"WebPlan"
 $ADApp_Name = $WebAppName+"ADApp"
 $global:thumbPrint = ""
+$global:appInsightsId = ""
 $storageAccount_name 
 $ADApplicationId = ""
 Write-Output "Reading from template.parameters.json file..."
@@ -178,5 +179,8 @@ Invoke-Expression $storageScriptFile
 
 $webJobScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'Create-MatterCenterWebJob.ps1')
 Invoke-Expression $webJobScriptFile
+
+$spoDeployFiles = [System.IO.Path]::Combine($PSScriptRoot, 'Deploy-SPOFiles.ps1')
+Invoke-Expression $spoDeployFiles
 
 Stop-Transcript 
