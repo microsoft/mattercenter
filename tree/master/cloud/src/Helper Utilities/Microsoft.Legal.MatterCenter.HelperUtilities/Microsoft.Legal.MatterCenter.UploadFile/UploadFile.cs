@@ -63,7 +63,8 @@ namespace Microsoft.Legal.MatterCenter.UploadFile
         /// <param name="siteAssets">Site Assets</param>
         /// <param name="listFolders">List Folders</param>
         /// <param name="listval">Configuration values from Configuration Excel</param>
-        private static void UploadFilesToFolder(string matterCenterAssetsFolder, ClientContext clientContext, List siteAssets, FolderCollection listFolders, Dictionary<string, string> listval)
+        private static void UploadFilesToFolder(string matterCenterAssetsFolder, ClientContext clientContext,
+            List siteAssets, FolderCollection listFolders, Dictionary<string, string> listval, string azureWebsiteUrl, string appInsightsId)
         {
             try
             {
@@ -121,31 +122,31 @@ namespace Microsoft.Legal.MatterCenter.UploadFile
                     Console.WriteLine(" ------- Starting to upload assets ------- ");
 
                     // Upload matter landing assets
-                    UploadAssets(parentDirectory + "\\" + matterLandingAssetsFolder, "*", matterCenterAssetsUrl + "/" + matterLandingAssetsFolder, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + matterLandingAssetsFolder, "*", matterCenterAssetsUrl + "/" + matterLandingAssetsFolder, clientContext, listval, azureWebsiteUrl, appInsightsId);
                     // Upload web dashboard images
-                    UploadAssets(parentDirectory + "\\" + webDashboardAssetsFolder + "\\" + images, "*", matterCenterAssetsUrl + "/" + webDashboardAssetsFolder + "/" + images, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + webDashboardAssetsFolder + "\\" + images, "*", matterCenterAssetsUrl + "/" + webDashboardAssetsFolder + "/" + images, clientContext, listval, azureWebsiteUrl, appInsightsId);
                     // Upload web dashboard scripts
-                    UploadAssets(parentDirectory + "\\" + webDashboardAssetsFolder + "\\" + scripts, "*", matterCenterAssetsUrl + "/" + webDashboardAssetsFolder + "/" + scripts, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + webDashboardAssetsFolder + "\\" + scripts, "*", matterCenterAssetsUrl + "/" + webDashboardAssetsFolder + "/" + scripts, clientContext, listval, azureWebsiteUrl, appInsightsId);
                     // Upload web dashboard styles
-                    UploadAssets(parentDirectory + "\\" + webDashboardAssetsFolder + "\\" + styles, "*", matterCenterAssetsUrl + "/" + webDashboardAssetsFolder + "/" + styles, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + webDashboardAssetsFolder + "\\" + styles, "*", matterCenterAssetsUrl + "/" + webDashboardAssetsFolder + "/" + styles, clientContext, listval, azureWebsiteUrl, appInsightsId);
                     // Upload matter landing images
-                    UploadAssets(parentDirectory + "\\" + matterLandingAssetsFolder + "\\" + images, "*", matterCenterAssetsUrl + "/" + matterLandingAssetsFolder + "/" + images, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + matterLandingAssetsFolder + "\\" + images, "*", matterCenterAssetsUrl + "/" + matterLandingAssetsFolder + "/" + images, clientContext, listval, azureWebsiteUrl, appInsightsId);
                     // Upload matter landing scripts
-                    UploadAssets(parentDirectory + "\\" + matterLandingAssetsFolder + "\\" + scripts, "*", matterCenterAssetsUrl + "/" + matterLandingAssetsFolder + "/" + scripts, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + matterLandingAssetsFolder + "\\" + scripts, "*", matterCenterAssetsUrl + "/" + matterLandingAssetsFolder + "/" + scripts, clientContext, listval, azureWebsiteUrl, appInsightsId);
                     // Upload matter landing styles
-                    UploadAssets(parentDirectory + "\\" + matterLandingAssetsFolder + "\\" + styles, "*", matterCenterAssetsUrl + "/" + matterLandingAssetsFolder + "/" + styles, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + matterLandingAssetsFolder + "\\" + styles, "*", matterCenterAssetsUrl + "/" + matterLandingAssetsFolder + "/" + styles, clientContext, listval, azureWebsiteUrl, appInsightsId);
                     // Upload common images
-                    UploadAssets(parentDirectory + "\\" + commonAssetsFolder + "\\" + images, "*", matterCenterAssetsUrl + "/" + commonAssetsFolder + "/" + images, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + commonAssetsFolder + "\\" + images, "*", matterCenterAssetsUrl + "/" + commonAssetsFolder + "/" + images, clientContext, listval, azureWebsiteUrl, appInsightsId);
                     // Upload common scripts
-                    UploadAssets(parentDirectory + "\\" + commonAssetsFolder + "\\" + scripts, "*", matterCenterAssetsUrl + "/" + commonAssetsFolder + "/" + scripts, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + commonAssetsFolder + "\\" + scripts, "*", matterCenterAssetsUrl + "/" + commonAssetsFolder + "/" + scripts, clientContext, listval, azureWebsiteUrl, appInsightsId);
                     // Upload common styles
-                    UploadAssets(parentDirectory + "\\" + commonAssetsFolder + "\\" + styles, "*", matterCenterAssetsUrl + "/" + commonAssetsFolder + "/" + styles, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + commonAssetsFolder + "\\" + styles, "*", matterCenterAssetsUrl + "/" + commonAssetsFolder + "/" + styles, clientContext, listval, azureWebsiteUrl, appInsightsId);
 
-                    UploadAssets(parentDirectory + "\\" + documentLandingAssetsFolder + "\\" + scripts, "*", matterCenterAssetsUrl + "/" + documentLandingAssetsFolder + "/" + scripts, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + documentLandingAssetsFolder + "\\" + scripts, "*", matterCenterAssetsUrl + "/" + documentLandingAssetsFolder + "/" + scripts, clientContext, listval, azureWebsiteUrl, appInsightsId);
 
-                    UploadAssets(parentDirectory + "\\" + documentLandingAssetsFolder + "\\" + images, "*", matterCenterAssetsUrl + "/" + documentLandingAssetsFolder + "/" + images, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + documentLandingAssetsFolder + "\\" + images, "*", matterCenterAssetsUrl + "/" + documentLandingAssetsFolder + "/" + images, clientContext, listval, azureWebsiteUrl, appInsightsId);
 
-                    UploadAssets(parentDirectory + "\\" + documentLandingAssetsFolder + "\\" + styles, "*", matterCenterAssetsUrl + "/" + documentLandingAssetsFolder + "/" + styles, clientContext, listval);
+                    UploadAssets(parentDirectory + "\\" + documentLandingAssetsFolder + "\\" + styles, "*", matterCenterAssetsUrl + "/" + documentLandingAssetsFolder + "/" + styles, clientContext, listval, azureWebsiteUrl, appInsightsId);
                 }
                 else
                 {
@@ -166,7 +167,8 @@ namespace Microsoft.Legal.MatterCenter.UploadFile
         /// <param name="matterCenterAssetsUrl">SharePoint assets URL to upload file</param>
         /// <param name="clientContext">SharePoint context to upload the files</param>
         /// <param name="listval">Value in list</param>
-        private static void UploadAssets(string directory, string searchPattern, string matterCenterAssetsUrl, ClientContext clientContext, Dictionary<string, string> listval)
+        private static void UploadAssets(string directory, string searchPattern, string matterCenterAssetsUrl,
+            ClientContext clientContext, Dictionary<string, string> listval, string azureWebsiteUrl, string appInsightsId)
         {
             try
             {
@@ -181,11 +183,11 @@ namespace Microsoft.Legal.MatterCenter.UploadFile
                     {
                         using (StreamReader fileStream = new StreamReader(uploadFilePath))
                         {
-                            string siteUrl = listval["UISiteURL"];
+                            string siteUrl = azureWebsiteUrl;
                             string managePermissionUrl = siteUrl + ConfigurationManager.AppSettings["ManagePermissionPageName"];
                             string tenantWebDashboardUrl = ConfigurationManager.AppSettings["WebDashboardPageName"];
                             string catalogsiteUrl = listval["CatalogSiteURL"];
-                            string appInsightsID = listval["SharePointApplicationInsightAppId"];
+                            string appInsightsID = appInsightsId;
                             string managePermissionUrlPlaceHolder = ConfigurationManager.AppSettings["ManagePermissionUrl"];
                             string tenantWebDashboardUrlPlaceHolder = ConfigurationManager.AppSettings["TenantWebDashboardUrl"];
                             string catalogsiteUrlPlaceHolder = ConfigurationManager.AppSettings["CatalogsiteUrl"];
@@ -256,23 +258,27 @@ namespace Microsoft.Legal.MatterCenter.UploadFile
         {
             try
             {
-                if (2 <= args.Length)
+                if (5 <= args.Length)
                 {
                     bool uploadAssets = Convert.ToBoolean(args[0], CultureInfo.InvariantCulture);
-                    if (!ExcelOperations.IsNullOrEmptyCredential(args[1], args[2]))  // Validate Username and Password
+                    if (!ExcelOperations.IsNullOrEmptyCredential(args[1], args[2]))  // Validate Username and Password and azure website url
                     {
                         Console.WriteLine("Reading inputs from Excel...");
                         string parentPath = Convert.ToString(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, CultureInfo.InvariantCulture);
+                        Console.WriteLine(parentPath);
                         string filePath = parentPath + "\\" + ConfigurationManager.AppSettings["filename"];
+                        Console.WriteLine(filePath);
                         string sheetName = ConfigurationManager.AppSettings["configsheetname"];
                         Dictionary<string, string> listval = ExcelOperations.ReadFromExcel(filePath, sheetName);
                         string login = args[1]; // Get the user name
                         string password = args[2]; // Get the password
+                        string azureWebsiteUrl = args[3];
+                        string appInsightsId = args[4];
                         string catalogURL = listval["CatalogSiteURL"];
-                        string matterCenterAssetsFolder = ConfigurationManager.AppSettings["AssetsFolder"];
+                        string matterCenterAssetsFolder = ConfigurationManager.AppSettings["AssetsFolder"];                        
                         parentPath = Convert.ToString(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName, CultureInfo.InvariantCulture);
 
-                        using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(catalogURL, login, password ))
+                        using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(catalogURL, login, password))
                         {
                             List siteAssets;
                             ListItemCollection matterCenterFolder;
@@ -289,7 +295,8 @@ namespace Microsoft.Legal.MatterCenter.UploadFile
 
                             if (uploadAssets)
                             {
-                                UploadFilesToFolder(matterCenterAssetsFolder, clientContext, siteAssets, listFolders, listval);
+                                UploadFilesToFolder(matterCenterAssetsFolder, clientContext, siteAssets,
+                                    listFolders, listval, azureWebsiteUrl, appInsightsId);
                             }
                         }
                     }
