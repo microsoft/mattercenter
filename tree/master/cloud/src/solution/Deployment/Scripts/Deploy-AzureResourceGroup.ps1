@@ -166,7 +166,7 @@ New-AzureRmResourceGroupDeployment -Name ((Get-ChildItem $TemplateFile).BaseName
                                    @OptionalParameters `
                                    -Force -Verbose
 
-$creds = Get-Credential
+$creds = Get-Credential -Message "Enter credentials for connecting to Azure"
 
 Write-Output "Getting the storage key to write to key vault..."
 $StorageAccountKey = Get-AzureRmStorageAccountKey -Name $storageAccount_name -ResourceGroupName $ResourceGroupName
