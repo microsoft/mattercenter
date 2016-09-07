@@ -106,9 +106,9 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
              * 4 = true, <Page Name>, username, password  :  Create specific page as mentioned in parameter
              * */
 
-            if (null != args && 3 <= argLength)
+            if (null != args && 4 <= argLength)
             {
-                bool isSpecificPageRequest = (3 < argLength) ? true : false;
+                bool isSpecificPageRequest = (4 < argLength) ? true : false;
                 bool isCreatePageRequest = Convert.ToBoolean(args[0], CultureInfo.InvariantCulture);
 
                 if (isSpecificPageRequest)
@@ -122,6 +122,7 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
                     {
                         configVal.Add("Username", args[1]);
                         configVal.Add("Password", args[2]);
+                        configVal.Add("UISiteURL", args[3]);
                     }
                     else
                     {
@@ -193,6 +194,7 @@ namespace Microsoft.Legal.MatterCenter.ProvisionWebDashboard
                     {
                         configVal.Add("Username", args[1]);
                         configVal.Add("Password", args[2]);
+                        configVal.Add("UISiteURL", args[3]);
                     }
                     else
                     {
