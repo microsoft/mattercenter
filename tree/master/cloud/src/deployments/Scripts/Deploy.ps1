@@ -8,8 +8,7 @@
 # Step 4: Update search configuration file and upload to SharePoint
 # Step 5: Activate SharePoint Server Publishing infrastructure feature on catalog site collection 
 # Step 6: Creating Site Collection(s)
-# Step 7: Provisioning Web dashboard
-# Step 8: Update site collection view with field(s)
+# Step 7: Update site collection view with field(s)
 #
 # Any changes in these steps, kindly update this list. Also update the checkpoint in Revert script
 #----------------------------------------------
@@ -178,8 +177,8 @@ Show-Message -Message "Added common library functions" -Type ([MessageType]::Suc
 #----------------------------------------------
 
 $SPCredential = Get-Credential -Message "Enter credentials to access SharePoint tenant."
-$ExchangeCredential = Get-Credential -Message "Enter credentials to connect with Exchange server."
-If ($Null -eq $SPCredential -or $Null -eq $ExchangeCredential) {
+
+If ($Null -eq $SPCredential) {
 	# Display error message and exit
 	Write-Log $ErrorLogFile "Failed to get credentials"
 	return
@@ -344,23 +343,10 @@ if($IsValid -eq $true)
 		Show-Message -Message "Completed creating site collection" -Type ([MessageType]::Success)
     }
 
-    #---------------------------------------------------------------------
-    # Provisioning Web Dashboard page(s) on SharePoint library
-    #---------------------------------------------------------------------
-    Show-Message -Message "Step 7: Provisioning Web dashboard"
-    & "$HelperPath\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.exe" "true" $Username $Password
-
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Provisioning Web dashboard failed" -Type ([MessageType]::Failure)  
-    }
-    else {
-		Show-Message -Message "Completed Provisioning Web dashboard" -Type ([MessageType]::Success)
-    }
-
 	#---------------------------------------------------------------------
     # Update site pages view with fields
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 8: Update site collection view with fields"
+    Show-Message -Message "Step 7: Update site collection view with fields"
     & "$HelperPath\Microsoft.Legal.MatterCenter.UpdateView.exe" $Username $Password
 
     #----------------------------------------------

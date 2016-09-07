@@ -108,6 +108,20 @@ Function Deploy-SPOFiles
 	else {
 		Show-Message -Message "Completed uploading files to SharePoint library" -Type ([MessageType]::Success)
 	}
+    
+    #---------------------------------------------------------------------
+    # Provisioning Web Dashboard page(s) on SharePoint library
+    #---------------------------------------------------------------------
+    Show-Message -Message "Provisioning Web dashboard"
+    & "$HelperPath\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.exe" "true" $Username $Password $WebSiteName
+
+    If ((Get-Content $ErrorLogFile) -ne $Null) {
+		Show-Message -Message "Provisioning Web dashboard failed" -Type ([MessageType]::Failure)  
+    }
+    else {
+		Show-Message -Message "Completed Provisioning Web dashboard" -Type ([MessageType]::Success)
+    }
+
 	cd $PSScriptRoot
     
 }
