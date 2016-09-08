@@ -316,8 +316,8 @@ if($IsValid -eq $true)
 	}
 	catch [System.Exception]
 	{
-		Show-Message -Message "Could not activate SharePoint Server Publishing Infrastructure feature." -Type ([MessageType]::Failure)
-        Write-Log $ErrorLogFile $_.Exception.ToString()
+		Show-Message -Message "Could not activate SharePoint Server Publishing Infrastructure feature." -Type ([MessageType]::Warning)
+        #Write-Log $ErrorLogFile $_.Exception.ToString()
 	}
 	finally {
         $Context.Dispose()

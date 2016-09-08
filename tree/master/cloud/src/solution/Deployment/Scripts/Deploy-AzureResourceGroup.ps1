@@ -25,6 +25,8 @@ Param(
     [string] [Parameter(Mandatory=$true, HelpMessage="ex: MatterCenterWeb")] $WebAppName = 'MatterCenterWeb',
 	[string] [Parameter(Mandatory=$true, HelpMessage="Provide the catalog site url you used during sharepoint site deployment. `
 	it will be https://<tenantname>.sharepoinT.com/sites/catalog if you didnt change default catalog site.")] $CentralRepositoryUrl,
+	[string] [Parameter(Mandatory=$true, HelpMessage="You can get it from sharepoint catalog site collection settings -> Search Result Sources -> Matter Center. `
+	From the URL take sourceid value and replace %2D with -. ex: b31b647d-4074-43d2-a1f6-3905a7f8630b  ")] $SearchResultSourceId,
 
     [switch] $UploadArtifacts,
     [string] $StorageAccountName,
@@ -181,9 +183,10 @@ $SPPassword = $SPCredential.GetNetworkCredential().Password
 #----------------------------------------------
 # Update Office, Outlook and SharePoint App schema files
 #----------------------------------------------
-cd $HelperPath
-Show-Message -Message "Getting the result source ID..."
-& $SearchResultSourceId = "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "4" $SPCredential.UserName $SPPassword
+# cd $HelperPath
+# Show-Message -Message "Getting the result source ID..."
+# & $SearchResultSourceId = "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "4" $SPCredential.UserName $SPPassword
+
 cd $PSScriptRoot
 
 
