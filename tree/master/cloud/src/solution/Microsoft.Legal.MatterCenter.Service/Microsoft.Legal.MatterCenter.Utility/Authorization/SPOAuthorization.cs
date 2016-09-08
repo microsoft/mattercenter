@@ -80,7 +80,61 @@ namespace Microsoft.Legal.MatterCenter.Utility
                 throw;
             }
         }
-                
+
+        /// <summary>
+        /// This method will get the access token for the Microsoft Graph and returns that token
+        /// </summary>
+        /// <param name="url">The SharePoint Url for which the client context needs to be creatwed</param>
+        /// <returns>ClientContext - Return SharePoint Client Context Object</returns>
+        public string GetGraphAccessToken()
+        {
+            try
+            {
+                return GetAccessTokenForGraph().Result;
+
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// This method will get access for the web api from the Azure Active Directory. 
+        /// This method internally uses the Authorization token sent by the UI application
+        /// </summary>
+        /// <returns>Access Token for the web api service</returns>
+        private async Task<string> GetAccessTokenForGraph()
+        {
+            try
+            {
+                string clientId = generalSettings.ClientId;
+                string appKey = generalSettings.AppKey;
+                string aadInstance = generalSettings.AADInstance;
+                string tenant = generalSettings.Tenant;
+                string resource = generalSettings.GraphUrl;
+                ClientCredential clientCred = new ClientCredential(clientId, appKey);
+                string accessToken = Context.Request.Headers["Authorization"].ToString().Split(' ')[1];
+                UserAssertion userAssertion = new UserAssertion(accessToken);
+                string authority = String.Format(CultureInfo.InvariantCulture, aadInstance, tenant);
+                //ToDo: Set the TokenCache to null. Need to implement custom token cache to support multiple users
+                //If we dont have the custom cache, there will be some performance overhead.
+                AuthenticationContext authContext = new AuthenticationContext(authority, null);
+                AuthenticationResult result = await authContext.AcquireTokenAsync(resource, clientCred, userAssertion);
+                return result.AccessToken;
+            }
+            catch (AggregateException ex)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
         /// <summary>
         /// This method will get access for the web api from the Azure Active Directory. 
         /// This method internally uses the Authorization token sent by the UI application

@@ -122,11 +122,10 @@ namespace Microsoft.Legal.MatterCenter.CreateGroups
                 // Get the URL of site collection
                 string login = listval["Username"]; // Get the user name
                 string password = listval["Password"]; // Get the password
-                bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture);
 
                 foreach (DataStorage item in groupData)
                 {
-                    using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(item.SiteUrl, login, password, isDeployedOnAzure))
+                    using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(item.SiteUrl, login, password ))
                     {
                         //Deleting group if exists
                         Web site = clientContext.Web;
@@ -165,11 +164,10 @@ namespace Microsoft.Legal.MatterCenter.CreateGroups
                 // Get the URL of site collection
                 string login = listval["Username"]; // Get the user name
                 string password = listval["Password"]; // Get the password
-                bool isDeployedOnAzure = Convert.ToBoolean(listval["IsDeployedOnAzure"].ToUpperInvariant(), CultureInfo.InvariantCulture); // Get Is Deployed on Azure 
 
                 foreach (DataStorage item in groupData)
                 {
-                    using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(item.SiteUrl, login, password, isDeployedOnAzure))
+                    using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(item.SiteUrl, login, password ))
                     {
                         Web site = clientContext.Web;
                         GroupCollection collGroup = site.SiteGroups;

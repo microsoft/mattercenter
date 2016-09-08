@@ -43,19 +43,33 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="js\angulartics-azure.js" />
-    <Content Include="js\site.js" />
-    <Content Include="js\site.min.js" />
+    <Content Include="..\Microsoft.Legal.MatterCenter.Web\wwwroot\app\dashboard\settings.controller.js">
+      <Link>app\dashboard\settings.controller.js</Link>
+    </Content>
+    <Content Include="..\Microsoft.Legal.MatterCenter.Web\wwwroot\app\dashboard\settings.resources.js">
+      <Link>app\dashboard\settings.resources.js</Link>
+    </Content>
+    <Content Include="..\Microsoft.Legal.MatterCenter.Web\wwwroot\app\matter\matterusers.controller.js">
+      <Link>app\matter\matterusers.controller.js</Link>
+    </Content>
+    <Content Include="js\app.js" />
+    <Content Include="js\config.js" />
     <Content Include="Object\ObjectCollection.js" />
     <Content Include="packages.config" />
     <Content Include="Scripts\app.js" />
     <Content Include="Open Notebook.onetoc2" />
     <Content Include="bower.json" />
     <Content Include=".bowerrc" />
-    <None Include=".bin\bower.cmd" />
-    <None Include=".bin\git.cmd" />
-    <None Include=".bin\node.cmd" />
-    <Content Include="js\Open Notebook.onetoc2" />
+    <None Include="Properties\PublishProfiles\mattercenterjasmine - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mattercenterjasmine - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\mattercenterjasmine - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\mattercenterjasmine - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\mattermaqdevsite - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\mattermaqdevsite - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\POCAPI - FTP %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\POCAPI - FTP %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\POCAPI - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\POCAPI - Web Deploy %283%29.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -124,7 +138,8 @@
     <Content Include="..\Microsoft.Legal.MatterCenter.Web\wwwroot\app\services\auth.service.js">
       <Link>app\services\auth.service.js</Link>
     </Content>
-    <Content Include="JasmineTest.html" />
+    <Content Include="Scripts\SourceReference.js" />
+    <Content Include="TestResults.aspx" />
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\site.min.js" />
     <Content Include="Scripts\TestConfig.js" />
@@ -137,23 +152,39 @@
     <Content Include="Specs\DocumentDashboardControllerServiceCall.spec.js" />
     <Content Include="Specs\HomeController.spec.js" />
     <Content Include="Specs\HomeControllerservicecall.spec.js" />
+    <Content Include="Specs\MatterUsersController.spec.js" />
     <Content Include="Specs\MatterController.spec.js" />
     <Content Include="Specs\MatterControllerservicecall.spec.js" />
     <Content Include="Specs\MatterDashboardController.spec.js" />
     <Content Include="Specs\MatterDashboardControllerservicecall.spec.js" />
+    <Content Include="Specs\SettingsController.spec.js" />
     <Content Include="Specs\NavigationController.spec.js" />
     <Content Include="Specs\UploadVerification.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="lib\" />
-    <Folder Include="Properties\PublishProfiles\" />
+    <Compile Include="TestResults.aspx.cs">
+      <DependentUpon>TestResults.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TestResults.aspx.designer.cs">
+      <DependentUpon>TestResults.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="lib\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

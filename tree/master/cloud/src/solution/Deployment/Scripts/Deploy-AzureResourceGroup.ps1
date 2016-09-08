@@ -24,7 +24,7 @@ Param(
     [string] [Parameter(Mandatory=$true, HelpMessage="ex: MatterCenterRG")] $ResourceGroupName = 'MatterCenterRG',
     [string] [Parameter(Mandatory=$true, HelpMessage="ex: MatterCenterWeb")] $WebAppName = 'MatterCenterWeb',
 	[string] [Parameter(Mandatory=$true, HelpMessage="Provide the catalog site url you used during sharepoint site deployment. `
-	it will be https://<tenantname>.sharepoinT.com/sites/catalog if you didnt change default catalog site.")] $CentralRepositoryUrl,	
+	it will be https://<tenantname>.sharepoinT.com/sites/catalog if you didnt change default catalog site.")] $CentralRepositoryUrl,
 	[string] [Parameter(Mandatory=$true, HelpMessage="You can get it from sharepoint catalog site collection settings -> Search Result Sources -> Matter Center. `
 	From the URL take sourceid value and replace %2D with -. ex: b31b647d-4074-43d2-a1f6-3905a7f8630b  ")] $SearchResultSourceId,
 
@@ -41,7 +41,7 @@ Param(
 $logFileName = "MCDeploy"+(Get-Date).ToString('yyyyMMdd-HHmmss')+".log"
 Start-Transcript -path $logFileName
 $WebAppName = $WebAppName + ((Get-Date).ToUniversalTime()).ToString('MMddHHmm')
-if($WebAppName.Length > 60)
+if($WebAppName.Length -gt 60)
 {
 	$WebAppName =  $WebAppName.Substring(0,60)
 }
@@ -54,7 +54,7 @@ $SiteURL = $CentralRepositoryUrl.Substring(0, $indexOfSPO + 4)
 $Redis_cache_name = $WebAppName+"RedisCache"
 $autoscalesettings_name = $WebAppName+"ScaleSettings"
 $components_AppInsights_name = $WebAppName+"AppInsights"
-if($WebAppName.Length > 24)
+if($WebAppName.Length -gt 24)
 {
 	$vaults_KeyVault_name = $WebAppName.Substring(0,24)
 	$storageAccount_name = $WebAppName.Substring(0,24)
@@ -67,6 +67,7 @@ else
 $serverfarms_WebPlan_name = $WebAppName+"WebPlan"
 $ADApp_Name = $WebAppName+"ADApp"
 $global:thumbPrint = ""
+$global:appInsightsId = ""
 $storageAccount_name 
 $ADApplicationId = ""
 Write-Output "Reading from template.parameters.json file..."
@@ -165,10 +166,29 @@ New-AzureRmResourceGroupDeployment -Name ((Get-ChildItem $TemplateFile).BaseName
                                    @OptionalParameters `
                                    -Force -Verbose
 
-$creds = Get-Credential
+$creds = Get-Credential -Message "Enter credentials for connecting to Azure"
 
 Write-Output "Getting the storage key to write to key vault..."
 $StorageAccountKey = Get-AzureRmStorageAccountKey -Name $storageAccount_name -ResourceGroupName $ResourceGroupName
+
+
+# Set helper utilities folder path
+$RootPath = Split-Path(Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) -Parent
+$DeployPath = "$RootPath\deployments"
+$HelperPath = "$RootPath\deployments\scripts\Helper Utilities"
+$ExcelFilePath = "$RootPath\deployments\MCDeploymentConfig.xlsx"
+$SPCredential = Get-Credential -Message "Enter credentials to access SharePoint tenant."
+$SPPassword = $SPCredential.GetNetworkCredential().Password
+
+#----------------------------------------------
+# Update Office, Outlook and SharePoint App schema files
+#----------------------------------------------
+# cd $HelperPath
+# Show-Message -Message "Getting the result source ID..."
+# & $SearchResultSourceId = "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "4" $SPCredential.UserName $SPPassword
+
+cd $PSScriptRoot
+
 
 $custScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'KeyVault-Config.ps1')
 Invoke-Expression $custScriptFile 
@@ -178,5 +198,8 @@ Invoke-Expression $storageScriptFile
 
 $webJobScriptFile = [System.IO.Path]::Combine($PSScriptRoot, 'Create-MatterCenterWebJob.ps1')
 Invoke-Expression $webJobScriptFile
+
+$spoDeployFiles = [System.IO.Path]::Combine($PSScriptRoot, 'Deploy-SPOFiles.ps1')
+Invoke-Expression $spoDeployFiles
 
 Stop-Transcript 

@@ -172,7 +172,7 @@ Write-Output "Writing for AppGuid $ADApplicationId"
 $storageConnString =  [string]::format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", $storageAccount_name, $StorageAccountKey.Item(0).Value)
 
 $AppInsightsApp = Get-AzureRmResource -ResourceType "Microsoft.Insights/components" -ResourceGroupName $ResourceGroupName -ResourceName $components_AppInsights_name
-
+$global:appInsightsId = $AppInsightsApp.Properties.InstrumentationKey
 Write-Output "Writing secrets to key vault..."
 Create-KeyVaultSecrets -VaultName $vaults_KeyVault_name -AdminUserName $creds.UserName -AdminPassword $creds.Password -CloudStorageConnectionString $storageConnString -ClientId  $ADApplicationId -RedisCacheHostName $Redis_cache_name -AppInsightsInstrumentationKey $AppInsightsApp.Properties.InstrumentationKey 
 Write-Host "Updating Matter Web App Settings..."

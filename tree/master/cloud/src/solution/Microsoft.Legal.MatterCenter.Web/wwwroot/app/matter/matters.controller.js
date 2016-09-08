@@ -92,10 +92,10 @@
 
             $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
-           var columnDefs1 = [];
+            var columnDefs1 = [];
             angular.forEach(configs.search.searchColumnsUIPickerForMatter, function (value, key) {
                 if (key == "matterName") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn1Header,
@@ -105,11 +105,11 @@
                             headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html',
                             position: value.position
                         });
-                       
+
                     }
                 }
                 if (key == "matterClient") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn2Header,
@@ -119,16 +119,16 @@
                             width: "200",
                             headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html',
                             position: value.position
-                        });                        
+                        });
                     }
                 }
                 if (key == "matterClientId") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         var cellTemplateContent = "";
                         if (configs.search.Schema.toLowerCase() == "mattercenter") {
-                            cellTemplateContent='<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>';
+                            cellTemplateContent = '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>';
                         }
-                        else{
+                        else {
                             cellTemplateContent = '<div class="ui-grid-cell-contents" >{{row.entity.matterID}}</div>';
                         }
                         columnDefs1.push({
@@ -142,12 +142,12 @@
                             enableCellEdit: true,
                             position: value.position
                         });
-                        
+
                     }
 
                 }
                 if (key == "matterModifiedDate") {
-                    if (value.displayInUI == true && value.position!=-1) {                                              
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn4Header,
@@ -158,11 +158,11 @@
                             headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html',
                             position: value.position
                         });
-                       
+
                     }
                 }
                 if (key == "matterResponsibleAttorney") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn5Header,
@@ -173,11 +173,11 @@
                             visible: false,
                             position: value.position
                         });
-                       
+
                     }
                 }
                 if (key == "matterSubAreaOfLaw") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn6Header,
@@ -189,11 +189,11 @@
                             visible: false,
                             position: value.position
                         });
-                       
+
                     }
                 }
                 if (key == "matterCreatedDate") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn7Header,
@@ -204,7 +204,7 @@
                             cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
                             visible: false,
                             position: value.position
-                        });                        
+                        });
                     }
                 }
                 if (key == "matterDescription" && value.position != -1) {
@@ -321,13 +321,13 @@
 
                     }
                 }
-               
+
             });
             function getSortFunction(fieldName) {
                 return function (col1, col2) {
                     return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
                 }
-            }          
+            }
             columnDefs1.sort(getSortFunction("position"));
 
             //#region Setting the options for grid
@@ -343,7 +343,7 @@
                 enableRowSelection: true,
                 enableSelectAll: false,
                 multiSelect: false,
-                columnDefs:columnDefs1,
+                columnDefs: columnDefs1,
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
                     $scope.gridApi = gridApi;
@@ -426,7 +426,7 @@
             //#region for setting the dynamic width to grid
             var screenHeight = 0;
             vm.searchResultsLength = 0;
-            
+
 
             //#endregion
 
@@ -1596,6 +1596,7 @@
 
             //#region To run GetMatters function on page load 
             vm.GetMatters(vm.ddlMatters.Id);
+            vm.matterid = vm.ddlMatters.Id;
             //End 
 
 
@@ -1605,8 +1606,6 @@
                 var alldata = data.entity;
                 var unpinRequest = {
                     Client: {
-
-
                         Url: configs.global.repositoryUrl
                     },
                     matterData: {
@@ -1616,7 +1615,7 @@
                 UnpinMatters(unpinRequest, function (response) {
                     if (response.isMatterUnPinned) {
                         $timeout(vm.SetMatters(vm.matterid, vm.mattername), 500);
-                        alert("Success");
+                        //alert("Success");
                     }
                 });
             }
@@ -1652,7 +1651,7 @@
                 PinMatters(pinRequest, function (response) {
                     if (response.isMatterPinned) {
                         $timeout(vm.SetMatters(vm.matterid, vm.mattername), 500);
-                        alert("Success");
+                        //alert("Success");
                     }
                 });
             }
@@ -2160,7 +2159,9 @@
                             if (item.parentURL !== null) {
                                 if (item.active) {
                                     child.active = child.active ? false : true;
-                                    if (!child.active) { setActiveItem(child); }
+                                    if (!child.active) {
+                                        setActiveItem(child);
+                                    }
                                 } else {
                                     child.active = false;
                                     setActiveItem(child);
@@ -2324,8 +2325,12 @@
                 var dimensions = $event.target.getBoundingClientRect();
                 var top = dimensions.top + 30;
                 var left = dimensions.left - 224;
-                angular.element('.matterheader').css({ 'top': top, 'left': left });
-                angular.element('.matterheaderdates').css({ 'top': top, 'left': left });
+                angular.element('.matterheader').css({
+                    'top': top, 'left': left
+                });
+                angular.element('.matterheaderdates').css({
+                    'top': top, 'left': left
+                });
                 if (name === vm.matterConfigContent.GridColumn1Header) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                     vm.filtername = vm.matterConfigContent.GridColumn1Header;

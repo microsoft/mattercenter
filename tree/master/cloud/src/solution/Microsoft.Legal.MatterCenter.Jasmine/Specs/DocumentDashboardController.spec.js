@@ -1,5 +1,15 @@
 ﻿/// <disable>JS2074, JS3058</disable>
-// Test suite
+//// ***********************************************************************
+//// Author           : MAQ USER
+//// Created          : 31-08-2016
+////
+//// ***********************************************************************
+//// <copyright file="DocumentDashboardController.spec.js" company="MAQSoftware">
+////  Copyright (c) . All rights reserved.
+//// </copyright>
+//// <summary>Test suite for documentDashboard</summary>
+//// ***********************************************************************
+
 describe("DocumentDashboard Controller test suite", function () {
     "use strict";
 
@@ -20,16 +30,6 @@ describe("DocumentDashboard Controller test suite", function () {
         rootScope = $rootScope.$new();
         vm = $controller("DocumentDashBoardController as vm", { $scope: $scope, $state: $state, $stateParams: $stateParams, documentDashBoardResource: mockDocumentDashBoardResource, api: mockapi, $rootScope: rootScope, $http: $http, $location: $location });
     }));
-
-    //describe("Verification of closealldrops function", function () {
-    //    it("It should close all dropdowns on click of page", function () {
-    //        vm.x = 5;
-    //        vm.y = 2;
-    //        vm.sum();
-    //        expect(vm.z).toBe(7);
-
-    //    });
-    //});
 
     describe("Verification of closealldrops function", function () {
         it("It should close all dropdowns on click of page", function () {
@@ -70,7 +70,7 @@ describe("DocumentDashboard Controller test suite", function () {
     });
 
     describe("Verification of removeAttachment function", function () {
-        it("It should add an elements to the cart", function () {
+        it("It should add an element to the cart", function () {
             vm.cartelements = obj;
             vm.documentsCheckedCount = 3;
             vm.removeAttachment(obj[0]);
@@ -122,13 +122,13 @@ describe("DocumentDashboard Controller test suite", function () {
     });
 
     describe("Verification of showsortby function", function () {
-        it("It should show sortby dropdown box", function () {
+        it("It should show sort by dropdown box", function () {
             vm.sortbydropvisible = false;
             vm.showsortby(event);
             expect(vm.sortbydrop).toBe(true);
             expect(vm.sortbydropvisible).toBe(true);
         });
-        it("It should hide show sortby dropdown box", function () {
+        it("It should hide show sort by dropdown box", function () {
             vm.sortbydropvisible = true;
             vm.showsortby(event);
             expect(vm.sortbydrop).toBe(false);
@@ -150,4 +150,5 @@ describe("DocumentDashboard Controller test suite", function () {
             expect(vm.displaypagination).toBe(true);
         });
     });
+
 });

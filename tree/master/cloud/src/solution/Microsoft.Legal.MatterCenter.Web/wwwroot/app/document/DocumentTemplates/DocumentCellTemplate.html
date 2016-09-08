@@ -19,7 +19,7 @@
             <ul style='margin:0;padding:0' class='dropdown-menu'>
 
                 <li class='ms-ContextualMenu-item'>
-                    <a class='ECBItem ms-ContextualMenu-link upload' href='{{row.entity.documentOWAUrl}}.aspx'
+                    <a class='ECBItem ms-ContextualMenu-link upload' href='{{row.entity.documentOWAUrl}}'
                        target='_blank'>{{grid.appScope.vm.documentConfigContent.EllipsisLink1Text}}</a>
                 </li>
                 <li class='ms-ContextualMenu-item'>
@@ -28,7 +28,7 @@
                 </li>
                 <li class='ms-ContextualMenu-item'
                     ng-click='row.entity.MatterInfo===undefined?grid.appScope.vm.PinMatter(row):grid.appScope.vm.UnpinDocument(row)'>
-                    <a class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?grid.appScope.vm.documentConfigContent.EllipsisLink4Text:grid.appScope.vm.documentConfigContent.EllipsisLink4Text}}</a>
+                    <a class='ECBItem ms-ContextualMenu-link upload'>{{row.entity.MatterInfo===undefined?grid.appScope.vm.documentConfigContent.EllipsisLink3Text:grid.appScope.vm.documentConfigContent.EllipsisLink4Text}}</a>
                 </li>
             </ul>
         </div>

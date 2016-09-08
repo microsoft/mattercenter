@@ -11,10 +11,12 @@
     "angular-route": "1.5.2",
     "angular-resource": "1.5.2",
     "angular-sanitize": "1.5.2",
-    "adal-angular": "1.0.11",
+    "adal-angular": "1.0.9",
     "angular-ui-grid": "3.1.1",
     "angular-bootstrap": "1.3.2",
-    "jasmine-core": "2.4.1"
+    "jasmine-core": "2.4.1",
+    "angulartics": "1.0.3"
+
   },
   "resolutions": {
     "angular": "1.5.2"

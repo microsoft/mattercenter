@@ -2,10 +2,6 @@
 (                  
     [parameter(Mandatory=$true)]            
     [ValidateNotNullOrEmpty()]             
-    [bool] $IsDeployedOnAzure
-
-    ,[parameter(Mandatory=$true)]            
-    [ValidateNotNullOrEmpty()]             
     [string] $Username
 
     ,[parameter(Mandatory=$true)]            
@@ -33,27 +29,6 @@ $ParentDirectory = (Get-ParentDirectory)
 $IsValid = Test-Path $ExcelFilePath
 
 if($IsValid -eq $true){
-    if($IsDeployedOnAzure)
-    {
         Show-Message -Message "Provisioning Site Collection"
         & "$HelperPath\Microsoft.Legal.MatterCenter.CreateSiteCollection.exe" "true" $Username $Password
-    }
-    else
-    {
-        $sheet = (ReadSheet-FromExcel $ExcelFilePath "Client_Config" $ErrorLogFile)
-        For($count = 2; $count -le $sheet.Length; $count++)
-        {
-            $siteUrl = $sheet[$count-1][3]
-            $exists = (Get-SPSite $siteUrl -ErrorAction SilentlyContinue) -ne $null
-            if(-not $exists)
-            {
-                $template = Get-SPWebTemplate "STS#0"
-                New-SPSite $siteUrl -OwnerAlias $Username -CompatibilityLevel 15 -Name $sheet[$count-1][1]  -Template $template
-            }
-            else
-            {
-				Show-Message -Message "$siteUrl already exists..." -Type ( [MessageType]::Warning )
-            }
-        }
-    }
 }
