@@ -34,6 +34,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string OrgDomainName { get; set; }
         public string MatterCenterConfiguration { get; set; }
         public string KeyVaultURI { get; set; }
+        public string GraphUrl { get; set; }
 
     }
 }

@@ -49,12 +49,12 @@
                 </div>
             </div>
             <div id="ProfileSwitcher" ng-click="$root.dispPersonal($event)">
-                <img class="AppHeaderProfilePict" src="{{vm.smallPictureUrl}}" id="AppHeaderPersona" alt="{{vm.header.ProfilePictureLabelText}}" />
+                <img class="AppHeaderProfilePict" ng-src="{{vm.smallPictureUrl}}" id="AppHeaderPersona" alt="{{vm.header.ProfilePictureLabelText}}" />
             </div>
             <div class="PersonalInfoFlyout" ng-show="$root.displayinfo" ng-click="$event.stopPropagation();">
                 <div class="PersonaContainer">
                     <div class="PersonaPictureContainer">
-                        <img id="PersonaPicture" src="{{vm.largePictureUrl}}" alt="{{vm.header.ProfilePictureLabelText}}" title="{{vm.header.ProfilePictureLabelText}}" />
+                        <img id="PersonaPicture" ng-src="{{vm.largePictureUrl}}" alt="{{vm.header.ProfilePictureLabelText}}" title="{{vm.header.ProfilePictureLabelText}}" />
                     </div>
                     <div class="PersonaPictureDetails">
                         <div class="PersonaTitle" id="PersonaTitle">{{vm.fullName}}</div>
