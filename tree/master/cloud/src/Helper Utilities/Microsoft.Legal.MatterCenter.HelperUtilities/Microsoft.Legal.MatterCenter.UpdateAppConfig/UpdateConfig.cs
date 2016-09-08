@@ -182,6 +182,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
             Dictionary<string, string> ConfigDetails = ExcelOperations.ReadFromExcel(filePath, configSheet);
             string url = ConfigDetails[ConfigurationManager.AppSettings["CatalogSiteUrlKey"]].TrimEnd(ConstantStrings.FRONTSLASH);
             string resultSourceID = null;
+
             try
             {
                 using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(url, login, password))
@@ -265,7 +266,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                                     }
                                     else
                                     {
-                                        clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement] + previousValue.Substring(previousValue.IndexOf(ConstantStrings.PAGES, StringComparison.OrdinalIgnoreCase));
+                                        clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement];
                                     }
                                 }
                             }
@@ -336,10 +337,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                                         {
                                             case 2:
                                                 appDomain.InnerText = excelInput[ConstantStrings.AZURE_UI_SITE_URL];
-                                                break;
-                                            case 3:
-                                                appDomain.InnerText = excelInput[ConstantStrings.AZURE_SERVICE_SITE_URL];
-                                                break;
+                                                break;                                            
                                             case 4:
                                                 appDomain.InnerText = excelInput[ConstantStrings.TENANT_URL];
                                                 break;
@@ -800,11 +798,16 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                             // Code for updating schema files
                             Console.WriteLine("Updating app schema files");
 
+
                             string manifestSheetname = ConfigurationManager.AppSettings["manifestSheetname"];
 
                             if (!string.IsNullOrEmpty(filePath) && !string.IsNullOrEmpty(manifestSheetname))
                             {
                                 Dictionary<string, string> xmlUpdateList = ExcelOperations.ReadFromExcel(filePath, manifestSheetname);
+                                //Dictionary<string, string> xmlUpdateList = new Dictionary<string, string>();
+
+                                string azureSiteURL = args[3];
+                                xmlUpdateList.Add(ConstantStrings.AZURE_UI_SITE_URL, azureSiteURL);
                                 xmlUpdateList.Add(ConstantStrings.USERNAME, username);
                                 xmlUpdateList.Add(ConstantStrings.PASSWORD, password);
                                 if (xmlUpdateList.Count > 0)
@@ -843,6 +846,10 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                             #region Update search configuration file
                             UpdateSearchConfig(filePath, username, password);
                             #endregion
+                        }
+                        else if (4 == operation)
+                        {
+                            Console.WriteLine(GetResultSourceId(username, password));
                         }
                         else if (0 == operation)
                         {
@@ -983,11 +990,11 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                     }
                 }
 
-                    // Update the configuration for Azure
-                    UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_CLOUD, ConstantStrings.UI_FOLDER_NAME);
-                    UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_CLOUD, ConstantStrings.SERVICE_FOLDER_NAME);
-                    UpdateWebConfig(configUpdateList, ConstantStrings.APP_INSIGHTS, ConstantStrings.UI_FOLDER_NAME);
-          
+                // Update the configuration for Azure
+                UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_CLOUD, ConstantStrings.UI_FOLDER_NAME);
+                UpdateWebConfig(configUpdateList, ConstantStrings.WEB_CONFIG_CLOUD, ConstantStrings.SERVICE_FOLDER_NAME);
+                UpdateWebConfig(configUpdateList, ConstantStrings.APP_INSIGHTS, ConstantStrings.UI_FOLDER_NAME);
+
                 Console.WriteLine("Updated Web.config");
             }
             else

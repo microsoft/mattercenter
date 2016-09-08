@@ -36,7 +36,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns></returns>
         public Users GetUserProfilePicture(Client client)
         {
-            return userDetails.GetUserProfilePicture(client);
+            return userDetails.GetUserProfilePicture(client).Result;
         }
 
         /// <summary>

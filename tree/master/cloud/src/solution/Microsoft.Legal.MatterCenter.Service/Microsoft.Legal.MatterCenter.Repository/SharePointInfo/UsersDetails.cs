@@ -27,6 +27,9 @@ using System.IO;
 using Microsoft.SharePoint.ApplicationPages.ClientPickerQuery;
 using Microsoft.SharePoint.Client.Utilities;
 using Microsoft.AspNetCore.Http;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -76,23 +79,24 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="client"></param>
         /// <returns></returns>
-        public Users GetUserProfilePicture(Client client)
+        public async Task<Users> GetUserProfilePicture(Client client)
         {
-            ClientContext clientContext = spoAuthorization.GetClientContext(client.Url);
-            PeopleManager peopleManager = new PeopleManager(clientContext);
-            string accountName = $"i:0#.f|membership|{Context.User.Identity.Name}";
-            ClientResult<string> userProfile = peopleManager.GetUserProfilePropertyFor(accountName, "PictureURL");
-            clientContext.ExecuteQuery();
-            string personalURL = userProfile.Value;
-
-            string smallProfilePicture = personalURL.Replace("MThumb.jpg", "SThumb.jpg");
-            string mediumProfilePicture = personalURL;
-            Users users = new Users();
-
-            users.SmallPictureUrl = smallProfilePicture;
-            users.LargePictureUrl = mediumProfilePicture;
-            return users;
-            //return null;
+            string accessToken = spoAuthorization.GetGraphAccessToken();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("blob"));
+                var url = $"{generalSettings.GraphUrl}/v1.0/me/photo/$value";
+                var resultAsString = await httpClient.GetStreamAsync(url);
+                Users users = new Users();
+                using (var newStream = new MemoryStream())
+                {
+                    resultAsString.CopyTo(newStream);
+                    byte[] bytes = newStream.ToArray();
+                    users.LargePictureUrl = ServiceConstants.BASE64_IMAGE_FORMAT + Convert.ToBase64String(bytes);
+                }   
+                return users;
+            }
         }
 
         /// <summary>
