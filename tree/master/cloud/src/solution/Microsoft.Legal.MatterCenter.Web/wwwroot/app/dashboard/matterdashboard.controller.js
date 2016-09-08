@@ -708,6 +708,7 @@
                             vm.pagination();
                             vm.lazyloaderdashboard = true;
                             vm.divuigrid = true;
+                            vm.getMatterCounts();
                         }
                         else {
                             vm.lazyloaderdashboard = true;
@@ -1259,8 +1260,8 @@
             //#endregion
 
             //Call search api on page load
-            $interval(function () { vm.getMatterCounts(); }, 800, 3);
-            $interval(function () { vm.search() }, 500, 3);
+            //$interval(function () { vm.getMatterCounts(); }, 800, 3);
+            $timeout(function () { vm.search() }, 500);
 
 
             //#region For Sorting by Alphebatical or Created date

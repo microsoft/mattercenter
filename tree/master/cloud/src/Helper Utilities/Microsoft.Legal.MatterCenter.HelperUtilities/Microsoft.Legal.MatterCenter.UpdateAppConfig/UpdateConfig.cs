@@ -265,7 +265,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                                     }
                                     else
                                     {
-                                        clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement] + previousValue.Substring(previousValue.IndexOf(ConstantStrings.PAGES, StringComparison.OrdinalIgnoreCase));
+                                        clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement];
                                     }
                                 }
                             }
@@ -336,10 +336,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                                         {
                                             case 2:
                                                 appDomain.InnerText = excelInput[ConstantStrings.AZURE_UI_SITE_URL];
-                                                break;
-                                            case 3:
-                                                appDomain.InnerText = excelInput[ConstantStrings.AZURE_SERVICE_SITE_URL];
-                                                break;
+                                                break;                                            
                                             case 4:
                                                 appDomain.InnerText = excelInput[ConstantStrings.TENANT_URL];
                                                 break;
