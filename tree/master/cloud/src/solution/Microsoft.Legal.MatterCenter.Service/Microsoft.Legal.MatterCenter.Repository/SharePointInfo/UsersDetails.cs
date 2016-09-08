@@ -81,22 +81,35 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns></returns>
         public async Task<Users> GetUserProfilePicture(Client client)
         {
-            string accessToken = spoAuthorization.GetGraphAccessToken();
-            using (var httpClient = new HttpClient())
+            Users users = new Users();
+            try
             {
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                //httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("blob"));
-                var url = $"{generalSettings.GraphUrl}/v1.0/me/photo/$value";
-                var resultAsString = await httpClient.GetStreamAsync(url);
-                Users users = new Users();
-                using (var newStream = new MemoryStream())
+                string accessToken = spoAuthorization.GetGraphAccessToken();
+                using (var httpClient = new HttpClient())
                 {
-                    resultAsString.CopyTo(newStream);
-                    byte[] bytes = newStream.ToArray();
-                    users.LargePictureUrl = ServiceConstants.BASE64_IMAGE_FORMAT + Convert.ToBase64String(bytes);
-                }   
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);                    
+                    var url = $"{generalSettings.GraphUrl}/v1.0/me/photo/$value";
+                    var resultAsString = await httpClient.GetStreamAsync(url);
+
+                    using (var newStream = new MemoryStream())
+                    {
+                        resultAsString.CopyTo(newStream);
+                        byte[] bytes = newStream.ToArray();
+                        users.LargePictureUrl = ServiceConstants.BASE64_IMAGE_FORMAT + Convert.ToBase64String(bytes);
+                    }
+                    return users;
+                }
+            }
+            catch(Exception ex) when(ex.Message.Contains("404"))
+            {
+                users.LargePictureUrl = "";
                 return users;
             }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
         }
 
         /// <summary>
