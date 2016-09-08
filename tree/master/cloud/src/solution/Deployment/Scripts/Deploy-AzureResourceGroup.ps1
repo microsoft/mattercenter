@@ -178,12 +178,10 @@ $ExcelFilePath = "$RootPath\deployments\MCDeploymentConfig.xlsx"
 $SPCredential = Get-Credential -Message "Enter credentials to access SharePoint tenant."
 $SPPassword = $SPCredential.GetNetworkCredential().Password
 
-#----------------------------------------------
-# Update Office, Outlook and SharePoint App schema files
-#----------------------------------------------
+
 cd $HelperPath
 Show-Message -Message "Getting the result source ID..."
-& $SearchResultSourceId = "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "4" $SPCredential.UserName $SPPassword
+$SearchResultSourceId = & ".\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "4" $SPCredential.UserName $SPPassword
 cd $PSScriptRoot
 
 
