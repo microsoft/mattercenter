@@ -182,6 +182,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
             Dictionary<string, string> ConfigDetails = ExcelOperations.ReadFromExcel(filePath, configSheet);
             string url = ConfigDetails[ConfigurationManager.AppSettings["CatalogSiteUrlKey"]].TrimEnd(ConstantStrings.FRONTSLASH);
             string resultSourceID = null;
+
             try
             {
                 using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(url, login, password))
@@ -845,6 +846,10 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                             #region Update search configuration file
                             UpdateSearchConfig(filePath, username, password);
                             #endregion
+                        }
+                        else if (4 == operation)
+                        {
+                            Console.WriteLine(GetResultSourceId(username, password));
                         }
                         else if (0 == operation)
                         {
