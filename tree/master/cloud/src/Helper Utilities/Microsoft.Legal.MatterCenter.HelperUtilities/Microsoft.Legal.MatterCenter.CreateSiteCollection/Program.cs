@@ -56,11 +56,10 @@ namespace Microsoft.Legal.MatterCenter.CreateSiteCollection
                     try
                     {
                         Collection<Collection<string>> clientVal = ExcelOperations.ReadSheet(filePath, ConfigurationManager.AppSettings["clientsheetname"]);
-                        bool isDeployedOnAzure = Convert.ToBoolean(configVal["IsDeployedOnAzure"], CultureInfo.InvariantCulture);
                         string targetSite = configVal["TenantAdminURL"];
                         string tenantSite = configVal["TenantURL"];
 
-                        using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password, isDeployedOnAzure))
+                        using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, login, password ))
                         {
                             using (SecureString securePassword = new SecureString())
                             {

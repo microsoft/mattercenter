@@ -74,63 +74,6 @@ Show-Message -Message "Adding common library functions" -Type ([MessageType]::Wa
 Show-Message -Message "Added common library functions" -Type ([MessageType]::Success)
 
 #----------------------------------------------
-# Reverting step 11
-#----------------------------------------------
-if (11 -le $Checkpoint)
-{
-    Show-Message -Message ""
-    Show-Message -Message "Deleting files from SharePoint library"
-    try {
-        & "$HelperPath\Microsoft.Legal.MatterCenter.UploadFile.exe" "false" $Username $Password
-    }
-    catch {        
-        Write-Log $RevertLogFile "Could not delete files from SharePoint library"
-    }
-}
-
-#----------------------------------------------
-# Reverting step 10
-#----------------------------------------------
-if (10 -le $Checkpoint)
-{
-    Show-Message -Message ""
-    Show-Message -Message "Removing apps from Exchange"
-    try {
-        . "$ScriptDirectory\DeployOutlookApp.ps1" -IsDeploy: $false
-    }
-    catch {        
-        Write-Log $RevertLogFile "Could not remove apps from Exchange"
-    }
-}
-
-#----------------------------------------------
-# Reverting step 9
-#----------------------------------------------
-if (9 -le $Checkpoint)
-{
-    Show-Message -Message ""
-    Show-Message -Message "Removing apps from SharePoint and Office"
-    try {
-        . "$ScriptDirectory\AppInstall.ps1" -IsDeploy: $false
-        . "$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $false -IsOfficeApp: $false
-        . "$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $false -IsOfficeApp: $true
-    }
-    catch {        
-        Write-Log $RevertLogFile "Could not remove apps from SharePoint and Office"
-    }
-}
-
-#----------------------------------------------
-# Reverting Step 8
-#----------------------------------------------
-if (8 -le $Checkpoint)
-{
-    Show-Message -Message ""
-    Show-Message -Message "Undoing Encryption"
-    . "$ScriptDirectory\EncryptDecrypt.ps1" -ToEncrypt: $false -ErrorLogPath: $RevertLogFile
-}
-
-#----------------------------------------------
 # Reverting step 3
 #----------------------------------------------
 if (3 -le $Checkpoint)

@@ -5,18 +5,10 @@
 # Step 1b: Create configuration lists
 # Step 2: Create taxonomy hierarchy
 # Step 3: Create site columns and content types
-# Step 4: Update Office, Outlook and SharePoint App schema files
-# Step 5: Update search configuration file and upload to SharePoint
-# Step 6: Update resource and config files in build
-# Step 7: Activate SharePoint Server Publishing infrastructure feature on catalog site collection 
-# Step 8: Encrypting the config files
-# Step 9: Add and install apps to SharePoint and Office
-# Step 10: Add apps to Exchange
-# Step 11: Upload files to SharePoint Library
-# Step 12: Creating Site Collection(s)
-# Step 13: Provisioning Web dashboard
-# Step 14: Update site collection view with field(s)
-# Step 15: Creating source in event viewer
+# Step 4: Update search configuration file and upload to SharePoint
+# Step 5: Activate SharePoint Server Publishing infrastructure feature on catalog site collection 
+# Step 6: Creating Site Collection(s)
+# Step 7: Update site collection view with field(s)
 #
 # Any changes in these steps, kindly update this list. Also update the checkpoint in Revert script
 #----------------------------------------------
@@ -185,8 +177,8 @@ Show-Message -Message "Added common library functions" -Type ([MessageType]::Suc
 #----------------------------------------------
 
 $SPCredential = Get-Credential -Message "Enter credentials to access SharePoint tenant."
-$ExchangeCredential = Get-Credential -Message "Enter credentials to connect with Exchange server."
-If ($Null -eq $SPCredential -or $Null -eq $ExchangeCredential) {
+
+If ($Null -eq $SPCredential) {
 	# Display error message and exit
 	Write-Log $ErrorLogFile "Failed to get credentials"
 	return
@@ -199,7 +191,7 @@ If ($Null -eq $SPCredential -or $Null -eq $ExchangeCredential) {
 Show-Message -Message ""
 . "$ScriptDirectory\PreRequisitesScript.ps1"
 
-$ExcelValues = (Read-FromExcel $ExcelFilePath "Config" ("TenantURL", "IsDeployedOnAzure", "EventViewer_LogName", "EventViewer_Source", "TenantAdminURL", "CatalogSiteURL") $ErrorLogFile)
+$ExcelValues = (Read-FromExcel $ExcelFilePath "Config" ("TenantURL", "TenantAdminURL", "CatalogSiteURL") $ErrorLogFile)
 $ExcelValues = $ExcelValues.Split(";")
 if($ExcelValues.length -le 0)
 {
@@ -207,44 +199,14 @@ if($ExcelValues.length -le 0)
     return $false
 }
 $TenantUrl = $ExcelValues[0]
-$IsDeployedOnAzure = [System.Convert]::ToBoolean($ExcelValues[1])
-$Log = $ExcelValues[2]
-$Source = $ExcelValues[3]
-$TenantAdminURL=$ExcelValues[4]
-$CatalogSiteUrl=$ExcelValues[5]
+$TenantAdminURL=$ExcelValues[1]
+$CatalogSiteUrl=$ExcelValues[2]
 $Username = $SPCredential.UserName
 $Password = $SPCredential.GetNetworkCredential().Password
 
 if($IsValid -eq $true)
 {
     Show-Message -Message "Starting deployment..."
-
-    #----------------------------------------------
-    # Configure trust for the apps and update Issuer Id in Web.config
-    #----------------------------------------------
-    . "$ScriptDirectory\ConfigureTrust.ps1"
-
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Failed to configure trust of the app" -Type ([MessageType]::Failure)
-        return
-    }
-    else {
-		Show-Message -Message "Successfully configured trust of the app" -Type ([MessageType]::Success)
-    }
-
-    #----------------------------------------------
-    # Create crawled and managed properties and add mapping
-    #----------------------------------------------
-    Show-Message -Message ""
-	Show-Message -Message "Create Managed Properties"
-    . "$ScriptDirectory\CreateProperties.ps1"
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Failed to create Managed Properties" -Type ([MessageType]::Failure)
-        return
-    }
-    else {
-		Show-Message -Message "Successfully created Managed Properties" -Type ([MessageType]::Success)
-    }
 
 	# Setting current location to "Helper Utilities" folder, in order to run the utility applications
     cd $HelperPath
@@ -322,25 +284,10 @@ if($IsValid -eq $true)
 		Show-Message -Message "Completed creating content types" -Type ([MessageType]::Success)
 	}
 
-     #----------------------------------------------
-     # Update Office, Outlook and SharePoint App schema files
-     #----------------------------------------------
-     Show-Message -Message "Step 4: Update Office, Outlook and SharePoint App schema files"
-     & "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "1" $Username $Password
-
-     If ((Get-Content $ErrorLogFile) -ne $Null) {
-		 Show-Message -Message "Updating Office, Outlook and SharePoint App schema files failed" -Type ([MessageType]::Failure)
-         RevertAll $ScriptDirectory 3		#Revert from step 3 to 1
-         return
-     }
-     else {
-		 Show-Message -Message "Completed updating Office, Outlook and SharePoint App schema files" -Type ([MessageType]::Success)
-     }
-
 	#----------------------------------------------
 	# Update search configuration file and upload to SharePoint
 	#----------------------------------------------
-	Show-Message -Message "Step 5: Update Search Configuration files and upload to SharePoint"
+	Show-Message -Message "Step 4: Update Search Configuration files and upload to SharePoint"
 	& "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "3" $Username $Password
 	    
 	If ((Get-Content $ErrorLogFile) -ne $Null) {
@@ -352,26 +299,10 @@ if($IsValid -eq $true)
 		Show-Message -Message "Completed updating search configuration file" -Type ([MessageType]::Success)
 	}
 
-
-    #----------------------------------------------
-    # Update resource files for Utility, Service and UI projects
-    #----------------------------------------------
-    Show-Message -Message "Step 6: Update resource and config files in build"
-     & "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "2" $Username $Password $ExchangeCredential.UserName $ExchangeCredential.GetNetworkCredential().Password
-    
-     If ((Get-Content $ErrorLogFile) -ne $Null) {
-		 Show-Message -Message "Updating resource and config files in solution failed" -Type ([MessageType]::Failure)
-         RevertAll $ScriptDirectory 3		#Revert from step 3 to 1
-         return
-     }
-     else {
-		 Show-Message -Message "Completed updating resource and config files in solution" -Type ([MessageType]::Success)
-     }
-
 	#----------------------------------------------
 	# Activate SharePoint Server Publishing Infrastructure
 	#----------------------------------------------
-	Show-Message -Message "Step 7: Activating SharePoint Server Publishing Infrastructure at Catalog site collection"
+	Show-Message -Message "Step 5: Activating SharePoint Server Publishing Infrastructure at Catalog site collection"
 	try 
 	{
 		$Context = New-Object Microsoft.SharePoint.Client.ClientContext($CatalogSiteUrl)  
@@ -391,102 +322,20 @@ if($IsValid -eq $true)
 	finally {
         $Context.Dispose()
     }
-
-	#----------------------------------------------
-	# Update App files for SharePoint and OneDrive Ribbon Apps
-	#----------------------------------------------
- #	Show-Message -Message "Step 8: Update App files for SharePoint and OneDrive Ribbon Apps"
- #	. "$ScriptDirectory\UpdateAppPackage.ps1" -IsDeployedOnAzure $IsDeployedOnAzure -Credentials $SPCredential
- #	    
- #	If ((Get-Content $ErrorLogFile) -ne $Null) {
- #		Show-Message -Message "Updating App files for SharePoint and OneDrive Ribbon Apps failed" -Type ([MessageType]::Failure)
- #	    RevertAll $ScriptDirectory 3		#Revert from step 3 to 1
- #	    return
- #	}
- #	else {
- #		Show-Message -Message "Completed updating App files for SharePoint and OneDrive Ribbon Apps" -Type ([MessageType]::Success)
- #	}
-
-    #----------------------------------------------
-    # Encrypt the appSettings section in web.config
-    #----------------------------------------------
-    Show-Message -Message "Step 8: Encrypting the config files"
-    . "$ScriptDirectory\EncryptDecrypt.ps1" -ToEncrypt: $true -ErrorLogPath: $ErrorLogFile
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Encryption failed..." -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 8
-        return
-    }
-    else {
-		Show-Message -Message "Config files encrypted successfully..." -Type ([MessageType]::Success)
-    }
-
-    #----------------------------------------------
-    # Add Apps to SharePoint and Office
-    #----------------------------------------------
-    Show-Message -Message "Step 9: Add and install apps to SharePoint and Office"
-	. "$ScriptDirectory\AppInstall.ps1" -IsDeploy: $false
-    . "$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $true -IsOfficeApp: $false
-    . "$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $true -IsOfficeApp: $true    
-    . "$ScriptDirectory\AppInstall.ps1" -IsDeploy: $true
-    
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Adding and installing apps to SharePoint and Office failed" -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 9
-        return
-    }
-    else {
-		Show-Message -Message "Completed adding and installing apps to SharePoint and Office" -Type ([MessageType]::Success)
-    }
-
-
-    #----------------------------------------------
-    # Add Apps to Exchange
-    #----------------------------------------------
-    Show-Message -Message "Step 10: Add apps to Exchange"
-    . "$ScriptDirectory\DeployOutlookApp.ps1" -IsDeploy: $true
-    
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Adding apps to Exchange failed" -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 10
-        return
-    }
-    else {
-		Show-Message -Message "Completed adding apps to Exchange" -Type ([MessageType]::Success)
-    }
-
-    #---------------------------------------------------------------------
-    # Upload files required for Matter landing page to SharePoint library
-    #---------------------------------------------------------------------
-    Show-Message -Message "Step 11: Upload files to SharePoint Library"
-    [Environment]::CurrentDirectory = Get-Location
-    & "$HelperPath\Microsoft.Legal.MatterCenter.UploadFile.exe" "true" $Username $Password
-
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Uploading files to SharePoint Library failed" -Type ([MessageType]::Failure)
-        RevertAll $ScriptDirectory 11
-        return
-    }
-    else {
-		Show-Message -Message "Completed uploading files to SharePoint library" -Type ([MessageType]::Success)
-    }
-
+   
     #---------------------------------------------------------------------
     # Create site collection(s) on SharePoint library
     #---------------------------------------------------------------------
-	if($IsDeployedOnAzure)
+	Connect-SPOService -url $TenantAdminUrl -Credential $SPCredential
+	$Rootsite = Get-SPOSite($TenantUrl)
+	$ReturnedValue = [string[]]$Rootsite.DenyAddAndCustomizePages
+	If("false" -ne $ReturnedValue.ToLower())
 	{
-		Connect-SPOService -url $TenantAdminUrl -Credential $SPCredential
-		$Rootsite = Get-SPOSite($TenantUrl)
-		$ReturnedValue = [string[]]$Rootsite.DenyAddAndCustomizePages
-		If("false" -ne $ReturnedValue.ToLower())
-		{
-			Set-SPOSite -Identity $TenantUrl -DenyAddAndCustomizePages $false
-		}
+		Set-SPOSite -Identity $TenantUrl -DenyAddAndCustomizePages $false
 	}
 	
-    Show-Message -Message "Step 12: Creating Site Collection(s)"
-    . "$ScriptDirectory\CreateSiteCollection.ps1" -IsDeployedOnAzure: $IsDeployedOnAzure -Username: $Username -Password $Password
+    Show-Message -Message "Step 6: Creating Site Collection(s)"
+    . "$ScriptDirectory\CreateSiteCollection.ps1" -Username: $Username -Password $Password
     If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Creating site collection failed" -Type ([MessageType]::Failure)
     }
@@ -494,36 +343,11 @@ if($IsValid -eq $true)
 		Show-Message -Message "Completed creating site collection" -Type ([MessageType]::Success)
     }
 
-    #---------------------------------------------------------------------
-    # Provisioning Web Dashboard page(s) on SharePoint library
-    #---------------------------------------------------------------------
-    Show-Message -Message "Step 13: Provisioning Web dashboard"
-    & "$HelperPath\Microsoft.Legal.MatterCenter.ProvisionWebDashboard.exe" "true" $Username $Password
-
-    If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Provisioning Web dashboard failed" -Type ([MessageType]::Failure)  
-    }
-    else {
-		Show-Message -Message "Completed Provisioning Web dashboard" -Type ([MessageType]::Success)
-    }
-
 	#---------------------------------------------------------------------
     # Update site pages view with fields
     #---------------------------------------------------------------------
-    Show-Message -Message "Step 14: Update site collection view with fields"
+    Show-Message -Message "Step 7: Update site collection view with fields"
     & "$HelperPath\Microsoft.Legal.MatterCenter.UpdateView.exe" $Username $Password
-
-    #---------------------------------------------------------------------
-    # Creating source in event viewer
-    #---------------------------------------------------------------------
-    Show-Message -Message "Step 15: Creating source in event viewer"
-	if(-not $IsDeployedOnAzure)
-	{
-		$logFileExists = Get-EventLog -list | Where-Object {$_.logdisplayname -eq $Log} 
-		if (! $logFileExists) {
-			New-EventLog -LogName $Log -Source $Source
-		}
-	}
 
     #----------------------------------------------
     # Complete tool error check

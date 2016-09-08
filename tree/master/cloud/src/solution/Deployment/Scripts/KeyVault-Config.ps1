@@ -49,7 +49,7 @@ function Create-ADAppFromCert
 
 	$dnsname =  [string]::format("{0}.azurewebsites.net", $WebAppName)
  
-    $crt = New-SelfSignedCertificate -DnsName $dnsname -CertStoreLocation cert:\CurrentUser\My
+    $crt = New-SelfSignedCertificate -DnsName $dnsname -CertStoreLocation cert:\CurrentUser\My -KeySpec KeyExchange
 	$global:thumbPrint = $crt.Thumbprint
     
     #$mypwd = ConvertTo-SecureString -String $creds.Password -Force –AsPlainText
@@ -58,7 +58,7 @@ function Create-ADAppFromCert
  
     Export-Certificate -Cert $crt -FilePath "$PSScriptRoot\MatterWebApp.cer"
  
-    New-AzureRmWebAppSSLBinding -ResourceGroupName $ResourceGroupName -WebAppName $WebAppName.ToLowerInvariant() -CertificateFilePath "$PSScriptRoot\MatterWebApp.pfx" -CertificatePassword $creds.GetNetworkCredential().Password -Name $dnsname
+    New-AzureRmWebAppSSLBinding -ResourceGroupName $ResourceGroupName -WebAppName $WebAppName.ToLowerInvariant() -CertificateFilePath "$PSScriptRoot\MatterWebApp.pfx" -CertificatePassword $creds.GetNetworkCredential().Password -Name $dnsname -SslState Disabled
     
     Write-Host "Certificate uploaded successfully.."
 
@@ -172,7 +172,7 @@ Write-Output "Writing for AppGuid $ADApplicationId"
 $storageConnString =  [string]::format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}", $storageAccount_name, $StorageAccountKey.Item(0).Value)
 
 $AppInsightsApp = Get-AzureRmResource -ResourceType "Microsoft.Insights/components" -ResourceGroupName $ResourceGroupName -ResourceName $components_AppInsights_name
-
+$global:appInsightsId = $AppInsightsApp.Properties.InstrumentationKey
 Write-Output "Writing secrets to key vault..."
 Create-KeyVaultSecrets -VaultName $vaults_KeyVault_name -AdminUserName $creds.UserName -AdminPassword $creds.Password -CloudStorageConnectionString $storageConnString -ClientId  $ADApplicationId -RedisCacheHostName $Redis_cache_name -AppInsightsInstrumentationKey $AppInsightsApp.Properties.InstrumentationKey 
 Write-Host "Updating Matter Web App Settings..."
@@ -184,6 +184,7 @@ $appSettings = @{ `
 				"General:KeyVaultClientID" = $ADApplicationId; `
 				"General:KeyVaultCertThumbPrint" = $global:thumbPrint;`
 				"Search:SearchResultSourceID" = $SearchResultSourceId;`
+				"WEBSITE_LOAD_CERTIFICATES" = $global:thumbPrint;`
 			}
 			Set-AzureWebsite -Name $WebAppName -AppSettings $appSettings		
 

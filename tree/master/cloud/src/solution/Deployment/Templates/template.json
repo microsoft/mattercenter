@@ -52,8 +52,8 @@
     "Redis_cache_name": "[concat(parameters('webSite_name'), 'RedisCache')]",
     "autoscalesettings_name": "[concat(parameters('webSite_name'), 'ScaleSettings')]",
     "components_AppInsights_name": "[concat(parameters('webSite_name'), 'AppInsights')]",
-    "vaults_KeyVault_name": "[concat(parameters('webSite_name'), 'KeyVault')]",
-    "storageAccount_name": "[toLower(parameters('webSite_name'))]",
+    "vaults_KeyVault_name": "[toLower(take(parameters('webSite_name'), 24))]",
+    "storageAccount_name": "[toLower(take(parameters('webSite_name'), 24))]",
     "serverfarms_WebPlan_name": "[concat(parameters('webSite_name'), 'WebPlan')]"
   },
   "resources": [
