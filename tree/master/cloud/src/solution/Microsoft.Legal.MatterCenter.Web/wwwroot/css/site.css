@@ -89,6 +89,11 @@ textarea {
         overflow-x: hidden !important;
         overflow-y: auto !important;
     }
+
+    .searchwidth{
+        min-width:204px !important;
+        max-width:204px !important;
+    }
 }
 
 .viewportlg {

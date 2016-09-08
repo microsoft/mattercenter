@@ -18,7 +18,7 @@
             vm.matterConfigContent = uiconfigs.Matters;
             vm.header = uiconfigs.Header;
             //#end region
-            vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
+            vm.mattername = "" + vm.matterConfigContent.Dropdown1Item2 + "";
             vm.sortname = "";
             vm.mattersdrop = false;
             vm.mattersdropinner = true;
@@ -29,8 +29,9 @@
             //#region Onload show ui grid and hide error div
             //start
             vm.divuigrid = true;
-            vm.nodata = false;
+            //vm.nodata = false;
             vm.filternodata = false;
+            vm.matterid = 2;
             //#endregion
 
             //#region To hide lazyloader on load
@@ -1224,6 +1225,7 @@
             vm.search = function () {
                 vm.lazyloader = false;
                 vm.divuigrid = false;
+                vm.nodata = false;
                 vm.matterid = 1;
                 vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
                 vm.pagenumber = 1;
@@ -1244,7 +1246,7 @@
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 get(searchRequest, function (response) {
-                    if (response == "") {
+                    if (response == "" || response.errorCode == "500" || response.lenth == 0) {
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
                         vm.divuigrid = true;
@@ -1455,7 +1457,7 @@
             //#region Code written for displaying types in dropdown 
             //Start 
             vm.Matters = [{ Id: 1, Name: "" + vm.matterConfigContent.Dropdown1Item1 + "" }, { Id: 2, Name: "" + vm.matterConfigContent.Dropdown1Item2 + "" }, { Id: 3, Name: "" + vm.matterConfigContent.Dropdown1Item3 + "" }];
-            vm.ddlMatters = vm.Matters[0];
+            vm.ddlMatters = vm.Matters[1];
             //#endregion  
 
             //#region Hits when the Dropdown changes 
@@ -1482,7 +1484,7 @@
                     searchRequest.SearchObject.Filters.FilterByMe = 0;
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     get(searchRequest, function (response) {
-                        if (response == "") {
+                        if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
                             vm.lazyloader = true;
                             vm.divuigrid = true;
@@ -1513,10 +1515,10 @@
                                 }
                             });
                         }
+                        vm.nodata = false;
                         $timeout(function () {
                             vm.lazyloader = true;
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }, 1000);
                     });
                 } else if (id == 2) {
@@ -1529,7 +1531,7 @@
                     searchRequest.SearchObject.Filters.FilterByMe = 1;
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     get(searchRequest, function (response) {
-                        if (response == "") {
+                        if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
                             vm.lazyloader = true;
                             vm.divuigrid = true;
@@ -1571,7 +1573,7 @@
                         Url: configs.global.repositoryUrl
                     }
                     getPinnedMatters(pinnedMattersRequest, function (response) {
-                        if (response == "") {
+                        if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
                             vm.lazyloader = true;
                             vm.divuigrid = true;
@@ -1595,8 +1597,7 @@
 
 
             //#region To run GetMatters function on page load 
-            vm.GetMatters(vm.ddlMatters.Id);
-            vm.matterid = vm.ddlMatters.Id;
+            vm.SetMatters(vm.matterid, vm.mattername);
             //End 
 
 
@@ -1800,7 +1801,7 @@
             vm.FilterByType = function () {
                 get(searchRequest, function (response) {
                     vm.lazyloader = true;
-                    if (response == "") {
+                    if (response == "" || response.errorCode == "500") {
                         vm.gridOptions.data = response;
                         vm.divuigrid = false;
                         vm.nodata = true;
@@ -1863,7 +1864,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
@@ -1892,7 +1893,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
@@ -1921,7 +1922,7 @@
 
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
@@ -1950,7 +1951,7 @@
 
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
@@ -1978,7 +1979,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
@@ -2006,7 +2007,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
@@ -2035,7 +2036,7 @@
 
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                 } else {
@@ -2397,6 +2398,13 @@
             }
 
             //end
+            //#endregion
+
+            //#region for opening view matters url in new window
+            vm.viewMatterDetails = function (url, guid) {
+                var viewmatterurl = url + '/SitePages/' + guid + '.aspx';
+                window.open(viewmatterurl, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
+            }
             //#endregion
 
         }]);
