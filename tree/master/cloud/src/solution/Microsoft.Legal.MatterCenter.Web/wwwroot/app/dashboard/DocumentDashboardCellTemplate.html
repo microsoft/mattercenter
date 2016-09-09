@@ -1,7 +1,10 @@
 ﻿<div class='row'>
     <div class='col-xs-12' id='documentPopup' title='{{row.entity.documentName}}'>
         <a documentflyout type='button' class='btn btn-link col-xs-12 col-sm-12 txtellipsis' style='text-align: left'
-           details={{row.entity}} ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess">{{row.entity.documentName}}
+           details={{row.entity}} ng-click="grid.appScope.vm.getDocumentAssets(row)" loader="grid.appScope.vm.assetsuccess">
+            <img class="docTypeIconHeader" id="docTypeIcon"  style="padding-left:0px;padding-right:4px"
+                 src="{{row.entity.documentIconUrl}}" alt="{{grid.appScope.vm.documentConfigContent.EllipsisDocTypeIconAltText}}" />
+            {{row.entity.documentName}}
         </a>
         <div class='popcontent' style="display:none;">
         </div>

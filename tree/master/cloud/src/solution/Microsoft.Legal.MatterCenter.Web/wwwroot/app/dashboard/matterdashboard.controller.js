@@ -86,10 +86,10 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn1Header,                            
+                            displayName: vm.matterDashboardConfigs.GridColumn1Header,
                             enableColumnMenu: false,
                             width: "20%",
-                            cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html',                           
+                            cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html',
                             position: value.position
                         });
 
@@ -113,7 +113,7 @@
                             field: key,
                             width: '15%',
                             displayName: vm.matterDashboardConfigs.GridColumn3Header,
-                            headerTooltip: 'Click to sort by client.matterid', 
+                            headerTooltip: 'Click to sort by client.matterid',
                             enableCellEdit: true,
                             cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>',
                             enableColumnMenu: false,
@@ -127,6 +127,9 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
+                            sort: {
+                                direction: uiGridConstants.DESC,
+                            },
                             width: '15%',
                             displayName: vm.matterDashboardConfigs.GridColumn4Header,
                             cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>',
@@ -140,7 +143,7 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            width: '15%', 
+                            width: '15%',
                             headerTooltip: 'Click to sort by attorney',
                             displayName: vm.matterDashboardConfigs.GridColumn5Header,
                             cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>',
@@ -296,7 +299,7 @@
                 }
 
             });
-           
+
             columnDefs1.push({
                 field: 'pin',
                 displayName: '',
@@ -333,7 +336,7 @@
                 enableSelectAll: gridOptions.enableSelectAll,
                 multiSelect: gridOptions.multiSelect,
                 enableFiltering: gridOptions.enableFiltering,
-                columnDefs:columnDefs1,
+                columnDefs: columnDefs1,
                 //    [
                 //    { field: 'matterName', width: '20%', displayName: vm.matterDashboardConfigs.GridColumn1Header, cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html', enableColumnMenu: false },
                 //    { field: 'matterClient', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn2Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>', enableColumnMenu: false },
@@ -1712,7 +1715,7 @@
                             AOLList: jsonMatterSearchRequest.SearchObject.Filters.AOLList,
                             FromDate: jsonMatterSearchRequest.SearchObject.Filters.FromDate,
                             ToDate: jsonMatterSearchRequest.SearchObject.Filters.ToDate,
-                            FilterByMe: jsonMatterSearchRequest.SearchObject.Filters.FilterByMe
+                            FilterByMe: 0
                         },
                         Sort: {
                             ByProperty: 'LastModifiedTime',
@@ -1760,8 +1763,8 @@
                     filteredresult.pop(input[i]);
                 }
             }
-            return filteredresult;           
+            return filteredresult;
         };
-    })  
+    })
 
 })();
