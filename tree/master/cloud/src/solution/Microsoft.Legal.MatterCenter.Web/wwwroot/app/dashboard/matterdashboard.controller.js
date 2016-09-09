@@ -71,7 +71,7 @@
 
 
             var gridOptions = {
-                paginationPageSize: 28,
+                paginationPageSize: 30,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,

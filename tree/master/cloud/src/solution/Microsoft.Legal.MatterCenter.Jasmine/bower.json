@@ -16,7 +16,6 @@
     "angular-bootstrap": "1.3.2",
     "jasmine-core": "2.4.1",
     "angulartics": "1.0.3"
-
   },
   "resolutions": {
     "angular": "1.5.2"
