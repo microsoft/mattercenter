@@ -62,7 +62,7 @@
             //#endregion
 
             var gridOptions = {
-                paginationPageSize: 28,
+                paginationPageSize: 30,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
@@ -130,6 +130,9 @@
                         columnDefs1.push({
                             field: key,
                             displayName: vm.documentDashboardConfigs.GridColumn4Header,
+                            sort: {
+                                direction: uiGridConstants.DESC,
+                            },
                             width: '20%',
                             enableColumnMenu: false,
                             position: value.position

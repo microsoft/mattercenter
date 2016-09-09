@@ -266,7 +266,7 @@
                 vm.clienturl = url;
                 vm.modifiedDate = '0';
                 getDefaultConfigurations(siteCollectionPath, function (response) {
-                    if (response != "") {
+                    if (response != "" && !response.isError) {
                         vm.configurations = JSON.parse(response.code);
                         vm.setClientData(vm.configurations);
                         vm.showrole = "Yes";
@@ -362,6 +362,8 @@
                     } else {
                         vm.nodata = true;
                         vm.lazyloader = true;
+                        vm.error = response.value;
+                        angular.element('#errorDiv').modal('show');
                     }
                 });
             }
