@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
+  <Id>2076412a-e554-414c-9221-fdcd515794dc</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Microsoft Corporation</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Matter Center" />
+  <Description DefaultValue="Matter Center App allows you to search matters, document, filing documents to matter and even create new matters."/>
+  <IconUrl DefaultValue="https://matterwebapp.azurewebsites.net/Images/32x32-logo.png" />
+  <HighResolutionIconUrl DefaultValue="~appWebUrl/Images/64x64-logo.png" />
+  <AppDomains>
+    <AppDomain>https://matterwebapp.azurewebsites.net</AppDomain>
+    <AppDomain>https://login.microsoftonline.com/</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Document" />
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://matterwebapp.azurewebsites.net" />
+  </DefaultSettings>
+  <Permissions>Restricted</Permissions>
+</OfficeApp>
