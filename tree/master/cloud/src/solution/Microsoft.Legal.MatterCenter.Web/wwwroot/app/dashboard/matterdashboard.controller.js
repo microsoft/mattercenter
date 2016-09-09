@@ -1712,7 +1712,7 @@
                             AOLList: jsonMatterSearchRequest.SearchObject.Filters.AOLList,
                             FromDate: jsonMatterSearchRequest.SearchObject.Filters.FromDate,
                             ToDate: jsonMatterSearchRequest.SearchObject.Filters.ToDate,
-                            FilterByMe: jsonMatterSearchRequest.SearchObject.Filters.FilterByMe
+                            FilterByMe: 0
                         },
                         Sort: {
                             ByProperty: 'LastModifiedTime',
