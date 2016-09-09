@@ -18,6 +18,6 @@
     "angulartics": "1.0.3"
   },
   "resolutions": {
-    "angular": "1.5.9-build.4999+sha.3d686a9"
+    "angular": "1.5.2"
   }
 }
