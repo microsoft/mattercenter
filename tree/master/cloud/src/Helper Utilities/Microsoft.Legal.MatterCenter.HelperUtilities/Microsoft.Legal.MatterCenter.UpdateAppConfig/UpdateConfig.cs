@@ -256,17 +256,12 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                                 for (int iterator = 0; iterator < clientElement.Count; iterator++)
                                 {
                                     string previousValue = clientElement[iterator].Attributes[clientAttribute].Value;
-                                    if (flag)
-                                    {
-                                        clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement];
-                                    }
-                                    else if ("iconUrl" == sourceLocation)
+
+                                    clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement];
+
+                                    if ("iconUrl" == sourceLocation)
                                     {
                                         clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement] + previousValue.Substring(previousValue.IndexOf(ConstantStrings.IMAGES_ICON, StringComparison.OrdinalIgnoreCase));
-                                    }
-                                    else
-                                    {
-                                        clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement];
                                     }
                                 }
                             }
