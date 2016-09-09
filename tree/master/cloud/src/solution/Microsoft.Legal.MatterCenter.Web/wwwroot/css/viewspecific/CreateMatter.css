@@ -1458,3 +1458,17 @@
     border: 1px solid #ccc;
     font-size: 0.875em;
 }
+
+
+.closebutton {
+    float: right !important;
+    text-decoration: none !important;
+} 
+.settingserror {
+    padding: 25px;
+    color: red;
+}
+.settingsSuccess {
+    padding: 25px;
+    color: Green;
+}
