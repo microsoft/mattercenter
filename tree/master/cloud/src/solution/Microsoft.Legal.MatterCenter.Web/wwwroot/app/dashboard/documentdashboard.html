@@ -26,6 +26,9 @@
                         <div class="col-md-12">
                             <img data-dismiss="modal" class="pull-right" src="../../images/close-666.png" />
                         </div>
+                        <div style="text-align:center; margin-bottom:10px;" ng-show="vm.isDisplayMessage">
+                            {{vm.displayMessage}}
+                        </div>
                         <div id="PopupBody">
                             <div class="selectMailFormat">
                                 <div class="sendEmailOptions emailAttachmentOption" ng-click="!vm.enable||vm.downloadEmailAsAttachment(true);">
