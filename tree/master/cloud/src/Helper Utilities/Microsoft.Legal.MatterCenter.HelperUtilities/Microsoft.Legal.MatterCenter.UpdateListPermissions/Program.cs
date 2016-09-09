@@ -50,10 +50,10 @@ namespace Microsoft.Legal.MatterCenter.UpdateListPermissions
                 string password = args[1].Trim();
                 try
                 {
-                    string targetSite = configVal["CatalogSiteURL"] + "/" + ConfigurationManager.AppSettings["ProvisionMatterAppName"];
+                    string targetSite = configVal["CatalogSiteURL"];
                     using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(targetSite, username, password))
                     {
-                        UpdateSendMailListPermissions(clientContext, configVal);
+                        CreateUpdateProvisionMatterListPermissions(clientContext, configVal);
                     }
                 }
                 catch (Exception exception)
@@ -72,65 +72,63 @@ namespace Microsoft.Legal.MatterCenter.UpdateListPermissions
         /// </summary>
         /// <param name="clientContext">Client Context</param>
         /// <param name="configVal">Configuration values from configuration excel</param>
-        internal static void UpdateSendMailListPermissions(ClientContext clientContext, Dictionary<string, string> configVal)
+        internal static void CreateUpdateProvisionMatterListPermissions(ClientContext clientContext, Dictionary<string, string> configVal)
         {
             Dictionary<string, string> groupValues = ExcelOperations.ReadFromExcel(filePath, ConfigurationManager.AppSettings["groupSheetName"]);
-            Console.Write("Updating permissions for Send Mail list");
-
+            Console.Write("Creating Provision Matter List...");
+            List provisionMatterList;
+            //This is a dummy list that is getting created to check whether the current login user can create matter or not
+            //Otherwise this list has no significance
             string listName = ConfigurationManager.AppSettings["listName"];
             Web web = clientContext.Web;
-            clientContext.Load(web);
-            clientContext.ExecuteQuery();
 
             ListCollection listcoll = web.Lists;
 
-            //Attempt to get the list
-            List sendList;
-            int attempts = 0;
-            do
+            clientContext.Load(listcoll, lists => lists.Include(list => list.Title)); //Refresh the collection
+            clientContext.ExecuteQuery();
+            provisionMatterList = listcoll.Cast<List>().FirstOrDefault(list => list.Title == listName);
+
+            if (null == provisionMatterList)
             {
-                Console.Write(".");
-                System.Threading.Thread.Sleep(30000);
-                clientContext.Load(listcoll, lists => lists.Include(list => list.Title, list => list.HasUniqueRoleAssignments)); //Refresh the collection
+                ListCreationInformation listCreationInfo = new ListCreationInformation();
+                listCreationInfo.Title = listName;
+                listCreationInfo.TemplateType = (int)ListTemplateType.Announcements;
+                provisionMatterList = web.Lists.Add(listCreationInfo);
+                clientContext.Load(provisionMatterList);
                 clientContext.ExecuteQuery();
-                sendList = listcoll.Cast<List>().FirstOrDefault(list => list.Title == listName);
-                attempts += 1;
             }
-            while (null == sendList && 20 > attempts);
-            Console.WriteLine(string.Empty);
 
-            if (null != sendList)
+            clientContext.Load(listcoll, lists => lists.Include(list => list.Title, list => list.HasUniqueRoleAssignments)); //Refresh the collection
+            clientContext.ExecuteQuery();
+            provisionMatterList = listcoll.Cast<List>().FirstOrDefault(list => list.Title == listName);
+
+
+
+            //Update list permissions
+            if (provisionMatterList.HasUniqueRoleAssignments)
             {
-                //Update list permissions
-                if (sendList.HasUniqueRoleAssignments)
-                {
-                    sendList.ResetRoleInheritance();
-                }
+                provisionMatterList.ResetRoleInheritance();
+            }
 
-                sendList.BreakRoleInheritance(false, true);
-                clientContext.Load(sendList);
+            provisionMatterList.BreakRoleInheritance(false, true);
+            clientContext.Load(provisionMatterList);
+            clientContext.ExecuteQuery();
+
+            RoleAssignmentCollection roleAssignment = provisionMatterList.RoleAssignments;
+            List<string> groupNames = groupValues.Keys.ToList();
+            if (3 <= groupNames.Count)
+            {
+                Group provisionGroup = web.SiteGroups.GetByName(groupNames[2]);
+                RoleDefinition contributeRole = web.RoleDefinitions.GetByName(ConfigurationManager.AppSettings["roleType"]);
+                clientContext.Load(roleAssignment);
+                clientContext.Load(provisionGroup);
+                clientContext.Load(contributeRole);
                 clientContext.ExecuteQuery();
 
-                RoleAssignmentCollection roleAssignment = sendList.RoleAssignments;
-                List<string> groupNames = groupValues.Keys.ToList();
-                if (3 <= groupNames.Count)
-                {
-                    Group provisionGroup = web.SiteGroups.GetByName(groupNames[2]);
-                    RoleDefinition contributeRole = web.RoleDefinitions.GetByName(ConfigurationManager.AppSettings["roleType"]);
-                    clientContext.Load(roleAssignment);
-                    clientContext.Load(provisionGroup);
-                    clientContext.Load(contributeRole);
-                    clientContext.ExecuteQuery();
-
-                    RoleDefinitionBindingCollection collRdb = new Microsoft.SharePoint.Client.RoleDefinitionBindingCollection(clientContext);
-                    collRdb.Add(contributeRole);
-                    roleAssignment.Add(provisionGroup, collRdb);
-                    clientContext.ExecuteQuery();
-                }
-            }
-            else
-            {
-                ErrorLogger.LogErrorToTextFile(errorFilePath, "Message: SendMail list was not created successfully at " + configVal["CatalogSiteURL"] + "/" + ConfigurationManager.AppSettings["ProvisionMatterAppName"]);
+                RoleDefinitionBindingCollection collRdb = new Microsoft.SharePoint.Client.RoleDefinitionBindingCollection(clientContext);
+                collRdb.Add(contributeRole);
+                roleAssignment.Add(provisionGroup, collRdb);
+                clientContext.ExecuteQuery();
             }
         }
     }

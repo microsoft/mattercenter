@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <div class="col-sm-12 noResultsText" ng-if="vm.nodata" ng-bind-html="vm.matterConfigContent.NoDataSearchText">
+    <div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.matterConfigContent.NoDataSearchText">
     </div>
 
     <onload sortdetails="{{vm.sortexp}}"></onload>
@@ -244,7 +244,7 @@
                                 </script>
 
                                 <ul>
-                                    <li ng-repeat="child in vm.foldersList" ng-class='child.parentURL?"childNode":"parentNode"' droppable  data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" drop="handleDrop()" folder="child" ng-include="'folderTree'" style="display: inline-block; width: 90%; padding:0;">
+                                    <li ng-repeat="child in vm.foldersList" ng-class='child.parentURL?"childNode":"parentNode"' droppable data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" drop="handleDrop()" folder="child" ng-include="'folderTree'" style="display: inline-block; width: 90%; padding:0;">
 
                                     </li>
 
