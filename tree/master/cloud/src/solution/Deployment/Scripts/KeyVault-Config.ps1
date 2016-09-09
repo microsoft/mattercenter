@@ -67,7 +67,7 @@ function Create-ADAppFromCert
     $now = [System.DateTime]::Now
 	Write-Host "Creating Azure RM AD Application"
 
-	$adapp = New-AzureRmADApplication -DisplayName $ADApplicationName -HomePage $applicationURL -IdentifierUris $applicationURL -CertValue $credValue -StartDate $crt.NotBefore -EndDate $crt.NotAfter
+	$adapp = New-AzureRmADApplication -DisplayName $ADApplicationName -HomePage $applicationURL -IdentifierUris $applicationURL -CertValue $credValue -StartDate $crt.NotBefore -EndDate $crt.NotAfter -ReplyUrls $applicationURL
     
 	$sp = New-AzureRmADServicePrincipal -ApplicationId $adapp.ApplicationId
 	
