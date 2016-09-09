@@ -17,6 +17,9 @@
             vm.configSearchContent = configs.search;
             vm.matterConfigContent = uiconfigs.Matters;
             vm.header = uiconfigs.Header;
+            //#region for setting the dynamic width to grid
+            var screenHeight = 0;
+            vm.searchResultsLength = 0;
             //#end region
             vm.mattername = "" + vm.matterConfigContent.Dropdown1Item2 + "";
             vm.sortname = "";
@@ -47,6 +50,7 @@
             vm.clientfilter = false;
             vm.areafilter = false;
             vm.attorneyfilter = false;
+            vm.showfiltericon = vm.configSearchContent.ManagedPropertyLastModifiedTime;
             //end
 
             //#region Assigning scopes for Dropdowns in headers
@@ -423,10 +427,6 @@
                 return promise.promise;
             }
             //#endregion
-
-            //#region for setting the dynamic width to grid
-            var screenHeight = 0;
-            vm.searchResultsLength = 0;
 
 
             //#endregion
@@ -1251,11 +1251,13 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.gridOptions.data = response;
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
             }
@@ -1327,7 +1329,7 @@
                         }
                         vm.lazyloader = true;
                         vm.divuigrid = true;
-
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -1344,6 +1346,7 @@
                         }
                         searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Sort.ByProperty = "";
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
             }
@@ -1375,11 +1378,13 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
+                        $interval(function () { vm.showSortExp(); }, 2500, 3);
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
                         vm.gridOptions.data = response;
+                        $interval(function () { vm.showSortExp(); }, 2500, 3);
                     }
                 });
 
@@ -1443,11 +1448,13 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
                         vm.gridOptions.data = response;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
             }
@@ -1520,6 +1527,7 @@
                             vm.lazyloader = true;
                             vm.divuigrid = true;
                         }, 1000);
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     });
                 } else if (id == 2) {
                     vm.lazyloader = false;
@@ -1563,6 +1571,7 @@
                                 vm.lazyloader = true;
                                 vm.divuigrid = true;
                                 vm.nodata = false;
+                                $interval(function () { vm.showSortExp(); }, 2000, 3);
                             });
                         }
                     });
@@ -1589,6 +1598,7 @@
                             vm.lazyloader = true;
                             vm.divuigrid = true;
                             vm.nodata = false;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                     });
                 }
@@ -1604,6 +1614,8 @@
             //#region Written for unpinning the matter 
             //Start 
             vm.UnpinMatter = function (data) {
+                vm.lazyloader = false;
+                vm.divuigrid = false;
                 var alldata = data.entity;
                 var unpinRequest = {
                     Client: {
@@ -1615,7 +1627,7 @@
                 }
                 UnpinMatters(unpinRequest, function (response) {
                     if (response.isMatterUnPinned) {
-                        $timeout(vm.SetMatters(vm.matterid, vm.mattername), 500);
+                        $timeout(function () { vm.SetMatters(vm.matterid, vm.mattername); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
                         //alert("Success");
                     }
                 });
@@ -1626,6 +1638,8 @@
             //#region Written for pinning the matter 
             //Start 
             vm.PinMatter = function (data) {
+                vm.lazyloader = false;
+                vm.divuigrid = false;
                 var alldata = data.entity;
                 var pinRequest = {
                     Client: {
@@ -1651,7 +1665,7 @@
                 }
                 PinMatters(pinRequest, function (response) {
                     if (response.isMatterPinned) {
-                        $timeout(vm.SetMatters(vm.matterid, vm.mattername), 500);
+                        $timeout(function () { vm.SetMatters(vm.matterid, vm.mattername); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
                         //alert("Success");
                     }
                 });
@@ -1818,8 +1832,8 @@
                 });
             }
 
-            vm.sortby = "";
-            vm.sortexp = "";
+            vm.sortby = "desc";
+            vm.sortexp = "matterModifiedDate";
             vm.showSortExp = function () {
                 if (vm.sortexp != "" || vm.sortexp != undefined || vm.sortby != "" || vm.sortby != undefined) {
                     if (vm.sortby == "asc") {
@@ -1833,6 +1847,8 @@
                     }
                 }
             }
+
+            $interval(function () { vm.showSortExp(); }, 3000, 3);
 
             $scope.sortChanged = function (grid, sortColumns) {
                 vm.divuigrid = false;
@@ -2040,27 +2056,17 @@
                         }
                     }
                 } else {
-                    //if (vm.MatterNameSort == undefined || vm.MatterNameSort == "asc") {
-                    //    vm.pagenumber = 1;
-                    //    vm.lazyloader = false;
-                    //    searchRequest.SearchObject.PageNumber = 1;
-                    //    searchRequest.SearchObject.Sort.ByProperty = ""+vm.configSearchContent.ManagedPropertyMatterName+"";
-                    //    searchRequest.SearchObject.Sort.Direction = 0;
-                    //    vm.FilterByType();
-                    //    vm.MatterNameSort = "desc"; vm.sortby = "asc";
-                    //    vm.sortexp = "matterName";
-                    //    $interval(function () { vm.showSortExp(); }, 1200, 3);
-                    //} else {
-                    //    vm.pagenumber = 1;
-                    //    vm.lazyloader = false;
-                    //    searchRequest.SearchObject.PageNumber = 1;
-                    //    searchRequest.SearchObject.Sort.ByProperty = ""+vm.configSearchContent.ManagedPropertyMatterName+"";
-                    //    searchRequest.SearchObject.Sort.Direction = 1;
-                    //    vm.FilterByType();
-                    //    vm.MatterNameSort = "asc"; vm.sortby = "desc";
-                    //    vm.sortexp = "matterName";
-                    //    $interval(function () { vm.showSortExp(); }, 1200, 3);
-                    //}
+
+                    vm.pagenumber = 1;
+                    vm.lazyloader = false;
+                    searchRequest.SearchObject.PageNumber = 1;
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
+                    searchRequest.SearchObject.Sort.Direction = 1;
+                    vm.FilterByType();
+                    vm.MatterNameSort = "asc"; vm.sortby = "desc";
+                    vm.sortexp = "matterName";
+                    $interval(function () { vm.showSortExp(); }, 1200, 3);
+
                 }
             }
             //#endregion
