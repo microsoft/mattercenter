@@ -673,7 +673,7 @@
 
             var getUserName = function (sUserEmails, bIsName) {
                 "use strict";
-                var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp("^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$");
+                var arrUserNames = [], arrTempUserNames = [], sEmail = "", oEmailRegex = new RegExp("^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$");
                 if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
                     arrUserNames = sUserEmails.split(";");
                     for (var iIterator = 0; iIterator < arrUserNames.length - 1; iIterator++) {
@@ -687,7 +687,14 @@
                         }
                     }
                 }
-                return arrUserNames.filter(v=>v != '');
+                angular.forEach(arrUserNames, function (user) {
+                    if(user != '')
+                    {
+                        arrTempUserNames.push(user)
+                    }
+                });
+               
+                return arrTempUserNames;  //arrUserNames.filter(v=>v != '');
             }
 
             function getArrAssignedUserNamesAndEmails() {
