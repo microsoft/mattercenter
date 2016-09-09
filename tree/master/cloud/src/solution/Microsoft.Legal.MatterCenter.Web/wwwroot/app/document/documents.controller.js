@@ -17,8 +17,8 @@
         vm.documentConfigContent = uiconfigs.Documents;
         vm.configSearchContent = configs.search;
         //#end region
-        vm.documentname = 'All Documents'
-        vm.documentid = 1;
+        vm.documentname = 'My Documents'
+        vm.documentid = 2;
         vm.documentsdrop = false;
         vm.docdropinner = true;
         $rootScope.pageIndex = "2";
@@ -973,7 +973,7 @@
         //Code written for displaying types in dropdown 
         //Start 
         vm.Documents = [{ Id: 1, Name: "All documents" }, { Id: 2, Name: "My documents" }, { Id: 3, Name: "Pinned documents" }];
-        vm.ddlDocuments = vm.Documents[0];
+        vm.ddlDocuments = vm.Documents[1];
         //End  
 
         var pinnedDocumentsRequest = {

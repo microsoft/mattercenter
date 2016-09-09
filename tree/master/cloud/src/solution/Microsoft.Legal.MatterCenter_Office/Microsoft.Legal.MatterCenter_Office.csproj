@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{736CED7B-2538-4C9A-ACAD-444A0917312D}</ProjectGuid>
+    <ProjectGuid>{2DC47702-5909-4058-9023-93F99B26E283}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Legal.MatterCenter_Office</RootNamespace>
@@ -14,17 +14,14 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <IncludeAssemblyInPackage>False</IncludeAssemblyInPackage>
-    <AppFeaturePartId>{082fc3ba-dc4a-492d-86d7-4ee04cb02933}</AppFeaturePartId>
-    <WspPartId>{86f6a18a-f33a-436c-8855-6e9c1fc42a27}</WspPartId>
-    <WorkflowPartId>{3e4269c4-f583-4e2e-b197-d61fadd752de}</WorkflowPartId>
-    <CspkgPartId>{9f3aefcd-6f4c-45c7-b686-3ed44d8585e3}</CspkgPartId>
-    <SqlPackagePartId>{5d800008-5294-4bbe-81bc-2b785cfdcef9}</SqlPackagePartId>
+    <AppFeaturePartId>{be62935a-e321-4dbf-b286-ca9adae78afe}</AppFeaturePartId>
+    <WspPartId>{83858f03-2006-40df-a43c-0167b215385d}</WspPartId>
+    <WorkflowPartId>{1e4ea407-045d-4850-961e-3f11f6001b7d}</WorkflowPartId>
+    <CspkgPartId>{5267b759-8d78-453b-9cde-48e36af28b21}</CspkgPartId>
+    <SqlPackagePartId>{57024cbf-cc6c-4f41-a934-0d8152a57822}</SqlPackagePartId>
     <ProjectMode>OfficeApp</ProjectMode>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <FileUpgradeFlags />
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <MinimumOfficeToolsVersion>12.2</MinimumOfficeToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,8 +32,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,13 +41,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Microsoft.Legal.MatterCenter_OfficeManifest\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{cf6e966f-cb9e-46f3-b54d-765b343e68e4}</SharePointProjectItemId>
+      <SharePointProjectItemId>{aa519f51-cb5e-4f79-94f0-4e9e00750f31}</SharePointProjectItemId>
     </None>
+    <Content Include="Images\64x64-logo.png" />
     <Content Include="Microsoft.Legal.MatterCenter_OfficeManifest\Microsoft.Legal.MatterCenter_Office.xml">
       <OpcRelationship>manifest-oemanifest</OpcRelationship>
     </Content>
