@@ -183,9 +183,11 @@ $appSettings = @{ `
 				"General:KeyVaultURI" = $kvSettings.VaultUri; `
 				"General:KeyVaultClientID" = $ADApplicationId; `
 				"General:KeyVaultCertThumbPrint" = $global:thumbPrint;`
-				"Search:SearchResultSourceID" = $SearchResultSourceId;`
+				"Search:SearchResultSourceID" = $SearchResultSourceId.ToString();`
 				"WEBSITE_LOAD_CERTIFICATES" = $global:thumbPrint;`
 			}
-			Set-AzureWebsite -Name $WebAppName -AppSettings $appSettings		
+			#Set-AzureWebsite $WebAppName -AppSettings $appSettings -SlotStickyAppSettingNames $appSettings
+			Set-AzureRmWebApp -Name $WebAppName -ResourceGroupName $ResourceGroupName -AppSettings $appSettings
+
 
 Write-Host "Updated Matter Web App Settings"

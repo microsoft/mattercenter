@@ -179,8 +179,9 @@ $SPCredential = Get-Credential -Message "Enter credentials to access SharePoint 
 $SPPassword = $SPCredential.GetNetworkCredential().Password
 
 cd $HelperPath
-Show-Message -Message "Getting the result source ID..."
+Write-Output "Getting the result source ID..."
 $SearchResultSourceId = & ".\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "4" $SPCredential.UserName $SPPassword
+$SearchResultSourceId.ToString()
 cd $PSScriptRoot
 
 
