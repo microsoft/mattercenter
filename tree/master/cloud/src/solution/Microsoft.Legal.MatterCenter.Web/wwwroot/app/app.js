@@ -105,6 +105,15 @@ angular.module('matterMain', [
                 }
             }, requireADLogin: true
         })
+         .state('mc.admin', {
+             url: "^/admin",
+             views: {
+                 "contentView": {
+                     templateUrl: '/app/admin/admin.html',
+                     controller: 'AdminController as vm'
+                 }
+             }, requireADLogin: true
+         })
         ;;
 
 
