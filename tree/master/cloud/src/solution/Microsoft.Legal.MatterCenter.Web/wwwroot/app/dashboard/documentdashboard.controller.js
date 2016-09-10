@@ -408,6 +408,7 @@
                 angular.forEach(vm.gridApi.grid.rows, function (row) {
                     if (row.entity.checker) {
                         vm.documentsCheckedCount = vm.documentsCheckedCount + 1;
+                        row.entity.mailCartSelected = false;
                         vm.cartelements.push(row.entity);
                     }
                 });
@@ -419,19 +420,33 @@
 
             //Removing elements from cart
             vm.removeAttachment = function (obj) {
-                angular.forEach(vm.cartelements, function (element) {
-                    if (element.documentID == obj.documentID) {
-                        if (jQuery("#doc" + obj.documentID).is(":checked")) {
-                            jQuery("#doc" + obj.documentID).prop("checked", false);
-                        }
-                        vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1;
-                        vm.cartelements.pop(element);
-                        if (vm.cartelements.length == 0) {
-                            vm.documentsCheckedCount = 0;
-                        }
+                var index = 0
+
+                for (var i = 0; i < vm.cartelements.length ; i++) {
+                    if (vm.cartelements[i].documentCreatedDate == obj.documentCreatedDate && vm.cartelements[i].documentName == obj.documentName) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (vm.cartelements.length > 0) {
+                    vm.cartelements.splice(index, 1);
+                }
+
+                angular.forEach(vm.gridApi.grid.rows, function (row) {
+                    if (row.entity.checker && row.entity.documentCreatedDate == obj.documentCreatedDate && row.entity.documentName == obj.documentName) {
+                        row.entity.checker = false;
+                        row.entity.mailCartSelected = false;
                     }
                 });
 
+                if (vm.documentsCheckedCount > 0) {
+                    vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1;
+                }
+
+                if (vm.cartelements.length == 0) {
+                    vm.documentsCheckedCount = 0;
+                    jQuery('#UploadMatterModal').modal("hide");
+                }
             }
 
             //function to check all checkboxes inside grid
@@ -451,6 +466,9 @@
             vm.showMailCartModal = function () {
                 if (vm.documentsCheckedCount > 0) {
                     jQuery('#UploadMatterModal').modal("show");
+                    angular.forEach(vm.cartelements, function (cartItem) {
+                        cartItem.mailCartSelected = false;
+                    });
                     vm.displayMessage = '';
                     vm.isDisplayMessage = false;
                 }
@@ -463,7 +481,7 @@
                 vm.displayMessage = '';
                 angular.forEach(vm.cartelements, function (selectedDocument) {
 
-                    if (selectedDocument.selected) {
+                    if (selectedDocument.mailCartSelected) {
                         vm.selectedDocuments.push(selectedDocument);
                         //Display progress icon for each checked item
                         angular.element("#document-" + i).css("display", "block");
