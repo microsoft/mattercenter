@@ -182,6 +182,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
             Dictionary<string, string> ConfigDetails = ExcelOperations.ReadFromExcel(filePath, configSheet);
             string url = ConfigDetails[ConfigurationManager.AppSettings["CatalogSiteUrlKey"]].TrimEnd(ConstantStrings.FRONTSLASH);
             string resultSourceID = null;
+
             try
             {
                 using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(url, login, password))
@@ -255,17 +256,12 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                                 for (int iterator = 0; iterator < clientElement.Count; iterator++)
                                 {
                                     string previousValue = clientElement[iterator].Attributes[clientAttribute].Value;
-                                    if (flag)
-                                    {
-                                        clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement];
-                                    }
-                                    else if ("iconUrl" == sourceLocation)
+
+                                    clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement];
+
+                                    if ("iconUrl" == sourceLocation)
                                     {
                                         clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement] + previousValue.Substring(previousValue.IndexOf(ConstantStrings.IMAGES_ICON, StringComparison.OrdinalIgnoreCase));
-                                    }
-                                    else
-                                    {
-                                        clientElement[iterator].Attributes[clientAttribute].Value = excelInput[startPageElement] + previousValue.Substring(previousValue.IndexOf(ConstantStrings.PAGES, StringComparison.OrdinalIgnoreCase));
                                     }
                                 }
                             }
@@ -336,10 +332,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                                         {
                                             case 2:
                                                 appDomain.InnerText = excelInput[ConstantStrings.AZURE_UI_SITE_URL];
-                                                break;
-                                            case 3:
-                                                appDomain.InnerText = excelInput[ConstantStrings.AZURE_SERVICE_SITE_URL];
-                                                break;
+                                                break;                                            
                                             case 4:
                                                 appDomain.InnerText = excelInput[ConstantStrings.TENANT_URL];
                                                 break;
@@ -848,6 +841,10 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                             #region Update search configuration file
                             UpdateSearchConfig(filePath, username, password);
                             #endregion
+                        }
+                        else if (4 == operation)
+                        {
+                            Console.WriteLine(GetResultSourceId(username, password));
                         }
                         else if (0 == operation)
                         {

@@ -89,11 +89,16 @@ textarea {
         overflow-x: hidden !important;
         overflow-y: auto !important;
     }
+
+    .searchwidth {
+        min-width: 204px !important;
+        max-width: 204px !important;
+    }
 }
 
 .viewportlg {
     overflow: auto !important;
-    overflow-y:scroll !important;
+    overflow-y: scroll !important;
     /*height:510px !important;*/
 }
 
@@ -741,18 +746,18 @@ textarea {
     border-radius: 0;
 }
 
-#docsearchmatter ul li a, #searchmatter ul li a {
-    height: 30px;
-    padding: 5px 10px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-
-    #searchmatter ul li a:hover {
-        background-color: #cde6f7 !important;
-        font-family: "Segoe UI Semibold", "Segoe UI Web Semibold" !important;
-        color: #333 !important;
+    #docsearchmatter ul li a, #searchmatter ul li a {
+        height: 30px;
+        padding: 5px 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
+
+        #searchmatter ul li a:hover {
+            background-color: #cde6f7 !important;
+            font-family: "Segoe UI Semibold", "Segoe UI Web Semibold" !important;
+            color: #333 !important;
+        }
 
 #searchmatter .active {
     background-color: #cde6f7 !important;
@@ -988,17 +993,29 @@ textarea {
 }
 
 .height155 {
-    height: 200px !important; 
+    height: 200px !important;
 }
 
 .height200 {
     height: 200px !important;
 }
 
-.marginTop7{
-    margin-top:7px;
+.marginTop7 {
+    margin-top: 7px;
 }
 
-.addMoreLinks{
-    float:right;margin-top:10px;padding:0px;
+.addMoreLinks {
+    float: right;
+    margin-top: 10px;
+    padding: 0px;
+}
+
+.settingserror {
+    padding: 25px;
+    color: red;
+}
+
+.closebutton {
+    float: right !important;
+    text-decoration: none !important;
 }

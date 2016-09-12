@@ -9,7 +9,7 @@
 # Step 5: Activate SharePoint Server Publishing infrastructure feature on catalog site collection 
 # Step 6: Creating Site Collection(s)
 # Step 7: Update site collection view with field(s)
-#
+# Step 8: Create ProvisionMatterList
 # Any changes in these steps, kindly update this list. Also update the checkpoint in Revert script
 #----------------------------------------------
 
@@ -316,8 +316,8 @@ if($IsValid -eq $true)
 	}
 	catch [System.Exception]
 	{
-		Show-Message -Message "Could not activate SharePoint Server Publishing Infrastructure feature." -Type ([MessageType]::Failure)
-        Write-Log $ErrorLogFile $_.Exception.ToString()
+		Show-Message -Message "Could not activate SharePoint Server Publishing Infrastructure feature." -Type ([MessageType]::Warning)
+        #Write-Log $ErrorLogFile $_.Exception.ToString()
 	}
 	finally {
         $Context.Dispose()
@@ -353,11 +353,29 @@ if($IsValid -eq $true)
     # Complete tool error check
     #----------------------------------------------
     If ((Get-Content $ErrorLogFile) -eq $Null) {
+		Show-Message -Message "Update site collection view with fields successfully" -Type ([MessageType]::Success)
+    }
+    else {
+		Show-Message -Message "Update site collection view with fields failed" -Type ([MessageType]::Failure)
+    }
+	
+	
+	#---------------------------------------------------------------------
+    # Create Provision Matter List
+    #---------------------------------------------------------------------
+    Show-Message -Message "Step 8: Create Provision Matter List"
+    & "$HelperPath\Microsoft.Legal.MatterCenter.UpdateListPermissions" $Username $Password
+
+    #----------------------------------------------
+    # Complete tool error check
+    #----------------------------------------------
+    If ((Get-Content $ErrorLogFile) -eq $Null) {
 		Show-Message -Message "Deployment completed successfully" -Type ([MessageType]::Success)
     }
     else {
 		Show-Message -Message "Deployment failed" -Type ([MessageType]::Failure)
     }
+	
 }
 else
 {

@@ -16,12 +16,6 @@ $ScriptDirectory = (ScriptRoot)
 Function Get-ParentDirectory {Split-Path -Parent(Split-Path $MyInvocation.ScriptName)}
 $ParentDirectory = (Get-ParentDirectory)
 
-# Set helper utilities folder path
-$RootPath = Split-Path(Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) -Parent
-$DeployPath = "$RootPath\deployments"
-$HelperPath = "$RootPath\deployments\scripts\Helper Utilities"
-$ExcelFilePath = "$RootPath\deployments\MCDeploymentConfig.xlsx"
-
 
 #----------------------------------------------
 # Include Common functions script
@@ -143,9 +137,7 @@ Function Deploy-SPOFiles
 }
 
 $UIUrl = [string]::format("https://{0}.azurewebsites.net", $WebAppName)
-$SPCredential = Get-Credential -Message "Enter credentials to access SharePoint tenant."
-$Password = $SPCredential.GetNetworkCredential().Password
-Deploy-SPOFiles -WebSiteName $UIUrl  -UserName $SPCredential.UserName -PassWord $Password 
+Deploy-SPOFiles -WebSiteName $UIUrl  -UserName $SPCredential.UserName -PassWord $SPPassword 
 
 
 #----------------------------------------------
@@ -153,7 +145,7 @@ Deploy-SPOFiles -WebSiteName $UIUrl  -UserName $SPCredential.UserName -PassWord 
 #----------------------------------------------
 cd $HelperPath
 Show-Message -Message "Step : Update Office, Outlook and SharePoint App schema files"
-& "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "1" $SPCredential.UserName $Password $UIUrl
+& "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "1" $SPCredential.UserName $SPPassword $UIUrl
 
 If ((Get-Content $ErrorLogFile) -ne $Null) {
 	Show-Message -Message "Updating Office, Outlook and SharePoint App schema files failed" -Type ([MessageType]::Failure)

@@ -100,7 +100,7 @@
                 }
 
                 getUserProfilePicture(client, function (response) {
-                    vm.smallPictureUrl = response.smallPictureUrl;
+                    vm.smallPictureUrl = response.largePictureUrl;
                     vm.largePictureUrl = response.largePictureUrl;
                 });
             }

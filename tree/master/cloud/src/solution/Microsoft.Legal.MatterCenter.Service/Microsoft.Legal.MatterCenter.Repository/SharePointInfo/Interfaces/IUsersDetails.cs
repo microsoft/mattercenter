@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 
 using Microsoft.Legal.MatterCenter.Models;
+using System.Threading.Tasks;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -28,7 +29,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         IList<FieldUserValue> ResolveUserNames(Client client, IList<string> userNames);
         IList<FieldUserValue> ResolveUserNames(ClientContext clientContext, IList<string> userNames);
         List<Tuple<int, Principal>> GetUserPrincipal(Client client, Matter matter, IList<string> userIds);
-        Users GetUserProfilePicture(Client client);
+        Task<Users> GetUserProfilePicture(Client client);
         bool CheckUserPresentInMatterCenter(string clientUrl, string email);
         bool CheckUserPresentInMatterCenter(ClientContext clientContext, string email);
         //bool CheckUserPermissionsInGroup(Client client, string groupName);

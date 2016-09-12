@@ -17,8 +17,11 @@
             vm.configSearchContent = configs.search;
             vm.matterConfigContent = uiconfigs.Matters;
             vm.header = uiconfigs.Header;
+            //#region for setting the dynamic width to grid
+            var screenHeight = 0;
+            vm.searchResultsLength = 0;
             //#end region
-            vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
+            vm.mattername = "" + vm.matterConfigContent.Dropdown1Item2 + "";
             vm.sortname = "";
             vm.mattersdrop = false;
             vm.mattersdropinner = true;
@@ -29,8 +32,9 @@
             //#region Onload show ui grid and hide error div
             //start
             vm.divuigrid = true;
-            vm.nodata = false;
+            //vm.nodata = false;
             vm.filternodata = false;
+            vm.matterid = 2;
             //#endregion
 
             //#region To hide lazyloader on load
@@ -46,6 +50,7 @@
             vm.clientfilter = false;
             vm.areafilter = false;
             vm.attorneyfilter = false;
+            vm.showfiltericon = vm.configSearchContent.ManagedPropertyLastModifiedTime;
             //end
 
             //#region Assigning scopes for Dropdowns in headers
@@ -92,10 +97,10 @@
 
             $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
-           var columnDefs1 = [];
+            var columnDefs1 = [];
             angular.forEach(configs.search.searchColumnsUIPickerForMatter, function (value, key) {
                 if (key == "matterName") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn1Header,
@@ -105,11 +110,11 @@
                             headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html',
                             position: value.position
                         });
-                       
+
                     }
                 }
                 if (key == "matterClient") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn2Header,
@@ -119,16 +124,16 @@
                             width: "200",
                             headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html',
                             position: value.position
-                        });                        
+                        });
                     }
                 }
                 if (key == "matterClientId") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         var cellTemplateContent = "";
                         if (configs.search.Schema.toLowerCase() == "mattercenter") {
-                            cellTemplateContent='<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>';
+                            cellTemplateContent = '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterID}}</div>';
                         }
-                        else{
+                        else {
                             cellTemplateContent = '<div class="ui-grid-cell-contents" >{{row.entity.matterID}}</div>';
                         }
                         columnDefs1.push({
@@ -142,12 +147,12 @@
                             enableCellEdit: true,
                             position: value.position
                         });
-                        
+
                     }
 
                 }
                 if (key == "matterModifiedDate") {
-                    if (value.displayInUI == true && value.position!=-1) {                                              
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn4Header,
@@ -158,11 +163,11 @@
                             headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html',
                             position: value.position
                         });
-                       
+
                     }
                 }
                 if (key == "matterResponsibleAttorney") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn5Header,
@@ -173,11 +178,11 @@
                             visible: false,
                             position: value.position
                         });
-                       
+
                     }
                 }
                 if (key == "matterSubAreaOfLaw") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn6Header,
@@ -189,11 +194,11 @@
                             visible: false,
                             position: value.position
                         });
-                       
+
                     }
                 }
                 if (key == "matterCreatedDate") {
-                    if (value.displayInUI == true && value.position!=-1) {
+                    if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.matterConfigContent.GridColumn7Header,
@@ -204,7 +209,7 @@
                             cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
                             visible: false,
                             position: value.position
-                        });                        
+                        });
                     }
                 }
                 if (key == "matterDescription" && value.position != -1) {
@@ -321,13 +326,13 @@
 
                     }
                 }
-               
+
             });
             function getSortFunction(fieldName) {
                 return function (col1, col2) {
                     return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
                 }
-            }          
+            }
             columnDefs1.sort(getSortFunction("position"));
 
             //#region Setting the options for grid
@@ -343,7 +348,7 @@
                 enableRowSelection: true,
                 enableSelectAll: false,
                 multiSelect: false,
-                columnDefs:columnDefs1,
+                columnDefs: columnDefs1,
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
                     $scope.gridApi = gridApi;
@@ -423,10 +428,6 @@
             }
             //#endregion
 
-            //#region for setting the dynamic width to grid
-            var screenHeight = 0;
-            vm.searchResultsLength = 0;
-            
 
             //#endregion
 
@@ -1224,6 +1225,7 @@
             vm.search = function () {
                 vm.lazyloader = false;
                 vm.divuigrid = false;
+                vm.nodata = false;
                 vm.matterid = 1;
                 vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
                 vm.pagenumber = 1;
@@ -1244,16 +1246,18 @@
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 get(searchRequest, function (response) {
-                    if (response == "") {
+                    if (response == "" || response.errorCode == "500" || response.lenth == 0) {
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.gridOptions.data = response;
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
             }
@@ -1325,7 +1329,7 @@
                         }
                         vm.lazyloader = true;
                         vm.divuigrid = true;
-
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -1342,6 +1346,7 @@
                         }
                         searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Sort.ByProperty = "";
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
             }
@@ -1373,11 +1378,13 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
+                        $interval(function () { vm.showSortExp(); }, 2500, 3);
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
                         vm.gridOptions.data = response;
+                        $interval(function () { vm.showSortExp(); }, 2500, 3);
                     }
                 });
 
@@ -1441,11 +1448,13 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
                         vm.gridOptions.data = response;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
             }
@@ -1455,7 +1464,7 @@
             //#region Code written for displaying types in dropdown 
             //Start 
             vm.Matters = [{ Id: 1, Name: "" + vm.matterConfigContent.Dropdown1Item1 + "" }, { Id: 2, Name: "" + vm.matterConfigContent.Dropdown1Item2 + "" }, { Id: 3, Name: "" + vm.matterConfigContent.Dropdown1Item3 + "" }];
-            vm.ddlMatters = vm.Matters[0];
+            vm.ddlMatters = vm.Matters[1];
             //#endregion  
 
             //#region Hits when the Dropdown changes 
@@ -1482,7 +1491,7 @@
                     searchRequest.SearchObject.Filters.FilterByMe = 0;
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     get(searchRequest, function (response) {
-                        if (response == "") {
+                        if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
                             vm.lazyloader = true;
                             vm.divuigrid = true;
@@ -1513,11 +1522,12 @@
                                 }
                             });
                         }
+                        vm.nodata = false;
                         $timeout(function () {
                             vm.lazyloader = true;
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }, 1000);
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     });
                 } else if (id == 2) {
                     vm.lazyloader = false;
@@ -1529,7 +1539,7 @@
                     searchRequest.SearchObject.Filters.FilterByMe = 1;
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     get(searchRequest, function (response) {
-                        if (response == "") {
+                        if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
                             vm.lazyloader = true;
                             vm.divuigrid = true;
@@ -1561,6 +1571,7 @@
                                 vm.lazyloader = true;
                                 vm.divuigrid = true;
                                 vm.nodata = false;
+                                $interval(function () { vm.showSortExp(); }, 2000, 3);
                             });
                         }
                     });
@@ -1571,7 +1582,7 @@
                         Url: configs.global.repositoryUrl
                     }
                     getPinnedMatters(pinnedMattersRequest, function (response) {
-                        if (response == "") {
+                        if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
                             vm.lazyloader = true;
                             vm.divuigrid = true;
@@ -1587,6 +1598,7 @@
                             vm.lazyloader = true;
                             vm.divuigrid = true;
                             vm.nodata = false;
+                            $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                     });
                 }
@@ -1595,18 +1607,18 @@
 
 
             //#region To run GetMatters function on page load 
-            vm.GetMatters(vm.ddlMatters.Id);
+            vm.SetMatters(vm.matterid, vm.mattername);
             //End 
 
 
             //#region Written for unpinning the matter 
             //Start 
             vm.UnpinMatter = function (data) {
+                vm.lazyloader = false;
+                vm.divuigrid = false;
                 var alldata = data.entity;
                 var unpinRequest = {
                     Client: {
-
-
                         Url: configs.global.repositoryUrl
                     },
                     matterData: {
@@ -1615,8 +1627,8 @@
                 }
                 UnpinMatters(unpinRequest, function (response) {
                     if (response.isMatterUnPinned) {
-                        $timeout(vm.SetMatters(vm.matterid, vm.mattername), 500);
-                        alert("Success");
+                        $timeout(function () { vm.SetMatters(vm.matterid, vm.mattername); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
+                        //alert("Success");
                     }
                 });
             }
@@ -1626,6 +1638,8 @@
             //#region Written for pinning the matter 
             //Start 
             vm.PinMatter = function (data) {
+                vm.lazyloader = false;
+                vm.divuigrid = false;
                 var alldata = data.entity;
                 var pinRequest = {
                     Client: {
@@ -1651,8 +1665,8 @@
                 }
                 PinMatters(pinRequest, function (response) {
                     if (response.isMatterPinned) {
-                        $timeout(vm.SetMatters(vm.matterid, vm.mattername), 500);
-                        alert("Success");
+                        $timeout(function () { vm.SetMatters(vm.matterid, vm.mattername); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
+                        //alert("Success");
                     }
                 });
             }
@@ -1801,7 +1815,7 @@
             vm.FilterByType = function () {
                 get(searchRequest, function (response) {
                     vm.lazyloader = true;
-                    if (response == "") {
+                    if (response == "" || response.errorCode == "500") {
                         vm.gridOptions.data = response;
                         vm.divuigrid = false;
                         vm.nodata = true;
@@ -1818,8 +1832,8 @@
                 });
             }
 
-            vm.sortby = "";
-            vm.sortexp = "";
+            vm.sortby = "desc";
+            vm.sortexp = "matterModifiedDate";
             vm.showSortExp = function () {
                 if (vm.sortexp != "" || vm.sortexp != undefined || vm.sortby != "" || vm.sortby != undefined) {
                     if (vm.sortby == "asc") {
@@ -1833,6 +1847,8 @@
                     }
                 }
             }
+
+            $interval(function () { vm.showSortExp(); }, 3000, 3);
 
             $scope.sortChanged = function (grid, sortColumns) {
                 vm.divuigrid = false;
@@ -1864,7 +1880,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
@@ -1893,7 +1909,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
@@ -1922,7 +1938,7 @@
 
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
@@ -1951,7 +1967,7 @@
 
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
@@ -1979,7 +1995,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
@@ -2007,7 +2023,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
@@ -2036,31 +2052,21 @@
 
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.nodata = false;
                         }
                     }
                 } else {
-                    //if (vm.MatterNameSort == undefined || vm.MatterNameSort == "asc") {
-                    //    vm.pagenumber = 1;
-                    //    vm.lazyloader = false;
-                    //    searchRequest.SearchObject.PageNumber = 1;
-                    //    searchRequest.SearchObject.Sort.ByProperty = ""+vm.configSearchContent.ManagedPropertyMatterName+"";
-                    //    searchRequest.SearchObject.Sort.Direction = 0;
-                    //    vm.FilterByType();
-                    //    vm.MatterNameSort = "desc"; vm.sortby = "asc";
-                    //    vm.sortexp = "matterName";
-                    //    $interval(function () { vm.showSortExp(); }, 1200, 3);
-                    //} else {
-                    //    vm.pagenumber = 1;
-                    //    vm.lazyloader = false;
-                    //    searchRequest.SearchObject.PageNumber = 1;
-                    //    searchRequest.SearchObject.Sort.ByProperty = ""+vm.configSearchContent.ManagedPropertyMatterName+"";
-                    //    searchRequest.SearchObject.Sort.Direction = 1;
-                    //    vm.FilterByType();
-                    //    vm.MatterNameSort = "asc"; vm.sortby = "desc";
-                    //    vm.sortexp = "matterName";
-                    //    $interval(function () { vm.showSortExp(); }, 1200, 3);
-                    //}
+
+                    vm.pagenumber = 1;
+                    vm.lazyloader = false;
+                    searchRequest.SearchObject.PageNumber = 1;
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
+                    searchRequest.SearchObject.Sort.Direction = 1;
+                    vm.FilterByType();
+                    vm.MatterNameSort = "asc"; vm.sortby = "desc";
+                    vm.sortexp = "matterName";
+                    $interval(function () { vm.showSortExp(); }, 1200, 3);
+
                 }
             }
             //#endregion
@@ -2160,7 +2166,9 @@
                             if (item.parentURL !== null) {
                                 if (item.active) {
                                     child.active = child.active ? false : true;
-                                    if (!child.active) { setActiveItem(child); }
+                                    if (!child.active) {
+                                        setActiveItem(child);
+                                    }
                                 } else {
                                     child.active = false;
                                     setActiveItem(child);
@@ -2324,8 +2332,12 @@
                 var dimensions = $event.target.getBoundingClientRect();
                 var top = dimensions.top + 30;
                 var left = dimensions.left - 224;
-                angular.element('.matterheader').css({ 'top': top, 'left': left });
-                angular.element('.matterheaderdates').css({ 'top': top, 'left': left });
+                angular.element('.matterheader').css({
+                    'top': top, 'left': left
+                });
+                angular.element('.matterheaderdates').css({
+                    'top': top, 'left': left
+                });
                 if (name === vm.matterConfigContent.GridColumn1Header) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                     vm.filtername = vm.matterConfigContent.GridColumn1Header;
@@ -2392,6 +2404,13 @@
             }
 
             //end
+            //#endregion
+
+            //#region for opening view matters url in new window
+            vm.viewMatterDetails = function (url, guid) {
+                var viewmatterurl = url + '/SitePages/' + guid + '.aspx';
+                window.open(viewmatterurl, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
+            }
             //#endregion
 
         }]);
