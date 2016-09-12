@@ -196,28 +196,28 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-6 col-sm-8 col-md-12 padtop20">
+            <div class="col-xs-12  padtop20">
                 <ul class="nav nav-tabs" toggletab>
                     <li id="myMatters"><a href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">{{vm.matterDashboardConfigs.Tab1HeaderText}} ({{vm.myMatterCount}})</a></li>
                     <li id="allMatters" class="active cursor"><a data-toggle="tab" ng-click="vm.search()">{{vm.matterDashboardConfigs.Tab2HeaderText}} ({{vm.allMatterCount}})</a></li>
                     <li id="pinMatters"><a href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">{{vm.matterDashboardConfigs.Tab3HeaderText}} ({{vm.pinMatterCount}})</a></li>
                 </ul>
             </div>
-            <div class="col-xs-offset-6 col-xs-6 sortby">
-                <div class="col-xs-offset-0 col-xs-8 col-sm-offset-3 col-sm-5 col-md-offset-4 col-sm-5 pad0">
+            <div class="col-xs-offset-6 col-xs-6 sortbymatters">
+                <div class="col-xs-offset-0 col-xs-8 col-sm-offset-3 col-sm-5 col-md-offset-3 col-sm-5 pad0">
                     <span class="img-xls" ng-click="vm.export()">
                         <img alt="export" src="../../images/icxlsx.png" />
                     </span>
                     <!--<button ng-click="vm.export()" class="btn btn-primary pull-right">{{vm.matterDashboardConfigs.ButtonExportText}}</button>-->
                 </div>
-                <div class="col-xs-4 col-sm-4 col-md-3 text-right pad0">
+                <div class="col-xs-4 col-sm-4 col-md-4 text-right pad0">
                     <span>{{vm.matterDashboardConfigs.LabelSortByText}} </span>
                     <span>{{vm.sortbytext}}</span>
                     <img alt="Sort By" class="" ng-click="vm.showsortby($event)" title="Sort By" src="../Images/icon-combobox.png" />
                 </div>
                 <div class="col-xs-offset-7 col-xs-5 col-sm-offset-9 col-sm-3" ng-if="vm.sortbydrop">
                     <ul>
-                        <li ng-click="vm.sortyby('Relevant','None')">{{vm.matterDashboardConfigs.DrpDownOption1Text}}</li>
+                        <li ng-click="vm.sortyby('Relevant','None')" >{{vm.tabClicked=='All Matters'?vm.matterDashboardConfigs.DropDownOptionText:vm.matterDashboardConfigs.DrpDownOption1Text}}</li>
                         <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">{{vm.matterDashboardConfigs.DrpDownOption2Text}} ↑</li>
                         <li ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">{{vm.matterDashboardConfigs.DrpDownOption2Text}} ↓</li>
                         <li ng-click="vm.sortyby('CreateddateUp','Created date ↑')">{{vm.matterDashboardConfigs.DrpDownOption3Text}} ↑</li>

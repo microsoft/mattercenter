@@ -119,7 +119,8 @@
     "GridColumn3Header": "Author",
     "GridColumn4Header": "Modified Date",
     "GridColumn5Header": "Document ID",
-    "GridColumn6Header": "Version"
+    "GridColumn6Header": "Version",
+    "DropDownOptionText": "Relevant"
   },
   "Documents": {
     "EllipsisLink4Text": "Unpin this Document",
@@ -170,10 +171,10 @@
     "MenuImage1OpenTitle": "Open App Switcher",
     "MenuImage1CloseTitle": "Close App Switcher",
     "Menu1Option1Title": "Home",
-    "Menu1Option2Title": "Search matters",
-    "Menu1Option3Title": "Search documents",
+    "Menu1Option2Title": "Search Matters",
+    "Menu1Option3Title": "Search Documents",
     "Menu1Option1Text": "Home",
-    "Menu1Option2Text": "Matters",
+    "Menu1Option2Text": "Projects",
     "Menu1Option3Text": "Documents",
     "ContextualHelpImageTitle": "Matter center help",
     "ContextualHelpHeader": "Matter Center For Outlook",
@@ -264,7 +265,8 @@
     "GridColumn5Header": "Responsible attorney",
     "AdvSearchLabel1InternalFuncParamText": "client",
     "AdvSearchLabel2InternalFuncParamText": "level1",
-    "AdvSearchLabel3InternalFuncParamText": "level2"
+    "AdvSearchLabel3InternalFuncParamText": "level2",
+    "DropDownOptionText": "Relevant"
   },
   "Matters": {
     "EllipsisLink5Text": "Unpin this matter",
@@ -341,7 +343,7 @@
     "MenuImageCloseTitle": "Close App Switcher",
     "HeaderBarLink1Text": "LearnMore",
     "HomeMenuText": "Home",
-    "Image1Title": "Search matters",
+    "Image1Title": "Search projects",
     "Image2Title": "Search documents",
     "HelpRequesURL": "https://msmatter.sharepoint.com/sites/catalog",
     "FooterLabel": "Questions? Contact",
@@ -357,13 +359,13 @@
     "ContextualHelpLink1URL": "https://microsoft.sharepoint.com/teams/celapcconfig/Shared%20Documents/CELA%20Project%20Center%20End%20User%20Guide_24.pdf#Home_in_Outlook_and_Word ",
     "ContextualHelpLabel2": "How do I get Project Center on my device?",
     "ContextualHelpLink2URL": "https://microsoft.sharepoint.com/teams/celapcconfig/Shared%20Documents/CELA%20Project%20Center%20End%20User%20Guide_24.pdf#Enabling_Project_Center",
-    "ContextualHelpFooterLink1Label": "Matter Center Aisling Support",
+    "ContextualHelpFooterLink1Label": "Project Center Aisling Support",
     "MatterCenterSupportLink": "mailto:support@supportsite.com",
     "ContextualHelpFooterLink1Title": "Write an email to support",
     "ContextualHelpHeader": "Matter Center For Outlook",
     "ContextualHelpFooterLabel": "Questions? Contact ",
     "HeaderBarLabel": "Welcome to Matter Center! Upload, share, and save your documents here.",
-    "Image1Caption": "Matters",
+    "Image1Caption": "Projects",
     "Image2Caption": "Documents",
     "HeaderBarLink1URL": "http://www.microsoft.com/mattercenter",
     "HeaderBarLink2Text": "dismiss",

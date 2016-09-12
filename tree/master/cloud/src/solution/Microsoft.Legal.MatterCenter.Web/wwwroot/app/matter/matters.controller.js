@@ -1215,19 +1215,49 @@
                 if (val != "") {
                     finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":" + val + "* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":" + val + "*)";
                 }
-                vm.pagenumber = 1;
-                searchRequest.SearchObject.PageNumber = vm.pagenumber;
-                searchRequest.SearchObject.SearchTerm = finalSearchText;
-                searchRequest.SearchObject.Sort.Direction = 1;
-                return matterResource.get(searchRequest).$promise;
+                var searchMatterRequest = {
+                    Client: {
+                        Url: configs.global.repositoryUrl
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: 5,
+                        SearchTerm: finalSearchText,
+                        Filters: {
+                            AOLList: [],
+                            ClientName: "",
+                            ClientsList: [],
+                            DateFilters: {
+                                CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: "", ModifiedToDate: "", OpenDateFrom: "", OpenDateTo: ""
+                            },
+                            DocumentAuthor: "",
+                            DocumentCheckoutUsers: "",
+                            FilterByMe: 1,
+                            FromDate: "",
+                            Name: "",
+                            PGList: [],
+                            ResponsibleAttorneys: "",
+                            SubareaOfLaw: "",
+                            ToDate: ""
+                        },
+                        Sort:
+                                {
+                                    ByProperty: "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "",
+                                    Direction: 1
+                                }
+                    }
+                }
+                return matterResource.get(searchMatterRequest).$promise;
             }
 
             vm.search = function () {
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
-                vm.matterid = 1;
-                vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
+                if (vm.matterid == 3) {
+                    vm.matterid = 1;
+                    vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
+                }
                 vm.pagenumber = 1;
                 var searchToText = '';
                 var finalSearchText = '';
@@ -1991,7 +2021,7 @@
                                 vm.FilterByType();
                                 vm.ResAttoSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1200, 3);
+                                $interval(function () { vm.showSortExp(); }, 1500, 3);
                             }
                         } else {
                             vm.divuigrid = true;
@@ -2090,8 +2120,10 @@
 
             //#region
             vm.typeheadselect = function (index, selected) {
-                vm.matterid = 1;
-                vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
+                if (vm.matterid == 3) {
+                    vm.matterid = 1;
+                    vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
+                }
                 var searchToText = '';
                 var finalSearchText = '';
                 if (selected != "") {
