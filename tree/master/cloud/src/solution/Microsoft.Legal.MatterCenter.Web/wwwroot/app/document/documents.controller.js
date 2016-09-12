@@ -750,18 +750,52 @@
             if (val != "") {
                 finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":" + val + "* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":" + val + "*)"
             }
-            vm.pagenumber = 1;
-            searchRequest.SearchObject.PageNumber = vm.pagenumber;
-            searchRequest.SearchObject.SearchTerm = finalSearchText;
-            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
-            searchRequest.SearchObject.Sort.Direction = 0;
-            return documentResource.get(searchRequest).$promise;
+            var searchDocumentRequest = {
+                Client: {
+                    Url: configs.global.repositoryUrl
+                },
+                SearchObject: {
+                    PageNumber: 1,
+                    ItemsPerPage: 5,
+                    SearchTerm: finalSearchText,
+                    Filters: {
+                        ClientName: "",
+                        ClientsList: [],
+                        PGList: [],
+                        AOLList: [],
+                        DateFilters: {
+                            CreatedFromDate: "",
+                            CreatedToDate: "",
+                            ModifiedFromDate: "",
+                            ModifiedToDate: "",
+                            OpenDateFrom: "",
+                            OpenDateTo: ""
+                        },
+                        DocumentAuthor: "",
+                        DocumentCheckoutUsers: "",
+                        FilterByMe: 0,
+                        FromDate: "",
+                        Name: "",
+                        ResponsibleAttorneys: "",
+                        SubareaOfLaw: "",
+                        ToDate: ""
+                    },
+                    Sort:
+                            {
+                                ByProperty: '' + vm.configSearchContent.ManagedPropertyFileName + '',
+                                Direction: 0
+                            }
+                }
+            };
+            return documentResource.get(searchDocumentRequest).$promise;
         }
 
         vm.search = function () {
             vm.pagenumber = 1;
-            vm.documentname = 'All Documents'
-            vm.documentid = 1;
+            if (vm.documentid == 3) {
+                vm.documentname = 'All Documents'
+                vm.documentid = 1;
+            }
             vm.lazyloader = false;
             vm.divuigrid = false;
             vm.responseNull = false;
@@ -1632,8 +1666,10 @@
 
         //#region
         vm.typeheadselect = function (index, selected) {
-            vm.documentname = 'All Documents'
-            vm.documentid = 1;
+            if (vm.documentid == 3) {
+                vm.documentname = 'All Documents'
+                vm.documentid = 1;
+            }
             var searchToText = '';
             var finalSearchText = "";
             if (selected != "") {

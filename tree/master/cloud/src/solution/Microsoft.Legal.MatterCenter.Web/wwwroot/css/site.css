@@ -53,6 +53,24 @@ textarea {
     }
 }
 
+@media screen and (max-width:867px) and (min-width: 268px) {
+    .hideDocTabs {
+        display: none !important;
+    }
+
+    .showDocDashboard {
+        display: block !important;
+    }
+}
+
+.hideDocTabs {
+    display: block;
+}
+
+.showDocDashboard {
+    display: none;
+}
+
 @media screen and (max-width:360px) and (min-width: 268px) {
     .ui-grid-icon-container {
         display: none !important;
@@ -628,6 +646,12 @@ textarea {
 
 .sortby {
     position: absolute;
+    top: 30px;
+    padding: 0;
+}
+
+.sortbymatters {
+    position: absolute;
     top: 80px;
     padding: 0;
 }
@@ -649,7 +673,7 @@ textarea {
     padding-top: 5px;
 }
 
-.sortby ul {
+.sortby ul,.sortbymatters ul {
     background-color: #fff;
     border: 1px solid #c8c8c8;
     position: absolute;
@@ -660,12 +684,12 @@ textarea {
     margin-top: 5px;
 }
 
-    .sortby ul li:hover {
+    .sortby ul li:hover,.sortbymatters ul li:hover {
         background-color: #eaecea;
         cursor: pointer;
     }
 
-    .sortby ul li {
+    .sortby ul li,.sortbymatters ul li {
         padding: 5px 10px 5px 10px;
         color: #333;
         display: inline-block;
@@ -1018,4 +1042,28 @@ textarea {
 .closebutton {
     float: right !important;
     text-decoration: none !important;
+}
+
+.displayDocTabs {
+    width: 12px;
+    position: absolute;
+    top: 33px;
+    right: 1px;
+    left: 175px;
+    cursor: pointer;
+    margin-left: 28px;
+}
+
+
+.switchHideTab {
+    cursor: pointer;
+    float: none;
+    font-weight: 400;
+    background-color: #fff;
+    border: 2px solid silver;
+    position: absolute;
+    width: 145px;
+    z-index: 100;
+    top: 55px !important;
+    left: 182px !important;
 }

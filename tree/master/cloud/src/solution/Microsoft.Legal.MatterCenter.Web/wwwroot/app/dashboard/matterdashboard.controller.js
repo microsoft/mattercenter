@@ -24,7 +24,6 @@
             vm.checkClient = false;
             vm.sortbydrop = false;
             vm.sortbydropvisible = false;
-            vm.sortbytext = 'None';
             vm.searchText = '';
             vm.lazyloaderdashboard = true;
             vm.lazyloaderclient = true;
@@ -33,6 +32,8 @@
             vm.totalrecords = 0;
             $rootScope.bodyclass = "bodymain";
             $rootScope.profileClass = "hide";
+            vm.tabClicked = "All Matters";
+            vm.sortbytext = vm.tabClicked == "All Matters" ? vm.matterDashboardConfigs.DropDownOptionText : vm.matterDashboardConfigs.DrpDownOption1Text;
             //#endregion
             //#region Variable to show matter count            
             vm.allMatterCount = 0;
@@ -127,9 +128,6 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            sort: {
-                                direction: uiGridConstants.DESC,
-                            },
                             width: '15%',
                             displayName: vm.matterDashboardConfigs.GridColumn4Header,
                             cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>',
@@ -321,14 +319,15 @@
                     return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
                 }
             }
-            console.log(columnDefs1);
+
             columnDefs1.sort(getSortFunction("position"));
-            console.log(columnDefs1);
+
 
             //#region Matter Grid functionality
             vm.matterGridOptions = {
                 enableHorizontalScrollbar: 0,
                 enableVerticalScrollbar: 0,
+                enableSorting: false,
                 paginationPageSize: gridOptions.paginationPageSize,
                 enableGridMenu: gridOptions.enableGridMenu,
                 enableRowHeaderSelection: gridOptions.enableRowHeaderSelection,
@@ -487,6 +486,8 @@
             //#reion This function will get counts for all matters, my matters and pinned matters
             vm.getMatterCounts = function () {
                 vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.displaypagination = false;
                 getMatterCounts(jsonMatterSearchRequest, function (response) {
                     vm.allMatterCount = response.allMatterCounts;
                     vm.myMatterCount = response.myMatterCounts;
@@ -497,12 +498,16 @@
                     }
                     vm.pagination();
                     vm.lazyloaderdashboard = true;
+                    vm.divuigrid = true;
+                    vm.displaypagination = true;
                 });
             }
             //#endregion
 
             //#region This api will get all matters which are pinned and this will be invoked when the user clicks on "Pinned Matters Tab"
             vm.getMatterPinned = function () {
+                vm.tabClicked = "Pinned Matters";
+                vm.sortbytext = vm.matterDashboardConfigs.DrpDownOption1Text;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.displaypagination = false;
@@ -623,6 +628,8 @@
 
 
             vm.myMatters = function () {
+                vm.tabClicked = "My Matters";
+                vm.sortbytext = vm.matterDashboardConfigs.DrpDownOption1Text;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.displaypagination = false;
@@ -643,6 +650,7 @@
                 jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
+                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                 jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 get(jsonMatterSearchRequest, function (response) {
                     if (response == "") {
@@ -664,6 +672,8 @@
 
             //This search function will be used for binding search results to the grid
             vm.search = function (isMy) {
+                vm.tabClicked = "All Matters";
+                vm.sortbytext = vm.matterDashboardConfigs.DropDownOptionText;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.displaypagination = false;
@@ -688,6 +698,7 @@
                 var tempMatters = [];
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
+                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
                 jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 get(jsonMatterSearchRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not                    
@@ -729,7 +740,7 @@
 
             //This function will pin or unpin the matter based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
-                vm.lazyloaderdashboard = false;
+                //vm.lazyloaderdashboard = false;
                 if (e.currentTarget.src.toLowerCase().indexOf("images/pin-666.png") > 0) {
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var pinRequest = {
@@ -760,7 +771,7 @@
                             e.currentTarget.src = "../images/unpin-666.png";
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) + 1;
                         }
-                        vm.lazyloaderdashboard = true;
+                        //vm.lazyloaderdashboard = true;
                     });
                 }
                 else if (e.currentTarget.src.toLowerCase().indexOf("images/unpin-666.png") > 0) {
@@ -779,7 +790,7 @@
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
                             vm.matterGridOptions.data.splice(vm.matterGridOptions.data.indexOf(currentRowData), 1)
                         }
-                        vm.lazyloaderdashboard = true;
+                        //vm.lazyloaderdashboard = true;
                     });
                 }
 
@@ -1301,7 +1312,6 @@
             vm.sortyby = function (sortexp, data) {
                 vm.sortbytext = data;
                 if (sortexp == 'AlphabeticalUp') {
-
                     jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
                     jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
