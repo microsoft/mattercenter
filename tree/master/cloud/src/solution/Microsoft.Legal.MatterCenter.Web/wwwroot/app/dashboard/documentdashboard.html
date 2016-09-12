@@ -26,6 +26,9 @@
                         <div class="col-md-12">
                             <img data-dismiss="modal" class="pull-right" src="../../images/close-666.png" />
                         </div>
+                        <div style="text-align:center; margin-bottom:10px;" ng-show="vm.isDisplayMessage">
+                            {{vm.displayMessage}}
+                        </div>
                         <div id="PopupBody">
                             <div class="selectMailFormat">
                                 <div class="sendEmailOptions emailAttachmentOption" ng-click="!vm.enable||vm.downloadEmailAsAttachment(true);">
@@ -45,7 +48,7 @@
                                                 <span><img id="document-{{$index}}" style="display:none" src="../Images/loadingcirclests16.gif"></span>
                                             </div>
                                             <div class="col-xs-12 col-sm-8">
-                                                <span class="paddingRight20"><input type="checkbox" ng-model="element.selected" /></span>{{element.documentName}}
+                                                <span class="paddingRight20"><input type="checkbox" ng-model="element.mailCartSelected" /></span>{{element.documentName}}.{{element.documentExtension}}
                                             </div>
                                             <div class="col-xs-12 col-sm-1"><img src="../Images/icon-delete.png" class="" title="{{vm.documentDashboardConfigs.Image3EmailRemovalAttachmentLinkText}}" ng-click="vm.removeAttachment(element)"></div>
                                         </div>

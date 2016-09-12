@@ -71,7 +71,7 @@
 
 
             var gridOptions = {
-                paginationPageSize: 28,
+                paginationPageSize: 30,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
@@ -775,7 +775,7 @@
                     }
                     unpinMatter(unpinRequest, function (response) {
                         if (response.isMatterUnPinned) {
-                            e.currentTarget.src = "../images/pin-666.png";
+                            e.currentTarget.src = "../images/unpin-666.png";
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
                             vm.matterGridOptions.data.splice(vm.matterGridOptions.data.indexOf(currentRowData), 1)
                         }
@@ -1715,7 +1715,7 @@
                             AOLList: jsonMatterSearchRequest.SearchObject.Filters.AOLList,
                             FromDate: jsonMatterSearchRequest.SearchObject.Filters.FromDate,
                             ToDate: jsonMatterSearchRequest.SearchObject.Filters.ToDate,
-                            FilterByMe: jsonMatterSearchRequest.SearchObject.Filters.FilterByMe
+                            FilterByMe: 0
                         },
                         Sort: {
                             ByProperty: 'LastModifiedTime',
