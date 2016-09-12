@@ -35,7 +35,7 @@ Where is Matter Center going in the future?
 # Installation and build
 Please note the following software must be installed before you can open and deploy the Matter Center solution:
 * [SharePoint Online Management Shell](http://www.microsoft.com/en-us/download/details.aspx?id=35588)
-*	[Windows PowerShell](http://www.microsoft.com/en-in/download/details.aspx?id=2560)
+*	[Windows PowerShell](https://www.microsoft.com/en-us/download/details.aspx?id=50395)
 *	[Azure PowerShell](http://go.microsoft.com/?linkid=9811175)
 *	[DotNet Core](https://www.microsoft.com/net/core#windows) 
 *	 [Visual Studio 2015 (Community or Pro and above)](https://www.visualstudio.com/en-us/products/vs-2015-product-editions.aspx?wt.mc_id=github_microsoft_mattercenter)

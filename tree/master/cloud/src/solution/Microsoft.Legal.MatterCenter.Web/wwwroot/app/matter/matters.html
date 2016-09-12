@@ -39,7 +39,7 @@
             </div>
             <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="searchmatter">
-                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
+                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="searchMatters.matterName + ' ('+ searchMatters.matterID + ')' for searchMatters in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
                     <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
                 <div class="col-xs-12">
