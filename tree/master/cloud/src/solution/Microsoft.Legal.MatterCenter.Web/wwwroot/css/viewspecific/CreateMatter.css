@@ -333,7 +333,7 @@
 .errPopUpMatterSelectTemp {
     left: 12px;
     right: 264px;
-    top: 322px;
+    top: 211px;
 }
 
 .errPopUpMatterSelectTempWithOutMatterID {
@@ -614,7 +614,7 @@
 
     .errPopUpMatterSelectTemp {
         left: 12px;
-        top: 550px;
+        top: 420px;
     }
 
     .errPopUpMatterSelectTempWithOutMatterID {
@@ -1123,9 +1123,7 @@
     outline: none !important;
 }
 
-    .buttonPrev:hover {
-        background-color: rgb(204,204,204);
-    }
+   
 
 
 .notificationTriangleBorder {
@@ -1471,4 +1469,12 @@
 .settingsSuccess {
     padding: 25px;
     color: Green;
+}
+
+.btnHover:hover{
+      background-color: rgb(204,204,204);
+}
+.creatematerLoadingBtn{
+        float: left;
+    margin-top: 10px;
 }

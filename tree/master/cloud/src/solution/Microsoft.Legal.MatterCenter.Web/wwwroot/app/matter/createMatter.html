@@ -270,18 +270,19 @@
                     <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox2Text}}</span></label>
                 </div>
                 <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton($event)' ng-disabled="cm.createBtnDisabled" value="Create">{{cm.createButton}}</button>
+                <div class="creatematerLoadingBtn">
+                    <img id="loadingImageCreate" ng-show="cm.createBtnDisabled" src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
+                </div>
             </div>
-            <div class="loading " ng-show="cm.createBtnDisabled">
-                <img id="loadingImage" src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
-            </div>
+           
         </section>
         <div id="space"></div>
         <div class="row ">
             <div class="col-xs-5">
-                <button class="buttonPrev pull-right marginTop10" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
+                <button class="buttonPrev pull-right marginTop10"  ng-class="{'btnHover' : cm.prevButtonDisabled=== false}" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
             </div>
             <div class="col-xs-6">
-                <button class="buttonPrev pull-left marginTop10" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
+                <button class="buttonPrev pull-left marginTop10" ng-class="{'btnHover' : cm.nextButtonDisabled=== false}" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
             </div>
         </div>
     </div>

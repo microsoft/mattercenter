@@ -148,7 +148,7 @@
 
 .folderContent {
     float: right;
-    width: 30%;
+    width: 50%;
     padding-right: 6px;
     height: 150px;
     border-bottom: 1px solid #c8c8c8;
@@ -172,12 +172,12 @@
 
 .mailHeaderItems {
     clear: both;
-    width: 69%;
+    width: 50%;
     border-right: 1px solid #666;
 }
 
 .mailHeaderFolders {
-    width: 30%;
+    width: 50%;
 }
 
 .folderStructureContent {
@@ -256,7 +256,7 @@
 .maildata {
     float: left;
     overflow-y: auto;
-    width: 69%;
+    width: 50%;
     border-right: 1px solid #666;
     border-bottom: 1px solid #c8c8c8;
     min-height: 150px;
