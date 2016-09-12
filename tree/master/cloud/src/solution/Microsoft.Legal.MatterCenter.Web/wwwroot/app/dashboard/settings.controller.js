@@ -266,7 +266,7 @@
                 vm.clienturl = url;
                 vm.modifiedDate = '0';
                 getDefaultConfigurations(siteCollectionPath, function (response) {
-                    if (response != "") {
+                    if (response != "" && !response.isError) {
                         vm.configurations = JSON.parse(response.code);
                         vm.setClientData(vm.configurations);
                         vm.showrole = "Yes";
@@ -362,6 +362,8 @@
                     } else {
                         vm.nodata = true;
                         vm.lazyloader = true;
+                        vm.error = response.value;
+                        angular.element('#errorDiv').modal('show');
                     }
                 });
             }
@@ -671,7 +673,7 @@
 
             var getUserName = function (sUserEmails, bIsName) {
                 "use strict";
-                var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp("^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$");
+                var arrUserNames = [], arrTempUserNames = [], sEmail = "", oEmailRegex = new RegExp("^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$");
                 if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
                     arrUserNames = sUserEmails.split(";");
                     for (var iIterator = 0; iIterator < arrUserNames.length - 1; iIterator++) {
@@ -685,7 +687,14 @@
                         }
                     }
                 }
-                return arrUserNames.filter(v=>v != '');
+                angular.forEach(arrUserNames, function (user) {
+                    if(user != '')
+                    {
+                        arrTempUserNames.push(user)
+                    }
+                });
+               
+                return arrTempUserNames;  //arrUserNames.filter(v=>v != '');
             }
 
             function getArrAssignedUserNamesAndEmails() {

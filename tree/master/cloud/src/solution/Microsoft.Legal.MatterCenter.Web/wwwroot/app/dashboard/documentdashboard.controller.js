@@ -27,6 +27,8 @@
             $rootScope.bodyclass = "bodymain";
             $rootScope.profileClass="hide";
             vm.nodata = false;
+            vm.isDisplayMessage = false;
+            vm.displayMessage = '';
             //#endregion
 
             //#region Variable to show document count
@@ -62,7 +64,7 @@
             //#endregion
 
             var gridOptions = {
-                paginationPageSize: 28,
+                paginationPageSize: 30,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
@@ -130,6 +132,9 @@
                         columnDefs1.push({
                             field: key,
                             displayName: vm.documentDashboardConfigs.GridColumn4Header,
+                            sort: {
+                                direction: uiGridConstants.DESC,
+                            },
                             width: '20%',
                             enableColumnMenu: false,
                             position: value.position
@@ -359,17 +364,20 @@
                 //],
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
+                    $scope.gridApi = gridApi;
                     //Set the selected row of the grid to selectedRow property of the controller
                     gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                        vm.selectedRow = row.entity
-                       // vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
-                        var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.documentID);
+                        // vm.selectedRow = row.entity
+                        vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
+                        var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.documentCreatedDate);
                         if (isRowPresent.length > 0) {
                             row.entity.checker = true;
+                            vm.toggleChecker(true, row.entity);
                         }
                         else {
                             vm.checker = false;
                             row.entity.checker = false;
+                            vm.toggleChecker(false, row.entity);
                         }
                     });
                 }
@@ -394,45 +402,57 @@
             vm.cartelements = [];
             //function to toggle check all 
             vm.toggleChecker = function (checked, rowinfo) {
-                if (checked) {
-                    if (vm.documentsCheckedCount >= 0) {
-                        vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) + 1;
+                vm.documentsCheckedCount = 0;
+                allChecked = false;
+                vm.cartelements = [];
+                angular.forEach(vm.gridApi.grid.rows, function (row) {
+                    if (row.entity.checker) {
+                        vm.documentsCheckedCount = vm.documentsCheckedCount + 1;
+                        row.entity.mailCartSelected = false;
+                        vm.cartelements.push(row.entity);
                     }
-                    vm.cartelements.push(rowinfo);
+                });
+                if (vm.gridApi.grid.rows.length == vm.documentsCheckedCount) {
+                    allChecked = true;
                 }
-                else {
-                    vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1
-                    var rows = vm.gridApi.core.getVisibleRows(vm.gridApi.grid),
-                        allChecked = true;
-                    for (var r = 0; r < rows.length; r++) {
-                        if (rows[r].entity.checker !== true) {
-                            allChecked = false;
-                            break;
-                        }
-                    }
-                    $("#chkAllDocCheckBox").prop('checked', allChecked);
-                }
+                $("#chkAllDocCheckBox").prop('checked', allChecked);
             };
 
             //Removing elements from cart
             vm.removeAttachment = function (obj) {
-                angular.forEach(vm.cartelements, function (element) {
-                    if (element.documentID == obj.documentID) {
-                        if (jQuery("#doc" + obj.documentID).is(":checked")) {
-                            jQuery("#doc" + obj.documentID).prop("checked", false);
-                        }
-                        vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1;
-                        vm.cartelements.pop(element);
-                        if (vm.cartelements.length == 0) {
-                            vm.documentsCheckedCount = 0;
-                        }
+                var index = 0
+
+                for (var i = 0; i < vm.cartelements.length ; i++) {
+                    if (vm.cartelements[i].documentCreatedDate == obj.documentCreatedDate && vm.cartelements[i].documentName == obj.documentName) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (vm.cartelements.length > 0) {
+                    vm.cartelements.splice(index, 1);
+                }
+
+                angular.forEach(vm.gridApi.grid.rows, function (row) {
+                    if (row.entity.checker && row.entity.documentCreatedDate == obj.documentCreatedDate && row.entity.documentName == obj.documentName) {
+                        row.entity.checker = false;
+                        row.entity.mailCartSelected = false;
                     }
                 });
 
+                if (vm.documentsCheckedCount > 0) {
+                    vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1;
+                }
+
+                if (vm.cartelements.length == 0) {
+                    vm.documentsCheckedCount = 0;
+                    jQuery('#UploadMatterModal').modal("hide");
+                }
             }
 
             //function to check all checkboxes inside grid
             vm.toggleCheckerAll = function (checked) {
+                vm.cartelements = [];
+                vm.documentsCheckedCount = 0;
                 for (var i = 0; i < vm.documentGridOptions.data.length; i++) {
                     vm.documentGridOptions.data[i].checker = checked;
                     if (checked) {
@@ -440,27 +460,17 @@
                         vm.documentsCheckedCount = vm.documentGridOptions.data.length;
                         vm.selectedRows = vm.documentGridOptions.data;
                     }
-                    else {
-                        vm.cartelements = [];
-                        vm.documentsCheckedCount = 0;
-                    }
-                    if (checked) {
-                       // $scope.gridApi.selection.selectAllRows();
-                    }
-                    else {
-                        //$scope.gridApi.selection.clearSelectedRows();
-                        //vm.selectedRows = [];
-                        //vm.showErrorAttachmentInfo = false;
-
-                    }
                 }
-                //$scope.$apply();
-
             };
 
             vm.showMailCartModal = function () {
                 if (vm.documentsCheckedCount > 0) {
                     jQuery('#UploadMatterModal').modal("show");
+                    angular.forEach(vm.cartelements, function (cartItem) {
+                        cartItem.mailCartSelected = false;
+                    });
+                    vm.displayMessage = '';
+                    vm.isDisplayMessage = false;
                 }
             }
 
@@ -468,9 +478,10 @@
             vm.downloadEmailAsAttachment = function (downloadAttachmentsAsEmail) {
                 //Get all the documents which are checked
                 var i = 0;
+                vm.displayMessage = '';
                 angular.forEach(vm.cartelements, function (selectedDocument) {
 
-                    if (selectedDocument.selected) {
+                    if (selectedDocument.mailCartSelected) {
                         vm.selectedDocuments.push(selectedDocument);
                         //Display progress icon for each checked item
                         angular.element("#document-" + i).css("display", "block");
@@ -481,40 +492,50 @@
                 if (vm.selectedDocuments.length > 0) {
                     //Disbale the click event of the button. Once we get the response from the server, enable the click event again
                     vm.enable = false;
+
+                    var oEmailRelativePath = '';
+                    var sFileURLs = ""
+                    angular.forEach(vm.selectedDocuments, function (selectedDocument) {
+                        oEmailRelativePath = trimEndChar(unescape(selectedDocument.documentUrl));
+                        oEmailRelativePath = oEmailRelativePath.replace(configs.uri.SPOsiteURL, "$") + "$";
+                        if (selectedDocument.documentClientUrl) {
+                            sFileURLs += selectedDocument.documentClientUrl + oEmailRelativePath + selectedDocument.documentName + ";";
+                        }
+                        else {
+                            sFileURLs += selectedDocument.documentTeamUrl + oEmailRelativePath + selectedDocument.documentName + ";";
+                        }
+                    });
+
+                    var mailAttachmentDetailsRequest = {
+                        FullUrl: sFileURLs,
+                        IsAttachmentCall: downloadAttachmentsAsEmail
+                    }
+
+                    downloadAttachmentsAsStream(mailAttachmentDetailsRequest, function (response) {
+                        var result = encodeURIComponent(response);
+                        //Once we get the response, stop the progress
+                        angular.forEach(vm.cartelements, function (document) {
+                            angular.element("#document-" + i).css("display", "none");
+                            i = i + 1;
+                        });
+                        //clear the selectedDocuments array
+                        vm.selectedDocuments = [];
+                        //enable the vm.enable so that user can click the link again
+                        vm.enable = true;
+                        vm.isDisplayMessage = true;
+                        if (downloadAttachmentsAsEmail) {
+                            vm.displayMessage = "Selected documents has been saved as an attachment in draft email in Outlook."
+                        }
+                        else {
+                            vm.displayMessage = "Selected documents has been saved as link in draft email in Outlook."
+                        }
+                    })
                 }
                 else {
                     vm.enable = true;
+                    vm.isDisplayMessage = true;
+                    vm.displayMessage = "Please select document."
                 }
-                var oEmailRelativePath = '';
-                var sFileURLs = ""
-                angular.forEach(vm.selectedDocuments, function (selectedDocument) {
-                    oEmailRelativePath = trimEndChar(unescape(selectedDocument.documentUrl));
-                    oEmailRelativePath = oEmailRelativePath.replace(configs.uri.SPOsiteURL, "$") + "$";
-                    if (selectedDocument.documentClientUrl) {
-                        sFileURLs += selectedDocument.documentClientUrl + oEmailRelativePath + selectedDocument.documentName + ";";
-                    }
-                    else {
-                        sFileURLs += selectedDocument.documentTeamUrl + oEmailRelativePath + selectedDocument.documentName + ";";
-                    }
-                });
-
-                var mailAttachmentDetailsRequest = {
-                    FullUrl: sFileURLs,
-                    IsAttachmentCall: downloadAttachmentsAsEmail
-                }
-
-                downloadAttachmentsAsStream(mailAttachmentDetailsRequest, function (response) {
-                    var result = encodeURIComponent(response);
-                    //Once we get the response, stop the progress
-                    angular.forEach(vm.cartelements, function (document) {
-                        angular.element("#document-" + i).css("display", "none");
-                        i = i + 1;
-                    });
-                    //clear the selectedDocuments array
-                    vm.selectedDocuments = [];
-                    //enable the vm.enable so that user can click the link again
-                    vm.enable = true;
-                })
             }
 
             function trimEndChar(sOrignalString, sCharToTrim) {

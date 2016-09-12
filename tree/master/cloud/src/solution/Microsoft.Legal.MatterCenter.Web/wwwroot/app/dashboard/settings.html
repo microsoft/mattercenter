@@ -73,7 +73,7 @@
                 </div>
                 <div class="col-xs-12 pad0 marginTop10">
                     {{vm.settingsConfigs.Label11DefaultValue3HeaderText}}
-                   
+
                 </div>
                 <div class="col-xs-12 pad0 marginTop10">
                     <div class="settingsMatterTypeBox">
@@ -94,13 +94,10 @@
                              title="{{selectedDocumentTypeLawTerm.termChainName}}">
                             {{selectedDocumentTypeLawTerm.termChainName}} ({{selectedDocumentTypeLawTerm.documentTemplateNames | getAssociatedDocumentTemplatesCount: ';' }})
                         </div>
-
                     </div>
 
-
-
                     <div class="addmatterType">
-                        <a id=""  ng-click="vm.selectMatterType()" ><span class="glyphicon glyphicon-plus"></span> Add/Remove Types</a>
+                        <a id="" ng-click="vm.selectMatterType()"><span class="glyphicon glyphicon-plus"></span> Add/Remove Types</a>
                     </div>
                 </div>
                 <div class="col-xs-12 pad0 marginTop10">
@@ -306,9 +303,7 @@
         </div>
     </div>
     <!--<div id="taxonomyData" ng-include src="'../app/matter/MatterTemplates/taxonomyTemplate.html'"></div>-->
-
     <div class="popupContainerBackground " ng-click="vm.selectMatterTypePopUpClose()" ng-class="vm.popupContainerBackground"></div>
-
 
     <div class="popUpContainer popUpContainerLevel3" ng-class="vm.popupContainer" ng-show="vm.taxonomyHierarchyLevels==3||vm.taxonomyHierarchyLevels==2" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
         <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='vm.selectMatterTypePopUpClose()'>
@@ -317,12 +312,10 @@
                 <div title="Select a {{vm.createMatterTaxonomyColumnNames.ColumnName1}}" class="popUpFloatLeft">Select a {{vm.createMatterTaxonomyColumnNames.ColumnName1}}</div>
                 <div class="popUpPracticeGroup clear">
                     <div class="popUpPGDiv">
-
                         <select class="dropdownLevelOne clear custPracticeGroup " ng-model='vm.selectedLevelOneItem' ng-change='vm.getSelectedLevelOne()' ng-options='levelOneItem.termName for levelOneItem in vm.levelOneList'>
                             <option value="" label="- {{vm.createContent.Tab1DrpDownLevel1DefaultSelectOption}} -"></option>
                         </select>
                     </div>
-
                 </div>
             </div>
             <div class="popUpBody popUpFloatLeft" style="overflow:hidden;">
@@ -356,7 +349,6 @@
                                     <div ng-class="{popUpSelected : ((vm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='vm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
                                         {{levelThreeItem.termName}}
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelThreeItem === levelThreeItem}" ng-show="vm.taxonomyHierarchyLevels>3" class=""></i>
-
                                     </div>
                                 </div>
                             </div>
@@ -364,9 +356,7 @@
                     </div>
                 </div>
 
-
                 <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " id="divSAOL1" style="width:28%;" ng-show="vm.taxonomyHierarchyLevels>=4">
-
                     <span style="margin-bottom:5px;">
                         {{vm.createMatterTaxonomyColumnNames.ColumnName4}}
                     </span>
@@ -378,16 +368,13 @@
                                     <div ng-class="{popUpSelected : ((vm.activeLevelFourItem === levelFourItem) && ((levelFourItem.state==undefined) ||( levelFourItem.state && levelFourItem.state=='enable' ))) , disableBlock:(levelFourItem.state && levelFourItem.state=='disable')}" ng-click='vm.selectLevelFourItem(levelFourItem)' data-state='{{levelFourItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFourItem.id}}' data-display-name='{{levelFourItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFourItem.folderNames}}' data-associated-document-template='{{levelFourItem.documentTemplateNames}}' data-document-template='{{levelFourItem.documentTemplates}}'>
                                         {{levelFourItem.termName}}
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelFourItem === levelFourItem}" ng-show="vm.taxonomyHierarchyLevels>4" class=""></i>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " id="divSAOL1" style="width:28%;" ng-show="vm.taxonomyHierarchyLevels>=5">
-
                     <span style="margin-bottom:5px;">
                         {{vm.createMatterTaxonomyColumnNames.ColumnName5}}
                     </span>
@@ -399,14 +386,12 @@
                                     <div ng-class="{popUpSelected : ((vm.activeLevelFiveItem === levelFourItem) && ((levelFiveItem.state==undefined) ||( levelFiveItem.state && levelFiveItem.state=='enable' ))) , disableBlock:(levelFiveItem.state && levelFiveItem.state=='disable')}" ng-click='vm.selectLevelFourItem(levelFiveItem)' data-state='{{levelFiveItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFiveItem.id}}' data-display-name='{{levelFiveItem.termName}}' data-isnofolderstructurepresent='{{levelFiveItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFiveItem.folderNames}}' data-associated-document-template='{{levelFiveItem.documentTemplateNames}}' data-document-template='{{levelFiveItem.documentTemplates}}'>
                                         {{levelFiveItem.termName}}
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelFiveItem === levelFiveItem}" ng-show="vm.taxonomyHierarchyLevels>5" class=""></i>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popUpBodyBlocksLevel3" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs addOrRemoveBtnMargin" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
@@ -417,7 +402,6 @@
                             remove
                         </div>
                     </div>
-
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType" id="divDocTemplate">
                     <div class="errorPopUpArea  " ng-show='vm.errorPopUp' style="">
@@ -437,7 +421,6 @@
                     </div>
                 </div>
 
-
                 <div id="defaultMessageDiv" class="">
                     <img id="infoImg" alt="info" src="../Images/information-blue.png">
                     <span id="defaultMessage" class="defaultMessageLevel3">{{vm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
@@ -453,12 +436,10 @@
                 <div title="Select a {{vm.createMatterTaxonomyColumnNames.ColumnName1}}" class="popUpFloatLeft">Select a {{vm.createMatterTaxonomyColumnNames.ColumnName1}}</div>
                 <div class="popUpPracticeGroup clear">
                     <div class="popUpPGDiv">
-
                         <select class="dropdownLevelOne clear custPracticeGroup " ng-model='vm.selectedLevelOneItem' ng-change='vm.getSelectedLevelOne()' ng-options='levelOneItem.termName for levelOneItem in vm.levelOneList'>
                             <option value="" label="- {{vm.createContent.Tab1DrpDownLevel1DefaultSelectOption}} -"></option>
                         </select>
                     </div>
-
                 </div>
             </div>
             <div class="popUpBody popUpBodyLevel4 popUpFloatLeft" style="overflow:hidden">
@@ -490,7 +471,6 @@
                                     <div ng-class="{popUpSelected : ((vm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='vm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
                                         {{levelThreeItem.termName}}
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelThreeItem === levelThreeItem}" ng-show="vm.taxonomyHierarchyLevels>3" class=""></i>
-
                                     </div>
                                 </div>
                             </div>
@@ -498,9 +478,7 @@
                     </div>
                 </div>
 
-
                 <div class="popMarginRight popUpFloatLeft " id="divSAOL1" style="width:225px;" ng-show="vm.taxonomyHierarchyLevels>=4">
-
                     <span style="margin-bottom:5px;">
                         {{vm.createMatterTaxonomyColumnNames.ColumnName4}}
                     </span>
@@ -512,16 +490,13 @@
                                     <div ng-class="{popUpSelected : ((vm.activeLevelFourItem === levelFourItem) && ((levelFourItem.state==undefined) ||( levelFourItem.state && levelFourItem.state=='enable' ))) , disableBlock:(levelFourItem.state && levelFourItem.state=='disable')}" ng-click='vm.selectLevelFourItem(levelFourItem)' data-state='{{levelFourItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFourItem.id}}' data-display-name='{{levelFourItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFourItem.folderNames}}' data-associated-document-template='{{levelFourItem.documentTemplateNames}}' data-document-template='{{levelFourItem.documentTemplates}}'>
                                         {{levelFourItem.termName}}
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelFourItem === levelFourItem}" ng-show="vm.taxonomyHierarchyLevels>4" class=""></i>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="popMarginRight popUpFloatLeft " id="divSAOL2" style="width:225px;" ng-show="vm.taxonomyHierarchyLevels>=5">
-
                     <span style="margin-bottom:5px;">
                         {{vm.createMatterTaxonomyColumnNames.ColumnName5}}
                     </span>
@@ -533,14 +508,12 @@
                                     <div ng-class="{popUpSelected : ((vm.activeLevelFiveItem === levelFourItem) && ((levelFiveItem.state==undefined) ||( levelFiveItem.state && levelFiveItem.state=='enable' ))) , disableBlock:(levelFiveItem.state && levelFiveItem.state=='disable')}" ng-click='vm.selectLevelFourItem(levelFiveItem)' data-state='{{levelFiveItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFiveItem.id}}' data-display-name='{{levelFiveItem.termName}}' data-isnofolderstructurepresent='{{levelFiveItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFiveItem.folderNames}}' data-associated-document-template='{{levelFiveItem.documentTemplateNames}}' data-document-template='{{levelFiveItem.documentTemplates}}'>
                                         {{levelFiveItem.termName}}
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelFiveItem === levelFiveItem}" ng-show="vm.taxonomyHierarchyLevels>5" class=""></i>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popUpBodyBlocksLevel4" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs addOrRemoveBtnMargin addOrRemoveBtnMarginLevel4 popAddLevel4" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
@@ -551,7 +524,6 @@
                             remove
                         </div>
                     </div>
-
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType matterTypeLevel4" id="divDocTemplate" style="width:225px;">
                     <div class="errorPopUpArea  " ng-show='vm.errorPopUp' style="">
@@ -570,12 +542,10 @@
                     </div>
                 </div>
 
-
                 <div id="defaultMessageDiv" class="defaultMessageDivLevel4">
                     <img id="infoImg" class="infoImgLevel4" alt="info" src="../Images/information-blue.png">
                     <span id="defaultMessage" class="defaultMessageLevel4">{{vm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
-
             </div>
             <button ng-click="vm.saveDocumentTemplates()" class="SavePopUpEntries saveDocButtonLevel4" type="button">{{vm.createContent.Tab1ButtonSaveSelectiponText}}</button>
         </div>
@@ -587,12 +557,10 @@
                 <div title="Select a {{vm.createMatterTaxonomyColumnNames.ColumnName1}}" class="popUpFloatLeft">Select a {{vm.createMatterTaxonomyColumnNames.ColumnName1}}</div>
                 <div class="popUpPracticeGroup clear">
                     <div class="popUpPGDiv">
-
                         <select class="dropdownLevelOne clear custPracticeGroup " ng-model='vm.selectedLevelOneItem' ng-change='vm.getSelectedLevelOne()' ng-options='levelOneItem.termName for levelOneItem in vm.levelOneList'>
                             <option value="" label="- {{vm.createContent.Tab1DrpDownLevel1DefaultSelectOption}} -"></option>
                         </select>
                     </div>
-
                 </div>
             </div>
             <div class="popUpBody popUpFloatLeft" style="overflow:hidden">
@@ -624,7 +592,6 @@
                                     <div ng-class="{popUpSelected : ((vm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='vm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
                                         {{levelThreeItem.termName}}
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelThreeItem === levelThreeItem}" ng-show="vm.taxonomyHierarchyLevels>3" class=""></i>
-
                                     </div>
                                 </div>
                             </div>
@@ -632,9 +599,7 @@
                     </div>
                 </div>
 
-
                 <div class="popMarginRight popUpFloatLeft " id="divSAOL1" style="width:225px;" ng-show="vm.taxonomyHierarchyLevels>=4">
-
                     <span style="margin-bottom:5px;">
                         {{vm.createMatterTaxonomyColumnNames.ColumnName4}}
                     </span>
@@ -646,16 +611,13 @@
                                     <div ng-class="{popUpSelected : ((vm.activeLevelFourItem === levelFourItem) && ((levelFourItem.state==undefined) ||( levelFourItem.state && levelFourItem.state=='enable' ))) , disableBlock:(levelFourItem.state && levelFourItem.state=='disable')}" ng-click='vm.selectLevelFourItem(levelFourItem)' data-state='{{levelFourItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFourItem.id}}' data-display-name='{{levelFourItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFourItem.folderNames}}' data-associated-document-template='{{levelFourItem.documentTemplateNames}}' data-document-template='{{levelFourItem.documentTemplates}}'>
                                         {{levelFourItem.termName}}
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelFourItem === levelFourItem}" ng-show="vm.taxonomyHierarchyLevels>4" class=""></i>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="popMarginRight popUpFloatLeft " id="divSAOL2" style="width:225px;" ng-show="vm.taxonomyHierarchyLevels>=5">
-
                     <span style="margin-bottom:5px;">
                         {{vm.createMatterTaxonomyColumnNames.ColumnName5}}
                     </span>
@@ -667,14 +629,12 @@
                                     <div ng-class="{popUpSelected : ((vm.activeLevelFiveItem === levelFiveItem) && ((levelFiveItem.state==undefined) ||( levelFiveItem.state && levelFiveItem.state=='enable' ))) , disableBlock:(levelFiveItem.state && levelFiveItem.state=='disable')}" ng-click='vm.selectLevelFiveItem(levelFiveItem)' data-state='{{levelFiveItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFiveItem.id}}' data-display-name='{{levelFiveItem.termName}}' data-isnofolderstructurepresent='{{levelFiveItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFiveItem.folderNames}}' data-associated-document-template='{{levelFiveItem.documentTemplateNames}}' data-document-template='{{levelFiveItem.documentTemplates}}'>
                                         {{levelFiveItem.termName}}
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : vm.activeLevelFiveItem === levelFiveItem}" ng-show="vm.taxonomyHierarchyLevels>5" class=""></i>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popAddRemove" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs addOrRemoveBtnMargin addMarginTop popAddWidth" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
@@ -685,7 +645,6 @@
                             remove
                         </div>
                     </div>
-
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType matterType" id="divDocTemplate" style="width:225px;">
                     <div class="errorPopUpArea  " ng-show='vm.errorPopUp' style="">
@@ -704,19 +663,24 @@
                     </div>
                 </div>
 
-
                 <div id="defaultMessageDiv" class="defaultMessage defaultMessageLevel5">
                     <img id="infoImg" class="infoImg" alt="info" src="../Images/information-blue.png">
                     <span id="defaultMessage" class="spanDefaultMessage spanDefaultMessageLevel5">{{vm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
-
             </div>
             <button ng-click="vm.saveDocumentTemplates()" class="SavePopUpEntries saveDocButton saveDocButtonLevel5" type="button">{{vm.createContent.Tab1ButtonSaveSelectiponText}}</button>
         </div>
     </div>
-
-
-
+    <div class="modal fade " id="errorDiv">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="">
+                    <button type="button" class="close closebutton" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="row margin0 settingserror">{{vm.error}}</div>
+            </div>
+        </div>
+    </div>
     <div id="loadingImageContainer" style="top:25%;left:47%">
         <div class="lazyLoading" ng-hide="vm.lazyloader">
             <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.settingsConfigs.Image.LoadingAltText}}" title="{{vm.settingsConfigs.Image.LoadingAltText}}" />

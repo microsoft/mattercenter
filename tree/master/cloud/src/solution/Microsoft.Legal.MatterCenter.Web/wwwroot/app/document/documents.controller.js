@@ -28,6 +28,8 @@
         //start
         vm.divuigrid = true;
         vm.nodata = false;
+        var screenHeight = 0;
+        vm.searchResultsLength = 0;
         //end
 
         //#region scopes for displaying and hiding filter icons
@@ -119,7 +121,7 @@
         });
         angular.forEach(configs.search.searchColumnsUIPickerForDocument, function (value, key) {
             if (key == "documentName") {
-                if (value.displayInUI == true && value.position!=-1) {
+                if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
                         field: key,
                         displayName: vm.documentConfigContent.GridColumn1Header,
@@ -180,7 +182,7 @@
                 }
             }
             if (key == "documentOwner") {
-                if (value.displayInUI == true && value.position!=-1) {
+                if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
                         field: key,
                         displayName: vm.documentConfigContent.GridColumn5Header,
@@ -210,7 +212,7 @@
                 }
             }
             if (key == "documentCheckoutUser") {
-                if (value.displayInUI == true && value.position!=-1) {
+                if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
                         field: key,
                         displayName: vm.documentConfigContent.GridColumn7Header,
@@ -226,7 +228,7 @@
                 }
             }
             if (key == "documentCreatedDate") {
-                if (value.displayInUI == true && value.position!=-1) {
+                if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
                         field: key,
                         displayName: vm.documentConfigContent.GridColumn8Header,
@@ -241,9 +243,9 @@
 
                 }
             }
-            
+
             if (key == "sitename") {
-                if (value.displayInUI == true && value.position!=-1) {
+                if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
                         field: key,
                         displayName: vm.documentConfigContent.GridColumn10Header,
@@ -256,7 +258,7 @@
                 }
             }
             if (key == "documentMatter") {
-                if (value.displayInUI == true && value.position!=-1) {
+                if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
                         field: key,
                         displayName: vm.documentConfigContent.GridColumn10Header,
@@ -269,7 +271,7 @@
                 }
             }
             if (key == "documentMatterId") {
-                if (value.displayInUI == true && value.position!=-1) {
+                if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
                         field: key,
                         displayName: vm.documentConfigContent.GridColumn10Header,
@@ -281,7 +283,7 @@
                     });
                 }
             }
-            
+
             if (key == "documentExtension") {
                 if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
@@ -296,7 +298,7 @@
                 }
             }
             if (key == "documentIconUrl") {
-                if (value.displayInUI == true && value.position!=-1) {
+                if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
                         field: key,
                         displayName: vm.documentConfigContent.GridColumn10Header,
@@ -322,7 +324,7 @@
                 }
             }
             if (key == "documentOWAUrl") {
-                if (value.displayInUI == true && value.position!=-1) {
+                if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
                         field: key,
                         displayName: vm.documentConfigContent.GridColumn10Header,
@@ -361,7 +363,7 @@
                 }
             }
             if (key == "documentMatterUrl") {
-                if (value.displayInUI == true && value.position!=-1) {
+                if (value.displayInUI == true && value.position != -1) {
                     columnDefs1.push({
                         field: key,
                         displayName: vm.documentConfigContent.GridColumn10Header,
@@ -373,7 +375,7 @@
                     });
                 }
             }
-        });     
+        });
         function getSortFunction(fieldName) {
             return function (col1, col2) {
                 return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
@@ -442,9 +444,6 @@
                 }
             }
         }
-
-        var screenHeight = 0;
-        vm.searchResultsLength = 0;
 
         //#region for setting the classes for ui-grid based on size
         vm.setColumns = function () {
@@ -792,12 +791,14 @@
                     vm.lazyloader = true;
                     vm.divuigrid = true;
                     vm.nodata = true;
+                    $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
+                    $interval(function () { vm.showSortExp(); }, 2000, 3);
                 }
             });
         }
@@ -849,6 +850,7 @@
                     }
                     vm.lazyloader = true;
                     vm.divuigrid = true;
+                    $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.divuigrid = true;
                     vm.nodata = false;
@@ -865,6 +867,7 @@
                     }
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Sort.ByProperty = "";
+                    $interval(function () { vm.showSortExp(); }, 2000, 3);
                 }
             });
         }
@@ -895,11 +898,13 @@
                     vm.lazyloader = true;
                     vm.divuigrid = true;
                     vm.nodata = true;
+                    $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
+                    $interval(function () { vm.showSortExp(); }, 2000, 3);
                 }
             });
 
@@ -958,11 +963,13 @@
                     vm.lazyloader = true;
                     vm.divuigrid = true;
                     vm.nodata = true;
+                    $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
+                    $interval(function () { vm.showSortExp(); }, 2000, 3);
                 }
             });
         }
@@ -1052,6 +1059,7 @@
                             }
                         });
                         $timeout(function () { vm.lazyloader = true; }, 1000);
+                        $interval(function () { vm.showSortExp(); }, 3000, 3);
                     }
                 });
 
@@ -1098,6 +1106,7 @@
                                 }
                             }
                             $timeout(function () { vm.lazyloader = true; }, 1000);
+                            $interval(function () { vm.showSortExp(); }, 3000, 3);
                         });
                     }
                 });
@@ -1127,6 +1136,7 @@
                         });
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
             }
@@ -1143,6 +1153,8 @@
         //Written for unpinning the matter 
         //Start 
         vm.UnpinDocument = function (data) {
+            vm.divuigrid = false;
+            vm.lazyloader = false;
             var alldata = data.entity;
             var unpinRequest = {
                 Client: {
@@ -1154,7 +1166,7 @@
             }
             UnpinDocuments(unpinRequest, function (response) {
                 if (response.isDocumentUnPinned) {
-                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);
+                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
                 }
             });
         }
@@ -1164,6 +1176,8 @@
         //Written for pinning the matter 
         //Start 
         vm.PinMatter = function (data) {
+            vm.divuigrid = false;
+            vm.lazyloader = false;
             var alldata = data.entity;
             var pinRequest = {
                 Client: {
@@ -1193,7 +1207,7 @@
             }
             pinDocuments(pinRequest, function (response) {
                 if (response.isDocumentPinned) {
-                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); }, 500);
+                    $timeout(function () { vm.SetDocuments(vm.documentid, vm.documentname); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
                 }
             });
         }
@@ -1324,8 +1338,8 @@
             });
         }
 
-        vm.sortby = "";
-        vm.sortexp = "";
+        vm.sortby = "desc";
+        vm.sortexp = "documentName";
         vm.showSortExp = function () {
             if (vm.sortexp != "" || vm.sortexp != undefined || vm.sortby != "" || vm.sortby != undefined) {
                 if (vm.sortby == "asc") {
@@ -1339,7 +1353,7 @@
                 }
             }
         }
-
+        $interval(function () { vm.showSortExp(); }, 2500, 3);
         $scope.sortChangedDocument = function (grid, sortColumns) {
             vm.divuigrid = false;
             vm.responseNull = false;
@@ -1697,7 +1711,7 @@
             vm.assetsuccess = false;
             var Client = {
                 Id: (row.entity.documentParentUrl + "/" + row.entity.documentName + "." + row.entity.documentExtension).replace(configs.uri.SPOsiteURL, ""),
-                Name: row.entity.documentMatterUrl.replace(configs.uri.SPOsiteURL, "").replace(".aspx","").replace("/sitepages/", "/"),
+                Name: row.entity.documentMatterUrl.replace(configs.uri.SPOsiteURL, "").replace(".aspx", "").replace("/sitepages/", "/"),
                 Url: row.entity.documentClientUrl
             }
             GetAssets(Client, function (response) {
@@ -1709,9 +1723,9 @@
 
         vm.gotoDocumentUrl = function (url) {
             if (vm.assetsuccess) {
-                $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank");
+                $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500');
             } else {
-                $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank"); }, 1500);
+                $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500'); }, 1500);
             }
         }
 
@@ -1771,6 +1785,13 @@
             }
         }
         //#endregion
+
+        //#region for opening view documents url in new window
+        vm.viewDocumentMatter = function (url) {
+            window.open(url, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500')
+        }
+        //#endregion
+
 
     }]);
 
