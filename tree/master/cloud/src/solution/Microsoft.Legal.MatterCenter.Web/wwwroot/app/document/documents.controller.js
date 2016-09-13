@@ -30,6 +30,7 @@
         vm.nodata = false;
         var screenHeight = 0;
         vm.searchResultsLength = 0;
+        vm.lazyloaderFilter = true;
         //end
 
         //#region scopes for displaying and hiding filter icons
@@ -839,7 +840,7 @@
 
         //#region for searching matter by property and searchterm
         vm.documentsearch = function (term, property, bool) {
-            vm.lazyloader = false;
+            vm.lazyloaderFilter = false;
             vm.responseNull = false;
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.SearchTerm = term;
@@ -882,13 +883,13 @@
                         vm.nodata = false;
                         vm.filternodata = true;
                     }
-                    vm.lazyloader = true;
+                    vm.lazyloaderFilter = true;
                     vm.divuigrid = true;
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.divuigrid = true;
                     vm.nodata = false;
-                    vm.lazyloader = true;
+                    vm.lazyloaderFilter = true;
                     if (bool) {
                         vm.gridOptions.data = response;
                         vm.details = [];
@@ -915,13 +916,13 @@
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.SearchTerm = "";
             if (name == "Modified Date") {
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = vm.modstartdate.format("yyyy-MM-ddT00:00:00Z");
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = vm.modenddate.format("yyyy-MM-ddT23:59:59Z");
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modstartdate, "yyyy-MM-ddT00:00:00") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modenddate, "yyyy-MM-ddT23:59:59") + "Z";
                 vm.moddatefilter = true;
             }
             if (name == "Created Date") {
-                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
-                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
+                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
                 vm.createddatefilter = true;
             }
             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";

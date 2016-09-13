@@ -977,10 +977,15 @@
                         }
                     }
                     UnpinDocuments(unpinRequest, function (response) {
-                        if (response.isDocumentUnPinned) {
-                            e.currentTarget.src = "../images/pin-666.png";
+                        if (response.isDocumentUnPinned) {                            
                             vm.pinDocumentCount = parseInt(vm.pinDocumentCount, 10) - 1;
-                            vm.documentGridOptions.data.splice(vm.documentGridOptions.data.indexOf(currentRowData), 1)
+                            if (vm.tabClicked.toLowerCase().indexOf("pinned") >= 0) {
+                                e.currentTarget.src = "../images/unpin-666.png";
+                                vm.documentGridOptions.data.splice(vm.documentGridOptions.data.indexOf(currentRowData), 1)
+                            }
+                            else {
+                                e.currentTarget.src = "../images/pin-666.png";
+                            }
                         }
                     });
                 }

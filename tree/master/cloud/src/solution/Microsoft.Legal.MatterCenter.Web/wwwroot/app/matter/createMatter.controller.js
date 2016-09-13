@@ -31,6 +31,7 @@
             cm.showRoles = true;
             cm.showMatterId = true;
             cm.matterIdType = "Custom";
+            cm.nextButtonDisabled = false; cm.prevButtonDisabled = true;
             cm.taxonomyHierarchyLevels = configs.taxonomy.levels;
             cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);
             if (cm.taxonomyHierarchyLevels >= 2) {
@@ -653,6 +654,7 @@
                     cm.showRoles = true;
                     cm.matterIdType = "Custom";
                     cm.clientId = "";
+                    cm.selectedClientName = undefined;
 
                 }
             }
@@ -2872,6 +2874,7 @@
                         }
                         else {
                             cm.errTextMsg = "Selected  client for this matter clientId is null ";
+                            showErrorNotification("client");
                             cm.errorBorder = "client";
                             cm.errorPopUpBlock = true; return false;
                         }
