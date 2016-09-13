@@ -122,7 +122,7 @@
                 <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()"></div>
             </div>
         </div>
-        <div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">            
+        <div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">
         </div>
         <div ng-if="vm.isOutlook && vm.showAttachment">
             <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
@@ -157,6 +157,11 @@
                 <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.documentConfigContent.ClearFilterFromLabelText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.documentConfigContent.ClearFilterFromLabelText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div style="width:100%;">
+                <div ng-hide="vm.lazyloaderFilter">
+                    <img src="../Images/WindowsLoadingFast.GIF" style="margin-left: 55px; margin-top:3px;" alt="{{vm.matterConfigContent.AttachmentLoadingTitle}}" title="{{vm.matterConfigContent.AttachmentLoadingTitle}}" />
+                </div>
+            </div>
             <div id='filterResultsContainer'>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-repeat='document in vm.details' ng-click='vm.documentsearch(document.documentName,""+vm.configSearchContent.ManagedPropertyFileName+"",true)'>{{document.documentName}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.documentsearch(client.documentClient,""+vm.configSearchContent.ManagedPropertyDocumentClientName+"",true)'>{{client.documentClient}}</div>
