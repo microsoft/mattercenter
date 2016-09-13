@@ -72,6 +72,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string ManagedPropertySPWebUrl { get; set; }
         public string ManagedPropertyDocumentVersion { get; set; }
         public string ManagedPropertyIsDocument { get; set; }
+        public string DocId { get; set; }
         #endregion
 
         #region Pin
