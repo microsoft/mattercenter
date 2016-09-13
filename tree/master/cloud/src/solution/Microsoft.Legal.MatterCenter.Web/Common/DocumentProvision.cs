@@ -491,6 +491,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentOwner").Key,
                                 searchResult[key].ToString());
                         }
+                        if (key.ToString().ToLower() == "docid")
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("docId").Key,
+                                searchResult[key].ToString());
+                        }
                         if (key.ToString().ToLower() == "parentlink")
                         {
                             ServiceUtility.AddProperty(documentData,

@@ -19,6 +19,7 @@
             vm.pgdropvisible = false;
             vm.matterDashboardConfigs = uiconfigs.MatterDashboard;
             vm.matterConfigContent = uiconfigs.Matters;
+            sortPropertyForAllMatters = configs.search.ManagedPropertyMatterName;
             vm.aoldrop = false;
             vm.aoldropvisible = false;
             vm.checkClient = false;
@@ -698,7 +699,8 @@
                 var tempMatters = [];
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
-                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
+                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = sortPropertyForAllMatters;
+                jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
                 jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 get(jsonMatterSearchRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not                    
