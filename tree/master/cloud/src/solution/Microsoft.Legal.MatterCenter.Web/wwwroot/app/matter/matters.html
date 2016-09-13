@@ -39,7 +39,7 @@
             </div>
             <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="searchmatter">
-                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
+                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="searchMatters.matterName + ' ('+ searchMatters.matterID + ')' for searchMatters in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
                     <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
                 <div class="col-xs-12">
@@ -285,6 +285,11 @@
                 <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='{{vm.matterConfigContent.ImageClearTitle}}' title='{{vm.matterConfigContent.ImageClearAltText}}'>
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.matterConfigContent.ClearFilterText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.matterConfigContent.ClearFilterText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div style="width:100%;">
+                <div ng-hide="vm.lazyloaderFilter">
+                    <img src="../Images/WindowsLoadingFast.GIF" style="margin-left: 55px; margin-top:3px;" alt="{{vm.matterConfigContent.AttachmentLoadingTitle}}" title="{{vm.matterConfigContent.AttachmentLoadingTitle}}" />
+                </div>
+            </div>
             <div id='filterResultsContainer'>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-repeat='matter in vm.details' ng-click='vm.mattersearch(matter.matterName,""+vm.configSearchContent.ManagedPropertyMatterName+"",true)'>{{matter.matterName}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.mattersearch(client.matterClient,""+vm.configSearchContent.ManagedPropertyClientName+"",true)'>{{client.matterClient}}</div>
@@ -342,7 +347,7 @@
                        ng-model='vm.modenddate'
                        is-open='vm.modifiedenddate'
                        datepicker-options='vm.modenddateOptions'
-                       ng-required='true' close-text='Close'
+                       ng-required='true' close-text='Close'                    
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
                     <button type='button' class='btn btn-default' ng-click='vm.modEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>

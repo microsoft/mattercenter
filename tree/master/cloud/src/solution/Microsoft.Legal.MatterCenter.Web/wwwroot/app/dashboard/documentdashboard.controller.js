@@ -25,10 +25,16 @@
             vm.enable = true;
             vm.totalrecords = 0;
             $rootScope.bodyclass = "bodymain";
-            $rootScope.profileClass="hide";
+            $rootScope.profileClass = "hide";
             vm.nodata = false;
             vm.isDisplayMessage = false;
             vm.displayMessage = '';
+            vm.tabClicked = "All Documents";
+            vm.showNavTab = false;
+            vm.showInnerNav = true;
+            vm.selectedTabInfo = "";
+            vm.selectedTab = vm.documentDashboardConfigs.Tab1HeaderText;
+            vm.selectedTabCount = 0;
             //#endregion
 
             //#region Variable to show document count
@@ -51,6 +57,8 @@
                 vm.clientdropvisible = false;
                 vm.sortbydrop = false;
                 vm.sortbydropvisible = false;
+                vm.showNavTab = false;
+                vm.showInnerNav = true;
                 angular.element('.popcontent').css('display', 'none');
             }
             //#endregion
@@ -78,15 +86,15 @@
 
             var columnDefs1 = [];
             columnDefs1.push({
-                field: 'checker', 
+                field: 'checker',
                 displayName: 'checked',
-                width: '2%', 
+                width: '2%',
                 cellTemplate: '/app/dashboard/cellCheckboxTemplate.html',
-                headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html', 
+                headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html',
                 enableColumnMenu: false,
                 position: 0
             });
-           
+
 
             angular.forEach(configs.search.searchColumnsUIPickerForDocument, function (value, key) {
                 if (key == "documentName") {
@@ -102,7 +110,7 @@
 
                     }
                 }
-                 if (key == "documentClientId") {
+                if (key == "documentClientId") {
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
@@ -114,48 +122,46 @@
                         });
 
                     }
-                 }
-                 if (key == "documentOwner") {
-                     if (value.displayInUI == true && value.position != -1) {
-                         columnDefs1.push({
-                             field: key,
-                             displayName: vm.documentDashboardConfigs.GridColumn3Header,
-                             width: '14%',
-                             enableColumnMenu: false,
-                             position: value.position
-                         });
+                }
+                if (key == "documentOwner") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.documentDashboardConfigs.GridColumn3Header,
+                            width: '14%',
+                            enableColumnMenu: false,
+                            position: value.position
+                        });
 
-                     }
-                 }
-                 if (key == "documentModifiedDate") {
+                    }
+                }
+                if (key == "documentModifiedDate") {
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.documentDashboardConfigs.GridColumn4Header,
-                            sort: {
-                                direction: uiGridConstants.DESC,
-                            },
+                            cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>',
                             width: '20%',
                             enableColumnMenu: false,
                             position: value.position
                         });
 
                     }
-                 }
+                }
 
-                 if (key == "documentID") {
-                     if (value.displayInUI == true && value.position != -1) {
-                         columnDefs1.push({
-                             field: key,
-                             displayName: vm.documentDashboardConfigs.GridColumn5Header,
-                             width: '10%',
-                             cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentID==""?"NA":row.entity.documentID}}</div>',
-                             enableColumnMenu: false,
-                             position: value.position
-                         });
-                     }
-                 }
-                 if (key == "documentVersion") {
+                if (key == "documentID") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.documentDashboardConfigs.GridColumn5Header,
+                            width: '10%',
+                            cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentID==""?"NA":row.entity.documentID}}</div>',
+                            enableColumnMenu: false,
+                            position: value.position
+                        });
+                    }
+                }
+                if (key == "documentVersion") {
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
@@ -166,7 +172,7 @@
                         });
 
                     }
-                 }
+                }
 
 
                 //if (key == "documentClient") {
@@ -181,8 +187,8 @@
 
                 //    }
                 //}              
-               
-               
+
+
                 //if (key == "documentCheckoutUser") {
                 //    if (value.displayInUI == true && value.position != -1) {
                 //        columnDefs1.push({
@@ -207,7 +213,7 @@
 
                 //    }
                 //}
-                
+
                 if (key == "sitename") {
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
@@ -342,6 +348,7 @@
             vm.documentGridOptions = {
                 enableHorizontalScrollbar: 0,
                 enableVerticalScrollbar: 0,
+                enableSorting: false,
                 paginationPageSize: gridOptions.paginationPageSize,
                 enablePagination: false,
                 enableGridMenu: gridOptions.enableGridMenu,
@@ -350,11 +357,11 @@
                 enableSelectAll: gridOptions.enableSelectAll,
                 multiSelect: gridOptions.multiSelect,
                 enableFiltering: gridOptions.enableFiltering,
-                columnDefs:columnDefs1,
+                columnDefs: columnDefs1,
                 //[
                 //    { field: 'checker', displayName: 'checked', width: '2%', cellTemplate: '/app/dashboard/cellCheckboxTemplate.html', headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html', enableColumnMenu: false },
                 //    { field: 'documentIconUrl', displayName: 'Icon', width: '2%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="{{row.entity.documentIconUrl}}"/></div>', headerCellTemplate: '<div class="ui-grid-cell-contents"><img class="docTypeIconHeader" id="docTypeIcon" style="padding:0" alt="Document type icon" src="' + configs.uri.SPOsiteURL + '/_layouts/15/images/generaldocument.png"></div>', enableColumnMenu: false },
-    	        //    { field: 'documentName', displayName: vm.documentDashboardConfigs.GridColumn1Header, width: '20%', cellTemplate: '/app/dashboard/DocumentDashboardCellTemplate.html', enableColumnMenu: false },
+                //    { field: 'documentName', displayName: vm.documentDashboardConfigs.GridColumn1Header, width: '20%', cellTemplate: '/app/dashboard/DocumentDashboardCellTemplate.html', enableColumnMenu: false },
                 //    { field: 'documentClientId', displayName: vm.documentDashboardConfigs.GridColumn2Header, width: '15%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>', enableColumnMenu: false },
                 //    { field: 'documentOwner', displayName: vm.documentDashboardConfigs.GridColumn3Header, width: '14%', enableColumnMenu: false },
                 //    { field: 'documentModifiedDate', displayName: vm.documentDashboardConfigs.GridColumn4Header, width: '20%', enableColumnMenu: false },
@@ -785,18 +792,19 @@
             //#reion This function will get counts for all matters, my matters and pinned matters
             vm.getDocumentCounts = function () {
                 vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
                 vm.displaypagination = false;
-                //vm.divuigrid = false;
                 getDocumentCounts(documentRequest, function (response) {
                     vm.allDocumentCount = response.allDocumentCounts;
                     vm.myDocumentCount = response.myDocumentCounts;
                     vm.pinDocumentCount = response.pinnedDocumentCounts;
                     vm.totalrecords = response.allDocumentCounts;
+                    vm.selectedTabInfo = vm.documentDashboardConfigs.Tab1HeaderText + " (" + vm.myDocumentCount + ")";
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
                     vm.pagination();
-                    //vm.divuigrid = true;
+                    vm.divuigrid = true;
                     vm.displaypagination = true;
                     vm.lazyloaderdashboard = true;
                 });
@@ -808,6 +816,7 @@
 
             //#region function to get the documents based on search term
             vm.getDocuments = function () {
+                vm.tabClicked = "All Documents";
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
@@ -817,6 +826,7 @@
                 }
                 documentRequest.SearchObject.PageNumber = 1;
                 documentRequest.SearchObject.Filters.FilterByMe = 0;
+                documentRequest.SearchObject.Sort.ByProperty = "";
                 documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
@@ -836,17 +846,19 @@
                             });
                             vm.documentGridOptions.data = response;
                             //vm.allDocumentCount = response.length;
+                            vm.getDocumentCounts();
                             vm.totalrecords = vm.allDocumentCount;
                             vm.pagination();
                         }
                         else {
                             vm.documentGridOptions.data = response;
                             //vm.allDocumentCount = response.length;
+                            vm.getDocumentCounts();
                             vm.totalrecords = vm.allDocumentCount;
                             vm.pagination();
                         }
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = true;
+                        // vm.lazyloaderdashboard = true;
+                        //vm.divuigrid = true;
                     });
 
                 });
@@ -855,6 +867,8 @@
 
             //#region function to get the documents which are pinned by user
             vm.getPinnedDocuments = function () {
+                vm.tabClicked = "Pinned Documents";
+                vm.sortbytext = vm.documentDashboardConfigs.DrpDownOption1Text;
                 vm.displaypagination = false;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -879,24 +893,29 @@
 
             //#region function to get the documents based on login user
             vm.getMyDocuments = function () {
+                vm.tabClicked = "My Documents";
+                vm.sortbytext = vm.documentDashboardConfigs.DrpDownOption4Text + ' ↓';
                 vm.lazyloaderdashboard = false;
                 vm.displaypagination = false;
-                vm.divuigrid = false;                
+                vm.divuigrid = false;
                 vm.nodata = false;
                 documentRequest.SearchObject.PageNumber = 1;
                 documentRequest.SearchObject.Filters.FilterByMe = 1;
+                documentRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
                 documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
                     if (response == "") {
                         vm.lazyloaderdashboard = true;
-                        vm.divuigrid = false;
+                        vm.divuigrid = true;
                         vm.nodata = true;
+                        //vm.getDocumentCounts();
                         vm.totalrecords = response.length;
                         vm.pagination();
                     } else {
                         vm.documentGridOptions.data = response;
                         //vm.myDocumentCount = response.length;
+                        //vm.getDocumentCounts();
                         vm.totalrecords = vm.myDocumentCount;
                         vm.pagination();
                         vm.lazyloaderdashboard = true;
@@ -908,8 +927,7 @@
             //#endregion
 
             //$timeout(vm.getDocumentCounts(), 800);
-            $interval(function () { vm.getDocumentCounts() }, 800, 3);
-            $interval(function () { vm.getDocuments() }, 700, 3);
+            $timeout(function () { vm.getDocuments() }, 500);
 
             //#region This function will pin or unpin the document based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
@@ -959,10 +977,15 @@
                         }
                     }
                     UnpinDocuments(unpinRequest, function (response) {
-                        if (response.isDocumentUnPinned) {
-                            e.currentTarget.src = "../images/pin-666.png";
+                        if (response.isDocumentUnPinned) {                            
                             vm.pinDocumentCount = parseInt(vm.pinDocumentCount, 10) - 1;
-                            vm.documentGridOptions.data.splice(vm.documentGridOptions.data.indexOf(currentRowData), 1)
+                            if (vm.tabClicked.toLowerCase().indexOf("pinned") >= 0) {
+                                e.currentTarget.src = "../images/unpin-666.png";
+                                vm.documentGridOptions.data.splice(vm.documentGridOptions.data.indexOf(currentRowData), 1)
+                            }
+                            else {
+                                e.currentTarget.src = "../images/pin-666.png";
+                            }
                         }
                     });
                 }
@@ -1082,9 +1105,9 @@
             //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
             vm.customSelection = function (type) {
                 if (type !== undefined && type === vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText) {
-                var selectdClients = vm.selectedClients.split(',');
+                    var selectdClients = vm.selectedClients.split(',');
                     angular.forEach(vm.clients, function (client) {
-                    client.Selected = false;
+                        client.Selected = false;
                         angular.forEach(selectdClients, function (clientInput) {
                             if (clientInput.toString().length > 0 && client.name.toString().toLowerCase().indexOf(clientInput.toString().toLowerCase()) !== -1) {
                                 client.Selected = true;
@@ -1115,7 +1138,7 @@
 
             vm.FilterByType = function () {
                 vm.lazyloaderdashboard = false;
-                vm.divuigrid = false;               
+                vm.divuigrid = false;
                 vm.nodata = false;
                 get(documentRequest, function (response) {
                     vm.lazyloader = true;
@@ -1134,7 +1157,7 @@
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
-                        vm.lazyloaderdashboard = true;                        
+                        vm.lazyloaderdashboard = true;
                         vm.divuigrid = true;
                         vm.nodata = false;
                     }
@@ -1180,7 +1203,6 @@
                     vm.FilterByType();
                 }
                 else {
-
                     documentRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                     documentRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
@@ -1230,7 +1252,7 @@
 
             vm.next = function () {
                 vm.lazyloaderdashboard = false;
-                vm.divuigrid = false;               
+                vm.divuigrid = false;
                 if (vm.last < vm.totalrecords) {
                     vm.first = vm.first + gridOptions.paginationPageSize;
                     vm.last = vm.last + gridOptions.paginationPageSize;
@@ -1257,7 +1279,7 @@
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
-                            vm.lazyloaderdashboard = true;                        
+                            vm.lazyloaderdashboard = true;
                         }
                     });
                 } else {
@@ -1269,7 +1291,7 @@
 
             vm.prev = function () {
                 vm.lazyloaderdashboard = false;
-                vm.divuigrid = false;             
+                vm.divuigrid = false;
                 if (vm.last > gridOptions.paginationPageSize) {
                     vm.first = vm.first - gridOptions.paginationPageSize;
                     vm.last = vm.last - gridOptions.paginationPageSize;
@@ -1290,7 +1312,7 @@
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
-                            vm.lazyloaderdashboard = true;                          
+                            vm.lazyloaderdashboard = true;
                         }
                     });
                 } else {
@@ -1333,7 +1355,7 @@
                     vm.listguid = response.listInternalName;
                     vm.docguid = response.documentGuid;
                     vm.assetsuccess = true;
-                },function (data) {
+                }, function (data) {
                     vm.listguid = "";
                     vm.docguid = "";
                     vm.assetsuccess = true;
@@ -1391,7 +1413,7 @@
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.documentGridOptions.data = response;
-                        vm.getDocumentCounts();                      
+                        vm.getDocumentCounts();
                         vm.lazyloaderdashboard = true;
                         vm.totalrecords = response.length;
                         vm.pagination();
@@ -1401,6 +1423,31 @@
                     }
                 });
             }
+
+
+
+            vm.showDocTabs = function ($event) {
+                $event.stopPropagation();
+                if (vm.showInnerNav) {
+                    vm.showNavTab = true;
+                    vm.showInnerNav = false;
+                }
+            }
+
+            vm.showSelectedTabs = function (name, count) {
+                vm.selectedTab = name;
+                vm.selectedTabCount = count;
+                vm.selectedTabInfo = vm.selectedTab + " (" + vm.selectedTabCount + ")";
+                if (name == vm.documentConfigContent.Dropdown1Item1) {
+                    vm.getMyDocuments();
+                }
+                else if (name == vm.documentConfigContent.Dropdown1Item2) {
+                    vm.getDocuments();
+                } else {
+                    vm.getPinnedDocuments();
+                }
+            }
+
         }
     ]);
 }

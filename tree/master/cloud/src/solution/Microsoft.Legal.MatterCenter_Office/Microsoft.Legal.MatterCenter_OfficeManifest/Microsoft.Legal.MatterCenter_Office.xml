@@ -8,7 +8,7 @@
   <DisplayName DefaultValue="Matter Center" />
   <Description DefaultValue="Matter Center App allows you to search matters, document, filing documents to matter and even create new matters."/>
   <IconUrl DefaultValue="https://matterwebapp.azurewebsites.net/Images/32x32-logo.png" />
-  <HighResolutionIconUrl DefaultValue="~appWebUrl/Images/64x64-logo.png" />
+  <HighResolutionIconUrl DefaultValue="https://matterwebapp.azurewebsites.net/Images/64x64-logo.png" />
   <AppDomains>
     <AppDomain>https://matterwebapp.azurewebsites.net</AppDomain>
     <AppDomain>https://login.microsoftonline.com/</AppDomain>
