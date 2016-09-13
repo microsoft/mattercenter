@@ -40,6 +40,7 @@
             //#region To hide lazyloader on load
             //start
             vm.lazyloader = true;
+            vm.lazyloaderFilter = true;
             //#endregion
 
             //#region scopes for displaying and hiding filter icons
@@ -1209,7 +1210,7 @@
             //#endregion
 
 
-            //#region For filtering the grid when clicked on search button 
+           //#region For filtering the grid when clicked on search button 
             vm.searchMatter = function (val) {
                 var finalSearchText = "";
                 if (val != "") {
@@ -1304,7 +1305,7 @@
             //#endregion
             //#region for searching matter by property and searchterm
             vm.mattersearch = function (term, property, bool) {
-                vm.lazyloader = false;
+                vm.lazyloaderFilter = false;
                 vm.filternodata = false;
                 searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = term;
@@ -1357,13 +1358,13 @@
                             vm.nodata = false;
                             vm.filternodata = true;
                         }
-                        vm.lazyloader = true;
+                        vm.lazyloaderFilter = true;
                         vm.divuigrid = true;
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
-                        vm.lazyloader = true;
+                        vm.lazyloaderFilter = true;
                         if (bool) {
                             vm.gridOptions.data = response;
                             vm.details = [];
@@ -1391,13 +1392,13 @@
                 searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = "";
                 if (name == "Modified Date") {
-                    searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = vm.modstartdate.format("yyyy-MM-ddT00:00:00Z");
-                    searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = vm.modenddate.format("yyyy-MM-ddT23:59:59Z");
+                    searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modstartdate, "yyyy-MM-ddT00:00:00") + "Z";
+                    searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modenddate,"yyyy-MM-ddT23:59:59") + "Z";
                     vm.moddatefilter = true;
                 }
                 if (name == "Open Date") {
-                    searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
-                    searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
                     vm.opendatefilter = true;
                 }
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
