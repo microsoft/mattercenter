@@ -1,8 +1,8 @@
 ﻿(function () {
     'use strict;'
     var app = angular.module("matterMain");
-    app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$q', '$filter', 'commonFunctions',
-        function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http, $q, $filter, commonFunctions) {
+    app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$q', '$filter', 'commonFunctions', '$window',
+        function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http, $q, $filter, commonFunctions, $window) {
             var vm = this;
             vm.selectedRow = {
                 matterClientUrl: '',
@@ -35,11 +35,16 @@
             $rootScope.profileClass = "hide";
             vm.tabClicked = "All Matters";
             vm.sortbytext = vm.tabClicked == "All Matters" ? vm.matterDashboardConfigs.DropDownOptionText : vm.matterDashboardConfigs.DrpDownOption1Text;
+            vm.showNavTab = false;
+            vm.showInnerNav = true;
+            vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
+            
             //#endregion
             //#region Variable to show matter count            
             vm.allMatterCount = 0;
             vm.myMatterCount = 0;
             vm.pinMatterCount = 0;
+            vm.selectedTabInfo = vm.matterDashboardConfigs.Tab2HeaderText + " (" + vm.allMatterCount + ")";
             vm.Pinnedobj = [];
             //#endregion            
 
@@ -56,6 +61,8 @@
                 vm.aoldropvisible = false;
                 vm.sortbydrop = false;
                 vm.sortbydropvisible = false;
+                vm.showNavTab = false;
+                vm.showInnerNav = true;
             }
             //#endregion
 
@@ -494,6 +501,14 @@
                     vm.myMatterCount = response.myMatterCounts;
                     vm.pinMatterCount = response.pinnedMatterCounts;
                     vm.totalrecords = response.allMatterCounts;
+                    //vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + vm.myMatterCount + ")";
+                    if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
+                        vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + response.myMatterCounts + ")";
+                    } else if (vm.selectedTab == vm.matterDashboardConfigs.Tab2HeaderText) {
+                        vm.selectedTabInfo = vm.matterDashboardConfigs.Tab2HeaderText + " (" + response.allMatterCounts + ")";
+                    } else {
+                        vm.selectedTabInfo = vm.matterDashboardConfigs.Tab3HeaderText + " (" + response.pinnedMatterCounts + ")";
+                    }
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
@@ -508,6 +523,7 @@
             //#region This api will get all matters which are pinned and this will be invoked when the user clicks on "Pinned Matters Tab"
             vm.getMatterPinned = function () {
                 vm.tabClicked = "Pinned Matters";
+                vm.selectedTab == "Pinned matters";
                 vm.sortbytext = vm.matterDashboardConfigs.DrpDownOption1Text;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -533,6 +549,7 @@
                         vm.Pinnedobj = response
                         vm.matterGridOptions.data = response;
                         vm.totalrecords = vm.pinMatterCount;
+                        vm.selectedTabCount = vm.pinMatterCount;
                         vm.pagination();
                         if (!$scope.$$phase) {
                             $scope.$apply();
@@ -630,6 +647,7 @@
 
             vm.myMatters = function () {
                 vm.tabClicked = "My Matters";
+                vm.selectedTab == "My matters";
                 vm.sortbytext = vm.matterDashboardConfigs.DrpDownOption1Text;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -664,6 +682,7 @@
                         vm.matterGridOptions.data = response;
                         vm.lazyloaderdashboard = true;
                         vm.totalrecords = vm.myMatterCount;
+                        vm.selectedTabCount = vm.myMatterCount;
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.pagination();
@@ -674,6 +693,7 @@
             //This search function will be used for binding search results to the grid
             vm.search = function (isMy) {
                 vm.tabClicked = "All Matters";
+                vm.selectedTab == "All matters";
                 vm.sortbytext = vm.matterDashboardConfigs.DropDownOptionText;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -721,6 +741,7 @@
                             });
                             vm.matterGridOptions.data = response;
                             vm.totalrecords = vm.allMatterCount;
+                            vm.selectedTabCount = vm.allMatterCount;
                             vm.pagination();
                             vm.lazyloaderdashboard = true;
                             vm.divuigrid = true;
@@ -730,6 +751,7 @@
                             vm.lazyloaderdashboard = true;
                             vm.matterGridOptions.data = response;
                             vm.totalrecords = vm.allMatterCount;
+                            vm.selectedTabCount = vm.allMatterCount;
                             vm.pagination();
                             vm.pinMatterCount = 0;
                             vm.divuigrid = true;
@@ -1730,8 +1752,8 @@
                             FilterByMe: 0
                         },
                         Sort: {
-                            ByProperty: 'LastModifiedTime',
-                            Direction: 1
+                            ByProperty: jsonMatterSearchRequest.SearchObject.Sort.ByProperty,
+                            Direction: jsonMatterSearchRequest.SearchObject.Sort.Direction
                         }
                     }
                 };
@@ -1760,6 +1782,36 @@
                 window.open(viewmatterurl, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
             }
             //#endregion
+
+            //#region showing the hidden tabs in responsive
+            vm.showDocTabs = function ($event) {
+                $event.stopPropagation();
+                if (vm.showInnerNav) {
+                    vm.showNavTab = true;
+                    vm.showInnerNav = false;
+                }
+            }
+
+            vm.showSelectedTabs = function (name, count) {
+                vm.selectedTab = name;
+                vm.selectedTabInfo = vm.selectedTab + " (" + count + ")";
+                if (name == vm.matterDashboardConfigs.Tab1HeaderText) {
+                    vm.myMatters();
+                }
+                else if (name == vm.matterDashboardConfigs.Tab2HeaderText) {
+                    vm.search();
+                } else {
+                    vm.getMatterPinned();
+                }
+            }
+            //#endregion
+
+            angular.element($window).bind('resize', function () {
+                if ($window.innerWidth > 867) {
+                    vm.showNavTab = false;
+                    vm.showInnerNav = true;
+                }
+            });
         }
     ]);
 

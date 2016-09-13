@@ -396,8 +396,8 @@
     }
 
     #HeaderPlaceHolder {
-        min-width: 240px;
-        max-width: 240px;
+        min-width: 226px;
+        max-width: 226px;
     }
 
         #HeaderPlaceHolder .autoCompleteSection, #HeaderPlaceHolder #autoCompletePlaceHolder, #HeaderPlaceHolder #autoCompleteText {
@@ -449,7 +449,7 @@
     min-width: 260px;
     max-width: 260px;
     min-height: 80px;
-    max-height: 273px;
+    max-height: 380px;
     padding: 18px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.4);
     background-color: #fff;

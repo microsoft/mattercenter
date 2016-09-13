@@ -37,6 +37,27 @@ textarea {
 }
 
 
+@media (max-width: 320px) {
+    .width25 {
+        width: 5% !important;
+    }
+
+    .overflowxAuto {
+        overflow-x: auto !important;
+    }
+
+    .padbtm15 {
+        padding-bottom: 15px;
+    }
+}
+
+@media(max-width:347px) {
+    .width25 {
+        width: 5% !important;
+    }
+}
+
+
 @media (min-width: 768px) {
     .carousel-caption {
         z-index: 10 !important;
@@ -424,7 +445,7 @@ textarea {
 }
 
 #filterResultsContainer {
-    max-height: 134px !important;
+    max-height: 219px !important;
     min-height: 0;
     overflow-y: auto;
     clear: both;
@@ -656,9 +677,9 @@ textarea {
     padding: 0;
 }
 
-    .sortby .btn {
-        padding: 1px 12px;
-    }
+.sortby .btn {
+    padding: 1px 12px;
+}
 
 .img-xls {
     float: right;
@@ -673,7 +694,7 @@ textarea {
     padding-top: 5px;
 }
 
-.sortby ul,.sortbymatters ul {
+.sortby ul, .sortbymatters ul {
     background-color: #fff;
     border: 1px solid #c8c8c8;
     position: absolute;
@@ -684,12 +705,12 @@ textarea {
     margin-top: 5px;
 }
 
-    .sortby ul li:hover,.sortbymatters ul li:hover {
+    .sortby ul li:hover, .sortbymatters ul li:hover {
         background-color: #eaecea;
         cursor: pointer;
     }
 
-    .sortby ul li,.sortbymatters ul li {
+    .sortby ul li, .sortbymatters ul li {
         padding: 5px 10px 5px 10px;
         color: #333;
         display: inline-block;
@@ -1009,7 +1030,7 @@ textarea {
 }
 
 #HeaderPlaceHolder {
-    min-width: 270px !important;
+    min-width: 226px !important;
 }
 
 .zindex6 {
@@ -1066,4 +1087,32 @@ textarea {
     z-index: 100;
     top: 55px !important;
     left: 182px !important;
+}
+
+
+.ui-grid-cell-contents {
+    overflow: hidden !important;
+}
+
+.displayMatterTabs {
+    width: 12px;
+    position: absolute;
+    top: 84px;
+    right: 1px;
+    left: 133px;
+    cursor: pointer;
+    margin-left: 28px;
+}
+
+.switchHideMatterTab {
+    cursor: pointer;
+    float: none;
+    font-weight: 400;
+    background-color: #fff;
+    border: 2px solid silver;
+    position: absolute;
+    width: 145px;
+    z-index: 100;
+    top: 105px !important;
+    left: 176px !important;
 }

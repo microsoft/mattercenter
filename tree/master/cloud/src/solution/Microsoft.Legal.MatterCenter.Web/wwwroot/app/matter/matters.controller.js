@@ -2105,7 +2105,7 @@
             //#region setting the grid options when window is resized
 
             angular.element($window).bind('resize', function () {
-                angular.element('#mattergrid .ui-grid').css('height', $window.innerHeight - 110);
+                angular.element('#mattergrid .ui-grid').css('height', $window.innerHeight - 115);
                 if ($window.innerWidth < 360) {
                     angular.element('#mattergrid .ui-grid-viewport').addClass('viewport');
                     angular.element('#mattergrid .ui-grid-viewport').removeClass('viewportlg');

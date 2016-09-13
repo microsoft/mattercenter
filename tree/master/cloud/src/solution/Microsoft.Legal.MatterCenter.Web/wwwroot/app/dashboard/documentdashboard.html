@@ -74,7 +74,7 @@
             <div class="col-xs-9">
                 <div class="col-xs-12 padlf0">
                     <div class="input-group">
-                        <input type="text" ng-model="vm.selected" placeholder="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}" uib-typeahead="documentDataList.documentName for documentDataList in vm.searchDocumentFile($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                        <input type="text" ng-model="vm.selected" placeholder="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}" uib-typeahead="documentDataList.documentName+'.'+documentDataList.documentExtension for documentDataList in vm.searchDocumentFile($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                         <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                     </div>
                 </div>
@@ -178,16 +178,16 @@
             </div>
             <div class="col-xs-12 padtop20">
                 <ul class="nav nav-tabs" toggletab>
-                    <li id="showDocuments" class="showDocDashboard hide"><a href="#Documents" data-toggle="tab" ng-click="vm.getMyDocuments()">{{vm.selectedTabInfo}}</a></li>
-                    <li id="myDocuments" class="hideDocTabs"><a href="#Documents" data-toggle="tab" ng-click="vm.getMyDocuments()">{{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})</a></li>
-                    <li id="allDocuments" class="active hideDocTabs"><a href="#Documents" data-toggle="tab" ng-click="vm.getDocuments()">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a></li>
-                    <li id="pinDocuments" class="hideDocTabs"><a href="#Documents" data-toggle="tab" ng-click="vm.getPinnedDocuments()">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a></li>
+                    <li id="showDocuments" class="showDocDashboard hide"><a href="#Documents" data-toggle="tab">{{vm.selectedTabInfo}}</a></li>
+                    <li id="myDocuments"  ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText}" class="hideDocTabs"><a href="#Documents" data-toggle="tab" ng-click="vm.getMyDocuments()">{{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})</a></li>
+                    <li id="allDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText}" class="hideDocTabs"><a href="#Documents" data-toggle="tab" ng-click="vm.getDocuments()">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a></li>
+                    <li id="pinDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText}" class="hideDocTabs"><a href="#Documents" data-toggle="tab" ng-click="vm.getPinnedDocuments()">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a></li>
                 </ul>
                 <span class="showDocDashboard displayDocTabs" ng-click="vm.showDocTabs($event)">...</span>
                 <div class="switchHideTab" ng-if="vm.showNavTab" style="left: 165px; display: block;">
-                    <div class="navDiv" ng-if="vm.selectedTab!=vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab!=vm.documentDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab1HeaderText,vm.myDocumentCount)">My documents</div>
-                    <div class="navDiv" ng-if="vm.selectedTab!=vm.documentDashboardConfigs.Tab1HeaderText||vm.selectedTab!=vm.documentDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab2HeaderText,vm.allDocumentCount)">All documents</div>
-                    <div class="navDiv" ng-if="vm.selectedTab!=vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab!=vm.documentDashboardConfigs.Tab1HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab3HeaderText,vm.pinDocumentCount)">Pinned documents</div>
+                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab1HeaderText,vm.myDocumentCount)">{{vm.documentDashboardConfigs.Tab1HeaderText}}</div>
+                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab2HeaderText,vm.allDocumentCount)">{{vm.documentDashboardConfigs.Tab2HeaderText}}</div>
+                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab3HeaderText,vm.pinDocumentCount)">{{vm.documentDashboardConfigs.Tab3HeaderText}}</div>
                 </div>
                 <div class="col-xs-12">
                     <div class="tab-content">
