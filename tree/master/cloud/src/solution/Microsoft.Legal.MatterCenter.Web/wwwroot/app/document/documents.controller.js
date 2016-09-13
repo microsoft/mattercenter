@@ -104,7 +104,7 @@
             }
             else {
                 return {
-                    height: ($window.innerHeight - 105) + "px"
+                    height: ($window.innerHeight - 115) + "px"
                 }
             }
         };
@@ -519,14 +519,14 @@
         //#region Code for attaching documents in compose more
         Office.initialize = function (reason) {
         }
-        var isAppOpenedInOutlook = $location.absUrl().split('|')[0].split('=')[2];
+        var isAppOpenedInOutlook = $location.absUrl().split('|')[0].split('=')[2];        
         if (isAppOpenedInOutlook && isAppOpenedInOutlook === "Outlook") {
 
             vm.isOutlook = true;
             //  vm.isOutlookAsAttachment(vm.isOutlook);
             // }
         }
-        vm.isOutlook = true;
+        //vm.isOutlook = true;
         //vm.appType=$location.search().AppType;
         // vm.isOutlook ? vm.isOutlookAsAttachment(vm.isOutlook) : "";
         vm.isOutlookAsAttachment = function (isOutlook) {
@@ -1653,7 +1653,7 @@
         //#region setting the grid options when window is resized
 
         angular.element($window).bind('resize', function () {
-            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 110);
+            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 115);
             if ($window.innerWidth < 380) {
                 angular.element('#documentgrid .ui-grid-viewport').addClass('viewport');
                 angular.element('#documentgrid .ui-grid-viewport').removeClass('viewportlg');

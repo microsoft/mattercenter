@@ -1101,7 +1101,7 @@
 }
 
 .errorAttachDocument {
-    z-index: 2;
+    z-index: 6;
 }
 
 .menuText:hover {

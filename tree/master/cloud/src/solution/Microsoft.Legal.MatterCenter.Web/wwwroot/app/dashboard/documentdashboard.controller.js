@@ -32,9 +32,8 @@
             vm.tabClicked = "All Documents";
             vm.showNavTab = false;
             vm.showInnerNav = true;
-            vm.selectedTabInfo = "";
-            vm.selectedTab = vm.documentDashboardConfigs.Tab1HeaderText;
-            vm.selectedTabCount = 0;
+            vm.selectedTab = vm.documentDashboardConfigs.Tab2HeaderText;
+            
             //#endregion
 
             //#region Variable to show document count
@@ -42,6 +41,7 @@
             vm.allDocumentCount = 0;
             vm.myDocumentCount = 0;
             vm.pinDocumentCount = 0;
+            vm.selectedTabInfo = vm.documentDashboardConfigs.Tab2HeaderText + " (" + vm.myDocumentCount + ")";
             vm.selectedDocuments = [];
             //#endregion
 
@@ -799,7 +799,13 @@
                     vm.myDocumentCount = response.myDocumentCounts;
                     vm.pinDocumentCount = response.pinnedDocumentCounts;
                     vm.totalrecords = response.allDocumentCounts;
-                    vm.selectedTabInfo = vm.documentDashboardConfigs.Tab1HeaderText + " (" + vm.myDocumentCount + ")";
+                    if (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText){
+                        vm.selectedTabInfo = vm.documentDashboardConfigs.Tab1HeaderText + " (" + response.myDocumentCounts + ")";
+                    } else if (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText) {
+                        vm.selectedTabInfo = vm.documentDashboardConfigs.Tab2HeaderText + " (" + response.allDocumentCounts + ")";
+                    } else {
+                        vm.selectedTabInfo = vm.documentDashboardConfigs.Tab3HeaderText + " (" + response.pinnedDocumentCounts + ")";
+                    }
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
@@ -817,6 +823,7 @@
             //#region function to get the documents based on search term
             vm.getDocuments = function () {
                 vm.tabClicked = "All Documents";
+                vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
@@ -859,6 +866,7 @@
                         }
                         // vm.lazyloaderdashboard = true;
                         //vm.divuigrid = true;
+                       
                     });
 
                 });
@@ -868,6 +876,7 @@
             //#region function to get the documents which are pinned by user
             vm.getPinnedDocuments = function () {
                 vm.tabClicked = "Pinned Documents";
+                vm.selectedTab == vm.documentDashboardConfigs.Tab3HeaderText;
                 vm.sortbytext = vm.documentDashboardConfigs.DrpDownOption1Text;
                 vm.displaypagination = false;
                 vm.lazyloaderdashboard = false;
@@ -882,7 +891,7 @@
                     if (response) {
                         vm.documentGridOptions.data = response;
                         //vm.pinDocumentCount = response.length;
-                        vm.totalrecords = vm.pinDocumentCount;
+                        vm.totalrecords = vm.pinDocumentCount;                   
                         vm.pagination();
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = true;
@@ -894,6 +903,7 @@
             //#region function to get the documents based on login user
             vm.getMyDocuments = function () {
                 vm.tabClicked = "My Documents";
+                vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText;
                 vm.sortbytext = vm.documentDashboardConfigs.DrpDownOption4Text + ' ↓';
                 vm.lazyloaderdashboard = false;
                 vm.displaypagination = false;
@@ -906,19 +916,19 @@
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
                     if (response == "") {
-                        vm.lazyloaderdashboard = true;
+                        //vm.lazyloaderdashboard = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
-                        //vm.getDocumentCounts();
+                        vm.getDocumentCounts();
                         vm.totalrecords = response.length;
                         vm.pagination();
                     } else {
                         vm.documentGridOptions.data = response;
                         //vm.myDocumentCount = response.length;
-                        //vm.getDocumentCounts();
-                        vm.totalrecords = vm.myDocumentCount;
+                        vm.getDocumentCounts();
+                        vm.totalrecords = vm.myDocumentCount;                      
                         vm.pagination();
-                        vm.lazyloaderdashboard = true;
+                        //vm.lazyloaderdashboard = true;
                         vm.divuigrid = true;
                         vm.nodata = false;
                     }
@@ -977,7 +987,7 @@
                         }
                     }
                     UnpinDocuments(unpinRequest, function (response) {
-                        if (response.isDocumentUnPinned) {                            
+                        if (response.isDocumentUnPinned) {
                             vm.pinDocumentCount = parseInt(vm.pinDocumentCount, 10) - 1;
                             if (vm.tabClicked.toLowerCase().indexOf("pinned") >= 0) {
                                 e.currentTarget.src = "../images/unpin-666.png";
@@ -1425,7 +1435,7 @@
             }
 
 
-
+            //#region showing the hidden tabs in responsive
             vm.showDocTabs = function ($event) {
                 $event.stopPropagation();
                 if (vm.showInnerNav) {
@@ -1436,17 +1446,25 @@
 
             vm.showSelectedTabs = function (name, count) {
                 vm.selectedTab = name;
-                vm.selectedTabCount = count;
-                vm.selectedTabInfo = vm.selectedTab + " (" + vm.selectedTabCount + ")";
-                if (name == vm.documentConfigContent.Dropdown1Item1) {
+                //vm.selectedTabCount = count;
+                vm.selectedTabInfo = vm.selectedTab + " (" + count + ")";
+                if (name == vm.documentDashboardConfigs.Tab1HeaderText) {
                     vm.getMyDocuments();
                 }
-                else if (name == vm.documentConfigContent.Dropdown1Item2) {
+                else if (name == vm.documentDashboardConfigs.Tab2HeaderText) {
                     vm.getDocuments();
                 } else {
                     vm.getPinnedDocuments();
                 }
             }
+            //#endregion
+
+            angular.element($window).bind('resize', function () {
+                if ($window.innerWidth > 867) {
+                    vm.showNavTab = false;
+                    vm.showInnerNav = true;
+                }
+            });
 
         }
     ]);
