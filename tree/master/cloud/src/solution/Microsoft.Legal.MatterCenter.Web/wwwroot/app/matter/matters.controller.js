@@ -16,6 +16,7 @@
             vm.navigationContent = uiconfigs.Navigation;
             vm.configSearchContent = configs.search;
             vm.matterConfigContent = uiconfigs.Matters;
+            vm.configsUri = configs.uri;
             vm.header = uiconfigs.Header;
             //#region for setting the dynamic width to grid
             var screenHeight = 0;
@@ -92,7 +93,7 @@
             //For setting dynamic height to the grid
             vm.getTableHeight = function () {
                 return {
-                    height: ($window.innerHeight - 115) + "px"
+                    height: ($window.innerHeight - 105) + "px"
                 };
             };
 
