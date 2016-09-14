@@ -1357,8 +1357,8 @@
                 vm.assetsuccess = false;
                 vm.closealldrops(null);
                 var Client = {
-                    Id: row.entity.documentUrl.replace("https://msmatter.sharepoint.com", ""),
-                    Name: row.entity.documentMatterUrl.replace("https://msmatter.sharepoint.com", ""),
+                    Id: (row.entity.documentParentUrl + "/" + row.entity.documentName + "." + row.entity.documentExtension).replace(configs.uri.SPOsiteURL, ""),
+                    Name: row.entity.documentMatterUrl.replace(configs.uri.SPOsiteURL, "").replace(".aspx", "").replace("/sitepages/", "/"),
                     Url: row.entity.documentClientUrl
                 }
                 GetAssets(Client, function (response) {
@@ -1375,9 +1375,9 @@
 
             vm.gotoDocumentUrl = function (url) {
                 if (vm.assetsuccess) {
-                    $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace("https://msmatter.sharepoint.com", "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank");
+                    $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank");
                 } else {
-                    $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace("https://msmatter.sharepoint.com", "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank"); }, 1500);
+                    $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_blank"); }, 1500);
                 }
             }
 
