@@ -817,9 +817,15 @@
                     }
                     unpinMatter(unpinRequest, function (response) {
                         if (response.isMatterUnPinned) {
-                            e.currentTarget.src = "../images/unpin-666.png";
+                            
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
-                            vm.matterGridOptions.data.splice(vm.matterGridOptions.data.indexOf(currentRowData), 1)
+                            if (vm.tabClicked.toLowerCase().indexOf("pinned") >= 0) {
+                                e.currentTarget.src = "../images/unpin-666.png";
+                                vm.matterGridOptions.data.splice(vm.matterGridOptions.data.indexOf(currentRowData), 1)
+                            }
+                            else {
+                                e.currentTarget.src = "../images/pin-666.png";
+                            }
                         }
                         //vm.lazyloaderdashboard = true;
                     });
