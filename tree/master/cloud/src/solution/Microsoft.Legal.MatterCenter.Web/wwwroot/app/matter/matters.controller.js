@@ -1844,23 +1844,54 @@
             //Start
 
             vm.FilterByType = function () {
-                get(searchRequest, function (response) {
-                    vm.lazyloader = true;
-                    if (response == "" || response.errorCode == "500") {
-                        vm.gridOptions.data = response;
-                        vm.divuigrid = false;
-                        vm.nodata = true;
-                        $scope.errorMessage = response.message;
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
-                        vm.gridOptions.data = response;
-                        if (!$scope.$$phase) {
-                            $scope.$apply();
-                        }
-
+                vm.lazyloader = true;
+                if (vm.matterid == 3) {
+                    var pinnedMattersRequest = {
+                        Url: configs.global.repositoryUrl
                     }
-                });
+                    getPinnedMatters(pinnedMattersRequest, function (response) {
+                       
+                        if (response == "" || response.errorCode == "500") {
+                            vm.gridOptions.data = response;                        
+                            vm.divuigrid = true;
+                            vm.nodata = true;
+                            $scope.errorMessage = response.message;
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            angular.forEach(response, function (res) {
+                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                    res.MatterInfo = "Unpin this matter";
+                                    res.ismatterdone = true;
+                                }
+                            });
+                            vm.gridOptions.data = response;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+
+                        }
+                    });
+                }
+                else {
+                    get(searchRequest, function (response) {
+                      //  vm.lazyloader = true;
+                        if (response == "" || response.errorCode == "500") {
+                            vm.gridOptions.data = response;
+                            vm.divuigrid = false;
+                            vm.nodata = true;
+                            $scope.errorMessage = response.message;
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            vm.gridOptions.data = response;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+
+                        }
+                    });
+                }
             }
 
             vm.sortby = "desc";
