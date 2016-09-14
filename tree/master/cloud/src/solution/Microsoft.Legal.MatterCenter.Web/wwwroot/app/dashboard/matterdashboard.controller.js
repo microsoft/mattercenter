@@ -17,6 +17,7 @@
             vm.clientdropvisible = false;
             vm.pgdrop = false;
             vm.pgdropvisible = false;
+            vm.configsUri = configs.uri;
             vm.matterDashboardConfigs = uiconfigs.MatterDashboard;
             vm.matterConfigContent = uiconfigs.Matters;
             sortPropertyForAllMatters = configs.search.ManagedPropertyMatterName;
@@ -38,7 +39,7 @@
             vm.showNavTab = false;
             vm.showInnerNav = true;
             vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
-            
+
             //#endregion
             //#region Variable to show matter count            
             vm.allMatterCount = 0;
@@ -97,7 +98,7 @@
                             field: key,
                             displayName: vm.matterDashboardConfigs.GridColumn1Header,
                             enableColumnMenu: false,
-                            width: "20%",
+                            width: "230",
                             cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html',
                             position: value.position
                         });
@@ -110,7 +111,7 @@
                             field: key,
                             displayName: vm.matterDashboardConfigs.GridColumn2Header,
                             enableColumnMenu: false,
-                            width: "15%",
+                            width: "150",
                             cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>',
                             position: value.position
                         });
@@ -120,9 +121,11 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            width: '15%',
+                            width: '200',
                             displayName: vm.matterDashboardConfigs.GridColumn3Header,
                             headerTooltip: 'Click to sort by client.matterid',
+                            headerCellClass: 'matterGridClientClass',
+                            cellClass: 'matterGridClientClass',
                             enableCellEdit: true,
                             cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>',
                             enableColumnMenu: false,
@@ -136,7 +139,9 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            width: '15%',
+                            width: '200',
+                            headerCellClass: 'matterGridModDateClass',
+                            cellClass: 'matterGridModDateClass',
                             displayName: vm.matterDashboardConfigs.GridColumn4Header,
                             cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>',
                             enableColumnMenu: false,
@@ -149,7 +154,9 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            width: '15%',
+                            width: '175',
+                            headerCellClass: 'matterGridAttorClass',
+                            cellClass: 'matterGridAttorClass',
                             headerTooltip: 'Click to sort by attorney',
                             displayName: vm.matterDashboardConfigs.GridColumn5Header,
                             cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>',
@@ -309,7 +316,7 @@
             columnDefs1.push({
                 field: 'pin',
                 displayName: '',
-                width: '5%',
+                width: '50',
                 cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
                 enableColumnMenu: false,
                 position: 75
@@ -317,7 +324,7 @@
             columnDefs1.push({
                 field: 'upload',
                 displayName: '',
-                width: '7%',
+                width: '60',
                 cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>',
                 enableColumnMenu: false,
                 position: 76

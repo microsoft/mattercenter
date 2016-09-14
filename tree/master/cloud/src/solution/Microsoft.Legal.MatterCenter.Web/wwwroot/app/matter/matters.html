@@ -233,7 +233,7 @@
                             <div class="folderStructureContent" showbreadcrumb ng-hide="foldercontent">
                                 <script type="text/ng-template" id="folderTree">
                                     <div ng-if="child.parentURL!==null" class="treeNodes" ng-show="child.active" title="" droppable drop="handleDrop()" folder="child" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" ng-click="vm.showSelectedFolderTree(child)">
-                                        <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="{{vm.matterConfigContent.AttachmentFolderAltText}}">
+                                        <img class="folderIcon" src="{{vm.configsUri.SPOsiteURL}}/_layouts/15/images/folder.gif" align="center" alt="{{vm.matterConfigContent.AttachmentFolderAltText}}">
                                         {{child.name}}
                                     </div>
                                     <ul ng-if="child.children" style="margin-left:5px;">

@@ -32,6 +32,15 @@
         vm.searchResultsLength = 0;
         vm.lazyloaderFilter = true;
         //end
+        //#region for checking whether the app is opened in outlook
+        var isAppOpenedInOutlook = $location.absUrl();
+        if (isAppOpenedInOutlook.indexOf("Outlook") > -1) {
+
+            vm.isOutlook = true;
+            //  vm.isOutlookAsAttachment(vm.isOutlook);
+            // }
+        }
+        //#endregion
 
         //#region scopes for displaying and hiding filter icons
         //start
@@ -104,7 +113,7 @@
             }
             else {
                 return {
-                    height: ($window.innerHeight - 115) + "px"
+                    height: ($window.innerHeight - 105) + "px"
                 }
             }
         };
@@ -518,13 +527,6 @@
 
         //#region Code for attaching documents in compose more
         Office.initialize = function (reason) {
-        }
-        var isAppOpenedInOutlook = $location.absUrl().split('|')[0].split('=')[2];        
-        if (isAppOpenedInOutlook && isAppOpenedInOutlook === "Outlook") {
-
-            vm.isOutlook = true;
-            //  vm.isOutlookAsAttachment(vm.isOutlook);
-            // }
         }
         //vm.isOutlook = true;
         //vm.appType=$location.search().AppType;
@@ -1682,7 +1684,7 @@
         //#region setting the grid options when window is resized
 
         angular.element($window).bind('resize', function () {
-            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 115);
+            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 105);
             if ($window.innerWidth < 380) {
                 angular.element('#documentgrid .ui-grid-viewport').addClass('viewport');
                 angular.element('#documentgrid .ui-grid-viewport').removeClass('viewportlg');

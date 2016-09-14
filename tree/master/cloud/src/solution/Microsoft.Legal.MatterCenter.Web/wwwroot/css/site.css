@@ -57,6 +57,36 @@ textarea {
     }
 }
 
+@media(max-width:1038px) {
+    .matterGridAttorClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:858px) {
+    .matterGridModDateClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:698px) {
+    .matterGridClientClass {
+        display: none !important;
+    }
+}
+
+.matterGridClientClass{
+    display: table-cell;
+}
+
+.matterGridModDateClass {
+    display: table-cell;
+}
+
+.matterGridAttorClass {
+    display: table-cell;
+}
+
 
 @media (min-width: 768px) {
     .carousel-caption {
@@ -847,7 +877,7 @@ textarea {
 }
 
 #docgrid .ui-grid-viewport, #mattersGrid .ui-grid-viewport {
-    overflow: auto !important;
+    overflow: hidden !important;
 }
 
 .mattersdrop {

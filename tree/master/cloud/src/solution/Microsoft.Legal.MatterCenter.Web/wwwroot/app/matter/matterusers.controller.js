@@ -18,6 +18,7 @@
         $rootScope.bodyclass = "bodymain";
         cm.oSiteUsers = [];
         cm.invalidUserCheck = false;
+        cm.configsUri = configs.uri;
 
         function getParameterByName(name) {
             "use strict";
@@ -33,7 +34,7 @@
 
         if (cm.clientUrl === "" && cm.matterName === "") {
             cm.matterName = "E2ETesting2";
-            cm.clientUrl = "https://msmatter.sharepoint.com/sites/microsoft";
+            cm.clientUrl = cm.configsUri.SPOsiteURL + "/sites/microsoft";
             cm.isEdit = "true";
         }
 
@@ -565,14 +566,14 @@
 
 
         cm.onSelect = function ($item, $model, $label, value, fucnValue, $event) {
-           
+
             if ($item && $item.name !== "No results found") {
 
                 if (value == "team") {
                     $label.assignedUser = $item.name + '(' + $item.email + ')';
                     cm.typehead = false;
                     cm.notificationPopUpBlock = false;
-                }               
+                }
 
                 if (-1 == cm.oSiteUsers.indexOf($item.email)) {
                     cm.oSiteUsers.push($item.email);
@@ -669,14 +670,14 @@
         function validateUsers() {
             var keepGoing = true;
             var blockedUserEmail = cm.matterProperties.matterObject.blockUserNames[0];
-           
+
             angular.forEach(cm.assignPermissionTeams, function (team) {
                 if (keepGoing) {
                     if (team.assignedUser && team.assignedUser != "") {//For loop                                             
                         var teamUserEmail = [];
                         if (blockedUserEmail && blockedUserEmail != "") {
-                         teamUserEmail= getUserName(team.assignedUser.trim() + ";", false)
-                         if (teamUserEmail[0] == blockedUserEmail) {
+                            teamUserEmail = getUserName(team.assignedUser.trim() + ";", false)
+                            if (teamUserEmail[0] == blockedUserEmail) {
                                 cm.errTextMsg = "Please enter individual who is not conflicted.";
                                 cm.errorBorder = "";
                                 cm.errorPopUpBlock = true;
@@ -685,26 +686,26 @@
                                 return false;
                             }
                         }
-                         teamUserEmail = getUserName(team.assignedUser.trim() + ";", false)
-                         if (-1 == cm.oSiteUsers.indexOf(teamUserEmail[0])) {
-                             //  cm.blockedUserName.trim()
-                             if (team.userExsists) {
-                                 cm.errTextMsg = "Please enter valid team members.";
-                                 cm.errorBorder = "";
-                                 cm.errorPopUpBlock = true;
-                                 showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
-                                 cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
-                                 return false;
-                             }
-                             else {
-                                 if (!team.userConfirmation) {
-                                     cm.checkUserExists(team);
-                                     if (!cm.invalidUserCheck) {
-                                         keepGoing = false;
-                                         return false;
-                                     }
-                                 }
-                             }
+                        teamUserEmail = getUserName(team.assignedUser.trim() + ";", false)
+                        if (-1 == cm.oSiteUsers.indexOf(teamUserEmail[0])) {
+                            //  cm.blockedUserName.trim()
+                            if (team.userExsists) {
+                                cm.errTextMsg = "Please enter valid team members.";
+                                cm.errorBorder = "";
+                                cm.errorPopUpBlock = true;
+                                showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
+                                return false;
+                            }
+                            else {
+                                if (!team.userConfirmation) {
+                                    cm.checkUserExists(team);
+                                    if (!cm.invalidUserCheck) {
+                                        keepGoing = false;
+                                        return false;
+                                    }
+                                }
+                            }
                         }
                     }
                     else {
@@ -859,9 +860,9 @@
                 if (keepGoing) {
                     var userVal = angular.element('#txtUser' + team.assigneTeamRowNumber).attr('confirm');
                     if (userVal == "false") {
-                        cm.textInputUser = team;                       
-                            showNotificatoinMessages(team.assigneTeamRowNumber);
-                            cm.notificationPopUpBlock = true;                       
+                        cm.textInputUser = team;
+                        showNotificatoinMessages(team.assigneTeamRowNumber);
+                        cm.notificationPopUpBlock = true;
 
                     }
                     validUsers = (userVal == "false") ? false : true;
