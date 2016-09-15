@@ -32,6 +32,7 @@
             cm.showRoles = true;
             cm.showMatterId = true;
             cm.matterIdType = "Custom";
+            $rootScope.displayOverflow = "";
             cm.nextButtonDisabled = false; cm.prevButtonDisabled = true;
             cm.taxonomyHierarchyLevels = configs.taxonomy.levels;
             cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);
@@ -1168,6 +1169,7 @@
                         cm.errorPopUpBlock = true;
                         return false;
                     }
+                    if (cm.conflictRadioCheck) {
                     if (undefined == cm.blockedUserName || "" == cm.blockedUserName) {
                         cm.errTextMsg = "Enter users that are conflicted with this matter.";
                         cm.errorBorder = "cblockuser";
@@ -1175,6 +1177,7 @@
                         cm.errorPopUpBlock = true;
                         return false;
                     }
+                }
                 }
 
                 if (cm.selectedConflictCheckUser && "" !== cm.selectedConflictCheckUser) {
@@ -2245,7 +2248,7 @@
                     MatterProvisionFlags: oMatterProvisionFlags,
                     MatterConfigurations: {
                         IsConflictCheck: cm.chkConfilctCheck,
-                        IsMatterDescriptionMandatory: true
+                        IsMatterDescriptionMandatory: cm.isMatterDescriptionMandatory
                     }
                 }
                 console.log("options for optionsForStampMatterDetails matter");
