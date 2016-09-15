@@ -840,6 +840,24 @@
             });
         }
 
+        vm.filterSearch = function (val) {
+            if (val.length > 3) {
+
+                if (vm.searchexp == vm.configSearchContent.ManagedPropertyFileName) {
+                    vm.documentsearch("" + vm.configSearchContent.ManagedPropertyFileName + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false);
+                }
+                else if (vm.searchexp == vm.configSearchContent.ManagedPropertyDocumentClientName) {
+                    vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentClientName + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false);
+                }
+                else if (vm.searchexp == vm.configSearchContent.ManagedPropertyAuthor) {
+                    vm.documentsearch("" + vm.configSearchContent.ManagedPropertyAuthor + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
+                }
+                else if (vm.searchexp == vm.configSearchContent.ManagedPropertyDocumentCheckOutUser) {
+                    vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
+                }
+            }
+        }
+
         //#region for searching matter by property and searchterm
         vm.documentsearch = function (term, property, bool) {
             vm.lazyloaderFilter = false;
