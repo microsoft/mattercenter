@@ -1173,7 +1173,7 @@
 
             }
             //#endregion
-
+            
             //#region Request object for the GetMattersMethod
             var searchRequest = {
                 Client: {
@@ -1209,9 +1209,29 @@
             }
 
             //#endregion
+            vm.filterSearch = function (val) {
+                if (val.length > 3) {
+                    
+                    if (vm.searchexp == vm.configSearchContent.ManagedPropertyMatterName)
+                    {
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyMatterName + ":" + val + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                    }
+                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertyClientName)
+                    {
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyClientName + ":" + vm.clientSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                    }
+                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertyResponsibleAttorney)
+                    {
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + ":" + vm.attorneySearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                    }
+                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertySubAreaOfLaw)
+                    {
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + ":" + vm.areaSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                    }
+                }
+            }
 
-
-           //#region For filtering the grid when clicked on search button 
+           //#region For filtering the grid when clicked on search button
             vm.searchMatter = function (val) {
                 var finalSearchText = "";
                 if (val != "") {
@@ -1249,13 +1269,14 @@
                                 }
                     }
                 }
-                return matterResource.get(searchMatterRequest).$promise;
+                                return matterResource.get(searchMatterRequest).$promise;
             }
 
             vm.search = function () {
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
+                searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
                 if (vm.matterid == 3) {
                     vm.matterid = 1;
                     vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
@@ -1316,14 +1337,16 @@
                     vm.matterheader = true;
                     vm.divuigrid = false;
                     searchRequest.SearchObject.SearchTerm = "";
-                    searchRequest.SearchObject.ItemsPerPage = 17;
+                    searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
                     if (property == "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "") {
                         vm.attorneyproperty = term;
                         searchRequest.SearchObject.Filters.ResponsibleAttorneys = term;
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.attorneyfilter = true;
                     }
                     else if (property == "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "") {
-                        searchRequest.SearchObject.Filters.SubareaOfLaw = term;
+                        searchRequest.SearchObject.Filters.SubareaOfLaw = term.trim();
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.areafilter = true;
                     }
                     else if (property == "" + vm.configSearchContent.ManagedPropertyMatterName + "") {
@@ -1433,8 +1456,9 @@
                 vm.nodata = false;
                 vm.responseNull = false;
                 vm.pagenumber = 1;
+                searchRequest.SearchObject.SearchTerm = '';
+                searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
                 searchRequest.SearchObject.PageNumber = vm.pagenumber;
-                searchRequest.SearchObject.ItemsPerPage = 17;
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 if (property == vm.matterConfigContent.GridColumn5Header) {
