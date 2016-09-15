@@ -23,6 +23,7 @@
         vm.docdropinner = true;
         $rootScope.pageIndex = "2";
         $rootScope.bodyclass = "bodymain";
+        $rootScope.displayOverflow = "";
         $rootScope.profileClass = "";
         // Onload show ui grid and hide error div
         //start

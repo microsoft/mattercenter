@@ -18,6 +18,7 @@
             vm.header = uiconfigs.Header;
             
             $rootScope.setAuthenticatedUserContext();
+            $rootScope.displayOverflow = "";
 
             //Callback function for help 
             function getHelp(options, callback) {
