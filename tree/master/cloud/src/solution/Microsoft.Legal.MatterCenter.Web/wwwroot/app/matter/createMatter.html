@@ -181,12 +181,13 @@
                         <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox2Label}}</label>
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
                         <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
-                        <div ng-show="blockUserResults">
-                            <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
-                        </div>
                         <div class="gutter">
                             <i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh pull-left loadingGlyphicon"></i>
                         </div>
+                         <div ng-show="blockUserResults">
+                            <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
+                        </div>
+                      
                         <div class="gutter"></div>
                         <div class="large clear" id="areaBlockUser"></div>
                     </section>
@@ -210,12 +211,12 @@
                 <div data-ng-repeat="assignTeam in cm.assignPermissionTeams" class="assignTeam">
                     <div class="row{{$index}} assignNewPerm">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' confirm="false" uservalue="" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" autocomplete="off">
+                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' confirm="false" uservalue="" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocationsTeam' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" autocomplete="off">
                         <!--<div ng-show='teamAssingnResults'>
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
                         </div>-->
                         <div class="gutter">
-                            <i ng-show='loadingLocations' class="glyphicon glyphicon-refresh pull-left loadingGlyphicon"></i>
+                            <i ng-show='loadingLocationsTeam' class="glyphicon glyphicon-refresh pull-left loadingGlyphicon"></i>
                         </div>
                         <div class="gutter"></div>
                         <div class="addNewMember" ng-show="cm.showRoles">
