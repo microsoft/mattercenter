@@ -1786,7 +1786,7 @@
             //#region for opening view matters url in new window
             vm.viewMatterDetails = function (url, guid) {
                 var viewmatterurl = url + '/SitePages/' + guid + '.aspx';
-                window.open(viewmatterurl, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
+                window.open(viewmatterurl, '_self', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
             }
             //#endregion
 
