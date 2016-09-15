@@ -26,6 +26,7 @@
             vm.totalrecords = 0;
             $rootScope.bodyclass = "bodymain";
             $rootScope.profileClass = "hide";
+            $rootScope.displayOverflow = "display";
             vm.nodata = false;
             vm.isDisplayMessage = false;
             vm.displayMessage = '';
@@ -33,7 +34,7 @@
             vm.showNavTab = false;
             vm.showInnerNav = true;
             vm.selectedTab = vm.documentDashboardConfigs.Tab2HeaderText;
-            
+
             //#endregion
 
             //#region Variable to show document count
@@ -72,7 +73,7 @@
             //#endregion
 
             var gridOptions = {
-                paginationPageSize: 28,
+                paginationPageSize: 30,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
@@ -102,7 +103,7 @@
                         columnDefs1.push({
                             field: key,
                             displayName: vm.documentDashboardConfigs.GridColumn1Header,
-                            width: '20%',
+                            width: '250',
                             cellTemplate: '/app/dashboard/DocumentDashboardCellTemplate.html',
                             enableColumnMenu: false,
                             position: value.position
@@ -110,13 +111,13 @@
 
                     }
                 }
-                if (key == "documentClientId") {
+                if (key == "documentClient") {
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.documentDashboardConfigs.GridColumn2Header,
-                            width: '15%',
-                            cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>',
+                            width: '175',
+                            cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClient==""?"NA":row.entity.documentClient}}</div>',
                             enableColumnMenu: false,
                             position: value.position
                         });
@@ -128,8 +129,10 @@
                         columnDefs1.push({
                             field: key,
                             displayName: vm.documentDashboardConfigs.GridColumn3Header,
-                            width: '14%',
+                            width: '150',
                             enableColumnMenu: false,
+                            headerCellClass: 'docOwnerGridClass',
+                            cellClass: 'docOwnerGridClass',
                             position: value.position
                         });
 
@@ -141,22 +144,26 @@
                             field: key,
                             displayName: vm.documentDashboardConfigs.GridColumn4Header,
                             cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>',
-                            width: '20%',
+                            width: '150',
                             enableColumnMenu: false,
+                            headerCellClass: 'docModDateGridClass',
+                            cellClass: 'docModDateGridClass',
                             position: value.position
                         });
 
                     }
                 }
 
-                if (key == "documentID") {
+                if (key == "docId") {
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
                             displayName: vm.documentDashboardConfigs.GridColumn5Header,
-                            width: '10%',
-                            cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentID==""?"NA":row.entity.documentID}}</div>',
+                            width: '150',
+                            cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.docId==""?"NA":row.entity.docId}}</div>',
                             enableColumnMenu: false,
+                            headerCellClass: 'docIdGridClass',
+                            cellClass: 'docIdGridClass',
                             position: value.position
                         });
                     }
@@ -166,8 +173,10 @@
                         columnDefs1.push({
                             field: key,
                             displayName: vm.documentDashboardConfigs.GridColumn6Header,
-                            width: '6%',
+                            width: '80',
                             enableColumnMenu: false,
+                            headerCellClass: 'docGridVerClass',
+                            cellClass: 'docGridVerClass',
                             position: value.position
                         });
 
@@ -175,11 +184,12 @@
                 }
 
 
-                //if (key == "documentClient") {
+                //if (key == "documentClientId") {
                 //    if (value.displayInUI == true && value.position != -1) {
                 //        columnDefs1.push({
                 //            field: key,
-                //            displayName: vm.documentDashboardConfigs.GridColumn7Header,
+                //            displayName: vm.documentDashboardConfigs.GridColumn2Header,
+                //cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>',
                 //            width: '20%',
                 //            enableColumnMenu: false,
                 //            position: value.position
@@ -799,7 +809,7 @@
                     vm.myDocumentCount = response.myDocumentCounts;
                     vm.pinDocumentCount = response.pinnedDocumentCounts;
                     vm.totalrecords = response.allDocumentCounts;
-                    if (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText){
+                    if (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText) {
                         vm.selectedTabInfo = vm.documentDashboardConfigs.Tab1HeaderText + " (" + response.myDocumentCounts + ")";
                     } else if (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText) {
                         vm.selectedTabInfo = vm.documentDashboardConfigs.Tab2HeaderText + " (" + response.allDocumentCounts + ")";
@@ -866,7 +876,7 @@
                         }
                         // vm.lazyloaderdashboard = true;
                         //vm.divuigrid = true;
-                       
+
                     });
 
                 });
@@ -891,7 +901,7 @@
                     if (response) {
                         vm.documentGridOptions.data = response;
                         //vm.pinDocumentCount = response.length;
-                        vm.totalrecords = vm.pinDocumentCount;                   
+                        vm.totalrecords = vm.pinDocumentCount;
                         vm.pagination();
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = true;
@@ -926,7 +936,7 @@
                         vm.documentGridOptions.data = response;
                         //vm.myDocumentCount = response.length;
                         vm.getDocumentCounts();
-                        vm.totalrecords = vm.myDocumentCount;                      
+                        vm.totalrecords = vm.myDocumentCount;
                         vm.pagination();
                         //vm.lazyloaderdashboard = true;
                         vm.divuigrid = true;
@@ -1255,6 +1265,7 @@
                     vm.divuigrid = true;
                     vm.displaypagination = true;
                 }
+                //vm.setToptoPagination();
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
@@ -1268,10 +1279,13 @@
                     vm.last = vm.last + gridOptions.paginationPageSize;
                     vm.total = vm.totalrecords - gridOptions.paginationPageSize;
                     if (vm.last > vm.totalrecords) {
+                        //vm.last = vm.totalrecords;
                         vm.fromtopage = vm.first + " - " + vm.totalrecords;
+                        //vm.setToptoPagination();
                     } else {
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
+
                     vm.pagenumber = vm.pagenumber + 1;
                     documentRequest.SearchObject.PageNumber = vm.pagenumber;
                     documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
@@ -1307,6 +1321,7 @@
                     vm.last = vm.last - gridOptions.paginationPageSize;
                     vm.pagenumber = vm.pagenumber - 1;
                     vm.fromtopage = vm.first + " - " + vm.last;
+                    //vm.setToptoPagination();
                     documentRequest.SearchObject.PageNumber = vm.pagenumber;
                     documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(documentRequest, function (response) {
@@ -1324,6 +1339,7 @@
                             }
                             vm.lazyloaderdashboard = true;
                         }
+
                     });
                 } else {
                     if (!$scope.$$phase) {
@@ -1332,6 +1348,19 @@
                 }
             };
 
+            //#endregion
+
+            //#region for setting the top to the pagination
+            //vm.setToptoPagination = function () {
+            //    var totalRows = vm.last - vm.first;
+            //    var calcTop = (totalRows * 30) + 100;
+            //    angular.element(".jsonGridFooter").css("top", calcTop);
+            //    if (!$scope.$$phase) {
+            //        $scope.$apply();
+            //    }
+            //}
+
+            //$timeout(function () { vm.setToptoPagination(); }, 800);
             //#endregion
 
             //#region This event is going to fire when the user clicks on "OK" button in the filter panel

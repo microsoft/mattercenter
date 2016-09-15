@@ -2,7 +2,7 @@
     <heading employee-names="vm.userName" nav-url="vm.navUrl" nav-url-text="vm.navUrlText"></heading>
 </header>
 -->
-<div>
+<div ng-class="{'dashboardXOverFlow':$root.displayOverflow!=''}">
     <div class="row {{$root.profileClass}} topheader">
         <div class="col-xs-10 AppHeader">
             <div class="AppSwitcherContainer" ng-click="vm.menuClick()">
@@ -71,7 +71,7 @@
 
     <div class="maincontentDiv commonContent marginTop20" id="matterCenterHeader">
         <div class="row pad0 mainHeader">
-            <div class="col-xs-12 col-sm-5 col-lg-6 pad0">
+            <div class="col-xs-5 col-sm-5 col-lg-6 pad0">
                 <div class="row pad0 margin0">
                     <div class="col-xs-12 col-sm-10 col-lg-11 pad0">
                         <div class="floatLeft" id="hamburgerConatiner" ng-click="vm.showCloseIcon()" ng-show="vm.showHamburger">
@@ -88,7 +88,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-6 col-lg-5 mainSearch pad0">
+            <div class="col-xs-6 col-sm-6 col-lg-5 mainSearch pad0">
                 <input id="searchText" type="text" placeholder="{{vm.header.DashboardHeaderSearchPlaceholderText}}" my-enter="vm.mainHeaderClick()" ng-model="vm.mainheadersearch" />
                 <div id="searchLink">
                     <img class="searchIcon" title="{{vm.header.DashboardSearchIconTitle}}" alt="{{vm.header.DashboardSearchIconTitle}}" src="Images/search-15x15-666.png" ng-click="vm.mainHeaderClick()" />

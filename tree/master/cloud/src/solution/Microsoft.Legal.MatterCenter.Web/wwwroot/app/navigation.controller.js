@@ -20,6 +20,7 @@
             //#region Global Variables
             vm.welcomeheader = false;
             $rootScope.bodyclass = "";
+            $rootScope.displayOverflow = "";
             //#endregion
             vm.emailsubject = "CELA Project Center Feedback and Support request";
 

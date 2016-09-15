@@ -15,6 +15,7 @@
             vm.documentTypeLawTerms = [];
             vm.primaryMatterType = vm.errorPopUp = false;
             vm.removeDTItem = false;
+            $rootScope.displayOverflow = "display";
 
             vm.taxonomyHierarchyLevels = parseInt(vm.taxonomyHierarchyLevels);
             if (vm.taxonomyHierarchyLevels >= 2) {
