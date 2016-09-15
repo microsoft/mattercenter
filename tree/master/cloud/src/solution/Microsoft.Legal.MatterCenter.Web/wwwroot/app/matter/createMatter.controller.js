@@ -1859,7 +1859,7 @@
                             },
                             MatterConfigurations: {
                                 IsConflictCheck: cm.chkConfilctCheck,
-                                IsMatterDescriptionMandatory: true,
+                                IsMatterDescriptionMandatory: cm.isMatterDescriptionMandatory,
                                 IsCalendarSelected: cm.includeCalendar,
                                 IsTaskSelected: cm.includeTasks
                             },
@@ -2021,7 +2021,7 @@
                     MatterConfigurations: {
 
                         IsConflictCheck: cm.chkConfilctCheck,
-                        IsMatterDescriptionMandatory: true,
+                        IsMatterDescriptionMandatory: cm.isMatterDescriptionMandatory,
                         IsCalendarSelected: cm.includeCalendar,
                         IsTaskSelected: cm.includeTasks,
                         IsRSSSelected: cm.includeRssFeeds
@@ -2848,8 +2848,7 @@
                                                     cm.errorPopUpBlock = true; return false;
                                                 }
                                             }
-                                            else {
-                                                cm.matterDescription = "";
+                                            else {                                                
                                                 bInValid = true;
                                             }
 
