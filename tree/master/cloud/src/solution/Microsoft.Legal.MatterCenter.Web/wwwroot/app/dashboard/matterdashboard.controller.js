@@ -635,17 +635,17 @@
                         vm.totalrecords = response.length;
                         vm.getMatterCounts();
                         vm.matterGridOptions.data = response;
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = false;
+                        //vm.lazyloaderdashboard = true;
+                        //vm.divuigrid = false;
                         vm.nodata = true;
                         vm.pagination();
                     } else {
                         vm.getMatterCounts();
                         vm.totalrecords = response.length;
                         vm.matterGridOptions.data = response;
-                        vm.divuigrid = true;
+                        //vm.divuigrid = true;
                         vm.nodata = false;
-                        vm.lazyloaderdashboard = true;
+                        //vm.lazyloaderdashboard = true;
                         vm.pagination();
                     }
                 });
@@ -818,7 +818,7 @@
                     }
                     unpinMatter(unpinRequest, function (response) {
                         if (response.isMatterUnPinned) {
-                            
+
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
                             if (vm.tabClicked.toLowerCase().indexOf("pinned") >= 0) {
                                 e.currentTarget.src = "../images/unpin-666.png";
@@ -1749,43 +1749,64 @@
             //#region Exporting to Excel Test
             vm.export = function () {
                 //vm.lazyloaderdashboard = false;
-                var exportMatterSearchRequest = {
-                    Client: {
-                        Url: configs.global.repositoryUrl
-                    },
-                    SearchObject: {
-                        PageNumber: 1,
-                        ItemsPerPage: 500,
-                        SearchTerm: jsonMatterSearchRequest.SearchObject.SearchTerm,
-                        Filters: {
-                            ClientsList: jsonMatterSearchRequest.SearchObject.Filters.ClientsList,
-                            PGList: jsonMatterSearchRequest.SearchObject.Filters.PGList,
-                            AOLList: jsonMatterSearchRequest.SearchObject.Filters.AOLList,
-                            FromDate: jsonMatterSearchRequest.SearchObject.Filters.FromDate,
-                            ToDate: jsonMatterSearchRequest.SearchObject.Filters.ToDate,
-                            FilterByMe: 0
+                if (vm.tabClicked != "Pinned Matters") {
+                    var exportMatterSearchRequest = {
+                        Client: {
+                            Url: configs.global.repositoryUrl
                         },
-                        Sort: {
-                            ByProperty: jsonMatterSearchRequest.SearchObject.Sort.ByProperty,
-                            Direction: jsonMatterSearchRequest.SearchObject.Sort.Direction
+                        SearchObject: {
+                            PageNumber: 1,
+                            ItemsPerPage: 500,
+                            SearchTerm: jsonMatterSearchRequest.SearchObject.SearchTerm,
+                            Filters: {
+                                ClientsList: jsonMatterSearchRequest.SearchObject.Filters.ClientsList,
+                                PGList: jsonMatterSearchRequest.SearchObject.Filters.PGList,
+                                AOLList: jsonMatterSearchRequest.SearchObject.Filters.AOLList,
+                                FromDate: jsonMatterSearchRequest.SearchObject.Filters.FromDate,
+                                ToDate: jsonMatterSearchRequest.SearchObject.Filters.ToDate,
+                                FilterByMe: jsonMatterSearchRequest.SearchObject.Filters.FilterByMe
+                            },
+                            Sort: {
+                                ByProperty: jsonMatterSearchRequest.SearchObject.Sort.ByProperty,
+                                Direction: jsonMatterSearchRequest.SearchObject.Sort.Direction
+                            }
                         }
-                    }
-                };
-                get(exportMatterSearchRequest, function (response) {
-                    if (response == "") {
-                        //vm.lazyloaderdashboard = true;
-                    } else {
-                        vm.exportDate = response;
-
-                        $timeout(function () {
-                            var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
-                            });
-                            saveAs(blob, "Matters.xls");
+                    };
+                    get(exportMatterSearchRequest, function (response) {
+                        if (response == "") {
                             //vm.lazyloaderdashboard = true;
-                        }, 1000);
+                        } else {
+                            vm.exportDate = response;
+
+                            $timeout(function () {
+                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
+                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                });
+                                saveAs(blob, "Matters.xls");
+                                //vm.lazyloaderdashboard = true;
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    var pinnedMattersRequest = {
+                        Url: configs.global.repositoryUrl//ToDo: Read from config.js
                     }
-                });
+                    getPinnedMatters(pinnedMattersRequest, function (response) {
+                        if (response == "") {
+
+                        } else {
+                            vm.exportDate = response;
+
+                            $timeout(function () {
+                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
+                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                });
+                                saveAs(blob, "Matters.xls");
+                                //vm.lazyloaderdashboard = true;
+                            }, 1000);
+                        }
+                    });
+                }
             }
 
             //#endregion
