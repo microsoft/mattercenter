@@ -140,7 +140,7 @@
                                 </div>';
                     }
                     else {
-                        var matterUrl = obj.matterClientUrl + "\\" + obj.matterGuid;
+                        var matterUrl = obj.matterClientUrl + "/" + obj.matterGuid;
                         actualcontent = '<div class="" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
                                    <div class="FlyoutBoxContent flyoutwidth">\
                                       <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
