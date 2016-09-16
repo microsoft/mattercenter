@@ -1334,8 +1334,19 @@
                         cm.checkUserExists($label, $event);
                     }
                     if (!noresults) {
-                        $label.assignedUser = "";
-                        $label.assignedUser = cm.user;
+                        if (value == "conflictcheckuser") {
+                            $label = "";
+                            cm.selectedConflictCheckUser = "";
+                        }
+                        if (value == "blockuser") {
+                            $label = "";
+                            cm.blockedUserName = "";
+                        }
+                        if (value == "team") {
+                            $label.assignedUser = "";
+                            $label.assignedUser = cm.user;
+                        }
+                      
                     }
                 }
             }

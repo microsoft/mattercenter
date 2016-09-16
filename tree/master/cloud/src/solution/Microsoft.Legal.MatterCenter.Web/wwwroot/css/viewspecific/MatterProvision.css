@@ -1368,6 +1368,7 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
 
     .sectionStep {
         max-width: 327px;
+         min-width:290px
     }
 
     .ddlRoleAssignList {

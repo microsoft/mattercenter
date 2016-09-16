@@ -664,7 +664,7 @@
 
     .errPopUpCBlockUser {
         left: 10px;
-        top: 355px;
+        top: 318px;
     }
 
     .errTringleBlockCBlockUser {
@@ -1347,7 +1347,15 @@
 
 .loadingGlyphicon {
     left: -24px;
-    top: 6px;
+    top: 8px;
+}
+.loadingGlyphiconBlockUser {
+    left: -17px;
+    top: 8px;
+}
+.loadingGlyphiconCCheck{
+left: -17px;
+    top: 31px;
 }
 
 .labelRoles {
@@ -1483,11 +1491,37 @@
         max-width: 292px;
     min-width: 292px;
 }
-@media (max-width: 734px){
-  .sectionContent .dropdown-menu li {
+@media (max-width: 734px) {
+    .sectionContent .dropdown-menu li {
         min-width: 276px !important;
         max-width: 276px !important;
     }
- 
-  
+
+    .loadingGlyphiconCCheck {
+        left: -17px;
+        top: 40px;
+        z-index: 1;
+    }
+    .dateConductedLbl {
+        margin-left: 0px !important;
+    }
 }
+.matterTxtInputCtrl{
+    min-width: 228px !important;
+    max-width: 228px !important;
+    padding-right:20px !important;
+}
+.dateConductedLbl{
+    margin-left:-42px ;
+}
+ .matterUsersSection .dropdown-menu li {
+        min-width: 228px !important;
+        max-width: 228px !important;
+    }
+
+.loadMatterGlyphicon {
+    top: -25px;
+    right: 5px;
+}
+
+

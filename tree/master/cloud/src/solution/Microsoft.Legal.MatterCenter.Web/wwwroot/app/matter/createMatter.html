@@ -128,19 +128,20 @@
                         <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">{{cm.createContent.Tab2Checkbox1Lebal}}
                     </label>
                     <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox1Label}}</label>
+                    <div class="gutter">
+                        <i ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh loadingGlyphiconCCheck pull-left"></i>
+                    </div>
                     <div class="gutter"></div>
                     <div class="gutter"></div>
-                    <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2DateLabel}}</label>
+                    <label class="contentLabel mediumSmall dateConductedLbl" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2DateLabel}}</label>
 
                     <label class="contentLabel " id="conflictIdentified">{{cm.createContent.Tab2RadioButton1Label}}</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser")' typeahead-no-results="conflictUserResults" class="form-control" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
+                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser","",$event,"")' typeahead-no-results="conflictUserResults" class="form-control" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
                     <div ng-show="conflictUserResults">
                         <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
                     </div>
-                    <div class="gutter">
-                        <i ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh loadingGlyphicon pull-left"></i>
-                    </div>
+                  
                     <div class="gutter"></div>
                     <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
                     <!--<input type="text" class="form-control" datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />-->
@@ -180,9 +181,9 @@
                     <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
                         <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox2Label}}</label>
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
+                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser","",$event,"")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
                         <div class="gutter">
-                            <i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh pull-left loadingGlyphicon"></i>
+                            <i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh pull-left loadingGlyphiconBlockUser"></i>
                         </div>
                          <div ng-show="blockUserResults">
                             <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
