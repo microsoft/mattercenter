@@ -1478,3 +1478,16 @@
         float: left;
     margin-top: 10px;
 }
+
+ .sectionContent .dropdown-menu li {
+        max-width: 292px;
+    min-width: 292px;
+}
+@media (max-width: 734px){
+  .sectionContent .dropdown-menu li {
+        min-width: 276px !important;
+        max-width: 276px !important;
+    }
+ 
+  
+}
