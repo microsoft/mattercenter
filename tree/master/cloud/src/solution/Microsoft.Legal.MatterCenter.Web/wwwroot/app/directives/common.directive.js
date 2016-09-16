@@ -110,7 +110,8 @@
                         obj.matterSubAreaOfLaw = "NA";
                     }
                     var actualcontent = "";
-                    actualcontent = '<div class="" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
+                    if (typeof Word === 'undefined') {
+                        actualcontent = '<div class="" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
                                    <div class="FlyoutBoxContent flyoutwidth">\
                                       <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
                                       <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
@@ -134,9 +135,45 @@
                                           <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
                                        </div>\
                                        <a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" ng-click="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '</a><br/>\
-                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
-                                    </div>\
+                                      <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
+                                   </div>\
                                 </div>';
+                    }
+                    else {
+                        var matterUrl = obj.matterClientUrl + "\\" + obj.matterGuid;
+                        actualcontent = '<div class="" style="position:relative;display:table-row" ng-click="stopEvent($event)">\
+                                   <div class="FlyoutBoxContent flyoutwidth">\
+                                      <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
+                                      <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
+                                      <div class="FlyoutContent FlyoutHeading">\
+                                          <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.matterName + ' </div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn2Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn3Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn6Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn5Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
+                                       </div>\
+                                        <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading" style="width:250px">Save the document to this locations</div><br/>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">URL:</div><br/>\
+                                          <input type="text" value="' + matterUrl + '"><br/>\
+                                       </div>\<a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" ng-click="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '</a><br/>\
+                                      </div>\
+                                </div>';
+                    }
+                    
+                    
                     $templateCache.put("test.html", actualcontent);
                     var template = $templateCache.get("test.html");
                     var a = $compile("<div>" + template + "</div>")(scope);
@@ -146,7 +183,7 @@
                     $(this).parent().find('.popcontent').html(a[0]);
                     $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '220px' });
                     $(this).parent().find('.popcontent').css('top', "0");
-                });
+                            });
             },
             controller: function ($scope) {
                 $scope.openUpload = function (matterName, matterUrl, matterGUID) {
