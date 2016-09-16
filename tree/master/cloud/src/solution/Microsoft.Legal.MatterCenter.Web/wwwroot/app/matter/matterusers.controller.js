@@ -275,6 +275,9 @@
                                         team.userExsists = response.isUserExistsInSite;
                                         team.userConfirmation = true;
                                         cm.confirmUser(true);
+                                        if (-1 == cm.oSiteUsers.indexOf(userEmail[0])) {
+                                            cm.oSiteUsers.push(userEmail[0]);
+                                        }
                                     }
                                 });
 
@@ -566,10 +569,20 @@
         }
 
 
-        cm.onSelect = function ($item, $model, $label, value, fucnValue, $event) {
-
+        cm.onSelect = function ($item, $model, $label, value, fucnValue, $event, username) {
+            var typeheadelelen = angular.element('.dropdown-menu li').length;
+            var noresults = true;
+            if (typeheadelelen == 1) {
+                if (angular.element('.dropdown-menu li a')[0]) {
+                    if (angular.element('.dropdown-menu li a')[0].innerHTML == "No results found") {
+                        noresults = false;
+                        if ($event.keyCode == 9 || $event.keyCode == 13) {
+                            cm.user = angular.element('#' + $event.currentTarget.id).val();
+                        }
+                    }
+                }
+            }
             if ($item && $item.name !== "No results found") {
-
                 if (value == "team") {
                     $label.assignedUser = $item.name + '(' + $item.email + ')';
                     cm.typehead = false;
@@ -580,11 +593,19 @@
                     cm.oSiteUsers.push($item.email);
                 }
                 cm.checkUserExists($label);
-
             }
             else {
                 if (fucnValue == "on-blurr") {
+                    cm.user = username;
+                }
+                if (fucnValue == "on-blurr" && typeheadelelen == 0 && noresults) {
                     cm.checkUserExists($label, $event);
+                }
+                if (!noresults) {                   
+                    if (value == "team") {
+                        $label.assignedUser = "";
+                        $label.assignedUser = cm.user;
+                    }
                 }
             }
         }
