@@ -71,7 +71,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="mailAttachmentDetails"></param>
         /// <returns></returns>
         [HttpPost("downloadattachmentsasstream")]
-        [SwaggerResponse(System.Net.HttpStatusCode.OK)]
+        [Produces(typeof(Stream))]
+        [SwaggerOperation("downloadAttachmentsAsStream")]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which contains the file streams which needs to be downloaded to the client", Type = typeof(Stream))]
+        [SwaggerResponseRemoveDefaults]
         public IActionResult DownloadAttachmentsAsStream([FromBody]MailAttachmentDetails mailAttachmentDetails)
         {
             try
@@ -108,7 +111,10 @@ namespace Microsoft.Legal.MatterCenter.Web
         /// <param name="mailAttachmentDetails"></param>
         /// <returns></returns>
         [HttpPost("downloadattachments")]
-        [SwaggerResponse(System.Net.HttpStatusCode.OK)]
+        [Produces(typeof(HttpResponseMessage))]
+        [SwaggerOperation("downloadAttachments")]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult is of type HttpResponseMessage", Type = typeof(HttpResponseMessage))]
+        [SwaggerResponseRemoveDefaults]
         public IActionResult DownloadAttachments([FromBody]MailAttachmentDetails mailAttachmentDetails)
         {
             try

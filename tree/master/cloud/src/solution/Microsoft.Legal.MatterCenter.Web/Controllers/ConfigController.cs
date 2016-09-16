@@ -80,11 +80,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// <param name="filter"></param>
         /// <returns></returns>
         [HttpPost("Get")]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [Produces(typeof(List<DynamicTableEntity>))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which returns all the entries from MatterConfigiration azure table for matter web app azure web site", 
+            Type = typeof(List<DynamicTableEntity>))]
+        [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> Get([FromBody] String filter)
         {
             string result = string.Empty;
-
             try
             {
                 #region Error Checking                
@@ -101,13 +103,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-
-
                 var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
-
                 CreateConfig(configResultsVM, "uiconfig.js", false);
                 return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
-
             }
             catch (Exception exception)
             {
@@ -123,7 +121,10 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
         /// <param name="filter"></param>
         /// <returns></returns>
         [HttpPost("getconfigsforspo")]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [Produces(typeof(List<DynamicTableEntity>))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which returns all the entries from MatterConfigiration azure table for SPO dashboard pages",
+            Type = typeof(List<DynamicTableEntity>))]
+        [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> GetConfigsForSPO([FromBody] String filter)
         {
             string result = string.Empty;
@@ -144,10 +145,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-
-
                 var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
-
                 CreateConfig(configResultsVM, "uiconfigforspo.js", true);
                 return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
 
@@ -162,11 +160,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
 
 
         /// <summary>
-        /// Returns all the entries for Configuring the UI
+        /// This method will intert/update entries in the MatterConfiguration azure table
         /// </summary>
         /// <param name="configs">Request object for POST</param>   
         [HttpPost("Insertupdate")]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [Produces(typeof(bool))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult of type bool",
+            Type = typeof(List<DynamicTableEntity>))]
+        [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> InsertUpdate([FromBody] String configs)
         {
             string result = string.Empty;
@@ -187,13 +188,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-
-
                 var configResultsVM = await configRepository.InsertUpdateConfigurationsAsync(configs);
-
-
                 return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
-
             }
             catch (Exception exception)
             {
