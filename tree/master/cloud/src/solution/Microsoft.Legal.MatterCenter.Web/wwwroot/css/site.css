@@ -75,7 +75,95 @@ textarea {
     }
 }
 
-.matterGridClientClass{
+@media(max-width:668px) {
+    #matterCenterHeader {
+        width: 660px !important;
+    }
+
+    .searchdashboard {
+        width: 660px !important;
+    }
+
+    .navtabs {
+        width: 681px;
+    }
+
+    .sortbymatters {
+        width: 660px;
+    }
+
+    #mattersGrid .ui-grid-viewport {
+        width: 660px;
+    }
+
+    .sortbymatters ul {
+        left: 136px;
+        width: 141px;
+    }
+
+    .dashboarddrop {
+        width: 473px;
+    }
+}
+
+@media(max-width:767px) {
+    .sortbymatters {
+        width: 670px;
+    }
+
+        .sortbymatters ul {
+            left: 157px !important;
+            width: 120px;
+        }
+}
+
+
+@media(max-width:1057px) {
+    .docGridVerClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:977px) {
+    .docIdGridClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:840px) {
+    .docOwnerGridClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:673px) {
+    .docModDateGridClass {
+        display: none !important;
+    }
+}
+
+
+/*Document Dashboard classes*/
+.docGridVerClass {
+    display: table-cell;
+}
+
+.docIdGridClass {
+    display: table-cell;
+}
+
+.docModDateGridClass {
+    display: table-cell;
+}
+
+.docOwnerGridClass {
+    display:table-cell;
+}
+/*End of document dashboard classed*/
+
+
+/*Matter Dasboard classes*/
+.matterGridClientClass {
     display: table-cell;
 }
 
@@ -86,7 +174,7 @@ textarea {
 .matterGridAttorClass {
     display: table-cell;
 }
-
+/*End of Matter Dasboard classes*/
 
 @media (min-width: 768px) {
     .carousel-caption {
@@ -190,8 +278,8 @@ textarea {
         background-color: white;
         height: 28px;
         border: 1px solid #c8c8c8;
-        margin-top: 0;
-        margin-right: 0;
+        margin-top: 15px;
+        margin-right: 20px;
     }
 }
 
@@ -873,7 +961,7 @@ textarea {
 }
 
 #docgrid .ui-grid, #mattersGrid .ui-grid {
-    height: 920px !important;
+    height: 960px !important;
 }
 
 #docgrid .ui-grid-viewport, #mattersGrid .ui-grid-viewport {
@@ -1103,6 +1191,7 @@ textarea {
     left: 175px;
     cursor: pointer;
     margin-left: 28px;
+    z-index: 5;
 }
 
 
@@ -1132,6 +1221,7 @@ textarea {
     left: 133px;
     cursor: pointer;
     margin-left: 28px;
+    z-index: 5;
 }
 
 .switchHideMatterTab {
@@ -1145,4 +1235,16 @@ textarea {
     z-index: 100;
     top: 105px !important;
     left: 176px !important;
+}
+
+.xOverflowAuto {
+    overflow-x: auto;
+}
+
+.navtabs ul li {
+    z-index: 3;
+}
+
+.dashboardXOverFlow {
+    overflow-x: auto;
 }

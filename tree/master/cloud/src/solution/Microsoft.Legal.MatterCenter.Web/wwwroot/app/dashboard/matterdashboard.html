@@ -196,7 +196,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12  padtop20">
+            <div class="col-xs-12  padtop20 navtabs">
                 <ul class="nav nav-tabs" toggletab>
                     <li id="showMatters" class="showDocDashboard hide"><a href="#Documents" data-toggle="tab">{{vm.selectedTabInfo}}</a></li>
                     <li id="myMatters"   ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText}" class="hideDocTabs"><a href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">{{vm.matterDashboardConfigs.Tab1HeaderText}} ({{vm.myMatterCount}})</a></li>
@@ -210,7 +210,7 @@
                 <div class="navDiv" ng-if="vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText||vm.selectedTab==vm.matterDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.matterDashboardConfigs.Tab2HeaderText,vm.allMatterCount)">{{vm.matterDashboardConfigs.Tab2HeaderText}}</div>
                 <div class="navDiv" ng-if="vm.selectedTab==vm.matterDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText" ng-click="vm.showSelectedTabs(vm.matterDashboardConfigs.Tab3HeaderText,vm.pinMatterCount)">{{vm.matterDashboardConfigs.Tab3HeaderText}}</div>
             </div>
-            <div class="col-xs-offset-6 col-xs-6 sortbymatters">
+            <div class="col-sm-offset-6 col-sm-6 sortbymatters">
                 <div class="col-xs-4 col-sm-4 col-md-4 text-right pad0" style="max-width: 192px;min-width: 192px;float: right;">
                     <span>{{vm.matterDashboardConfigs.LabelSortByText}} </span>
                     <span>{{vm.sortbytext}}</span>
@@ -222,7 +222,7 @@
                     </span>
                     <!--<button ng-click="vm.export()" class="btn btn-primary pull-right">{{vm.matterDashboardConfigs.ButtonExportText}}</button>-->
                 </div>
-                <div class="col-xs-offset-7 col-xs-5 col-sm-offset-9 col-sm-3" ng-if="vm.sortbydrop">
+                <div class="col-xs-offset-7 col-xs-5 col-sm-offset-8 col-sm-3 col-md-offset-9 col-sm-3" ng-if="vm.sortbydrop">
                     <ul>
                         <li ng-click="vm.sortyby('Relevant','None')">{{vm.tabClicked=='All Matters'?vm.matterDashboardConfigs.DropDownOptionText:vm.matterDashboardConfigs.DrpDownOption1Text}}</li>
                         <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">{{vm.matterDashboardConfigs.DrpDownOption2Text}} ↑</li>

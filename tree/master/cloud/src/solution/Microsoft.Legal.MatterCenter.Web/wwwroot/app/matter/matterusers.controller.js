@@ -16,6 +16,7 @@
         cm.oMandatoryRoleNames = [];
         cm.popupContainerBackground = "Show";
         $rootScope.bodyclass = "bodymain";
+        $rootScope.displayOverflow = "";
         cm.oSiteUsers = [];
         cm.invalidUserCheck = false;
         cm.configsUri = configs.uri;

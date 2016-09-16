@@ -34,6 +34,7 @@
             vm.totalrecords = 0;
             $rootScope.bodyclass = "bodymain";
             $rootScope.profileClass = "hide";
+            $rootScope.displayOverflow = "display";
             vm.tabClicked = "All Matters";
             vm.sortbytext = vm.tabClicked == "All Matters" ? vm.matterDashboardConfigs.DropDownOptionText : vm.matterDashboardConfigs.DrpDownOption1Text;
             vm.showNavTab = false;
@@ -81,7 +82,7 @@
 
 
             var gridOptions = {
-                paginationPageSize: 28,
+                paginationPageSize: 30,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
                 enableRowSelection: true,
@@ -1792,7 +1793,7 @@
             //#region for opening view matters url in new window
             vm.viewMatterDetails = function (url, guid) {
                 var viewmatterurl = url + '/SitePages/' + guid + '.aspx';
-                window.open(viewmatterurl, '_self', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
+                window.open(viewmatterurl, '_parent');
             }
             //#endregion
 
