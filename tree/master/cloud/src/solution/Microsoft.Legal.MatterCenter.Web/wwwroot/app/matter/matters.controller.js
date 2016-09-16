@@ -94,7 +94,7 @@
             //For setting dynamic height to the grid
             vm.getTableHeight = function () {
                 return {
-                    height: ($window.innerHeight - 105) + "px"
+                    height: ($window.innerHeight - 100) + "px"
                 };
             };
 
@@ -377,13 +377,12 @@
 
             vm.watchFuncscroll = function () {
                 //var element = 0;
-                //var topelement = angular.element('.ui-grid-viewport').scrollTop();
-                //angular.element('.popcontent').css({ 'top': element - topelement });
+                ////var topelement = angular.element('.ui-grid-viewport').scrollTop();
+                //angular.element('.popcontent').css("display","none");
                 //if (!$scope.$$phase) {
                 //    $scope.$apply();
                 //}
             }
-
 
             //#region for setting the classes for ui-grid based on size
             vm.setColumns = function () {
@@ -407,7 +406,6 @@
             vm.pagenumber = 1;
             vm.responseNull = false;
             vm.watchFunc = function () {
-
                 var promise = $q.defer();
                 if (!vm.responseNull) {
                     vm.lazyloader = false;

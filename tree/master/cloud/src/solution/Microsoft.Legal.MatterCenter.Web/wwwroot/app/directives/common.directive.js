@@ -172,8 +172,8 @@
                                       </div>\
                                 </div>';
                     }
-                    
-                    
+
+
                     $templateCache.put("test.html", actualcontent);
                     var template = $templateCache.get("test.html");
                     var a = $compile("<div>" + template + "</div>")(scope);
@@ -181,16 +181,23 @@
                     e.stopPropagation();
                     var obj = $(this).parent().position();
                     $(this).parent().find('.popcontent').html(a[0]);
-                    $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '220px' });
-                    $(this).parent().find('.popcontent').css('top', "0");
-                            });
+                    if (obj.top < 240) {
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px', 'top': '0' });
+                        $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
+                    } else {
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px', 'top': '-238px' });
+                        $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '244px');
+                    }
+                    //$(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '220px' });
+                    //$(this).parent().find('.popcontent').css('top', "0");
+                });
             },
             controller: function ($scope) {
                 $scope.openUpload = function (matterName, matterUrl, matterGUID) {
                     $scope.$parent.$parent.$parent.grid.appScope.vm.Openuploadmodal(matterName, matterUrl, matterGUID);
                     $('.popcontent').css('display', 'none');
                 };
-                $scope.redirectViewMatters = function (url,guid) {
+                $scope.redirectViewMatters = function (url, guid) {
                     $scope.$parent.$parent.$parent.grid.appScope.vm.viewMatterDetails(url, guid);
                 }
                 $scope.stopEvent = function ($event) {
@@ -267,8 +274,13 @@
                     e.stopPropagation();
                     var obj = $(this).parent().position();
                     $(this).parent().find('.popcontent').html(a[0]);
-                    $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px' });
-                    $(this).parent().find('.popcontent').css('top', "0");
+                    if (obj.top < 240) {
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px', 'top': '0' });
+                        $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
+                    } else {
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px','top': '-238px' });
+                        $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '244px');
+                    }
                 });
             },
             controller: function ($scope) {
@@ -334,7 +346,7 @@
             restrict: 'AE',
             link: function (scope, element, attrs) {
                 element.find('.ui-grid-icon-menu').addClass('showExpandIcon');
-                
+
                 $(element).on("click", function (e) {
                     e.stopPropagation();
                     $timeout(function () {
@@ -355,6 +367,19 @@
         }
     }
 
+    'use strict'
+    function uiGridViewport() {
+        return {
+            restrict: 'AE',
+            link: function (scope, element, attrs) {
+                $(element).scroll(function (e) {
+                    $('.popcontent').css('display', 'none');
+                    $('.dropdown').removeClass("open");
+                });
+            }
+        }
+    }
+
     var app = angular.module('matterMain');
     app.directive('onload', ['$timeout', onload]);
     app.directive('showbreadcrumb', [showbreadcrumb]);
@@ -366,6 +391,7 @@
     app.directive('fallbacksrc', [fallbacksrc]);
     app.directive('myEnter', [myEnter]);
     app.directive('uiGridMenuButton', ['$window', '$timeout', uiGridMenuButton]);
+    app.directive('uiGridViewport', [uiGridViewport]);
 })();
 
 
