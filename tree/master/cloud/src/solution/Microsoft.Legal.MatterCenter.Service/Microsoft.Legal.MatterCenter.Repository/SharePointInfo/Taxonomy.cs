@@ -192,29 +192,25 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             taxonomyResponseVM.TermSets = GetManagedTermSetHierarchy(clientContext, termSet, termStoreDetails);
                         }
                         //This condition is if the UI is requesting client terms and the clients are defined as term set and not terms
-                        else if (termStoreDetails.TermSetName == taxonomySettings.ClientTermSetName && 
-                            taxonomySettings.ClientTermPath==ServiceConstants.CLIENT_TERM_PATH)
+                        else if (termStoreDetails.TermSetName == taxonomySettings.ClientTermSetName )
                         {                            
                             taxonomyResponseVM.ClientTermSets = GetClientTermSetHierarchy(clientContext, termSet, termStoreDetails);    
-                        }                       
-                        
+                        }
                     }
                 }
 
-                if (termStoreDetails.TermSetName == taxonomySettings.ClientTermSetName &&
-                            taxonomySettings.ClientTermPath != ServiceConstants.CLIENT_TERM_PATH)
-                {
-                    //This condition is if the UI is requesting client terms and the clients are defined as terms and not term sets
-                    foreach (TermSet termSet in termGroup.TermSets)
-                    {                        
-                        Term term = null;
-                        if (termSet.TermExists(clientContext, termStoreDetails.TermSetName, ref term))
-                        {
-                            taxonomyResponseVM.ClientTermSets = GetClientTerms(clientContext, term, termStoreDetails);
-                            break;
-                        }                       
-                    }
-                }
+                //if (termStoreDetails.TermSetName == taxonomySettings.ClientTermSetName &&
+                //            taxonomySettings.ClientTermPath != ServiceConstants.CLIENT_TERM_PATH)
+                //{
+                //    //This condition is if the UI is requesting client terms and the clients are defined as terms and not term sets
+                //    foreach (TermSet termSet in termGroup.TermSets)
+                //    {                        
+                //        if (termSet.Name == taxonomySettings.ClientTermPath)
+                //        {
+                //            taxonomyResponseVM.ClientTermSets = GetClientTermSetHierarchy(clientContext, termSet, termStoreDetails);
+                //        }
+                //    }
+                //}
             }
             catch(Exception ex)
             {
@@ -455,7 +451,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             ClientTermSets tempClientTermSet = new ClientTermSets();
             try
             {
-                tempClientTermSet.Name = taxonomySettings.ClientTermSetName;
+                tempClientTermSet.Name = "Clients";
                 /////Retrieve the Terms - level 1
                 tempClientTermSet.ClientTerms = new List<Client>();
                 TermCollection termColl = null;
@@ -531,7 +527,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             }
                         }
                     }
-                    clientTermSet.ClientTerms.Add(tempTermPG);
+                    if(!string.IsNullOrWhiteSpace(tempTermPG.Id) && !string.IsNullOrWhiteSpace(tempTermPG.Url))
+                    {
+                        clientTermSet.ClientTerms.Add(tempTermPG);
+                    }                    
                 }
                 return clientTermSet;
             }

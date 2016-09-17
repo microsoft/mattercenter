@@ -351,6 +351,7 @@
                 enableRowSelection: true,
                 enableSelectAll: false,
                 multiSelect: false,
+                virtualizationThreshold: vm.searchResultsLength,
                 columnDefs: columnDefs1,
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
