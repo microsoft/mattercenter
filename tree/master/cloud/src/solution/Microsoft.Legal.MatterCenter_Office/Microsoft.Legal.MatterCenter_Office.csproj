@@ -46,6 +46,7 @@
     <None Include="Microsoft.Legal.MatterCenter_OfficeManifest\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{aa519f51-cb5e-4f79-94f0-4e9e00750f31}</SharePointProjectItemId>
     </None>
+    <Content Include="Images\64x64-logo.png" />
     <Content Include="Microsoft.Legal.MatterCenter_OfficeManifest\Microsoft.Legal.MatterCenter_Office.xml">
       <OpcRelationship>manifest-oemanifest</OpcRelationship>
     </Content>
