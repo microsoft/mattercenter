@@ -446,6 +446,16 @@ namespace Microsoft.Legal.MatterCenter.Web
                 jw.WriteStartObject();
                     jw.WritePropertyName("levels");
                     jw.WriteValue(taxonomySettingsSection["Levels"]);
+                    jw.WritePropertyName("practiceGroupTermSetName");
+                    jw.WriteValue(taxonomySettingsSection["PracticeGroupTermSetName"]);
+                    jw.WritePropertyName("termGroup");
+                    jw.WriteValue(taxonomySettingsSection["TermGroup"]);
+                    jw.WritePropertyName("clientTermSetName");
+                    jw.WriteValue(taxonomySettingsSection["ClientTermSetName"]);
+                    jw.WritePropertyName("clientCustomPropertiesURL");
+                    jw.WriteValue(taxonomySettingsSection["ClientCustomPropertiesURL"]);
+                    jw.WritePropertyName("clientCustomPropertiesId");
+                    jw.WriteValue(taxonomySettingsSection["ClientCustomPropertiesId"]);
                 jw.WriteEndObject();
 
             jw.WritePropertyName("search");

@@ -12,7 +12,8 @@ angular.module('matterMain', [
   'ngAnimate',
   'ui.grid.infiniteScroll',
   'angulartics',
-  'angulartics.azure'
+  'angulartics.azure',
+  'ngAria'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {

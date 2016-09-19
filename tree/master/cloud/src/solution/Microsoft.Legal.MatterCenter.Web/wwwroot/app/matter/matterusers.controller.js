@@ -15,6 +15,11 @@
         cm.isEdit = "false";
         cm.oMandatoryRoleNames = [];
         cm.popupContainerBackground = "Show";
+        $rootScope.bodyclass = "bodymain";
+        $rootScope.displayOverflow = "";
+        cm.oSiteUsers = [];
+        cm.invalidUserCheck = false;
+        cm.configsUri = configs.uri;
 
         function getParameterByName(name) {
             "use strict";
@@ -30,7 +35,7 @@
 
         if (cm.clientUrl === "" && cm.matterName === "") {
             cm.matterName = "E2ETesting2";
-            cm.clientUrl = "https://msmatter.sharepoint.com/sites/microsoft";
+            cm.clientUrl = cm.configsUri.SPOsiteURL + "/sites/microsoft";
             cm.isEdit = "true";
         }
 
@@ -164,6 +169,9 @@
                     assignedTeam.assignedUser = userNames[i][0] + "(" + userEmails[i][0] + ")";
                     assignedTeam.userExsists = true; assignedTeam.userConfirmation = true;
                     // assignedTeam.assignedRole = roles[i];
+                    if (-1 == cm.oSiteUsers.indexOf(userEmails[i][0])) {
+                        cm.oSiteUsers.push(userEmails[i][0]);
+                    }
                     angular.forEach(cm.assignRoles, function (role) {
                         if (role.name == roles[i]) {
                             assignedTeam.assignedRole = role;
@@ -223,6 +231,10 @@
                             checkEmailExists = true;
                             teamDetails.userConfirmation = false;
                         }
+                        else {
+                            teamDetails.userConfirmation = teamDetails.userConfirmation;
+                            cm.invalidUserCheck = true;
+                        }
 
                     } else {
                         checkEmailExists = true;
@@ -263,6 +275,9 @@
                                         team.userExsists = response.isUserExistsInSite;
                                         team.userConfirmation = true;
                                         cm.confirmUser(true);
+                                        if (-1 == cm.oSiteUsers.indexOf(userEmail[0])) {
+                                            cm.oSiteUsers.push(userEmail[0]);
+                                        }
                                     }
                                 });
 
@@ -280,12 +295,14 @@
                             cm.errorStatus = true;
                             cm.errorPopUpBlock = true;
                             showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                            team.userConfirmation = false;
+                            angular.element('#txtUser' + team.assigneTeamRowNumber).attr('confirm', "false");
                             cm.errorBorder = "txtUser" + team.assigneTeamRowNumber;
                             return false;
                         }
 
                     });
-
+                    cm.invalidUserCheck = false;
                 }
             }
             if (userMailId && userMailId != "") {
@@ -552,26 +569,43 @@
         }
 
 
-        cm.onSelect = function ($item, $model, $label, value, fucnValue, $event) {
-           
+        cm.onSelect = function ($item, $model, $label, value, fucnValue, $event, username) {
+            var typeheadelelen = angular.element('.dropdown-menu li').length;
+            var noresults = true;
+            if (typeheadelelen == 1) {
+                if (angular.element('.dropdown-menu li a')[0]) {
+                    if (angular.element('.dropdown-menu li a')[0].innerHTML == "No results found") {
+                        noresults = false;
+                        if ($event.keyCode == 9 || $event.keyCode == 13) {
+                            cm.user = angular.element('#' + $event.currentTarget.id).val();
+                        }
+                    }
+                }
+            }
             if ($item && $item.name !== "No results found") {
-
                 if (value == "team") {
                     $label.assignedUser = $item.name + '(' + $item.email + ')';
                     cm.typehead = false;
                     cm.notificationPopUpBlock = false;
                 }
-               
 
                 if (-1 == cm.oSiteUsers.indexOf($item.email)) {
                     cm.oSiteUsers.push($item.email);
                 }
                 cm.checkUserExists($label);
-
             }
             else {
                 if (fucnValue == "on-blurr") {
+                    cm.user = username;
+                }
+                if (fucnValue == "on-blurr" && typeheadelelen == 0 && noresults) {
                     cm.checkUserExists($label, $event);
+                }
+                if (!noresults) {                   
+                    if (value == "team") {
+                        $label.assignedUser = "";
+                        $label.assignedUser = cm.user;
+                    }
                 }
             }
         }
@@ -658,20 +692,41 @@
         function validateUsers() {
             var keepGoing = true;
             var blockedUserEmail = cm.matterProperties.matterObject.blockUserNames[0];
-           
+
             angular.forEach(cm.assignPermissionTeams, function (team) {
                 if (keepGoing) {
                     if (team.assignedUser && team.assignedUser != "") {//For loop                                             
-
+                        var teamUserEmail = [];
                         if (blockedUserEmail && blockedUserEmail != "") {
-                         var teamUserEmail= getUserName(team.assignedUser.trim() + ";", false)
-                         if (teamUserEmail[0] == blockedUserEmail) {
+                            teamUserEmail = getUserName(team.assignedUser.trim() + ";", false)
+                            if (teamUserEmail[0] == blockedUserEmail) {
                                 cm.errTextMsg = "Please enter individual who is not conflicted.";
                                 cm.errorBorder = "";
                                 cm.errorPopUpBlock = true;
                                 showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
                                 cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
                                 return false;
+                            }
+                        }
+                        teamUserEmail = getUserName(team.assignedUser.trim() + ";", false)
+                        if (-1 == cm.oSiteUsers.indexOf(teamUserEmail[0])) {
+                            //  cm.blockedUserName.trim()
+                            if (team.userExsists) {
+                                cm.errTextMsg = "Please enter valid team members.";
+                                cm.errorBorder = "";
+                                cm.errorPopUpBlock = true;
+                                showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
+                                return false;
+                            }
+                            else {
+                                if (!team.userConfirmation) {
+                                    cm.checkUserExists(team);
+                                    if (!cm.invalidUserCheck) {
+                                        keepGoing = false;
+                                        return false;
+                                    }
+                                }
                             }
                         }
                     }
@@ -708,99 +763,104 @@
 
             var attornyCheck = validateAttornyUserRolesAndPermissins($event);
             var validUsersCheck = validateUsers();
-            var checkUserDExists = validateCheckUserExisits();
-            if (attornyCheck && validUsersCheck && checkUserDExists) {
-                angular.forEach(cm.assignPermissionTeams, function (item) {
-                    if ("" !== item.assignedRole && "" !== item.assignedPermission) {
-                        if (roleInformation.hasOwnProperty(item.assignedRole.name)) {
-                            roleInformation[item.assignedRole.name] = roleInformation[item.assignedRole.name] + ";" + item.assignedUser;
-                        }
-                        else {
-                            roleInformation[item.assignedRole.name] = item.assignedUser;
-                        }
-                    }
-                });
-
-                angular.forEach(cm.assignPermissionTeams, function (item) {
-                    arrUserNames.push(getUserName(item.assignedUser.trim() + ";", true));
-                    arrUserEmails.push(getUserName(item.assignedUser.trim() + ";", false));
-                    arrTeamMembers.push(getUserName(item.assignedUser.trim() + ";", true).join(";"));
-                    var User_Upload_Permissions = "Read";
+            if (validUsersCheck) {
+                var checkUserDExists = validateCheckUserExisits();
+                if (attornyCheck && validUsersCheck && checkUserDExists) {
                     angular.forEach(cm.assignPermissionTeams, function (item) {
-                        if (item.assignedPermission.name.toLowerCase() === User_Upload_Permissions.toLowerCase()) {
-                            arrReadOnlyUsers.push(getUserName(item.assignedRole.name.trim() + ";", false).join(";"), ";");
+                        if ("" !== item.assignedRole && "" !== item.assignedPermission) {
+                            if (roleInformation.hasOwnProperty(item.assignedRole.name)) {
+                                roleInformation[item.assignedRole.name] = roleInformation[item.assignedRole.name] + ";" + item.assignedUser;
+                            }
+                            else {
+                                roleInformation[item.assignedRole.name] = item.assignedUser;
+                            }
                         }
                     });
 
-                });
+                    angular.forEach(cm.assignPermissionTeams, function (item) {
+                        arrUserNames.push(getUserName(item.assignedUser.trim() + ";", true));
+                        arrUserEmails.push(getUserName(item.assignedUser.trim() + ";", false));
+                        arrTeamMembers.push(getUserName(item.assignedUser.trim() + ";", true).join(";"));
+                        var User_Upload_Permissions = "Read";
+                        angular.forEach(cm.assignPermissionTeams, function (item) {
+                            if (item.assignedPermission.name.toLowerCase() === User_Upload_Permissions.toLowerCase()) {
+                                arrReadOnlyUsers.push(getUserName(item.assignedRole.name.trim() + ";", false).join(";"), ";");
+                            }
+                        });
 
-                validateTeamAssigmentRole();
-                getArrAssignedUserNamesAndEmails();
-                var arrRoles = getAssignedUserRoles();
-                var arrPermissions = getAssignedUserPermissions();
-                angular.forEach(cm.assignPermissionTeams, function (item) {
-                    if (1 <= cm.assignPermissionTeams.length) {
-                        if ("" !== item.assignedRole && "" !== item.assignedPermission) {
-                            if (-1 !== cm.oMandatoryRoleNames.indexOf(item.assignedRole.name)) {
-                                sResponsibleAttorney.push(getUserName(item.assignedUser + ";", true).join(";"));
-                                sResponsibleAttorneyEmail.push(getUserName(item.assignedUser + ";", false).join(";"));
+                    });
+
+                    validateTeamAssigmentRole();
+                    getArrAssignedUserNamesAndEmails();
+                    var arrRoles = getAssignedUserRoles();
+                    var arrPermissions = getAssignedUserPermissions();
+                    angular.forEach(cm.assignPermissionTeams, function (item) {
+                        if (1 <= cm.assignPermissionTeams.length) {
+                            if ("" !== item.assignedRole && "" !== item.assignedPermission) {
+                                if (-1 !== cm.oMandatoryRoleNames.indexOf(item.assignedRole.name)) {
+                                    sResponsibleAttorney.push(getUserName(item.assignedUser + ";", true).join(";"));
+                                    sResponsibleAttorneyEmail.push(getUserName(item.assignedUser + ";", false).join(";"));
+                                }
                             }
                         }
-                    }
-                });
+                    });
 
-                var updatedMatterUsers = {
-                    Client: {
-                        Url: cm.clientUrl,
-                        Id: "",
-                        Name: ""
-                    },
-                    Matter: {
-                        Name: cm.matterName,
-                        BlockUserNames: arrBlockUserNames,
-                        AssignUserNames: arrUserNames,
-                        AssignUserEmails: arrUserEmails,
-                        Permissions: arrPermissions,
-                        Roles: arrRoles,
-                        Conflict: {
-                            Identified: cm.sConflictScenario
+                    var updatedMatterUsers = {
+                        Client: {
+                            Url: cm.clientUrl,
+                            Id: "",
+                            Name: ""
                         },
-                        FolderNames: [],
-                        DefaultContentType: "",
-                        ContentTypes: [],
-                        Description: "",
-                        Id: "",
-                        MatterGuid: cm.matterProperties.matterObject.matterGuid
+                        Matter: {
+                            Name: cm.matterName,
+                            BlockUserNames: arrBlockUserNames,
+                            AssignUserNames: arrUserNames,
+                            AssignUserEmails: arrUserEmails,
+                            Permissions: arrPermissions,
+                            Roles: arrRoles,
+                            Conflict: {
+                                Identified: cm.sConflictScenario
+                            },
+                            FolderNames: [],
+                            DefaultContentType: "",
+                            ContentTypes: [],
+                            Description: "",
+                            Id: "",
+                            MatterGuid: cm.matterProperties.matterObject.matterGuid
 
-                    },
-                    MatterDetails: {
-                        PracticeGroup: "",
-                        AreaOfLaw: "",
-                        SubareaOfLaw: "",
-                        ResponsibleAttorney: sResponsibleAttorney.join(";").replace(/;;/g, ";"),
-                        ResponsibleAttorneyEmail: sResponsibleAttorneyEmail.join(";").replace(/;;/g, ";"),
-                        UploadBlockedUsers: arrReadOnlyUsers,
-                        TeamMembers: arrTeamMembers.join(";"),
-                        RoleInformation: JSON.stringify(roleInformation)
-                    },
-                    EditMode: cm.isEdit,
-                    UserIds: cm.userIDs,
-                    SerializeMatter: "",
-                    Status: ""
+                        },
+                        MatterDetails: {
+                            PracticeGroup: "",
+                            AreaOfLaw: "",
+                            SubareaOfLaw: "",
+                            ResponsibleAttorney: sResponsibleAttorney.join(";").replace(/;;/g, ";"),
+                            ResponsibleAttorneyEmail: sResponsibleAttorneyEmail.join(";").replace(/;;/g, ";"),
+                            UploadBlockedUsers: arrReadOnlyUsers,
+                            TeamMembers: arrTeamMembers.join(";"),
+                            RoleInformation: JSON.stringify(roleInformation)
+                        },
+                        EditMode: cm.isEdit,
+                        UserIds: cm.userIDs,
+                        SerializeMatter: "",
+                        Status: ""
+                    }
+
+                    updateMatterPermissions(updatedMatterUsers, function (response) {
+                        console.log(response);
+
+
+                        cm.popupContainerBackground = "hide";
+                        //                           cm.errTextMsg = "Error in updating  matter: Incorrect inputs.";
+                        //                           showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
+                        //                           cm.errorBorder = "";
+                        //                           cm.errorPopUpBlock = true;
+                        //                           cm.popupContainerBackground = "hide";
+                    });
+
                 }
-
-                updateMatterPermissions(updatedMatterUsers, function (response) {
-                    console.log(response);
-
-
+                else {
                     cm.popupContainerBackground = "hide";
-                    //                           cm.errTextMsg = "Error in updating  matter: Incorrect inputs.";
-                    //                           showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
-                    //                           cm.errorBorder = "";
-                    //                           cm.errorPopUpBlock = true;
-                    //                           cm.popupContainerBackground = "hide";
-                });
-
+                }
             }
             else {
                 cm.popupContainerBackground = "hide";
@@ -823,10 +883,8 @@
                     var userVal = angular.element('#txtUser' + team.assigneTeamRowNumber).attr('confirm');
                     if (userVal == "false") {
                         cm.textInputUser = team;
-                        if (cm.iCurrentPage == 2) {
-                            showNotificatoinMessages(team.assigneTeamRowNumber);
-                            cm.notificationPopUpBlock = true;
-                        }
+                        showNotificatoinMessages(team.assigneTeamRowNumber);
+                        cm.notificationPopUpBlock = true;
 
                     }
                     validUsers = (userVal == "false") ? false : true;

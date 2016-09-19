@@ -28,9 +28,12 @@
             cm.clientUrl = "";
             cm.errorStatus = false;
             cm.prevButtonDisabled = true;
+            cm.invalidUserCheck = false;
             cm.showRoles = true;
             cm.showMatterId = true;
             cm.matterIdType = "Custom";
+            $rootScope.displayOverflow = "";
+            cm.nextButtonDisabled = false; cm.prevButtonDisabled = true;
             cm.taxonomyHierarchyLevels = configs.taxonomy.levels;
             cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);
             if (cm.taxonomyHierarchyLevels >= 2) {
@@ -280,9 +283,9 @@
                     Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
-                    TermGroup: "MatterCenterTerms",
-                    TermSetName: "Clients",
-                    CustomPropertyName: "ClientURL"
+                    TermGroup: configs.taxonomy.termGroup,
+                    TermSetName: configs.taxonomy.clientTermSetName,
+                    CustomPropertyName: configs.taxonomy.clientCustomPropertiesURL,
                 }
             }
 
@@ -293,8 +296,8 @@
                     Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
-                    TermGroup: "MatterCenterTerms",
-                    TermSetName: "Practice Groups",
+                    TermGroup: configs.taxonomy.termGroup,
+                    TermSetName: configs.taxonomy.practiceGroupTermSetName,
                     CustomPropertyName: "ContentTypeName",
                     DocumentTemplatesName: "DocumentTemplates"
                 }
@@ -653,6 +656,7 @@
                     cm.showRoles = true;
                     cm.matterIdType = "Custom";
                     cm.clientId = "";
+                    cm.selectedClientName = undefined;
 
                 }
             }
@@ -1157,6 +1161,25 @@
             function validateUsers() {
                 var keepGoing = true;
                 var username = "";
+                if (cm.defaultConfilctCheck) {
+                    if (undefined==cm.selectedConflictCheckUser || "" == cm.selectedConflictCheckUser) {
+                        cm.errTextMsg = "Enter the conflict reviewers name (for auditing purposes).";
+                        cm.errorBorder = "ccheckuser";
+                        showErrorNotification("ccheckuser");
+                        cm.errorPopUpBlock = true;
+                        return false;
+                    }
+                    if (cm.conflictRadioCheck) {
+                    if (undefined == cm.blockedUserName || "" == cm.blockedUserName) {
+                        cm.errTextMsg = "Enter users that are conflicted with this matter.";
+                        cm.errorBorder = "cblockuser";
+                        showErrorNotification("cblockuser");
+                        cm.errorPopUpBlock = true;
+                        return false;
+                    }
+                }
+                }
+
                 if (cm.selectedConflictCheckUser && "" !== cm.selectedConflictCheckUser) {
                     username = getUserName(cm.selectedConflictCheckUser + ";", false);
                     if (-1 == cm.oSiteUsers.indexOf(username[0])) {
@@ -1184,16 +1207,26 @@
                     if (keepGoing) {
                         if (team.assignedUser && team.assignedUser != "") {//For loop
                             username = getUserName(team.assignedUser + ";", false)
-                            //if (99 == cm.oSiteUsers.indexOf(username[0])) {
-                            //    //  cm.blockedUserName.trim()
-                            //    cm.errTextMsg = "Please enter valid team members.";
-                            //    cm.errorBorder = "";
-                            //    cm.errorPopUpBlock = true;
-                            //    showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
-                            //    cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
-                            //    return false;
+                            if (team.userExsists) {
+                            if (-1 == cm.oSiteUsers.indexOf(username[0])) {
+                                //  cm.blockedUserName.trim()
+                                cm.errTextMsg = "Please enter valid team members.";
+                                cm.errorBorder = "";
+                                cm.errorPopUpBlock = true;
+                                showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
+                                return false;
 
-                            //}
+                            }
+                            } else {
+                                if (!team.userConfirmation) {
+                                    cm.checkUserExists(team);
+                                    if (!cm.invalidUserCheck) {
+                                        keepGoing = false;
+                                        return false;
+                                    }
+                                }
+                            }
 
                             if (cm.blockedUserName && cm.blockedUserName != "") {
                                 if (team.assignedUser == cm.blockedUserName) {
@@ -1217,6 +1250,8 @@
 
                 if (keepGoing) {
                     return true;
+                } else {
+                    return false;
                 }
             }
 
@@ -1257,7 +1292,7 @@
             cm.externalusers = [];
 
             cm.onSelect = function ($item, $model, $label, value, fucnValue, $event, username) {
-                console.log(cm.typehead);
+              
                 var typeheadelelen = angular.element('.dropdown-menu li').length;
                 var noresults = true;
                 if (typeheadelelen == 1) {
@@ -1299,8 +1334,19 @@
                         cm.checkUserExists($label, $event);
                     }
                     if (!noresults) {
-                        $label.assignedUser = "";
-                        $label.assignedUser = cm.user;
+                        if (value == "conflictcheckuser") {
+                            $label = "";
+                            cm.selectedConflictCheckUser = "";
+                        }
+                        if (value == "blockuser") {
+                            $label = "";
+                            cm.blockedUserName = "";
+                        }
+                        if (value == "team") {
+                            $label.assignedUser = "";
+                            $label.assignedUser = cm.user;
+                        }
+                      
                     }
                 }
             }
@@ -1643,6 +1689,7 @@
                     return re.test(email);
                 }
                 function validate(email) {
+
                     if (validateEmail(email)) {
                         var checkEmailExists = false;
                         if (cm.textInputUser && cm.textInputUser != "") {
@@ -1650,6 +1697,10 @@
                             if (oldUserEmail !== email) {
                                 checkEmailExists = true;
                                 teamDetails.userConfirmation = false;
+                            }
+                            else {
+                                teamDetails.userConfirmation = teamDetails.userConfirmation;
+                                cm.invalidUserCheck = true;
                             }
 
                         } else {
@@ -1703,12 +1754,14 @@
                                 cm.errorStatus = true;
                                 cm.errorPopUpBlock = true;
                                 showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                team.userConfirmation = false;
                                 angular.element('#txtUser' + team.assigneTeamRowNumber).attr('confirm', "false");
                                 cm.errorBorder = "txtUser" + team.assigneTeamRowNumber;
                                 return false;
                             }
 
                         });
+                        cm.invalidUserCheck = false;
 
                     }
                 }
@@ -1820,7 +1873,7 @@
                             },
                             MatterConfigurations: {
                                 IsConflictCheck: cm.chkConfilctCheck,
-                                IsMatterDescriptionMandatory: true,
+                                IsMatterDescriptionMandatory: cm.isMatterDescriptionMandatory,
                                 IsCalendarSelected: cm.includeCalendar,
                                 IsTaskSelected: cm.includeTasks
                             },
@@ -1982,7 +2035,7 @@
                     MatterConfigurations: {
 
                         IsConflictCheck: cm.chkConfilctCheck,
-                        IsMatterDescriptionMandatory: true,
+                        IsMatterDescriptionMandatory: cm.isMatterDescriptionMandatory,
                         IsCalendarSelected: cm.includeCalendar,
                         IsTaskSelected: cm.includeTasks,
                         IsRSSSelected: cm.includeRssFeeds
@@ -2206,7 +2259,7 @@
                     MatterProvisionFlags: oMatterProvisionFlags,
                     MatterConfigurations: {
                         IsConflictCheck: cm.chkConfilctCheck,
-                        IsMatterDescriptionMandatory: true
+                        IsMatterDescriptionMandatory: cm.isMatterDescriptionMandatory
                     }
                 }
                 console.log("options for optionsForStampMatterDetails matter");
@@ -2809,8 +2862,7 @@
                                                     cm.errorPopUpBlock = true; return false;
                                                 }
                                             }
-                                            else {
-                                                cm.matterDescription = "";
+                                            else {                                                
                                                 bInValid = true;
                                             }
 
@@ -2872,6 +2924,7 @@
                         }
                         else {
                             cm.errTextMsg = "Selected  client for this matter clientId is null ";
+                            showErrorNotification("client");
                             cm.errorBorder = "client";
                             cm.errorPopUpBlock = true; return false;
                         }
@@ -2892,6 +2945,7 @@
 
                             if (undefined !== cm.conflictDate && null !== cm.conflictDate && "" != cm.conflictDate) {
                                 // cm.conflictDate = new Date();
+                                
                                 var validUsers = validateUsers();
                                 var checkUserDExists = false;
                                 if (validUsers) {

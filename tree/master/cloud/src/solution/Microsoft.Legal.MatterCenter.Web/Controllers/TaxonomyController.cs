@@ -73,16 +73,17 @@ namespace Microsoft.Legal.MatterCenter.Web
             this.logTables = logTables.Value;
             this.validationFunctions = validationFunctions;
         }
-         
-        [HttpPost("gettaxonomy")]
-        [SwaggerResponse(HttpStatusCode.OK)]        
+
         /// <summary>
         /// Gets the hierarchy of terms along with the specific custom properties of each term from term store.
-        /// </summary>        
-        /// <param name="client">Client object containing Client data</param>
-        /// <param name="details">Term Store object containing Term store data</param>
-        /// <returns>Returns JSON object to the client</returns>
-        ///
+        /// </summary>
+        /// <param name="termStoreViewModel">request object which contains information from where we need to generate the taxonomy hierarchy</param>
+        /// <returns></returns>
+        [HttpPost("gettaxonomy")]
+        [Produces(typeof(TermSets))]
+        [SwaggerOperation("getTaxonomy")]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which contains either ClientTermSets or  TermSets either ", Type = typeof(TermSets))]
+        [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> GetTaxonomy([FromBody]TermStoreViewModel termStoreViewModel)
         {
             try
@@ -123,7 +124,7 @@ namespace Microsoft.Legal.MatterCenter.Web
 
                 ServiceUtility.RedisCacheHostName = generalSettings.RedisCacheHostName;
                 cacheValue = ServiceUtility.GetDataFromAzureRedisCache(key);
-                cacheValue = string.Empty;
+                cacheValue = "";
                 TaxonomyResponseVM taxonomyRepositoryVM = null;
                 if (String.IsNullOrEmpty(cacheValue))
                 {
@@ -143,7 +144,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 {
                     if (termStoreViewModel.TermStoreDetails.TermSetName == taxonomySettings.PracticeGroupTermSetName)
                     {
-                        var pgTermSets = JsonConvert.DeserializeObject<TermSets>(cacheValue);
+                        var pgTermSets = JsonConvert.DeserializeObject<string>(cacheValue);
                         if (pgTermSets == null)
                         {
                             errorResponse = new ErrorResponse()
@@ -185,59 +186,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
-            }
-            
-        }
-        /// <summary>
-        /// This is test method for testing the contrroller
-        /// </summary>
-        /// <returns></returns>
-        
-        [HttpGet("getcurrentsitetitle")]
-        [SwaggerResponse(HttpStatusCode.OK)]        
-        public IActionResult GetCurrentSiteTitle()
-        {
-            var termStoreViewModel1 = new TermStoreViewModel()
-            {
-                Client = new Client()
-                {
-                    Id = "123456",
-                    Name = "Disney",
-                    Url = "https://msmatter.sharepoint.com/sites/microsoft"
-                },
-                TermStoreDetails = new TermStoreDetails()
-                {
-                    TermGroup = "Site Collection - microsoft.sharepoint.com-teams-mcuisite",
-                    TermSetName = "Clients",
-                    CustomPropertyName = "ClientURL"
-                }
-            };
-            
-            string siteName = string.Empty;
-            
-           
-            siteName = taxonomyRepository.GetCurrentSiteName(termStoreViewModel1.Client);
-            var success = new 
-            {
-                Title = siteName
-            };
-            return matterCenterServiceFunctions.ServiceResponse(success, (int)HttpStatusCode.OK);
-        }
-
-
-        /// <summary>
-        /// This is test method for testing the contrroller
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("getcurrentsitetitlev1")]
-        [SwaggerResponse(HttpStatusCode.OK)]        
-        public IActionResult TestWebApi()
-        {            
-            var success = new
-            {
-                Title = "New Title"
-            };
-            return matterCenterServiceFunctions.ServiceResponse(success, (int)HttpStatusCode.OK);
-        }
+            }            
+        }        
     }
 }

@@ -37,6 +37,145 @@ textarea {
 }
 
 
+@media (max-width: 320px) {
+    .width25 {
+        width: 5% !important;
+    }
+
+    .overflowxAuto {
+        overflow-x: auto !important;
+    }
+
+    .padbtm15 {
+        padding-bottom: 15px;
+    }
+}
+
+@media(max-width:347px) {
+    .width25 {
+        width: 5% !important;
+    }
+}
+
+@media(max-width:1038px) {
+    .matterGridAttorClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:858px) {
+    .matterGridModDateClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:698px) {
+    .matterGridClientClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:668px) {
+    #matterCenterHeader {
+        width: 660px !important;
+    }
+
+    .searchdashboard {
+        width: 660px !important;
+    }
+
+    .navtabs {
+        width: 681px;
+    }
+
+    .sortbymatters {
+        width: 660px;
+    }
+
+    #mattersGrid .ui-grid-viewport {
+        width: 660px;
+    }
+
+    .sortbymatters ul {
+        left: 136px;
+        width: 141px;
+    }
+
+    .dashboarddrop {
+        width: 473px;
+    }
+}
+
+@media(max-width:767px) {
+    .sortbymatters {
+        width: 670px;
+    }
+
+        .sortbymatters ul {
+            left: 157px !important;
+            width: 120px;
+        }
+}
+
+
+@media(max-width:1057px) {
+    .docGridVerClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:977px) {
+    .docIdGridClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:840px) {
+    .docOwnerGridClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:673px) {
+    .docModDateGridClass {
+        display: none !important;
+    }
+}
+
+
+/*Document Dashboard classes*/
+.docGridVerClass {
+    display: table-cell;
+}
+
+.docIdGridClass {
+    display: table-cell;
+}
+
+.docModDateGridClass {
+    display: table-cell;
+}
+
+.docOwnerGridClass {
+    display:table-cell;
+}
+/*End of document dashboard classed*/
+
+
+/*Matter Dasboard classes*/
+.matterGridClientClass {
+    display: table-cell;
+}
+
+.matterGridModDateClass {
+    display: table-cell;
+}
+
+.matterGridAttorClass {
+    display: table-cell;
+}
+/*End of Matter Dasboard classes*/
+
 @media (min-width: 768px) {
     .carousel-caption {
         z-index: 10 !important;
@@ -51,6 +190,24 @@ textarea {
         margin-right: 20px;
         max-width: 400px;
     }
+}
+
+@media screen and (max-width:867px) and (min-width: 268px) {
+    .hideDocTabs {
+        display: none !important;
+    }
+
+    .showDocDashboard {
+        display: block !important;
+    }
+}
+
+.hideDocTabs {
+    display: block;
+}
+
+.showDocDashboard {
+    display: none;
 }
 
 @media screen and (max-width:360px) and (min-width: 268px) {
@@ -121,8 +278,8 @@ textarea {
         background-color: white;
         height: 28px;
         border: 1px solid #c8c8c8;
-        margin-top: 0;
-        margin-right: 0;
+        margin-top: 15px;
+        margin-right: 20px;
     }
 }
 
@@ -406,7 +563,7 @@ textarea {
 }
 
 #filterResultsContainer {
-    max-height: 134px !important;
+    max-height: 219px !important;
     min-height: 0;
     overflow-y: auto;
     clear: both;
@@ -628,13 +785,19 @@ textarea {
 
 .sortby {
     position: absolute;
+    top: 30px;
+    padding: 0;
+}
+
+.sortbymatters {
+    position: absolute;
     top: 80px;
     padding: 0;
 }
 
-    .sortby .btn {
-        padding: 1px 12px;
-    }
+.sortby .btn {
+    padding: 1px 12px;
+}
 
 .img-xls {
     float: right;
@@ -649,7 +812,7 @@ textarea {
     padding-top: 5px;
 }
 
-.sortby ul {
+.sortby ul, .sortbymatters ul {
     background-color: #fff;
     border: 1px solid #c8c8c8;
     position: absolute;
@@ -660,12 +823,12 @@ textarea {
     margin-top: 5px;
 }
 
-    .sortby ul li:hover {
+    .sortby ul li:hover, .sortbymatters ul li:hover {
         background-color: #eaecea;
         cursor: pointer;
     }
 
-    .sortby ul li {
+    .sortby ul li, .sortbymatters ul li {
         padding: 5px 10px 5px 10px;
         color: #333;
         display: inline-block;
@@ -798,11 +961,11 @@ textarea {
 }
 
 #docgrid .ui-grid, #mattersGrid .ui-grid {
-    height: 920px !important;
+    height: 960px !important;
 }
 
 #docgrid .ui-grid-viewport, #mattersGrid .ui-grid-viewport {
-    overflow: auto !important;
+    overflow: hidden !important;
 }
 
 .mattersdrop {
@@ -985,7 +1148,7 @@ textarea {
 }
 
 #HeaderPlaceHolder {
-    min-width: 270px !important;
+    min-width: 226px !important;
 }
 
 .zindex6 {
@@ -1018,4 +1181,70 @@ textarea {
 .closebutton {
     float: right !important;
     text-decoration: none !important;
+}
+
+.displayDocTabs {
+    width: 12px;
+    position: absolute;
+    top: 33px;
+    right: 1px;
+    left: 175px;
+    cursor: pointer;
+    margin-left: 28px;
+    z-index: 5;
+}
+
+
+.switchHideTab {
+    cursor: pointer;
+    float: none;
+    font-weight: 400;
+    background-color: #fff;
+    border: 2px solid silver;
+    position: absolute;
+    width: 145px;
+    z-index: 100;
+    top: 55px !important;
+    left: 182px !important;
+}
+
+
+.ui-grid-cell-contents {
+    overflow: hidden !important;
+}
+
+.displayMatterTabs {
+    width: 12px;
+    position: absolute;
+    top: 84px;
+    right: 1px;
+    left: 133px;
+    cursor: pointer;
+    margin-left: 28px;
+    z-index: 5;
+}
+
+.switchHideMatterTab {
+    cursor: pointer;
+    float: none;
+    font-weight: 400;
+    background-color: #fff;
+    border: 2px solid silver;
+    position: absolute;
+    width: 145px;
+    z-index: 100;
+    top: 105px !important;
+    left: 176px !important;
+}
+
+.xOverflowAuto {
+    overflow-x: auto;
+}
+
+.navtabs ul li {
+    z-index: 3;
+}
+
+.dashboardXOverFlow {
+    overflow-x: auto;
 }

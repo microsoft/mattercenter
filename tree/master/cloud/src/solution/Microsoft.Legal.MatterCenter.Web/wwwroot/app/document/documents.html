@@ -6,7 +6,6 @@
 </style>
 <!--<div class="container-fluid">   -->
 <div ng-click="vm.closealldrops()" ng-class="{'mainMatter':vm.lazyloader}">
-
     <div class="row">
         <div class="row" id="mainmenu">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
@@ -40,12 +39,12 @@
             </div>
             <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="docsearchmatter">
-                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + '' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                     <!--<span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>-->
                 </div>
                 <div class="col-xs-12">
-                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <!--<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>-->
                     <!--<div ng-show="noResults">
                         <i class="glyphicon glyphicon-remove"></i> No Results Found
                     </div>-->
@@ -53,7 +52,7 @@
             </div>
             <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth">
                 <div class="input-group col-xs-12 zindex6">
-                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + ' ('+ documentDataList.documentID + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + '' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></button>
@@ -122,7 +121,7 @@
                 <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()"></div>
             </div>
         </div>
-        <div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">            
+        <div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">
         </div>
         <div ng-if="vm.isOutlook && vm.showAttachment">
             <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
@@ -140,10 +139,10 @@
     <onload sortdetails="{{vm.sortexp}}"></onload>
     <div class="documentheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentheader">
         <div class='input-group'>
-            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input class='form-control' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-model='vm.checkedSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-model='vm.checkedSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
             <div class='input-group-btn'>
                 <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
                 <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
@@ -157,6 +156,11 @@
                 <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.documentConfigContent.ClearFilterFromLabelText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.documentConfigContent.ClearFilterFromLabelText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div style="width:100%;">
+                <div ng-hide="vm.lazyloaderFilter">
+                    <img src="../Images/WindowsLoadingFast.GIF" style="margin-left: 55px; margin-top:3px;" alt="{{vm.matterConfigContent.AttachmentLoadingTitle}}" title="{{vm.matterConfigContent.AttachmentLoadingTitle}}" />
+                </div>
+            </div>
             <div id='filterResultsContainer'>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-repeat='document in vm.details' ng-click='vm.documentsearch(document.documentName,""+vm.configSearchContent.ManagedPropertyFileName+"",true)'>{{document.documentName}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.documentsearch(client.documentClient,""+vm.configSearchContent.ManagedPropertyDocumentClientName+"",true)'>{{client.documentClient}}</div>

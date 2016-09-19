@@ -937,7 +937,7 @@ var oDocumentLandingObject = (function () {
             } else {
                 $("#accessValue").text("Same as matter");
             }
-            $("#accessValue").attr({ "target": "_self", "href": oDocumentLanding.sSPTenantUrl + oDocumentLanding.sClientRelativeUrl + oDocumentLanding.sPermissionURL.replace("{0}", oDocumentLanding.sDocumentParentListId).replace("{1}", oDocumentLanding.sDocumentItemId) });
+            $("#accessValue").attr({ "target": "_blank", "href": oDocumentLanding.sSPTenantUrl + oDocumentLanding.sClientRelativeUrl + oDocumentLanding.sPermissionURL.replace("{0}", oDocumentLanding.sDocumentParentListId).replace("{1}", oDocumentLanding.sDocumentItemId) });
             $("#fileTitleValue").text(oDocumentLanding.sFileTitle).attr("title", oDocumentLanding.sFileTitle);
             $("#clientValue").text(oDocumentLanding.sDocumentClient).attr("title", oDocumentLanding.sDocumentClient);
             $("#matterValue").text(oDocumentLanding.sMatterName).attr("title", oDocumentLanding.sMatterName);
@@ -1172,7 +1172,7 @@ var oDocumentLandingObject = (function () {
 	$("#viewMoreVersions").html(uiconfigs.DocumentDetails.Link3ViewMoreText);
 	
 	$("#spanDocumentName").html(uiconfigs.DocumentDetails.Label1HeaderText+ ":");
- 
+
 	$("#filePropertiesTitle").html(uiconfigs.DocumentDetails.Label2Section2HeaderText);
 	$("#Section1Column1").html(uiconfigs.DocumentDetails.Label1HeaderText + ":");
 	$("#Section1Column1").attr("title",uiconfigs.DocumentDetails.Label1HeaderText);

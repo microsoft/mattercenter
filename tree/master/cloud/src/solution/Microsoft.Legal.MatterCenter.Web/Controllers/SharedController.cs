@@ -45,7 +45,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         private ICustomLogger customLogger;
         private LogTables logTables;
        /// <summary>
-       /// 
+       /// Constructor where all dependencies are injected
        /// </summary>
        /// <param name="errorSettings"></param>
        /// <param name="sharedSettings"></param>
@@ -69,75 +69,24 @@ namespace Microsoft.Legal.MatterCenter.Web
             this.sharedSettings = sharedSettings.Value;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="oneNoteUrl"></param>
-        /// <param name="matterLandingPageUrl"></param>
-        /// <returns></returns>
-                    
-        [HttpPost("urlexists")]
-        [SwaggerResponse(HttpStatusCode.OK)]        
-        public async Task<IActionResult> UrlExists(Client client, string oneNoteUrl, string matterLandingPageUrl)
-        {
-            string result = string.Empty;
-            
-            try
-            {
-
-                
-                #region Error Checking                
-                ErrorResponse errorResponse = null;
-                //if the token is not valid, immediately return no authorization error to the user
-                if (errorResponse != null && !errorResponse.IsTokenValid)
-                {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-                }
-
-                if (client == null && string.IsNullOrEmpty(oneNoteUrl) && string.IsNullOrEmpty(matterLandingPageUrl))
-                {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.NotFound);
-                }
-                #endregion
-                var oneNoteUrlExists = await sharedRepository.UrlExistsAsync(client, oneNoteUrl);
-                var matterLandingUrlExists = await sharedRepository.UrlExistsAsync(client, matterLandingPageUrl);
-                var urlExists = new
-                {
-                    OneNoteExists = oneNoteUrlExists,
-                    MatterLandingExists = matterLandingUrlExists
-                };
-                return matterCenterServiceFunctions.ServiceResponse(urlExists, (int)HttpStatusCode.OK);
-            }
-            catch (Exception exception)
-            {
-                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
-            }
-        }
+        
 
        /// <summary>
-       /// 
+       /// This api will return help collection information for a particular page
        /// </summary>
        /// <param name="helpRequestModel"></param>
        /// <returns></returns>
         [HttpPost("help")]
-        [SwaggerResponse(HttpStatusCode.OK)]        
+        [Produces(typeof(List<ContextHelpData>))]
+        [SwaggerResponse(HttpStatusCode.OK, Description = "Returns IActionResult which contains help information about a page", Type = typeof(List<ContextHelpData>))]
+        [SwaggerResponseRemoveDefaults]
         public async Task<IActionResult> Help([FromBody]HelpRequestModel helpRequestModel)
         {
             string selectedPage = helpRequestModel.SelectedPage;
             Client client = helpRequestModel.Client;
             string result = string.Empty;
             try
-            {
-
-                
+            {                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 //if the token is not valid, immediately return no authorization error to the user

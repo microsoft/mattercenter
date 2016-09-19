@@ -23,6 +23,7 @@
         vm.docdropinner = true;
         $rootScope.pageIndex = "2";
         $rootScope.bodyclass = "bodymain";
+        $rootScope.displayOverflow = "";
         $rootScope.profileClass = "";
         // Onload show ui grid and hide error div
         //start
@@ -30,7 +31,17 @@
         vm.nodata = false;
         var screenHeight = 0;
         vm.searchResultsLength = 0;
+        vm.lazyloaderFilter = true;
         //end
+        //#region for checking whether the app is opened in outlook
+        var isAppOpenedInOutlook = $location.absUrl();
+        if (isAppOpenedInOutlook.indexOf("Outlook") > -1) {
+
+            vm.isOutlook = true;
+            //  vm.isOutlookAsAttachment(vm.isOutlook);
+            // }
+        }
+        //#endregion
 
         //#region scopes for displaying and hiding filter icons
         //start
@@ -518,14 +529,7 @@
         //#region Code for attaching documents in compose more
         Office.initialize = function (reason) {
         }
-        var isAppOpenedInOutlook = $location.absUrl().split('|')[0].split('=')[2];
-        if (isAppOpenedInOutlook && isAppOpenedInOutlook === "Outlook") {
-
-            vm.isOutlook = true;
-            //  vm.isOutlookAsAttachment(vm.isOutlook);
-            // }
-        }
-        vm.isOutlook = true;
+        //vm.isOutlook = true;
         //vm.appType=$location.search().AppType;
         // vm.isOutlook ? vm.isOutlookAsAttachment(vm.isOutlook) : "";
         vm.isOutlookAsAttachment = function (isOutlook) {
@@ -750,18 +754,52 @@
             if (val != "") {
                 finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":" + val + "* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":" + val + "*)"
             }
-            vm.pagenumber = 1;
-            searchRequest.SearchObject.PageNumber = vm.pagenumber;
-            searchRequest.SearchObject.SearchTerm = finalSearchText;
-            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
-            searchRequest.SearchObject.Sort.Direction = 0;
-            return documentResource.get(searchRequest).$promise;
+            var searchDocumentRequest = {
+                Client: {
+                    Url: configs.global.repositoryUrl
+                },
+                SearchObject: {
+                    PageNumber: 1,
+                    ItemsPerPage: 5,
+                    SearchTerm: finalSearchText,
+                    Filters: {
+                        ClientName: "",
+                        ClientsList: [],
+                        PGList: [],
+                        AOLList: [],
+                        DateFilters: {
+                            CreatedFromDate: "",
+                            CreatedToDate: "",
+                            ModifiedFromDate: "",
+                            ModifiedToDate: "",
+                            OpenDateFrom: "",
+                            OpenDateTo: ""
+                        },
+                        DocumentAuthor: "",
+                        DocumentCheckoutUsers: "",
+                        FilterByMe: 0,
+                        FromDate: "",
+                        Name: "",
+                        ResponsibleAttorneys: "",
+                        SubareaOfLaw: "",
+                        ToDate: ""
+                    },
+                    Sort:
+                            {
+                                ByProperty: '' + vm.configSearchContent.ManagedPropertyFileName + '',
+                                Direction: 0
+                            }
+                }
+            };
+            return documentResource.get(searchDocumentRequest).$promise;
         }
 
         vm.search = function () {
             vm.pagenumber = 1;
-            vm.documentname = 'All Documents'
-            vm.documentid = 1;
+            if (vm.documentid == 3) {
+                vm.documentname = 'All Documents'
+                vm.documentid = 1;
+            }
             vm.lazyloader = false;
             vm.divuigrid = false;
             vm.responseNull = false;
@@ -803,9 +841,27 @@
             });
         }
 
+        vm.filterSearch = function (val) {
+            if (val.length > 3) {
+
+                if (vm.searchexp == vm.configSearchContent.ManagedPropertyFileName) {
+                    vm.documentsearch("" + vm.configSearchContent.ManagedPropertyFileName + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false);
+                }
+                else if (vm.searchexp == vm.configSearchContent.ManagedPropertyDocumentClientName) {
+                    vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentClientName + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false);
+                }
+                else if (vm.searchexp == vm.configSearchContent.ManagedPropertyAuthor) {
+                    vm.documentsearch("" + vm.configSearchContent.ManagedPropertyAuthor + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
+                }
+                else if (vm.searchexp == vm.configSearchContent.ManagedPropertyDocumentCheckOutUser) {
+                    vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
+                }
+            }
+        }
+
         //#region for searching matter by property and searchterm
         vm.documentsearch = function (term, property, bool) {
-            vm.lazyloader = false;
+            vm.lazyloaderFilter = false;
             vm.responseNull = false;
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.SearchTerm = term;
@@ -848,13 +904,13 @@
                         vm.nodata = false;
                         vm.filternodata = true;
                     }
-                    vm.lazyloader = true;
+                    vm.lazyloaderFilter = true;
                     vm.divuigrid = true;
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.divuigrid = true;
                     vm.nodata = false;
-                    vm.lazyloader = true;
+                    vm.lazyloaderFilter = true;
                     if (bool) {
                         vm.gridOptions.data = response;
                         vm.details = [];
@@ -881,13 +937,13 @@
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.SearchTerm = "";
             if (name == "Modified Date") {
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = vm.modstartdate.format("yyyy-MM-ddT00:00:00Z");
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = vm.modenddate.format("yyyy-MM-ddT23:59:59Z");
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modstartdate, "yyyy-MM-ddT00:00:00") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modenddate, "yyyy-MM-ddT23:59:59") + "Z";
                 vm.moddatefilter = true;
             }
             if (name == "Created Date") {
-                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
-                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
+                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
                 vm.createddatefilter = true;
             }
             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
@@ -1321,21 +1377,50 @@
         //Start
 
         vm.FilterByType = function () {
-            get(searchRequest, function (response) {
-                vm.lazyloader = true;
-                if (response.errorCode == "404") {
-                    vm.divuigrid = false;
-                    vm.nodata = true;
-
-                } else {
-                    vm.divuigrid = true;
-                    vm.nodata = false;
-                    vm.gridOptions.data = response;
-                    //if (!$scope.$$phase) {
-                    //    $scope.$apply();
-                    //}
+            vm.lazyloader = true;
+            if (vm.documentid == 3) {
+                var pinnedDocumentsRequest = {
+                    Url: configs.global.repositoryUrl
                 }
-            });
+                getPinnedDocuments(pinnedDocumentsRequest, function (response) {
+
+                    if (response == "" || response.errorCode == "500") {
+                        vm.gridOptions.data = response;
+                        vm.divuigrid = true;
+                        vm.nodata = true;
+                        $scope.errorMessage = response.message;
+                    } else {
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        angular.forEach(response, function (res) {
+                            if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                res.MatterInfo = "Unpin this document";
+                                res.ismatterdone = true;
+                            }
+                        });
+                        vm.gridOptions.data = response;
+                        //if (!$scope.$$phase) {
+                        //    $scope.$apply();
+                        //}
+                    }
+                });
+            }
+            else {
+                get(searchRequest, function (response) {
+                    if (response.errorCode == "404") {
+                        vm.divuigrid = false;
+                        vm.nodata = true;
+
+                    } else {
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.gridOptions.data = response;
+                        //if (!$scope.$$phase) {
+                        //    $scope.$apply();
+                        //}
+                    }
+                });
+            }
         }
 
         vm.sortby = "desc";
@@ -1618,7 +1703,7 @@
         //#region setting the grid options when window is resized
 
         angular.element($window).bind('resize', function () {
-            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 110);
+            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 105);
             if ($window.innerWidth < 380) {
                 angular.element('#documentgrid .ui-grid-viewport').addClass('viewport');
                 angular.element('#documentgrid .ui-grid-viewport').removeClass('viewportlg');
@@ -1632,8 +1717,10 @@
 
         //#region
         vm.typeheadselect = function (index, selected) {
-            vm.documentname = 'All Documents'
-            vm.documentid = 1;
+            if (vm.documentid == 3) {
+                vm.documentname = 'All Documents'
+                vm.documentid = 1;
+            }
             var searchToText = '';
             var finalSearchText = "";
             if (selected != "") {

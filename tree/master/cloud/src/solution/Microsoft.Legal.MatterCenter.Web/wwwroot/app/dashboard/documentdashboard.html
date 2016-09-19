@@ -74,7 +74,7 @@
             <div class="col-xs-9">
                 <div class="col-xs-12 padlf0">
                     <div class="input-group">
-                        <input type="text" ng-model="vm.selected" placeholder="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}" uib-typeahead="documentDataList.documentName for documentDataList in vm.searchDocumentFile($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                        <input type="text" ng-model="vm.selected" placeholder="{{vm.documentDashboardConfigs.SearchDocumentPlaceholderText}}" uib-typeahead="documentDataList.documentName+'.'+documentDataList.documentExtension for documentDataList in vm.searchDocumentFile($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                         <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                     </div>
                 </div>
@@ -176,76 +176,83 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 padtop20">
+            <div class="col-xs-12 padtop20 navtabs">
                 <ul class="nav nav-tabs" toggletab>
-                    <li id="myDocuments"><a href="#Documents" data-toggle="tab" ng-click="vm.getMyDocuments()">{{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})</a></li>
-                    <li id="allDocuments" class="active"><a href="#Documents" data-toggle="tab" ng-click="vm.getDocuments()">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a></li>
-                    <li id="pinDocuments"><a href="#Documents" data-toggle="tab" ng-click="vm.getPinnedDocuments()">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a></li>
+                    <li id="showDocuments" class="showDocDashboard hide"><a href="#Documents" data-toggle="tab">{{vm.selectedTabInfo}}</a></li>
+                    <li id="myDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText}" class="hideDocTabs"><a href="#Documents" data-toggle="tab" ng-click="vm.getMyDocuments()">{{vm.documentDashboardConfigs.Tab1HeaderText}}({{vm.myDocumentCount}})</a></li>
+                    <li id="allDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText}" class="hideDocTabs"><a href="#Documents" data-toggle="tab" ng-click="vm.getDocuments()">{{vm.documentDashboardConfigs.Tab2HeaderText}}({{vm.allDocumentCount}})</a></li>
+                    <li id="pinDocuments" ng-class="{'active':vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText}" class="hideDocTabs"><a href="#Documents" data-toggle="tab" ng-click="vm.getPinnedDocuments()">{{vm.documentDashboardConfigs.Tab3HeaderText}}({{vm.pinDocumentCount}})</a></li>
                 </ul>
-            </div>
-            <div class="col-xs-12">
-                <div class="tab-content">
-                    <div class="tab-pane active" id="Documents">
-                        <div class="col-xs-12 pad0 padtop5" id="docgrid" ng-if="vm.divuigrid">
-                            <div id="grid1" ui-grid="vm.documentGridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
-                        </div>
-                        <div class="col-xs-12 pad0 padtop5 text-center" id="docgrid" ng-if="vm.nodata">
-                            {{vm.documentDashboardConfigs.NoSearchResultMsgText}}
+                <span class="showDocDashboard displayDocTabs" ng-click="vm.showDocTabs($event)">...</span>
+                <div class="switchHideTab" ng-if="vm.showNavTab" style="left: 165px; display: block;">
+                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab1HeaderText,vm.myDocumentCount)">{{vm.documentDashboardConfigs.Tab1HeaderText}}</div>
+                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab3HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab2HeaderText,vm.allDocumentCount)">{{vm.documentDashboardConfigs.Tab2HeaderText}}</div>
+                    <div class="navDiv" ng-if="vm.selectedTab==vm.documentDashboardConfigs.Tab2HeaderText||vm.selectedTab==vm.documentDashboardConfigs.Tab1HeaderText" ng-click="vm.showSelectedTabs(vm.documentDashboardConfigs.Tab3HeaderText,vm.pinDocumentCount)">{{vm.documentDashboardConfigs.Tab3HeaderText}}</div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="Documents">
+                            <div class="col-xs-12 pad0 padtop5" id="docgrid" ng-if="vm.divuigrid">
+                                <div id="grid1" ui-grid="vm.documentGridOptions" ui-grid-exporter ui-grid-selection class="grid"></div>
+                            </div>
+                            <div class="col-xs-12 pad0 padtop5 text-center" id="docgrid" ng-if="vm.nodata">
+                                {{vm.documentDashboardConfigs.NoSearchResultMsgText}}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="jsonGridFooter" ng-if="vm.displaypagination && vm.totalrecords>0">
-                <div ng-if="vm.totalrecords>6 && vm.first>2"> <img id="" ng-click="vm.prev()" class="first cur-pointer" src="../Images/pagination-back-Enabled.png"></div>
-                <div ng-if="vm.totalrecords<6 || vm.first<2"><img id="grid_Grid_First" class="first click-disabled" src="../Images/pagination-back-disabled.png"></div>
-                <div id="grid_Grid_ViewRecords" class="ViewRecordDiv moveToMiddle"><span class="PaginateSpan">{{vm.fromtopage}}</span></div>
-                <div ng-if="vm.totalrecords<=6 || vm.last>=vm.totalrecords"><img id="grid_Grid_Next" class="next click-disabled" src="../Images/pagination-front-disabled.png"></div>
-                <div ng-if="vm.totalrecords>6" ng-class="{'hide':vm.last>=vm.totalrecords}"><img title="Next" id="grid_Grid_Next" ng-click="vm.next()" class="next cur-pointer" active="0" src="../Images/pagination-front-Enabled.png"></div>
+                <div class="jsonGridFooter" ng-if="vm.displaypagination && vm.totalrecords>0">
+                    <div ng-if="vm.totalrecords>6 && vm.first>2"> <img id="" ng-click="vm.prev()" class="first cur-pointer" src="../Images/pagination-back-Enabled.png"></div>
+                    <div ng-if="vm.totalrecords<6 || vm.first<2"><img id="grid_Grid_First" class="first click-disabled" src="../Images/pagination-back-disabled.png"></div>
+                    <div id="grid_Grid_ViewRecords" class="ViewRecordDiv moveToMiddle"><span class="PaginateSpan">{{vm.fromtopage}}</span></div>
+                    <div ng-if="vm.totalrecords<=6 || vm.last>=vm.totalrecords"><img id="grid_Grid_Next" class="next click-disabled" src="../Images/pagination-front-disabled.png"></div>
+                    <div ng-if="vm.totalrecords>6" ng-class="{'hide':vm.last>=vm.totalrecords}"><img title="Next" id="grid_Grid_Next" ng-click="vm.next()" class="next cur-pointer" active="0" src="../Images/pagination-front-Enabled.png"></div>
 
-            </div>
-
-            <div class="col-xs-offset-6 col-xs-6 sortby">
-                <span id="EmailDiv" style="display: inline; cursor: default; color: rgb(68, 68, 68);">
-                    <span id="EmailImg">
-                        <img src="../Images/cart_icon_30px_X_30px.png"
-                             class="mailCartIcon"
-                             title="{{vm.documentDashboardConfigs.ImageMailCartIconTitle}}"
-                             alt="{{vm.documentDashboardConfigs.ImageMailCartIconAltText}}" ng-click="vm.showMailCartModal()">({{vm.documentsCheckedCount}})
-                    </span>
-                </span>
-            </div>
-
-
-            <div class="col-xs-offset-9 col-xs-3 sortby">
-                <div class="col-xs-offset-4 col-xs-8 text-right pad0">
-                    <span>{{vm.documentDashboardConfigs.LabelSortByText}} </span>
-                    <span>{{vm.sortbytext}}</span>
-                    <img alt="{{vm.documentDashboardConfigs.LabelSortByTitle}}" class="" ng-click="vm.showsortby($event)" title="{{vm.documentDashboardConfigs.LabelSortByTitle}}" src="../Images/icon-combobox.png" />
                 </div>
-                <div class="col-xs-offset-7 col-xs-5" ng-if="vm.sortbydrop">
-                    <ul>
-                        <li ng-click="vm.sortyby('Relevant','None')">{{vm.documentDashboardConfigs.DrpDownOption1Text}}</li>
-                        <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↑</li>
-                        <li ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↓</li>
-                        <li ng-click="vm.sortyby('CreateddateUp','Created date ↑')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↑</li>
-                        <li ng-click="vm.sortyby('CreateddateDown','Created date ↓')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↓</li>
-                        <li ng-click="vm.sortyby('ModifieddateUp','Modified date ↑')">{{vm.documentDashboardConfigs.DrpDownOption4Text}} ↑</li>
-                        <li ng-click="vm.sortyby('ModifieddateDown','Modified date ↓')">{{vm.documentDashboardConfigs.DrpDownOption4Text}} ↓</li>
-                    </ul>
+
+                <div class="col-xs-offset-6 col-xs-6 col-sm-offset-7 col-sm-5 sortby">
+                    <span id="" style="display: inline; cursor: default; color: rgb(68, 68, 68);">
+                        <span id="EmailImg">
+                            <img src="../Images/cart_icon_30px_X_30px.png"
+                                 class="mailCartIcon"
+                                 title="{{vm.documentDashboardConfigs.ImageMailCartIconTitle}}"
+                                 alt="{{vm.documentDashboardConfigs.ImageMailCartIconAltText}}" ng-click="vm.showMailCartModal()">({{vm.documentsCheckedCount}})
+                        </span>
+                    </span>
+                </div>
+
+
+                <div class="col-xs-offset-8 col-xs-4 sortby">
+                    <div class="col-xs-offset-2 col-xs-8 col-sm-offset-3 col-sm-8 text-right pad0">
+                        <span>{{vm.documentDashboardConfigs.LabelSortByText}} </span>
+                        <span>{{vm.sortbytext}}</span>
+                        <img alt="{{vm.documentDashboardConfigs.LabelSortByTitle}}" class="" ng-click="vm.showsortby($event)" title="{{vm.documentDashboardConfigs.LabelSortByTitle}}" src="../Images/icon-combobox.png" />
+                    </div>
+                    <div class="col-xs-offset-4 col-xs-5 col-sm-offset-5 col-sm-4 col-md-offset-7 col-md-4" ng-if="vm.sortbydrop">
+                        <ul>
+                            <li ng-click="vm.sortyby('Relevant','None')">{{vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text}}</li>
+                            <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↑</li>
+                            <li ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↓</li>
+                            <li ng-click="vm.sortyby('CreateddateUp','Created date ↑')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↑</li>
+                            <li ng-click="vm.sortyby('CreateddateDown','Created date ↓')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↓</li>
+                            <li ng-click="vm.sortyby('ModifieddateUp','Modified date ↑')">{{vm.documentDashboardConfigs.DrpDownOption4Text}} ↑</li>
+                            <li ng-click="vm.sortyby('ModifieddateDown','Modified date ↓')">{{vm.documentDashboardConfigs.DrpDownOption4Text}} ↓</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div id="loadingImageContainer" style="top:25%;left:47%">
-    <div class="lazyLoading" ng-hide="vm.lazyloaderdashboard">
-        <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" title="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" />
+    <div id="loadingImageContainer" style="top:25%;left:47%">
+        <div class="lazyLoading" ng-hide="vm.lazyloaderdashboard">
+            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" title="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" />
+        </div>
     </div>
-</div>
 
-<div style="position:absolute;top:28%;left:40%">
-    <div class="row text-center" style="" ng-hide="vm.lazyloaderdashboard">
-        {{vm.documentDashboardConfigs.MattersPreLoadingMsgText}}
+    <div style="position:absolute;top:28%;left:40%">
+        <div class="row text-center" style="" ng-hide="vm.lazyloaderdashboard">
+            {{vm.documentDashboardConfigs.MattersPreLoadingMsgText}}
+        </div>
     </div>
 </div>

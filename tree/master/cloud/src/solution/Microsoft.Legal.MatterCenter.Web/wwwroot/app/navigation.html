@@ -21,24 +21,16 @@
         <div class="LeftLinkContainer">
             <!--     <div class="row"> -->
             <!--  <div class="col-xs-6"> -->
-            <div class="MattersContainer" title="{{vm.navigationContent.Image1Title}}">
-                <a ui-sref='mc.matters()'>
-                    <figure>
+                    <figure ui-sref='mc.matters()' ng-click="mc.matters()" class="MattersContainer"  title="{{vm.navigationContent.Image1Title}}">
                         <img src="Images/MC_Matters.png" alt="{{vm.navigationContent.Image1Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image1Caption}}</figcaption>
                     </figure>
-                </a>
-            </div>
             <!--   </div> -->
             <!-- <div class="col-xs-6"> -->
-            <div class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
-                <a ui-sref='mc.documents()'>
-                    <figure>
+                    <figure ui-sref='mc.documents()' ng-click="mc.documents()" class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
                         <img src="Images/MC_Documents.png" alt="{{vm.navigationContent.Image2Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image2Caption}}</figcaption>
                     </figure>
-                </a>
-            </div>
             <!-- </div> -->
             <!--    </div> -->
             <!--  </div> -->
@@ -73,9 +65,9 @@
         <!--     </div> -->
     </div>
 </div>
-<footer class="marleft10" title="Write an email to Support">
+<div class="marleft10 padbtm15" title="Write an email to Support">
     <span class="ms-font-m ms-font-weight-semilight">{{vm.navigationContent.FooterLabel}} <a href="{{vm.navigationContent.FooterLink1URL}}" title="{{vm.navigationContent.FooterLink1Title}}" class="emailLink">{{vm.navigationContent.FooterLink1Text}}</a></span>
-</footer>
+</div>
 <div id="HeaderPlaceHolderContent">
     <span class="AppLogoContainer hide" title="{{vm.header.LogoImageTitle}}">
         <img class="AppLogo" src="Images/MC_Logo.png" alt="{{vm.header.LogoImageTitle}}" />

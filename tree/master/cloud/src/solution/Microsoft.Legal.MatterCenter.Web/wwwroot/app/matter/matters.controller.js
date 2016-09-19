@@ -16,6 +16,7 @@
             vm.navigationContent = uiconfigs.Navigation;
             vm.configSearchContent = configs.search;
             vm.matterConfigContent = uiconfigs.Matters;
+            vm.configsUri = configs.uri;
             vm.header = uiconfigs.Header;
             //#region for setting the dynamic width to grid
             var screenHeight = 0;
@@ -27,6 +28,7 @@
             vm.mattersdropinner = true;
             $rootScope.bodyclass = "bodymain";
             $rootScope.profileClass = "";
+            $rootScope.displayOverflow = "";
             //This value is for displaying the help
             $rootScope.pageIndex = "1";
             //#region Onload show ui grid and hide error div
@@ -40,6 +42,7 @@
             //#region To hide lazyloader on load
             //start
             vm.lazyloader = true;
+            vm.lazyloaderFilter = true;
             //#endregion
 
             //#region scopes for displaying and hiding filter icons
@@ -91,7 +94,7 @@
             //For setting dynamic height to the grid
             vm.getTableHeight = function () {
                 return {
-                    height: ($window.innerHeight - 115) + "px"
+                    height: ($window.innerHeight - 100) + "px"
                 };
             };
 
@@ -348,6 +351,7 @@
                 enableRowSelection: true,
                 enableSelectAll: false,
                 multiSelect: false,
+                virtualizationThreshold: vm.searchResultsLength,
                 columnDefs: columnDefs1,
                 enableColumnMenus: false,
                 onRegisterApi: function (gridApi) {
@@ -374,13 +378,12 @@
 
             vm.watchFuncscroll = function () {
                 //var element = 0;
-                //var topelement = angular.element('.ui-grid-viewport').scrollTop();
-                //angular.element('.popcontent').css({ 'top': element - topelement });
+                ////var topelement = angular.element('.ui-grid-viewport').scrollTop();
+                //angular.element('.popcontent').css("display","none");
                 //if (!$scope.$$phase) {
                 //    $scope.$apply();
                 //}
             }
-
 
             //#region for setting the classes for ui-grid based on size
             vm.setColumns = function () {
@@ -404,7 +407,6 @@
             vm.pagenumber = 1;
             vm.responseNull = false;
             vm.watchFunc = function () {
-
                 var promise = $q.defer();
                 if (!vm.responseNull) {
                     vm.lazyloader = false;
@@ -1171,7 +1173,7 @@
 
             }
             //#endregion
-
+            
             //#region Request object for the GetMattersMethod
             var searchRequest = {
                 Client: {
@@ -1207,27 +1209,78 @@
             }
 
             //#endregion
+            vm.filterSearch = function (val) {
+                if (val.length > 3) {
+                    
+                    if (vm.searchexp == vm.configSearchContent.ManagedPropertyMatterName)
+                    {
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyMatterName + ":" + val + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                    }
+                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertyClientName)
+                    {
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyClientName + ":" + vm.clientSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                    }
+                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertyResponsibleAttorney)
+                    {
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + ":" + vm.attorneySearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                    }
+                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertySubAreaOfLaw)
+                    {
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + ":" + vm.areaSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                    }
+                }
+            }
 
-
-            //#region For filtering the grid when clicked on search button 
+           //#region For filtering the grid when clicked on search button
             vm.searchMatter = function (val) {
                 var finalSearchText = "";
                 if (val != "") {
                     finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":" + val + "* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":" + val + "*)";
                 }
-                vm.pagenumber = 1;
-                searchRequest.SearchObject.PageNumber = vm.pagenumber;
-                searchRequest.SearchObject.SearchTerm = finalSearchText;
-                searchRequest.SearchObject.Sort.Direction = 1;
-                return matterResource.get(searchRequest).$promise;
+                var searchMatterRequest = {
+                    Client: {
+                        Url: configs.global.repositoryUrl
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: 5,
+                        SearchTerm: finalSearchText,
+                        Filters: {
+                            AOLList: [],
+                            ClientName: "",
+                            ClientsList: [],
+                            DateFilters: {
+                                CreatedFromDate: "", CreatedToDate: "", ModifiedFromDate: "", ModifiedToDate: "", OpenDateFrom: "", OpenDateTo: ""
+                            },
+                            DocumentAuthor: "",
+                            DocumentCheckoutUsers: "",
+                            FilterByMe: 1,
+                            FromDate: "",
+                            Name: "",
+                            PGList: [],
+                            ResponsibleAttorneys: "",
+                            SubareaOfLaw: "",
+                            ToDate: ""
+                        },
+                        Sort:
+                                {
+                                    ByProperty: "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "",
+                                    Direction: 1
+                                }
+                    }
+                }
+                                return matterResource.get(searchMatterRequest).$promise;
             }
 
             vm.search = function () {
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
-                vm.matterid = 1;
-                vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
+                searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
+                if (vm.matterid == 3) {
+                    vm.matterid = 1;
+                    vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
+                }
                 vm.pagenumber = 1;
                 var searchToText = '';
                 var finalSearchText = '';
@@ -1274,7 +1327,7 @@
             //#endregion
             //#region for searching matter by property and searchterm
             vm.mattersearch = function (term, property, bool) {
-                vm.lazyloader = false;
+                vm.lazyloaderFilter = false;
                 vm.filternodata = false;
                 searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = term;
@@ -1284,14 +1337,16 @@
                     vm.matterheader = true;
                     vm.divuigrid = false;
                     searchRequest.SearchObject.SearchTerm = "";
-                    searchRequest.SearchObject.ItemsPerPage = 17;
+                    searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
                     if (property == "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "") {
                         vm.attorneyproperty = term;
                         searchRequest.SearchObject.Filters.ResponsibleAttorneys = term;
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.attorneyfilter = true;
                     }
                     else if (property == "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "") {
-                        searchRequest.SearchObject.Filters.SubareaOfLaw = term;
+                        searchRequest.SearchObject.Filters.SubareaOfLaw = term.trim();
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.areafilter = true;
                     }
                     else if (property == "" + vm.configSearchContent.ManagedPropertyMatterName + "") {
@@ -1327,13 +1382,13 @@
                             vm.nodata = false;
                             vm.filternodata = true;
                         }
-                        vm.lazyloader = true;
+                        vm.lazyloaderFilter = true;
                         vm.divuigrid = true;
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
-                        vm.lazyloader = true;
+                        vm.lazyloaderFilter = true;
                         if (bool) {
                             vm.gridOptions.data = response;
                             vm.details = [];
@@ -1361,13 +1416,13 @@
                 searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = "";
                 if (name == "Modified Date") {
-                    searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = vm.modstartdate.format("yyyy-MM-ddT00:00:00Z");
-                    searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = vm.modenddate.format("yyyy-MM-ddT23:59:59Z");
+                    searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modstartdate, "yyyy-MM-ddT00:00:00") + "Z";
+                    searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modenddate,"yyyy-MM-ddT23:59:59") + "Z";
                     vm.moddatefilter = true;
                 }
                 if (name == "Open Date") {
-                    searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
-                    searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
                     vm.opendatefilter = true;
                 }
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
@@ -1401,8 +1456,9 @@
                 vm.nodata = false;
                 vm.responseNull = false;
                 vm.pagenumber = 1;
+                searchRequest.SearchObject.SearchTerm = '';
+                searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
                 searchRequest.SearchObject.PageNumber = vm.pagenumber;
-                searchRequest.SearchObject.ItemsPerPage = 17;
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 if (property == vm.matterConfigContent.GridColumn5Header) {
@@ -1813,23 +1869,54 @@
             //Start
 
             vm.FilterByType = function () {
-                get(searchRequest, function (response) {
-                    vm.lazyloader = true;
-                    if (response == "" || response.errorCode == "500") {
-                        vm.gridOptions.data = response;
-                        vm.divuigrid = false;
-                        vm.nodata = true;
-                        $scope.errorMessage = response.message;
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
-                        vm.gridOptions.data = response;
-                        if (!$scope.$$phase) {
-                            $scope.$apply();
-                        }
-
+                vm.lazyloader = true;
+                if (vm.matterid == 3) {
+                    var pinnedMattersRequest = {
+                        Url: configs.global.repositoryUrl
                     }
-                });
+                    getPinnedMatters(pinnedMattersRequest, function (response) {
+                       
+                        if (response == "" || response.errorCode == "500") {
+                            vm.gridOptions.data = response;                        
+                            vm.divuigrid = true;
+                            vm.nodata = true;
+                            $scope.errorMessage = response.message;
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            angular.forEach(response, function (res) {
+                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                    res.MatterInfo = "Unpin this matter";
+                                    res.ismatterdone = true;
+                                }
+                            });
+                            vm.gridOptions.data = response;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+
+                        }
+                    });
+                }
+                else {
+                    get(searchRequest, function (response) {
+                      //  vm.lazyloader = true;
+                        if (response == "" || response.errorCode == "500") {
+                            vm.gridOptions.data = response;
+                            vm.divuigrid = false;
+                            vm.nodata = true;
+                            $scope.errorMessage = response.message;
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            vm.gridOptions.data = response;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+
+                        }
+                    });
+                }
             }
 
             vm.sortby = "desc";
@@ -1991,7 +2078,7 @@
                                 vm.FilterByType();
                                 vm.ResAttoSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
-                                $interval(function () { vm.showSortExp(); }, 1200, 3);
+                                $interval(function () { vm.showSortExp(); }, 1500, 3);
                             }
                         } else {
                             vm.divuigrid = true;
@@ -2074,7 +2161,7 @@
             //#region setting the grid options when window is resized
 
             angular.element($window).bind('resize', function () {
-                angular.element('#mattergrid .ui-grid').css('height', $window.innerHeight - 110);
+                angular.element('#mattergrid .ui-grid').css('height', $window.innerHeight - 115);
                 if ($window.innerWidth < 360) {
                     angular.element('#mattergrid .ui-grid-viewport').addClass('viewport');
                     angular.element('#mattergrid .ui-grid-viewport').removeClass('viewportlg');
@@ -2090,8 +2177,10 @@
 
             //#region
             vm.typeheadselect = function (index, selected) {
-                vm.matterid = 1;
-                vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
+                if (vm.matterid == 3) {
+                    vm.matterid = 1;
+                    vm.mattername = "" + vm.matterConfigContent.Dropdown1Item1 + "";
+                }
                 var searchToText = '';
                 var finalSearchText = '';
                 if (selected != "") {

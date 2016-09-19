@@ -39,11 +39,11 @@
             </div>
             <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="searchmatter">
-                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
+                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.matterConfigContent.SearchPlaceholderText}}" uib-typeahead="searchMatters.matterName + ' ('+ searchMatters.matterID + ')' for searchMatters in vm.searchMatter($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
                     <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
                 <div class="col-xs-12">
-                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                    <!--<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>-->
                     <!--<div ng-show="noResults">
                         <i class="glyphicon glyphicon-remove"></i> No Results Found
                     </div>-->
@@ -233,7 +233,7 @@
                             <div class="folderStructureContent" showbreadcrumb ng-hide="foldercontent">
                                 <script type="text/ng-template" id="folderTree">
                                     <div ng-if="child.parentURL!==null" class="treeNodes" ng-show="child.active" title="" droppable drop="handleDrop()" folder="child" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" ng-click="vm.showSelectedFolderTree(child)">
-                                        <img class="folderIcon" src="https://msmatter.sharepoint.com/_layouts/15/images/folder.gif" align="center" alt="{{vm.matterConfigContent.AttachmentFolderAltText}}">
+                                        <img class="folderIcon" src="{{vm.configsUri.SPOsiteURL}}/_layouts/15/images/folder.gif" align="center" alt="{{vm.matterConfigContent.AttachmentFolderAltText}}">
                                         {{child.name}}
                                     </div>
                                     <ul ng-if="child.children" style="margin-left:5px;">
@@ -268,10 +268,10 @@
 
     <div class="matterheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.matterheader">
         <div class='input-group'>
-            <input class='form-control' ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
-            <input class='form-control' ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
-            <input class='form-control' ng-if="vm.filtername==vm.matterConfigContent.GridColumn5Header" ng-model='vm.attorneySearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
-            <input class='form-control' ng-if="vm.filtername==vm.matterConfigContent.GridColumn6Header" ng-model='vm.areaSearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="searchMatters.matterName for searchMatters in vm.filterSearch($viewValue)"  ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="searchMatters.matterClient for searchMatters in vm.filterSearch($viewValue)"  ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="searchMatters.matterClient for searchMatters in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.matterConfigContent.GridColumn5Header" ng-model='vm.attorneySearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="searchMatters.matterClient for searchMatters in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.matterConfigContent.GridColumn6Header" ng-model='vm.areaSearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
             <div class='input-group-btn'>
                 <button type='button' ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.searchTerm+"*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
                 <button type='button' ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header" ng-click='vm.mattersearch(""+vm.configSearchContent.ManagedPropertyClientName+":" + vm.clientSearchTerm + "*("+vm.configSearchContent.ManagedPropertyMatterName+":* OR "+vm.configSearchContent.ManagedPropertyMatterId+":* OR "+vm.configSearchContent.ManagedPropertyClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
@@ -285,11 +285,16 @@
                 <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='{{vm.matterConfigContent.ImageClearTitle}}' title='{{vm.matterConfigContent.ImageClearAltText}}'>
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.matterConfigContent.ClearFilterText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.matterConfigContent.ClearFilterText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
+            <div style="width:100%;">
+                <div ng-hide="vm.lazyloaderFilter">
+                    <img src="../Images/WindowsLoadingFast.GIF" style="margin-left: 55px; margin-top:3px;" alt="{{vm.matterConfigContent.AttachmentLoadingTitle}}" title="{{vm.matterConfigContent.AttachmentLoadingTitle}}" />
+                </div>
+            </div>
             <div id='filterResultsContainer'>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-repeat='matter in vm.details' ng-click='vm.mattersearch(matter.matterName,""+vm.configSearchContent.ManagedPropertyMatterName+"",true)'>{{matter.matterName}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header" ng-repeat='client in vm.details|limitTo:1' ng-click='vm.mattersearch(client.matterClient,""+vm.configSearchContent.ManagedPropertyClientName+"",true)'>{{client.matterClient}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn5Header" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(vm.filtermatter(matter.matterResponsibleAttorney),""+vm.configSearchContent.ManagedPropertyResponsibleAttorney+"",true)'>{{vm.filtermatter(matter.matterResponsibleAttorney)}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn6Header" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(matter.matterSubAreaOfLaw,""+vm.configSearchContent.ManagedPropertySubAreaOfLaw+"",true)'>{{vm.filtermatter(matter.matterSubAreaOfLaw)}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.matterConfigContent.GridColumn6Header" ng-repeat='matter in vm.details|limitTo:1' ng-click='vm.mattersearch(vm.filtermatter(matter.matterSubAreaOfLaw),""+vm.configSearchContent.ManagedPropertySubAreaOfLaw+"",true)'>{{vm.filtermatter(matter.matterSubAreaOfLaw)}}</div>
                 <div title="{{vm.matterConfigContent.NoFilterMatchMsgTitle}}" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>{{vm.matterConfigContent.NoFilterMatchMsgText}}</span></div>
             </div>
 
@@ -342,7 +347,7 @@
                        ng-model='vm.modenddate'
                        is-open='vm.modifiedenddate'
                        datepicker-options='vm.modenddateOptions'
-                       ng-required='true' close-text='Close'
+                       ng-required='true' close-text='Close'                    
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
                     <button type='button' class='btn btn-default' ng-click='vm.modEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>

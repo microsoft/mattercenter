@@ -128,19 +128,20 @@
                         <input id="chkConflictCheck" type="checkbox" checked="checked" ng-model="cm.chkConfilctCheck" value="Yes">{{cm.createContent.Tab2Checkbox1Lebal}}
                     </label>
                     <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox1Label}}</label>
+                    <div class="gutter">
+                        <i ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh loadingGlyphiconCCheck pull-left"></i>
+                    </div>
                     <div class="gutter"></div>
                     <div class="gutter"></div>
-                    <label class="contentLabel mediumSmall" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2DateLabel}}</label>
+                    <label class="contentLabel mediumSmall dateConductedLbl" id="checkedPerformedOn"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2DateLabel}}</label>
 
                     <label class="contentLabel " id="conflictIdentified">{{cm.createContent.Tab2RadioButton1Label}}</label>
                     <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser")' typeahead-no-results="conflictUserResults" class="form-control" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
+                    <input class="medium clear ui-autocomplete-input" id="txtConflictCheckBy" ng-class="{'errorBorder' :  (cm.errorBorder == 'ccheckuser')}" ng-model="cm.selectedConflictCheckUser" spellcheck="true" type="text" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading="conflictloadingLocations" typeahead-on-select='cm.onSelect($item, $model, cm.selectedConflictCheckUser,"conflictcheckuser","",$event,"")' typeahead-no-results="conflictUserResults" class="form-control" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
                     <div ng-show="conflictUserResults">
                         <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
                     </div>
-                    <div class="gutter">
-                        <i ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh loadingGlyphicon pull-left"></i>
-                    </div>
+                  
                     <div class="gutter"></div>
                     <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
                     <!--<input type="text" class="form-control" datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />-->
@@ -180,13 +181,14 @@
                     <section id="snBlockUser" ng-show="cm.conflictRadioCheck">
                         <label class="contentLabel medium clear"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox2Label}}</label>
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
-                        <div ng-show="blockUserResults">
+                        <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" ng-model="cm.blockedUserName" uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.blockedUserName,"blockuser","",$event,"")' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" autocomplete="off">
+                        <div class="gutter">
+                            <i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh pull-left loadingGlyphiconBlockUser"></i>
+                        </div>
+                         <div ng-show="blockUserResults">
                             <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
                         </div>
-                        <div class="gutter">
-                            <i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh pull-left loadingGlyphicon"></i>
-                        </div>
+                      
                         <div class="gutter"></div>
                         <div class="large clear" id="areaBlockUser"></div>
                     </section>
@@ -210,12 +212,12 @@
                 <div data-ng-repeat="assignTeam in cm.assignPermissionTeams" class="assignTeam">
                     <div class="row{{$index}} assignNewPerm">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' confirm="false" uservalue="" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" autocomplete="off">
+                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' confirm="false" uservalue="" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocationsTeam' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" autocomplete="off">
                         <!--<div ng-show='teamAssingnResults'>
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
                         </div>-->
                         <div class="gutter">
-                            <i ng-show='loadingLocations' class="glyphicon glyphicon-refresh pull-left loadingGlyphicon"></i>
+                            <i ng-show='loadingLocationsTeam' class="glyphicon glyphicon-refresh pull-left loadingGlyphicon"></i>
                         </div>
                         <div class="gutter"></div>
                         <div class="addNewMember" ng-show="cm.showRoles">
@@ -270,18 +272,19 @@
                     <label for="demo-checkbox-unselected1" class="ms-ChoiceField-field"><span id="checkbox-label-text1" class="ms-Label checkbox createLable">{{cm.createContent.Tab3CheckBox2Text}}</span></label>
                 </div>
                 <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton($event)' ng-disabled="cm.createBtnDisabled" value="Create">{{cm.createButton}}</button>
+                <div class="creatematerLoadingBtn">
+                    <img id="loadingImageCreate" ng-show="cm.createBtnDisabled" src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
+                </div>
             </div>
-            <div class="loading " ng-show="cm.createBtnDisabled">
-                <img id="loadingImage" src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
-            </div>
+           
         </section>
         <div id="space"></div>
         <div class="row ">
             <div class="col-xs-5">
-                <button class="buttonPrev pull-right marginTop10" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
+                <button class="buttonPrev pull-right marginTop10"  ng-class="{'btnHover' : cm.prevButtonDisabled=== false}" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
             </div>
             <div class="col-xs-6">
-                <button class="buttonPrev pull-left marginTop10" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
+                <button class="buttonPrev pull-left marginTop10" ng-class="{'btnHover' : cm.nextButtonDisabled=== false}" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
             </div>
         </div>
     </div>
