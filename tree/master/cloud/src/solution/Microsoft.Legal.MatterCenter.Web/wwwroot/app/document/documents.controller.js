@@ -787,7 +787,8 @@
                     Sort:
                             {
                                 ByProperty: '' + vm.configSearchContent.ManagedPropertyFileName + '',
-                                Direction: 0
+                                Direction: 0, 
+                                ByProperty: "MatterModifiedDate"
                             }
                 }
             };

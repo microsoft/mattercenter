@@ -1203,6 +1203,7 @@
                     Sort:
                             {
                                 ByProperty: "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "",
+                                ByColumn: "ModifiedFromDate",
                                 Direction: 1
                             }
                 }
@@ -1265,7 +1266,8 @@
                         Sort:
                                 {
                                     ByProperty: "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "",
-                                    Direction: 1
+                                    Direction: 1,
+                                    ByColumn: "ModifiedFromDate",
                                 }
                     }
                 }
@@ -1304,12 +1306,16 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
+                        vm.sortby = "desc";
+                        vm.sortexp = "matterModifiedDate";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.gridOptions.data = response;
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
+                        vm.sortby = "desc";
+                        vm.sortexp = "matterModifiedDate";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
@@ -1384,6 +1390,8 @@
                         }
                         vm.lazyloaderFilter = true;
                         vm.divuigrid = true;
+                        vm.sortby = "desc";
+                        vm.sortexp = "matterModifiedDate";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.divuigrid = true;
@@ -1401,6 +1409,8 @@
                         }
                         searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Sort.ByProperty = "";
+                        vm.sortby = "desc";
+                        vm.sortexp = "matterModifiedDate";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
@@ -1433,12 +1443,16 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
+                        vm.sortby = "desc";
+                        vm.sortexp = "matterModifiedDate";
                         $interval(function () { vm.showSortExp(); }, 2500, 3);
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
                         vm.gridOptions.data = response;
+                        vm.sortby = "desc";
+                        vm.sortexp = "matterModifiedDate";
                         $interval(function () { vm.showSortExp(); }, 2500, 3);
                     }
                 });
@@ -1504,12 +1518,16 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
+                        vm.sortby = "desc";
+                        vm.sortexp = "matterModifiedDate";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
                         vm.gridOptions.data = response;
+                        vm.sortby = "desc";
+                        vm.sortexp = "matterModifiedDate";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
@@ -1546,6 +1564,7 @@
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.FilterByMe = 0;
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                    searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
                     get(searchRequest, function (response) {
                         if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
@@ -1553,7 +1572,7 @@
                             vm.divuigrid = true;
                             vm.nodata = true;
                         } else {
-                            getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
+                            getPinnedMatters(searchRequest, function (pinnedResponse) {
                                 if (pinnedResponse && pinnedResponse.length > 0) {
                                     angular.forEach(pinnedResponse, function (pinobj) {
                                         angular.forEach(response, function (res) {
@@ -1583,6 +1602,8 @@
                             vm.lazyloader = true;
                             vm.divuigrid = true;
                         }, 1000);
+                        vm.sortby = "desc";
+                        vm.sortexp = "matterModifiedDate";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     });
                 } else if (id == 2) {
@@ -1594,6 +1615,7 @@
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.FilterByMe = 1;
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                    searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
                     get(searchRequest, function (response) {
                         if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
@@ -1601,7 +1623,7 @@
                             vm.divuigrid = true;
                             vm.nodata = true;
                         } else {
-                            getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
+                            getPinnedMatters(searchRequest, function (pinnedResponse) {
                                 if (pinnedResponse && pinnedResponse.length > 0) {
                                     angular.forEach(pinnedResponse, function (pinobj) {
                                         angular.forEach(response, function (res) {
@@ -1627,6 +1649,8 @@
                                 vm.lazyloader = true;
                                 vm.divuigrid = true;
                                 vm.nodata = false;
+                                vm.sortby = "desc";
+                                vm.sortexp = "matterModifiedDate";
                                 $interval(function () { vm.showSortExp(); }, 2000, 3);
                             });
                         }
@@ -1637,7 +1661,8 @@
                     var pinnedMattersRequest = {
                         Url: configs.global.repositoryUrl
                     }
-                    getPinnedMatters(pinnedMattersRequest, function (response) {
+                    searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
+                    getPinnedMatters(searchRequest, function (response) {
                         if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
                             vm.lazyloader = true;
@@ -1654,6 +1679,8 @@
                             vm.lazyloader = true;
                             vm.divuigrid = true;
                             vm.nodata = false;
+                            vm.sortby = "desc";
+                            vm.sortexp = "matterModifiedDate";
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                     });
@@ -1874,11 +1901,11 @@
                     var pinnedMattersRequest = {
                         Url: configs.global.repositoryUrl
                     }
-                    getPinnedMatters(pinnedMattersRequest, function (response) {
+                    getPinnedMatters(searchRequest, function (response) {
                        
                         if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;                        
-                            vm.divuigrid = true;
+                            vm.divuigrid = false;
                             vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
@@ -1949,6 +1976,7 @@
                                 vm.lazyloader = false;
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 vm.FilterByType();
                                 vm.MatterNameSort = "desc"; vm.sortby = "asc";
@@ -1960,6 +1988,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.MatterNameSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
@@ -1978,6 +2007,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyClientName + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.ClientSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
@@ -1989,6 +2019,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyClientName + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.ClientSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2007,6 +2038,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 searchRequest.SearchObject.Sort.Direction = 0;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.ClientIDSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2017,6 +2049,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
                                 searchRequest.SearchObject.Sort.Direction = 1;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.ClientIDSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2036,6 +2069,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.ModiFiedTimeSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2046,6 +2080,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.ModiFiedTimeSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2065,6 +2100,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.ResAttoSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2075,6 +2111,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.ResAttoSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2093,6 +2130,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.SubAreaSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2103,6 +2141,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.SubAreaSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2121,6 +2160,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyOpenDate + "";
                                 searchRequest.SearchObject.Sort.Direction = 0;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.OpenDateSort = "desc"; vm.sortby = "asc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2131,6 +2171,7 @@
                                 searchRequest.SearchObject.PageNumber = 1;
                                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyOpenDate + "";
                                 searchRequest.SearchObject.Sort.Direction = 1;
+                                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
                                 vm.OpenDateSort = "asc"; vm.sortby = "desc";
                                 vm.sortexp = sortColumns[0].field;
@@ -2149,6 +2190,7 @@
                     searchRequest.SearchObject.PageNumber = 1;
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                     searchRequest.SearchObject.Sort.Direction = 1;
+                    searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                     vm.FilterByType();
                     vm.MatterNameSort = "asc"; vm.sortby = "desc";
                     vm.sortexp = "matterName";

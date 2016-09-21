@@ -29,6 +29,13 @@ namespace Microsoft.Legal.MatterCenter.Models
             set;
         }
 
+        public string ByColumn
+        {
+            get;
+            set;
+        }
+
+
         /// <summary>
         /// Gets or sets the direction. Represents the order for sorting.
         /// </summary>
