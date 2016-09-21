@@ -157,7 +157,7 @@ textarea {
 }
 
 .docOwnerGridClass {
-    display:table-cell;
+    display: table-cell;
 }
 /*End of document dashboard classed*/
 
@@ -1247,4 +1247,9 @@ textarea {
 
 .dashboardXOverFlow {
     overflow-x: auto;
+}
+
+
+#matterMain div,#matterMain figure {
+    outline: none !important;
 }
