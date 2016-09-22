@@ -281,7 +281,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 //searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.Reverse();
                                 if (searchRequestVM.SearchObject.Sort.Direction == 0)
                                 {
-                                    if (sortCol == "MatterModifiedDate")
+                                    if (sortCol == "DocumentModifiedDate")
                                     {
                                         searchResponse.MatterDataList = userpinnedDocumentCollection.Values.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
@@ -292,7 +292,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 }
                                 else
                                 {
-                                    if (sortCol == "MatterModifiedDate")
+                                    if (sortCol == "DocumentModifiedDate")
                                     {
                                         searchResponse.MatterDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
