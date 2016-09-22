@@ -788,7 +788,7 @@
                             {
                                 ByProperty: '' + vm.configSearchContent.ManagedPropertyFileName + '',
                                 Direction: 0, 
-                                ByProperty: "MatterModifiedDate"
+                                ByColumn: "MatterModifiedDate"
                             }
                 }
             };
@@ -1217,6 +1217,8 @@
                         });
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
+                        vm.divuigrid = true;
+                        vm.nodata = false;
                         vm.sortby = "desc";
                         vm.sortexp = "documentName";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
@@ -1453,7 +1455,7 @@
         vm.sortby = "desc";
         vm.sortexp = "documentName";
         vm.showSortExp = function () {
-            if (vm.sortexp != "" || vm.sortexp != undefined || vm.sortby != "" || vm.sortby != undefined) {
+            if ((vm.sortexp != "" || vm.sortexp != undefined) && (vm.sortby != "" || vm.sortby != undefined)) {
                 if (vm.sortby == "asc") {
                     angular.element("#desc" + vm.sortexp).css("display", "none");
                 } else {
@@ -1465,6 +1467,8 @@
                 }
             }
         }
+        vm.sortby = "desc";
+        vm.sortexp = "documentName";
         $interval(function () { vm.showSortExp(); }, 2500, 3);
         $scope.sortChangedDocument = function (grid, sortColumns) {
             vm.divuigrid = false;

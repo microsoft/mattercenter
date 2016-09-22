@@ -1949,7 +1949,7 @@
             vm.sortby = "desc";
             vm.sortexp = "matterModifiedDate";
             vm.showSortExp = function () {
-                if (vm.sortexp != "" || vm.sortexp != undefined || vm.sortby != "" || vm.sortby != undefined) {
+                if ((vm.sortexp != "" || vm.sortexp != undefined) &&  (vm.sortby != "" || vm.sortby != undefined)) {
                     if (vm.sortby == "asc") {
                         angular.element("#desc" + vm.sortexp).css("display", "none");
                     } else {
@@ -1962,6 +1962,8 @@
                 }
             }
 
+            vm.sortby = "desc";
+            vm.sortexp = "matterModifiedDate";
             $interval(function () { vm.showSortExp(); }, 3000, 3);
 
             $scope.sortChanged = function (grid, sortColumns) {

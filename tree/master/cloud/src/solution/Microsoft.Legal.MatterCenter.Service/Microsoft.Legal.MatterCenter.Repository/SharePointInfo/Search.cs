@@ -283,22 +283,22 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 {
                                     if (sortCol == "DocumentModifiedDate")
                                     {
-                                        searchResponse.MatterDataList = userpinnedDocumentCollection.Values.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
+                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
                                     else
                                     {
-                                        searchResponse.MatterDataList = userpinnedDocumentCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
+                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
                                     }
                                 }
                                 else
                                 {
                                     if (sortCol == "DocumentModifiedDate")
                                     {
-                                        searchResponse.MatterDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
+                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
                                     else
                                     {
-                                        searchResponse.MatterDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
+                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
                                     }
                                 }
                             }
