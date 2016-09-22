@@ -32,6 +32,8 @@
         var screenHeight = 0;
         vm.searchResultsLength = 0;
         vm.lazyloaderFilter = true;
+        vm.sortby = "desc";
+        vm.sortexp = "documentName"
         //end
         //#region for checking whether the app is opened in outlook
         var isAppOpenedInOutlook = $location.absUrl();
@@ -788,7 +790,7 @@
                             {
                                 ByProperty: '' + vm.configSearchContent.ManagedPropertyFileName + '',
                                 Direction: 0, 
-                                ByColumn: "MatterModifiedDate"
+                                ByColumn: "DocumentName"
                             }
                 }
             };
@@ -830,8 +832,6 @@
                     vm.lazyloader = true;
                     vm.divuigrid = true;
                     vm.nodata = true;
-                    vm.sortby = "desc";
-                    vm.sortexp = "documentName";
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.divuigrid = true;
@@ -839,8 +839,6 @@
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
-                    vm.sortby = "desc";
-                    vm.sortexp = "documentName";
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 }
             });
@@ -911,8 +909,6 @@
                     }
                     vm.lazyloaderFilter = true;
                     vm.divuigrid = true;
-                    vm.sortby = "desc";
-                    vm.sortexp = "documentName";
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.divuigrid = true;
@@ -930,8 +926,6 @@
                     }
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Sort.ByProperty = "";
-                    vm.sortby = "desc";
-                    vm.sortexp = "documentName";
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 }
             });
@@ -963,16 +957,12 @@
                     vm.lazyloader = true;
                     vm.divuigrid = true;
                     vm.nodata = true;
-                    vm.sortby = "desc";
-                    vm.sortexp = "documentName";
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
-                    vm.sortby = "desc";
-                    vm.sortexp = "documentName";
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 }
             });
@@ -1032,16 +1022,12 @@
                     vm.lazyloader = true;
                     vm.divuigrid = true;
                     vm.nodata = true;
-                    vm.sortby = "desc";
-                    vm.sortexp = "documentName";
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
-                    vm.sortby = "desc";
-                    vm.sortexp = "documentName";
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 }
             });
@@ -1079,8 +1065,6 @@
             vm.searchClientTerm = "";
             vm.startdate = "";
             vm.enddate = "";
-            vm.sortexp = "";
-            vm.sortby = "";
             vm.lazyloader = false;
             vm.divuigrid = false;
             vm.nodata = false;
@@ -1134,8 +1118,6 @@
                             }
                         });
                         $timeout(function () { vm.lazyloader = true; }, 1000);
-                        vm.sortby = "desc";
-                        vm.sortexp = "documentName";
                         $interval(function () { vm.showSortExp(); }, 3000, 3);
                     }
                 });
@@ -1184,8 +1166,6 @@
                                 }
                             }
                             $timeout(function () { vm.lazyloader = true; }, 1000);
-                            vm.sortby = "desc";
-                            vm.sortexp = "documentName";
                             $interval(function () { vm.showSortExp(); }, 3000, 3);
                         });
                     }
@@ -1219,8 +1199,6 @@
                         vm.lazyloader = true;
                         vm.divuigrid = true;
                         vm.nodata = false;
-                        vm.sortby = "desc";
-                        vm.sortexp = "documentName";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
@@ -1455,20 +1433,21 @@
         vm.sortby = "desc";
         vm.sortexp = "documentName";
         vm.showSortExp = function () {
-            if ((vm.sortexp != "" || vm.sortexp != undefined) && (vm.sortby != "" || vm.sortby != undefined)) {
-                if (vm.sortby == "asc") {
-                    angular.element("#desc" + vm.sortexp).css("display", "none");
-                } else {
-                    angular.element("#asc" + vm.sortexp).css("display", "none");
-                }
-                angular.element("#" + vm.sortby + vm.sortexp).css("display", "block");
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
+            if (vm.sortby == "asc") {
+                angular.element("#desc" + vm.sortexp).css("display", "none");
+            } else {
+                angular.element("#asc" + vm.sortexp).css("display", "none");
+            }
+            var elm = angular.element("#" + vm.sortby + vm.sortexp);
+            if (elm != undefined) {
+                elm.css("display", "block");
+            }
+            if (!$scope.$$phase) {
+                $scope.$apply();
             }
         }
-        vm.sortby = "desc";
-        vm.sortexp = "documentName";
+
+
         $interval(function () { vm.showSortExp(); }, 2500, 3);
         $scope.sortChangedDocument = function (grid, sortColumns) {
             vm.divuigrid = false;
