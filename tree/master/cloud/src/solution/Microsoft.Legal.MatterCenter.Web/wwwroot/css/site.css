@@ -49,6 +49,10 @@ textarea {
     .padbtm15 {
         padding-bottom: 15px;
     }
+
+    /*#mattergrid .ui-grid-viewport,#documentgrid .ui-grid-viewport {
+        overflow-x: hidden !important;
+    }*/
 }
 
 @media(max-width:347px) {
@@ -229,10 +233,10 @@ textarea {
         margin-left: -68px !important;
     }
 
-    .mainMatter {
+    /*.mainMatter {
         overflow-x: auto;
         overflow-y: hidden;
-    }
+    }*/
 
     .ContextualHelpLogo {
         margin-right: -5px;
@@ -1106,6 +1110,7 @@ textarea {
 
 #gridViewPageHeaderContainer {
     margin-top: 11px;
+    cursor:default !important;
 }
 
 .MenuCaption {
@@ -1250,6 +1255,6 @@ textarea {
 }
 
 
-#matterMain div,#matterMain figure {
+#matterMain div, #matterMain figure {
     outline: none !important;
 }
