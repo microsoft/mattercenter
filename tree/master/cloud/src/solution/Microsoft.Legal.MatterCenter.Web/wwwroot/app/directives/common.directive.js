@@ -182,10 +182,10 @@
                     var obj = $(this).parent().position();
                     $(this).parent().find('.popcontent').html(a[0]);
                     if (obj.top < 240) {
-                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px', 'top': '0' });
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '278px', 'top': '0' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
                     } else {
-                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px', 'top': '-238px' });
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '278px', 'top': '-238px' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '244px');
                     }
                     //$(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '220px' });
@@ -275,10 +275,10 @@
                     var obj = $(this).parent().position();
                     $(this).parent().find('.popcontent').html(a[0]);
                     if (obj.top < 240) {
-                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px', 'top': '0' });
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '278px', 'top': '0' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
                     } else {
-                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px','top': '-238px' });
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '278px', 'top': '-238px' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '244px');
                     }
                 });
@@ -368,17 +368,35 @@
     }
 
     'use strict'
-    function uiGridViewport() {
+    function uiGridViewport($window) {
         return {
             restrict: 'AE',
             link: function (scope, element, attrs) {
                 $(element).scroll(function (e) {
-                    $('.popcontent').css('display', 'none');
-                    $('.dropdown').removeClass("open");
+                    if ($window.innerWidth > 360) {
+                        $('.popcontent').css('display', 'none');
+                        $('.dropdown').removeClass("open");
+                    }
                 });
             }
         }
     }
+
+    'use strict'
+    function dropdown() {
+        return {
+            restrict: 'AE',
+            link: function (scope, element, attrs) {
+                $(element).click(function (e) {
+                    var obj = $(this).parent().parent().position();
+                    if (obj.top > 280) {
+                        $(this).parent().addClass('dropup');
+                    }
+                });
+            }
+        }
+    }
+
 
     var app = angular.module('matterMain');
     app.directive('onload', ['$timeout', onload]);
@@ -391,7 +409,8 @@
     app.directive('fallbacksrc', [fallbacksrc]);
     app.directive('myEnter', [myEnter]);
     app.directive('uiGridMenuButton', ['$window', '$timeout', uiGridMenuButton]);
-    app.directive('uiGridViewport', [uiGridViewport]);
+    app.directive('uiGridViewport', ['$window', uiGridViewport]);
+    app.directive('dropdown', [dropdown]);
 })();
 
 

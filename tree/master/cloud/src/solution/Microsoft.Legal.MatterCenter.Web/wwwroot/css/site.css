@@ -49,6 +49,10 @@ textarea {
     .padbtm15 {
         padding-bottom: 15px;
     }
+
+    /*#mattergrid .ui-grid-viewport,#documentgrid .ui-grid-viewport {
+        overflow-x: hidden !important;
+    }*/
 }
 
 @media(max-width:347px) {
@@ -157,7 +161,7 @@ textarea {
 }
 
 .docOwnerGridClass {
-    display:table-cell;
+    display: table-cell;
 }
 /*End of document dashboard classed*/
 
@@ -229,10 +233,10 @@ textarea {
         margin-left: -68px !important;
     }
 
-    .mainMatter {
+    /*.mainMatter {
         overflow-x: auto;
         overflow-y: hidden;
-    }
+    }*/
 
     .ContextualHelpLogo {
         margin-right: -5px;
@@ -1106,6 +1110,7 @@ textarea {
 
 #gridViewPageHeaderContainer {
     margin-top: 11px;
+    cursor:default !important;
 }
 
 .MenuCaption {
@@ -1247,4 +1252,9 @@ textarea {
 
 .dashboardXOverFlow {
     overflow-x: auto;
+}
+
+
+#matterMain div, #matterMain figure {
+    outline: none !important;
 }
