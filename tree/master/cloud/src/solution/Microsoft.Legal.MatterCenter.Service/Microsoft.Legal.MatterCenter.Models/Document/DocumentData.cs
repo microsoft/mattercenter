@@ -71,6 +71,16 @@ namespace Microsoft.Legal.MatterCenter.Models
         }
 
         /// <summary>
+        /// Gets or sets the document matter. Represents the matter library that holds the document.
+        /// </summary>
+        /// <value>The document matter.</value>
+        public string DocumentMatterName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets the document matter identifier. Represents the matter ID that holds the document.
         /// </summary>
         /// <value>The document matter identifier.</value>
@@ -190,5 +200,7 @@ namespace Microsoft.Legal.MatterCenter.Models
             get;
             set;
         }
+
+        public string DocumentPracticeGroup { get; set; }
     }
 }

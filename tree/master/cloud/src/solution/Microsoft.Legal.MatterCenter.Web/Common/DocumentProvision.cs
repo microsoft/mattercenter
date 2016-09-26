@@ -531,6 +531,15 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return searchResultsVM;
         }
 
+
+
+        public async Task<SearchResponseVM> GetPinnedDocumentsAsync(Client client)
+        {         
+
+            var searchResultsVM = await docRepository.GetPinnedRecordsAsync(client);    
+            return searchResultsVM;
+        }
+
         public GenericResponseVM UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, 
             string folderName, string fileName, string clientUrl, string folder, string documentLibraryName)
         {

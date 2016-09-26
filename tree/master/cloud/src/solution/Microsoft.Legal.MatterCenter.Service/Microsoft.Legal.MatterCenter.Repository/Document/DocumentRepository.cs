@@ -94,6 +94,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             documentData.DocumentClientId = ServiceUtility.EncodeValues(documentData.DocumentClientId);
             documentData.DocumentClientUrl = ServiceUtility.EncodeValues(documentData.DocumentClientUrl);
             documentData.DocumentMatter = ServiceUtility.EncodeValues(documentData.DocumentMatter);
+            documentData.DocumentMatterName = ServiceUtility.EncodeValues(documentData.DocumentMatter);
             documentData.DocumentMatterId = ServiceUtility.EncodeValues(documentData.DocumentMatterId);
             documentData.DocumentOwner = ServiceUtility.EncodeValues(documentData.DocumentOwner);
             documentData.DocumentUrl = ServiceUtility.EncodeValues(documentData.DocumentUrl);
@@ -105,6 +106,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             documentData.DocumentMatterUrl = ServiceUtility.EncodeValues(documentData.DocumentMatterUrl);
             documentData.DocumentParentUrl = ServiceUtility.EncodeValues(documentData.DocumentParentUrl);
             documentData.DocumentID = ServiceUtility.EncodeValues(documentData.DocumentID);
+            documentData.DocumentPracticeGroup = ServiceUtility.EncodeValues(documentData.DocumentPracticeGroup);
             pinRequestDocumentVM.DocumentData = documentData;
             return await Task.FromResult(search.PinDocument(pinRequestDocumentVM));
         }

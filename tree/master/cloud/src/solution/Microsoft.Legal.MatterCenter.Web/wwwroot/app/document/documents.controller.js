@@ -1281,7 +1281,7 @@
                     DocumentClient: alldata.documentClient,
                     DocumentClientId: alldata.documentClientId,
                     DocumentClientUrl: alldata.documentClientUrl,
-                    DocumentMatter: alldata.documentMatter,
+                    DocumentMatter: alldata.documentMatterName,
                     DocumentMatterId: alldata.documentMatterId,
                     DocumentOwner: alldata.documentOwner,
                     DocumentUrl: alldata.documentUrl,
@@ -1294,6 +1294,7 @@
                     DocumentParentUrl: alldata.documentParentUrl,
                     DocumentID: alldata.documentID,
                     DocumentIconUrl: alldata.documentIconUrl,
+                    DocumentPracticeGroup: alldata.documentPracticeGroup,
                     PinType: "unpin"
                 }
             }
