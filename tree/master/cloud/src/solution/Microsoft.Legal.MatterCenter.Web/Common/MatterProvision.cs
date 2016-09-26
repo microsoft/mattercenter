@@ -172,9 +172,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return searchResultsVM.TotalRows;
         }
 
-        public async Task<int> GetPinnedCounts(Client client)
+        public async Task<int> GetPinnedCounts(SearchRequestVM searchRequestVM)
         {
-            var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(client);
+            var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(searchRequestVM);
             return pinResponseVM.TotalRows;
         }
 

@@ -7,6 +7,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
     {
         Task<int> GetAllCounts(SearchRequestVM searchRequestVM);
         Task<int> GetMyCounts(SearchRequestVM searchRequestVM);
-        Task<int> GetPinnedCounts(Client client);
+        Task<int> GetPinnedCounts(SearchRequestVM searchRequestVM);
     }
 }

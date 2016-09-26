@@ -8,7 +8,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 {
     public interface ICommonRepository
     {
-        Task<SearchResponseVM> GetPinnedRecordsAsync(Client client);
+        Task<SearchResponseVM> GetPinnedRecordsAsync(SearchRequestVM searchRequestVM);
         Task<bool> PinRecordAsync<T>(T pinData);
         Task<bool> UnPinRecordAsync<T>(T unpinData);
     }

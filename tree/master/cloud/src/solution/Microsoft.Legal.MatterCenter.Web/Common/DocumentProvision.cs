@@ -100,11 +100,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
         }
 
-        public async Task<int> GetPinnedCounts(Client client)
+        public async Task<int> GetPinnedCounts(SearchRequestVM searchRequestVM)
         {
             try
             {
-                var pinResponseVM = await docRepository.GetPinnedRecordsAsync(client);
+                var pinResponseVM = await docRepository.GetPinnedRecordsAsync(searchRequestVM);
                 return pinResponseVM.TotalRows;
             }
             catch (Exception ex)

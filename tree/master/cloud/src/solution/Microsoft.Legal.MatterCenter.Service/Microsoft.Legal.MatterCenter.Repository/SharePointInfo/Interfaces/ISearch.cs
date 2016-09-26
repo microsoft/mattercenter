@@ -9,7 +9,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
     {
         SearchResponseVM GetMatters(SearchRequestVM searchRequestVM);
         SearchResponseVM GetDocuments(SearchRequestVM searchRequestVM);
-        SearchResponseVM GetPinnedData(Client client, string listName, string listColumnName, bool isShowDocument);
+        SearchResponseVM GetPinnedData(SearchRequestVM searchRequestVM, string listName, string listColumnName, bool isShowDocument);
         bool PinMatter(PinRequestMatterVM pinRequestMatterVM);
         bool UnPinMatter(PinRequestMatterVM pinRequestMatterVM);
         bool PinDocument(PinRequestDocumentVM pinRequestDocumentVM);
