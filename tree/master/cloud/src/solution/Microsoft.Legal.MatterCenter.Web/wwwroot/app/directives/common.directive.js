@@ -118,19 +118,27 @@
                                       <div class="FlyoutContent FlyoutHeading">\
                                           <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.matterName + ' </div>\
                                        </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn2Header + ':</div>\
+                                        <div class="ms-Callout-content commonFlyoutContaint"  ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterClient.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn3Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
                                        </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                        <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterPracticeGroup.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn2Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterPracticeGroup + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint"  ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterAreaOfLaw.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn3Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterAreaOfLaw + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint"  ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterSubAreaOfLaw.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn4Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterClientId.displayInFlyOut + '>\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn3Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
                                        </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn6Header + ':</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                       <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterResponsibleAttorney.displayInFlyOut + '>\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn5Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
                                        </div>\
@@ -148,19 +156,27 @@
                                       <div class="FlyoutContent FlyoutHeading">\
                                           <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.matterName + ' </div>\
                                        </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn2Header + ':</div>\
+                                        <div class="ms-Callout-content commonFlyoutContaint"  ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterClient.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn3Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterClient + '</div>\
                                        </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                       <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterPracticeGroup.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn2Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterPracticeGroup + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint"  ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterAreaOfLaw.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn3Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterAreaOfLaw + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint"  ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterSubAreaOfLaw.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn4Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterClientId.displayInFlyOut + '>\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn3Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterClientId + '.' + obj.matterID + '</div>\
                                        </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn6Header + ':</div>\
-                                          <div class="ms-font-m FlyoutContent">' + obj.matterSubAreaOfLaw + '</div> \
-                                       </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                       <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForMatter.matterResponsibleAttorney.displayInFlyOut + '>\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.GridColumn5Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.matterResponsibleAttorney + '</div>\
                                        </div>\
@@ -176,7 +192,7 @@
 
                     $templateCache.put("test.html", actualcontent);
                     var template = $templateCache.get("test.html");
-                    var a = $compile("<div>" + template + "</div>")(scope);
+                    var a = $compile("<div>" + actualcontent + "</div>")(scope);
                     $('.popcontent').css('display', 'none');
                     e.stopPropagation();
                     var obj = $(this).parent().position();
@@ -188,8 +204,7 @@
                         $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px', 'top': '-238px' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '244px');
                     }
-                    //$(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '220px' });
-                    //$(this).parent().find('.popcontent').css('top', "0");
+                    scope.$apply();                    
                 });
             },
             controller: function ($scope) {
@@ -202,7 +217,7 @@
                 }
                 $scope.stopEvent = function ($event) {
                     $event.stopPropagation();
-                };
+                };                
             }
         }
     };
@@ -242,24 +257,32 @@
                                       <div class="FlyoutContent">\
                                           <div class="ms-Callout-content FlyoutHeadingText">  ' + obj.documentName + ' </div>\
                                        </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                       <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForDocument.documentMatterName.displayInFlyOut + '>\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutLable1Text + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.documentMatterName + '</div>\
                                        </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                        <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForDocument.documentPracticeGroup.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.GridColumn6Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.documentPracticeGroup + '</div>\
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForDocument.documentClient.displayInFlyOut + '>\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.GridColumn2Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.documentClient + '</div>\
                                        </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                       <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForDocument.documentID.displayInFlyOut + '>\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutLable2Text + ':</div>\
                                           <div class="ms-font-m FlyoutContent">' + obj.documentID + '</div>\
                                        </div>\
-                                       <div class="ms-Callout-content commonFlyoutContaint">\
-                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.GridColumn5Header + ':</div>\
-                                          <div class="ms-font-m FlyoutContent" toggle="parentToggle(message)">' + obj.documentOwner + '</div> \
+                                        <div class="ms-Callout-content commonFlyoutContaint" ng-show=' + configs.search.searchColumnsUIPickerForDocument.documentVersion.displayInFlyOut + '>\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.GridColumn2Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent">' + obj.documentVersion + '</div>\
                                        </div>\
                                        <div class="ms-Callout-content commonFlyoutContaint">\
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.GridColumn4Header + ':</div>\
+                                          <div class="ms-font-m FlyoutContent" toggle="parentToggle(message)">' + obj.documentOwner + '</div> \
+                                       </div>\
+                                       <div class="ms-Callout-content commonFlyoutContaint">\
+                                          <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.GridColumn5Header + ':</div>\
                                           <div class="ms-font-m FlyoutContent" datefilter date='+ obj.documentModifiedDate + '>' + obj.documentModifiedDate + '</div>\
                                        </div>\
                                        <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" style="width:190px;padding-left: 12.5%;" href="' + obj.documentUrl + '" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton1Text + '</a>\
@@ -290,6 +313,7 @@
                 $scope.stopEvent = function ($event) {
                     $event.stopPropagation();
                 };
+                
             }
         }
     };

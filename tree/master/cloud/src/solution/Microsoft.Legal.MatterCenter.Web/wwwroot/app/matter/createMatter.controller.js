@@ -298,8 +298,8 @@
                 TermStoreDetails: {
                     TermGroup: configs.taxonomy.termGroup,
                     TermSetName: configs.taxonomy.practiceGroupTermSetName,
-                    CustomPropertyName: "ContentTypeName",
-                    DocumentTemplatesName: "DocumentTemplates"
+                    CustomPropertyName: configs.taxonomy.subAreaOfLawCustomContentTypeProperty,
+                    DocumentTemplatesName: configs.taxonomy.subAreaOfLawDocumentContentTypeProperty,
                 }
             }
 

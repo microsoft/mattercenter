@@ -10,5 +10,6 @@ namespace Microsoft.Legal.MatterCenter.Models
         public string Code { get; set; }
         public string Value { get; set;  }
         public bool IsError { get; set; }
+        public string Description { get; set; }
     }
 }

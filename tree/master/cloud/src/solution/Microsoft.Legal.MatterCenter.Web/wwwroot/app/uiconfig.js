@@ -174,7 +174,7 @@
     "Menu1Option2Title": "Search Matters",
     "Menu1Option3Title": "Search Documents",
     "Menu1Option1Text": "Home",
-    "Menu1Option2Text": "Projects",
+    "Menu1Option2Text": "Matters",
     "Menu1Option3Text": "Documents",
     "ContextualHelpImageTitle": "Matter center help",
     "ContextualHelpHeader": "Matter Center For Outlook",
@@ -201,7 +201,9 @@
     "FooterMenuOption3Text": "Terms of use",
     "ProfilePictureLabelText": "Profile Picture",
     "LabelSingOutText": "Sign Out",
-    "ImageCloseHamburgerTitle": "Close"
+    "ImageCloseHamburgerTitle": "Close",
+    "Menu1Option4Text": "Create New Matter",
+    "Menu1Option4Title": "Create New Matter"
   },
   "MatterDashboard": {
     "LinkImageLoadingTitle": "Matter Center Home",
@@ -365,7 +367,7 @@
     "ContextualHelpHeader": "Matter Center For Outlook",
     "ContextualHelpFooterLabel": "Questions? Contact ",
     "HeaderBarLabel": "Welcome to Matter Center! Upload, share, and save your documents here.",
-    "Image1Caption": "Projects",
+    "Image1Caption": "Matters",
     "Image2Caption": "Documents",
     "HeaderBarLink1URL": "http://www.microsoft.com/mattercenter",
     "HeaderBarLink2Text": "dismiss",
@@ -425,5 +427,9 @@
     "Radio2Option2ValueText": "DateTime",
     "Label33Section2Text": "Your changes have been saved. Go back to ",
     "Label34Section2Text": "Clients"
+  },
+  "Admin": {
+    "Link2Text": "Update labels for details page in sharepoint site",
+    "Link1Text": "Update labels for matter center"
   }
 };

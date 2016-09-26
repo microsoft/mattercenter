@@ -268,8 +268,8 @@
 
     <div class="matterheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.matterheader">
         <div class='input-group'>
-            <input class='form-control' uib-typeahead="searchMatters.matterName for searchMatters in vm.filterSearch($viewValue)"  ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
-            <input class='form-control' uib-typeahead="searchMatters.matterClient for searchMatters in vm.filterSearch($viewValue)"  ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="searchMatters.matterName for searchMatters in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="searchMatters.matterClient for searchMatters in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.matterConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
             <input class='form-control' uib-typeahead="searchMatters.matterClient for searchMatters in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.matterConfigContent.GridColumn5Header" ng-model='vm.attorneySearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
             <input class='form-control' uib-typeahead="searchMatters.matterClient for searchMatters in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.matterConfigContent.GridColumn6Header" ng-model='vm.areaSearchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
             <div class='input-group-btn'>
@@ -281,7 +281,7 @@
         </div>
         <hr />
         <div class='clearFilterText'>
-            <div class='clearFiltersIcon'>
+            <div ng-click='vm.clearFilters(vm.filtername)' class='clearFiltersIcon'>
                 <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='{{vm.matterConfigContent.ImageClearTitle}}' title='{{vm.matterConfigContent.ImageClearAltText}}'>
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.matterConfigContent.ClearFilterText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.matterConfigContent.ClearFilterText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
@@ -347,7 +347,7 @@
                        ng-model='vm.modenddate'
                        is-open='vm.modifiedenddate'
                        datepicker-options='vm.modenddateOptions'
-                       ng-required='true' close-text='Close'                    
+                       ng-required='true' close-text='Close'
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
                     <button type='button' class='btn btn-default' ng-click='vm.modEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
@@ -357,7 +357,7 @@
         <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.matterdateheader=true;'>{{vm.matterConfigContent.Button5OkText}}</div>
         <hr />
         <div class='clearFilterText' data-clearfiltertype='text'>
-            <div class='clearFiltersIcon'>
+            <div ng-click='vm.clearFilters(vm.filtername)' class='clearFiltersIcon'>
                 <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='{{vm.matterConfigContent.ImageClearAltText}}'>
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='Clear filters from {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.matterConfigContent.ClearFilterText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>

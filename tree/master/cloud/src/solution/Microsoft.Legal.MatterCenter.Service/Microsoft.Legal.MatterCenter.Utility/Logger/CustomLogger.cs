@@ -58,9 +58,9 @@ namespace Microsoft.Legal.MatterCenter.Utility
             var response = new ErrorResponse()
             {
                 Message = ex.Message,
-                StackTrace = ex.ToString(),
+                StackTrace = ex.StackTrace.ToString(),
                 Description = "Error occured in the system. Please contact the administrator",
-                //Exception = context.Exception.ToString(),
+                Exception = ex,
                 LineNumber = stackFrameInstance?.GetFileLineNumber(),
                 MethodName = stackFrameInstance?.GetMethod().Name,
                 ClassName = stackFrameInstance?.GetMethod().DeclaringType.Name,

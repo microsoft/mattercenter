@@ -133,7 +133,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
                     foreach (var key in managedColumns)
                     {
-                        managedProperties.Add("MC" + key.Value);
+                        managedProperties.Add(searchSettings.ManagedPropertyExtension + key.Value.Replace("LPC", ""));
                     }
                     managedProperties.Add(searchSettings.ManagedPropertyMatterId);
                     managedProperties.Add(searchSettings.ManagedPropertyCustomTitle);
@@ -220,10 +220,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     managedProperties.Add(searchSettings.ManagedPropertySPWebUrl);
                     managedProperties.Add(searchSettings.ManagedPropertyAuthor);
                     managedProperties.Add(searchSettings.ManagedPropertyMatterGuid);
+                    
                     //Filter on Result source to fetch only Matter Center specific results
                     keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
+                    
+                    var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
+                    foreach (var key in managedColumns)
+                    {
+                        managedProperties.Add(searchSettings.ManagedPropertyExtension + key.Value.Replace("LPC", ""));
+                    }
                     keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
-                        
                     searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, false, managedProperties);
                     clientContext.Dispose();
                 }               
@@ -1458,10 +1464,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
             matterMetadata[searchSettings.ManagedPropertyTitle] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyTitle]);
             matterMetadata[searchSettings.ManagedPropertySiteName] = DecodeValues(matterMetadata[searchSettings.ManagedPropertySiteName]);
             matterMetadata[searchSettings.ManagedPropertyDescription] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyDescription]);
-            var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
+            var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();            
             foreach (var key in managedColumns)
-            {
-                matterMetadata["MC" + key.Value] = DecodeValues(matterMetadata["MC" + key.Value]);
+            {                
+                if (key.Value.Contains("PracticeGroup"))
+                {
+                    string practiceGroupKey = key.Value.Replace("LPC", "");
+                    matterMetadata[searchSettings.ManagedPropertyExtension + practiceGroupKey] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyExtension + practiceGroupKey]);
+                }
+                else
+                {
+                    matterMetadata[searchSettings.ManagedPropertyExtension + key.Value] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyExtension + key.Value]);
+                }                                      
             }
             matterMetadata[searchSettings.ManagedPropertyCustomTitle] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyCustomTitle]);
             matterMetadata[searchSettings.ManagedPropertyPath] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyPath]);

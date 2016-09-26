@@ -1,27 +1,25 @@
 ﻿
 <div class="row margin0">
     <!--<div class="col-xs-10 col-sm-8 col-md-6 col-lg-5" style="margin-left: 45px;margin-top: 1px;height: 58px;">-->
-        <!--<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4 zindex6 createMatterHeaderWidth" style="cursor: pointer;font-size: 1.125em;line-height:40px; padding: 0 11px 0 13px;text-decoration: none !important;" title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' data-section-num="1" data-section-name="snOpenMatter">1  {{cm.createContent.Tab1Header}}</div>
-        <div class="col-xs-10 col-sm-4 col-md-4 col-lg-4 zindex6 pad0 createMatterHeaderWidth matterMarginLeft" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2  {{cm.createContent.Tab2Header}}</div>
-        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 zindex6 pad0 createMatterHeaderWidth matterMarginLeft" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 {{cm.createContent.Tab3Header}}</div>-->
-        <!--<div><span title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText zindex6" data-section-num="1" data-section-name="snOpenMatter">1 {{cm.createContent.Tab1Header}}</span></div>
-        <div><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" class="menuText zindex6" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 {{cm.createContent.Tab2Header}}</span></div>
-        <div><span ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" class="menuText zindex6" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 {{cm.createContent.Tab3Header}}</span></div>-->
-   
-    
-     <!--</div>-->
+    <!--<div class="col-xs-10 col-sm-4 col-md-4 col-lg-4 zindex6 createMatterHeaderWidth" style="cursor: pointer;font-size: 1.125em;line-height:40px; padding: 0 11px 0 13px;text-decoration: none !important;" title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' data-section-num="1" data-section-name="snOpenMatter">1  {{cm.createContent.Tab1Header}}</div>
+    <div class="col-xs-10 col-sm-4 col-md-4 col-lg-4 zindex6 pad0 createMatterHeaderWidth matterMarginLeft" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2  {{cm.createContent.Tab2Header}}</div>
+    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 zindex6 pad0 createMatterHeaderWidth matterMarginLeft" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 {{cm.createContent.Tab3Header}}</div>-->
+    <!--<div><span title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText zindex6" data-section-num="1" data-section-name="snOpenMatter">1 {{cm.createContent.Tab1Header}}</span></div>
+    <div><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" class="menuText zindex6" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 {{cm.createContent.Tab2Header}}</span></div>
+    <div><span ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" class="menuText zindex6" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 {{cm.createContent.Tab3Header}}</span></div>-->
+    <!--</div>-->
 
     <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2 ">
-        <a href="" ng-click='vm.updateLabels(1)' class="btn btn-link">Update labels for matter center</a>
+        <a href="" ng-click='vm.updateLabels(1)' class="btn btn-link">{{vm.adminContent.Link1Text}}</a>
     </div>
 </div>
 <div class="row margin0">
     <div class="col-lg-3 col-md-2 col-sm-2 col-xs-2 ">
-        <a href="" ng-click='vm.updateLabels(2)' class="btn btn-link">Update labels for landing page</a>
+        <a href="" ng-click='vm.updateLabels(2)' class="btn btn-link">{{vm.adminContent.Link2Text}}</a>
     </div>
 
 </div>
-<div class="popupContainerBackground "  ng-class="vm.popupContainerBackground"></div>
+<div class="popupContainerBackground " ng-class="vm.popupContainerBackground"></div>
 <div class="modal fade " id="errorDiv">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -32,13 +30,12 @@
             <div class="row margin0 settingsSuccess" ng-show="vm.successMsg!=''">{{vm.successMsg}}</div>
         </div>
     </div>
-</div> 
+</div>
 
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-class="vm.popupContainerBackground">
-        <img src="../Images/WindowsLoadingFast.GIF"  />
+        <img src="../Images/WindowsLoadingFast.GIF" />
     </div>
 </div>
-
 
 

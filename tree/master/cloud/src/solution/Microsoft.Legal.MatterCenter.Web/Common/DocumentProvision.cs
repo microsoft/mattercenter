@@ -497,6 +497,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("docId").Key,
                                 searchResult[key].ToString());
                         }
+
+                        if (key.ToString().ToLower() == "cpcpracticegroup")
+                        {
+                            ServiceUtility.AddProperty(documentData,
+                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentPracticeGroup").Key,
+                                searchResult[key].ToString());
+                        }
+
                         if (key.ToString().ToLower() == "parentlink")
                         {
                             ServiceUtility.AddProperty(documentData,

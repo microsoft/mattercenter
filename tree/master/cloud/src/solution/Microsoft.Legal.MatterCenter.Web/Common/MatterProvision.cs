@@ -245,29 +245,29 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         {
                             ServiceUtility.AddProperty(matterData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterPracticeGroup").Key,
-                                searchResult[key].ToString());
+                                searchResult[key].ToString().Trim().Replace(";",""));
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyAreaOfLaw.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterAreaOfLaw").Key,
-                                searchResult[key].ToString());
+                                searchResult[key].ToString().Trim().Replace(";", ""));
                         }
 
                         #region Subarea of law login
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw2.ToLower())
                         {
-                            subAreaOfLaw2 = searchResult[key].ToString();
+                            subAreaOfLaw2 = searchResult[key].ToString().Trim().Replace(";", "");
                         }
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw1.ToLower())
                         {
-                            subAreaOfLaw1 = searchResult[key].ToString();
+                            subAreaOfLaw1 = searchResult[key].ToString().Trim().Replace(";", "");
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw.ToLower())
                         {
-                            subAreaOfLaw = searchResult[key].ToString();
+                            subAreaOfLaw = searchResult[key].ToString().Trim().Replace(";", "");
                         }
 
                         if (subAreaOfLaw2 != string.Empty && subAreaOfLaw1 != string.Empty && subAreaOfLaw != string.Empty)
@@ -647,7 +647,25 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 using (clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
                     IList<ContentType> contentTypeCollection = matterRepositoy.GetContentTypeData(clientContext, matter.ContentTypes, client, matter);
-                    if (null != contentTypeCollection && matter.ContentTypes.Count == contentTypeCollection.Count && !string.IsNullOrWhiteSpace(matter.Name))
+                    bool isContentTypePresent = false;
+                    if (matter.ContentTypes.Count == contentTypeCollection.Count)
+                    {
+                        isContentTypePresent = true;
+                    }
+                    else
+                    {
+                        foreach (string requestContentType in matter.ContentTypes)
+                        {
+                            foreach (var contentType in contentTypeCollection)
+                            {
+                                if (requestContentType == contentType.Name)
+                                {
+                                    isContentTypePresent = true;
+                                }
+                            }
+                        }
+                    }
+                    if (null != contentTypeCollection && isContentTypePresent && !string.IsNullOrWhiteSpace(matter.Name))
                     {
                         genericResponseVM = matterRepositoy.AssignContentTypeHelper(matterMetadata, clientContext, contentTypeCollection, client, matter);
                     }
@@ -1510,7 +1528,10 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 propertyList.Add(matterSettings.StampedPropertyMatterName, WebUtility.HtmlEncode(matter.Name));
                 propertyList.Add(matterSettings.StampedPropertyMatterID, WebUtility.HtmlEncode(matter.Id));
-                propertyList.Add(matterSettings.StampedPropertyClientName, WebUtility.HtmlEncode(client.Name));
+                if(!propertyList.ContainsKey(matterSettings.StampedPropertyClientName))
+                {
+                    propertyList.Add(matterSettings.StampedPropertyClientName, WebUtility.HtmlEncode(client.Name));
+                }                
                 propertyList.Add(matterSettings.StampedPropertyClientID, WebUtility.HtmlEncode(client.Id));
                 propertyList.Add(matterSettings.StampedPropertyResponsibleAttorney, WebUtility.HtmlEncode(finalResponsibleAttorneysUsers));
                 propertyList.Add(matterSettings.StampedPropertyTeamMembers, WebUtility.HtmlEncode(finalTeamMembers));
