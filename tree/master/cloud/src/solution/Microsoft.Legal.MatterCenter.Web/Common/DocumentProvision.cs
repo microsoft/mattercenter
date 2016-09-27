@@ -533,10 +533,10 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
 
 
-        public async Task<SearchResponseVM> GetPinnedDocumentsAsync(Client client)
+        public async Task<SearchResponseVM> GetPinnedDocumentsAsync(SearchRequestVM searchRequestVM)
         {         
 
-            var searchResultsVM = await docRepository.GetPinnedRecordsAsync(client);    
+            var searchResultsVM = await docRepository.GetPinnedRecordsAsync(searchRequestVM);    
             return searchResultsVM;
         }
 
