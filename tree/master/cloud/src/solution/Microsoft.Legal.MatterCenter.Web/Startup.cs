@@ -456,6 +456,12 @@ namespace Microsoft.Legal.MatterCenter.Web
                     jw.WriteValue(taxonomySettingsSection["ClientCustomPropertiesURL"]);
                     jw.WritePropertyName("clientCustomPropertiesId");
                     jw.WriteValue(taxonomySettingsSection["ClientCustomPropertiesId"]);
+
+                    jw.WritePropertyName("subAreaOfLawCustomContentTypeProperty");
+                    jw.WriteValue(taxonomySettingsSection["SubAreaOfLawContentTypeTemplates"]);
+                    jw.WritePropertyName("subAreaOfLawDocumentContentTypeProperty");
+                    jw.WriteValue(taxonomySettingsSection["SubAreaOfLawDocumentTemplates"]);
+
                 jw.WriteEndObject();
 
             jw.WritePropertyName("search");
@@ -489,7 +495,15 @@ namespace Microsoft.Legal.MatterCenter.Web
                                             else if (subKey.Key == "position")
                                             {
                                                 jw.WriteValue(int.Parse(subKey.Value));
-                                            }                                                                                     
+                                            }  
+                                            else if (subKey.Key == "defaultVisibleInGrid")
+                                            {
+                                                jw.WriteValue(bool.Parse(subKey.Value));
+                                            }
+                                            else if (subKey.Key == "displayInFlyOut")
+                                            {
+                                                jw.WriteValue(bool.Parse(subKey.Value));
+                                            }
                                         }
                                     jw.WriteEndObject();
                             }
@@ -513,7 +527,14 @@ namespace Microsoft.Legal.MatterCenter.Web
                                         {
                                             jw.WriteValue(int.Parse(subKey.Value));
                                         }
-                                        
+                                        else if (subKey.Key == "defaultVisibleInGrid")
+                                        {
+                                            jw.WriteValue(bool.Parse(subKey.Value));
+                                        }
+                                        else if (subKey.Key == "displayInFlyOut")
+                                        {
+                                            jw.WriteValue(bool.Parse(subKey.Value));
+                                        }
                                     }
                                 jw.WriteEndObject();
                             }

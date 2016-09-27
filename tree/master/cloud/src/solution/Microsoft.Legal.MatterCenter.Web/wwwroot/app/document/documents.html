@@ -152,7 +152,7 @@
         </div>
         <hr />
         <div class='clearFilterText'>
-            <div class='clearFiltersIcon'>
+            <div ng-click='vm.clearFilters(vm.filtername)' class='clearFiltersIcon'>
                 <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='clear' title='Clear filters'>
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.documentConfigContent.ClearFilterFromLabelText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.documentConfigContent.ClearFilterFromLabelText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>
@@ -227,7 +227,7 @@
         <div class='okDateButton' id='btnOK' ng-click='vm.FilterModifiedDate(vm.filtername);vm.documentdateheader=true;'>{{vm.documentConfigContent.ButtonOkText}}</div>
         <hr />
         <div class='clearFilterText' data-clearfiltertype='text'>
-            <div class='clearFiltersIcon'>
+            <div ng-click='vm.clearFilters(vm.filtername)' class='clearFiltersIcon'>
                 <img src='../Images/Filters_30px_X_30px_active_color_666.png' alt='{{vm.documentConfigContent.ImageClearTitle}}' title='{{vm.documentConfigContent.ImageClearAltText}}'>
             </div>
             <div class='ms-font-m ms-font-weight-semilight clearText' title='{{vm.documentConfigContent.ClearFilterFromLabelText}} {{vm.filtername}}' ng-click='vm.clearFilters(vm.filtername)'><span>{{vm.documentConfigContent.ClearFilterFromLabelText}} </span><span class='clearFilterTitle'>{{vm.filtername}}</span></div>

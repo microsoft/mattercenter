@@ -298,8 +298,8 @@
                 TermStoreDetails: {
                     TermGroup: configs.taxonomy.termGroup,
                     TermSetName: configs.taxonomy.practiceGroupTermSetName,
-                    CustomPropertyName: "ContentTypeName",
-                    DocumentTemplatesName: "DocumentTemplates"
+                    CustomPropertyName: configs.taxonomy.subAreaOfLawCustomContentTypeProperty,
+                    DocumentTemplatesName: configs.taxonomy.subAreaOfLawDocumentContentTypeProperty,
                 }
             }
 
@@ -2268,7 +2268,7 @@
 
                     console.log("stampProperties Success");
                     console.log(response);
-                    cm.successMsg = "Matter is successfully created. You can find recently created matter over <a target='_blank' href='" + cm.clientUrl + "/SitePages/" + cm.matterGUID + ".aspx'>here</a>.";
+                    cm.successMsg = cm.createContent.LabelSuccessEntityCreation + " <a target='_blank' href='" + cm.clientUrl + "/SitePages/" + cm.matterGUID + ".aspx'>here</a>.";
                     clearAllProperties();
 
                     cm.navigateToSecondSection(cm.sectionName);

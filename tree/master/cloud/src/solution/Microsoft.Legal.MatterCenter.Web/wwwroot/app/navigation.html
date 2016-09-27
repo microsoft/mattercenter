@@ -21,16 +21,24 @@
         <div class="LeftLinkContainer">
             <!--     <div class="row"> -->
             <!--  <div class="col-xs-6"> -->
-                    <figure ui-sref='mc.matters()' ng-click="mc.matters()" class="MattersContainer"  title="{{vm.navigationContent.Image1Title}}">
+            <div class="MattersContainer" title="{{vm.navigationContent.Image1Title}}">
+                <a ui-sref='mc.matters()'>
+                    <figure>
                         <img src="Images/MC_Matters.png" alt="{{vm.navigationContent.Image1Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image1Caption}}</figcaption>
                     </figure>
+                </a>
+            </div>
             <!--   </div> -->
             <!-- <div class="col-xs-6"> -->
-                    <figure ui-sref='mc.documents()' ng-click="mc.documents()" class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
+            <div class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
+                <a ui-sref='mc.documents()'>
+                    <figure>
                         <img src="Images/MC_Documents.png" alt="{{vm.navigationContent.Image2Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image2Caption}}</figcaption>
                     </figure>
+                </a>
+            </div>
             <!-- </div> -->
             <!--    </div> -->
             <!--  </div> -->
@@ -73,6 +81,5 @@
         <img class="AppLogo" src="Images/MC_Logo.png" alt="{{vm.header.LogoImageTitle}}" />
     </span>
 </div>
-
 
 

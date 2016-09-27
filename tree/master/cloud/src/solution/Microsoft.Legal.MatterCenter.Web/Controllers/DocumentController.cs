@@ -214,7 +214,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 }
                 #endregion
                 //Get the documents which are pinned by the user
-                var pinResponseVM = await documentRepositoy.GetPinnedRecordsAsync(searchRequestVM);  
+                var pinResponseVM = await documentProvision.GetPinnedDocumentsAsync(searchRequestVM);  
                 //Return the response with proper http status code              
                 return matterCenterServiceFunctions.ServiceResponse(pinResponseVM.DocumentDataList, (int)HttpStatusCode.OK);
             }

@@ -503,8 +503,9 @@
 }
 
 .ClientNameTitle {
-    font-size: 14px;
-}
+    font-size: 20px;
+    margin-top: 7px;
+} 
 
 .contentMatterType {
     background-color: #f4f4f4;

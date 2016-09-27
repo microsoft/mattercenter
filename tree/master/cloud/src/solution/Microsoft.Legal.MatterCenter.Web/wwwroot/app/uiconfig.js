@@ -76,7 +76,8 @@
     "Tab1LabelFinalTypeText": "MatterType",
     "Tab1LabelPrimaryTypeText": "Please select primary matter type",
     "Tab1LabelPrimaryTypeBeforeSaveText": "Please select primary matter type before you save.",
-    "Tab1ButtonSaveSelectiponText": "Save Selections"
+    "Tab1ButtonSaveSelectiponText": "Save Selections",
+    "LabelSuccessEntityCreation": "Matter is successfully created. You can find recently created matter over"
   },
   "DocumentDashboard": {
     "LinkImageLoadingTitle": "Matter Center Home",
@@ -163,7 +164,17 @@
     "EllipsisLink2Text": "View Matter Details",
     "EllipsisLink3Text": "Pin this Document",
     "FlyoutButton1Text": "Open document",
-    "FlyoutButton2Text": "View document details"
+    "FlyoutButton2Text": "View document details",
+    "FlyoutMenuColumn1DisplayName": "Matter",
+    "FlyoutMenuColumn2DisplayName": "Practice Group",
+    "FlyoutMenuColumn3DisplayName": "Client",
+    "FlyoutMenuColumn4DisplayName": "Document ID",
+    "FlyoutMenuColumn5DisplayName": "Version",
+    "FlyoutMenuColumn6DisplayName": "Author",
+    "FlyoutMenuColumn7DisplayName": "Modified Date",
+    "FlyoutMenuColumn8DisplayName": "DisplayColumn8Name",
+    "FlyoutMenuColumn9DisplayName": "DisplayColumn9Name",
+    "FlyoutMenuColumn10DisplayName": "DisplayColumn10Name"
   },
   "Header": {
     "MenuImage1Title": "Matter center menu",
@@ -174,7 +185,7 @@
     "Menu1Option2Title": "Search Matters",
     "Menu1Option3Title": "Search Documents",
     "Menu1Option1Text": "Home",
-    "Menu1Option2Text": "Projects",
+    "Menu1Option2Text": "Matters",
     "Menu1Option3Text": "Documents",
     "ContextualHelpImageTitle": "Matter center help",
     "ContextualHelpHeader": "Matter Center For Outlook",
@@ -201,7 +212,9 @@
     "FooterMenuOption3Text": "Terms of use",
     "ProfilePictureLabelText": "Profile Picture",
     "LabelSingOutText": "Sign Out",
-    "ImageCloseHamburgerTitle": "Close"
+    "ImageCloseHamburgerTitle": "Close",
+    "Menu1Option4Text": "Create New Matter",
+    "Menu1Option4Title": "Create New Matter"
   },
   "MatterDashboard": {
     "LinkImageLoadingTitle": "Matter Center Home",
@@ -330,7 +343,17 @@
     "AttachmentPopupFooterImageCapetion": "You can also drag and drop files from your desktop.",
     "AttachmentPopupHeaderItem1Text": "Items",
     "AttachmentPopupHeaderItem2Text": "Folders",
-    "AttachmentPopupHeaderText": "Upload to a matter"
+    "AttachmentPopupHeaderText": "Upload to a matter",
+    "FlyoutMenuColumn1DisplayName": "Client",
+    "FlyoutMenuColumn2DisplayName": "Practice Group",
+    "FlyoutMenuColumn3DisplayName": "Client.MatterID",
+    "FlyoutMenuColumn4DisplayName": "Sub Area of Law",
+    "FlyoutMenuColumn5DisplayName": "MatterID",
+    "FlyoutMenuColumn6DisplayName": "Responsible Attorney",
+    "FlyoutMenuColumn7DisplayName": "DisplayColumn7Name",
+    "FlyoutMenuColumn8DisplayName": "DisplayColumn8Name",
+    "FlyoutMenuColumn9DisplayName": "DisplayColumn9Name",
+    "FlyoutMenuColumn10DisplayName": "DisplayColumn10Name"
   },
   "Navigation": {
     "MenuItem1LinkTitle": "Home",
@@ -359,13 +382,13 @@
     "ContextualHelpLink1URL": "https://microsoft.sharepoint.com/teams/celapcconfig/Shared%20Documents/CELA%20Project%20Center%20End%20User%20Guide_24.pdf#Home_in_Outlook_and_Word ",
     "ContextualHelpLabel2": "How do I get Project Center on my device?",
     "ContextualHelpLink2URL": "https://microsoft.sharepoint.com/teams/celapcconfig/Shared%20Documents/CELA%20Project%20Center%20End%20User%20Guide_24.pdf#Enabling_Project_Center",
-    "ContextualHelpFooterLink1Label": "Project Center Aisling Support",
+    "ContextualHelpFooterLink1Label": "Matter Center Support",
     "MatterCenterSupportLink": "mailto:support@supportsite.com",
     "ContextualHelpFooterLink1Title": "Write an email to support",
     "ContextualHelpHeader": "Matter Center For Outlook",
     "ContextualHelpFooterLabel": "Questions? Contact ",
     "HeaderBarLabel": "Welcome to Matter Center! Upload, share, and save your documents here.",
-    "Image1Caption": "Projects",
+    "Image1Caption": "Matters",
     "Image2Caption": "Documents",
     "HeaderBarLink1URL": "http://www.microsoft.com/mattercenter",
     "HeaderBarLink2Text": "dismiss",
@@ -425,5 +448,9 @@
     "Radio2Option2ValueText": "DateTime",
     "Label33Section2Text": "Your changes have been saved. Go back to ",
     "Label34Section2Text": "Clients"
+  },
+  "Admin": {
+    "Link2Text": "Update labels for details page in sharepoint site",
+    "Link1Text": "Update labels for matter center"
   }
 };

@@ -15,7 +15,7 @@
                     <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span></a>
                     <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
                     <a ui-sref='mc.documents()' class="AppFlyoutLinks MatterDocumentsLink" title="{{vm.header.Menu1Option3Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option3Text}}</span></a>
-                    <a ui-sref='mc.createMatter()' class="AppFlyoutLinks MatterDocumentsLink" ng-if="vm.canLoginUserCreateMatter" title="Create New Matter"><span class="AppFlyoutLinksText">Create New Matter</span></a>
+                    <a ui-sref='mc.createMatter()' class="AppFlyoutLinks MatterDocumentsLink" ng-if="vm.canLoginUserCreateMatter" title="{{vm.header.Menu1Option4Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option4Text}}</span></a>
 
                 </div>
             </div>
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="ContextualHelpSupport">
-                            <span class="ContextualHelpBottomText" title="{{vm.header.ContextualHelpFooterLink1Title}}">{{vm.header.ContextualHelpFooterLabel}}<span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="[Enter URL for Support, e.g. {{vm.navigation.MatterCenterSupportLink}}]">{{vm.navigation.ContextualHelpFooterLink1Label}}</a></span></span>
+                            <span class="ContextualHelpBottomText" title="{{vm.header.ContextualHelpFooterLink1Title}}">{{vm.header.ContextualHelpFooterLabel}}<span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="{{vm.navigation.MatterCenterSupportLink}}">{{vm.navigation.ContextualHelpFooterLink1Label}}</a></span></span>
                         </div>
                     </div>
                 </div>
@@ -122,4 +122,3 @@
         </div>
     </div>
 </div>
-

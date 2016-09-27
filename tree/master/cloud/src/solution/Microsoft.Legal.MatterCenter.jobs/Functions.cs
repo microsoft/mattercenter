@@ -85,7 +85,10 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                             string defaultContentType = string.Format(CultureInfo.InvariantCulture,
                                 defaultHtmlChunk, matter.DefaultContentType);
                             string matterType = string.Join(";", matter.ContentTypes.ToArray()).TrimEnd(';').Replace(matter.DefaultContentType, defaultContentType);
-
+                            if(matterType==string.Empty)
+                            {
+                                matterType = defaultContentType;
+                            }
                             // Step 2: Create Team Information
                             string secureMatter = ServiceConstants.FALSE.ToUpperInvariant() == matter.Conflict.SecureMatter.ToUpperInvariant() ?
                                 ServiceConstants.NO : ServiceConstants.YES;
@@ -134,7 +137,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                     }
                                 }
                             }                            
-                            email.From = new EmailAddress("matteradmin@msmatter.onmicrosoft.com");
+                            email.From = new EmailAddress(adminUserName);
                             email.Subject = matterMailSubject;
                             email.Body = matterMailBody;
                             email.Send();

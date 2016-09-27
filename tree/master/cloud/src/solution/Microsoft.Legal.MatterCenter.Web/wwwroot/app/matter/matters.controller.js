@@ -114,7 +114,8 @@
                             width: "275",
                             cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html',
                             headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html',
-                            position: value.position
+                            position: value.position,
+                            
                         });
 
                     }
@@ -129,7 +130,8 @@
                             enableCellEdit: true,
                             width: "200",
                             headerCellTemplate: '../app/matter/MatterTemplates/ClientHeaderTemplate.html',
-                            position: value.position
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
                     }
                 }
@@ -151,7 +153,8 @@
                             headerCellTemplate: $templateCache.get('coldefheadertemplate.html'),
                             cellTemplate: cellTemplateContent,
                             enableCellEdit: true,
-                            position: value.position
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -167,7 +170,8 @@
                             cellClass: 'gridclass',
                             cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>',
                             headerCellTemplate: '../app/matter/MatterTemplates/ModifiedDateTemplate.html',
-                            position: value.position
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -180,41 +184,57 @@
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html',
-                            width: "250",
-                            visible: false,
-                            position: value.position
+                            width: "250",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
                 }
                 if (key == "matterSubAreaOfLaw") {
                     if (value.displayInUI == true && value.position != -1) {
+
+                        var columnName = "";
+                        if (configs.search.Schema.toLowerCase()==="projectcenter"){
+                            columnName = vm.matterConfigContent.GridColumn4Header
+                        }
+                        else{
+                            columnName = vm.matterConfigContent.GridColumn6Header
+                        }
+
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.matterConfigContent.GridColumn6Header,
+                            displayName: columnName,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterSubAreaOfLaw==""?"NA":row.entity.matterSubAreaOfLaw}}</div>',
                             headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
                 }
                 if (key == "matterCreatedDate") {
+                    var columnName = "";
+                    if (configs.search.Schema.toLowerCase() === "projectcenter") {
+                        columnName = vm.matterConfigContent.GridColumn5Header
+                    }
+                    else {
+                        columnName = vm.matterConfigContent.GridColumn7Header
+                    }
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.matterConfigContent.GridColumn7Header,
+                            displayName: columnName,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html',
                             width: "170",
-                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
-                            visible: false,
-                            position: value.position
+                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
                     }
                 }
@@ -225,9 +245,9 @@
                             displayName: vm.matterConfigContent.GridColumn8Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                           
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -239,9 +259,9 @@
                             displayName: vm.matterConfigContent.GridColumn9Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -253,9 +273,9 @@
                             displayName: vm.matterConfigContent.GridColumn10Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -264,12 +284,12 @@
                     if (value.displayInUI == true) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.matterConfigContent.GridColumn11Header,
+                            displayName: vm.matterConfigContent.GridColumn2Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -279,12 +299,12 @@
                     if (value.displayInUI == true) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.matterConfigContent.GridColumn12Header,
+                            displayName: vm.matterConfigContent.GridColumn3Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
                             width: "210",
-                            visible: false,
+                            visible: value.defaultVisibleInGrid,
                             position: value.position
                         });
 
@@ -298,7 +318,7 @@
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             width: "210",
-                            visible: false,
+                            visible: value.defaultVisibleInGrid,
                             position: value.position
                         });
 
@@ -308,11 +328,11 @@
                     if (value.displayInUI == true) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.matterConfigContent.GridColumn14Header,
+                            displayName: vm.matterConfigContent.GridColumn6Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             width: "210",
-                            visible: false,
+                            visible: value.defaultVisibleInGrid,
                             position: value.position
                         });
 
@@ -326,7 +346,7 @@
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             width: "210",
-                            visible: false,
+                            visible: value.defaultVisibleInGrid,
                             position: value.position
                         });
 
