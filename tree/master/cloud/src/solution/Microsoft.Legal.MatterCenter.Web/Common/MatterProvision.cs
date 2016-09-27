@@ -258,16 +258,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         #region Subarea of law login
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw2.ToLower())
                         {
-                            subAreaOfLaw2 = searchResult[key].ToString().Trim().Replace(";", "");
+                            subAreaOfLaw2 = searchResult[key].ToString().Trim();
                         }
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw1.ToLower())
                         {
-                            subAreaOfLaw1 = searchResult[key].ToString().Trim().Replace(";", "");
+                            subAreaOfLaw1 = searchResult[key].ToString().Trim();
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw.ToLower())
                         {
-                            subAreaOfLaw = searchResult[key].ToString().Trim().Replace(";", "");
+                            subAreaOfLaw = searchResult[key].ToString().Trim();
                         }
 
                         if (subAreaOfLaw2 != string.Empty && subAreaOfLaw1 != string.Empty && subAreaOfLaw != string.Empty)
