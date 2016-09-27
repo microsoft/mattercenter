@@ -1106,6 +1106,7 @@ textarea {
 
 #gridViewPageHeaderContainer {
     margin-top: 11px;
+    cursor:default !important;
 }
 
 .MenuCaption {
@@ -1247,4 +1248,8 @@ textarea {
 
 .dashboardXOverFlow {
     overflow-x: auto;
+}
+
+#matterMain div, #matterMain figure {
+    outline: none !important;
 }
