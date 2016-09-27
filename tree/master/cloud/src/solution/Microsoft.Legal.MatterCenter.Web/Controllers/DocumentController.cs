@@ -119,7 +119,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 //uploaded by him, all documents that are assigned to him and all the documents which are pinned by him
                 int allDocumentCounts = await documentProvision.GetAllCounts(searchRequestVM);
                 int myDocumentCounts = await documentProvision.GetMyCounts(searchRequestVM);
-                int pinnedDocumentCounts = await documentProvision.GetPinnedCounts(searchRequestVM.Client);
+                int pinnedDocumentCounts = await documentProvision.GetPinnedCounts(searchRequestVM);
                 //The object count information that will be sent to the user
                 var documentCounts = new
                 {
@@ -194,14 +194,14 @@ namespace Microsoft.Legal.MatterCenter.Web
             Description = "Get all the documents which are pinned by the logged in user",
             Type = typeof(SearchResponseVM))]
         [SwaggerResponseRemoveDefaults]
-        public async Task<IActionResult> GetPin([FromBody]Client client)
+        public async Task<IActionResult> GetPin([FromBody]SearchRequestVM searchRequestVM)
         {
             try
             {   
                 #region Error Checking    
                 //Input validation            
                 GenericResponseVM genericResponse = null;                                
-                if (client == null)
+                if (searchRequestVM == null)
                 {
                     genericResponse = new GenericResponseVM()
                     {
@@ -214,7 +214,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                 }
                 #endregion
                 //Get the documents which are pinned by the user
-                var pinResponseVM = await documentProvision.GetPinnedDocumentsAsync(client);  
+                var pinResponseVM = await documentProvision.GetPinnedDocumentsAsync(searchRequestVM);  
                 //Return the response with proper http status code              
                 return matterCenterServiceFunctions.ServiceResponse(pinResponseVM.DocumentDataList, (int)HttpStatusCode.OK);
             }

@@ -92,14 +92,14 @@ namespace Microsoft.Legal.MatterCenter.Service
             Description = "Returns Asynchronouns IActionResult which contains list pinned matters which are pinned by the user", 
             Type = typeof(SearchResponseVM))]
         [SwaggerResponseRemoveDefaults]
-        public async Task<IActionResult> GetPin([FromBody]Client client)
+        public async Task<IActionResult> GetPin([FromBody]SearchRequestVM searchRequestVM)
         {
             try
             {                
                 #region Error Checking                
                 ErrorResponse errorResponse = null;
                 
-                if (client == null)
+                if (searchRequestVM == null)
                 {
                     errorResponse = new ErrorResponse()
                     {
@@ -110,7 +110,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
-                var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(client);                
+                var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(searchRequestVM);                
                 return matterCenterServiceFunctions.ServiceResponse(pinResponseVM.MatterDataList, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -150,7 +150,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                 #endregion                
                 int allMatterCounts = await matterProvision.GetAllCounts(searchRequestVM);
                 int myMatterCounts = await matterProvision.GetMyCounts(searchRequestVM);
-                int pinnedMatterCounts = await matterProvision.GetPinnedCounts(searchRequestVM.Client);
+                int pinnedMatterCounts = await matterProvision.GetPinnedCounts(searchRequestVM);
                 var matterCounts = new
                 {
                     AllMatterCounts = allMatterCounts,

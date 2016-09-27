@@ -32,6 +32,8 @@
         var screenHeight = 0;
         vm.searchResultsLength = 0;
         vm.lazyloaderFilter = true;
+        vm.sortby = "desc";
+        vm.sortexp = "documentName"
         //end
         //#region for checking whether the app is opened in outlook
         var isAppOpenedInOutlook = $location.absUrl();
@@ -823,7 +825,8 @@
                     Sort:
                             {
                                 ByProperty: '' + vm.configSearchContent.ManagedPropertyFileName + '',
-                                Direction: 0
+                                Direction: 0, 
+                                ByColumn: "DocumentName"
                             }
                 }
             };
@@ -1098,8 +1101,6 @@
             vm.searchClientTerm = "";
             vm.startdate = "";
             vm.enddate = "";
-            vm.sortexp = "";
-            vm.sortby = "";
             vm.lazyloader = false;
             vm.divuigrid = false;
             vm.nodata = false;
@@ -1109,6 +1110,7 @@
                 searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Filters.FilterByMe = 0;
+                searchRequest.SearchObject.Sort.ByColumn = "documentName";
                 get(searchRequest, function (response) {
                     if (response == "") {
                         vm.gridOptions.data = response;
@@ -1127,7 +1129,8 @@
                         searchRequest.SearchObject.PageNumber = 1;
                         searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Filters.FilterByMe = 0;
-                        getPinnedDocuments(pinnedDocumentsRequest, function (pinresponse) {
+                        searchRequest.SearchObject.Sort.ByColumn = "documentName";
+                        getPinnedDocuments(searchRequest, function (pinresponse) {
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
                                     angular.forEach(response, function (res) {
@@ -1163,6 +1166,7 @@
                 searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Filters.FilterByMe = 1;
+                searchRequest.SearchObject.Sort.ByColumn = "documentName";
                 get(searchRequest, function (response) {
                     if (response == "") {
                         vm.gridOptions.data = response;
@@ -1175,7 +1179,7 @@
                         }
                         vm.divuigrid = true;
                         vm.nodata = false;
-                        getPinnedDocuments(pinnedDocumentsRequest, function (pinresponse) {
+                        getPinnedDocuments(searchRequest, function (pinresponse) {
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
                                     angular.forEach(response, function (res) {
@@ -1208,7 +1212,8 @@
                 var pinnedMattersRequest = {
                     Url: configs.global.repositoryUrl
                 }
-                getPinnedDocuments(pinnedMattersRequest, function (response) {
+                searchRequest.SearchObject.Sort.ByColumn = "documentName";
+                getPinnedDocuments(searchRequest, function (response) {
                     if (response == "") {
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
@@ -1228,6 +1233,8 @@
                         });
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
+                        vm.divuigrid = true;
+                        vm.nodata = false;
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
@@ -1419,7 +1426,7 @@
                 var pinnedDocumentsRequest = {
                     Url: configs.global.repositoryUrl
                 }
-                getPinnedDocuments(pinnedDocumentsRequest, function (response) {
+                getPinnedDocuments(searchRequest, function (response) {
 
                     if (response == "" || response.errorCode == "500") {
                         vm.gridOptions.data = response;
@@ -1463,18 +1470,21 @@
         vm.sortby = "desc";
         vm.sortexp = "documentName";
         vm.showSortExp = function () {
-            if (vm.sortexp != "" || vm.sortexp != undefined || vm.sortby != "" || vm.sortby != undefined) {
-                if (vm.sortby == "asc") {
-                    angular.element("#desc" + vm.sortexp).css("display", "none");
-                } else {
-                    angular.element("#asc" + vm.sortexp).css("display", "none");
-                }
-                angular.element("#" + vm.sortby + vm.sortexp).css("display", "block");
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
+            if (vm.sortby == "asc") {
+                angular.element("#desc" + vm.sortexp).css("display", "none");
+            } else {
+                angular.element("#asc" + vm.sortexp).css("display", "none");
+            }
+            var elm = angular.element("#" + vm.sortby + vm.sortexp);
+            if (elm != undefined) {
+                elm.css("display", "block");
+            }
+            if (!$scope.$$phase) {
+                $scope.$apply();
             }
         }
+
+
         $interval(function () { vm.showSortExp(); }, 2500, 3);
         $scope.sortChangedDocument = function (grid, sortColumns) {
             vm.divuigrid = false;
@@ -1490,6 +1500,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.FileNameSort = "desc";
                             vm.sortby = "asc";
@@ -1501,6 +1512,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.FileNameSort = "asc";
                             vm.sortby = "desc";
@@ -1520,6 +1532,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.DocumentClientSort = "desc";
                             vm.sortby = "asc";
@@ -1532,6 +1545,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.DocumentClientSort = "asc";
                             vm.sortby = "desc";
@@ -1551,6 +1565,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientId + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.DocumentClientIDSort = "desc";
                             vm.sortby = "asc";
@@ -1562,6 +1577,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientId + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.DocumentClientIDSort = "asc";
                             vm.sortby = "desc";
@@ -1582,6 +1598,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.ModiFiedDateSort = "desc";
                             vm.sortby = "asc";
@@ -1593,6 +1610,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.ModiFiedDateSort = "asc";
                             vm.sortby = "desc";
@@ -1613,6 +1631,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.AuthorSort = "desc";
                             vm.sortby = "asc";
@@ -1624,6 +1643,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.AuthorSort = "asc";
                             vm.sortby = "desc";
@@ -1643,6 +1663,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentVersion + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.VersionSort = "desc";
                             vm.sortby = "asc";
@@ -1654,6 +1675,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentVersion + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.VersionSort = "asc";
                             vm.sortby = "desc";
@@ -1671,6 +1693,7 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
@@ -1682,6 +1705,7 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
                             vm.FilterByType();
@@ -1701,6 +1725,7 @@
                             vm.lazyloader = false;
                             vm.pagenumber = 1;
                             searchRequest.SearchObject.PageNumber = 1;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyCreated + "";
                             searchRequest.SearchObject.Sort.Direction = 0;
                             vm.FilterByType();
@@ -1714,6 +1739,7 @@
                             searchRequest.SearchObject.PageNumber = 1;
                             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyCreated + "";
                             searchRequest.SearchObject.Sort.Direction = 1;
+                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                             vm.FilterByType();
                             vm.CreatedSort = "asc";
                             vm.sortby = "desc";
@@ -1731,6 +1757,7 @@
                 vm.lazyloader = false;
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
                 searchRequest.SearchObject.Sort.Direction = 0;
+                searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                 vm.FilterByType();
             }
         }

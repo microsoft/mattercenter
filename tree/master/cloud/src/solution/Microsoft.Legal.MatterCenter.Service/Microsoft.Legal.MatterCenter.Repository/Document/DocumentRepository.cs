@@ -66,9 +66,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        public async Task<SearchResponseVM> GetPinnedRecordsAsync(Client client)
+        public async Task<SearchResponseVM> GetPinnedRecordsAsync(SearchRequestVM searchRequestVM)
         {
-            return await Task.FromResult(search.GetPinnedData(client, listNames.UserPinnedDocumentListName,
+            return await Task.FromResult(search.GetPinnedData(searchRequestVM, listNames.UserPinnedDocumentListName,
                 searchSettings.PinnedListColumnDocumentDetails, true));
         }
 
