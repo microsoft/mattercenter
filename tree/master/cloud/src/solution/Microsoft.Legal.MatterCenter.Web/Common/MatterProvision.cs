@@ -245,29 +245,29 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         {
                             ServiceUtility.AddProperty(matterData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterPracticeGroup").Key,
-                                searchResult[key].ToString().Trim().Replace(";",""));
+                                searchResult[key].ToString().Trim().TrimEnd(';'));
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyAreaOfLaw.ToLower())
                         {
                             ServiceUtility.AddProperty(matterData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterAreaOfLaw").Key,
-                                searchResult[key].ToString().Trim().Replace(";", ""));
+                                searchResult[key].ToString().Trim().TrimEnd(';'));
                         }
 
                         #region Subarea of law login
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw2.ToLower())
                         {
-                            subAreaOfLaw2 = searchResult[key].ToString().Trim();
+                            subAreaOfLaw2 = searchResult[key].ToString().Trim().TrimEnd(';');
                         }
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw1.ToLower())
                         {
-                            subAreaOfLaw1 = searchResult[key].ToString().Trim();
+                            subAreaOfLaw1 = searchResult[key].ToString().Trim().TrimEnd(';');
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertySubAreaOfLaw.ToLower())
                         {
-                            subAreaOfLaw = searchResult[key].ToString().Trim();
+                            subAreaOfLaw = searchResult[key].ToString().Trim().TrimEnd(';');
                         }
 
                         if (subAreaOfLaw2 != string.Empty && subAreaOfLaw1 != string.Empty && subAreaOfLaw != string.Empty)

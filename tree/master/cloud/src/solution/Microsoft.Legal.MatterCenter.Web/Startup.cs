@@ -504,6 +504,10 @@ namespace Microsoft.Legal.MatterCenter.Web
                                             {
                                                 jw.WriteValue(bool.Parse(subKey.Value));
                                             }
+                                            else if (subKey.Key == "displayInDashboard")
+                                            {
+                                                jw.WriteValue(bool.Parse(subKey.Value));
+                                            }
                                         }
                                     jw.WriteEndObject();
                             }
@@ -532,6 +536,10 @@ namespace Microsoft.Legal.MatterCenter.Web
                                             jw.WriteValue(bool.Parse(subKey.Value));
                                         }
                                         else if (subKey.Key == "displayInFlyOut")
+                                        {
+                                            jw.WriteValue(bool.Parse(subKey.Value));
+                                        }
+                                        else if (subKey.Key == "displayInDashboard")
                                         {
                                             jw.WriteValue(bool.Parse(subKey.Value));
                                         }
