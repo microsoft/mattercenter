@@ -151,6 +151,25 @@ namespace Microsoft.Legal.MatterCenter.Models
                 get;
                 set;
             }
+
+        /// <summary>
+        /// Gets or sets the Sub area of Law. Represents Sub area of Law selected for filtering.
+        /// </summary>
+        public string PracticeGroup
+        {
+            get;
+            set;
         }
-   
+
+        /// <summary>
+        /// Gets or sets the Sub area of Law. Represents Sub area of Law selected for filtering.
+        /// </summary>
+        public string AreaOfLaw
+        {
+            get;
+            set;
+        }
+
+    }
+
 }

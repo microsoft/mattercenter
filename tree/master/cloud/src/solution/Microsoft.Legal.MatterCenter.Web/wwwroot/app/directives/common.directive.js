@@ -198,13 +198,18 @@
                     var obj = $(this).parent().position();
                     $(this).parent().find('.popcontent').html(a[0]);
                     if (obj.top < 240) {
-                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px', 'top': '0' });
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '268px', 'top': '0' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
                     } else {
-                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px', 'top': '-238px' });
-                        $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '244px');
+                        if (scope.$parent.$parent.$parent.grid.appScope.vm.center == "mattercenter") {
+                            $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '268px', 'top': '-238px' });
+                            $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '244px');
+                        } else {
+                            $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '268px', 'top': '-218px' });
+                            $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '220px');
+                        }
                     }
-                    scope.$apply();                    
+                    scope.$apply();
                 });
             },
             controller: function ($scope) {
@@ -217,7 +222,7 @@
                 }
                 $scope.stopEvent = function ($event) {
                     $event.stopPropagation();
-                };                
+                };
             }
         }
     };
@@ -302,10 +307,10 @@
                     var obj = $(this).parent().position();
                     $(this).parent().find('.popcontent').html(a[0]);
                     if (obj.top < 240) {
-                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px', 'top': '0' });
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '284px', 'top': '0' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
                     } else {
-                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '240px','top': '-238px' });
+                        $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '284px', 'top': '-238px' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '244px');
                     }
                 });
@@ -317,7 +322,7 @@
                 $scope.stopEvent = function ($event) {
                     $event.stopPropagation();
                 };
-                
+
             }
         }
     };

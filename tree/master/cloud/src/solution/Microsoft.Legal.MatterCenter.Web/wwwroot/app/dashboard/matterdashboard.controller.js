@@ -18,6 +18,7 @@
             vm.pgdrop = false;
             vm.pgdropvisible = false;
             vm.configsUri = configs.uri;
+            vm.configSearchContent = configs.search;
             vm.matterDashboardConfigs = uiconfigs.MatterDashboard;
             vm.matterConfigContent = uiconfigs.Matters;
             sortPropertyForAllMatters = configs.search.ManagedPropertyMatterName;
@@ -89,7 +90,8 @@
                 enableSelectAll: false,
                 multiSelect: false,
                 enableColumnMenus: false,
-                enableFiltering: false
+                enableFiltering: false,
+                enableSorting: false
             }
             var columnDefs1 = [];
             angular.forEach(configs.search.searchColumnsUIPickerForMatter, function (value, key) {
@@ -179,8 +181,8 @@
                             displayName: vm.matterDashboardConfigs.GridColumn4Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
-                            width: "210",                            
+                            enableColumnMenu: false,
+                            width: "210",
                             visible: value.defaultVisibleInGrid,
                             position: value.position
                         });
@@ -194,9 +196,8 @@
                             displayName: vm.matterDashboardConfigs.GridColumn7Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html',
                             width: "170",
-                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',                            
+                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -209,7 +210,7 @@
                             displayName: vm.matterDashboardConfigs.GridColumn8Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                            
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -223,7 +224,7 @@
                             displayName: vm.matterDashboardConfigs.GridColumn9Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                            
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -237,7 +238,7 @@
                             displayName: vm.matterDashboardConfigs.GridColumn10Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                           
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -251,7 +252,8 @@
                             displayName: vm.matterDashboardConfigs.GridColumn2Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                           
+                            width: "210",
+                            enableColumnMenu: false,
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -266,8 +268,8 @@
                             displayName: vm.matterDashboardConfigs.GridColumn3Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
-                            width: "210",                            
+                            enableColumnMenu: false,
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -281,7 +283,7 @@
                             displayName: vm.matterDashboardConfigs.GridColumn13Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                            
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -295,7 +297,7 @@
                             displayName: vm.matterDashboardConfigs.GridColumn14Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                            
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -309,7 +311,7 @@
                             displayName: vm.matterDashboardConfigs.GridColumn15Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                            
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -356,7 +358,7 @@
                 enableSelectAll: gridOptions.enableSelectAll,
                 multiSelect: gridOptions.multiSelect,
                 enableFiltering: gridOptions.enableFiltering,
-                columnDefs: columnDefs1,                
+                columnDefs: columnDefs1,
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
                     //Set the selected row of the grid to selectedRow property of the controller
@@ -684,6 +686,7 @@
                     }
                     else {
                         vm.matterGridOptions.data = response;
+                        vm.getMatterCounts();
                         vm.lazyloaderdashboard = true;
                         vm.totalrecords = vm.myMatterCount;
                         vm.selectedTabCount = vm.myMatterCount;
@@ -749,7 +752,7 @@
                             vm.pagination();
                             vm.lazyloaderdashboard = true;
                             vm.divuigrid = true;
-                            vm.getMatterCounts();
+
                         }
                         else {
                             vm.lazyloaderdashboard = true;
@@ -1309,7 +1312,7 @@
 
             //Call search api on page load
             //$interval(function () { vm.getMatterCounts(); }, 800, 3);
-            $timeout(function () { vm.search() }, 500);
+            $timeout(function () { vm.myMatters() }, 500);
 
 
             //#region For Sorting by Alphebatical or Created date
@@ -1319,55 +1322,87 @@
                 vm.divuigrid = false;
                 vm.displaypagination = false;
                 vm.nodata = false;
-                get(jsonMatterSearchRequest, function (response) {
-                    vm.lazyloader = true;
-                    if (response == "") {
-                        vm.divuigrid = false;
-                        vm.nodata = true;
-                        vm.lazyloaderdashboard = true;
-                        vm.getMatterCounts();
-                        vm.pagination();
-                        $scope.errorMessage = response.message;
-                    } else {
-                        vm.matterGridOptions.data = response;
-                        vm.divuigrid = true;
-                        vm.nodata = false;
-                        vm.lazyloaderdashboard = true;
-                        vm.getMatterCounts();
-                        vm.pagination();
-                        if (!$scope.$$phase) {
-                            $scope.$apply();
+                if (vm.tabClicked === "Pinned Matters") {
+                    getPinnedMatters(jsonMatterSearchRequest, function (response) {
+                        if (response == "") {
+                            vm.nodata = true;
+                            vm.divuigrid = false;
+                            vm.displaypagination = false;
+                            vm.lazyloaderdashboard = true;
                         }
-                    }
-                });
+                        else {
+                            var pinnedResponse = response;
+                            if (response && response.length > 0) {
+                                angular.forEach(response, function (res) {
+                                    res.pinType = "unpin"
+                                })
+                            }
+                            vm.Pinnedobj = response
+                            vm.matterGridOptions.data = response;
+                            vm.totalrecords = vm.pinMatterCount;
+                            vm.selectedTabCount = vm.pinMatterCount;
+                            vm.pagination();
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                            vm.nodata = false;
+                            vm.divuigrid = true;
+                            vm.lazyloaderdashboard = true;
+                            vm.displaypagination = true;
+                        }
+                    });
+                }
+                else {
+                    get(jsonMatterSearchRequest, function (response) {
+                        vm.lazyloader = true;
+                        if (response == "") {
+                            vm.divuigrid = false;
+                            vm.nodata = true;
+                            vm.lazyloaderdashboard = true;
+                            vm.getMatterCounts();
+                            vm.pagination();
+                            $scope.errorMessage = response.message;
+                        } else {
+                            vm.matterGridOptions.data = response;
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            vm.lazyloaderdashboard = true;
+                            vm.getMatterCounts();
+                            vm.pagination();
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                        }
+                    });
+                }
             }
 
 
             vm.sortyby = function (sortexp, data) {
                 vm.sortbytext = data;
                 if (sortexp == 'AlphabeticalUp') {
-                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyMatterName;
                     jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 } else if (sortexp == 'AlphabeticalDown') {
 
-                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCMatterName";
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyMatterName;
                     jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 } else if (sortexp == 'CreateddateUp') {
 
-                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyOpenDate;
                     jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 }
                 else if (sortexp == 'CreateddateDown') {
 
-                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "MCOpenDate";
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyOpenDate;
                     jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 } else {
 
-                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyLastModifiedTime;
                     jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 }
@@ -1836,6 +1871,29 @@
                 }
             }
             //#endregion
+
+            //#region To display modal up in center of the screen...
+            //Start 
+
+
+            vm.reposition = function () {
+                var modal = $(this)
+
+                var dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+                // Dividing by two centers the modal exactly, but dividing by three  
+                // or four works better for larger screens. 
+                dialog.css("margin-top", Math.max(0, (jQuery(window).height() - dialog.height()) / 2));
+            }
+            // Reposition when a modal is shown 
+            jQuery('.modal').on('show.bs.modal', vm.reposition);
+            // Reposition when the window is resized 
+            jQuery(window).on('resize', function () {
+                jQuery('.modal:visible').each(vm.reposition);
+            });
+
+            $timeout(vm.reposition(), 100);
+            //#endregion 
 
             angular.element($window).bind('resize', function () {
                 if ($window.innerWidth > 867) {

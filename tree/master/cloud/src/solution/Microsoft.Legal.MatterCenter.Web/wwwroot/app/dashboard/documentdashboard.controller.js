@@ -14,6 +14,7 @@
             vm.AuthornoResults = false;
             vm.documentDashboardConfigs = uiconfigs.DocumentDashboard;
             vm.documentConfigContent = uiconfigs.Documents;
+            vm.configSearchContent = configs.search;
             vm.clientdrop = false;
             vm.lazyloaderdocumentclient = true;
             vm.clientdropvisible = false;
@@ -215,7 +216,7 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.documentDashboardConfigs.GridColumn5Header,                            
+                            displayName: vm.documentDashboardConfigs.GridColumn5Header,
                             width: '20%',
                             enableColumnMenu: false,
                             position: value.position
@@ -867,20 +868,18 @@
                                 });
                             });
                             vm.documentGridOptions.data = response;
-                            //vm.allDocumentCount = response.length;
-                            vm.getDocumentCounts();
+                            //vm.allDocumentCount = response.length;                           
                             vm.totalrecords = vm.allDocumentCount;
                             vm.pagination();
                         }
                         else {
                             vm.documentGridOptions.data = response;
-                            //vm.allDocumentCount = response.length;
-                            vm.getDocumentCounts();
+                            //vm.allDocumentCount = response.length;                            
                             vm.totalrecords = vm.allDocumentCount;
                             vm.pagination();
                         }
-                        // vm.lazyloaderdashboard = true;
-                        //vm.divuigrid = true;
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = true;
 
                     });
 
@@ -903,13 +902,18 @@
                 }
 
                 getPinDocuments(documentRequest, function (response) {
-                    if (response) {
+                    if (response && response.length > 0) {
                         vm.documentGridOptions.data = response;
                         //vm.pinDocumentCount = response.length;
                         vm.totalrecords = vm.pinDocumentCount;
                         vm.pagination();
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = true;
+                    }
+                    else {
+                        vm.nodata = true;
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = false;
                     }
                 });
             }
@@ -934,8 +938,8 @@
                         //vm.lazyloaderdashboard = true;
                         vm.divuigrid = true;
                         vm.nodata = true;
-                        vm.getDocumentCounts();
                         vm.totalrecords = response.length;
+                        vm.getDocumentCounts();
                         vm.pagination();
                     } else {
                         vm.documentGridOptions.data = response;
@@ -944,7 +948,7 @@
                         vm.totalrecords = vm.myDocumentCount;
                         vm.pagination();
                         //vm.lazyloaderdashboard = true;
-                        vm.divuigrid = true;
+                        //vm.divuigrid = true;
                         vm.nodata = false;
                     }
                 });
@@ -952,7 +956,7 @@
             //#endregion
 
             //$timeout(vm.getDocumentCounts(), 800);
-            $timeout(function () { vm.getDocuments() }, 500);
+            $timeout(function () { vm.getMyDocuments() }, 500);
 
             //#region This function will pin or unpin the document based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
@@ -1165,28 +1169,47 @@
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
-                get(documentRequest, function (response) {
-                    vm.lazyloader = true;
-                    if (response.errorCode == "404") {
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = false;
-                        vm.nodata = true;
-                        vm.displaypagination = false;
-                        vm.errorMessage = response.message;
-                        vm.getDocumentCounts();
-                        vm.totalrecords = response.length;
-                    } else {
-                        vm.getDocumentCounts();
-                        vm.totalrecords = response.length;
-                        vm.documentGridOptions.data = response;
-                        if (!$scope.$$phase) {
-                            $scope.$apply();
+                if (vm.tabClicked == "Pinned Documents") {
+                    getPinDocuments(documentRequest, function (response) {
+                        if (response && response.length > 0) {
+                            vm.documentGridOptions.data = response;
+                            //vm.pinDocumentCount = response.length;
+                            vm.totalrecords = vm.pinDocumentCount;
+                            vm.pagination();
+                            vm.lazyloaderdashboard = true;
+                            vm.divuigrid = true;
                         }
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = true;
-                        vm.nodata = false;
-                    }
-                });
+                        else {
+                            vm.nodata = true;
+                            vm.lazyloaderdashboard = true;
+                            vm.divuigrid = false;
+                        }
+                    });
+
+                } else {
+                    get(documentRequest, function (response) {
+                        vm.lazyloader = true;
+                        if (response.errorCode == "404") {
+                            vm.lazyloaderdashboard = true;
+                            vm.divuigrid = false;
+                            vm.nodata = true;
+                            vm.displaypagination = false;
+                            vm.errorMessage = response.message;
+                            vm.getDocumentCounts();
+                            vm.totalrecords = response.length;
+                        } else {
+                            vm.getDocumentCounts();
+                            vm.totalrecords = response.length;
+                            vm.documentGridOptions.data = response;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                            vm.lazyloaderdashboard = true;
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                        }
+                    });
+                }
             }
 
 
@@ -1195,40 +1218,40 @@
                 vm.sortbydrop = false;
                 if (sortexp == 'AlphabeticalUp') {
 
-                    documentRequest.SearchObject.Sort.ByProperty = "FileName";
+                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyFileName;
                     documentRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 } else if (sortexp == 'AlphabeticalDown') {
 
-                    documentRequest.SearchObject.Sort.ByProperty = "FileName";
+                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyFileName;
                     documentRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 } else if (sortexp == 'CreateddateUp') {
 
-                    documentRequest.SearchObject.Sort.ByProperty = "Created";
+                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyCreated;
                     documentRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 }
                 else if (sortexp == 'CreateddateDown') {
 
-                    documentRequest.SearchObject.Sort.ByProperty = "Created";
+                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyCreated;
                     documentRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 }
                 else if (sortexp == 'ModifieddateUp') {
 
-                    documentRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime;
                     documentRequest.SearchObject.Sort.Direction = 0;
                     vm.FilterByType();
                 }
                 else if (sortexp == 'ModifieddateDown') {
 
-                    documentRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime;
                     documentRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 }
                 else {
-                    documentRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime;
                     documentRequest.SearchObject.Sort.Direction = 1;
                     vm.FilterByType();
                 }

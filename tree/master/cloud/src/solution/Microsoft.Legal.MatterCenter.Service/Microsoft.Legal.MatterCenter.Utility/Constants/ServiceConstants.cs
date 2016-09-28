@@ -24,6 +24,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public const int Matter_ONE_NOTE_LENGTH = 120;
         public const string CLIENT_TERM_PATH = "/";
         public const string CACHE_PERMISSIONS = "Permissions";
+        public const string DOUBLE_INVERTED_COMMA = "\"";
 
         public const string SUCCESS = "200";
         /// <summary>
