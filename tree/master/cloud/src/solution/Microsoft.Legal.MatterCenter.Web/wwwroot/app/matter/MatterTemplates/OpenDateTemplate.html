@@ -1,6 +1,9 @@
 ﻿<div ng-mouseenter='grid.appScope.vm.opendateDropDown = true' ng-mouseleave='grid.appScope.vm.opendateDropDown = false'>
     <div class='sorticon keep-open' style='float:right;' ng-show='grid.appScope.vm.opendateDropDown'>
-        <a href='javascript:;' class='prisma-header-dropdown-anchor' id='acombo' type='button' ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn7Header)">
+        <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="grid.appScope.vm.center!='projectcenter'" id='acombo' type='button' ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn7Header)">
+            <img src='../images/icon-combobox.png' />
+        </a>
+        <a href='javascript:;' class='prisma-header-dropdown-anchor' ng-if="grid.appScope.vm.center=='projectcenter'" id='acombo' type='button' ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn5Header)">
             <img src='../images/icon-combobox.png' />
         </a>
     </div>

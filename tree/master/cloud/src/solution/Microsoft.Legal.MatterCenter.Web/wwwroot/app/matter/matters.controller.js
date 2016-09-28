@@ -18,6 +18,7 @@
             vm.matterConfigContent = uiconfigs.Matters;
             vm.configsUri = configs.uri;
             vm.header = uiconfigs.Header;
+            vm.center = configs.search.Schema.toLowerCase();
             //#region for setting the dynamic width to grid
             var screenHeight = 0;
             vm.searchResultsLength = 0;
@@ -55,6 +56,8 @@
             vm.opendatefilter = false;
             vm.clientfilter = false;
             vm.areafilter = false;
+            vm.areaoflawfilter = false;
+            vm.subareafilter = false;
             vm.attorneyfilter = false;
             vm.showfiltericon = vm.configSearchContent.ManagedPropertyLastModifiedTime;
             //end
@@ -66,6 +69,7 @@
             vm.modifieddateDropDowm = false;
             vm.attorneyDropDowm = false;
             vm.arealawDropDowm = false;
+            vm.subArealawDropDowm = false;
             vm.opendateDropDown = false;
             //End
             Office.initialize = function (reason) {
@@ -115,7 +119,7 @@
                             cellTemplate: '../app/matter/MatterTemplates/MatterCellTemplate.html',
                             headerCellTemplate: '../app/matter/MatterTemplates/MatterHeaderTemplate.html',
                             position: value.position,
-                            
+
                         });
 
                     }
@@ -184,7 +188,7 @@
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             headerCellTemplate: '../app/matter/MatterTemplates/ResponsibleAttorneyHeaderTemplate.html',
-                            width: "250",                            
+                            width: "250",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -195,11 +199,14 @@
                     if (value.displayInUI == true && value.position != -1) {
 
                         var columnName = "";
-                        if (configs.search.Schema.toLowerCase()==="projectcenter"){
-                            columnName = vm.matterConfigContent.GridColumn4Header
+                        var cellTemplate = "";
+                        if (configs.search.Schema.toLowerCase() === "projectcenter") {
+                            columnName = vm.matterConfigContent.GridColumn4Header;
+                            cellTemplate = '../app/matter/MatterTemplates/SubAreaofLawHeaderTemplate.html';
                         }
-                        else{
+                        else {
                             columnName = vm.matterConfigContent.GridColumn6Header
+                            cellTemplate = '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html';
                         }
 
                         columnDefs1.push({
@@ -208,8 +215,8 @@
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterSubAreaOfLaw==""?"NA":row.entity.matterSubAreaOfLaw}}</div>',
-                            headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
-                            width: "210",                            
+                            headerCellTemplate: cellTemplate,
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -232,7 +239,7 @@
                             cellClass: 'gridclass',
                             headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html',
                             width: "170",
-                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',                            
+                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -245,7 +252,7 @@
                             displayName: vm.matterConfigContent.GridColumn8Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                           
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -259,7 +266,7 @@
                             displayName: vm.matterConfigContent.GridColumn9Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                            
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -273,7 +280,7 @@
                             displayName: vm.matterConfigContent.GridColumn10Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                            
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -287,7 +294,7 @@
                             displayName: vm.matterConfigContent.GridColumn2Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",                            
+                            width: "210",
                             position: value.position,
                             visible: value.defaultVisibleInGrid
                         });
@@ -1235,11 +1242,10 @@
             //#endregion
             vm.filterSearch = function (val) {
                 if (val.length > 3) {
-
                     if (vm.searchexp == vm.configSearchContent.ManagedPropertyMatterName) {
                         vm.mattersearch("" + vm.configSearchContent.ManagedPropertyMatterName + ":" + val + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
-                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertyClientName) {
+                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertyClientName && vm.center != 'projectcenter') {
                         vm.mattersearch("" + vm.configSearchContent.ManagedPropertyClientName + ":" + vm.clientSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
                     else if (vm.searchexp == vm.configSearchContent.ManagedPropertyResponsibleAttorney) {
@@ -1247,6 +1253,9 @@
                     }
                     else if (vm.searchexp == vm.configSearchContent.ManagedPropertySubAreaOfLaw) {
                         vm.mattersearch("" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + ":" + vm.areaSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                    }
+                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertyAreaOfLaw) {
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyAreaOfLaw + ":" + vm.areaOfLawSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
                 }
             }
@@ -1369,16 +1378,22 @@
                         searchRequest.SearchObject.Filters.SubareaOfLaw = term.trim();
                         searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.areafilter = true;
+                        vm.subareafilter = true;
                     }
                     else if (property == "" + vm.configSearchContent.ManagedPropertyMatterName + "") {
                         searchRequest.SearchObject.Filters.Name = term;
                         searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.matterfilter = true;
                     }
-                    else if (property == "" + vm.configSearchContent.ManagedPropertyClientName + "") {
+                    else if (property == "" + vm.configSearchContent.ManagedPropertyClientName + "" && vm.center != 'projectcenter') {
                         searchRequest.SearchObject.Filters.ClientName = term;
                         searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.clientfilter = true;
+                    }
+                    else if (property == "" + vm.configSearchContent.ManagedPropertyAreaOfLaw + "" && vm.center == 'projectcenter') {
+                        searchRequest.SearchObject.SearchTerm = term.trim();
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                        vm.areaoflawfilter = true;
                     }
                 } else {
                     searchRequest.SearchObject.ItemsPerPage = 50;
@@ -1387,6 +1402,9 @@
                         searchRequest.SearchObject.Sort.Direction = 0;
                     } else if (property == "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "") {
                         searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
+                        searchRequest.SearchObject.Sort.Direction = 0;
+                    } else if (property == "" + vm.configSearchContent.ManagedPropertyAreaOfLaw + "") {
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyAreaOfLaw + "";
                         searchRequest.SearchObject.Sort.Direction = 0;
                     } else {
                         searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
@@ -1441,7 +1459,7 @@
                     searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modenddate, "yyyy-MM-ddT23:59:59") + "Z";
                     vm.moddatefilter = true;
                 }
-                if (name == "Open Date") {
+                if (name == "Open Date" || name == "Created Date") {
                     searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
                     searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
                     vm.opendatefilter = true;
@@ -1483,9 +1501,18 @@
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 if (property == vm.matterConfigContent.GridColumn5Header) {
-                    vm.attorneySearchTerm = "";
-                    searchRequest.SearchObject.Filters.ResponsibleAttorneys = "";
-                    vm.attorneyfilter = false;
+                    if (vm.center != "projectcenter") {
+                        vm.attorneySearchTerm = "";
+                        searchRequest.SearchObject.Filters.ResponsibleAttorneys = "";
+                        vm.attorneyfilter = false;
+                    }
+                    else {
+                        searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = "";
+                        searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = "";
+                        vm.startDate = "";
+                        vm.endDate = "";
+                        vm.opendatefilter = false;
+                    }
                 }
                 else if (property == vm.matterConfigContent.GridColumn6Header) {
                     vm.areaSearchTerm = "";
@@ -1506,12 +1533,27 @@
                     vm.clientfilter = false;
                 }
                 else if (property == vm.matterConfigContent.GridColumn4Header) {
-                    searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
-                    searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
-                    vm.modstartdate = "";
-                    vm.modenddate = "";
-                    vm.moddatefilter = false;
-                } else {
+                    if (vm.center == 'projectcenter') {
+                        searchRequest.SearchObject.Filters.SubareaOfLaw = "";
+                        vm.subAreaOfLawSearchTerm = "";
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                        vm.subareafilter = false;
+                    } else {
+                        searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
+                        searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
+                        vm.modstartdate = "";
+                        vm.modenddate = "";
+                        vm.moddatefilter = false;
+                    }
+                }
+                else if (property == vm.matterConfigContent.GridColumn3Header) {
+                    searchRequest.SearchObject.SearchTerm = "";
+                    vm.areaOfLawSearchTerm = "";
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                    vm.areaoflawfilter = false;
+                    vm.areafilter = false;
+                }
+                else {
                     searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = "";
                     searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = "";
                     vm.startDate = "";
@@ -2036,7 +2078,11 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
+                                if (vm.center == "projectcenter") {
+                                    searchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyAreaOfLaw;
+                                } else {
+                                    searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
+                                }
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
@@ -2047,7 +2093,11 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
+                                if (vm.center == "projectcenter") {
+                                    searchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyAreaOfLaw;
+                                } else {
+                                    searchRequest.SearchObject.Sort.ByProperty = "MCClientID";
+                                }
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
@@ -2067,7 +2117,11 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                                if (vm.center == "projectcenter") {
+                                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
+                                } else {
+                                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                                }
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
@@ -2078,7 +2132,11 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                                if (vm.center == "projectcenter") {
+                                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + "";
+                                } else {
+                                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                                }
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
@@ -2098,7 +2156,11 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
+                                if (vm.center == "projectcenter") {
+                                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyOpenDate + "";
+                                } else {
+                                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
+                                }
                                 searchRequest.SearchObject.Sort.Direction = 0;
                                 searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
@@ -2109,7 +2171,11 @@
                                 vm.lazyloader = false;
                                 vm.pagenumber = 1;
                                 searchRequest.SearchObject.PageNumber = 1;
-                                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
+                                if (vm.center == "projectcenter") {
+                                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyOpenDate + "";
+                                } else {
+                                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
+                                }
                                 searchRequest.SearchObject.Sort.Direction = 1;
                                 searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
                                 vm.FilterByType();
@@ -2477,9 +2543,18 @@
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyClientName + "";
                     vm.filtername = vm.matterConfigContent.GridColumn2Header;
                 }
+                if (name === vm.matterConfigContent.GridColumn3Header) {
+                    vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAreaOfLaw + "";
+                    vm.filtername = vm.matterConfigContent.GridColumn3Header;
+                }
                 if (name === vm.matterConfigContent.GridColumn5Header) {
-                    vm.searchexp = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
-                    vm.filtername = vm.matterConfigContent.GridColumn5Header;
+                    if (vm.center != "projectcenter") {
+                        vm.searchexp = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
+                        vm.filtername = vm.matterConfigContent.GridColumn5Header;
+                    }
+                    else {
+                        vm.filtername = vm.matterConfigContent.GridColumn5Header;
+                    }
                 }
                 //AOL
                 if (name === vm.matterConfigContent.GridColumn6Header) {
@@ -2493,7 +2568,7 @@
                     vm.filtername = vm.matterConfigContent.GridColumn7Header;
                 }
                 $timeout(function () {
-                    if (name == vm.matterConfigContent.GridColumn4Header || name == vm.matterConfigContent.GridColumn7Header) {
+                    if (name == vm.matterConfigContent.GridColumn4Header && vm.center != 'projectcenter' || name == vm.matterConfigContent.GridColumn7Header && vm.center != 'projectcenter' || name == vm.matterConfigContent.GridColumn5Header && vm.center == 'projectcenter') {
                         vm.matterdateheader = false;
                     }
                     else {
@@ -2522,6 +2597,12 @@
                 }
                 else if (vm.filtername == vm.matterConfigContent.GridColumn6Header) {
                     searchTerm = vm.areaSearchTerm.toLowerCase();
+                }
+                else if (vm.filtername == vm.matterConfigContent.GridColumn3Header) {
+                    searchTerm = vm.areaOfLawSearchTerm.toLowerCase();
+                }
+                else if (vm.filtername == vm.matterConfigContent.GridColumn4Header) {
+                    searchTerm = vm.subAreaOfLawSearchTerm.toLowerCase();
                 }
                 var arrayItem = value.split(';');
                 var arrelements = [];
