@@ -86,7 +86,7 @@
                 <input title="Matter Name" class="medium clear" id="txtMatterName" ng-blur='cm.checkValidMatterName()' ng-class="{'errorBorder' :  (cm.errorBorder == 'mattername')}" ng-model="cm.matterName" n style="border: 1px solid rgb(200, 200, 200); border-image: none;" type="text" maxlength="75" placeholder="{{cm.createContent.Tab1Textbox2PlaceholderText}}" value="">
                 <div class="gutter"></div>
                 <input title="Matter ID" class="small" id="txtMatterId" ng-show="cm.showMatterId" ng-disabled="cm.matterIdType!='Custom'" ng-model="cm.matterId" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterid')}" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="{{cm.createContent.Tab1Textbox3PlaceholderText}}" value="">
-                <label class="contentLabel large clear"><span class="mandatory description">*&nbsp;</span>{{cm.createContent.Tab1Textbox4Label}}</label>
+                <label class="contentLabel large clear"><span class="mandatory description" ng-show="cm.isMatterDescriptionMandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox4Label}}</label>
                 <textarea class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterdescription')}" spellcheck="true" maxlength="255" placeholder="{{cm.createContent.Tab1Textbox4PlaceholderText}}" rows="2" cols="400"></textarea>
                 <label class="contentLabel large clear customDivCreate"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox5Label}}</label>
                 <div class="large" id="documentTemplates">

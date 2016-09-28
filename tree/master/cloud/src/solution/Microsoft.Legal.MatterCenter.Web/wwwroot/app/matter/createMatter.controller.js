@@ -2399,8 +2399,8 @@
                             nLength = arrContentTypes.length;
                             for (nCount = 0; nCount < nLength; nCount++) {
                                 if ("contenttypes" == contentTypeValue) {
-                                    if (-1 == arrContents.indexOf(arrContentTypes[nCount].termName)) {
-                                        arrContents.push(arrContentTypes[nCount].termName);
+                                    if (-1 == arrContents.indexOf(arrContentTypes[nCount].documentTemplates)) {
+                                        arrContents.push(arrContentTypes[nCount].documentTemplates);
                                     }
 
                                     var arrAssociatedDocumentTemplates = arrContentTypes[nCount].documentTemplateNames.split(";");
@@ -2422,7 +2422,7 @@
                             for (nCount = 0; nCount < nLength; nCount++) {
                                 if ("defaultcontenttype" == contentTypeValue) {
                                     if (arrContentTypes[nCount].primaryMatterType === true) {
-                                        defaultContentType = arrContentTypes[nCount].termName;
+                                        defaultContentType = arrContentTypes[nCount].documentTemplates;
                                     }
                                 }
                             }
