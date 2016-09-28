@@ -105,7 +105,7 @@
                         <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentConfigContent.AttachmentLoadingText}}" title="{{vm.documentConfigContent.AttachmentLoadingText}}" />
                     </div>
                 </div>
-                <div class="attachedFailedPopUp" ng-if="vm.showFailedAtachments">
+                <div class="attachedFailedPopUp" ng-show="vm.showFailedAtachmentsBlock">
                     <div class="attachedPopUpDetails">{{vm.failedHeaderMessage}}</div>
                     <div class="failureDocumentList" ng-repeat="failedFile in vm.failedFiles track by $index">
                         <div title="{{failedFile}}" class="documentList"> {{failedFile}} </div>
