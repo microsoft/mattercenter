@@ -39,7 +39,7 @@
             vm.sortbytext = vm.tabClicked == "All Matters" ? vm.matterDashboardConfigs.DropDownOptionText : vm.matterDashboardConfigs.DrpDownOption1Text;
             vm.showNavTab = false;
             vm.showInnerNav = true;
-            vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
+            vm.selectedTab = vm.matterDashboardConfigs.Tab1HeaderText;
 
             //#endregion
             //#region Variable to show matter count            
@@ -101,7 +101,8 @@
                             enableColumnMenu: false,
                             width: "230",
                             cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html',
-                            position: value.position
+                            position: value.position,
+                            visible: true
                         });
 
                     }
@@ -114,7 +115,8 @@
                             enableColumnMenu: false,
                             width: "150",
                             cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>',
-                            position: value.position
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
                     }
                 }
@@ -130,7 +132,8 @@
                             enableCellEdit: true,
                             cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>',
                             enableColumnMenu: false,
-                            position: value.position
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -146,7 +149,8 @@
                             displayName: vm.matterDashboardConfigs.GridColumn4Header,
                             cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>',
                             enableColumnMenu: false,
-                            position: value.position
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -162,7 +166,8 @@
                             displayName: vm.matterDashboardConfigs.GridColumn5Header,
                             cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>',
                             enableColumnMenu: false,
-                            position: value.position
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -171,12 +176,12 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn6Header,
+                            displayName: vm.matterDashboardConfigs.GridColumn4Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
-                            width: "210",
-                            visible: false,
+                            width: "210",                            
+                            visible: value.defaultVisibleInGrid,
                             position: value.position
                         });
 
@@ -191,9 +196,9 @@
                             cellClass: 'gridclass',
                             headerCellTemplate: '../app/matter/MatterTemplates/OpenDateTemplate.html',
                             width: "170",
-                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
-                            visible: false,
-                            position: value.position
+                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
                     }
                 }
@@ -204,9 +209,9 @@
                             displayName: vm.matterDashboardConfigs.GridColumn8Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -218,9 +223,9 @@
                             displayName: vm.matterDashboardConfigs.GridColumn9Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -232,9 +237,9 @@
                             displayName: vm.matterDashboardConfigs.GridColumn10Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                           
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -243,12 +248,12 @@
                     if (value.displayInUI == true) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn11Header,
+                            displayName: vm.matterDashboardConfigs.GridColumn2Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                           
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -258,13 +263,13 @@
                     if (value.displayInUI == true) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn12Header,
+                            displayName: vm.matterDashboardConfigs.GridColumn3Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
                             headerCellTemplate: '../app/matter/MatterTemplates/AreaofLawHeaderTemplate.html',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -276,9 +281,9 @@
                             displayName: vm.matterDashboardConfigs.GridColumn13Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -290,9 +295,9 @@
                             displayName: vm.matterDashboardConfigs.GridColumn14Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -304,9 +309,9 @@
                             displayName: vm.matterDashboardConfigs.GridColumn15Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
-                            width: "210",
-                            visible: false,
-                            position: value.position
+                            width: "210",                            
+                            position: value.position,
+                            visible: value.defaultVisibleInGrid
                         });
 
                     }
@@ -351,16 +356,7 @@
                 enableSelectAll: gridOptions.enableSelectAll,
                 multiSelect: gridOptions.multiSelect,
                 enableFiltering: gridOptions.enableFiltering,
-                columnDefs: columnDefs1,
-                //    [
-                //    { field: 'matterName', width: '20%', displayName: vm.matterDashboardConfigs.GridColumn1Header, cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html', enableColumnMenu: false },
-                //    { field: 'matterClient', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn2Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>', enableColumnMenu: false },
-                //    { field: 'matterClientId', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn3Header, headerTooltip: 'Click to sort by client.matterid', enableCellEdit: true, cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>', enableColumnMenu: false },
-                //    { field: 'matterModifiedDate', width: '15%', displayName: vm.matterDashboardConfigs.GridColumn4Header, cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>', enableColumnMenu: false },
-                //    { field: 'matterResponsibleAttorney', width: '15%', headerTooltip: 'Click to sort by attorney', displayName: vm.matterDashboardConfigs.GridColumn5Header, cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>', enableColumnMenu: false },
-                //    { field: 'pin', displayName: '', width: '5%', cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false },
-                //    { field: 'upload', displayName: '', width: '7%', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>', enableColumnMenu: false }
-                //],
+                columnDefs: columnDefs1,                
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
                     //Set the selected row of the grid to selectedRow property of the controller
@@ -377,9 +373,9 @@
                     Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
-                    TermGroup: "MatterCenterTerms",
-                    TermSetName: "Clients",
-                    CustomPropertyName: "ClientURL"
+                    TermGroup: configs.taxonomy.termGroup,
+                    TermSetName: configs.taxonomy.clientTermSetName,
+                    CustomPropertyName: configs.taxonomy.clientCustomPropertiesURL,
                 }
             };
 
@@ -388,10 +384,10 @@
                     Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
-                    TermGroup: "MatterCenterTerms",
-                    TermSetName: "Practice Groups",
-                    CustomPropertyName: "ContentTypeName",
-                    DocumentTemplatesName: "DocumentTemplates"
+                    TermGroup: configs.taxonomy.termGroup,
+                    TermSetName: configs.taxonomy.practiceGroupTermSetName,
+                    CustomPropertyName: configs.taxonomy.subAreaOfLawCustomContentTypeProperty,
+                    DocumentTemplatesName: configs.taxonomy.subAreaOfLawDocumentContentTypeProperty,
                 }
             }
 
@@ -540,7 +536,7 @@
                 var pinnedMattersRequest = {
                     Url: configs.global.repositoryUrl//ToDo: Read from config.js
                 }
-                getPinnedMatters(pinnedMattersRequest, function (response) {
+                getPinnedMatters(jsonMatterSearchRequest, function (response) {
                     if (response == "") {
                         vm.nodata = true;
                         vm.divuigrid = false;
@@ -732,7 +728,7 @@
                 jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 get(jsonMatterSearchRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not                    
-                    getPinnedMatters(pinnedMattersRequest, function (pinnedResponse) {
+                    getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
                         if (pinnedResponse && pinnedResponse.length > 0) {
                             vm.Pinnedobj = pinnedResponse;
                             vm.pinMatterCount = vm.Pinnedobj.length
