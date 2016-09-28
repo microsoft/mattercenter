@@ -35,6 +35,7 @@
             $rootScope.displayOverflow = "";
             cm.nextButtonDisabled = false; cm.prevButtonDisabled = true;
             cm.taxonomyHierarchyLevels = configs.taxonomy.levels;
+            cm.schema= configs.search.Schema;
             cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);
             if (cm.taxonomyHierarchyLevels >= 2) {
                 cm.levelOneList = [];
@@ -1811,7 +1812,7 @@
                     defaultContentType = getDefaultContentTypeValues("defaultcontenttype");
                     var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
                     var sCheckBy = getUserEmail(sCheckByUserEmail);
-                    var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
+                    var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : [];
                     var sBlockUserName = sBlockUserEmail;
                     var bValid = false;
                     if (cm.defaultConfilctCheck) {
@@ -1884,13 +1885,13 @@
 
                         console.log(matterMetdataVM);
 
-                        cm.successMsg = "Step 1/3: Creating matter library and OneNote library... ";
+                        cm.successMsg = cm.createContent.LabelEntityCreationSuccessMsgText1;
                         cm.successBanner = true; cm.createBtnDisabled = true;
                         createMatter(matterMetdataVM, function (response) {
 
                             console.log("createMatter API success");
                             console.log(response);
-                            cm.successMsg = "Step 2/3: Assigning permissions to matter library and OneNote library,associating Content Types, creating view and matter landing page..."
+                            cm.successMsg = cm.createContent.LabelEntityCreationSuccessMsgText2;
 
                             associateContentTypes();
                             assignPermission();
@@ -2021,7 +2022,7 @@
                 var matterGUID = cm.matterGUID;
                 var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
                 var sCheckBy = getUserEmail(sCheckByUserEmail);
-                var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
+                var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : [];
                 var sBlockUserName = sBlockUserEmail;
                 var arrPermissions = [];
                 arrPermissions = getAssignedUserPermissions();
@@ -2078,10 +2079,10 @@
                 //  alert();
                 var matterGUID = cm.matterGUID;
                 cm.successBanner = true;
-                cm.successMsg = "Step 3/3: Updating metadata of matter library and sharing matter with the users... ";
+                cm.successMsg = cm.createContent.LabelEntityCreationSuccessMsgText3;
                 var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
                 var sCheckBy = getUserEmail(sCheckByUserEmail);
-                var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
+                var sBlockUserEmail = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : [];
                 var sBlockUserName = sBlockUserEmail;
                 var arrPermissions = [];
                 arrPermissions = getAssignedUserPermissions();
@@ -2377,9 +2378,17 @@
                     for (nCount = 0; nCount < nLength; nCount++) {
                         if (arrContentTypes[nCount].primaryMatterType === true || 0 === nCount) {
                             // Check if the isNoFolderStructurePresent flag is set to true
-                            if (arrContentTypes[nCount].isNoFolderStructurePresent && "false" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
-                                // If the folder at the specific level is not present then move to the parent level
-                                arrFolderStructure = arrContentTypes[nCount].folderNames && "" !== arrContentTypes[nCount].folderNames ? arrContentTypes[nCount].folderNames.split(";") : arrContentTypes[nCount].foldernamesaol && "" !== arrContentTypes[nCount].foldernamesaol ? arrContentTypes[nCount].foldernamesaol.split(";") : arrContentTypes[nCount].foldernamespg && "" !== arrContentTypes[nCount].foldernamespg ? arrContentTypes[nCount].foldernamespg.split(";") : [];
+                            if (cm.schema.toLowerCase == "mattercenter") {
+                                if (arrContentTypes[nCount].isNoFolderStructurePresent && "false" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
+                                    // If the folder at the specific level is not present then move to the parent level
+                                    arrFolderStructure = arrContentTypes[nCount].folderNames && "" !== arrContentTypes[nCount].folderNames ? arrContentTypes[nCount].folderNames.split(";") : arrContentTypes[nCount].foldernamesaol && "" !== arrContentTypes[nCount].foldernamesaol ? arrContentTypes[nCount].foldernamesaol.split(";") : arrContentTypes[nCount].foldernamespg && "" !== arrContentTypes[nCount].foldernamespg ? arrContentTypes[nCount].foldernamespg.split(";") : [];
+                                }
+                            }
+                            else {
+                                if (arrContentTypes[nCount].isNoFolderStructurePresent && "true" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
+                                    // If the folder at the specific level is not present then move to the parent level
+                                    arrFolderStructure = arrContentTypes[nCount].folderNames && "" !== arrContentTypes[nCount].folderNames ? arrContentTypes[nCount].folderNames.split(";") : arrContentTypes[nCount].foldernamesaol && "" !== arrContentTypes[nCount].foldernamesaol ? arrContentTypes[nCount].foldernamesaol.split(";") : arrContentTypes[nCount].foldernamespg && "" !== arrContentTypes[nCount].foldernamespg ? arrContentTypes[nCount].foldernamespg.split(";") : [];
+                                }
                             }
                         }
 
