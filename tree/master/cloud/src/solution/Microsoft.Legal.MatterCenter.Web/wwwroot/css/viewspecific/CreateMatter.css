@@ -337,9 +337,9 @@
 }
 
 .errPopUpMatterSelectTempWithOutMatterID {
-    left: 460px;
+    left: 12px;
     right: 264px;
-    top: 276px;
+    top: 211px;
 }
 
 .errTringleBlockMatterSelectTemp {
@@ -618,8 +618,8 @@
     }
 
     .errPopUpMatterSelectTempWithOutMatterID {
-        left: 45px;
-        top: 484px;
+        left: 12px;
+        top: 360px;
     }
 
     .errTringleBlockMatterSelectTemp {
