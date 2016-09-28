@@ -2377,19 +2377,12 @@
                     nLength = arrContentTypes.length;
                     for (nCount = 0; nCount < nLength; nCount++) {
                         if (arrContentTypes[nCount].primaryMatterType === true || 0 === nCount) {
-                            // Check if the isNoFolderStructurePresent flag is set to true
-                            if (cm.schema.toLowerCase == "mattercenter") {
-                                if (arrContentTypes[nCount].isNoFolderStructurePresent && "false" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
-                                    // If the folder at the specific level is not present then move to the parent level
-                                    arrFolderStructure = arrContentTypes[nCount].folderNames && "" !== arrContentTypes[nCount].folderNames ? arrContentTypes[nCount].folderNames.split(";") : arrContentTypes[nCount].foldernamesaol && "" !== arrContentTypes[nCount].foldernamesaol ? arrContentTypes[nCount].foldernamesaol.split(";") : arrContentTypes[nCount].foldernamespg && "" !== arrContentTypes[nCount].foldernamespg ? arrContentTypes[nCount].foldernamespg.split(";") : [];
-                                }
+                            // Check if the isNoFolderStructurePresent flag is set to true                            
+                            if (arrContentTypes[nCount].isNoFolderStructurePresent && "false" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
+                                // If the folder at the specific level is not present then move to the parent level
+                                arrFolderStructure = arrContentTypes[nCount].folderNames && "" !== arrContentTypes[nCount].folderNames ? arrContentTypes[nCount].folderNames.split(";") : arrContentTypes[nCount].foldernamesaol && "" !== arrContentTypes[nCount].foldernamesaol ? arrContentTypes[nCount].foldernamesaol.split(";") : arrContentTypes[nCount].foldernamespg && "" !== arrContentTypes[nCount].foldernamespg ? arrContentTypes[nCount].foldernamespg.split(";") : [];
                             }
-                            else {
-                                if (arrContentTypes[nCount].isNoFolderStructurePresent && "true" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
-                                    // If the folder at the specific level is not present then move to the parent level
-                                    arrFolderStructure = arrContentTypes[nCount].folderNames && "" !== arrContentTypes[nCount].folderNames ? arrContentTypes[nCount].folderNames.split(";") : arrContentTypes[nCount].foldernamesaol && "" !== arrContentTypes[nCount].foldernamesaol ? arrContentTypes[nCount].foldernamesaol.split(";") : arrContentTypes[nCount].foldernamespg && "" !== arrContentTypes[nCount].foldernamespg ? arrContentTypes[nCount].foldernamespg.split(";") : [];
-                                }
-                            }
+                            
                         }
 
                     }

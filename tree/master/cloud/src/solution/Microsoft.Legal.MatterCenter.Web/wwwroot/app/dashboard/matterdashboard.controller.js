@@ -118,7 +118,7 @@
                             width: "150",
                             cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>',
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
                     }
                 }
@@ -135,7 +135,7 @@
                             cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>',
                             enableColumnMenu: false,
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -152,7 +152,7 @@
                             cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>',
                             enableColumnMenu: false,
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -169,7 +169,7 @@
                             cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>',
                             enableColumnMenu: false,
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -183,7 +183,7 @@
                             cellClass: 'gridclass',
                             enableColumnMenu: false,
                             width: "210",
-                            visible: value.defaultVisibleInGrid,
+                            visible: value.displayInDashboard,
                             position: value.position
                         });
 
@@ -193,13 +193,14 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn7Header,
+                            displayName: vm.matterDashboardConfigs.GridColumn5Header,
                             headerCellClass: 'gridclass',
                             cellClass: 'gridclass',
+                            enableColumnMenu: false,
                             width: "170",
                             cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
                     }
                 }
@@ -212,7 +213,7 @@
                             cellClass: 'gridclass',
                             width: "210",
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -226,7 +227,7 @@
                             cellClass: 'gridclass',
                             width: "210",
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -240,7 +241,7 @@
                             cellClass: 'gridclass',
                             width: "210",
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -255,7 +256,7 @@
                             width: "210",
                             enableColumnMenu: false,
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -271,7 +272,7 @@
                             enableColumnMenu: false,
                             width: "210",
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -285,7 +286,7 @@
                             cellClass: 'gridclass',
                             width: "210",
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -299,7 +300,7 @@
                             cellClass: 'gridclass',
                             width: "210",
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -313,7 +314,7 @@
                             cellClass: 'gridclass',
                             width: "210",
                             position: value.position,
-                            visible: value.defaultVisibleInGrid
+                            visible: value.displayInDashboard
                         });
 
                     }
@@ -574,7 +575,7 @@
             vm.searchMatters = function (val) {
                 var finalSearchText = "";
                 if (val != "") {
-                    finalSearchText = "(MCMatterName:" + val + "* OR MCMatterID:" + val + "*)";
+                    finalSearchText = "(" + configs.search.ManagedPropertyMatterName + ":" + val + "* OR " + configs.search.ManagedPropertyMatterId + ":" + val + "*)";
                 }
                 vm.pagenumber = 1;
                 jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
@@ -594,7 +595,7 @@
                     searchToText = searchToText.replace(")", "")
                     var firstText = searchToText.split(',')[0]
                     var secondText = searchToText.split(',')[1]
-                    var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                    var finalSearchText = "(" + configs.search.ManagedPropertyMatterName + ":" + val + "* OR " + configs.search.ManagedPropertyMatterId + ":" + val + "*)";
                 }
                 jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
                 jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
@@ -620,7 +621,7 @@
                         searchToText = searchToText.replace(")", "")
                         var firstText = searchToText.split(',')[0]
                         var secondText = searchToText.split(',')[1]
-                        finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                        finalSearchText = '(' + configs.search.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + configs.search.ManagedPropertyMatterId + ':"' + secondText.trim() + '")'
                     } else {
                         finalSearchText = commonFunctions.searchFilter(vm.searchText);
                     }
@@ -667,7 +668,8 @@
                         searchToText = searchToText.replace(")", "")
                         var firstText = searchToText.split(',')[0]
                         var secondText = searchToText.split(',')[1]
-                        var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                        var finalSearchText = '(' + configs.search.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + configs.search.ManagedPropertyMatterId + ':"' + secondText.trim() + '")'
+                        //var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
                     } else {
                         finalSearchText = commonFunctions.searchFilter(vm.searchText);
                     }
@@ -685,15 +687,41 @@
                         vm.nodata = true;
                     }
                     else {
-                        vm.matterGridOptions.data = response;
-                        vm.getMatterCounts();
-                        vm.lazyloaderdashboard = true;
-                        vm.totalrecords = vm.myMatterCount;
-                        vm.selectedTabCount = vm.myMatterCount;
-                        vm.divuigrid = true;
-                        vm.nodata = false;
-                        vm.pagination();
-                    }
+                        getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                            if (pinnedResponse && pinnedResponse.length > 0) {
+                                vm.Pinnedobj = pinnedResponse;
+                                vm.pinMatterCount = vm.Pinnedobj.length
+                                angular.forEach(pinnedResponse, function (pinobj) {
+                                    angular.forEach(response, function (res) {
+                                        //Check if the pinned matter name is equal to search matter name
+                                        if (pinobj.matterName == res.matterName) {
+                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                res.ismatterdone = true;
+                                                res.pinType = "unpin"
+                                            }
+                                        }
+                                    });
+                                });
+                                vm.matterGridOptions.data = response;
+                                vm.totalrecords = vm.allMatterCount;
+                                vm.selectedTabCount = vm.allMatterCount;
+                                vm.pagination();
+                                vm.lazyloaderdashboard = true;
+                                vm.divuigrid = true;
+                                vm.getMatterCounts();
+                            }
+                            else {
+                                vm.lazyloaderdashboard = true;
+                                vm.matterGridOptions.data = response;
+                                vm.totalrecords = vm.allMatterCount;
+                                vm.selectedTabCount = vm.allMatterCount;
+                                vm.pagination();
+                                vm.pinMatterCount = 0;
+                                vm.divuigrid = true;
+                                vm.getMatterCounts();
+                            }
+                        });
+                    }                    
                 });
             }
 
@@ -714,7 +742,8 @@
                         searchToText = searchToText.replace(")", "")
                         var firstText = searchToText.split(',')[0]
                         var secondText = searchToText.split(',')[1]
-                        var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")';
+                        var finalSearchText = '(' + configs.search.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + configs.search.ManagedPropertyMatterId + ':"' + secondText.trim() + '")'
+                        //var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")';
                     } else {
                         finalSearchText = commonFunctions.searchFilter(vm.searchText);
                     }

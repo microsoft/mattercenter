@@ -612,7 +612,11 @@
                 vm.attachedProgressPopUp = true;
                 vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", 1);
                 angular.forEach(vm.selectedRows, function (selRow) {
-                    var documentPath = trimEndChar(selRow.documentOWAUrl, "/");
+                    var docUrl = selRow.documentOWAUrl;
+                    if (selRow.documentOWAUrl.indexOf("WopiFrame.aspx") > 0) {
+                        docUrl = selRow.documentParentUrl + '/' + selRow.documentName + '.' + selRow.documentExtension
+                    }
+                    var documentPath = trimEndChar(docUrl, "/");
                     var documentName = '';
                     if (documentPath) {
                         documentPath = trimEndChar(documentPath.trim(), "/");

@@ -391,9 +391,24 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             }
                             else if (customProperty.Key.Equals(taxonomySettings.SubAreaCustomPropertyisNoFolderStructurePresent, StringComparison.Ordinal))
                             {
-
                                 jw.WritePropertyName("isNoFolderStructurePresent");
-                                jw.WriteValue(customProperty.Value);
+                                if (generalSettings.IsBackwardCompatibale)
+                                {
+                                    if(customProperty.Value==ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_FALSE)
+                                    {
+                                        jw.WriteValue(ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_TRUE);
+                                    }
+                                    else if (customProperty.Value == ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_TRUE)
+                                    {
+                                        jw.WriteValue(ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_FALSE);
+                                    }                                    
+                                }
+                                else
+                                {
+                                    jw.WriteValue(customProperty.Value);
+                                }
+                                
+                                
                             }
                             else if (customProperty.Key.Equals(taxonomySettings.SubAreaOfLawDocumentTemplates, StringComparison.Ordinal))
                             {
