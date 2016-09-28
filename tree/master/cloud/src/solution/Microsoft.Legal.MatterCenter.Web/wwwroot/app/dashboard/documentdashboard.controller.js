@@ -33,7 +33,7 @@
             vm.tabClicked = "All Documents";
             vm.showNavTab = false;
             vm.showInnerNav = true;
-            vm.selectedTab = vm.documentDashboardConfigs.Tab2HeaderText;
+            vm.selectedTab = vm.documentDashboardConfigs.Tab1HeaderText;
 
             //#endregion
 
@@ -128,7 +128,7 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.documentDashboardConfigs.GridColumn3Header,
+                            displayName: vm.documentDashboardConfigs.GridColumn4Header,
                             width: '150',
                             enableColumnMenu: false,
                             headerCellClass: 'docOwnerGridClass',
@@ -172,7 +172,7 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.documentDashboardConfigs.GridColumn6Header,
+                            displayName: vm.documentDashboardConfigs.GridColumn2Header,
                             width: '80',
                             enableColumnMenu: false,
                             headerCellClass: 'docGridVerClass',
@@ -211,18 +211,18 @@
 
                 //    }
                 //}
-                //if (key == "documentCreatedDate") {
-                //    if (value.displayInUI == true && value.position != -1) {
-                //        columnDefs1.push({
-                //            field: key,
-                //            displayName: '',
-                //            width: '20%',
-                //            enableColumnMenu: false,
-                //            position: value.position
-                //        });
+                if (key == "documentCreatedDate") {
+                    if (value.displayInUI == true && value.position != -1) {
+                        columnDefs1.push({
+                            field: key,
+                            displayName: vm.documentDashboardConfigs.GridColumn5Header,                            
+                            width: '20%',
+                            enableColumnMenu: false,
+                            position: value.position
+                        });
 
-                //    }
-                //}
+                    }
+                }
 
                 if (key == "sitename") {
                     if (value.displayInUI == true && value.position != -1) {
@@ -235,11 +235,11 @@
                         });
                     }
                 }
-                if (key == "documentMatter") {
+                if (key == "documentMatterName") {
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
-                            displayName: vm.documentDashboardConfigs.GridColumn12Header,
+                            displayName: vm.documentDashboardConfigs.GridColumn3Header,
                             width: '20%',
                             enableColumnMenu: false,
                             position: value.position
@@ -513,7 +513,12 @@
                     var oEmailRelativePath = '';
                     var sFileURLs = ""
                     angular.forEach(vm.selectedDocuments, function (selectedDocument) {
-                        oEmailRelativePath = trimEndChar(unescape(selectedDocument.documentUrl));
+
+                        var docUrl = selectedDocument.documentUrl;
+                        if (selectedDocument.documentUrl.indexOf("WopiFrame.aspx") > 0) {
+                            docUrl = selectedDocument.documentParentUrl + '/' + selectedDocument.documentName + '.' + selectedDocument.documentExtension
+                        }
+                        oEmailRelativePath = trimEndChar(unescape(docUrl));
                         oEmailRelativePath = oEmailRelativePath.replace(configs.uri.SPOsiteURL, "$") + "$";
                         if (selectedDocument.documentClientUrl) {
                             sFileURLs += selectedDocument.documentClientUrl + oEmailRelativePath + selectedDocument.documentName + ";";
@@ -848,7 +853,7 @@
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not
-                    getPinDocuments(pinnedDocumentsRequest, function (pinnedResponse) {
+                    getPinDocuments(documentRequest, function (pinnedResponse) {
                         if (pinnedResponse && pinnedResponse.length > 0) {
                             vm.pinDocumentCount = pinnedResponse.length;
                             angular.forEach(pinnedResponse, function (pinobj) {
@@ -897,7 +902,7 @@
                     Url: configs.global.repositoryUrl
                 }
 
-                getPinDocuments(client, function (response) {
+                getPinDocuments(documentRequest, function (response) {
                     if (response) {
                         vm.documentGridOptions.data = response;
                         //vm.pinDocumentCount = response.length;
