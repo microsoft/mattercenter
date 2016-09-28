@@ -92,6 +92,7 @@
         vm.showPopUpHolder = false;
         vm.showErrorAttachmentInfo = false;
         vm.showFailedAtachments = false;
+        vm.showFailedAtachmentsBlock = false;
         vm.showSuccessAttachments = false;
         vm.failedFiles = [];
         vm.enableAttachment = false;
@@ -604,8 +605,8 @@
                 vm.enableAttachment = true;
                 vm.errorAttachDocument = false;;
                 vm.asyncCallCompleted = 1;
-
                 vm.showFailedAtachments = false;
+                vm.showFailedAtachmentsBlock = false;
                 vm.failedFiles = [];
                 vm.showPopUpHolder = true;
                 vm.attachedProgressPopUp = true;
@@ -662,10 +663,10 @@
         function notifyAttachmentResult() {
             if (vm.showFailedAtachments) {
                 vm.showSuccessAttachments = false;
-                vm.showFailedAtachments = true;
+                vm.showFailedAtachmentsBlock = true;
                 vm.failedHeaderMessage = configs.uploadMessages.attachFailureMessage;
             } else {
-                vm.showFailedAtachments = false;
+                vm.showFailedAtachmentsBlock = false;
                 vm.showSuccessAttachments = true;
                 vm.failedHeaderMessage = '';
                 vm.failedFiles = [];
