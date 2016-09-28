@@ -287,24 +287,32 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 //searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.Reverse();
                                 if (searchRequestVM.SearchObject.Sort.Direction == 0)
                                 {
-                                    if (sortCol == "DocumentModifiedDate")
+                                    if (sortCol != "" && sortCol.ToLower().Trim() == "documentmodifieddate")
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
-                                    else
+                                    else if (sortCol != "" && sortCol.ToLower().Trim() != "documentmodifieddate")
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
+                                    }
+                                    else
+                                    {
+                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values;
                                     }
                                 }
                                 else
                                 {
-                                    if (sortCol == "DocumentModifiedDate")
+                                    if (sortCol != "" && sortCol.ToLower().Trim() == "documentmodifieddate")
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
-                                    else
+                                    else if (sortCol != "" && sortCol.ToLower().Trim() != "documentmodifieddate")
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
+                                    }
+                                    else
+                                    {
+                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values;
                                     }
                                 }
                             }
@@ -316,24 +324,32 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 // searchResponse.MatterDataList = userpinnedMatterCollection.Values.Reverse();
                                 if (searchRequestVM.SearchObject.Sort.Direction == 0)
                                 {
-                                    if (sortCol == "MatterModifiedDate")
+                                    if (sortCol != "" && sortCol.ToLower().Trim() == "mattermodifieddate")
                                     {
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
-                                    else
+                                    else if(sortCol!="" && sortCol.ToLower().Trim() != "mattermodifieddate")
                                     {
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
+                                    }
+                                    else
+                                    {
+                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values;
                                     }
                                 }
                                 else
                                 {
-                                    if (sortCol == "MatterModifiedDate")
+                                    if (sortCol != "" && sortCol.ToLower().Trim() == "mattermodifieddate")
                                     {                                                         
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
-                                    else
+                                    else if (sortCol != "" && sortCol.ToLower().Trim() != "mattermodifieddate")
                                     {
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
+                                    }
+                                    else
+                                    {
+                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values;
                                     }
                                 }
                             }
@@ -912,7 +928,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             Dictionary<string, MatterData> userpinnedMatterCollection = JsonConvert.DeserializeObject<Dictionary<string, MatterData>>(userPinnedMatter);
 
                             if (!string.IsNullOrWhiteSpace(userPinnedDetails.UserPinnedMatterData.MatterName) &&
-                                userpinnedMatterCollection.ContainsKey(userPinnedDetails.UserPinnedMatterData.MatterName))
+                                userpinnedMatterCollection.ContainsKey(WebUtility.HtmlEncode(userPinnedDetails.UserPinnedMatterData.MatterName))
+                                ||
+                                !string.IsNullOrWhiteSpace(userPinnedDetails.UserPinnedMatterData.MatterName) &&
+                                userpinnedMatterCollection.ContainsKey(userPinnedDetails.UserPinnedMatterData.MatterName)
+                                )
                             {
                                 ////Only 1 pinned request for user
                                 if (1 == userpinnedMatterCollection.Count)
@@ -938,7 +958,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 CultureInfo.InvariantCulture) : string.Empty;
                             Dictionary<string, DocumentData> userpinnedDocumentCollection =
                                 JsonConvert.DeserializeObject<Dictionary<string, DocumentData>>(userPinnedDocument);
-                            if (!string.IsNullOrWhiteSpace(userPinnedDetails.URL) && userpinnedDocumentCollection.ContainsKey(userPinnedDetails.URL))
+                            if (!string.IsNullOrWhiteSpace(userPinnedDetails.URL) && userpinnedDocumentCollection.ContainsKey(WebUtility.HtmlEncode(userPinnedDetails.URL))
+                                    || !string.IsNullOrWhiteSpace(userPinnedDetails.URL) && userpinnedDocumentCollection.ContainsKey(userPinnedDetails.URL)
+                                )
                             {
                                 ////Only 1 pinned request for user
                                 if (1 == userpinnedDocumentCollection.Count)
