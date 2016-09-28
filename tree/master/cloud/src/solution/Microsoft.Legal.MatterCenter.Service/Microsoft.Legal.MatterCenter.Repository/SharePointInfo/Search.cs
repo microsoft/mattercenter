@@ -1246,18 +1246,27 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyResponsibleAttorney, ServiceConstants.COLON,
                             ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.ResponsibleAttorneys, ServiceConstants.DOUBLE_QUOTE));
                     }
-
-                    if (!string.IsNullOrWhiteSpace(searchObject.Filters.SubareaOfLaw))
+                    if (null != searchObject.Filters.PracticeGroup && !string.IsNullOrWhiteSpace(searchObject.Filters.PracticeGroup))
                     {
-                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertySubAreaOfLaw, ServiceConstants.COLON,
-                            ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.SubareaOfLaw, ServiceConstants.DOUBLE_QUOTE));
+                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyPracticeGroup, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.PracticeGroup, ServiceConstants.DOUBLE_INVERTED_COMMA));
                     }
+                    if (!string.IsNullOrWhiteSpace(searchObject.Filters.AreaOfLaw))
+                    {
+                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.AreaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                    }
+
+                    if (null != searchObject.Filters.SubareaOfLaw && !string.IsNullOrWhiteSpace(searchObject.Filters.SubareaOfLaw))
+                    {
+                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertySubAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.SubareaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                    }
+
                     if (null != searchObject.Filters.DateFilters)
                     {
                         ////// Add refiner for Open date value
                         keywordQuery = AddDateRefinementFilter(keywordQuery, searchObject.Filters.DateFilters.OpenDateFrom,
                             searchObject.Filters.DateFilters.OpenDateTo, searchSettings.ManagedPropertyOpenDate);
                     }
+
                 }
             }
             catch (Exception exception)

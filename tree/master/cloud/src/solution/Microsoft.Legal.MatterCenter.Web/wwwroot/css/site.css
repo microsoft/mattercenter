@@ -157,7 +157,7 @@ textarea {
 }
 
 .docOwnerGridClass {
-    display:table-cell;
+    display: table-cell;
 }
 /*End of document dashboard classed*/
 
@@ -1106,7 +1106,7 @@ textarea {
 
 #gridViewPageHeaderContainer {
     margin-top: 11px;
-    cursor:default !important;
+    cursor: default !important;
 }
 
 .MenuCaption {
@@ -1252,4 +1252,9 @@ textarea {
 
 #matterMain div, #matterMain figure {
     outline: none !important;
+}
+
+.mainsort {
+    position: absolute;
+    top: 0px;
 }
