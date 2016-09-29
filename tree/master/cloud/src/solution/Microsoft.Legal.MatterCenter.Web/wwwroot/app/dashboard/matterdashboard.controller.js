@@ -19,6 +19,7 @@
             vm.pgdropvisible = false;
             vm.configsUri = configs.uri;
             vm.configSearchContent = configs.search;
+            vm.center = configs.search.Schema.toLowerCase();
             vm.matterDashboardConfigs = uiconfigs.MatterDashboard;
             vm.matterConfigContent = uiconfigs.Matters;
             sortPropertyForAllMatters = configs.search.ManagedPropertyMatterName;
@@ -43,7 +44,7 @@
             vm.selectedTab = vm.matterDashboardConfigs.Tab1HeaderText;
 
             //#endregion
-            //#region Variable to show matter count            
+            //#region Variable to show the matter count            
             vm.allMatterCount = 0;
             vm.myMatterCount = 0;
             vm.pinMatterCount = 0;
@@ -1809,29 +1810,30 @@
             //#region Exporting to Excel Test
             vm.export = function () {
                 //vm.lazyloaderdashboard = false;
-                if (vm.tabClicked != "Pinned Matters") {
-                    var exportMatterSearchRequest = {
-                        Client: {
-                            Url: configs.global.repositoryUrl
+                var exportMatterSearchRequest = {
+                    Client: {
+                        Url: configs.global.repositoryUrl
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: 500,
+                        SearchTerm: jsonMatterSearchRequest.SearchObject.SearchTerm,
+                        Filters: {
+                            ClientsList: jsonMatterSearchRequest.SearchObject.Filters.ClientsList,
+                            PGList: jsonMatterSearchRequest.SearchObject.Filters.PGList,
+                            AOLList: jsonMatterSearchRequest.SearchObject.Filters.AOLList,
+                            FromDate: jsonMatterSearchRequest.SearchObject.Filters.FromDate,
+                            ToDate: jsonMatterSearchRequest.SearchObject.Filters.ToDate,
+                            FilterByMe: jsonMatterSearchRequest.SearchObject.Filters.FilterByMe
                         },
-                        SearchObject: {
-                            PageNumber: 1,
-                            ItemsPerPage: 500,
-                            SearchTerm: jsonMatterSearchRequest.SearchObject.SearchTerm,
-                            Filters: {
-                                ClientsList: jsonMatterSearchRequest.SearchObject.Filters.ClientsList,
-                                PGList: jsonMatterSearchRequest.SearchObject.Filters.PGList,
-                                AOLList: jsonMatterSearchRequest.SearchObject.Filters.AOLList,
-                                FromDate: jsonMatterSearchRequest.SearchObject.Filters.FromDate,
-                                ToDate: jsonMatterSearchRequest.SearchObject.Filters.ToDate,
-                                FilterByMe: jsonMatterSearchRequest.SearchObject.Filters.FilterByMe
-                            },
-                            Sort: {
-                                ByProperty: jsonMatterSearchRequest.SearchObject.Sort.ByProperty,
-                                Direction: jsonMatterSearchRequest.SearchObject.Sort.Direction
-                            }
+                        Sort: {
+                            ByProperty: jsonMatterSearchRequest.SearchObject.Sort.ByProperty,
+                            Direction: jsonMatterSearchRequest.SearchObject.Sort.Direction
                         }
-                    };
+                    }
+                };
+                if (vm.tabClicked != "Pinned Matters") {
+                    
                     get(exportMatterSearchRequest, function (response) {
                         if (response == "") {
                             //vm.lazyloaderdashboard = true;
@@ -1851,7 +1853,7 @@
                     var pinnedMattersRequest = {
                         Url: configs.global.repositoryUrl//ToDo: Read from config.js
                     }
-                    getPinnedMatters(pinnedMattersRequest, function (response) {
+                    getPinnedMatters(exportMatterSearchRequest, function (response) {
                         if (response == "") {
 
                         } else {
@@ -1912,7 +1914,7 @@
                 modal.css('display', 'block');
                 // Dividing by two centers the modal exactly, but dividing by three  
                 // or four works better for larger screens. 
-                dialog.css("margin-top", Math.max(0, (jQuery(window).height() - dialog.height()) / 2));
+                dialog.css("margin-top", Math.max(0, (screen.height - dialog.height()) / 4));
             }
             // Reposition when a modal is shown 
             jQuery('.modal').on('show.bs.modal', vm.reposition);

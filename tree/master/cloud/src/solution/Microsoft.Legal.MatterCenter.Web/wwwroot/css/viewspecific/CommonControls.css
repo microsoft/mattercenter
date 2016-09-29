@@ -1,4 +1,4 @@
-﻿/* Use !important to override styles provided by fabric framework */
+﻿/* Use !important to override styles provided by the fabric framework */
 #gridViewPageHeaderContainer {
     color: #333;
     font-size: 1em;
@@ -506,6 +506,7 @@
     overflow-y: auto;
     clear: both;
     position: relative;
+    overflow-x: hidden;
 }
 
     #filterResultsContainer .filterflyoutLoading {

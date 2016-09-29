@@ -16,7 +16,7 @@
     <div class="matterPopup"></div>
     <div class="documentPopup"></div>
     <div class="clear"></div>
-    <!--Start Pop up conatins for documents to send documents to one drive, send email etc-->
+    <!--Start Pop up conatins for documents to send documents to the one drive, send email etc-->
     <div class="popUpContainer hide">
         <header class="popUpHeader">
             <div class="popUpHeaderTitle popUpFloatLeft"></div>
@@ -455,7 +455,7 @@
 
     <!--For the export Data-->
     <div id="exportable" class="hide">
-        <table width="100%">
+        <table width="100%" ng-if="vm.center=='mattercenter'">
             <thead>
                 <tr>
                     <th>{{vm.matterDashboardConfigs.GridColumn1Header}}</th>
@@ -472,6 +472,28 @@
                     <td>{{item.matterClientId}}</td>
                     <td>{{item.matterModifiedDate}}</td>
                     <td>{{item.matterResponsibleAttorney}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <table width="100%" ng-if="vm.center!='mattercenter'">
+            <thead>
+                <tr>
+                    <th>{{vm.matterDashboardConfigs.GridColumn1Header}}</th>
+                    <th>{{vm.matterDashboardConfigs.GridColumn2Header}}</th>
+                    <th>{{vm.matterDashboardConfigs.GridColumn3Header}}</th>
+                    <th>{{vm.matterDashboardConfigs.GridColumn4Header}}</th>
+                    <th>{{vm.matterDashboardConfigs.GridColumn5Header}}</th>
+                    <th>{{vm.matterDashboardConfigs.GridColumn6Header}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in vm.exportDate">
+                    <td>{{item.matterName}}</td>
+                    <td>{{item.matterPracticeGroup}}</td>
+                    <td>{{item.matterClient}}</td>
+                    <td>{{item.matterSubAreaOfLaw}}</td>
+                    <td>{{item.matterCreatedDate}}</td>
+                    <td>{{item.matterID}}</td>
                 </tr>
             </tbody>
         </table>
