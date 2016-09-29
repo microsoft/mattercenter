@@ -107,29 +107,7 @@
         vm.createddateDropDown = false;
         //End
 
-        //#region for modifying the date format
-        vm.changeDateFormat = function (changedate) {
-            var dDate = changedate;
-            var oDates = new Date(dDate), months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], date = "", oLocalDate = dDate;
-            if (isNaN(oDates)) {
-                var arrSplitedDate = dDate.replace(/[-]/g, "/");
-                arrSplitedDate = arrSplitedDate.split("/");
-                dDate = arrSplitedDate[1] + "-" + arrSplitedDate[0] + "-" + arrSplitedDate[2];
-                oDates = new Date(dDate);
-            }
-            if (0 > oLocalDate.indexOf("Z")) {
-                date += months[parseInt(oDates.getMonth(), 10)] + " ";
-                date += oDates.getDate() + ", ";
-                date += oDates.getFullYear();
-            } else {
-                date += months[parseInt(oDates.getUTCMonth(), 10)] + " ";
-                date += oDates.getUTCDate() + ", ";
-                date += oDates.getUTCFullYear();
-            }
-            return date;
-        }
-
-        //#endregion
+        
 
         //For setting dynamic height to the grid
         vm.getTableHeight = function () {
@@ -1213,7 +1191,9 @@
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
                                     angular.forEach(response, function (res) {
-                                        if (vm.changeDateFormat(pinobj.documentCreatedDate) == vm.changeDateFormat(res.documentCreatedDate)) {
+                                        var pinnedUrl = pinobj.documentParentUrl + "/" + pinobj.documentName
+                                        var searchDocumentUrl = res.documentParentUrl + "/" + res.documentName
+                                        if (pinnedUrl == searchDocumentUrl) {
                                             if (res.ismatterdone == undefined && !res.ismatterdone) {
                                                 res.MatterInfo = "Unpin this matter";
                                                 res.ismatterdone = true;
