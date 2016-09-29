@@ -20,6 +20,8 @@
         cm.oSiteUsers = [];
         cm.invalidUserCheck = false;
         cm.configsUri = configs.uri;
+        cm.showRoles = true;
+        var siteCollectionPath = "";
 
         function getParameterByName(name) {
             "use strict";
@@ -34,8 +36,8 @@
         cm.isEdit = getParameterByName("IsEdit");
 
         if (cm.clientUrl === "" && cm.matterName === "") {
-            cm.matterName = "E2ETesting2";
-            cm.clientUrl = cm.configsUri.SPOsiteURL + "/sites/microsoft";
+            cm.matterName = "test project for outlook";
+            cm.clientUrl = cm.configsUri.SPOsiteURL + "/teams/celapcdts";
             cm.isEdit = "true";
         }
 
@@ -86,6 +88,15 @@
                 success: callback
             });
         }
+        //API call to get default configurations of client?
+        function getDefaultMatterConfigurations(siteCollectionPath, callback) {
+            api({
+                resource: 'matterResource',
+                method: 'getDefaultMatterConfigurations',
+                data: JSON.stringify(siteCollectionPath),
+                success: callback
+            });
+        }
         //#endregion
 
         //#region
@@ -123,6 +134,16 @@
             }
         }
         //endregion
+        siteCollectionPath = cm.clientUrl;
+        getDefaultMatterConfigurations(siteCollectionPath, function (result) {
+            if (result.isError) {
+
+            }
+            else {
+                var defaultMatterConfig = JSON.parse(result.code);
+                cm.showRoles = defaultMatterConfig.ShowRole;
+            }
+        });
 
         //#region Main function calss
         function getMatterUsers() {
@@ -510,6 +531,9 @@
         }
         var validateAttornyUserRolesAndPermissins = function () {
             var responsibleAttorny = 0, fullControl = 0;
+            if (!cm.showRoles) {
+                assignDefaultRolesToTeamMembers();
+            }
             for (var iCount = 0; iCount < cm.assignPermissionTeams.length; iCount++) {
 
                 if ("" !== cm.assignPermissionTeams[iCount].assignedUser) {
@@ -568,6 +592,26 @@
             }
         }
 
+
+        //setting the team  roles to default i.e responsible attrony when showRole is false from default settings.
+        function assignDefaultRolesToTeamMembers() {
+            if (!cm.showRoles) {
+                var arrAssigneTeams = cm.assignPermissionTeams, nCount = 0, nlength;
+                if (arrAssigneTeams) {
+                    nlength = arrAssigneTeams.length;
+                    for (nCount = 0; nCount < nlength; nCount++) {
+                        if (arrAssigneTeams[nCount] && arrAssigneTeams[nCount].assignedUser && "" !== arrAssigneTeams[nCount].assignedUser) {
+                            angular.forEach(cm.assignRoles, function (role) {
+                                if (role.mandatory) {
+                                    arrAssigneTeams[nCount].assignedRole = role;
+                                }
+                            });
+                        }
+                    }
+                }
+
+            }
+        }
 
         cm.onSelect = function ($item, $model, $label, value, fucnValue, $event, username) {
             var typeheadelelen = angular.element('.dropdown-menu li').length;
