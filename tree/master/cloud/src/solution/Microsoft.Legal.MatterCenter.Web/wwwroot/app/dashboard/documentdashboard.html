@@ -16,7 +16,7 @@
     <div class="matterPopup"></div>
     <div class="documentPopup"></div>
     <div class="clear"></div>
-    <!--Start Pop up conatins for documents to send documents to one drive, send email etc-->
+    <!--Start Pop up conatins for documents to send documents to one drive, send the email etc-->
 
     <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" style="width:100%">
@@ -124,8 +124,8 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.documentDashboardConfigs.AdvSearchLabel2Text}}</div>
-                        <div class="col-xs-12 col-sm-7 pull-left pad10">
-                            <input type="text" placeholder="{{vm.documentDashboardConfigs.AdvSearchTextbox2PlaceholderText}}" ng-model="vm.selectedAuthor" class="form-control">
+                        <div class="col-xs-12 col-sm-7 pull-left pad10" id="documentAuthorDiv">
+                            <input type="text" placeholder="{{vm.documentDashboardConfigs.AdvSearchTextbox2PlaceholderText}}" uib-typeahead="documentDataList.name for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.authortypeheadselect($item, $model)' typeahead-no-results="noResults" ng-model="vm.selectedAuthor" class="form-control">
                         </div>
                         <div class="col-xs-12 hide">
                             <i ng-show="vm.loadLocation" class="glyphicon glyphicon-refresh"></i>
@@ -231,7 +231,7 @@
                     </div>
                     <div class="col-xs-offset-4 col-xs-5 col-sm-offset-5 col-sm-4 col-md-offset-7 col-md-4" ng-if="vm.sortbydrop">
                         <ul>
-                            <li ng-click="vm.sortyby('Relevant','None')">{{vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text}}</li>
+                            <li ng-click="vm.sortyby('Relevant',vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text)">{{vm.tabClicked=='All Documents'?vm.documentDashboardConfigs.DropDownOptionText:vm.documentDashboardConfigs.DrpDownOption1Text}}</li>
                             <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↑</li>
                             <li ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">{{vm.documentDashboardConfigs.DrpDownOption2Text}} ↓</li>
                             <li ng-click="vm.sortyby('CreateddateUp','Created date ↑')">{{vm.documentDashboardConfigs.DrpDownOption3Text}} ↑</li>

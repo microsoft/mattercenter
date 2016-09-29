@@ -6,7 +6,7 @@
             var vm = this;
             vm.selected = undefined;
             vm.selectedAuthor = undefined;
-            //#region Global Variables
+            //#region Global Variable
             vm.documentdrop = false;
             vm.downwarddrop = true;
             vm.upwarddrop = false;
@@ -806,6 +806,13 @@
 
             //#endregion
 
+            //#region
+            vm.authortypeheadselect = function (index, selected) {
+                vm.selectedAuthor = index.name + " (" + index.email + ");";
+            }
+
+            //#endregion
+
             //#reion This function will get counts for all matters, my matters and pinned matters
             vm.getDocumentCounts = function () {
                 vm.lazyloaderdashboard = false;
@@ -841,6 +848,7 @@
             vm.getDocuments = function () {
                 vm.tabClicked = "All Documents";
                 vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText;
+                vm.sortbytext = vm.documentDashboardConfigs.DropDownOptionText;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.nodata = false;

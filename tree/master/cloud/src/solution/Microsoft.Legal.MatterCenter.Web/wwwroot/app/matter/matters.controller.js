@@ -12,7 +12,7 @@
                 matterName: '',
                 matterGuid: ''
             };
-            //#region dynamic content
+            //#region dynamic contents
             vm.navigationContent = uiconfigs.Navigation;
             vm.configSearchContent = configs.search;
             vm.matterConfigContent = uiconfigs.Matters;

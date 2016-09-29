@@ -12,15 +12,19 @@ matterMain.directive('droppable', function () {
 
             el.addEventListener('dragover', function(e){
                 e.dataTransfer.dropEffect = 'move'
-                if(e.preventDefault) e.preventDefault();
-                this.classList.add('folderDragOver');
+                if (e.preventDefault) e.preventDefault();
+                if (this.nodeName != "LI") {
+                    this.classList.add('folderDragOver');
+                }
                 return false;
             }, false);
 
 
-            el.addEventListener('dragenter', function(e){
-                this.classList.add('folderDragOver');
-                return false;
+            el.addEventListener('dragenter', function (e) {
+                if (this.nodeName != "LI") {
+                    this.classList.add('folderDragOver');
+                    return false;
+                }
             }, false);
 
             el.addEventListener('dragleave', function(e){
@@ -64,7 +68,7 @@ matterMain.directive('droppable', function () {
                     //call the parent method called handleDrop which will call the web api method to upload the attachment
                     scope.$parent.vm.handleOutlookDrop(scope.folder, sourceItem)
                 }
-                
+               
                 
                return false;
             }, false);
