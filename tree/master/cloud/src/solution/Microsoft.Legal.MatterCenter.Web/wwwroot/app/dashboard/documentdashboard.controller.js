@@ -216,6 +216,7 @@
                     if (value.displayInUI == true && value.position != -1) {
                         columnDefs1.push({
                             field: key,
+                            cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentCreatedDate}}"></div>',
                             displayName: vm.documentDashboardConfigs.GridColumn5Header,
                             width: '20%',
                             enableColumnMenu: false,

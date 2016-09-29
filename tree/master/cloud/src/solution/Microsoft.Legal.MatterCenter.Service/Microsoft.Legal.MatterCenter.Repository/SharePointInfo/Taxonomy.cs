@@ -392,7 +392,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             else if (customProperty.Key.Equals(taxonomySettings.SubAreaCustomPropertyisNoFolderStructurePresent, StringComparison.Ordinal))
                             {
                                 jw.WritePropertyName("isNoFolderStructurePresent");
-                                if (generalSettings.IsBackwardCompatibale)
+                                if (generalSettings.IsBackwardCompatible)
                                 {
                                     if(customProperty.Value==ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_FALSE)
                                     {

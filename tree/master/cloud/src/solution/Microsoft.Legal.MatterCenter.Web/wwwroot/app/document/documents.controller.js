@@ -1139,7 +1139,9 @@
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
                                     angular.forEach(response, function (res) {
-                                        if (pinobj.documentCreatedDate == res.documentCreatedDate) {
+                                        var pinnedUrl = pinobj.documentParentUrl + "/" + pinobj.documentName
+                                        var searchDocumentUrl = res.documentParentUrl + "/" + res.documentName
+                                        if (pinnedUrl == searchDocumentUrl) {
                                             if (res.ismatterdone == undefined && !res.ismatterdone) {
                                                 res.MatterInfo = "Unpin this matter";
                                                 res.ismatterdone = true;

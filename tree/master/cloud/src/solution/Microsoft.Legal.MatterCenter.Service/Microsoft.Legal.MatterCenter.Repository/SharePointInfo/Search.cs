@@ -326,7 +326,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 {
                                     if (sortCol != "" && sortCol.ToLower().Trim() == "mattermodifieddate")
                                     {
-                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
+                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString()));
                                     }
                                     else if(sortCol!="" && sortCol.ToLower().Trim() != "mattermodifieddate")
                                     {
@@ -341,7 +341,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 {
                                     if (sortCol != "" && sortCol.ToLower().Trim() == "mattermodifieddate")
                                     {                                                         
-                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
+                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString()));
                                     }
                                     else if (sortCol != "" && sortCol.ToLower().Trim() != "mattermodifieddate")
                                     {
@@ -928,10 +928,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             Dictionary<string, MatterData> userpinnedMatterCollection = JsonConvert.DeserializeObject<Dictionary<string, MatterData>>(userPinnedMatter);
 
                             if (!string.IsNullOrWhiteSpace(userPinnedDetails.UserPinnedMatterData.MatterName) &&
-                                userpinnedMatterCollection.ContainsKey(WebUtility.HtmlEncode(userPinnedDetails.UserPinnedMatterData.MatterName))
+                                userpinnedMatterCollection.ContainsKey(WebUtility.HtmlEncode(userPinnedDetails.UserPinnedMatterData.MatterName.Trim().ToLower()))
                                 ||
                                 !string.IsNullOrWhiteSpace(userPinnedDetails.UserPinnedMatterData.MatterName) &&
-                                userpinnedMatterCollection.ContainsKey(userPinnedDetails.UserPinnedMatterData.MatterName)
+                                userpinnedMatterCollection.ContainsKey(userPinnedDetails.UserPinnedMatterData.MatterName.Trim().ToLower())
                                 )
                             {
                                 ////Only 1 pinned request for user
@@ -956,10 +956,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             string userPinnedDocument = !string.IsNullOrEmpty(Convert.ToString(listItems[0][userPinnedDetails.PinnedListColumnDetails],
                                 CultureInfo.InvariantCulture)) ? Convert.ToString(listItems[0][userPinnedDetails.PinnedListColumnDetails],
                                 CultureInfo.InvariantCulture) : string.Empty;
-                            Dictionary<string, DocumentData> userpinnedDocumentCollection =
-                                JsonConvert.DeserializeObject<Dictionary<string, DocumentData>>(userPinnedDocument);
-                            if (!string.IsNullOrWhiteSpace(userPinnedDetails.URL) && userpinnedDocumentCollection.ContainsKey(WebUtility.HtmlEncode(userPinnedDetails.URL))
-                                    || !string.IsNullOrWhiteSpace(userPinnedDetails.URL) && userpinnedDocumentCollection.ContainsKey(userPinnedDetails.URL)
+                            Dictionary<string, DocumentData> userpinnedDocumentCollection = new Dictionary<string, DocumentData>(StringComparer.InvariantCultureIgnoreCase);
+                            userpinnedDocumentCollection = JsonConvert.DeserializeObject<Dictionary<string, DocumentData>>(userPinnedDocument);
+                            if (!string.IsNullOrWhiteSpace(userPinnedDetails.URL) && userpinnedDocumentCollection.Where(x => x.Key.ToLower() == WebUtility.HtmlEncode(userPinnedDetails.URL.Trim().ToLower())).ToList().Count > 0
+                                    || !string.IsNullOrWhiteSpace(userPinnedDetails.URL) && userpinnedDocumentCollection.Where(x => x.Key.ToLower() == userPinnedDetails.URL.Trim().ToLower()).ToList().Count>0
                                 )
                             {
                                 ////Only 1 pinned request for user
