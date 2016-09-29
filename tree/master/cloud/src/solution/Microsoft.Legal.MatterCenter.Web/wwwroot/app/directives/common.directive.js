@@ -401,13 +401,15 @@
     }
 
     'use strict'
-    function uiGridViewport() {
+    function uiGridViewport($window) {
         return {
             restrict: 'AE',
             link: function (scope, element, attrs) {
                 $(element).scroll(function (e) {
-                    $('.popcontent').css('display', 'none');
-                    $('.dropdown').removeClass("open");
+                    if ($window.innerHeight > 442) {
+                        $('.popcontent').css('display', 'none');
+                        $('.dropdown').removeClass("open");
+                    }
                 });
             }
         }
@@ -424,7 +426,8 @@
     app.directive('fallbacksrc', [fallbacksrc]);
     app.directive('myEnter', [myEnter]);
     app.directive('uiGridMenuButton', ['$window', '$timeout', uiGridMenuButton]);
-    app.directive('uiGridViewport', [uiGridViewport]);
+    //Adding Window
+    app.directive('uiGridViewport', ['$window', uiGridViewport]);
 })();
 
 

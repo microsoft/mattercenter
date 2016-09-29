@@ -7,7 +7,6 @@
         text-decoration: none !important;
     }
 
-/* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -259,7 +258,7 @@ textarea {
     /*height:510px !important;*/
 }
 
-@media screen and (max-width:767px) and (min-width: 268px) {
+@media screen and (max-width:767px) and (min-width: 250px) {
     .popcontent {
         position: absolute;
         top: 31px !important;
@@ -1257,4 +1256,8 @@ textarea {
 .mainsort {
     position: absolute;
     top: 0px;
+}
+
+#documentAuthorDiv ul {
+    width: 96%;
 }
