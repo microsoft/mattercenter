@@ -35,7 +35,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string MatterCenterConfiguration { get; set; }
         public string KeyVaultURI { get; set; }
         public string GraphUrl { get; set; }
-        public bool IsBackwardCompatibale { get; set; }
+        public bool IsBackwardCompatible { get; set; }
 
     }
 }
