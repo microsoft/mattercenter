@@ -928,10 +928,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             Dictionary<string, MatterData> userpinnedMatterCollection = JsonConvert.DeserializeObject<Dictionary<string, MatterData>>(userPinnedMatter);
 
                             if (!string.IsNullOrWhiteSpace(userPinnedDetails.UserPinnedMatterData.MatterName) &&
-                                userpinnedMatterCollection.ContainsKey(WebUtility.HtmlEncode(userPinnedDetails.UserPinnedMatterData.MatterName.Trim().ToLower()))
+                                userpinnedMatterCollection.Where(x => x.Key.ToLower() == WebUtility.HtmlEncode(userPinnedDetails.UserPinnedMatterData.MatterName.Trim().ToLower())).ToList().Count > 0
                                 ||
                                 !string.IsNullOrWhiteSpace(userPinnedDetails.UserPinnedMatterData.MatterName) &&
-                                userpinnedMatterCollection.ContainsKey(userPinnedDetails.UserPinnedMatterData.MatterName.Trim().ToLower())
+                                userpinnedMatterCollection.Where(x => x.Key.ToLower() == userPinnedDetails.UserPinnedMatterData.MatterName.Trim().ToLower()).ToList().Count > 0
                                 )
                             {
                                 ////Only 1 pinned request for user
