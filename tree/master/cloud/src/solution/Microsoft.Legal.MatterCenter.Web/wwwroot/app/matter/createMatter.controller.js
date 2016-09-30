@@ -2175,7 +2175,7 @@
 
                 oMatterProvisionFlags = {
                     "MatterLandingFlag": cm.bMatterLandingPage,
-                    "SendEmailFlag": true
+                    "SendEmailFlag": cm.includeEmail
                 };
 
                 angular.forEach(oDocumentTemplates, function (item) {
