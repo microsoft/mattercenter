@@ -287,11 +287,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 //searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.Reverse();
                                 if (searchRequestVM.SearchObject.Sort.Direction == 0)
                                 {
-                                    if (sortCol != "" && sortCol.ToLower().Trim() == "documentmodifieddate")
+                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyCreated.ToLower().Trim()))
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
-                                    else if (sortCol != "" && sortCol.ToLower().Trim() != "documentmodifieddate")
+                                    else if (sortCol != "" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyCreated.ToLower().Trim()))
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
                                     }
@@ -302,11 +302,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 }
                                 else
                                 {
-                                    if (sortCol != "" && sortCol.ToLower().Trim() == "documentmodifieddate")
+                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyCreated.ToLower().Trim()))
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
-                                    else if (sortCol != "" && sortCol.ToLower().Trim() != "documentmodifieddate")
+                                    else if (sortCol != "" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyCreated.ToLower().Trim()))
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
                                     }
@@ -324,11 +324,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 // searchResponse.MatterDataList = userpinnedMatterCollection.Values.Reverse();
                                 if (searchRequestVM.SearchObject.Sort.Direction == 0)
                                 {
-                                    if (sortCol != "" && sortCol.ToLower().Trim() == "mattermodifieddate")
+                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
                                     {
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString()));
                                     }
-                                    else if(sortCol!="" && sortCol.ToLower().Trim() != "mattermodifieddate")
+                                    else if(sortCol!="" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
                                     {
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
                                     }
@@ -339,11 +339,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 }
                                 else
                                 {
-                                    if (sortCol != "" && sortCol.ToLower().Trim() == "mattermodifieddate")
+                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
                                     {                                                         
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString()));
                                     }
-                                    else if (sortCol != "" && sortCol.ToLower().Trim() != "mattermodifieddate")
+                                    else if (sortCol != "" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
                                     {
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
                                     }
