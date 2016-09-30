@@ -296,9 +296,9 @@
                                         team.userExsists = response.isUserExistsInSite;
                                         team.userConfirmation = true;
                                         cm.confirmUser(true);
-                                        if (-1 == cm.oSiteUsers.indexOf(userEmail[0])) {
-                                            cm.oSiteUsers.push(userEmail[0]);
-                                        }
+                                        //if (-1 == cm.oSiteUsers.indexOf(userEmail[0])) {
+                                        //    cm.oSiteUsers.push(userEmail[0]);
+                                        //}
                                     }
                                 });
 
@@ -753,15 +753,17 @@
                             }
                         }
                         teamUserEmail = getUserName(team.assignedUser.trim() + ";", false)
-                        if (-1 == cm.oSiteUsers.indexOf(teamUserEmail[0])) {
+                     //  if (-1 == cm.oSiteUsers.indexOf(teamUserEmail[0])) {
                             //  cm.blockedUserName.trim()
                             if (team.userExsists) {
-                                cm.errTextMsg = "Please enter valid team members.";
-                                cm.errorBorder = "";
-                                cm.errorPopUpBlock = true;
-                                showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
-                                cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
-                                return false;
+                                if (-1 == cm.oSiteUsers.indexOf(teamUserEmail[0])) {
+                                    cm.errTextMsg = "Please enter valid team members.";
+                                    cm.errorBorder = "";
+                                    cm.errorPopUpBlock = true;
+                                    showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                    cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
+                                    return false;
+                                }
                             }
                             else {
                                 if (!team.userConfirmation) {
@@ -772,7 +774,7 @@
                                     }
                                 }
                             }
-                        }
+                       // }
                     }
                     else {
                         showErrorNotificationAssignTeams(team.assignedRole.name + " cannot be empty", team.assigneTeamRowNumber, "user")
