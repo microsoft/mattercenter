@@ -75,7 +75,7 @@
                 <label class="contentLabel small" id="clientId">{{cm.createContent.Tab1Textbox1Label}}</label>
                 <div>
                     <select class="medium clear" ng-class="{'errorBorder' :  (cm.errorBorder == 'client')}" ng-model="cm.selectedClient" ng-change="cm.getSelectedClientValue(cm.selectedClient)" ng-options='client.name for client in cm.clientNameList track by client.id' required>
-                        <option value="" label="- Select a client -"></option>
+                        <option value="" label="- Select a {{cm.createContent.Tab1Textbox1LabelClientOrTeam1}}-"></option>
                     </select>
                 </div>
                 <div class="gutter"></div>
