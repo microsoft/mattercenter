@@ -1,5 +1,4 @@
 ﻿/// <reference path="documentheadertemplate.html" />
-/// <reference path="documentheadertemplate.html" />
 (function () {
     'use strict';
 
@@ -108,6 +107,8 @@
         vm.createddateDropDown = false;
         //End
 
+        
+
         //For setting dynamic height to the grid
         vm.getTableHeight = function () {
             if (vm.isOutlook) {
@@ -122,7 +123,50 @@
             }
         };
 
-        $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
+        vm.switchFuction = function (columnName) {
+            var displayColumn= [];
+            switch (columnName) {
+                case "GridColumn1Header":
+                    displayColumn[0] = vm.documentConfigContent.GridColumn1Header;
+                    displayColumn[1] = vm.documentConfigContent.GridColumn1HeaderTitle;
+                    break;
+                case "GridColumn2Header":
+                    displayColumn[0] = vm.documentConfigContent.GridColumn2Header;
+                    displayColumn[1] = vm.documentConfigContent.GridColumn2HeaderTitle;
+                    break;
+                case "GridColumn3Header":
+                    displayColumn[0] = vm.documentConfigContent.GridColumn3Header;
+                    displayColumn[1] = vm.documentConfigContent.GridColumn3HeaderTitle;
+                    break;
+                case "GridColumn4Header":
+                    displayColumn[0] = vm.documentConfigContent.GridColumn4Header;
+                    displayColumn[1] = vm.documentConfigContent.GridColumn4HeaderTitle;
+                    break;
+                case "GridColumn5Header":
+                    displayColumn[0] = vm.documentConfigContent.GridColumn5Header;
+                    displayColumn[1] = vm.documentConfigContent.GridColumn5HeaderTitle;
+                    break;
+                case "GridColumn6Header":
+                    displayColumn[0] = vm.documentConfigContent.GridColumn6Header;
+                    displayColumn[1] = vm.documentConfigContent.GridColumn6HeaderTitle;
+                    break;
+                case "GridColumn7Header":
+                    displayColumn[0] = vm.documentConfigContent.GridColumn7Header;
+                    displayColumn[1] = vm.documentConfigContent.GridColumn7HeaderTitle;
+                    break;
+                case "GridColumn8Header":
+                    displayColumn[0] = vm.documentConfigContent.GridColumn8Header;
+                    displayColumn[1] = vm.documentConfigContent.GridColumn8HeaderTitle;
+                    break;
+                default:
+                    displayColumn = '';
+                    displayColumn[1] = '';
+                    break;
+            }
+            return displayColumn;
+        };
+
+        $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
         var columnDefs1 = [];
         columnDefs1.push({
             field: 'checker',
@@ -134,298 +178,24 @@
             position: 0
         });
         angular.forEach(configs.search.searchColumnsUIPickerForDocument, function (value, key) {
-            if (key == "documentName") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn1Header,
-                        width: '278',
-                        enableHiding: false,
-                        cellTemplate: '../app/document/DocumentTemplates/DocumentCellTemplate.html',
-                        headerCellTemplate: '../app/document/DocumentTemplates/DocumentHeaderTemplate.html',
-                        position: value.position
-                    });
 
-                }
-            }
-            if (key == "documentClient") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn2Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '200',
-                        cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClient=="" ? "NA":row.entity.documentClient}}</div>',
-                        enableCellEdit: true,
-                        headerCellTemplate: '../app/document/DocumentTemplates/ClientHeaderTemplate.html',
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-
-                }
-            }
-            if (key == "documentClientId") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn3Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '150',
-                        headerCellTemplate: $templateCache.get('coldefheadertemplate.html'),
-                        cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentClientId==""?"NA":row.entity.documentClientId}}.{{row.entity.documentMatterId==""?"NA":row.entity.documentMatterId}}</div>',
-                        enableCellEdit: true,
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-
-                }
-            }
-            if (key == "documentModifiedDate") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn4Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '195',
-                        cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.documentModifiedDate}}"></div>',
-                        headerCellTemplate: '../app/document/DocumentTemplates/ModifiedDateHeaderTemplate.html',
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-
-                }
-            }
-            if (key == "documentOwner") {
-                if (value.displayInUI == true && value.position != -1) {
-
-                    var columnName = "";
-                    if (configs.search.Schema.toLowerCase() === "projectcenter") {
-                        columnName = vm.documentConfigContent.GridColumn4Header
-                    }
-                    else {
-                        columnName = vm.documentConfigContent.GridColumn5Header
-                    }
-
-                    columnDefs1.push({
-                        field: key,
-                        displayName: columnName,
-                        width: '140',
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        headerCellTemplate: '/app/document/DocumentTemplates/AuthorHeaderTemplate.html',
-                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-
-                }
-            }
-            if (key == "documentVersion") {
-                if (value.displayInUI == true && value.position != -1) {
-                    var columnName = "";
-                    if (configs.search.Schema.toLowerCase() === "projectcenter") {
-                        columnName = vm.documentConfigContent.GridColumn2Header
-                    }
-                    else {
-                        columnName = vm.documentConfigContent.GridColumn6Header
-                    }
-                    columnDefs1.push({
-                        field: key,
-                        displayName: columnName,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '200',
-                        headerCellTemplate: $templateCache.get('coldefheadertemplate.html'),                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-
-                }
-            }
-            if (key == "documentCheckoutUser") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn7Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '210',
-                        headerCellTemplate: '/app/document/DocumentTemplates/CheckOutHeaderTemplate.html',
-                        cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.documentCheckoutUser=="" ? "NA":row.entity.documentCheckoutUser}}</div>',                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-
-                }
-            }
-            if (key == "documentCreatedDate") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn8Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',
-                        headerCellTemplate: '/app/document/DocumentTemplates/CreatedDateHeaderTemplate.html',
-                        cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.documentCreatedDate}}"></div>',                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-
-                }
-            }
-
-            if (key == "sitename") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn10Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
-            }
-            if (key == "documentMatterName") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn3Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
-            }
-            if (key == "documentMatterId") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn10Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
-            }
-
-            if (key == "documentExtension") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn10Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
-            }
-            if (key == "documentIconUrl") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn10Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
-            }
-            if (key == "documentID") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn10Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
-            }
-            if (key == "documentOWAUrl") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn10Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',
-                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
-            }
-            if (key == "documentUrl") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn10Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',
-                       
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
-            }
-            if (key == "documentParentUrl" && value.position != -1) {
-                if (value.displayInUI == true) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn10Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',
-                       
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
-            }
-            if (key == "documentMatterUrl") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn10Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',                        
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
-            }
-            if (key == "documentPracticeGroup") {
-                if (value.displayInUI == true && value.position != -1) {
-                    columnDefs1.push({
-                        field: key,
-                        displayName: vm.documentConfigContent.GridColumn6Header,
-                        headerCellClass: 'gridclass',
-                        cellClass: 'gridclass',
-                        width: '170',
-                        position: value.position,
-                        visible: value.defaultVisibleInGrid
-                    });
-                }
+            if (value.displayInUI == true && value.position != -1) {
+                var displaycolVal = vm.switchFuction(value.displayName);
+                columnDefs1.push({
+                    field: key,
+                    displayName: displaycolVal[0],
+                    width: value.width,
+                    enableHiding: value.enableHiding,
+                    cellTemplate: value.cellTemplate,
+                    headerCellTemplate: value.headerCellTemplate == "Custom" ? $templateCache.get('coldefheadertemplate.html').replace('Click to sort by', displaycolVal[1]) : value.headerCellTemplate,
+                    position: value.position,
+                    cellClass: value.cellClass,
+                    headerCellClass: value.headerCellClass,
+                    visible: value.defaultVisibleInGrid
+                });
             }
         });
+            
         function getSortFunction(fieldName) {
             return function (col1, col2) {
                 return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
@@ -1010,6 +780,45 @@
 
         }
 
+        vm.clearAllFilter = function () {
+         
+            vm.documentheader = true;
+            vm.documentdateheader = true;
+            vm.nodata = false;
+            vm.pagenumber = 1;
+            searchRequest.SearchObject.PageNumber = vm.pagenumber;
+            vm.searchTerm = "";
+
+            searchRequest.SearchObject.SearchTerm = "";
+            searchRequest.SearchObject.Filters.Name = "";
+            searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+            vm.documentfilter = false;
+
+            vm.clientSearchTerm = "";
+            searchRequest.SearchObject.Filters.ClientName = "";
+            vm.clientfilter = false;
+
+            vm.checkedSearchTerm = "";
+            searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
+            vm.checkoutfilter = false;
+
+            vm.authorSearchTerm = ""
+            searchRequest.SearchObject.Filters.DocumentAuthor = "";
+            vm.authorfilter = false;
+
+            searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
+            searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
+            vm.modstartdate = "";
+            vm.modenddate = "";
+            vm.moddatefilter = false;
+
+            searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
+            searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
+            vm.startDate = "";
+            vm.endDate = "";
+            vm.createddatefilter = false;
+        }
+
         //#endregion
 
         //#region clearing all filters
@@ -1038,12 +847,12 @@
                 searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
                 vm.checkoutfilter = false;
             }
-            else if (property == vm.documentConfigContent.GridColumn5Header) {
+            else if (property == vm.documentConfigContent.GridColumn4Header) {
                 vm.authorSearchTerm = ""
                 searchRequest.SearchObject.Filters.DocumentAuthor = "";
                 vm.authorfilter = false;
             }
-            else if (property == vm.documentConfigContent.GridColumn4Header) {
+            else if (property == vm.documentConfigContent.GridColumn5Header) {
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
                 vm.modstartdate = "";
@@ -1089,6 +898,7 @@
 
         //#region for setting the document name in dropdown
         vm.SetDocuments = function (id, name) {
+            vm.clearAllFilter();
             vm.documentname = name;
             vm.documentid = id;
             vm.GetDocuments(id);
@@ -1139,7 +949,9 @@
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
                                     angular.forEach(response, function (res) {
-                                        if (pinobj.documentCreatedDate == res.documentCreatedDate) {
+                                        var pinnedUrl = pinobj.documentParentUrl + "/" + pinobj.documentName
+                                        var searchDocumentUrl = res.documentParentUrl + "/" + res.documentName
+                                        if (pinnedUrl == searchDocumentUrl) {
                                             if (res.ismatterdone == undefined && !res.ismatterdone) {
                                                 res.MatterInfo = "Unpin this matter";
                                                 res.ismatterdone = true;
@@ -1188,7 +1000,9 @@
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
                                     angular.forEach(response, function (res) {
-                                        if (pinobj.documentCreatedDate == res.documentCreatedDate) {
+                                        var pinnedUrl = pinobj.documentParentUrl + "/" + pinobj.documentName
+                                        var searchDocumentUrl = res.documentParentUrl + "/" + res.documentName
+                                        if (pinnedUrl == searchDocumentUrl) {
                                             if (res.ismatterdone == undefined && !res.ismatterdone) {
                                                 res.MatterInfo = "Unpin this matter";
                                                 res.ismatterdone = true;
@@ -1910,9 +1724,9 @@
                 vm.filtername = vm.documentConfigContent.GridColumn2Header;
             }
             //Author
-            if (name === vm.documentConfigContent.GridColumn5Header) {
+            if (name === vm.documentConfigContent.GridColumn4Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
-                vm.filtername = vm.documentConfigContent.GridColumn5Header;
+                vm.filtername = vm.documentConfigContent.GridColumn4Header;
             }
             //Check out to
             if (name === vm.documentConfigContent.GridColumn7Header) {
@@ -1920,15 +1734,15 @@
                 vm.filtername = vm.documentConfigContent.GridColumn7Header;
             }
             //Modified Date
-            if (name === vm.documentConfigContent.GridColumn4Header) {
-                vm.filtername = vm.documentConfigContent.GridColumn4Header;
+            if (name === vm.documentConfigContent.GridColumn5Header) {
+                vm.filtername = vm.documentConfigContent.GridColumn5Header;
             }
             //Created Date
             if (name == vm.documentConfigContent.GridColumn8Header) {
                 vm.filtername = vm.documentConfigContent.GridColumn8Header;
             }
             $timeout(function () {
-                if (name == vm.documentConfigContent.GridColumn4Header || name == vm.documentConfigContent.GridColumn8Header) {
+                if (name == vm.documentConfigContent.GridColumn5Header || name == vm.documentConfigContent.GridColumn8Header) {
                     vm.documentdateheader = false;
                 }
                 else {
@@ -1947,7 +1761,6 @@
             window.open(url, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500')
         }
         //#endregion
-
 
     }]);
 

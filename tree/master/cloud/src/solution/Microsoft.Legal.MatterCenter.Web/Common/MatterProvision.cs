@@ -646,26 +646,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 GenericResponseVM genericResponseVM = null;
                 using (clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
-                    IList<ContentType> contentTypeCollection = matterRepositoy.GetContentTypeData(clientContext, matter.ContentTypes, client, matter);
-                    bool isContentTypePresent = false;
-                    if (matter.ContentTypes.Count == contentTypeCollection.Count)
-                    {
-                        isContentTypePresent = true;
-                    }
-                    else
-                    {
-                        foreach (string requestContentType in matter.ContentTypes)
-                        {
-                            foreach (var contentType in contentTypeCollection)
-                            {
-                                if (requestContentType == contentType.Name)
-                                {
-                                    isContentTypePresent = true;
-                                }
-                            }
-                        }
-                    }
-                    if (null != contentTypeCollection && isContentTypePresent && !string.IsNullOrWhiteSpace(matter.Name))
+                    IList<ContentType> contentTypeCollection = matterRepositoy.GetContentTypeData(clientContext, matter.ContentTypes, client, matter);                    
+                    if (null != contentTypeCollection && matter.ContentTypes.Count == contentTypeCollection.Count && !string.IsNullOrWhiteSpace(matter.Name))
                     {
                         genericResponseVM = matterRepositoy.AssignContentTypeHelper(matterMetadata, clientContext, contentTypeCollection, client, matter);
                     }

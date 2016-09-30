@@ -12,7 +12,7 @@
                 matterName: '',
                 matterGuid: ''
             };
-            //#region dynamic content
+            //#region dynamic contents
             vm.navigationContent = uiconfigs.Navigation;
             vm.configSearchContent = configs.search;
             vm.matterConfigContent = uiconfigs.Matters;
@@ -105,7 +105,7 @@
                 };
             };
 
-            $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by {{ col.colDef.displayName }}'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
+            $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
             var columnDefs1 = [];
             angular.forEach(configs.search.searchColumnsUIPickerForMatter, function (value, key) {
@@ -121,7 +121,6 @@
                             position: value.position,
 
                         });
-
                     }
                 }
                 if (key == "matterClient") {
@@ -296,6 +295,7 @@
                             cellClass: 'gridclass',
                             width: "210",
                             position: value.position,
+                            headerCellTemplate: $templateCache.get('coldefheadertemplate.html').replace('Click to sort by', vm.matterConfigContent.GridColumn2HeaderTitle),
                             visible: value.defaultVisibleInGrid
                         });
 
@@ -340,6 +340,7 @@
                             cellClass: 'gridclass',
                             width: "210",
                             visible: value.defaultVisibleInGrid,
+                            headerCellTemplate: $templateCache.get('coldefheadertemplate.html').replace('Click to sort by', vm.matterConfigContent.GridColumn6HeaderTitle),
                             position: value.position
                         });
 

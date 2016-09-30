@@ -427,6 +427,8 @@ namespace Microsoft.Legal.MatterCenter.Web
                     jw.WriteValue(generalSettingsSection["CentralRepositoryUrl"]);
                     jw.WritePropertyName("isDevMode");
                     jw.WriteValue(bool.Parse(generalSettingsSection["IsDevMode"]));
+                    jw.WritePropertyName("isBackwardCompatible");
+                    jw.WriteValue(bool.Parse(generalSettingsSection["IsBackwardCompatible"]));
                 jw.WriteEndObject();
 
             jw.WritePropertyName("matter");
@@ -523,25 +525,25 @@ namespace Microsoft.Legal.MatterCenter.Web
                                     foreach (var subKey in Configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection(key.Key).GetChildren())
                                     {
                                         jw.WritePropertyName(subKey.Key);
-                                        if (subKey.Key == "displayInUI")
+                                        var propVal = subKey.Value.Trim();
+                                        var propKey = subKey.Key.Trim();
+
+                                        switch (propKey)
                                         {
-                                            jw.WriteValue(bool.Parse(subKey.Value));
-                                        }
-                                        else if (subKey.Key == "position")
-                                        {
-                                            jw.WriteValue(int.Parse(subKey.Value));
-                                        }
-                                        else if (subKey.Key == "defaultVisibleInGrid")
-                                        {
-                                            jw.WriteValue(bool.Parse(subKey.Value));
-                                        }
-                                        else if (subKey.Key == "displayInFlyOut")
-                                        {
-                                            jw.WriteValue(bool.Parse(subKey.Value));
-                                        }
-                                        else if (subKey.Key == "displayInDashboard")
-                                        {
-                                            jw.WriteValue(bool.Parse(subKey.Value));
+                                            case "displayInUI":
+                                            case "defaultVisibleInGrid":
+                                            case "displayInFlyOut":
+                                            case "enableHiding":
+                                            case "enableColumnMenu":
+                                            case "displayInDashboard":
+                                                jw.WriteValue(bool.Parse(propVal));
+                                                break;
+                                            case "position":
+                                                jw.WriteValue(int.Parse(propVal));
+                                                break;
+                                            default:
+                                                jw.WriteValue(propVal);
+                                                break;
                                         }
                                     }
                                 jw.WriteEndObject();
