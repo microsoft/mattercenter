@@ -79,12 +79,14 @@
     <div class="row" id="mattergrid">
         <div class="col-sm-12" ng-if="vm.divuigrid">
             <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()">
+                <div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.matterConfigContent.NoDataSearchText">
+                </div>
             </div>
+           
         </div>
     </div>
 
-    <div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.matterConfigContent.NoDataSearchText">
-    </div>
+
 
     <onload sortdetails="{{vm.sortexp}}"></onload>
 
@@ -229,7 +231,7 @@
                                 <div id="parentFolder" class="breadcrumbItem"></div>
                                 <div id="breadcrumbSeparator"></div>
                                 <div id="currentFolder" class="breadcrumbItem"></div>
-                            </div>                           
+                            </div>
                             <div class="folderStructureContent" showbreadcrumb ng-hide="foldercontent">
                                 <script type="text/ng-template" id="folderTree">
                                     <div id="div{{child.name}}" ng-if="child.parentURL!==null" class="treeNodes" ng-show="child.active" title="" droppable drop="handleDrop()" folder="child" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" ng-click="vm.showSelectedFolderTree(child)">

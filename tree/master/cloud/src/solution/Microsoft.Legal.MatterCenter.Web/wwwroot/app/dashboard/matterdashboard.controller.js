@@ -494,7 +494,8 @@
                     },
                     Sort: {
                         ByProperty: 'LastModifiedTime',
-                        Direction: 1
+                        Direction: 1,
+                        ByColumn:""
                     }
                 }
             };
@@ -1408,33 +1409,49 @@
             }
 
 
-            vm.sortyby = function (sortexp, data) {
+            vm.sortExpression = function (byProperty, byColumn, sortDirection) {
+                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = byProperty;
+                jsonMatterSearchRequest.SearchObject.Sort.Direction = sortDirection;
+                jsonMatterSearchRequest.SearchObject.Sort.ByColumn = byColumn;
+                vm.FilterByType();
+            }
+
+            vm.sortby = function (sortexp, data) {
                 vm.sortbytext = data;
-                if (sortexp == 'AlphabeticalUp') {
-                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyMatterName;
-                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
-                    vm.FilterByType();
-                } else if (sortexp == 'AlphabeticalDown') {
-
-                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyMatterName;
-                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
-                    vm.FilterByType();
-                } else if (sortexp == 'CreateddateUp') {
-
-                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyOpenDate;
-                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
-                    vm.FilterByType();
+                vm.sortbydrop = false;
+                if (vm.tabClicked !== "Pinned Matters") {
+                	if (sortexp == 'AlphabeticalUp') {
+                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 0);
+                    }
+                	else if (sortexp == 'AlphabeticalDown') {
+                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 1);
+                    }
+                	else if (sortexp == 'CreateddateUp') {
+                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 0);
+                    }
+                	else if (sortexp == 'CreateddateDown') {
+                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 1);
+                    }
+                    else {
+                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyLastModifiedTime, vm.configSearchContent.ManagedPropertyLastModifiedTime, 1);
+                    }
                 }
-                else if (sortexp == 'CreateddateDown') {
-
-                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyOpenDate;
-                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
-                    vm.FilterByType();
-                } else {
-
-                    jsonMatterSearchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyLastModifiedTime;
-                    jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
-                    vm.FilterByType();
+                else {
+                	if (sortexp == 'AlphabeticalUp') {
+                        vm.sortExpression("MatterName", "MatterName", 0);
+                    }
+                	else if (sortexp == 'AlphabeticalDown') {
+                        vm.sortExpression("MatterName", "MatterName", 1);
+                    }
+                	else if (sortexp == 'CreateddateUp') {
+                        vm.sortExpression("MatterCreatedDate", "MatterCreatedDate", 0);
+                    }
+                	else if (sortexp == 'CreateddateDown') {
+                        vm.sortExpression("MatterCreatedDate", "MatterCreatedDate", 1);
+                    }
+                    else {
+                        vm.sortExpression("MatterModifiedDate", "MatterModifiedDate", 1);
+                    }
                 }
             }
 

@@ -788,6 +788,12 @@ textarea {
     padding: 0;
 }
 
+.docsortby{
+    position: absolute;
+    top: 82px;
+    padding: 0;
+}
+
 .sortbymatters {
     position: absolute;
     top: 80px;
@@ -811,7 +817,7 @@ textarea {
     padding-top: 5px;
 }
 
-.sortby ul, .sortbymatters ul {
+.sortby ul, .sortbymatters ul,.docsortby ul{
     background-color: #fff;
     border: 1px solid #c8c8c8;
     position: absolute;
@@ -822,12 +828,12 @@ textarea {
     margin-top: 5px;
 }
 
-    .sortby ul li:hover, .sortbymatters ul li:hover {
+    .sortby ul li:hover, .sortbymatters ul li:hover,.docsortby ul li:hover{
         background-color: #eaecea;
         cursor: pointer;
     }
 
-    .sortby ul li, .sortbymatters ul li {
+    .sortby ul li, .sortbymatters ul li,.docsortby ul li {
         padding: 5px 10px 5px 10px;
         color: #333;
         display: inline-block;
@@ -1080,8 +1086,8 @@ textarea {
 }
 
 .footerLinks {
-    padding-top: 13px !important;
-    margin-bottom: 44px;
+    /*padding-top: 13px !important;*/
+    margin-bottom: 10px;
 }
 
 #menuitem-1 button {
@@ -1260,4 +1266,12 @@ textarea {
 
 #documentAuthorDiv ul {
     width: 96%;
+}
+
+#divDashboardSearch ul {
+    width: 100%;
+}
+
+#divMatterDashboardSearch ul {
+    width: 100%;
 }
