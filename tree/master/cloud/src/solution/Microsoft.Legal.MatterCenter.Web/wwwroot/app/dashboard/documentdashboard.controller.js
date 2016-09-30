@@ -15,6 +15,7 @@
             vm.documentDashboardConfigs = uiconfigs.DocumentDashboard;
             vm.documentConfigContent = uiconfigs.Documents;
             vm.configSearchContent = configs.search;
+            vm.center = configs.search.Schema.toLowerCase();
             vm.clientdrop = false;
             vm.lazyloaderdocumentclient = true;
             vm.clientdropvisible = false;
@@ -513,7 +514,8 @@
                     Sort:
                       {
                           ByProperty: "LastModifiedTime",
-                          Direction: 1
+                          Direction: 1,
+                          ByColumn:""
                       }
                 }
             }
@@ -1028,48 +1030,61 @@
                 }
             }
 
+            vm.sortExpression = function (byProperty, byColumn, sortDirection) {
+                documentRequest.SearchObject.Sort.ByProperty = byProperty;
+                documentRequest.SearchObject.Sort.Direction = sortDirection;
+                documentRequest.SearchObject.Sort.ByColumn = byColumn;
+                vm.FilterByType();
+            }
 
             vm.sortyby = function (sortexp, data) {
                 vm.sortbytext = data;
                 vm.sortbydrop = false;
-                if (sortexp == 'AlphabeticalUp') {
-
-                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyFileName;
-                    documentRequest.SearchObject.Sort.Direction = 0;
-                    vm.FilterByType();
-                } else if (sortexp == 'AlphabeticalDown') {
-
-                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyFileName;
-                    documentRequest.SearchObject.Sort.Direction = 1;
-                    vm.FilterByType();
-                } else if (sortexp == 'CreateddateUp') {
-
-                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyCreated;
-                    documentRequest.SearchObject.Sort.Direction = 0;
-                    vm.FilterByType();
-                }
-                else if (sortexp == 'CreateddateDown') {
-
-                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyCreated;
-                    documentRequest.SearchObject.Sort.Direction = 1;
-                    vm.FilterByType();
-                }
-                else if (sortexp == 'ModifieddateUp') {
-
-                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime;
-                    documentRequest.SearchObject.Sort.Direction = 0;
-                    vm.FilterByType();
-                }
-                else if (sortexp == 'ModifieddateDown') {
-
-                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime;
-                    documentRequest.SearchObject.Sort.Direction = 1;
-                    vm.FilterByType();
+                if (vm.tabClicked !== "Pinned Documents") {
+                    if (sortexp == 'AlphabeticalUp') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyFileName, vm.configSearchContent.ManagedPropertyFileName, 0);
+                    }
+                    else if (sortexp == 'AlphabeticalDown') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyFileName, vm.configSearchContent.ManagedPropertyFileName, 1);
+                    }
+                    else if (sortexp == 'CreateddateUp') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyCreated, vm.configSearchContent.ManagedPropertyCreated, 0);
+                    }
+                    else if (sortexp == 'CreateddateDown') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyCreated, vm.configSearchContent.ManagedPropertyCreated, 1);
+                    }
+                    else if (sortexp == 'ModifieddateUp') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, 0);
+                    }
+                    else if (sortexp == 'ModifieddateDown') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, 1);
+                    }
+                    else {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, 1);
+                    }
                 }
                 else {
-                    documentRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime;
-                    documentRequest.SearchObject.Sort.Direction = 1;
-                    vm.FilterByType();
+                    if (sortexp == 'AlphabeticalUp') {
+                        vm.sortExpression("DocumentName", "DocumentName", 0);
+                    }
+                    else if (sortexp == 'AlphabeticalDown') {
+                        vm.sortExpression("DocumentName", "DocumentName", 1);
+                    }
+                    else if (sortexp == 'CreateddateUp') {
+                        vm.sortExpression("DocumentCreatedDate", "DocumentCreatedDate", 0);
+                    }
+                    else if (sortexp == 'CreateddateDown') {
+                        vm.sortExpression("DocumentCreatedDate", "DocumentCreatedDate", 1);
+                    }
+                    else if (sortexp == 'ModifieddateUp') {
+                        vm.sortExpression("DocumentModifiedDate", "DocumentModifiedDate", 0);
+                    }
+                    else if (sortexp == 'ModifieddateDown') {
+                        vm.sortExpression("DocumentModifiedDate", "DocumentModifiedDate", 1);
+                    }
+                    else {
+                        vm.sortExpression("DocumentModifiedDate", "DocumentModifiedDate", 1);
+                    }
                 }
             }
 
@@ -1330,6 +1345,74 @@
                     vm.getPinnedDocuments();
                 }
             }
+            //#endregion
+
+            //#region Exporting to Excel Test
+            vm.export = function () {
+                //vm.lazyloaderdashboard = false;
+                var exportMatterSearchRequest = {
+                    Client: {
+                        //ToDo: Need to read from config.js
+                        Url: configs.global.repositoryUrl
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: 500,
+                        SearchTerm: documentRequest.SearchObject.SearchTerm,
+                        Filters: {
+                            ClientsList: documentRequest.SearchObject.Filters.ClientsList,
+                            FromDate: documentRequest.SearchObject.Filters.FromDate,
+                            ToDate: documentRequest.SearchObject.Filters.ToDate,
+                            DocumentAuthor: documentRequest.SearchObject.Filters.DocumentAuthor,
+                            FilterByMe: documentRequest.SearchObject.Filters.FilterByMe
+                        },
+                        Sort:
+                          {
+                              ByProperty: documentRequest.SearchObject.Sort.ByProperty,
+                              Direction: documentRequest.SearchObject.Sort.Direction,
+                              ByColumn: documentRequest.SearchObject.Sort.ByColumn
+                          }
+                    }
+                };
+                if (vm.tabClicked != "Pinned Documents") {
+
+                    get(exportMatterSearchRequest, function (response) {
+                        if (response == "") {
+                            //vm.lazyloaderdashboard = true;
+                        } else {
+                            vm.exportDate = response;
+
+                            $timeout(function () {
+                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
+                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                });
+                                saveAs(blob, "Matters.xls");
+                                //vm.lazyloaderdashboard = true;
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    var pinnedMattersRequest = {
+                        Url: configs.global.repositoryUrl//ToDo: Read from config.js
+                    }
+                    getPinDocuments(exportMatterSearchRequest, function (response) {
+                        if (response == "") {
+
+                        } else {
+                            vm.exportDate = response;
+
+                            $timeout(function () {
+                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
+                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                });
+                                saveAs(blob, "Matters.xls");
+                                //vm.lazyloaderdashboard = true;
+                            }, 1000);
+                        }
+                    });
+                }
+            }
+
             //#endregion
 
             angular.element($window).bind('resize', function () {

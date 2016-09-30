@@ -118,7 +118,7 @@
             }
             else {
                 return {
-                    height: ($window.innerHeight - 105) + "px"
+                    height: ($window.innerHeight - 93) + "px"
                 }
             }
         };
@@ -191,7 +191,7 @@
                     position: value.position,
                     cellClass: value.cellClass,
                     headerCellClass: value.headerCellClass,
-                    visible: value.defaultVisibleInGrid
+                    visible: value.defaultVisibleInGrid,
                 });
             }
         });
@@ -1305,7 +1305,23 @@
 
 
         $interval(function () { vm.showSortExp(); }, 2500, 3);
+
+        //#region for sorting in ascending
+        vm.documentSortBy = function (byproperty,direction,bycolumn,sortexp,sortby) {
+            vm.pagenumber = 1;
+            searchRequest.SearchObject.PageNumber = 1;
+            searchRequest.SearchObject.Sort.ByProperty = byproperty;
+            searchRequest.SearchObject.Sort.Direction = direction;
+            searchRequest.SearchObject.Sort.ByColumn = bycolumn;
+            vm.FilterByType();
+            vm.sortby = sortby;
+            vm.sortexp = sortexp;
+            $interval(function () { vm.showSortExp(); }, 1500, 3);
+        }
+
+
         $scope.sortChangedDocument = function (grid, sortColumns) {
+            vm.lazyloader = false;
             vm.divuigrid = false;
             vm.responseNull = false;
             vm.gridOptions.data = [];
@@ -1314,29 +1330,11 @@
                 if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
-                            searchRequest.SearchObject.Sort.Direction = 0;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.FileNameSort = "desc";
-                            vm.sortby = "asc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyFileName, 0, sortColumns[0].name, sortColumns[0].field, "asc");
                         } else {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
-                            searchRequest.SearchObject.Sort.Direction = 1;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.FileNameSort = "asc";
-                            vm.sortby = "desc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyFileName, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1346,30 +1344,12 @@
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.DocumentClientSort == undefined || vm.DocumentClientSort == "asc") {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "";
-                            searchRequest.SearchObject.Sort.Direction = 0;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.DocumentClientSort = "desc";
-                            vm.sortby = "asc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientName, 0, sortColumns[0].name, sortColumns[0].field, "asc");
                         }
                         else {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "";
-                            searchRequest.SearchObject.Sort.Direction = 1;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.DocumentClientSort = "asc";
-                            vm.sortby = "desc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientName, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1379,31 +1359,12 @@
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.DocumentClientIDSort == undefined || vm.DocumentClientIDSort == "asc") {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientId + "";
-                            searchRequest.SearchObject.Sort.Direction = 0;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.DocumentClientIDSort = "desc";
-                            vm.sortby = "asc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
-                        } else {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentClientId + "";
-                            searchRequest.SearchObject.Sort.Direction = 1;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientId, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                        } else {                            
                             vm.DocumentClientIDSort = "asc";
-                            vm.sortby = "desc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientId, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                         }
-
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -1412,31 +1373,12 @@
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.ModiFiedDateSort == undefined || vm.ModiFiedDateSort == "asc") {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
-                            searchRequest.SearchObject.Sort.Direction = 0;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.ModiFiedDateSort = "desc";
-                            vm.sortby = "asc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, 0, sortColumns[0].name, sortColumns[0].field, "asc");
                         } else {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
-                            searchRequest.SearchObject.Sort.Direction = 1;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.ModiFiedDateSort = "asc";
-                            vm.sortby = "desc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                         }
-
                     } else {
                         vm.divuigrid = true;
                         vm.nodata = false;
@@ -1445,29 +1387,11 @@
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.AuthorSort == undefined || vm.AuthorSort == "asc") {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
-                            searchRequest.SearchObject.Sort.Direction = 0;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.AuthorSort = "desc";
-                            vm.sortby = "asc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyAuthor, 0, sortColumns[0].name, sortColumns[0].field, "asc");
                         } else {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
-                            searchRequest.SearchObject.Sort.Direction = 1;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.AuthorSort = "asc";
-                            vm.sortby = "desc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyAuthor, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1477,29 +1401,11 @@
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.VersionSort == undefined || vm.VersionSort == "asc") {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentVersion + "";
-                            searchRequest.SearchObject.Sort.Direction = 0;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.VersionSort = "desc";
-                            vm.sortby = "asc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentVersion, 0, sortColumns[0].name, sortColumns[0].field, "asc");
                         } else {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentVersion + "";
-                            searchRequest.SearchObject.Sort.Direction = 1;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.VersionSort = "asc";
-                            vm.sortby = "desc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentVersion, 1, sortColumns[0].name, sortColumns[0].field, "desc");                            
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1509,29 +1415,11 @@
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[7].name) {
                     if (sortColumns[0].sort != undefined) {
                         if (vm.CheckoutSort == undefined || vm.CheckoutSort == "asc") {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "";
-                            searchRequest.SearchObject.Sort.Direction = 0;
-                            vm.FilterByType();
                             vm.CheckoutSort = "desc";
-                            vm.sortby = "asc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentCheckOutUser, 0, sortColumns[0].name, sortColumns[0].field, "asc");
                         } else {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "";
-                            searchRequest.SearchObject.Sort.Direction = 1;
-                            vm.FilterByType();
                             vm.CheckoutSort = "asc";
-                            vm.sortby = "desc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentCheckOutUser, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1540,30 +1428,12 @@
                 }
                 else if (sortColumns[0].name == vm.gridOptions.columnDefs[8].name) {
                     if (sortColumns[0].sort != undefined) {
-                        if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyCreated + "";
-                            searchRequest.SearchObject.Sort.Direction = 0;
-                            vm.FilterByType();
+                        if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {                            
                             vm.CreatedSort = "desc";
-                            vm.sortby = "asc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyCreated, 0, sortColumns[0].name, sortColumns[0].field, "asc");
                         } else {
-                            vm.lazyloader = false;
-                            vm.pagenumber = 1;
-                            searchRequest.SearchObject.PageNumber = 1;
-                            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyCreated + "";
-                            searchRequest.SearchObject.Sort.Direction = 1;
-                            searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
-                            vm.FilterByType();
                             vm.CreatedSort = "asc";
-                            vm.sortby = "desc";
-                            vm.sortexp = sortColumns[0].field;
-                            $interval(function () { vm.showSortExp(); }, 1500, 3);
+                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyCreated, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                         }
                     } else {
                         vm.divuigrid = true;
@@ -1586,7 +1456,7 @@
         //#region setting the grid options when window is resized
 
         angular.element($window).bind('resize', function () {
-            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 105);
+            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 93);
             if ($window.innerWidth < 380) {
                 angular.element('#documentgrid .ui-grid-viewport').addClass('viewport');
                 angular.element('#documentgrid .ui-grid-viewport').removeClass('viewportlg');
