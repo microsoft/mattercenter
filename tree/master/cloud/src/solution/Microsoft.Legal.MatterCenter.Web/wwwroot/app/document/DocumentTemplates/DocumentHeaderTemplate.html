@@ -9,7 +9,7 @@
          class='ui-grid-cell-contents ui-grid-header-cell-primary-focus'
          col-index='renderIndex'>
         <span class='ui-grid-header-cell-label ng-binding'
-              title='Click to sort by document name'>
+              title='{{grid.appScope.vm.documentConfigContent.GridColumn1HeaderTitle}}'>
             <img class="docTypeIconHeader" id="docTypeIcon"
                  src="Images/generaldocument.png"
                  alt="Document type icon"/>{{ col.colDef.displayName }}<span class="headerfilter" ng-if="grid.appScope.vm.documentfilter"><i class="ms-Icon ms-Icon--filter"></i></span>

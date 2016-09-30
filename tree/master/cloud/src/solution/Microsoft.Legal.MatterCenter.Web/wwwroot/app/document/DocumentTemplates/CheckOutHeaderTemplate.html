@@ -9,7 +9,7 @@
          class='ui-grid-cell-contents ui-grid-header-cell-primary-focus'
          col-index='renderIndex'>
         <span class='ui-grid-header-cell-label ng-binding'
-              title='Click to sort by check out to'>
+              title='{{grid.appScope.vm.documentConfigContent.GridColumn7HeaderTitle}}'>
             {{ col.colDef.displayName }}
             <span class="headerfilter" ng-if="grid.appScope.vm.checkoutfilter"><i class="ms-Icon ms-Icon--filter"></i></span>
             <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
