@@ -174,6 +174,21 @@
 
             //#region navigating to the url based on menu click
             vm.navigateUrl = function (data) {
+
+                var windowLocation = $window.location.href;
+
+                if (windowLocation != '' && typeof windowLocation != 'undefined')
+                {
+                    if ("section=2" == data && windowLocation.substring(windowLocation.indexOf("#") + 2, windowLocation.length) == 'documentdashboard')
+                    {
+                        return false;
+                    } else if ("section=1" == data && windowLocation.substring(windowLocation.indexOf("#") + 2, windowLocation.length) == 'matterdashboard') {
+                        return false;
+                    } else if ("settings" == data && windowLocation.substring(windowLocation.indexOf("#") + 2, windowLocation.length) == 'settings') {
+                        return false;
+                    }
+                }
+
                 if (data != "Settings") {
                     $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/MatterCenterHome.aspx?" + data;
                 } else {
