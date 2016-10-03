@@ -51,6 +51,8 @@
         vm.createddatefilter = false;
         vm.clientfilter = false;
         vm.authorfilter = false;
+        vm.projectNamefilter = false;
+        vm.practiceGroupfilter = false;
         vm.checkoutfilter = false;
         //end
 
@@ -103,6 +105,8 @@
         vm.clientDropDown = false;
         vm.modifieddateDropDown = false;
         vm.AuthorDropDown = false;
+        vm.practiceGroupDropDown = false;
+        vm.projectNameDropDown = false;
         vm.CheckDropDown = false;
         vm.createddateDropDown = false;
         //End
@@ -551,7 +555,10 @@
                     FromDate: "",
                     Name: "",
                     ResponsibleAttorneys: "",
+                    ProjectName: "",
                     SubareaOfLaw: "",
+                    ProjectID:"",
+                    PracticeGroup : "",
                     ToDate: ""
                 },
                 Sort:
@@ -594,6 +601,9 @@
                         FromDate: "",
                         Name: "",
                         ResponsibleAttorneys: "",
+                        ProjectName:"",
+                        PracticeGroup: "",
+                        ProjectID: "",
                         SubareaOfLaw: "",
                         ToDate: ""
                     },
@@ -664,8 +674,14 @@
                 else if (vm.searchexp == vm.configSearchContent.ManagedPropertyDocumentClientName) {
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentClientName + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false);
                 }
+                else if (vm.searchexp == vm.configSearchContent.ManagedPropertyMatterName) {
+                    vm.documentsearch("" + vm.configSearchContent.ManagedPropertyMatterName + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false);
+                }
                 else if (vm.searchexp == vm.configSearchContent.ManagedPropertyAuthor) {
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyAuthor + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
+                }
+                else if (vm.searchexp == vm.configSearchContent.ManagedPropertyPracticeGroup) {
+                    vm.documentsearch("" + vm.configSearchContent.ManagedPropertyPracticeGroup + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
                 }
                 else if (vm.searchexp == vm.configSearchContent.ManagedPropertyDocumentCheckOutUser) {
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
@@ -696,10 +712,20 @@
                     searchRequest.SearchObject.Filters.ClientName = term;
                     vm.clientfilter = true;
                 }
+                else if (property == "" + vm.configSearchContent.ManagedPropertyMatterName + "") {
+                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
+                    searchRequest.SearchObject.Filters.ProjectName = term;
+                    vm.projectNamefilter = true;
+                }
                 else if (property == "" + vm.configSearchContent.ManagedPropertyAuthor + "") {
                     searchRequest.SearchObject.Filters.DocumentAuthor = term;
                     vm.authorfilter = true;
-                } else if (property == "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "") {
+                }
+                else if (property == "" + vm.configSearchContent.ManagedPropertyPracticeGroup + "") {
+                    searchRequest.SearchObject.Filters.PracticeGroup = term;
+                    vm.practiceGroupfilter = true;
+                }
+                else if (property == "" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + "") {
                     searchRequest.SearchObject.Filters.DocumentCheckoutUsers = term;
                     vm.checkoutfilter = true;
                 }
@@ -798,6 +824,11 @@
             searchRequest.SearchObject.Filters.ClientName = "";
             vm.clientfilter = false;
 
+            vm.projectSearchTerm = "";
+            searchRequest.SearchObject.Filters.ProjectName = "";
+            vm.projectNamefilter = false;
+            
+
             vm.checkedSearchTerm = "";
             searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
             vm.checkoutfilter = false;
@@ -805,6 +836,10 @@
             vm.authorSearchTerm = ""
             searchRequest.SearchObject.Filters.DocumentAuthor = "";
             vm.authorfilter = false;
+
+            vm.practiceGroupSearchTerm = ""
+            searchRequest.SearchObject.Filters.PracticeGroup = "";
+            vm.practiceGroupfilter = false;
 
             searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
             searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
@@ -842,6 +877,12 @@
                 searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                 vm.clientfilter = false;
             }
+            else if (property == vm.documentConfigContent.GridColumn3Header) {
+                vm.projectSearchTerm = "";
+                searchRequest.SearchObject.Filters.ProjectName = "";
+                searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
+                vm.projectNamefilter = false;
+            }
             else if (property == vm.documentConfigContent.GridColumn7Header) {
                 vm.checkedSearchTerm = "";
                 searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
@@ -851,6 +892,11 @@
                 vm.authorSearchTerm = ""
                 searchRequest.SearchObject.Filters.DocumentAuthor = "";
                 vm.authorfilter = false;
+            }
+            else if (property == vm.documentConfigContent.GridColumn6Header) {
+                vm.practiceGroupSearchTerm = ""
+                searchRequest.SearchObject.Filters.PracticeGroup = "";
+                vm.practiceGroupfilter = false;
             }
             else if (property == vm.documentConfigContent.GridColumn5Header) {
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
@@ -1593,10 +1639,21 @@
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyDocumentClientName + "";
                 vm.filtername = vm.documentConfigContent.GridColumn2Header;
             }
+
+            //Project Name
+            if (name === vm.documentConfigContent.GridColumn3Header) {
+                vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
+                vm.filtername = vm.documentConfigContent.GridColumn3Header;
+            }
             //Author
             if (name === vm.documentConfigContent.GridColumn4Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
                 vm.filtername = vm.documentConfigContent.GridColumn4Header;
+            }
+            //for Practice Group
+            if (name === vm.documentConfigContent.GridColumn6Header) {
+                vm.searchexp = "" + vm.configSearchContent.ManagedPropertyPracticeGroup + "";
+                vm.filtername = vm.documentConfigContent.GridColumn6Header;
             }
             //Check out to
             if (name === vm.documentConfigContent.GridColumn7Header) {
