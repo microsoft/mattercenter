@@ -78,7 +78,7 @@
                 paginationPageSize: 30,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
-                enableRowSelection: true,
+                enableRowSelection: false,
                 enableSelectAll: false,
                 multiSelect: false,
                 enableColumnMenus: false,
@@ -125,7 +125,7 @@
             columnDefs1.push({
                 field: 'checker',
                 displayName: 'checked',
-                width: '2%',
+                width: '2.5%',
                 cellTemplate: '/app/dashboard/cellCheckboxTemplate.html',
                 headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html',
                 enableColumnMenu: false,
@@ -195,17 +195,17 @@
                     //Set the selected row of the grid to selectedRow property of the controller
                     gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                         // vm.selectedRow = row.entity
-                        vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
-                        var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.documentCreatedDate);
-                        if (isRowPresent.length > 0) {
-                            row.entity.checker = true;
-                            vm.toggleChecker(true, row.entity);
-                        }
-                        else {
-                            vm.checker = false;
-                            row.entity.checker = false;
-                            vm.toggleChecker(false, row.entity);
-                        }
+                        //vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
+                        //var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.documentCreatedDate);
+                        //if (isRowPresent.length > 0) {
+                        //    row.entity.checker = true;
+                        //    vm.toggleChecker(true, row.entity);
+                        //}
+                        //else {
+                        //    vm.checker = false;
+                        //    row.entity.checker = false;
+                        //    vm.toggleChecker(false, row.entity);
+                        //}
                     });
                 }
             }
@@ -292,7 +292,7 @@
 
             vm.showMailCartModal = function () {
                 if (vm.documentsCheckedCount > 0) {
-                    jQuery('#UploadMatterModal').modal("show");
+                    angular.element('#UploadMatterModal').modal("show");
                     angular.forEach(vm.cartelements, function (cartItem) {
                         cartItem.mailCartSelected = false;
                     });
@@ -1414,6 +1414,30 @@
             }
 
             //#endregion
+
+
+            //#region To display modal up in center of the screen...
+            //Start 
+
+
+            vm.reposition = function () {
+                var modal = $(this)
+
+                var dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+                // Dividing by two centers the modal exactly, but dividing by three  
+                // or four works better for larger screens. 
+                dialog.css("margin-top", Math.max(0, (jQuery(window).height() - dialog.height()) / 2));
+            }
+            // Reposition when a modal is shown 
+            jQuery('.modal').on('show.bs.modal', vm.reposition);
+            // Reposition when the window is resized 
+            jQuery(window).on('resize', function () {
+                jQuery('.modal:visible').each(vm.reposition);
+            });
+
+            $timeout(vm.reposition(), 100);
+            //#endregion 
 
             angular.element($window).bind('resize', function () {
                 if ($window.innerWidth > 867) {
