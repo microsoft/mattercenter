@@ -1254,7 +1254,7 @@
                     if (vm.searchexp == vm.configSearchContent.ManagedPropertyMatterName) {
                         vm.mattersearch("" + vm.configSearchContent.ManagedPropertyMatterName + ":" + val + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
-                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertyClientName) {
+                    else if (vm.searchexp == vm.configSearchContent.ManagedPropertyClientName && !vm.globalSettings.isBackwardCompatible) {
                         vm.mattersearch("" + vm.configSearchContent.ManagedPropertyClientName + ":" + vm.clientSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
                     else if (vm.searchexp == vm.configSearchContent.ManagedPropertyPracticeGroup) {
@@ -1407,6 +1407,7 @@
                         searchRequest.SearchObject.Filters.ClientName = term;
                         searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.clientfilter = true;
+                        vm.areaoflawfilter = true
                     }
                     else if (property == "" + vm.configSearchContent.ManagedPropertyAreaOfLaw + "" && vm.globalSettings.isBackwardCompatible) {
                         searchRequest.SearchObject.Filters.AreaOfLaw = term.trim();
@@ -1570,6 +1571,7 @@
                     searchRequest.SearchObject.Filters.ClientName = "";
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     vm.clientfilter = false;
+                    vm.areaoflawfilter = false;
                 }
                 else if (property == vm.matterConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible) {
                     vm.clientSearchTerm = ""
@@ -2324,6 +2326,13 @@
                     angular.element('#mattergrid .ui-grid-viewport').addClass('viewportlg');
                     angular.element('.ui-grid-menu-mid').css('height', $window.innerHeight - 300 + 'px !important');
                 }
+                if (vm.nodata && $window.innerHeight < 375) {
+                    angular.element('#mattergrid .ui-grid-viewport').removeClass('viewportlg');
+                    angular.element('#mattergrid .ui-grid-viewport').css("overflow-x","hidden!important");
+                } else {
+                    angular.element('#mattergrid .ui-grid-viewport').css("overflow-x", "auto!important");
+                    angular.element('#mattergrid .ui-grid-viewport').addClass('viewportlg');
+                }
             });
 
             //#endregion
@@ -2683,6 +2692,8 @@
                 window.open(viewmatterurl, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
             }
             //#endregion
+
+            
 
         }]);
     app.filter('unique', function () {
