@@ -22,7 +22,7 @@ $ParentDirectory = (Get-ParentDirectory)
 #----------------------------------------------
 
 Show-Message -Message "Adding common library functions" -Type ([MessageType]::Warning)
-. "$ScriptDirectory\LibraryFunctions.ps1"
+"$ScriptDirectory\LibraryFunctions.ps1"
 Show-Message -Message "Added common library functions" -Type ([MessageType]::Success)
 
 
