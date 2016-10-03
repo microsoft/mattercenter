@@ -372,11 +372,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else
                 {
-                    var matterDescription = Regex.Match(matter.Description, matterSettings.SpecialCharacterExpressionMatterDescription, RegexOptions.IgnoreCase);
-                    if (matter.Description.Length > matterSettings.MatterDescriptionLength  || !matterDescription.Success)
-                    {
-                        return GenericResponse(errorSettings.IncorrectInputMatterDescriptionCode, errorSettings.IncorrectInputMatterDescriptionMessage);
-                    }
+                    //var matterDescription = Regex.Match(matter.Description, matterSettings.SpecialCharacterExpressionMatterDescription, RegexOptions.IgnoreCase);
+                    //if (matter.Description.Length > matterSettings.MatterDescriptionLength  || !matterDescription.Success)
+                    //{
+                    //    return GenericResponse(errorSettings.IncorrectInputMatterDescriptionCode, errorSettings.IncorrectInputMatterDescriptionMessage);
+                    //}
                 }
             }
             if (matterConfigurations.IsConflictCheck)

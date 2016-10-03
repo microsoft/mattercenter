@@ -1291,6 +1291,10 @@ textarea {
     width: 100%;
 }
 
+.footerMargin{
+    margin-right:19.5% !important
+}
+
 .padright0 {
     padding-right: 0 !important;
 }
