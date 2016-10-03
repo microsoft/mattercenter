@@ -519,6 +519,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 matterUrl);
                         }  
                         ServiceUtility.AddProperty(documentData, "PinType", "Pin");
+                        ServiceUtility.AddProperty(documentData, "DocGuid", Guid.NewGuid().ToString());
 
 
                     }

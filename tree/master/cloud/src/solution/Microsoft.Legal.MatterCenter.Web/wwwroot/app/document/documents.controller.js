@@ -226,7 +226,7 @@
                 gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                     //vm.selectedRow = row.entity
                     vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
-                    var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.documentID);
+                    var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.docGuid);
                     if (isRowPresent.length > 0) {
                         row.entity.checker = true;
                     }

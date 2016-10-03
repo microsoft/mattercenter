@@ -738,3 +738,6 @@ input[type=text]::-webkit-input-placeholder, input[type=text]:-moz-placeholder, 
         width: 1150px;
     }
 }
+.settingsMarginBotton{
+    margin-bottom:120px
+}
