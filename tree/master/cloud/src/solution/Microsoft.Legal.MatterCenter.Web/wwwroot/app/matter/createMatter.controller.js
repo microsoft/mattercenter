@@ -2904,13 +2904,14 @@
                                             if (cm.isMatterDescriptionMandatory) {
                                                 var sCurrentMatterDesc = cm.matterDescription;
                                                 if (undefined !== sCurrentMatterDesc && null !== sCurrentMatterDesc && "" !== sCurrentMatterDesc) {
-                                                    sCurrentMatterDesc = sCurrentMatterDesc.trim(); bInValid = false;
-                                                    var arrValidMatch = sCurrentMatterDesc.match(RegularExpression);
-                                                    if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterDesc) {
-                                                        bInValid = false;
-                                                    } else {
-                                                        bInValid = true;
-                                                    }
+                                                    sCurrentMatterDesc = sCurrentMatterDesc.trim();
+                                                    bInValid = true;
+                                                    //var arrValidMatch = sCurrentMatterDesc.match(RegularExpression);
+                                                    //if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterDesc) {
+                                                    //    bInValid = false;
+                                                    //} else {
+                                                    //    bInValid = true;
+                                                    //}
                                                 }
                                                 else {
                                                     cm.errTextMsg = cm.createContent.ErrorMessageEntityDescription;
