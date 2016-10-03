@@ -37,8 +37,10 @@
             cm.taxonomyHierarchyLevels = configs.taxonomy.levels;
             cm.schema = configs.search.Schema;
             cm.isBackwardCompatible = configs.global.isBackwardCompatible;
+            cm.isClientMappedWithHierachy = configs.global.isClientMappedWithHierachy;
             cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);
             if (cm.taxonomyHierarchyLevels >= 2) {
+                cm.parentLevelOneList = [];
                 cm.levelOneList = [];
                 cm.levelTwoList = [];
             }
@@ -86,7 +88,9 @@
                 showRoles: true,
                 showMatterId: true,
                 matterIdType: "Custom",
-                specialCharacterExpressionMatter: "[A-Za-z0-9_]+[-A-Za-z0-9_, ]*"
+                specialCharacterExpressionMatter: "[A-Za-z0-9_]+[-A-Za-z0-9_, ]*",
+                isBackwardCompatible: false,
+                isClientMappedWithHierachy:false
             }
 
             var oPageTwoState = {
@@ -382,8 +386,16 @@
                         else {
                             // cm.pracitceGroupList = response.pgTerms;
                             cm.levelOneList = response.level1;
+                            cm.parentLevelOneList = response;
                             cm.selectedLevelOneItem = response.level1[0];
-                            getTaxonomyHierarchy(response);
+                            if (cm.iCurrentPage == 1) {
+                                getTaxonomyHierarchy(response);
+                            }
+                            else {
+                                if (cm.isClientMappedWithHierachy) {
+                                    getClientsPracticeGroup(cm.selectedClientName);
+                                }
+                            }
                             getRoles(optionsForRoles, function (response) {
                                 cm.assignRoles = response;
 
@@ -492,9 +504,10 @@
                     cm.clientUrl = client.url;
                     cm.popupContainerBackground = "Show";
                     siteCollectionPath = cm.clientUrl;
-
+                    if (cm.isClientMappedWithHierachy) {
+                        getClientsPracticeGroup(cm.selectedClientName);
+                    }                 
                     getDefaultMatterConfigurations(siteCollectionPath, function (result) {
-
                         if (result.isError) {
                             cm.errTextMsg = result.value;
                             cm.errorBorder = "client";
@@ -1111,7 +1124,8 @@
                         }
                     }
                     else {
-                        cm.errTextMsg = cm.assignPermissionTeams[iCount].assignedRole.name + " cannot be empty.";
+                        cm.errTextMsg = cm.createContent.ErrorMessageTeamMember1;
+                        // cm.assignPermissionTeams[iCount].assignedRole.name + " cannot be empty.";
                         cm.errorBorder = "";
                         showErrorNotificationAssignTeams(cm.errTextMsg, cm.assignPermissionTeams[iCount].assigneTeamRowNumber, "user");
                         cm.errorPopUpBlock = true;
@@ -1259,7 +1273,9 @@
                             }
                         }
                         else {
-                            showErrorNotificationAssignTeams(team.assignedRole.name + " cannot be empty", team.assigneTeamRowNumber, "user")
+                            
+                            showErrorNotificationAssignTeams(cm.createContent.ErrorMessageTeamMember1, team.assigneTeamRowNumber, "user")
+                          //  showErrorNotificationAssignTeams(team.assignedRole.name + " cannot be empty", team.assigneTeamRowNumber, "user")
                             cm.errorBorder = "txtUser" + team.assigneTeamRowNumber;
                             keepGoing = false;
                             return false;
@@ -1384,8 +1400,7 @@
 
             var callCheckSecurityGroupExists = function (sectionName) {
                 //console.log(cm.assignPermissionTeams);
-                getArrAssignedUserNamesAndEmails();
-                cm.conflictRadioCheck = true;
+                getArrAssignedUserNamesAndEmails();                
                 var optionsForSecurityGroupCheck = {
                     Client: {
 
@@ -1571,15 +1586,15 @@
                     cm.primaryMatterType = cm.errorPopUp = false;
                     cm.matterGUID = oPageData.matterGUID;
                     cm.iCurrentPage = 2;
+                    cm.isBackwardCompatible = oPageData.isBackwardCompatible;
+                    cm.isClientMappedWithHierachy = oPageData.isClientMappedWithHierachy
                     cm.includeRssFeeds = (localStorage.getItem("IsRSSSelected") === "true");
                     cm.includeEmail = (localStorage.getItem("IsEmailOptionSelected") === "true");
                     cm.includeCalendar = (localStorage.getItem("IsCalendarSelected") === "true");
                     cm.isMatterDescriptionMandatory = (localStorage.getItem("IsMatterDescriptionMandatory") === "true");
                     cm.defaultConfilctCheck = (localStorage.getItem("IsConflictCheck") === "true");
-
                     cm.includeTasks = (localStorage.getItem("IsTaskSelected") === "true");
-
-                    cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true");
+                    cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true");               
                     if (cm.includeEmail) {
                         cm.createButton = "Create and Notify";
                     }
@@ -1595,8 +1610,7 @@
                     var oPageData = JSON.parse(localStorage.getItem("oPageTwoData"));
                     if (oPageData && oPageData !== null) {
                         cm.chkConfilctCheck = oPageData.ChkConfilctCheck;
-                        cm.selectedConflictCheckUser = oPageData.SelectedConflictCheckUser;
-
+                        cm.selectedConflictCheckUser = oPageData.SelectedConflictCheckUser;                       
                         cm.conflictDate = oPageData.ConflictDate;
                         cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
                         cm.conflictDate = new Date(cm.conflictDate);
@@ -2782,6 +2796,8 @@
                 oPageOneState.showRoles = cm.showRoles;
                 oPageOneState.showMatterId = cm.showMatterId;
                 oPageOneState.matterIdType = cm.matterIdType;
+                oPageOneState.isBackwardCompatible = cm.isBackwardCompatible;
+                oPageOneState.isClientMappedWithHierachy = cm.isClientMappedWithHierachy;
                 //  oPageOneState.chkConflictCheck = cm.chkConfilctCheck;
                 //  oPageOneState.oValidMatterName = oPageOneState.oValidMatterName;
 
@@ -3559,7 +3575,39 @@
             }
 
 
-            //#endregion          
+            //#endregion
+
+
+            //#region
+            //function to filter practice groups
+            function getClientsPracticeGroup(clientName) {
+                if (clientName && clientName!=null && clientName != "") {
+                    var levelOneList = [];
+                    var pgTermList = cm.parentLevelOneList.level1;
+                    console.log(pgTermList);
+                    angular.forEach(pgTermList, function (pgTerm) {
+                        if (pgTerm.level2) {
+                            angular.forEach(pgTerm.level2, function (levelTwoTerm) {
+                                if (levelTwoTerm.termName === clientName) {
+                                    levelOneList.push(pgTerm);
+                                    console.log(levelOneList);
+                                }
+                            });
+                        }
+                    });
+                    cm.levelOneList = levelOneList;
+                    var data={};
+                    data.name = cm.parentLevelOneList.name;
+                    data.levels = cm.parentLevelOneList.levels;
+                    data.level1 = levelOneList;
+                    cm.selectedLevelOneItem = cm.levelOneList[0];
+                    getTaxonomyHierarchy(data);
+
+                   // if(pgList.)
+                }
+
+            }
+            //#endregion
 
         }]);
 

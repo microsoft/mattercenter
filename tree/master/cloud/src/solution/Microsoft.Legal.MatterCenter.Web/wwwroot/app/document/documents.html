@@ -32,7 +32,7 @@
             </div>
             <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="docsearchmatter">
-                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + '' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                    <input type="text" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + '' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                     <!--<span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>-->
                 </div>
@@ -45,7 +45,7 @@
             </div>
             <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth">
                 <div class="input-group col-xs-12 zindex6">
-                    <input type="text" ng-model="vm.selected" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + '' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                    <input type="text" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + '' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></button>
@@ -111,11 +111,14 @@
         <!--End For attaching documents messages to the current mail item-->
         <div class="row" id="documentgrid" style="margin-left:5px;margin-right: 5px;">
             <div class="col-sm-12" ng-show="vm.divuigrid">
-                <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()"></div>
+                <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()">
+                    <div class="col-xs-12 col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">
-        </div>
+        <!--<div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">
+        </div>-->
         <div ng-if="vm.isOutlook && vm.showAttachment">
             <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
                     id="attachDocuments" ng-click="vm.sendDocumentAsAttachment()">
