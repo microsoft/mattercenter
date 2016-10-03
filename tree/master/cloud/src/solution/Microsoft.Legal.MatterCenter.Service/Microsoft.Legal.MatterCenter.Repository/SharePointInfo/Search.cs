@@ -1110,6 +1110,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyFileName, ServiceConstants.COLON,
                                 ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.Name, ServiceConstants.DOUBLE_QUOTE));
                         }
+                        if (!string.IsNullOrWhiteSpace(searchObject.Filters.ProjectName))
+                        {
+                            keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyMatterName, ServiceConstants.COLON,
+                                ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.ProjectName, ServiceConstants.DOUBLE_QUOTE));
+                        }
 
                         if (!string.IsNullOrWhiteSpace(searchObject.Filters.ClientName))
                         {
@@ -1121,6 +1126,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         {
                             keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyDocumentCheckOutUser, ServiceConstants.COLON,
                                 ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.DocumentCheckoutUsers, ServiceConstants.DOUBLE_QUOTE));
+                        }
+                        if (!string.IsNullOrWhiteSpace(searchObject.Filters.PracticeGroup))
+                        {
+                            keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyPracticeGroup, ServiceConstants.COLON,
+                                ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.PracticeGroup, ServiceConstants.DOUBLE_QUOTE));
                         }
                     }
                     keywordQuery = FilterCommonDetails(searchObject, keywordQuery, false);
@@ -1258,6 +1268,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     if (null != searchObject.Filters.SubareaOfLaw && !string.IsNullOrWhiteSpace(searchObject.Filters.SubareaOfLaw))
                     {
                         keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertySubAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.SubareaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                    }
+                    if (null != searchObject.Filters.ProjectID && !string.IsNullOrWhiteSpace(searchObject.Filters.ProjectID))
+                    {
+                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyMatterId, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.ProjectID, ServiceConstants.DOUBLE_INVERTED_COMMA));
                     }
 
                     if (null != searchObject.Filters.DateFilters)

@@ -1,9 +1,9 @@
 ﻿<div ng-mouseenter='grid.appScope.vm.arealawDropDowm = true' ng-mouseleave='grid.appScope.vm.arealawDropDowm = false'>
     <div class='sorticon keep-open' style='float:right;' ng-show='grid.appScope.vm.arealawDropDowm'>
-        <a href='javascript:;' class='prisma-header-dropdown-anchor dropdown-toggle' ng-if="grid.appScope.vm.center!='projectcenter'" ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn6Header)" type='button'>
+        <a href='javascript:;' class='prisma-header-dropdown-anchor dropdown-toggle' ng-if="!grid.appScope.vm.globalSettings.isBackwardCompatible" ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn6Header)" type='button'>
             <img src='../images/icon-combobox.png' />
         </a>
-        <a href='javascript:;' class='prisma-header-dropdown-anchor dropdown-toggle' ng-if="grid.appScope.vm.center=='projectcenter'" ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn3Header)" type='button'>
+        <a href='javascript:;' class='prisma-header-dropdown-anchor dropdown-toggle' ng-if="grid.appScope.vm.globalSettings.isBackwardCompatible" ng-click="grid.appScope.vm.openMatterHeader($event,grid.appScope.vm.matterConfigContent.GridColumn3Header)" type='button'>
             <img src='../images/icon-combobox.png' />
         </a>
     </div>
