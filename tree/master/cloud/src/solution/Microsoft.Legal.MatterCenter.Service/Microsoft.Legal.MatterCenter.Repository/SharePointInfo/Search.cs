@@ -287,11 +287,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 //searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.Reverse();
                                 if (searchRequestVM.SearchObject.Sort.Direction == 0)
                                 {
-                                    if (sortCol != "" && sortCol.ToLower().Trim() == "documentmodifieddate")
+                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyCreated.ToLower().Trim()))
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
-                                    else if (sortCol != "" && sortCol.ToLower().Trim() != "documentmodifieddate")
+                                    else if (sortCol != "" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyCreated.ToLower().Trim()))
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
                                     }
@@ -302,11 +302,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 }
                                 else
                                 {
-                                    if (sortCol != "" && sortCol.ToLower().Trim() == "documentmodifieddate")
+                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyCreated.ToLower().Trim()))
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
                                     }
-                                    else if (sortCol != "" && sortCol.ToLower().Trim() != "documentmodifieddate")
+                                    else if (sortCol != "" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyCreated.ToLower().Trim()))
                                     {
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
                                     }
@@ -324,11 +324,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 // searchResponse.MatterDataList = userpinnedMatterCollection.Values.Reverse();
                                 if (searchRequestVM.SearchObject.Sort.Direction == 0)
                                 {
-                                    if (sortCol != "" && sortCol.ToLower().Trim() == "mattermodifieddate")
+                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
                                     {
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString()));
                                     }
-                                    else if(sortCol!="" && sortCol.ToLower().Trim() != "mattermodifieddate")
+                                    else if(sortCol!="" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
                                     {
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
                                     }
@@ -339,11 +339,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 }
                                 else
                                 {
-                                    if (sortCol != "" && sortCol.ToLower().Trim() == "mattermodifieddate")
+                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
                                     {                                                         
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString()));
                                     }
-                                    else if (sortCol != "" && sortCol.ToLower().Trim() != "mattermodifieddate")
+                                    else if (sortCol != "" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
                                     {
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
                                     }
@@ -1110,6 +1110,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyFileName, ServiceConstants.COLON,
                                 ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.Name, ServiceConstants.DOUBLE_QUOTE));
                         }
+                        if (!string.IsNullOrWhiteSpace(searchObject.Filters.ProjectName))
+                        {
+                            keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyMatterName, ServiceConstants.COLON,
+                                ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.ProjectName, ServiceConstants.DOUBLE_QUOTE));
+                        }
 
                         if (!string.IsNullOrWhiteSpace(searchObject.Filters.ClientName))
                         {
@@ -1121,6 +1126,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         {
                             keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyDocumentCheckOutUser, ServiceConstants.COLON,
                                 ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.DocumentCheckoutUsers, ServiceConstants.DOUBLE_QUOTE));
+                        }
+                        if (!string.IsNullOrWhiteSpace(searchObject.Filters.PracticeGroup))
+                        {
+                            keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyPracticeGroup, ServiceConstants.COLON,
+                                ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.PracticeGroup, ServiceConstants.DOUBLE_QUOTE));
                         }
                     }
                     keywordQuery = FilterCommonDetails(searchObject, keywordQuery, false);
@@ -1258,6 +1268,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     if (null != searchObject.Filters.SubareaOfLaw && !string.IsNullOrWhiteSpace(searchObject.Filters.SubareaOfLaw))
                     {
                         keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertySubAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.SubareaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                    }
+                    if (null != searchObject.Filters.ProjectID && !string.IsNullOrWhiteSpace(searchObject.Filters.ProjectID))
+                    {
+                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyMatterId, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.ProjectID, ServiceConstants.DOUBLE_INVERTED_COMMA));
                     }
 
                     if (null != searchObject.Filters.DateFilters)

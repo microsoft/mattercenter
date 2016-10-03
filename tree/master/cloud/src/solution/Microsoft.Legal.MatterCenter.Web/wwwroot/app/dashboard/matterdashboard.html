@@ -31,7 +31,7 @@
         <div class="row searchdashboard">
             <div class="col-xs-9">
                 <div class="col-xs-12 padlf0">
-                    <div class="input-group">
+                    <div class="input-group" id="divMatterDashboardSearch">
                         <input type="text" ng-model="vm.searchText" my-enter="vm.searchByTerm()" placeholder="{{vm.matterDashboardConfigs.SearchTextboxPlaceholderText}}"
                                uib-typeahead="matterDataList.matterName + ' ('+ matterDataList.matterID + ')' for matterDataList in vm.searchMatters($viewValue)"
                                typeahead-loading="loadingLocations" typeahead-no-results="noResults"  typeahead-on-select='vm.typeheadselect($item, $model)' class="form-control">
@@ -225,11 +225,11 @@
                     </div>
                     <div class="col-xs-offset-7 col-xs-5 col-sm-offset-8 col-sm-3 col-md-offset-9 col-sm-3" ng-if="vm.sortbydrop">
                         <ul>
-                            <li ng-click="vm.sortyby('Relevant','None')">{{vm.tabClicked=='All Matters'?vm.matterDashboardConfigs.DropDownOptionText:vm.matterDashboardConfigs.DrpDownOption1Text}}</li>
-                            <li ng-click="vm.sortyby('AlphabeticalUp','Alphabetical ↑')">{{vm.matterDashboardConfigs.DrpDownOption2Text}} ↑</li>
-                            <li ng-click="vm.sortyby('AlphabeticalDown','Alphabetical ↓')">{{vm.matterDashboardConfigs.DrpDownOption2Text}} ↓</li>
-                            <li ng-click="vm.sortyby('CreateddateUp','Created date ↑')">{{vm.matterDashboardConfigs.DrpDownOption3Text}} ↑</li>
-                            <li ng-click="vm.sortyby('CreateddateDown','Created date ↓')">{{vm.matterDashboardConfigs.DrpDownOption3Text}} ↓</li>
+                            <li ng-click="vm.sortby('Relevant','None')">{{vm.tabClicked=='All Matters'?vm.matterDashboardConfigs.DropDownOptionText:vm.matterDashboardConfigs.DrpDownOption1Text}}</li>
+                            <li ng-click="vm.sortby('AlphabeticalUp','Alphabetical ↑')">{{vm.matterDashboardConfigs.DrpDownOption2Text}} ↑</li>
+                            <li ng-click="vm.sortby('AlphabeticalDown','Alphabetical ↓')">{{vm.matterDashboardConfigs.DrpDownOption2Text}} ↓</li>
+                            <li ng-click="vm.sortby('CreateddateUp','Created date ↑')">{{vm.matterDashboardConfigs.DrpDownOption3Text}} ↑</li>
+                            <li ng-click="vm.sortby('CreateddateDown','Created date ↓')">{{vm.matterDashboardConfigs.DrpDownOption3Text}} ↓</li>
                         </ul>
                     </div>
                 </div>

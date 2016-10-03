@@ -106,7 +106,7 @@
 
     </main>
 
-    <div class="maincontentDiv commonContent" id="footer">
+    <footer class="maincontentDiv commonContent" id="footer">
         <div class="row">
             <a aria-haspopup="true" href="http://www.microsoft.com/en-in/default.aspx" target="_parent">
                 <img title="{{vm.header.FooterMenuOption4Text}}" class="mslogo imgNoBorder pull-right" alt="{{vm.header.FooterMenuOption4Text}}" src="Images/microsoft-grey-logo-sm.png" />
@@ -114,11 +114,11 @@
         </div>
         <div class="row text-right">
             <ul class="footerLinks" role="menubar">
-                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Feedback and Support, e.g. mailto:support@supportsite.com]" target="_parent">{{vm.header.FooterMenuOption1Text}}</a></li>
-                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Privacy terms, e.g. privacy.supportsite.com]" target="_parent">{{vm.header.FooterMenuOption2Text}}</a></li>
-                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="[Enter URL for Terms of use, e.g. termofuse.supportsite.com]" target="_parent">{{vm.header.FooterMenuOption3Text}}</a></li>
+                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="{{vm.header.FooterMenuOption1Value}}" target="_parent">{{vm.header.FooterMenuOption1Text}}</a></li>
+                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="{{vm.header.FooterMenuOption2Value}}" target="_parent">{{vm.header.FooterMenuOption2Text}}</a></li>
+                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="{{vm.header.FooterMenuOption3Value}}" target="_parent">{{vm.header.FooterMenuOption3Text}}</a></li>
                 <li class="rightFooterElement copyRightElement" role="menuitem">© {{vm.currentyear}}  {{vm.header.FooterMenuOption4Text}}</li>
             </ul>
         </div>
-    </div>
+    </footer>
 </div>

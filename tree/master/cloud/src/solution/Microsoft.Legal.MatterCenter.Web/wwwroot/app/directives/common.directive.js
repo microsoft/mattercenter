@@ -193,6 +193,7 @@
                     $templateCache.put("test.html", actualcontent);
                     var template = $templateCache.get("test.html");
                     var a = $compile("<div>" + actualcontent + "</div>")(scope);
+                    $('.dropdown').removeClass('open');
                     $('.popcontent').css('display', 'none');
                     e.stopPropagation();
                     var obj = $(this).parent().position();
@@ -302,6 +303,7 @@
                     $templateCache.put("test.html", actualcontent);
                     var template = $templateCache.get("test.html");
                     var a = $compile("<div>" + template + "</div>")(scope);
+                    $('.dropdown').removeClass('open');
                     $('.popcontent').css('display', 'none');
                     e.stopPropagation();
                     var obj = $(this).parent().position();
