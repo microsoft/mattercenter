@@ -189,3 +189,6 @@
 #currentDocumentCount {
     padding-right: 5px;
 }
+.documentDashboardCellCheckBox{
+    padding-top: 3px;  z-index:6; position:relative
+}
