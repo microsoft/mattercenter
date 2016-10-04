@@ -495,7 +495,7 @@
                     Sort: {
                         ByProperty: 'LastModifiedTime',
                         Direction: 1,
-                        ByColumn:""
+                        ByColumn: ""
                     }
                 }
             };
@@ -723,7 +723,7 @@
                                 vm.getMatterCounts();
                             }
                         });
-                    }                    
+                    }
                 });
             }
 
@@ -1420,33 +1420,33 @@
                 vm.sortbytext = data;
                 vm.sortbydrop = false;
                 if (vm.tabClicked !== "Pinned Matters") {
-                	if (sortexp == 'AlphabeticalUp') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 0);
+                    if (sortexp == 'AlphabeticalUp') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 0);
                     }
-                	else if (sortexp == 'AlphabeticalDown') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 1);
+                    else if (sortexp == 'AlphabeticalDown') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 1);
                     }
-                	else if (sortexp == 'CreateddateUp') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 0);
+                    else if (sortexp == 'CreateddateUp') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 0);
                     }
-                	else if (sortexp == 'CreateddateDown') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 1);
+                    else if (sortexp == 'CreateddateDown') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 1);
                     }
                     else {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyLastModifiedTime, vm.configSearchContent.ManagedPropertyLastModifiedTime, 1);
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyLastModifiedTime, vm.configSearchContent.ManagedPropertyLastModifiedTime, 1);
                     }
                 }
                 else {
-                	if (sortexp == 'AlphabeticalUp') {
+                    if (sortexp == 'AlphabeticalUp') {
                         vm.sortExpression("MatterName", "MatterName", 0);
                     }
-                	else if (sortexp == 'AlphabeticalDown') {
+                    else if (sortexp == 'AlphabeticalDown') {
                         vm.sortExpression("MatterName", "MatterName", 1);
                     }
-                	else if (sortexp == 'CreateddateUp') {
+                    else if (sortexp == 'CreateddateUp') {
                         vm.sortExpression("MatterCreatedDate", "MatterCreatedDate", 0);
                     }
-                	else if (sortexp == 'CreateddateDown') {
+                    else if (sortexp == 'CreateddateDown') {
                         vm.sortExpression("MatterCreatedDate", "MatterCreatedDate", 1);
                     }
                     else {
@@ -1850,7 +1850,7 @@
                     }
                 };
                 if (vm.tabClicked != "Pinned Matters") {
-                    
+
                     get(exportMatterSearchRequest, function (response) {
                         if (response == "") {
                             //vm.lazyloaderdashboard = true;
@@ -1858,12 +1858,15 @@
                             vm.exportDate = response;
 
                             $timeout(function () {
-                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                $("#exportable").table2excel({
+                                    // exclude CSS class
+                                    exclude: ".noExl",
+                                    name: "Matters",
+                                    filename: "Matters" //do not include extension
                                 });
-                                saveAs(blob, "Matters.xls");
-                                //vm.lazyloaderdashboard = true;
+
                             }, 1000);
+
                         }
                     });
                 } else {
@@ -1877,11 +1880,12 @@
                             vm.exportDate = response;
 
                             $timeout(function () {
-                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                $("#exportable").table2excel({
+                                    // exclude CSS class
+                                    exclude: ".noExl",
+                                    name: "Matters",
+                                    filename: "Matters" //do not include extension
                                 });
-                                saveAs(blob, "Matters.xls");
-                                //vm.lazyloaderdashboard = true;
                             }, 1000);
                         }
                     });

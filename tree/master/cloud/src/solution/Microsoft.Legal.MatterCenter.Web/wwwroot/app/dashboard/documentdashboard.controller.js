@@ -1383,11 +1383,12 @@
                             vm.exportDate = response;
 
                             $timeout(function () {
-                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                $("#exportable").table2excel({
+                                    // exclude CSS class
+                                    exclude: ".noExl",
+                                    name: "Documents",
+                                    filename: "Documents" //do not include extension
                                 });
-                                saveAs(blob, "Matters.xls");
-                                //vm.lazyloaderdashboard = true;
                             }, 1000);
                         }
                     });
@@ -1402,11 +1403,12 @@
                             vm.exportDate = response;
 
                             $timeout(function () {
-                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                $("#exportable").table2excel({
+                                    // exclude CSS class
+                                    exclude: ".noExl",
+                                    name: "Documents",
+                                    filename: "Documents" //do not include extension
                                 });
-                                saveAs(blob, "Matters.xls");
-                                //vm.lazyloaderdashboard = true;
                             }, 1000);
                         }
                     });
@@ -1427,7 +1429,7 @@
                 modal.css('display', 'block');
                 // Dividing by two centers the modal exactly, but dividing by three  
                 // or four works better for larger screens. 
-                dialog.css("margin-top", Math.max(0, (jQuery(window).height() - dialog.height()) / 2));
+                dialog.css("margin-top", Math.max(0, (screen.height - dialog.height()) / 4));
             }
             // Reposition when a modal is shown 
             jQuery('.modal').on('show.bs.modal', vm.reposition);
