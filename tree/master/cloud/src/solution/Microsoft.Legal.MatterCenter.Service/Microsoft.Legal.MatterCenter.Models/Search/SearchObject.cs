@@ -72,5 +72,38 @@ namespace Microsoft.Legal.MatterCenter.Models
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets or sets the search term. Represents the isunique or not for filter results.
+        /// </summary>
+        /// <value>The search term.</value>
+
+        public bool IsUnique
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the search term. Represents the column name for filter to get unique result.
+        /// </summary>
+        /// <value>The search term.</value>
+
+        public string UniqueColumnName
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets the search term. Represents the filter value for filter to get unique result.
+        /// </summary>
+        /// <value>The search term.</value>
+
+        public string FilterValue
+        {
+            get;
+            set;
+        }
     }
 }
