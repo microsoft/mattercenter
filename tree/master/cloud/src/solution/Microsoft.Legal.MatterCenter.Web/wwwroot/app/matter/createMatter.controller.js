@@ -43,15 +43,19 @@
                 cm.parentLevelOneList = [];
                 cm.levelOneList = [];
                 cm.levelTwoList = [];
+                cm.createContent.Tab1Textbox5Label = cm.createContent.Tab1Textbox5Label;
             }
             if (cm.taxonomyHierarchyLevels >= 3) {
                 cm.levelThreeList = [];
+                cm.createContent.Tab1Textbox5Label = cm.createContent.Tab1Textbox5LabelForLevel3;
             }
             if (cm.taxonomyHierarchyLevels >= 4) {
                 cm.levelFourList = [];
+                cm.createContent.Tab1Textbox5Label = cm.createContent.Tab1Textbox5LabelForLevel4;
             }
             if (cm.taxonomyHierarchyLevels >= 5) {
                 cm.levelFiveList = [];
+                cm.createContent.Tab1Textbox5Label = cm.createContent.Tab1Textbox5LabelForLevel5;
             }
 
 
@@ -1088,12 +1092,12 @@
 
 
             var validateAttornyUserRolesAndPermissins = function () {
-                var responsibleAttorny = 0, fullControl = 0;
+                var responsibleAttorny = 0, fullControl = 0,teamRowNumber=1;
                 if (!cm.showRoles) {
                     assignDefaultRolesToTeamMembers();
                 }
                 for (var iCount = 0; iCount < cm.assignPermissionTeams.length; iCount++) {
-
+                    teamRowNumber = iCount == 0 ? cm.assignPermissionTeams[iCount].assigneTeamRowNumber : teamRowNumber;
                     if ("" !== cm.assignPermissionTeams[iCount].assignedUser) {
 
                         if (cm.assignPermissionTeams[iCount].assignedRole && "" !== cm.assignPermissionTeams[iCount].assignedRole.name) {
@@ -1139,8 +1143,8 @@
                     else {
                         cm.errTextMsg = cm.createContent.ErrorMessageEntityTeamPermission2;
                             //"Please provide at least one user who has Full Control permission on this  matter.";
-                        cm.errorBorder = "permUser1";
-                        showErrorNotificationAssignTeams(cm.errTextMsg, 1, "perm");
+                        cm.errorBorder = "permUser" + teamRowNumber;
+                        showErrorNotificationAssignTeams(cm.errTextMsg, teamRowNumber, "perm");
                         cm.errorPopUpBlock = true;
                         return false;
                     }
@@ -1148,8 +1152,8 @@
                 else {
                     cm.errTextMsg = cm.createContent.ErrorMessageEntityTeamRole2;
                         //"Enter at least one Responsible Attorney for this matter.";
-                    cm.errorBorder = "roleUser1";
-                    showErrorNotificationAssignTeams(cm.errTextMsg, 1, "role");
+                    cm.errorBorder = "roleUser" + teamRowNumber;
+                    showErrorNotificationAssignTeams(cm.errTextMsg, teamRowNumber, "role");
                     cm.errorPopUpBlock = true;
                     return false;
                 }
