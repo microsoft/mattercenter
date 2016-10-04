@@ -401,7 +401,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentMatterName.ToString().ToLower())
                         {
                             if(searchResult[key].ToString()!=string.Empty)
-                            { 
+                            {
                                 ServiceUtility.AddProperty(documentData,
                                     configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentMatterName").Key,
                                     searchResult[key].ToString());
@@ -412,13 +412,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                     configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentMatterName").Key,
                                     searchResult["Title"].ToString());
                             }
-                        }   
+                        }                        
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentMatterId.ToString().ToLower())
                         {
                             ServiceUtility.AddProperty(documentData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentMatterId").Key,
                                 searchResult[key].ToString());
-                        }                        
+                        }
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentCheckOutUser.ToString().ToLower())
                         {
                             ServiceUtility.AddProperty(documentData,
@@ -484,7 +484,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentModifiedDate").Key,
                                 searchResult[key].ToString());                            
                         }
-                       
+
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyAuthor.ToString().ToLower())
                         {
                             ServiceUtility.AddProperty(documentData,
@@ -498,7 +498,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 searchResult[key].ToString());
                         }
 
-                        if (key.ToString().ToLower() == "cpcpracticegroup")
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyPracticeGroup.ToString().ToLower())
                         {
                             ServiceUtility.AddProperty(documentData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentPracticeGroup").Key,
@@ -529,11 +529,134 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 
             }
             searchResultsVM.SearchResults = null;
+            if (searchRequestVM.SearchObject.IsUnique && searchResultsVM.DocumentDataList != null && !string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.UniqueColumnName))
+            {
+                searchResultsVM.DocumentDataList = getUniqueResults(searchRequestVM, searchResultsVM);
+            }
             return searchResultsVM;
         }
 
+        /// <summary>
+        /// getting unique results for this.
+        /// </summary>
+        /// <param name="searchRequestVM"></param>
+        /// <param name="searchResultsVM"></param>
+        /// <returns></returns>
+        public dynamic getUniqueResults(SearchRequestVM searchRequestVM, dynamic searchResultsVM)
+        {
+           dynamic documentDataList1 = new List<dynamic>();
 
+           var colList = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument");
 
+           string UniqueColumnName = getuniqueColumnName(searchRequestVM.SearchObject.UniqueColumnName.ToLower().Trim());
+            if (!string.IsNullOrWhiteSpace(UniqueColumnName))
+            {
+                if (UniqueColumnName.Equals(colList.GetSection("documentMatterName").Key))
+                {
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentMatterName.Contains(searchRequestVM.SearchObject.FilterValue));
+                    data = data.Select(o => o.documentMatterName).Distinct();
+                    foreach (var dt in data)
+                    {
+                        dynamic documentData1 = new ExpandoObject();
+                        documentData1.documentMatterName = dt;
+                        documentDataList1.Add(documentData1);
+                    }
+                    searchResultsVM.DocumentDataList = documentDataList1;
+                }
+                else if (UniqueColumnName.Equals(colList.GetSection("documentPracticeGroup").Key))
+                {
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentPracticeGroup.Contains(searchRequestVM.SearchObject.FilterValue));
+                    data = data.Select(o => o.documentPracticeGroup).Distinct();
+                    foreach (var dt in data)
+                    {
+                        dynamic documentData1 = new ExpandoObject();
+                        documentData1.documentPracticeGroup = dt;
+                        documentDataList1.Add(documentData1);
+                    }
+                    searchResultsVM.DocumentDataList = documentDataList1;
+                }
+                else if (UniqueColumnName.Equals(colList.GetSection("documentOwner").Key))
+                {
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentOwner.Contains(searchRequestVM.SearchObject.FilterValue));
+                    data = data.Select(o => o.documentOwner).Distinct();
+                    foreach (var dt in data)
+                    {
+                        dynamic documentData1 = new ExpandoObject();
+                        documentData1.documentOwner = dt;
+                        documentDataList1.Add(documentData1);
+                    }
+                    searchResultsVM.DocumentDataList = documentDataList1;
+                }
+                else if (UniqueColumnName.Equals(colList.GetSection("documentCheckoutUser").Key))
+                {
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentCheckoutUser.Contains(searchRequestVM.SearchObject.FilterValue));
+                    data = data.Select(o => o.documentCheckoutUser).Distinct();
+                    foreach (var dt in data)
+                    {
+                        dynamic documentData1 = new ExpandoObject();
+                        documentData1.documentCheckoutUser = dt;
+                        documentDataList1.Add(documentData1);
+                    }
+                    searchResultsVM.DocumentDataList = documentDataList1;
+                }
+                else if (UniqueColumnName.Equals(colList.GetSection("documentClient").Key))
+                {
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentClient.Contains(searchRequestVM.SearchObject.FilterValue));
+                    data = data.Select(o => o.documentClient).Distinct();
+                    foreach (var dt in data)
+                    {
+                        dynamic documentData1 = new ExpandoObject();
+                        documentData1.documentClient = dt;
+                        documentDataList1.Add(documentData1);
+                    }
+                    searchResultsVM.DocumentDataList = documentDataList1;
+                }
+            }
+        
+            return searchResultsVM.DocumentDataList;
+        }
+
+        /// <summary>
+        /// to get column name 
+        /// </summary>
+        /// <returns></returns>
+        public string getuniqueColumnName(string uniueColumnName)
+        {
+            var docColumnSesction = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument");
+
+            if (searchSettings.ManagedPropertyDocumentClientName.ToString().ToLower().Equals(uniueColumnName))
+            {
+                uniueColumnName = docColumnSesction.GetSection("documentClient").Key;
+            }
+            else if (searchSettings.ManagedPropertyMatterName.ToString().ToLower().Equals(uniueColumnName))
+            {
+                uniueColumnName = docColumnSesction.GetSection("documentMatterName").Key;
+            }
+            else if (searchSettings.ManagedPropertyAuthor.ToString().ToLower().Equals(uniueColumnName))
+            {
+                uniueColumnName = docColumnSesction.GetSection("documentOwner").Key;
+            }
+            else if (searchSettings.ManagedPropertyPracticeGroup.ToString().ToLower().Equals(uniueColumnName))
+            {
+                uniueColumnName = docColumnSesction.GetSection("documentPracticeGroup").Key;
+            }
+            else if (searchSettings.ManagedPropertyDocumentCheckOutUser.ToString().ToLower().Equals(uniueColumnName))
+            {
+                uniueColumnName = docColumnSesction.GetSection("documentCheckoutUser").Key;
+            }
+            else
+            {
+                uniueColumnName = string.Empty;
+            }
+
+            return uniueColumnName;
+        }
+
+        /// <summary>
+        /// get the documents async
+        /// </summary>
+        /// <param name="searchRequestVM"></param>
+        /// <returns></returns>
         public async Task<SearchResponseVM> GetPinnedDocumentsAsync(SearchRequestVM searchRequestVM)
         {         
 

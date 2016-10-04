@@ -536,6 +536,9 @@
                 PageNumber: 1,
                 ItemsPerPage: vm.searchResultsLength,
                 SearchTerm: '',
+                IsUnique: false,
+                UniqueColumnName: '',
+                FilterValue:'',
                 Filters: {
                     ClientName: "",
                     ClientsList: [],
@@ -582,6 +585,9 @@
                     PageNumber: 1,
                     ItemsPerPage: 5,
                     SearchTerm: finalSearchText,
+                    IsUnique: false,
+                    UniqueColumnName: '',
+                    FilterValue: '',
                     Filters: {
                         ClientName: "",
                         ClientsList: [],
@@ -668,24 +674,36 @@
         vm.filterSearch = function (val) {
             if (val.length > 3) {
 
+                searchRequest.SearchObject.IsUnique = true;
+                searchRequest.SearchObject.FilterValue = val;
+               
                 if (vm.searchexp == vm.configSearchContent.ManagedPropertyFileName) {
+                    searchRequest.SearchObject.IsUnique = false;
+                    searchRequest.SearchObject.FilterValue = '';
+                    searchRequest.SearchObject.UniqueColumnName = '';
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyFileName + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false);
                 }
                 else if (vm.searchexp == vm.configSearchContent.ManagedPropertyDocumentClientName) {
+                    searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyDocumentClientName;
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentClientName + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false);
                 }
                 else if (vm.searchexp == vm.configSearchContent.ManagedPropertyMatterName) {
+                    searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyMatterName;
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyMatterName + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false);
                 }
                 else if (vm.searchexp == vm.configSearchContent.ManagedPropertyAuthor) {
+                    searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyAuthor;
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyAuthor + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
                 }
                 else if (vm.searchexp == vm.configSearchContent.ManagedPropertyPracticeGroup) {
+                    searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyPracticeGroup;
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyPracticeGroup + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
                 }
                 else if (vm.searchexp == vm.configSearchContent.ManagedPropertyDocumentCheckOutUser) {
+                    searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyDocumentCheckOutUser;
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
                 }
+                
             }
         }
 
@@ -743,6 +761,9 @@
                         vm.details = response;
                         vm.nodata = false;
                         vm.filternodata = true;
+                        searchRequest.SearchObject.IsUnique = false;
+                        searchRequest.SearchObject.FilterValue = '';
+                        searchRequest.SearchObject.UniqueColumnName = '';
                     }
                     vm.lazyloaderFilter = true;
                     vm.divuigrid = true;
@@ -760,6 +781,9 @@
                     } else {
                         vm.details = response;
                         vm.filternodata = false;
+                        searchRequest.SearchObject.IsUnique = false;
+                        searchRequest.SearchObject.FilterValue = '';
+                        searchRequest.SearchObject.UniqueColumnName = '';
                     }
                     searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Sort.ByProperty = "";
@@ -852,6 +876,10 @@
             vm.startDate = "";
             vm.endDate = "";
             vm.createddatefilter = false;
+
+            searchRequest.SearchObject.FilterValue = '';
+            searchRequest.SearchObject.IsUnique = false;
+            searchRequest.SearchObject.UniqueColumnName = '';
         }
 
         //#endregion
@@ -897,14 +925,13 @@
                 vm.practiceGroupSearchTerm = ""
                 searchRequest.SearchObject.Filters.PracticeGroup = "";
                 vm.practiceGroupfilter = false;
-            }
+            } //For Date Columns
             else if (property == vm.documentConfigContent.GridColumn5Header) {
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
                 vm.modstartdate = "";
                 vm.modenddate = "";
                 vm.moddatefilter = false;
-            } else {
                 searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
                 searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
                 vm.startDate = "";
