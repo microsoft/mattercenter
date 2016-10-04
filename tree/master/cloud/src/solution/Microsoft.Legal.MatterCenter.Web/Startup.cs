@@ -429,7 +429,9 @@ namespace Microsoft.Legal.MatterCenter.Web
                     jw.WriteValue(bool.Parse(generalSettingsSection["IsDevMode"]));
                     jw.WritePropertyName("isBackwardCompatible");
                     jw.WriteValue(bool.Parse(generalSettingsSection["IsBackwardCompatible"]));
-                jw.WriteEndObject();
+                    jw.WritePropertyName("isClientMappedWithHierachy");
+                    jw.WriteValue(bool.Parse(generalSettingsSection["isClientMappedWithHierachy"]));
+            jw.WriteEndObject();
 
             jw.WritePropertyName("matter");
                 jw.WriteStartObject();

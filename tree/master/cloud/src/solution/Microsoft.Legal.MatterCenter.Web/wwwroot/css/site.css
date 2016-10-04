@@ -74,6 +74,18 @@ textarea {
     }
 }
 
+@media screen and ( max-height: 300px ) and (max-width:500px){
+    .noResultsText {
+        margin-top: 10% !important;
+    }
+}
+
+@media screen and ( max-height: 484px ) and (max-width:2000px){
+    .noResultsText {
+        margin-top: 2% !important;
+    }
+}
+
 @media(max-width:668px) {
     #matterCenterHeader {
         width: 660px !important;
@@ -486,12 +498,15 @@ textarea {
 .noResultsText {
     color: #333;
     font-weight: 200;
-    line-height: 1.5;
+    line-height: 1.5;   
     padding-left: 5px;
     padding-right: 30px;
     position: absolute;
-    top: 19%;
+    top: 7%;
     margin-left: 1.5%;
+    overflow-y: auto;
+    min-height: 151px;
+    max-height: 151px;
 }
 
 .AppMenuFlyout {
@@ -788,7 +803,7 @@ textarea {
     padding: 0;
 }
 
-.docsortby{
+.docsortby {
     position: absolute;
     top: 82px;
     padding: 0;
@@ -817,7 +832,7 @@ textarea {
     padding-top: 5px;
 }
 
-.sortby ul, .sortbymatters ul,.docsortby ul{
+.sortby ul, .sortbymatters ul, .docsortby ul {
     background-color: #fff;
     border: 1px solid #c8c8c8;
     position: absolute;
@@ -828,12 +843,12 @@ textarea {
     margin-top: 5px;
 }
 
-    .sortby ul li:hover, .sortbymatters ul li:hover,.docsortby ul li:hover{
+    .sortby ul li:hover, .sortbymatters ul li:hover, .docsortby ul li:hover {
         background-color: #eaecea;
         cursor: pointer;
     }
 
-    .sortby ul li, .sortbymatters ul li,.docsortby ul li {
+    .sortby ul li, .sortbymatters ul li, .docsortby ul li {
         padding: 5px 10px 5px 10px;
         color: #333;
         display: inline-block;
@@ -1274,4 +1289,12 @@ textarea {
 
 #divMatterDashboardSearch ul {
     width: 100%;
+}
+
+.footerMargin{
+    margin-right:19.5% !important
+}
+
+.padright0 {
+    padding-right: 0 !important;
 }
