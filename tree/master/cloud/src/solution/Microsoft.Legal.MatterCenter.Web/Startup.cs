@@ -538,6 +538,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                                             case "enableHiding":
                                             case "enableColumnMenu":
                                             case "displayInDashboard":
+                                            case "suppressRemoveSort":
                                                 jw.WriteValue(bool.Parse(propVal));
                                                 break;
                                             case "position":
