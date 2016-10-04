@@ -759,6 +759,7 @@ textarea {
     position: absolute;
     top: 48px;
     padding: 0 8px 1px 15px;
+    z-index: 5;
 }
 
 .dashboarddropinner {

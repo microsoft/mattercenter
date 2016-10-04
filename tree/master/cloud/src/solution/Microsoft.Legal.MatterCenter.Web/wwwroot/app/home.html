@@ -106,19 +106,21 @@
 
     </main>
 
-    <footer class="footer navbar-fixed-bottom commonContent" id="footer">
-        <div class="row footerMargin">
-            <a aria-haspopup="true" href="http://www.microsoft.com/en-in/default.aspx" target="_parent">
-                <img title="{{vm.header.FooterMenuOption4Text}}" class="mslogo imgNoBorder pull-right" alt="{{vm.header.FooterMenuOption4Text}}" src="Images/microsoft-grey-logo-sm.png" />
-            </a>
+    <div id="footer">
+        <div class="maincontentDiv commonContent">
+            <div class="row">
+                <a aria-haspopup="true" href="http://www.microsoft.com/en-in/default.aspx" target="_parent">
+                    <img title="{{vm.header.FooterMenuOption4Text}}" class="mslogo imgNoBorder pull-right" alt="{{vm.header.FooterMenuOption4Text}}" src="Images/microsoft-grey-logo-sm.png" />
+                </a>
+            </div>
+            <div class="row text-right">
+                <ul class="footerLinks" role="menubar">
+                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="{{vm.header.FooterMenuOption1Value}}" target="_parent">{{vm.header.FooterMenuOption1Text}}</a></li>
+                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="{{vm.header.FooterMenuOption2Value}}" target="_parent">{{vm.header.FooterMenuOption2Text}}</a></li>
+                    <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="{{vm.header.FooterMenuOption3Value}}" target="_parent">{{vm.header.FooterMenuOption3Text}}</a></li>
+                    <li class="rightFooterElement copyRightElement" role="menuitem">© {{vm.currentyear}}  {{vm.header.FooterMenuOption4Text}}</li>
+                </ul>
+            </div>
         </div>
-        <div class="row footerMargin text-right">
-            <ul class="footerLinks" role="menubar">
-                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="{{vm.header.FooterMenuOption1Value}}" target="_parent">{{vm.header.FooterMenuOption1Text}}</a></li>
-                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="{{vm.header.FooterMenuOption2Value}}" target="_parent">{{vm.header.FooterMenuOption2Text}}</a></li>
-                <li class="rightFooterElement" role="menuitem"><a aria-haspopup="true" href="{{vm.header.FooterMenuOption3Value}}" target="_parent">{{vm.header.FooterMenuOption3Text}}</a></li>
-                <li class="rightFooterElement copyRightElement" role="menuitem">© {{vm.currentyear}}  {{vm.header.FooterMenuOption4Text}}</li>
-            </ul>
-        </div>
-    </footer>
+    </div>
 </div>
