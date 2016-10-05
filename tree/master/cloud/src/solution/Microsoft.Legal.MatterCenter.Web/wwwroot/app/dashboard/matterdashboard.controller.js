@@ -51,6 +51,13 @@
             vm.selectedTabInfo = vm.matterDashboardConfigs.Tab2HeaderText + " (" + vm.allMatterCount + ")";
             vm.Pinnedobj = [];
             //#endregion            
+            vm.teamName = '';
+            //#region Get Querystring values
+            if ($location.search() && $location.search().teamName) {
+                vm.teamName = $location.search().teamName;
+                vm.selectedClients = vm.teamName;                
+            }
+            //#endregion
 
             //#region closing all dropdowns on click of page
             vm.closealldrops = function () {
@@ -495,7 +502,7 @@
                     Sort: {
                         ByProperty: 'LastModifiedTime',
                         Direction: 1,
-                        ByColumn:""
+                        ByColumn: ""
                     }
                 }
             };
@@ -723,7 +730,7 @@
                                 vm.getMatterCounts();
                             }
                         });
-                    }                    
+                    }
                 });
             }
 
@@ -1058,7 +1065,7 @@
                     vm.lazyloaderaol = true;
                 }
             }
-            //#endregion
+            //#endregion          
 
             //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
             vm.customSelection = function (type) {
@@ -1420,33 +1427,33 @@
                 vm.sortbytext = data;
                 vm.sortbydrop = false;
                 if (vm.tabClicked !== "Pinned Matters") {
-                	if (sortexp == 'AlphabeticalUp') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 0);
+                    if (sortexp == 'AlphabeticalUp') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 0);
                     }
-                	else if (sortexp == 'AlphabeticalDown') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 1);
+                    else if (sortexp == 'AlphabeticalDown') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 1);
                     }
-                	else if (sortexp == 'CreateddateUp') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 0);
+                    else if (sortexp == 'CreateddateUp') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 0);
                     }
-                	else if (sortexp == 'CreateddateDown') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 1);
+                    else if (sortexp == 'CreateddateDown') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 1);
                     }
                     else {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyLastModifiedTime, vm.configSearchContent.ManagedPropertyLastModifiedTime, 1);
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyLastModifiedTime, vm.configSearchContent.ManagedPropertyLastModifiedTime, 1);
                     }
                 }
                 else {
-                	if (sortexp == 'AlphabeticalUp') {
+                    if (sortexp == 'AlphabeticalUp') {
                         vm.sortExpression("MatterName", "MatterName", 0);
                     }
-                	else if (sortexp == 'AlphabeticalDown') {
+                    else if (sortexp == 'AlphabeticalDown') {
                         vm.sortExpression("MatterName", "MatterName", 1);
                     }
-                	else if (sortexp == 'CreateddateUp') {
+                    else if (sortexp == 'CreateddateUp') {
                         vm.sortExpression("MatterCreatedDate", "MatterCreatedDate", 0);
                     }
-                	else if (sortexp == 'CreateddateDown') {
+                    else if (sortexp == 'CreateddateDown') {
                         vm.sortExpression("MatterCreatedDate", "MatterCreatedDate", 1);
                     }
                     else {
@@ -1823,7 +1830,11 @@
             }
             //#endregion
 
-
+            if (vm.teamName !== '') {
+                vm.selectedTab = "All matters";
+                
+                vm.getSearchResults();
+            }
             //#region Exporting to Excel Test
             vm.export = function () {
                 //vm.lazyloaderdashboard = false;
@@ -1850,7 +1861,7 @@
                     }
                 };
                 if (vm.tabClicked != "Pinned Matters") {
-                    
+
                     get(exportMatterSearchRequest, function (response) {
                         if (response == "") {
                             //vm.lazyloaderdashboard = true;
@@ -1858,12 +1869,15 @@
                             vm.exportDate = response;
 
                             $timeout(function () {
-                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                $("#exportable").table2excel({
+                                    // exclude CSS class
+                                    exclude: ".noExl",
+                                    name: "Matters",
+                                    filename: "Matters" //do not include extension
                                 });
-                                saveAs(blob, "Matters.xls");
-                                //vm.lazyloaderdashboard = true;
+
                             }, 1000);
+
                         }
                     });
                 } else {
@@ -1877,11 +1891,12 @@
                             vm.exportDate = response;
 
                             $timeout(function () {
-                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                $("#exportable").table2excel({
+                                    // exclude CSS class
+                                    exclude: ".noExl",
+                                    name: "Matters",
+                                    filename: "Matters" //do not include extension
                                 });
-                                saveAs(blob, "Matters.xls");
-                                //vm.lazyloaderdashboard = true;
                             }, 1000);
                         }
                     });
