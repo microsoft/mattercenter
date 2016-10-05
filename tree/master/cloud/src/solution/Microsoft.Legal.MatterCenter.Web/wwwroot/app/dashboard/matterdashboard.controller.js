@@ -22,6 +22,7 @@
             vm.center = configs.search.Schema.toLowerCase();
             vm.matterDashboardConfigs = uiconfigs.MatterDashboard;
             vm.matterConfigContent = uiconfigs.Matters;
+            vm.globalSettings = configs.global;
             sortPropertyForAllMatters = configs.search.ManagedPropertyMatterName;
             vm.aoldrop = false;
             vm.aoldropvisible = false;
@@ -51,6 +52,13 @@
             vm.selectedTabInfo = vm.matterDashboardConfigs.Tab2HeaderText + " (" + vm.allMatterCount + ")";
             vm.Pinnedobj = [];
             //#endregion            
+            vm.teamName = '';
+            //#region Get Querystring values
+            if ($location.search() && $location.search().teamName) {
+                vm.teamName = $location.search().teamName;
+                vm.selectedClients = vm.teamName;
+            }
+            //#endregion
 
             //#region closing all dropdowns on click of page
             vm.closealldrops = function () {
@@ -495,7 +503,7 @@
                     Sort: {
                         ByProperty: 'LastModifiedTime',
                         Direction: 1,
-                        ByColumn:""
+                        ByColumn: ""
                     }
                 }
             };
@@ -509,7 +517,7 @@
                     vm.allMatterCount = response.allMatterCounts;
                     vm.myMatterCount = response.myMatterCounts;
                     vm.pinMatterCount = response.pinnedMatterCounts;
-                    vm.totalrecords = response.allMatterCounts;
+                    vm.totalrecords = response.myMatterCounts;
                     //vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + vm.myMatterCount + ")";
                     if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
                         vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + response.myMatterCounts + ")";
@@ -705,8 +713,8 @@
                                     });
                                 });
                                 vm.matterGridOptions.data = response;
-                                vm.totalrecords = vm.allMatterCount;
-                                vm.selectedTabCount = vm.allMatterCount;
+                                vm.totalrecords = vm.myMatterCount;
+                                vm.selectedTabCount = vm.myMatterCount;
                                 vm.pagination();
                                 vm.lazyloaderdashboard = true;
                                 vm.divuigrid = true;
@@ -715,15 +723,15 @@
                             else {
                                 vm.lazyloaderdashboard = true;
                                 vm.matterGridOptions.data = response;
-                                vm.totalrecords = vm.allMatterCount;
-                                vm.selectedTabCount = vm.allMatterCount;
+                                vm.totalrecords = vm.myMatterCount;
+                                vm.selectedTabCount = vm.myMatterCount;
                                 vm.pagination();
                                 vm.pinMatterCount = 0;
                                 vm.divuigrid = true;
                                 vm.getMatterCounts();
                             }
                         });
-                    }                    
+                    }
                 });
             }
 
@@ -975,11 +983,21 @@
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                             vm.practiceGroups = response.level1;
                             vm.aolTerms = [];
-                            angular.forEach(response.level1, function (pgTerm) {
-                                angular.forEach(pgTerm.level2, function (areaterm) {
-                                    vm.aolTerms.push(areaterm);
+                            if (!vm.globalSettings.isBackwardCompatible) {
+                                angular.forEach(response.level1, function (pgTerm) {
+                                    angular.forEach(pgTerm.level2, function (areaterm) {
+                                        vm.aolTerms.push(areaterm);
+                                    });
                                 });
-                            })
+                            } else {
+                                angular.forEach(response.level1, function (pgTerm) {
+                                    angular.forEach(pgTerm.level2, function (areaterm) {
+                                        angular.forEach(areaterm.level3, function (term) {
+                                            vm.aolTerms.push(term);
+                                        });
+                                    });
+                                });
+                            }
                             vm.pgdrop = true;
                             vm.pgdropvisible = true;
                             if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
@@ -1058,7 +1076,7 @@
                     vm.lazyloaderaol = true;
                 }
             }
-            //#endregion
+            //#endregion          
 
             //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
             vm.customSelection = function (type) {
@@ -1420,33 +1438,33 @@
                 vm.sortbytext = data;
                 vm.sortbydrop = false;
                 if (vm.tabClicked !== "Pinned Matters") {
-                	if (sortexp == 'AlphabeticalUp') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 0);
+                    if (sortexp == 'AlphabeticalUp') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 0);
                     }
-                	else if (sortexp == 'AlphabeticalDown') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 1);
+                    else if (sortexp == 'AlphabeticalDown') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyMatterName, vm.configSearchContent.ManagedPropertyMatterName, 1);
                     }
-                	else if (sortexp == 'CreateddateUp') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 0);
+                    else if (sortexp == 'CreateddateUp') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 0);
                     }
-                	else if (sortexp == 'CreateddateDown') {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 1);
+                    else if (sortexp == 'CreateddateDown') {
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyOpenDate, vm.configSearchContent.ManagedPropertyOpenDate, 1);
                     }
                     else {
-                    	vm.sortExpression(vm.configSearchContent.ManagedPropertyLastModifiedTime, vm.configSearchContent.ManagedPropertyLastModifiedTime, 1);
+                        vm.sortExpression(vm.configSearchContent.ManagedPropertyLastModifiedTime, vm.configSearchContent.ManagedPropertyLastModifiedTime, 1);
                     }
                 }
                 else {
-                	if (sortexp == 'AlphabeticalUp') {
+                    if (sortexp == 'AlphabeticalUp') {
                         vm.sortExpression("MatterName", "MatterName", 0);
                     }
-                	else if (sortexp == 'AlphabeticalDown') {
+                    else if (sortexp == 'AlphabeticalDown') {
                         vm.sortExpression("MatterName", "MatterName", 1);
                     }
-                	else if (sortexp == 'CreateddateUp') {
+                    else if (sortexp == 'CreateddateUp') {
                         vm.sortExpression("MatterCreatedDate", "MatterCreatedDate", 0);
                     }
-                	else if (sortexp == 'CreateddateDown') {
+                    else if (sortexp == 'CreateddateDown') {
                         vm.sortExpression("MatterCreatedDate", "MatterCreatedDate", 1);
                     }
                     else {
@@ -1518,11 +1536,33 @@
                             vm.lazyloaderdashboard = true;
                             vm.displaypagination = true;
                         } else {
-                            vm.matterGridOptions.data = response;
-                            vm.divuigrid = true;
-                            vm.nodata = false;
-                            vm.lazyloaderdashboard = true;
-                            vm.displaypagination = true;
+                            getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    vm.Pinnedobj = pinnedResponse;
+                                    vm.pinMatterCount = vm.Pinnedobj.length
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            //Check if the pinned matter name is equal to search matter name
+                                            if (pinobj.matterName == res.matterName) {
+                                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                    res.ismatterdone = true;
+                                                    res.pinType = "unpin"
+                                                }
+                                            }
+                                        });
+                                    });
+                                    vm.matterGridOptions.data = response;
+                                    vm.lazyloaderdashboard = true;
+                                    vm.divuigrid = true;
+
+                                }
+                                else {
+                                    vm.lazyloaderdashboard = true;
+                                    vm.pinMatterCount = 0;
+                                    vm.divuigrid = true;
+                                }
+                                vm.displaypagination = true;
+                            });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1555,11 +1595,33 @@
                             vm.lazyloaderdashboard = true;
                             vm.displaypagination = true;
                         } else {
-                            vm.matterGridOptions.data = response;
-                            vm.divuigrid = true;
-                            vm.nodata = false;
-                            vm.lazyloaderdashboard = true;
-                            vm.displaypagination = true;
+                            getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    vm.Pinnedobj = pinnedResponse;
+                                    vm.pinMatterCount = vm.Pinnedobj.length
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            //Check if the pinned matter name is equal to search matter name
+                                            if (pinobj.matterName == res.matterName) {
+                                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                    res.ismatterdone = true;
+                                                    res.pinType = "unpin"
+                                                }
+                                            }
+                                        });
+                                    });
+                                    vm.matterGridOptions.data = response;
+                                    vm.lazyloaderdashboard = true;
+                                    vm.divuigrid = true;
+
+                                }
+                                else {
+                                    vm.lazyloaderdashboard = true;
+                                    vm.pinMatterCount = 0;
+                                    vm.divuigrid = true;
+                                }
+                                vm.displaypagination = true;
+                            });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1823,7 +1885,11 @@
             }
             //#endregion
 
+            if (vm.teamName !== '') {
+                vm.selectedTab = "All matters";
 
+                vm.getSearchResults();
+            }
             //#region Exporting to Excel Test
             vm.export = function () {
                 //vm.lazyloaderdashboard = false;
@@ -1850,7 +1916,7 @@
                     }
                 };
                 if (vm.tabClicked != "Pinned Matters") {
-                    
+
                     get(exportMatterSearchRequest, function (response) {
                         if (response == "") {
                             //vm.lazyloaderdashboard = true;
@@ -1858,12 +1924,15 @@
                             vm.exportDate = response;
 
                             $timeout(function () {
-                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                $("#exportable").table2excel({
+                                    // exclude CSS class
+                                    exclude: ".noExl",
+                                    name: "Matters",
+                                    filename: "Matters" //do not include extension
                                 });
-                                saveAs(blob, "Matters.xls");
-                                //vm.lazyloaderdashboard = true;
+
                             }, 1000);
+
                         }
                     });
                 } else {
@@ -1877,11 +1946,12 @@
                             vm.exportDate = response;
 
                             $timeout(function () {
-                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                $("#exportable").table2excel({
+                                    // exclude CSS class
+                                    exclude: ".noExl",
+                                    name: "Matters",
+                                    filename: "Matters" //do not include extension
                                 });
-                                saveAs(blob, "Matters.xls");
-                                //vm.lazyloaderdashboard = true;
                             }, 1000);
                         }
                     });

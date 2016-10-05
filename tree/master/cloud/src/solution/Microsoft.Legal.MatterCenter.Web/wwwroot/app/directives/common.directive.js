@@ -417,6 +417,22 @@
         }
     }
 
+
+    'use strict'
+    function dropdown() {
+        return {
+            restrict: 'AE',
+            link: function (scope, element, attrs) {
+                $(element).click(function (e) {
+                    var obj = $(this).parent().parent().position();
+                    if (obj.top > 280) {
+                        $(this).parent().addClass('dropup');
+                    }
+                });
+            }
+        }
+    }
+
     var app = angular.module('matterMain');
     app.directive('onload', ['$timeout', onload]);
     app.directive('showbreadcrumb', [showbreadcrumb]);
@@ -430,6 +446,7 @@
     app.directive('uiGridMenuButton', ['$window', '$timeout', uiGridMenuButton]);
     //Adding Window
     app.directive('uiGridViewport', ['$window', uiGridViewport]);
+    app.directive('dropdown', [dropdown]);
 })();
 
 

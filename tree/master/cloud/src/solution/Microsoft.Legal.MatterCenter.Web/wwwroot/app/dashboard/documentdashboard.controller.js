@@ -78,7 +78,7 @@
                 paginationPageSize: 30,
                 enableGridMenu: false,
                 enableRowHeaderSelection: false,
-                enableRowSelection: true,
+                enableRowSelection: false,
                 enableSelectAll: false,
                 multiSelect: false,
                 enableColumnMenus: false,
@@ -125,7 +125,7 @@
             columnDefs1.push({
                 field: 'checker',
                 displayName: 'checked',
-                width: '2%',
+                width: '2.5%',
                 cellTemplate: '/app/dashboard/cellCheckboxTemplate.html',
                 headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html',
                 enableColumnMenu: false,
@@ -151,9 +151,9 @@
                 
             columnDefs1.push({
                 field: 'pin',
-                width: '5%',
+                width: '6%',
                 displayName: '',
-                cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0 pull-right"><img src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
                 enableColumnMenu: false,
                 position: 75
             });
@@ -195,17 +195,17 @@
                     //Set the selected row of the grid to selectedRow property of the controller
                     gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                         // vm.selectedRow = row.entity
-                        vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
-                        var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.documentCreatedDate);
-                        if (isRowPresent.length > 0) {
-                            row.entity.checker = true;
-                            vm.toggleChecker(true, row.entity);
-                        }
-                        else {
-                            vm.checker = false;
-                            row.entity.checker = false;
-                            vm.toggleChecker(false, row.entity);
-                        }
+                        //vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
+                        //var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.documentCreatedDate);
+                        //if (isRowPresent.length > 0) {
+                        //    row.entity.checker = true;
+                        //    vm.toggleChecker(true, row.entity);
+                        //}
+                        //else {
+                        //    vm.checker = false;
+                        //    row.entity.checker = false;
+                        //    vm.toggleChecker(false, row.entity);
+                        //}
                     });
                 }
             }
@@ -216,9 +216,9 @@
                     Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
-                    TermGroup: "MatterCenterTerms",
-                    TermSetName: "Clients",
-                    CustomPropertyName: "ClientURL"
+                    TermGroup: configs.taxonomy.termGroup,
+                    TermSetName: configs.taxonomy.clientTermSetName,
+                    CustomPropertyName: configs.taxonomy.clientCustomPropertiesURL,
                 }
             };
             //#endregion
@@ -292,7 +292,7 @@
 
             vm.showMailCartModal = function () {
                 if (vm.documentsCheckedCount > 0) {
-                    jQuery('#UploadMatterModal').modal("show");
+                    angular.element('#UploadMatterModal').modal("show");
                     angular.forEach(vm.cartelements, function (cartItem) {
                         cartItem.mailCartSelected = false;
                     });
@@ -631,7 +631,7 @@
                     vm.allDocumentCount = response.allDocumentCounts;
                     vm.myDocumentCount = response.myDocumentCounts;
                     vm.pinDocumentCount = response.pinnedDocumentCounts;
-                    vm.totalrecords = response.allDocumentCounts;
+                    vm.totalrecords = response.myDocumentCounts;
                     if (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText) {
                         vm.selectedTabInfo = vm.documentDashboardConfigs.Tab1HeaderText + " (" + response.myDocumentCounts + ")";
                     } else if (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText) {
@@ -760,14 +760,42 @@
                         vm.getDocumentCounts();
                         vm.pagination();
                     } else {
-                        vm.documentGridOptions.data = response;
-                        //vm.myDocumentCount = response.length;
-                        vm.getDocumentCounts();
-                        vm.totalrecords = vm.myDocumentCount;
-                        vm.pagination();
-                        //vm.lazyloaderdashboard = true;
-                        //vm.divuigrid = true;
-                        vm.nodata = false;
+                        //vm.documentGridOptions.data = response;
+                        ////vm.myDocumentCount = response.length;
+                        //vm.getDocumentCounts();
+                        //vm.totalrecords = vm.myDocumentCount;
+                        //vm.pagination();
+                        ////vm.lazyloaderdashboard = true;
+                        ////vm.divuigrid = true;
+                        //vm.nodata = false;
+                        getPinDocuments(documentRequest, function (pinnedResponse) {
+                            if (pinnedResponse && pinnedResponse.length > 0) {
+                                vm.pinDocumentCount = pinnedResponse.length;
+                                angular.forEach(pinnedResponse, function (pinobj) {
+                                    angular.forEach(response, function (res) {
+                                        if (pinobj.documentName == res.documentName) {
+                                            if (res.isDocumentDone == undefined && !res.isDocumentDone) {
+                                                res.isDocumentDone = true;
+                                                res.pinType = "unpin"
+                                            }
+                                        }
+                                    });
+                                });
+                                vm.documentGridOptions.data = response;
+                                vm.getDocumentCounts();
+                                vm.totalrecords = vm.myDocumentCount;
+                                vm.pagination();
+                            }
+                            else {
+                                vm.documentGridOptions.data = response;
+                                //vm.allDocumentCount = response.length;                            
+                                vm.totalrecords = vm.myDocumentCount;
+                                vm.pagination();
+                            }
+                            //vm.lazyloaderdashboard = true;
+                            //vm.divuigrid = true;
+
+                        });
                     }
                 });
             }
@@ -1134,6 +1162,7 @@
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 if (vm.last < vm.totalrecords) {
+                    vm.documentGridOptions.data = [];
                     vm.first = vm.first + gridOptions.paginationPageSize;
                     vm.last = vm.last + gridOptions.paginationPageSize;
                     vm.total = vm.totalrecords - gridOptions.paginationPageSize;
@@ -1156,13 +1185,30 @@
                             vm.nodata = true;
                             vm.errorMessage = response.message;
                         } else {
-                            vm.divuigrid = true;
-                            vm.nodata = false;
-                            vm.documentGridOptions.data = response;
+                            getPinDocuments(documentRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    vm.pinDocumentCount = pinnedResponse.length;
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            if (pinobj.documentName == res.documentName) {
+                                                if (res.isDocumentDone == undefined && !res.isDocumentDone) {
+                                                    res.isDocumentDone = true;
+                                                    res.pinType = "unpin"
+                                                }
+                                            }
+                                        });
+                                    });
+                                    vm.documentGridOptions.data = response;
+                                }
+                                else {
+                                    vm.documentGridOptions.data = response;
+                                }
+                            });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
                             vm.lazyloaderdashboard = true;
+                            vm.divuigrid = true;
                         }
                     });
                 } else {
@@ -1176,6 +1222,7 @@
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 if (vm.last > gridOptions.paginationPageSize) {
+                    vm.documentGridOptions.data = [];
                     vm.first = vm.first - gridOptions.paginationPageSize;
                     vm.last = vm.last - gridOptions.paginationPageSize;
                     vm.pagenumber = vm.pagenumber - 1;
@@ -1190,13 +1237,32 @@
                             vm.errorMessage = response.message;
                             vm.lazyloaderdashboard = true;
                         } else {
-                            vm.divuigrid = true;
-                            vm.nodata = false;
-                            vm.documentGridOptions.data = response;
+                            getPinDocuments(documentRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    vm.pinDocumentCount = pinnedResponse.length;
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            if (pinobj.documentName == res.documentName) {
+                                                if (res.isDocumentDone == undefined && !res.isDocumentDone) {
+                                                    res.isDocumentDone = true;
+                                                    res.pinType = "unpin"
+                                                }
+                                            }
+                                        });
+                                    });
+                                    vm.documentGridOptions.data = response;
+                                    vm.lazyloaderdashboard = true;
+                                    vm.divuigrid = true;
+                                }
+                                else {
+                                    vm.documentGridOptions.data = response;
+                                    vm.lazyloaderdashboard = true;
+                                }
+                            });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
-                            vm.lazyloaderdashboard = true;
+                            
                         }
 
                     });
@@ -1383,11 +1449,12 @@
                             vm.exportDate = response;
 
                             $timeout(function () {
-                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                $("#exportable").table2excel({
+                                    // exclude CSS class
+                                    exclude: ".noExl",
+                                    name: "Documents",
+                                    filename: "Documents" //do not include extension
                                 });
-                                saveAs(blob, "Matters.xls");
-                                //vm.lazyloaderdashboard = true;
                             }, 1000);
                         }
                     });
@@ -1402,11 +1469,12 @@
                             vm.exportDate = response;
 
                             $timeout(function () {
-                                var blob = new Blob([document.getElementById('exportable').innerHTML], {
-                                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                                $("#exportable").table2excel({
+                                    // exclude CSS class
+                                    exclude: ".noExl",
+                                    name: "Documents",
+                                    filename: "Documents" //do not include extension
                                 });
-                                saveAs(blob, "Matters.xls");
-                                //vm.lazyloaderdashboard = true;
                             }, 1000);
                         }
                     });
@@ -1414,6 +1482,30 @@
             }
 
             //#endregion
+
+
+            //#region To display modal up in center of the screen...
+            //Start 
+
+
+            vm.reposition = function () {
+                var modal = $(this)
+
+                var dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
+                // Dividing by two centers the modal exactly, but dividing by three  
+                // or four works better for larger screens. 
+                dialog.css("margin-top", Math.max(0, (screen.height - dialog.height()) / 4));
+            }
+            // Reposition when a modal is shown 
+            jQuery('.modal').on('show.bs.modal', vm.reposition);
+            // Reposition when the window is resized 
+            jQuery(window).on('resize', function () {
+                jQuery('.modal:visible').each(vm.reposition);
+            });
+
+            $timeout(vm.reposition(), 100);
+            //#endregion 
 
             angular.element($window).bind('resize', function () {
                 if ($window.innerWidth > 867) {

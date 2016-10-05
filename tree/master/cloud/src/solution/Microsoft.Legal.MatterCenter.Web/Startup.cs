@@ -429,7 +429,9 @@ namespace Microsoft.Legal.MatterCenter.Web
                     jw.WriteValue(bool.Parse(generalSettingsSection["IsDevMode"]));
                     jw.WritePropertyName("isBackwardCompatible");
                     jw.WriteValue(bool.Parse(generalSettingsSection["IsBackwardCompatible"]));
-                jw.WriteEndObject();
+                    jw.WritePropertyName("isClientMappedWithHierachy");
+                    jw.WriteValue(bool.Parse(generalSettingsSection["isClientMappedWithHierachy"]));
+            jw.WriteEndObject();
 
             jw.WritePropertyName("matter");
                 jw.WriteStartObject();
@@ -536,6 +538,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                                             case "enableHiding":
                                             case "enableColumnMenu":
                                             case "displayInDashboard":
+                                            case "suppressRemoveSort":
                                                 jw.WriteValue(bool.Parse(propVal));
                                                 break;
                                             case "position":
