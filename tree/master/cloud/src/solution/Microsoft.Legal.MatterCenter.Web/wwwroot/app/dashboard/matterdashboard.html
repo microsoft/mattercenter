@@ -70,8 +70,10 @@
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText,$event)">{{vm.matterDashboardConfigs.AdvSearchSelectAllLinkText}}</a> </div>
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText,$event)">{{vm.matterDashboardConfigs.AdvSearchSelectNoneLinkText}}</a></div>
-                                <div class="col-xs-12 refinerWrapper" ng-repeat="client in vm.clients" ng-click="$event.stopPropagation();">
-                                    <input type="checkbox" ng-model="client.Selected" /> <span>{{client.name}}</span>
+                                <div class="col-xs-12 refinerWrapper">
+                                    <div class="col-xs-12 refinerRow" ng-repeat="client in vm.clients" ng-click="$event.stopPropagation();">
+                                        <input type="checkbox" ng-model="client.Selected" /> <span>{{client.name}}</span>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-3">
@@ -101,11 +103,13 @@
                     </div>
                     <div class="col-xs-12 " ng-if="vm.pgdrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
-                            <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
+                            <div class="col-xs-9 col-sm-7 clientdropinner refinerPG">
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText,$event)">{{vm.matterDashboardConfigs.AdvSearchSelectAllLinkText}}</a> </div>
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false,  vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText,$event)">{{vm.matterDashboardConfigs.AdvSearchSelectNoneLinkText}}</a></div>
-                                <div class="col-xs-12 refinerWrapper" ng-repeat="pg in vm.practiceGroups" ng-click="$event.stopPropagation();">
-                                    <input type="checkbox" ng-model="pg.Selected" /> <span>{{pg.termName}}</span>
+                                <div class="refinerWrapper col-xs-12">
+                                    <div class="col-xs-12 refinerRow" ng-repeat="pg in vm.practiceGroups" ng-click="$event.stopPropagation();">
+                                        <input type="checkbox" ng-model="pg.Selected" /> <span>{{pg.termName}}</span>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-3">
@@ -135,11 +139,13 @@
                     </div>
                     <div class="col-xs-12" ng-if="vm.aoldrop" ng-click="$event.stopPropagation();">
                         <div class="row ">
-                            <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
+                            <div class="col-xs-9 col-sm-7 clientdropinner refinerAOL">
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText,$event)">{{vm.matterDashboardConfigs.AdvSearchSelectAllLinkText}}</a> </div>
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText,$event)">{{vm.matterDashboardConfigs.AdvSearchSelectNoneLinkText}}</a></div>
-                                <div class="col-xs-12 refinerWrapper" ng-repeat="aol in vm.aolTerms" ng-click="$event.stopPropagation();">
-                                    <input type="checkbox" ng-model="aol.Selected" /> <span>{{aol.termName}}</span>
+                                <div class="col-xs-12 refinerWrapper">
+                                    <div class="col-xs-12 refinerRow" ng-repeat="aol in vm.aolTerms" ng-click="$event.stopPropagation();">
+                                        <input type="checkbox" ng-model="aol.Selected" /> <span>{{aol.termName}}</span>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-3">
