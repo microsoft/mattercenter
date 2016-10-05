@@ -196,6 +196,7 @@
                     cellClass: value.cellClass,
                     headerCellClass: value.headerCellClass,
                     visible: value.defaultVisibleInGrid,
+                    //suppressRemoveSort: value.suppressRemoveSort
                 });
             }
         });
@@ -1400,117 +1401,133 @@
             vm.gridOptions.data = [];
             $scope.gridApi.infiniteScroll.resetScroll();
             if (sortColumns.length != 0) {
-                if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
-                    if (sortColumns[0].sort != undefined) {
-                        if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
-                            vm.FileNameSort = "desc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyFileName, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                if (sortColumns[0].name != undefined) {
+                    if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentName.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
+                                vm.FileNameSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyFileName, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            } else {
+                                vm.FileNameSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyFileName, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
                         } else {
-                            vm.FileNameSort = "asc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyFileName, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
                     }
-                }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
-                    if (sortColumns[0].sort != undefined) {
-                        if (vm.DocumentClientSort == undefined || vm.DocumentClientSort == "asc") {
-                            vm.DocumentClientSort = "desc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientName, 0, sortColumns[0].name, sortColumns[0].field, "asc");
-                        }
-                        else {
-                            vm.DocumentClientSort = "asc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientName, 1, sortColumns[0].name, sortColumns[0].field, "desc");
-                        }
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
-                    }
-                }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
-                    if (sortColumns[0].sort != undefined) {
-                        if (vm.DocumentClientIDSort == undefined || vm.DocumentClientIDSort == "asc") {
-                            vm.DocumentClientIDSort = "desc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientId, 0, sortColumns[0].name, sortColumns[0].field, "asc");
-                        } else {                            
-                            vm.DocumentClientIDSort = "asc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientId, 1, sortColumns[0].name, sortColumns[0].field, "desc");
-                        }
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
-                    }
-                }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
-                    if (sortColumns[0].sort != undefined) {
-                        if (vm.ModiFiedDateSort == undefined || vm.ModiFiedDateSort == "asc") {
-                            vm.ModiFiedDateSort = "desc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                    else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentClient.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.DocumentClientSort == undefined || vm.DocumentClientSort == "asc") {
+                                vm.DocumentClientSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientName, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            }
+                            else {
+                                vm.DocumentClientSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientName, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
                         } else {
-                            vm.ModiFiedDateSort = "asc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
                     }
-                }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
-                    if (sortColumns[0].sort != undefined) {
-                        if (vm.AuthorSort == undefined || vm.AuthorSort == "asc") {
-                            vm.AuthorSort = "desc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyAuthor, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                    else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentClientId.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.DocumentClientIDSort == undefined || vm.DocumentClientIDSort == "asc") {
+                                vm.DocumentClientIDSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientId, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            } else {
+                                vm.DocumentClientIDSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentClientId, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
                         } else {
-                            vm.AuthorSort = "asc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyAuthor, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
                     }
-                }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
-                    if (sortColumns[0].sort != undefined) {
-                        if (vm.VersionSort == undefined || vm.VersionSort == "asc") {
-                            vm.VersionSort = "desc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentVersion, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                    else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentModifiedDate.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.ModiFiedDateSort == undefined || vm.ModiFiedDateSort == "asc") {
+                                vm.ModiFiedDateSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            } else {
+                                vm.ModiFiedDateSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
                         } else {
-                            vm.VersionSort = "asc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentVersion, 1, sortColumns[0].name, sortColumns[0].field, "desc");                            
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
                     }
-                }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[7].name) {
-                    if (sortColumns[0].sort != undefined) {
-                        if (vm.CheckoutSort == undefined || vm.CheckoutSort == "asc") {
-                            vm.CheckoutSort = "desc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentCheckOutUser, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                    else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentOwner.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.AuthorSort == undefined || vm.AuthorSort == "asc") {
+                                vm.AuthorSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyAuthor, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            } else {
+                                vm.AuthorSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyAuthor, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
                         } else {
-                            vm.CheckoutSort = "asc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentCheckOutUser, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
                     }
-                }
-                else if (sortColumns[0].name == vm.gridOptions.columnDefs[8].name) {
-                    if (sortColumns[0].sort != undefined) {
-                        if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {                            
-                            vm.CreatedSort = "desc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyCreated, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                    else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentVersion.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.VersionSort == undefined || vm.VersionSort == "asc") {
+                                vm.VersionSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentVersion, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            } else {
+                                vm.VersionSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentVersion, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
                         } else {
-                            vm.CreatedSort = "asc";
-                            vm.documentSortBy(vm.configSearchContent.ManagedPropertyCreated, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            vm.divuigrid = true;
+                            vm.nodata = false;
                         }
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
+                    }
+                    else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentCheckoutUser.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.CheckoutSort == undefined || vm.CheckoutSort == "asc") {
+                                vm.CheckoutSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentCheckOutUser, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            } else {
+                                vm.CheckoutSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyDocumentCheckOutUser, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                        }
+                    }
+                    else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentCreatedDate.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {
+                                vm.CreatedSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyCreated, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            } else {
+                                vm.CreatedSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyCreated, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                        }
+                    }
+                    else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentMatterName.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.CreatedSort == undefined || vm.CreatedSort == "asc") {
+                                vm.CreatedSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyMatterName, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            } else {
+                                vm.CreatedSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyMatterName, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                        }
                     }
                 }
             } else {

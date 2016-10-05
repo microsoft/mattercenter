@@ -1417,7 +1417,7 @@
                         searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.matterfilter = true;
                     }
-                    else if (property == "" + vm.configSearchContent.ManagedPropertyClientName + "") {
+                    else if (property == "" + vm.configSearchContent.ManagedPropertyClientName  + "" && !vm.globalSettings.isBackwardCompatible) {
                         searchRequest.SearchObject.Filters.ClientName = term;
                         searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         vm.clientfilter = true;
@@ -2716,7 +2716,9 @@
                     vm.filtername = vm.matterConfigContent.GridColumn7Header;
                 }
                 $timeout(function () {
-                    if (name == vm.matterConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible || name == vm.matterConfigContent.GridColumn7Header && !vm.globalSettings.isBackwardCompatible || name == vm.matterConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible) {
+                    if (name == vm.matterConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible
+                        || name == vm.matterConfigContent.GridColumn7Header && !vm.globalSettings.isBackwardCompatible
+                        || name == vm.matterConfigContent.GridColumn5Header && vm.globalSettings.isBackwardCompatible) {
                         vm.matterdateheader = false;
                     }
                     else {
