@@ -51,6 +51,13 @@
             vm.selectedTabInfo = vm.matterDashboardConfigs.Tab2HeaderText + " (" + vm.allMatterCount + ")";
             vm.Pinnedobj = [];
             //#endregion            
+            vm.teamName = '';
+            //#region Get Querystring values
+            if ($location.search() && $location.search().teamName) {
+                vm.teamName = $location.search().teamName;
+                vm.selectedClients = vm.teamName;                
+            }
+            //#endregion
 
             //#region closing all dropdowns on click of page
             vm.closealldrops = function () {
@@ -1058,7 +1065,7 @@
                     vm.lazyloaderaol = true;
                 }
             }
-            //#endregion
+            //#endregion          
 
             //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
             vm.customSelection = function (type) {
@@ -1823,7 +1830,11 @@
             }
             //#endregion
 
-
+            if (vm.teamName !== '') {
+                vm.selectedTab = "All matters";
+                
+                vm.getSearchResults();
+            }
             //#region Exporting to Excel Test
             vm.export = function () {
                 //vm.lazyloaderdashboard = false;
