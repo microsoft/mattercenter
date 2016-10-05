@@ -114,15 +114,15 @@ h1.specificName {
 }
 
 .refinerClient .refinerWrapper {
-    height: 25px;
+    height: 150px;
 }
 
 .refinerAOL .refinerWrapper {
-    height: 25px;
+    max-height: 110px;
 }
 
 .refinerPG .refinerWrapper {
-    max-height: 25px;
+    max-height: 110px;
 }
 
 .refinerSeparator {
