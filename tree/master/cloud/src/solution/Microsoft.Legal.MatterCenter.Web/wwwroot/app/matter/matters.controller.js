@@ -1599,8 +1599,8 @@
 
                 searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = "";
                 searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = "";
-                vm.startDate = "";
-                vm.endDate = "";
+                vm.startdate = "";
+                vm.enddate = "";
                 vm.opendatefilter = false;
             }
 
@@ -1629,8 +1629,8 @@
                     else {
                         searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = "";
                         searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = "";
-                        vm.startDate = "";
-                        vm.endDate = "";
+                        vm.startdate = "";
+                        vm.enddate = "";
                         vm.opendatefilter = false;
                     }
                 }
@@ -1688,8 +1688,8 @@
                 else {
                     searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = "";
                     searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = "";
-                    vm.startDate = "";
-                    vm.endDate = "";
+                    vm.startdate = "";
+                    vm.enddate = "";
                     vm.opendatefilter = false;
                 }
 
