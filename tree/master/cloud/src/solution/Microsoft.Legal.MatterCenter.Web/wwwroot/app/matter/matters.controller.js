@@ -1515,8 +1515,8 @@
                     vm.moddatefilter = true;
                 }
                 if (name == "Open Date" || name == "Created Date") {
-                    searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
-                    searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = $filter('date')(vm.startDate, "yyyy-MM-ddT00:00:00") + "Z";
+                    searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = $filter('date')(vm.endDate, "yyyy-MM-ddT23:59:59") + "Z";
                     vm.opendatefilter = true;
                 }
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
@@ -1724,8 +1724,8 @@
                 vm.selected = "";
                 vm.searchTerm = "";
                 vm.searchClientTerm = "";
-                vm.startdate = "";
-                vm.enddate = "";
+                vm.startDate = "";
+                vm.endDate = "";
                 //vm.sortexp = "";
                 //vm.sortby = "";
                 vm.lazyloader = false;
@@ -2032,7 +2032,7 @@
                 maxDate: new Date()
             }
 
-            $scope.$watch('vm.startdate', function (newval, oldval) {
+            $scope.$watch('vm.startDate', function (newval, oldval) {
                 vm.enddateOptions.minDate = newval;
             });
 

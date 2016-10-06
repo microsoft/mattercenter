@@ -22,6 +22,7 @@
             vm.center = configs.search.Schema.toLowerCase();
             vm.matterDashboardConfigs = uiconfigs.MatterDashboard;
             vm.matterConfigContent = uiconfigs.Matters;
+            vm.globalSettings = configs.global;
             sortPropertyForAllMatters = configs.search.ManagedPropertyMatterName;
             vm.aoldrop = false;
             vm.aoldropvisible = false;
@@ -55,7 +56,7 @@
             //#region Get Querystring values
             if ($location.search() && $location.search().teamName) {
                 vm.teamName = $location.search().teamName;
-                vm.selectedClients = vm.teamName;                
+                vm.selectedClients = vm.teamName;
             }
             //#endregion
 
@@ -516,7 +517,7 @@
                     vm.allMatterCount = response.allMatterCounts;
                     vm.myMatterCount = response.myMatterCounts;
                     vm.pinMatterCount = response.pinnedMatterCounts;
-                    vm.totalrecords = response.allMatterCounts;
+                    vm.totalrecords = response.myMatterCounts;
                     //vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + vm.myMatterCount + ")";
                     if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
                         vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + response.myMatterCounts + ")";
@@ -712,8 +713,8 @@
                                     });
                                 });
                                 vm.matterGridOptions.data = response;
-                                vm.totalrecords = vm.allMatterCount;
-                                vm.selectedTabCount = vm.allMatterCount;
+                                vm.totalrecords = vm.myMatterCount;
+                                vm.selectedTabCount = vm.myMatterCount;
                                 vm.pagination();
                                 vm.lazyloaderdashboard = true;
                                 vm.divuigrid = true;
@@ -722,8 +723,8 @@
                             else {
                                 vm.lazyloaderdashboard = true;
                                 vm.matterGridOptions.data = response;
-                                vm.totalrecords = vm.allMatterCount;
-                                vm.selectedTabCount = vm.allMatterCount;
+                                vm.totalrecords = vm.myMatterCount;
+                                vm.selectedTabCount = vm.myMatterCount;
                                 vm.pagination();
                                 vm.pinMatterCount = 0;
                                 vm.divuigrid = true;
@@ -982,11 +983,21 @@
                         getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                             vm.practiceGroups = response.level1;
                             vm.aolTerms = [];
-                            angular.forEach(response.level1, function (pgTerm) {
-                                angular.forEach(pgTerm.level2, function (areaterm) {
-                                    vm.aolTerms.push(areaterm);
+                            if (!vm.globalSettings.isBackwardCompatible) {
+                                angular.forEach(response.level1, function (pgTerm) {
+                                    angular.forEach(pgTerm.level2, function (areaterm) {
+                                        vm.aolTerms.push(areaterm);
+                                    });
                                 });
-                            })
+                            } else {
+                                angular.forEach(response.level1, function (pgTerm) {
+                                    angular.forEach(pgTerm.level2, function (areaterm) {
+                                        angular.forEach(areaterm.level3, function (term) {
+                                            vm.aolTerms.push(term);
+                                        });
+                                    });
+                                });
+                            }
                             vm.pgdrop = true;
                             vm.pgdropvisible = true;
                             if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
@@ -1525,11 +1536,33 @@
                             vm.lazyloaderdashboard = true;
                             vm.displaypagination = true;
                         } else {
-                            vm.matterGridOptions.data = response;
-                            vm.divuigrid = true;
-                            vm.nodata = false;
-                            vm.lazyloaderdashboard = true;
-                            vm.displaypagination = true;
+                            getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    vm.Pinnedobj = pinnedResponse;
+                                    vm.pinMatterCount = vm.Pinnedobj.length
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            //Check if the pinned matter name is equal to search matter name
+                                            if (pinobj.matterName == res.matterName) {
+                                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                    res.ismatterdone = true;
+                                                    res.pinType = "unpin"
+                                                }
+                                            }
+                                        });
+                                    });
+                                    vm.matterGridOptions.data = response;
+                                    vm.lazyloaderdashboard = true;
+                                    vm.divuigrid = true;
+
+                                }
+                                else {
+                                    vm.lazyloaderdashboard = true;
+                                    vm.pinMatterCount = 0;
+                                    vm.divuigrid = true;
+                                }
+                                vm.displaypagination = true;
+                            });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1562,11 +1595,33 @@
                             vm.lazyloaderdashboard = true;
                             vm.displaypagination = true;
                         } else {
-                            vm.matterGridOptions.data = response;
-                            vm.divuigrid = true;
-                            vm.nodata = false;
-                            vm.lazyloaderdashboard = true;
-                            vm.displaypagination = true;
+                            getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    vm.Pinnedobj = pinnedResponse;
+                                    vm.pinMatterCount = vm.Pinnedobj.length
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            //Check if the pinned matter name is equal to search matter name
+                                            if (pinobj.matterName == res.matterName) {
+                                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                    res.ismatterdone = true;
+                                                    res.pinType = "unpin"
+                                                }
+                                            }
+                                        });
+                                    });
+                                    vm.matterGridOptions.data = response;
+                                    vm.lazyloaderdashboard = true;
+                                    vm.divuigrid = true;
+
+                                }
+                                else {
+                                    vm.lazyloaderdashboard = true;
+                                    vm.pinMatterCount = 0;
+                                    vm.divuigrid = true;
+                                }
+                                vm.displaypagination = true;
+                            });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1832,7 +1887,7 @@
 
             if (vm.teamName !== '') {
                 vm.selectedTab = "All matters";
-                
+
                 vm.getSearchResults();
             }
             //#region Exporting to Excel Test

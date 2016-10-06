@@ -644,10 +644,10 @@
                     searchToText = searchToText.replace(")", "");
                     var firstText = searchToText.split(',')[0];
                     var secondText = searchToText.split(',')[1];
-                    var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':"' + firstText.trim() + '" OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + firstText.trim() + '"OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':"' + firstText.trim() + '")';
+                    var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':' + firstText.trim() + ' OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + firstText.trim() + 'OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + firstText.trim() + ')';
                 }
                 else {
-                    finalSearchText = '("' + vm.selected + '*" OR ' + vm.configSearchContent.ManagedPropertyFileName + ':"' + vm.selected + '*" OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + vm.selected + '*" OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':"' + vm.selected + '*")';
+                    finalSearchText = '(' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyFileName + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + vm.selected + '*)';
                 }
             }
             searchRequest.SearchObject.PageNumber = vm.pagenumber;

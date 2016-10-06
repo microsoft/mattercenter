@@ -28,6 +28,7 @@ input {
     padding: 0 10px;
     position: relative;
     width: 1150px;
+    cursor: default;
 }
 
 .docimage {
