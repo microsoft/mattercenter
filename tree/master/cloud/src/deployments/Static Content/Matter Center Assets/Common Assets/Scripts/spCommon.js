@@ -48,7 +48,9 @@ var oGlobalConstants = {
     sDateFormat: "MMMM dd, yyyy",
     sEventName: "",
     clientContext: null,
-    sNotApplicable: "NA"
+    sNotApplicable: "NA", 
+    sCurrentUserEmail:"",
+    sEmailName : "EmailSupport.eml"
 };
 
 /* Attaches all the content on the page */
@@ -116,6 +118,7 @@ function getCurrentUserTitle() {
         clientContext.load(oGlobalConstants.currentUser);
         clientContext.executeQueryAsync(Function.createDelegate(this, function () {
             oGlobalConstants.sCurrentUserTitle = oGlobalConstants.currentUser.get_title();
+            oGlobalConstants.sCurrentUserEmail = oGlobalConstants.currentUser.get_email();
             var sAlias = oGlobalConstants.currentUser.get_email();
             if (sAlias) {
                 oGlobalConstants.sUserLoginName = getUserLoginName(sAlias);
