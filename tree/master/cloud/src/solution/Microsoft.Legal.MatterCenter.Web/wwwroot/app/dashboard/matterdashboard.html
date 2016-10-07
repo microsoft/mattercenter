@@ -124,7 +124,7 @@
                     </div>
                     <!--End Practive Group Selection Dropdown-->
                     <!--Start AOL Selection Dropdown-->
-                    <div class="row">
+                    <div class="row" ng-if="!vm.globalSettings.isBackwardCompatible">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.matterDashboardConfigs.AdvSearchLabel3Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
@@ -159,6 +159,42 @@
                         </div>
                     </div>
                     <!--End AOL Selection Dropdown-->
+                    <!--Start Sub AOL Selection Dropdown-->
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.matterDashboardConfigs.AdvSearchLabel3Text}}</div>
+                        <div class="col-xs-12 col-sm-7 pull-left pad10">
+                            <div class="input-group">
+                                <input type="text" value="{{vm.selectedSubAOLs}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedSubAOLs" ng-keyup="vm.showSubAreaofLawDrop($event)" placeholder="{{vm.matterDashboardConfigs.AdvSearchTextbox3PlaceholderText}}" class="form-control">
+                                <span class="input-group-addon cursor" id="basic-addon1"
+                                      ng-click="vm.showSubAreaofLawDrop($event)"><img src='../images/icon-combobox.png' /></span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-1 pull-left pad10 lazyLoading" ng-hide="vm.lazyloadersubaol" style="position:static !important">
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.matterDashboardConfigs.AttachmentLoadingText}}" title="{{vm.matterDashboardConfigs.AttachmentLoadingText}}" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12" ng-if="vm.subAoldrop" ng-click="$event.stopPropagation();">
+                        <div class="row ">
+                            <div class="col-xs-9 col-sm-7 clientdropinner refinerAOL">
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText,$event)">{{vm.matterDashboardConfigs.AdvSearchSelectAllLinkText}}</a> </div>
+                                <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText,$event)">{{vm.matterDashboardConfigs.AdvSearchSelectNoneLinkText}}</a></div>
+                                <div class="col-xs-12 refinerWrapper">
+                                    <div class="col-xs-12 refinerRow" ng-repeat="subAol in vm.subAolTerms" ng-click="$event.stopPropagation();">
+                                        <input type="checkbox" ng-model="subAol.Selected" /> <span>{{subAol.termName}}</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK(vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText)">{{vm.matterDashboardConfigs.AdvSearchbuttonOkText}}</div></div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchCancel(vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText)">{{vm.matterDashboardConfigs.AdvSearchbuttonCancelText}}</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End AOL Selection Dropdown-->
 
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.matterDashboardConfigs.AdvSearchLabel4Text}}</div>
@@ -172,9 +208,9 @@
                                                is-open='vm.openedStartDate'
                                                datepicker-options='vm.dateOptions'
                                                ng-required='true' close-text='Close'
-                                               alt-input-formats='altInputFormats' />
+                                               alt-input-formats='altInputFormats'/>
                                         <span class='input-group-btn'>
-                                            <button type='button' class='btn btn-default' ng-click='vm.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                                            <button type='button' class='btn btn-default' ng-click='vm.openStartDate()' ><i class='glyphicon glyphicon-calendar'></i></button>
                                         </span>
                                     </div>
                                 </div>
@@ -188,7 +224,7 @@
                                                ng-required='true' close-text='Close'
                                                alt-input-formats='altInputFormats' />
                                         <span class='input-group-btn'>
-                                            <button type='button' class='btn btn-default' ng-click='vm.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                                            <button type='button' class='btn btn-default' ng-click='vm.openEndDate()' ><i class='glyphicon glyphicon-calendar'></i></button>
                                         </span>
                                     </div>
                                 </div>
