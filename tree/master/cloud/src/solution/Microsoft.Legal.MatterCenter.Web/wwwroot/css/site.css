@@ -763,6 +763,13 @@ textarea {
     z-index: 5;
 }
 
+.dashboarddropForTeam {
+    position: absolute;
+    top: 111px;
+    padding: 0 8px 1px 15px;
+    z-index: 5;
+}
+
 .dashboarddropinner {
     z-index: 1000;
     background: #fff;

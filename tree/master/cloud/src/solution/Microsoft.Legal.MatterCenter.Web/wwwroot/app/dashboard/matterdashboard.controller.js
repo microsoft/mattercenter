@@ -9,6 +9,9 @@
                 matterName: '',
                 matterGuid: ''
             };
+            vm.isTeamNamePresent = false;
+            vm.clientNameSelected = "";
+            vm.practiceGroupSelected = "";
             vm.downwarddrop = true;
             vm.upwarddrop = false;
             vm.loadLocation = false;
@@ -55,18 +58,28 @@
             //#endregion            
             vm.teamName = '';
             //#region Get Querystring values
-            if ($location.search() && $location.search().teamName) {
-                vm.teamName = $location.search().teamName;
+            if ($location.search() && $location.search().teamname) {
+                vm.isTeamNamePresent = true;
+                angular.element("#dashboardDrop").removeClass('dashboarddrop');
+                angular.element("#dashboardDrop").addClass('dashboarddropForTeam');
+                angular.element("#sortColumns").css("top", "144px")
+                vm.teamName = $location.search().teamname;
                 vm.selectedClients = vm.teamName;
             }
-
-            if ($location.search() && $location.search().practiceGroup) {
-                vm.practiceGroup = $location.search().practiceGroup;
-                vm.selectedPGs = vm.practiceGroup;
+            else {
+                angular.element("#dashboardDrop").addClass('dashboarddrop');
+                angular.element("#dashboardDrop").removeClass('dashboarddropForTeam');
+                angular.element("#sortColumns").css("top", "80px;")
             }
 
-            if ($location.search() && $location.search().matterType) {
-                vm.matterType = $location.search().matterType;
+            if ($location.search() && $location.search().practicegroup) {
+                vm.practiceGroup = $location.search().practicegroup;
+                vm.selectedPGs = vm.practiceGroup;
+                
+            }
+
+            if ($location.search() && $location.search().mattertype) {
+                vm.matterType = $location.search().mattertype;
                 vm.selectedSubAOLs = vm.matterType;
             }
 
@@ -1833,8 +1846,11 @@
                     if (response == "") {
                         vm.nodata = true;
                         vm.totalrecords = response.length;
+                        vm.matterGridOptions.data = [];
                         vm.getMatterCounts();
+                        vm.divuigrid = false;
                     } else {
+                        vm.divuigrid = true;
                         vm.matterGridOptions.data = response;
                         vm.totalrecords = response.length;
                         vm.getMatterCounts();
