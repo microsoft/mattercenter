@@ -266,7 +266,7 @@ textarea {
 
 .viewportlg {
     overflow: auto !important;
-    overflow-y: scroll !important;
+    /*overflow-y: scroll !important;*/
     /*height:510px !important;*/
 }
 
@@ -678,7 +678,7 @@ textarea {
 }
 
 .ui-grid-viewport {
-    min-height: 20px;
+    /*min-height: 20px;*/
 }
 
 .overflowMain {
