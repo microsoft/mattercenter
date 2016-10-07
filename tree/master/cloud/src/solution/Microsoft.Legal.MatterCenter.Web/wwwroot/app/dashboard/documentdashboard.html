@@ -89,8 +89,8 @@
                     <i class="glyphicon glyphicon-remove"></i> No Results Found
                 </div>-->
             </div>
-            <div class="col-xs-9 dashboarddrop" ng-if="vm.searchdrop">
-                <div class="col-xs-12 dashboarddropinner" ng-click='$event.stopPropagation()'>
+            <div class="col-xs-9 dashboarddrop" ng-click='vm.hideinnerdashboarddrop($event)' ng-if="vm.searchdrop">
+                <div class="col-xs-12 dashboarddropinner" >
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.documentDashboardConfigs.AdvSearchLabel1Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">

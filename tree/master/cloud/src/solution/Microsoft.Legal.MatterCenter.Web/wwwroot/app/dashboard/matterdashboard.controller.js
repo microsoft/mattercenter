@@ -34,6 +34,7 @@
             vm.lazyloaderclient = true;
             vm.lazyloaderpg = true;
             vm.lazyloaderaol = true;
+            vm.lazyloadersubaol = true;
             vm.totalrecords = 0;
             $rootScope.bodyclass = "bodymain";
             $rootScope.profileClass = "hide";
@@ -58,6 +59,17 @@
                 vm.teamName = $location.search().teamName;
                 vm.selectedClients = vm.teamName;
             }
+
+            if ($location.search() && $location.search().practiceGroup) {
+                vm.practiceGroup = $location.search().practiceGroup;
+                vm.selectedPGs = vm.practiceGroup;
+            }
+
+            if ($location.search() && $location.search().matterType) {
+                vm.matterType = $location.search().matterType;
+                vm.selectedSubAOLs = vm.matterType;
+            }
+
             //#endregion
 
             //#region closing all dropdowns on click of page
@@ -75,6 +87,8 @@
                 vm.sortbydropvisible = false;
                 vm.showNavTab = false;
                 vm.showInnerNav = true;
+                vm.openedStartDate = false;
+                vm.openedEndDate = false;
             }
             //#endregion
 
@@ -87,6 +101,16 @@
                 vm.pgdropvisible = false;
                 vm.aoldrop = false;
                 vm.aoldropvisible = false;
+                vm.subAolDropVisible = false;
+                vm.subAoldrop = false;
+                isOpen = false;
+                //if (vm.openedStartDate == true) {
+                //    vm.openedStartDate = false;
+                //}
+                //if (vm.openedEndDate == true) {
+                //    vm.openedEndDate = false;
+                //}
+               
             }
             //#endregion
 
@@ -341,7 +365,13 @@
                     vm.allMatterCount = response.allMatterCounts;
                     vm.myMatterCount = response.myMatterCounts;
                     vm.pinMatterCount = response.pinnedMatterCounts;
-                    vm.totalrecords = response.myMatterCounts;
+                    if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
+                        vm.totalrecords = response.myMatterCounts;
+                    } else if (vm.selectedTab == vm.matterDashboardConfigs.Tab2HeaderText) {
+                        vm.totalrecords = response.allMatterCounts;
+                    } else {
+                        vm.totalrecords = response.pinnedMatterCounts
+                    }
                     //vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + vm.myMatterCount + ")";
                     if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
                         vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + response.myMatterCounts + ")";
@@ -356,7 +386,7 @@
                     vm.pagination();
                     vm.lazyloaderdashboard = true;
                     vm.divuigrid = true;
-                    vm.displaypagination = true;
+                    //vm.displaypagination = true;
                 });
             }
             //#endregion
@@ -364,7 +394,7 @@
             //#region This api will get all matters which are pinned and this will be invoked when the user clicks on "Pinned Matters Tab"
             vm.getMatterPinned = function () {
                 vm.tabClicked = "Pinned Matters";
-                vm.selectedTab == "Pinned matters";
+                vm.selectedTab = vm.matterDashboardConfigs.Tab3HeaderText;
                 vm.sortbytext = vm.matterDashboardConfigs.DrpDownOption1Text;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -471,7 +501,6 @@
                         //vm.lazyloaderdashboard = true;
                         //vm.divuigrid = false;
                         vm.nodata = true;
-                        vm.pagination();
                     } else {
                         vm.getMatterCounts();
                         vm.totalrecords = response.length;
@@ -479,7 +508,6 @@
                         //vm.divuigrid = true;
                         vm.nodata = false;
                         //vm.lazyloaderdashboard = true;
-                        vm.pagination();
                     }
                 });
             }
@@ -488,7 +516,7 @@
 
             vm.myMatters = function () {
                 vm.tabClicked = "My Matters";
-                vm.selectedTab == "My matters";
+                vm.selectedTab = vm.matterDashboardConfigs.Tab1HeaderText;
                 vm.sortbytext = vm.matterDashboardConfigs.DrpDownOption1Text;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -537,9 +565,7 @@
                                     });
                                 });
                                 vm.matterGridOptions.data = response;
-                                vm.totalrecords = vm.myMatterCount;
                                 vm.selectedTabCount = vm.myMatterCount;
-                                vm.pagination();
                                 vm.lazyloaderdashboard = true;
                                 vm.divuigrid = true;
                                 vm.getMatterCounts();
@@ -547,9 +573,7 @@
                             else {
                                 vm.lazyloaderdashboard = true;
                                 vm.matterGridOptions.data = response;
-                                vm.totalrecords = vm.myMatterCount;
                                 vm.selectedTabCount = vm.myMatterCount;
-                                vm.pagination();
                                 vm.pinMatterCount = 0;
                                 vm.divuigrid = true;
                                 vm.getMatterCounts();
@@ -562,7 +586,7 @@
             //This search function will be used for binding search results to the grid
             vm.search = function (isMy) {
                 vm.tabClicked = "All Matters";
-                vm.selectedTab == "All matters";
+                vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
                 vm.sortbytext = vm.matterDashboardConfigs.DropDownOptionText;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -744,14 +768,16 @@
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                this.openedStartDate = true;
+                vm.openedStartDate = vm.openedStartDate ? false : true;
+                vm.openedEndDate = false;
             };
             vm.openEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                this.openedEndDate = true;
+                vm.openedEndDate = vm.openedEndDate ? false : true;
+                vm.openedStartDate = false;
             };
             vm.openedStartDate = false;
             vm.openedEndDate = false;
@@ -784,6 +810,8 @@
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
 
                 } else if (vm.clientdropvisible && $event.type === "keyup") {
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText);
@@ -795,6 +823,8 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                     vm.lazyloaderclient = true;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
                 }
             }
 
@@ -814,10 +844,11 @@
                                     });
                                 });
                             } else {
+                                vm.subAolTerms = [];
                                 angular.forEach(response.level1, function (pgTerm) {
                                     angular.forEach(pgTerm.level2, function (areaterm) {
                                         angular.forEach(areaterm.level3, function (term) {
-                                            vm.aolTerms.push(term);
+                                            vm.subAolTerms.push(term);
                                         });
                                     });
                                 });
@@ -841,6 +872,8 @@
                     vm.clientdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
                 } else if (vm.pgdropvisible && $event.type === "keyup") {
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
                 } else {
@@ -851,6 +884,8 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                     vm.lazyloaderpg = true;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
                 }
             }
             //#endregion
@@ -888,6 +923,8 @@
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
                     vm.pgdropvisible = false;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
                 } else if (vm.aoldropvisible && $event.type === "keyup") {
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
                 } else {
@@ -898,6 +935,62 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                     vm.lazyloaderaol = true;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
+                }
+            }
+
+            vm.showSubAreaofLawDrop = function ($event) {
+                $event.stopPropagation();
+                if (!vm.subAolDropVisible) {
+                    if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined) && (vm.subAolTerms === undefined)) {
+                        vm.lazyloadersubaol = false;
+                        getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                            vm.practiceGroups = response.level1;
+                            vm.aolTerms = [];
+                            vm.subAolTerms = [];
+                            angular.forEach(response.level1, function (pgTerm) {
+                                angular.forEach(pgTerm.level2, function (areaterm) {
+                                    angular.forEach(areaterm.level3, function (subAreaTerm) {
+                                        vm.subAolTerms.push(subAreaTerm);
+                                    });
+                                });
+                            })
+                            vm.subAoldrop = true;
+                            vm.subAolDropVisible = true;
+                            if (vm.selectedSubAOLs !== undefined && vm.selectedSubAOLs.length > 0) {
+                                vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText);
+                            }
+                            vm.lazyloadersubaol = true;
+                        });
+                    }
+                    else {
+                        if (vm.selectedSubAOLs !== undefined && vm.selectedSubAOLs.length > 0) {
+                            vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText);
+                        }
+                        vm.subAoldrop = true;
+                        vm.subAolDropVisible = true;
+                    }
+                    vm.clientdrop = false;
+                    vm.clientdropvisible = false;
+                    vm.pgdrop = false;
+                    vm.pgdropvisible = false;
+                    vm.aoldrop = false;
+                    vm.aoldropvisible = false;
+                }
+                else if (vm.subAolDropVisible && $event.type === "keyup") {
+                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
+                }
+                else {
+                    vm.clientdrop = false;
+                    vm.clientdropvisible = false;
+                    vm.pgdrop = false;
+                    vm.pgdropvisible = false;
+                    vm.aoldrop = false;
+                    vm.aoldropvisible = false;
+                    vm.lazyloadersubaol = true;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
                 }
             }
             //#endregion          
@@ -957,6 +1050,11 @@
                         aol.Selected = checkAll;
                     });
                 }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText) {
+                    angular.forEach(vm.subAolTerms, function (subAol) {
+                        subAol.Selected = checkAll;
+                    });
+                }
             }
 
             //#region This event is going to fire when the user clicks on "OK" button in the filter panel
@@ -1012,6 +1110,19 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                 }
+
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText) {
+                    vm.selectedSubAOLs = '';
+                    angular.forEach(vm.subAolTerms, function (subAolTerm) {
+                        if (subAolTerm.Selected) {
+                            vm.selectedSubAOLs = vm.selectedSubAOLs + subAolTerm.termName + ","
+                        }
+                    });
+                    vm.selectedSubAOLs = vm.selectedSubAOLs.slice(0, vm.selectedSubAOLs.length - 1);
+                    vm.selectedSubAOLsForCancel = vm.selectedSubAOLs;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
+                }
             }
             //#endregion
 
@@ -1047,12 +1158,24 @@
                         });
                     }
                 }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText) {
+                    if (vm.selectedSubAOLsForCancel !== undefined && vm.selectedSubAOLsForCancel.toString().length > 0) {
+                        vm.selectedSubAOLs = vm.selectedSubAOLsForCancel;
+                        angular.forEach(vm.subAolTerms, function (subAol) {
+                            if (vm.selectedSubAOLs.indexOf(subAol.termName) > 0) {
+                                subAol.Selected = true;
+                            }
+                        });
+                    }
+                }
                 vm.clientdrop = false;
                 vm.clientdropvisible = false;
                 vm.pgdrop = false;
                 vm.pgdropvisible = false;
                 vm.aoldrop = false;
                 vm.aoldropvisible = false;
+                vm.subAoldrop = false;
+                vm.subAolDropVisible = false;
             }
             //#endregion
             //#region File upload functionality
@@ -1233,7 +1356,6 @@
                             vm.nodata = true;
                             vm.lazyloaderdashboard = true;
                             vm.getMatterCounts();
-                            vm.pagination();
                             $scope.errorMessage = response.message;
                         } else {
                             vm.matterGridOptions.data = response;
@@ -1241,7 +1363,6 @@
                             vm.nodata = false;
                             vm.lazyloaderdashboard = true;
                             vm.getMatterCounts();
-                            vm.pagination();
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1350,6 +1471,11 @@
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
                     vm.pagenumber = vm.pagenumber + 1;
+                    if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
+                        jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
+                    } else {
+                        jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
+                    }
                     jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
                     jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(jsonMatterSearchRequest, function (response) {
@@ -1409,6 +1535,11 @@
                     vm.last = vm.last - gridOptions.paginationPageSize;
                     vm.pagenumber = vm.pagenumber - 1;
                     vm.fromtopage = vm.first + " - " + vm.last;
+                    if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
+                        jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
+                    } else {
+                        jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
+                    }
                     jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
                     jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(jsonMatterSearchRequest, function (response) {
@@ -1657,20 +1788,32 @@
                 vm.searchdrop = false;
                 var clientArray = [];
                 var aolListarray = [];
+                var subAolListarray = [];
                 var pglistArray = [];
                 var startdate = "";
                 var enddate = "";
+                vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
+
                 if (vm.selectedClients != "" && vm.selectedClients != undefined) {
-                    clientArray = vm.selectedClients.split(',');
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        clientArray = vm.selectedClients.split(',');
+                    }
                 }
                 if (vm.selectedPGs != "" && vm.selectedPGs != undefined) {
                     pglistArray = vm.selectedPGs.split(',');
                 }
-                if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined) {
-                    aolListarray = vm.selectedAOLs.split(',');
+                if ((vm.selectedAOLs != "" && vm.selectedAOLs != undefined && !vm.globalSettings.isBackwardCompatible) || (vm.selectedClients != "" && vm.selectedClients != undefined && vm.globalSettings.isBackwardCompatible)) {
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        aolListarray = vm.selectedAOLs.split(',');
+                    }
+                    else {
+                        aolListarray = vm.selectedClients.split(',');
+                    }
                 }
-                if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined) {
-                    aolListarray = vm.selectedAOLs.split(',');
+                if (vm.selectedSubAOLs != "" && vm.selectedSubAOLs != undefined) {
+                    jsonMatterSearchRequest.SearchObject.Filters.SubareaOfLaw = vm.selectedSubAOLs;
+                } else {
+                    jsonMatterSearchRequest.SearchObject.Filters.SubareaOfLaw = "";
                 }
                 if (vm.startdate != "" && vm.startdate != undefined) {
                     startdate = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
@@ -1682,24 +1825,19 @@
                 jsonMatterSearchRequest.SearchObject.Filters.ClientsList = clientArray;
                 jsonMatterSearchRequest.SearchObject.Filters.PGList = pglistArray;
                 jsonMatterSearchRequest.SearchObject.Filters.AOLList = aolListarray;
+                jsonMatterSearchRequest.SearchObject.PageNumber = 1;
                 jsonMatterSearchRequest.SearchObject.Filters.FromDate = startdate;
                 jsonMatterSearchRequest.SearchObject.Filters.ToDate = enddate;
                 get(jsonMatterSearchRequest, function (response) {
                     vm.lazyloaderdashboard = true;
                     if (response == "") {
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = false;
                         vm.nodata = true;
                         vm.totalrecords = response.length;
                         vm.getMatterCounts();
-                        vm.displaypagination = false;
                     } else {
                         vm.matterGridOptions.data = response;
                         vm.totalrecords = response.length;
                         vm.getMatterCounts();
-                        vm.lazyloaderdashboard = true;
-                        vm.displaypagination = true;
-                        vm.divuigrid = true;
                         vm.nodata = false;
                         if (!$scope.$$phase) {
                             $scope.$apply();
@@ -1710,7 +1848,7 @@
             //#endregion
 
             if (vm.teamName !== '') {
-                vm.selectedTab = "All matters";
+                vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
 
                 vm.getSearchResults();
             }

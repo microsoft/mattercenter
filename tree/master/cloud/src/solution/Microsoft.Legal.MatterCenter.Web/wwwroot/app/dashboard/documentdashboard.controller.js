@@ -62,6 +62,8 @@
                 vm.sortbydropvisible = false;
                 vm.showNavTab = false;
                 vm.showInnerNav = true;
+                vm.openedStartDate = false;
+                vm.openedEndDate = false;
                 angular.element('.popcontent').css('display', 'none');
             }
             //#endregion
@@ -71,6 +73,15 @@
                 $event.stopPropagation();
                 vm.clientdrop = false;
                 vm.clientdropvisible = false;
+
+                //vm.collapseDateControls();
+            }
+
+            vm.collapseDateControls = function () {
+                vm.openedStartDate = true;
+                vm.openedEndDate = true;
+                vm.openedStartDate = false;
+                vm.openedEndDate = false;
             }
             //#endregion
 
@@ -932,14 +943,17 @@
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                this.openedStartDate = true;
+                vm.openedStartDate = vm.openedStartDate ? false : true;
+                vm.openedEndDate = false;
+                
             };
             vm.openEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                this.openedEndDate = true;
+                vm.openedEndDate = vm.openedEndDate ? false : true;
+                vm.openedStartDate = false;
             };
 
             vm.openedStartDate = false;
