@@ -12,8 +12,7 @@ angular.module('matterMain')
                   }),                 
                   'getconfigsforspo': auth.attachCSRF({
                       method: 'POST',
-                      url: '/api/v1/config/getconfigsforspo',
-                      isArray: true
+                      url: '/api/v1/config/getconfigsforspo'                      
                   }),
                 
               });

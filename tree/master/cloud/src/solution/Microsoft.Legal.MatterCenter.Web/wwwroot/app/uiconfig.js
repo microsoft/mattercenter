@@ -104,7 +104,7 @@
     "ErrorMessageEntityConflictCheck": "A confilct check must be completed prior to provisioning this  project ",
     "Tab1Textbox1LabelClientOrTeam1": "Team",
     "ErrorMessageTeamMember1": "Team member cannot be empty.",
-    "Tab1Textbox5LabelForLevel3": "Project Type (click Add to define the practice group, team and project type)",
+    "Tab1Textbox5LabelForLevel3": "Project Type  (  click Add to define the practice group, team and project type ) ",
     "Tab1Textbox5LabelForLevel4": "Project Type (click Add to define the practice group, team, project type and project type1)",
     "Tab1Textbox5LabelForLevel5": "Project Type (click Add to define the practice group, team, project type,  project type1 and project type 2)"
   },
