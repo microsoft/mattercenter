@@ -26,7 +26,7 @@
         $rootScope.profileClass = "";
         // Onload show ui grid and hide error div
         //start
-        vm.divuigrid = true;
+        vm.divuigrid = false;
         vm.nodata = false;
         var screenHeight = 0;
         vm.searchResultsLength = 0;
@@ -111,7 +111,7 @@
         vm.createddateDropDown = false;
         //End
 
-        
+
 
         //For setting dynamic height to the grid
         vm.getTableHeight = function () {
@@ -128,7 +128,7 @@
         };
 
         vm.switchFuction = function (columnName) {
-            var displayColumn= [];
+            var displayColumn = [];
             switch (columnName) {
                 case "GridColumn1Header":
                     displayColumn[0] = vm.documentConfigContent.GridColumn1Header;
@@ -200,7 +200,7 @@
                 });
             }
         });
-            
+
         function getSortFunction(fieldName) {
             return function (col1, col2) {
                 return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
@@ -236,14 +236,13 @@
                         row.entity.checker = false;
                     }
                     isOpenedInOutlook();
-
                 });
                 $animate.enabled(gridApi.grid.element, false);
                 $scope.gridApi.core.on.sortChanged($scope, $scope.sortChangedDocument);
                 $scope.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
                 $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFuncScroll);
                 gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
-                vm.setColumns();
+                //vm.setColumns();
             }
         };
 
@@ -539,7 +538,7 @@
                 SearchTerm: '',
                 IsUnique: false,
                 UniqueColumnName: '',
-                FilterValue:'',
+                FilterValue: '',
                 Filters: {
                     ClientName: "",
                     ClientsList: [],
@@ -561,8 +560,8 @@
                     ResponsibleAttorneys: "",
                     ProjectName: "",
                     SubareaOfLaw: "",
-                    ProjectID:"",
-                    PracticeGroup : "",
+                    ProjectID: "",
+                    PracticeGroup: "",
                     ToDate: ""
                 },
                 Sort:
@@ -608,7 +607,7 @@
                         FromDate: "",
                         Name: "",
                         ResponsibleAttorneys: "",
-                        ProjectName:"",
+                        ProjectName: "",
                         PracticeGroup: "",
                         ProjectID: "",
                         SubareaOfLaw: "",
@@ -617,7 +616,7 @@
                     Sort:
                             {
                                 ByProperty: '' + vm.configSearchContent.ManagedPropertyFileName + '',
-                                Direction: 0, 
+                                Direction: 0,
                                 ByColumn: "DocumentName"
                             }
                 }
@@ -632,8 +631,9 @@
                 vm.documentid = 1;
             }
             vm.lazyloader = false;
-            vm.divuigrid = false;
+            //vm.divuigrid = false;
             vm.responseNull = false;
+            vm.gridOptions.data = [];
             var searchToText = '';
             var finalSearchText = '';
             if (vm.selected != "") {
@@ -658,11 +658,11 @@
                 if (response == "") {
                     vm.gridOptions.data = response;
                     vm.lazyloader = true;
-                    vm.divuigrid = true;
+                    //vm.divuigrid = true;
                     vm.nodata = true;
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
-                    vm.divuigrid = true;
+                    //vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
@@ -677,7 +677,7 @@
 
                 searchRequest.SearchObject.IsUnique = true;
                 searchRequest.SearchObject.FilterValue = val;
-               
+
                 if (vm.searchexp == vm.configSearchContent.ManagedPropertyFileName) {
                     searchRequest.SearchObject.IsUnique = false;
                     searchRequest.SearchObject.FilterValue = '';
@@ -704,7 +704,7 @@
                     searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyDocumentCheckOutUser;
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
                 }
-                
+
             }
         }
 
@@ -718,7 +718,8 @@
             searchRequest.SearchObject.Sort.Direction = 1;
             if (bool) {
                 vm.documentheader = true;
-                vm.divuigrid = false;
+                //vm.divuigrid = false;
+                vm.lazyloader = false;
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 if (property == "" + vm.configSearchContent.ManagedPropertyFileName + "") {
@@ -758,6 +759,7 @@
                     if (bool) {
                         vm.gridOptions.data = response;
                         vm.nodata = true;
+                        vm.lazyloader = true;
                     } else {
                         vm.details = response;
                         vm.nodata = false;
@@ -776,6 +778,7 @@
                     if (bool) {
                         vm.gridOptions.data = response;
                         vm.details = [];
+                        vm.lazyloader = true;
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
@@ -798,7 +801,8 @@
         //start
         vm.FilterModifiedDate = function (name) {
             vm.lazyloader = false;
-            vm.divuigrid = false;
+            vm.gridOptions.data = [];
+            //vm.divuigrid = false;
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.SearchTerm = "";
             if (name == "Modified Date") {
@@ -817,11 +821,11 @@
                 if (response == "") {
                     vm.gridOptions.data = response;
                     vm.lazyloader = true;
-                    vm.divuigrid = true;
+                    //vm.divuigrid = true;
                     vm.nodata = true;
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
-                    vm.divuigrid = true;
+                    //vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
@@ -832,7 +836,7 @@
         }
 
         vm.clearAllFilter = function () {
-         
+
             vm.documentheader = true;
             vm.documentdateheader = true;
             vm.nodata = false;
@@ -852,7 +856,7 @@
             vm.projectSearchTerm = "";
             searchRequest.SearchObject.Filters.ProjectName = "";
             vm.projectNamefilter = false;
-            
+
 
             vm.checkedSearchTerm = "";
             searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
@@ -1011,7 +1015,6 @@
                         if (vm.isOutlook) {
                             vm.isOutlookAsAttachment(vm.isOutlook);
                         }
-                        vm.divuigrid = true;
                         vm.nodata = false;
                         vm.responseNull = false;
                         vm.pagenumber = 1;
@@ -1044,7 +1047,7 @@
                                 }
                             }
                         });
-                        $timeout(function () { vm.lazyloader = true; }, 1000);
+                        $timeout(function () { vm.lazyloader = true; vm.divuigrid = true; }, 1000);
                         $interval(function () { vm.showSortExp(); }, 3000, 3);
                     }
                 });
@@ -1085,6 +1088,7 @@
                                     });
                                 });
                                 vm.gridOptions.data = response;
+
                                 if (!$scope.$$phase) {
                                     $scope.$apply();
                                 }
@@ -1126,8 +1130,6 @@
                         });
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
-                        vm.divuigrid = true;
-                        vm.nodata = false;
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
@@ -1381,7 +1383,8 @@
         $interval(function () { vm.showSortExp(); }, 2500, 3);
 
         //#region for sorting in ascending
-        vm.documentSortBy = function (byproperty,direction,bycolumn,sortexp,sortby) {
+        vm.documentSortBy = function (byproperty, direction, bycolumn, sortexp, sortby) {
+            vm.lazyloader = true;
             vm.pagenumber = 1;
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.Sort.ByProperty = byproperty;
@@ -1395,13 +1398,14 @@
 
 
         $scope.sortChangedDocument = function (grid, sortColumns) {
-            vm.lazyloader = false;
-            vm.divuigrid = false;
             vm.responseNull = false;
+            vm.lazyloader = false;
             vm.gridOptions.data = [];
             $scope.gridApi.infiniteScroll.resetScroll();
             if (sortColumns.length != 0) {
                 if (sortColumns[0].name != undefined) {
+
+                    //vm.divuigrid = false;
                     if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentName.keyName.trim().toLowerCase()) {
                         if (sortColumns[0].sort != undefined) {
                             if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
@@ -1413,7 +1417,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            vm.lazyloader = true;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentClient.keyName.trim().toLowerCase()) {
@@ -1428,7 +1432,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentClientId.keyName.trim().toLowerCase()) {
@@ -1442,7 +1445,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentModifiedDate.keyName.trim().toLowerCase()) {
@@ -1456,7 +1458,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentOwner.keyName.trim().toLowerCase()) {
@@ -1470,7 +1471,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentVersion.keyName.trim().toLowerCase()) {
@@ -1484,7 +1484,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentCheckoutUser.keyName.trim().toLowerCase()) {
@@ -1498,7 +1497,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentCreatedDate.keyName.trim().toLowerCase()) {
@@ -1512,7 +1510,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentMatterName.keyName.trim().toLowerCase()) {
@@ -1525,15 +1522,15 @@
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyMatterName, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                             }
                         } else {
-                            vm.divuigrid = true;
-                            vm.nodata = false;
+                            vm.divuigrid = true;                            
                         }
                     }
                 }
             } else {
                 vm.pagenumber = 1;
                 searchRequest.SearchObject.PageNumber = 1;
-                vm.lazyloader = false;
+                vm.lazyloader = true;
+                vm.divuigrid = true;
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
                 searchRequest.SearchObject.Sort.Direction = 0;
                 searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
