@@ -1,4 +1,4 @@
-body {
+﻿body {
     font-family: "Segoe UI";
     font-size: 14px;
     height: 100%;
@@ -727,3 +727,25 @@ body {
         width: 1156px !important;
     }
 }
+
+.editmatterDescriptionBody {
+	margin-top:2px;
+	
+    height: 31px;
+    font: 14px "Segoe UI Regular","Segoe UI";
+    color: #ff0000;
+}
+.matterDetailText div, .emailSupportText {
+    color: #666;
+    font: 14px "Segoe UI Regular","Segoe UI";
+}
+.emailSupportLink {
+}
+.cancelButton, .emailSupportLink {
+    font: 14px "Segoe UI semibold","Segoe UI";
+    color: #2b579a;
+}
+#matterCenterHeader a, #matterInfo a {
+    text-decoration: none;
+}
+
