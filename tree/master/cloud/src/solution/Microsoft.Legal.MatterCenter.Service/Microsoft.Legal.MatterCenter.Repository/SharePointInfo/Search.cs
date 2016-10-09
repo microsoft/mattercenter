@@ -395,14 +395,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 }
                                 if (searchRequestVM.SearchObject.Filters.ClientsList!=null && searchRequestVM.SearchObject.Filters.ClientsList.Count>0)
                                 {
-                                    if (filterPinnedList != null)
+                                    if(searchRequestVM.SearchObject.Filters.ClientsList[0]!="")
                                     {
-                                        filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.ClientsList.Contains(pinMatter.MatterClient)).ToList();
+                                        if (filterPinnedList != null)
+                                        {
+                                            filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.ClientsList.Contains(pinMatter.MatterClient)).ToList();
+                                        }
+                                        else
+                                        {
+                                            filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.ClientsList.Contains(pinMatter.MatterClient)).ToList();
+                                        }
                                     }
-                                    else
-                                    {
-                                        filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.ClientsList.Contains(pinMatter.MatterClient)).ToList();
-                                    }
+                                    
                                 }
                                 if (filterPinnedList != null)
                                 {
