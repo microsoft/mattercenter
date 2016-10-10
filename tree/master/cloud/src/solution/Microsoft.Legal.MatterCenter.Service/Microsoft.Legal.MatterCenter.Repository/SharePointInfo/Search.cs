@@ -1326,16 +1326,26 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                     if (null != searchObject.Filters.PracticeGroup && !string.IsNullOrWhiteSpace(searchObject.Filters.PracticeGroup))
                     {
-                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyPracticeGroup, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.PracticeGroup, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                        var pgList = searchObject.Filters.PracticeGroup.Split(',').ToList();
+                        var filterValues = FormFilterQuery(searchSettings.ManagedPropertyPracticeGroup, pgList);
+                        keywordQuery.RefinementFilters.Add(filterValues);
+
+                        //keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyPracticeGroup, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.PracticeGroup, ServiceConstants.DOUBLE_INVERTED_COMMA));
                     }
                     if (!string.IsNullOrWhiteSpace(searchObject.Filters.AreaOfLaw))
                     {
-                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.AreaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                        //keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.AreaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                        var areaList = searchObject.Filters.AreaOfLaw.Split(',').ToList();
+                        var filterValues = FormFilterQuery(searchSettings.ManagedPropertyAreaOfLaw, areaList);
+                        keywordQuery.RefinementFilters.Add(filterValues);
                     }
 
                     if (null != searchObject.Filters.SubareaOfLaw && !string.IsNullOrWhiteSpace(searchObject.Filters.SubareaOfLaw))
                     {
-                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertySubAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.SubareaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                        var subAreaList = searchObject.Filters.SubareaOfLaw.Split(',').ToList();
+                        var filterValues = FormFilterQuery(searchSettings.ManagedPropertySubAreaOfLaw, subAreaList);
+                        keywordQuery.RefinementFilters.Add(filterValues);
+                        //keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertySubAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.SubareaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
                     }
                     if (null != searchObject.Filters.ProjectID && !string.IsNullOrWhiteSpace(searchObject.Filters.ProjectID))
                     {
