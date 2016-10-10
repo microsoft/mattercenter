@@ -62,7 +62,7 @@
             <div class="col-xs-9 dashboarddrop" ng-click='vm.hideinnerdrop($event)' ng-show="vm.searchdrop" id="dashboardDrop">
                 <div class="col-xs-12 dashboarddropinner">
                     <!--Start Client Selection Dropdown-->
-                    <div class="row">
+                    <div class="row"  ng-if="!vm.globalSettings.isBackwardCompatible">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.matterDashboardConfigs.AdvSearchLabel1Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
@@ -134,7 +134,7 @@
                     </div>
                     <!--End Practive Group Selection Dropdown-->
                     <!--Start AOL Selection Dropdown-->
-                    <div class="row" ng-if="!vm.globalSettings.isBackwardCompatible">
+                    <div class="row">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.matterDashboardConfigs.AdvSearchLabel3Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
@@ -152,9 +152,14 @@
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerAOL">
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(true, vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText,$event)">{{vm.matterDashboardConfigs.AdvSearchSelectAllLinkText}}</a> </div>
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" ng-click="vm.checkAll(false, vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText,$event)">{{vm.matterDashboardConfigs.AdvSearchSelectNoneLinkText}}</a></div>
-                                <div class="col-xs-12 refinerWrapper">
+                                <div class="col-xs-12 refinerWrapper" ng-if="!vm.globalSettings.isBackwardCompatible">
                                     <div class="col-xs-12 refinerRow" ng-repeat="aol in vm.aolTerms" ng-click="$event.stopPropagation();">
                                         <input type="checkbox" ng-model="aol.Selected" /> <span>{{aol.termName}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 refinerWrapper" ng-if="vm.globalSettings.isBackwardCompatible">
+                                    <div class="col-xs-12 refinerRow" ng-repeat="aol in vm.aolTerms" ng-click="$event.stopPropagation();">
+                                        <input type="checkbox" ng-model="aol.Selected" /> <span>{{aol.name}}</span>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -171,10 +176,10 @@
                     <!--End AOL Selection Dropdown-->
                     <!--Start Sub AOL Selection Dropdown-->
                     <div class="row">
-                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.matterDashboardConfigs.AdvSearchLabel3Text}}</div>
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.matterDashboardConfigs.AdvSearchLabel4Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="input-group">
-                                <input type="text" value="{{vm.selectedSubAOLs}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedSubAOLs" ng-keyup="vm.showSubAreaofLawDrop($event)" placeholder="{{vm.matterDashboardConfigs.AdvSearchTextbox3PlaceholderText}}" class="form-control">
+                                <input type="text" value="{{vm.selectedSubAOLs}}" ng-click="$event.stopPropagation();" ng-model="vm.selectedSubAOLs" ng-keyup="vm.showSubAreaofLawDrop($event)" placeholder="{{vm.matterDashboardConfigs.AdvSearchTextbox4PlaceholderText}}" class="form-control">
                                 <span class="input-group-addon cursor" id="basic-addon1"
                                       ng-click="vm.showSubAreaofLawDrop($event)"><img src='../images/icon-combobox.png' /></span>
                             </div>
@@ -207,12 +212,12 @@
                     <!--End AOL Selection Dropdown-->
 
                     <div class="row">
-                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.matterDashboardConfigs.AdvSearchLabel4Text}}</div>
+                        <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.matterDashboardConfigs.AdvSearchLabel5Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10">
                             <div class="row">
                                 <div class="col-xs-6 col-sm-4">
                                     <div class='input-group'>
-                                        <input type='text' placeholder='{{vm.matterDashboardConfigs.AdvSearchTextbox4PlaceholderText}}' class='calendar form-control'
+                                        <input type='text' placeholder='{{vm.matterDashboardConfigs.AdvSearchTextbox5PlaceholderText}}' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
                                                ng-model='vm.startdate'
                                                is-open='vm.openedStartDate'
@@ -226,7 +231,7 @@
                                 </div>
                                 <div class="col-xs-6 col-sm-4">
                                     <div class='input-group'>
-                                        <input type='text' placeholder='{{vm.matterDashboardConfigs.AdvSearchTextbox5PlaceholderText}}' class='calendar form-control'
+                                        <input type='text' placeholder='{{vm.matterDashboardConfigs.AdvSearchTextbox6PlaceholderText}}' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
                                                ng-model='vm.enddate'
                                                is-open='vm.openedEndDate'

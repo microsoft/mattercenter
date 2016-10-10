@@ -64,7 +64,7 @@
                 angular.element("#dashboardDrop").addClass('dashboarddropForTeam');
                 angular.element("#sortColumns").css("top", "144px")
                 vm.teamName = $location.search().teamname;
-                vm.selectedClients = vm.teamName;
+                vm.selectedAOLs = vm.teamName;
             }
             else {
                 angular.element("#dashboardDrop").addClass('dashboarddrop');
@@ -359,7 +359,10 @@
                         AOLList: [""],
                         FromDate: "",
                         ToDate: "",
-                        FilterByMe: 0
+                        FilterByMe: 0,
+                        PracticeGroup: "",
+                        AreaOfLaw: "",
+                        SubareaOfLaw:""
                     },
                     Sort: {
                         ByProperty: 'LastModifiedTime',
@@ -844,19 +847,19 @@
             //#region showing and hiding practice group dropdown
             vm.showPracticegroupDrop = function ($event) {
                 $event.stopPropagation();
-                if (!vm.pgdropvisible) {
-                    if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
-                        vm.lazyloaderpg = false;
-                        getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                            vm.practiceGroups = response.level1;
-                            vm.aolTerms = [];
-                            if (!vm.globalSettings.isBackwardCompatible) {
+                if (!vm.pgdropvisible) {                    
+                    
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
+                            vm.lazyloaderpg = false;
+                            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                                vm.practiceGroups = response.level1;
+                                vm.aolTerms = [];
                                 angular.forEach(response.level1, function (pgTerm) {
                                     angular.forEach(pgTerm.level2, function (areaterm) {
                                         vm.aolTerms.push(areaterm);
                                     });
                                 });
-                            } else {
                                 vm.subAolTerms = [];
                                 angular.forEach(response.level1, function (pgTerm) {
                                     angular.forEach(pgTerm.level2, function (areaterm) {
@@ -865,21 +868,50 @@
                                         });
                                     });
                                 });
-                            }
-                            vm.pgdrop = true;
-                            vm.pgdropvisible = true;
+                                vm.pgdrop = true;
+                                vm.pgdropvisible = true;
+                                if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
+                                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
+                                }
+                                vm.lazyloaderpg = true;
+                            });
+                        }
+                        else {
                             if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
                                 vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
                             }
-                            vm.lazyloaderpg = true;
-                        });
+                            vm.pgdrop = true;
+                            vm.pgdropvisible = true;
+                        }
                     }
                     else {
-                        if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
-                            vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
+                        if (vm.practiceGroups === undefined) {
+                            vm.lazyloaderpg = false;
+                            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                                vm.practiceGroups = response.level1;
+                                vm.subAolTerms = [];
+                                angular.forEach(response.level1, function (pgTerm) {
+                                    angular.forEach(pgTerm.level2, function (areaterm) {
+                                        angular.forEach(areaterm.level3, function (term) {
+                                            vm.subAolTerms.push(term);
+                                        });
+                                    });
+                                });
+                                vm.pgdrop = true;
+                                vm.pgdropvisible = true;
+                                if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
+                                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
+                                }
+                                vm.lazyloaderpg = true;
+                            });
                         }
-                        vm.pgdrop = true;
-                        vm.pgdropvisible = true;
+                        else {
+                            if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
+                                vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
+                            }
+                            vm.pgdrop = true;
+                            vm.pgdropvisible = true;
+                        }
                     }
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
@@ -907,40 +939,70 @@
             vm.showAreaofLawDrop = function ($event) {
                 $event.stopPropagation();
                 if (!vm.aoldropvisible) {
-                    if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
-                        vm.lazyloaderaol = false;
-                        getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                            vm.practiceGroups = response.level1;
-                            vm.aolTerms = [];
-                            angular.forEach(response.level1, function (pgTerm) {
-                                angular.forEach(pgTerm.level2, function (areaterm) {
-                                    vm.aolTerms.push(areaterm);
-                                });
-                            })
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
+                            vm.lazyloaderaol = false;                        
+                            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                                vm.practiceGroups = response.level1;
+                                vm.aolTerms = [];
+                                angular.forEach(response.level1, function (pgTerm) {
+                                    angular.forEach(pgTerm.level2, function (areaterm) {
+                                        vm.aolTerms.push(areaterm);
+                                    });
+                                })
+                                vm.aoldrop = true;
+                                vm.aoldropvisible = true;
+                                if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
+                                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
+                                }
+                                
+                            });
+                        }
+                        else {
+                            vm.lazyloaderaol = true;
+                            if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
+                                vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
+                            }
                             vm.aoldrop = true;
                             vm.aoldropvisible = true;
+                        }
+                    }
+                    else {
+                        vm.lazyloaderaol = false;
+                        if (vm.aolTerms === undefined || vm.aolTerms.length==0) {
+                            getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
+                                vm.aolTerms = response.clientTerms;
+                                vm.aoldrop = true;
+                                vm.aoldropvisible = true;
+                                if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
+                                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
+                                }
+                                vm.lazyloaderaol = true;
+                            });
+                        }
+                        else {
+                            vm.lazyloaderaol = true;
                             if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
                                 vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
                             }
                             vm.lazyloaderaol = true;
-                        });
-                    }
-                    else {
-                        if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
-                            vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
+                            vm.aoldrop = true;
+                            vm.aoldropvisible = true;
                         }
-                        vm.aoldrop = true;
-                        vm.aoldropvisible = true;
                     }
+                    
+                    
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
                     vm.pgdropvisible = false;
                     vm.subAoldrop = false;
                     vm.subAolDropVisible = false;
-                } else if (vm.aoldropvisible && $event.type === "keyup") {
+                }
+                else if (vm.aoldropvisible && $event.type === "keyup") {
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
-                } else {
+                }
+                else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
@@ -992,7 +1054,7 @@
                     vm.aoldropvisible = false;
                 }
                 else if (vm.subAolDropVisible && $event.type === "keyup") {
-                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
+                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText);
                 }
                 else {
                     vm.clientdrop = false;
@@ -1021,7 +1083,8 @@
                             }
                         })
                     });
-                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
+                }
+                else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
                     var selectdPGs = vm.selectedPGs.split(',');  //user altered text value
                     angular.forEach(vm.practiceGroups, function (pgGroup) {
                         pgGroup.Selected = false;
@@ -1031,13 +1094,34 @@
                             }
                         })
                     });
-                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
+                }
+                else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
                     var selectedAOLs = vm.selectedAOLs.split(',');  //user altered text value
                     angular.forEach(vm.aolTerms, function (aol) {
                         aol.Selected = false;
-                        angular.forEach(selectedAOLs, function (aolInput) {
-                            if (aolInput.toString().length > 0 && aol.termName.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
-                                aol.Selected = true;
+                        if (!vm.globalSettings.isBackwardCompatible) {
+                            angular.forEach(selectedAOLs, function (aolInput) {
+                                if (aolInput.toString().length > 0 && aol.termName.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
+                                    aol.Selected = true;
+                                }
+                            })
+                        }
+                        else {
+                            angular.forEach(selectedAOLs, function (aolInput) {
+                                if (aolInput.toString().length > 0 && aol.name.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
+                                    aol.Selected = true;
+                                }
+                            })
+                        }
+                    });
+                }
+                else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText) {
+                    var selectdSubAreaofLaws = vm.selectedSubAOLs.split(';');  //user altered text value
+                    angular.forEach(vm.subAolTerms, function (subAreaOfLaw) {
+                        subAreaOfLaw.Selected = false;
+                        angular.forEach(selectdSubAreaofLaws, function (subAreaOfLawInput) {
+                            if (subAreaOfLawInput.toString().length > 0 && subAreaOfLaw.termName.toString().toLowerCase().indexOf(subAreaOfLawInput.toString().toLowerCase()) !== -1) {
+                                subAreaOfLaw.Selected = true;
                             }
                         })
                     });
@@ -1113,11 +1197,20 @@
 
                 if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
                     vm.selectedAOLs = '';
-                    angular.forEach(vm.aolTerms, function (aol) {
-                        if (aol.Selected) {
-                            vm.selectedAOLs = vm.selectedAOLs + aol.termName + ","
-                        }
-                    });
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        angular.forEach(vm.aolTerms, function (aol) {
+                            if (aol.Selected) {
+                                vm.selectedAOLs = vm.selectedAOLs + aol.termName + ","
+                            }
+                        });
+                    }
+                    else {
+                        angular.forEach(vm.aolTerms, function (aol) {
+                            if (aol.Selected) {
+                                vm.selectedAOLs = vm.selectedAOLs + aol.name + ","
+                            }
+                        });
+                    }
                     vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
                     vm.selectedAOLsForCancel = vm.selectedAOLs;
                     vm.aoldrop = false;
@@ -1813,21 +1906,14 @@
                     }
                 }
                 if (vm.selectedPGs != "" && vm.selectedPGs != undefined) {
-                    pglistArray = vm.selectedPGs.split(',');
+                    jsonMatterSearchRequest.SearchObject.Filters.PracticeGroup = vm.selectedPGs;
                 }
-                if ((vm.selectedAOLs != "" && vm.selectedAOLs != undefined && !vm.globalSettings.isBackwardCompatible) || (vm.selectedClients != "" && vm.selectedClients != undefined && vm.globalSettings.isBackwardCompatible)) {
-                    if (!vm.globalSettings.isBackwardCompatible) {
-                        aolListarray = vm.selectedAOLs.split(',');
-                    }
-                    else {
-                        aolListarray = vm.selectedClients.split(',');
-                    }
+                if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined){
+                    jsonMatterSearchRequest.SearchObject.Filters.AreaOfLaw = vm.selectedAOLs
                 }
                 if (vm.selectedSubAOLs != "" && vm.selectedSubAOLs != undefined) {
                     jsonMatterSearchRequest.SearchObject.Filters.SubareaOfLaw = vm.selectedSubAOLs;
-                } else {
-                    jsonMatterSearchRequest.SearchObject.Filters.SubareaOfLaw = "";
-                }
+                } 
                 if (vm.startdate != "" && vm.startdate != undefined) {
                     startdate = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
                 }
@@ -1836,8 +1922,8 @@
                 }
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.Filters.ClientsList = clientArray;
-                jsonMatterSearchRequest.SearchObject.Filters.PGList = pglistArray;
-                jsonMatterSearchRequest.SearchObject.Filters.AOLList = aolListarray;
+                //jsonMatterSearchRequest.SearchObject.Filters.PGList = pglistArray;
+                //jsonMatterSearchRequest.SearchObject.Filters.AOLList = aolListarray;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
                 jsonMatterSearchRequest.SearchObject.Filters.FromDate = startdate;
                 jsonMatterSearchRequest.SearchObject.Filters.ToDate = enddate;
