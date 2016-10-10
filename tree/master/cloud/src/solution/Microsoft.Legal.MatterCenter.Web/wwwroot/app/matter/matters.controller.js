@@ -1267,6 +1267,11 @@
                         searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                         searchRequest.SearchObject.Sort.Direction = 1;
                     }
+                    if (!searchRequest.SearchObject.IsUnique) {
+                        searchRequest.SearchObject.IsUnique = true;
+                        searchRequest.SearchObject.FilterValue = term.substring(term.indexOf(":") + 1, term.indexOf("*"));
+                        searchRequest.SearchObject.UniqueColumnName = property;
+                    }
                 }
                 get(searchRequest, function (response) {
                     if (response == "") {
