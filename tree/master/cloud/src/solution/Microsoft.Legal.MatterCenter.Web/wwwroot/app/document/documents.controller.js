@@ -15,6 +15,7 @@
         vm.header = uiconfigs.Header;
         vm.documentConfigContent = uiconfigs.Documents;
         vm.configSearchContent = configs.search;
+        vm.globalSettings = configs.global;
         //#end region
         vm.documentname = 'My Documents'
         vm.documentid = 2;
@@ -196,7 +197,7 @@
                     cellClass: value.cellClass,
                     headerCellClass: value.headerCellClass,
                     visible: value.defaultVisibleInGrid,
-                    //suppressRemoveSort: value.suppressRemoveSort
+                    suppressRemoveSort: true
                 });
             }
         });
@@ -806,13 +807,13 @@
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.SearchTerm = "";
             if (name == "Modified Date") {
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modstartdate, "yyyy-MM-ddT00:00:00") + "Z";
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modenddate, "yyyy-MM-ddT23:59:59") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modStartDate, "yyyy-MM-ddT00:00:00") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modEndDate, "yyyy-MM-ddT23:59:59") + "Z";
                 vm.moddatefilter = true;
             }
             if (name == "Created Date") {
-                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
-                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = $filter('date')(vm.startDate, "yyyy-MM-ddT00:00:00") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = $filter('date')(vm.endDate, "yyyy-MM-ddT23:59:59") + "Z";
                 vm.createddatefilter = true;
             }
             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
@@ -872,8 +873,8 @@
 
             searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
             searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
-            vm.modstartdate = "";
-            vm.modenddate = "";
+            vm.modStartDate = "";
+            vm.modEndDate = "";
             vm.moddatefilter = false;
 
             searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
@@ -921,22 +922,40 @@
                 searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
                 vm.checkoutfilter = false;
             }
-            else if (property == vm.documentConfigContent.GridColumn4Header) {
+            else if (property == vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible) {
                 vm.authorSearchTerm = ""
                 searchRequest.SearchObject.Filters.DocumentAuthor = "";
                 vm.authorfilter = false;
             }
-            else if (property == vm.documentConfigContent.GridColumn6Header) {
+            else if (property == vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible) {
+                vm.authorSearchTerm = ""
+                searchRequest.SearchObject.Filters.DocumentAuthor = "";
+                vm.authorfilter = false;
+            }
+            else if (property == vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible) {
                 vm.practiceGroupSearchTerm = ""
                 searchRequest.SearchObject.Filters.PracticeGroup = "";
                 vm.practiceGroupfilter = false;
             } //For Date Columns
-            else if (property == vm.documentConfigContent.GridColumn5Header) {
+            else if (property == vm.documentConfigContent.GridColumn5Header && vm.globalSettings.isBackwardCompatible) {
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
-                vm.modstartdate = "";
-                vm.modenddate = "";
+                vm.modStartDate = "";
+                vm.modEndDate = "";
                 vm.moddatefilter = false;
+                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
+                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
+                vm.startDate = "";
+                vm.endDate = "";
+                vm.createddatefilter = false;
+            }
+            else if (!vm.globalSettings.isBackwardCompatible && property == vm.documentConfigContent.GridColumn4Header) {
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
+                vm.modStartDate = "";
+                vm.modEndDate = "";
+                vm.moddatefilter = false;
+            } else if (!vm.globalSettings.isBackwardCompatible && property == vm.documentConfigContent.GridColumn8Header) {
                 searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
                 searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
                 vm.startDate = "";
@@ -992,8 +1011,8 @@
             vm.selected = "";
             vm.searchTerm = "";
             vm.searchClientTerm = "";
-            vm.startdate = "";
-            vm.enddate = "";
+            vm.startDate = "";
+            vm.endDate = "";
             vm.lazyloader = false;
             vm.divuigrid = false;
             vm.nodata = false;
@@ -1239,28 +1258,28 @@
             maxDate: new Date()
         }
 
-        $scope.$watch('vm.modstartdate', function (newval, oldval) {
+        $scope.$watch('vm.modStartDate', function (newval, oldval) {
             vm.modenddateOptions.minDate = newval;
         });
 
 
-        vm.modStartDate = function ($event) {
+        vm.modStartDateClick = function ($event) {
             if ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
             }
             this.modifiedStartDate = true;
         };
-        vm.modEndDate = function ($event) {
+        vm.modEndDateClick = function ($event) {
             if ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
             }
-            this.modifiedenddate = true;
+            this.modifiedEndDate = true;
         };
 
         vm.modifiedStartDate = false;
-        vm.modifiedenddate = false;
+        vm.modifiedEndDate = false;
 
         vm.disabled = function (date, mode) {
             return (mode === 'day' && (date.getDay() != 0));
@@ -1281,7 +1300,7 @@
             maxDate: new Date()
         }
 
-        $scope.$watch('vm.startdate', function (newval, oldval) {
+        $scope.$watch('vm.startDate', function (newval, oldval) {
             vm.enddateOptions.minDate = newval;
         });
 
@@ -1687,9 +1706,13 @@
                 vm.filtername = vm.documentConfigContent.GridColumn3Header;
             }
             //Author
-            if (name === vm.documentConfigContent.GridColumn4Header) {
+            if (name === vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
                 vm.filtername = vm.documentConfigContent.GridColumn4Header;
+            }
+            if (name === vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible) {
+                vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
+                vm.filtername = vm.documentConfigContent.GridColumn5Header;
             }
             //for Practice Group
             if (name === vm.documentConfigContent.GridColumn6Header) {
@@ -1702,7 +1725,11 @@
                 vm.filtername = vm.documentConfigContent.GridColumn7Header;
             }
             //Modified Date
-            if (name === vm.documentConfigContent.GridColumn5Header) {
+            if (name === vm.documentConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible) {
+                vm.filtername = vm.documentConfigContent.GridColumn4Header;
+            }
+
+            if (name === vm.documentConfigContent.GridColumn5Header && vm.globalSettings.isBackwardCompatible) {
                 vm.filtername = vm.documentConfigContent.GridColumn5Header;
             }
             //Created Date
@@ -1710,7 +1737,7 @@
                 vm.filtername = vm.documentConfigContent.GridColumn8Header;
             }
             $timeout(function () {
-                if (name == vm.documentConfigContent.GridColumn5Header || name == vm.documentConfigContent.GridColumn8Header) {
+                if (name == vm.documentConfigContent.GridColumn5Header && vm.globalSettings.isBackwardCompatible || name == vm.documentConfigContent.GridColumn8Header || name == vm.documentConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible) {
                     vm.documentdateheader = false;
                 }
                 else {
