@@ -196,9 +196,9 @@
                     $('.dropdown').removeClass('open');
                     $('.popcontent').css('display', 'none');
                     e.stopPropagation();
-                    var obj = $(this).parent().position();
+                    var obj = e.target.getBoundingClientRect();
                     $(this).parent().find('.popcontent').html(a[0]);
-                    if (obj.top < 240) {
+                    if (obj.top < 350) {
                         $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '268px', 'top': '0' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
                     } else {
@@ -306,9 +306,9 @@
                     $('.dropdown').removeClass('open');
                     $('.popcontent').css('display', 'none');
                     e.stopPropagation();
-                    var obj = $(this).parent().position();
+                    var obj = e.target.getBoundingClientRect();
                     $(this).parent().find('.popcontent').html(a[0]);
-                    if (obj.top < 240) {
+                    if (obj.top < 350) {
                         $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '284px', 'top': '0' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
                     } else {
@@ -424,8 +424,8 @@
             restrict: 'AE',
             link: function (scope, element, attrs) {
                 $(element).click(function (e) {
-                    var obj = $(this).parent().parent().position();
-                    if (obj.top > 280) {
+                    var obj = e.target.getBoundingClientRect();
+                    if (obj.top > 450) {
                         $(this).parent().addClass('dropup');
                     }
                 });

@@ -16,6 +16,7 @@
             vm.documentConfigContent = uiconfigs.Documents;
             vm.configSearchContent = configs.search;
             vm.center = configs.search.Schema.toLowerCase();
+            vm.globalSettings = configs.global;
             vm.clientdrop = false;
             vm.lazyloaderdocumentclient = true;
             vm.clientdropvisible = false;
@@ -147,10 +148,10 @@
 
                 if (value.displayInDashboard == true && value.position != -1) {
                     columnDefs1.push({
-                        field: key,
+                        field: value.keyName,
                         displayName: vm.switchFuction(value.displayName),
                         width: value.dashboardwidth,
-                        enableHiding: value.enableHiding,
+                        enableHiding: false,
                         cellTemplate: value.dashboardcellTemplate,
                         position: value.position,
                         cellClass: value.dashboardCellClass,
