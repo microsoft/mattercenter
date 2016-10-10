@@ -2941,6 +2941,7 @@
 
 
             function clearAllProperties() {
+                cm.iShowSuccessMessage = 0;
                 cm.clientId = "";
                 cm.selectedClient = "";
                 cm.clientUrl = "";
