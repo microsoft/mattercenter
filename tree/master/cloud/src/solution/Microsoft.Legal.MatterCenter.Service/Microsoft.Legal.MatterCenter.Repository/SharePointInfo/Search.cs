@@ -1107,6 +1107,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                         if (!string.IsNullOrWhiteSpace(searchObject.Filters.Name))
                         {
+                            if (searchObject.Filters.Name.Length > 70)
+                            {
+                                searchObject.Filters.Name = searchObject.Filters.Name.Replace(searchObject.Filters.Name.Substring(70, searchObject.Filters.Name.Length - 70), "*");
+                            }
+
                             keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyFileName, ServiceConstants.COLON,
                                 ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.Name, ServiceConstants.DOUBLE_QUOTE));
                         }

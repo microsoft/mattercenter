@@ -265,7 +265,7 @@
 
     <!--For the export Data-->
     <div id="exportable" class="hide">
-        <table width="100%" ng-if="vm.center=='mattercenter'">
+        <table width="100%" ng-if="!vm.globalSettings.isBackwardCompatible">
             <thead>
                 <tr>
                     <th>{{vm.documentDashboardConfigs.GridColumn1Header}}</th>
@@ -285,7 +285,7 @@
                 </tr>
             </tbody>
         </table>
-        <table width="100%" ng-if="vm.center!='mattercenter'">
+        <table width="100%" ng-if="vm.globalSettings.isBackwardCompatible">
             <thead>
                 <tr>
                     <th>{{vm.documentDashboardConfigs.GridColumn1Header}}</th>
