@@ -147,7 +147,15 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                 #endregion
                 var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
                 CreateConfig(configResultsVM, "uiconfigforspo.js", true);
-                return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
+                configRepository.UploadConfigFileToSPO(Path.Combine(hostingEnvironment.WebRootPath, "app/config.js"), generalSettings.CentralRepositoryUrl);
+                var genericResponse = new GenericResponseVM
+                {
+                    Code = HttpStatusCode.OK.ToString(),
+                    Value = "",
+                    IsError = false
+
+                };
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
 
             }
             catch (Exception exception)
@@ -282,6 +290,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
             if(includeSPOLabels)
             {
                 configRepository.UploadConfigFileToSPO(Path.Combine(hostingEnvironment.WebRootPath, "app/uiconfigforspo.js"), generalSettings.CentralRepositoryUrl);
+                
             }
         }
     }

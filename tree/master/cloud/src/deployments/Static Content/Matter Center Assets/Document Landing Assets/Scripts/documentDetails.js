@@ -39,6 +39,7 @@ var oDocumentLandingObject = (function () {
         sAreaOfLaw: "",
         sSubAreaOfLaw: "",
         sCurrentDocumentType: "",
+        PinType:"unpin",
         iSize: 0,
         /* Other properties for pin */
         sModifiedDate: "",
@@ -97,47 +98,104 @@ var oDocumentLandingObject = (function () {
         sTermsOfUse: "Terms of use",
         sMicrosoft: "Microsoft",
         sSharedProperties: "View shared properties"
-    },
-    oPinDocumentKeys = {
-        "DocumentName": "DocumentName",
-        "DocumentVersion": "DocumentVersion",
-        "DocumentClient": "DocumentClient",
-        "DocumentClientId": "DocumentClientId",
-        "DocumentClientUrl": "DocumentClientUrl",
-        "DocumentMatter": "DocumentMatter",
-        "DocumentMatterId": "DocumentMatterId",
-        "DocumentOwner": "DocumentOwner",
-        "DocumentUrl": "DocumentUrl",
-        "DocumentOWAUrl": "DocumentOWAUrl",
-        "DocumentExtension": "DocumentExtension",
-        "DocumentCreatedDate": "DocumentCreatedDate",
-        "DocumentModifiedDate": "DocumentModifiedDate",
-        "DocumentCheckOutUser": "DocumentCheckOutUser",
-        "DocumentMatterUrl": "DocumentMatterUrl",
-        "DocumentParentUrl": "DocumentParentUrl",
-        "DocumentID": "DocumentID"
-    },
-    oErrorMessages = {
+    }
+    var oPinDocumentKeys = null;
+    if(!configs.global.isBackwardCompatible){
+        oPinDocumentKeys = {
+	        "DocumentName": "DocumentName",
+	        "DocumentVersion": "DocumentVersion",
+	        "DocumentClient": "DocumentClient",
+	        "DocumentClientId": "DocumentClientId",
+	        "DocumentClientUrl": "DocumentClientUrl",
+	        "DocumentMatter": "DocumentMatter",
+	        "DocumentMatterId": "DocumentMatterId",
+	        "DocumentOwner": "DocumentOwner",
+	        "DocumentUrl": "DocumentUrl",
+	        "DocumentOWAUrl": "DocumentOWAUrl",
+	        "DocumentExtension": "DocumentExtension",
+	        "DocumentCreatedDate": "DocumentCreatedDate",
+	        "DocumentModifiedDate": "DocumentModifiedDate",
+	        "DocumentCheckOutUser": "DocumentCheckOutUser",
+	        "DocumentMatterUrl": "DocumentMatterUrl",
+	        "DocumentParentUrl": "DocumentParentUrl",
+	        "DocumentID": "DocumentID",
+	        "DocumentIconUrl":"DocumentIconUrl",
+	        "PinType":"PinType",
+	        "DocumentPracticeGroup":"DocumentPracticeGroup",
+	        "Checker":"Checker"
+        }
+    }
+    if(configs.global.isBackwardCompatible){
+        oPinDocumentKeys = {
+	        "DocumentName": "DocumentName",
+	        "DocumentVersion": "DocumentVersion",
+	        "DocumentClient": "DocumentClient",
+	        "DocumentClientId": "DocumentClientId",
+	        "DocumentClientUrl": "DocumentClientUrl",
+	        "DocumentMatter": "DocumentMatter",
+	        "DocumentMatterId": "DocumentMatterId",
+	        "DocumentOwner": "DocumentOwner",
+	        "DocumentUrl": "DocumentUrl",
+	        "DocumentOWAUrl": "DocumentOWAUrl",
+	        "DocumentExtension": "DocumentExtension",
+	        "DocumentCreatedDate": "DocumentCreatedDate",
+	        "DocumentModifiedDate": "DocumentModifiedDate",
+	        "DocumentCheckOutUser": "DocumentCheckOutUser",
+	        "DocumentMatterUrl": "DocumentMatterUrl",
+	        "DocumentParentUrl": "DocumentParentUrl",
+	        "DocumentID": "DocumentID",
+	        "DocumentMatterName":"DocumentMatterName",
+	        "DocumentIconUrl":"DocumentIconUrl",
+	        "PinType":"PinType",
+	        "DocumentPracticeGroup":"DocumentPracticeGroup",
+	        "Checker":"Checker"
+
+        }
+    }
+
+    
+    var oErrorMessages = {
         sInsufficientParametersMessage: "Insufficient Parameters",
         sErrorMessage: "Something went wrong",
         sPropertiesRetrievalFailureMessage: "Failed to retrieve document properties",
         sDocumentRetrievalFailure: "Failed to get current document"
     },
-    oSelectProperties = {
-        sDocumentProperties: "vti_x005f_timecreated,vti_x005f_timelastmodified,vti_x005f_filesize,vti_x005f_title",
-        sMatterProperties: "vti_x005f_listname,MatterGUID",
-        sCheckedOutUserProperties: "CheckedOutByUser,Title,Email",
-        sAuthorProperties: "Title,Email",
-        sClientID: "Client_Id",
-        sClientName: "Client_Name",
-        sMatterID: "Matter_Id",
-        sMatterName: "Matter_Name",
-        sPracticeGroup: "PracticeGroup",
-        sAreaOfLaw: "AreaOfLaw",
-        sSubAreaOfLaw: "SubareaOfLaw",
-        sItemId: "Id"
-    },
     oCommonFunctions = {};
+    var oSelectProperties;
+    if(configs.search.Schema.toLowerCase()==='projectcenter'){
+    	oSelectProperties = {
+	        sDocumentProperties: "vti_x005f_timecreated,vti_x005f_timelastmodified,vti_x005f_filesize,vti_x005f_title",
+	        sMatterProperties: "vti_x005f_listname,ProjectGUID",
+	        sCheckedOutUserProperties: "CheckedOutByUser,Title,Email",
+	        sAuthorProperties: "Title,Email",
+	        sClientID: "TeamID",
+	        sClientName: "TeamName",
+	        sMatterID: "ProjectID",
+	        sMatterName: "ProjectName",
+	        sPracticeGroup: "LPCPracticeGroup",
+	        sAreaOfLaw: "TeamName",
+	        sSubAreaOfLaw: "ProjectType",
+	        sItemId: "Id"
+    	}
+    }
+    else{
+    	oSelectProperties = {
+	        sDocumentProperties: "vti_x005f_timecreated,vti_x005f_timelastmodified,vti_x005f_filesize,vti_x005f_title",
+	        sMatterProperties: "vti_x005f_listname,MatterGUID",
+	        sCheckedOutUserProperties: "CheckedOutByUser,Title,Email",
+	        sAuthorProperties: "Title,Email",
+	        sClientID: "Client_Id",
+	        sClientName: "Client_Name",
+	        sMatterID: "Matter_Id",
+	        sMatterName: "Matter_Name",
+	        sPracticeGroup: "PracticeGroup",
+	        sAreaOfLaw: "AreaOfLaw",
+	        sSubAreaOfLaw: "SubareaOfLaw",
+	        sItemId: "Id"
+    	}
+    }
+    
+    
 
     oGlobalConstants.sListName = "UserPinnedDetails"; //// This should be updated with different deployments
     oGlobalConstants.sPinColumn = "UserPinDocumentDetails";
@@ -230,7 +288,7 @@ var oDocumentLandingObject = (function () {
                     oCommonFunctions.getCheckOutUser(); //// Check out to
                     oCommonFunctions.getAuthor(); //// Author
                     oCommonFunctions.getVersionInfo();
-                    oCommonFunctions.getListItem();
+                    
                     //// Set the required properties
                     $("#documentTitle").text(oDocumentLanding.sCurrentDocumentName).attr("title", oDocumentLanding.sCurrentDocumentName);
                     var sDownloadParameters = oDocumentLanding.sSPTenantUrl + oDocumentLanding.sClientRelativeUrl + oDocumentLanding.sDownloadURL.replace("{0}", oDocumentLanding.sCurrentDocumentDownloadUrl).replace("{1}", oDocumentLanding.sSPTenantUrl + oDocumentLanding.sClientRelativeUrl + "/" + oDocumentLanding.sDocumentParentList);
@@ -433,13 +491,26 @@ var oDocumentLandingObject = (function () {
 
     /* Function to get already pinned object */
     oCommonFunctions.getPinnedObject = function () {
+    
+    	var iconUrl = "";
+    	if(oDocumentLanding.sCurrentDocumentType.toLowerCase()!=="pdf"){
+    		iconUrl = oDocumentLanding.sSPTenantUrl+"/_layouts/15/images/ic"+oDocumentLanding.sCurrentDocumentType.toLowerCase()+".gif";
+    	}
+    	else{
+    		iconUrl = oDocumentLanding.sSPTenantUrl+"/_layouts/15/images/ic"+oDocumentLanding.sCurrentDocumentType.toLowerCase()+".png";
+
+    	}
         var sPinnedObject = "\"" + oCommonFunctions.htmlEncode(decodeURIComponent(oDocumentLanding.sCurrentDocumentUrl).toLowerCase()) + "\": {\n\t \"" + oPinDocumentKeys.DocumentName + "\": \"" +
                             oDocumentLanding.sCurrentDocumentName.replace(new RegExp("." + oDocumentLanding.sCurrentDocumentType + "$"), "") + "\", \n\t \"" + oPinDocumentKeys.DocumentVersion + "\": \"" +
                                 oDocumentLanding.oCurrenVersionDetails.sCurrentVersionNumber + "\", \n\t \"" + oPinDocumentKeys.DocumentClient + "\": \"" +
                                 oDocumentLanding.sDocumentClient + "\", \n\t \"" + oPinDocumentKeys.DocumentClientId + "\": \"" +
                                 oDocumentLanding.sClientID + "\", \n\t \"" + oPinDocumentKeys.DocumentClientUrl + "\": \"" +
                                             decodeURIComponent(oDocumentLanding.sSPTenantUrl + oDocumentLanding.sClientRelativeUrl) + "\", \n\t \"" + oPinDocumentKeys.DocumentMatter + "\": \"" +
-                                oDocumentLanding.sMatterName + "\", \n\t \"" + oPinDocumentKeys.DocumentMatterId + "\": \"" +
+                                oDocumentLanding.sMatterName + "\", \n\t \"" + oPinDocumentKeys.DocumentMatterName + "\": \"" +
+                                oDocumentLanding.sMatterName + "\", \n\t \"" + oPinDocumentKeys.PinType + "\": \"" +
+                                oDocumentLanding.PinType + "\", \n\t \"" + oPinDocumentKeys.DocumentPracticeGroup + "\": \"" +
+                                oDocumentLanding.sPracticeGroup + "\", \n\t \"" + oPinDocumentKeys.DocumentIconUrl + "\": \"" +
+                                iconUrl + "\", \n\t \"" + oPinDocumentKeys.DocumentMatterId + "\": \"" +
                                 oDocumentLanding.sMatterId + "\", \n\t \"" + oPinDocumentKeys.DocumentOwner + "\": \"" +
                                 oDocumentLanding.sAuthor + "\", \n\t \"" + oPinDocumentKeys.DocumentUrl + "\": \"" +
                             oCommonFunctions.htmlEncode(decodeURIComponent(oDocumentLanding.sCurrentDocumentUrl)) + "\", \n\t \"" + oPinDocumentKeys.DocumentOWAUrl + "\": \"" +
@@ -603,7 +674,13 @@ var oDocumentLandingObject = (function () {
             oDocumentLanding.sMatterGUID = oData.d.MatterGUID ? oData.d.MatterGUID : oDocumentLanding.sDocumentParentList;
             oDocumentLanding.sDocumentListItemId = oData.d.vti_x005f_listname ? oData.d.vti_x005f_listname : oGlobalConstants.sNotApplicable;
             oDocumentLanding.sFilePropertiesURL = oDocumentLanding.sSPTenantUrl + oDocumentLanding.sClientRelativeUrl + "/" + "{0}" + oDocumentLanding.sDisplayFormURL;
-            oDocumentLanding.sFilePropertiesURL = oData.d.MatterGUID ? oDocumentLanding.sFilePropertiesURL.replace("{0}", oData.d.MatterGUID) : oDocumentLanding.sFilePropertiesURL.replace("{0}", oDocumentLanding.sCurrentLibrary);
+            if(configs.search.Schema.toLowerCase()==='mattercenter'){
+            	oDocumentLanding.sFilePropertiesURL = oData.d.MatterGUID ? oDocumentLanding.sFilePropertiesURL.replace("{0}", oData.d.MatterGUID) : oDocumentLanding.sFilePropertiesURL.replace("{0}", oDocumentLanding.sCurrentLibrary);
+            }
+            else if(configs.search.Schema.toLowerCase()==='projectcenter'){
+            	oDocumentLanding.sFilePropertiesURL = oData.d.ProjectGUID ? oDocumentLanding.sFilePropertiesURL.replace("{0}", oData.d.ProjectGUID) : oDocumentLanding.sFilePropertiesURL.replace("{0}", oDocumentLanding.sCurrentLibrary);
+            }
+            oCommonFunctions.getListItem();
             oCommonFunctions.populateMetadata();
         }
     };
@@ -938,7 +1015,7 @@ var oDocumentLandingObject = (function () {
                 $("#accessValue").text("Same as matter");
             }
             $("#accessValue").attr({ "target": "_blank", "href": oDocumentLanding.sSPTenantUrl + oDocumentLanding.sClientRelativeUrl + oDocumentLanding.sPermissionURL.replace("{0}", oDocumentLanding.sDocumentParentListId).replace("{1}", oDocumentLanding.sDocumentItemId) });
-            $("#fileTitleValue").text(oDocumentLanding.sFileTitle).attr("title", oDocumentLanding.sFileTitle);
+            $("#fileTitleValue").text(oDocumentLanding.sCurrentDocumentName).attr("title", oDocumentLanding.sCurrentDocumentName);
             $("#clientValue").text(oDocumentLanding.sDocumentClient).attr("title", oDocumentLanding.sDocumentClient);
             $("#matterValue").text(oDocumentLanding.sMatterName).attr("title", oDocumentLanding.sMatterName);
             $("#clientMatterIdValue").text(oDocumentLanding.sClientID + "." + oDocumentLanding.sMatterId).attr("title", oDocumentLanding.sClientID + "." + oDocumentLanding.sMatterId);
@@ -1176,8 +1253,15 @@ var oDocumentLandingObject = (function () {
 	$("#filePropertiesTitle").html(uiconfigs.DocumentDetails.Label2Section2HeaderText);
 	$("#Section1Column1").html(uiconfigs.DocumentDetails.Label1HeaderText + ":");
 	$("#Section1Column1").attr("title",uiconfigs.DocumentDetails.Label1HeaderText);
-	$("#Section1Column2").html(uiconfigs.DocumentDetails.Label4Section2Column2Text+ ":");
-	$("#Section1Column2").attr("title",uiconfigs.DocumentDetails.Label4Section2Column2Text);
+	
+	if(configs.search.Schema.toLowerCase()==='mattercenter'){
+		$("#Section1Column2").html(uiconfigs.DocumentDetails.Label4Section2Column2Text+ ":");
+		$("#Section1Column2").attr("title",uiconfigs.DocumentDetails.Label4Section2Column2Text);
+	}
+	else{
+		$("#Section1Column2").hide();
+		$("#clientValue").hide();		
+	}
 	$("#Section1Column3").html(uiconfigs.DocumentDetails.Label5Section2Column3Text+ ":");
 	$("#Section1Column3").attr("title",uiconfigs.DocumentDetails.Label5Section2Column3Text);
 	$("#Section1Column4").html(uiconfigs.DocumentDetails.Label6Section2Column4Text+ ":");
@@ -1249,6 +1333,14 @@ var oDocumentLandingObject = (function () {
                 oCommonFunctions.getDocumentURL();
             }, "sp.js");
         }
+        
+    	$("#matterLink").text(uiconfigs.MatterLanding.Menu1Option1Text);
+    	$("#matterLink").attr('title', uiconfigs.MatterLanding.Menu1Option1Text);
+    	
+    	$("#documentLink").text(uiconfigs.MatterLanding.Menu1Option2Text);
+    	$("#documentLink").attr('title', uiconfigs.MatterLanding.Menu1Option2Text);
+
+        
     });
 })();
 

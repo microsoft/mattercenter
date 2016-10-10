@@ -1,22 +1,26 @@
 ﻿<div ng-mouseenter='grid.appScope.vm.AuthorDropDown = true' ng-mouseleave='grid.appScope.vm.AuthorDropDown = false'>
     <div class='sorticon keep-open' style='float:right;' ng-show='grid.appScope.vm.AuthorDropDown'>
-        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor' ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn4Header)"
+        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor' ng-if="!grid.appScope.vm.globalSettings.isBackwardCompatible" ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn5Header)"
+           type='button' data-toggle='dropdown'>
+            <img src='../images/icon-combobox.png' />
+        </a>
+        <a href='javascript:;' dropdown class='prisma-header-dropdown-anchor' ng-if="grid.appScope.vm.globalSettings.isBackwardCompatible" ng-click="grid.appScope.vm.openDocumentHeader($event,grid.appScope.vm.documentConfigContent.GridColumn4Header)"
            type='button' data-toggle='dropdown'>
             <img src='../images/icon-combobox.png' />
         </a>
     </div>
-   
-        <div role='button'
-             class='ui-grid-cell-contents ui-grid-header-cell-primary-focus'
-             col-index='renderIndex'>
-            <span class='ui-grid-header-cell-label ng-binding'
-                  title='{{grid.appScope.vm.documentConfigContent.GridColumn4HeaderTitle}}'>
-                {{ col.colDef.displayName }}
-                <span class="headerfilter" ng-if="grid.appScope.vm.authorfilter"><i class="ms-Icon ms-Icon--filter"></i></span>
-                <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
-            </span>
-        </div>
-   
+
+    <div role='button'
+         class='ui-grid-cell-contents ui-grid-header-cell-primary-focus'
+         col-index='renderIndex'>
+        <span class='ui-grid-header-cell-label ng-binding'
+              title='{{grid.appScope.vm.globalSettings.isBackwardCompatible ? grid.appScope.vm.documentConfigContent.GridColumn4HeaderTitle : grid.appScope.vm.documentConfigContent.GridColumn5HeaderTitle }}'>
+            {{ col.colDef.displayName }}
+            <span class="headerfilter" ng-if="grid.appScope.vm.authorfilter"><i class="ms-Icon ms-Icon--filter"></i></span>
+            <span id="asc{{col.colDef.field}}" style="float:right;display:none" class='padl10px'>↑</span><span id="desc{{col.colDef.field}}" style="float:right;display:none" class='padlf10'>↓</span>
+        </span>
+    </div>
+
     <div class='ui-grid-column-menu-button ng-scope'
          ng-if='grid.options.enableColumnMenus && !col.isRowHeader && col.colDef.enableColumnMenu !== false'
          ng-click='grid.appScope.toggleMenu($event)' ng-class='{' ui-grid-column-menu-button-last-col' isLastCol}'>

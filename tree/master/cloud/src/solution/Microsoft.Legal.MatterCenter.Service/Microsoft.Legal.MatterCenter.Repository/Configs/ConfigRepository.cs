@@ -82,7 +82,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 clientContext.Load(uploadFile);
                 clientContext.ExecuteQuery();
                 //After uploading the file to sharepoint site collection, delete the file from the app root
-                System.IO.File.Delete(filePath);
+                if(!filePath.EndsWith("config.js"))
+                {
+                    System.IO.File.Delete(filePath);
+                }                
             }
         }
 

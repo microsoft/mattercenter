@@ -105,12 +105,22 @@
         if ($("#webDashboardPage").length) {
             oWebDashboardSPGlobal.iFrame = $("#webDashboardPage")[0];
         }
+   	var steamName = getParameterByName('teamname')
+        var spracticeGroup = getParameterByName('practicegroup')
+        var smatterType = getParameterByName('mattertype')
         var sClientName = "", sSectionID = getParameterByName(sSection), sQueryString = "";
         if (sSectionID) {
             sQueryString = sQuestionMarkChar + sSection + sEqualChar + sSectionID + sAmpersandChar;
         }
         if(sSectionID==="1"){
-        	oWebDashboardSPGlobal.iFrame.src = "WEB_DASHBOARD_PAGE_URL/#/matterdashboard";
+	     if(steamName !=='' && spracticeGroup!=="" && smatterType!==""){
+        	var qParams = "teamname="+steamName+"&practicegroup="+spracticeGroup+"&mattertype="+smatterType
+		oWebDashboardSPGlobal.iFrame.src = "WEB_DASHBOARD_PAGE_URL/#/matterdashboard?"+qParams;
+            }
+            else{
+		oWebDashboardSPGlobal.iFrame.src = "WEB_DASHBOARD_PAGE_URL/#/matterdashboard";
+            }
+        	
         }
         else{
         	oWebDashboardSPGlobal.iFrame.src = "WEB_DASHBOARD_PAGE_URL/#/documentdashboard";
