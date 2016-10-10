@@ -327,6 +327,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     IList<string> userList = matter.AssignUserEmails[iCounter].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
                     IList<string> userNameList = matter.AssignUserNames[iCounter].Where(user => !string.IsNullOrWhiteSpace(user.Trim())).ToList();
+                    int userAtLocation = 0;
+                    List<int> itemsToRemoveUsers = new List<int>();
                     foreach (string userName in userList)
                     {
                         //Check has been made to check whether the user is present in the system as part of external sharing implementation
@@ -335,16 +337,30 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             Principal teamMemberPrincipal = clientContext.Web.EnsureUser(userName.Trim());
                             clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title);
                             teamMemberPrincipalCollection.Add(teamMemberPrincipal);
+                        }else
+                        {
+                            itemsToRemoveUsers.Add(userAtLocation);                           
+                        }
+                        userAtLocation++;
+                    }
+
+                    if (itemsToRemoveUsers.Count > 0)
+                    {
+                        for (int k = 0; k < itemsToRemoveUsers.Count; k++)
+                        {
+                            userNameList[itemsToRemoveUsers[k]] = string.Empty; ;
                         }
                     }
+                    userNameList = userNameList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                     //Check has been made to check whether the user is present in the system as part of external sharing implementation
                     if (teamMemberPrincipalCollection.Count > 0)
                     {
+                        iCount = 0;
                         clientContext.ExecuteQuery();
                         //// Check whether the name entered by the user and the name resolved by SharePoint is same.
                         foreach (string teamMember in userNameList)
                         {
-                            if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[0].Title.Trim(), StringComparison.OrdinalIgnoreCase))
+                            if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[iCount].Title.Trim(), StringComparison.OrdinalIgnoreCase))
                             {
                                 genericResponse = new GenericResponseVM();
                                 //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectTeamMembersCode, ServiceConstantStrings.IncorrectTeamMembersMessage + ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR + userId[iCounter]);

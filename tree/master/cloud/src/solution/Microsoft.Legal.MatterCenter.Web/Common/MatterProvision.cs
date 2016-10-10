@@ -1484,8 +1484,23 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 Client client = matterMetadata.Client;
                 Matter matter = matterMetadata.Matter;
                 MatterDetails matterDetails = matterMetadata.MatterDetails;
+                var index = 0;
+                List<string> arrRoles =new List<string>();
+                List<string> arrPermissions = new List<string>();
 
-                string documentTemplateCount = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.DocumentTemplateCount);
+                foreach (IList<string> userNames in matter.AssignUserNames)
+                {
+                    IList<string> userNamesListTemp = userNames.Where(user => !string.IsNullOrWhiteSpace(user)).ToList();
+                    foreach (var userTem in userNamesListTemp)
+                    {
+                        arrRoles.Add(matter.Roles[index]);
+                        arrPermissions.Add(matter.Permissions[index]);
+                    }
+                    index++;
+                }
+                matter.Roles = arrRoles;
+                matter.Permissions = arrPermissions;
+                string documentTemplateCount = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.DocumentTemplateCount);         
                 string matterCenterPermission = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Permissions);
                 string matterCenterRoles = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Roles);
                 string finalTeamMembers = matterDetails.TeamMembers;
@@ -1496,23 +1511,32 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 string separator = string.Empty;
                 foreach (IList<string> userNames in matter.AssignUserNames)
                 {
-                    if (userDetails.CheckUserPresentInMatterCenter(client.Url, userNames.Where(user => !string.IsNullOrWhiteSpace(user)).SingleOrDefault()) == true)
+                    IList<string> userNamesListTemp = userNames.Where(user => !string.IsNullOrWhiteSpace(user)).ToList();
+                    foreach (var userTem in userNamesListTemp)
                     {
-                        matterCenterUsers += separator + string.Join(ServiceConstants.SEMICOLON, userNames.Where(user => !string.IsNullOrWhiteSpace(user)));
-                        separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                        if (userDetails.CheckUserPresentInMatterCenter(client.Url, userTem) == true)
+                        {
+                            matterCenterUsers += separator + string.Join(ServiceConstants.SEMICOLON, userTem);
+                            separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                        }
                     }
                 }
 
                 foreach (IList<string> userEmails in matter.AssignUserEmails)
                 {
-                    if (userDetails.CheckUserPresentInMatterCenter(client.Url, userEmails.Where(user => !string.IsNullOrWhiteSpace(user)).SingleOrDefault()) == true)
+                    IList<string> userNamesListTemp = userEmails.Where(user => !string.IsNullOrWhiteSpace(user)).ToList();
+                    foreach (var userEmailTem in userNamesListTemp)
                     {
-                        matterCenterUserEmails += string.Join(ServiceConstants.SEMICOLON, userEmails.Where(user => !string.IsNullOrWhiteSpace(user))) + separator;
+                        if (userDetails.CheckUserPresentInMatterCenter(client.Url, userEmailTem) == true)
+                        {
+                            matterCenterUserEmails += string.Join(ServiceConstants.SEMICOLON, userEmailTem) + separator;
+                        }
                     }
                 }
                 var finalMatterPermissionsList = matterCenterPermission.Replace("$|$", "$").Split('$').ToList();
                 var finalMatterRolesList = matterCenterRoles.Replace("$|$", "$").Split('$').ToList();
-                var finalTeamMembersList = matterDetails.TeamMembers.Replace(";;", "$").Split('$').ToList();
+                var finalTeamMembersList = matterDetails.TeamMembers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                //matterDetails.TeamMembers.Replace(";;", "$").Split('$').ToList();
                 var finalResponsibleAttorneysEmailList = matterDetails.ResponsibleAttorneyEmail.Split(';').ToList();
                 var finalResponsibleAttorneysUsersList = matterDetails.ResponsibleAttorney.Split(';').ToList();
                 var userEmailsList = matter.AssignUserEmails;
@@ -1536,8 +1560,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     {
                         if (finalResponsibleAttorneysEmailList.Count > itemsToRemoveAttorneys[k] && finalResponsibleAttorneysEmailList[itemsToRemoveAttorneys[k]] != null)
                         {
-                            finalResponsibleAttorneysEmailList[k] = string.Empty;
-                            finalResponsibleAttorneysUsersList[k] = string.Empty;
+                            finalResponsibleAttorneysEmailList[itemsToRemoveAttorneys[k]] = string.Empty;
+                            finalResponsibleAttorneysUsersList[itemsToRemoveAttorneys[k]] = string.Empty;
                         }
                     }
                     finalResponsibleAttorneysEmailList = finalResponsibleAttorneysEmailList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
@@ -1549,11 +1573,16 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 //Check if any of the assigned team member is an external user?
                 foreach (IList<string> userNames in matter.AssignUserNames)
                 {
-                    if (userDetails.CheckUserPresentInMatterCenter(client.Url, userNames.Where(user => !string.IsNullOrWhiteSpace(user)).SingleOrDefault()) == false)
+                    IList<string> userNamesListTemp = userNames.Where(user => !string.IsNullOrWhiteSpace(user)).ToList();
+                    foreach (var userTem in userNamesListTemp)
                     {
-                        itemsToRemove.Add(l);
+                        if (userDetails.CheckUserPresentInMatterCenter(client.Url, userTem) == false)
+                        {
+                            itemsToRemove.Add(l);
+                        }
+                        l = l + 1;
                     }
-                    l = l + 1;
+                   
                 }
 
                 //If any of the team members are external users, do not add his role, his permission into matter proeprty bag
@@ -1581,24 +1610,32 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     separator = "";
                     foreach (IList<string> userNames in userNamesList)
                     {
-                        if (userDetails.CheckUserPresentInMatterCenter(client.Url, userNames.Where(user => !string.IsNullOrWhiteSpace(user)).SingleOrDefault()) == true)
+                        IList<string> userNamesListTemp = userNames.Where(user => !string.IsNullOrWhiteSpace(user)).ToList();
+                        foreach (var userTem in userNamesListTemp)
                         {
-                            matterCenterUsers += separator + string.Join(ServiceConstants.SEMICOLON, userNames.Where(user => !string.IsNullOrWhiteSpace(user)));
-                            separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                            if (userDetails.CheckUserPresentInMatterCenter(client.Url, userTem) == true)
+                            {
+                                matterCenterUsers += separator + string.Join(ServiceConstants.SEMICOLON, userTem);
+                                separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                            }
                         }
 
                     }
                     separator = "";
                     foreach (IList<string> userEmails in userEmailsList)
                     {
-                        if (userDetails.CheckUserPresentInMatterCenter(client.Url, userEmails.Where(user => !string.IsNullOrWhiteSpace(user)).SingleOrDefault()) == true)
+                        IList<string> userNamesListTemp = userEmails.Where(user => !string.IsNullOrWhiteSpace(user)).ToList();
+                        foreach (var userTem in userNamesListTemp)
                         {
-                            matterCenterUserEmails += separator + string.Join(ServiceConstants.SEMICOLON, userEmails.Where(user => !string.IsNullOrWhiteSpace(user)));
-                            separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                            if (userDetails.CheckUserPresentInMatterCenter(client.Url, userTem) == true)
+                            {
+                                matterCenterUserEmails += separator + string.Join(ServiceConstants.SEMICOLON, userTem);
+                                separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                            }
                         }
                     }
 
-                    finalTeamMembers = string.Join(";;", finalTeamMembersArray);
+                    finalTeamMembers = string.Join(";", finalTeamMembersArray);
                     matterCenterPermission = string.Join("$|$", finalMatterPermissionsArray);
                     matterCenterRoles = string.Join("$|$", finalMatterRolesArray);
                     finalResponsibleAttorneysEmail = string.Join(";", finalResponsibleAttorneysEmailsArray);
@@ -1708,23 +1745,77 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 itemsToRemove.Clear();
                 l = 0;
                 //Check if any of the assigned team member is an external user?
-                foreach (IList<string> userNames in matter.AssignUserNames)
-                {
-                    if (userDetails.CheckUserPresentInMatterCenter(client.Url, userNames.Where(user => !string.IsNullOrWhiteSpace(user)).SingleOrDefault()) == true)
+                //   List<List<string>> userNamesListTempForExt = new List<List<string>>();
+                //setting the internal users to null and adding the index to remove the roles and permissions in matter.Permissions and matter.roles
+                for (int z=0;z< matter.AssignUserNames.Count; z++)
+                {                  
+                    for(int y=0;y< matter.AssignUserNames[z].Count; y++)
                     {
-                        itemsToRemove.Add(l);
+                        string userName = matter.AssignUserNames[z][y].ToString();
+                        if (userName != "")
+                        {
+                            if (userDetails.CheckUserPresentInMatterCenter(client.Url, userName) == true)
+                            {
+                                itemsToRemove.Add(l);
+                                matter.AssignUserNames[z][y] = null;
+                                matter.AssignUserEmails[z][y] = null;
+                            }                           
+                            l = l + 1;
+                        }
                     }
-                    l = l + 1;
                 }
-                finalTeamMembersList = matterDetails.TeamMembers.Replace(";;", "$").Split('$').ToList();
+
+               
+
+                for (int x = 0; x < matter.AssignUserNames.Count; x++)
+                {
+                    var matterAssignedNames = matter.AssignUserNames[x].Where(user => !string.IsNullOrWhiteSpace(user));
+                    var matterAssignedUserEmails = matter.AssignUserEmails[x].Where(user => !string.IsNullOrWhiteSpace(user));
+                    if (matterAssignedNames.Count() > 0)
+                    {
+                        matter.AssignUserNames[x] = matterAssignedNames.ToList();
+                        matter.AssignUserEmails[x] = matterAssignedUserEmails.ToList();
+                    }
+                    else
+                    {
+                        matter.AssignUserNames[x] = null;
+                        matter.AssignUserEmails[x] = null;
+                    }
+                }
+               
+
+                //foreach (IList<string> userNames in matter.AssignUserNames)
+                //{
+                //    IList<string> userNamesListTemp = userNames.Where(user => !string.IsNullOrWhiteSpace(user)).ToList();
+                //    List<string> userNameExtForTemp = new List<string>();
+                //    foreach (var userTem in userNamesListTemp)
+                //    {
+
+                //        if (userDetails.CheckUserPresentInMatterCenter(client.Url, userTem) == true)
+                //        {
+                //            itemsToRemove.Add(l);
+
+                //        }
+                //        else
+                //        {
+                //            userNameExtForTemp.Add(userTem);
+                //        }
+                //        l = l + 1;
+                //    }
+                //    if (userNameExtForTemp.Count >= 1) {
+                //        userNamesListTempForExt.Add(userNameExtForTemp);
+                //    }
+                //}
+
+                finalTeamMembersList = matterDetails.TeamMembers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();               
                 if (itemsToRemove.Count > 0)
                 {
                     for (int k = 0; k < itemsToRemove.Count; k++)
                     {
                         matter.Permissions[itemsToRemove[k]] = string.Empty;
                         matter.Roles[itemsToRemove[k]] = string.Empty;
-                        matter.AssignUserEmails[itemsToRemove[k]] = null;
-                        matter.AssignUserNames[itemsToRemove[k]] = null;
+                        //matter.AssignUserEmails[itemsToRemove[k]] = null;
+                      //  matter.AssignUserNames[itemsToRemove[k]] = null;
                         finalTeamMembersList[itemsToRemove[k]] = string.Empty;
                     }
                 }
@@ -1738,7 +1829,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
                 matterDetails.ResponsibleAttorneyEmail = string.Empty;
                 matterDetails.ResponsibleAttorney = string.Empty;
-                matterDetails.TeamMembers = string.Join(";;", finalTeamMembersList.ToArray());
+                matterDetails.TeamMembers = string.Join(";", finalTeamMembersList.ToArray());
                 matterDetails.ResponsibleAttorneyEmail = string.Join(";", finalResponsibleAttorneysEmailList.ToArray());
                 matterDetails.ResponsibleAttorney = string.Join(";", finalResponsibleAttorneysUsersList.ToArray());
                 return propertyList;
@@ -1762,7 +1853,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="matterInformation">Contains information about all external users, his roles and permissions</param>
         private void ShareMatterToExtUser(MatterInformationVM matterInformation)
         {            
-            for (int i = 0; i < matterInformation.Matter.Roles.Count; i++)
+            for (int i = 0; i < matterInformation.Matter.AssignUserNames.Count; i++)
             {
                 //Need to construct new MatterInformationVM object for each external user
                 MatterInformationVM matterInfoNew = new MatterInformationVM();

@@ -433,6 +433,62 @@
         }
     }
 
+    'use strict'
+    function assignTeamKeyDown() {
+        return function (scope, element, attrs) {
+            element.bind("keydown keypress", function (event) {
+                if (event.which === 8 || (event.which === 46 && event.key == "Delete")) {
+                    scope.$apply(function () {
+                        scope.assignTeam.assignedAllUserNamesAndEmails = scope.assignTeam.assignedUser;
+                        var userEmails = getUserName(scope.assignTeam.assignedUser, false);
+                        var exsistingTeams = [];
+                        for (var i = 0; i < userEmails.length; i++) {
+                            if (userEmails[i] != "") {
+                                angular.forEach(scope.assignTeam.teamUsers, function (team) {
+                                    if (team.userName == userEmails[i]) {
+                                        exsistingTeams.push(team);
+                                    }
+                                });
+                            }
+                        }
+                        scope.assignTeam.teamUsers = exsistingTeams;
+                        // $scope.projects.splice(i, 1);
+                        scope.$parent.cm.errorPopUpBlock = false;
+                        scope.$parent.cm.errorBorder = "";
+                    });
+                } else {
+                    // var txtUserEmails = scope.assignTeam.assignedUser;
+                    //var userEmails= txtUserEmails.split(";");
+                    // scope.assignTeam.assignedAllUserNamesAndEmails = scope.assignTeam.assignedUser;
+                    if (event.which === 186) {
+                        scope.assignTeam.assignedAllUserNamesAndEmails = scope.assignTeam.assignedUser + ";";
+                    }
+                    scope.$parent.cm.errorPopUpBlock = false;
+                    scope.$parent.cm.errorBorder = "";
+                }
+            });
+        };
+    }
+    'use strict'
+    function getUserName(sUserEmails, bIsName) {
+
+        var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp("^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$");
+        if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
+            arrUserNames = sUserEmails.split(";");
+            for (var iIterator = 0; iIterator < arrUserNames.length - 1; iIterator++) {
+                if (arrUserNames[iIterator] && null !== arrUserNames[iIterator] && "" !== arrUserNames[iIterator]) {
+                    if (-1 !== arrUserNames[iIterator].lastIndexOf("(")) {
+                        sEmail = $.trim(arrUserNames[iIterator].substring(arrUserNames[iIterator].lastIndexOf("(") + 1, arrUserNames[iIterator].lastIndexOf(")")));
+                        if (oEmailRegex.test(sEmail)) {
+                            arrUserNames[iIterator] = bIsName ? $.trim(arrUserNames[iIterator].substring(0, arrUserNames[iIterator].lastIndexOf("("))) : sEmail;
+                        }
+                    }
+                }
+            }
+        }
+        return arrUserNames;
+    }
+
     var app = angular.module('matterMain');
     app.directive('onload', ['$timeout', onload]);
     app.directive('showbreadcrumb', [showbreadcrumb]);
@@ -447,6 +503,7 @@
     //Adding Window
     app.directive('uiGridViewport', ['$window', uiGridViewport]);
     app.directive('dropdown', [dropdown]);
+    app.directive('assignteamkeydown', [assignTeamKeyDown]);
 })();
 
 
