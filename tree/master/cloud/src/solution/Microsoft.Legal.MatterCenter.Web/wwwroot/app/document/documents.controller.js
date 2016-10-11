@@ -755,6 +755,13 @@
                     searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
                 }
             }
+            else {
+                if (!searchRequest.SearchObject.IsUnique) {
+                    searchRequest.SearchObject.IsUnique = true;
+                    searchRequest.SearchObject.FilterValue = term.substring(term.indexOf(":") + 1, term.indexOf("*"));
+                    searchRequest.SearchObject.UniqueColumnName = property;
+                }
+            }
             get(searchRequest, function (response) {
                 if (response == "") {
                     if (bool) {
@@ -1487,6 +1494,20 @@
                             } else {
                                 vm.AuthorSort = "asc";
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyAuthor, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
+                        } else {
+                            vm.divuigrid = true;
+                        }
+                    }
+                    else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentPracticeGroup.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.DocumentPracticeGroupSort == undefined || vm.DocumentPracticeGroupSort == "asc") {
+                                vm.DocumentPracticeGroupSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyPracticeGroup, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            }
+                            else {
+                                vm.DocumentPracticeGroupSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyPracticeGroup, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                             }
                         } else {
                             vm.divuigrid = true;
