@@ -110,9 +110,9 @@
 
         <!--End For attaching documents messages to the current mail item-->
         <div class="row" id="documentgrid" style="margin-left:5px;margin-right: 5px;">
-            <div class="col-sm-12" ng-show="vm.divuigrid">
+            <div class="col-sm-12" ng-if="vm.divuigrid">
                 <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-selection data-ui-grid-infinite-scroll class="grid" ng-style="vm.getTableHeight()">
-                    <div class="col-xs-12 col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">
+                    <div class="col-xs-12 col-sm-12 noResultsText" ng-if="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">
                     </div>
                 </div>
             </div>
@@ -137,16 +137,18 @@
         <div class='input-group'>
             <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
             <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-model='vm.clientSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header" ng-model='vm.projectSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
-            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header" ng-model='vm.practiceGroupSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-model='vm.projectSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible" ng-model='vm.authorSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
+            <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-model='vm.practiceGroupSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
             <input class='form-control' uib-typeahead="documentDataList.documentName for documentDataList in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-model='vm.checkedSearchTerm' placeholder='{{vm.documentConfigContent.FilterSearchPlaceholderText}}' />
             <div class='input-group-btn'>
                 <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyFileName+":"+vm.searchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
                 <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentClientName+":"+vm.clientSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.projectSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
-                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":"+vm.practiceGroupSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyMatterName+":"+vm.projectSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header &&  vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header &&  !vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyAuthor+":"+vm.authorSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
+                <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyPracticeGroup+":"+vm.practiceGroupSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
                 <button type='button' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-click='vm.documentsearch(""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+":"+vm.checkedSearchTerm+"*(* OR "+vm.configSearchContent.ManagedPropertyFileName+":* OR "+vm.configSearchContent.ManagedPropertyDocumentId+":* OR "+vm.configSearchContent.ManagedPropertyDocumentClientName+":*)",vm.searchexp,false)' class='btn btn-default'><img src='../images/search-15x15-666.png' /></button>
             </div>
         </div>
@@ -164,13 +166,13 @@
             <div id='filterResultsContainer'>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn1Header" ng-repeat='document in vm.details' ng-click='vm.documentsearch(document.documentName,""+vm.configSearchContent.ManagedPropertyFileName+"",true)'>{{document.documentName}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn2Header" ng-repeat='client in vm.details' ng-click='vm.documentsearch(client.documentClient,""+vm.configSearchContent.ManagedPropertyDocumentClientName+"",true)'>{{client.documentClient}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentMatterName,""+vm.configSearchContent.ManagedPropertyMatterName+"",true)'>{{matter.documentMatterName}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)'>{{matter.documentOwner}}</div>
-                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentPracticeGroup,""+vm.configSearchContent.ManagedPropertyPracticeGroup+"",true)'>{{matter.documentPracticeGroup}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn3Header && vm.globalSettings.isBackwardCompatible" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentMatterName,""+vm.configSearchContent.ManagedPropertyMatterName+"",true)'>{{matter.documentMatterName}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)'>{{matter.documentOwner}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentOwner,""+vm.configSearchContent.ManagedPropertyAuthor+"",true)'>{{matter.documentOwner}}</div>
+                <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentPracticeGroup,""+vm.configSearchContent.ManagedPropertyPracticeGroup+"",true)'>{{matter.documentPracticeGroup}}</div>
                 <div class='filterValueLabels ms-font-m ms-font-weight-semilight' ng-if="vm.filtername==vm.documentConfigContent.GridColumn7Header" ng-repeat='matter in vm.details' ng-click='vm.documentsearch(matter.documentCheckoutUser,""+vm.configSearchContent.ManagedPropertyDocumentCheckOutUser+"",true)'>{{matter.documentCheckoutUser}}</div>
                 <div title="{{vm.documentConfigContent.NoFilterMatchMsgTitle}}" ng-if="vm.filternodata" class="ms-font-m filterFlyOutNoResults"><span>{{vm.documentConfigContent.NoFilterMatchMsgText}}</span></div>
             </div>
-
         </div>
     </div>
     <div class="documentheaderdates flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentdateheader">
@@ -178,7 +180,7 @@
             <div class='input-group'>
                 <input type='text' placeholder='{{vm.documentConfigContent.StartDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
-                       ng-model='vm.startdate'
+                       ng-model='vm.startDate'
                        is-open='vm.openedStartDate'
                        datepicker-options='vm.dateOptions'
                        ng-required='true' close-text='Close'
@@ -190,7 +192,7 @@
             <div class='input-group' style='margin-top:5px'>
                 <input type='text' placeholder='{{vm.documentConfigContent.EndDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
-                       ng-model='vm.enddate'
+                       ng-model='vm.endDate'
                        is-open='vm.openedEndDate'
                        datepicker-options='vm.enddateOptions'
                        ng-required='true' close-text='Close'
@@ -204,25 +206,25 @@
             <div class='input-group'>
                 <input type='text' placeholder='{{vm.documentConfigContent.StartDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
-                       ng-model='vm.modstartdate'
+                       ng-model='vm.modStartDate'
                        is-open='vm.modifiedStartDate'
                        datepicker-options='vm.moddateOptions'
                        ng-required='true' close-text='Close'
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.modStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default' ng-click='vm.modStartDateClick()'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
             <div class='input-group' style='margin-top:5px'>
                 <input type='text' placeholder='{{vm.documentConfigContent.EndDatePlaceHolder}}' class='calendar form-control'
                        uib-datepicker-popup='MM/dd/yyyy'
-                       ng-model='vm.modenddate'
-                       is-open='vm.modifiedenddate'
+                       ng-model='vm.modEndDate'
+                       is-open='vm.modifiedEndDate'
                        datepicker-options='vm.modenddateOptions'
                        ng-required='true' close-text='Close'
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.modEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default' ng-click='vm.modEndDateClick()'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
         </div>

@@ -315,6 +315,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                         searchResponse.DocumentDataList = userpinnedDocumentCollection.Values;
                                     }
                                 }
+                                IList<DocumentData> filterDocumentList = null;
+                                if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.AreaOfLaw))
+                                {
+                                    filterDocumentList = userpinnedDocumentCollection.Values.Where(pinDocument => searchRequestVM.SearchObject.Filters.AreaOfLaw.Contains(pinDocument.DocumentClient)).ToList();
+                                }
+                                if (filterDocumentList != null)
+                                {
+                                    searchResponse.DocumentDataList = filterDocumentList;
+                                    searchResponse.TotalRows = filterDocumentList.Count();
+                                }
                             }
                             else
                             {
@@ -352,6 +362,59 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                         searchResponse.MatterDataList = userpinnedMatterCollection.Values;
                                     }
                                 }
+
+                                #region Code for filtering pinned data
+                                IList<MatterData> filterPinnedList = null;
+                                if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.AreaOfLaw))
+                                {
+                                    filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.AreaOfLaw.Contains(pinMatter.MatterAreaOfLaw)).ToList();
+                                }
+                                //Filter the pinned data based on the filter criteria that client has sent
+                                if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.PracticeGroup))
+                                {
+                                    if(filterPinnedList!=null)
+                                    {
+                                        filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.PracticeGroup.Contains(pinMatter.MatterPracticeGroup)).ToList();
+                                    }
+                                    else
+                                    {
+                                        filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.PracticeGroup.Contains(pinMatter.MatterPracticeGroup)).ToList();
+                                    }
+                                    
+                                }
+                                if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.SubareaOfLaw))
+                                {
+                                    if (filterPinnedList != null)
+                                    {
+                                        filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.SubareaOfLaw.Contains(pinMatter.MatterSubAreaOfLaw)).ToList();
+                                    }
+                                    else
+                                    {
+                                        filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.SubareaOfLaw.Contains(pinMatter.MatterSubAreaOfLaw)).ToList();
+                                    }                                        
+                                }
+                                if (searchRequestVM.SearchObject.Filters.ClientsList!=null && searchRequestVM.SearchObject.Filters.ClientsList.Count>0)
+                                {
+                                    if(searchRequestVM.SearchObject.Filters.ClientsList[0]!="")
+                                    {
+                                        if (filterPinnedList != null)
+                                        {
+                                            filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.ClientsList.Contains(pinMatter.MatterClient)).ToList();
+                                        }
+                                        else
+                                        {
+                                            filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.ClientsList.Contains(pinMatter.MatterClient)).ToList();
+                                        }
+                                    }
+                                    
+                                }
+                                if (filterPinnedList != null)
+                                {
+                                    searchResponse.MatterDataList = filterPinnedList;
+                                    searchResponse.TotalRows = filterPinnedList.Count();
+                                }                                    
+                                #endregion
+
                             }
                         }
 
@@ -1107,6 +1170,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                         if (!string.IsNullOrWhiteSpace(searchObject.Filters.Name))
                         {
+                            if (searchObject.Filters.Name.Length > 70)
+                            {
+                                searchObject.Filters.Name = searchObject.Filters.Name.Replace(searchObject.Filters.Name.Substring(70, searchObject.Filters.Name.Length - 70), "*");
+                            }
+
                             keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyFileName, ServiceConstants.COLON,
                                 ServiceConstants.DOUBLE_QUOTE, searchObject.Filters.Name, ServiceConstants.DOUBLE_QUOTE));
                         }
@@ -1258,16 +1326,26 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                     if (null != searchObject.Filters.PracticeGroup && !string.IsNullOrWhiteSpace(searchObject.Filters.PracticeGroup))
                     {
-                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyPracticeGroup, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.PracticeGroup, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                        var pgList = searchObject.Filters.PracticeGroup.Split(',').ToList();
+                        var filterValues = FormFilterQuery(searchSettings.ManagedPropertyPracticeGroup, pgList);
+                        keywordQuery.RefinementFilters.Add(filterValues);
+
+                        //keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyPracticeGroup, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.PracticeGroup, ServiceConstants.DOUBLE_INVERTED_COMMA));
                     }
                     if (!string.IsNullOrWhiteSpace(searchObject.Filters.AreaOfLaw))
                     {
-                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.AreaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                        //keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertyAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.AreaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                        var areaList = searchObject.Filters.AreaOfLaw.Split(',').ToList();
+                        var filterValues = FormFilterQuery(searchSettings.ManagedPropertyAreaOfLaw, areaList);
+                        keywordQuery.RefinementFilters.Add(filterValues);
                     }
 
                     if (null != searchObject.Filters.SubareaOfLaw && !string.IsNullOrWhiteSpace(searchObject.Filters.SubareaOfLaw))
                     {
-                        keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertySubAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.SubareaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
+                        var subAreaList = searchObject.Filters.SubareaOfLaw.Split(',').ToList();
+                        var filterValues = FormFilterQuery(searchSettings.ManagedPropertySubAreaOfLaw, subAreaList);
+                        keywordQuery.RefinementFilters.Add(filterValues);
+                        //keywordQuery.RefinementFilters.Add(string.Concat(searchSettings.ManagedPropertySubAreaOfLaw, ServiceConstants.COLON, ServiceConstants.DOUBLE_INVERTED_COMMA, searchObject.Filters.SubareaOfLaw, ServiceConstants.DOUBLE_INVERTED_COMMA));
                     }
                     if (null != searchObject.Filters.ProjectID && !string.IsNullOrWhiteSpace(searchObject.Filters.ProjectID))
                     {

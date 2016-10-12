@@ -16,6 +16,7 @@
             vm.documentConfigContent = uiconfigs.Documents;
             vm.configSearchContent = configs.search;
             vm.center = configs.search.Schema.toLowerCase();
+            vm.globalSettings = configs.global;
             vm.clientdrop = false;
             vm.lazyloaderdocumentclient = true;
             vm.clientdropvisible = false;
@@ -62,6 +63,8 @@
                 vm.sortbydropvisible = false;
                 vm.showNavTab = false;
                 vm.showInnerNav = true;
+                vm.openedStartDate = false;
+                vm.openedEndDate = false;
                 angular.element('.popcontent').css('display', 'none');
             }
             //#endregion
@@ -71,6 +74,15 @@
                 $event.stopPropagation();
                 vm.clientdrop = false;
                 vm.clientdropvisible = false;
+
+                //vm.collapseDateControls();
+            }
+
+            vm.collapseDateControls = function () {
+                vm.openedStartDate = true;
+                vm.openedEndDate = true;
+                vm.openedStartDate = false;
+                vm.openedEndDate = false;
             }
             //#endregion
 
@@ -136,10 +148,10 @@
 
                 if (value.displayInDashboard == true && value.position != -1) {
                     columnDefs1.push({
-                        field: key,
+                        field: value.keyName,
                         displayName: vm.switchFuction(value.displayName),
                         width: value.dashboardwidth,
-                        enableHiding: value.enableHiding,
+                        enableHiding: false,
                         cellTemplate: value.dashboardcellTemplate,
                         position: value.position,
                         cellClass: value.dashboardCellClass,
@@ -932,14 +944,17 @@
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                this.openedStartDate = true;
+                vm.openedStartDate = vm.openedStartDate ? false : true;
+                vm.openedEndDate = false;
+                
             };
             vm.openEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                this.openedEndDate = true;
+                vm.openedEndDate = vm.openedEndDate ? false : true;
+                vm.openedStartDate = false;
             };
 
             vm.openedStartDate = false;

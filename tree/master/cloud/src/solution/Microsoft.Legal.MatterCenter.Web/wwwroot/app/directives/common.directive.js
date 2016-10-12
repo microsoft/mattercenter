@@ -196,9 +196,9 @@
                     $('.dropdown').removeClass('open');
                     $('.popcontent').css('display', 'none');
                     e.stopPropagation();
-                    var obj = $(this).parent().position();
+                    var obj = e.target.getBoundingClientRect();
                     $(this).parent().find('.popcontent').html(a[0]);
-                    if (obj.top < 240) {
+                    if (obj.top < 350) {
                         $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '268px', 'top': '0' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
                     } else {
@@ -306,9 +306,9 @@
                     $('.dropdown').removeClass('open');
                     $('.popcontent').css('display', 'none');
                     e.stopPropagation();
-                    var obj = $(this).parent().position();
+                    var obj = e.target.getBoundingClientRect();
                     $(this).parent().find('.popcontent').html(a[0]);
-                    if (obj.top < 240) {
+                    if (obj.top < 350) {
                         $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '284px', 'top': '0' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
                     } else {
@@ -424,13 +424,69 @@
             restrict: 'AE',
             link: function (scope, element, attrs) {
                 $(element).click(function (e) {
-                    var obj = $(this).parent().parent().position();
-                    if (obj.top > 280) {
+                    var obj = e.target.getBoundingClientRect();
+                    if (obj.top > 450) {
                         $(this).parent().addClass('dropup');
                     }
                 });
             }
         }
+    }
+
+    'use strict'
+    function assignTeamKeyDown() {
+        return function (scope, element, attrs) {
+            element.bind("keydown keypress", function (event) {
+                if (event.which === 8 || (event.which === 46 && event.key == "Delete")) {
+                    scope.$apply(function () {
+                        scope.assignTeam.assignedAllUserNamesAndEmails = scope.assignTeam.assignedUser;
+                        var userEmails = getUserName(scope.assignTeam.assignedUser, false);
+                        var exsistingTeams = [];
+                        for (var i = 0; i < userEmails.length; i++) {
+                            if (userEmails[i] != "") {
+                                angular.forEach(scope.assignTeam.teamUsers, function (team) {
+                                    if (team.userName == userEmails[i]) {
+                                        exsistingTeams.push(team);
+                                    }
+                                });
+                            }
+                        }
+                        scope.assignTeam.teamUsers = exsistingTeams;
+                        // $scope.projects.splice(i, 1);
+                        scope.$parent.cm.errorPopUpBlock = false;
+                        scope.$parent.cm.errorBorder = "";
+                    });
+                } else {
+                    // var txtUserEmails = scope.assignTeam.assignedUser;
+                    //var userEmails= txtUserEmails.split(";");
+                    // scope.assignTeam.assignedAllUserNamesAndEmails = scope.assignTeam.assignedUser;
+                    if (event.which === 186) {
+                        scope.assignTeam.assignedAllUserNamesAndEmails = scope.assignTeam.assignedUser + ";";
+                    }
+                    scope.$parent.cm.errorPopUpBlock = false;
+                    scope.$parent.cm.errorBorder = "";
+                }
+            });
+        };
+    }
+    'use strict'
+    function getUserName(sUserEmails, bIsName) {
+
+        var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp("^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$");
+        if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
+            arrUserNames = sUserEmails.split(";");
+            for (var iIterator = 0; iIterator < arrUserNames.length - 1; iIterator++) {
+                if (arrUserNames[iIterator] && null !== arrUserNames[iIterator] && "" !== arrUserNames[iIterator]) {
+                    if (-1 !== arrUserNames[iIterator].lastIndexOf("(")) {
+                        sEmail = $.trim(arrUserNames[iIterator].substring(arrUserNames[iIterator].lastIndexOf("(") + 1, arrUserNames[iIterator].lastIndexOf(")")));
+                        if (oEmailRegex.test(sEmail)) {
+                            arrUserNames[iIterator] = bIsName ? $.trim(arrUserNames[iIterator].substring(0, arrUserNames[iIterator].lastIndexOf("("))) : sEmail;
+                        }
+                    }
+                }
+            }
+        }
+        return arrUserNames;
     }
 
     var app = angular.module('matterMain');
@@ -447,6 +503,7 @@
     //Adding Window
     app.directive('uiGridViewport', ['$window', uiGridViewport]);
     app.directive('dropdown', [dropdown]);
+    app.directive('assignteamkeydown', [assignTeamKeyDown]);
 })();
 
 

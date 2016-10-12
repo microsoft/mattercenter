@@ -9,6 +9,9 @@
                 matterName: '',
                 matterGuid: ''
             };
+            vm.isTeamNamePresent = false;
+            vm.clientNameSelected = "";
+            vm.practiceGroupSelected = "";
             vm.downwarddrop = true;
             vm.upwarddrop = false;
             vm.loadLocation = false;
@@ -34,6 +37,7 @@
             vm.lazyloaderclient = true;
             vm.lazyloaderpg = true;
             vm.lazyloaderaol = true;
+            vm.lazyloadersubaol = true;
             vm.totalrecords = 0;
             $rootScope.bodyclass = "bodymain";
             $rootScope.profileClass = "hide";
@@ -54,10 +58,31 @@
             //#endregion            
             vm.teamName = '';
             //#region Get Querystring values
-            if ($location.search() && $location.search().teamName) {
-                vm.teamName = $location.search().teamName;
-                vm.selectedClients = vm.teamName;
+            if ($location.search() && $location.search().teamname) {
+                vm.isTeamNamePresent = true;
+                angular.element("#dashboardDrop").removeClass('dashboarddrop');
+                angular.element("#dashboardDrop").addClass('dashboarddropForTeam');
+                angular.element("#sortColumns").css("top", "144px")
+                vm.teamName = $location.search().teamname;
+                vm.selectedAOLs = vm.teamName;
             }
+            else {
+                angular.element("#dashboardDrop").addClass('dashboarddrop');
+                angular.element("#dashboardDrop").removeClass('dashboarddropForTeam');
+                angular.element("#sortColumns").css("top", "80px;")
+            }
+
+            if ($location.search() && $location.search().practicegroup) {
+                vm.practiceGroup = $location.search().practicegroup;
+                vm.selectedPGs = vm.practiceGroup;
+                
+            }
+
+            if ($location.search() && $location.search().mattertype) {
+                vm.matterType = $location.search().mattertype;
+                vm.selectedSubAOLs = vm.matterType;
+            }
+
             //#endregion
 
             //#region closing all dropdowns on click of page
@@ -75,6 +100,8 @@
                 vm.sortbydropvisible = false;
                 vm.showNavTab = false;
                 vm.showInnerNav = true;
+                vm.openedStartDate = false;
+                vm.openedEndDate = false;
             }
             //#endregion
 
@@ -87,6 +114,16 @@
                 vm.pgdropvisible = false;
                 vm.aoldrop = false;
                 vm.aoldropvisible = false;
+                vm.subAolDropVisible = false;
+                vm.subAoldrop = false;
+                isOpen = false;
+                //if (vm.openedStartDate == true) {
+                //    vm.openedStartDate = false;
+                //}
+                //if (vm.openedEndDate == true) {
+                //    vm.openedEndDate = false;
+                //}
+               
             }
             //#endregion
 
@@ -99,234 +136,58 @@
                 enableSelectAll: false,
                 multiSelect: false,
                 enableColumnMenus: false,
-                enableFiltering: false,
+                enableFiltering: false,                
                 enableSorting: false
             }
+
+            vm.switchFuction = function (columnName) {
+                var displayColumn;
+                switch (columnName) {
+                    case "GridColumn1Header":
+                        displayColumn = vm.matterDashboardConfigs.GridColumn1Header;
+                        break;
+                    case "GridColumn2Header":
+                        displayColumn = vm.matterDashboardConfigs.GridColumn2Header;
+                        break;
+                    case "GridColumn3Header":
+                        displayColumn = vm.matterDashboardConfigs.GridColumn3Header;
+                        break;
+                    case "GridColumn4Header":
+                        displayColumn = vm.matterDashboardConfigs.GridColumn4Header;
+                        break;
+                    case "GridColumn5Header":
+                        displayColumn = vm.matterDashboardConfigs.GridColumn5Header;
+                        break;
+                    case "GridColumn6Header":
+                        displayColumn = vm.matterDashboardConfigs.GridColumn6Header;
+                        break;
+                    case "GridColumn7Header":
+                        displayColumn = vm.matterDashboardConfigs.GridColumn7Header;
+                        break;
+                    case "GridColumn8Header":
+                        displayColumn = vm.documentDashboardConfigs.GridColumn8Header;
+                        break;
+                    default:
+                        displayColumn = '';
+                        break;
+                }
+                return displayColumn;
+            };
+
             var columnDefs1 = [];
             angular.forEach(configs.search.searchColumnsUIPickerForMatter, function (value, key) {
-                if (key == "matterName") {
-                    if (value.displayInUI == true && value.position != -1) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn1Header,
-                            enableColumnMenu: false,
-                            width: "230",
-                            cellTemplate: '../app/dashboard/MatterDashboardCellTemplate.html',
-                            position: value.position,
-                            visible: true
-                        });
-
-                    }
-                }
-                if (key == "matterClient") {
-                    if (value.displayInUI == true && value.position != -1) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn2Header,
-                            enableColumnMenu: false,
-                            width: "150",
-                            cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterClient}}</div>',
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-                    }
-                }
-                if (key == "matterClientId") {
-                    if (value.displayInUI == true && value.position != -1) {
-                        columnDefs1.push({
-                            field: key,
-                            width: '200',
-                            displayName: vm.matterDashboardConfigs.GridColumn3Header,
-                            headerTooltip: 'Click to sort by client.matterid',
-                            headerCellClass: 'matterGridClientClass',
-                            cellClass: 'matterGridClientClass',
-                            enableCellEdit: true,
-                            cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.matterClientId}}.{{row.entity.matterClient}}</div>',
-                            enableColumnMenu: false,
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
-
-                }
-                if (key == "matterModifiedDate") {
-                    if (value.displayInUI == true && value.position != -1) {
-                        columnDefs1.push({
-                            field: key,
-                            width: '200',
-                            headerCellClass: 'matterGridModDateClass',
-                            cellClass: 'matterGridModDateClass',
-                            displayName: vm.matterDashboardConfigs.GridColumn4Header,
-                            cellTemplate: '<div class="ui-grid-cell-contents"  datefilter date="{{row.entity.matterModifiedDate}}"></div>',
-                            enableColumnMenu: false,
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
-                }
-                if (key == "matterResponsibleAttorney") {
-                    if (value.displayInUI == true && value.position != -1) {
-                        columnDefs1.push({
-                            field: key,
-                            width: '175',
-                            headerCellClass: 'matterGridAttorClass',
-                            cellClass: 'matterGridAttorClass',
-                            headerTooltip: 'Click to sort by attorney',
-                            displayName: vm.matterDashboardConfigs.GridColumn5Header,
-                            cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity.matterResponsibleAttorney}}</div>',
-                            enableColumnMenu: false,
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
-                }
-                if (key == "matterSubAreaOfLaw") {
-                    if (value.displayInUI == true && value.position != -1) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn4Header,
-                            headerCellClass: 'gridclass',
-                            cellClass: 'gridclass',
-                            enableColumnMenu: false,
-                            width: "210",
-                            visible: value.displayInDashboard,
-                            position: value.position
-                        });
-
-                    }
-                }
-                if (key == "matterCreatedDate") {
-                    if (value.displayInUI == true && value.position != -1) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn5Header,
-                            headerCellClass: 'gridclass',
-                            cellClass: 'gridclass',
-                            enableColumnMenu: false,
-                            width: "170",
-                            cellTemplate: '<div class="ui-grid-cell-contents" datefilter date="{{row.entity.matterCreatedDate}}"></div>',
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-                    }
-                }
-                if (key == "matterDescription" && value.position != -1) {
-                    if (value.displayInUI == true) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn8Header,
-                            headerCellClass: 'gridclass',
-                            cellClass: 'gridclass',
-                            width: "210",
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
-                }
-                if (key == "matterUrl" && value.position != -1) {
-                    if (value.displayInUI == true) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn9Header,
-                            headerCellClass: 'gridclass',
-                            cellClass: 'gridclass',
-                            width: "210",
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
-                }
-                if (key == "matterClientUrl" && value.position != -1) {
-                    if (value.displayInUI == true) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn10Header,
-                            headerCellClass: 'gridclass',
-                            cellClass: 'gridclass',
-                            width: "210",
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
-                }
-                if (key == "matterPracticeGroup" && value.position != -1) {
-                    if (value.displayInUI == true) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn2Header,
-                            headerCellClass: 'gridclass',
-                            cellClass: 'gridclass',
-                            width: "210",
-                            enableColumnMenu: false,
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
-                }
-
-                if (key == "matterAreaOfLaw" && value.position != -1) {
-                    if (value.displayInUI == true) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn3Header,
-                            headerCellClass: 'gridclass',
-                            cellClass: 'gridclass',
-                            enableColumnMenu: false,
-                            width: "210",
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
-                }
-                if (key == "hideUpload" && value.position != -1) {
-                    if (value.displayInUI == true) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn13Header,
-                            headerCellClass: 'gridclass',
-                            cellClass: 'gridclass',
-                            width: "210",
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
-                }
-                if (key == "matterID" && value.position != -1) {
-                    if (value.displayInUI == true) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn14Header,
-                            headerCellClass: 'gridclass',
-                            cellClass: 'gridclass',
-                            width: "210",
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
-                }
-                if (key == "matterGuid" && value.position != -1) {
-                    if (value.displayInUI == true) {
-                        columnDefs1.push({
-                            field: key,
-                            displayName: vm.matterDashboardConfigs.GridColumn15Header,
-                            headerCellClass: 'gridclass',
-                            cellClass: 'gridclass',
-                            width: "210",
-                            position: value.position,
-                            visible: value.displayInDashboard
-                        });
-
-                    }
+                
+                if (value.displayInDashboard == true && value.position != -1) {
+                    columnDefs1.push({
+                        field: key,
+                        displayName: vm.switchFuction(value.displayName),
+                        width: value.dashboardwidth,
+                        cellTemplate: value.dashboardcellTemplate,
+                        position: value.position,
+                        cellClass: value.dashboardCellClass,
+                        headerCellClass: value.dashboardHeaderCellClass,
+                        enableColumnMenu: false
+                    });
                 }
 
             });
@@ -498,7 +359,10 @@
                         AOLList: [""],
                         FromDate: "",
                         ToDate: "",
-                        FilterByMe: 0
+                        FilterByMe: 0,
+                        PracticeGroup: "",
+                        AreaOfLaw: "",
+                        SubareaOfLaw:""
                     },
                     Sort: {
                         ByProperty: 'LastModifiedTime',
@@ -517,7 +381,13 @@
                     vm.allMatterCount = response.allMatterCounts;
                     vm.myMatterCount = response.myMatterCounts;
                     vm.pinMatterCount = response.pinnedMatterCounts;
-                    vm.totalrecords = response.myMatterCounts;
+                    if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
+                        vm.totalrecords = response.myMatterCounts;
+                    } else if (vm.selectedTab == vm.matterDashboardConfigs.Tab2HeaderText) {
+                        vm.totalrecords = response.allMatterCounts;
+                    } else {
+                        vm.totalrecords = response.pinnedMatterCounts
+                    }
                     //vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + vm.myMatterCount + ")";
                     if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
                         vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + response.myMatterCounts + ")";
@@ -532,7 +402,7 @@
                     vm.pagination();
                     vm.lazyloaderdashboard = true;
                     vm.divuigrid = true;
-                    vm.displaypagination = true;
+                    //vm.displaypagination = true;
                 });
             }
             //#endregion
@@ -540,7 +410,7 @@
             //#region This api will get all matters which are pinned and this will be invoked when the user clicks on "Pinned Matters Tab"
             vm.getMatterPinned = function () {
                 vm.tabClicked = "Pinned Matters";
-                vm.selectedTab == "Pinned matters";
+                vm.selectedTab = vm.matterDashboardConfigs.Tab3HeaderText;
                 vm.sortbytext = vm.matterDashboardConfigs.DrpDownOption1Text;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -647,7 +517,6 @@
                         //vm.lazyloaderdashboard = true;
                         //vm.divuigrid = false;
                         vm.nodata = true;
-                        vm.pagination();
                     } else {
                         vm.getMatterCounts();
                         vm.totalrecords = response.length;
@@ -655,7 +524,6 @@
                         //vm.divuigrid = true;
                         vm.nodata = false;
                         //vm.lazyloaderdashboard = true;
-                        vm.pagination();
                     }
                 });
             }
@@ -664,7 +532,7 @@
 
             vm.myMatters = function () {
                 vm.tabClicked = "My Matters";
-                vm.selectedTab == "My matters";
+                vm.selectedTab = vm.matterDashboardConfigs.Tab1HeaderText;
                 vm.sortbytext = vm.matterDashboardConfigs.DrpDownOption1Text;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -713,9 +581,7 @@
                                     });
                                 });
                                 vm.matterGridOptions.data = response;
-                                vm.totalrecords = vm.myMatterCount;
                                 vm.selectedTabCount = vm.myMatterCount;
-                                vm.pagination();
                                 vm.lazyloaderdashboard = true;
                                 vm.divuigrid = true;
                                 vm.getMatterCounts();
@@ -723,9 +589,7 @@
                             else {
                                 vm.lazyloaderdashboard = true;
                                 vm.matterGridOptions.data = response;
-                                vm.totalrecords = vm.myMatterCount;
                                 vm.selectedTabCount = vm.myMatterCount;
-                                vm.pagination();
                                 vm.pinMatterCount = 0;
                                 vm.divuigrid = true;
                                 vm.getMatterCounts();
@@ -738,7 +602,7 @@
             //This search function will be used for binding search results to the grid
             vm.search = function (isMy) {
                 vm.tabClicked = "All Matters";
-                vm.selectedTab == "All matters";
+                vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
                 vm.sortbytext = vm.matterDashboardConfigs.DropDownOptionText;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -920,14 +784,16 @@
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                this.openedStartDate = true;
+                vm.openedStartDate = vm.openedStartDate ? false : true;
+                vm.openedEndDate = false;
             };
             vm.openEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                this.openedEndDate = true;
+                vm.openedEndDate = vm.openedEndDate ? false : true;
+                vm.openedStartDate = false;
             };
             vm.openedStartDate = false;
             vm.openedEndDate = false;
@@ -960,6 +826,8 @@
                     vm.pgdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
 
                 } else if (vm.clientdropvisible && $event.type === "keyup") {
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel1InternalFuncParamText);
@@ -971,52 +839,86 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                     vm.lazyloaderclient = true;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
                 }
             }
 
             //#region showing and hiding practice group dropdown
             vm.showPracticegroupDrop = function ($event) {
                 $event.stopPropagation();
-                if (!vm.pgdropvisible) {
-                    if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
-                        vm.lazyloaderpg = false;
-                        getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                            vm.practiceGroups = response.level1;
-                            vm.aolTerms = [];
-                            if (!vm.globalSettings.isBackwardCompatible) {
+                if (!vm.pgdropvisible) {                    
+                    
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
+                            vm.lazyloaderpg = false;
+                            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                                vm.practiceGroups = response.level1;
+                                vm.aolTerms = [];
                                 angular.forEach(response.level1, function (pgTerm) {
                                     angular.forEach(pgTerm.level2, function (areaterm) {
                                         vm.aolTerms.push(areaterm);
                                     });
                                 });
-                            } else {
+                                vm.subAolTerms = [];
                                 angular.forEach(response.level1, function (pgTerm) {
                                     angular.forEach(pgTerm.level2, function (areaterm) {
                                         angular.forEach(areaterm.level3, function (term) {
-                                            vm.aolTerms.push(term);
+                                            vm.subAolTerms.push(term);
                                         });
                                     });
                                 });
-                            }
-                            vm.pgdrop = true;
-                            vm.pgdropvisible = true;
+                                vm.pgdrop = true;
+                                vm.pgdropvisible = true;
+                                if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
+                                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
+                                }
+                                vm.lazyloaderpg = true;
+                            });
+                        }
+                        else {
                             if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
                                 vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
                             }
-                            vm.lazyloaderpg = true;
-                        });
+                            vm.pgdrop = true;
+                            vm.pgdropvisible = true;
+                        }
                     }
                     else {
-                        if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
-                            vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
+                        if (vm.practiceGroups === undefined) {
+                            vm.lazyloaderpg = false;
+                            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                                vm.practiceGroups = response.level1;
+                                vm.subAolTerms = [];
+                                angular.forEach(response.level1, function (pgTerm) {
+                                    angular.forEach(pgTerm.level2, function (areaterm) {
+                                        angular.forEach(areaterm.level3, function (term) {
+                                            vm.subAolTerms.push(term);
+                                        });
+                                    });
+                                });
+                                vm.pgdrop = true;
+                                vm.pgdropvisible = true;
+                                if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
+                                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
+                                }
+                                vm.lazyloaderpg = true;
+                            });
                         }
-                        vm.pgdrop = true;
-                        vm.pgdropvisible = true;
+                        else {
+                            if (vm.selectedPGs !== undefined && vm.selectedPGs.length > 0) {
+                                vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
+                            }
+                            vm.pgdrop = true;
+                            vm.pgdropvisible = true;
+                        }
                     }
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
                 } else if (vm.pgdropvisible && $event.type === "keyup") {
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText);
                 } else {
@@ -1027,6 +929,8 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                     vm.lazyloaderpg = true;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
                 }
             }
             //#endregion
@@ -1035,38 +939,70 @@
             vm.showAreaofLawDrop = function ($event) {
                 $event.stopPropagation();
                 if (!vm.aoldropvisible) {
-                    if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
-                        vm.lazyloaderaol = false;
-                        getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-                            vm.practiceGroups = response.level1;
-                            vm.aolTerms = [];
-                            angular.forEach(response.level1, function (pgTerm) {
-                                angular.forEach(pgTerm.level2, function (areaterm) {
-                                    vm.aolTerms.push(areaterm);
-                                });
-                            })
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined)) {
+                            vm.lazyloaderaol = false;                        
+                            getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                                vm.practiceGroups = response.level1;
+                                vm.aolTerms = [];
+                                angular.forEach(response.level1, function (pgTerm) {
+                                    angular.forEach(pgTerm.level2, function (areaterm) {
+                                        vm.aolTerms.push(areaterm);
+                                    });
+                                })
+                                vm.aoldrop = true;
+                                vm.aoldropvisible = true;
+                                if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
+                                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
+                                }
+                                
+                            });
+                        }
+                        else {
+                            vm.lazyloaderaol = true;
+                            if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
+                                vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
+                            }
                             vm.aoldrop = true;
                             vm.aoldropvisible = true;
+                        }
+                    }
+                    else {
+                        vm.lazyloaderaol = false;
+                        if (vm.aolTerms === undefined || vm.aolTerms.length==0) {
+                            getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
+                                vm.aolTerms = response.clientTerms;
+                                vm.aoldrop = true;
+                                vm.aoldropvisible = true;
+                                if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
+                                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
+                                }
+                                vm.lazyloaderaol = true;
+                            });
+                        }
+                        else {
+                            vm.lazyloaderaol = true;
                             if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
                                 vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
                             }
                             vm.lazyloaderaol = true;
-                        });
-                    }
-                    else {
-                        if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
-                            vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
+                            vm.aoldrop = true;
+                            vm.aoldropvisible = true;
                         }
-                        vm.aoldrop = true;
-                        vm.aoldropvisible = true;
                     }
+                    
+                    
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
                     vm.pgdropvisible = false;
-                } else if (vm.aoldropvisible && $event.type === "keyup") {
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
+                }
+                else if (vm.aoldropvisible && $event.type === "keyup") {
                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
-                } else {
+                }
+                else {
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
                     vm.pgdrop = false;
@@ -1074,6 +1010,62 @@
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
                     vm.lazyloaderaol = true;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
+                }
+            }
+
+            vm.showSubAreaofLawDrop = function ($event) {
+                $event.stopPropagation();
+                if (!vm.subAolDropVisible) {
+                    if ((vm.practiceGroups === undefined) && (vm.aolTerms === undefined) && (vm.subAolTerms === undefined)) {
+                        vm.lazyloadersubaol = false;
+                        getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                            vm.practiceGroups = response.level1;
+                            vm.aolTerms = [];
+                            vm.subAolTerms = [];
+                            angular.forEach(response.level1, function (pgTerm) {
+                                angular.forEach(pgTerm.level2, function (areaterm) {
+                                    angular.forEach(areaterm.level3, function (subAreaTerm) {
+                                        vm.subAolTerms.push(subAreaTerm);
+                                    });
+                                });
+                            })
+                            vm.subAoldrop = true;
+                            vm.subAolDropVisible = true;
+                            if (vm.selectedSubAOLs !== undefined && vm.selectedSubAOLs.length > 0) {
+                                vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText);
+                            }
+                            vm.lazyloadersubaol = true;
+                        });
+                    }
+                    else {
+                        if (vm.selectedSubAOLs !== undefined && vm.selectedSubAOLs.length > 0) {
+                            vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText);
+                        }
+                        vm.subAoldrop = true;
+                        vm.subAolDropVisible = true;
+                    }
+                    vm.clientdrop = false;
+                    vm.clientdropvisible = false;
+                    vm.pgdrop = false;
+                    vm.pgdropvisible = false;
+                    vm.aoldrop = false;
+                    vm.aoldropvisible = false;
+                }
+                else if (vm.subAolDropVisible && $event.type === "keyup") {
+                    vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText);
+                }
+                else {
+                    vm.clientdrop = false;
+                    vm.clientdropvisible = false;
+                    vm.pgdrop = false;
+                    vm.pgdropvisible = false;
+                    vm.aoldrop = false;
+                    vm.aoldropvisible = false;
+                    vm.lazyloadersubaol = true;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
                 }
             }
             //#endregion          
@@ -1091,7 +1083,8 @@
                             }
                         })
                     });
-                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
+                }
+                else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel2InternalFuncParamText) {
                     var selectdPGs = vm.selectedPGs.split(',');  //user altered text value
                     angular.forEach(vm.practiceGroups, function (pgGroup) {
                         pgGroup.Selected = false;
@@ -1101,13 +1094,34 @@
                             }
                         })
                     });
-                } else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
+                }
+                else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
                     var selectedAOLs = vm.selectedAOLs.split(',');  //user altered text value
                     angular.forEach(vm.aolTerms, function (aol) {
                         aol.Selected = false;
-                        angular.forEach(selectedAOLs, function (aolInput) {
-                            if (aolInput.toString().length > 0 && aol.termName.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
-                                aol.Selected = true;
+                        if (!vm.globalSettings.isBackwardCompatible) {
+                            angular.forEach(selectedAOLs, function (aolInput) {
+                                if (aolInput.toString().length > 0 && aol.termName.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
+                                    aol.Selected = true;
+                                }
+                            })
+                        }
+                        else {
+                            angular.forEach(selectedAOLs, function (aolInput) {
+                                if (aolInput.toString().length > 0 && aol.name.toString().toLowerCase().indexOf(aolInput.toString().toLowerCase()) !== -1) {
+                                    aol.Selected = true;
+                                }
+                            })
+                        }
+                    });
+                }
+                else if (type !== undefined && type === vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText) {
+                    var selectdSubAreaofLaws = vm.selectedSubAOLs.split(';');  //user altered text value
+                    angular.forEach(vm.subAolTerms, function (subAreaOfLaw) {
+                        subAreaOfLaw.Selected = false;
+                        angular.forEach(selectdSubAreaofLaws, function (subAreaOfLawInput) {
+                            if (subAreaOfLawInput.toString().length > 0 && subAreaOfLaw.termName.toString().toLowerCase().indexOf(subAreaOfLawInput.toString().toLowerCase()) !== -1) {
+                                subAreaOfLaw.Selected = true;
                             }
                         })
                     });
@@ -1131,6 +1145,11 @@
                 if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
                     angular.forEach(vm.aolTerms, function (aol) {
                         aol.Selected = checkAll;
+                    });
+                }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText) {
+                    angular.forEach(vm.subAolTerms, function (subAol) {
+                        subAol.Selected = checkAll;
                     });
                 }
             }
@@ -1178,15 +1197,37 @@
 
                 if (type === vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText) {
                     vm.selectedAOLs = '';
-                    angular.forEach(vm.aolTerms, function (aol) {
-                        if (aol.Selected) {
-                            vm.selectedAOLs = vm.selectedAOLs + aol.termName + ","
-                        }
-                    });
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        angular.forEach(vm.aolTerms, function (aol) {
+                            if (aol.Selected) {
+                                vm.selectedAOLs = vm.selectedAOLs + aol.termName + ","
+                            }
+                        });
+                    }
+                    else {
+                        angular.forEach(vm.aolTerms, function (aol) {
+                            if (aol.Selected) {
+                                vm.selectedAOLs = vm.selectedAOLs + aol.name + ","
+                            }
+                        });
+                    }
                     vm.selectedAOLs = vm.selectedAOLs.slice(0, vm.selectedAOLs.length - 1);
                     vm.selectedAOLsForCancel = vm.selectedAOLs;
                     vm.aoldrop = false;
                     vm.aoldropvisible = false;
+                }
+
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText) {
+                    vm.selectedSubAOLs = '';
+                    angular.forEach(vm.subAolTerms, function (subAolTerm) {
+                        if (subAolTerm.Selected) {
+                            vm.selectedSubAOLs = vm.selectedSubAOLs + subAolTerm.termName + ","
+                        }
+                    });
+                    vm.selectedSubAOLs = vm.selectedSubAOLs.slice(0, vm.selectedSubAOLs.length - 1);
+                    vm.selectedSubAOLsForCancel = vm.selectedSubAOLs;
+                    vm.subAoldrop = false;
+                    vm.subAolDropVisible = false;
                 }
             }
             //#endregion
@@ -1223,12 +1264,24 @@
                         });
                     }
                 }
+                if (type === vm.matterDashboardConfigs.AdvSearchLabel4InternalFuncParamText) {
+                    if (vm.selectedSubAOLsForCancel !== undefined && vm.selectedSubAOLsForCancel.toString().length > 0) {
+                        vm.selectedSubAOLs = vm.selectedSubAOLsForCancel;
+                        angular.forEach(vm.subAolTerms, function (subAol) {
+                            if (vm.selectedSubAOLs.indexOf(subAol.termName) > 0) {
+                                subAol.Selected = true;
+                            }
+                        });
+                    }
+                }
                 vm.clientdrop = false;
                 vm.clientdropvisible = false;
                 vm.pgdrop = false;
                 vm.pgdropvisible = false;
                 vm.aoldrop = false;
                 vm.aoldropvisible = false;
+                vm.subAoldrop = false;
+                vm.subAolDropVisible = false;
             }
             //#endregion
             //#region File upload functionality
@@ -1409,7 +1462,6 @@
                             vm.nodata = true;
                             vm.lazyloaderdashboard = true;
                             vm.getMatterCounts();
-                            vm.pagination();
                             $scope.errorMessage = response.message;
                         } else {
                             vm.matterGridOptions.data = response;
@@ -1417,7 +1469,6 @@
                             vm.nodata = false;
                             vm.lazyloaderdashboard = true;
                             vm.getMatterCounts();
-                            vm.pagination();
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1526,6 +1577,11 @@
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
                     vm.pagenumber = vm.pagenumber + 1;
+                    if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
+                        jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
+                    } else {
+                        jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
+                    }
                     jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
                     jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(jsonMatterSearchRequest, function (response) {
@@ -1585,6 +1641,11 @@
                     vm.last = vm.last - gridOptions.paginationPageSize;
                     vm.pagenumber = vm.pagenumber - 1;
                     vm.fromtopage = vm.first + " - " + vm.last;
+                    if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
+                        jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
+                    } else {
+                        jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
+                    }
                     jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
                     jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(jsonMatterSearchRequest, function (response) {
@@ -1833,21 +1894,26 @@
                 vm.searchdrop = false;
                 var clientArray = [];
                 var aolListarray = [];
+                var subAolListarray = [];
                 var pglistArray = [];
                 var startdate = "";
                 var enddate = "";
+                vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
+
                 if (vm.selectedClients != "" && vm.selectedClients != undefined) {
-                    clientArray = vm.selectedClients.split(',');
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        clientArray = vm.selectedClients.split(',');
+                    }
                 }
                 if (vm.selectedPGs != "" && vm.selectedPGs != undefined) {
-                    pglistArray = vm.selectedPGs.split(',');
+                    jsonMatterSearchRequest.SearchObject.Filters.PracticeGroup = vm.selectedPGs;
                 }
-                if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined) {
-                    aolListarray = vm.selectedAOLs.split(',');
+                if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined){
+                    jsonMatterSearchRequest.SearchObject.Filters.AreaOfLaw = vm.selectedAOLs
                 }
-                if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined) {
-                    aolListarray = vm.selectedAOLs.split(',');
-                }
+                if (vm.selectedSubAOLs != "" && vm.selectedSubAOLs != undefined) {
+                    jsonMatterSearchRequest.SearchObject.Filters.SubareaOfLaw = vm.selectedSubAOLs;
+                } 
                 if (vm.startdate != "" && vm.startdate != undefined) {
                     startdate = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
                 }
@@ -1856,26 +1922,24 @@
                 }
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.Filters.ClientsList = clientArray;
-                jsonMatterSearchRequest.SearchObject.Filters.PGList = pglistArray;
-                jsonMatterSearchRequest.SearchObject.Filters.AOLList = aolListarray;
+                //jsonMatterSearchRequest.SearchObject.Filters.PGList = pglistArray;
+                //jsonMatterSearchRequest.SearchObject.Filters.AOLList = aolListarray;
+                jsonMatterSearchRequest.SearchObject.PageNumber = 1;
                 jsonMatterSearchRequest.SearchObject.Filters.FromDate = startdate;
                 jsonMatterSearchRequest.SearchObject.Filters.ToDate = enddate;
                 get(jsonMatterSearchRequest, function (response) {
                     vm.lazyloaderdashboard = true;
                     if (response == "") {
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = false;
                         vm.nodata = true;
                         vm.totalrecords = response.length;
+                        vm.matterGridOptions.data = [];
                         vm.getMatterCounts();
-                        vm.displaypagination = false;
+                        vm.divuigrid = false;
                     } else {
+                        vm.divuigrid = true;
                         vm.matterGridOptions.data = response;
                         vm.totalrecords = response.length;
                         vm.getMatterCounts();
-                        vm.lazyloaderdashboard = true;
-                        vm.displaypagination = true;
-                        vm.divuigrid = true;
                         vm.nodata = false;
                         if (!$scope.$$phase) {
                             $scope.$apply();
@@ -1886,7 +1950,7 @@
             //#endregion
 
             if (vm.teamName !== '') {
-                vm.selectedTab = "All matters";
+                vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
 
                 vm.getSearchResults();
             }

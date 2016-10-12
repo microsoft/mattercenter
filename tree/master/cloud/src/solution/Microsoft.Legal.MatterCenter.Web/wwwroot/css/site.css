@@ -266,7 +266,7 @@ textarea {
 
 .viewportlg {
     overflow: auto !important;
-    overflow-y: scroll !important;
+    /*overflow-y: scroll !important;*/
     /*height:510px !important;*/
 }
 
@@ -678,7 +678,7 @@ textarea {
 }
 
 .ui-grid-viewport {
-    min-height: 20px;
+    /*min-height: 20px;*/
 }
 
 .overflowMain {
@@ -759,6 +759,13 @@ textarea {
 .dashboarddrop {
     position: absolute;
     top: 48px;
+    padding: 0 8px 1px 15px;
+    z-index: 5;
+}
+
+.dashboarddropForTeam {
+    position: absolute;
+    top: 111px;
     padding: 0 8px 1px 15px;
     z-index: 5;
 }

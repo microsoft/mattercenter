@@ -15,6 +15,7 @@
         vm.header = uiconfigs.Header;
         vm.documentConfigContent = uiconfigs.Documents;
         vm.configSearchContent = configs.search;
+        vm.globalSettings = configs.global;
         //#end region
         vm.documentname = 'My Documents'
         vm.documentid = 2;
@@ -26,7 +27,7 @@
         $rootScope.profileClass = "";
         // Onload show ui grid and hide error div
         //start
-        vm.divuigrid = true;
+        vm.divuigrid = false;
         vm.nodata = false;
         var screenHeight = 0;
         vm.searchResultsLength = 0;
@@ -111,7 +112,7 @@
         vm.createddateDropDown = false;
         //End
 
-        
+
 
         //For setting dynamic height to the grid
         vm.getTableHeight = function () {
@@ -128,7 +129,7 @@
         };
 
         vm.switchFuction = function (columnName) {
-            var displayColumn= [];
+            var displayColumn = [];
             switch (columnName) {
                 case "GridColumn1Header":
                     displayColumn[0] = vm.documentConfigContent.GridColumn1Header;
@@ -196,11 +197,11 @@
                     cellClass: value.cellClass,
                     headerCellClass: value.headerCellClass,
                     visible: value.defaultVisibleInGrid,
-                    //suppressRemoveSort: value.suppressRemoveSort
+                    suppressRemoveSort: true
                 });
             }
         });
-            
+
         function getSortFunction(fieldName) {
             return function (col1, col2) {
                 return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
@@ -236,14 +237,13 @@
                         row.entity.checker = false;
                     }
                     isOpenedInOutlook();
-
                 });
                 $animate.enabled(gridApi.grid.element, false);
                 $scope.gridApi.core.on.sortChanged($scope, $scope.sortChangedDocument);
                 $scope.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
                 $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFuncScroll);
                 gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
-                vm.setColumns();
+                //vm.setColumns();
             }
         };
 
@@ -539,7 +539,7 @@
                 SearchTerm: '',
                 IsUnique: false,
                 UniqueColumnName: '',
-                FilterValue:'',
+                FilterValue: '',
                 Filters: {
                     ClientName: "",
                     ClientsList: [],
@@ -561,8 +561,8 @@
                     ResponsibleAttorneys: "",
                     ProjectName: "",
                     SubareaOfLaw: "",
-                    ProjectID:"",
-                    PracticeGroup : "",
+                    ProjectID: "",
+                    PracticeGroup: "",
                     ToDate: ""
                 },
                 Sort:
@@ -608,7 +608,7 @@
                         FromDate: "",
                         Name: "",
                         ResponsibleAttorneys: "",
-                        ProjectName:"",
+                        ProjectName: "",
                         PracticeGroup: "",
                         ProjectID: "",
                         SubareaOfLaw: "",
@@ -617,7 +617,7 @@
                     Sort:
                             {
                                 ByProperty: '' + vm.configSearchContent.ManagedPropertyFileName + '',
-                                Direction: 0, 
+                                Direction: 0,
                                 ByColumn: "DocumentName"
                             }
                 }
@@ -632,8 +632,9 @@
                 vm.documentid = 1;
             }
             vm.lazyloader = false;
-            vm.divuigrid = false;
+            //vm.divuigrid = false;
             vm.responseNull = false;
+            vm.gridOptions.data = [];
             var searchToText = '';
             var finalSearchText = '';
             if (vm.selected != "") {
@@ -658,11 +659,11 @@
                 if (response == "") {
                     vm.gridOptions.data = response;
                     vm.lazyloader = true;
-                    vm.divuigrid = true;
+                    //vm.divuigrid = true;
                     vm.nodata = true;
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
-                    vm.divuigrid = true;
+                    //vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
@@ -677,7 +678,7 @@
 
                 searchRequest.SearchObject.IsUnique = true;
                 searchRequest.SearchObject.FilterValue = val;
-               
+
                 if (vm.searchexp == vm.configSearchContent.ManagedPropertyFileName) {
                     searchRequest.SearchObject.IsUnique = false;
                     searchRequest.SearchObject.FilterValue = '';
@@ -704,7 +705,7 @@
                     searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyDocumentCheckOutUser;
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
                 }
-                
+
             }
         }
 
@@ -718,7 +719,8 @@
             searchRequest.SearchObject.Sort.Direction = 1;
             if (bool) {
                 vm.documentheader = true;
-                vm.divuigrid = false;
+                //vm.divuigrid = false;
+                vm.lazyloader = false;
                 searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 if (property == "" + vm.configSearchContent.ManagedPropertyFileName + "") {
@@ -753,11 +755,19 @@
                     searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
                 }
             }
+            else {
+                if (!searchRequest.SearchObject.IsUnique) {
+                    searchRequest.SearchObject.IsUnique = true;
+                    searchRequest.SearchObject.FilterValue = term.substring(term.indexOf(":") + 1, term.indexOf("*"));
+                    searchRequest.SearchObject.UniqueColumnName = property;
+                }
+            }
             get(searchRequest, function (response) {
                 if (response == "") {
                     if (bool) {
                         vm.gridOptions.data = response;
                         vm.nodata = true;
+                        vm.lazyloader = true;
                     } else {
                         vm.details = response;
                         vm.nodata = false;
@@ -776,6 +786,7 @@
                     if (bool) {
                         vm.gridOptions.data = response;
                         vm.details = [];
+                        vm.lazyloader = true;
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
@@ -798,17 +809,18 @@
         //start
         vm.FilterModifiedDate = function (name) {
             vm.lazyloader = false;
-            vm.divuigrid = false;
+            vm.gridOptions.data = [];
+            //vm.divuigrid = false;
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.SearchTerm = "";
             if (name == "Modified Date") {
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modstartdate, "yyyy-MM-ddT00:00:00") + "Z";
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modenddate, "yyyy-MM-ddT23:59:59") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modStartDate, "yyyy-MM-ddT00:00:00") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modEndDate, "yyyy-MM-ddT23:59:59") + "Z";
                 vm.moddatefilter = true;
             }
             if (name == "Created Date") {
-                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
-                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = $filter('date')(vm.startDate, "yyyy-MM-ddT00:00:00") + "Z";
+                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = $filter('date')(vm.endDate, "yyyy-MM-ddT23:59:59") + "Z";
                 vm.createddatefilter = true;
             }
             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
@@ -817,11 +829,11 @@
                 if (response == "") {
                     vm.gridOptions.data = response;
                     vm.lazyloader = true;
-                    vm.divuigrid = true;
+                    //vm.divuigrid = true;
                     vm.nodata = true;
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
-                    vm.divuigrid = true;
+                    //vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
                     vm.gridOptions.data = response;
@@ -832,7 +844,7 @@
         }
 
         vm.clearAllFilter = function () {
-         
+
             vm.documentheader = true;
             vm.documentdateheader = true;
             vm.nodata = false;
@@ -852,7 +864,7 @@
             vm.projectSearchTerm = "";
             searchRequest.SearchObject.Filters.ProjectName = "";
             vm.projectNamefilter = false;
-            
+
 
             vm.checkedSearchTerm = "";
             searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
@@ -868,8 +880,8 @@
 
             searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
             searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
-            vm.modstartdate = "";
-            vm.modenddate = "";
+            vm.modStartDate = "";
+            vm.modEndDate = "";
             vm.moddatefilter = false;
 
             searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
@@ -917,22 +929,40 @@
                 searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
                 vm.checkoutfilter = false;
             }
-            else if (property == vm.documentConfigContent.GridColumn4Header) {
+            else if (property == vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible) {
                 vm.authorSearchTerm = ""
                 searchRequest.SearchObject.Filters.DocumentAuthor = "";
                 vm.authorfilter = false;
             }
-            else if (property == vm.documentConfigContent.GridColumn6Header) {
+            else if (property == vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible) {
+                vm.authorSearchTerm = ""
+                searchRequest.SearchObject.Filters.DocumentAuthor = "";
+                vm.authorfilter = false;
+            }
+            else if (property == vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible) {
                 vm.practiceGroupSearchTerm = ""
                 searchRequest.SearchObject.Filters.PracticeGroup = "";
                 vm.practiceGroupfilter = false;
             } //For Date Columns
-            else if (property == vm.documentConfigContent.GridColumn5Header) {
+            else if (property == vm.documentConfigContent.GridColumn5Header && vm.globalSettings.isBackwardCompatible) {
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
-                vm.modstartdate = "";
-                vm.modenddate = "";
+                vm.modStartDate = "";
+                vm.modEndDate = "";
                 vm.moddatefilter = false;
+                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
+                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
+                vm.startDate = "";
+                vm.endDate = "";
+                vm.createddatefilter = false;
+            }
+            else if (!vm.globalSettings.isBackwardCompatible && property == vm.documentConfigContent.GridColumn4Header) {
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
+                vm.modStartDate = "";
+                vm.modEndDate = "";
+                vm.moddatefilter = false;
+            } else if (!vm.globalSettings.isBackwardCompatible && property == vm.documentConfigContent.GridColumn8Header) {
                 searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
                 searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
                 vm.startDate = "";
@@ -988,8 +1018,8 @@
             vm.selected = "";
             vm.searchTerm = "";
             vm.searchClientTerm = "";
-            vm.startdate = "";
-            vm.enddate = "";
+            vm.startDate = "";
+            vm.endDate = "";
             vm.lazyloader = false;
             vm.divuigrid = false;
             vm.nodata = false;
@@ -1011,7 +1041,6 @@
                         if (vm.isOutlook) {
                             vm.isOutlookAsAttachment(vm.isOutlook);
                         }
-                        vm.divuigrid = true;
                         vm.nodata = false;
                         vm.responseNull = false;
                         vm.pagenumber = 1;
@@ -1044,7 +1073,7 @@
                                 }
                             }
                         });
-                        $timeout(function () { vm.lazyloader = true; }, 1000);
+                        $timeout(function () { vm.lazyloader = true; vm.divuigrid = true; }, 1000);
                         $interval(function () { vm.showSortExp(); }, 3000, 3);
                     }
                 });
@@ -1085,6 +1114,7 @@
                                     });
                                 });
                                 vm.gridOptions.data = response;
+
                                 if (!$scope.$$phase) {
                                     $scope.$apply();
                                 }
@@ -1126,8 +1156,6 @@
                         });
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
-                        vm.divuigrid = true;
-                        vm.nodata = false;
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
@@ -1237,28 +1265,28 @@
             maxDate: new Date()
         }
 
-        $scope.$watch('vm.modstartdate', function (newval, oldval) {
+        $scope.$watch('vm.modStartDate', function (newval, oldval) {
             vm.modenddateOptions.minDate = newval;
         });
 
 
-        vm.modStartDate = function ($event) {
+        vm.modStartDateClick = function ($event) {
             if ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
             }
             this.modifiedStartDate = true;
         };
-        vm.modEndDate = function ($event) {
+        vm.modEndDateClick = function ($event) {
             if ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
             }
-            this.modifiedenddate = true;
+            this.modifiedEndDate = true;
         };
 
         vm.modifiedStartDate = false;
-        vm.modifiedenddate = false;
+        vm.modifiedEndDate = false;
 
         vm.disabled = function (date, mode) {
             return (mode === 'day' && (date.getDay() != 0));
@@ -1279,7 +1307,7 @@
             maxDate: new Date()
         }
 
-        $scope.$watch('vm.startdate', function (newval, oldval) {
+        $scope.$watch('vm.startDate', function (newval, oldval) {
             vm.enddateOptions.minDate = newval;
         });
 
@@ -1381,7 +1409,8 @@
         $interval(function () { vm.showSortExp(); }, 2500, 3);
 
         //#region for sorting in ascending
-        vm.documentSortBy = function (byproperty,direction,bycolumn,sortexp,sortby) {
+        vm.documentSortBy = function (byproperty, direction, bycolumn, sortexp, sortby) {
+            vm.lazyloader = true;
             vm.pagenumber = 1;
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.Sort.ByProperty = byproperty;
@@ -1395,13 +1424,14 @@
 
 
         $scope.sortChangedDocument = function (grid, sortColumns) {
-            vm.lazyloader = false;
-            vm.divuigrid = false;
             vm.responseNull = false;
+            vm.lazyloader = false;
             vm.gridOptions.data = [];
             $scope.gridApi.infiniteScroll.resetScroll();
             if (sortColumns.length != 0) {
                 if (sortColumns[0].name != undefined) {
+
+                    //vm.divuigrid = false;
                     if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentName.keyName.trim().toLowerCase()) {
                         if (sortColumns[0].sort != undefined) {
                             if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
@@ -1413,7 +1443,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                            vm.lazyloader = true;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentClient.keyName.trim().toLowerCase()) {
@@ -1428,7 +1458,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentClientId.keyName.trim().toLowerCase()) {
@@ -1442,7 +1471,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentModifiedDate.keyName.trim().toLowerCase()) {
@@ -1456,7 +1484,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentOwner.keyName.trim().toLowerCase()) {
@@ -1470,7 +1497,20 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
+                        }
+                    }
+                    else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentPracticeGroup.keyName.trim().toLowerCase()) {
+                        if (sortColumns[0].sort != undefined) {
+                            if (vm.DocumentPracticeGroupSort == undefined || vm.DocumentPracticeGroupSort == "asc") {
+                                vm.DocumentPracticeGroupSort = "desc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyPracticeGroup, 0, sortColumns[0].name, sortColumns[0].field, "asc");
+                            }
+                            else {
+                                vm.DocumentPracticeGroupSort = "asc";
+                                vm.documentSortBy(vm.configSearchContent.ManagedPropertyPracticeGroup, 1, sortColumns[0].name, sortColumns[0].field, "desc");
+                            }
+                        } else {
+                            vm.divuigrid = true;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentVersion.keyName.trim().toLowerCase()) {
@@ -1484,7 +1524,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentCheckoutUser.keyName.trim().toLowerCase()) {
@@ -1498,7 +1537,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentCreatedDate.keyName.trim().toLowerCase()) {
@@ -1512,7 +1550,6 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            vm.nodata = false;
                         }
                     }
                     else if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentMatterName.keyName.trim().toLowerCase()) {
@@ -1525,15 +1562,15 @@
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyMatterName, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                             }
                         } else {
-                            vm.divuigrid = true;
-                            vm.nodata = false;
+                            vm.divuigrid = true;                            
                         }
                     }
                 }
             } else {
                 vm.pagenumber = 1;
                 searchRequest.SearchObject.PageNumber = 1;
-                vm.lazyloader = false;
+                vm.lazyloader = true;
+                vm.divuigrid = true;
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
                 searchRequest.SearchObject.Sort.Direction = 0;
                 searchRequest.SearchObject.Sort.ByColumn = sortColumns[0].name;
@@ -1690,9 +1727,13 @@
                 vm.filtername = vm.documentConfigContent.GridColumn3Header;
             }
             //Author
-            if (name === vm.documentConfigContent.GridColumn4Header) {
+            if (name === vm.documentConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
                 vm.filtername = vm.documentConfigContent.GridColumn4Header;
+            }
+            if (name === vm.documentConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible) {
+                vm.searchexp = "" + vm.configSearchContent.ManagedPropertyAuthor + "";
+                vm.filtername = vm.documentConfigContent.GridColumn5Header;
             }
             //for Practice Group
             if (name === vm.documentConfigContent.GridColumn6Header) {
@@ -1705,7 +1746,11 @@
                 vm.filtername = vm.documentConfigContent.GridColumn7Header;
             }
             //Modified Date
-            if (name === vm.documentConfigContent.GridColumn5Header) {
+            if (name === vm.documentConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible) {
+                vm.filtername = vm.documentConfigContent.GridColumn4Header;
+            }
+
+            if (name === vm.documentConfigContent.GridColumn5Header && vm.globalSettings.isBackwardCompatible) {
                 vm.filtername = vm.documentConfigContent.GridColumn5Header;
             }
             //Created Date
@@ -1713,7 +1758,7 @@
                 vm.filtername = vm.documentConfigContent.GridColumn8Header;
             }
             $timeout(function () {
-                if (name == vm.documentConfigContent.GridColumn5Header || name == vm.documentConfigContent.GridColumn8Header) {
+                if (name == vm.documentConfigContent.GridColumn5Header && vm.globalSettings.isBackwardCompatible || name == vm.documentConfigContent.GridColumn8Header || name == vm.documentConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible) {
                     vm.documentdateheader = false;
                 }
                 else {
