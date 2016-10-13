@@ -31,6 +31,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private ErrorSettings errorSettings;
         private SearchSettings searchSettings;
         private IConfigurationRoot configuration;
+        private IHttpContextAccessor httpContextAccessor;
         public DocumentProvision(IDocumentRepository docRepository, 
             IUserRepository userRepository, 
             IUploadHelperFunctions uploadHelperFunctions, 
@@ -39,6 +40,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             ICustomLogger customLogger,
             IOptions<SearchSettings> searchSettings,
             IConfigurationRoot configuration,
+            IHttpContextAccessor httpContextAccessor,
             IOptions<LogTables> logTables, IOptions<ErrorSettings> errorSettings)
         {
             this.docRepository = docRepository;
@@ -51,6 +53,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.errorSettings = errorSettings.Value;
             this.searchSettings = searchSettings.Value;
             this.configuration = configuration;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
@@ -142,22 +145,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             Stream result = null;
             try
             {
+                
+                
+
+
                 MemoryStream mailFile = GetMailAsStream(collectionOfAttachments, documentUrls, attachmentFlag);
                 mailFile.Position = 0;
-                var fileContentResponse = new HttpResponseMessage(HttpStatusCode.OK);
-                fileContentResponse.Headers.Clear();
-
-                fileContentResponse.Content = new StreamContent(mailFile);
-
-                fileContentResponse.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(ReturnExtension(string.Empty));
-                //fileContentResponse.Headers.Add("Content-Type", ReturnExtension(string.Empty));
-                fileContentResponse.Content.Headers.Add("Content-Length", mailFile.Length.ToString());
-                fileContentResponse.Content.Headers.Add("Content-Description","File Transfer");
-                fileContentResponse.Content.Headers.Add("Content-Disposition", "inline; filename=" + documentSettings.TempEmailName + new Guid().ToString() + ServiceConstants.EMAIL_FILE_EXTENSION);
-                fileContentResponse.Content.Headers.Add("Content-Transfer-Encoding","binary");
-                fileContentResponse.Content.Headers.Expires = DateTimeOffset.Now.AddDays(-1); ;
-                fileContentResponse.Headers.Add("Cache-Control", "must-revalidate, post-check=0, pre-check=0");                
-                fileContentResponse.Headers.Add("Pragma", "public");
+                
                 result = mailFile;
             }
             catch(Exception ex)
@@ -241,7 +235,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// </summary>
         /// <param name="fileExtension">Extension of the file</param>
         /// <returns>File content type</returns>
-        internal static string ReturnExtension(string fileExtension)
+        public static string ReturnExtension(string fileExtension)
         {
             string result = string.Empty;
             switch (fileExtension)

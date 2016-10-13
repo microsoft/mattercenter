@@ -394,11 +394,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 jw.WritePropertyName("isNoFolderStructurePresent");
                                 if (generalSettings.IsBackwardCompatible)
                                 {
-                                    if(customProperty.Value==ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_FALSE)
+                                    if(customProperty.Value.ToLower()==ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_FALSE.ToLower())
                                     {
                                         jw.WriteValue(ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_TRUE);
                                     }
-                                    else if (customProperty.Value == ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_TRUE)
+                                    else if (customProperty.Value.ToLower() == ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_TRUE.ToLower())
                                     {
                                         jw.WriteValue(ServiceConstants.IS_FOLDER_STRUCTURE_PRESENT_FALSE);
                                     }                                    
