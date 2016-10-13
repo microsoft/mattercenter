@@ -141,10 +141,11 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         {
 
             string tempUserEmail = userEmail;
-            if (!userEmail.Contains("msmatter.onmicrosoft.com"))
+            if (!userEmail.Contains(configuration["General:Tenant"].ToString()))
+               // i: 0#.f|membership|venkatmuppa3_outlook.com#ext#@msmattercela.onmicrosoft.com
             {
                 tempUserEmail = userEmail.Replace("@", "_");
-                tempUserEmail = $"i:0#.f|membership|{tempUserEmail}#ext#@msmatter.onmicrosoft.com";
+                tempUserEmail = $"i:0#.f|membership|{tempUserEmail}#EXT#@{configuration["General:Tenant"].ToString()}";
             }
             GroupCollection groupCollection = catalogContext.Web.SiteGroups;
             Group group = groupCollection.GetByName("Matter Center Users");
@@ -189,10 +190,10 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                     string finalMatterCenterUsers = string.Concat(stampedUsers, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentUsers);
                     string finalBlockedUploadUsers = string.Concat(stampedBlockedUploadUsers, ServiceConstants.SEMICOLON, currentBlockedUploadUsers);
 
-                    if(stampedUserEmails.LastIndexOf("$|$")>0)
-                    {
-                        stampedUserEmails = stampedUserEmails.Remove(stampedUserEmails.Length - 3);
-                    }
+                    //if(stampedUserEmails.LastIndexOf("$|$")>0)
+                    //{
+                    //    stampedUserEmails = stampedUserEmails.Remove(stampedUserEmails.Length - 3);
+                    //}
 
                     string finalMatterCenterUserEmails = string.Concat(stampedUserEmails, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentUserEmails);
 
