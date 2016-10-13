@@ -1030,6 +1030,7 @@
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
+                vm.displaypagination = false;
                 if (vm.tabClicked == "Pinned Documents") {
                     getPinDocuments(documentRequest, function (response) {
                         if (response && response.length > 0) {
@@ -1039,6 +1040,7 @@
                             vm.pagination();
                             vm.lazyloaderdashboard = true;
                             vm.divuigrid = true;
+                            vm.displaypagination = true;
                         }
                         else {
                             vm.nodata = true;
@@ -1049,25 +1051,26 @@
 
                 } else {
                     get(documentRequest, function (response) {
-                        vm.lazyloader = true;
-                        if (response.errorCode == "404") {
-                            vm.lazyloaderdashboard = true;
-                            vm.divuigrid = false;
-                            vm.nodata = true;
-                            vm.displaypagination = false;
+                        if (response && response.length > 0) {
+                            //vm.lazyloaderdashboard = true;
+                            //vm.divuigrid = false;
+                            vm.nodata = false;
+                            //vm.displaypagination = false;
+                            vm.documentGridOptions.data = response;
                             vm.errorMessage = response.message;
                             vm.getDocumentCounts();
                             vm.totalrecords = response.length;
                         } else {
-                            vm.getDocumentCounts();
-                            vm.totalrecords = response.length;
+                            //vm.totalrecords = response.length;
                             vm.documentGridOptions.data = response;
+                            vm.getDocumentCounts();
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
-                            vm.lazyloaderdashboard = true;
-                            vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.lazyloaderdashboard = true;
+                            //vm.divuigrid = true;
+                            vm.nodata = true;
+                            //vm.displaypagination = true;
                         }
                     });
                 }
