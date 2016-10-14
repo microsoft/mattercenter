@@ -275,7 +275,7 @@
                         <img alt="Sort By" class="" ng-click="vm.showsortby($event)" title="Sort By" src="../Images/icon-combobox.png" />
                     </div>
                     <div class="" style="min-width: 20px;max-width: 20px;float: right;margin-right: 10px;">
-                        <span class="img-xls" ng-click="vm.export()">
+                        <span class="img-xls" ng-show="vm.lazyloaderdashboard" ng-click="vm.export()">
                             <img alt="export" src="../../images/icxlsx.png" />
                         </span>
                         <!--<button ng-click="vm.export()" class="btn btn-primary pull-right">{{vm.matterDashboardConfigs.ButtonExportText}}</button>-->
@@ -540,7 +540,7 @@
                     <th>{{vm.matterDashboardConfigs.GridColumn3Header}}</th>
                     <th>{{vm.matterDashboardConfigs.GridColumn4Header}}</th>
                     <th>{{vm.matterDashboardConfigs.GridColumn5Header}}</th>
-                    <th>{{vm.matterDashboardConfigs.GridColumn6Header}}</th>
+                    <!--<th>{{vm.matterDashboardConfigs.GridColumn6Header}}</th>-->
                 </tr>
             </thead>
             <tbody>
@@ -549,8 +549,8 @@
                     <td>{{item.matterPracticeGroup}}</td>
                     <td>{{item.matterClient}}</td>
                     <td>{{item.matterSubAreaOfLaw}}</td>
-                    <td>{{item.matterCreatedDate}}</td>
-                    <td>{{item.matterID}}</td>
+                    <td datefilter date={{item.matterCreatedDate}}></td>
+                    <!--<td>{{item.matterID}}</td>-->
                 </tr>
             </tbody>
         </table>
