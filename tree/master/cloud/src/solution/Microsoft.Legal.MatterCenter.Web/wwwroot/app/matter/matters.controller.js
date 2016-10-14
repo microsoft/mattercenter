@@ -2573,7 +2573,9 @@
                 else if (vm.filtername == vm.matterConfigContent.GridColumn4Header) {
                     searchTerm = vm.subAreaOfLawSearchTerm.toLowerCase();
                 }
-                var arrayItem = value.split(';');
+
+                var arrayItem = [];
+                arrayItem.push(value);
                 var arrelements = [];
                 angular.forEach(arrayItem, function (item) {
                     var lowerItem = item.toLowerCase();

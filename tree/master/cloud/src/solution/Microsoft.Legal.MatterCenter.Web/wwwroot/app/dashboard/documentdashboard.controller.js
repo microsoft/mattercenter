@@ -356,7 +356,17 @@
                     }
 
                     downloadAttachmentsAsStream(mailAttachmentDetailsRequest, function (response) {
-                        var result = encodeURIComponent(response);
+                        var fileName = response.fileName
+                        var blob = new Blob([response.fileAttachment.result], { type: "text/eml" });
+                        //window.navigator.msSaveOrOpenBlob(blob, "temp.eml");
+                        var element = window.document.createElement("a");
+                        element.href = window.URL.createObjectURL(blob);
+                        element.download = fileName;
+                        document.body.appendChild(element);
+                        element.click();
+                        document.body.removeChild(element);
+
+
                         //Once we get the response, stop the progress
                         angular.forEach(vm.cartelements, function (document) {
                             angular.element("#document-" + i).css("display", "none");
@@ -373,6 +383,7 @@
                         else {
                             vm.displayMessage = "Selected documents has been saved as link in draft email in Outlook."
                         }
+                        
                     })
                 }
                 else {
