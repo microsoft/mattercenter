@@ -50,7 +50,7 @@ describe("documents Controller test suite for service call", function () {
             vm.documentsearch(term, property, false);
             expect(vm.divuigrid).toBe(true);
             expect(vm.nodata).toBe(false);
-            expect(vm.lazyloader).toBe(true);
+            expect(vm.lazyloader).toBe(false);
             expect(vm.filternodata).toBe(false);
             expect(vm.details.length).toBeGreaterThan(0);
             expect(vm.details).not.toBe(null);
@@ -80,7 +80,7 @@ describe("documents Controller test suite for service call", function () {
     });
 
     describe("Verification of GetDocuments function", function () {
-        it("It should get document name from dropdown", function () {
+        it("It should add document name in dropdown", function () {
             vm.GetDocuments(3);
             expect(true).toBe(true);
             expect(vm.divuigrid).toBe(true);
@@ -98,7 +98,7 @@ describe("documents Controller test suite for service call", function () {
             vm.PinMatter(pinObject);
             vm.documentid = 1;
             vm.documentname = "All Documents";
-            expect(vm.divuigrid).toBe(true);
+            expect(vm.divuigrid).toBe(false);
             expect(vm.responseNull).toBe(false);
             expect(vm.nodata).toBe(false);
             expect(vm.gridOptions.data.length).toBeGreaterThan(0);
@@ -115,7 +115,7 @@ describe("documents Controller test suite for service call", function () {
             vm.UnpinDocument(pinObject);
             vm.documentid = 1;
             vm.documentname = "All Documents";
-            expect(vm.divuigrid).toBe(true);
+            expect(vm.divuigrid).toBe(false);
             expect(vm.responseNull).toBe(false);
             expect(vm.nodata).toBe(false);
             expect(vm.gridOptions.data.length).toBeGreaterThan(0);
@@ -125,7 +125,7 @@ describe("documents Controller test suite for service call", function () {
     });
 
     describe("Verification of FilterByType function", function () {
-        it("It should filter data whose document is greater than 0", function () {
+        it("It should filter data whose document count should be greater than 0", function () {
             vm.FilterByType();
             expect(vm.divuigrid).toBe(true);
             expect(vm.nodata).toBe(false);
@@ -161,7 +161,7 @@ describe("documents Controller test suite for service call", function () {
     });
 
     describe("Verification of FilterModifiedDate function", function () {
-        it("It should filter data based on modified date", function () {
+        it("It should filter the modified date based on date column ", function () {
             vm.FilterModifiedDate("test");
             expect(vm.divuigrid).toBe(true);
             expect(vm.nodata).toBe(false);
@@ -191,21 +191,21 @@ describe("documents Controller test suite for service call", function () {
     })
 
     describe("Verification of modEndDate function", function () {
-        it("It should return end date", function () {
+        it("It should return start date", function () {
             vm.modEndDate(event);
             expect(vm.modifiedenddate).toBe(true);
         });
     })
 
     describe("Verification of openStartDate function", function () {
-        it("It should return open start date", function () {
+        it("It should return start date", function () {
             vm.openStartDate(event);
             expect(vm.openedStartDate).toBe(true);
         });
     })
 
     describe("Verification of openEndDate function", function () {
-        it("It should return open end date", function () {
+        it("It should return start date", function () {
             vm.openStartDate(event);
             expect(vm.openedEndDate).toBe(false);
         });
@@ -238,4 +238,17 @@ describe("documents Controller test suite for service call", function () {
             expect(vm.documentheader).toBe(true);
         });
     });
+
+    describe("Verification of filterSearch function", function () {
+        it("It should filter the search results", function () {
+            vm.searchexp = "FileName";
+            vm.filterSearch("test");
+            expect(vm.divuigrid).toBe(true);
+            expect(vm.nodata).toBe(false);
+            expect(vm.lazyloaderFilter).toBe(true);
+            expect(vm.details.length).toBeGreaterThan(0);
+            expect(vm.filternodata).toBe(false);
+        });
+    });
+
 });

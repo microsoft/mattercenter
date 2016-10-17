@@ -27,8 +27,8 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         IJavaScriptExecutor scriptExecutor = (IJavaScriptExecutor)webDriver;
         CommonHelperFunction common = new CommonHelperFunction();
         #region 01. Open the browser and load home page
-        [When(@"user enters credentials on home page")]
-        public void WhenUserEntersCredentialsOnHomePage()
+        [When(@"user enters credentials on homepage")]
+        public void WhenUserEntersCredentialsOnHomepage()
         {
             common.GetLogin(webDriver, URL);
         }
@@ -41,8 +41,8 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         #endregion
 
         #region 02. Open the hamburger menu and verify all the elements
-        [When(@"user clicks on hamburger menu on home page")]
-        public void WhenUserClicksOnHamburgerMenuOnHomePage()
+        [When(@"user clicks on hamburger menu on homepage")]
+        public void WhenUserClicksOnHamburgerMenuOnHomepage()
         {
             webDriver.FindElement(By.ClassName("AppSwitcherContainer")).Click();
         }
@@ -51,10 +51,10 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         public void ThenHamburgerMenuShouldDisplayAndMenu(string selectHome, string selectMatters, string selectDocument, string selectProvision)
         {
             Thread.Sleep(2000);
-            string home = (string)scriptExecutor.ExecuteScript("var links = $('.AppMenuFlyoutPriLinks a')[0].text;return links");
-            string matters = (string)scriptExecutor.ExecuteScript("var links = $('.AppMenuFlyoutPriLinks a')[1].text;return links");
-            string documents = (string)scriptExecutor.ExecuteScript("var links = $('.AppMenuFlyoutPriLinks a')[2].text;return links");
-            string matterProvision = (string)scriptExecutor.ExecuteScript("var links = $('.AppMenuFlyoutPriLinks a')[3].text;return links");
+            string home = (string)scriptExecutor.ExecuteScript("var links = $('.AppMenuFlyoutPriLinks a')[0].text;return links"),
+                   matters = (string)scriptExecutor.ExecuteScript("var links = $('.AppMenuFlyoutPriLinks a')[1].text;return links"),
+                   documents = (string)scriptExecutor.ExecuteScript("var links = $('.AppMenuFlyoutPriLinks a')[2].text;return links"),
+                   matterProvision = (string)scriptExecutor.ExecuteScript("var links = $('.AppMenuFlyoutPriLinks a')[3].text;return links");
 
             Assert.IsTrue(home.Equals(selectHome));
             Assert.IsTrue(matters.Equals(selectMatters));

@@ -19,7 +19,7 @@ describe("SettingsController test suite", function () {
     var mockapi = function (settingsResource, callback) {
         getData(settingsResource, mockSettingsResource);
     };
-    
+
     beforeEach(module("matterMain"));
     beforeEach(module("matterMain", function ($provide) {
         $provide.factory("settingsResource", ["$resource", "auth", mockSettingsResource]);
@@ -45,7 +45,7 @@ describe("SettingsController test suite", function () {
             expect(vm.lazyloader).toBe(true);
         });
     });
-    
+
     describe("Verification of getRolesData function", function () {
         it("It should get data related to all roles", function () {
             vm.getTaxonomyData();
@@ -67,7 +67,7 @@ describe("SettingsController test suite", function () {
     });
 
     describe("Verification of removeAssignPermissionsRow function", function () {
-        it("It should remove the assigned permission", function () {
+        it("It should remove the assign permission", function () {
             vm.assignPermissionTeams = "MatterCenter";
             vm.assignPermissionTeams = {
                 "splice": function (index, data) { vm.assignPermissionTeams = true; }
@@ -78,7 +78,7 @@ describe("SettingsController test suite", function () {
     });
 
     describe("Verification of addNewAssignPermissions function", function () {
-        it("It should add the assigned permission", function () {
+        it("It should add the assign permission", function () {
             vm.assignPermissionTeams = "MatterCenter";
             vm.assignPermissionTeams = {
                 "push": function (data) { vm.assignPermissionTeams = data; }
@@ -120,8 +120,8 @@ describe("SettingsController test suite", function () {
         });
     });
     describe("Verification of getBoolValues function", function () {
-        it("It should get all the boolean values", function () {
-        
+        it("It should get all the bool values", function () {
+
             var data = vm.getBoolValues("Yes");
             expect(data).toBe(true);
         });
@@ -148,7 +148,7 @@ describe("SettingsController test suite", function () {
             expect(vm.conflict).toBe("Yes");
             expect(vm.showmatterconfiguration).toBe("DateTime");
         });
-   
+
         it("It should not set the client data", function () {
             vm.setClientData(dataChunk);
             expect(vm.assignteam).toBe("No");
@@ -164,15 +164,137 @@ describe("SettingsController test suite", function () {
 
     describe("Verification of showSelectedClient function", function () {
         it("It should show all the selected clients", function () {
-            vm.showSelectedClient("Test", oEnvironmentConfiguration.tenantUrl);
+            vm.showSelectedClient("Test", oTestConfiguration.sValidMatterClientURL);
             expect(vm.lazyloader).toBe(true);
             expect(vm.selected).toBe("Test");
-            expect(vm.clienturl).toBe(oEnvironmentConfiguration.tenantUrl);
+            expect(vm.clienturl).toBe(oTestConfiguration.sValidMatterClientURL);
             expect(vm.nodata).toBe(false);
             expect(vm.lazyloader).toBe(true);
             expect(vm.clientlist).toBe(false);
             expect(vm.showClientDetails).toBe(true);
         });
+    });
+
+    describe("Verification of showMatterId function", function () {
+        it("It should show matter Id", function () {
+            vm.showMatterId();
+            expect(vm.showmatterconfiguration).toBe("Guid");
+        });
+    });
+
+    describe("Verification of selectMatterTypePopUpClose function", function () {
+        it("It should hide popup", function () {
+            vm.popupContainer = "Show";
+            vm.selectMatterTypePopUpClose();
+            expect(vm.popupContainerBackground).toBe("hide");
+            expect(vm.popupContainer).toBe("hide");
+
+        });
+    });
+
+    describe("Verification of selectMatterType function", function () {
+        it("It should show Matter type popup", function () {
+            vm.selectMatterType();
+            expect(vm.popupContainerBackground).toBe("Show");
+            expect(vm.popupContainer).toBe("Show");
+
+        });
+    });
+
+    //describe("Verification of removeFromDocumentTemplate function", function () {
+    //    it("It should remove document from document template", function () {
+    //        vm.removeDTItem = true;
+    //        debugger;
+    //        vm.removeFromDocumentTemplate();
+    //        expect(vm.popupContainer).toBe("Show");
+
+    //    });
+    //});
+
+    describe("Verification of selectDocumentTemplateTypeLawTerm function", function () {
+        it("It should select document template type for law term", function () {
+            vm.selectDocumentTemplateTypeLawTerm("AreaOfLaw");
+            expect(vm.errorPopUp).toBe(false);
+            expect(vm.removeDTItem).toBe(true);
+            expect(vm.primaryMatterType).toBe(true);
+            expect(vm.activeDocumentTypeLawTerm).toBe("AreaOfLaw");
+
+        });
+    });
+
+    describe("Verification of saveDocumentTemplates function", function () {
+        it("It should save document templates", function () {
+            vm.primaryMatterType = true;
+            vm.documentTypeLawTerms = [{ id: "test" }];
+            vm.activeDocumentTypeLawTerm = { id: "test" };
+            vm.saveDocumentTemplates();
+            expect(vm.errorPopUp).toBe(false);
+            expect(vm.popupContainerBackground).toBe("hide");
+            expect(vm.popupContainer).toBe("hide");
+
+
+        });
+
+        it("It should not save document templates", function () {
+            vm.saveDocumentTemplates();
+            expect(vm.errorPopUp).toBe(true);
+
+        });
+    });
+
+    describe('Verification of getSelectedLevelOne function', function () {
+        it('it should check that SelectedLevelOne item is null', function () {
+            vm.selectedLevelOneItem = null;
+            vm.taxonomyHierarchyLevels = 5;
+            vm.getSelectedLevelOne();
+            expect(vm.levelTwoList).toBeNull();
+            expect(vm.levelThreeList).toBeNull();
+            expect(vm.levelFourList).toBeNull();
+            expect(vm.levelFiveList).toBeNull();
+        });
+    });
+
+    describe('Verification of selectLevelTwoItem   function', function () {
+        it('It should check the levelTwoItem', function () {
+            var oLevel = { level3: ['level3'] };
+            vm.taxonomyHierarchyLevels = 3;
+            vm.selectLevelTwoItem(oLevel);
+            expect(vm.activeLevelThreeItem).toBe(vm.levelThreeList[0]);
+        });
+
+        it('it should check that taxonomyhierarchylevels is greater than equal to 3', function () {
+            var oLevel = { level3: [{ level4: 'level4' }] };
+            vm.taxonomyHierarchyLevels = 4;
+            vm.selectLevelTwoItem(oLevel);
+            expect(vm.activeLevelFourItem).toBe(vm.levelFourList[0]);
+
+        });
+    });
+
+    describe('Verification of selectLevelThreeItem   function', function () {
+        it('It should check the levelThreeItem', function () {
+            var oLevel = { level4: ['level4'] };
+            vm.taxonomyHierarchyLevels = 4;
+            vm.selectLevelThreeItem(oLevel);
+            expect(vm.activeLevelFourItem).toBe(vm.levelFourList[0]);
+        });
+
+        it('It should check that taxonomyHierarchyLevels is greater than equal to 4', function () {
+            var oLevel = { level4: [{ level5: 'level5' }] };
+            vm.taxonomyHierarchyLevels = 5;
+            vm.selectLevelThreeItem(oLevel);
+            expect(vm.activeLevelFiveItem).toBe(vm.levelFiveList[0]);
+        });
+    });
+
+    describe('Verification of selectLevelFourItem   function', function () {
+        it('It should check the levelFourItem', function () {
+            var oLevel = { level5: ['level5'] };
+            vm.taxonomyHierarchyLevels = 5;
+            vm.selectLevelFourItem(oLevel);
+            expect(vm.activeLevelFiveItem).toBe(vm.levelFiveList[0]);
+        });
+
     });
 
 });

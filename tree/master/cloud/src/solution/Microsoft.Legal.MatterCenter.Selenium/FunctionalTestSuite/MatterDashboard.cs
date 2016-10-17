@@ -26,8 +26,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
     [Binding]
     public class MatterDashboard
     {
-        string URL = ConfigurationManager.AppSettings["MatterDashboard"];
-        string initialState;
+        string URL = ConfigurationManager.AppSettings["MatterDashboard"], initialState = String.Empty;
         static IWebDriver webDriver = CommonHelperFunction.GetDriver();
         IJavaScriptExecutor scriptExecutor = (IJavaScriptExecutor)webDriver;
         CommonHelperFunction common = new CommonHelperFunction();
@@ -47,7 +46,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         #endregion
 
         #region 02. Verify the hamburger menu
-        [When(@"user clicks on hamburger menu on Matter Center home page")]
+        [When(@"user clicks on hamburger menu on Matter Center homepage")]
         public void WhenUserClicksOnHamburgerMenuOnMatterCenterHomepage()
         {
             scriptExecutor.ExecuteScript("$('#openHamburger').click();");
@@ -57,9 +56,9 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"hamburger menu should be loaded")]
         public void ThenHamburgerMenuShouldBeLoaded()
         {
-            string Matters = (string)scriptExecutor.ExecuteScript("var links= $('#searchMatterTab')[0].innerText;return links");
-            string Documents = (string)scriptExecutor.ExecuteScript("var links = $('#searchDocumentTab')[0].innerText;return links");
-            string Settings = (string)scriptExecutor.ExecuteScript("var links = $('#settingsLink')[0].innerText;return links");
+            string Matters = (string)scriptExecutor.ExecuteScript("var links= $('#searchMatterTab')[0].innerText;return links"),
+                   Documents = (string)scriptExecutor.ExecuteScript("var links = $('#searchDocumentTab')[0].innerText;return links"),
+                   Settings = (string)scriptExecutor.ExecuteScript("var links = $('#settingsLink')[0].innerText;return links");
             Assert.IsTrue(Matters.Contains("Matters"));
             Assert.IsTrue(Documents.Contains("Documents"));
             Assert.IsTrue(Settings.Contains("Settings"));
@@ -80,17 +79,17 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"a matter fly out should be seen")]
         public void ThenAMatterFlyOutShouldBeSeen()
         {
-            string matterHeaderName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[0].innerText ;return links");
-            string clientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[1].innerText ;return links");
-            string clientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[2].innerText ;return links");
-            string subAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[3].innerText ;return links");
-            string responsibleAttorney = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[4].innerText ;return links");
-            string viewMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[5].innerText ;return links");
-            string uploadToMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[6].innerText;return links");
-            string flyoutClientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[1].innerText;return links");
-            string flyoutClientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[3].innerText;return links");
-            string flyoutSubAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[5].innerText;return links");
-            string flyoutResonsibleAttorney = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[7].innerText;return links");
+            string matterHeaderName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[0].innerText ;return links"),
+                   clientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[1].innerText ;return links"),
+                   clientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[2].innerText ;return links"),
+                   subAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[3].innerText ;return links"),
+                   responsibleAttorney = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[4].innerText ;return links"),
+                   viewMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[5].innerText ;return links"),
+                   uploadToMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[6].innerText;return links"),
+                   flyoutClientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[1].innerText;return links"),
+                   flyoutClientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[3].innerText;return links"),
+                   flyoutSubAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[5].innerText;return links"),
+                   flyoutResonsibleAttorney = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[7].innerText;return links");
             if (flyoutClientName != null && flyoutClientMatterId != null && flyoutSubAreaOfLaw != null && flyoutResonsibleAttorney != null && matterHeaderName != null)
             {
                 Assert.IsTrue(true);
@@ -109,8 +108,8 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         #endregion
 
         #region  06. Verify the search feature
-        [When(@"user types '(.*)' in search box on Matter Center Home page")]
-        public void WhenWhenUserTypesInSearchBoxOnMatterCenterHomePage(string searchBoxValue)
+        [When(@"user types '(.*)' in search box on Matter Center Homepage")]
+        public void WhenUserTypesInSearchBoxOnMatterCenterHomepage(string searchBoxValue)
         {
             common.GetLogin(webDriver, URL);
             Thread.Sleep(5000);
@@ -129,7 +128,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             {
                 Thread.Sleep(1000);
                 string test = (string)scriptExecutor.ExecuteScript("var links =$('.col-xs-11')[" + linkCounter + "].innerText;return links;");
-                if (!String.IsNullOrEmpty(searchBoxValue) && test.ToLower(CultureInfo.CurrentCulture).Contains(searchBoxValue.ToLower(CultureInfo.CurrentCulture)))
+                if (!String.IsNullOrWhiteSpace(searchBoxValue) && test.ToLower(CultureInfo.CurrentCulture).Contains(searchBoxValue.ToLower(CultureInfo.CurrentCulture)))
                     tempCounter++;
             }
             if (tempCounter > 0)
@@ -141,6 +140,31 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                 Assert.IsTrue(false);
             }
         }
+        #endregion
+
+        #region 11. Verify gibberish search
+
+        [When(@"user types gibberish in search box on Matter Center dashboard")]
+        public void WhenUserTypesGibberishInSearchBoxOnMatterCenterDashboard()
+        {
+            string searchBoxValue = ConfigurationManager.AppSettings["Gibberish"];
+            common.GetLogin(webDriver, URL);
+            Thread.Sleep(5000);
+            webDriver.FindElement(By.CssSelector(".col-xs-12 .form-control")).Clear();
+            Thread.Sleep(1000);
+            webDriver.FindElement(By.CssSelector(".col-xs-12 .form-control")).SendKeys(searchBoxValue);
+            Thread.Sleep(5000);
+            scriptExecutor.ExecuteScript("$('#basic-addon1').click()");
+            Thread.Sleep(5000);
+        }
+
+        [Then(@"no results should be displayed on Matter Center dashboard")]
+        public void ThenNoResultsShouldBeDisplayedOnMatterCenterDashboard()
+        {
+            string searchResCount = (string)scriptExecutor.ExecuteScript("var text = $('.nav-tabs .active a')[0].innerText; return text;");
+            Assert.IsTrue(searchResCount.ToLower(CultureInfo.CurrentCulture).Contains("0"));
+        }
+
         #endregion
 
         #region 04. Verify the upload button functionality
@@ -253,9 +277,9 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             char[] delimiters = new char[] { '\r', '\n' };
 
             long length = (long)scriptExecutor.ExecuteScript("var links = $('.col-xs-11').length;return links");
-            string sortedDocument = "[";
+            string sortedDocument = "[", duplicateDocuments = null;
             string[] documentList = new string[length];
-            string duplicateDocuments = null;
+
             for (int documentCounter = 0; documentCounter < length; documentCounter++)
             {
                 string datachunk = (string)scriptExecutor.ExecuteScript("var links = $('.col-xs-11')[" + documentCounter + "].innerText;return links");
@@ -272,7 +296,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             var tempDocumentList = new List<string>();
             foreach (var document in documentList)
             {
-                if (!string.IsNullOrEmpty(document))
+                if (!string.IsNullOrWhiteSpace(document))
                 {
                     tempDocumentList.Add(document);
                     sortedDocument += "'" + document + "',";
@@ -309,9 +333,9 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             char[] delimiters = new char[] { '\r', '\n' };
 
             long length = (long)scriptExecutor.ExecuteScript("var links = $('.col-xs-11').length;return links");
-            string sortedDocument = "[";
+            string sortedDocument = "[", duplicateDocuments = null;
             string[] documentList = new string[length];
-            string duplicateDocuments = null;
+
             for (int documentCounter = 0; documentCounter < length; documentCounter++)
             {
                 string datachunk = (string)scriptExecutor.ExecuteScript("var links = $('.col-xs-11 a').eq(" + documentCounter + ").attr('details');links=JSON.parse(links);return links.matterCreatedDate");
@@ -327,7 +351,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             var tempDocumentList = new List<string>();
             foreach (var document in documentList)
             {
-                if (!string.IsNullOrEmpty(document))
+                if (!string.IsNullOrWhiteSpace(document))
                 {
                     tempDocumentList.Add(document);
                     sortedDocument += "'" + document + "',";
@@ -406,16 +430,16 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"footer should have all the links")]
         public void ThenFooterShouldHaveAllTheLinks()
         {
-            string checkFeedbackAndSupport = (string)scriptExecutor.ExecuteScript("var links = $('.rightFooterElement a')[0].href;return links");
-            string checkPrivacyAndCookies = (string)scriptExecutor.ExecuteScript("var links = $('.rightFooterElement a')[1].href;return links");
-            string checkTermsOfUse = (string)scriptExecutor.ExecuteScript("var links = $('.rightFooterElement a')[2].href;return links");
-            string checkMicrosoft = (string)scriptExecutor.ExecuteScript("var links = $('.rightFooterElement')[3].innerText;return links");
-            string checkMicrosoftLogo = (string)scriptExecutor.ExecuteScript("var links = $('#footer div a')[0].href;return links");
+            string checkFeedbackAndSupport = (string)scriptExecutor.ExecuteScript("var links = $('.rightFooterElement a')[0].href;return links"),
+                   checkPrivacyAndCookies = (string)scriptExecutor.ExecuteScript("var links = $('.rightFooterElement a')[1].href;return links"),
+                   checkTermsOfUse = (string)scriptExecutor.ExecuteScript("var links = $('.rightFooterElement a')[2].href;return links"),
+                   checkMicrosoft = (string)scriptExecutor.ExecuteScript("var links = $('.rightFooterElement')[3].innerText;return links"),
+                   checkMicrosoftLogo = (string)scriptExecutor.ExecuteScript("var links = $('#footer div a')[0].href;return links");
 
-            Assert.IsTrue(checkMicrosoftLogo.Contains("http://www.microsoft.com"));
-            Assert.IsTrue(checkFeedbackAndSupport.Contains("https://matterwebapp.azurewebsites.net/[Enter%20URL%20for%20Feedback%20and%20Support,%20e.g.%20mailto:support@supportsite.com"));
-            Assert.IsTrue(checkPrivacyAndCookies.Contains("https://matterwebapp.azurewebsites.net/[Enter%20URL%20for%20Privacy%20terms,%20e.g.%20privacy.supportsite.com"));
-            Assert.IsTrue(checkTermsOfUse.Contains("https://matterwebapp.azurewebsites.net/[Enter%20URL%20for%20Terms%20of%20use,%20e.g.%20termofuse.supportsite.com"));
+            Assert.IsTrue(checkMicrosoftLogo.Contains(ConfigurationManager.AppSettings["MicrosoftLogo"]));
+            Assert.IsTrue(checkFeedbackAndSupport.Contains(ConfigurationManager.AppSettings["FeedbackAndSupport"]));
+            Assert.IsTrue(checkPrivacyAndCookies.Contains(ConfigurationManager.AppSettings["PrivacyAndCookies"]));
+            Assert.IsTrue(checkTermsOfUse.Contains(ConfigurationManager.AppSettings["TermsOfUse"]));
             Assert.IsTrue(checkMicrosoft.Contains("2016 Microsoft"));
         }
 
@@ -437,7 +461,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             string url = webDriver.Url;
             Console.Write(url);
-            Assert.IsTrue(!String.IsNullOrEmpty(searchBox) && url.ToLower(CultureInfo.CurrentCulture).Contains(searchBox.ToLower(CultureInfo.CurrentCulture)));
+            Assert.IsTrue(!String.IsNullOrWhiteSpace(searchBox) && url.ToLower(CultureInfo.CurrentCulture).Contains(searchBox.ToLower(CultureInfo.CurrentCulture)));
         }
 
         #endregion

@@ -34,7 +34,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     }));
 
     describe("Verification of getMatterCounts function", function () {
-        it("It should show count of all the matters ", function () {
+        it("It should show all matters count", function () {
             vm.getMatterCounts();
             expect(vm.allMatterCount).toBeGreaterThan(0);
             expect(vm.myMatterCount).toBeGreaterThan(0);
@@ -83,7 +83,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     });
 
     describe("Verification of showClientDrop function", function () {
-        it("It should show client drop down menu", function () {
+        it("It should show clientdrop", function () {
             vm.clientdropvisible = false;
             vm.clients = undefined;
             vm.showClientDrop(event);
@@ -97,7 +97,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
             expect(vm.aoldropvisible).toBe(false);
         });
 
-        it("It should not show client dropdown menu", function () {
+        it("It should not show clientdrop", function () {
             vm.clientdropvisible = true;
             vm.showClientDrop(event);
             expect(vm.clientdrop).toBe(false);
@@ -132,13 +132,13 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     });
 
     describe("Verification of next function", function () {
-        it("It should show next section", function () {
+        it("It should show next", function () {
             vm.last = 5;
             vm.totalrecords = 30;
             vm.next();
             expect(vm.first).toBeGreaterThan(0);
             expect(vm.last).toBeGreaterThan(0);
-            expect(vm.total).toBeGreaterThan(0);
+            expect(vm.total).not.toBeLessThan(0);
             expect(vm.pagenumber).toBeGreaterThan(0);
             expect(vm.fromtopage).toBe(vm.first + " - " + vm.totalrecords);
             expect(vm.displaypagination).toBe(true);
@@ -149,7 +149,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     });
 
     describe("Verification of prev function", function () {
-        it("It should show previous section", function () {
+        it("It should show prev", function () {
             vm.last = 50;
             vm.first = 50;
             vm.prev();
@@ -165,7 +165,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     });
 
     describe("verification of showPracticegroupDrop function", function () {
-        it("It should show practice group dropdown", function () {
+        it("It should show PracticegroupDrop", function () {
             vm.pgdropvisible = false;
             vm.practiceGroups = undefined;
             vm.aolTerms = undefined;
@@ -175,7 +175,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
             expect(vm.pgdropvisible).toBe(true);
         });
 
-        it("It should not show  practice group dropdown", function () {
+        it("It should not show PracticegroupDrop", function () {
             vm.pgdropvisible = false;
             vm.practiceGroups = "data";
             vm.aolTerms = "test";
@@ -188,7 +188,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
             expect(vm.aoldropvisible).toBe(false);
         });
 
-        it("It should not display practice group dropdown", function () {
+        it("It should not showPracticegroupDrop", function () {
             vm.clientdropvisible = true;
             vm.showClientDrop(event);
             expect(vm.clientdrop).toBe(false);
@@ -203,14 +203,14 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     });
 
     describe("Verification of getFolderHierarchy function", function () {
-        it("It should get the folder hierarchy", function () {
+        it("It should getFolderHierarchy", function () {
             vm.getFolderHierarchy("Default Matter", oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient", "6cbca4ab447c87302d3a1f0e3c32985a");
             expect(vm.showSelectedFolderTree).not.toBe(null);
         });
     });
 
     describe("Verification of Openuploadmodal function", function () {
-        it("It should show open upload modal", function () {
+        it("It should show Openuploadmodal", function () {
             vm.Openuploadmodal("Default Matter", oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient", "6cbca4ab447c87302d3a1f0e3c32985a");
             expect(vm.oUploadGlobal.successBanner).toBe(false);
             expect(vm.isLoadingFromDesktopStarted).toBe(false);
@@ -218,7 +218,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     });
 
     describe("Verification of showclients function", function () {
-        it("It should show clients details", function () {
+        it("It should show showclients", function () {
             vm.client = undefined;
             vm.showclients(event);
             expect(vm.clients).toBeDefined();
@@ -228,21 +228,21 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     });
 
     describe("Verification of getContentCheckConfigurations function", function () {
-        it("It should get content check configurations", function () {
+        it("It should getContentCheckConfigurations", function () {
             vm.getContentCheckConfigurations(oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient");
             expect(vm.oUploadGlobal.bAllowContentCheck).not.toBe(null);
         });
     });
 
     describe("Verification of showSelectedFolderTree function", function () {
-        it("It should show selected folder tree", function () {
+        it("It should showSelectedFolderTree", function () {
             vm.showSelectedFolderTree(folder);
             expect(vm.showSelectedFolderTree).not.toThrow(Error);
         });
     });
 
     describe("Verification of localOverWriteDocument function", function () {
-        it("It should show local over write document", function () {
+        it("It should show localOverWriteDocument", function () {
             vm.ducplicateSourceFile = {
                 pop: function ()
                 { return true; }
@@ -261,12 +261,12 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     });
 
     describe("Verification of search function", function () {
-        it("It should show the search results", function () {
+        it("It should show search results", function () {
             vm.search("Test");
             expect(vm.Pinnedobj).toBeDefined();
             expect(vm.pinMatterCount).toBeGreaterThan(0);
             expect(vm.matterGridOptions.data).toBeDefined();
-            expect(vm.totalrecords).toBe(0);
+            expect(vm.totalrecords).toBeGreaterThan(0);
             expect(vm.lazyloaderdashboard).toBe(true);
             expect(vm.divuigrid).toBe(true);
 
@@ -274,7 +274,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     });
 
     describe("Verification of showAreaofLawDrop function", function () {
-        it("It should show area of law dropdown", function () {
+        it("It should show showAreaofLawDrop", function () {
             vm.aoldropvisible = false;
             vm.practiceGroups = undefined;
             vm.aolTerms = undefined;
@@ -286,7 +286,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
             expect(vm.pgdropvisible).toBe(false);
         });
 
-        it("It should not show area of law dropdown", function () {
+        it("It should not show showAreaofLawDrop", function () {
             vm.clientdropvisible = true;
             vm.showClientDrop(event);
             expect(vm.clientdrop).toBe(false);

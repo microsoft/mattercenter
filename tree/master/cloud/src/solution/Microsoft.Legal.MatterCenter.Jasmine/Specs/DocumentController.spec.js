@@ -32,14 +32,14 @@ describe("documents Controller test suite", function () {
     }));
 
     describe("Verification of showdocdrop function", function () {
-        it("It should display the matters dropdown menu with responsiveness ", function () {
+        it("It should display the matters dropdown in resposive ", function () {
             vm.docdropinner = true;
             vm.showdocdrop(event);
             expect(vm.documentsdrop).toBe(true);
             expect(vm.docdropinner).toBe(false);
         });
 
-        it("It should hide the matters dropdown  menu with responsiveness", function () {
+        it("It should hide the matters dropdown in resposive ", function () {
             vm.docdropinner = false;
             vm.showdocdrop(event);
             expect(vm.documentsdrop).toBe(false);
@@ -48,7 +48,7 @@ describe("documents Controller test suite", function () {
     });
 
     describe("Verification of closealldrops function", function () {
-        it("It should close the dropdown menus", function () {
+        it("It should close all dropdown menu", function () {
             vm.closealldrops();
             expect(vm.documentsdrop).toBe(false);
             expect(vm.docdropinner).toBe(true);
@@ -91,12 +91,12 @@ describe("documents Controller test suite", function () {
     });
 
     describe("Verification of search function", function () {
-        it("It should perform the text search in all documents", function () {
+        it("It should perform the text search in my documents", function () {
             vm.selected = "";
             vm.search();
             expect(vm.pagenumber).toBe(1);
-            expect(vm.documentname).toBe("All Documents");
-            expect(vm.documentid).toBe(1);
+            expect(vm.documentname).toBe("My Documents");
+            expect(vm.documentid).toBe(2);
             expect(vm.lazyloader).toBe(false);
             expect(vm.responseNull).toBe(false);
             expect(vm.divuigrid).toBe(false);

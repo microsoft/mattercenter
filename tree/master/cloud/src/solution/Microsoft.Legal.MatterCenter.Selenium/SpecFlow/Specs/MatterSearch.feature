@@ -20,7 +20,7 @@ Scenario: 05. Verify the matter search box
 	Then all matters with 'test' keyword should be shown 
 
 @E2E
-Scenario: 06. Verify the matter column picker
+Scenario: 09. Verify the matter column picker
 	When user clicks on column picker icon
 	Then a column picker should be shown
 	When user checks all columns
@@ -29,7 +29,7 @@ Scenario: 06. Verify the matter column picker
 	Then all columns should be hidden in column header except matter column 
 
 @E2E
-Scenario: 02. Verify the matter ECB menu
+Scenario: 02. Verify the matter Ecb menu
 	When user clicks on ECB menu
 	Then a fly out should be shown
 	When user clicks on upload to matter
@@ -63,6 +63,16 @@ Scenario: 08. Verify the matter filter search
 	Then it should filter the matter based on filter keyword
 
 @E2E	     
-Scenario: 09. Verify the matter search box using managed properties
+Scenario: 06. Verify the matter search box using managed properties
 	When user types 'MCMatterName: test' in search box 
 	Then all matters with 'test' keyword should be shown 
+
+@E2E
+Scenario:10. Verify no results on searching gibberish text
+	When user searches with random keywords on matter search page
+	Then no results should be displayed on matter search page
+
+@E2E
+Scenario:11. Verify no results on searching gibberish text on matter filter
+	When user clicks on column filter to filter the matter using random keyword
+	Then no matters should be displayed inside the fly out

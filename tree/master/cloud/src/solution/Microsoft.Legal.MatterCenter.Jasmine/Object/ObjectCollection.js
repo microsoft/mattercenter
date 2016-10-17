@@ -1,7 +1,7 @@
 ﻿var vm, matterResource, $filter, $window, $watch, $http, $stateParams;
 var $rootScope = { logEvent: function () { }, setAuthenticatedUserContext: function () { } };
 var rootScope = { logEvent: function () { } };
-var rootData = { logEvent: function () { }, setAuthenticatedUserContext: function () { }};
+var rootData = { logEvent: function () { }, setAuthenticatedUserContext: function () { } };
 var $model = {};
 var $label = { "assignedUser": oEnvironmentConfiguration.loggedInUserEmail };
 var $item = {
@@ -70,6 +70,7 @@ var mockMatterResource = {
     'assignContentType': '/api/v1/matter/assigncontenttype',
     'createLandingPage': '/api/v1/matter/createlandingpage',
     'updateMatterMetadata': '/api/v1/matter/UpdateMetadata',
+    'updateMatter': '/api/v1/matter/update',
     'getStampedProperties': '/api/v1/matter/getstampedproperties',
     'uploadEmail': '/api/v1/document/UploadMail',
     'uploadAttachment': '/api/v1/document/UploadAttachments',
@@ -128,7 +129,8 @@ var mockMatterResourceService = {
     'uploadEmail': '/api/v1/document/UploadMail',
     'uploadAttachment': '/api/v1/document/UploadAttachments',
     'uploadfiles': '/api/v1/document/UploadAttachments',
-    'getHelp': '/api/v1/shared/help'
+    'getHelp': '/api/v1/shared/help',
+    'userexists': '/api/v1/user/userexists'
 };
 
 var mockSettingsResource = {
@@ -408,6 +410,9 @@ var practicegroup = [
 var gridrows = {
     "core": {
         getVisibleRows: function (data) { return 0; }
+    },
+    "grid": {
+        rows: [{ entity: { checker: "", mailCartSelected: false } }]
     }
 }
 

@@ -35,7 +35,7 @@ describe("Matters Controller test suite for service call", function () {
     }));
 
     describe("Verification of SetMatters function", function () {
-        it("It should add matter name in dropdown", function () {
+        it("matter name should be added in dropdown", function () {
             vm.SetMatters(1, "All Matters");
             expect(vm.divuigrid).toBe(false);
             expect(vm.responseNull).toBe(false);
@@ -46,7 +46,7 @@ describe("Matters Controller test suite for service call", function () {
     });
 
     describe("Verification of GetMatters function", function () {
-        it("It should get matter name from dropdown", function () {
+        it("matter name should be added in dropdown", function () {
             vm.GetMatters(3);
             expect(vm.divuigrid).toBe(true);
             expect(vm.nodata).toBe(false);
@@ -70,7 +70,7 @@ describe("Matters Controller test suite for service call", function () {
     });
 
     describe("Verification of FilterModifiedDate function", function () {
-        it("It should filter data based on modified date", function () {
+        it("Data should be filtered based on modified date", function () {
             vm.modstartdate = new Date("08/01/2016");
             vm.modenddate = new Date("08/10/2016");
             vm.FilterModifiedDate("Modified Date");
@@ -79,7 +79,7 @@ describe("Matters Controller test suite for service call", function () {
     });
 
     describe("Verification of PinMatter function", function () {
-        it("It should add matter in pinned list", function () {
+        it("It should be added in pinned list", function () {
             var currentRowData = {
                 entity: oTestConfiguration.oMatterObject
             };
@@ -93,7 +93,7 @@ describe("Matters Controller test suite for service call", function () {
     });
 
     describe("Verification of UnpinMatter function", function () {
-        it("It should remove matter from pinned list", function () {
+        it("It should be removed from pinned list", function () {
             var pinObject = {
                 entity: oTestConfiguration.oMatterObject
             };
@@ -107,7 +107,7 @@ describe("Matters Controller test suite for service call", function () {
     });
 
     describe("Verification of sortChanged function", function () {
-        it("It should sort the documents based on matter name", function () {
+        it("documents should be sort based on matter name", function () {
             var sortColumns = [{ "field": "matterName", "name": "matterName", "sort": "asc" }];
             vm.gridOptions.columnDefs[0] = { "field": "matterName", "displayName": "Matter", "enableHiding": false, "width": "275", "cellTemplate": "../app/matter/MatterTemplates/MatterCellTemplate.html", "headerCellTemplate": "../app/matter/MatterTemplates/MatterHeaderTemplate.html", "name": "matterName", "type": "string" };
             $scope.sortChanged(null, sortColumns);
@@ -119,7 +119,7 @@ describe("Matters Controller test suite for service call", function () {
 
 
     describe("Verification of typeheadselect function", function () {
-        it("It should display the result of the selected document", function () {
+        it("selected document result should be displayed", function () {
             var selected = "Default Matter (11111)";
             vm.typeheadselect(null, selected);
             expect(selected).toContain("Default Matter (11111)");
@@ -128,7 +128,7 @@ describe("Matters Controller test suite for service call", function () {
 
 
     describe("Verification of watchFunc function", function () {
-        it("It should load the matters", function () {
+        it("It should watch the function", function () {
             vm.responseNull = false;
             vm.watchFunc();
             expect(vm.lazyloader).toBe(true);
@@ -168,7 +168,7 @@ describe("Matters Controller test suite for service call", function () {
     });
 
     describe("Verification of Openuploadmodal function", function () {
-        it("It should show open upload modal", function () {
+        it("It should show Openuploadmodal", function () {
             vm.Openuploadmodal("Default Matter", oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient", "6cbca4ab447c87302d3a1f0e3c32985a");
             expect(vm.oUploadGlobal.successBanner).toBe(false);
             expect(vm.isLoadingFromDesktopStarted).toBe(false);
@@ -176,7 +176,7 @@ describe("Matters Controller test suite for service call", function () {
     });
 
     describe("Verification of localOverWriteDocument function", function () {
-        it("It should show local over write document", function () {
+        it("It should show localOverWriteDocument", function () {
             vm.ducplicateSourceFile = {
                 pop: function ()
                 { return true; },
@@ -196,7 +196,7 @@ describe("Matters Controller test suite for service call", function () {
             expect(vm.files).toBeDefined();
         });
 
-        it("It should not show local over write document", function () {
+        it("It should not show localOverWriteDocument", function () {
             vm.ducplicateSourceFile = {
                 pop: function ()
                 { return true; },
@@ -213,7 +213,7 @@ describe("Matters Controller test suite for service call", function () {
 
 
     describe("Verification of showSelectedFolderTree function", function () {
-        it("It should show show selected folder tree", function () {
+        it("It should show showSelectedFolderTree", function () {
             vm.showSelectedFolderTree(folder);
             expect(vm.showSelectedFolderTree).not.toThrow(Error);
         });
@@ -227,7 +227,7 @@ describe("Matters Controller test suite for service call", function () {
     });
 
     describe("Verification of closeNotificationDialog function", function () {
-        it("It should close notification dialog", function () {
+        it("This should close Notification Dialog", function () {
             vm.closeNotificationDialog();
             expect(vm.IsDupliacteDocument).toBe(false);
             expect(vm.IsNonIdenticalContent).toBe(false);
@@ -236,7 +236,7 @@ describe("Matters Controller test suite for service call", function () {
     });
 
     describe("Verification of Openuploadmodal function", function () {
-        it("This should open upload modal", function () {
+        it("This should Open upload modal", function () {
             vm.Openuploadmodal("Default Matter", oEnvironmentConfiguration.tenantUrl + "/sites/subsiteclient", "6cbca4ab447c87302d3a1f0e3c32985a");
             expect(vm.IsDupliacteDocument).toBe(false);
             expect(vm.IsNonIdenticalContent).toBe(false);
@@ -248,7 +248,7 @@ describe("Matters Controller test suite for service call", function () {
     });
 
     describe("Verification of getIconSource function", function () {
-        it("This should get icon source", function () {
+        it("This should get Icon Source", function () {
             var data = vm.getIconSource(".docx");
             expect(data).toBe(oEnvironmentConfiguration.tenantUrl + "/_layouts/15/images/ic.docx.gif");
             expect(vm.mailUpLoadSuccess).toBe(false);
@@ -298,6 +298,18 @@ describe("Matters Controller test suite for service call", function () {
         it("It should filter the matter", function () {
             var data = vm.filtermatter("Matter");
             expect(data).toBe("Matter");
+        });
+    });
+
+    describe("Verification of export function", function () {
+        it("This should export the data in spreadsheet", function () {
+            vm.searchexp = "MCMatterName";
+            vm.filterSearch("test");
+            expect(vm.divuigrid).toBe(true);
+            expect(vm.nodata).toBe(false);
+            expect(vm.lazyloaderFilter).toBe(true);
+            expect(vm.details.length).toBeGreaterThan(0);
+            expect(vm.filternodata).toBe(false);
         });
     });
 });

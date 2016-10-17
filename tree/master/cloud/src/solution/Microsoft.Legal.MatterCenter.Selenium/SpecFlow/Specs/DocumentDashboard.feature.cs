@@ -18,8 +18,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.9.0.77")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Document Dashboard Page")]
+    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class DocumentDashboardPageFeature
     {
         
@@ -28,27 +27,32 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
 #line 1 "DocumentDashboard.feature"
 #line hidden
         
-        [NUnit.Framework.TestFixtureSetUpAttribute()]
-        public virtual void FeatureSetup()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute()]
+        public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Document Dashboard Page", "", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        [NUnit.Framework.TestFixtureTearDownAttribute()]
-        public virtual void FeatureTearDown()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute()]
+        public static void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
-        [NUnit.Framework.SetUpAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute()]
         public virtual void TestInitialize()
         {
+            if (((TechTalk.SpecFlow.FeatureContext.Current != null) 
+                        && (TechTalk.SpecFlow.FeatureContext.Current.FeatureInfo.Title != "Document Dashboard Page")))
+            {
+                Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature.FeatureSetup(null);
+            }
         }
         
-        [NUnit.Framework.TearDownAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -64,9 +68,10 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
             testRunner.CollectScenarioErrors();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("01. Open the browser and load document dashboard page")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("01. Open the browser and load document dashboard page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Dashboard Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _01_OpenTheBrowserAndLoadDocumentDashboardPage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("01. Open the browser and load document dashboard page", new string[] {
@@ -81,9 +86,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("02. Verify the document fly out on document dashboard")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("02. Verify the document fly out on document dashboard")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Dashboard Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _02_VerifyTheDocumentFlyOutOnDocumentDashboard()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("02. Verify the document fly out on document dashboard", new string[] {
@@ -98,9 +104,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("03. Verify the pin/unpin functionality")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("03. Verify the pin/unpin functionality")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Dashboard Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _03_VerifyThePinUnpinFunctionality()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("03. Verify the pin/unpin functionality", new string[] {
@@ -115,12 +122,13 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("06. Verify the search feature on document dashboard")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
-        public virtual void _06_VerifyTheSearchFeatureOnDocumentDashboard()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("07. Verify the search feature on document dashboard")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Dashboard Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _07_VerifyTheSearchFeatureOnDocumentDashboard()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify the search feature on document dashboard", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify the search feature on document dashboard", new string[] {
                         "E2E"});
 #line 19
 this.ScenarioSetup(scenarioInfo);
@@ -132,12 +140,13 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("08. Verify the advance filter functionality")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
-        public virtual void _08_VerifyTheAdvanceFilterFunctionality()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("09. Verify the advance filter functionality")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Dashboard Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _09_VerifyTheAdvanceFilterFunctionality()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("08. Verify the advance filter functionality", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("09. Verify the advance filter functionality", new string[] {
                         "E2E"});
 #line 24
 this.ScenarioSetup(scenarioInfo);
@@ -149,9 +158,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("05. Verify the sort functionality on document dashboard")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("05. Verify the sort functionality on document dashboard")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Dashboard Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _05_VerifyTheSortFunctionalityOnDocumentDashboard()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("05. Verify the sort functionality on document dashboard", new string[] {
@@ -189,9 +199,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("04. Verify the mail cart functionality")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("04. Verify the mail cart functionality")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Dashboard Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _04_VerifyTheMailCartFunctionality()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("04. Verify the mail cart functionality", new string[] {
@@ -206,12 +217,13 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("07. Verify the search feature with managed properties on document dashboard")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
-        public virtual void _07_VerifyTheSearchFeatureWithManagedPropertiesOnDocumentDashboard()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("08. Verify the search feature with managed properties on document dashboard")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Dashboard Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _08_VerifyTheSearchFeatureWithManagedPropertiesOnDocumentDashboard()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify the search feature with managed properties on document dashboard", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("08. Verify the search feature with managed properties on document dashboard", new string[] {
                         "E2E"});
 #line 51
 this.ScenarioSetup(scenarioInfo);
@@ -219,6 +231,24 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("user types \'DocTitle:test\' in search box on document dashboard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 53
  testRunner.Then("all documents having \'test\' keyword should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("06. Verify gibberish search on document dashboard")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Dashboard Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _06_VerifyGibberishSearchOnDocumentDashboard()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify gibberish search on document dashboard", new string[] {
+                        "E2E"});
+#line 56
+this.ScenarioSetup(scenarioInfo);
+#line 57
+ testRunner.When("user types gibberish in search box on document dashboard", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 58
+ testRunner.Then("no documents should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

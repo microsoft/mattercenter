@@ -2,12 +2,12 @@
 
 @E2E
 Scenario:01. Open the browser and load home page
-	When user enters credentials on home page
+	When user enters credentials on homepage
 	Then home page should be loaded with element 'HomeContainer'	   
 
 @E2E
 Scenario:02. Open the hamburger menu and verify all the elements
-	When user clicks on hamburger menu on home page
+	When user clicks on hamburger menu on homepage
 	Then hamburger menu should display 'Home','Matters','Documents' and 'Create New Matter' menu
 
 @E2E	

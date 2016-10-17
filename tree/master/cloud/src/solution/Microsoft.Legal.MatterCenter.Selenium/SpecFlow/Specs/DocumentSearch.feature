@@ -39,7 +39,7 @@ Scenario:08. Verify the document filter search
 	Then it should filter the document based on filtered keyword 
 	    
 @E2E
-Scenario:02. Verify the document ECB menu
+Scenario:02. Verify the document Ecb menu
 	When user clicks on ECB menu in document search page
 	Then a fly out should open
 	When user clicks on open this document
@@ -62,3 +62,13 @@ Scenario:03. Verify the document fly out
 Scenario:09. Verify the document search box for managed search
  	When user searches with keyword 'DocTitle:test'
 	Then it should display all the document which consist of 'test' keyword
+
+@E2E
+Scenario:10. Verify no results on searching gibberish text
+	When user searches with random keywords on document search page
+	Then no results should be displayed on document search page
+
+@E2E
+Scenario:11. Verify no results on searching gibberish text on document filter
+	When user clicks on column filter to filter the documents using random keyword
+	Then no documents should be displayed inside the fly out

@@ -18,8 +18,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.9.0.77")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Matter Search Page")]
+    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class MatterSearchPageFeature
     {
         
@@ -28,27 +27,32 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
 #line 1 "MatterSearch.feature"
 #line hidden
         
-        [NUnit.Framework.TestFixtureSetUpAttribute()]
-        public virtual void FeatureSetup()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute()]
+        public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Matter Search Page", "", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        [NUnit.Framework.TestFixtureTearDownAttribute()]
-        public virtual void FeatureTearDown()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute()]
+        public static void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
-        [NUnit.Framework.SetUpAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute()]
         public virtual void TestInitialize()
         {
+            if (((TechTalk.SpecFlow.FeatureContext.Current != null) 
+                        && (TechTalk.SpecFlow.FeatureContext.Current.FeatureInfo.Title != "Matter Search Page")))
+            {
+                Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterSearchPageFeature.FeatureSetup(null);
+            }
         }
         
-        [NUnit.Framework.TearDownAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -64,9 +68,10 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
             testRunner.CollectScenarioErrors();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("01. Open the browser and load search matter page")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("01. Open the browser and load search matter page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _01_OpenTheBrowserAndLoadSearchMatterPage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("01. Open the browser and load search matter page", new string[] {
@@ -81,9 +86,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("07. Verify the matter drop down menu")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("07. Verify the matter drop down menu")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _07_VerifyTheMatterDropDownMenu()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify the matter drop down menu", new string[] {
@@ -106,9 +112,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("05. Verify the matter search box")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("05. Verify the matter search box")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _05_VerifyTheMatterSearchBox()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("05. Verify the matter search box", new string[] {
@@ -123,12 +130,13 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("06. Verify the matter column picker")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
-        public virtual void _06_VerifyTheMatterColumnPicker()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("09. Verify the matter column picker")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _09_VerifyTheMatterColumnPicker()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify the matter column picker", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("09. Verify the matter column picker", new string[] {
                         "E2E"});
 #line 23
 this.ScenarioSetup(scenarioInfo);
@@ -148,12 +156,13 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("02. Verify the matter ECB menu")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
-        public virtual void _02_VerifyTheMatterECBMenu()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("02. Verify the matter Ecb menu")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _02_VerifyTheMatterEcbMenu()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("02. Verify the matter ECB menu", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("02. Verify the matter Ecb menu", new string[] {
                         "E2E"});
 #line 32
 this.ScenarioSetup(scenarioInfo);
@@ -181,9 +190,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("03. Verify the matter fly out")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("03. Verify the matter fly out")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _03_VerifyTheMatterFlyOut()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("03. Verify the matter fly out", new string[] {
@@ -206,9 +216,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("04. Verify the matter sort")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("04. Verify the matter sort")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _04_VerifyTheMatterSort()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("04. Verify the matter sort", new string[] {
@@ -223,9 +234,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("08. Verify the matter filter search")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("08. Verify the matter filter search")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _08_VerifyTheMatterFilterSearch()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("08. Verify the matter filter search", new string[] {
@@ -246,12 +258,13 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("09. Verify the matter search box using managed properties")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
-        public virtual void _09_VerifyTheMatterSearchBoxUsingManagedProperties()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("06. Verify the matter search box using managed properties")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _06_VerifyTheMatterSearchBoxUsingManagedProperties()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("09. Verify the matter search box using managed properties", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify the matter search box using managed properties", new string[] {
                         "E2E"});
 #line 66
 this.ScenarioSetup(scenarioInfo);
@@ -259,6 +272,42 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("user types \'MCMatterName: test\' in search box", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 68
  testRunner.Then("all matters with \'test\' keyword should be shown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("10. Verify no results on searching gibberish text")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _10_VerifyNoResultsOnSearchingGibberishText()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("10. Verify no results on searching gibberish text", new string[] {
+                        "E2E"});
+#line 71
+this.ScenarioSetup(scenarioInfo);
+#line 72
+ testRunner.When("user searches with random keywords on matter search page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 73
+ testRunner.Then("no results should be displayed on matter search page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("11. Verify no results on searching gibberish text on matter filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _11_VerifyNoResultsOnSearchingGibberishTextOnMatterFilter()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("11. Verify no results on searching gibberish text on matter filter", new string[] {
+                        "E2E"});
+#line 76
+this.ScenarioSetup(scenarioInfo);
+#line 77
+ testRunner.When("user clicks on column filter to filter the matter using random keyword", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 78
+ testRunner.Then("no matters should be displayed inside the fly out", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -33,7 +33,7 @@ describe("Home Controller test suite for service call", function () {
     }));
 
     describe("Verification of getUserProfilePicture function", function () {
-        it("It should get the user's profile picture", function () {
+        it("It should get User ProfilePicture", function () {
             vm.getUserProfilePicture();
             expect(vm.smallPictureUrl).toBeDefined();
             expect(vm.largePictureUrl).toBeDefined();
@@ -41,7 +41,7 @@ describe("Home Controller test suite for service call", function () {
     });
 
     describe("Verification of help function", function () {
-        it("It should show help to the user", function () {
+        it("It should set help", function () {
             vm.help();
             expect(vm.helpData.length).toBeGreaterThan(0);
             expect(vm.helpData).toBeDefined();
@@ -49,14 +49,14 @@ describe("Home Controller test suite for service call", function () {
     });
 
     describe("Verification of signOut function", function () {
-        it("It should sign out the user", function () {
+        it("It should signOut", function () {
             vm.signOut();
             expect(vm.status).toBe(true);
         });
     });
 
     describe('Verification of showHamburgerIcon function', function () {
-        it('It should show Hamburger icon', function () {
+        it('It should show Hamburger Icon', function () {
             vm.showHamburgerIcon();
             expect(vm.showHamburger).toBe(true);
             expect(vm.showClose).toBe(false);
@@ -66,7 +66,7 @@ describe("Home Controller test suite for service call", function () {
     });
 
     describe('Verification of showCloseIcon function', function () {
-        it('It should show the close icon', function () {
+        it('It should show Close Icon', function () {
             vm.showCloseIcon();
             expect(vm.showHamburger).toBe(true);
             expect(vm.showClose).toBe(true);
@@ -76,7 +76,7 @@ describe("Home Controller test suite for service call", function () {
     });
 
     describe('Verification of canCreateMatter function', function () {
-        it('It should display the create matter option', function () {
+        it('It should create the matter', function () {
             vm.canCreateMatter();
             expect(vm.canLoginUserCreateMatter).toBeDefined();
         });

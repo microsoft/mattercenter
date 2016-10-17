@@ -125,13 +125,13 @@ describe("MatterDashBoard Controller test suite", function () {
     });
 
     describe("Verification of showsortby function", function () {
-        it("It should show sort by box", function () {
+        it("It should show sortby box", function () {
             vm.sortbydropvisible = false;
             vm.showsortby(event);
             expect(vm.sortbydrop).toBe(true);
             expect(vm.sortbydropvisible).toBe(true);
         });
-        it("It should hide sort by box", function () {
+        it("It should hide sortby box", function () {
             vm.sortbydropvisible = true;
             vm.showsortby(event);
             expect(vm.sortbydrop).toBe(false);
@@ -188,6 +188,15 @@ describe("MatterDashBoard Controller test suite", function () {
         it("It should close success banner", function () {
             vm.closeSuccessBanner();
             expect(vm.oUploadGlobal.successBanner).toBe(false);
+        });
+    });
+
+    describe("Verification of showDocTabs function", function () {
+        it("It should display document tabs", function () {
+            vm.showInnerNav = true;
+            vm.showDocTabs(event);
+            expect(vm.showNavTab).toBe(true);
+            expect(vm.showInnerNav).toBe(false);
         });
     });
 

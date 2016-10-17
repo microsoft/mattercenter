@@ -16,12 +16,12 @@ Scenario: 03. Verify the pin/unpin functionality
 	Then document should get pinned or unpinned
 
 @E2E
-Scenario: 06. Verify the search feature on document dashboard
+Scenario: 07. Verify the search feature on document dashboard
 	When user types 'test' in search box on document dashboard
 	Then all documents having 'test' keyword should be displayed
 
 @E2E
-Scenario: 08. Verify the advance filter functionality
+Scenario: 09. Verify the advance filter functionality
 	When user clicks on advance filter on document dashboard
 	Then filtered results should be shown to user
 
@@ -48,6 +48,11 @@ Scenario: 04. Verify the mail cart functionality
 	Then popup should display email as link or email as attachment options
 	
 @E2E    
-Scenario: 07. Verify the search feature with managed properties on document dashboard
+Scenario: 08. Verify the search feature with managed properties on document dashboard
 	When user types 'DocTitle:test' in search box on document dashboard
 	Then all documents having 'test' keyword should be displayed		  
+
+@E2E
+Scenario: 06. Verify gibberish search on document dashboard
+	When user types gibberish in search box on document dashboard
+	Then no documents should be displayed
