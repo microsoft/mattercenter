@@ -356,7 +356,17 @@
                     }
 
                     downloadAttachmentsAsStream(mailAttachmentDetailsRequest, function (response) {
-                        var result = encodeURIComponent(response);
+                        var fileName = response.fileName
+                        var blob = new Blob([response.fileAttachment.result], { type: "text/eml" });
+                        //window.navigator.msSaveOrOpenBlob(blob, "temp.eml");
+                        var element = window.document.createElement("a");
+                        element.href = window.URL.createObjectURL(blob);
+                        element.download = fileName;
+                        document.body.appendChild(element);
+                        element.click();
+                        document.body.removeChild(element);
+
+
                         //Once we get the response, stop the progress
                         angular.forEach(vm.cartelements, function (document) {
                             angular.element("#document-" + i).css("display", "none");
@@ -373,6 +383,7 @@
                         else {
                             vm.displayMessage = "Selected documents has been saved as link in draft email in Outlook."
                         }
+                        
                     })
                 }
                 else {
@@ -1030,6 +1041,7 @@
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
+                vm.displaypagination = false;
                 if (vm.tabClicked == "Pinned Documents") {
                     getPinDocuments(documentRequest, function (response) {
                         if (response && response.length > 0) {
@@ -1039,6 +1051,7 @@
                             vm.pagination();
                             vm.lazyloaderdashboard = true;
                             vm.divuigrid = true;
+                            vm.displaypagination = true;
                         }
                         else {
                             vm.nodata = true;
@@ -1049,25 +1062,26 @@
 
                 } else {
                     get(documentRequest, function (response) {
-                        vm.lazyloader = true;
-                        if (response.errorCode == "404") {
-                            vm.lazyloaderdashboard = true;
-                            vm.divuigrid = false;
-                            vm.nodata = true;
-                            vm.displaypagination = false;
+                        if (response && response.length > 0) {
+                            //vm.lazyloaderdashboard = true;
+                            //vm.divuigrid = false;
+                            vm.nodata = false;
+                            //vm.displaypagination = false;
+                            vm.documentGridOptions.data = response;
                             vm.errorMessage = response.message;
                             vm.getDocumentCounts();
                             vm.totalrecords = response.length;
                         } else {
-                            vm.getDocumentCounts();
-                            vm.totalrecords = response.length;
+                            //vm.totalrecords = response.length;
                             vm.documentGridOptions.data = response;
+                            vm.getDocumentCounts();
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
-                            vm.lazyloaderdashboard = true;
-                            vm.divuigrid = true;
-                            vm.nodata = false;
+                            //vm.lazyloaderdashboard = true;
+                            //vm.divuigrid = true;
+                            vm.nodata = true;
+                            //vm.displaypagination = true;
                         }
                     });
                 }

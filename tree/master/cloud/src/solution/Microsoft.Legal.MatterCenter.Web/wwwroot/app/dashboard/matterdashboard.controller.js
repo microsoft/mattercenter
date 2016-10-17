@@ -1444,6 +1444,7 @@
                             vm.totalrecords = vm.pinMatterCount;
                             vm.selectedTabCount = vm.pinMatterCount;
                             vm.pagination();
+                            //vm.getMatterCounts();
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1465,9 +1466,9 @@
                             $scope.errorMessage = response.message;
                         } else {
                             vm.matterGridOptions.data = response;
-                            vm.divuigrid = true;
+                            //vm.divuigrid = true;
                             vm.nodata = false;
-                            vm.lazyloaderdashboard = true;
+                            //vm.lazyloaderdashboard = true;
                             vm.getMatterCounts();
                             if (!$scope.$$phase) {
                                 $scope.$apply();
@@ -1613,6 +1614,7 @@
 
                                 }
                                 else {
+                                    vm.matterGridOptions.data = response;
                                     vm.lazyloaderdashboard = true;
                                     vm.pinMatterCount = 0;
                                     vm.divuigrid = true;
@@ -1677,6 +1679,7 @@
 
                                 }
                                 else {
+                                    vm.matterGridOptions.data = response;
                                     vm.lazyloaderdashboard = true;
                                     vm.pinMatterCount = 0;
                                     vm.divuigrid = true;
