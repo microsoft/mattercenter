@@ -74,13 +74,13 @@ textarea {
     }
 }
 
-@media screen and ( max-height: 300px ) and (max-width:500px){
+@media screen and ( max-height: 300px ) and (max-width:500px) {
     .noResultsText {
         margin-top: 10% !important;
     }
 }
 
-@media screen and ( max-height: 484px ) and (max-width:2000px){
+@media screen and ( max-height: 484px ) and (max-width:2000px) {
     .noResultsText {
         margin-top: 2% !important;
     }
@@ -261,6 +261,13 @@ textarea {
     .searchwidth {
         min-width: 204px !important;
         max-width: 204px !important;
+    }
+}
+
+@media screen and (max-width:377px) {
+    .viewportlg {
+        overflow: hidden !important;
+        overflow-y: auto !important;
     }
 }
 
@@ -498,7 +505,7 @@ textarea {
 .noResultsText {
     color: #333;
     font-weight: 200;
-    line-height: 1.5;   
+    line-height: 1.5;
     padding-left: 5px;
     padding-right: 30px;
     position: absolute;
@@ -753,7 +760,7 @@ textarea {
 
 .searchdashboard {
     padding-top: 15px;
-    cursor:default;
+    cursor: default;
 }
 
 .dashboarddrop {
@@ -1300,10 +1307,39 @@ textarea {
     width: 100%;
 }
 
-.footerMargin{
-    margin-right:19.5% !important
+.footerMargin {
+    margin-right: 19.5% !important;
 }
 
 .padright0 {
     padding-right: 0 !important;
+}
+
+.docSortbyWidth {
+    min-width: 656px;
+}
+
+.docSortbyText {
+    max-width: 192px;
+    min-width: 118px;
+    float: right;
+    text-align: right;
+}
+
+.docExportIcon {
+    min-width: 20px;
+    max-width: 20px;
+    float: right;
+    margin-right: 10px;
+}
+
+.docDashboardLoader {
+    top: 25%;
+    left: 47%;
+}
+
+.docDashboardInnerLoader {
+    position: absolute;
+    top: 28%;
+    left: 40%;
 }
