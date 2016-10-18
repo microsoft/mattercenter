@@ -235,14 +235,14 @@
                     </span>
                 </div>
             </div>
-            <div class="col-xs-12 mainsort">
+            <div class="col-xs-12 mainsort docSortbyWidth">
                 <div class="col-xs-offset-8 col-xs-4 docsortby" >
-                    <div class="pad0" style="max-width: 192px;min-width: 118px;float: right;text-align: right;">
+                    <div class="pad0 docSortbyText" >
                         <span>{{vm.documentDashboardConfigs.LabelSortByText}} </span>
                         <span>{{vm.sortbytext}}</span>
                         <img alt="{{vm.documentDashboardConfigs.LabelSortByTitle}}" class="" ng-click="vm.showsortby($event)" title="{{vm.documentDashboardConfigs.LabelSortByTitle}}" src="../Images/icon-combobox.png" />
                     </div>
-                    <div class="" style="min-width: 20px;max-width: 20px;float: right;margin-right: 10px;" ng-if="vm.center!='mattercenter'">
+                    <div class="docExportIcon" ng-if="vm.center!='mattercenter'">
                         <span class="img-xls" ng-click="vm.export()" ng-show="vm.lazyloaderdashboard">
                             <img alt="export" src="../../images/icxlsx.png" />
                         </span>
@@ -262,14 +262,14 @@
             </div>
         </div>
     </div>
-    <div id="loadingImageContainer" style="top:25%;left:47%">
+    <div id="loadingImageContainer" class="docDashboardLoader">
         <div class="lazyLoading" ng-hide="vm.lazyloaderdashboard">
             <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" title="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" />
         </div>
     </div>
 
-    <div style="position:absolute;top:28%;left:40%">
-        <div class="row text-center" style="" ng-hide="vm.lazyloaderdashboard">
+    <div class="docDashboardInnerLoader">
+        <div class="row text-center" ng-hide="vm.lazyloaderdashboard">
             {{vm.documentDashboardConfigs.MattersPreLoadingMsgText}}
         </div>
     </div>
