@@ -1629,6 +1629,7 @@
             cm.conflictRadioCheckValue = true;
             cm.conflictRadioChange = function (value) {
                 cm.blockedUserName = "";
+                cm.conflictUsers.assignedUser = "";
                 if (value) {
                     cm.secureMatterRadioEnabled = true;
                     cm.secureMatterCheck = true;
