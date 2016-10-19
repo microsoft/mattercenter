@@ -96,7 +96,8 @@
                 matterIdType: "Custom",
                 specialCharacterExpressionMatter: "[A-Za-z0-9_]+[-A-Za-z0-9_, ]*",
                 isBackwardCompatible: false,
-                isClientMappedWithHierachy:false
+                isClientMappedWithHierachy: false,
+                ConflictRadioCheck:false
             }
 
             var oPageTwoState = {
@@ -331,6 +332,7 @@
             //optionsForUsers
 
             cm.searchUsers = function (val) {
+                $("[uib-typeahead-popup].dropdown-menu").css("display", "block");
                 cm.typehead = true;                        
                 if (val && val != null && val != "") {
                     if (val.indexOf(';') > -1) {
@@ -1431,7 +1433,7 @@
                     if (fucnValue == "on-blurr") {
                         cm.user = username;
                         $label.assignedAllUserNamesAndEmails = $label.assignedUser;
-                        var userEmailTxt = "";
+                        var userEmailTxt = "",userEmailString="";
                         var userNames = getUserName($label.assignedUser, true);
                         var userEmails = getUserName($label.assignedUser, false);
                         var exsistingTeams = [];
@@ -1439,6 +1441,7 @@
                             if (userEmails[i] != "" && validateEmail(userEmails[i])) {
                                 angular.forEach($label.teamUsers, function (team) {
                                     if (team.userName == userEmails[i]) {
+                                        userEmailString = userEmailString + userEmails[i] + ";";
                                         exsistingTeams.push(team);                                       
                                     }
                                 });
@@ -1446,12 +1449,19 @@
                              userEmailTxt = userEmailTxt + userNameAndEmailTxt + ";";
                             }
                         }
+                        angular.element('#txtUser' + $label.assigneTeamRowNumber).attr('uservalue', userEmailString);
                         $label.assignedAllUserNamesAndEmails = userEmailTxt;
                         $label.teamUsers = exsistingTeams;
 
                     }
-                    if (fucnValue == "on-blurr" && value == "teamuser" && typeheadelelen == 0 && noresults) {
-                        cm.checkUserExists($label, $event);
+                    if (fucnValue == "on-blurr" && value == "teamuser") {
+                        if (typeheadelelen == 0 && noresults) {
+                            cm.checkUserExists($label, $event);                            
+                        }else if(typeheadelelen >=1 && !noresults){
+                            cm.checkUserExists($label, $event);
+                            $("[uib-typeahead-popup].dropdown-menu").css("display", "none");
+                           // $("[uib-typeahead-popup].dropdown-menu").show();
+                        }
                     }
                     if (!noresults) {
                         if (value == "conflictcheckuser") {
@@ -1471,6 +1481,9 @@
                     }
                 }
             }
+
+
+          
 
             function getArrAssignedUserNamesAndEmails() {
                 cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
@@ -1659,6 +1672,7 @@
                     cm.showRoles = oPageData.showRoles;
                     cm.showMatterId = oPageData.showMatterId;
                     cm.matterIdType = oPageData.matterIdType;
+                    cm.conflictRadioCheck = oPageData.conflictRadioCheck;
                     //  cm.areaOfLawTerms = [];
                     //  cm.subAreaOfLawTerms = [];
                     //  cm.documentTypeLawTerms = [];
@@ -1804,18 +1818,20 @@
                     cm.notificationBorder = "";
                     var userEmail = getUserName(cm.textInputUser.assignedUser, false);
                     userEmail = cleanArray(userEmail);
+                    var userEmailString = "";
                     for (var i = 0; i < userEmail.length; i++) {
                         if (i == cm.currentExternalUser.userIndex && userEmail[i] == cm.currentExternalUser.userName && userEmail[i] != "") {                          
                             angular.forEach(cm.textInputUser.teamUsers, function (teamUser) {
-                                if (teamUser.userName == userEmail[i]) {
+                                if (teamUser.userName == userEmail[i]) {                                   
                                     teamUser.userConfirmation = true;
                                     teamUser.userExsists = teamUser.userExsists;
                                 }
+                                userEmailString = userEmailString + teamUser.userName + ";";
                             });
                         }
                     }
                     cm.textInputUser.userConfirmation = true;
-                    angular.element('#txtUser' + cm.textInputUser.assigneTeamRowNumber).attr('uservalue', cm.textInputUser.assignedUser);
+                    angular.element('#txtUser' + cm.textInputUser.assigneTeamRowNumber).attr('uservalue', userEmailString);
                     angular.element('#txtUser' + cm.textInputUser.assigneTeamRowNumber).attr('confirm', "true");
                     angular.element('#txtUser' + cm.textInputUser.assigneTeamRowNumber).css('border-color', '#ccc');
                     cm.getExternalUserNotification = true;
@@ -3013,6 +3029,7 @@
                 oPageOneState.showRoles = cm.showRoles;
                 oPageOneState.showMatterId = cm.showMatterId;
                 oPageOneState.matterIdType = cm.matterIdType;
+                oPageOneState.conflictRadioCheck = cm.conflictRadioCheck;
                 //oPageOneState.isBackwardCompatible = cm.isBackwardCompatible;
                 //oPageOneState.isClientMappedWithHierachy = cm.isClientMappedWithHierachy;
                 //  oPageOneState.chkConflictCheck = cm.chkConfilctCheck;
