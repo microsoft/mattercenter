@@ -2224,13 +2224,13 @@
                     angular.element('#mattergrid .ui-grid-viewport').addClass('viewportlg');
                     angular.element('.ui-grid-menu-mid').css('height', $window.innerHeight - 300 + 'px !important');
                 }
-                if (vm.nodata && $window.innerHeight < 375) {
-                    angular.element('#mattergrid .ui-grid-viewport').removeClass('viewportlg');
-                    angular.element('#mattergrid .ui-grid-viewport').css("overflow-x","hidden!important");
-                } else {
-                    angular.element('#mattergrid .ui-grid-viewport').css("overflow-x", "auto!important");
-                    angular.element('#mattergrid .ui-grid-viewport').addClass('viewportlg');
-                }
+                //if (vm.nodata && $window.innerHeight < 375) {
+                //    angular.element('#mattergrid .ui-grid-viewport').removeClass('viewportlg');
+                //    angular.element('#mattergrid .ui-grid-viewport').css("overflow-x","hidden!important");
+                //} else {
+                //    angular.element('#mattergrid .ui-grid-viewport').css("overflow-x", "auto!important");
+                //    angular.element('#mattergrid .ui-grid-viewport').addClass('viewportlg');
+                //}
             });
 
             //#endregion
