@@ -399,7 +399,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                     jw.WritePropertyName("SPOsiteURL");
                     jw.WriteValue(generalSettingsSection["SiteURL"]);
                     jw.WritePropertyName("tenant");
-                    jw.WriteValue(generalSettingsSection["OrgDomainName"]);
+                    jw.WriteValue(generalSettingsSection["Tenant"]);
                     jw.WritePropertyName("MainURL");
                     jw.WriteValue(generalSettingsSection["MainURL"]);
                 jw.WriteEndObject();
