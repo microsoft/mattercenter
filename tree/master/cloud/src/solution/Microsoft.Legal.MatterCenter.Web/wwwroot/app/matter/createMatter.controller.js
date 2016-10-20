@@ -40,7 +40,7 @@
             cm.schema = configs.search.Schema;
             cm.isBackwardCompatible = configs.global.isBackwardCompatible;
             cm.isClientMappedWithHierachy = configs.global.isClientMappedWithHierachy;
-            cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);
+            cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);            
             if (cm.taxonomyHierarchyLevels >= 2) {
                 cm.parentLevelOneList = [];
                 cm.levelOneList = [];
@@ -97,7 +97,8 @@
                 specialCharacterExpressionMatter: "[A-Za-z0-9_]+[-A-Za-z0-9_, ]*",
                 isBackwardCompatible: false,
                 isClientMappedWithHierachy: false,
-                ConflictRadioCheck:false
+                ConflictRadioCheck: false,
+                oEmailRegexp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             }
 
             var oPageTwoState = {
@@ -480,6 +481,7 @@
             cm.selectMatterType = function (value) {
                 cm.popupContainer = "Show";
                 cm.popupContainerBackground = "Show";
+                cm.successBanner = false;
             }
             //calls this function when selectType button clicks
             //cm.selectMatterType = function (value) {
@@ -518,6 +520,7 @@
             }
             //function to get the clientId from ClientName dropdown
             cm.getSelectedClientValue = function (client) {
+                cm.successBanner = false;
                 if (undefined !== client && null !== client) {
                     cm.clientId = client.id;
                     cm.selectedClientName = client.name;
@@ -1547,7 +1550,7 @@
             }
             var getUserName = function (sUserEmails, bIsName) {
                 "use strict";
-                var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp("^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$");
+                var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp(oPageOneState.oEmailRegexp);
                 if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
                     arrUserNames = sUserEmails.split(";");
                     for (var iIterator = 0; iIterator < arrUserNames.length - 1; iIterator++) {
@@ -1629,6 +1632,7 @@
             cm.conflictRadioCheckValue = true;
             cm.conflictRadioChange = function (value) {
                 cm.blockedUserName = "";
+                cm.conflictUsers.assignedUser = "";
                 if (value) {
                     cm.secureMatterRadioEnabled = true;
                     cm.secureMatterCheck = true;
@@ -1893,7 +1897,7 @@
             }
 
             function validateEmail(email) {
-                var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                var re = new RegExp(oPageOneState.oEmailRegexp);
                 return re.test(email);
             }
 
@@ -2402,9 +2406,11 @@
                 angular.forEach(cm.assignPermissionTeams, function (item) {
                     //    arrPermissions.push($.trim($(this).val()));
                     if (item.assignedPermission.name.toLowerCase() === User_Upload_Permissions.toLowerCase()) {
-                        arrReadOnlyUsers.push(getUserName(item.assignedRole.name.trim() + ";", false).join(";"), ";");
+                        arrReadOnlyUsers.push(getUserName(item.assignedUser.trim() , false).join(";"));
                     }
                 });
+                arrReadOnlyUsers = cleanArray(arrReadOnlyUsers);
+
                 validateTeamAssigmentRole();
                 angular.forEach(cm.assignPermissionTeams, function (item) {
                     // var sCurrElementID = $(this).attr("id");

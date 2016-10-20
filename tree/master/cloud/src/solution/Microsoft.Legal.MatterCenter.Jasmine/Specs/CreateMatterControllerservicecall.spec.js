@@ -28,10 +28,10 @@ describe("CreateMatter Controller test suite for service call", function () {
 
     beforeEach(module("ui.router"));
     beforeEach(module("ui.bootstrap"));
-
+    
     beforeEach(inject(function ($controller, $injector, $rootScope) {
         rootScope = $rootScope.$new();
-        vm = $controller("createMatterController as vm", { $scope: $scope, $rootScope: rootScope, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResourceService, api: mockapi });
+        vm = $controller("createMatterController as vm", { $scope: $scope, $rootScope: rootScope, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResourceService, api: mockapi, adalAuthenticationService: mockadalAuthenticationService });
     }));
 
     describe("Verification of Check valid matter function", function () {

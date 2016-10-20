@@ -153,6 +153,31 @@ textarea {
     }
 }
 
+@media(max-width:940px) {
+    .docCreatedDateTypeClass {
+        display: none !important;
+    }
+}
+
+
+@media(max-width:1120px) {
+    .matterCreatedDateClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:965px) {
+    .matterProjectTypeClass {
+        display: none !important;
+    }
+}
+
+@media(max-width:740px) {
+    .matterTeamTypeClass {
+        display: none !important;
+    }
+}
+
 
 /*Document Dashboard classes*/
 .docGridVerClass {
@@ -170,6 +195,10 @@ textarea {
 .docOwnerGridClass {
     display: table-cell;
 }
+
+.docCreatedDateTypeClass {
+    display: table-cell;
+}
 /*End of document dashboard classed*/
 
 
@@ -183,6 +212,18 @@ textarea {
 }
 
 .matterGridAttorClass {
+    display: table-cell;
+}
+
+.matterCreatedDateClass {
+    display: table-cell;
+}
+
+.matterProjectTypeClass {
+    display: table-cell;
+}
+
+.matterTeamTypeClass {
     display: table-cell;
 }
 /*End of Matter Dasboard classes*/
@@ -1342,4 +1383,20 @@ textarea {
     position: absolute;
     top: 28%;
     left: 40%;
+}
+
+.jsonGridFooterNew {
+    position: absolute;
+    min-width: 35px;
+    max-width: 133px;
+}
+
+.fromToPageWidth {
+    min-width: 35px;
+    max-width: 133px;
+}
+
+.docFromToPageWidth {
+    min-width: 52px;
+    max-width: 133px;
 }

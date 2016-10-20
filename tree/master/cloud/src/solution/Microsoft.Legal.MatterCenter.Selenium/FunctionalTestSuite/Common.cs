@@ -15,6 +15,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
     using OpenQA.Selenium;
     using OpenQA.Selenium.IE;
     using System;
+    using System.Collections.Specialized;
     using System.Configuration;
     using System.Threading;
 
@@ -26,6 +27,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
     public class CommonHelperFunction
     {
         static IWebDriver webDriver = new InternetExplorerDriver();
+        NameValueCollection cred = ConfigurationManager.GetSection("credSettings") as NameValueCollection;
 
         /// <summary>
         /// This method is used to perform authentication
@@ -38,12 +40,12 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             IJavaScriptExecutor scriptExecutor = (IJavaScriptExecutor)webDriver;
             webDriver.FindElement(By.Id("cred_userid_inputtext")).Click();
             webDriver.FindElement(By.Id("cred_userid_inputtext")).Clear();
-            scriptExecutor.ExecuteScript("document.getElementById('cred_userid_inputtext').value='"+ ConfigurationManager.AppSettings["UserName"]+"'");
+            scriptExecutor.ExecuteScript("document.getElementById('cred_userid_inputtext').value='"+ cred["UserName"]+"'");
             Thread.Sleep(5000);
             webDriver.FindElement(By.Id("cred_password_inputtext")).Click();
             webDriver.FindElement(By.Id("cred_password_inputtext")).Clear();
             Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("document.getElementById('cred_password_inputtext').setAttribute('value','"+ ConfigurationManager.AppSettings["Password"] + "')");
+            scriptExecutor.ExecuteScript("document.getElementById('cred_password_inputtext').setAttribute('value','"+ cred["Password"] + "')");
             Thread.Sleep(3000);
             scriptExecutor.ExecuteScript("document.getElementById('cred_keep_me_signed_in_checkbox').checked = true;");
             Thread.Sleep(2000);

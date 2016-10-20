@@ -28,7 +28,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         static IWebDriver webDriver = CommonHelperFunction.GetDriver();
         IJavaScriptExecutor scriptExecutor = (IJavaScriptExecutor)webDriver;
         CommonHelperFunction common = new CommonHelperFunction();
-        bool pinned;
+        bool pinned = false;
 
         #region 01. Open the browser and load document landing page
         [When(@"user enters credentials on document landing page")]
@@ -45,8 +45,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         #endregion
 
         #region 02. Verify action links
-        string initialState;
-        string checkIn, checkOut;
+        string initialState,checkIn, checkOut;
         [When(@"user loads document landing page")]
         public void WhenUserLoadsDocumentLandingPage()
         {
@@ -58,17 +57,17 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         }
 
         [Then(@"document action links should be present")]
-        public void ThenActionLinks()
+        public void ThenDocumentActionLinksShouldBePresent()
         {
-            string checkDownload = (string)scriptExecutor.ExecuteScript("var links = $('#spanDownload')[0].innerText;return links");
-            string checkShare = (string)scriptExecutor.ExecuteScript("var links = $('#spanShare')[0].innerText;return links");
-            string checkSend = (string)scriptExecutor.ExecuteScript("var links = $('#spanSendLink')[0].innerText;return links");
-            string finalState = (string)scriptExecutor.ExecuteScript("var links = $('#pinUnpinDocument span').eq(2).attr('class');return links");
+            string checkDownload = (string)scriptExecutor.ExecuteScript("var links = $('#spanDownload')[0].innerText;return links"),
+                   checkShare = (string)scriptExecutor.ExecuteScript("var links = $('#spanShare')[0].innerText;return links"),
+                   checkSend = (string)scriptExecutor.ExecuteScript("var links = $('#spanSendLink')[0].innerText;return links"),
+                   finalState = (string)scriptExecutor.ExecuteScript("var links = $('#pinUnpinDocument span').eq(2).attr('class');return links");
             Assert.IsTrue(checkDownload.Contains("download"));
             Assert.IsTrue(checkShare.Contains("share"));
             Assert.IsTrue(checkSend.Contains("send link"));
 
-            if ((string.IsNullOrEmpty(checkIn) && checkOut.Contains("hide")) || (checkIn.Contains("hide") && string.IsNullOrEmpty(checkOut)))
+            if ((string.IsNullOrWhiteSpace(checkIn) && checkOut.Contains("hide")) || (checkIn.Contains("hide") && string.IsNullOrWhiteSpace(checkOut)))
             {
                 Assert.IsTrue(true);
             }
@@ -76,7 +75,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             {
                 Assert.IsTrue(false);
             }
-            if ((string.IsNullOrEmpty(initialState) && finalState.Contains("hide")) || (initialState.Contains("hide") && string.IsNullOrEmpty(finalState)))
+            if ((string.IsNullOrWhiteSpace(initialState) && finalState.Contains("hide")) || (initialState.Contains("hide") && string.IsNullOrWhiteSpace(finalState)))
             {
                 Assert.IsTrue(true);
             }
@@ -101,38 +100,38 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"all file properties should be present")]
         public void ThenAllFilePropertiesShouldBePresent()
         {
-            string checkFileName = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[2].innerText;return links");
-            string checkClient = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[4].innerText;return links");
-            string checkMatter = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[6].innerText;return links");
-            string checkMatterId = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[8].innerText;return links");
-            string checkDocumnentId = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[10].innerText;return links");
-            string checkCheckedOutTo = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[16].innerText;return links");
-            string checkAuthor = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[22].innerText;return links");
-            string checkDateCreated = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[24].innerText;return links");
-            string checkPracticeGroup = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[26].innerText;return links");
-            string checkAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[28].innerText;return links");
-            string checkSubAreaofLaw = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[30].innerText;return links");
-            string checkFileType = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[32].innerText;return links");
-            string checkFileSize = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[34].innerText;return links");
-            string checkFileAccess = (string)scriptExecutor.ExecuteScript("var links = $('#accessValue')[0].href;return links");
-            string checkViewMore = (string)scriptExecutor.ExecuteScript("var links = $('#viewMoreFileProperties')[0].innerText;return links");
-            string checkFileNameHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[1].innerText;return links");
-            string checkClientHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[3].innerText;return links");
-            string checkMatterHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[5].innerText;return links");
-            string checkClientMatterIdHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[7].innerText;return links");
-            string checkDocumentIdHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[9].innerText;return links");
-            string checkCheckedOutToHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[11].innerText;return links");
-            string checkAuthorHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[17].innerText;return links");
-            string checkDateCreatedHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[23].innerText;return links");
-            string checkPracticeGroupHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[25].innerText;return links");
-            string checkAreaOfLawHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[27].innerText;return links");
-            string checkSubAreaOfLawHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[29].innerText;return links");
-            string checkFileTypeHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[31].innerText;return links");
-            string checkFileSizeHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[33].innerText;return links");
-            string checkFileAccessHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[35].innerText;return links");
+            string checkFileName = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[2].innerText;return links"),
+                   checkClient = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[4].innerText;return links"),
+                   checkMatter = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[6].innerText;return links"),
+                   checkMatterId = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[8].innerText;return links"),
+                   checkDocumnentId = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[10].innerText;return links"),
+                   checkCheckedOutTo = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[16].innerText;return links"),
+                   checkAuthor = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[22].innerText;return links"),
+                   checkDateCreated = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[24].innerText;return links"),
+                   checkPracticeGroup = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[26].innerText;return links"),
+                   checkAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[28].innerText;return links"),
+                   checkSubAreaofLaw = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[30].innerText;return links"),
+                   checkFileType = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[32].innerText;return links"),
+                   checkFileSize = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[34].innerText;return links"),
+                   checkFileAccess = (string)scriptExecutor.ExecuteScript("var links = $('#accessValue')[0].href;return links"),
+                   checkViewMore = (string)scriptExecutor.ExecuteScript("var links = $('#viewMoreFileProperties')[0].innerText;return links"),
+                   checkFileNameHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[1].innerText;return links"),
+                   checkClientHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[3].innerText;return links"),
+                   checkMatterHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[5].innerText;return links"),
+                   checkClientMatterIdHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[7].innerText;return links"),
+                   checkDocumentIdHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[9].innerText;return links"),
+                   checkCheckedOutToHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[11].innerText;return links"),
+                   checkAuthorHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[17].innerText;return links"),
+                   checkDateCreatedHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[23].innerText;return links"),
+                   checkPracticeGroupHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[25].innerText;return links"),
+                   checkAreaOfLawHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[27].innerText;return links"),
+                   checkSubAreaOfLawHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[29].innerText;return links"),
+                   checkFileTypeHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[31].innerText;return links"),
+                   checkFileSizeHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[33].innerText;return links"),
+                   checkFileAccessHeader = (string)scriptExecutor.ExecuteScript("var links = $('#metadataProperties li span')[35].innerText;return links");
 
 
-            if ((!string.IsNullOrEmpty(checkFileName) && !string.IsNullOrEmpty(checkClient) && !string.IsNullOrEmpty(checkMatter) && !string.IsNullOrEmpty(checkMatterId) && !string.IsNullOrEmpty(checkDocumnentId) && !string.IsNullOrEmpty(checkCheckedOutTo) && !string.IsNullOrEmpty(checkAuthor) && !string.IsNullOrEmpty(checkDateCreated) && !string.IsNullOrEmpty(checkPracticeGroup) && !string.IsNullOrEmpty(checkAreaOfLaw) && !string.IsNullOrEmpty(checkSubAreaofLaw) && !string.IsNullOrEmpty(checkFileType) && !string.IsNullOrEmpty(checkFileSize) && !string.IsNullOrEmpty(checkFileAccess)))
+            if ((!string.IsNullOrWhiteSpace(checkFileName) && !string.IsNullOrWhiteSpace(checkClient) && !string.IsNullOrWhiteSpace(checkMatter) && !string.IsNullOrWhiteSpace(checkMatterId) && !string.IsNullOrWhiteSpace(checkDocumnentId) && !string.IsNullOrWhiteSpace(checkCheckedOutTo) && !string.IsNullOrWhiteSpace(checkAuthor) && !string.IsNullOrWhiteSpace(checkDateCreated) && !string.IsNullOrWhiteSpace(checkPracticeGroup) && !string.IsNullOrWhiteSpace(checkAreaOfLaw) && !string.IsNullOrWhiteSpace(checkSubAreaofLaw) && !string.IsNullOrWhiteSpace(checkFileType) && !string.IsNullOrWhiteSpace(checkFileSize) && !string.IsNullOrWhiteSpace(checkFileAccess)))
             {
                 Assert.IsTrue(true);
             }
@@ -173,12 +172,12 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"all versions of the document should be seen")]
         public void ThenAllVersionsOfTheDocumentShouldBeSeen()
         {
-            string checkVersion = (string)scriptExecutor.ExecuteScript("var links = $('#versionHeader span')[0].innerText;return links");
-            string checkModified = (string)scriptExecutor.ExecuteScript("var links = $('#versionHeader span')[1].innerText;return links");
-            string checkModifiedBy = (string)scriptExecutor.ExecuteScript("var links = $('#versionHeader span')[2].innerText;return links");
-            string checkViewMore = (string)scriptExecutor.ExecuteScript("var links = $('#viewMoreVersions')[0].innerText;return links");
-            string checkVersionNumber = (string)scriptExecutor.ExecuteScript("var links = $('.versionNumber ')[0].innerText;return links");
-            Assert.IsTrue(!string.IsNullOrEmpty(checkVersionNumber));
+            string checkVersion = (string)scriptExecutor.ExecuteScript("var links = $('#versionHeader span')[0].innerText;return links"),
+                   checkModified = (string)scriptExecutor.ExecuteScript("var links = $('#versionHeader span')[1].innerText;return links"),
+                   checkModifiedBy = (string)scriptExecutor.ExecuteScript("var links = $('#versionHeader span')[2].innerText;return links"),
+                   checkViewMore = (string)scriptExecutor.ExecuteScript("var links = $('#viewMoreVersions')[0].innerText;return links"),
+                   checkVersionNumber = (string)scriptExecutor.ExecuteScript("var links = $('.versionNumber ')[0].innerText;return links");
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(checkVersionNumber));
             Assert.IsTrue(checkVersion.Contains("Version"));
             Assert.IsTrue(checkModified.Contains("Modified"));
             Assert.IsTrue(checkModifiedBy.Contains("Modified By"));
@@ -188,7 +187,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
 
         #region 05. Verify the footer links
         [When(@"user clicks on footer on document landing page")]
-        public void WhenUserNavigatesToFooterOnDocumentLandingPage()
+        public void WhenUserClicksOnFooterOnDocumentLandingPage()
         {
             webDriver.Navigate().GoToUrl(URL);
             Thread.Sleep(5000);
@@ -197,11 +196,11 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"all links should be present on footer on document landing page")]
         public void ThenAllLinksShouldBePresentOnFooterOnDocumentLandingPage()
         {
-            string checkFeedbackAndSupport = (string)scriptExecutor.ExecuteScript("var links =$('#feedbackSupport')[0].innerText;return links");
-            string checkPrivacyAndCookies = (string)scriptExecutor.ExecuteScript("var links =$('#privacyLink')[0].href;return links");
-            string checkTermsOfUse = (string)scriptExecutor.ExecuteScript("var links =$('#termsOfUse')[0].href;return links");
-            string checkMicrosoft = (string)scriptExecutor.ExecuteScript("var links =$('.footerLink span')[0].innerText;return links");
-            string checkMicrosoftLogo = (string)scriptExecutor.ExecuteScript("var links =$('.footerLogo a img')[0].title;return links");
+            string checkFeedbackAndSupport = (string)scriptExecutor.ExecuteScript("var links =$('#feedbackSupport')[0].innerText;return links"),
+                   checkPrivacyAndCookies = (string)scriptExecutor.ExecuteScript("var links =$('#privacyLink')[0].href;return links"),
+                   checkTermsOfUse = (string)scriptExecutor.ExecuteScript("var links =$('#termsOfUse')[0].href;return links"),
+                   checkMicrosoft = (string)scriptExecutor.ExecuteScript("var links =$('.footerLink span')[0].innerText;return links"),
+                   checkMicrosoftLogo = (string)scriptExecutor.ExecuteScript("var links =$('.footerLogo a img')[0].title;return links");
 
             Thread.Sleep(1000);
 
@@ -230,6 +229,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                 scriptExecutor.ExecuteScript("$('#spanUnpin').click();");
                 pinned = false;
             }
+            Thread.Sleep(2000);
         }
 
         [Then(@"document should get pinned/unpinned")]

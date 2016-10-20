@@ -45,7 +45,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     });
 
     describe("Verification of getPinnedDocuments function", function () {
-        it("It should display the all pinned documents", function () {
+        it("It should return the all pinned documents", function () {
             vm.getPinnedDocuments();
             expect(vm.documentGridOptions.data).not.toBe(null);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(1);
@@ -56,25 +56,24 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     });
 
     describe("Verification of getMyDocuments function", function () {
-        it("It should display all the user documents", function () {
+        it("It should return the My documents", function () {
             vm.getMyDocuments();
             expect(vm.lazyloaderdashboard).toBe(true);
-            expect(vm.displaypagination).toBe(false);
+            expect(vm.displaypagination).toBe(true);
             expect(vm.divuigrid).toBe(true);
             expect(vm.nodata).toBe(false);
         });
     });
 
     describe("Verification of getDocuments function", function () {
-        it("It should get all the user documents", function () {
+        it("It should get the Documents", function () {
             vm.getDocuments();
             expect(vm.lazyloaderdashboard).toBe(true);
-            expect(vm.displaypagination).toBe(false);
             expect(vm.divuigrid).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.pinDocumentCount).toBeGreaterThan(0);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(1);
-            expect(vm.totalrecords).toBe(0);
+            expect(vm.totalrecords).not.toBeLessThan(0);
             expect(vm.pinDocumentCount).toBeGreaterThan(0);
             expect(vm.nodata).toBe(false);
 
@@ -82,7 +81,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     });
 
     describe("Verification of showclientdrop function", function () {
-        it("It should show client dropdown menu", function () {
+        it("It should show clientdrop", function () {
             vm.clientdropvisible = false;
             vm.clients = undefined;
             vm.showclientdrop(event);
@@ -93,7 +92,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
 
         });
 
-        it("It should not show client dropdown menu", function () {
+        it("It should not show clientdrop", function () {
             vm.clientdropvisible = true;
             vm.showclientdrop(event);
             expect(vm.clientdrop).toBe(false);
@@ -108,7 +107,6 @@ describe("DocumentDashboard Controller test suite for service call", function ()
             vm.FilterByType();
             expect(vm.totalrecords).toBeGreaterThan(0);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(0);
-            expect(vm.lazyloader).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.divuigrid).toBe(true);
             expect(vm.lazyloaderdashboard).toBe(true);
@@ -116,12 +114,11 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     });
 
     describe("Verification of sortyby function", function () {
-        it("It should sort the data", function () {
+        it("It should show sort the data", function () {
             var sortexp = "AlphabeticalUp";
             vm.sortyby(sortexp, "Searchkeyword");
             expect(vm.totalrecords).toBeGreaterThan(0);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(0);
-            expect(vm.lazyloader).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.divuigrid).toBe(true);
             expect(vm.lazyloaderdashboard).toBe(true);
@@ -129,13 +126,13 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     });
 
     describe("Verification of next function", function () {
-        it("It should show next section", function () {
+        it("It should show next", function () {
             vm.last = 5;
             vm.totalrecords = 30;
             vm.next();
             expect(vm.first).toBeGreaterThan(0);
             expect(vm.last).toBeGreaterThan(0);
-            expect(vm.total).toBeGreaterThan(0);
+            expect(vm.total).not.toBeLessThan(0);
             expect(vm.pagenumber).toBeGreaterThan(0);
             expect(vm.fromtopage).toBe(vm.first + " - " + vm.totalrecords);
             expect(vm.lazyloader).toBe(true);
@@ -147,7 +144,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     });
 
     describe("Verification of prev function", function () {
-        it("It should show previous section", function () {
+        it("It should show prev", function () {
             vm.last = 50;
             vm.first = 50;
             vm.prev();
@@ -210,7 +207,6 @@ describe("DocumentDashboard Controller test suite for service call", function ()
             expect(vm.documentid).toBe(1);
             expect(vm.totalrecords).toBeGreaterThan(0);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(0);
-            expect(vm.lazyloader).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.divuigrid).toBe(true);
             expect(vm.lazyloaderdashboard).toBe(true);
@@ -228,7 +224,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     });
 
     describe("Verification of filterSearchOK function", function () {
-        it("It should return all the selected client", function () {
+        it("It should return selected client", function () {
             vm.selectedClients = "";
             vm.clients = clientobj;
             vm.filterSearchOK("client");
@@ -240,7 +236,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     })
 
     describe("Verification of openStartDate function", function () {
-        it("It should return open start date", function () {
+        it("It should return start date", function () {
            
             vm.openStartDate(event);
             expect(vm.openedStartDate).toBe(true);
@@ -248,7 +244,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     })
 
     describe("Verification of openEndDate function", function () {
-        it("It should return open end date", function () {
+        it("It should return start date", function () {
 
             vm.openStartDate(event);
             expect(vm.openedEndDate).toBe(false);
@@ -256,7 +252,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     })
 
     describe('Verification of getDocumentAssets   function', function () {
-    it('It should get all the document's asset', function () {
+    it('It should get all the documents asset', function () {
             var data;
             var row = {
                 "entity":

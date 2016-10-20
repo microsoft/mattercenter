@@ -1,0 +1,1086 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="008f2a20-42bb-40a2-8617-8f499a6dda01" name="v-akdigh@MCDEV02 2016-10-13 10:29:08" runUser="MCDEV02\v-akdigh" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Default Test Settings" id="d99e8c7c-1130-412e-91e4-2cc84a1fcc06">
+    <Deployment userDeploymentRoot="C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium" useDefaultDeploymentRoot="false" runDeploymentRoot="v-akdigh_MCDEV02 2016-10-13 10_29_08" />
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+    <Properties />
+  </TestSettings>
+  <Times creation="2016-10-13T10:29:08.3897899+00:00" queuing="2016-10-13T10:29:09.0377814+00:00" start="2016-10-13T10:29:09.3217776+00:00" finish="2016-10-13T10:49:53.8734743+00:00" />
+  <ResultSummary outcome="Failed">
+    <Counters total="40" executed="40" passed="35" error="0" failed="5" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>-&gt; warning: The previous FeatureContext was not disposed.
+-&gt; warning: The previous FeatureContext was not disposed.
+-&gt; warning: The previous FeatureContext was not disposed.
+-&gt; warning: The previous FeatureContext was not disposed.
+-&gt; warning: The previous FeatureContext was already disposed.
+-&gt; warning: The previous FeatureContext was already disposed.
+-&gt; warning: The previous FeatureContext was already disposed.
+-&gt; warning: The previous FeatureContext was already disposed.
+</StdOut>
+    </Output>
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="_05_VerifyVersionDetails" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="73fce949-1ca1-aefb-9af8-2ac1f5e5f477">
+      <Description>05. Verify version details</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="ec015bfa-8558-44da-8a2e-6fe81c33b814" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>DocumentLanding</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentLandingFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_05_VerifyVersionDetails" />
+    </UnitTest>
+    <UnitTest name="_02_OpenTheHamburgerMenuAndVerifyAllTheElements" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="f641ea43-e57e-273e-90b6-7e15fe693a61">
+      <Description>02. Open the hamburger menu and verify all the elements</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="630e7cfc-270a-457a-a7ce-400d7f4d2a26" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Home Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.HomePageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_02_OpenTheHamburgerMenuAndVerifyAllTheElements" />
+    </UnitTest>
+    <UnitTest name="_02_VerifyActionLinks" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="6c079a02-1ca2-6b27-6573-f246e9224ee2">
+      <Description>02. Verify action links</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="8cf6f214-8a30-438b-9faf-5ebd308762eb" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>DocumentLanding</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentLandingFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_02_VerifyActionLinks" />
+    </UnitTest>
+    <UnitTest name="_09_VerifyTheAdvanceFilterFunctionality" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="1bece639-f722-fee4-4526-ef9ed7898034">
+      <Description>09. Verify the advance filter functionality</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="58dff063-b0b4-4c42-b307-23b890825185" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Document Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_09_VerifyTheAdvanceFilterFunctionality" />
+    </UnitTest>
+    <UnitTest name="_04_VerifyFileProperties" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="a674883e-1941-8b11-cfa8-d97a7a6ce41e">
+      <Description>04. Verify file properties</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="d3e08b36-630f-4f85-ba31-e9535233709c" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>DocumentLanding</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentLandingFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_04_VerifyFileProperties" />
+    </UnitTest>
+    <UnitTest name="_05_VerifyTheSortFunctionalityOnDocumentDashboard" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="5f11ca4e-99e7-7bed-af60-ca0009de6399">
+      <Description>05. Verify the sort functionality on document dashboard</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="c4ad78fd-e68d-4911-ad9b-63a256f39911" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Document Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_05_VerifyTheSortFunctionalityOnDocumentDashboard" />
+    </UnitTest>
+    <UnitTest name="_03_VerifyTheLinksOnHomePage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="586c1cfe-c810-4180-2e49-1d875d023a1e">
+      <Description>03. Verify the links on home page</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="e8ae5261-bb99-4a1f-af07-ca42fcf79ccf" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Home Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.HomePageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_03_VerifyTheLinksOnHomePage" />
+    </UnitTest>
+    <UnitTest name="_02_VerifyTheHamburgerMenu" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="aef22e6d-830a-e14b-12af-044dfa29778c">
+      <Description>02. Verify the hamburger menu</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="3f4620bb-1d1e-474c-b9a2-43579f25f36e" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_02_VerifyTheHamburgerMenu" />
+    </UnitTest>
+    <UnitTest name="_07_VerifyTheSearchFeatureOnMatterCenterHomepage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="00390f21-b014-cf6c-afd0-bbdd99e04508">
+      <Description>07. Verify the search feature on matter center homepage</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="18a78a78-9b0a-4293-8644-98a0a2d226a9" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_07_VerifyTheSearchFeatureOnMatterCenterHomepage" />
+    </UnitTest>
+    <UnitTest name="_05_VerifyTheMatterFlyOutOnMatterCenterHomepage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="ea13cae3-a51e-c5d4-88d5-9e238cae8d5b">
+      <Description>05. Verify the matter fly out on Matter Center homepage</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="b0224587-f1bf-4b0c-823b-9539562e8136" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_05_VerifyTheMatterFlyOutOnMatterCenterHomepage" />
+    </UnitTest>
+    <UnitTest name="_12_VerifyEnterpriseSearchFeatureOnMatterCenterHomePage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="ec092d03-493f-5476-0bcf-e02cae6da5de">
+      <Description>12. Verify enterprise search feature on matter center home page</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="972dc1bc-e520-4354-a516-989c1b4921d2" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_12_VerifyEnterpriseSearchFeatureOnMatterCenterHomePage" />
+    </UnitTest>
+    <UnitTest name="_03_VerifyThePinUnpinFunctionality" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="418f8d10-8756-2ede-f12d-9f1d7ca29d8b">
+      <Description>03. Verify the pin/unpin functionality</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="a4833cd4-128a-40e2-9efb-0d777b482c18" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>DocumentLanding</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentLandingFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_03_VerifyThePinUnpinFunctionality" />
+    </UnitTest>
+    <UnitTest name="_07_VerifyTheUserProfileIcon" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="234690ea-c07c-9184-2276-51b52649c7fc">
+      <Description>07. Verify the user profile icon</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="1243c0a3-4268-4763-9fad-9e418f290f7e" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Home Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.HomePageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_07_VerifyTheUserProfileIcon" />
+    </UnitTest>
+    <UnitTest name="_03_VerifyThePinUnpinFunctionality" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="9c207c34-cbf1-b789-c105-7068a9932344">
+      <Description>03. Verify the pin/unpin functionality</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="0ad37214-3679-4e36-a06d-c233342256f3" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Document Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_03_VerifyThePinUnpinFunctionality" />
+    </UnitTest>
+    <UnitTest name="_06_VerifyTheFooterLinks" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="791acc40-4a08-71e3-cff4-43fe7c832722">
+      <Description>06. Verify the footer links</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="4b073339-90b3-4101-8dab-4c97855d1097" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>DocumentLanding</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentLandingFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_06_VerifyTheFooterLinks" />
+    </UnitTest>
+    <UnitTest name="_08_VerifyTheSearchFeatureWithManagedPropertiesOnDocumentDashboard" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="61440d9c-70f2-5240-6216-f02430850f00">
+      <Description>08. Verify the search feature with managed properties on document dashboard</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="25f3ffb7-713e-470f-91cd-1a3ef5f66e98" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Document Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_08_VerifyTheSearchFeatureWithManagedPropertiesOnDocumentDashboard" />
+    </UnitTest>
+    <UnitTest name="_04_VerifyTheUploadButtonFunctionality" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="59313735-0fa6-14ea-75a6-e4acd26368c6">
+      <Description>04. Verify the upload button functionality</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="d714db9b-1074-46c3-9802-6f45bf47fd45" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_04_VerifyTheUploadButtonFunctionality" />
+    </UnitTest>
+    <UnitTest name="_04_VerifyTheMailCartFunctionality" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="41ef27c9-4687-01b8-22cf-4bfc1f4155a2">
+      <Description>04. Verify the mail cart functionality</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="2bc5b956-fb08-4f9a-86fc-6104f8b9b132" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Document Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_04_VerifyTheMailCartFunctionality" />
+    </UnitTest>
+    <UnitTest name="_01_OpenTheBrowserAndLoadDocumentLandingPage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="d0a50dce-28e0-5eca-01ec-3f8c82e67cf7">
+      <Description>01. Open the browser and load document landing page</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="e22ae1ce-b929-47c2-8c2e-251c4cfcf3f5" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>DocumentLanding</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentLandingFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_01_OpenTheBrowserAndLoadDocumentLandingPage" />
+    </UnitTest>
+    <UnitTest name="_08_VerifyTheSearchFeatureUsingManagedPropertiesOnMatterCenterHomePage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="69123953-8c68-e4b4-6c0b-68980a8d06b7">
+      <Description>08. Verify the search feature using managed properties on matter center home page</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="a5a30a8c-639f-42b0-a379-4b683e0f9a84" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_08_VerifyTheSearchFeatureUsingManagedPropertiesOnMatterCenterHomePage" />
+    </UnitTest>
+    <UnitTest name="_01_OpenTheBrowserAndLoadHomePage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="8457d09f-a04d-11a0-d784-7df72b44a197">
+      <Description>01. Open the browser and load home page</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="b77c83f6-cd76-463f-914d-7c2ab2145beb" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Home Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.HomePageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_01_OpenTheBrowserAndLoadHomePage" />
+    </UnitTest>
+    <UnitTest name="_01_OpenTheBrowserAndLoadCreateMatterPage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="5ef4f0be-771a-6d59-f4ec-4fdcfda539d1">
+      <Description>01.Open the browser and load create matter page</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="12d28e7f-8d56-4c77-9909-4b943fdaca10" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Create Matter Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.CreateMatterPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_01_OpenTheBrowserAndLoadCreateMatterPage" />
+    </UnitTest>
+    <UnitTest name="_07_VerifyTheSearchFeatureOnDocumentDashboard" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="9379170f-182d-1765-1cf8-5c3a4b1f3bc5">
+      <Description>07. Verify the search feature on document dashboard</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="2432a693-7db2-416c-98ed-e2897ef421dd" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Document Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_07_VerifyTheSearchFeatureOnDocumentDashboard" />
+    </UnitTest>
+    <UnitTest name="_05_VerifyTheMatterCenterSupportLink" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="0c1d4661-f05a-aff9-a1d8-250fc124bdae">
+      <Description>05. Verify the Matter Center support link</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="0ae79210-82d9-4064-9919-a26ddb02f69f" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Home Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.HomePageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_05_VerifyTheMatterCenterSupportLink" />
+    </UnitTest>
+    <UnitTest name="_02_VerifyTheDocumentFlyOutOnDocumentDashboard" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="d8321596-5711-5646-22c3-6c53e52aa534">
+      <Description>02. Verify the document fly out on document dashboard</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="d0cedfec-53df-482a-ba8c-8cec172e7d26" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Document Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_02_VerifyTheDocumentFlyOutOnDocumentDashboard" />
+    </UnitTest>
+    <UnitTest name="_10_VerifyTheSortFunctionalityInMatterCenterHome" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="fc8cab93-560c-efe3-f589-f92c5147f80a">
+      <Description>10. Verify the sort functionality in matter center home</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="4f4360f4-b7f8-4113-a648-011fdef8a772" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_10_VerifyTheSortFunctionalityInMatterCenterHome" />
+    </UnitTest>
+    <UnitTest name="_04_VerifyAllComponentsOfThePage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="28e750c8-3223-9f84-bd10-4607d947025a">
+      <Description>04. Verify all components of the page</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="1d859067-6b54-4fae-a2c8-c9edcb28aa5b" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Home Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.HomePageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_04_VerifyAllComponentsOfThePage" />
+    </UnitTest>
+    <UnitTest name="_01_OpenTheBrowserAndLoadDocumentDashboardPage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="08561e29-3f06-95ed-84ea-4355f8b11be0">
+      <Description>01. Open the browser and load document dashboard page</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="ac77179d-d338-4ce2-9265-447e59ef356a" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Document Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_01_OpenTheBrowserAndLoadDocumentDashboardPage" />
+    </UnitTest>
+    <UnitTest name="_06_VerifyGibberishSearchOnDocumentDashboard" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="bd8e621a-b54c-244c-673a-dd5804ef1699">
+      <Description>06. Verify gibberish search on document dashboard</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="eb46baab-cbc9-45a6-b5dd-0f5a90f8bca3" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Document Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_06_VerifyGibberishSearchOnDocumentDashboard" />
+    </UnitTest>
+    <UnitTest name="_01_OpenTheBrowserAndLoadMatterCenterHomePage" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="966e64f7-f008-edad-e309-d9233be35561">
+      <Description>01. Open the browser and load Matter Center home page</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="2f692170-5e46-4592-bb99-0c8d3d45f4cd" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_01_OpenTheBrowserAndLoadMatterCenterHomePage" />
+    </UnitTest>
+    <UnitTest name="_11_VerifyTheFooterOnMatterCenterHome" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="aead35ec-4afb-9b7a-0912-4509a170cd59">
+      <Description>11. Verify the footer on matter center home</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="fb58f059-5b7b-4549-8356-4a8560add721" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_11_VerifyTheFooterOnMatterCenterHome" />
+    </UnitTest>
+    <UnitTest name="_05_VerifyAssignPermissionTab" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="c6440354-5389-6bd3-7107-46ed4037664c">
+      <Description>05.Verify Assign Permission tab</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="a4841c4c-0c8e-47a3-9bce-9a79b977a6ef" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Create Matter Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.CreateMatterPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_05_VerifyAssignPermissionTab" />
+    </UnitTest>
+    <UnitTest name="_03_VerifyOpenMatterTab" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="5885d47f-90eb-e02e-9361-d847deb7d783">
+      <Description>03.Verify Open Matter tab</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="cbdca84b-507f-41a0-bc85-b6172f55479d" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Create Matter Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.CreateMatterPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_03_VerifyOpenMatterTab" />
+    </UnitTest>
+    <UnitTest name="_02_VerifyIncorrectFormSubmissionErrorOnOpenMatterTab" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="cf7c001a-2636-dddd-9b6a-1b78d9a9fd82">
+      <Description>02.Verify incorrect form submission error on open matter tab</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="0683546b-31d8-4354-87d2-e34fdd0fe914" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Create Matter Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.CreateMatterPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_02_VerifyIncorrectFormSubmissionErrorOnOpenMatterTab" />
+    </UnitTest>
+    <UnitTest name="_06_VerifyNoResultsOnGibberishSearch" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="b5d40f76-f604-ee61-2de2-b7cab8ba1641">
+      <Description>06. Verify no results on gibberish search</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="19e763ca-4f8f-45f3-ae42-9f49be3a14d0" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_06_VerifyNoResultsOnGibberishSearch" />
+    </UnitTest>
+    <UnitTest name="_06_VerifyTheContextualHelpSection" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="0b5e1e39-f0e8-a4c8-e328-7186cd1fdaee">
+      <Description>06. Verify the contextual help section</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="c3f40bd8-4442-4721-8bb0-ccb26ce106bd" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Home Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.HomePageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_06_VerifyTheContextualHelpSection" />
+    </UnitTest>
+    <UnitTest name="_03_VerifyThePinUnpinFunctionality" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="5d7e697c-7177-6eaa-57b7-cd93a86f88f7">
+      <Description>03. Verify the pin/unpin functionality</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="21549126-c617-4204-b5a6-31ad2d876919" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_03_VerifyThePinUnpinFunctionality" />
+    </UnitTest>
+    <UnitTest name="_04_VerifyIncorrectFormSubmissionErrorOnAssignPermissionTab" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="024da496-8748-e5f8-3c84-20062ec36b82">
+      <Description>04.Verify incorrect form submission error on Assign Permission tab</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="a52a7305-7c76-4c1a-aa1f-4227b648ddc1" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Create Matter Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.CreateMatterPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_04_VerifyIncorrectFormSubmissionErrorOnAssignPermissionTab" />
+    </UnitTest>
+    <UnitTest name="_06_VerifyCreateAndNotifyTab" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="65da4e6a-cadc-f2c9-1808-8c40c444ace6">
+      <Description>06.Verify create and notify tab</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="5e669315-ff6a-4399-919f-da7ed7611caa" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Create Matter Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.CreateMatterPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_06_VerifyCreateAndNotifyTab" />
+    </UnitTest>
+    <UnitTest name="_09_VerifyTheAdvanceFilterFunctionality" storage="testresults\microsoft.legal.mattercenter.selenium.dll" id="5c303309-4ba2-ef48-f766-7c5cf4e07ee9">
+      <Description>09. Verify the advance filter functionality</Description>
+      <TestCategory>
+        <TestCategoryItem TestCategory="E2E" />
+      </TestCategory>
+      <Execution id="0727bf17-373f-404b-a11d-756d7a9e49b6" />
+      <Properties>
+        <Property>
+          <Key>FeatureTitle</Key>
+          <Value>Matter Dashboard Page</Value>
+        </Property>
+      </Properties>
+      <TestMethod codeBase="C:/MC2Sel/tree/master/cloud/src/solution/Microsoft.Legal.MatterCenter.Selenium/TestResults/Microsoft.Legal.MatterCenter.Selenium.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature, Microsoft.Legal.MatterCenter.Selenium, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" name="_09_VerifyTheAdvanceFilterFunctionality" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="5ef4f0be-771a-6d59-f4ec-4fdcfda539d1" executionId="12d28e7f-8d56-4c77-9909-4b943fdaca10" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cf7c001a-2636-dddd-9b6a-1b78d9a9fd82" executionId="0683546b-31d8-4354-87d2-e34fdd0fe914" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5885d47f-90eb-e02e-9361-d847deb7d783" executionId="cbdca84b-507f-41a0-bc85-b6172f55479d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="024da496-8748-e5f8-3c84-20062ec36b82" executionId="a52a7305-7c76-4c1a-aa1f-4227b648ddc1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6440354-5389-6bd3-7107-46ed4037664c" executionId="a4841c4c-0c8e-47a3-9bce-9a79b977a6ef" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="65da4e6a-cadc-f2c9-1808-8c40c444ace6" executionId="5e669315-ff6a-4399-919f-da7ed7611caa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="08561e29-3f06-95ed-84ea-4355f8b11be0" executionId="ac77179d-d338-4ce2-9265-447e59ef356a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d8321596-5711-5646-22c3-6c53e52aa534" executionId="d0cedfec-53df-482a-ba8c-8cec172e7d26" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9c207c34-cbf1-b789-c105-7068a9932344" executionId="0ad37214-3679-4e36-a06d-c233342256f3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="41ef27c9-4687-01b8-22cf-4bfc1f4155a2" executionId="2bc5b956-fb08-4f9a-86fc-6104f8b9b132" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5f11ca4e-99e7-7bed-af60-ca0009de6399" executionId="c4ad78fd-e68d-4911-ad9b-63a256f39911" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bd8e621a-b54c-244c-673a-dd5804ef1699" executionId="eb46baab-cbc9-45a6-b5dd-0f5a90f8bca3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9379170f-182d-1765-1cf8-5c3a4b1f3bc5" executionId="2432a693-7db2-416c-98ed-e2897ef421dd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="61440d9c-70f2-5240-6216-f02430850f00" executionId="25f3ffb7-713e-470f-91cd-1a3ef5f66e98" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1bece639-f722-fee4-4526-ef9ed7898034" executionId="58dff063-b0b4-4c42-b307-23b890825185" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d0a50dce-28e0-5eca-01ec-3f8c82e67cf7" executionId="e22ae1ce-b929-47c2-8c2e-251c4cfcf3f5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6c079a02-1ca2-6b27-6573-f246e9224ee2" executionId="8cf6f214-8a30-438b-9faf-5ebd308762eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="418f8d10-8756-2ede-f12d-9f1d7ca29d8b" executionId="a4833cd4-128a-40e2-9efb-0d777b482c18" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a674883e-1941-8b11-cfa8-d97a7a6ce41e" executionId="d3e08b36-630f-4f85-ba31-e9535233709c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73fce949-1ca1-aefb-9af8-2ac1f5e5f477" executionId="ec015bfa-8558-44da-8a2e-6fe81c33b814" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="791acc40-4a08-71e3-cff4-43fe7c832722" executionId="4b073339-90b3-4101-8dab-4c97855d1097" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8457d09f-a04d-11a0-d784-7df72b44a197" executionId="b77c83f6-cd76-463f-914d-7c2ab2145beb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f641ea43-e57e-273e-90b6-7e15fe693a61" executionId="630e7cfc-270a-457a-a7ce-400d7f4d2a26" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="586c1cfe-c810-4180-2e49-1d875d023a1e" executionId="e8ae5261-bb99-4a1f-af07-ca42fcf79ccf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="28e750c8-3223-9f84-bd10-4607d947025a" executionId="1d859067-6b54-4fae-a2c8-c9edcb28aa5b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0c1d4661-f05a-aff9-a1d8-250fc124bdae" executionId="0ae79210-82d9-4064-9919-a26ddb02f69f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0b5e1e39-f0e8-a4c8-e328-7186cd1fdaee" executionId="c3f40bd8-4442-4721-8bb0-ccb26ce106bd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="234690ea-c07c-9184-2276-51b52649c7fc" executionId="1243c0a3-4268-4763-9fad-9e418f290f7e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="966e64f7-f008-edad-e309-d9233be35561" executionId="2f692170-5e46-4592-bb99-0c8d3d45f4cd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aef22e6d-830a-e14b-12af-044dfa29778c" executionId="3f4620bb-1d1e-474c-b9a2-43579f25f36e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5d7e697c-7177-6eaa-57b7-cd93a86f88f7" executionId="21549126-c617-4204-b5a6-31ad2d876919" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="59313735-0fa6-14ea-75a6-e4acd26368c6" executionId="d714db9b-1074-46c3-9802-6f45bf47fd45" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ea13cae3-a51e-c5d4-88d5-9e238cae8d5b" executionId="b0224587-f1bf-4b0c-823b-9539562e8136" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b5d40f76-f604-ee61-2de2-b7cab8ba1641" executionId="19e763ca-4f8f-45f3-ae42-9f49be3a14d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="00390f21-b014-cf6c-afd0-bbdd99e04508" executionId="18a78a78-9b0a-4293-8644-98a0a2d226a9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="69123953-8c68-e4b4-6c0b-68980a8d06b7" executionId="a5a30a8c-639f-42b0-a379-4b683e0f9a84" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5c303309-4ba2-ef48-f766-7c5cf4e07ee9" executionId="0727bf17-373f-404b-a11d-756d7a9e49b6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fc8cab93-560c-efe3-f589-f92c5147f80a" executionId="4f4360f4-b7f8-4113-a648-011fdef8a772" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aead35ec-4afb-9b7a-0912-4509a170cd59" executionId="fb58f059-5b7b-4549-8356-4a8560add721" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ec092d03-493f-5476-0bcf-e02cae6da5de" executionId="972dc1bc-e520-4354-a516-989c1b4921d2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="12d28e7f-8d56-4c77-9909-4b943fdaca10" testId="5ef4f0be-771a-6d59-f4ec-4fdcfda539d1" testName="_01_OpenTheBrowserAndLoadCreateMatterPage" computerName="MCDEV02" duration="00:00:14.0612121" startTime="2016-10-13T10:29:09.3917848+00:00" endTime="2016-10-13T10:29:24.2974831+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="12d28e7f-8d56-4c77-9909-4b943fdaca10">
+      <Output>
+        <StdOut>When user enters credentials on matter provision page
+-&gt; done: CreateMatter.WhenUserEntersCredentialsOnMatterProvisionPage() (13.2s)
+Then matter provision page should be loaded with element 'snConflictCheck'
+-&gt; done: CreateMatter.ThenMatterProvisionPageShouldBeLoadedWithElement("snConflictCheck") (0.2s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0683546b-31d8-4354-87d2-e34fdd0fe914" testId="cf7c001a-2636-dddd-9b6a-1b78d9a9fd82" testName="_02_VerifyIncorrectFormSubmissionErrorOnOpenMatterTab" computerName="MCDEV02" duration="00:00:35.4257057" startTime="2016-10-13T10:29:24.2984810+00:00" endTime="2016-10-13T10:29:59.7276133+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0683546b-31d8-4354-87d2-e34fdd0fe914">
+      <Output>
+        <StdOut>When user submits blank and incorrect forms
+-&gt; done: CreateMatter.WhenUserSubmitsBlankAndIncorrectForms() (35.4s)
+Then next step should not be allowed
+-&gt; done: CreateMatter.ThenNextStepShouldNotBeAllowed() (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cbdca84b-507f-41a0-bc85-b6172f55479d" testId="5885d47f-90eb-e02e-9361-d847deb7d783" testName="_03_VerifyOpenMatterTab" computerName="MCDEV02" duration="00:00:42.8154577" startTime="2016-10-13T10:29:59.7306097+00:00" endTime="2016-10-13T10:30:42.5494576+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cbdca84b-507f-41a0-bc85-b6172f55479d">
+      <Output>
+        <StdOut>When user selects basic matter information
+-&gt; error: Cannot click on element
+Then it should navigate to second step
+-&gt; skipped because of previous errors</StdOut>
+        <ErrorInfo>
+          <Message>Test method Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.CreateMatterPageFeature._03_VerifyOpenMatterTab threw exception: 
+OpenQA.Selenium.ElementNotVisibleException: Cannot click on element</Message>
+          <StackTrace>    at OpenQA.Selenium.Remote.RemoteWebDriver.UnpackAndThrowOnError(Response errorResponse)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.Remote.RemoteWebElement.Click()
+   at Microsoft.Legal.MatterCenter.Selenium.CreateMatter.WhenUserSelectsBasicMatterInformation() in C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium\FunctionalTestSuite\CreateMatter.cs:line 113
+   at lambda_method(Closure , IContextManager )
+   at TechTalk.SpecFlow.Bindings.BindingInvoker.InvokeBinding(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, TimeSpan&amp; duration)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStepMatch(BindingMatch match, Object[] arguments)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStep(StepInstance stepInstance)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.OnAfterLastStep()
+   at TechTalk.SpecFlow.TestRunner.CollectScenarioErrors()
+   at Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.CreateMatterPageFeature.ScenarioCleanup()
+   at Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.CreateMatterPageFeature._03_VerifyOpenMatterTab() in C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium\SpecFlow\Specs\CreateMatter.feature:line 16
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a52a7305-7c76-4c1a-aa1f-4227b648ddc1" testId="024da496-8748-e5f8-3c84-20062ec36b82" testName="_04_VerifyIncorrectFormSubmissionErrorOnAssignPermissionTab" computerName="MCDEV02" duration="00:01:33.7706671" startTime="2016-10-13T10:30:42.5544580+00:00" endTime="2016-10-13T10:32:16.3348586+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a52a7305-7c76-4c1a-aa1f-4227b648ddc1">
+      <Output>
+        <StdOut>When user submits blank forms on assign permissions
+-&gt; done: CreateMatter.WhenUserSubmitsBlankFormsOnAssignPermissions() (93.8s)
+Then it should not navigate to third step
+-&gt; done: CreateMatter.ThenItShouldNotNavigateToThirdStep() (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a4841c4c-0c8e-47a3-9bce-9a79b977a6ef" testId="c6440354-5389-6bd3-7107-46ed4037664c" testName="_05_VerifyAssignPermissionTab" computerName="MCDEV02" duration="00:02:06.2253667" startTime="2016-10-13T10:32:16.3368588+00:00" endTime="2016-10-13T10:34:22.5649691+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4841c4c-0c8e-47a3-9bce-9a79b977a6ef">
+      <Output>
+        <StdOut>When user selects permission for current matter
+-&gt; done: CreateMatter.WhenUserSelectsPermissionForCurrentMatter() (126.1s)
+Then it should navigate to third step
+-&gt; done: CreateMatter.ThenItShouldNavigateToThirdStep() (0.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5e669315-ff6a-4399-919f-da7ed7611caa" testId="65da4e6a-cadc-f2c9-1808-8c40c444ace6" testName="_06_VerifyCreateAndNotifyTab" computerName="MCDEV02" duration="00:02:08.9205706" startTime="2016-10-13T10:34:22.5669704+00:00" endTime="2016-10-13T10:36:31.4902896+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5e669315-ff6a-4399-919f-da7ed7611caa">
+      <Output>
+        <StdOut>When user checks all check boxes
+-&gt; done: CreateMatter.WhenUserCheckesAllCheckBoxes() (7.3s)
+Then all check boxes should get checked
+-&gt; done: CreateMatter.ThenAllCheckBoxesShouldGetChecked() (0.3s)
+When user clicks on create and notify
+-&gt; done: CreateMatter.WhenUserClicksOnCreateAndNotify() (120.1s)
+Then a new matter should get created
+-&gt; done: CreateMatter.ThenNewMatterShouldGetCreated() (1.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ac77179d-d338-4ce2-9265-447e59ef356a" testId="08561e29-3f06-95ed-84ea-4355f8b11be0" testName="_01_OpenTheBrowserAndLoadDocumentDashboardPage" computerName="MCDEV02" duration="00:00:12.5369394" startTime="2016-10-13T10:36:31.4912884+00:00" endTime="2016-10-13T10:36:44.0449959+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac77179d-d338-4ce2-9265-447e59ef356a">
+      <Output>
+        <StdOut>When user enters credentials on document dashboard page
+-&gt; done: DocumentDashboard.WhenUserEntersCredentialsOnDocumentDashboardPage() (12.4s)
+Then document dashboard page should be loaded with element 'allDocuments'
+-&gt; done: DocumentDashboard.ThenDocumentDashboardPageShouldBeLoadedWithElement("allDocuments") (0.2s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d0cedfec-53df-482a-ba8c-8cec172e7d26" testId="d8321596-5711-5646-22c3-6c53e52aa534" testName="_02_VerifyTheDocumentFlyOutOnDocumentDashboard" computerName="MCDEV02" duration="00:00:06.3741451" startTime="2016-10-13T10:36:44.0469981+00:00" endTime="2016-10-13T10:36:50.4301178+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0cedfec-53df-482a-ba8c-8cec172e7d26">
+      <Output>
+        <StdOut>When user clicks on document
+-&gt; done: DocumentDashboard.WhenUserClicksOnDocument() (5.2s)
+Then a document fly out should be seen
+-&gt; done: DocumentDashboard.ThenADocumentFlyOutShouldBeSeen() (1.2s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0ad37214-3679-4e36-a06d-c233342256f3" testId="9c207c34-cbf1-b789-c105-7068a9932344" testName="_03_VerifyThePinUnpinFunctionality" computerName="MCDEV02" duration="00:00:05.4500040" startTime="2016-10-13T10:36:50.4321095+00:00" endTime="2016-10-13T10:36:55.8861549+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0ad37214-3679-4e36-a06d-c233342256f3">
+      <Output>
+        <StdOut>When user clicks on pin or unpin icon
+-&gt; done: DocumentDashboard.WhenUserClicksOnPinOrUnpinIcon() (5.3s)
+Then document should get pinned or unpinned
+-&gt; done: DocumentDashboard.ThenDocumentShouldGetPinnedOrUnpinned() (0.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2bc5b956-fb08-4f9a-86fc-6104f8b9b132" testId="41ef27c9-4687-01b8-22cf-4bfc1f4155a2" testName="_04_VerifyTheMailCartFunctionality" computerName="MCDEV02" duration="00:00:27.1674382" startTime="2016-10-13T10:36:55.8891452+00:00" endTime="2016-10-13T10:37:23.0607283+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2bc5b956-fb08-4f9a-86fc-6104f8b9b132">
+      <Output>
+        <StdOut>When user selects document and clicks on mail cart
+-&gt; done: DocumentDashboard.WhenUserSelectsDocumentAndClicksOnMailCart() (26.6s)
+Then popup should display email as link or email as attachment options
+-&gt; done: DocumentDashboard.ThenPopupShouldDisplayEmailAsLinkOrEmailAsAttachmentOptions() (0.5s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c4ad78fd-e68d-4911-ad9b-63a256f39911" testId="5f11ca4e-99e7-7bed-af60-ca0009de6399" testName="_05_VerifyTheSortFunctionalityOnDocumentDashboard" computerName="MCDEV02" duration="00:02:00.4974576" startTime="2016-10-13T10:37:23.0727244+00:00" endTime="2016-10-13T10:39:23.5722513+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c4ad78fd-e68d-4911-ad9b-63a256f39911">
+      <Output>
+        <StdOut>When user sorts data in ascending order on document dashboard
+-&gt; done: DocumentDashboard.WhenUserSortsDataInAscendingOrderOnDocumentDashboard() (12.5s)
+Then all records should be sorted in ascending order on document dashboard
+-&gt; done: DocumentDashboard.ThenAllRecordsShouldBeSortedInAscendingOrderOnDocumentDashboard() (5.0s)
+When user sorts data in ascending order of created date
+-&gt; done: DocumentDashboard.WhenUserSortsDataInAscendingOrderOfCreatedDate() (12.8s)
+Then all records should be sorted in ascending order on document dashboard by created date
+-&gt; done: DocumentDashboard.ThenAllRecordsShouldBeSortedInAscendingOrderOnDocumentDashboardByCreatedDate() (5.0s)
+When user sorts data for Pinned document in ascending order
+-&gt; done: DocumentDashboard.WhenUserSortsDataForPinnedDocumentInAscendingOrder() (11.7s)
+Then all records should be sorted in ascending order on document dashboard
+-&gt; done: DocumentDashboard.ThenAllRecordsShouldBeSortedInAscendingOrderOnDocumentDashboard() (5.6s)
+When user sorts data for Pinned document in ascending order of created date
+-&gt; done: DocumentDashboard.WhenUserSortsDataForPinnedDocumentInAscendingOrderOfCreatedDate() (11.7s)
+Then all records should be sorted in ascending order on document dashboard by created date
+-&gt; done: DocumentDashboard.ThenAllRecordsShouldBeSortedInAscendingOrderOnDocumentDashboardByCreatedDate() (6.3s)
+When user sorts data for My document in ascending order
+-&gt; done: DocumentDashboard.WhenUserSortsDataForMyDocumentInAscendingOrder() (24.6s)
+Then all records should be sorted in ascending order on document dashboard
+-&gt; done: DocumentDashboard.ThenAllRecordsShouldBeSortedInAscendingOrderOnDocumentDashboard() (5.5s)
+When user sorts data for My document in ascending order of created date
+-&gt; done: DocumentDashboard.WhenUserSortsDataForMyDocumentInAscendingOrderOfCreatedDate() (12.6s)
+Then all records should be sorted in ascending order on document dashboard by created date
+-&gt; done: DocumentDashboard.ThenAllRecordsShouldBeSortedInAscendingOrderOnDocumentDashboardByCreatedDate() (7.2s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="eb46baab-cbc9-45a6-b5dd-0f5a90f8bca3" testId="bd8e621a-b54c-244c-673a-dd5804ef1699" testName="_06_VerifyGibberishSearchOnDocumentDashboard" computerName="MCDEV02" duration="00:01:15.0194568" startTime="2016-10-13T10:39:23.5731494+00:00" endTime="2016-10-13T10:40:38.6015690+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eb46baab-cbc9-45a6-b5dd-0f5a90f8bca3">
+      <Output>
+        <StdOut>When user types gibberish in search box on document dashboard
+-&gt; done: DocumentDashboard.WhenUserTypesGibberishInSearchBoxOnDocumentDashboard() (74.9s)
+Then no documents should be displayed
+-&gt; error: Assert.IsTrue failed.</StdOut>
+        <ErrorInfo>
+          <Message>Assert.IsTrue failed. </Message>
+          <StackTrace>   at Microsoft.Legal.MatterCenter.Selenium.DocumentDashboard.ThenNoDocumentsShouldBeDisplayed() in C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium\FunctionalTestSuite\DocumentDashboard.cs:line 176
+   at lambda_method(Closure , IContextManager )
+   at TechTalk.SpecFlow.Bindings.BindingInvoker.InvokeBinding(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, TimeSpan&amp; duration)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStepMatch(BindingMatch match, Object[] arguments)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStep(StepInstance stepInstance)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.OnAfterLastStep()
+   at TechTalk.SpecFlow.TestRunner.CollectScenarioErrors()
+   at Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature.ScenarioCleanup()
+   at Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentDashboardPageFeature._06_VerifyGibberishSearchOnDocumentDashboard() in C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium\SpecFlow\Specs\DocumentDashboard.feature:line 58
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2432a693-7db2-416c-98ed-e2897ef421dd" testId="9379170f-182d-1765-1cf8-5c3a4b1f3bc5" testName="_07_VerifyTheSearchFeatureOnDocumentDashboard" computerName="MCDEV02" duration="00:00:44.1525578" startTime="2016-10-13T10:40:38.6035613+00:00" endTime="2016-10-13T10:41:22.7595805+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2432a693-7db2-416c-98ed-e2897ef421dd">
+      <Output>
+        <StdOut>When user types 'test' in search box on document dashboard
+-&gt; done: DocumentDashboard.WhenUserTypesInSearchBoxOnDocumentDashboard("test") (10.9s)
+Then all documents having 'test' keyword should be displayed
+-&gt; done: DocumentDashboard.ThenAllDocumentsHavingKeywordShouldBeDisplayed("test") (33.3s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="25f3ffb7-713e-470f-91cd-1a3ef5f66e98" testId="61440d9c-70f2-5240-6216-f02430850f00" testName="_08_VerifyTheSearchFeatureWithManagedPropertiesOnDocumentDashboard" computerName="MCDEV02" duration="00:00:44.0352996" startTime="2016-10-13T10:41:22.7605722+00:00" endTime="2016-10-13T10:42:06.8015121+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="25f3ffb7-713e-470f-91cd-1a3ef5f66e98">
+      <Output>
+        <StdOut>When user types 'DocTitle:test' in search box on document dashboard
+-&gt; done: DocumentDashboard.WhenUserTypesInSearchBoxOnDocumentDashboard("DocTitle:test") (10.9s)
+Then all documents having 'test' keyword should be displayed
+-&gt; done: DocumentDashboard.ThenAllDocumentsHavingKeywordShouldBeDisplayed("test") (33.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="58dff063-b0b4-4c42-b307-23b890825185" testId="1bece639-f722-fee4-4526-ef9ed7898034" testName="_09_VerifyTheAdvanceFilterFunctionality" computerName="MCDEV02" duration="00:00:27.3587411" startTime="2016-10-13T10:42:06.8045010+00:00" endTime="2016-10-13T10:42:34.1675509+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="58dff063-b0b4-4c42-b307-23b890825185">
+      <Output>
+        <StdOut>When user clicks on advance filter on document dashboard
+-&gt; done: DocumentDashboard.WhenUserClicksOnAdvanceFilterOnDocumentDashboard() (26.3s)
+Then filtered results should be shown to user
+-&gt; done: DocumentDashboard.ThenFilteredResultsShouldBeShownToUser() (1.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e22ae1ce-b929-47c2-8c2e-251c4cfcf3f5" testId="d0a50dce-28e0-5eca-01ec-3f8c82e67cf7" testName="_01_OpenTheBrowserAndLoadDocumentLandingPage" computerName="MCDEV02" duration="00:00:07.0045491" startTime="2016-10-13T10:42:34.1685425+00:00" endTime="2016-10-13T10:42:41.1817637+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e22ae1ce-b929-47c2-8c2e-251c4cfcf3f5">
+      <Output>
+        <StdOut>When user enters credentials on document landing page
+-&gt; done: DocumentLanding.WhenUserEntersCredentialsOnDocumentLandingPage() (5.7s)
+Then document landing page should be loaded with element 'documentName'
+-&gt; done: DocumentLanding.ThenDocumentLandingPageShouldBeLoadedWithElement("documentName") (1.3s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8cf6f214-8a30-438b-9faf-5ebd308762eb" testId="6c079a02-1ca2-6b27-6573-f246e9224ee2" testName="_02_VerifyActionLinks" computerName="MCDEV02" duration="00:00:11.2470887" startTime="2016-10-13T10:42:41.1847648+00:00" endTime="2016-10-13T10:42:52.4391075+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8cf6f214-8a30-438b-9faf-5ebd308762eb">
+      <Output>
+        <StdOut>When user loads document landing page
+-&gt; done: DocumentLanding.WhenUserLoadsDocumentLandingPage() (10.9s)
+Then document action links should be present
+-&gt; done: DocumentLanding.ThenDocumentActionLinksShouldBePresent() (0.4s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a4833cd4-128a-40e2-9efb-0d777b482c18" testId="418f8d10-8756-2ede-f12d-9f1d7ca29d8b" testName="_03_VerifyThePinUnpinFunctionality" computerName="MCDEV02" duration="00:00:04.3881235" startTime="2016-10-13T10:42:52.4410985+00:00" endTime="2016-10-13T10:42:56.8335012+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4833cd4-128a-40e2-9efb-0d777b482c18">
+      <Output>
+        <StdOut>When user clicks on pin/unpin button
+-&gt; done: DocumentLanding.WhenUserClicksOnPinUnpinButton() (4.3s)
+Then document should get pinned/unpinned
+-&gt; done: DocumentLanding.ThenDocumentShouldGetPinnedUnpinned() (0.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d3e08b36-630f-4f85-ba31-e9535233709c" testId="a674883e-1941-8b11-cfa8-d97a7a6ce41e" testName="_04_VerifyFileProperties" computerName="MCDEV02" duration="00:00:05.0126010" startTime="2016-10-13T10:42:56.8344961+00:00" endTime="2016-10-13T10:43:01.8525526+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d3e08b36-630f-4f85-ba31-e9535233709c">
+      <Output>
+        <StdOut>When user expands file properties section
+-&gt; done: DocumentLanding.WhenUserExpandsFilePropertiesSection() (2.3s)
+Then all file properties should be present
+-&gt; done: DocumentLanding.ThenAllFilePropertiesShouldBePresent() (2.8s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ec015bfa-8558-44da-8a2e-6fe81c33b814" testId="73fce949-1ca1-aefb-9af8-2ac1f5e5f477" testName="_05_VerifyVersionDetails" computerName="MCDEV02" duration="00:00:02.7270253" startTime="2016-10-13T10:43:01.8535516+00:00" endTime="2016-10-13T10:43:04.5853803+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec015bfa-8558-44da-8a2e-6fe81c33b814">
+      <Output>
+        <StdOut>When user expands version section
+-&gt; done: DocumentLanding.WhenUserExpandsVersionSection() (2.2s)
+Then all versions of the document should be seen
+-&gt; done: DocumentLanding.ThenAllVersionsOfTheDocumentShouldBeSeen() (0.5s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4b073339-90b3-4101-8dab-4c97855d1097" testId="791acc40-4a08-71e3-cff4-43fe7c832722" testName="_06_VerifyTheFooterLinks" computerName="MCDEV02" duration="00:00:10.2090998" startTime="2016-10-13T10:43:04.5863748+00:00" endTime="2016-10-13T10:43:14.7996034+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4b073339-90b3-4101-8dab-4c97855d1097">
+      <Output>
+        <StdOut>When user clicks on footer on document landing page
+-&gt; done: DocumentLanding.WhenUserClicksOnFooterOnDocumentLandingPage() (8.7s)
+Then all links should be present on footer on document landing page
+-&gt; done: DocumentLanding.ThenAllLinksShouldBePresentOnFooterOnDocumentLandingPage() (1.5s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b77c83f6-cd76-463f-914d-7c2ab2145beb" testId="8457d09f-a04d-11a0-d784-7df72b44a197" testName="_01_OpenTheBrowserAndLoadHomePage" computerName="MCDEV02" duration="00:00:09.1511821" startTime="2016-10-13T10:43:14.8096029+00:00" endTime="2016-10-13T10:43:23.9764045+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b77c83f6-cd76-463f-914d-7c2ab2145beb">
+      <Output>
+        <StdOut>When user enters credentials on homepage
+-&gt; done: Home.WhenUserEntersCredentialsOnHomepage() (9.0s)
+Then home page should be loaded with element 'HomeContainer'
+-&gt; done: Home.ThenTheHomePageShouldBeLoadedWithElement("HomeContainer") (0.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="630e7cfc-270a-457a-a7ce-400d7f4d2a26" testId="f641ea43-e57e-273e-90b6-7e15fe693a61" testName="_02_OpenTheHamburgerMenuAndVerifyAllTheElements" computerName="MCDEV02" duration="00:00:05.3240157" startTime="2016-10-13T10:43:23.9774047+00:00" endTime="2016-10-13T10:43:29.3089707+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="630e7cfc-270a-457a-a7ce-400d7f4d2a26">
+      <Output>
+        <StdOut>When user clicks on hamburger menu on homepage
+-&gt; done: Home.WhenUserClicksOnHamburgerMenuOnHomepage() (0.8s)
+Then hamburger menu should display 'Home','Matters','Documents' and 'Create New Matter' menu
+-&gt; done: Home.ThenHamburgerMenuShouldDisplayAndMenu("Home", "Matters", "Documents", "Create New Matter") (4.5s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e8ae5261-bb99-4a1f-af07-ca42fcf79ccf" testId="586c1cfe-c810-4180-2e49-1d875d023a1e" testName="_03_VerifyTheLinksOnHomePage" computerName="MCDEV02" duration="00:00:00.3859667" startTime="2016-10-13T10:43:29.3109706+00:00" endTime="2016-10-13T10:43:29.6999640+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e8ae5261-bb99-4a1f-af07-ca42fcf79ccf">
+      <Output>
+        <StdOut>When user clicks on learn more and dismiss link
+-&gt; done: Home.WhenUserClicksOnLearnMoreAndDismissLink() (0.1s)
+Then it should dismiss the link
+-&gt; done: Home.ThenItShouldDismissTheLink() (0.3s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1d859067-6b54-4fae-a2c8-c9edcb28aa5b" testId="28e750c8-3223-9f84-bd10-4607d947025a" testName="_04_VerifyAllComponentsOfThePage" computerName="MCDEV02" duration="00:00:52.0688645" startTime="2016-10-13T10:43:29.7029666+00:00" endTime="2016-10-13T10:44:21.7761825+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1d859067-6b54-4fae-a2c8-c9edcb28aa5b">
+      <Output>
+        <StdOut>When user clicks on matters link
+-&gt; done: Home.WhenUserClicksOnMattersLink() (4.6s)
+Then it should open the matter search page
+-&gt; done: Home.ThenItShouldOpenTheMatterSearchPage() (5.7s)
+When user clicks on documents link
+-&gt; done: Home.WhenUserClickOnDocumentsLink() (4.9s)
+Then it should open the document search page
+-&gt; done: Home.ThenItShouldOpenTheDocumentSearchPage() (6.0s)
+When user clicks on upload attachments link
+-&gt; done: Home.WhenUserClicksOnUploadAttachmentsLink() (4.6s)
+Then it should redirect to matter search page
+-&gt; done: Home.ThenItShouldRedirectToMatterSearchPage() (5.7s)
+When user clicks on create a new matter
+-&gt; done: Home.WhenUserClicksOnCreateANewMatter() (5.0s)
+Then it should open the matter provision page
+-&gt; done: Home.ThenItShouldOpenTheMatterProvisionPage() (5.8s)
+When user clicks on go to matter center home page
+-&gt; done: Home.WhenUserClicksOnGoToMatterCenterHomePage() (4.1s)
+Then it should open the matters page
+-&gt; done: Home.ThenItShouldOpenTheMattersPage() (5.5s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0ae79210-82d9-4064-9919-a26ddb02f69f" testId="0c1d4661-f05a-aff9-a1d8-250fc124bdae" testName="_05_VerifyTheMatterCenterSupportLink" computerName="MCDEV02" duration="00:00:00.2185027" startTime="2016-10-13T10:44:21.7781749+00:00" endTime="2016-10-13T10:44:22.0011707+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0ae79210-82d9-4064-9919-a26ddb02f69f">
+      <Output>
+        <StdOut>When user click on Matter Center support link
+-&gt; done: Home.WhenUserClickOnMatterCenterSupportLink() (0.1s)
+Then it should open draft mail with recipient 'lcaweb2@microsoft.com' and subject as 'CELA Project Center Feedback and Support request'
+-&gt; done: Home.ThenItShouldOpenDraftMailWithRecipientAndSubjectAs("lcaweb2@microsoft...", "CELA Project Cent...") (0.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c3f40bd8-4442-4721-8bb0-ccb26ce106bd" testId="0b5e1e39-f0e8-a4c8-e328-7186cd1fdaee" testName="_06_VerifyTheContextualHelpSection" computerName="MCDEV02" duration="00:00:02.5887088" startTime="2016-10-13T10:44:22.0021725+00:00" endTime="2016-10-13T10:44:24.5946950+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c3f40bd8-4442-4721-8bb0-ccb26ce106bd">
+      <Output>
+        <StdOut>When user clicks on contextual help icon(?)
+-&gt; done: Home.WhenUserClicksOnContextualHelpIcon() (0.1s)
+Then it should open the contextual help menu
+-&gt; done: Home.ThenItShouldOpenTheContextualHelpMenu() (2.5s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1243c0a3-4268-4763-9fad-9e418f290f7e" testId="234690ea-c07c-9184-2276-51b52649c7fc" testName="_07_VerifyTheUserProfileIcon" computerName="MCDEV02" duration="00:00:02.8830220" startTime="2016-10-13T10:44:24.5956932+00:00" endTime="2016-10-13T10:44:27.4825346+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1243c0a3-4268-4763-9fad-9e418f290f7e">
+      <Output>
+        <StdOut>When user clicks on user profile icon
+-&gt; done: Home.WhenUserClicksOnUserProfileIcon() (0.1s)
+Then it should open user profile details
+-&gt; done: Home.ThenItShouldOpenUserProfileDetails() (2.8s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2f692170-5e46-4592-bb99-0c8d3d45f4cd" testId="966e64f7-f008-edad-e309-d9233be35561" testName="_01_OpenTheBrowserAndLoadMatterCenterHomePage" computerName="MCDEV02" duration="00:00:07.1570131" startTime="2016-10-13T10:44:27.4845272+00:00" endTime="2016-10-13T10:44:34.6516365+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f692170-5e46-4592-bb99-0c8d3d45f4cd">
+      <Output>
+        <StdOut>When user enters credentials on matter dashboard page
+-&gt; done: MatterDashboard.WhenUserEntersCredentialsOnMatterDashboardPage() (7.0s)
+Then Matter Center home page should be loaded with element 'mcIcon'
+-&gt; done: MatterDashboard.ThenMatterCenterHomePageShouldBeLoadedWithElement("mcIcon") (0.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3f4620bb-1d1e-474c-b9a2-43579f25f36e" testId="aef22e6d-830a-e14b-12af-044dfa29778c" testName="_02_VerifyTheHamburgerMenu" computerName="MCDEV02" duration="00:00:04.7777741" startTime="2016-10-13T10:44:34.6526368+00:00" endTime="2016-10-13T10:44:39.4340304+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3f4620bb-1d1e-474c-b9a2-43579f25f36e">
+      <Output>
+        <StdOut>When user clicks on hamburger menu on Matter Center homepage
+-&gt; done: MatterDashboard.WhenUserClicksOnHamburgerMenuOnMatterCenterHomepage() (4.3s)
+Then hamburger menu should be loaded
+-&gt; done: MatterDashboard.ThenHamburgerMenuShouldBeLoaded() (0.5s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="21549126-c617-4204-b5a6-31ad2d876919" testId="5d7e697c-7177-6eaa-57b7-cd93a86f88f7" testName="_03_VerifyThePinUnpinFunctionality" computerName="MCDEV02" duration="00:00:06.3794250" startTime="2016-10-13T10:44:39.4490219+00:00" endTime="2016-10-13T10:44:45.8379425+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="21549126-c617-4204-b5a6-31ad2d876919">
+      <Output>
+        <StdOut>When user clicks on pin or unpin
+-&gt; done: MatterDashboard.WhenUserClicksOnPinOrUnpin() (5.3s)
+Then matter should get pinned or unpinned
+-&gt; done: MatterDashboard.ThenMatterShouldGetPinnedOrUnpinned() (1.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d714db9b-1074-46c3-9802-6f45bf47fd45" testId="59313735-0fa6-14ea-75a6-e4acd26368c6" testName="_04_VerifyTheUploadButtonFunctionality" computerName="MCDEV02" duration="00:00:10.4523508" startTime="2016-10-13T10:44:45.8389344+00:00" endTime="2016-10-13T10:44:56.2955765+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d714db9b-1074-46c3-9802-6f45bf47fd45">
+      <Output>
+        <StdOut>When user clicks on upload button
+-&gt; done: MatterDashboard.WhenUserClicksOnUploadButton() (5.2s)
+Then an upload pop up should be seen
+-&gt; done: MatterDashboard.ThenAnUploadPopUpShouldBeSeen() (5.3s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b0224587-f1bf-4b0c-823b-9539562e8136" testId="ea13cae3-a51e-c5d4-88d5-9e238cae8d5b" testName="_05_VerifyTheMatterFlyOutOnMatterCenterHomepage" computerName="MCDEV02" duration="00:00:05.1480533" startTime="2016-10-13T10:44:56.2975424+00:00" endTime="2016-10-13T10:45:01.4489903+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b0224587-f1bf-4b0c-823b-9539562e8136">
+      <Output>
+        <StdOut>When user clicks on matter fly out
+-&gt; done: MatterDashboard.WhenUserClicksOnMatterFlyOut() (4.2s)
+Then a matter fly out should be seen
+-&gt; done: MatterDashboard.ThenAMatterFlyOutShouldBeSeen() (1.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="19e763ca-4f8f-45f3-ae42-9f49be3a14d0" testId="b5d40f76-f604-ee61-2de2-b7cab8ba1641" testName="_06_VerifyNoResultsOnGibberishSearch" computerName="MCDEV02" duration="00:01:14.3868727" startTime="2016-10-13T10:45:01.4509904+00:00" endTime="2016-10-13T10:46:15.8413727+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19e763ca-4f8f-45f3-ae42-9f49be3a14d0">
+      <Output>
+        <StdOut>When user types gibberish in search box on Matter Center dashboard
+-&gt; done: MatterDashboard.WhenUserTypesGibberishInSearchBoxOnMatterCenterDashboard() (74.3s)
+Then no results should be displayed on Matter Center dashboard
+-&gt; done: MatterDashboard.ThenNoResultsShouldBeDisplayedOnMatterCenterDashboard() (0.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="18a78a78-9b0a-4293-8644-98a0a2d226a9" testId="00390f21-b014-cf6c-afd0-bbdd99e04508" testName="_07_VerifyTheSearchFeatureOnMatterCenterHomepage" computerName="MCDEV02" duration="00:00:18.7820416" startTime="2016-10-13T10:46:15.8453753+00:00" endTime="2016-10-13T10:46:34.6348859+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="18a78a78-9b0a-4293-8644-98a0a2d226a9">
+      <Output>
+        <StdOut>When user types 'test' in search box on Matter Center Homepage
+-&gt; done: MatterDashboard.WhenUserTypesInSearchBoxOnMatterCenterHomepage("test") (18.7s)
+Then all results having 'test' keyword should be displayed
+-&gt; error: Assert.IsTrue failed.</StdOut>
+        <ErrorInfo>
+          <Message>Assert.IsTrue failed. </Message>
+          <StackTrace>   at Microsoft.Legal.MatterCenter.Selenium.MatterDashboard.ThenAllResultsHavingKeywordShouldBeDisplayed(String searchBoxValue) in C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium\FunctionalTestSuite\MatterDashboard.cs:line 140
+   at lambda_method(Closure , IContextManager , String )
+   at TechTalk.SpecFlow.Bindings.BindingInvoker.InvokeBinding(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, TimeSpan&amp; duration)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStepMatch(BindingMatch match, Object[] arguments)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStep(StepInstance stepInstance)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.OnAfterLastStep()
+   at TechTalk.SpecFlow.TestRunner.CollectScenarioErrors()
+   at Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature.ScenarioCleanup()
+   at Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature._07_VerifyTheSearchFeatureOnMatterCenterHomepage() in C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium\SpecFlow\Specs\MatterDashboard.feature:line 21
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a5a30a8c-639f-42b0-a379-4b683e0f9a84" testId="69123953-8c68-e4b4-6c0b-68980a8d06b7" testName="_08_VerifyTheSearchFeatureUsingManagedPropertiesOnMatterCenterHomePage" computerName="MCDEV02" duration="00:00:19.8542517" startTime="2016-10-13T10:46:34.6368789+00:00" endTime="2016-10-13T10:46:54.4941665+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a5a30a8c-639f-42b0-a379-4b683e0f9a84">
+      <Output>
+        <StdOut>When user types 'MCMatterName:Test' in search box on Matter Center Homepage
+-&gt; done: MatterDashboard.WhenUserTypesInSearchBoxOnMatterCenterHomepage("MCMatterName:Test") (19.7s)
+Then all results having 'Test' keyword should be displayed
+-&gt; error: Assert.IsTrue failed.</StdOut>
+        <ErrorInfo>
+          <Message>Assert.IsTrue failed. </Message>
+          <StackTrace>   at Microsoft.Legal.MatterCenter.Selenium.MatterDashboard.ThenAllResultsHavingKeywordShouldBeDisplayed(String searchBoxValue) in C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium\FunctionalTestSuite\MatterDashboard.cs:line 140
+   at lambda_method(Closure , IContextManager , String )
+   at TechTalk.SpecFlow.Bindings.BindingInvoker.InvokeBinding(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, TimeSpan&amp; duration)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStepMatch(BindingMatch match, Object[] arguments)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStep(StepInstance stepInstance)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.OnAfterLastStep()
+   at TechTalk.SpecFlow.TestRunner.CollectScenarioErrors()
+   at Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature.ScenarioCleanup()
+   at Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature._08_VerifyTheSearchFeatureUsingManagedPropertiesOnMatterCenterHomePage() in C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium\SpecFlow\Specs\MatterDashboard.feature:line 63
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0727bf17-373f-404b-a11d-756d7a9e49b6" testId="5c303309-4ba2-ef48-f766-7c5cf4e07ee9" testName="_09_VerifyTheAdvanceFilterFunctionality" computerName="MCDEV02" duration="00:00:40.1352448" startTime="2016-10-13T10:46:54.4961574+00:00" endTime="2016-10-13T10:47:34.6360768+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0727bf17-373f-404b-a11d-756d7a9e49b6">
+      <Output>
+        <StdOut>When user clicks on advance filter
+-&gt; done: MatterDashboard.WhenUserClicksOnAdvanceFilter() (40.0s)
+Then filter results should be shown to user
+-&gt; error: Assert.IsTrue failed.</StdOut>
+        <ErrorInfo>
+          <Message>Assert.IsTrue failed. </Message>
+          <StackTrace>   at Microsoft.Legal.MatterCenter.Selenium.MatterDashboard.ThenFilterResultsShouldBeShownToUser() in C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium\FunctionalTestSuite\MatterDashboard.cs:line 259
+   at lambda_method(Closure , IContextManager )
+   at TechTalk.SpecFlow.Bindings.BindingInvoker.InvokeBinding(IBinding binding, IContextManager contextManager, Object[] arguments, ITestTracer testTracer, TimeSpan&amp; duration)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStepMatch(BindingMatch match, Object[] arguments)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.ExecuteStep(StepInstance stepInstance)
+   at TechTalk.SpecFlow.Infrastructure.TestExecutionEngine.OnAfterLastStep()
+   at TechTalk.SpecFlow.TestRunner.CollectScenarioErrors()
+   at Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature.ScenarioCleanup()
+   at Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterDashboardPageFeature._09_VerifyTheAdvanceFilterFunctionality() in C:\MC2Sel\tree\master\cloud\src\solution\Microsoft.Legal.MatterCenter.Selenium\SpecFlow\Specs\MatterDashboard.feature:line 36
+</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4f4360f4-b7f8-4113-a648-011fdef8a772" testId="fc8cab93-560c-efe3-f589-f92c5147f80a" testName="_10_VerifyTheSortFunctionalityInMatterCenterHome" computerName="MCDEV02" duration="00:01:26.2624692" startTime="2016-10-13T10:47:34.6380763+00:00" endTime="2016-10-13T10:49:00.9030333+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4f4360f4-b7f8-4113-a648-011fdef8a772">
+      <Output>
+        <StdOut>When user sorts data for All matters in ascending order
+-&gt; done: MatterDashboard.WhenUserSortsDataForAllMattersInAscendingOrder() (8.3s)
+Then all records should be sorted in ascending order
+-&gt; done: MatterDashboard.ThenAllRecordsShouldBeSortedInAscendingOrder() (2.2s)
+When user sorts data for All matters in ascending order of created date
+-&gt; done: MatterDashboard.WhenUserSortsDataForAllMattersInAscendingOrderOfCreatedDate() (8.3s)
+Then all records should be sorted in ascending order of created date
+-&gt; done: MatterDashboard.ThenAllRecordsShouldBeSortedInAscendingOrderOfCreatedDate() (2.2s)
+When user sorts data for Pinned matters in ascending order
+-&gt; done: MatterDashboard.WhenUserSortsDataForPinnedMattersInAscendingOrder() (11.6s)
+Then all records should be sorted in ascending order
+-&gt; done: MatterDashboard.ThenAllRecordsShouldBeSortedInAscendingOrder() (4.4s)
+When user sorts data for Pinned matters in ascending order of created date
+-&gt; done: MatterDashboard.WhenUserSortsDataForPinnedMattersInAscendingOrderOfCreatedDate() (11.6s)
+Then all records should be sorted in ascending order of created date
+-&gt; done: MatterDashboard.ThenAllRecordsShouldBeSortedInAscendingOrderOfCreatedDate() (4.5s)
+When user sorts data for My matters in ascending order
+-&gt; done: MatterDashboard.WhenUserSortsDataForMyMattersInAscendingOrder() (11.5s)
+Then all records should be sorted in ascending order
+-&gt; done: MatterDashboard.ThenAllRecordsShouldBeSortedInAscendingOrder() (4.4s)
+When user sorts data for My matters in ascending order of created date
+-&gt; done: MatterDashboard.WhenUserSortsDataForMyMattersInAscendingOrderOfCreatedDate() (12.5s)
+Then all records should be sorted in ascending order of created date
+-&gt; done: MatterDashboard.ThenAllRecordsShouldBeSortedInAscendingOrderOfCreatedDate() (4.6s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="fb58f059-5b7b-4549-8356-4a8560add721" testId="aead35ec-4afb-9b7a-0912-4509a170cd59" testName="_11_VerifyTheFooterOnMatterCenterHome" computerName="MCDEV02" duration="00:00:11.0148522" startTime="2016-10-13T10:49:00.9060245+00:00" endTime="2016-10-13T10:49:11.9244117+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fb58f059-5b7b-4549-8356-4a8560add721">
+      <Output>
+        <StdOut>When user navigates to the footer
+-&gt; done: MatterDashboard.WhenUserNavigatesToTheFooter() (10.6s)
+Then footer should have all the links
+-&gt; done: MatterDashboard.ThenFooterShouldHaveAllTheLinks() (0.4s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="972dc1bc-e520-4354-a516-989c1b4921d2" testId="ec092d03-493f-5476-0bcf-e02cae6da5de" testName="_12_VerifyEnterpriseSearchFeatureOnMatterCenterHomePage" computerName="MCDEV02" duration="00:00:41.6842567" startTime="2016-10-13T10:49:11.9254098+00:00" endTime="2016-10-13T10:49:53.6132875+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="972dc1bc-e520-4354-a516-989c1b4921d2">
+      <Output>
+        <StdOut>When user types 'Test' in enterprise search box on Matter Center Home page
+-&gt; done: MatterDashboard.WhenUserTypesInEnterpriseSearchBoxOnMatterCenterHomepage("Test") (41.6s)
+Then user should redirect to enterprise page with search results for 'Test'
+https://msmatter.sharepoint.com/search/Pages/results.aspx?k=Test-&gt; done: MatterDashboard.ThenUserShouldRedirectToEnterprisePageWithSearchResults("Test") (0.1s)</StdOut>
+      </Output>
+    </UnitTestResult>
+  </Results>
+</TestRun>

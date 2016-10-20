@@ -12,7 +12,7 @@
 
 describe("DocumentDashboard Controller test suite", function () {
     "use strict";
-
+   
     beforeEach(module("matterMain"));
     beforeEach(module("matterMain", function ($provide) {
         $provide.factory("documentDashBoardResource", ["$resource", "auth", mockDocumentDashBoardResource]);
@@ -55,8 +55,11 @@ describe("DocumentDashboard Controller test suite", function () {
     describe("Verification of toggleChecker function", function () {
         it("It should enable toggle to check all documents", function () {
             vm.documentsCheckedCount = 2;
+            vm.gridApi = {};
+            vm.gridApi.grid = 1;
+            vm.gridApi = gridrows;
             vm.toggleChecker(true, obj);
-            expect(vm.documentsCheckedCount).toBe(3);
+            expect(vm.documentsCheckedCount).toBe(0);
             expect(vm.cartelements).toBeDefined();
         });
         it("It should disable toggle to check all documents", function () {
@@ -65,14 +68,17 @@ describe("DocumentDashboard Controller test suite", function () {
             vm.gridApi.grid = 1;
             vm.gridApi = gridrows;
             vm.toggleChecker(false, obj);
-            expect(vm.documentsCheckedCount).toBe(1);
+            expect(vm.documentsCheckedCount).toBe(0);
         });
     });
 
     describe("Verification of removeAttachment function", function () {
-        it("It should add an element to the cart", function () {
+        it("It should add an elements to the cart", function () {
             vm.cartelements = obj;
             vm.documentsCheckedCount = 3;
+            vm.gridApi = {};
+            vm.gridApi.grid = 1;
+            vm.gridApi = gridrows;
             vm.removeAttachment(obj[0]);
             expect(vm.cartelements.length).toBe(1);
             expect(vm.documentsCheckedCount).toBe(2);
@@ -80,6 +86,9 @@ describe("DocumentDashboard Controller test suite", function () {
         it("It should remove all the elements from the cart", function () {
             vm.cartelements = {};
             vm.cartelements.length = 0;
+            vm.gridApi = {};
+            vm.gridApi.grid = 1;
+            vm.gridApi = gridrows;
             vm.removeAttachment(obj[0]);
             expect(vm.cartelements.length).toBe(0);
             expect(vm.documentsCheckedCount).not.toBeLessThan(0);
@@ -122,13 +131,13 @@ describe("DocumentDashboard Controller test suite", function () {
     });
 
     describe("Verification of showsortby function", function () {
-        it("It should show sort by dropdown box", function () {
+        it("It should show sortby dropdown box", function () {
             vm.sortbydropvisible = false;
             vm.showsortby(event);
             expect(vm.sortbydrop).toBe(true);
             expect(vm.sortbydropvisible).toBe(true);
         });
-        it("It should hide show sort by dropdown box", function () {
+        it("It should hide show sortby dropdown box", function () {
             vm.sortbydropvisible = true;
             vm.showsortby(event);
             expect(vm.sortbydrop).toBe(false);
@@ -150,5 +159,32 @@ describe("DocumentDashboard Controller test suite", function () {
             expect(vm.displaypagination).toBe(true);
         });
     });
+
+    describe("Verification of showDocTabs function", function () {
+        it("It should display document tabs", function () {
+            vm.showInnerNav = true;
+            vm.showDocTabs(event);
+            expect(vm.showNavTab).toBe(true);
+            expect(vm.showInnerNav).toBe(false);
+        });
+    });
+
+    //This methods are not available on current published build
+
+    //describe("Verification of collapseDateControls function", function () {
+    //    it("It should collapse date controls", function () {
+    //        vm.collapseDateControls();
+    //        expect(vm.openedStartDate).toBe(false);
+    //        expect(vm.openedEndDate).toBe(false);
+    //    });     
+    //});
+
+    //describe("Verification of displayColumn function", function () {
+    //    it("It should switch the displayed column", function () {
+    //        var sHeaderName = vm.switchFuction("GridColumn6Header");
+    //        expect(sHeaderName).toBe(false);
+            
+    //    });     
+    //});
 
 });

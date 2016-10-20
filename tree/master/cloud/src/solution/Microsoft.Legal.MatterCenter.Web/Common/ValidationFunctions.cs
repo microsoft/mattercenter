@@ -298,7 +298,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     }
                     else
                     {
-                        IList<string> userList = matter.AssignUserNames.SelectMany(x => x).Distinct().ToList();
+                        IList<string> userList = matter.AssignUserEmails.SelectMany(x => x).Distinct().ToList();
                         //ToDo: Need to know the use of this method
                         matterRespository.ResolveUserNames(client, userList).FirstOrDefault();
                     }
