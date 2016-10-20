@@ -18,8 +18,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.9.0.77")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("MatterLanding")]
+    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class MatterLandingFeature
     {
         
@@ -28,27 +27,32 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
 #line 1 "MatterLanding.feature"
 #line hidden
         
-        [NUnit.Framework.TestFixtureSetUpAttribute()]
-        public virtual void FeatureSetup()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute()]
+        public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "MatterLanding", "", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        [NUnit.Framework.TestFixtureTearDownAttribute()]
-        public virtual void FeatureTearDown()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute()]
+        public static void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
-        [NUnit.Framework.SetUpAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute()]
         public virtual void TestInitialize()
         {
+            if (((TechTalk.SpecFlow.FeatureContext.Current != null) 
+                        && (TechTalk.SpecFlow.FeatureContext.Current.FeatureInfo.Title != "MatterLanding")))
+            {
+                Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.MatterLandingFeature.FeatureSetup(null);
+            }
         }
         
-        [NUnit.Framework.TearDownAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -64,9 +68,10 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
             testRunner.CollectScenarioErrors();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("01. Open the browser and load matter landing page")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("01. Open the browser and load matter landing page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MatterLanding")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _01_OpenTheBrowserAndLoadMatterLandingPage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("01. Open the browser and load matter landing page", new string[] {
@@ -81,9 +86,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("02. Verify the matter components")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("02. Verify the matter components")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MatterLanding")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _02_VerifyTheMatterComponents()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("02. Verify the matter components", new string[] {
@@ -98,9 +104,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("03. Verify the matter profile and matter description")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("03. Verify the matter profile and matter description")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MatterLanding")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _03_VerifyTheMatterProfileAndMatterDescription()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("03. Verify the matter profile and matter description", new string[] {
@@ -119,9 +126,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("04. Verify the footer")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("04. Verify the footer")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MatterLanding")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _04_VerifyTheFooter()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("04. Verify the footer", new string[] {
@@ -136,9 +144,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("05. Verify the hamburger menu")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("05. Verify the hamburger menu")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MatterLanding")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _05_VerifyTheHamburgerMenu()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("05. Verify the hamburger menu", new string[] {
@@ -153,9 +162,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("06. Verify the manage user functionality")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("06. Verify the manage user functionality")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MatterLanding")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _06_VerifyTheManageUserFunctionality()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify the manage user functionality", new string[] {
@@ -166,6 +176,24 @@ this.ScenarioSetup(scenarioInfo);
     testRunner.When("user clicks on group icon", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 33
  testRunner.Then("popup should display list of Attorneys", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("07. Verify empty results on searching non existing files")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MatterLanding")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _07_VerifyEmptyResultsOnSearchingNonExistingFiles()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify empty results on searching non existing files", new string[] {
+                        "E2E"});
+#line 36
+this.ScenarioSetup(scenarioInfo);
+#line 37
+ testRunner.When("user types random text in file search", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 38
+ testRunner.Then("no results should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -16,7 +16,7 @@ describe("MatterUsers Controller test suite", function () {
         getData(matterResource, mockMatterResource);
 
     };
-   
+
     beforeEach(module("matterMain"));
     beforeEach(module("matterMain", function ($provide) {
         $provide.factory("matterResource", ["$resource", "auth", mockMatterResource]);
@@ -78,13 +78,13 @@ describe("MatterUsers Controller test suite", function () {
     });
 
     describe("Verification of confirmUser function", function () {
-        it("It should confirm the user credentials", function () {
+        it("It should confirm the user", function () {
             vm.textInputUser = { "userConfirmation": false };
             vm.confirmUser(true);
             expect(vm.notificationPopUpBlock).toBe(false);
             expect(vm.notificationBorder).toBe("");
         });
-        it("It should not confirm the user credentials", function () {
+        it("It should not confirm the user", function () {
             vm.textInputUser = { "assignedUser": null };
             vm.confirmUser(false);
             expect(vm.notificationPopUpBlock).toBe(false);
@@ -96,17 +96,17 @@ describe("MatterUsers Controller test suite", function () {
     });
 
     describe("Verification of checkUserExists function", function () {
-        it("It should check if the user exists", function () {
+        it("It should check if UserExists", function () {
             vm.checkUserExists(oEnvironmentConfiguration.loggedInUserEmail, event);
             expect(vm.notificationPopUpBlock).toBe(false);
         });
-        it("It should not check if the user exists", function () {
+        it("It should not check if UserExists", function () {
             vm.assignPermissionTeams = [{ "team": { "assignedUser": oEnvironmentConfiguration.loggedInUserEmail } }];
             vm.checkUserExists("maquser@test.onmicrosoft.com", event);
             expect(vm.notificationPopUpBlock).toBe(false);
         });
     });
- 
+
     describe("Verification of onSelect function", function () {
         it("It should return the conflicted user", function () {
             var $item = {
@@ -128,4 +128,22 @@ describe("MatterUsers Controller test suite", function () {
         });
     });
 
-});
+    describe("Verification of confirmUser function", function () {    
+        it("It should confirm the list of users", function () {
+            vm.textInputUser = {};
+            vm.confirmUser(true);
+            expect(vm.notificationPopUpBlock).toBe(false);
+            expect(vm.textInputUser.userConfirmation).toBe(true);       
+        });
+
+        it("It should not confirm the list of users", function () {
+            vm.textInputUser = {};
+            vm.confirmUser(false);
+            expect(vm.notificationPopUpBlock).toBe(false);
+            expect(vm.textInputUser.userConfirmation).toBe(false);
+            expect(vm.textInputUser.userExsists).toBe(false);
+            expect(vm.textInputUser.assignedUser).toBe("");
+        });
+    });
+
+   });

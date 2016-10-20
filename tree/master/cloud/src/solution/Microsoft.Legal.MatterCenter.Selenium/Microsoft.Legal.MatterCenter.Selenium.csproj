@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Microsoft.Legal.MatterCenter.Selenium</RootNamespace>
     <AssemblyName>Microsoft.Legal.MatterCenter.Selenium</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,14 +49,27 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
+    <Reference Include="System.Core">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Data">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="TechTalk.SpecFlow">
       <HintPath>..\packages\SpecFlow.1.9.0\lib\net35\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
@@ -67,17 +81,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FunctionalTest\DocumentLanding.cs" />
-    <Compile Include="FunctionalTest\DocumentDashboard.cs" />
-    <Compile Include="FunctionalTest\CreateMatter.cs" />
-    <Compile Include="FunctionalTest\DocumentSearch.cs" />
-    <Compile Include="FunctionalTest\Home.cs" />
-    <Compile Include="FunctionalTest\Common.cs" />
-    <Compile Include="FunctionalTest\ManagePermission.cs" />
-    <Compile Include="FunctionalTest\MatterLanding.cs" />
-    <Compile Include="FunctionalTest\MatterSearch.cs" />
-    <Compile Include="FunctionalTest\MatterDashboard.cs" />
-    <Compile Include="FunctionalTest\Settings.cs" />
+    <Compile Include="FunctionalTestSuite\DocumentLanding.cs" />
+    <Compile Include="FunctionalTestSuite\DocumentDashboard.cs" />
+    <Compile Include="FunctionalTestSuite\CreateMatter.cs" />
+    <Compile Include="FunctionalTestSuite\DocumentSearch.cs" />
+    <Compile Include="FunctionalTestSuite\Home.cs" />
+    <Compile Include="FunctionalTestSuite\Common.cs" />
+    <Compile Include="FunctionalTestSuite\ManagePermission.cs" />
+    <Compile Include="FunctionalTestSuite\MatterLanding.cs" />
+    <Compile Include="FunctionalTestSuite\MatterSearch.cs" />
+    <Compile Include="FunctionalTestSuite\MatterDashboard.cs" />
+    <Compile Include="FunctionalTestSuite\Settings.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="SpecFlow\Specs\CreateMatter.feature.cs">
       <AutoGen>True</AutoGen>
@@ -100,9 +114,9 @@
       <DependentUpon>DocumentSearch.feature</DependentUpon>
     </Compile>
     <Compile Include="SpecFlow\Specs\Home.feature.cs">
-      <DependentUpon>Home.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>Home.feature</DependentUpon>
     </Compile>
     <Compile Include="SpecFlow\Specs\ManagePermission.feature.cs">
       <AutoGen>True</AutoGen>
@@ -137,6 +151,26 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages\FluentAssertions.3.2.1\FluentAssertions.3.2.1.nupkg" />
+    <None Include="packages\NUnit.2.6.3\NUnit.2.6.3.nupkg" />
+    <None Include="packages\Protractor.0.3.0\Protractor.0.3.0.nupkg" />
+    <None Include="packages\Selenium.Support.2.44.0\Selenium.Support.2.44.0.nupkg" />
+    <None Include="packages\Selenium.WebDriver.2.44.0\Selenium.WebDriver.2.44.0.nupkg" />
+    <None Include="packages\SpecFlow.1.9.0\content\App.config.transform" />
+    <None Include="packages\SpecFlow.1.9.0\SpecFlow.1.9.0.nupkg" />
+    <None Include="packages\SpecFlow.1.9.0\tools\TechTalk.SpecFlow.targets" />
+    <None Include="packages\SpecFlow.1.9.0\tools\TechTalk.SpecFlow.tasks" />
+    <None Include="packages\SpecFlow.NUnit.1.1.1\content\App.config.transform" />
+    <None Include="packages\SpecFlow.NUnit.1.1.1\SpecFlow.NUnit.1.1.1.nupkg" />
+    <None Include="packages\Unity.4.0.1\lib\win8\Microsoft.Practices.Unity.RegistrationByConvention.pri" />
+    <None Include="packages\Unity.4.0.1\Unity.4.0.1.nupkg" />
+    <None Include="packages\Unity.4.0.1\UnityConfiguration30.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages\Unity.Interception.4.0.1\Unity.Interception.4.0.1.nupkg" />
+    <None Include="packages\WebDriver.ChromeDriver.win32.2.12.0.0\tools\install.ps1" />
+    <None Include="packages\WebDriver.ChromeDriver.win32.2.12.0.0\tools\uninstall.ps1" />
+    <None Include="packages\WebDriver.ChromeDriver.win32.2.12.0.0\WebDriver.ChromeDriver.win32.2.12.0.0.nupkg" />
     <None Include="SpecFlow\Specs\CreateMatter.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CreateMatter.feature.cs</LastGenOutput>
@@ -182,15 +216,142 @@
     <Content Include="IEDriverServer.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net40\FluentAssertions.Core.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net40\FluentAssertions.Core.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net40\FluentAssertions.Core.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net40\FluentAssertions.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net40\FluentAssertions.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net40\FluentAssertions.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-monotouch+monoandroid\FluentAssertions.Core.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-monotouch+monoandroid\FluentAssertions.Core.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-monotouch+monoandroid\FluentAssertions.Core.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-net40+sl5+win8+wp8+wpa81\FluentAssertions.Core.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-net40+sl5+win8+wp8+wpa81\FluentAssertions.Core.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-net40+sl5+win8+wp8+wpa81\FluentAssertions.Core.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-net40+sl5+win8+wp8+wpa81\FluentAssertions.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-net40+sl5+win8+wp8+wpa81\FluentAssertions.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-net40+sl5+win8+wp8+wpa81\FluentAssertions.XML" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-win81+wpa81\FluentAssertions.Core.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-win81+wpa81\FluentAssertions.Core.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-win81+wpa81\FluentAssertions.Core.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-win81+wpa81\FluentAssertions.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-win81+wpa81\FluentAssertions.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\portable-win81+wpa81\FluentAssertions.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\de\Microsoft.CSharp.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\de\System.Xml.Linq.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\es\Microsoft.CSharp.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\es\System.Xml.Linq.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\FluentAssertions.Core.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\FluentAssertions.Core.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\FluentAssertions.Core.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\FluentAssertions.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\FluentAssertions.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\FluentAssertions.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\fr\Microsoft.CSharp.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\fr\System.Xml.Linq.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\it\Microsoft.CSharp.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\it\System.Xml.Linq.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\ja\Microsoft.CSharp.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\ja\System.Xml.Linq.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\ko\Microsoft.CSharp.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\ko\System.Xml.Linq.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\Microsoft.CSharp.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\Microsoft.CSharp.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\ru\Microsoft.CSharp.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\ru\System.Xml.Linq.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\System.Xml.Linq.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\System.Xml.Linq.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\zh-Hans\Microsoft.CSharp.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\zh-Hans\System.Xml.Linq.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\zh-Hant\Microsoft.CSharp.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\sl5\zh-Hant\System.Xml.Linq.resources.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\win8\FluentAssertions.Core.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\win8\FluentAssertions.Core.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\win8\FluentAssertions.Core.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\win8\FluentAssertions.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\win8\FluentAssertions.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\win8\FluentAssertions.XML" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\wp8\FluentAssertions.Core.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\wp8\FluentAssertions.Core.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\wp8\FluentAssertions.Core.xml" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\wp8\FluentAssertions.dll" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\wp8\FluentAssertions.pdb" />
+    <Content Include="packages\FluentAssertions.3.2.1\lib\wp8\FluentAssertions.xml" />
+    <Content Include="packages\NUnit.2.6.3\lib\nunit.framework.dll" />
+    <Content Include="packages\NUnit.2.6.3\lib\nunit.framework.xml" />
+    <Content Include="packages\NUnit.2.6.3\license.txt" />
+    <Content Include="packages\Protractor.0.3.0\lib\net35\Protractor.dll" />
+    <Content Include="packages\Protractor.0.3.0\lib\net35\Protractor.pdb" />
+    <Content Include="packages\Protractor.0.3.0\lib\net35\Protractor.xml" />
+    <Content Include="packages\Protractor.0.3.0\lib\net40\Protractor.dll" />
+    <Content Include="packages\Protractor.0.3.0\lib\net40\Protractor.pdb" />
+    <Content Include="packages\Protractor.0.3.0\lib\net40\Protractor.xml" />
+    <Content Include="packages\Selenium.Support.2.44.0\lib\net35\WebDriver.Support.dll" />
+    <Content Include="packages\Selenium.Support.2.44.0\lib\net35\WebDriver.Support.xml" />
+    <Content Include="packages\Selenium.Support.2.44.0\lib\net40\WebDriver.Support.dll" />
+    <Content Include="packages\Selenium.Support.2.44.0\lib\net40\WebDriver.Support.xml" />
+    <Content Include="packages\Selenium.WebDriver.2.44.0\lib\net35\WebDriver.dll" />
+    <Content Include="packages\Selenium.WebDriver.2.44.0\lib\net35\WebDriver.xml" />
+    <Content Include="packages\Selenium.WebDriver.2.44.0\lib\net40\WebDriver.dll" />
+    <Content Include="packages\Selenium.WebDriver.2.44.0\lib\net40\WebDriver.xml" />
+    <Content Include="packages\SpecFlow.1.9.0\changelog.txt" />
+    <Content Include="packages\SpecFlow.1.9.0\lib\net35\TechTalk.SpecFlow.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\lib\sl3\TechTalk.SpecFlow.Silverlight3.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\lib\sl4-wp\TechTalk.SpecFlow.WindowsPhone7.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\LICENSE.txt" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\Gherkin.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\IKVM.OpenJDK.Core.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\IKVM.OpenJDK.Security.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\IKVM.OpenJDK.Text.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\IKVM.OpenJDK.Util.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\IKVM.Runtime.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\specflow.exe" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\TechTalk.SpecFlow.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\TechTalk.SpecFlow.Generator.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\TechTalk.SpecFlow.Parser.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\TechTalk.SpecFlow.Reporting.dll" />
+    <Content Include="packages\SpecFlow.1.9.0\tools\TechTalk.SpecFlow.Utils.dll" />
+    <Content Include="packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.dll" />
+    <Content Include="packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.XML" />
+    <Content Include="packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll" />
+    <Content Include="packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll" />
+    <Content Include="packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.XML" />
+    <Content Include="packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.xml" />
+    <Content Include="packages\Unity.4.0.1\lib\portable-net45+wp80+win8+wpa81+MonoAndroid10+MonoTouch10\Microsoft.Practices.Unity.dll" />
+    <Content Include="packages\Unity.4.0.1\lib\portable-net45+wp80+win8+wpa81+MonoAndroid10+MonoTouch10\Microsoft.Practices.Unity.xml" />
+    <Content Include="packages\Unity.4.0.1\lib\win8\Microsoft.Practices.Unity.dll" />
+    <Content Include="packages\Unity.4.0.1\lib\win8\Microsoft.Practices.Unity.RegistrationByConvention.dll" />
+    <Content Include="packages\Unity.4.0.1\lib\win8\Microsoft.Practices.Unity.RegistrationByConvention.XML" />
+    <Content Include="packages\Unity.4.0.1\lib\win8\Microsoft.Practices.Unity.xml" />
+    <Content Include="packages\Unity.4.0.1\lib\wp80\Microsoft.Practices.Unity.dll" />
+    <Content Include="packages\Unity.4.0.1\lib\wp80\Microsoft.Practices.Unity.RegistrationByConvention.dll" />
+    <Content Include="packages\Unity.4.0.1\lib\wp80\Microsoft.Practices.Unity.RegistrationByConvention.XML" />
+    <Content Include="packages\Unity.4.0.1\lib\wp80\Microsoft.Practices.Unity.xml" />
+    <Content Include="packages\Unity.Interception.4.0.1\lib\Net45\Microsoft.Practices.Unity.Interception.Configuration.dll" />
+    <Content Include="packages\Unity.Interception.4.0.1\lib\Net45\Microsoft.Practices.Unity.Interception.Configuration.xml" />
+    <Content Include="packages\Unity.Interception.4.0.1\lib\Net45\Microsoft.Practices.Unity.Interception.dll" />
+    <Content Include="packages\Unity.Interception.4.0.1\lib\Net45\Microsoft.Practices.Unity.Interception.xml" />
+    <Content Include="packages\WebDriver.ChromeDriver.win32.2.12.0.0\content\chromedriver.exe" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="packages\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>MKDIR "$(ProjectDir)TestResults"
+IF EXIST "$(ProjectDir)TestResults" (XCOPY "$(ProjectDir)$(OutDir)*.*" "$(ProjectDir)TestResults" /E /Y /C)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
