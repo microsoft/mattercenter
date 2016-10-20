@@ -153,7 +153,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.ui-grid-menu-inner ul li button')[9].click()");
-            scriptExecutor.ExecuteScript("$('.ui-grid-menu-inner ul li button')[10].click()");
+            //scriptExecutor.ExecuteScript("$('.ui-grid-menu-inner ul li button')[10].click()");
             scriptExecutor.ExecuteScript("$('.ui-grid-menu-inner ul li button')[12].click()");
             Thread.Sleep(4000);
         }
@@ -299,6 +299,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user clicks on matter")]
         public void WhenUserClicksOnMatter()
         {
+            common.GetLogin(webDriver, URL);
             Thread.Sleep(5000);
             scriptExecutor.ExecuteScript(" $('.col-xs-7 a')[0].click()");
             Thread.Sleep(1000);
@@ -310,11 +311,11 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             string matterName = (string)scriptExecutor.ExecuteScript("var links = $('.col-xs-7 a')[0].innerText;return links"),
                    matterHeaderName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[0].innerText ;return links"),
                    clientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[1].innerText ;return links"),
-                   clientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[2].innerText ;return links"),
-                   subAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[3].innerText ;return links"),
-                   responsibleAttorney = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[4].innerText ;return links"),
-                   viewMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[5].innerText ;return links"),
-                   uploadToMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[6].innerText;return links"),
+                   clientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[3].innerText ;return links"),
+                   subAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links =  $('.FlyoutContentHeading')[4].innerText ;return links"),
+                   responsibleAttorney = (string)scriptExecutor.ExecuteScript("var links =  $('.FlyoutContentHeading')[5].innerText ;return links"),
+                   viewMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[7].innerText ;return links"),
+                   uploadToMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[8].innerText;return links"),
                    flyoutClientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[1].innerText;return links"),
                    flyoutClientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[3].innerText;return links"),
                    flyoutSubAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[5].innerText;return links"),
@@ -346,7 +347,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"matter landing page should open")]
         public void ThenMatterLandingPageShouldOpen()
         {
-            string viewMatterDetails = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[5].href ;return links");
+            string viewMatterDetails = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[7].href ;return links");
             Assert.IsTrue(viewMatterDetails.Contains("https://matterwebapp.azurewebsites.net/"));
         }
 
@@ -524,11 +525,11 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             Thread.Sleep(3000);
             webDriver.FindElement(By.CssSelector("a.prisma-header-dropdown-anchor > img")).Click();
             Thread.Sleep(3000);
-            webDriver.FindElement(By.XPath("/html/body/div/div/main/div/div[7]/div[1]/input")).Clear();
-            webDriver.FindElement(By.XPath("/html/body/div/div/main/div/div[7]/div[1]/input")).Click();
-            webDriver.FindElement(By.XPath("/html/body/div/div/main/div/div[7]/div[1]/input")).SendKeys(searchBox);
+            webDriver.FindElement(By.XPath("//*[@id='matterMain']/div/div/main/div/div[6]/div[1]/input")).Clear();
+            webDriver.FindElement(By.XPath("//*[@id='matterMain']/div/div/main/div/div[6]/div[1]/input")).Click();
+            webDriver.FindElement(By.XPath("//*[@id='matterMain']/div/div/main/div/div[6]/div[1]/input")).SendKeys(searchBox);
             Thread.Sleep(2000);
-            webDriver.FindElement(By.XPath("/html/body/div/div/main/div/div[7]/div[1]/div/button")).Click();
+            webDriver.FindElement(By.XPath("//*[@id='matterMain']/div/div/main/div/div[6]/div[1]/div/button")).Click();
             Thread.Sleep(2000);
         }
 

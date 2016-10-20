@@ -64,11 +64,11 @@ Scenario:09. Verify the document search box for managed search
 	Then it should display all the document which consist of 'test' keyword
 
 @E2E
-Scenario:10. Verify no results on searching gibberish text
+Scenario:10. Verify no results on searching invalid text
 	When user searches with random keywords on document search page
 	Then no results should be displayed on document search page
 
 @E2E
-Scenario:11. Verify no results on searching gibberish text on document filter
+Scenario:11. Verify no results on searching invalid text on document filter
 	When user clicks on column filter to filter the documents using random keyword
 	Then no documents should be displayed inside the fly out

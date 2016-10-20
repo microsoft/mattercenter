@@ -29,11 +29,13 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         IJavaScriptExecutor scriptExecutor = (IJavaScriptExecutor)webDriver;
         static int existingUsers = 0;
         CultureInfo culture = Thread.CurrentThread.CurrentCulture;
+        CommonHelperFunction common = new CommonHelperFunction();
 
         #region 01. Open the browser and load manage permission page
         [When(@"user enters credentials on manage permissions page")]
         public void WhenUserEntersCredentialsOnManagePermissionsPage()
         {
+            common.GetLogin(webDriver, URL);
             webDriver.Navigate().GoToUrl(new Uri(URL));
             Thread.Sleep(4000);
         }

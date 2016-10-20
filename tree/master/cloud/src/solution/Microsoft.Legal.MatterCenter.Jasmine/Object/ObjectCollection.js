@@ -17,6 +17,9 @@ var $location = {
     absUrl: function () {
         var url = "https://" + oEnvironmentConfiguration.azureSiteName + ".azurewebsites.net&test=1&attempt=2|jasminetest.html";
         return url;
+    },
+    search: function () {
+        return { mattertype: "", practicegroup: "", teamname: "" }
     }
 };
 
@@ -34,6 +37,10 @@ var adalService = {
 };
 
 var mockapi = function () {
+};
+
+var mockadalAuthenticationService = function () {
+
 };
 
 var mocknavigationResource = {

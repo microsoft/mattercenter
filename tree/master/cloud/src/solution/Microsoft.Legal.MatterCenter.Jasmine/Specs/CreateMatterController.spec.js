@@ -28,7 +28,7 @@ describe("CreateMatter Controller test suite", function () {
 
     beforeEach(inject(function ($controller, $injector, $rootScope) {
         rootScope = $rootScope.$new();
-        vm = $controller("createMatterController as vm", { $scope: $scope, $rootScope: rootScope, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResourceService, api: mockapi });
+        vm = $controller("createMatterController as vm", { $scope: $scope, $rootScope: rootScope, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResourceService, api: mockapi, adalAuthenticationService: mockadalAuthenticationService });
     }));
 
     describe("Verification of clearpopup function", function () {
@@ -190,7 +190,7 @@ describe("CreateMatter Controller test suite", function () {
         it("It should return the blocked user", function () {
             vm.onSelect(item, $model, $label, "blockuser", "on-blurr", event, item.name);
             expect(vm.oSiteUsers).toBeDefined();
-            expect(vm.blockedUserName).toBe(oEnvironmentConfiguration.loggedInUserName + "(" + oEnvironmentConfiguration.loggedInUserEmail + ")");
+            //expect(vm.blockedUserName).toBe(oEnvironmentConfiguration.loggedInUserName + "(" + oEnvironmentConfiguration.loggedInUserEmail + ")");
         });
 
         it("It should return the team member", function () {
@@ -198,7 +198,7 @@ describe("CreateMatter Controller test suite", function () {
             expect(vm.oSiteUsers).toBeDefined();
             expect(vm.typehead).toBe(false);
             expect(vm.notificationPopUpBlock).toBe(false);
-            expect($label.assignedUser).toBe(oEnvironmentConfiguration.loggedInUserName + "(" + oEnvironmentConfiguration.loggedInUserEmail + ")");
+            expect($label.assignedUser).toBe(oEnvironmentConfiguration.loggedInUserName + "(" + oEnvironmentConfiguration.loggedInUserEmail + ");");
         });
 
         it("It should return the assigned user", function () {

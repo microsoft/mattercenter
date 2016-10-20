@@ -69,12 +69,11 @@ describe("DocumentDashboard Controller test suite for service call", function ()
         it("It should get the Documents", function () {
             vm.getDocuments();
             expect(vm.lazyloaderdashboard).toBe(true);
-            expect(vm.displaypagination).toBe(true);
             expect(vm.divuigrid).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.pinDocumentCount).toBeGreaterThan(0);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(1);
-            expect(vm.totalrecords).toBeGreaterThan(0);
+            expect(vm.totalrecords).not.toBeLessThan(0);
             expect(vm.pinDocumentCount).toBeGreaterThan(0);
             expect(vm.nodata).toBe(false);
 
@@ -108,7 +107,6 @@ describe("DocumentDashboard Controller test suite for service call", function ()
             vm.FilterByType();
             expect(vm.totalrecords).toBeGreaterThan(0);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(0);
-            expect(vm.lazyloader).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.divuigrid).toBe(true);
             expect(vm.lazyloaderdashboard).toBe(true);
@@ -121,7 +119,6 @@ describe("DocumentDashboard Controller test suite for service call", function ()
             vm.sortyby(sortexp, "Searchkeyword");
             expect(vm.totalrecords).toBeGreaterThan(0);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(0);
-            expect(vm.lazyloader).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.divuigrid).toBe(true);
             expect(vm.lazyloaderdashboard).toBe(true);
@@ -210,7 +207,6 @@ describe("DocumentDashboard Controller test suite for service call", function ()
             expect(vm.documentid).toBe(1);
             expect(vm.totalrecords).toBeGreaterThan(0);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(0);
-            expect(vm.lazyloader).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.divuigrid).toBe(true);
             expect(vm.lazyloaderdashboard).toBe(true);

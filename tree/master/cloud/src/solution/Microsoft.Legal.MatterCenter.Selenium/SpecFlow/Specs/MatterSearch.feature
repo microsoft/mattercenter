@@ -68,11 +68,11 @@ Scenario: 06. Verify the matter search box using managed properties
 	Then all matters with 'test' keyword should be shown 
 
 @E2E
-Scenario:10. Verify no results on searching gibberish text
+Scenario:10. Verify no results on searching invalid text
 	When user searches with random keywords on matter search page
 	Then no results should be displayed on matter search page
 
 @E2E
-Scenario:11. Verify no results on searching gibberish text on matter filter
+Scenario:11. Verify no results on searching invalid text on matter filter
 	When user clicks on column filter to filter the matter using random keyword
 	Then no matters should be displayed inside the fly out

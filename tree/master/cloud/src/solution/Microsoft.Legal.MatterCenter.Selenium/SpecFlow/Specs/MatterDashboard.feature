@@ -16,7 +16,7 @@ Scenario: 05. Verify the matter fly out on Matter Center homepage
 	Then a matter fly out should be seen
 
 @E2E
-Scenario: 07. Verify the search feature on matter center homepage
+Scenario: 06. Verify the search feature on matter center homepage
 	When user types 'test' in search box on Matter Center Homepage
 	Then all results having 'test' keyword should be displayed
 
@@ -36,7 +36,7 @@ Scenario: 09. Verify the advance filter functionality
 	Then filter results should be shown to user
 
 @E2E
-Scenario: 10. Verify the sort functionality in matter center home
+Scenario: 08. Verify the sort functionality in matter center home
 	When user sorts data for All matters in ascending order
 	Then all records should be sorted in ascending order
 	When user sorts data for All matters in ascending order of created date
@@ -53,12 +53,12 @@ Scenario: 10. Verify the sort functionality in matter center home
 	Then all records should be sorted in ascending order of created date
 
 @E2E
-Scenario: 11. Verify the footer on matter center home
+Scenario: 10. Verify the footer on matter center home
 	When user navigates to the footer
 	Then footer should have all the links
 
 @E2E
-Scenario: 08. Verify the search feature using managed properties on matter center home page
+Scenario: 07. Verify the search feature using managed properties on matter center home page
 	When user types 'MCMatterName:Test' in search box on Matter Center Homepage
 	Then all results having 'Test' keyword should be displayed
 
@@ -68,6 +68,6 @@ Scenario: 12. Verify enterprise search feature on matter center home page
 	Then user should redirect to enterprise page with search results for 'Test'
 
 @E2E
-Scenario: 06. Verify no results on gibberish search
+Scenario: 11. Verify no results on invalid search
 	When user types gibberish in search box on Matter Center dashboard
 	Then no results should be displayed on Matter Center dashboard

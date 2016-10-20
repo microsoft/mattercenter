@@ -80,12 +80,12 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         public void ThenAMatterFlyOutShouldBeSeen()
         {
             string matterHeaderName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[0].innerText ;return links"),
-                   clientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[1].innerText ;return links"),
-                   clientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[2].innerText ;return links"),
-                   subAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[3].innerText ;return links"),
-                   responsibleAttorney = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[4].innerText ;return links"),
-                   viewMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[5].innerText ;return links"),
-                   uploadToMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[6].innerText;return links"),
+                   clientName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[0].innerText ;return links"),
+                   clientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[3].innerText ;return links"),
+                   subAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links =  $('.FlyoutContentHeading')[4].innerText ;return links"),
+                   responsibleAttorney = (string)scriptExecutor.ExecuteScript("var links =  $('.FlyoutContentHeading')[5].innerText ;return links"),
+                   viewMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[7].innerText ;return links"),
+                   uploadToMatter = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[8].innerText;return links"),
                    flyoutClientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[1].innerText;return links"),
                    flyoutClientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[3].innerText;return links"),
                    flyoutSubAreaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[5].innerText;return links"),
@@ -264,7 +264,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user sorts data for All matters in ascending order")]
         public void WhenUserSortsDataForAllMattersInAscendingOrder()
         {
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img').click()");
+            scriptExecutor.ExecuteScript("$('.col-sm-offset-6 img')[0].click())");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-xs-offset-7 li')[1].click()");
             Thread.Sleep(4000);
@@ -320,7 +320,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user sorts data for All matters in ascending order of created date")]
         public void WhenUserSortsDataForAllMattersInAscendingOrderOfCreatedDate()
         {
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img').click()");
+            scriptExecutor.ExecuteScript("$('.col-sm-offset-6 img')[0].click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-xs-offset-7 li')[3].click()");
             Thread.Sleep(4000);
@@ -378,7 +378,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             scriptExecutor.ExecuteScript("$('.nav-tabs a')[3].click()");
             Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img').click()");
+            scriptExecutor.ExecuteScript("$('.col-sm-offset-6 img')[0].click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-xs-offset-7 li')[1].click()");
             Thread.Sleep(4000);
@@ -389,7 +389,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             scriptExecutor.ExecuteScript("$('.nav-tabs a')[3].click()");
             Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img').click()");
+            scriptExecutor.ExecuteScript("$('.col-sm-offset-6 img')[0].click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-xs-offset-7 li')[3].click()");
             Thread.Sleep(4000);
@@ -400,7 +400,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             scriptExecutor.ExecuteScript("$('.nav-tabs a')[1].click()");
             Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img').click()");
+            scriptExecutor.ExecuteScript("$('.col-sm-offset-6 img')[0].click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-xs-offset-7 li')[1].click()");
             Thread.Sleep(4000);
@@ -411,7 +411,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             scriptExecutor.ExecuteScript("$('.nav-tabs a')[1].click()");
             Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('.col-xs-4 img').click()");
+            scriptExecutor.ExecuteScript("$('.col-sm-offset-6 img')[0].click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-xs-offset-7 li')[3].click()");
             Thread.Sleep(4000);

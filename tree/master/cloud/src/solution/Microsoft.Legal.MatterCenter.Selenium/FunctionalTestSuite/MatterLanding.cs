@@ -111,7 +111,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                    clientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.matterDetailTitle')[1].innerText ;return links"),
                    practiceGroup = (string)scriptExecutor.ExecuteScript("var links = $('.matterDetailTitle')[2].innerText ;return links"),
                    areaOfLaw = (string)scriptExecutor.ExecuteScript("var links = $('.matterDetailTitle')[3].innerText;return links"),
-                   responsibleAttorney = (string)scriptExecutor.ExecuteScript("var links = $('.matterDetailTitle')[4].innerText ;return links"),
+                   responsibleAttorney = (string)scriptExecutor.ExecuteScript("var links = $('.matterDetailTitle')[5].innerText ;return links"),
                    checkClientName = (string)scriptExecutor.ExecuteScript("var links = $('.matterDetailText')[0].innerText;return links"),
                    checkClientMatterId = (string)scriptExecutor.ExecuteScript("var links = $('.matterDetailText')[1].innerText;return links"),
                    checkpracticeGroup = (string)scriptExecutor.ExecuteScript("var links = $('.matterDetailText')[2].innerText ;return links"),

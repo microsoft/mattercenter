@@ -9,7 +9,7 @@
 
 var oTestConfiguration = {
     sSiteURL: "http://" + oEnvironmentConfiguration.azureSiteName + ".azurewebsites.net",
-    sValidMatterName: "Test Matter 112233",
+    sValidMatterName: "Test Matter 11223344",
     sValidMatterClientURL: oEnvironmentConfiguration.tenantUrl + "/sites/microsoft",
     sInvalidMatterName: "Microsoft Test",
     sInvalidMatterURL: oEnvironmentConfiguration.tenantUrl + "/sites/microsoft",

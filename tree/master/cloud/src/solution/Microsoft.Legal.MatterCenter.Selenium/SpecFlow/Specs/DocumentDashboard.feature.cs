@@ -236,12 +236,12 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("06. Verify gibberish search on document dashboard")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("06. Verify invalid text search on document dashboard")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Dashboard Page")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
-        public virtual void _06_VerifyGibberishSearchOnDocumentDashboard()
+        public virtual void _06_VerifyInvalidTextSearchOnDocumentDashboard()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify gibberish search on document dashboard", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify invalid text search on document dashboard", new string[] {
                         "E2E"});
 #line 56
 this.ScenarioSetup(scenarioInfo);

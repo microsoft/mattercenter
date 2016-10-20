@@ -51,6 +51,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user clicks on document")]
         public void WhenUserClicksOnDocument()
         {
+            Thread.Sleep(15000);
             scriptExecutor.ExecuteScript("$('.col-xs-12 a')[4].click()");
             Thread.Sleep(5000);
         }
@@ -59,13 +60,13 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         public void ThenADocumentFlyOutShouldBeSeen()
         {
             string headingMatterName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[0].innerText ;return links"),
-                   matterName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[1].innerText ;return links"),
-                   clientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[2].innerText ;return links"),
-                   documentId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[3].innerText ;return links"),
-                   authorName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[4].innerText ;return links"),
-                   modifiedDate = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[5].innerText ;return links"),
-                   openDocument = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[6].innerText;return links"),
-                   viewDocument = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[7].innerText;return links"),
+                   matterName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[0].innerText ;return links"),
+                   clientName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[2].innerText ;return links"),
+                   documentId = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[3].innerText ;return links"),
+                   authorName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[5].innerText ;return links"),
+                   modifiedDate = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[6].innerText ;return links"),
+                   openDocument = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[9].innerText;return links"),
+                   viewDocument = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[10].innerText;return links"),
                    flyoutMatterName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[1].innerText;return links"),
                    flyoutClientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[3].innerText;return links"),
                    flyoutDocumentId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[5].innerText;return links"),
@@ -167,7 +168,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             webDriver.FindElement(By.CssSelector(".col-xs-12 .form-control")).SendKeys(searchBox);
             Thread.Sleep(5000);
             scriptExecutor.ExecuteScript("$('#basic-addon1').click()");
-            Thread.Sleep(2000);
+            Thread.Sleep(5000);
         }
 
         [Then(@"no documents should be displayed")]
@@ -183,6 +184,8 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user clicks on advance filter on document dashboard")]
         public void WhenUserClicksOnAdvanceFilterOnDocumentDashboard()
         {
+            common.GetLogin(webDriver, URL);
+            Thread.Sleep(3000);
             scriptExecutor.ExecuteScript("history.go(0)");
             Thread.Sleep(5000);
             scriptExecutor.ExecuteScript("$('.col-xs-3 img')[0].click();");
@@ -191,7 +194,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             Thread.Sleep(3000);
             scriptExecutor.ExecuteScript("$('.col-md-2 a')[1].click();");
             Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('.refinerWrapper input')[0].click()");
+            scriptExecutor.ExecuteScript("$('.refinerWrapper input')[1].click()");
             Thread.Sleep(2000);
             scriptExecutor.ExecuteScript("$('.filterOkButton .dashboardSearch')[0].click()");
             Thread.Sleep(2000);
@@ -208,7 +211,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             for (int documentCounter = 7; documentCounter <= finalValue; documentCounter = documentCounter + 6)
             {
                 string checkClient = (string)scriptExecutor.ExecuteScript("var links = $('.ui-grid-cell-contents')[" + documentCounter + "].innerText;return links");
-                if (checkClient.Contains("Amazon"))
+                if (checkClient.Contains("Microsoft"))
                 {
                     counter++;
                 }
@@ -294,7 +297,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             CultureInfo provider = CultureInfo.InvariantCulture;
             for (int documentCounter = 1; documentCounter <= length; documentCounter++)
             {
-                string datachunk = (string)scriptExecutor.ExecuteScript("var links = $('.docModDateGridClass .ng-scope')[" + documentCounter + "].innerText;return links");
+                string datachunk = (string)scriptExecutor.ExecuteScript("var links = $('.ui-grid-cell .ng-isolate-scope')[" + (documentCounter*2-1) + "].innerText;return links");
                 if (datachunk.Length == 12)
                 {
                     dates[documentCounter-1] = DateTime.ParseExact(datachunk, format, provider);

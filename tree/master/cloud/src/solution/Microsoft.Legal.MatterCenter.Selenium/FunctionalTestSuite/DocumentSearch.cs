@@ -96,9 +96,9 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             scriptExecutor.ExecuteScript("$('.showExpandIcon').click();");
             Thread.Sleep(2000);
-            scriptExecutor.ExecuteScript("$('#menuitem-9 > button > i').click();");
-            scriptExecutor.ExecuteScript("$('#menuitem-11 > button > i').click();");
-            scriptExecutor.ExecuteScript("$('#menuitem-13 > button > i').click();");
+            //scriptExecutor.ExecuteScript("$('#menuitem-9 > button > i').click();");
+            //scriptExecutor.ExecuteScript("$('#menuitem-11 > button > i').click();");
+            //scriptExecutor.ExecuteScript("$('#menuitem-13 > button > i').click();");
             scriptExecutor.ExecuteScript("$('#menuitem-15 > button > i').click();");
         }
 
@@ -411,13 +411,13 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         public void ThenADocumentFlyOutShouldOpen()
         {
             string headingMatterName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[0].innerText ;return links"),
-                   matterName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[1].innerText ;return links"),
-                   clientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[2].innerText ;return links"),
-                   documentId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[3].innerText ;return links"),
-                   authorName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[4].innerText ;return links"),
-                   modifiedDate = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[5].innerText ;return links"),
-                   openDocument = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[6].innerText;return links"),
-                   viewDocument = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[7].innerText;return links"),
+                   matterName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[0].innerText ;return links"),
+                   clientName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[2].innerText ;return links"),
+                   documentId = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[3].innerText ;return links"),
+                   authorName = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[5].innerText ;return links"),
+                   modifiedDate = (string)scriptExecutor.ExecuteScript("var links = $('.FlyoutContentHeading')[6].innerText ;return links"),
+                   openDocument = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[9].innerText;return links"),
+                   viewDocument = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[10].innerText;return links"),
                    flyoutMatterName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[1].innerText;return links"),
                    flyoutClientName = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[3].innerText;return links"),
                    flyoutDocumentId = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content .ms-font-m')[5].innerText;return links"),
@@ -465,7 +465,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"document landing page should open")]
         public void ThenDocumentLandingPageShouldOpen()
         {
-            string viewDocuments = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[7].innerText;return links");
+            string viewDocuments = (string)scriptExecutor.ExecuteScript("var links = $('.ms-Callout-content')[10].innerText;return links");
             Assert.IsTrue(viewDocuments.Contains("View document details"));
         }
         #endregion

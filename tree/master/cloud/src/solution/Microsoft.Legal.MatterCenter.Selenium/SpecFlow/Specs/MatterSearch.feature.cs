@@ -277,12 +277,12 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("10. Verify no results on searching gibberish text")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("10. Verify no results on searching invalid text")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
-        public virtual void _10_VerifyNoResultsOnSearchingGibberishText()
+        public virtual void _10_VerifyNoResultsOnSearchingInvalidText()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("10. Verify no results on searching gibberish text", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("10. Verify no results on searching invalid text", new string[] {
                         "E2E"});
 #line 71
 this.ScenarioSetup(scenarioInfo);
@@ -295,12 +295,12 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("11. Verify no results on searching gibberish text on matter filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("11. Verify no results on searching invalid text on matter filter")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Search Page")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
-        public virtual void _11_VerifyNoResultsOnSearchingGibberishTextOnMatterFilter()
+        public virtual void _11_VerifyNoResultsOnSearchingInvalidTextOnMatterFilter()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("11. Verify no results on searching gibberish text on matter filter", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("11. Verify no results on searching invalid text on matter filter", new string[] {
                         "E2E"});
 #line 76
 this.ScenarioSetup(scenarioInfo);

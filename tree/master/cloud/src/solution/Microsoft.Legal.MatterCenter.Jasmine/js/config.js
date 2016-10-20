@@ -43,7 +43,13 @@
         "StampedPropertyTeamMembers": "TeamMembers"
     },
     "taxonomy": {
-        "levels": "3"
+        "levels": "3",
+        "termGroup": "MatterCenterTerms",
+        "clientTermSetName": "Clients",
+        "clientCustomPropertiesURL": "ClientURL",
+        "practiceGroupTermSetName": "Practice Groups",
+        "subAreaOfLawCustomContentTypeProperty": "ContentTypeName",
+        "subAreaOfLawDocumentContentTypeProperty": "DocumentTemplates"
     },
     "search": {
         "ManagedPropertyAreaOfLaw": "MCAreaofLaw",
@@ -85,6 +91,7 @@
         "ManagedPropertyTeamMembers": "MCTeamMembers",
         "ManagedPropertyTitle": "Title",
         "ManagedPropertyUIVersionStringOWSTEXT": "UIVersionStringOWSTEXT",
+        "Schema": "testSchema",
         "searchColumnsUIPickerForMatter": {
             "hideUpload": "test",
             "matterAreaOfLaw": "test",
@@ -115,7 +122,7 @@
             "documentMatterName": "test",
             "documentMatterUrl": "test",
             "documentModifiedDate": "656",
-            "documentName": "test",
+            "documentName": { keyName: "documentName", value: "test" },
             "documentOWAUrl": "test",
             "documentOwner": "MAQuser",
             "documentParentUrl": "test",

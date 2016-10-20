@@ -33,7 +33,7 @@ Scenario:06. Verify the manage user functionality
 	Then popup should display list of Attorneys
 
 @E2E
-Scenario:07. Verify empty results on searching non-existing files
+Scenario:07. Verify empty results on searching non existing files
 	When user types random text in file search
 	Then no results should be displayed
 

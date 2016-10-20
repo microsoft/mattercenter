@@ -53,6 +53,6 @@ Scenario: 08. Verify the search feature with managed properties on document dash
 	Then all documents having 'test' keyword should be displayed		  
 
 @E2E
-Scenario: 06. Verify gibberish search on document dashboard
+Scenario: 06. Verify invalid text search on document dashboard
 	When user types gibberish in search box on document dashboard
 	Then no documents should be displayed

@@ -123,12 +123,12 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("07. Verify the search feature on matter center homepage")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("06. Verify the search feature on matter center homepage")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Dashboard Page")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
-        public virtual void _07_VerifyTheSearchFeatureOnMatterCenterHomepage()
+        public virtual void _06_VerifyTheSearchFeatureOnMatterCenterHomepage()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify the search feature on matter center homepage", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify the search feature on matter center homepage", new string[] {
                         "E2E"});
 #line 19
 this.ScenarioSetup(scenarioInfo);
@@ -195,12 +195,12 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("10. Verify the sort functionality in matter center home")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("08. Verify the sort functionality in matter center home")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Dashboard Page")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
-        public virtual void _10_VerifyTheSortFunctionalityInMatterCenterHome()
+        public virtual void _08_VerifyTheSortFunctionalityInMatterCenterHome()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("10. Verify the sort functionality in matter center home", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("08. Verify the sort functionality in matter center home", new string[] {
                         "E2E"});
 #line 39
 this.ScenarioSetup(scenarioInfo);
@@ -233,12 +233,12 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("11. Verify the footer on matter center home")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("10. Verify the footer on matter center home")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Dashboard Page")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
-        public virtual void _11_VerifyTheFooterOnMatterCenterHome()
+        public virtual void _10_VerifyTheFooterOnMatterCenterHome()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("11. Verify the footer on matter center home", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("10. Verify the footer on matter center home", new string[] {
                         "E2E"});
 #line 56
 this.ScenarioSetup(scenarioInfo);
@@ -251,13 +251,13 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("08. Verify the search feature using managed properties on matter center home page" +
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("07. Verify the search feature using managed properties on matter center home page" +
             "")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Dashboard Page")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
-        public virtual void _08_VerifyTheSearchFeatureUsingManagedPropertiesOnMatterCenterHomePage()
+        public virtual void _07_VerifyTheSearchFeatureUsingManagedPropertiesOnMatterCenterHomePage()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("08. Verify the search feature using managed properties on matter center home page" +
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify the search feature using managed properties on matter center home page" +
                     "", new string[] {
                         "E2E"});
 #line 61
@@ -289,12 +289,12 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("06. Verify no results on gibberish search")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("11. Verify no results on invalid search")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Matter Dashboard Page")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
-        public virtual void _06_VerifyNoResultsOnGibberishSearch()
+        public virtual void _11_VerifyNoResultsOnInvalidSearch()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify no results on gibberish search", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("11. Verify no results on invalid search", new string[] {
                         "E2E"});
 #line 71
 this.ScenarioSetup(scenarioInfo);

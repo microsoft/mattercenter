@@ -16,6 +16,6 @@ Scenario:03. Verify newly added Attorney
 	Then updated Attorney should be added in the matter
 
 @E2E
-Scenario:04. Verify error on adding non-existing Attorney
+Scenario:04. Verify error on adding non existing Attorney
 	When user adds non-existing Attorney to the matter
 	Then Attorney should not be added

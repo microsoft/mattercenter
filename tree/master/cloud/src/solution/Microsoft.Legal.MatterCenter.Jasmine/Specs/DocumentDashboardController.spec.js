@@ -12,7 +12,7 @@
 
 describe("DocumentDashboard Controller test suite", function () {
     "use strict";
-
+   
     beforeEach(module("matterMain"));
     beforeEach(module("matterMain", function ($provide) {
         $provide.factory("documentDashBoardResource", ["$resource", "auth", mockDocumentDashBoardResource]);

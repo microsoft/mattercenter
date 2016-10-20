@@ -181,12 +181,12 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("07. Verify empty results on searching non-existing files")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("07. Verify empty results on searching non existing files")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "MatterLanding")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
-        public virtual void _07_VerifyEmptyResultsOnSearchingNon_ExistingFiles()
+        public virtual void _07_VerifyEmptyResultsOnSearchingNonExistingFiles()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify empty results on searching non-existing files", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify empty results on searching non existing files", new string[] {
                         "E2E"});
 #line 36
 this.ScenarioSetup(scenarioInfo);
