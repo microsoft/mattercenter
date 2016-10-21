@@ -18,8 +18,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.9.0.77")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Document Search Page")]
+    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class DocumentSearchPageFeature
     {
         
@@ -28,27 +27,32 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
 #line 1 "DocumentSearch.feature"
 #line hidden
         
-        [NUnit.Framework.TestFixtureSetUpAttribute()]
-        public virtual void FeatureSetup()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute()]
+        public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Document Search Page", "", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        [NUnit.Framework.TestFixtureTearDownAttribute()]
-        public virtual void FeatureTearDown()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute()]
+        public static void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
-        [NUnit.Framework.SetUpAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute()]
         public virtual void TestInitialize()
         {
+            if (((TechTalk.SpecFlow.FeatureContext.Current != null) 
+                        && (TechTalk.SpecFlow.FeatureContext.Current.FeatureInfo.Title != "Document Search Page")))
+            {
+                Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.DocumentSearchPageFeature.FeatureSetup(null);
+            }
         }
         
-        [NUnit.Framework.TearDownAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -64,9 +68,10 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
             testRunner.CollectScenarioErrors();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("01. Open the browser and load search document page")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("01. Open the browser and load search document page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _01_OpenTheBrowserAndLoadSearchDocumentPage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("01. Open the browser and load search document page", new string[] {
@@ -81,9 +86,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("07. Verify the document drop down menu")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("07. Verify the document drop down menu")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _07_VerifyTheDocumentDropDownMenu()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify the document drop down menu", new string[] {
@@ -106,9 +112,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("06. Verify the column picker")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("06. Verify the column picker")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _06_VerifyTheColumnPicker()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify the column picker", new string[] {
@@ -127,9 +134,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("05. Verify the document search box")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("05. Verify the document search box")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _05_VerifyTheDocumentSearchBox()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("05. Verify the document search box", new string[] {
@@ -144,9 +152,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("04. Verify the document sort")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("04. Verify the document sort")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _04_VerifyTheDocumentSort()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("04. Verify the document sort", new string[] {
@@ -161,9 +170,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("08. Verify the document filter search")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("08. Verify the document filter search")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _08_VerifyTheDocumentFilterSearch()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("08. Verify the document filter search", new string[] {
@@ -184,12 +194,13 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("02. Verify the document ECB menu")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
-        public virtual void _02_VerifyTheDocumentECBMenu()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("02. Verify the document Ecb menu")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _02_VerifyTheDocumentEcbMenu()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("02. Verify the document ECB menu", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("02. Verify the document Ecb menu", new string[] {
                         "E2E"});
 #line 42
 this.ScenarioSetup(scenarioInfo);
@@ -213,9 +224,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("03. Verify the document fly out")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("03. Verify the document fly out")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _03_VerifyTheDocumentFlyOut()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("03. Verify the document fly out", new string[] {
@@ -238,9 +250,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("09. Verify the document search box for managed search")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("09. Verify the document search box for managed search")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _09_VerifyTheDocumentSearchBoxForManagedSearch()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("09. Verify the document search box for managed search", new string[] {
@@ -251,6 +264,42 @@ this.ScenarioSetup(scenarioInfo);
   testRunner.When("user searches with keyword \'DocTitle:test\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 64
  testRunner.Then("it should display all the document which consist of \'test\' keyword", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("10. Verify no results on searching invalid text")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _10_VerifyNoResultsOnSearchingInvalidText()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("10. Verify no results on searching invalid text", new string[] {
+                        "E2E"});
+#line 67
+this.ScenarioSetup(scenarioInfo);
+#line 68
+ testRunner.When("user searches with random keywords on document search page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 69
+ testRunner.Then("no results should be displayed on document search page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("11. Verify no results on searching invalid text on document filter")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Document Search Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
+        public virtual void _11_VerifyNoResultsOnSearchingInvalidTextOnDocumentFilter()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("11. Verify no results on searching invalid text on document filter", new string[] {
+                        "E2E"});
+#line 72
+this.ScenarioSetup(scenarioInfo);
+#line 73
+ testRunner.When("user clicks on column filter to filter the documents using random keyword", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 74
+ testRunner.Then("no documents should be displayed inside the fly out", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

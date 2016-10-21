@@ -1852,79 +1852,88 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// </summary>
         /// <param name="matterInformation">Contains information about all external users, his roles and permissions</param>
         private void ShareMatterToExtUser(MatterInformationVM matterInformation)
-        {            
+        {
+            //index is used to get the individual assigned user permissions and roles
+            var index = 0;
+          
             for (int i = 0; i < matterInformation.Matter.AssignUserNames.Count; i++)
             {
                 //Need to construct new MatterInformationVM object for each external user
                 MatterInformationVM matterInfoNew = new MatterInformationVM();
-
-                List<string> userIds = new List<string>();
-                if (matterInformation.UserIds != null)
+                //looping  to send the notification to all the users present in matterInformation.Matter.AssignUserNames[i]
+                for (int j = 0; j < matterInformation.Matter.AssignUserNames[i].Count; j++)
                 {
-                    foreach (var userid in matterInformation.UserIds)
+                    List<string> userIds = new List<string>();
+                    if (matterInformation.UserIds != null)
                     {
-                        userIds.Add(userid);
+                        foreach (var userid in matterInformation.UserIds)
+                        {
+                            userIds.Add(userid);
+                        }
                     }
+
+                    matterInfoNew.UserIds = userIds;
+                    Conflict conflictNew = new Conflict();
+                    conflictNew.Identified = matterInformation.Matter.Conflict.Identified;
+                    Matter matterNew = new Matter()
+                    {
+                        Id = matterInformation.Matter.Id,
+                        Name = matterInformation.Matter.Name,
+                        Description = matterInformation.Matter.Description,
+                        MatterGuid = matterInformation.Matter.MatterGuid,
+                        Conflict = conflictNew,
+
+
+                    };
+                    matterInfoNew.EditMode = matterInformation.EditMode;
+                    matterInfoNew.Client = matterInformation.Client;
+                    var roles = new List<String>();
+                    string role = matterInformation.Matter.Roles[index];
+                    roles.Add(role);
+                    matterNew.Roles = roles;
+                    var permissions = new List<String>();
+                    string permission = matterInformation.Matter.Permissions[index];
+                    permissions.Add(permission);
+                    matterNew.Permissions = permissions;
+
+                    var assignUserEmails = new List<IList<string>>();
+                    var userEmails = new List<string>();
+                    var assignUserEmailList = matterInformation.Matter.AssignUserEmails[i];
+                    var assignUserEmail = assignUserEmailList[j];
+                   
+                        userEmails.Add(assignUserEmail);
+                  
+                    assignUserEmails.Add(userEmails);
+                    matterNew.AssignUserEmails = assignUserEmails;
+
+                    var assignUserNames = new List<IList<string>>();
+                    var userNames = new List<string>();
+                    var assignUserNameList = matterInformation.Matter.AssignUserNames[i];
+                    var assignName = assignUserNameList[j];
+                    
+                        userNames.Add(assignName);
+                   
+                    assignUserNames.Add(userNames);
+                    matterNew.AssignUserNames = assignUserNames;
+
+                    matterInfoNew.Matter = matterNew;
+                    MatterDetails matterDetailsNew = new MatterDetails();
+                    if (!string.IsNullOrEmpty(matterInformation.MatterDetails.ResponsibleAttorney))
+                    {
+                        matterDetailsNew.ResponsibleAttorney = matterInformation.MatterDetails.ResponsibleAttorney;
+                    }
+                    if (!string.IsNullOrEmpty(matterInformation.MatterDetails.ResponsibleAttorneyEmail))
+                    {
+                        matterDetailsNew.ResponsibleAttorneyEmail = matterInformation.MatterDetails.ResponsibleAttorneyEmail;
+                    }
+                    matterDetailsNew.TeamMembers = assignName;
+                    matterDetailsNew.UploadBlockedUsers = matterInformation.MatterDetails.UploadBlockedUsers;
+                    matterInfoNew.MatterDetails = matterDetailsNew;
+                    //Share the matter to external user by sending the notification
+                    externalSharing.ShareMatter(matterInfoNew);
+                    index = index + 1;
                 }
-
-                matterInfoNew.UserIds = userIds;
-                Conflict conflictNew = new Conflict();
-                conflictNew.Identified = matterInformation.Matter.Conflict.Identified;
-                Matter matterNew = new Matter()
-                {
-                    Id = matterInformation.Matter.Id,
-                    Name = matterInformation.Matter.Name,
-                    Description = matterInformation.Matter.Description,
-                    MatterGuid = matterInformation.Matter.MatterGuid,
-                    Conflict = conflictNew,
-
-
-                };
-                matterInfoNew.EditMode = matterInformation.EditMode;
-                matterInfoNew.Client = matterInformation.Client;
-                var roles = new List<String>();
-                string role = matterInformation.Matter.Roles[i];
-                roles.Add(role);
-                matterNew.Roles = roles;
-                var permissions = new List<String>();
-                string permission = matterInformation.Matter.Permissions[i];
-                permissions.Add(permission);
-                matterNew.Permissions = permissions;
-
-                var assignUserEmails = new List<IList<string>>();
-                var userEmails = new List<string>();
-                foreach (var assignUserEmail in matterInformation.Matter.AssignUserEmails[i])
-                {
-                    userEmails.Add(assignUserEmail);
-                }
-                assignUserEmails.Add(userEmails);
-                matterNew.AssignUserEmails = assignUserEmails;
-
-                var assignUserNames = new List<IList<string>>();
-                var userNames = new List<string>();
-                foreach (var assignUserName in matterInformation.Matter.AssignUserNames[i])
-                {
-                    userNames.Add(assignUserName);
-                }
-                assignUserNames.Add(userNames);
-                matterNew.AssignUserNames = assignUserNames;
-
-                matterInfoNew.Matter = matterNew;
-                MatterDetails matterDetailsNew = new MatterDetails();
-                if (!string.IsNullOrEmpty(matterInformation.MatterDetails.ResponsibleAttorney))
-                {
-                    matterDetailsNew.ResponsibleAttorney = matterInformation.MatterDetails.ResponsibleAttorney.Split(';')[i];
-                }
-                if (!string.IsNullOrEmpty(matterInformation.MatterDetails.ResponsibleAttorneyEmail))
-                {
-                    matterDetailsNew.ResponsibleAttorneyEmail = matterInformation.MatterDetails.ResponsibleAttorneyEmail.Split(';')[i];
-                }
-                matterDetailsNew.TeamMembers = matterNew.AssignUserNames[0][0];
-                matterDetailsNew.UploadBlockedUsers = matterInformation.MatterDetails.UploadBlockedUsers;
-                matterInfoNew.MatterDetails = matterDetailsNew;
-                //Share the matter to external user by sending the notification
-                externalSharing.ShareMatter(matterInfoNew);
-            }            
+            }           
         }
         #endregion
     }

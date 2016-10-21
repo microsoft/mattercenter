@@ -18,8 +18,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "1.9.0.77")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Home Page")]
+    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
     public partial class HomePageFeature
     {
         
@@ -28,27 +27,32 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
 #line 1 "Home.feature"
 #line hidden
         
-        [NUnit.Framework.TestFixtureSetUpAttribute()]
-        public virtual void FeatureSetup()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute()]
+        public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Home Page", "", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
-        [NUnit.Framework.TestFixtureTearDownAttribute()]
-        public virtual void FeatureTearDown()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute()]
+        public static void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
         
-        [NUnit.Framework.SetUpAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute()]
         public virtual void TestInitialize()
         {
+            if (((TechTalk.SpecFlow.FeatureContext.Current != null) 
+                        && (TechTalk.SpecFlow.FeatureContext.Current.FeatureInfo.Title != "Home Page")))
+            {
+                Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs.HomePageFeature.FeatureSetup(null);
+            }
         }
         
-        [NUnit.Framework.TearDownAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
@@ -64,9 +68,10 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
             testRunner.CollectScenarioErrors();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("01. Open the browser and load home page")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("01. Open the browser and load home page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Home Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _01_OpenTheBrowserAndLoadHomePage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("01. Open the browser and load home page", new string[] {
@@ -74,16 +79,17 @@ namespace Microsoft.Legal.MatterCenter.Selenium.SpecFlow.Specs
 #line 4
 this.ScenarioSetup(scenarioInfo);
 #line 5
- testRunner.When("user enters credentials on home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("user enters credentials on homepage", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 6
  testRunner.Then("home page should be loaded with element \'HomeContainer\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("02. Open the hamburger menu and verify all the elements")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("02. Open the hamburger menu and verify all the elements")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Home Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _02_OpenTheHamburgerMenuAndVerifyAllTheElements()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("02. Open the hamburger menu and verify all the elements", new string[] {
@@ -91,7 +97,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 9
 this.ScenarioSetup(scenarioInfo);
 #line 10
- testRunner.When("user clicks on hamburger menu on home page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("user clicks on hamburger menu on homepage", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
  testRunner.Then("hamburger menu should display \'Home\',\'Matters\',\'Documents\' and \'Create New Matter" +
                     "\' menu", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -99,9 +105,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("03. Verify the links on home page")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("03. Verify the links on home page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Home Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _03_VerifyTheLinksOnHomePage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("03. Verify the links on home page", new string[] {
@@ -116,9 +123,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("04. Verify all components of the page")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("04. Verify all components of the page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Home Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _04_VerifyAllComponentsOfThePage()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("04. Verify all components of the page", new string[] {
@@ -149,9 +157,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("05. Verify the Matter Center support link")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("05. Verify the Matter Center support link")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Home Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _05_VerifyTheMatterCenterSupportLink()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("05. Verify the Matter Center support link", new string[] {
@@ -167,9 +176,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("06. Verify the contextual help section")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("06. Verify the contextual help section")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Home Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _06_VerifyTheContextualHelpSection()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("06. Verify the contextual help section", new string[] {
@@ -184,9 +194,10 @@ this.ScenarioSetup(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("07. Verify the user profile icon")]
-        [NUnit.Framework.CategoryAttribute("E2E")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("07. Verify the user profile icon")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Home Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("E2E")]
         public virtual void _07_VerifyTheUserProfileIcon()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("07. Verify the user profile icon", new string[] {

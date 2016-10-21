@@ -11,21 +11,21 @@ Scenario:02. Verify action links
 	Then document action links should be present
 	
 @E2E
-Scenario:03. Verify file properties
+Scenario:04. Verify file properties
 	When user expands file properties section
 	Then all file properties should be present  
 
 @E2E
-Scenario:04. Verify version details
+Scenario:05. Verify version details
 	When user expands version section
 	Then all versions of the document should be seen
       
 @E2E
-Scenario:05. Verify the footer links
+Scenario:06. Verify the footer links
 	When user clicks on footer on document landing page
 	Then all links should be present on footer on document landing page  
 
 @E2E
-Scenario:06. Verify the pin/unpin functionality
+Scenario:03. Verify the pin/unpin functionality
 	When user clicks on pin/unpin button
 	Then document should get pinned/unpinned

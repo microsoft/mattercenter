@@ -133,7 +133,15 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                 {
                                     if(!string.IsNullOrWhiteSpace(userName))
                                     {
-                                        email.ToRecipients.Add(userName);
+                                        using (var ctx = new ClientContext(originalMatter.Client.Url))
+                                        {
+                                            SecureString password = Utility.GetEncryptedPassword(configuration["General:AdminPassword"]);
+                                            ctx.Credentials = new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);
+                                            if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, userName, null, log))
+                                            {
+                                                email.ToRecipients.Add(userName);
+                                            }
+                                        }
                                     }
                                 }
                             }                            
