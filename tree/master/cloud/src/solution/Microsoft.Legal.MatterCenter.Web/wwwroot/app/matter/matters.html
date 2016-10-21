@@ -268,7 +268,7 @@
             <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.matterConfigContent.AttachmentLoadingTitle}}" title="{{vm.matterConfigContent.AttachmentLoadingTitle}}" />
         </div>
     </div>
-
+    <div class="popupContainerBackground" ng-hide="vm.lazyloader"></div>
     <div class="matterheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.matterheader">
         <div class='input-group'>
             <input class='form-control' uib-typeahead="searchMatters.matterName for searchMatters in vm.filterSearch($viewValue)" ng-if="vm.filtername==vm.matterConfigContent.GridColumn1Header" ng-model='vm.searchTerm' placeholder='{{vm.matterConfigContent.FilterSearchPlaceholderText}}' />
