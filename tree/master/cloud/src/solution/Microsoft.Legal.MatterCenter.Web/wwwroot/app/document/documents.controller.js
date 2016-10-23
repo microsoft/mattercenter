@@ -1021,10 +1021,11 @@
             vm.startDate = "";
             vm.endDate = "";
             vm.lazyloader = false;
-            vm.divuigrid = false;
+            //vm.divuigrid = false;
             vm.nodata = false;
             vm.gridOptions.data = [];
             if (id == 1) {
+                vm.divuigrid = false;
                 vm.responseNull = false;
                 searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = "";
@@ -1131,7 +1132,7 @@
                 });
             } else if (id == 3) {
                 vm.lazyloader = false;
-                vm.divuigrid = false;
+                //vm.divuigrid = false;
                 var pinnedMattersRequest = {
                     Url: configs.global.repositoryUrl
                 }
@@ -1146,7 +1147,7 @@
                         if (vm.isOutlook) {
                             vm.isOutlookAsAttachment(vm.isOutlook);
                         }
-                        vm.divuigrid = true;
+                        //vm.divuigrid = true;
                         vm.nodata = false;
                         angular.forEach(response, function (res) {
                             if (res.ismatterdone == undefined && !res.ismatterdone) {
@@ -1173,7 +1174,7 @@
         //Written for unpinning the matter 
         //Start 
         vm.UnpinDocument = function (data) {
-            vm.divuigrid = false;
+            //vm.divuigrid = false;
             vm.lazyloader = false;
             var alldata = data.entity;
             var unpinRequest = {
