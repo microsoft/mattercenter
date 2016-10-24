@@ -133,6 +133,7 @@
             <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentConfigContent.AttachmentLoadingText}}" title="{{vm.documentConfigContent.AttachmentLoadingText}}" />
         </div>
     </div>
+    <div class="popupContainerBackground"  ng-hide="vm.lazyloader"></div>
     <onload sortdetails="{{vm.sortexp}}"></onload>
     <div class="documentheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentheader">
         <div class='input-group'>
