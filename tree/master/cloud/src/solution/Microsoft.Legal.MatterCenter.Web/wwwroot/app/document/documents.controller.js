@@ -762,46 +762,90 @@
                     searchRequest.SearchObject.UniqueColumnName = property;
                 }
             }
-            get(searchRequest, function (response) {
-                if (response == "") {
-                    if (bool) {
-                        vm.gridOptions.data = response;
-                        vm.nodata = true;
-                        vm.lazyloader = true;
-                    } else {
-                        vm.details = response;
-                        vm.nodata = false;
-                        vm.filternodata = true;
-                        searchRequest.SearchObject.IsUnique = false;
-                        searchRequest.SearchObject.FilterValue = '';
-                        searchRequest.SearchObject.UniqueColumnName = '';
-                    }
-                    vm.lazyloaderFilter = true;
-                    vm.divuigrid = true;
-                    $interval(function () { vm.showSortExp(); }, 2000, 3);
-                } else {
-                    vm.divuigrid = true;
-                    vm.nodata = false;
-                    vm.lazyloaderFilter = true;
-                    if (bool) {
-                        vm.gridOptions.data = response;
-                        vm.details = [];
-                        vm.lazyloader = true;
-                        if (!$scope.$$phase) {
-                            $scope.$apply();
+
+            if (vm.documentid === 3) {
+                getPinnedDocuments(searchRequest, function (response) {
+                    if (response == "") {
+                        if (bool) {
+                            vm.gridOptions.data = response;
+                            vm.nodata = true;
+                            vm.lazyloader = true;
+                        } else {
+                            vm.details = response;
+                            vm.nodata = false;
+                            vm.filternodata = true;
+                            searchRequest.SearchObject.IsUnique = false;
+                            searchRequest.SearchObject.FilterValue = '';
+                            searchRequest.SearchObject.UniqueColumnName = '';
                         }
+                        vm.lazyloaderFilter = true;
+                        vm.divuigrid = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
-                        vm.details = response;
-                        vm.filternodata = false;
-                        searchRequest.SearchObject.IsUnique = false;
-                        searchRequest.SearchObject.FilterValue = '';
-                        searchRequest.SearchObject.UniqueColumnName = '';
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.lazyloaderFilter = true;
+                        if (bool) {
+                            vm.gridOptions.data = response;
+                            vm.details = [];
+                            vm.lazyloader = true;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                        } else {
+                            vm.details = response;
+                            vm.filternodata = false;
+                            searchRequest.SearchObject.IsUnique = false;
+                            searchRequest.SearchObject.FilterValue = '';
+                            searchRequest.SearchObject.UniqueColumnName = '';
+                        }
+                        searchRequest.SearchObject.SearchTerm = "";
+                        searchRequest.SearchObject.Sort.ByProperty = "";
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
-                    searchRequest.SearchObject.SearchTerm = "";
-                    searchRequest.SearchObject.Sort.ByProperty = "";
-                    $interval(function () { vm.showSortExp(); }, 2000, 3);
-                }
-            });
+                });
+            } else {
+                get(searchRequest, function (response) {
+                    if (response == "") {
+                        if (bool) {
+                            vm.gridOptions.data = response;
+                            vm.nodata = true;
+                            vm.lazyloader = true;
+                        } else {
+                            vm.details = response;
+                            vm.nodata = false;
+                            vm.filternodata = true;
+                            searchRequest.SearchObject.IsUnique = false;
+                            searchRequest.SearchObject.FilterValue = '';
+                            searchRequest.SearchObject.UniqueColumnName = '';
+                        }
+                        vm.lazyloaderFilter = true;
+                        vm.divuigrid = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+                    } else {
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.lazyloaderFilter = true;
+                        if (bool) {
+                            vm.gridOptions.data = response;
+                            vm.details = [];
+                            vm.lazyloader = true;
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                        } else {
+                            vm.details = response;
+                            vm.filternodata = false;
+                            searchRequest.SearchObject.IsUnique = false;
+                            searchRequest.SearchObject.FilterValue = '';
+                            searchRequest.SearchObject.UniqueColumnName = '';
+                        }
+                        searchRequest.SearchObject.SearchTerm = "";
+                        searchRequest.SearchObject.Sort.ByProperty = "";
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+                    }
+                });
+            }
         }
         //#endregion
 
@@ -969,22 +1013,39 @@
                 vm.endDate = "";
                 vm.createddatefilter = false;
             }
-
-            get(searchRequest, function (response) {
-                if (response == "") {
-                    vm.gridOptions.data = response;
-                    vm.lazyloader = true;
-                    vm.divuigrid = true;
-                    vm.nodata = true;
-                    $interval(function () { vm.showSortExp(); }, 2000, 3);
-                } else {
-                    vm.divuigrid = true;
-                    vm.nodata = false;
-                    vm.lazyloader = true;
-                    vm.gridOptions.data = response;
-                    $interval(function () { vm.showSortExp(); }, 2000, 3);
-                }
-            });
+            if (vm.documentid === 3) {
+                getPinnedDocuments(searchRequest, function (response) {
+                    if (response == "") {
+                        vm.gridOptions.data = response;
+                        vm.lazyloader = true;
+                        vm.divuigrid = true;
+                        vm.nodata = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+                    } else {
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.lazyloader = true;
+                        vm.gridOptions.data = response;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+                    }
+                });
+            } else {
+                get(searchRequest, function (response) {
+                    if (response == "") {
+                        vm.gridOptions.data = response;
+                        vm.lazyloader = true;
+                        vm.divuigrid = true;
+                        vm.nodata = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+                    } else {
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.lazyloader = true;
+                        vm.gridOptions.data = response;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+                    }
+                });
+            }
         }
 
         //#endregion
@@ -1025,7 +1086,7 @@
             vm.nodata = false;
             vm.gridOptions.data = [];
             if (id == 1) {
-                vm.divuigrid = false;
+                //vm.divuigrid = false;
                 vm.responseNull = false;
                 searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = "";
@@ -1035,13 +1096,14 @@
                     if (response == "") {
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
-                        vm.divuigrid = true;
+                        //vm.divuigrid = true;
                         vm.nodata = true;
 
                     } else {
                         if (vm.isOutlook) {
                             vm.isOutlookAsAttachment(vm.isOutlook);
                         }
+                        vm.divuigrid = true;
                         vm.nodata = false;
                         vm.responseNull = false;
                         vm.pagenumber = 1;
@@ -1073,15 +1135,14 @@
                                     $scope.$apply();
                                 }
                             }
+                            $timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
+                            $interval(function () { vm.showSortExp(); }, 3000, 3);
                         });
-                        $timeout(function () { vm.lazyloader = true; vm.divuigrid = true; }, 1000);
-                        $interval(function () { vm.showSortExp(); }, 3000, 3);
                     }
                 });
 
             } else if (id == 2) {
                 vm.lazyloader = false;
-                vm.divuigrid = false;
                 vm.responseNull = false;
                 vm.pagenumber = 1;
                 searchRequest.SearchObject.PageNumber = 1;
@@ -1092,7 +1153,7 @@
                     if (response == "") {
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
-                        vm.divuigrid = true;
+                        //vm.divuigrid = true;
                         vm.nodata = true;
                     } else {
                         if (vm.isOutlook) {
@@ -1125,7 +1186,7 @@
                                     $scope.$apply();
                                 }
                             }
-                            $timeout(function () { vm.lazyloader = true; }, 1000);
+                            $timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
                             $interval(function () { vm.showSortExp(); }, 3000, 3);
                         });
                     }
@@ -1141,7 +1202,7 @@
                     if (response == "") {
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
-                        vm.divuigrid = true;
+                        //vm.divuigrid = true;
                         vm.nodata = true;
                     } else {
                         if (vm.isOutlook) {
@@ -1343,7 +1404,6 @@
         //Start
 
         vm.FilterByType = function () {
-            vm.lazyloader = true;
             if (vm.documentid == 3) {
                 var pinnedDocumentsRequest = {
                     Url: configs.global.repositoryUrl
@@ -1369,6 +1429,7 @@
                         //    $scope.$apply();
                         //}
                     }
+                    vm.lazyloader = true;
                 });
             }
             else {
@@ -1378,13 +1439,34 @@
                         vm.nodata = true;
 
                     } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
-                        vm.gridOptions.data = response;
-                        //if (!$scope.$$phase) {
-                        //    $scope.$apply();
-                        //}
+                        getPinnedDocuments(searchRequest, function (pinresponse) {
+                            if (pinresponse.length > 0) {
+                                angular.forEach(pinresponse, function (pinobj) {
+                                    angular.forEach(response, function (res) {
+                                        var pinnedUrl = pinobj.documentParentUrl + "/" + pinobj.documentName
+                                        var searchDocumentUrl = res.documentParentUrl + "/" + res.documentName
+                                        if (pinnedUrl == searchDocumentUrl) {
+                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                res.MatterInfo = "Unpin this matter";
+                                                res.ismatterdone = true;
+                                            }
+                                        }
+                                    });
+                                });
+                                vm.gridOptions.data = response;
+                                if (!$scope.$$phase) {
+                                    $scope.$apply();
+                                }
+                            } else {
+                                vm.gridOptions.data = response;
+                                if (!$scope.$$phase) {
+                                    $scope.$apply();
+                                }
+                            }
+                            $timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
+                        });
                     }
+                    vm.lazyloader = true;
                 });
             }
         }
@@ -1392,6 +1474,8 @@
         vm.sortby = "desc";
         vm.sortexp = "documentName";
         vm.showSortExp = function () {
+            //angular.element('[id^="asc"]').hide();
+            //angular.element('[id^="desc"]').hide();
             if (vm.sortby == "asc") {
                 angular.element("#desc" + vm.sortexp).css("display", "none");
             } else {
@@ -1401,6 +1485,7 @@
             if (elm != undefined) {
                 elm.css("display", "block");
             }
+            $timeout(function () {vm.divuigrid = true;}, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
             if (!$scope.$$phase) {
                 $scope.$apply();
             }
@@ -1411,7 +1496,7 @@
 
         //#region for sorting in ascending
         vm.documentSortBy = function (byproperty, direction, bycolumn, sortexp, sortby) {
-            vm.lazyloader = true;
+            //vm.lazyloader = true;
             vm.pagenumber = 1;
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.Sort.ByProperty = byproperty;
@@ -1432,7 +1517,7 @@
             if (sortColumns.length != 0) {
                 if (sortColumns[0].name != undefined) {
 
-                    //vm.divuigrid = false;
+                    vm.divuigrid = false;
                     if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentName.keyName.trim().toLowerCase()) {
                         if (sortColumns[0].sort != undefined) {
                             if (vm.FileNameSort == undefined || vm.FileNameSort == "asc") {
@@ -1563,7 +1648,7 @@
                                 vm.documentSortBy(vm.configSearchContent.ManagedPropertyMatterName, 1, sortColumns[0].name, sortColumns[0].field, "desc");
                             }
                         } else {
-                            vm.divuigrid = true;                            
+                            vm.divuigrid = true;
                         }
                     }
                 }
