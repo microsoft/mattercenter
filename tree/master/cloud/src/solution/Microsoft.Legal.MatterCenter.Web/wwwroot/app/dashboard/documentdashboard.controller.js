@@ -745,6 +745,7 @@
                 getPinDocuments(documentRequest, function (response) {
                     if (response && response.length > 0) {
                         vm.documentGridOptions.data = response;
+                        vm.getDocumentCounts();
                         //vm.pinDocumentCount = response.length;
                         vm.totalrecords = vm.pinDocumentCount;
                         vm.pagination();
@@ -811,6 +812,7 @@
                             }
                             else {
                                 vm.documentGridOptions.data = response;
+                                vm.getDocumentCounts();
                                 //vm.allDocumentCount = response.length;                            
                                 vm.totalrecords = vm.myDocumentCount;
                                 vm.pagination();
