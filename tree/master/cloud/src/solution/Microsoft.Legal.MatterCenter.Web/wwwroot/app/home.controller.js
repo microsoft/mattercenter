@@ -190,9 +190,21 @@
                 }
 
                 if (data != "Settings") {
-                    $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/MatterCenterHome.aspx?" + data;
+                    if (configs.global.isBackwardCompatible == false) {
+                        $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/MatterCenterHome.aspx?" + data;
+                    }
+                    else {
+                        $window.top.parent.location.href = configs.global.repositoryUrl + "/SitePages/MatterCenterHome.aspx?" + data;
+                    }
+                    
                 } else {
-                    $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/" + data + ".aspx";
+                    if (configs.global.isBackwardCompatible == false) {
+                        $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/" + data + ".aspx";
+                    }
+                    else {
+                        $window.top.parent.location.href = configs.global.repositoryUrl + "/SitePages/" + data + ".aspx";
+                    }
+                    
                 }
             }
 
