@@ -21,7 +21,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             KeyVaultHelper kv = new KeyVaultHelper(configuration);
             KeyVaultHelper.GetCert(configuration);
             kv.GetKeyVaultSecretsCerticate();
-            var azureStorageConnectionString = configuration["Data:DefaultConnection:AzureStorageConnectionString"];
+            var azureStorageConnectionString = configuration["General:CloudStorageConnectionString"];
             JobHostConfiguration config = new JobHostConfiguration(azureStorageConnectionString);
             config.UseTimers();
             
