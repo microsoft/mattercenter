@@ -400,8 +400,13 @@
                         $scope.$apply();
                     }
                     vm.pagination();
-                    vm.lazyloaderdashboard = true;
-                    vm.divuigrid = true;
+                    if (response == "" || vm.selectedTab == vm.matterDashboardConfigs.Tab2HeaderText && response.allMatterCounts == 0 || vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText && response.myMatterCount == 0 ||vm.selectedTabInfo == vm.matterDashboardConfigs.Tab3HeaderText && response.pinMatterCount == 0) {
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = false;
+                    } else {
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = true;
+                    }
                     //vm.displaypagination = true;
                 });
             }
@@ -633,41 +638,48 @@
                 jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
                 jsonMatterSearchRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 get(jsonMatterSearchRequest, function (response) {
-                    //We need to call pinned api to determine whether a matter is pinned or not                    
-                    getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
-                        if (pinnedResponse && pinnedResponse.length > 0) {
-                            vm.Pinnedobj = pinnedResponse;
-                            vm.pinMatterCount = vm.Pinnedobj.length
-                            angular.forEach(pinnedResponse, function (pinobj) {
-                                angular.forEach(response, function (res) {
-                                    //Check if the pinned matter name is equal to search matter name
-                                    if (pinobj.matterName == res.matterName) {
-                                        if (res.ismatterdone == undefined && !res.ismatterdone) {
-                                            res.ismatterdone = true;
-                                            res.pinType = "unpin"
+                    if (response == "" || response.length == 0) {
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = false;
+                        vm.displaypagination = false;
+                        vm.nodata = true;
+                    }
+                    else {
+                        //We need to call pinned api to determine whether a matter is pinned or not                    
+                        getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                            if (pinnedResponse && pinnedResponse.length > 0) {
+                                vm.Pinnedobj = pinnedResponse;
+                                vm.pinMatterCount = vm.Pinnedobj.length
+                                angular.forEach(pinnedResponse, function (pinobj) {
+                                    angular.forEach(response, function (res) {
+                                        //Check if the pinned matter name is equal to search matter name
+                                        if (pinobj.matterName == res.matterName) {
+                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                res.ismatterdone = true;
+                                                res.pinType = "unpin"
+                                            }
                                         }
-                                    }
+                                    });
                                 });
-                            });
-                            vm.matterGridOptions.data = response;
-                            vm.totalrecords = vm.allMatterCount;
-                            vm.selectedTabCount = vm.allMatterCount;
-                            vm.pagination();
-                            vm.lazyloaderdashboard = true;
-                            vm.divuigrid = true;
+                                vm.matterGridOptions.data = response;
+                                vm.totalrecords = vm.allMatterCount;
+                                vm.selectedTabCount = vm.allMatterCount;
+                                vm.pagination();
+                                vm.lazyloaderdashboard = true;
+                                vm.divuigrid = true;
 
-                        }
-                        else {
-                            vm.lazyloaderdashboard = true;
-                            vm.matterGridOptions.data = response;
-                            vm.totalrecords = vm.allMatterCount;
-                            vm.selectedTabCount = vm.allMatterCount;
-                            vm.pagination();
-                            vm.pinMatterCount = 0;
-                            vm.divuigrid = true;
-                        }
-                    });
-
+                            }
+                            else {
+                                vm.lazyloaderdashboard = true;
+                                vm.matterGridOptions.data = response;
+                                vm.totalrecords = vm.allMatterCount;
+                                vm.selectedTabCount = vm.allMatterCount;
+                                vm.pagination();
+                                vm.pinMatterCount = 0;
+                                vm.divuigrid = true;
+                            }
+                        });
+                    }
                 });
             }
 
@@ -1914,12 +1926,20 @@
                 }
                 if (vm.selectedPGs != "" && vm.selectedPGs != undefined) {
                     jsonMatterSearchRequest.SearchObject.Filters.PracticeGroup = vm.selectedPGs;
+                } else {
+                    jsonMatterSearchRequest.SearchObject.Filters.PracticeGroup = "";
                 }
                 if (vm.selectedAOLs != "" && vm.selectedAOLs != undefined) {
                     jsonMatterSearchRequest.SearchObject.Filters.AreaOfLaw = vm.selectedAOLs
                 }
+                else {
+                    jsonMatterSearchRequest.SearchObject.Filters.AreaOfLaw = "";
+                }
                 if (vm.selectedSubAOLs != "" && vm.selectedSubAOLs != undefined) {
                     jsonMatterSearchRequest.SearchObject.Filters.SubareaOfLaw = vm.selectedSubAOLs;
+                }
+                else {
+                    jsonMatterSearchRequest.SearchObject.Filters.SubareaOfLaw = "";
                 }
                 if (vm.startdate != "" && vm.startdate != undefined) {
                     startdate = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
@@ -1936,7 +1956,7 @@
                 jsonMatterSearchRequest.SearchObject.Filters.ToDate = enddate;
                 get(jsonMatterSearchRequest, function (response) {
                     vm.lazyloaderdashboard = true;
-                    if (response == "") {
+                    if (response == "" || response.length == 0) {
                         vm.nodata = true;
                         vm.totalrecords = response.length;
                         vm.matterGridOptions.data = [];

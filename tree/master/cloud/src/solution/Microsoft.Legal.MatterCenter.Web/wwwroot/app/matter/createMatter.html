@@ -113,7 +113,7 @@
                 <!--<button class="button" id="btnLookup" type="button" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" value="Lookup">Select Type</button>-->
                 <div class="gutter"></div>
                 <div class="addmatterType">
-                    <a id="" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}" ng-click="cm.selectMatterType()" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span> Add/Remove Types</a>
+                    <a id="" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}" ng-click="cm.selectMatterType()" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span> {{cm.createContent.LabelAddOrRemoveTypes}} </a>
                 </div>
                 <div class="loadingLookUp hide">
                     <img id="loadingLookupImage" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" src="../Images/WindowsLoadingFast.GIF">
@@ -410,7 +410,7 @@
                     <div class="errorPopUpArea  " ng-show='cm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
-                        <div class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 23px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">Please select primary matter type</span></div>
+                        <div class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 23px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">{{cm.createContent.ErrorMessagePrimaryMatterType}} </span></div>
                     </div>
                     <span style="margin-bottom:5px;">{{cm.createContent.Tab1LabelFinalTypeText}}</span>
                     <!--<label title="Matter Type" class="popUpBodyHeader popUpFloatLeft customDivCreate">Matter Type</label>-->
@@ -678,7 +678,7 @@
                     <div class="errorPopUpArea  " ng-show='cm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
-                        <div class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 22px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">Please select primary matter type</span></div>
+                        <div class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 22px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">{{cm.createContent.ErrorMessagePrimaryMatterType}}</span></div>
                     </div>
                     <span style="margin-bottom:5px;">{{cm.createContent.Tab1LabelFinalTypeText}}</span>
                     <div class="popUpFloatLeft popUpBorder" style="height:213px; width:207px;margin-top:5px;">
