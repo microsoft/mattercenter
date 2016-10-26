@@ -715,6 +715,7 @@
                         }
                         else {
                             vm.documentGridOptions.data = response;
+                            vm.getDocumentCounts();
                             //vm.allDocumentCount = response.length;                            
                             vm.totalrecords = vm.allDocumentCount;
                             vm.pagination();
