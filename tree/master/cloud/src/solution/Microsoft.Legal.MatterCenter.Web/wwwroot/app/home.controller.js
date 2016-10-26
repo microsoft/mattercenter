@@ -202,7 +202,7 @@
                         $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/" + data + ".aspx";
                     }
                     else {
-                        $window.top.parent.location.href = configs.global.repositoryUrl + "/SitePages/MatterCenterHome.aspx?" + data;
+                        $window.top.parent.location.href = configs.global.repositoryUrl + "/SitePages/" + data + ".aspx";
                     }
                     
                 }

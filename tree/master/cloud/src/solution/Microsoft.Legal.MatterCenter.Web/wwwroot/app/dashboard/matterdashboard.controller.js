@@ -563,6 +563,7 @@
                         vm.divuigrid = false;
                         vm.displaypagination = false;
                         vm.nodata = true;
+                        vm.getMatterCounts();
                     }
                     else {
                         getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
@@ -649,6 +650,7 @@
                                     }
                                 });
                             });
+                            vm.getMatterCounts();
                             vm.matterGridOptions.data = response;
                             vm.totalrecords = vm.allMatterCount;
                             vm.selectedTabCount = vm.allMatterCount;
@@ -658,12 +660,14 @@
 
                         }
                         else {
-                            vm.lazyloaderdashboard = true;
+                            
+                            vm.getMatterCounts();
                             vm.matterGridOptions.data = response;
                             vm.totalrecords = vm.allMatterCount;
                             vm.selectedTabCount = vm.allMatterCount;
                             vm.pagination();
                             vm.pinMatterCount = 0;
+                            vm.lazyloaderdashboard = true;
                             vm.divuigrid = true;
                         }
                     });
