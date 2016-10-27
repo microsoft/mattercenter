@@ -1,4 +1,5 @@
-﻿/// <disable>JS2074, JS3058</disable>
+﻿/// <reference path="../References.js" />
+/// <disable>JS2074, JS3058</disable>
 //// ***********************************************************************
 //// Author           : MAQ USER
 //// Created          : 31-08-2016
@@ -113,10 +114,11 @@ describe("SettingsController test suite", function () {
     describe("Verification of saveSettings function", function () {
         it("It should save the final settings", function () {
             vm.saveSettings();
-            expect(vm.lazyloader).toBe(false);
-            expect(vm.clientlist).toBe(true);
-            expect(vm.showClientDetails).toBe(false);
-            expect(vm.successmessage).toBe(false);
+            vm.popupContainerBackground = "hide";
+            expect(vm.lazyloader).toBe(true);
+            expect(vm.clientlist).toBe(false);
+            expect(vm.showClientDetails).toBe(true);
+            expect(vm.successmessage).toBe(true);
         });
     });
     describe("Verification of getBoolValues function", function () {

@@ -3,15 +3,6 @@
 
     // Enter Global Config Values & Instantiate ADAL AuthenticationContext
     window.config = {
-
-        //***************************** CONFIGURAATION VALUES ****************************//
-        tenant: appSettings.tenantId, //Enter tenant Name e.g. microsoft.onmicrosoft.com
-        clientId: appSettings.clientId, //Enter your app Client ID created in Azure Portal
-        tenantUrl: appSettings.tenantURL, //Enter your tenant url,
-        loggedInUserName: appSettings.userName, //Enter logged in user name
-        loggedInUserEmail: appSettings.userEmail, //Enter logged in user email
-        azureSiteName: appSettings.azureSiteName, //Enter Azure site name
-
         instance: 'https://login.microsoftonline.com/',
         postLogoutRedirectUri: window.location.origin,
     };
@@ -53,8 +44,8 @@
         authContext.logOut();
     });
     $(document).ready(function () {
-        if (null == sessionStorage.getItem('adal.idtoken') || "" === sessionStorage.getItem('adal.idtoken')) {
-            authContext.login();
-        }
+        //if (null == sessionStorage.getItem('adal.idtoken') || "" === sessionStorage.getItem('adal.idtoken')) {
+        //    authContext.login();
+        //}
     });
 }());

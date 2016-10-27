@@ -203,7 +203,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         {
             Thread.Sleep(3000);
             webDriver.FindElement(By.CssSelector("div.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
-            Thread.Sleep(3000);
+            Thread.Sleep(7000);
         }
 
         [Then(@"it should sort the document in ascending order")]
@@ -508,9 +508,9 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             Thread.Sleep(3000);
             webDriver.FindElement(By.CssSelector("a.prisma-header-dropdown-anchor > img")).Click();
             Thread.Sleep(3000);
-            webDriver.FindElement(By.XPath("/html/body/div/div/main/div/div[6]/div[1]/input")).Clear();
-            webDriver.FindElement(By.XPath("/html/body/div/div/main/div/div[6]/div[1]/input")).Click();
-            webDriver.FindElement(By.XPath("/html/body/div/div/main/div/div[6]/div[1]/input")).SendKeys(searchBox);
+            webDriver.FindElement(By.XPath("//*[@id='matterMain']/div/div/main/div/div[7]/div[1]/input")).Clear();
+            webDriver.FindElement(By.XPath("//*[@id='matterMain']/div/div/main/div/div[7]/div[1]/input")).Click();
+            webDriver.FindElement(By.XPath("//*[@id='matterMain']/div/div/main/div/div[7]/div[1]/input")).SendKeys(searchBox);
             Thread.Sleep(2000);
             webDriver.FindElement(By.XPath("(//button[@type='button'])[4]")).Click();
             Thread.Sleep(2000);

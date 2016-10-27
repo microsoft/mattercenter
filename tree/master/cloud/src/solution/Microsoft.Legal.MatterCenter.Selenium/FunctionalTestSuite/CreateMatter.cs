@@ -66,7 +66,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             new SelectElement(webDriver.FindElement(By.XPath("//section[@id='snOpenMatter']/div/div[2]/select"))).SelectByText(ConfigurationManager.AppSettings["DropDownKeyword"]);
             Thread.Sleep(2000);
             scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
-            Thread.Sleep(5000);
+            Thread.Sleep(7000);
             repeatedMatterError = (string)scriptExecutor.ExecuteScript("var text = $('.errTextMatterName')[0].innerText; return text;");
             Assert.IsTrue(repeatedMatterError.ToLower(CultureInfo.CurrentCulture).Contains("matter is already created"));
             errorCount++;
