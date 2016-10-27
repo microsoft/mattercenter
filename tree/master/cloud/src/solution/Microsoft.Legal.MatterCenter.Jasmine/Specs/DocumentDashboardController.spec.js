@@ -1,4 +1,5 @@
-﻿/// <disable>JS2074, JS3058</disable>
+﻿/// <reference path="../References.js" />
+/// <disable>JS2074, JS3058</disable>
 //// ***********************************************************************
 //// Author           : MAQ USER
 //// Created          : 31-08-2016
@@ -182,8 +183,7 @@ describe("DocumentDashboard Controller test suite", function () {
     //describe("Verification of displayColumn function", function () {
     //    it("It should switch the displayed column", function () {
     //        var sHeaderName = vm.switchFuction("GridColumn6Header");
-    //        expect(sHeaderName).toBe(false);
-            
+    //        expect(sHeaderName).toBe(false);        
     //    });     
     //});
 

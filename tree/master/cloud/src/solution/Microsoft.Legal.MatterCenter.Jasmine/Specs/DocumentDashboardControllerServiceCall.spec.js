@@ -1,4 +1,4 @@
-﻿
+﻿/// <reference path="../References.js" />
 /// <disable> JS2074,JS3058,JS2085,JS3056,JS3116,JS3054,JS2064,JS2043,JS2073,JS2038 </disable>
 //// ***********************************************************************
 //// Author           : MAQ USER

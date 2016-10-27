@@ -1,10 +1,9 @@
 ﻿var oEnvironmentConfiguration = {
-    tenant: window.config.tenant,
-    clientId: window.config.clientId,
-    tenantUrl: window.config.tenantUrl,
-    loggedInUserName: window.config.loggedInUserName,
-    loggedInUserEmail: window.config.loggedInUserEmail,
-    azureSiteName: window.config.azureSiteName
+    tenant: "MySharePoint.onmicrosoft.com",
+    tenantUrl: "https://MySharePoint.sharepoint.com",
+    loggedInUserName: "TestUser",
+    loggedInUserEmail: "TestUser@MySharePoint.onmicrosoft.com",
+    azureSiteName: "MyAzureSite"
 };
 
 var oTestConfiguration = {
