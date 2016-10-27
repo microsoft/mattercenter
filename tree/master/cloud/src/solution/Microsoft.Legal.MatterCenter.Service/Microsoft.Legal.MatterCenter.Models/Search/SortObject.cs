@@ -46,5 +46,13 @@ namespace Microsoft.Legal.MatterCenter.Models
             get;
             set;
         }
+
+        /// <summary>
+        /// This property will determine whether pinned documents or matters needs to filtered or sorted
+        /// </summary>
+        public bool SortAndFilterPinnedData
+        {
+            get;set;
+        }
     }
 }
