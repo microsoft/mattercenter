@@ -1,4 +1,5 @@
-﻿//// ***********************************************************************
+﻿/// <reference path="../References.js" />
+//// ***********************************************************************
 //// Author           : MAQ USER
 //// Created          : 31-08-2016
 ////
@@ -137,7 +138,6 @@ describe("documents Controller test suite for service call", function () {
     describe("Verification of sortChangedDocument function", function () {
         it("It should sort documents based on document name", function () {
             vm.gridOptions.columnDefs[1] = { "field": "documentName", "displayName": "Document", "width": "278", "enableHiding": false, "cellTemplate": "../app/document/DocumentTemplates/DocumentCellTemplate.html", "headerCellTemplate": "../app/document/DocumentTemplates/DocumentHeaderTemplate.html", "name": "documentName", "type": "string" };
-            debugger;
             $scope.sortChangedDocument(null, sortColumns);
             expect(vm.FileNameSort).toBe("desc");
             expect(vm.sortby).toBe("asc");
@@ -226,7 +226,7 @@ describe("documents Controller test suite for service call", function () {
                     }
             };
             vm.getDocumentAssets(row);
-            expect(vm.assetsuccess).toBe(false);
+            expect(vm.assetsuccess).toBe(true);
         });
     });
 

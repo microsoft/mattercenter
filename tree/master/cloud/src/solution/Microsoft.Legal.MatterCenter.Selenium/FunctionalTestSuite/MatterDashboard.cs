@@ -264,7 +264,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user sorts data for All matters in ascending order")]
         public void WhenUserSortsDataForAllMattersInAscendingOrder()
         {
-            scriptExecutor.ExecuteScript("$('.col-sm-offset-6 img')[0].click())");
+            scriptExecutor.ExecuteScript("$('.col-sm-offset-6 img')[0].click()");
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.col-xs-offset-7 li')[1].click()");
             Thread.Sleep(4000);
