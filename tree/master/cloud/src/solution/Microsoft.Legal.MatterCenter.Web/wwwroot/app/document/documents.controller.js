@@ -765,7 +765,7 @@
             }
 
             if (vm.documentid === 3) {
-                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true
+                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                 getPinnedDocuments(searchRequest, function (response) {
                     if (response == "") {
                         if (bool) {
@@ -805,9 +805,9 @@
                         searchRequest.SearchObject.Sort.ByProperty = "";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
-                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false
                 });
             } else {
+                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 get(searchRequest, function (response) {
                     if (response == "") {
                         if (bool) {
@@ -872,22 +872,41 @@
             }
             searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
             searchRequest.SearchObject.Sort.Direction = 1;
-            get(searchRequest, function (response) {
-                if (response == "") {
-                    vm.gridOptions.data = response;
-                    vm.lazyloader = true;
-                    //vm.divuigrid = true;
-                    vm.nodata = true;
-                    $interval(function () { vm.showSortExp(); }, 2000, 3);
-                } else {
-                    //vm.divuigrid = true;
-                    vm.nodata = false;
-                    vm.lazyloader = true;
-                    vm.gridOptions.data = response;
-                    $interval(function () { vm.showSortExp(); }, 2000, 3);
-                }
-            });
-
+            if (vm.documentid === 3) {
+                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
+                getPinnedDocuments(searchRequest, function (response) {
+                    if (response == "") {
+                        vm.gridOptions.data = response;
+                        vm.lazyloader = true;
+                        vm.divuigrid = true;
+                        vm.nodata = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+                    } else {
+                        vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.lazyloader = true;
+                        vm.gridOptions.data = response;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+                    }
+                });
+            } else {
+                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                get(searchRequest, function (response) {
+                    if (response == "") {
+                        vm.gridOptions.data = response;
+                        vm.lazyloader = true;
+                        //vm.divuigrid = true;
+                        vm.nodata = true;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+                    } else {
+                        //vm.divuigrid = true;
+                        vm.nodata = false;
+                        vm.lazyloader = true;
+                        vm.gridOptions.data = response;
+                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+                    }
+                });
+            }
         }
 
         vm.clearAllFilter = function () {
@@ -1017,6 +1036,7 @@
                 vm.createddatefilter = false;
             }
             if (vm.documentid === 3) {
+                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                 getPinnedDocuments(searchRequest, function (response) {
                     if (response == "") {
                         vm.gridOptions.data = response;
@@ -1033,6 +1053,7 @@
                     }
                 });
             } else {
+                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 get(searchRequest, function (response) {
                     if (response == "") {
                         vm.gridOptions.data = response;
