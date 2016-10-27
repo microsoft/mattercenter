@@ -1054,7 +1054,8 @@
                             {
                                 ByProperty: "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "",
                                 ByColumn: "ModifiedFromDate",
-                                Direction: 1
+                                Direction: 1,
+                                SortAndFilterPinnedData:false
                             }
                 }
             }
@@ -1556,7 +1557,7 @@
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
                     get(searchRequest, function (response) {
-                        if (response == "" || response.errorCode == "500") {
+                        if (response == "" || response.length == 0) {
                             vm.gridOptions.data = response;
                             vm.lazyloader = true;
                             vm.divuigrid = true;
@@ -1605,7 +1606,7 @@
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
                     get(searchRequest, function (response) {
-                        if (response == "" || response.errorCode == "500") {
+                        if (response == "" || response.length == 0) {
                             vm.gridOptions.data = response;
                             vm.lazyloader = true;
                             vm.divuigrid = true;
@@ -1648,9 +1649,12 @@
                         Url: configs.global.repositoryUrl
                     }
                     searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
+                    searchRequest.SearchObject.Sort.ByProperty = "MatterModifiedDate";
+                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinnedMatters(searchRequest, function (response) {
-                        if (response == "" || response.errorCode == "500") {
+                        if (response == "" || response.length == 0) {
                             vm.gridOptions.data = response;
+                            
                             vm.lazyloader = true;
                             vm.divuigrid = true;
                             vm.nodata = true;
@@ -1667,6 +1671,7 @@
                             vm.nodata = false;
                             $interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
+                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     });
                 }
             }
@@ -1885,6 +1890,7 @@
                     var pinnedMattersRequest = {
                         Url: configs.global.repositoryUrl
                     }
+                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinnedMatters(searchRequest, function (response) {
 
                         if (response == "" || response.errorCode == "500") {
@@ -1907,6 +1913,7 @@
                             }
 
                         }
+                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     });
                 }
                 else {

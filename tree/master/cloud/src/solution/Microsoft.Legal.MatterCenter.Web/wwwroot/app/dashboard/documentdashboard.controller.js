@@ -555,6 +555,7 @@
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.responseNull = false;
+                vm.tabClicked = "All Documents"
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.selected != "") {
@@ -570,20 +571,14 @@
                 documentRequest.SearchObject.Sort.Direction = 0;
                 get(documentRequest, function (response) {
                     if (response == "") {
-                        vm.nodata = true;
-                        vm.totalrecords = response.length;
+                        vm.nodata = true;                        
                         vm.getDocumentCounts();
                         vm.documentGridOptions.data = response;
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = false;
+                        
                     } else {
                         vm.nodata = false;
-                        vm.getDocumentCounts();
-                        vm.totalrecords = response.length;
-                        vm.documentGridOptions.data = response;
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = true;
-                        documentRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                        vm.getDocumentCounts();                        
+                        vm.documentGridOptions.data = response;                        
                     }
                 });
             }
@@ -654,7 +649,21 @@
                     vm.allDocumentCount = response.allDocumentCounts;
                     vm.myDocumentCount = response.myDocumentCounts;
                     vm.pinDocumentCount = response.pinnedDocumentCounts;
-                    vm.totalrecords = response.myDocumentCounts;
+
+                    if (vm.tabClicked.toLowerCase() == vm.documentDashboardConfigs.Tab1HeaderText.toLowerCase()) {
+                        vm.totalrecords = response.myDocumentCounts;
+                    }
+                    if (vm.tabClicked.toLowerCase() == vm.documentDashboardConfigs.Tab2HeaderText.toLowerCase()) {
+                        vm.totalrecords = response.allDocumentCounts;
+                    }
+                    if (vm.tabClicked.toLowerCase() == vm.documentDashboardConfigs.Tab3HeaderText.toLowerCase()) {
+                        vm.totalrecords = response.pinnedDocumentCounts;
+                    }
+                    
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+
                     if (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText) {
                         vm.selectedTabInfo = vm.documentDashboardConfigs.Tab1HeaderText + " (" + response.myDocumentCounts + ")";
                     } else if (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText) {
@@ -665,10 +674,17 @@
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
-                    vm.pagination();
-                    vm.divuigrid = true;
+                    vm.pagination();                    
                     vm.displaypagination = true;
-                    vm.lazyloaderdashboard = true;
+                    if (response == "" || (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText && response.allDocumentCounts == 0) ||
+                        (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText && response.myDocumentCounts == 0) ||
+                        (vm.selectedTabInfo == vm.documentDashboardConfigs.Tab3HeaderText && response.pinnedDocumentCounts == 0)) {
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = false;
+                    } else {
+                        vm.lazyloaderdashboard = true;
+                        vm.divuigrid = true;
+                    }
                 });
             }
             //#endregion
@@ -695,6 +711,7 @@
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not
+                    documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     getPinDocuments(documentRequest, function (pinnedResponse) {
                         if (pinnedResponse && pinnedResponse.length > 0) {
                             vm.pinDocumentCount = pinnedResponse.length;
@@ -709,9 +726,7 @@
                                 });
                             });
                             vm.documentGridOptions.data = response;
-                            //vm.allDocumentCount = response.length;                           
-                            vm.totalrecords = vm.allDocumentCount;
-                            vm.pagination();
+                            vm.getDocumentCounts();
                         }
                         else {
                             vm.documentGridOptions.data = response;
@@ -738,6 +753,11 @@
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
+
+                documentRequest.SearchObject.Sort.ByProperty = "DocumentName";
+                documentRequest.SearchObject.Sort.Direction = 1;
+                documentRequest.SearchObject.Sort.ByColumn = "DocumentName";
+                documentRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                 var client = {
                     //ToDo: Need to read from config.js
                     Url: configs.global.repositoryUrl
@@ -745,18 +765,22 @@
 
                 getPinDocuments(documentRequest, function (response) {
                     if (response && response.length > 0) {
-                        vm.documentGridOptions.data = response;
+                        vm.documentGridOptions.data = response;                        
+                        documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                        documentRequest.SearchObject.Sort.ByProperty = "";
+                        documentRequest.SearchObject.Sort.Direction = 1;
+                        documentRequest.SearchObject.Sort.ByColumn = "";
                         vm.getDocumentCounts();
-                        //vm.pinDocumentCount = response.length;
-                        vm.totalrecords = vm.pinDocumentCount;
-                        vm.pagination();
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = true;
+                        vm.totalrecords = vm.pinDocumentCount
                     }
                     else {
                         vm.nodata = true;
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = false;
+                        documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                        documentRequest.SearchObject.Sort.ByProperty = "";
+                        documentRequest.SearchObject.Sort.Direction = 1;
+                        documentRequest.SearchObject.Sort.ByColumn = "";
+                        vm.getDocumentCounts();
+                        vm.totalrecords = 0;
                     }
                 });
             }
@@ -774,25 +798,16 @@
                 documentRequest.SearchObject.PageNumber = 1;
                 documentRequest.SearchObject.Filters.FilterByMe = 1;
                 documentRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
+                documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
-                    if (response == "") {
-                        //vm.lazyloaderdashboard = true;
-                        vm.divuigrid = true;
-                        vm.nodata = true;
-                        vm.totalrecords = response.length;
+                    if (response == "") {   
+                        vm.nodata = true;                        
                         vm.getDocumentCounts();
-                        vm.pagination();
+                        
                     } else {
-                        //vm.documentGridOptions.data = response;
-                        ////vm.myDocumentCount = response.length;
-                        //vm.getDocumentCounts();
-                        //vm.totalrecords = vm.myDocumentCount;
-                        //vm.pagination();
-                        ////vm.lazyloaderdashboard = true;
-                        ////vm.divuigrid = true;
-                        //vm.nodata = false;
+                        
                         getPinDocuments(documentRequest, function (pinnedResponse) {
                             if (pinnedResponse && pinnedResponse.length > 0) {
                                 vm.pinDocumentCount = pinnedResponse.length;
@@ -808,19 +823,12 @@
                                 });
                                 vm.documentGridOptions.data = response;
                                 vm.getDocumentCounts();
-                                vm.totalrecords = vm.myDocumentCount;
-                                vm.pagination();
+                                
                             }
                             else {
                                 vm.documentGridOptions.data = response;
-                                vm.getDocumentCounts();
-                                //vm.allDocumentCount = response.length;                            
-                                vm.totalrecords = vm.myDocumentCount;
-                                vm.pagination();
-                            }
-                            //vm.lazyloaderdashboard = true;
-                            //vm.divuigrid = true;
-
+                                vm.getDocumentCounts();                                
+                            }                            
                         });
                     }
                 });
@@ -1046,24 +1054,24 @@
                 vm.nodata = false;
                 vm.displaypagination = false;
                 if (vm.tabClicked == "Pinned Documents") {
+                    documentRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinDocuments(documentRequest, function (response) {
+                        documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                        documentRequest.SearchObject.Sort.ByProperty = "";
+                        documentRequest.SearchObject.Sort.Direction = 1;
+                        documentRequest.SearchObject.Sort.ByColumn = "";
                         if (response && response.length > 0) {
-                            vm.documentGridOptions.data = response;
-                            //vm.pinDocumentCount = response.length;
-                            vm.totalrecords = vm.pinDocumentCount;
-                            vm.pagination();
-                            vm.lazyloaderdashboard = true;
-                            vm.divuigrid = true;
-                            vm.displaypagination = true;
+                            vm.documentGridOptions.data = response;                            
+                            vm.getDocumentCounts();
                         }
                         else {
-                            vm.nodata = true;
-                            vm.lazyloaderdashboard = true;
-                            vm.divuigrid = false;
+                            vm.nodata = true;                            
+                            vm.getDocumentCounts()
                         }
                     });
 
                 } else {
+                    documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     get(documentRequest, function (response) {
                         if (response && response.length > 0) {
                             //vm.lazyloaderdashboard = true;
@@ -1073,18 +1081,15 @@
                             vm.documentGridOptions.data = response;
                             vm.errorMessage = response.message;
                             vm.getDocumentCounts();
-                            vm.totalrecords = response.length;
+                            
                         } else {
                             //vm.totalrecords = response.length;
                             vm.documentGridOptions.data = response;
+                            vm.nodata = true;
                             vm.getDocumentCounts();
                             if (!$scope.$$phase) {
                                 $scope.$apply();
-                            }
-                            //vm.lazyloaderdashboard = true;
-                            //vm.divuigrid = true;
-                            vm.nodata = true;
-                            //vm.displaypagination = true;
+                            }   
                         }
                     });
                 }
@@ -1218,6 +1223,7 @@
                             vm.nodata = true;
                             vm.errorMessage = response.message;
                         } else {
+                            documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                             getPinDocuments(documentRequest, function (pinnedResponse) {
                                 if (pinnedResponse && pinnedResponse.length > 0) {
                                     vm.pinDocumentCount = pinnedResponse.length;
@@ -1271,6 +1277,7 @@
                             vm.errorMessage = response.message;
                             vm.lazyloaderdashboard = true;
                         } else {
+                            documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                             getPinDocuments(documentRequest, function (pinnedResponse) {
                                 if (pinnedResponse && pinnedResponse.length > 0) {
                                     vm.pinDocumentCount = pinnedResponse.length;
@@ -1383,14 +1390,15 @@
                 var author = "";
                 var startdate = "";
                 var enddate = "";
+                vm.tabClicked = 'All Documents'
                 if (vm.selectedClients != "" && vm.selectedClients != undefined) {
                     clientArray = vm.selectedClients.split(',');
                 }
                 if (vm.startdate != "" && vm.startdate != undefined) {
-                    startdate = vm.startdate.format("yyyy-MM-ddT00:00:00Z");
+                    startdate = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
                 }
                 if (vm.enddate != "" && vm.enddate != undefined) {
-                    enddate = vm.enddate.format("yyyy-MM-ddT23:59:59Z");
+                    enddate = $filter('date')(vm.enddate, "yyyy-MM-ddT00:00:00") + "Z";
                 }
                 if (vm.selectedAuthor != "" && vm.selectedAuthor != undefined) {
                     author = vm.selectedAuthor;
@@ -1399,23 +1407,22 @@
                 documentRequest.SearchObject.Filters.DocumentAuthor = author;
                 documentRequest.SearchObject.Filters.FromDate = startdate;
                 documentRequest.SearchObject.Filters.ToDate = enddate;
+                documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 get(documentRequest, function (response) {
-                    if (response == "") {
-                        vm.divuigrid = false;
-                        vm.nodata = true;
-                        vm.lazyloaderdashboard = true;
+                    if (response == "") {                        
+                        vm.nodata = true;                        
                         vm.errorMessage = response.message;
-                        vm.totalrecords = response.length;
-                        vm.getDocumentCounts();
-                        vm.pagination();
-                    } else {
-                        vm.divuigrid = true;
+                        documentRequest.SearchObject.Sort.ByProperty = "";
+                        documentRequest.SearchObject.Sort.Direction = 1;
+                        documentRequest.SearchObject.Sort.ByColumn = "";
+                        vm.getDocumentCounts();                        
+                    } else {                        
                         vm.nodata = false;
                         vm.documentGridOptions.data = response;
-                        vm.getDocumentCounts();
-                        vm.lazyloaderdashboard = true;
-                        vm.totalrecords = response.length;
-                        vm.pagination();
+                        documentRequest.SearchObject.Sort.ByProperty = "";
+                        documentRequest.SearchObject.Sort.Direction = 1;
+                        documentRequest.SearchObject.Sort.ByColumn = "";
+                        vm.getDocumentCounts();                        
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
@@ -1476,7 +1483,7 @@
                     }
                 };
                 if (vm.tabClicked != "Pinned Documents") {
-
+                    exportMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     get(exportMatterSearchRequest, function (response) {
                         if (response == "") {
                             //vm.lazyloaderdashboard = true;
@@ -1497,6 +1504,7 @@
                     var pinnedMattersRequest = {
                         Url: configs.global.repositoryUrl//ToDo: Read from config.js
                     }
+                    exportMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinDocuments(exportMatterSearchRequest, function (response) {
                         if (response == "") {
 

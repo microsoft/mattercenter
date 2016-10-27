@@ -250,7 +250,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="listColumnName"></param>
         /// <param name="isShowDocument"></param>
         /// <returns></returns>
-        public SearchResponseVM GetPinnedData(SearchRequestVM searchRequestVM, string listName, string listColumnName, bool isShowDocument)
+        public SearchResponseVM GetPinnedData(SearchRequestVM searchRequestVM, string listName, 
+            string listColumnName, bool isShowDocument)
         {
             ////Holds logged-in user alias
             string userAlias = string.Empty;
@@ -284,46 +285,56 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 Dictionary<string, DocumentData> userpinnedDocumentCollection =
                                     JsonConvert.DeserializeObject<Dictionary<string, DocumentData>>(userPinnedMatter);
                                 searchResponse.TotalRows = userpinnedDocumentCollection.Count;
-                                //searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.Reverse();
-                                if (searchRequestVM.SearchObject.Sort.Direction == 0)
+
+                                if (searchRequestVM.SearchObject.Sort.SortAndFilterPinnedData == false)
                                 {
-                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyCreated.ToLower().Trim()))
-                                    {
-                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
-                                    }
-                                    else if (sortCol != "" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyCreated.ToLower().Trim()))
-                                    {
-                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
-                                    }
-                                    else
-                                    {
-                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values;
-                                    }
+                                    searchResponse.DocumentDataList = userpinnedDocumentCollection.Values;
                                 }
                                 else
                                 {
-                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyCreated.ToLower().Trim()))
+                                    string lastModifiedDate = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentModifiedDate").GetValue<string>("keyName");
+                                    string createdDate = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentCreatedDate").GetValue<string>("keyName");
+                                    //searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.Reverse();
+                                    if (searchRequestVM.SearchObject.Sort.Direction == 0)
                                     {
-                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
-                                    }
-                                    else if (sortCol != "" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyDocumentLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyCreated.ToLower().Trim()))
-                                    {
-                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
+                                        if (sortCol != "" && (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim()))
+                                        {
+                                            searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
+                                        }
+                                        else if (sortCol != "" && (sortCol.ToLower().Trim() != lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() != createdDate.ToLower().Trim()))
+                                        {
+                                            searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
+                                        }
+                                        else
+                                        {
+                                            searchResponse.DocumentDataList = userpinnedDocumentCollection.Values;
+                                        }
                                     }
                                     else
                                     {
-                                        searchResponse.DocumentDataList = userpinnedDocumentCollection.Values;
+                                        if (sortCol != "" && (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim()))
+                                        {
+                                            searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null));
+                                        }
+                                        else if (sortCol != "" && (sortCol.ToLower().Trim() != lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() != createdDate.ToLower().Trim()))
+                                        {
+                                            searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
+                                        }
+                                        else
+                                        {
+                                            searchResponse.DocumentDataList = userpinnedDocumentCollection.Values;
+                                        }
                                     }
-                                }
-                                IList<DocumentData> filterDocumentList = null;
-                                if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.AreaOfLaw))
-                                {
-                                    filterDocumentList = userpinnedDocumentCollection.Values.Where(pinDocument => searchRequestVM.SearchObject.Filters.AreaOfLaw.Contains(pinDocument.DocumentClient)).ToList();
-                                }
-                                if (filterDocumentList != null)
-                                {
-                                    searchResponse.DocumentDataList = filterDocumentList;
-                                    searchResponse.TotalRows = filterDocumentList.Count();
+                                    IList<DocumentData> filterDocumentList = null;
+                                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.AreaOfLaw))
+                                    {
+                                        filterDocumentList = userpinnedDocumentCollection.Values.Where(pinDocument => searchRequestVM.SearchObject.Filters.AreaOfLaw.Contains(pinDocument.DocumentClient)).ToList();
+                                    }
+                                    if (filterDocumentList != null)
+                                    {
+                                        searchResponse.DocumentDataList = filterDocumentList;
+                                        searchResponse.TotalRows = filterDocumentList.Count();
+                                    }
                                 }
                             }
                             else
@@ -331,89 +342,99 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 Dictionary<string, MatterData> userpinnedMatterCollection =
                                     JsonConvert.DeserializeObject<Dictionary<string, MatterData>>(userPinnedMatter);
                                 searchResponse.TotalRows = userpinnedMatterCollection.Count;
-                                // searchResponse.MatterDataList = userpinnedMatterCollection.Values.Reverse();
-                                if (searchRequestVM.SearchObject.Sort.Direction == 0)
+                                if (searchRequestVM.SearchObject.Sort.SortAndFilterPinnedData == false)
                                 {
-                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
-                                    {
-                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString()));
-                                    }
-                                    else if(sortCol!="" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
-                                    {
-                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
-                                    }
-                                    else
-                                    {
-                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values;
-                                    }
+                                    searchResponse.MatterDataList = userpinnedMatterCollection.Values;
                                 }
                                 else
                                 {
-                                    if (sortCol != "" && (sortCol.ToLower().Trim() == searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() == searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
-                                    {                                                         
-                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString()));
-                                    }
-                                    else if (sortCol != "" && (sortCol.ToLower().Trim() != searchSettings.ManagedPropertyLastModifiedTime || sortCol.ToLower().Trim() != searchSettings.ManagedPropertyOpenDate.ToLower().Trim()))
+                                    string lastModifiedDate = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterModifiedDate").GetValue<string>("keyName");
+                                    string createdDate = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterCreatedDate").GetValue<string>("keyName");
+                                    // searchResponse.MatterDataList = userpinnedMatterCollection.Values.Reverse();
+                                    if (searchRequestVM.SearchObject.Sort.Direction == 0)
                                     {
-                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
-                                    }
-                                    else
-                                    {
-                                        searchResponse.MatterDataList = userpinnedMatterCollection.Values;
-                                    }
-                                }
-
-                                #region Code for filtering pinned data
-                                IList<MatterData> filterPinnedList = null;
-                                if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.AreaOfLaw))
-                                {
-                                    filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.AreaOfLaw.Contains(pinMatter.MatterAreaOfLaw)).ToList();
-                                }
-                                //Filter the pinned data based on the filter criteria that client has sent
-                                if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.PracticeGroup))
-                                {
-                                    if(filterPinnedList!=null)
-                                    {
-                                        filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.PracticeGroup.Contains(pinMatter.MatterPracticeGroup)).ToList();
-                                    }
-                                    else
-                                    {
-                                        filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.PracticeGroup.Contains(pinMatter.MatterPracticeGroup)).ToList();
-                                    }
-                                    
-                                }
-                                if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.SubareaOfLaw))
-                                {
-                                    if (filterPinnedList != null)
-                                    {
-                                        filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.SubareaOfLaw.Contains(pinMatter.MatterSubAreaOfLaw)).ToList();
-                                    }
-                                    else
-                                    {
-                                        filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.SubareaOfLaw.Contains(pinMatter.MatterSubAreaOfLaw)).ToList();
-                                    }                                        
-                                }
-                                if (searchRequestVM.SearchObject.Filters.ClientsList!=null && searchRequestVM.SearchObject.Filters.ClientsList.Count>0)
-                                {
-                                    if(searchRequestVM.SearchObject.Filters.ClientsList[0]!="")
-                                    {
-                                        if (filterPinnedList != null)
+                                        
+                                        if (sortCol != "" && (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim()))
                                         {
-                                            filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.ClientsList.Contains(pinMatter.MatterClient)).ToList();
+                                            searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString()));
+                                        }
+                                        else if (sortCol != "" && (sortCol.ToLower().Trim() != lastModifiedDate || sortCol.ToLower().Trim() != createdDate.ToLower().Trim()))
+                                        {
+                                            searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol));
                                         }
                                         else
                                         {
-                                            filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.ClientsList.Contains(pinMatter.MatterClient)).ToList();
+                                            searchResponse.MatterDataList = userpinnedMatterCollection.Values;
                                         }
                                     }
-                                    
+                                    else
+                                    {
+                                        if (sortCol != "" && (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim()))
+                                        {
+                                            searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString()));
+                                        }
+                                        else if (sortCol != "" && (sortCol.ToLower().Trim() != lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() != createdDate.ToLower().Trim()))
+                                        {
+                                            searchResponse.MatterDataList = userpinnedMatterCollection.Values.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol));
+                                        }
+                                        else
+                                        {
+                                            searchResponse.MatterDataList = userpinnedMatterCollection.Values;
+                                        }
+                                    }
+
+                                    #region Code for filtering pinned data
+                                    IList<MatterData> filterPinnedList = null;
+                                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.AreaOfLaw))
+                                    {
+                                        filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.AreaOfLaw.Contains(pinMatter.MatterAreaOfLaw)).ToList();
+                                    }
+                                    //Filter the pinned data based on the filter criteria that client has sent
+                                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.PracticeGroup))
+                                    {
+                                        if (filterPinnedList != null)
+                                        {
+                                            filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.PracticeGroup.Contains(pinMatter.MatterPracticeGroup)).ToList();
+                                        }
+                                        else
+                                        {
+                                            filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.PracticeGroup.Contains(pinMatter.MatterPracticeGroup)).ToList();
+                                        }
+
+                                    }
+                                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.SubareaOfLaw))
+                                    {
+                                        if (filterPinnedList != null)
+                                        {
+                                            filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.SubareaOfLaw.Contains(pinMatter.MatterSubAreaOfLaw)).ToList();
+                                        }
+                                        else
+                                        {
+                                            filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.SubareaOfLaw.Contains(pinMatter.MatterSubAreaOfLaw)).ToList();
+                                        }
+                                    }
+                                    if (searchRequestVM.SearchObject.Filters.ClientsList != null && searchRequestVM.SearchObject.Filters.ClientsList.Count > 0)
+                                    {
+                                        if (searchRequestVM.SearchObject.Filters.ClientsList[0] != "")
+                                        {
+                                            if (filterPinnedList != null)
+                                            {
+                                                filterPinnedList = filterPinnedList.Where(pinMatter => searchRequestVM.SearchObject.Filters.ClientsList.Contains(pinMatter.MatterClient)).ToList();
+                                            }
+                                            else
+                                            {
+                                                filterPinnedList = userpinnedMatterCollection.Values.Where(pinMatter => searchRequestVM.SearchObject.Filters.ClientsList.Contains(pinMatter.MatterClient)).ToList();
+                                            }
+                                        }
+
+                                    }
+                                    if (filterPinnedList != null)
+                                    {
+                                        searchResponse.MatterDataList = filterPinnedList;
+                                        searchResponse.TotalRows = filterPinnedList.Count();
+                                    }
+                                    #endregion
                                 }
-                                if (filterPinnedList != null)
-                                {
-                                    searchResponse.MatterDataList = filterPinnedList;
-                                    searchResponse.TotalRows = filterPinnedList.Count();
-                                }                                    
-                                #endregion
 
                             }
                         }

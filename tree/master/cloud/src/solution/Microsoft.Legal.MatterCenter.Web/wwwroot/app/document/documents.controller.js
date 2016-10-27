@@ -618,7 +618,8 @@
                             {
                                 ByProperty: '' + vm.configSearchContent.ManagedPropertyFileName + '',
                                 Direction: 0,
-                                ByColumn: "DocumentName"
+                                ByColumn: "DocumentName",
+                                SortAndFilterPinnedData:false
                             }
                 }
             };
@@ -764,6 +765,7 @@
             }
 
             if (vm.documentid === 3) {
+                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true
                 getPinnedDocuments(searchRequest, function (response) {
                     if (response == "") {
                         if (bool) {
@@ -803,6 +805,7 @@
                         searchRequest.SearchObject.Sort.ByProperty = "";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
+                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false
                 });
             } else {
                 get(searchRequest, function (response) {
@@ -1408,6 +1411,7 @@
                 var pinnedDocumentsRequest = {
                     Url: configs.global.repositoryUrl
                 }
+                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                 getPinnedDocuments(searchRequest, function (response) {
 
                     if (response == "" || response.errorCode == "500") {
@@ -1430,6 +1434,7 @@
                         //}
                     }
                     vm.lazyloader = true;
+                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 });
             }
             else {
