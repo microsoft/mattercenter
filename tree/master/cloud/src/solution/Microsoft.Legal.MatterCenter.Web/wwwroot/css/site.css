@@ -1400,3 +1400,15 @@ textarea {
     min-width: 52px;
     max-width: 133px;
 }
+
+#mainDivContainer {
+    cursor: default;
+}
+
+.headerLinks > span {
+    outline: none !important;
+}
+
+#settingsLink span{
+    outline: none !important;
+}

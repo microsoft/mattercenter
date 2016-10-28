@@ -548,6 +548,9 @@
 
             vm.selected = "";
             vm.search = function () {
+                angular.element('#allDocuments').addClass("active");
+                angular.element('#myDocuments').removeClass("active");
+                angular.element('#pinDocuments').removeClass("active");
                 vm.pagenumber = 1;
                 vm.displaypagination = false;
                 vm.documentname = 'All Documents'
@@ -565,18 +568,17 @@
                         finalSearchText = '("' + vm.selected + '*" OR FileName:"' + vm.selected + '*" OR dlcDocIdOWSText:"' + vm.selected + '*" OR MCDocumentClientName:"' + vm.selected + '*")';
                     }
                 }
+                documentRequest.SearchObject.Filters.FilterByMe = 0;
+                vm.pagenumber = 1;
                 documentRequest.SearchObject.PageNumber = vm.pagenumber;
                 documentRequest.SearchObject.SearchTerm = finalSearchText;
                 documentRequest.SearchObject.Sort.ByProperty = "FileName";
                 documentRequest.SearchObject.Sort.Direction = 0;
                 get(documentRequest, function (response) {
-                    if (response == "") {
-                        vm.nodata = true;                        
+                    if (response == "" || response.length == 0) {
                         vm.getDocumentCounts();
                         vm.documentGridOptions.data = response;
-                        
                     } else {
-                        vm.nodata = false;
                         vm.getDocumentCounts();                        
                         vm.documentGridOptions.data = response;                        
                     }
@@ -615,6 +617,9 @@
 
             //#region
             vm.typeheadselect = function (index, selected) {
+                angular.element('#allDocuments').addClass("active");
+                angular.element('#myDocuments').removeClass("active");
+                angular.element('#pinDocuments').removeClass("active");
                 vm.documentname = 'All Documents'
                 vm.documentid = 1;
                 var searchToText = '';
@@ -626,6 +631,9 @@
                     var secondText = searchToText.split(',')[1]
                     var finalSearchText = '(FileName:"' + firstText.trim() + '" OR dlcDocIdOWSText:"' + firstText.trim() + '"OR MCDocumentClientName:"' + firstText.trim() + '")';
                 }
+                vm.pagenumber = 1;
+                documentRequest.SearchObject.PageNumber = 1;
+                documentRequest.SearchObject.Filters.FilterByMe = 0;
                 documentRequest.SearchObject.SearchTerm = finalSearchText;
                 documentRequest.SearchObject.Sort.Direction = 0;
                 vm.FilterByType();
@@ -681,9 +689,11 @@
                         (vm.selectedTabInfo == vm.documentDashboardConfigs.Tab3HeaderText && response.pinnedDocumentCounts == 0)) {
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = false;
+                        vm.nodata = true;
                     } else {
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = true;
+                        vm.nodata = false;
                     }
                 });
             }
@@ -704,6 +714,7 @@
                 var pinnedDocumentsRequest = {
                     Url: configs.global.repositoryUrl
                 }
+                vm.pagenumber = 1;
                 documentRequest.SearchObject.PageNumber = 1;
                 documentRequest.SearchObject.Filters.FilterByMe = 0;
                 documentRequest.SearchObject.Sort.ByProperty = "";
@@ -753,7 +764,20 @@
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
-
+                vm.selectedClients = "";
+                angular.element("input[name='clients']:checkbox").attr('checked', false);
+                vm.selectedAuthor = "";
+                vm.startdate = "";
+                vm.enddate = "";
+                vm.pagenumber = 1;
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+                documentRequest.SearchObject.PageNumber=1;
+                documentRequest.SearchObject.Filters.ClientsList = [];
+                documentRequest.SearchObject.Filters.DocumentAuthor = "";
+                documentRequest.SearchObject.Filters.FromDate = "";
+                documentRequest.SearchObject.Filters.ToDate = "";
                 documentRequest.SearchObject.Sort.ByProperty = "DocumentName";
                 documentRequest.SearchObject.Sort.Direction = 1;
                 documentRequest.SearchObject.Sort.ByColumn = "DocumentName";
@@ -774,7 +798,6 @@
                         vm.totalrecords = vm.pinDocumentCount
                     }
                     else {
-                        vm.nodata = true;
                         documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                         documentRequest.SearchObject.Sort.ByProperty = "";
                         documentRequest.SearchObject.Sort.Direction = 1;
@@ -802,12 +825,9 @@
                 documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
-                    if (response == "") {   
-                        vm.nodata = true;                        
+                    if (response == "" || response.length == 0) {
                         vm.getDocumentCounts();
-                        
                     } else {
-                        
                         getPinDocuments(documentRequest, function (pinnedResponse) {
                             if (pinnedResponse && pinnedResponse.length > 0) {
                                 vm.pinDocumentCount = pinnedResponse.length;
@@ -1064,8 +1084,7 @@
                             vm.documentGridOptions.data = response;                            
                             vm.getDocumentCounts();
                         }
-                        else {
-                            vm.nodata = true;                            
+                        else {                          
                             vm.getDocumentCounts()
                         }
                     });
@@ -1074,18 +1093,12 @@
                     documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     get(documentRequest, function (response) {
                         if (response && response.length > 0) {
-                            //vm.lazyloaderdashboard = true;
-                            //vm.divuigrid = false;
-                            vm.nodata = false;
-                            //vm.displaypagination = false;
                             vm.documentGridOptions.data = response;
                             vm.errorMessage = response.message;
                             vm.getDocumentCounts();
                             
                         } else {
-                            //vm.totalrecords = response.length;
                             vm.documentGridOptions.data = response;
-                            vm.nodata = true;
                             vm.getDocumentCounts();
                             if (!$scope.$$phase) {
                                 $scope.$apply();
@@ -1384,6 +1397,8 @@
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.searchdrop = false;
+                vm.upwarddrop = false;
+                vm.downwarddrop = true;
                 vm.displaypagination = false;
                 vm.nodata = false;
                 var clientArray = [];
@@ -1398,7 +1413,7 @@
                     startdate = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
                 }
                 if (vm.enddate != "" && vm.enddate != undefined) {
-                    enddate = $filter('date')(vm.enddate, "yyyy-MM-ddT00:00:00") + "Z";
+                    enddate = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
                 }
                 if (vm.selectedAuthor != "" && vm.selectedAuthor != undefined) {
                     author = vm.selectedAuthor;
@@ -1409,15 +1424,13 @@
                 documentRequest.SearchObject.Filters.ToDate = enddate;
                 documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 get(documentRequest, function (response) {
-                    if (response == "") {                        
-                        vm.nodata = true;                        
+                    if (response == "" || response.length == 0) {
                         vm.errorMessage = response.message;
                         documentRequest.SearchObject.Sort.ByProperty = "";
                         documentRequest.SearchObject.Sort.Direction = 1;
                         documentRequest.SearchObject.Sort.ByColumn = "";
                         vm.getDocumentCounts();                        
                     } else {                        
-                        vm.nodata = false;
                         vm.documentGridOptions.data = response;
                         documentRequest.SearchObject.Sort.ByProperty = "";
                         documentRequest.SearchObject.Sort.Direction = 1;
@@ -1485,7 +1498,7 @@
                 if (vm.tabClicked != "Pinned Documents") {
                     exportMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     get(exportMatterSearchRequest, function (response) {
-                        if (response == "") {
+                        if (response == "" || response.length == 0) {
                             //vm.lazyloaderdashboard = true;
                         } else {
                             vm.exportDate = response;
@@ -1506,7 +1519,7 @@
                     }
                     exportMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinDocuments(exportMatterSearchRequest, function (response) {
-                        if (response == "") {
+                        if (response == "" || response.length == 0) {
 
                         } else {
                             vm.exportDate = response;
@@ -1565,6 +1578,7 @@
                     $scope.$apply();
                 }
             }
+            //#endregion
         }
     ]);
 }
