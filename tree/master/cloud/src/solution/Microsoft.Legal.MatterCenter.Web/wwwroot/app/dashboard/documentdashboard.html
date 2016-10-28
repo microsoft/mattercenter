@@ -112,7 +112,7 @@
                                  title="{{vm.documentDashboardConfigs.AttachmentLoadingText}}" />
                         </div>
                     </div>
-                    <div class="col-xs-12 " ng-if="vm.clientdrop">
+                    <div class="col-xs-12 " ng-show="vm.clientdrop">
                         <div class="row ">
                             <div class="col-xs-9 col-sm-7 clientdropinner refinerClient">
                                 <div class="col-xs-12 col-sm-5 col-md-2"><a class="btn btn-link" 
@@ -121,7 +121,7 @@
                                                                             ng-click="vm.checkAll(false, vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText,$event)">{{vm.documentDashboardConfigs.AdvSearchSelectNoneLinkText}}</a></div>
                                 <div class="col-xs-12 refinerWrapper">
                                     <div class="col-xs-12 refinerRow" ng-repeat="client in vm.clients" ng-click="$event.stopPropagation();">
-                                        <input type="checkbox" ng-model="client.Selected" /> <span>{{client.name}}</span>
+                                        <input type="checkbox" name="clients" ng-model="client.Selected" /> <span>{{client.name}}</span>
                                     </div>
                                 </div>
                                 <div class="row">

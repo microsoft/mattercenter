@@ -117,6 +117,53 @@ angular.module('matterMain', [
          })
         ;;
 
+        //#region error handling.
+        $httpProvider.interceptors.push(function ($q, $rootScope) {
+
+            return {
+                request: function (config) {
+
+                    //the same config / modified config / a new config needs to be returned.
+                    return config;
+                },
+                requestError: function (rejection) {
+
+                    //Initializing error list
+                    if ($rootScope.errorList == undefined) {
+                        $rootScope.errorList = [];
+                    }
+
+                    $rootScope.errorList.push(rejection.data);
+
+                    //It has to return the rejection, simple reject call doesn't work
+                    return $q.reject(rejection);
+                },
+                response: function (response) {
+
+                    //the same response/modified/or a new one need to be returned.
+                    return response;
+                },
+                responseError: function (rejection) {
+
+                    //Initializing the error list
+                    if ($rootScope.exceptionObj == undefined) {
+                        $rootScope.exceptionObj = [];
+                    }
+                    if (rejection.data == undefined) {
+                        rejection.data = {};
+                        rejection.data.message = "Network issue. Unable to get the response from the server. ";
+                    }
+                    //Adding to error list
+                    //$rootScope.errorList.push(rejection.data);
+                    angular.element('#myErrorModal').modal("show");
+                    $rootScope.exceptionObj = rejection.data;                 
+                   //It has to return the rejection, simple reject call doesn't work
+                    return $q.reject(rejection);
+                }
+            };
+        });
+
+        //#endregion
 
 
         $locationProvider.html5Mode({

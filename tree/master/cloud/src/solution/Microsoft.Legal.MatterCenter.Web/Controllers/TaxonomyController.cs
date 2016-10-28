@@ -90,7 +90,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             {
                 
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+               
                 var matterInformation = new MatterInformationVM()
                 {
                     Client = new Client()
@@ -101,12 +101,8 @@ namespace Microsoft.Legal.MatterCenter.Web
                 var genericResponseVM = validationFunctions.IsMatterValid(matterInformation, 0, null); 
                 if (genericResponseVM != null)
                 {
-                    errorResponse = new ErrorResponse()
-                    {
-                        ErrorCode = genericResponseVM.Code,
-                        Message = genericResponseVM.Value
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    genericResponseVM.Description = $"Error occurred while getting the taxonomy data";
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
 
@@ -147,13 +143,14 @@ namespace Microsoft.Legal.MatterCenter.Web
                         var pgTermSets = JsonConvert.DeserializeObject<string>(cacheValue);
                         if (pgTermSets == null)
                         {
-                            errorResponse = new ErrorResponse()
+
+                             genericResponseVM = new GenericResponseVM()
                             {
-                                Message = errorSettings.MessageNoResult,
-                                ErrorCode = "404",
+                                Value = errorSettings.MessageNoResult,
+                                Code = "404",
                                 Description = "No data is present for the given passed input"
                             };
-                            return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                            return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.NotFound);
                         }
                         return matterCenterServiceFunctions.ServiceResponse(pgTermSets, (int)HttpStatusCode.OK);
                     }
@@ -162,30 +159,31 @@ namespace Microsoft.Legal.MatterCenter.Web
                         var clientTermSets = JsonConvert.DeserializeObject<ClientTermSets>(cacheValue);
                         if (clientTermSets == null)
                         {
-                            errorResponse = new ErrorResponse()
+                            genericResponseVM = new GenericResponseVM()
                             {
-                                Message = errorSettings.MessageNoResult,
-                                ErrorCode = "404",
+                                Value = errorSettings.MessageNoResult,
+                                Code = HttpStatusCode.NotFound.ToString(),
                                 Description = "No data is present for the given passed input"
                             };
-                            return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                            return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.NotFound);
                         }
                         return matterCenterServiceFunctions.ServiceResponse(clientTermSets, (int)HttpStatusCode.OK);
                     }
                 }
                 //If all the above condition fails, return validation error object
-                errorResponse = new ErrorResponse()
+                 genericResponseVM = new GenericResponseVM()
                 {
-                    Message = errorSettings.MessageNoResult,
-                    ErrorCode = "404",
-                    Description = "No data is present for the given passed input"                    
-                };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                     Value = errorSettings.MessageNoResult,
+                     Code = HttpStatusCode.NotFound.ToString(),
+                     Description = "No data is present for the given passed input"
+                 };
+                return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.BadRequest);
             }
             catch(Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
             }            
         }        
     }

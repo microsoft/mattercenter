@@ -123,4 +123,68 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="myErrorModal" tabindex="-1" role="dialog" aria-labelledby="myErrorModalLabel">
+        <div class="modal-dialog modal-lg modalDialogWidth" role="document">
+            <div class="modal-content popUpModalContainer modalContentMargin pad15 modelErrorContent " id="myModalContent">
+                <div class="popUpModalContainer errorModal">
+                    <h3 class="modal-title marleft10 colorRed">Error!</h3>
+                    <img title="Close" data-dismiss="modal" class="popUpCloseIcon popUpFloatRight popUpModalClose" alt="{{cm.createContent.Tab1ButtonCloseTitle}}" src="../Images/close-666.png">
+                    <div class="row margin0 marginTop10  segoUIFontBold " ng-show="vm.isDevMode">
+                        <div class="row margin0 marginTop10  segoUIFontBold colorRed" ng-if="$root.exceptionObj.description">
+                            <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">Description</div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{$root.exceptionObj.description}}</div>
+                        </div>
+                        <div class="row margin0 marginTop10  segoUIFontBold " ng-if="$root.exceptionObj.message">
+                            <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">Message</div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{$root.exceptionObj.message}}</div>
+                        </div>
+                        <div class="row margin0 marginTop10  segoUIFontBold " ng-if="$root.exceptionObj.value">
+                            <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">Value</div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{$root.exceptionObj.value}}</div>
+                        </div>
+                        <div class="row margin0 marginTop10  segoUIFontBold " ng-if="$root.exceptionObj.errorCode">
+                            <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">ErrorCode</div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{$root.exceptionObj.errorCode}}</div>
+                        </div>
+                        <div class="row margin0 marginTop10  segoUIFontBold "  ng-if="$root.exceptionObj.methodName">
+                            <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">MethodName</div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{($root.exceptionObj.methodName==undefined||$root.exceptionObj.methodName=="")?"NA":$root.exceptionObj.methodName}}</div>
+                        </div>
+                        <div class="row margin0 marginTop10  segoUIFontBold " ng-if="$root.exceptionObj.className">
+                            <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">ClassName</div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{$root.exceptionObj.className}}</div>
+                        </div>
+                        <div class="row margin0 marginTop10  segoUIFontBold " ng-if="$root.exceptionObj.lineNumber">
+                            <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">LineNumber </div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{$root.exceptionObj.lineNumber}}</div>
+                        </div>
+                        <div class="row margin0 marginTop10  segoUIFontBold  " ng-if="$root.exceptionObj.stackTrace">
+                            <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">StackTrace</div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12"  style="overflow:auto">{{$root.exceptionObj.stackTrace}}</div>
+                        </div>
+
+
+                    </div>
+                    <div class="row margin0 marginTop10  segoUIFontBold " ng-show="!vm.isDevMode">
+                        <div class="row margin0 marginTop10  segoUIFontBold colorRed" ng-if="$root.exceptionObj.description">
+                            <div class="col-lg-2 col-xs-12 col-md-3 col-sm-12 ">Description</div>
+                            <div class="col-lg-10 col-xs-12 col-md-8 col-sm-12">{{$root.exceptionObj.description}}</div>
+                        </div>
+                        <div class="row margin0 marginTop10  segoUIFontBold " ng-if="$root.exceptionObj.message">
+                            <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">Message</div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{$root.exceptionObj.message}}</div>
+                        </div>
+                        <div class="row margin0 marginTop10  segoUIFontBold " ng-if="$root.exceptionObj.value">
+                            <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">Value</div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{$root.exceptionObj.value}}</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
