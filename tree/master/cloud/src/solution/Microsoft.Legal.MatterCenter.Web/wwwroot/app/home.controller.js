@@ -16,9 +16,11 @@
             vm.userProfileObjectId = adalService.userInfo.profile.oid;
             vm.navigation = uiconfigs.Navigation;
             vm.header = uiconfigs.Header;
+            vm.isDevMode = configs.global.isDevMode;
             
             $rootScope.setAuthenticatedUserContext();
             $rootScope.displayOverflow = "";
+           
 
             //Callback function for help 
             function getHelp(options, callback) {
@@ -190,21 +192,9 @@
                 }
 
                 if (data != "Settings") {
-                    if (configs.global.isBackwardCompatible == false) {
-                        $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/MatterCenterHome.aspx?" + data;
-                    }
-                    else {
-                        $window.top.parent.location.href = configs.global.repositoryUrl + "/SitePages/MatterCenterHome.aspx?" + data;
-                    }
-                    
+                    $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/MatterCenterHome.aspx?" + data;
                 } else {
-                    if (configs.global.isBackwardCompatible == false) {
-                        $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/" + data + ".aspx";
-                    }
-                    else {
-                        $window.top.parent.location.href = configs.global.repositoryUrl + "/SitePages/" + data + ".aspx";
-                    }
-                    
+                    $window.top.parent.location.href = configs.uri.SPOsiteURL + "/SitePages/" + data + ".aspx";
                 }
             }
 
