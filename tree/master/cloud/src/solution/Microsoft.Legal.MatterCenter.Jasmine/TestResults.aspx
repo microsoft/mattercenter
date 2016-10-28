@@ -89,7 +89,7 @@
     </div>
     <div id="txtUser1" class="hide">
     </div>
-    <script src="/Scripts/app.js"></script>
+    <%--<script src="/Scripts/app.js"></script>--%>
     <script src="/Object/mockObjects.js"></script>
     <script src="/Scripts/TestConfig.js"></script>
     <script src="/Object/ObjectCollection.js"></script>
