@@ -83,7 +83,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         /// <summary>
         /// Get all pinned matters which are pinned by the user
         /// </summary>
-        /// <param name="client"></param>
+        /// <param name="searchRequestVM"></param>
         /// <returns></returns>
         [HttpPost("getpinned")]
         [Produces(typeof(SearchResponseVM))]
@@ -97,17 +97,18 @@ namespace Microsoft.Legal.MatterCenter.Service
             try
             {                
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 
                 if (searchRequestVM == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed to fetch the pinned matters"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true,
+                        Description = $"No input data is passed to fetch the pinned {errorSettings.Item}"
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
                 var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(searchRequestVM);                
@@ -116,7 +117,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -135,17 +137,18 @@ namespace Microsoft.Legal.MatterCenter.Service
             try
             {
                 //Get the authorization token from the Request header                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 #region Error Checking                
                 if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = $"No input data is passed to fetch  {errorSettings.Item}s count",
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion                
                 int allMatterCounts = await matterProvision.GetAllCounts(searchRequestVM);
@@ -162,7 +165,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -183,16 +187,17 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 
                 #region Error Checking                
-                ErrorResponse errorResponse = null;                
+                GenericResponseVM genericResponse = null;                
                 if (pinRequestMatterVM == null && pinRequestMatterVM.Client == null && pinRequestMatterVM.MatterData == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed to pin a matter"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = $"No input data is passed to pin an  {errorSettings.Item}",
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
                 var isMatterPinned = await matterRepositoy.PinRecordAsync<PinRequestMatterVM>(pinRequestMatterVM);
@@ -205,7 +210,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -223,23 +229,19 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                
+
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
-                //if the token is not valid, immediately return no authorization error to the user
-                if (errorResponse != null && !errorResponse.IsTokenValid)
-                {
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.Unauthorized);
-                }
+                GenericResponseVM genericResponse = null;                
                 if (pinRequestMatterVM == null && pinRequestMatterVM.Client == null && pinRequestMatterVM.MatterData == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = $"No input data is passed to fetch the unpinned  {errorSettings.Item}",
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
                 var isMatterUnPinned = await matterRepositoy.UnPinRecordAsync<PinRequestMatterVM>(pinRequestMatterVM);
@@ -253,7 +255,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
         #endregion
@@ -276,17 +279,19 @@ namespace Microsoft.Legal.MatterCenter.Service
             try
             {
                 #region Error Checking
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 if (searchRequestVM == null && searchRequestVM.Client == null && searchRequestVM.SearchObject == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = $"No input data is passed to get  {errorSettings.Item}s",
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
+                searchRequestVM = null;
                 #endregion                
                 var searchResultsVM = await matterProvision.GetMatters(searchRequestVM);
                 return matterCenterServiceFunctions.ServiceResponse(searchResultsVM.MatterDataList, (int)HttpStatusCode.OK);
@@ -295,8 +300,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 var errorResponse = customLogger.GenerateErrorResponse(ex);
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-                //throw;
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
+                
             }
         }
 
@@ -316,33 +321,34 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                
+
                 #region Error Checking                
-                ErrorResponse errorResponse = null;                
+                GenericResponseVM genericResponse = null;                
                 if (matterData == null && string.IsNullOrWhiteSpace(matterData.MatterUrl) && string.IsNullOrWhiteSpace(matterData.MatterName))
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed to get folder hierarchy",
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
                 var folderHierarchy = await matterRepositoy.GetFolderHierarchyAsync(matterData);
-                var genericResponse = new {
+                var response = new {
                     foldersList = folderHierarchy
                 };
-                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(response, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
-
         
 
         /// <summary>
@@ -361,19 +367,20 @@ namespace Microsoft.Legal.MatterCenter.Service
         {
             try
             {
-                
+
 
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 if (matterVM == null && matterVM.Client == null && matterVM.Matter != null && string.IsNullOrWhiteSpace(matterVM.Matter.Name))
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed to get stamped properties",
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
                 //ToDo: Need to concert this method to async
@@ -385,7 +392,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
         #endregion
@@ -407,18 +415,19 @@ namespace Microsoft.Legal.MatterCenter.Service
         public async Task<IActionResult> GetConfigurations([FromBody]string siteCollectionPath)
         {
             try
-            {                
+            {
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 if (string.IsNullOrWhiteSpace(siteCollectionPath))
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed",
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 GenericResponseVM genericResponseVM = await matterRepositoy.GetConfigurationsAsync(siteCollectionPath);
@@ -427,7 +436,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
             }
         }
 
@@ -457,9 +467,10 @@ namespace Microsoft.Legal.MatterCenter.Service
                     {
                         Value = errorSettings.MessageNoInputs,
                         Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed",
                         IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
                 GenericResponseVM genericResponseVM = matterProvision.SaveConfigurations(matterConfigurations);
@@ -468,7 +479,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
             }
         }
 
@@ -496,11 +508,11 @@ namespace Microsoft.Legal.MatterCenter.Service
                 genericResponse = new GenericResponseVM()
                 {
                     Value = errorSettings.MessageNoInputs,
-                    Code = "",
+                    Code = HttpStatusCode.BadRequest.ToString(),
+                    Description = "No input data is passed",
                     IsError = true
                 };
-                
-                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
             }
             try
             {
@@ -516,7 +528,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception exception)
             {
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(exception);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -538,17 +551,17 @@ namespace Microsoft.Legal.MatterCenter.Service
             GenericResponseVM genericResponse = ServiceUtility.GenericResponse(matterSettings.DeleteMatterCode, ServiceConstants.TRUE);
             var client = matterMetadataVM.Client;
             var matter = matterMetadataVM.Matter;
-            var matterConfiguration = matterMetadataVM.MatterConfigurations;
-            ErrorResponse errorResponse = null;
+            var matterConfiguration = matterMetadataVM.MatterConfigurations;         
             if (null == client && null == matter && string.IsNullOrWhiteSpace(client.Url))
             {
-                errorResponse = new ErrorResponse()
+                genericResponse = new GenericResponseVM()
                 {
-                    Message = errorSettings.MessageNoInputs,
-                    ErrorCode = "",
-                    Description = "No input data is passed"
+                    Value = errorSettings.MessageNoInputs,
+                    Code = HttpStatusCode.BadRequest.ToString(),
+                    Description = "No input data is passed",
+                    IsError = true
                 };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
             }
             var matterInformation = new MatterInformationVM()
             {
@@ -559,28 +572,23 @@ namespace Microsoft.Legal.MatterCenter.Service
                 CultureInfo.InvariantCulture), null);
             if(genericResponse!=null)
             {
-                errorResponse = new ErrorResponse()
-                {
-                    Message = genericResponse.Value,
-                    ErrorCode = genericResponse.Code,                                                
-                    Description = "No input data is passed"
-                };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+
+                genericResponse.Description = "Validation failed";
+                genericResponse.IsError = true;               
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
             }
                 
             try
             {
+               
                 if (!matterMetadataVM.HasErrorOccurred)
                 {
                     genericResponse = matterProvision.CheckMatterExists(matterMetadataVM);
                     if (genericResponse != null)
-                    {
-                        errorResponse = new ErrorResponse()
-                        {
-                            Message = genericResponse.Value,
-                            ErrorCode = genericResponse.Code,
-                        };
-                        return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    {                        
+                        genericResponse.Description = genericResponse.Value;
+                        genericResponse.IsError = true;
+                        return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                     }
                     else
                     {
@@ -591,18 +599,17 @@ namespace Microsoft.Legal.MatterCenter.Service
                 else
                 {
                     genericResponse = matterProvision.DeleteMatter(matterMetadataVM as MatterVM);
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponse.Value,
-                        ErrorCode = genericResponse.Code,
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    genericResponse.IsError = true;
+                    genericResponse.Description = $"Error occured when checking whether the given {errorSettings.Item} exisits or not";
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
             }
             catch (Exception exception)
             {
+                genericResponse = matterProvision.DeleteMatter(matterMetadataVM as MatterVM);
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errResponse = customLogger.GenerateErrorResponse(exception);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
             }                
         }
 
@@ -623,43 +630,40 @@ namespace Microsoft.Legal.MatterCenter.Service
             
             GenericResponseVM genericResponse = null;
             var client = matterInformationVM.Client;
-            var matter = matterInformationVM.Matter;
+            var matter = matterInformationVM.Matter;            
             
-            ErrorResponse errorResponse = null;
             if (null == client && null == matter && null != client.Url)
             {
-                errorResponse = new ErrorResponse()
+                genericResponse = new GenericResponseVM()
                 {
-                    Message = errorSettings.MessageNoInputs,
-                    ErrorCode = "",
-                    Description = "No input data is passed"
+                    Value = errorSettings.MessageNoInputs,
+                    Code = HttpStatusCode.BadRequest.ToString(),
+                    Description = "No input data is passed",
+                    IsError = true
                 };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
             }            
 
             try
             {
                 if (0 == matter.AssignUserEmails.Count)
-                {                    
-                    errorResponse = new ErrorResponse()
+                {
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.IncorrectInputUserNamesMessage,
-                        ErrorCode = errorSettings.IncorrectInputUserNamesCode,
-                        Description = "No input data is passed"
+                        Value = errorSettings.IncorrectInputUserNamesMessage,
+                        Code = errorSettings.IncorrectInputUserNamesCode,
+                        Description = "No input data is passed",
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
 
                 genericResponse = matterProvision.CheckSecurityGroupExists(matterInformationVM);
                 if(genericResponse != null)
                 {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponse.Value,
-                        ErrorCode = genericResponse.Code,
-                        Description = "No input data is passed"
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                   // genericResponse.Description = "No input data is passed";
+                    genericResponse.IsError = true;
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 genericResponse = ServiceUtility.GenericResponse(ServiceConstants.SUCCESS, ServiceConstants.TRUE);
                 return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
@@ -667,7 +671,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             catch (Exception exception)
             {
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errResponse = customLogger.GenerateErrorResponse(exception);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -691,18 +696,19 @@ namespace Microsoft.Legal.MatterCenter.Service
             var userid = matterInformation.UserIds;
             try
             {
-                
+
                 #region Error Checking                
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 if (matterInformation.Client == null && matterInformation.Matter == null && matterInformation.MatterDetails == null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = $"No input data is passed to update the {errorSettings.Item}",
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
 
@@ -710,24 +716,21 @@ namespace Microsoft.Legal.MatterCenter.Service
                 GenericResponseVM validationResponse = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.EditMatterPermission), null);
                 if (validationResponse != null)
                 {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = validationResponse.Value,
-                        ErrorCode = validationResponse.Code,
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    validationResponse.IsError = true;
+                    return matterCenterServiceFunctions.ServiceResponse(validationResponse, (int)HttpStatusCode.BadRequest);
                 }
 
                 if (null != matter.Conflict && !string.IsNullOrWhiteSpace(matter.Conflict.Identified))
                 {
                     if (matter.AssignUserNames.Count == 0)
                     {
-                        errorResponse = new ErrorResponse()
+                        genericResponse = new GenericResponseVM()
                         {
-                            Message = errorSettings.IncorrectInputUserNamesMessage,
-                            ErrorCode = errorSettings.IncorrectInputUserNamesCode,
+                            Value = errorSettings.IncorrectInputUserNamesMessage,
+                            Code = errorSettings.IncorrectInputUserNamesCode,
+                            IsError = true
                         };
-                        return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                        return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                     }
                     else
                     {
@@ -736,29 +739,26 @@ namespace Microsoft.Legal.MatterCenter.Service
                             validationResponse = editFunctions.CheckSecurityGroupInTeamMembers(client, matter, userid);
                             if (validationResponse != null)
                             {
-                                errorResponse = new ErrorResponse()
-                                {
-                                    Message = validationResponse.Value,
-                                    ErrorCode = validationResponse.Code,
-                                };
-                                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                                validationResponse.IsError = true;
+                                return matterCenterServiceFunctions.ServiceResponse(validationResponse, (int)HttpStatusCode.BadRequest);
                             }
                         }
                     }
                 }
                 else
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.IncorrectInputConflictIdentifiedMessage,
-                        ErrorCode = errorSettings.IncorrectInputConflictIdentifiedCode,
+                        Value = errorSettings.IncorrectInputConflictIdentifiedMessage,
+                        Code = errorSettings.IncorrectInputConflictIdentifiedCode,
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
 
                 #region Upadte Matter
-                GenericResponseVM genericResponse = matterProvision.UpdateMatter(matterInformation);
+                genericResponse = matterProvision.UpdateMatter(matterInformation);
                 if (genericResponse == null)
                 {
                     var result = new GenericResponseVM()
@@ -788,12 +788,10 @@ namespace Microsoft.Legal.MatterCenter.Service
                 };
                 //editFunctions.RevertMatterUpdates(client, matter, matterRevertListObject, loggedInUserName, userPermissionOnLibrary, listItemId, isEditMode);
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
             }
-            finally
-            {
-
-            }
+            
         }
 
         /// <summary>
@@ -809,21 +807,30 @@ namespace Microsoft.Legal.MatterCenter.Service
             Type = typeof(GenericResponseVM))]
         [SwaggerResponseRemoveDefaults]
         public IActionResult Delete([FromBody] MatterVM matterVM)
-        {            
-            ErrorResponse errorResponse = null;
-            if (null == matterVM && null == matterVM.Client && null == matterVM.Matter && string.IsNullOrWhiteSpace(matterVM.Client.Url) && string.IsNullOrWhiteSpace(matterVM.Matter.Name))
+        {
+            try
             {
-                errorResponse = new ErrorResponse()
+                ErrorResponse errorResponse = null;
+                if (null == matterVM && null == matterVM.Client && null == matterVM.Matter && string.IsNullOrWhiteSpace(matterVM.Client.Url) && string.IsNullOrWhiteSpace(matterVM.Matter.Name))
                 {
-                    Message = errorSettings.MessageNoInputs,
-                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                    Description = "No input data is passed"
-                };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-            }
+                    errorResponse = new ErrorResponse()
+                    {
+                        Message = errorSettings.MessageNoInputs,
+                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                }
 
-            GenericResponseVM genericResponse = matterProvision.DeleteMatter(matterVM);
-            return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                GenericResponseVM genericResponse = matterProvision.DeleteMatter(matterVM);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                var errResponse = customLogger.GenerateErrorResponse(exception);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
+            }
         }
 
         /// <summary>
@@ -840,18 +847,18 @@ namespace Microsoft.Legal.MatterCenter.Service
         [SwaggerResponseRemoveDefaults]
         public IActionResult Create([FromBody] MatterMetdataVM matterMetdataVM)
         {
-            ErrorResponse errorResponse = null;
-            GenericResponseVM genericResponseVM = null;
             
+            GenericResponseVM genericResponseVM = null;            
             if (null == matterMetdataVM && null == matterMetdataVM.Client && null == matterMetdataVM.Matter && string.IsNullOrWhiteSpace(matterMetdataVM.Client.Url))
             {
-                errorResponse = new ErrorResponse()
+                genericResponseVM = new GenericResponseVM()
                 {
-                    Message = errorSettings.MessageNoInputs,
-                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                    Description = "No input data is passed"
+                    Value = errorSettings.MessageNoInputs,
+                    Code = HttpStatusCode.BadRequest.ToString(),
+                    Description = $"No input data is passed to create the {errorSettings.Item}",
+                    IsError = true
                 };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.BadRequest);
             }
             try
             {
@@ -859,13 +866,10 @@ namespace Microsoft.Legal.MatterCenter.Service
                 if (genericResponseVM != null && genericResponseVM.IsError == true)
                 {
                     //Matter not created successfully
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponseVM.Value,
-                        ErrorCode = genericResponseVM.Code,
-                        Description = "Matter page not created successfully"
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    genericResponseVM.IsError = true;
+                    genericResponseVM.Description = "Matter page not created successfully";
+                    
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.OK);
                 }
                 //Matter page created successfully
                 genericResponseVM = new GenericResponseVM
@@ -879,7 +883,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 matterProvision.DeleteMatter(matterMetdataVM as MatterVM);
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errResponse = customLogger.GenerateErrorResponse(exception);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -906,10 +911,11 @@ namespace Microsoft.Legal.MatterCenter.Service
                 {
                     Value = errorSettings.MessageNoInputs,
                     Code = HttpStatusCode.BadRequest.ToString(),
+                    Description = $"No input data is passed to assigncontenttype for the {errorSettings.Item}",
                     IsError = true
                 };
                 
-                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);               
+                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);               
             }
 
             // For each value in the list of Content Type Names
@@ -929,27 +935,17 @@ namespace Microsoft.Legal.MatterCenter.Service
                 if (genericResponse != null)
                 { 
                     matterProvision.DeleteMatter(matterInformationVM as MatterVM);
-                    
-                    genericResponse = new GenericResponseVM()
-                    {
-                        Value = genericResponse.Value,
-                        Code = genericResponse.Code.ToString(),
-                        IsError = true
-                    };
+                    genericResponse.Description = $"Error occurred when asigning content type to the {errorSettings.Item}";
 
-                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 genericResponse = matterProvision.AssignContentType(matterMetadata);
                 if (genericResponse != null && genericResponse.IsError==true)
                 {
                     matterProvision.DeleteMatter(matterInformationVM as MatterVM);
-                    genericResponse = new GenericResponseVM()
-                    {
-                        Value = genericResponse.Value,
-                        Code = genericResponse.Code.ToString(),
-                        IsError = true
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                    genericResponse.Description = $"Error occurred when asigning content type to the {errorSettings.Item}";
+
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
             }
@@ -959,8 +955,8 @@ namespace Microsoft.Legal.MatterCenter.Service
                 matterProvision.DeleteMatter(matterInformationVM as MatterVM);
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 var errorResponse = customLogger.GenerateErrorResponse(exception);
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
-                //throw;
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
+                
             }
         }
 
@@ -984,28 +980,24 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 
                 var matterConfigurations = matterMetadataVM.MatterConfigurations;
-                ErrorResponse errorResponse = null;
+                GenericResponseVM genericResponse = null;
                 if (null == client && null == matter && null == client.Url && null == matterConfigurations)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = "No input data is passed",
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
 
                 var genericResponseVM = matterProvision.AssignUserPermissions(matterMetadataVM);
                 if (genericResponseVM != null && genericResponseVM.IsError == true)
                 {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponseVM.Value,
-                        ErrorCode = genericResponseVM.Code,
-                        Description = ""
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    genericResponseVM.IsError = true;
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.BadRequest);
                 }
                 var assignPermissions = new
                 {
@@ -1017,7 +1009,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 matterProvision.DeleteMatter(matterMetadataVM as MatterVM);
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -1037,19 +1030,20 @@ namespace Microsoft.Legal.MatterCenter.Service
         public IActionResult CreateLandingPage([FromBody] MatterMetdataVM matterMetdataVM)
         {
             
-            ErrorResponse errorResponse = null;
+            
             GenericResponseVM genericResponseVM = null;
             //No valid input
             if (null == matterMetdataVM && null == matterMetdataVM.Client && null == matterMetdataVM.Matter && 
                 string.IsNullOrWhiteSpace(matterMetdataVM.Client.Url))
             {
-                errorResponse = new ErrorResponse()
+                genericResponseVM = new GenericResponseVM()
                 {
-                    Message = errorSettings.MessageNoInputs,
-                    ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                    Description = "No input data is passed"
+                    Value = errorSettings.MessageNoInputs,
+                    Code = HttpStatusCode.BadRequest.ToString(),
+                    Description = "No input data is passed",
+                    IsError = true
                 };
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.BadRequest);
             }           
             try
             {
@@ -1058,13 +1052,10 @@ namespace Microsoft.Legal.MatterCenter.Service
                 {
                     matterProvision.DeleteMatter(matterMetdataVM as MatterVM);
                     //Matter landing page not created successfully
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponseVM.Value,
-                        ErrorCode = genericResponseVM.Code,
-                        Description = "Matter landing page not created successfully"
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                    genericResponseVM.IsError = true;
+                    genericResponseVM.Description = "Matter landing page not created successfully";
+                    
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.BadRequest);
                 }
                 //Matter landing page created successfully
                 genericResponseVM = new GenericResponseVM {
@@ -1078,7 +1069,8 @@ namespace Microsoft.Legal.MatterCenter.Service
                 //If there is error in creating matter landing page, delete all the information related to this matter
                 matterProvision.DeleteMatter(matterMetdataVM as MatterVM);
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errResponse = customLogger.GenerateErrorResponse(exception);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -1115,7 +1107,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                         Code = HttpStatusCode.BadRequest.ToString(),
                         IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
 
@@ -1132,13 +1124,8 @@ namespace Microsoft.Legal.MatterCenter.Service
                 if (genericResponse != null)
                 {
                     matterProvision.DeleteMatter(matterMetdata as MatterVM);
-                    genericResponse = new GenericResponseVM()
-                    {
-                        Value = genericResponse.Value,
-                        Code = genericResponse.Code,
-                        IsError = true
-                    };                    
-                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                    genericResponse.Description = $"Error occurred while updating the {errorSettings.Item} metadata.";
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion   
 
@@ -1161,14 +1148,16 @@ namespace Microsoft.Legal.MatterCenter.Service
                 {
                     matterProvision.DeleteMatter(matterMetdata as MatterVM);
                     customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                    throw;
+                    var errResponse = customLogger.GenerateErrorResponse(ex);
+                    return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
                 }
             }
             catch (Exception ex)
             {
                 matterProvision.DeleteMatter(matterMetdata as MatterVM);
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
             }
 
         }
@@ -1190,30 +1179,26 @@ namespace Microsoft.Legal.MatterCenter.Service
             var client = matterInformation.Client;            
             try
             {
-                
-                
-                ErrorResponse errorResponse = null;
+
+
+                GenericResponseVM genericResponse = null;
                 if (matterInformation == null && matterInformation.Client==null)
                 {
-                    errorResponse = new ErrorResponse()
+                    genericResponse = new GenericResponseVM()
                     {
-                        Message = errorSettings.MessageNoInputs,
-                        ErrorCode = HttpStatusCode.BadRequest.ToString(),
-                        Description = "No input data is passed"
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
                     };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
 
                 var genericResponseVM = matterProvision.ShareMatterToExternalUser(matterInformation);
                 if (genericResponseVM != null && genericResponseVM.IsError == true)
                 {
-                    errorResponse = new ErrorResponse()
-                    {
-                        Message = genericResponseVM.Value,
-                        ErrorCode = genericResponseVM.Code,
-                        Description = ""
-                    };
-                    return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.BadRequest);
+                    genericResponseVM.IsError = true;
+                    genericResponseVM.Description = $"Error occurred when sharing {errorSettings.Item} to the External user";
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.BadRequest);
                 }
                 var assignPermissions = new
                 {
@@ -1222,10 +1207,10 @@ namespace Microsoft.Legal.MatterCenter.Service
                 return matterCenterServiceFunctions.ServiceResponse(assignPermissions, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
-            {
-                
+            {                
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
             }
         }
 

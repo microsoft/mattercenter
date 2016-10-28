@@ -26,7 +26,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string MessageNoInputs { get; set; }
         public string MessageNoResult { get; set; }
         public string PeoplePickerNoResults { get; set; }
-
+        public string Item { get; set; }
 
 
         #region Error Code
