@@ -1503,7 +1503,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 string documentTemplateCount = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.DocumentTemplateCount);         
                 string matterCenterPermission = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Permissions);
                 string matterCenterRoles = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Roles);
-                string finalTeamMembers = matterDetails.TeamMembers;
+                string[] members = matterDetails.TeamMembers.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                string finalTeamMembers = String.Join(";", members);              
                 string finalResponsibleAttorneysUsers = matterDetails.ResponsibleAttorney;
                 string finalResponsibleAttorneysEmail = matterDetails.ResponsibleAttorneyEmail;
                 string matterCenterUsers = string.Empty;
@@ -1693,7 +1694,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }                
                 propertyList.Add(matterSettings.StampedPropertyClientID, WebUtility.HtmlEncode(client.Id));
                 propertyList.Add(matterSettings.StampedPropertyResponsibleAttorney, WebUtility.HtmlEncode(finalResponsibleAttorneysUsers));
-                propertyList.Add(matterSettings.StampedPropertyTeamMembers, WebUtility.HtmlEncode(finalTeamMembers));
+                propertyList.Add(matterSettings.StampedPropertyTeamMembers, WebUtility.HtmlEncode(finalTeamMembers.Replace(";", "; ")));               
                 propertyList.Add(matterSettings.StampedPropertyIsMatter, ServiceConstants.TRUE);
                 propertyList.Add(matterSettings.StampedPropertyOpenDate, WebUtility.HtmlEncode(DateTime.Now.ToString(matterSettings.ValidDateFormat, CultureInfo.InvariantCulture)));
                 propertyList.Add(matterSettings.PropertyNameVtiIndexedPropertyKeys, WebUtility.HtmlEncode(ServiceUtility.GetEncodedValueForSearchIndexProperty(keys)));

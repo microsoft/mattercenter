@@ -647,42 +647,56 @@
                             // cm.assignPermissionTeams.splice(0, 1);
                             cm.assignPermissionTeams = [];
                             // cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
-
+                            if (cm.isBackwardCompatible) {
+                                addLoggedinUserToTeam();
+                            }
                             for (var aCount = 0; aCount < arrDMatterUsers.length; aCount++) {
                                 var assignPermTeam = {};
                                 if ("" !== arrDMatterUsers[aCount]) {
                                     arrDMatterUsers[aCount] = arrDMatterUsers[aCount].replace(/\;$/, '');
                                     arrDMatterUserEmails[aCount] = arrDMatterUserEmails[aCount].replace(/\;$/, '');
-                                    assignPermTeam.assignedUser = arrDMatterUsers[aCount] + "(" + arrDMatterUserEmails[aCount] + ")";
+                                    assignPermTeam.assignedUser = arrDMatterUsers[aCount] + "(" + arrDMatterUserEmails[aCount] + ");";
                                     if (-1 == cm.oSiteUsers.indexOf(arrDMatterUserEmails[aCount])) {
                                         cm.oSiteUsers.push(arrDMatterUserEmails[aCount]);
                                     }
+
+                                    var userDetails = {};
+                                    userDetails.userName = arrDMatterUserEmails[aCount];
+                                    userDetails.userExsists = true;
+                                    userDetails.userConfirmation = true;
+                                    if (!assignPermTeam.teamUsers) {
+                                        assignPermTeam.teamUsers = [];
+                                    }
+                                    var isRowPresent = $filter("filter")(assignPermTeam.teamUsers, arrDMatterUserEmails[aCount]);
+                                    if (isRowPresent.length == 0) {
+                                        assignPermTeam.teamUsers.push(userDetails);
+                                    }
+                                    //cm.assignRoles   cm.assignPermissions 
+                                    //assignedRole  assignedPermission
+                                    angular.forEach(cm.assignRoles, function (assignRole) {
+                                        if (arrDMatterRoles[aCount] == assignRole.name) {
+                                            assignPermTeam.assignedRole = assignRole;
+                                        }
+                                    });
+                                    angular.forEach(cm.assignPermissions, function (assignPermission) {
+                                        if (arrDMatterPermissions[aCount] == assignPermission.name) {
+                                            assignPermTeam.assignedPermission = assignPermission;
+                                        }
+                                    });
                                 }
                                 else {
                                     assignPermTeam.assignedUser = "";
                                     assignPermTeam.assignedRole = cm.assignRoles[0];
                                     assignPermTeam.assignedPermission = cm.assignPermissions[0];
                                 }
-
-
-                                //cm.assignRoles   cm.assignPermissions 
-                                //assignedRole  assignedPermission
-                                angular.forEach(cm.assignRoles, function (assignRole) {
-                                    if (arrDMatterRoles[aCount] == assignRole.name) {
-                                        assignPermTeam.assignedRole = assignRole;
-                                    }
-                                });
-                                angular.forEach(cm.assignPermissions, function (assignPermission) {
-                                    if (arrDMatterPermissions[aCount] == assignPermission.name) {
-                                        assignPermTeam.assignedPermission = assignPermission;
-                                    }
-                                });
-                                assignPermTeam.assigneTeamRowNumber = aCount + 1;
-
+                                assignPermTeam.assignedAllUserNamesAndEmails = assignPermTeam.assignedUser;
+                                assignPermTeam.assigneTeamRowNumber = cm.assignPermissionTeams.length + 1;                                
+                                assignPermTeam.userConfirmation = true;
+                                assignPermTeam.userExsists = true;
                                 cm.assignPermissionTeams.push(assignPermTeam);
-                                if (assignPermTeam.assignedUser != "") {
-                                    cm.checkUserExists(assignPermTeam);
-                                }
+                                //if (assignPermTeam.assignedUser != "") {
+                                //    cm.checkUserExists(assignPermTeam);
+                                //}
                             }
 
 
@@ -2073,30 +2087,7 @@
                     cm.iCurrentPage = 1;
                 }
 
-                if (isPageValid) {
-                    //
-                    if (cm.isBackwardCompatible) {
-                        var team = {};
-                        team.assigneTeamRowNumber = cm.assignPermissionTeams.length + 1;
-                        team.assignedUser = adalService.userInfo.profile.given_name + ' ' + adalService.userInfo.profile.family_name + '(' + adalService.userInfo.userName + ');';
-                        team.userConfirmation = true;
-                        team.userExsists = true;
-
-                        angular.forEach(cm.assignRoles, function (assignRole) {
-                            if (assignRole.mandatory) {
-                                team.assignedRole = assignRole;
-                            }
-                        });
-                        angular.forEach(cm.assignPermissions, function (assignPermission) {
-                            if (assignPermission.name == "Full Control") {
-                                team.assignedPermission = assignPermission;
-                            }
-                        });
-                        cm.assignPermissionTeams.push(team);
-
-                    }
-                    //
-
+                if (isPageValid) {                   
                     cm.popupContainerBackground = "hide";
                     var matterGUID = cm.matterGUID;
                     var arrFolderNames = [];
@@ -3849,6 +3840,46 @@
 
             }
             //#endregion
+
+
+            function addLoggedinUserToTeam() {
+                if (cm.isBackwardCompatible) {
+                    var team = {};
+                    team.assigneTeamRowNumber = cm.assignPermissionTeams.length + 1;
+                    team.assignedUser = adalService.userInfo.profile.name + '(' + adalService.userInfo.userName + ');';
+                    team.userConfirmation = true;
+                    team.userExsists = true;
+                    team.disable = true;
+                    team.userConfirmation = true;
+                    team.userExsists = true;
+                    var userDetails = {};
+                    userDetails.userName = adalService.userInfo.userName;
+                    userDetails.userExsists = true;
+                    userDetails.userConfirmation = true;
+                    if (!team.teamUsers) {
+                        team.teamUsers = [];
+                    }
+                    var isRowPresent = $filter("filter")(team.teamUsers, adalService.userInfo.userName);
+                    if (isRowPresent.length == 0) {
+                        team.teamUsers.push(userDetails);
+                    }
+                    if (-1 == cm.oSiteUsers.indexOf(adalService.userInfo.userName)) {
+                        cm.oSiteUsers.push(adalService.userInfo.userName);
+                    }
+                    angular.forEach(cm.assignRoles, function (assignRole) {
+                        if (assignRole.mandatory) {
+                            team.assignedRole = assignRole;
+                        }
+                    });
+                    angular.forEach(cm.assignPermissions, function (assignPermission) {
+                        if (assignPermission.name == "Full Control") {
+                            team.assignedPermission = assignPermission;
+                        }
+                    });
+                    cm.assignPermissionTeams.push(team);
+
+                }
+            }
 
         }]);
 

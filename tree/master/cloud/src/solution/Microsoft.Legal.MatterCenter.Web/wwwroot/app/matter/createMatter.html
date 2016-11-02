@@ -212,7 +212,7 @@
                 <div data-ng-repeat="assignTeam in cm.assignPermissionTeams" class="assignTeam">
                     <div class="row{{$index}} assignNewPerm">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' assignteamkeydown confirm="false" uservalue="" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocationsTeam' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}"  typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
+                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' assignteamkeydown confirm="false" uservalue="" ng-disabled="assignTeam.disable" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocationsTeam' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}"  typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
                         <!--<div ng-show='teamAssingnResults'>
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
                         </div>-->
@@ -222,19 +222,22 @@
                         <div class="gutter"></div>
                         <div class="addNewMember" ng-show="cm.showRoles">
                             <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth ">
-                                <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
+                                <select id='roleUser{{assignTeam.assigneTeamRowNumber}}'  ng-disabled="assignTeam.disable" ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
                             </div>
                         </div>
                         <div class="gutter"></div>
                         <div>
                             <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
                                 <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
-                                    <select id='permUser{{assignTeam.assigneTeamRowNumber}}' ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
+                                    <select id='permUser{{assignTeam.assigneTeamRowNumber}}'  ng-disabled="assignTeam.disable" ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
                                 </div>
                             </div>
                         </div>
                         <div class="gutter"></div>
-                        <div class="close customClose">
+                        <div class="customClose" ng-if="assignTeam.disable==true">
+                            <img ng-model="assignTeam.assigneTeamRowNumber"  title="{{cm.createContent.ButtonDeleteText}}" alt="{{cm.createContent.ButtonDeleteText}}" style="cursor:default; opacity:0.6 !important" src="../Images/icon-delete.png">
+                        </div>
+                        <div class="close customClose" ng-if="assignTeam.disable==undefined">
                             <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="{{cm.createContent.ButtonDeleteText}}" alt="{{cm.createContent.ButtonDeleteText}}" src="../Images/icon-delete.png">
                         </div>
                     </div>
