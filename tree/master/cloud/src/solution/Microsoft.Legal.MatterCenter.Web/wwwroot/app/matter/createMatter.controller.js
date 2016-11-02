@@ -691,7 +691,8 @@
                                 }
                                 assignPermTeam.assignedAllUserNamesAndEmails = assignPermTeam.assignedUser;
                                 assignPermTeam.assigneTeamRowNumber = cm.assignPermissionTeams.length + 1;                                
-                             
+                                assignPermTeam.userConfirmation = true;
+                                assignPermTeam.userExsists = true;
                                 cm.assignPermissionTeams.push(assignPermTeam);
                                 //if (assignPermTeam.assignedUser != "") {
                                 //    cm.checkUserExists(assignPermTeam);
@@ -3849,6 +3850,8 @@
                     team.userConfirmation = true;
                     team.userExsists = true;
                     team.disable = true;
+                    team.userConfirmation = true;
+                    team.userExsists = true;
                     var userDetails = {};
                     userDetails.userName = adalService.userInfo.userName;
                     userDetails.userExsists = true;
