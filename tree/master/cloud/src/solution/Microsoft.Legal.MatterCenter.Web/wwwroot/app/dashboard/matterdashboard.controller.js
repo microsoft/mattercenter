@@ -406,8 +406,8 @@
                     vm.pagination();
                     if (response == "" ||
                             (vm.selectedTab == vm.matterDashboardConfigs.Tab2HeaderText && response.allMatterCounts == 0) ||
-                            (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText && response.myMatterCount == 0) ||
-                            (vm.selectedTabInfo == vm.matterDashboardConfigs.Tab3HeaderText && response.pinMatterCount == 0)) {
+                            (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText && response.myMatterCounts == 0) ||
+                            (vm.selectedTabInfo == vm.matterDashboardConfigs.Tab3HeaderText && response.pinMatterCounts == 0)) {
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = false;
                         vm.nodata = true;
@@ -422,6 +422,7 @@
 
             //#region This api will get all matters which are pinned and this will be invoked when the user clicks on "Pinned Matters Tab"
             vm.getMatterPinned = function () {
+                vm.matterGridOptions.data = [];
                 vm.tabClicked = "Pinned Matters";
                 vm.selectedTab = vm.matterDashboardConfigs.Tab3HeaderText;
                 vm.sortbytext = vm.matterDashboardConfigs.DrpDownOption1Text;
@@ -569,6 +570,7 @@
 
 
             vm.myMatters = function () {
+                vm.matterGridOptions.data = [];
                 vm.tabClicked = "My Matters";
                 vm.selectedTab = vm.matterDashboardConfigs.Tab1HeaderText;
                 vm.sortbytext = vm.matterDashboardConfigs.DrpDownOption1Text;
@@ -634,6 +636,7 @@
 
             //This search function will be used for binding search results to the grid
             vm.search = function (isMy) {
+                vm.matterGridOptions.data = [];
                 vm.tabClicked = "All Matters";
                 vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
                 vm.sortbytext = vm.matterDashboardConfigs.DropDownOptionText;
