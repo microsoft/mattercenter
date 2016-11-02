@@ -401,6 +401,7 @@
                     // jQuery('#myModal').modal('show');
                     // optionsForPracticeGroup.Client.Url=cm.clientUrl;
                     getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
+                      
                         if (response.isError !== undefined && response.isError) {
                             showApiErrorMessages(response);
                         }
@@ -543,10 +544,10 @@
                             cm.conflictUsers.assignedUser = "";
                             cm.conflictUsers.assignedAllUserNamesAndEmails = "";
                             cm.conflictUsers.teamUsers = []
-                            var defaultMatterConfig = JSON.parse(result.code);
-                            cm.matterName = defaultMatterConfig.DefaultMatterName;
+                            var defaultMatterConfig = JSON.parse(result.code);                           
+                            cm.matterName = defaultMatterConfig.DefaultMatterName?defaultMatterConfig.DefaultMatterName:"";
                             cm.checkValidMatterName();
-                            cm.matterId = defaultMatterConfig.DefaultMatterId;
+                            cm.matterId = defaultMatterConfig.DefaultMatterId?defaultMatterConfig.DefaultMatterId:"";
                             cm.secureMatterCheck = true;
                             if (defaultMatterConfig.IsRestrictedAccessSelected) {
                                 cm.secureMatterCheck = defaultMatterConfig.IsRestrictedAccessSelected;
@@ -558,20 +559,20 @@
                                 cm.includeCalendar = defaultMatterConfig.IsCalendarSelected;
                             }
                             else {
-                                cm.includeCalendar = defaultMatterConfig.IsCalendarSelected;
+                                cm.includeCalendar = defaultMatterConfig.IsCalendarSelected ? defaultMatterConfig.IsCalendarSelected : false;
                             }
                             if (defaultMatterConfig.IsEmailOptionSelected) {
                                 cm.includeEmail = defaultMatterConfig.IsEmailOptionSelected;
                                 cm.createButton = "Create and Notify";
                             }
                             else {
-                                cm.includeEmail = defaultMatterConfig.IsEmailOptionSelected;
+                                cm.includeEmail = defaultMatterConfig.IsEmailOptionSelected ? defaultMatterConfig.IsEmailOptionSelected : false;
                             }
                             if (defaultMatterConfig.IsRSSSelected) {
                                 cm.includeRssFeeds = defaultMatterConfig.IsRSSSelected;
                             }
                             else {
-                                cm.includeRssFeeds = defaultMatterConfig.IsRSSSelected;
+                                cm.includeRssFeeds = defaultMatterConfig.IsRSSSelected ? defaultMatterConfig.IsRSSSelected : false;
                             }
                             if (defaultMatterConfig.IsConflictCheck) {
                                 cm.defaultConfilctCheck = defaultMatterConfig.IsConflictCheck;
@@ -579,7 +580,7 @@
                                 cm.secureMatterRadioEnabled = cm.defaultConfilctCheck;
                             }
                             else {
-                                cm.defaultConfilctCheck = defaultMatterConfig.IsConflictCheck;
+                                cm.defaultConfilctCheck = defaultMatterConfig.IsConflictCheck?defaultMatterConfig.IsConflictCheck:false;
                                 cm.secureMatterRadioEnabled = cm.defaultConfilctCheck;
                                 cm.conflictRadioCheck = cm.defaultConfilctCheck;
 
@@ -588,7 +589,7 @@
                                 cm.isMatterDescriptionMandatory = defaultMatterConfig.IsMatterDescriptionMandatory;
                             }
                             else {
-                                cm.isMatterDescriptionMandatory = defaultMatterConfig.IsMatterDescriptionMandatory;
+                                cm.isMatterDescriptionMandatory = defaultMatterConfig.IsMatterDescriptionMandatory?defaultMatterConfig.IsMatterDescriptionMandatory:false;
                             }
                             // if (defaultMatterConfig.IsContentCheck) {
                             // cm.secureMatterCheck = "True";
@@ -597,22 +598,23 @@
                                 cm.includeTasks = defaultMatterConfig.IsTaskSelected;
                             }
                             else {
-                                cm.includeTasks = defaultMatterConfig.IsTaskSelected;
+                                cm.includeTasks = defaultMatterConfig.IsTaskSelected?defaultMatterConfig.IsTaskSelected:false;
                             }
                             var arrDMatterAreaOfLaw = [];
                             var arrDMatterPracticeGroup = [], arrDMatterUsers = [], arrDMatterUserEmails = [], arrDMatterPermissions = [], arrDMatterRoles = [];
-                            arrDMatterAreaOfLaw = defaultMatterConfig.MatterAreaofLaw.split('$|$');
-                            arrDMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup.split('$|$');
+                            arrDMatterAreaOfLaw = defaultMatterConfig.MatterAreaofLaw?defaultMatterConfig.MatterAreaofLaw.split('$|$'):[];
+                            arrDMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup ? defaultMatterConfig.MatterPracticeGroup.split('$|$') : [];
                             //     dMatterAreaOfLaw = defaultMatterConfig.MatterAreaofLaw ? defaultMatterConfig.MatterAreaofLaw : "";
                             //   dMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup?defaultMatterConfig.MatterPracticeGroup: "";
                             //   dMatterSubAreOfLaw = defaultMatterConfig.?: "";
                             dMatterTypes = defaultMatterConfig.MatterTypes ? defaultMatterConfig.MatterTypes : "";
-                            cm.showRoles = defaultMatterConfig.ShowRole;
-                            cm.showMatterId = defaultMatterConfig.ShowMatterId;
-                            cm.matterIdType = defaultMatterConfig.MatterIdType;
+                            cm.showRoles = defaultMatterConfig.ShowRole!=undefined ? defaultMatterConfig.ShowRole : true;
+                            cm.showMatterId = defaultMatterConfig.ShowMatterId != undefined ? defaultMatterConfig.ShowMatterId : true;
+                            cm.matterIdType = defaultMatterConfig.MatterIdType ? defaultMatterConfig.MatterIdType : "Custom";
                             setMatterId(cm.matterIdType);
                             var arrDMatterTypes = dMatterTypes.split('$|$');
                             dPrimaryMatterType = defaultMatterConfig.DefaultMatterType ? defaultMatterConfig.DefaultMatterType : "";
+                            cm.primaryMatterType =  dPrimaryMatterType != "" ? true : false;
                             dMatterUsers = defaultMatterConfig.MatterUsers ? defaultMatterConfig.MatterUsers : "";
                             arrDMatterUsers = dMatterUsers.split('$|$');
                             dMatterUserEmails = defaultMatterConfig.MatterUserEmails ? defaultMatterConfig.MatterUserEmails : "";
@@ -1528,12 +1530,12 @@
 
                 checkSecurityGroupExists(optionsForSecurityGroupCheck, function (response) {
                     // console.log(response);                   
-                    if (!response.value) {
-                        cm.errTextMsg = response.message.split('$')[0];
+                    if (response.isError) {
+                        cm.errTextMsg = response.value.split('$')[0];
                         cm.errorBorder = "";
                         cm.errorStatus = true;
                         cm.errorPopUpBlock = true;
-                        var rowNumber= parseInt(response.message.split('$')[1].replace(/[^\d.]/g, ''),10);
+                        var rowNumber = parseInt(response.value.split('$')[1].replace(/[^\d.]/g, ''), 10);
                         cm.errorBorder = "txtUser" + rowNumber;
                         showErrorNotificationAssignTeams(cm.errTextMsg, rowNumber, "securityuser")
                         cm.popupContainerBackground = "hide";
@@ -2575,7 +2577,7 @@
                     clearAllProperties();
 
                     cm.navigateToSecondSection(cm.sectionName);
-                    cm.popupContainerBackground = "hide";
+                    cm.popupContainerBackground = "Show";
 
                     //  updateMatterMetadata();
 
@@ -2997,7 +2999,7 @@
                 //  cm.activeAOLTerm = null;
                 // cm.activeSubAOLTerm = null;
                 // cm.activeDocumentTypeLawTerm = null;
-                cm.popupContainerBackground = "hide";
+                cm.popupContainerBackground = "Show";
                 cm.popupContainer = "hide";
                 cm.createBtnDisabled = false;
                 cm.sectionName = "snOpenMatter";
@@ -3823,13 +3825,13 @@
                 if (clientName && clientName!=null && clientName != "") {
                     var levelOneList = [];
                     var pgTermList = cm.parentLevelOneList.level1;
-                    console.log(pgTermList);
+                   
                     angular.forEach(pgTermList, function (pgTerm) {
                         if (pgTerm.level2) {
                             angular.forEach(pgTerm.level2, function (levelTwoTerm) {
                                 if (levelTwoTerm.termName === clientName) {
                                     levelOneList.push(pgTerm);
-                                    console.log(levelOneList);
+                                   
                                 }
                             });
                         }
