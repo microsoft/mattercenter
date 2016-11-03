@@ -1987,11 +1987,37 @@
                         jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
                         vm.getMatterCounts();
                     } else {
-                        vm.matterGridOptions.data = response;
-                        jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
-                        jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
-                        jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
-                        vm.getMatterCounts();
+                        getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                            if (pinnedResponse && pinnedResponse.length > 0) {
+                                vm.Pinnedobj = pinnedResponse;
+                                vm.pinMatterCount = vm.Pinnedobj.length
+                                angular.forEach(pinnedResponse, function (pinobj) {
+                                    angular.forEach(response, function (res) {
+                                        //Check if the pinned matter name is equal to search matter name
+                                        if (pinobj.matterName == res.matterName) {
+                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                res.ismatterdone = true;
+                                                res.pinType = "unpin"
+                                            }
+                                        }
+                                    });
+                                });
+                                vm.matterGridOptions.data = response;
+                                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
+                                jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
+                                jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
+                                vm.getMatterCounts();
+
+                            }
+                            else {
+                                vm.matterGridOptions.data = response;
+                                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
+                                jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
+                                jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
+                                vm.getMatterCounts();
+                            }
+                            $interval(function () { vm.setPaginationHeight() }, 500, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
+                        });
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
