@@ -13,7 +13,7 @@
             cm.blockedUserName = undefined;
             cm.defaultConfilctCheck = false;
             cm.createContent = uiconfigs.CreateMatter;
-            cm.createMatterTaxonomyColumnNames = configs.contentTypes.managedColumns;
+            //cm.createMatterTaxonomyColumnNames = configs.contentTypes.managedColumns;
             cm.header = uiconfigs.Header;
             cm.chkConfilctCheck = undefined;
             cm.conflictRadioCheck = false;
