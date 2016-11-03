@@ -704,6 +704,7 @@
 
             //#region function to get the documents based on search term
             vm.getDocuments = function () {
+                vm.documentGridOptions.data = [];
                 vm.tabClicked = "All Documents";
                 vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText;
                 vm.sortbytext = vm.documentDashboardConfigs.DropDownOptionText;
@@ -757,6 +758,7 @@
 
             //#region function to get the documents which are pinned by user
             vm.getPinnedDocuments = function () {
+                vm.documentGridOptions.data = [];
                 vm.tabClicked = "Pinned Documents";
                 vm.selectedTab == vm.documentDashboardConfigs.Tab3HeaderText;
                 vm.sortbytext = vm.documentDashboardConfigs.DrpDownOption1Text;
@@ -811,6 +813,7 @@
 
             //#region function to get the documents based on login user
             vm.getMyDocuments = function () {
+                vm.documentGridOptions.data = [];
                 vm.tabClicked = "My Documents";
                 vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText;
                 vm.sortbytext = vm.documentDashboardConfigs.DrpDownOption4Text + ' ↓';
