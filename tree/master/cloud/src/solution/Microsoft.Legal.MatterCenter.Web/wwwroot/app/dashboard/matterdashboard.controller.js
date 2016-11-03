@@ -42,7 +42,7 @@
             $rootScope.bodyclass = "bodymain";
             $rootScope.profileClass = "hide";
             $rootScope.displayOverflow = "display";
-            vm.tabClicked = "All Matters";
+            vm.tabClicked = "My Matters";
             vm.sortbytext = vm.tabClicked == "All Matters" ? vm.matterDashboardConfigs.DropDownOptionText : vm.matterDashboardConfigs.DrpDownOption1Text;
             vm.showNavTab = false;
             vm.showInnerNav = true;
@@ -1448,7 +1448,7 @@
 
             //Call search api on page load
             //$interval(function () { vm.getMatterCounts(); }, 800, 3);
-            $timeout(function () { vm.myMatters() }, 500);
+            
 
 
             //#region For Sorting by Alphebatical or Created date
@@ -2002,8 +2002,10 @@
 
             if (vm.teamName !== '') {
                 vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
-
                 vm.getSearchResults();
+            }
+            else {
+                $timeout(function () { vm.myMatters() }, 500);
             }
             //#region Exporting to Excel Test
             vm.export = function () {
@@ -2139,7 +2141,13 @@
             //#region for stting the height of the pagination
             vm.setPaginationHeight = function () {
                 var height = angular.element(".ui-grid-canvas").height();
-                angular.element('.jsonGridFooter').css("top", height + 180);
+                if (vm.teamName !== '') {
+                    angular.element('.jsonGridFooter').css("top", height + 225);
+                }
+                else {
+                    angular.element('.jsonGridFooter').css("top", height + 180);
+                }
+                
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
