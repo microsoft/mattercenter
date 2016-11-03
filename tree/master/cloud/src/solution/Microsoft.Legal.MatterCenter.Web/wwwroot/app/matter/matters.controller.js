@@ -254,6 +254,12 @@
                 if (!vm.responseNull) {
                     vm.lazyloader = false;
                     vm.pagenumber = vm.pagenumber + 1;
+                    var finalSearchText = '';
+                    if (vm.selected != undefined) {
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyClientName + ':"' + vm.selected.trim() + '*")';
+                    }
+                    
+                    searchRequest.SearchObject.SearchTerm = finalSearchText;
                     searchRequest.SearchObject.PageNumber = vm.pagenumber;
                     get(searchRequest, function (response) {
                         if (response == "") {
@@ -1152,12 +1158,16 @@
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.selected != "") {
-                    if (vm.selected.indexOf("(") > -1) {
+                    if (vm.selected.indexOf("(") === -1) {
                         searchToText = vm.selected.replace("(", ",")
                         searchToText = searchToText.replace(")", "")
                         var firstText = searchToText.split(',')[0]
-                        var secondText = searchToText.split(',')[1]
-                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + secondText.trim() + '")';
+                        var secondText = '';
+                        if(searchToText.split(',')[1]!=undefined){
+                            secondText = searchToText.split(',')[1];
+                        }
+                        
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + firstText.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + firstText.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyClientName + ':"' + firstText.trim() + '*")';
                     } else {
                         finalSearchText = commonFunctions.searchFilter(vm.selected);
                     }

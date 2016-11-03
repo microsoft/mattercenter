@@ -118,7 +118,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 var errorResponse = customLogger.GenerateErrorResponse(ex);
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
             }
         }
 
@@ -290,8 +290,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                         IsError = true
                     };
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
-                }
-                searchRequestVM = null;
+                }                
                 #endregion                
                 var searchResultsVM = await matterProvision.GetMatters(searchRequestVM);
                 return matterCenterServiceFunctions.ServiceResponse(searchResultsVM.MatterDataList, (int)HttpStatusCode.OK);
@@ -300,7 +299,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 var errorResponse = customLogger.GenerateErrorResponse(ex);
-                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
                 
             }
         }

@@ -177,7 +177,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
             }
         }
 
@@ -221,7 +222,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
-                throw;
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
             }
         }
 
