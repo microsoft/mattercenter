@@ -378,6 +378,7 @@ textarea {
     /*max-width: 1800px;*/
     /*display: table;*/
     position: relative;
+    cursor: default;
 }
 
 #documentgrid .ui-grid-render-container, #mattergrid .ui-grid-render-container {
@@ -595,6 +596,7 @@ textarea {
 
 .ui-grid-header-viewport {
     overflow: hidden;
+    cursor: default;
 }
 
 .ui-grid-top-panel {
@@ -1022,6 +1024,7 @@ textarea {
     right: 30px;
     top: 40px;
     box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.47);
+    cursor: default;
 }
 
 .ContextualHelp {
@@ -1409,6 +1412,23 @@ textarea {
     outline: none !important;
 }
 
-#settingsLink span{
+#settingsLink span {
     outline: none !important;
 }
+
+#PersonaPicture {
+    cursor: default;
+}
+
+.AppLogo {
+    cursor: default;
+}
+
+.modal-content {
+    cursor: default;
+}
+
+.ms-ContextualMenu-link {
+    max-width: 165px !important;
+}
+

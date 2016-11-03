@@ -295,9 +295,9 @@
             if (screenHeight <= 768) {
                 vm.searchResultsLength = 17;
             } else if (screenHeight <= 1024 && screenHeight >= 769) {
-                vm.searchResultsLength = 38;
-            } else if (screenHeight <= 1080 && screenHeight >= 1025) {
                 vm.searchResultsLength = 42;
+            } else if (screenHeight <= 1080 && screenHeight >= 1025) {
+                vm.searchResultsLength = 50;
             }
         };
 
