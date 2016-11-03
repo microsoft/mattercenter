@@ -315,7 +315,7 @@
                 vm.lazyloader = false;
                 vm.pagenumber = vm.pagenumber + 1;
                 searchRequest.SearchObject.PageNumber = vm.pagenumber;
-                searchRequest.SearchObject.SearchTerm = "";
+                
                 get(searchRequest, function (response) {
                     if (response == "") {
                         vm.lazyloader = true;
@@ -646,7 +646,7 @@
                     searchToText = searchToText.replace(")", "");
                     var firstText = searchToText.split(',')[0];
                     var secondText = searchToText.split(',')[1];
-                    var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':' + firstText.trim() + ' OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + firstText.trim() + 'OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + firstText.trim() + ')';
+                    var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':' + firstText.trim() + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + firstText.trim() + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + firstText.trim() + '*)';
                 }
                 else {
                     finalSearchText = '(' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyFileName + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + vm.selected + '*)';

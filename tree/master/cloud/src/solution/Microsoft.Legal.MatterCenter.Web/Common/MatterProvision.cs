@@ -1095,14 +1095,18 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         ServiceConstants.LISTS, ServiceConstants.FORWARD_SLASH), StringComparison.OrdinalIgnoreCase));
                     string matterListName = centralList.Substring(centralList.LastIndexOf(ServiceConstants.FORWARD_SLASH, StringComparison.OrdinalIgnoreCase) + 1);
 
-
-                    bool isMatterSaved = matterRepositoy.SaveMatter(client, matter, matterListName, matterConfiguration, matterSiteURL);
-                    if (isMatterSaved == false)
+                    if(generalSettings.IsBackwardCompatible==false)
                     {
-                        genericResponseVM = ServiceUtility.GenericResponse(errorSettings.ErrorCodeAddTaskList, "Matter Not Saved");
-                        genericResponseVM.IsError = true;
-                        return genericResponseVM;
+                        bool isMatterSaved = matterRepositoy.SaveMatter(client, matter, matterListName, matterConfiguration, matterSiteURL);
+                        if (isMatterSaved == false)
+                        {
+                            genericResponseVM = ServiceUtility.GenericResponse(errorSettings.ErrorCodeAddTaskList, "Matter Not Saved");
+                            genericResponseVM.IsError = true;
+                            return genericResponseVM;
+                        }
                     }
+
+                    
                 }
                 genericResponseVM = new GenericResponseVM()
                 {
@@ -1504,7 +1508,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 string matterCenterPermission = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Permissions);
                 string matterCenterRoles = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Roles);
                 string[] members = matterDetails.TeamMembers.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                string finalTeamMembers = String.Join(";", members);              
+                string finalTeamMembers = String.Join(";", members);
                 string finalResponsibleAttorneysUsers = matterDetails.ResponsibleAttorney;
                 string finalResponsibleAttorneysEmail = matterDetails.ResponsibleAttorneyEmail;
                 string matterCenterUsers = string.Empty;
@@ -1636,7 +1640,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         }
                     }
 
-                    finalTeamMembers = string.Join(";", finalTeamMembersArray);
+                    finalTeamMembers = string.Join(";", finalTeamMembersArray);                    
                     matterCenterPermission = string.Join("$|$", finalMatterPermissionsArray);
                     matterCenterRoles = string.Join("$|$", finalMatterRolesArray);
                     finalResponsibleAttorneysEmail = string.Join(";", finalResponsibleAttorneysEmailsArray);
@@ -1682,7 +1686,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     string columnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName" + i];
                     ManagedColumn managedColumn = matterDetails.ManagedColumnTerms[columnName];                    
                     //Add all the managed columns values to the property list of the matter document library             
-                    propertyList.Add(columnName, WebUtility.HtmlEncode(managedColumn.TermName));
+                    propertyList.Add(columnName, WebUtility.HtmlEncode(managedColumn.TermName.Trim()));
                     //Add all the managed columns to the Indexed Property keys of the matter document library
                     keys.Add(columnName);
                 }
@@ -1694,7 +1698,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }                
                 propertyList.Add(matterSettings.StampedPropertyClientID, WebUtility.HtmlEncode(client.Id));
                 propertyList.Add(matterSettings.StampedPropertyResponsibleAttorney, WebUtility.HtmlEncode(finalResponsibleAttorneysUsers));
-                propertyList.Add(matterSettings.StampedPropertyTeamMembers, WebUtility.HtmlEncode(finalTeamMembers.Replace(";", "; ")));               
+                propertyList.Add(matterSettings.StampedPropertyTeamMembers, WebUtility.HtmlEncode(finalTeamMembers.Replace(";", "; ")));
                 propertyList.Add(matterSettings.StampedPropertyIsMatter, ServiceConstants.TRUE);
                 propertyList.Add(matterSettings.StampedPropertyOpenDate, WebUtility.HtmlEncode(DateTime.Now.ToString(matterSettings.ValidDateFormat, CultureInfo.InvariantCulture)));
                 propertyList.Add(matterSettings.PropertyNameVtiIndexedPropertyKeys, WebUtility.HtmlEncode(ServiceUtility.GetEncodedValueForSearchIndexProperty(keys)));
