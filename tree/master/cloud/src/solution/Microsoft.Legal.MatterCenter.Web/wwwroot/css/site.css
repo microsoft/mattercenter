@@ -1328,6 +1328,7 @@ textarea {
 
 .dashboardXOverFlow {
     overflow-x: auto;
+    overflow-y:hidden;
 }
 
 #matterMain div, #matterMain figure {
@@ -1395,7 +1396,7 @@ textarea {
 }
 
 .fromToPageWidth {
-    min-width: 35px;
+    min-width: 43px;
     max-width: 133px;
 }
 
