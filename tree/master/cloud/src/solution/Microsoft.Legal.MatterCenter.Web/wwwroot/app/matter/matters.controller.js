@@ -255,7 +255,7 @@
                     vm.lazyloader = false;
                     vm.pagenumber = vm.pagenumber + 1;
                     var finalSearchText = '';
-                    if (vm.selected != undefined) {
+                    if (vm.selected != undefined && vm.selected !='') {
                         finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyClientName + ':"' + vm.selected.trim() + '*")';
                     }
                     

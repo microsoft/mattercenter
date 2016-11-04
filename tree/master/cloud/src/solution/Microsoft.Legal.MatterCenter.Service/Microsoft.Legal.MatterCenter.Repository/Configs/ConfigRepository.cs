@@ -22,19 +22,20 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private GeneralSettings generalSettings;
         private UIConfigSettings configSettings;
         private IConfigRepository config;
-
+        private ISPOAuthorization spoAuthorization;
         /// <summary>
         /// ConfigRepository with all the required dependency injections inserted
         /// </summary>
         /// <param name="generalSettings"></param>
         /// <param name="configSettings"></param>
-        public ConfigRepository(
+        public ConfigRepository(ISPOAuthorization spoAuthorization,
             IOptions<GeneralSettings> generalSettings,
               IOptions<UIConfigSettings> configSettings)
         {
             this.generalSettings = generalSettings.Value;
             this.configSettings = configSettings.Value;
-            
+            this.spoAuthorization = spoAuthorization;
+
         }
 
 
@@ -62,11 +63,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="clientUrl"></param>
         public void UploadConfigFileToSPO(string filePath, string clientUrl)
         {
-            using (ClientContext clientContext = new ClientContext(generalSettings.CentralRepositoryUrl))
+            using (ClientContext clientContext = spoAuthorization.GetClientContext(clientUrl))
             {
-                //Connec to sharepoint using admin username and password
-                SecureString password = GetEncryptedPassword(generalSettings.AdminPassword);
-                clientContext.Credentials = new SharePointOnlineCredentials(generalSettings.AdminUserName, password);
+                
+                
                 var web = clientContext.Web;
                 var newFile = new FileCreationInformation
                 {
