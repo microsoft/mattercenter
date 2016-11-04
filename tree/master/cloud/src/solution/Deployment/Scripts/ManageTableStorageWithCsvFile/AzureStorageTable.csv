@@ -558,3 +558,5 @@ MatterCenterConfig,RowKey667,CreateMatter,ErrorMessageAOLSelection,Select matter
 MatterCenterConfig,RowKey668,Header,FooterMenuOption1Value,"[Enter URL for Feedback and Support, e.g. mailto:support@supportsite.com]"
 MatterCenterConfig,RowKey669,Header,FooterMenuOption2Value,"[Enter URL for Privacy terms, e.g. privacy.supportsite.com]"
 MatterCenterConfig,RowKey670,Header,FooterMenuOption3Value,"[Enter URL for Privacy terms, e.g. privacy.supportsite.com]"
+MatterCenterConfig,RowKey678,DocumentDetails,MenuImageUpperCaption,Matter Center
+MatterCenterConfig,RowKey679,DocumentDetails,MenuImageLowerCaption,for office 365
