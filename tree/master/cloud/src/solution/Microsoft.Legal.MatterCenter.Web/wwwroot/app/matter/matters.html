@@ -93,7 +93,7 @@
 
     <!--Upload Modal Screen Start-->
     <div class="modal fade" id="UploadMatterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="width:100%">
+        <div class="modal-dialog modal-lg" style="width:100%;margin:0px;">
             <div ng-if="vm.IsDupliacteDocument" class="notificationContainerForPopup" style="height: 80px;margin-left:0">
 
 
@@ -190,7 +190,7 @@
                                         <input class="popupName editPopupContent hide ui-draggable" id="{{attachmentInfo.counter}}attachmentText" type="text" maxlength="128">
                                         <div title="{{attachmentInfo.attachmentFileName}}"
                                              id="{{attachmentInfo.counter}}attachment"
-                                             class="popupName ui-draggable"
+                                             class="popupName ui-draggable "
                                              draggable
                                              data-contentType="{{attachmentInfo.contentType}}"
                                              data-size="{{attachmentInfo.size}}"
@@ -212,9 +212,9 @@
                                         </div>
                                         <img class="attachIcon" id="{{uploadedFile.counter}}attachIcon"
                                              alt="attachment icon" src="{{uploadedFile.documentIconUrl}}" fallbacksrc>
-                                        <div title="Test attachments" class="popupName">{{uploadedFile.fileName}}</div>
+                                        <div title="{{uploadedFile.fileName}}" class="popupName ">{{uploadedFile.fileName}}</div>
                                         <!--If the mail upload is success, show the folder name under which the email has been dropped-->
-                                        <div ng-if="!uploadedFile.isError" title="{{uploadedFile.dropFolder}}" class="uploadSuccessMessage">({{uploadedFile.dropFolder}})</div>
+                                        <div ng-if="!uploadedFile.isError" title="{{uploadedFile.dropFolder}}" class="uploadSuccessMessage ">({{uploadedFile.dropFolder}})</div>
                                     </div>
                                 </div>
                                 <div ng-hide="(vm.uploadedFiles.length || vm.allAttachmentDetails.length) ">
