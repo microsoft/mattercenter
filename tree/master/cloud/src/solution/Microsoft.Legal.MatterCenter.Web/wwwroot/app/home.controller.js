@@ -16,6 +16,7 @@
             vm.userProfileObjectId = adalService.userInfo.profile.oid;
             vm.navigation = uiconfigs.Navigation;
             vm.header = uiconfigs.Header;
+            vm.globalSettings = configs.global;
             vm.isDevMode = configs.global.isDevMode;
             
             $rootScope.setAuthenticatedUserContext();
