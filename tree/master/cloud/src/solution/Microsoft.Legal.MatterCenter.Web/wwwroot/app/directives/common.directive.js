@@ -219,6 +219,9 @@
                     if (obj.documentModifiedDate == "") {
                         obj.documentModifiedDate = "NA";
                     }
+                    if (obj.documentPracticeGroup == "") {
+                        obj.documentPracticeGroup = "NA";
+                    }
 
                     var actualcontent = "";
                     actualcontent = '<div class="" ng-click="stopEvent($event)">\
