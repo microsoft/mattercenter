@@ -1130,7 +1130,9 @@
             return validUsers;
         }
 
-
+        $rootScope.$on('disableOverlay', function (event, data) {
+            cm.popupContainerBackground = "hide";
+        });
         //#endregion
     }]);
 

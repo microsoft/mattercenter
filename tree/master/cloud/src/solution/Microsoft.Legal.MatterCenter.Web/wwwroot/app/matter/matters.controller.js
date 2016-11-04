@@ -2708,6 +2708,12 @@
                 window.open(viewmatterurl, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
             }
             //#endregion
+
+
+            $rootScope.$on('disableOverlay', function (event, data) {
+                vm.lazyloader = false;
+            });
+
         }]);
     app.filter('unique', function () {
         return function (collection, keyname) {
