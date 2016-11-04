@@ -1158,7 +1158,7 @@
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.selected != "") {
-                    if (vm.selected.indexOf("(") === -1) {
+                    if (vm.selected.indexOf("(") > -1) {
                         searchToText = vm.selected.replace("(", ",")
                         searchToText = searchToText.replace(")", "")
                         var firstText = searchToText.split(',')[0]
@@ -2066,7 +2066,7 @@
                 $timeout(function () { vm.lazyloader = false; }, 1);
                 vm.divuigrid = false;
                 vm.responseNull = false;
-                searchRequest.SearchObject.SearchTerm = "";
+                //searchRequest.SearchObject.SearchTerm = "";
                 if (sortColumns.length != 0 && sortColumns[0] != undefined) {
                     if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
                         if (sortColumns[0].sort != undefined) {
@@ -2361,6 +2361,8 @@
                     var secondText = searchToText.split(',')[1]
                     var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + secondText.trim() + '")'
                 }
+                vm.pagenumber = 1;
+                searchRequest.SearchObject.PageNumber = vm.pagenumber;
                 searchRequest.SearchObject.SearchTerm = finalSearchText;
                 searchRequest.SearchObject.Sort.Direction = 0;
                 vm.FilterByType();
