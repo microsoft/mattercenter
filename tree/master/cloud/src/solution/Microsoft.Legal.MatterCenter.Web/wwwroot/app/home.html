@@ -21,7 +21,9 @@
             </div>
             <div id="HeaderPlaceHolder" class="padlf40">
                 <span title="{{vm.header.LogoImageTitle}}" class="AppLogoContainer">
-                    <img class="AppLogo" alt="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
+                        <img ng-show="!{{vm.globalSettings.isBackwardCompatible}}" class="AppLogo" alt="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
+                        <span ng-show="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoFirstPart">CELA </span>
+                        <span ng-show="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoSecondPart">Project Center</span>
                 </span>
             </div>
         </div>

@@ -18,6 +18,26 @@
     padding: 0 !important;
     border-bottom: none;
 }
+.ApplogoFirstPart
+{
+    color:#0072c6
+}
+
+.ApplogoSecondPart
+{
+    color: #8ac016;
+}
+
+.ApplogoFirstPart, .ApplogoSecondPart
+{
+    font-size:18px;
+    font-family:"Segoe UI";
+}
+
+#matterCenterHomeText, .AppLogoContainer
+{
+    cursor:pointer;
+}
 
 .SupportLink {
     position: absolute;
