@@ -3,6 +3,7 @@
 
     // Enter Global Config Values & Instantiate ADAL AuthenticationContext
     window.config = {
+        clientId: "89AE4FDE-B606-4817-A20E-5FFEFF3D8832", //Dummy client id (do not need to change)
         instance: 'https://login.microsoftonline.com/',
         postLogoutRedirectUri: window.location.origin,
     };

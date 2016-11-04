@@ -49,7 +49,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
             vm.getPinnedDocuments();
             expect(vm.documentGridOptions.data).not.toBe(null);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(1);
-            expect(vm.totalrecords).toBe(0);
+            expect(vm.totalrecords).toBeGreaterThan(1);
             expect(vm.lazyloaderdashboard).toBe(true);
             expect(vm.divuigrid).toBe(true);
         });
