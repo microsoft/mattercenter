@@ -84,7 +84,7 @@
 
 .successUpload {
     width: 100%;
-    margin-left: 1px;
+    margin-left: 0px;
     z-index: 2;
     position: absolute;
 }
@@ -107,7 +107,20 @@
 
 .attachmentListLoading {
     margin-top: -3%;
-    margin-left: 54%;
+    margin-left: 30%;
+}
+
+@media (max-width: 650px) {
+    .attachmentListLoading {      
+        margin-left: 15% !important;
+    }
+}
+
+@media (max-width: 410px) {
+    .attachmentListLoading {
+      
+        margin-left: 0% !important;
+    }
 }
 
 .warningNotification {
@@ -1526,5 +1539,7 @@ left: -17px;
 .colorRed{
     color:red;
 }
+
+
 
 
