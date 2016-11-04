@@ -93,9 +93,9 @@
                 if (screenHeight <= 768) {
                     vm.searchResultsLength = 20;
                 } else if (screenHeight <= 1024 && screenHeight >= 769) {
-                    vm.searchResultsLength = 30;
+                    vm.searchResultsLength = 45;
                 } else if (screenHeight <= 1080 && screenHeight >= 1025) {
-                    vm.searchResultsLength = 40;
+                    vm.searchResultsLength = 55;
                 }
             };
 
@@ -1997,9 +1997,9 @@
                     searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinnedMatters(searchRequest, function (response) {
 
-                        if (response == "" || response.errorCode == "500") {
+                        if (response == "" || response.length == 0) {
                             vm.gridOptions.data = response;
-                            vm.divuigrid = false;
+                            vm.divuigrid = true;
                             vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
@@ -2063,6 +2063,7 @@
             $interval(function () { vm.showSortExp(); }, 3000, 3);
 
             $scope.sortChanged = function (grid, sortColumns) {
+                $timeout(function () { vm.lazyloader = false; }, 1);
                 vm.divuigrid = false;
                 vm.responseNull = false;
                 searchRequest.SearchObject.SearchTerm = "";
@@ -2094,7 +2095,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            //vm.nodata = false;
+                            $timeout(function () { vm.lazyloader = true; }, 1);
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[1].name) {
@@ -2125,7 +2126,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            //vm.nodata = false;
+                            $timeout(function () { vm.lazyloader = true; }, 1);
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[2].name) {
@@ -2164,7 +2165,7 @@
 
                         } else {
                             vm.divuigrid = true;
-                            //vm.nodata = false;
+                            $timeout(function () { vm.lazyloader = true; }, 1);
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[3].name) {
@@ -2203,7 +2204,7 @@
 
                         } else {
                             vm.divuigrid = true;
-                            //vm.nodata = false;
+                            $timeout(function () { vm.lazyloader = true; }, 1);
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[4].name) {
@@ -2241,7 +2242,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            //vm.nodata = false;
+                            $timeout(function () { vm.lazyloader = true; }, 1);
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[5].name) {
@@ -2271,7 +2272,7 @@
                             }
                         } else {
                             vm.divuigrid = true;
-                            //vm.nodata = false;
+                            $timeout(function () { vm.lazyloader = true; }, 1);
                         }
                     }
                     else if (sortColumns[0].name == vm.gridOptions.columnDefs[6].name) {
@@ -2302,11 +2303,10 @@
 
                         } else {
                             vm.divuigrid = true;
-                            //vm.nodata = false;
+                            $timeout(function () { vm.lazyloader = true; }, 1);
                         }
                     }
                 } else {
-
                     vm.pagenumber = 1;
                     vm.lazyloader = false;
                     searchRequest.SearchObject.PageNumber = 1;

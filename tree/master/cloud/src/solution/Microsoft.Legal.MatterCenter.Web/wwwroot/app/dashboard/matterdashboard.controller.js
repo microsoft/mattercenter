@@ -42,7 +42,7 @@
             $rootScope.bodyclass = "bodymain";
             $rootScope.profileClass = "hide";
             $rootScope.displayOverflow = "display";
-            vm.tabClicked = "All Matters";
+            vm.tabClicked = "My Matters";
             vm.sortbytext = vm.tabClicked == "All Matters" ? vm.matterDashboardConfigs.DropDownOptionText : vm.matterDashboardConfigs.DrpDownOption1Text;
             vm.showNavTab = false;
             vm.showInnerNav = true;
@@ -1448,7 +1448,7 @@
 
             //Call search api on page load
             //$interval(function () { vm.getMatterCounts(); }, 800, 3);
-            $timeout(function () { vm.myMatters() }, 500);
+            
 
 
             //#region For Sorting by Alphebatical or Created date
@@ -1987,11 +1987,37 @@
                         jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
                         vm.getMatterCounts();
                     } else {
-                        vm.matterGridOptions.data = response;
-                        jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
-                        jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
-                        jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
-                        vm.getMatterCounts();
+                        getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                            if (pinnedResponse && pinnedResponse.length > 0) {
+                                vm.Pinnedobj = pinnedResponse;
+                                vm.pinMatterCount = vm.Pinnedobj.length
+                                angular.forEach(pinnedResponse, function (pinobj) {
+                                    angular.forEach(response, function (res) {
+                                        //Check if the pinned matter name is equal to search matter name
+                                        if (pinobj.matterName == res.matterName) {
+                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                res.ismatterdone = true;
+                                                res.pinType = "unpin"
+                                            }
+                                        }
+                                    });
+                                });
+                                vm.matterGridOptions.data = response;
+                                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
+                                jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
+                                jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
+                                vm.getMatterCounts();
+
+                            }
+                            else {
+                                vm.matterGridOptions.data = response;
+                                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
+                                jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
+                                jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
+                                vm.getMatterCounts();
+                            }
+                            $interval(function () { vm.setPaginationHeight() }, 500, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
+                        });
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
@@ -2002,8 +2028,10 @@
 
             if (vm.teamName !== '') {
                 vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
-
                 vm.getSearchResults();
+            }
+            else {
+                $timeout(function () { vm.myMatters() }, 500);
             }
             //#region Exporting to Excel Test
             vm.export = function () {
@@ -2139,7 +2167,13 @@
             //#region for stting the height of the pagination
             vm.setPaginationHeight = function () {
                 var height = angular.element(".ui-grid-canvas").height();
-                angular.element('.jsonGridFooter').css("top", height + 180);
+                if (vm.teamName !== '') {
+                    angular.element('.jsonGridFooter').css("top", height + 225);
+                }
+                else {
+                    angular.element('.jsonGridFooter').css("top", height + 180);
+                }
+                
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
