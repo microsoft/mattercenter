@@ -160,7 +160,7 @@
                     });
                 }
             });
-                
+
             columnDefs1.push({
                 field: 'pin',
                 width: '6%',
@@ -383,7 +383,7 @@
                         else {
                             vm.displayMessage = "Selected documents has been saved as link in draft email in Outlook."
                         }
-                        
+
                     })
                 }
                 else {
@@ -538,7 +538,7 @@
                       {
                           ByProperty: "LastModifiedTime",
                           Direction: 1,
-                          ByColumn:""
+                          ByColumn: ""
                       }
                 }
             }
@@ -579,8 +579,8 @@
                         vm.getDocumentCounts();
                         vm.documentGridOptions.data = response;
                     } else {
-                        vm.getDocumentCounts();                        
-                        vm.documentGridOptions.data = response;                        
+                        vm.getDocumentCounts();
+                        vm.documentGridOptions.data = response;
                     }
                 });
             }
@@ -667,7 +667,7 @@
                     if (vm.tabClicked.toLowerCase() == vm.documentDashboardConfigs.Tab3HeaderText.toLowerCase()) {
                         vm.totalrecords = response.pinnedDocumentCounts;
                     }
-                    
+
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
@@ -682,7 +682,7 @@
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
-                    vm.pagination();                    
+                    vm.pagination();
                     vm.displaypagination = true;
                     if (response == "" || (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText && response.allDocumentCounts == 0) ||
                         (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText && response.myDocumentCounts == 0) ||
@@ -706,7 +706,7 @@
             vm.getDocuments = function () {
                 vm.documentGridOptions.data = [];
                 vm.tabClicked = "All Documents";
-                vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText;
+                vm.selectedTab = vm.documentDashboardConfigs.Tab2HeaderText;
                 vm.sortbytext = vm.documentDashboardConfigs.DropDownOptionText;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -760,7 +760,7 @@
             vm.getPinnedDocuments = function () {
                 vm.documentGridOptions.data = [];
                 vm.tabClicked = "Pinned Documents";
-                vm.selectedTab == vm.documentDashboardConfigs.Tab3HeaderText;
+                vm.selectedTab = vm.documentDashboardConfigs.Tab3HeaderText;
                 vm.sortbytext = vm.documentDashboardConfigs.DrpDownOption1Text;
                 vm.displaypagination = false;
                 vm.lazyloaderdashboard = false;
@@ -775,7 +775,7 @@
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
-                documentRequest.SearchObject.PageNumber=1;
+                documentRequest.SearchObject.PageNumber = 1;
                 documentRequest.SearchObject.Filters.ClientsList = [];
                 documentRequest.SearchObject.Filters.DocumentAuthor = "";
                 documentRequest.SearchObject.Filters.FromDate = "";
@@ -791,7 +791,7 @@
 
                 getPinDocuments(documentRequest, function (response) {
                     if (response && response.length > 0) {
-                        vm.documentGridOptions.data = response;                        
+                        vm.documentGridOptions.data = response;
                         documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                         documentRequest.SearchObject.Sort.ByProperty = "";
                         documentRequest.SearchObject.Sort.Direction = 1;
@@ -846,12 +846,12 @@
                                 });
                                 vm.documentGridOptions.data = response;
                                 vm.getDocumentCounts();
-                                
+
                             }
                             else {
                                 vm.documentGridOptions.data = response;
-                                vm.getDocumentCounts();                                
-                            }                            
+                                vm.getDocumentCounts();
+                            }
                         });
                     }
                 });
@@ -991,7 +991,7 @@
                 }
                 vm.openedStartDate = vm.openedStartDate ? false : true;
                 vm.openedEndDate = false;
-                
+
             };
             vm.openEndDate = function ($event) {
                 if ($event) {
@@ -1084,10 +1084,10 @@
                         documentRequest.SearchObject.Sort.Direction = 1;
                         documentRequest.SearchObject.Sort.ByColumn = "";
                         if (response && response.length > 0) {
-                            vm.documentGridOptions.data = response;                            
+                            vm.documentGridOptions.data = response;
                             vm.getDocumentCounts();
                         }
-                        else {                          
+                        else {
                             vm.getDocumentCounts()
                         }
                     });
@@ -1099,13 +1099,13 @@
                             vm.documentGridOptions.data = response;
                             vm.errorMessage = response.message;
                             vm.getDocumentCounts();
-                            
+
                         } else {
                             vm.documentGridOptions.data = response;
                             vm.getDocumentCounts();
                             if (!$scope.$$phase) {
                                 $scope.$apply();
-                            }   
+                            }
                         }
                     });
                 }
@@ -1320,7 +1320,7 @@
                                 $scope.$apply();
                             }
                             $interval(function () { vm.setPaginationHeight() }, 500, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
-                            
+
                         }
 
                     });
@@ -1432,13 +1432,13 @@
                         documentRequest.SearchObject.Sort.ByProperty = "";
                         documentRequest.SearchObject.Sort.Direction = 1;
                         documentRequest.SearchObject.Sort.ByColumn = "";
-                        vm.getDocumentCounts();                        
-                    } else {                        
+                        vm.getDocumentCounts();
+                    } else {
                         vm.documentGridOptions.data = response;
                         documentRequest.SearchObject.Sort.ByProperty = "";
                         documentRequest.SearchObject.Sort.Direction = 1;
                         documentRequest.SearchObject.Sort.ByColumn = "";
-                        vm.getDocumentCounts();                        
+                        vm.getDocumentCounts();
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }

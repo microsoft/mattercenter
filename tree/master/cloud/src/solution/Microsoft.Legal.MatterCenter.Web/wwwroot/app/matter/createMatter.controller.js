@@ -1560,6 +1560,7 @@
                     } else {
                         cm.iCurrentPage = 3; cm.popupContainerBackground = "hide";
                         cm.sectionName = sectionName;
+                        makePrevOrNextButton();
                     }
 
                 });
@@ -2461,7 +2462,7 @@
                     arrUserEmails.push(getUserName(item.assignedUser.trim() + ";", false));
                     arrTeamMembers.push(getUserName(item.assignedUser.trim() + ";", true).join(";"));
                 });
-                contentTypes = subAreaofLaw.trim().split(";");
+               // contentTypes = subAreaofLaw.trim().split(";");
                 angular.forEach(oDocumentTemplates, function (item) {
                     arrDocumentTemplatesCount.push(item.documentTemplateNames.split(";").length.toString());
                 });
@@ -3881,6 +3882,11 @@
                 }
             }
 
+
+
+            $rootScope.$on('disableOverlay', function (event, data) {
+                cm.popupContainerBackground = "hide";               
+            });
         }]);
 
     app.filter('getAssociatedDocumentTemplatesCount', function () {

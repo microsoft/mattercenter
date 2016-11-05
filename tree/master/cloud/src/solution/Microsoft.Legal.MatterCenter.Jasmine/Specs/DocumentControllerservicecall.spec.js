@@ -72,7 +72,7 @@ describe("documents Controller test suite for service call", function () {
         it("It should add document name in dropdown", function () {
             vm.SetDocuments(1, "All Documents");
             expect(true).toBe(true);
-            expect(vm.divuigrid).toBe(false);
+            expect(vm.divuigrid).toBe(true);
             expect(vm.responseNull).toBe(false);
             expect(vm.nodata).toBe(false);
             expect(vm.gridOptions.data.length).toBeGreaterThan(0);
@@ -116,7 +116,7 @@ describe("documents Controller test suite for service call", function () {
             vm.UnpinDocument(pinObject);
             vm.documentid = 1;
             vm.documentname = "All Documents";
-            expect(vm.divuigrid).toBe(false);
+            expect(vm.divuigrid).toBe(true);
             expect(vm.responseNull).toBe(false);
             expect(vm.nodata).toBe(false);
             expect(vm.gridOptions.data.length).toBeGreaterThan(0);

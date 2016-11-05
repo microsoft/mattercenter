@@ -59,6 +59,10 @@
                 }
             }
 
+            $rootScope.$on('disableOverlay', function (event, data) {
+                vm.popupContainerBackground = "hide";
+            });
+
         }]);
 
 })();
