@@ -1683,12 +1683,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 for (int i = 1; i <= levels; i++)
                 {
                     //Get all the managed columns from "ContentType" settings from appsettings.json file
+                    string stampedColumnName = configuration.GetSection("ContentTypes").GetSection("ManagedStampedColumns")["ColumnName" + i];
                     string columnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName" + i];
                     ManagedColumn managedColumn = matterDetails.ManagedColumnTerms[columnName];                    
                     //Add all the managed columns values to the property list of the matter document library             
-                    propertyList.Add(columnName, WebUtility.HtmlEncode(managedColumn.TermName.Trim()));
+                    propertyList.Add(stampedColumnName, WebUtility.HtmlEncode(managedColumn.TermName.Trim()));
                     //Add all the managed columns to the Indexed Property keys of the matter document library
-                    keys.Add(columnName);
+                    keys.Add(stampedColumnName);
                 }
                 propertyList.Add(matterSettings.StampedPropertyMatterName, WebUtility.HtmlEncode(matter.Name));
                 propertyList.Add(matterSettings.StampedPropertyMatterID, WebUtility.HtmlEncode(matter.Id));

@@ -172,10 +172,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).ReadOnlyField = true;
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).SetShowInDisplayForm(true);
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).Update();
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).ReadOnlyField = true;
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).SetShowInDisplayForm(true);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).DefaultValue = matterMetadata.Client.Name;
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).Update();
+                if(configuration.GetSection("General")["IsBackwardCompatible"].ToString()=="false")
+                {
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).ReadOnlyField = true;
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).SetShowInDisplayForm(true);
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).DefaultValue = matterMetadata.Client.Name;
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).Update();
+                }    
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).DefaultValue = matterMetadata.Matter.Id;
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).ReadOnlyField = true;
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).SetShowInDisplayForm(true);
@@ -183,12 +186,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).DefaultValue = matterMetadata.Matter.Name;
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).ReadOnlyField = true;
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).SetShowInDisplayForm(true);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).Update();                
+                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).Update();
 
                 int levels = taxonomySettings.Levels;
                 //For the number of levels that are configured, get the configured column name and 
                 //update the wssid, termname and id for the managed field
-                for (int i=1;i<=levels; i++)
+                for (int i = 1; i <= levels; i++)
                 {
                     string columnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName" + i];
                     fields.GetByInternalNameOrTitle(columnName).SetShowInDisplayForm(true);
@@ -199,7 +202,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 managedColumn.TermName,
                                 managedColumn.Id);
                     fields.GetByInternalNameOrTitle(columnName).Update();
-                } 
+                }
             }
         }
 
