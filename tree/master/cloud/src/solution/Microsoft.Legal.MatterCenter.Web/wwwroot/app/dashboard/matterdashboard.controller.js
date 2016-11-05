@@ -196,15 +196,15 @@
                 field: 'pin',
                 displayName: '',
                 width: '50',
-                cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
-                enableColumnMenu: false,
+                cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img title={{row.entity.pinType}} ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
+                enableColumnMenu: false, 
                 position: 75
             });
             columnDefs1.push({
                 field: 'upload',
                 displayName: '',
                 width: '60',
-                cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0"><img title="upload" src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>',
                 enableColumnMenu: false,
                 position: 76
             });
@@ -737,6 +737,7 @@
                     pinMatter(pinRequest, function (response) {
                         if (response.isMatterPinned) {
                             e.currentTarget.src = "../images/unpin-666.png";
+                            e.currentTarget.title = "unpin"
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) + 1;
                         }
                         //vm.lazyloaderdashboard = true;
@@ -758,10 +759,12 @@
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
                             if (vm.tabClicked.toLowerCase().indexOf("pinned") >= 0) {
                                 e.currentTarget.src = "../images/unpin-666.png";
+                                e.currentTarget.title = "unpin";
                                 vm.matterGridOptions.data.splice(vm.matterGridOptions.data.indexOf(currentRowData), 1)
                             }
                             else {
                                 e.currentTarget.src = "../images/pin-666.png";
+                                e.currentTarget.title = "pin"
                             }
                         }
                         //vm.lazyloaderdashboard = true;

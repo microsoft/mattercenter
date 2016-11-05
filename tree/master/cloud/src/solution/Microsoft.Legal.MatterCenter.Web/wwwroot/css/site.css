@@ -1170,6 +1170,7 @@ textarea {
     font-size: 14px !important;
     font-weight: 400 !important;
     color: #333 !important;
+    cursor: default;
 }
 
 #mainmenu .AppMenuFlyout {
@@ -1328,7 +1329,7 @@ textarea {
 
 .dashboardXOverFlow {
     overflow-x: auto;
-    overflow-y:hidden;
+    overflow-y: hidden;
 }
 
 #matterMain div, #matterMain figure {
@@ -1432,4 +1433,3 @@ textarea {
 .ms-ContextualMenu-link {
     max-width: 165px !important;
 }
-

@@ -315,7 +315,7 @@
                 vm.lazyloader = false;
                 vm.pagenumber = vm.pagenumber + 1;
                 searchRequest.SearchObject.PageNumber = vm.pagenumber;
-                
+
                 get(searchRequest, function (response) {
                     if (response == "") {
                         vm.lazyloader = true;
@@ -619,18 +619,29 @@
                                 ByProperty: '' + vm.configSearchContent.ManagedPropertyFileName + '',
                                 Direction: 0,
                                 ByColumn: "DocumentName",
-                                SortAndFilterPinnedData:false
+                                SortAndFilterPinnedData: false
                             }
                 }
             };
+            if (vm.documentid == 2) {
+                searchDocumentRequest.SearchObject.Filters.FilterByMe = 1;
+            } else {
+                searchDocumentRequest.SearchObject.Filters.FilterByMe = 0;
+            }
             return documentResource.get(searchDocumentRequest).$promise;
         }
 
         vm.search = function () {
+            vm.clearAllFilterForSearch();
             vm.pagenumber = 1;
             if (vm.documentid == 3) {
                 vm.documentname = 'All Documents'
                 vm.documentid = 1;
+            }
+            if (vm.documentid == 2) {
+                searchRequest.SearchObject.Filters.FilterByMe = 1;
+            } else {
+                searchRequest.SearchObject.Filters.FilterByMe = 0;
             }
             vm.lazyloader = false;
             //vm.divuigrid = false;
@@ -855,57 +866,78 @@
         //Code for filtering ModifiedDate
         //start
         vm.FilterModifiedDate = function (name) {
-            vm.lazyloader = false;
-            vm.gridOptions.data = [];
-            //vm.divuigrid = false;
-            searchRequest.SearchObject.PageNumber = 1;
-            searchRequest.SearchObject.SearchTerm = "";
-            if (name == "Modified Date") {
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modStartDate, "yyyy-MM-ddT00:00:00") + "Z";
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modEndDate, "yyyy-MM-ddT23:59:59") + "Z";
-                vm.moddatefilter = true;
-            }
-            if (name == "Created Date") {
-                searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = $filter('date')(vm.startDate, "yyyy-MM-ddT00:00:00") + "Z";
-                searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = $filter('date')(vm.endDate, "yyyy-MM-ddT23:59:59") + "Z";
-                vm.createddatefilter = true;
-            }
-            searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
-            searchRequest.SearchObject.Sort.Direction = 1;
-            if (vm.documentid === 3) {
-                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
-                getPinnedDocuments(searchRequest, function (response) {
-                    if (response == "") {
-                        vm.gridOptions.data = response;
-                        vm.lazyloader = true;
-                        vm.divuigrid = true;
-                        vm.nodata = true;
-                        $interval(function () { vm.showSortExp(); }, 2000, 3);
-                    } else {
-                        vm.divuigrid = true;
-                        vm.nodata = false;
-                        vm.lazyloader = true;
-                        vm.gridOptions.data = response;
-                        $interval(function () { vm.showSortExp(); }, 2000, 3);
+            if (vm.startDate != "" || vm.endDate != "" || vm.modStartDate != "" || vm.modEndDate != "") {
+                vm.documentdateheader = false;
+                vm.lazyloader = false;
+                vm.gridOptions.data = [];
+                //vm.divuigrid = false;
+                searchRequest.SearchObject.PageNumber = 1;
+                searchRequest.SearchObject.SearchTerm = "";
+                if (name == "Modified Date") {
+                    if (vm.modStartDate != undefined) {
+                        if (vm.modStartDate != "") {
+                            searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modStartDate, "yyyy-MM-ddT00:00:00") + "Z";
+                        }
                     }
-                });
+                    if (vm.modEndDate != undefined) {
+                        if (vm.modEndDate != "") {
+                            searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modEndDate, "yyyy-MM-ddT23:59:59") + "Z";
+                        }
+                    }
+                    vm.moddatefilter = true;
+                }
+                if (name == "Created Date") {
+                    if (vm.startDate != undefined) {
+                        if (vm.startDate != "") {
+                            searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = $filter('date')(vm.startDate, "yyyy-MM-ddT00:00:00") + "Z";
+                        }
+                    }
+                    if (vm.endDate != undefined) {
+                        if (vm.endDate != "") {
+                            searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = $filter('date')(vm.endDate, "yyyy-MM-ddT23:59:59") + "Z";
+                        }
+                    }
+                    vm.createddatefilter = true;
+                }
+                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
+                searchRequest.SearchObject.Sort.Direction = 1;
+                if (vm.documentid === 3) {
+                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
+                    getPinnedDocuments(searchRequest, function (response) {
+                        if (response == "") {
+                            vm.gridOptions.data = response;
+                            vm.lazyloader = true;
+                            vm.divuigrid = true;
+                            vm.nodata = true;
+                            $interval(function () { vm.showSortExp(); }, 2000, 3);
+                        } else {
+                            vm.divuigrid = true;
+                            vm.nodata = false;
+                            vm.lazyloader = true;
+                            vm.gridOptions.data = response;
+                            $interval(function () { vm.showSortExp(); }, 2000, 3);
+                        }
+                    });
+                } else {
+                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                    get(searchRequest, function (response) {
+                        if (response == "") {
+                            vm.gridOptions.data = response;
+                            vm.lazyloader = true;
+                            //vm.divuigrid = true;
+                            vm.nodata = true;
+                            $interval(function () { vm.showSortExp(); }, 2000, 3);
+                        } else {
+                            //vm.divuigrid = true;
+                            vm.nodata = false;
+                            vm.lazyloader = true;
+                            vm.gridOptions.data = response;
+                            $interval(function () { vm.showSortExp(); }, 2000, 3);
+                        }
+                    });
+                }
             } else {
-                searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
-                get(searchRequest, function (response) {
-                    if (response == "") {
-                        vm.gridOptions.data = response;
-                        vm.lazyloader = true;
-                        //vm.divuigrid = true;
-                        vm.nodata = true;
-                        $interval(function () { vm.showSortExp(); }, 2000, 3);
-                    } else {
-                        //vm.divuigrid = true;
-                        vm.nodata = false;
-                        vm.lazyloader = true;
-                        vm.gridOptions.data = response;
-                        $interval(function () { vm.showSortExp(); }, 2000, 3);
-                    }
-                });
+                vm.documentdateheader = true;
             }
         }
 
@@ -1453,8 +1485,8 @@
                         //if (!$scope.$$phase) {
                         //    $scope.$apply();
                         //}
+                        vm.lazyloader = true;
                     }
-                    vm.lazyloader = true;
                     searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 });
             }
@@ -1480,19 +1512,21 @@
                                     });
                                 });
                                 vm.gridOptions.data = response;
+                                vm.divuigrid = true;
                                 if (!$scope.$$phase) {
                                     $scope.$apply();
                                 }
                             } else {
                                 vm.gridOptions.data = response;
+                                vm.divuigrid = true;
                                 if (!$scope.$$phase) {
                                     $scope.$apply();
                                 }
                             }
-                            $timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
+                            //$timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
+                            vm.lazyloader = true;
                         });
                     }
-                    vm.lazyloader = true;
                 });
             }
         }
@@ -1511,7 +1545,7 @@
             if (elm != undefined) {
                 elm.css("display", "block");
             }
-            $timeout(function () {vm.divuigrid = true;}, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
+            $timeout(function () { vm.divuigrid = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
             if (!$scope.$$phase) {
                 $scope.$apply();
             }
@@ -1537,12 +1571,11 @@
 
         $scope.sortChangedDocument = function (grid, sortColumns) {
             vm.responseNull = false;
-            vm.lazyloader = false;
             vm.gridOptions.data = [];
             $scope.gridApi.infiniteScroll.resetScroll();
             if (sortColumns.length != 0) {
                 if (sortColumns[0].name != undefined) {
-
+                    vm.lazyloader = false;
                     vm.divuigrid = false;
                     if (sortColumns[0].name.trim().toLowerCase() == configs.search.searchColumnsUIPickerForDocument.documentName.keyName.trim().toLowerCase()) {
                         if (sortColumns[0].sort != undefined) {
@@ -1677,6 +1710,9 @@
                             vm.divuigrid = true;
                         }
                     }
+                } else {
+                    vm.lazyloader = true;
+                    vm.divuigrid = true;
                 }
             } else {
                 vm.pagenumber = 1;
@@ -1709,6 +1745,8 @@
 
         //#region
         vm.typeheadselect = function (index, selected) {
+            vm.clearAllFilterForSearch();
+            vm.lazyloader = false;
             if (vm.documentid == 3) {
                 vm.documentname = 'All Documents'
                 vm.documentid = 1;
@@ -1721,6 +1759,11 @@
                 var firstText = searchToText.split(',')[0]
                 var secondText = searchToText.split(',')[1]
                 var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':"' + firstText.trim() + '" OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + firstText.trim() + '"OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':"' + firstText.trim() + '")';
+            }
+            if (vm.documentid == 2) {
+                searchRequest.SearchObject.Filters.FilterByMe = 1;
+            } else {
+                searchRequest.SearchObject.Filters.FilterByMe = 0;
             }
             searchRequest.SearchObject.SearchTerm = finalSearchText;
             searchRequest.SearchObject.Sort.Direction = 0;
@@ -1890,6 +1933,37 @@
         }
         //#endregion
 
+        vm.clearAllFilterForSearch = function () {
+            vm.searchTerm = "";
+            searchRequest.SearchObject.SearchTerm = "";
+            searchRequest.SearchObject.Filters.Name = "";
+            vm.documentfilter = false;
+            vm.clientSearchTerm = "";
+            searchRequest.SearchObject.Filters.ClientName = "";
+            vm.clientfilter = false;
+            vm.projectSearchTerm = "";
+            searchRequest.SearchObject.Filters.ProjectName = "";
+            vm.projectNamefilter = false;
+            vm.checkedSearchTerm = "";
+            searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
+            vm.checkoutfilter = false;
+            vm.authorSearchTerm = ""
+            searchRequest.SearchObject.Filters.DocumentAuthor = "";
+            vm.authorfilter = false;
+            vm.practiceGroupSearchTerm = ""
+            searchRequest.SearchObject.Filters.PracticeGroup = "";
+            vm.practiceGroupfilter = false;
+            searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
+            searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
+            vm.modStartDate = "";
+            vm.modEndDate = "";
+            vm.moddatefilter = false;
+            searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
+            searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
+            vm.startDate = "";
+            vm.endDate = "";
+            vm.createddatefilter = false;
+        }
     }]);
 
     app.filter('unique', function () {

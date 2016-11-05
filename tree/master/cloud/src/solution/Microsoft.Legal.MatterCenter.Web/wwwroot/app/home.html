@@ -21,9 +21,9 @@
             </div>
             <div id="HeaderPlaceHolder" class="padlf40">
                 <span title="{{vm.header.LogoImageTitle}}" class="AppLogoContainer">
-                        <img ng-show="!{{vm.globalSettings.isBackwardCompatible}}" class="AppLogo" alt="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
-                        <span ng-show="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoFirstPart">CELA </span>
-                        <span ng-show="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoSecondPart">Project Center</span>
+                    <img ng-show="!{{vm.globalSettings.isBackwardCompatible}}" class="AppLogo" alt="{{vm.header.LogoImageTitle}}" src="Images/MC_Logo.png">
+                    <span ng-show="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoFirstPart">CELA </span>
+                    <span ng-show="{{vm.globalSettings.isBackwardCompatible}}" class="ApplogoSecondPart">Project Center</span>
                 </span>
             </div>
         </div>
@@ -46,6 +46,9 @@
                         </div>
                         <div class="ContextualHelpSupport">
                             <span class="ContextualHelpBottomText" title="{{vm.header.ContextualHelpFooterLink1Title}}">{{vm.header.ContextualHelpFooterLabel}}<span class="ContextualHelpSupportMailTo"><a class="MatterCenterSupportLink" href="{{vm.navigation.MatterCenterSupportLink}}">{{vm.navigation.ContextualHelpFooterLink1Label}}</a></span></span>
+                        </div>
+                        <div class="lazyLoading" style="left:45%;bottom:162px" ng-hide="vm.lazyloaderhelp">
+                            <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.matterConfigContent.AttachmentLoadingTitle}}" title="{{vm.matterConfigContent.AttachmentLoadingTitle}}" />
                         </div>
                     </div>
                 </div>
@@ -149,7 +152,7 @@
                             <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">ErrorCode</div>
                             <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{$root.exceptionObj.errorCode}}</div>
                         </div>
-                        <div class="row margin0 marginTop10  segoUIFontBold "  ng-if="$root.exceptionObj.methodName">
+                        <div class="row margin0 marginTop10  segoUIFontBold " ng-if="$root.exceptionObj.methodName">
                             <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">MethodName</div>
                             <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12">{{($root.exceptionObj.methodName==undefined||$root.exceptionObj.methodName=="")?"NA":$root.exceptionObj.methodName}}</div>
                         </div>
@@ -163,7 +166,7 @@
                         </div>
                         <div class="row margin0 marginTop10  segoUIFontBold  " ng-if="$root.exceptionObj.stackTrace">
                             <div class="col-lg-2 col-xs-12 col-md-4 col-sm-12">StackTrace</div>
-                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12"  style="overflow:auto">{{$root.exceptionObj.stackTrace}}</div>
+                            <div class="col-lg-8 col-xs-12 col-md-8 col-sm-12" style="overflow:auto">{{$root.exceptionObj.stackTrace}}</div>
                         </div>
 
 
