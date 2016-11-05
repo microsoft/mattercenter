@@ -18,10 +18,10 @@
             vm.header = uiconfigs.Header;
             vm.globalSettings = configs.global;
             vm.isDevMode = configs.global.isDevMode;
-            
+            vm.lazyloaderhelp = true;
             $rootScope.setAuthenticatedUserContext();
             $rootScope.displayOverflow = "";
-           
+            vm.helpData = [];
 
             //Callback function for help 
             function getHelp(options, callback) {
@@ -105,7 +105,7 @@
             //#region for displaying contextual help 
             //This event is going to fire when the user clicks on the help icon using the mouse
             $rootScope.dispContextualHelp = function ($event) {
-
+                vm.lazyloaderhelp = false;
                 $rootScope.displayinfo = false;
                 $rootScope.dispinner = true;
                 $event.stopPropagation();
@@ -150,6 +150,7 @@
                 };
                 getHelp(helpRequestModel, function (response) {
                     vm.helpData = response;
+                    vm.lazyloaderhelp = true;
                 });
             }
             //#endregion
