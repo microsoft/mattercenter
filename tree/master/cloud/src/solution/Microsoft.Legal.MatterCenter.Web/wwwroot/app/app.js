@@ -134,7 +134,7 @@ angular.module('matterMain', [
                     }
 
                     $rootScope.errorList.push(rejection.data);
-
+                    $scope.$broadcast('disableOverlay', "text");                
                     //It has to return the rejection, simple reject call doesn't work
                     return $q.reject(rejection);
                 },
@@ -153,6 +153,7 @@ angular.module('matterMain', [
                         rejection.data = {};
                         rejection.data.message = "Network issue. Unable to get the response from the server. ";
                     }
+                    $rootScope.$broadcast('disableOverlay', "text");
                     //Adding to error list
                     //$rootScope.errorList.push(rejection.data);
                     angular.element('#myErrorModal').modal("show");

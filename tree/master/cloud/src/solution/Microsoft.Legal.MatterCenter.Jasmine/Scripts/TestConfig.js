@@ -3,7 +3,7 @@
     tenantUrl: "https://MySharePoint.sharepoint.com",
     loggedInUserName: "TestUser",
     loggedInUserEmail: "TestUser@MySharePoint.onmicrosoft.com",
-    azureSiteName: "MyAzureSite"
+    azureSiteName: "MatterWebapp"
 };
 
 var oTestConfiguration = {
