@@ -107,7 +107,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                         Users currentUserDetail = userDetails.GetLoggedInUserDetails(clientContext);
                         string userTitle = currentUserDetail.Name;
-                        searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, ServiceConstants.SPACE,
+                        if(generalSettings.IsBackwardCompatible==false)
+                        {
+                            searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, ServiceConstants.SPACE,
                             ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE,
                             ServiceConstants.OPENING_BRACKET, searchSettings.ManagedPropertyResponsibleAttorney,
                             ServiceConstants.COLON, ServiceConstants.SPACE, ServiceConstants.DOUBLE_QUOTE, userTitle,
@@ -115,6 +117,17 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             searchSettings.ManagedPropertyTeamMembers, ServiceConstants.COLON, ServiceConstants.SPACE,
                             ServiceConstants.DOUBLE_QUOTE, userTitle,
                             ServiceConstants.DOUBLE_QUOTE, ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
+                        }
+                        else
+                        {
+                            searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, 
+                                ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
+                                ServiceConstants.OPENING_BRACKET, "CPCTeamMembers", ServiceConstants.COLON, 
+                                ServiceConstants.SPACE, ServiceConstants.DOUBLE_INVERTED_COMMA, userTitle,
+                                ServiceConstants.DOUBLE_INVERTED_COMMA, ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
+
+                        }
+
                     }
 
                     keywordQuery = FilterMatters(searchObject, keywordQuery);
@@ -130,10 +143,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     managedProperties.Add(searchSettings.ManagedPropertyDescription);
                     managedProperties.Add(searchSettings.ManagedPropertySiteName);
                     managedProperties.Add(searchSettings.ManagedPropertyLastModifiedTime);
-                    var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
+                    var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedStampedColumns").GetChildren();
                     foreach (var key in managedColumns)
-                    {
-                        managedProperties.Add(searchSettings.ManagedPropertyExtension + key.Value.Replace("LPC", ""));
+                    {          
+                        managedProperties.Add(searchSettings.ManagedPropertyExtension + key.Value.Replace("LPC", ""));      
                     }
                     managedProperties.Add(searchSettings.ManagedPropertyMatterId);
                     managedProperties.Add(searchSettings.ManagedPropertyCustomTitle);
@@ -224,11 +237,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     //Filter on Result source to fetch only Matter Center specific results
                     keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
                     
-                    var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
+                    var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedStampedColumns").GetChildren();
                     foreach (var key in managedColumns)
                     {
                         managedProperties.Add(searchSettings.ManagedPropertyExtension + key.Value.Replace("LPC", ""));
                     }
+                    //managedProperties.Add("PCPrePodDocumentPracticeGroup");
+                    //managedProperties.Add("PCPrePodDocumentProjectType");
                     keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
                     searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, false, managedProperties);
                     clientContext.Dispose();
@@ -288,7 +303,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                                 if (searchRequestVM.SearchObject.Sort.SortAndFilterPinnedData == false)
                                 {
-                                    searchResponse.DocumentDataList = userpinnedDocumentCollection.Values;
+                                    searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.Reverse();
                                 }
                                 else
                                 {
@@ -2125,7 +2140,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             matterMetadata[searchSettings.ManagedPropertyTitle] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyTitle]);
             matterMetadata[searchSettings.ManagedPropertySiteName] = DecodeValues(matterMetadata[searchSettings.ManagedPropertySiteName]);
             matterMetadata[searchSettings.ManagedPropertyDescription] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyDescription]);
-            var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();            
+            var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedStampedColumns").GetChildren();            
             foreach (var key in managedColumns)
             {                
                 if (key.Value.Contains("PracticeGroup"))
@@ -2135,9 +2150,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 else
                 {
-                    matterMetadata[searchSettings.ManagedPropertyExtension + key.Value] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyExtension + key.Value]);
+                    if(generalSettings.IsBackwardCompatible==false)
+                    {
+                        matterMetadata[searchSettings.ManagedPropertyExtension + key.Value] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyExtension + key.Value]);
+                    }
+                    
                 }                                      
             }
+            
             matterMetadata[searchSettings.ManagedPropertyCustomTitle] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyCustomTitle]);
             matterMetadata[searchSettings.ManagedPropertyPath] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyPath]);
             matterMetadata[searchSettings.ManagedPropertyMatterName] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyMatterName]);
