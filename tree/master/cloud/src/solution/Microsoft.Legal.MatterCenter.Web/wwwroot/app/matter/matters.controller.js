@@ -1107,7 +1107,17 @@
             vm.searchMatter = function (val) {
                 var finalSearchText = "";
                 if (val != "") {
-                    finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":" + val + "* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":" + val + "*)";
+                    if (val.indexOf("(") == 0 && val.indexOf(")") == val.length - 1) {
+                        finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + val + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + val + "*\")";
+                    }
+                    else if (val.lastIndexOf("(") > 0 && val.lastIndexOf(")") == val.length - 1) {
+                        var matterName = val.substring(0, val.lastIndexOf("(") - 1);
+                        var matterID = val.substring(val.lastIndexOf("("), val.lastIndexOf(")") + 1);
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + matterName.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + matterID.trim() + "*\")";
+                    }
+                    else {
+                        finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + val.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + val.trim() + "*\")";
+                    }
                 }
                 var searchMatterRequest = {
                     Client: {
@@ -1169,18 +1179,17 @@
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.selected != "") {
-                    if (vm.selected.indexOf("(") > -1) {
-                        searchToText = vm.selected.replace("(", ",")
-                        searchToText = searchToText.replace(")", "")
-                        var firstText = searchToText.split(',')[0]
-                        var secondText = '';
-                        if (searchToText.split(',')[1] != undefined) {
-                            secondText = searchToText.split(',')[1];
-                        }
 
-                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + firstText.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + firstText.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyClientName + ':"' + firstText.trim() + '*")';
-                    } else {
-                        finalSearchText = commonFunctions.searchFilter(vm.selected);
+                    if (vm.selected.indexOf("(") == 0 && vm.selected.indexOf(")") == vm.selected.length - 1) {
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyClientName + ':"' + vm.selected.trim() + '*")';
+                    }
+                    else if (vm.selected.lastIndexOf("(") > 0 && vm.selected.lastIndexOf(")") == vm.selected.length - 1) {
+                        var matterName = vm.selected.substring(0, vm.selected.lastIndexOf("(") - 1);
+                        var matterID = vm.selected.substring(vm.selected.lastIndexOf("("), vm.selected.lastIndexOf(")") + 1);
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + matterName.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + matterID.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyClientName + ":\"" + vm.selected.trim() + "*\")";
+                    }
+                    else {
+                        finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyClientName + ":\"" + vm.selected.trim() + "*\")"
                     }
                 }
                 searchRequest.SearchObject.SearchTerm = finalSearchText;
@@ -2103,7 +2112,7 @@
             $interval(function () { vm.showSortExp(); }, 3000, 3);
 
             $scope.sortChanged = function (grid, sortColumns) {
-                $timeout(function () { vm.lazyloader = false; }, 1);
+                $timeout(function () { vm.matterdateheader = true; vm.lazyloader = false; }, 1);
                 vm.divuigrid = false;
                 vm.responseNull = false;
                 //searchRequest.SearchObject.SearchTerm = "";
@@ -2397,11 +2406,18 @@
                 var searchToText = '';
                 var finalSearchText = '';
                 if (selected != "") {
-                    searchToText = selected.replace("(", ",")
-                    searchToText = searchToText.replace(")", "")
-                    var firstText = searchToText.split(',')[0]
-                    var secondText = searchToText.split(',')[1]
-                    var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + secondText.trim() + '")'
+
+                    if (selected.lastIndexOf("(") > 0 && selected.lastIndexOf(")") == selected.length - 1) {
+                        var matterName = selected.substring(0, selected.lastIndexOf("(") - 1);
+                        var matterID = selected.substring(selected.lastIndexOf("("), selected.lastIndexOf(")") + 1);
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + matterName.trim() + "\" AND " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + matterID.trim() + "\")";
+                    }
+                    else if (selected.indexOf("(") == 0 && selected.indexOf(")") == selected.length - 1) {
+                        finalSearchText = '('+ vm.configSearchContent.ManagedPropertyMatterId + ':"' + selected.trim() + '")';
+                    }
+                    else {
+                        finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + selected.trim() + "*\")";
+                    }
                 }
                 if (vm.matterid == 2) {
                     searchRequest.SearchObject.Filters.FilterByMe = 1;
