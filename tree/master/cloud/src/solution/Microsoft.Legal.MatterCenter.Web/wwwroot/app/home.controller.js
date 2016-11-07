@@ -2,8 +2,8 @@
     'use strict';
     var app = angular.module("matterMain");
     app.controller('homeController', ['$scope', '$state', '$stateParams', '$rootScope', 'api', 'homeResource', '$window', '$location',
-            'adalAuthenticationService',
-        function ($scope, $state, $stateParams, $rootScope, api, homeResource, $window, $location, adalService) {
+            'adalAuthenticationService', '$timeout',
+        function ($scope, $state, $stateParams, $rootScope, api, homeResource, $window, $location, adalService, $timeout) {
             var vm = this;
             //header
             vm.userName = adalService.userInfo.userName
@@ -93,10 +93,10 @@
                     e.stopPropagation();
                 }
                 //If the user presses esc key, hide the help pop up
-                if (27 === e.keyCode) {                    
+                if (27 === e.keyCode) {
                     $rootScope.contextualhelp = false;
                     $rootScope.dispcontextualhelpinnerF1 = true;
-                    
+
                 }
             };
 
@@ -105,17 +105,19 @@
             //#region for displaying contextual help 
             //This event is going to fire when the user clicks on the help icon using the mouse
             $rootScope.dispContextualHelp = function ($event) {
-                vm.lazyloaderhelp = false;
                 $rootScope.displayinfo = false;
                 $rootScope.dispinner = true;
                 $event.stopPropagation();
                 if ($rootScope.dispcontextualhelpinner) {
+                    vm.lazyloaderhelp = false;
+                    angular.element('.zindex6').css('z-index', '2');
                     $rootScope.contextualhelp = true;
                     vm.help('');
                     $rootScope.dispcontextualhelpinner = false;
                 } else {
                     $rootScope.contextualhelp = false;
                     $rootScope.dispcontextualhelpinner = true;
+                    $timeout(function () { angular.element('.zindex6').css('z-index', '6'); }, 600);
                 }
             }
             //#endregion
@@ -181,10 +183,8 @@
 
                 var windowLocation = $window.location.href;
 
-                if (windowLocation != '' && typeof windowLocation != 'undefined')
-                {
-                    if ("section=2" == data && windowLocation.substring(windowLocation.indexOf("#") + 2, windowLocation.length) == 'documentdashboard')
-                    {
+                if (windowLocation != '' && typeof windowLocation != 'undefined') {
+                    if ("section=2" == data && windowLocation.substring(windowLocation.indexOf("#") + 2, windowLocation.length) == 'documentdashboard') {
                         return false;
                     } else if ("section=1" == data && windowLocation.substring(windowLocation.indexOf("#") + 2, windowLocation.length) == 'matterdashboard') {
                         return false;
@@ -228,7 +228,7 @@
             vm.currentyear = date.getFullYear();
             //#endregion
 
-            
+
 
             vm.menuClick = function () {
                 var oAppMenuFlyout = $(".AppMenuFlyout");
@@ -237,7 +237,7 @@
                     $(".OpenSwitcher").addClass("hide");
                     $(".CloseSwitcher").removeClass("hide");
                     $(".MenuCaption").addClass("hideMenuCaption");
-                    $(".topheader").css("z-index","8");
+                    $(".topheader").css("z-index", "8");
                     oAppMenuFlyout.slideDown();
                 } else {
                     oAppMenuFlyout.slideUp();
@@ -277,6 +277,6 @@
         }
     });
 
-    
+
 
 })();
