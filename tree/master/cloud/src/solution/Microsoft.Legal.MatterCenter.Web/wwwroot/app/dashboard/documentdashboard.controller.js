@@ -165,7 +165,7 @@
                 field: 'pin',
                 width: '6%',
                 displayName: '',
-                cellTemplate: '<div class="ui-grid-cell-contents pad0 pull-right"><img src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0 pull-right"><img title={{row.entity.pinType}} src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
                 enableColumnMenu: false,
                 position: 75
             });
@@ -894,6 +894,7 @@
                     pinDocuments(pinRequest, function (response) {
                         if (response.isDocumentPinned) {
                             e.currentTarget.src = "../images/unpin-666.png";
+                            e.currentTarget.title = "unpin";
                             vm.pinDocumentCount = parseInt(vm.pinDocumentCount, 10) + 1;
                         }
                     });
@@ -913,10 +914,12 @@
                             vm.pinDocumentCount = parseInt(vm.pinDocumentCount, 10) - 1;
                             if (vm.tabClicked.toLowerCase().indexOf("pinned") >= 0) {
                                 e.currentTarget.src = "../images/unpin-666.png";
+                                e.currentTarget.title = "unpin";
                                 vm.documentGridOptions.data.splice(vm.documentGridOptions.data.indexOf(currentRowData), 1)
                             }
                             else {
                                 e.currentTarget.src = "../images/pin-666.png";
+                                e.currentTarget.title = "pin";
                             }
                         }
                     });
