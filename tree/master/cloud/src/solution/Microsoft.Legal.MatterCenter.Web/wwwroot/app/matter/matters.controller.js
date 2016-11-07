@@ -1228,14 +1228,14 @@
                 vm.lazyloaderFilter = false;
                 vm.filternodata = false;
                 searchRequest.SearchObject.PageNumber = 1;
-                searchRequest.SearchObject.SearchTerm = term;
+                //searchRequest.SearchObject.SearchTerm = term;
                 searchRequest.SearchObject.Sort.ByProperty = property;
                 searchRequest.SearchObject.Sort.Direction = 0;
                 if (bool) {
                     vm.matterheader = true;
                     vm.divuigrid = false;
                     vm.lazyloader = false;
-                    searchRequest.SearchObject.SearchTerm = "";
+                    //searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
                     if (property == "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "") {
                         vm.attorneySearchTerm = term;
@@ -1349,7 +1349,7 @@
                                 searchRequest.SearchObject.FilterValue = '';
                                 searchRequest.SearchObject.UniqueColumnName = '';
                             }
-                            searchRequest.SearchObject.SearchTerm = "";
+                            //searchRequest.SearchObject.SearchTerm = "";
                             searchRequest.SearchObject.Sort.ByProperty = "";
                             $interval(function () { vm.showSortExp(); }, 2000, 3);
                         }
@@ -1389,7 +1389,7 @@
                                 searchRequest.SearchObject.FilterValue = '';
                                 searchRequest.SearchObject.UniqueColumnName = '';
                             }
-                            searchRequest.SearchObject.SearchTerm = "";
+                            //searchRequest.SearchObject.SearchTerm = "";
                             searchRequest.SearchObject.Sort.ByProperty = "";
                             $interval(function () { vm.showSortExp(); }, 2000, 3);
                         }
@@ -1552,7 +1552,7 @@
                 vm.nodata = false;
                 vm.responseNull = false;
                 vm.pagenumber = 1;
-                searchRequest.SearchObject.SearchTerm = '';
+                //searchRequest.SearchObject.SearchTerm = '';
                 searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
                 searchRequest.SearchObject.PageNumber = vm.pagenumber;
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
@@ -1583,7 +1583,7 @@
                 }
                 else if (property == vm.matterConfigContent.GridColumn1Header) {
                     vm.searchTerm = "";
-                    searchRequest.SearchObject.SearchTerm = "";
+                    //searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.Name = "";
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     vm.matterfilter = false;
@@ -2413,7 +2413,7 @@
                         finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + matterName.trim() + "\" AND " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + matterID.trim() + "\")";
                     }
                     else if (selected.indexOf("(") == 0 && selected.indexOf(")") == selected.length - 1) {
-                        finalSearchText = '('+ vm.configSearchContent.ManagedPropertyMatterId + ':"' + selected.trim() + '")';
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + selected.trim() + '")';
                     }
                     else {
                         finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + selected.trim() + "*\")";
@@ -2816,6 +2816,10 @@
                 vm.areaOfLawSearchTerm = "";
                 vm.ProjectID = false;
             }
+
+            angular.element('#menuitem-1').dblclick(function (e) {
+                e.preventDefault();
+            });
         }]);
     app.filter('unique', function () {
         return function (collection, keyname) {
