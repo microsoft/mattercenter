@@ -120,9 +120,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         }
                         else
                         {
-                            searchObject.SearchTerm = string.Concat(searchObject.SearchTerm, 
-                                ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE, 
-                                ServiceConstants.OPENING_BRACKET, "CPCTeamMembers", ServiceConstants.COLON, 
+                            searchObject.SearchTerm = string.Concat(searchObject.SearchTerm,
+                                ServiceConstants.SPACE, ServiceConstants.OPERATOR_AND, ServiceConstants.SPACE,
+                                ServiceConstants.OPENING_BRACKET, "CPCTeamMembers", ServiceConstants.COLON,
                                 ServiceConstants.SPACE, ServiceConstants.DOUBLE_INVERTED_COMMA, userTitle,
                                 ServiceConstants.DOUBLE_INVERTED_COMMA, ServiceConstants.SPACE, ServiceConstants.CLOSING_BRACKET);
 
@@ -145,8 +145,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     managedProperties.Add(searchSettings.ManagedPropertyLastModifiedTime);
                     var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedStampedColumns").GetChildren();
                     foreach (var key in managedColumns)
-                    {          
-                        managedProperties.Add(searchSettings.ManagedPropertyExtension + key.Value.Replace("LPC", ""));      
+                    {                       
+                            managedProperties.Add(searchSettings.ManagedPropertyExtension + key.Value.Replace("LPC", ""));
                     }
                     managedProperties.Add(searchSettings.ManagedPropertyMatterId);
                     managedProperties.Add(searchSettings.ManagedPropertyCustomTitle);
@@ -233,10 +233,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     managedProperties.Add(searchSettings.ManagedPropertySPWebUrl);
                     managedProperties.Add(searchSettings.ManagedPropertyAuthor);
                     managedProperties.Add(searchSettings.ManagedPropertyMatterGuid);
-                    
+
                     //Filter on Result source to fetch only Matter Center specific results
                     keywordQuery.SourceId = new Guid(searchSettings.SearchResultSourceID);
-                    
+
                     var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedStampedColumns").GetChildren();
                     foreach (var key in managedColumns)
                     {
@@ -265,7 +265,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="listColumnName"></param>
         /// <param name="isShowDocument"></param>
         /// <returns></returns>
-        public SearchResponseVM GetPinnedData(SearchRequestVM searchRequestVM, string listName, 
+        public SearchResponseVM GetPinnedData(SearchRequestVM searchRequestVM, string listName,
             string listColumnName, bool isShowDocument)
         {
             ////Holds logged-in user alias
@@ -310,48 +310,49 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                     string lastModifiedDate = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentModifiedDate").GetValue<string>("keyName");
                                     string createdDate = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentCreatedDate").GetValue<string>("keyName");
                                     //searchResponse.DocumentDataList = userpinnedDocumentCollection.Values.Reverse();
-                                    
+
                                     IList<DocumentData> filterPinnedDocList = null;
                                     filterPinnedDocList = GetPinDocsFilteredResult(searchRequestVM, userpinnedDocumentCollection);
-                                  
+
                                     if (filterPinnedDocList != null)
                                     {
-                                        if (filterPinnedDocList.Count > 1 && filterPinnedDocList[0].DocumentID != null)
+                                        searchResponse.DocumentDataList = filterPinnedDocList;
+                                        try
                                         {
-                                            if (searchRequestVM.SearchObject.Sort.Direction == 0)
+                                            if (searchRequestVM.SearchObject.Sort.Direction == 0 && !string.IsNullOrWhiteSpace(sortCol) && filterPinnedDocList.Count > 1)
                                             {
-                                                if (sortCol != "" && (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim()))
+                                                var getSortColNullCount = filterPinnedDocList.Select(x => TypeHelper.GetPropertyValue(x, sortCol)).Where(y => y == null);
+                                                if (getSortColNullCount.Count() == 0)
                                                 {
-                                                    searchResponse.DocumentDataList = filterPinnedDocList.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null)).ToList();
-                                                }
-                                                else if (sortCol != "" && (sortCol.ToLower().Trim() != lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() != createdDate.ToLower().Trim()))
-                                                {
-                                                    searchResponse.DocumentDataList = filterPinnedDocList.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol)).ToList();
-                                                }
-                                                else
-                                                {
-                                                    searchResponse.DocumentDataList = filterPinnedDocList;
+                                                    if (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim())
+                                                    {
+                                                        searchResponse.DocumentDataList = filterPinnedDocList.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null)).ToList();
+                                                    }
+                                                    else
+                                                    {
+                                                        searchResponse.DocumentDataList = filterPinnedDocList.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol)).ToList();
+                                                    }
                                                 }
                                             }
-                                            else
+                                            else if (searchRequestVM.SearchObject.Sort.Direction == 1 && !string.IsNullOrWhiteSpace(sortCol) && filterPinnedDocList.Count > 1)
                                             {
-                                                if (sortCol != "" && (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim()))
+                                                var getSortColNullCount = filterPinnedDocList.Select(x => TypeHelper.GetPropertyValue(x, sortCol)).Where(y => y == null);
+                                                if (getSortColNullCount.Count() == 0)
                                                 {
-                                                    searchResponse.DocumentDataList = filterPinnedDocList.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null)).ToList();
-                                                }
-                                                else if (sortCol != "" && (sortCol.ToLower().Trim() != lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() != createdDate.ToLower().Trim()))
-                                                {
-                                                    searchResponse.DocumentDataList = filterPinnedDocList.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol)).ToList();
-                                                }
-                                                else
-                                                {
-                                                    searchResponse.DocumentDataList = filterPinnedDocList;
+                                                    if (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim())
+                                                    {
+                                                        searchResponse.DocumentDataList = filterPinnedDocList.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null)).ToList();
+                                                    }
+                                                    else
+                                                    {
+                                                        searchResponse.DocumentDataList = filterPinnedDocList.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol)).ToList();
+                                                    }
                                                 }
                                             }
                                         }
-                                        else
+                                        catch (Exception ex)
                                         {
-                                            searchResponse.DocumentDataList = filterPinnedDocList;
+                                            string msg = ex.Message;
                                         }
                                         searchResponse.TotalRows = searchResponse.DocumentDataList.Count;
                                     }
@@ -369,14 +370,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 searchResponse.TotalRows = userpinnedMatterCollection.Count;
                                 if (searchRequestVM.SearchObject.Sort.SortAndFilterPinnedData == false)
                                 {
-                                    searchResponse.MatterDataList = userpinnedMatterCollection.Values;
+                                    searchResponse.MatterDataList = userpinnedMatterCollection.Values.Reverse();
                                 }
                                 else
                                 {
                                     string lastModifiedDate = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterModifiedDate").GetValue<string>("keyName");
                                     string createdDate = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterCreatedDate").GetValue<string>("keyName");
                                     // searchResponse.MatterDataList = userpinnedMatterCollection.Values.Reverse();
-                                   
+
 
                                     #region Code for filtering pinned data
                                     IList<MatterData> filterPinnedMatterList = null;
@@ -384,43 +385,43 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                     filterPinnedMatterList = GetPinMattersFilteredResult(searchRequestVM, userpinnedMatterCollection);
                                     if (filterPinnedMatterList != null)
                                     {
-                                        if (filterPinnedMatterList.Count > 1 && filterPinnedMatterList[0].MatterID != null)
+                                        searchResponse.MatterDataList = filterPinnedMatterList;
+                                        try
                                         {
-                                            if (searchRequestVM.SearchObject.Sort.Direction == 0)
+                                            if (searchRequestVM.SearchObject.Sort.Direction == 0 && !string.IsNullOrWhiteSpace(sortCol) && filterPinnedMatterList.Count > 1)
                                             {
-
-                                                if (sortCol != "" && (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim()))
+                                                var getSortColNullCount = filterPinnedMatterList.Select(x => TypeHelper.GetPropertyValue(x, sortCol)).Where(y => y == null);
+                                                if (getSortColNullCount.Count() == 0)
                                                 {
-                                                    searchResponse.MatterDataList = filterPinnedMatterList.OrderBy(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString())).ToList();
-                                                }
-                                                else if (sortCol != "" && (sortCol.ToLower().Trim() != lastModifiedDate || sortCol.ToLower().Trim() != createdDate.ToLower().Trim()))
-                                                {
-                                                    searchResponse.MatterDataList = filterPinnedMatterList.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol)).ToList();
-                                                }
-                                                else
-                                                {
-                                                    searchResponse.MatterDataList = filterPinnedMatterList;
+                                                    if (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim())
+                                                    {
+                                                        searchResponse.MatterDataList = filterPinnedMatterList.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null)).ToList();
+                                                    }
+                                                    else
+                                                    {
+                                                        searchResponse.MatterDataList = filterPinnedMatterList.OrderBy(x => TypeHelper.GetPropertyValue(x, sortCol)).ToList();
+                                                    }
                                                 }
                                             }
-                                            else
+                                            else if (searchRequestVM.SearchObject.Sort.Direction == 1 && !string.IsNullOrWhiteSpace(sortCol) && filterPinnedMatterList.Count > 1)
                                             {
-                                                if (sortCol != "" && (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim()))
+                                                var getSortColNullCount = filterPinnedMatterList.Select(x => TypeHelper.GetPropertyValue(x, sortCol)).Where(y => y == null);
+                                                if (getSortColNullCount.Count() == 0)
                                                 {
-                                                    searchResponse.MatterDataList = filterPinnedMatterList.OrderByDescending(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString())).ToList();
-                                                }
-                                                else if (sortCol != "" && (sortCol.ToLower().Trim() != lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() != createdDate.ToLower().Trim()))
-                                                {
-                                                    searchResponse.MatterDataList = filterPinnedMatterList.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol)).ToList();
-                                                }
-                                                else
-                                                {
-                                                    searchResponse.MatterDataList = filterPinnedMatterList;
+                                                    if (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim())
+                                                    {
+                                                        searchResponse.MatterDataList = filterPinnedMatterList.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null)).ToList();
+                                                    }
+                                                    else
+                                                    {
+                                                        searchResponse.MatterDataList = filterPinnedMatterList.OrderByDescending(x => TypeHelper.GetPropertyValue(x, sortCol)).ToList();
+                                                    }
                                                 }
                                             }
                                         }
-                                        else
+                                        catch (Exception ex)
                                         {
-                                            searchResponse.MatterDataList = filterPinnedMatterList;
+                                            string msg = ex.Message;
                                         }
                                         searchResponse.TotalRows = searchResponse.MatterDataList.Count;
                                     }
@@ -429,14 +430,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                         searchResponse.MatterDataList = new List<MatterData>();
                                         searchResponse.TotalRows = 0;
                                     }
-
-                                   
                                     #endregion
                                 }
-
                             }
                         }
-
                     }
                     else
                     {
@@ -2140,9 +2137,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
             matterMetadata[searchSettings.ManagedPropertyTitle] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyTitle]);
             matterMetadata[searchSettings.ManagedPropertySiteName] = DecodeValues(matterMetadata[searchSettings.ManagedPropertySiteName]);
             matterMetadata[searchSettings.ManagedPropertyDescription] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyDescription]);
-            var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedStampedColumns").GetChildren();            
+            var managedColumns = configuration.GetSection("ContentTypes").GetSection("ManagedStampedColumns").GetChildren();
             foreach (var key in managedColumns)
-            {                
+            {
                 if (key.Value.Contains("PracticeGroup"))
                 {
                     string practiceGroupKey = key.Value.Replace("LPC", "");
@@ -2154,10 +2151,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     {
                         matterMetadata[searchSettings.ManagedPropertyExtension + key.Value] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyExtension + key.Value]);
                     }
-                    
-                }                                      
+
+                }
             }
-            
+
             matterMetadata[searchSettings.ManagedPropertyCustomTitle] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyCustomTitle]);
             matterMetadata[searchSettings.ManagedPropertyPath] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyPath]);
             matterMetadata[searchSettings.ManagedPropertyMatterName] = DecodeValues(matterMetadata[searchSettings.ManagedPropertyMatterName]);
