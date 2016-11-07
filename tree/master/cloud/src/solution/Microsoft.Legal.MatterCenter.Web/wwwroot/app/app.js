@@ -134,7 +134,7 @@ angular.module('matterMain', [
                     }
 
                     $rootScope.errorList.push(rejection.data);
-                    $scope.$broadcast('disableOverlay', "text");                
+                    $scope.$broadcast('disableOverlay', "text");
                     //It has to return the rejection, simple reject call doesn't work
                     return $q.reject(rejection);
                 },
@@ -157,8 +157,8 @@ angular.module('matterMain', [
                     //Adding to error list
                     //$rootScope.errorList.push(rejection.data);
                     angular.element('#myErrorModal').modal("show");
-                    $rootScope.exceptionObj = rejection.data;                 
-                   //It has to return the rejection, simple reject call doesn't work
+                    $rootScope.exceptionObj = rejection.data;
+                    //It has to return the rejection, simple reject call doesn't work
                     return $q.reject(rejection);
                 }
             };
@@ -183,7 +183,7 @@ angular.module('matterMain', [
 
 
     }])
-.directive('menuclose', function ($rootScope) {
+.directive('menuclose', function ($rootScope, $timeout) {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
@@ -201,6 +201,7 @@ angular.module('matterMain', [
                     $rootScope.dispinner = true;
                     $rootScope.contextualhelp = false;
                     $rootScope.dispcontextualhelpinner = true;
+                    $timeout(function () { angular.element('.zindex6').css('z-index', '6'); }, 600);
                     $rootScope.$apply();
                 }
             });
@@ -210,7 +211,7 @@ angular.module('matterMain', [
 .run(function ($rootScope, $analytics) {
     $rootScope.setAuthenticatedUserContext = function () {
         appInsights.setAuthenticatedUserContext(configs.ADAL.authUserEmail);
-        
+
     };
 })
 ;

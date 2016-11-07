@@ -726,14 +726,14 @@
             vm.lazyloaderFilter = false;
             vm.responseNull = false;
             searchRequest.SearchObject.PageNumber = 1;
-            searchRequest.SearchObject.SearchTerm = term;
+            //searchRequest.SearchObject.SearchTerm = term;
             searchRequest.SearchObject.Sort.ByProperty = property;
             searchRequest.SearchObject.Sort.Direction = 1;
             if (bool) {
                 vm.documentheader = true;
                 //vm.divuigrid = false;
                 vm.lazyloader = false;
-                searchRequest.SearchObject.SearchTerm = "";
+                //searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 if (property == "" + vm.configSearchContent.ManagedPropertyFileName + "") {
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
@@ -812,7 +812,7 @@
                             searchRequest.SearchObject.FilterValue = '';
                             searchRequest.SearchObject.UniqueColumnName = '';
                         }
-                        searchRequest.SearchObject.SearchTerm = "";
+                        //searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Sort.ByProperty = "";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
@@ -854,7 +854,7 @@
                             searchRequest.SearchObject.FilterValue = '';
                             searchRequest.SearchObject.UniqueColumnName = '';
                         }
-                        searchRequest.SearchObject.SearchTerm = "";
+                        //searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Sort.ByProperty = "";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
@@ -1005,7 +1005,7 @@
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
             if (property === vm.documentConfigContent.GridColumn1Header) {
                 vm.searchTerm = "";
-                searchRequest.SearchObject.SearchTerm = "";
+                //searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Filters.Name = "";
                 searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                 vm.documentfilter = false;
