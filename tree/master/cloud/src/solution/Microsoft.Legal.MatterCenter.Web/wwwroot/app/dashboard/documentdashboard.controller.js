@@ -1372,7 +1372,7 @@
                 vm.assetsuccess = false;
                 vm.closealldrops(null);
                 var Client = {
-                    Id: (row.entity.documentParentUrl + "/" + row.entity.documentName + "." + row.entity.documentExtension).replace(configs.uri.SPOsiteURL, ""),
+                    Id: (row.entity.documentParentUrl.replace("/Forms/AllItems.aspx", "") + "/" + row.entity.documentName + "." + row.entity.documentExtension).replace(configs.uri.SPOsiteURL, ""),
                     Name: row.entity.documentMatterUrl.replace(configs.uri.SPOsiteURL, "").replace(".aspx", "").replace("/sitepages/", "/"),
                     Url: row.entity.documentClientUrl
                 }
