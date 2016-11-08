@@ -1545,7 +1545,8 @@
             if (elm != undefined) {
                 elm.css("display", "block");
             }
-            $timeout(function () { vm.divuigrid = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
+            //$timeout(function () { vm.divuigrid = true; }, 800, true);
+            vm.divuigrid = true;
             if (!$scope.$$phase) {
                 $scope.$apply();
             }
