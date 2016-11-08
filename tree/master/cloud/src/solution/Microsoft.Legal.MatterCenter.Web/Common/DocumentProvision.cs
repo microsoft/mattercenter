@@ -514,8 +514,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         }  
                         ServiceUtility.AddProperty(documentData, "PinType", "Pin");
                         ServiceUtility.AddProperty(documentData, "DocGuid", Guid.NewGuid().ToString());
-
-
                     }
                     documentDataList.Add(documentData);
                 }
@@ -545,7 +543,24 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
            string UniqueColumnName = getuniqueColumnName(searchRequestVM.SearchObject.UniqueColumnName.ToLower().Trim());
             if (!string.IsNullOrWhiteSpace(UniqueColumnName))
             {
-                if (UniqueColumnName.Equals(colList.GetSection("documentMatterName").Key))
+                if (UniqueColumnName.Equals(colList.GetSection("documentName").Key))
+                {
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentName.Contains(searchRequestVM.SearchObject.FilterValue));
+                    foreach (var dt in data)
+                    {
+                        dt.documentName = dt.documentName + "." + dt.documentExtension;
+                    }
+
+                    data = data.Select(o => o.documentName).Distinct();
+                    foreach (var dt in data)
+                    {
+                        dynamic documentData1 = new ExpandoObject();
+                        documentData1.documentName = dt;
+                        documentDataList1.Add(documentData1);
+                    }
+                    searchResultsVM.DocumentDataList = documentDataList1;
+                }
+                else if (UniqueColumnName.Equals(colList.GetSection("documentMatterName").Key))
                 {
                     var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentMatterName.Contains(searchRequestVM.SearchObject.FilterValue));
                     data = data.Select(o => o.documentMatterName).Distinct();
@@ -637,6 +652,10 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             else if (searchSettings.ManagedPropertyDocumentCheckOutUser.ToString().ToLower().Equals(uniueColumnName))
             {
                 uniueColumnName = docColumnSesction.GetSection("documentCheckoutUser").Key;
+            }
+            else if (searchSettings.ManagedPropertyFileName.ToString().ToLower().Equals(uniueColumnName))
+            {
+                uniueColumnName = docColumnSesction.GetSection("documentName").Key;
             }
             else
             {

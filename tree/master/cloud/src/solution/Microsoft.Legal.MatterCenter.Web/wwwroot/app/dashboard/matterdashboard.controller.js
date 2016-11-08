@@ -494,7 +494,17 @@
             vm.searchMatters = function (val) {
                 var finalSearchText = "";
                 if (val != "") {
-                    finalSearchText = "(" + configs.search.ManagedPropertyMatterName + ":" + val + "* OR " + configs.search.ManagedPropertyMatterId + ":" + val + "*)";
+                    if (val.indexOf("(") == 0 && val.indexOf(")") == val.length - 1) {
+                        finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + val + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + val + "*\")";
+                    }
+                    else if (val.lastIndexOf("(") > 0 && val.lastIndexOf(")") == val.length - 1) {
+                        var matterName = val.substring(0, val.lastIndexOf("(") - 1);
+                        var matterID = val.substring(val.lastIndexOf("("), val.lastIndexOf(")") + 1);
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + matterName.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + matterID.trim() + "*\")";
+                    }
+                    else {
+                        finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + val.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + val.trim() + "*\")";
+                    }
                 }
                 vm.pagenumber = 1;
                 jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
@@ -513,11 +523,18 @@
                 var finalSearchText = '';
                 vm.displaypagination = false;
                 if (selected != "") {
-                    searchToText = selected.replace("(", ",")
-                    searchToText = searchToText.replace(")", "")
-                    var firstText = searchToText.split(',')[0]
-                    var secondText = searchToText.split(',')[1]
-                    var finalSearchText = "(" + configs.search.ManagedPropertyMatterName + ":" + firstText.trim() + "* OR " + configs.search.ManagedPropertyMatterId + ":" + secondText.trim() + "*)";
+
+                    if (selected.lastIndexOf("(") > 0 && selected.lastIndexOf(")") == selected.length - 1) {
+                        var matterName = selected.substring(0, selected.lastIndexOf("(") - 1);
+                        var matterID = selected.substring(selected.lastIndexOf("("), selected.lastIndexOf(")") + 1);
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + matterName.trim() + "\" AND " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + matterID.trim() + "\")";
+                    }
+                    else if (selected.indexOf("(") == 0 && selected.indexOf(")") == selected.length - 1) {
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + selected.trim() + '")';
+                    }
+                    else {
+                        finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + selected.trim() + "*\")";
+                    }
                 }
                 vm.pagenumber = 1;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
@@ -646,16 +663,31 @@
                 vm.nodata = false;
                 var searchToText = '';
                 var finalSearchText = '';
+                //if (vm.searchText != "") {
+                //    if (vm.searchText.indexOf("(") > -1) {
+                //        searchToText = vm.searchText.replace("(", ",")
+                //        searchToText = searchToText.replace(")", "")
+                //        var firstText = searchToText.split(',')[0]
+                //        var secondText = searchToText.split(',')[1]
+                //        var finalSearchText = '(' + configs.search.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + configs.search.ManagedPropertyMatterId + ':"' + secondText.trim() + '")'
+                //        //var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")';
+                //    } else {
+                //        finalSearchText = commonFunctions.searchFilter(vm.searchText);
+                //    }
+                //}
+
                 if (vm.searchText != "") {
-                    if (vm.searchText.indexOf("(") > -1) {
-                        searchToText = vm.searchText.replace("(", ",")
-                        searchToText = searchToText.replace(")", "")
-                        var firstText = searchToText.split(',')[0]
-                        var secondText = searchToText.split(',')[1]
-                        var finalSearchText = '(' + configs.search.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + configs.search.ManagedPropertyMatterId + ':"' + secondText.trim() + '")'
-                        //var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")';
-                    } else {
-                        finalSearchText = commonFunctions.searchFilter(vm.searchText);
+
+                    if (vm.searchText.indexOf("(") == 0 && vm.searchText.indexOf(")") == vm.searchText.length - 1) {
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ':"' + vm.searchText.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyMatterId + ':"' + vm.searchText.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyClientName + ':"' + vm.searchText.trim() + '*")';
+                    }
+                    else if (vm.searchText.lastIndexOf("(") > 0 && vm.searchText.lastIndexOf(")") == vm.searchText.length - 1) {
+                        var matterName = vm.searchText.substring(0, vm.searchText.lastIndexOf("(") - 1);
+                        var matterID = vm.searchText.substring(vm.searchText.lastIndexOf("("), vm.searchText.lastIndexOf(")") + 1);
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + matterName.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + matterID.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyClientName + ":\"" + vm.searchText.trim() + "*\")";
+                    }
+                    else {
+                        finalSearchText = "(" + vm.configSearchContent.ManagedPropertyMatterName + ":\"" + vm.searchText.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyMatterId + ":\"" + vm.searchText.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyClientName + ":\"" + vm.searchText.trim() + "*\")"
                     }
                 }
 
@@ -663,6 +695,7 @@
                     Url: configs.global.repositoryUrl
                 }
                 var tempMatters = [];
+                jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
                 jsonMatterSearchRequest.SearchObject.Sort.ByProperty = sortPropertyForAllMatters;
