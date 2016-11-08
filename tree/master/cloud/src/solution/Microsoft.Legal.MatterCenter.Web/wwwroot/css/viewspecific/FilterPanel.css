@@ -992,8 +992,8 @@ input#sdBannerDropDown {
 }
 
 .PersonaContainer img {
-    width: 72px;
-    height: 72px;
+    /*width: 72px;
+    height: 72px;*/
     padding-right: 10px;
 }
 

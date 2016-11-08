@@ -80,13 +80,23 @@ textarea {
     }
 }
 
-@media(max-height:488px) {
+@media(max-height:400px) {
     .flyoutWrapper {
         max-height: 164px !important;
     }
 
     #filterResultsContainer {
         max-height: 33px !important;
+    }
+}
+
+@media screen and (max-height:488px) and (min-height: 400px) {
+    .flyoutWrapper {
+        max-height: 220px !important;
+    }
+
+    #filterResultsContainer {
+        max-height: 85px !important;
     }
 
     .ContextualHelp {
@@ -1412,17 +1422,17 @@ textarea {
 
 .jsonGridFooterNew {
     position: absolute;
-    min-width: 35px;
+    min-width: 64px;
     max-width: 133px;
 }
 
 .fromToPageWidth {
-    min-width: 43px;
+    min-width: 64px;
     max-width: 133px;
 }
 
 .docFromToPageWidth {
-    min-width: 52px;
+    min-width: 43px;
     max-width: 133px;
 }
 
@@ -1455,27 +1465,10 @@ textarea {
 }
 
 
-.ui-grid-menu .ui-grid-menu-inner ul li button:active {
-    background: #fff !important;
-    border: none;
-    outline: none;
+#InfoImg img {
+    cursor: default;
 }
 
-.ui-grid-menu .ui-grid-menu-inner ul li button :hover {
-    background: #fff !important;
-    border: none;
-    outline: none;
-}
-
-.ui-grid-menu .ui-grid-menu-inner ul li button :focus {
-    background: #fff !important;
-    border: none;
-    outline: none;
-}
-
-
-.ui-grid-menu:hover > #menuitem-1 :hover {
-    background-color: #fff;
-    border: none;
-    outline: none;
+#grid_Grid_ViewRecords {
+    text-align: center;
 }
