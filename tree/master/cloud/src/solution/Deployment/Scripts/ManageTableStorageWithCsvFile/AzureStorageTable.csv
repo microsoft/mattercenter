@@ -560,3 +560,5 @@ MatterCenterConfig,RowKey669,Header,FooterMenuOption2Value,"[Enter URL for Priva
 MatterCenterConfig,RowKey670,Header,FooterMenuOption3Value,"[Enter URL for Privacy terms, e.g. privacy.supportsite.com]"
 MatterCenterConfig,RowKey678,DocumentDetails,MenuImageUpperCaption,Matter Center
 MatterCenterConfig,RowKey679,DocumentDetails,MenuImageLowerCaption,for office 365
+MatterCenterConfig,RowKey680,CreateMatter,Tab1TextBoxMatterNameTitle,Matter Name
+MatterCenterConfig,RowKey681,CreateMatter,Tab1TextBoxMatterIDTitle,Matter ID
