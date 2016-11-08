@@ -282,7 +282,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
                         if (subAreaOfLaw2 == string.Empty && subAreaOfLaw1 == string.Empty && subAreaOfLaw != string.Empty)
                         {
-                            ServiceUtility.AddProperty(matterData, "matterSubAreaOfLaw", subAreaOfLaw);
+                            ServiceUtility.AddProperty(matterData, "matterSubAreaOfLaw",  WebUtility.HtmlDecode(subAreaOfLaw));
                         }
                         #endregion
 

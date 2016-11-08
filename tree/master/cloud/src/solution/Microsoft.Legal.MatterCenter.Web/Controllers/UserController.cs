@@ -127,23 +127,31 @@ namespace Microsoft.Legal.MatterCenter.Web
             Type = typeof(Users))]
         [SwaggerResponseRemoveDefaults]
         public IActionResult UserProfilePicture([FromBody]Client client)
-        {    
-            #region Error Checking                
-            GenericResponseVM genericResponse = null;
-
-            if (client == null && string.IsNullOrWhiteSpace(client.Url))
+        {
+            try
             {
-                genericResponse = new GenericResponseVM()
+                #region Error Checking                
+                GenericResponseVM genericResponse = null;
+
+                if (client == null && string.IsNullOrWhiteSpace(client.Url))
                 {
-                    Value = errorSettings.MessageNoInputs,
-                    Code = HttpStatusCode.BadRequest.ToString(),
-                    IsError = true
-                };
-                return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                }
+                #endregion
+                var userInfo = userRepositoy.GetUserProfilePicture(client);
+                return matterCenterServiceFunctions.ServiceResponse(userInfo, (int)HttpStatusCode.OK);
             }
-            #endregion
-            var userInfo = userRepositoy.GetUserProfilePicture(client);
-            return matterCenterServiceFunctions.ServiceResponse(userInfo, (int)HttpStatusCode.OK);
+            catch(Exception ex)
+            {
+                return matterCenterServiceFunctions.ServiceResponse("Error in getting user profile picture", (int)HttpStatusCode.OK);
+            }
+            
         }
 
 
