@@ -372,8 +372,8 @@
                             document.body.removeChild(element);
                         }
 
-                        
-                        
+
+
 
 
                         //Once we get the response, stop the progress
@@ -692,7 +692,7 @@
                         $scope.$apply();
                     }
                     vm.pagination();
-                    vm.displaypagination = true;
+                    //vm.displaypagination = true;
                     if (response == "" || (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText && response.allDocumentCounts == 0) ||
                         (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText && response.myDocumentCounts == 0) ||
                         (vm.selectedTabInfo == vm.documentDashboardConfigs.Tab3HeaderText && response.pinnedDocumentCounts == 0)) {
@@ -756,8 +756,8 @@
                             vm.totalrecords = vm.allDocumentCount;
                             vm.pagination();
                         }
-                        vm.lazyloaderdashboard = true;
-                        vm.divuigrid = true;
+                        //vm.lazyloaderdashboard = true;
+                        //vm.divuigrid = true;
 
                     });
 
@@ -824,7 +824,7 @@
             vm.getMyDocuments = function () {
                 vm.documentGridOptions.data = [];
                 vm.tabClicked = "My Documents";
-                vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText;
+                vm.selectedTab = vm.documentDashboardConfigs.Tab1HeaderText;
                 vm.sortbytext = vm.documentDashboardConfigs.DrpDownOption4Text + ' ↓';
                 vm.lazyloaderdashboard = false;
                 vm.displaypagination = false;
@@ -1209,7 +1209,7 @@
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
                 }
-
+                vm.setWidthtoPagination();
                 if (vm.totalrecords == 0) {
                     vm.displaypagination = false;
                     vm.divuigrid = false;
@@ -1227,6 +1227,7 @@
             vm.next = function () {
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
+                vm.displaypagination = false;
                 if (vm.last < vm.totalrecords) {
                     vm.documentGridOptions.data = [];
                     vm.first = vm.first + gridOptions.paginationPageSize;
@@ -1239,7 +1240,7 @@
                     } else {
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
-
+                    vm.setWidthtoPagination();
                     vm.pagenumber = vm.pagenumber + 1;
                     documentRequest.SearchObject.PageNumber = vm.pagenumber;
                     documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
@@ -1270,13 +1271,14 @@
                                 else {
                                     vm.documentGridOptions.data = response;
                                 }
+                                vm.lazyloaderdashboard = true;
+                                vm.divuigrid = true;
+                                vm.displaypagination = true;
+                                $interval(function () { vm.setPaginationHeight() }, 300, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
                             });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
-                            vm.lazyloaderdashboard = true;
-                            vm.divuigrid = true;
-                            $interval(function () { vm.setPaginationHeight() }, 500, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
                         }
                     });
                 } else {
@@ -1289,13 +1291,14 @@
             vm.prev = function () {
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
+                vm.displaypagination = false;
                 if (vm.last > gridOptions.paginationPageSize) {
                     vm.documentGridOptions.data = [];
                     vm.first = vm.first - gridOptions.paginationPageSize;
                     vm.last = vm.last - gridOptions.paginationPageSize;
                     vm.pagenumber = vm.pagenumber - 1;
                     vm.fromtopage = vm.first + " - " + vm.last;
-                    //vm.setToptoPagination();
+                    vm.setWidthtoPagination();
                     documentRequest.SearchObject.PageNumber = vm.pagenumber;
                     documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                     get(documentRequest, function (response) {
@@ -1327,12 +1330,12 @@
                                     vm.documentGridOptions.data = response;
                                     vm.lazyloaderdashboard = true;
                                 }
+                                vm.displaypagination = true;
+                                $interval(function () { vm.setPaginationHeight() }, 300, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
                             });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
-                            $interval(function () { vm.setPaginationHeight() }, 500, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
-
                         }
 
                     });
@@ -1594,6 +1597,17 @@
                 }
             }
             //#endregion
+
+            vm.setWidthtoPagination = function () {
+                var txt = vm.fromtopage;
+                if (txt.length <= 5) {
+                    angular.element('.docFromToPageWidth').css("min-width", "43px");
+                } else if (txt.length <= 7) {
+                    angular.element('.docFromToPageWidth').css("min-width", "64px");
+                } else if (txt.length <= 9) {
+                    angular.element('.docFromToPageWidth').css("min-width", "84px");
+                }
+            }
         }
     ]);
 }

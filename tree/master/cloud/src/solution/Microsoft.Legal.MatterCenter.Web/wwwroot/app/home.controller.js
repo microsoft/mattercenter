@@ -12,7 +12,7 @@
             vm.fullName = adalService.userInfo.profile.given_name + ' ' + adalService.userInfo.profile.family_name
             vm.isAuthenticated = adalService.userInfo.isAuthenticated
             vm.smallPictureUrl = 'Images/MC_Profile_Switcher.png';
-            vm.largePictureUrl = 'Images/MC_Profile_Switcher.png';
+            vm.largePictureUrl = 'Images/mc_profile_switcher_72.png';
             vm.userProfileObjectId = adalService.userInfo.profile.oid;
             vm.navigation = uiconfigs.Navigation;
             vm.header = uiconfigs.Header;

@@ -292,7 +292,7 @@
                     </div>
                     <div class="" style="min-width: 20px;max-width: 20px;float: right;margin-right: 10px;">
                         <span class="img-xls" ng-show="vm.lazyloaderdashboard" ng-click="vm.export()">
-                            <img alt="export" src="../../images/icxlsx.png" />
+                            <img alt="export" ng-if="!vm.nodata" src="../../images/icxlsx.png" />
                         </span>
                         <!--<button ng-click="vm.export()" class="btn btn-primary pull-right">{{vm.matterDashboardConfigs.ButtonExportText}}</button>-->
                     </div>
@@ -325,12 +325,12 @@
 
             </div>
         </div>
-        <div class="jsonGridFooter jsonGridFooterNew" ng-if="vm.displaypagination && vm.totalrecords>0">
-            <div ng-if="vm.totalrecords>6 && vm.first>2"> <img id="" ng-click="vm.prev()" class="first cur-pointer" src="../Images/pagination-back-Enabled.png"></div>
-            <div ng-if="vm.totalrecords<6 || vm.first<2"><img id="grid_Grid_First" class="first click-disabled" src="../Images/pagination-back-disabled.png"></div>
+        <div class="jsonGridFooter jsonGridFooterNew" ng-show="vm.displaypagination && vm.totalrecords>0">
+            <div ng-show="vm.totalrecords>6 && vm.first>2"> <img id="" ng-click="vm.prev()" class="first cur-pointer" src="../Images/pagination-back-Enabled.png"></div>
+            <div ng-show="vm.totalrecords<6 || vm.first<2"><img id="grid_Grid_First" class="first click-disabled" src="../Images/pagination-back-disabled.png"></div>
             <div id="grid_Grid_ViewRecords" class="ViewRecordDiv moveToMiddle fromToPageWidth"><span class="PaginateSpan">{{vm.fromtopage}}</span></div>
-            <div ng-if="vm.totalrecords<=6 || vm.last>=vm.totalrecords"><img id="grid_Grid_Next" class="next click-disabled" src="../Images/pagination-front-disabled.png"></div>
-            <div ng-if="vm.totalrecords>6" ng-class="{'hide':vm.last>=vm.totalrecords}"><img title="Next" id="grid_Grid_Next" ng-click="vm.next()" class="next cur-pointer" active="0" src="../Images/pagination-front-Enabled.png"></div>
+            <div ng-show="vm.totalrecords<=6 || vm.last>=vm.totalrecords"><img id="grid_Grid_Next" class="next click-disabled" src="../Images/pagination-front-disabled.png"></div>
+            <div ng-show="vm.totalrecords>6" ng-class="{'hide':vm.last>=vm.totalrecords}"><img title="Next" id="grid_Grid_Next" ng-click="vm.next()" class="next cur-pointer" active="0" src="../Images/pagination-front-Enabled.png"></div>
 
         </div>
     </div>

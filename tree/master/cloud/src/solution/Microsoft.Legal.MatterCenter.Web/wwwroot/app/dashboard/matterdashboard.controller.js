@@ -1618,7 +1618,7 @@
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
                 }
-
+                vm.setWidthtoPagination();
                 if (vm.totalrecords == 0) {
                     vm.displaypagination = false;
                 } else {
@@ -1644,6 +1644,7 @@
                     } else {
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
+                    vm.setWidthtoPagination();
                     vm.pagenumber = vm.pagenumber + 1;
                     if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
                         jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
@@ -1713,6 +1714,7 @@
                     vm.last = vm.last - gridOptions.paginationPageSize;
                     vm.pagenumber = vm.pagenumber - 1;
                     vm.fromtopage = vm.first + " - " + vm.last;
+                    vm.setWidthtoPagination();
                     if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
                         jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
                     } else {
@@ -2215,6 +2217,18 @@
                 }
             }
 
+            //#region to set the dynamic min-width to the pagination div
+            vm.setWidthtoPagination = function () {
+                var txt = vm.fromtopage;
+                if (txt.length <= 5) {
+                    angular.element('.fromToPageWidth').css("min-width", "43px");
+                } else if (txt.length <= 7) {
+                    angular.element('.fromToPageWidth').css("min-width", "64px");
+                } else if (txt.length <= 9) {
+                    angular.element('.fromToPageWidth').css("min-width", "84px");
+                }
+            }
+            //#endregion
           
 
         }
