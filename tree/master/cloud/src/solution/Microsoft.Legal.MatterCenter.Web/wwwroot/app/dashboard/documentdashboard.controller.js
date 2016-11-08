@@ -338,15 +338,15 @@
 
                         var docUrl = selectedDocument.documentUrl;
                         if (selectedDocument.documentUrl.indexOf("WopiFrame.aspx") > 0) {
-                            docUrl = selectedDocument.documentParentUrl + '/' + selectedDocument.documentName + '.' + selectedDocument.documentExtension
+                            docUrl = selectedDocument.documentParentUrl.replace("/Forms/AllItems.aspx", "") + '/' + selectedDocument.documentName + '.' + selectedDocument.documentExtension
                         }
                         oEmailRelativePath = trimEndChar(unescape(docUrl));
                         oEmailRelativePath = oEmailRelativePath.replace(configs.uri.SPOsiteURL, "$") + "$";
                         if (selectedDocument.documentClientUrl) {
-                            sFileURLs += selectedDocument.documentClientUrl + oEmailRelativePath + selectedDocument.documentName + ";";
+                            sFileURLs += selectedDocument.documentClientUrl.replace("/Forms/AllItems.aspx", "") + oEmailRelativePath + selectedDocument.documentName + ";";
                         }
                         else {
-                            sFileURLs += selectedDocument.documentTeamUrl + oEmailRelativePath + selectedDocument.documentName + ";";
+                            sFileURLs += selectedDocument.documentTeamUrl.replace("/Forms/AllItems.aspx", "") + oEmailRelativePath + selectedDocument.documentName + ";";
                         }
                     });
 
@@ -358,13 +358,22 @@
                     downloadAttachmentsAsStream(mailAttachmentDetailsRequest, function (response) {
                         var fileName = response.fileName
                         var blob = new Blob([response.fileAttachment.result], { type: "text/eml" });
-                        //window.navigator.msSaveOrOpenBlob(blob, "temp.eml");
-                        var element = window.document.createElement("a");
-                        element.href = window.URL.createObjectURL(blob);
-                        element.download = fileName;
-                        document.body.appendChild(element);
-                        element.click();
-                        document.body.removeChild(element);
+
+
+                        if (window.navigator.msSaveOrOpenBlob) {
+                            window.navigator.msSaveOrOpenBlob(blob, fileName);
+                        } else {
+                            //window.navigator.msSaveOrOpenBlob(blob, "temp.eml");
+                            var element = window.document.createElement("a");
+                            element.href = window.URL.createObjectURL(blob);
+                            element.download = fileName;
+                            document.body.appendChild(element);
+                            element.click();
+                            document.body.removeChild(element);
+                        }
+
+                        
+                        
 
 
                         //Once we get the response, stop the progress
