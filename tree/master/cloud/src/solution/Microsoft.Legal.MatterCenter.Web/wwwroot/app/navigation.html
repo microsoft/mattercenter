@@ -10,7 +10,7 @@
     <header class="WelcomeBar ms-bg-color-neutralLighterAlt" ng-class="{ 'RemoveWelcomeBar': vm.welcomeheader}">
         <span class="ms-font-s" ng-hide="vm.welcomeheader">
             {{vm.navigationContent.HeaderBarLabel}}
-            <a class="LearnMoreLink" ng-href="{{vm.navigationContent.HeaderBarLink1URL}}" target="_blank" title="Learn more about {{vm.navigationContent.Name}} Center">{{vm.navigationContent.HeaderBarLink1Text}}</a> or <a class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">{{vm.navigationContent.HeaderBarLink2Text}}</a>
+            <a class="LearnMoreLink" ng-href="{{vm.navigationContent.HeaderBarLink1URL}}" target="_blank" title="{{vm.navigationContent.HeaderBarLink1Title}}">{{vm.navigationContent.HeaderBarLink1Text}}</a> or <a class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">{{vm.navigationContent.HeaderBarLink2Text}}</a>
         </span>
     </header>
     <!--     </div> -->
