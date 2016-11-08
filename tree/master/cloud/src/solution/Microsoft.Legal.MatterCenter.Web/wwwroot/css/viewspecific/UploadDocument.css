@@ -352,6 +352,7 @@
     word-wrap: break-word;
     position: absolute;
     z-index: 2;
+    cursor:default;
 }
 
 .successNotification {
@@ -449,6 +450,7 @@
     height: 23px;
     margin-right: 10px;
     width: 27px;
+    cursor:default;
 }
 
 .noFilesUploaded {

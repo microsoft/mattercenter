@@ -1193,8 +1193,8 @@
                     }
                 }
                 searchRequest.SearchObject.SearchTerm = finalSearchText;
-                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
-                searchRequest.SearchObject.Sort.Direction = 1;
+                //searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                //searchRequest.SearchObject.Sort.Direction = 1;
                 get(searchRequest, function (response) {
                     if (response == "" || response.errorCode == "500" || response.lenth == 0) {
                         vm.gridOptions.data = response;
