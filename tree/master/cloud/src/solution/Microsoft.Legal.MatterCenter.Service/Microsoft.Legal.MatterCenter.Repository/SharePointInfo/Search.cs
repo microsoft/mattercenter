@@ -384,7 +384,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                                     filterPinnedMatterList = GetPinMattersFilteredResult(searchRequestVM, userpinnedMatterCollection);
                                     filterPinnedMatterList = filterPinnedMatterList
-                                                               .Select(usr => { usr.MatterName = WebUtility.HtmlDecode(usr.MatterName); return usr; })
+                                                               .Select(usr => { usr.MatterName = WebUtility.HtmlDecode(usr.MatterName); usr.MatterSubAreaOfLaw = WebUtility.HtmlDecode(usr.MatterSubAreaOfLaw); return usr; })
                                                                .ToList();
                                     if (filterPinnedMatterList != null)
                                     {
