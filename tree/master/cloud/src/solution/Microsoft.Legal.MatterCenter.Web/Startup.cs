@@ -387,6 +387,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             var taxonomySettingsSection = Configuration.GetSection("Taxonomy");
             var searchSettingsSection = Configuration.GetSection("Search").GetChildren();
             var contentTypeSettingsSection = Configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
+            var contentTypeStampedSettingsSection = Configuration.GetSection("ContentTypes").GetSection("ManagedStampedColumns").GetChildren();
             var appInsightsSections = Configuration.GetSection("ApplicationInsights");
             var matterSearchColumnPickerSection = Configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetChildren();
             var documentSearchColumnPickerSection = Configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetChildren();
@@ -563,8 +564,17 @@ namespace Microsoft.Legal.MatterCenter.Web
                             jw.WritePropertyName(key.Key);
                             jw.WriteValue(key.Value);                            
                         }
-                    jw.WriteEndObject();
-                jw.WriteEndObject();
+                        jw.WriteEndObject();
+                
+                    jw.WritePropertyName("managedStampedColumns");
+                        jw.WriteStartObject();
+                        foreach (var key in contentTypeStampedSettingsSection)
+                        {
+                            jw.WritePropertyName(key.Key);
+                            jw.WriteValue(key.Value);
+                        }
+                     jw.WriteEndObject();
+            jw.WriteEndObject();
 
             jw.WritePropertyName("uploadMessages");
                 jw.WriteStartObject();
