@@ -7,6 +7,8 @@
             ///All Variables
             var cm = this;
             $rootScope.pageIndex = "4";
+            //To load the Contextual help data
+            $rootScope.help();
             cm.selectedConflictCheckUser = undefined;
             $rootScope.bodyclass = "";
             $rootScope.profileClass = "";
@@ -21,6 +23,7 @@
             cm.oMandatoryRoleNames = [];
             cm.bMatterLandingPage = false;
             cm.oSiteUsers = [];
+            cm.oSiteUserNames = [];
             cm.successBanner = false;
             cm.selectedClient = undefined;
             cm.createBtnDisabled = false;
@@ -94,10 +97,13 @@
                 showRoles: true,
                 showMatterId: true,
                 matterIdType: "Custom",
+                AssignPermissionTeams: [],
                 specialCharacterExpressionMatter: "[A-Za-z0-9_]+[-A-Za-z0-9_, ]*",
                 isBackwardCompatible: false,
+                oSiteUsers: [],
+                oSiteUserNames: [],
                 isClientMappedWithHierachy: false,
-                ConflictRadioCheck: false,
+                ConflictRadioCheck: false,               
                 oEmailRegexp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             }
 
@@ -109,7 +115,8 @@
                 BlockedUserName: [],
                 SecureMatterCheck: true,
                 AssignPermissionTeams: [],
-                oSiteUsers: []
+                oSiteUsers: [],
+                oSiteUserNames: [],
             }
 
             cm.clientId = "";
@@ -658,6 +665,7 @@
                                     assignPermTeam.assignedUser = arrDMatterUsers[aCount] + "(" + arrDMatterUserEmails[aCount] + ");";
                                     if (-1 == cm.oSiteUsers.indexOf(arrDMatterUserEmails[aCount])) {
                                         cm.oSiteUsers.push(arrDMatterUserEmails[aCount]);
+                                        cm.oSiteUserNames.push(arrDMatterUsers[aCount]);
                                     }
 
                                     var userDetails = {};
@@ -1263,12 +1271,36 @@
                         cm.errorPopUpBlock = true;
                         return false;
                     }
+                    username = getUserName(cm.selectedConflictCheckUser + ";", true);
+                    if (-1 == cm.oSiteUserNames.indexOf(username[0])) {
+                        //  cm.blockedUserName.trim()
+                        cm.errTextMsg = cm.createContent.ErrorMessageConflictUser;
+                        //"Enter the conflict reviewers name (for auditing purposes).";
+                        cm.errorBorder = "ccheckuser";
+                        showErrorNotification("ccheckuser");
+                        cm.errorPopUpBlock = true;
+                        return false;
+                    }
                 }
                 if (cm.blockedUserName && "" !== cm.blockedUserName) {
                     username = getUserName(cm.blockedUserName + ";", false);
                     username=cleanArray(username);
                     for (var i = 0; i < username.length; i++) {
                         if (-1 == cm.oSiteUsers.indexOf(username[i])) {
+                            //  cm.blockedUserName.trim()
+                            cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
+                            //"Please enter valid team members.";
+                            //"Enter users that are conflicted with this matter.";
+                            cm.errorBorder = "cblockuser";
+                            showErrorNotification("cblockuser");
+                            cm.errorPopUpBlock = true;
+                            return false;
+                        }
+                    }
+                    username = getUserName(cm.blockedUserName + ";", true);
+                    username = cleanArray(username);
+                    for (var i = 0; i < username.length; i++) {
+                        if (-1 == cm.oSiteUserNames.indexOf(username[i])) {
                             //  cm.blockedUserName.trim()
                             cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                             //"Please enter valid team members.";
@@ -1286,6 +1318,8 @@
                         if (team.assignedUser && team.assignedUser != "") {//For loop
                             var usersEmails = getUserName(team.assignedUser, false);
                             usersEmails = cleanArray(usersEmails);
+                            var userAliasNames = getUserName(team.assignedUser, true);
+                            userAliasNames = cleanArray(userAliasNames);
                             if (usersEmails.length !== team.teamUsers.length) {
                                 cm.checkUserExists(team);
                                 keepGoing = false;
@@ -1297,6 +1331,16 @@
                                             if (teamUser.userName == usersEmails[j]) {
                                                 if (teamUser.userExsists) {
                                                     if (-1 == cm.oSiteUsers.indexOf(usersEmails[j])) {
+                                                        //  cm.blockedUserName.trim()
+                                                        cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
+                                                        //"Please enter valid team members.";
+                                                        cm.errorBorder = "";
+                                                        cm.errorPopUpBlock = true;
+                                                        showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
+                                                        cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
+                                                        return false;
+                                                    }
+                                                    if (-1 == cm.oSiteUserNames.indexOf(userAliasNames[j])) {
                                                         //  cm.blockedUserName.trim()
                                                         cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                                                         //"Please enter valid team members.";
@@ -1442,6 +1486,9 @@
                     if (-1 == cm.oSiteUsers.indexOf($item.email)) {
                         cm.oSiteUsers.push($item.email);
                     }
+                    if (-1 == cm.oSiteUserNames.indexOf($item.name)) {
+                        cm.oSiteUserNames.push($item.name);
+                    }
                     if (value == "team") {
                         $label.userConfirmation = false;
                         cm.checkUserExists($label);
@@ -1543,13 +1590,21 @@
                 // console.log(optionsForSecurityGroupCheck);
 
                 checkSecurityGroupExists(optionsForSecurityGroupCheck, function (response) {
-                    // console.log(response);                   
+                    // console.log(response);  
+                    var rowNumber = undefined;
                     if (response.isError) {
-                        cm.errTextMsg = response.value.split('$')[0];
+                        if (response.value){
+                            cm.errTextMsg = response.value.split('$')[0];
+                            rowNumber = parseInt(response.value.split('$')[1].replace(/[^\d.]/g, ''), 10);
+                        }
+                        else if (response.code) {
+                            cm.errTextMsg = response.code.split('$|$')[0];
+                            rowNumber = parseInt(response.code.split('$|$')[1].replace(/[^\d.]/g, ''), 10);
+                        }
                         cm.errorBorder = "";
                         cm.errorStatus = true;
                         cm.errorPopUpBlock = true;
-                        var rowNumber = parseInt(response.value.split('$')[1].replace(/[^\d.]/g, ''), 10);
+                        
                         cm.errorBorder = "txtUser" + rowNumber;
                         showErrorNotificationAssignTeams(cm.errTextMsg, rowNumber, "securityuser")
                         cm.popupContainerBackground = "hide";
@@ -1661,7 +1716,7 @@
 
 
             cm.addNewAssignPermissions = function () {
-                var newItemNo = cm.assignPermissionTeams.length + 1;
+                var newItemNo = cm.assignPermissionTeams[cm.assignPermissionTeams.length - 1].assigneTeamRowNumber+1;
                 cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0] });
             };
 
@@ -1688,7 +1743,9 @@
                     cm.matterName = oPageData.MatterName;
                     cm.matterId = oPageData.MatterId;
                     cm.matterDescription = oPageData.MatterDescription;
-
+                    cm.assignPermissionTeams = oPageData.AssignPermissionTeams;
+                    cm.oSiteUsers = oPageData.oSiteUsers;
+                    cm.oSiteUserNames = oPageData.oSiteUserNames;
                     cm.clientNameList = [];
                     cm.showRoles = oPageData.showRoles;
                     cm.showMatterId = oPageData.showMatterId;
@@ -1745,7 +1802,9 @@
                         cm.secureMatterCheck = oPageData.SecureMatterCheck;
                         cm.secureMatterCheck = (localStorage.getItem("IsRestrictedAccessSelected") === "true");
                         cm.assignPermissionTeams = oPageData.AssignPermissionTeams;
-                        cm.oSiteUsers = oPageData.oSiteUsers; cm.nextButtonDisabled = true;
+                        cm.oSiteUsers = oPageData.oSiteUsers;
+                        cm.oSiteUserNames = oPageData.oSiteUserNames;
+                        cm.nextButtonDisabled = true;
                         cm.iCurrentPage = 3;
                     }
                     if (cm.includeEmail) {
@@ -2085,7 +2144,7 @@
                     isPageValid = validateCurrentPage(2);
                 } else {
                     cm.sectionName = "snOpenMatter";
-                    cm.iCurrentPage = 1;
+                    cm.iCurrentPage = 1; makePrevOrNextButton();
                 }
 
                 if (isPageValid) {                   
@@ -2198,6 +2257,7 @@
                 else {
                     cm.sectionName = "snConflictCheck";
                     cm.iCurrentPage = 2;
+                    makePrevOrNextButton();
                 }
             }
 
@@ -3022,6 +3082,8 @@
                 oPageOneState.MatterName = cm.matterName.trim();
                 oPageOneState.MatterId = cm.matterId.trim();
                 oPageOneState.MatterDescription = cm.matterDescription.trim();
+                oPageOneState.oSiteUsers = cm.oSiteUsers;
+                oPageOneState.oSiteUserNames = cm.oSiteUserNames;
                 //  oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
                 //   oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
                 oPageOneState.matterGUID = cm.matterGUID;
@@ -3030,6 +3092,7 @@
                 oPageOneState.showMatterId = cm.showMatterId;
                 oPageOneState.matterIdType = cm.matterIdType;
                 oPageOneState.conflictRadioCheck = cm.conflictRadioCheck;
+                oPageOneState.AssignPermissionTeams = cm.assignPermissionTeams;
                 //oPageOneState.isBackwardCompatible = cm.isBackwardCompatible;
                 //oPageOneState.isClientMappedWithHierachy = cm.isClientMappedWithHierachy;
                 //  oPageOneState.chkConflictCheck = cm.chkConfilctCheck;
@@ -3068,6 +3131,7 @@
                 oPageTwoState.SecureMatterCheck = cm.secureMatterCheck;
                 oPageTwoState.AssignPermissionTeams = cm.assignPermissionTeams;
                 oPageTwoState.oSiteUsers = cm.oSiteUsers;
+                oPageTwoState.oSiteUserNames = cm.oSiteUserNames;
                 localStorage.setItem('oPageTwoData', JSON.stringify(oPageTwoState));
                 localStorage.iLivePage = 3;
             }
@@ -3848,6 +3912,7 @@
                     var team = {};
                     team.assigneTeamRowNumber = cm.assignPermissionTeams.length + 1;
                     team.assignedUser = adalService.userInfo.profile.name + '(' + adalService.userInfo.userName + ');';
+                    team.assignedAllUserNamesAndEmails = team.assignedUser;
                     team.userConfirmation = true;
                     team.userExsists = true;
                     team.disable = true;
@@ -3866,6 +3931,9 @@
                     }
                     if (-1 == cm.oSiteUsers.indexOf(adalService.userInfo.userName)) {
                         cm.oSiteUsers.push(adalService.userInfo.userName);
+                    }
+                    if (-1 == cm.oSiteUserNames.indexOf(adalService.userInfo.profile.name)) {
+                        cm.oSiteUserNames.push(adalService.userInfo.profile.name);
                     }
                     angular.forEach(cm.assignRoles, function (assignRole) {
                         if (assignRole.mandatory) {
