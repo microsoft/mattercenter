@@ -212,7 +212,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         {                            
                             ServiceUtility.AddProperty(matterData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterName").Key,
-                                searchResult[key].ToString());                            
+                                WebUtility.HtmlDecode(searchResult[key].ToString()));                            
                         }
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyDescription.ToLower())
                         {

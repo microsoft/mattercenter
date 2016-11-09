@@ -383,6 +383,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                     IList<MatterData> filterPinnedMatterList = null;
 
                                     filterPinnedMatterList = GetPinMattersFilteredResult(searchRequestVM, userpinnedMatterCollection);
+                                    filterPinnedMatterList = filterPinnedMatterList
+                                                               .Select(usr => { usr.MatterName = WebUtility.HtmlDecode(usr.MatterName); usr.MatterSubAreaOfLaw = WebUtility.HtmlDecode(usr.MatterSubAreaOfLaw); return usr; })
+                                                               .ToList();
                                     if (filterPinnedMatterList != null)
                                     {
                                         searchResponse.MatterDataList = filterPinnedMatterList;
@@ -477,7 +480,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.Filters.Name))
             {
-                docDataList = (docDataList.Where(d => d.DocumentName.Equals(searchRequestVM.SearchObject.Filters.Name))).ToList();
+                string docName = searchRequestVM.SearchObject.Filters.Name;
+                if (searchRequestVM.SearchObject.Filters.Name.Contains("."))
+                {
+                    docName = searchRequestVM.SearchObject.Filters.Name.Substring(0, searchRequestVM.SearchObject.Filters.Name.LastIndexOf("."));
+                }
+                docDataList = (docDataList.Where(d => d.DocumentName.Equals(docName))).ToList();
             }
             if (searchRequestVM.SearchObject.Filters.DateFilters != null)
             {
@@ -534,10 +542,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 var colList = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument");
                 if (uniqueColumnName.Equals(colList.GetSection("documentName").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         documentDataList = (documentDataList.Where(d => d.DocumentName.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        foreach (var dt in documentDataList)
+                        {
+                           dt.DocumentName = dt.DocumentName + "." + dt.DocumentExtension;
+                        }
                         var data1 = documentDataList.Select(o => o.DocumentName).Distinct().ToList();
+
                         foreach (var dt in data1)
                         {
                             DocumentData documentData = new DocumentData();
@@ -548,7 +561,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("documentClient").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         documentDataList = (documentDataList.Where(d => d.DocumentClient.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = documentDataList.Select(o => o.DocumentClient).Distinct().ToList();
@@ -562,7 +575,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("documentOwner").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         documentDataList = (documentDataList.Where(d => d.DocumentOwner.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = documentDataList.Select(o => o.DocumentOwner).Distinct().ToList();
@@ -576,7 +589,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("documentCheckoutUser").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         documentDataList = (documentDataList.Where(d => d.DocumentCheckoutUser.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = documentDataList.Select(o => o.DocumentCheckoutUser).Distinct().ToList();
@@ -590,7 +603,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("documentPracticeGroup").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         documentDataList = (documentDataList.Where(d => d.DocumentPracticeGroup.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = documentDataList.Select(o => o.DocumentPracticeGroup).Distinct().ToList();
@@ -604,7 +617,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("documentMatterName").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         documentDataList = (documentDataList.Where(d => d.DocumentMatterName.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = documentDataList.Select(o => o.DocumentMatterName).Distinct().ToList();
@@ -770,7 +783,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 var colList = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter");
                 if (uniqueColumnName.Equals(colList.GetSection("matterName").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         matterDataList = (matterDataList.Where(d => d.MatterName.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterName).Distinct().ToList();
@@ -784,7 +797,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("matterClient").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         matterDataList = (matterDataList.Where(d => d.MatterClient.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterClient).Distinct().ToList();
@@ -798,7 +811,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("matterPracticeGroup").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         matterDataList = (matterDataList.Where(d => d.MatterPracticeGroup.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterPracticeGroup).Distinct().ToList();
@@ -812,7 +825,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("matterResponsibleAttorney").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         matterDataList = (matterDataList.Where(d => d.MatterResponsibleAttorney.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterResponsibleAttorney).Distinct().ToList();
@@ -826,7 +839,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("matterAreaOfLaw").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         matterDataList = (matterDataList.Where(d => d.MatterAreaOfLaw.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterAreaOfLaw).Distinct().ToList();
@@ -840,7 +853,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("matterSubAreaOfLaw").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         matterDataList = (matterDataList.Where(d => d.MatterSubAreaOfLaw.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterSubAreaOfLaw).Distinct().ToList();
@@ -854,7 +867,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (uniqueColumnName.Equals(colList.GetSection("matterID").Key))
                 {
-                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.SearchTerm))
+                    if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
                         matterDataList = (matterDataList.Where(d => d.MatterID.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterID).Distinct().ToList();
