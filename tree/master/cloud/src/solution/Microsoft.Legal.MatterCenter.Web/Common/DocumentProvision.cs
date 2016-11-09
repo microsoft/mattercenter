@@ -485,7 +485,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentOwner").Key,
                                 searchResult[key].ToString());
                         }
-                        if (key.ToString().ToLower() == "docid")
+                        if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentId.ToLower())
                         {
                             ServiceUtility.AddProperty(documentData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("docId").Key,

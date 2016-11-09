@@ -313,7 +313,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                                     IList<DocumentData> filterPinnedDocList = null;
                                     filterPinnedDocList = GetPinDocsFilteredResult(searchRequestVM, userpinnedDocumentCollection);
-
+                                    filterPinnedDocList = filterPinnedDocList
+                                                               .Select(usr => {usr.DocumentMatterName = WebUtility.HtmlDecode(usr.DocumentMatterName);usr.DocumentPracticeGroup = usr.DocumentPracticeGroup;usr.DocumentName = usr.DocumentName;return usr; })
+                                                               .ToList();
                                     if (filterPinnedDocList != null)
                                     {
                                         searchResponse.DocumentDataList = filterPinnedDocList;

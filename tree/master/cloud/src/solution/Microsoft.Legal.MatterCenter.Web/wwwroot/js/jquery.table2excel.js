@@ -107,7 +107,7 @@
             }
             delete e.ctx.table;
 
-            if (typeof msie !== "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+            if (window.navigator.msSaveOrOpenBlob)      // If Internet Explorer
             {
                 if (typeof Blob !== "undefined") {
                     // Must be replaced
@@ -138,8 +138,10 @@
                 a.href = link;
 
                 document.body.appendChild(a);
-
+                
                 a.click();
+               
+                
 
                 document.body.removeChild(a);
             }
