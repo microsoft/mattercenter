@@ -145,7 +145,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.documentDashboardConfigs.AdvSearchLabel2Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10" id="documentAuthorDiv">
-                            <input type="text" placeholder="{{vm.documentDashboardConfigs.AdvSearchTextbox2PlaceholderText}}" uib-typeahead="documentDataList.name for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.authortypeheadselect($item, $model)' typeahead-no-results="noResults" ng-model="vm.selectedAuthor" class="form-control">
+                            <input type="text" placeholder="{{vm.documentDashboardConfigs.AdvSearchTextbox2PlaceholderText}}"  ng-model="vm.selectedAuthor" class="form-control">
                         </div>
                         <div class="col-xs-12 hide">
                             <i ng-show="vm.loadLocation" class="glyphicon glyphicon-refresh"></i>
