@@ -54,7 +54,7 @@
                 <img title="{{vm.matterDashboardConfigs.ImageAdvanceSearchTitle}}" id="filterSearchDown" ng-if="vm.upwarddrop" ng-click="vm.showdownward($event)" alt="{{vm.matterDashboardConfigs.ImageAdvanceSearchAltText}}" src="../Images/upward-advanced-search-29x29-666.png">
             </div>
             <div class="col-xs-12">
-                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                <!--<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>-->
                 <!--<div ng-show="noResults">
                     <i class="glyphicon glyphicon-remove"></i> No Results Found
                 </div>-->
@@ -485,7 +485,7 @@
                                     </script>
 
                                     <ul>
-                                        <li ng-repeat="child in vm.foldersList" ng-class='child.parentURL?"childNode":"parentNode"' data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" drop="handleDrop()" folder="child" ng-include="'folderTree'" style="display: inline-block; width: 90%; padding:0;">
+                                        <li ng-repeat="child in vm.foldersList" ng-class='child.parentURL?"childNode":"parentNode"' data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" droppable drop="handleDrop()" folder="child" ng-include="'folderTree'" style="display: inline-block; width: 90%; padding:0;">
 
                                         </li>
 
@@ -563,7 +563,7 @@
                 <tr ng-repeat="item in vm.exportDate">
                     <td>{{item.matterName}}</td>
                     <td>{{item.matterPracticeGroup}}</td>
-                    <td>{{item.matterClient}}</td>
+                    <td>{{item.matterAreaOfLaw}}</td>
                     <td>{{item.matterSubAreaOfLaw}}</td>
                     <td datefilter date={{item.matterCreatedDate}}></td>
                     <!--<td>{{item.matterID}}</td>-->

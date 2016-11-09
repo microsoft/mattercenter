@@ -22,6 +22,8 @@
         vm.documentsdrop = false;
         vm.docdropinner = true;
         $rootScope.pageIndex = "2";
+        //To load the Contextual help data
+        $rootScope.help();
         $rootScope.bodyclass = "bodymain";
         $rootScope.displayOverflow = "";
         $rootScope.profileClass = "";
@@ -676,16 +678,16 @@
                     finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":\"" + vm.selected.trim() + "*\")"
                 }
 
-            //else if (-1 !== vm.selected.indexOf("(")) {
-            //        searchToText = vm.selected.replace("(", ",");
-            //        searchToText = searchToText.replace(")", "");
-            //        var firstText = searchToText.split(',')[0];
-            //        var secondText = searchToText.split(',')[1];
-            //        var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':' + firstText.trim() + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + firstText.trim() + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + firstText.trim() + '*)';
-            //    }
-            //else {
-            //        finalSearchText = '(' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyFileName + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + vm.selected + '*)';
-            //}
+                //else if (-1 !== vm.selected.indexOf("(")) {
+                //        searchToText = vm.selected.replace("(", ",");
+                //        searchToText = searchToText.replace(")", "");
+                //        var firstText = searchToText.split(',')[0];
+                //        var secondText = searchToText.split(',')[1];
+                //        var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':' + firstText.trim() + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + firstText.trim() + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + firstText.trim() + '*)';
+                //    }
+                //else {
+                //        finalSearchText = '(' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyFileName + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + vm.selected + '*)';
+                //}
             }
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
             searchRequest.SearchObject.SearchTerm = finalSearchText;
@@ -903,11 +905,15 @@
                         if (vm.modStartDate != "") {
                             searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modStartDate, "yyyy-MM-ddT00:00:00") + "Z";
                         }
+                    } else {
+                        searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                     }
                     if (vm.modEndDate != undefined) {
                         if (vm.modEndDate != "") {
                             searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modEndDate, "yyyy-MM-ddT23:59:59") + "Z";
                         }
+                    } else {
+                        searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
                     }
                     vm.moddatefilter = true;
                 }
@@ -916,16 +922,26 @@
                         if (vm.startDate != "") {
                             searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = $filter('date')(vm.startDate, "yyyy-MM-ddT00:00:00") + "Z";
                         }
+                    } else {
+                        searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
                     }
                     if (vm.endDate != undefined) {
                         if (vm.endDate != "") {
                             searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = $filter('date')(vm.endDate, "yyyy-MM-ddT23:59:59") + "Z";
                         }
+                    } else {
+                        searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
                     }
                     vm.createddatefilter = true;
                 }
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
+                if ((vm.modStartDate == undefined && vm.modEndDate == undefined) || (vm.modStartDate == "" && vm.modEndDate == "") || (vm.modStartDate == undefined && vm.modEndDate == "") || (vm.modStartDate == undefined && vm.modEndDate == "")) {
+                    vm.moddatefilter = false;
+                }
+                if ((vm.startDate == undefined && vm.endDate == undefined) || (vm.startDate == "" && vm.endDate == "") || (vm.startDate == undefined && vm.endDate == "") || (vm.startDate == "" && vm.endDate == undefined)) {
+                    vm.createddatefilter = false;
+                }
                 if (vm.documentid === 3) {
                     searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinnedDocuments(searchRequest, function (response) {
@@ -1545,12 +1561,13 @@
                             } else {
                                 vm.gridOptions.data = response;
                                 vm.divuigrid = true;
+                                vm.lazyloader = true;
                                 if (!$scope.$$phase) {
                                     $scope.$apply();
                                 }
                             }
                             //$timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
-                            vm.lazyloader = true;
+                            
                         });
                     }
                 });

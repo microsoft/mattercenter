@@ -1181,6 +1181,14 @@ textarea {
     max-width: 1150px;
 }
 
+.footerMaincontentDiv{
+    font-family: 'Segoe UI';
+    margin: 0px auto 0 auto;
+    padding: 0 16px;
+    position: relative;
+    max-width: 1150px;
+}
+
 #searchText {
     font-family: Arial;
     color: #000;
@@ -1471,4 +1479,31 @@ textarea {
 
 #grid_Grid_ViewRecords {
     text-align: center;
+}
+
+#menuitem-1 button {
+    box-shadow: none !important;
+}
+
+.cartFileTxtLabel {
+    max-width: 90%;
+    overflow: hidden;
+    float: left;
+}
+
+.mailContentPopUpBody {
+    max-height: 350px;
+}
+
+.loadingIconMatterUsers {
+    left: 45%;
+    top: 35%;
+}
+
+.loadingImgExplicit {
+    bottom: 65% !important;
+}
+
+.footer{
+    margin:0 !important;
 }

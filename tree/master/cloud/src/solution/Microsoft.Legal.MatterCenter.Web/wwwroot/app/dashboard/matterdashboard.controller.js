@@ -407,7 +407,7 @@
                     if (response == "" ||
                             (vm.selectedTab == vm.matterDashboardConfigs.Tab2HeaderText && response.allMatterCounts == 0) ||
                             (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText && response.myMatterCounts == 0) ||
-                            (vm.selectedTabInfo == vm.matterDashboardConfigs.Tab3HeaderText && response.pinMatterCounts == 0)) {
+                            (vm.selectedTab == vm.matterDashboardConfigs.Tab3HeaderText && response.pinnedMatterCounts == 0)) {
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = false;
                         vm.nodata = true;
@@ -552,11 +552,13 @@
                 vm.lazyloaderdashboard = false;
                 vm.displaypagination = false;
                 vm.divuigrid = false;
+                vm.nodata = false;
                 vm.matterid = 1;
                 vm.mattername = "All Matters";
                 angular.element('#allMatters').addClass("active");
                 angular.element('#myMatters').removeClass("active");
                 angular.element('#pinMatters').removeClass("active");
+                vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
                 vm.pagenumber = 1;
                 var searchToText = '';
                 var finalSearchText = '';
@@ -571,6 +573,7 @@
                         finalSearchText = commonFunctions.searchFilter(vm.searchText);
                     }
                 }
+                jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
                 jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
                 jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;

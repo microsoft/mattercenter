@@ -7,6 +7,8 @@
 
             var vm = this;
             $rootScope.pageIndex = "0";
+            //To load the Contextual help data
+            $rootScope.help();
             if (configs.global.isBackwardCompatible == false) {
                 vm.SPOHomePage = configs.uri.SPOsiteURL + '/SitePages/MatterCenterHome.aspx?section=1';
             }
