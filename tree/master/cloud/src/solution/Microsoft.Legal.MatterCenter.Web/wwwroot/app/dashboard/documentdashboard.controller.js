@@ -1421,11 +1421,17 @@
                 vm.nodata = false;
                 var clientArray = [];
                 var author = "";
+                var areaOfLaw = "";
                 var startdate = "";
                 var enddate = "";
                 vm.tabClicked = 'All Documents'
                 if (vm.selectedClients != "" && vm.selectedClients != undefined) {
-                    clientArray = vm.selectedClients.split(',');
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        clientArray = vm.selectedClients.split(',');
+                    }
+                    else {
+                        areaOfLaw = vm.selectedClients;
+                    }
                 }
                 if (vm.startdate != "" && vm.startdate != undefined) {
                     startdate = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
@@ -1434,8 +1440,10 @@
                     enddate = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
                 }
                 if (vm.selectedAuthor != "" && vm.selectedAuthor != undefined) {
-                    author = vm.selectedAuthor;
+                    author = vm.selectedAuthor + "*";
                 }
+                
+                documentRequest.SearchObject.Filters.AreaOfLaw = areaOfLaw;
                 documentRequest.SearchObject.Filters.ClientsList = clientArray;
                 documentRequest.SearchObject.Filters.DocumentAuthor = author;
                 documentRequest.SearchObject.Filters.FromDate = startdate;
