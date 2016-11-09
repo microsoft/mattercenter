@@ -160,7 +160,14 @@
                     e.stopPropagation();
                     var obj = e.target.getBoundingClientRect();
                     $(this).parent().find('.popcontent').html(a[0]);
-                    if (obj.top < 350) {
+                    var dashboardTop = 350;
+                    if ($(".commonContent").css('display') === 'block') {
+                        dashboardTop = 450;
+                    } else {
+                        dashboardTop = 350;
+                    }
+
+                    if (obj.top < dashboardTop) {
                         $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '268px', 'top': '0' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
                     } else {
@@ -279,7 +286,13 @@
                     e.stopPropagation();
                     var obj = e.target.getBoundingClientRect();
                     $(this).parent().find('.popcontent').html(a[0]);
-                    if (obj.top < 350) {
+                    var dashboardTop = 350;
+                    if ($(".commonContent").css('display') === 'block') {
+                        dashboardTop = 450;
+                    } else {
+                        dashboardTop = 350;
+                    }
+                    if (obj.top < dashboardTop) {
                         $(this).parent().find('.popcontent').css({ 'display': 'block', 'left': '284px', 'top': '0' });
                         $(this).parent().find('.popcontent').find('.flyoutLeftarrow').css('top', '11px');
                     } else {
