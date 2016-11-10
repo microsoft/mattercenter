@@ -62,8 +62,8 @@
                         <img id="PersonaPicture" ng-src="{{vm.largePictureUrl}}" alt="{{vm.header.ProfilePictureLabelText}}" title="{{vm.header.ProfilePictureLabelText}}" />
                     </div>
                     <div class="PersonaPictureDetails">
-                        <div class="PersonaTitle" id="PersonaTitle">{{vm.fullName}}</div>
-                        <div class="PersonaEmail" id="PersonaEmail">{{vm.loginUserEmail}}</div>
+                        <div class="PersonaTitle" id="PersonaTitle" title={{vm.fullName}}>{{vm.fullName}}</div>
+                        <div class="PersonaEmail" id="PersonaEmail" title={{vm.loginUserEmail}}>{{vm.loginUserEmail}}</div>
                     </div>
                 </div>
                 <div class="SignOutLink">
