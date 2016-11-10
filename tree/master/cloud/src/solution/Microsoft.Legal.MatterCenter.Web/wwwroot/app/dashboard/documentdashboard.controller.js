@@ -654,7 +654,7 @@
 
             //#region
             vm.authortypeheadselect = function (index, selected) {
-                vm.selectedAuthor = index.name + " (" + index.email + ");";
+                vm.selectedAuthor = index.name;
             }
 
             //#endregion
@@ -1442,7 +1442,7 @@
                     enddate = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
                 }
                 if (vm.selectedAuthor != "" && vm.selectedAuthor != undefined) {
-                    author = vm.selectedAuthor + "*";
+                    author = vm.selectedAuthor;
                 }
                 
                 documentRequest.SearchObject.Filters.AreaOfLaw = areaOfLaw;
@@ -1457,12 +1457,12 @@
                         documentRequest.SearchObject.Sort.ByProperty = "";
                         documentRequest.SearchObject.Sort.Direction = 1;
                         documentRequest.SearchObject.Sort.ByColumn = "";
-                        vm.getDocumentCounts();
+                        vm.getDocumentCounts();                      
                     } else {
                         vm.documentGridOptions.data = response;
                         documentRequest.SearchObject.Sort.ByProperty = "";
                         documentRequest.SearchObject.Sort.Direction = 1;
-                        documentRequest.SearchObject.Sort.ByColumn = "";
+                        documentRequest.SearchObject.Sort.ByColumn = "";   
                         vm.getDocumentCounts();
                         if (!$scope.$$phase) {
                             $scope.$apply();

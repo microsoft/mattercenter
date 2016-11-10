@@ -328,7 +328,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                                 {
                                                     if (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim())
                                                     {
-                                                        searchResponse.DocumentDataList = filterPinnedDocList.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null)).ToList();
+                                                        searchResponse.DocumentDataList = filterPinnedDocList.OrderBy(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString())).ToList();
                                                     }
                                                     else
                                                     {
@@ -343,7 +343,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                                 {
                                                     if (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim())
                                                     {
-                                                        searchResponse.DocumentDataList = filterPinnedDocList.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null)).ToList();
+                                                        searchResponse.DocumentDataList = filterPinnedDocList.OrderByDescending(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString())).ToList();
                                                     }
                                                     else
                                                     {
@@ -400,7 +400,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                                 {
                                                     if (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim())
                                                     {
-                                                        searchResponse.MatterDataList = filterPinnedMatterList.OrderBy(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null)).ToList();
+                                                        searchResponse.MatterDataList = filterPinnedMatterList.OrderBy(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString())).ToList();
                                                     }
                                                     else
                                                     {
@@ -415,7 +415,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                                 {
                                                     if (sortCol.ToLower().Trim() == lastModifiedDate.ToLower().Trim() || sortCol.ToLower().Trim() == createdDate.ToLower().Trim())
                                                     {
-                                                        searchResponse.MatterDataList = filterPinnedMatterList.OrderByDescending(x => DateTime.ParseExact(TypeHelper.GetPropertyValue(x, sortCol).ToString(), "M/d/yyyy h:mm:ss tt", null)).ToList();
+                                                        searchResponse.MatterDataList = filterPinnedMatterList.OrderByDescending(x => DateTime.Parse(TypeHelper.GetPropertyValue(x, sortCol).ToString())).ToList();
                                                     }
                                                     else
                                                     {
@@ -2027,6 +2027,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     keywordQuery.EnableSorting = true;
                     keywordQuery = GetSortByProperty(keywordQuery, searchObject, isMatterSearch);
                 }
+                if(keywordQuery.QueryText.Length > 4000)
+                {
+                    return new SearchResponseVM();
+                }
+
                 SearchExecutor searchExecutor = new SearchExecutor(clientContext);
                 ClientResult<ResultTableCollection> resultsTableCollection = searchExecutor.ExecuteQuery(keywordQuery);
                 Users currentLoggedInUser = userDetails.GetLoggedInUserDetails(clientContext);
