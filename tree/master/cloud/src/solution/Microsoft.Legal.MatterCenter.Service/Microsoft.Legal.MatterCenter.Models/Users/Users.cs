@@ -60,6 +60,15 @@ namespace Microsoft.Legal.MatterCenter.Models
         }
 
         /// <summary>
+        /// Gets or sets the entity data.
+        /// </summary>
+        public string EntityDataTitle
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Gets or sets the entity type (user or security group).
         /// </summary>
         public string LargePictureUrl
