@@ -1181,7 +1181,7 @@ textarea {
     max-width: 1150px;
 }
 
-.footerMaincontentDiv{
+.footerMaincontentDiv {
     font-family: 'Segoe UI';
     margin: 0px auto 0 auto;
     padding: 0 16px;
@@ -1363,7 +1363,12 @@ textarea {
 
 .navtabs ul li {
     z-index: 3;
+    outline: none !important;
 }
+
+    .navtabs ul li a {
+        outline: none !important;
+    }
 
 .dashboardXOverFlow {
     overflow-x: auto;
@@ -1504,6 +1509,16 @@ textarea {
     bottom: 65% !important;
 }
 
-.footer{
-    margin:0 !important;
+.footer {
+    margin: 0 !important;
+}
+
+#PersonaPictureDetails div {
+    max-width: 274px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.noCursor{
+    cursor:not-allowed;
 }

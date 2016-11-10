@@ -755,8 +755,8 @@
                             vm.documentGridOptions.data = response;
                             vm.getDocumentCounts();
                             //vm.allDocumentCount = response.length;                            
-                            vm.totalrecords = vm.allDocumentCount;
-                            vm.pagination();
+                            //vm.totalrecords = vm.allDocumentCount;
+                            //vm.pagination();
                         }
                         //vm.lazyloaderdashboard = true;
                         //vm.divuigrid = true;
@@ -931,6 +931,11 @@
                             else {
                                 e.currentTarget.src = "../images/pin-666.png";
                                 e.currentTarget.title = "pin";
+                            }
+                            if (vm.pinDocumentCount == 0) {
+                                vm.divuigrid = false;
+                                vm.nodata = true;
+                                vm.displaypagination = false;
                             }
                         }
                     });
@@ -1444,7 +1449,7 @@
                 if (vm.selectedAuthor != "" && vm.selectedAuthor != undefined) {
                     author = vm.selectedAuthor;
                 }
-                
+
                 documentRequest.SearchObject.Filters.AreaOfLaw = areaOfLaw;
                 documentRequest.SearchObject.Filters.ClientsList = clientArray;
                 documentRequest.SearchObject.Filters.DocumentAuthor = author;
@@ -1457,12 +1462,12 @@
                         documentRequest.SearchObject.Sort.ByProperty = "";
                         documentRequest.SearchObject.Sort.Direction = 1;
                         documentRequest.SearchObject.Sort.ByColumn = "";
-                        vm.getDocumentCounts();                      
+                        vm.getDocumentCounts();
                     } else {
                         vm.documentGridOptions.data = response;
                         documentRequest.SearchObject.Sort.ByProperty = "";
                         documentRequest.SearchObject.Sort.Direction = 1;
-                        documentRequest.SearchObject.Sort.ByColumn = "";   
+                        documentRequest.SearchObject.Sort.ByColumn = "";
                         vm.getDocumentCounts();
                         if (!$scope.$$phase) {
                             $scope.$apply();
@@ -1625,9 +1630,30 @@
                 // Check if we have not clicked on the search box
                 if (!($(event.target).parents().andSelf().is('.dropdown-menu'))) {
                     // Hide/collapse your search box, autocomplete or whatever you need to do
-                    $('.dropdown-menu').hide('');
+                    angular.element('.dropdown-menu').hide('');
                 }
             });
+
+
+            //#region For removing the active class from the tabs that are not selected
+            vm.hideTabs = function ($event) {
+                if (!vm.lazyloaderdashboard) {
+                    if (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText) {
+                        angular.element('#allDocuments').removeClass("active");
+                        angular.element('#myDocuments').addClass("active");
+                        angular.element('#pinDocuments').removeClass("active");
+                    } else if (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText) {
+                        angular.element('#allDocuments').addClass("active");
+                        angular.element('#myDocuments').removeClass("active");
+                        angular.element('#pinDocuments').removeClass("active");
+                    } else {
+                        angular.element('#allDocuments').removeClass("active");
+                        angular.element('#myDocuments').removeClass("active");
+                        angular.element('#pinDocuments').addClass("active");
+                    }
+                }
+            }
+            //#endregion
         }
     ]);
 }

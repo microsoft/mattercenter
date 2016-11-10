@@ -802,6 +802,11 @@
                                 e.currentTarget.src = "../images/pin-666.png";
                                 e.currentTarget.title = "pin"
                             }
+                            if (vm.pinMatterCount == 0) {
+                                vm.divuigrid = false;
+                                vm.nodata = true;
+                                vm.displaypagination = false;
+                            }
                         }
                         //vm.lazyloaderdashboard = true;
                     });
@@ -2035,7 +2040,7 @@
                 jsonMatterSearchRequest.SearchObject.Filters.ToDate = enddate;
                 jsonMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 get(jsonMatterSearchRequest, function (response) {
-                    vm.lazyloaderdashboard = true;
+                    //vm.lazyloaderdashboard = true;
                     if (response == "" || response.length == 0) {
                         vm.matterGridOptions.data = [];
                         jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
@@ -2248,7 +2253,25 @@
             }
             //#endregion
           
-
+            //#region For removing the active class from the tabs that are not selected
+            vm.hideTabs = function ($event) {
+                if (!vm.lazyloaderdashboard) {
+                    if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
+                        angular.element('#allMatters').removeClass("active");
+                        angular.element('#myMatters').addClass("active");
+                        angular.element('#pinMatters').removeClass("active");
+                    } else if (vm.selectedTab == vm.matterDashboardConfigs.Tab2HeaderText) {
+                        angular.element('#allMatters').addClass("active");
+                        angular.element('#myMatters').removeClass("active");
+                        angular.element('#pinMatters').removeClass("active");
+                    } else {
+                        angular.element('#allMatters').removeClass("active");
+                        angular.element('#myMatters').removeClass("active");
+                        angular.element('#pinMatters').addClass("active");
+                    }
+                }
+            }
+            //#endregion
         }
     ]);
 
