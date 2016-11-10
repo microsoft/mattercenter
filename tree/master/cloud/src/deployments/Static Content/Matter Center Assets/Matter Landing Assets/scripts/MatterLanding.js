@@ -241,77 +241,7 @@ $(document).ready(function () {
     $("#termsOfUse").click(function () {
         LogEvent(appInsightsOperations.TermsOfUse);
     });
-    /* Register the click event for user icon */
-    $(".userIcon").click(function (event) {
-        $(".selectedUserIcon").removeClass("hide");
-        $(".popupBackground").removeClass("hide");
-        $(".teamFlyout").removeClass("hide");
-        increasePopUpheight();
-        LogEvent(appInsightsMatterLandingText + appInsightsOperations.Users);
-        event && event.stopPropagation();
-    });
-
-    /* Register the click event for selected user icon section */
-    $(".selectedUserIcon").click(function () {
-        $(this).addClass("hide");
-        $(".popupBackground").addClass("hide");
-        $(".teamFlyout").addClass("hide");
-    });
-
-    /* Register the click event for menu icon section */
-    $("#menu").click(function (event) {
-        increasePopUpheight();
-    });
-
-    /* Register the click event for team user section */
-    $(".teamSection").click(function () {
-        $(".blockedUserSection").removeClass("selectedSection");
-        $(".teamFlyoutData").removeClass("hide");
-        $(".blockedFlyoutData").addClass("hide");
-        $(this).addClass("selectedSection");
-    });
-
-    /* Register the click event for blocked user section */
-    $(".blockedUserSection").click(function () {
-        $(".teamSection").removeClass("selectedSection");
-        $(".teamFlyoutData").addClass("hide");
-        $(".blockedFlyoutData").removeClass("hide");
-        $(this).addClass("selectedSection");
-
-    });
-
-    /* Register the click event for background */
-    $(".popupBackground , .errorPopupBackground").on("click", function (event) {
-        closeAllPopup(event);
-    });
-
-    /* Set max height on the basis of height of the window */
-    $(".teamFlyoutData").css("max-height", oMatterLandingCommonObjects.windowHeight - 343);
-
-    /* Register the click event for search icon */
-    $(".searchIcon").on("click", function (event) {
-        var sSearchText = $("#searchText").val().trim();
-        if (sSearchText && "" !== sSearchText) {
-            LogEvent(appInsightsMatterLandingText + appInsightsOperations.Search);
-        }
-    });
-
-    /* Register the click event for error popup expand message option */
-    $("#expandMessage, #collapseMessage").click(function () {
-        if ($("#errorMessage").is(":visible")) {
-            $("#errorMessage, #collapseMessage").addClass("hide");
-            $("#expandMessage").removeClass("hide");
-        } else {
-            $("#errorMessage, #collapseMessage").removeClass("hide");
-            $("#expandMessage").addClass("hide");
-        }
-    });
-
-    // Register the close event of error popup
-    $(".errorPopUpCloseIcon").on("click", function (event) {
-        "use strict";
-        $(".errorPopUpHolder").addClass("hide");
-    });
+    
 
     
 
@@ -425,6 +355,80 @@ function displayContent() {
    $.getScript( url, function() {
    		$.getScript( configJSUrl, function() {
    			displayHeaderAndFooterContent(configs.global.isBackwardCompatible);
+			
+			/* Register the click event for user icon */
+			$(".userIcon").click(function (event) {
+				$(".selectedUserIcon").removeClass("hide");
+				$(".popupBackground").removeClass("hide");
+				$(".teamFlyout").removeClass("hide");
+				increasePopUpheight();
+				LogEvent(appInsightsMatterLandingText + appInsightsOperations.Users);
+				event && event.stopPropagation();
+			});
+
+			/* Register the click event for selected user icon section */
+			$(".selectedUserIcon").click(function () {
+				$(this).addClass("hide");
+				$(".popupBackground").addClass("hide");
+				$(".teamFlyout").addClass("hide");
+			});
+
+			/* Register the click event for menu icon section */
+			$("#menu").click(function (event) {
+				increasePopUpheight();
+			});
+
+			/* Register the click event for team user section */
+			$(".teamSection").click(function () {
+				$(".blockedUserSection").removeClass("selectedSection");
+				$(".teamFlyoutData").removeClass("hide");
+				$(".blockedFlyoutData").addClass("hide");
+				$(this).addClass("selectedSection");
+			});
+
+			/* Register the click event for blocked user section */
+			$(".blockedUserSection").click(function () {
+				$(".teamSection").removeClass("selectedSection");
+				$(".teamFlyoutData").addClass("hide");
+				$(".blockedFlyoutData").removeClass("hide");
+				$(this).addClass("selectedSection");
+
+			});
+
+			/* Register the click event for background */
+			$(".popupBackground , .errorPopupBackground").on("click", function (event) {
+				closeAllPopup(event);
+			});
+
+			/* Set max height on the basis of height of the window */
+			$(".teamFlyoutData").css("max-height", oMatterLandingCommonObjects.windowHeight - 343);
+
+			/* Register the click event for search icon */
+			$(".searchIcon").on("click", function (event) {
+				var sSearchText = $("#searchText").val().trim();
+				if (sSearchText && "" !== sSearchText) {
+					LogEvent(appInsightsMatterLandingText + appInsightsOperations.Search);
+				}
+			});
+
+			/* Register the click event for error popup expand message option */
+			$("#expandMessage, #collapseMessage").click(function () {
+				if ($("#errorMessage").is(":visible")) {
+					$("#errorMessage, #collapseMessage").addClass("hide");
+					$("#expandMessage").removeClass("hide");
+				} else {
+					$("#errorMessage, #collapseMessage").removeClass("hide");
+					$("#expandMessage").addClass("hide");
+				}
+			});
+
+			// Register the close event of error popup
+			$(".errorPopUpCloseIcon").on("click", function (event) {
+				"use strict";
+				$(".errorPopUpHolder").addClass("hide");
+			});
+			
+			
 			if(configs.global.isBackwardCompatible){
    				oGlobalConstants.sListName = "UserPinnedProject"
    			}
