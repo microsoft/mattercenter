@@ -290,8 +290,8 @@ namespace Microsoft.Legal.MatterCenter.Service
                         IsError = true
                     };
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
-                }                
-                #endregion                
+                }
+                #endregion
                 var searchResultsVM = await matterProvision.GetMatters(searchRequestVM);
                 return matterCenterServiceFunctions.ServiceResponse(searchResultsVM.MatterDataList, (int)HttpStatusCode.OK);
             }

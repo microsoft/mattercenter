@@ -80,6 +80,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     tempUser.Email = string.Equals(item.EntityType, ServiceConstants.PEOPLE_PICKER_ENTITY_TYPE_USER, StringComparison.OrdinalIgnoreCase) ?
                         Convert.ToString(item.Description, CultureInfo.InvariantCulture) : Convert.ToString(item.EntityData.Email, CultureInfo.InvariantCulture);
                     tempUser.EntityType = Convert.ToString(item.EntityType, CultureInfo.InvariantCulture);
+                    tempUser.EntityDataTitle = string.IsNullOrWhiteSpace(item.EntityData.Title) ? "" : "(" + item.EntityData.Title.Trim() + ")";
                     users.Add(tempUser);
                 }
                 return users;

@@ -339,13 +339,18 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     matterDataList.Add(matterData);
                 }
                 searchResultsVM.MatterDataList = matterDataList;
+
+                searchResultsVM.SearchResults = null;
+                if (searchRequestVM.SearchObject.IsUnique && searchResultsVM.MatterDataList != null && !string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.UniqueColumnName))
+                {
+                    searchResultsVM.MatterDataList = getUniqueResults(searchRequestVM, searchResultsVM);
+                }
+                return searchResultsVM;
             }
-            searchResultsVM.SearchResults = null;
-            if (searchRequestVM.SearchObject.IsUnique && searchResultsVM.MatterDataList != null && !string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.UniqueColumnName))
+            else
             {
-                searchResultsVM.MatterDataList = getUniqueResults(searchRequestVM, searchResultsVM);
+                return searchResultsVM;
             }
-            return searchResultsVM;
         }
 
 
@@ -365,7 +370,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             {
                 if (UniqueColumnName.Equals(colList.GetSection("matterName").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterName.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterName.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.matterName).Distinct();
                     foreach (var dt in data)
                     {
@@ -377,7 +382,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else if (UniqueColumnName.Equals(colList.GetSection("matterClient").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterClient.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterClient.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.matterClient).Distinct();
                     foreach (var dt in data)
                     {
@@ -389,7 +394,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else if (UniqueColumnName.Equals(colList.GetSection("matterPracticeGroup").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterPracticeGroup.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterPracticeGroup.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.matterPracticeGroup).Distinct();
                     foreach (var dt in data)
                     {
@@ -401,7 +406,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else if (UniqueColumnName.Equals(colList.GetSection("matterAreaOfLaw").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterAreaOfLaw.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterAreaOfLaw.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.matterAreaOfLaw).Distinct();
                     foreach (var dt in data)
                     {
@@ -413,7 +418,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else if (UniqueColumnName.Equals(colList.GetSection("matterSubAreaOfLaw").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterSubAreaOfLaw.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterSubAreaOfLaw.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.matterSubAreaOfLaw).Distinct();
                     foreach (var dt in data)
                     {
@@ -425,7 +430,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else if (UniqueColumnName.Equals(colList.GetSection("matterResponsibleAttorney").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterResponsibleAttorney.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.MatterDataList).Where(d => d.matterResponsibleAttorney.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.matterResponsibleAttorney).Distinct();
                     foreach (var dt in data)
                     {
