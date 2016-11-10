@@ -272,9 +272,9 @@
             <div class="col-xs-12  padtop20 navtabs">
                 <ul class="nav nav-tabs" toggletab>
                     <li id="showMatters" class="showDocDashboard hide"><a href="#Documents" data-toggle="tab">{{vm.selectedTabInfo}}</a></li>
-                    <li id="myMatters"   ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText}" class="hideDocTabs"><a href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">{{vm.matterDashboardConfigs.Tab1HeaderText}} ({{vm.myMatterCount}})</a></li>
-                    <li id="allMatters"  ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab2HeaderText}" class="cursor hideDocTabs"><a data-toggle="tab" ng-click="vm.search()">{{vm.matterDashboardConfigs.Tab2HeaderText}} ({{vm.allMatterCount}})</a></li>
-                    <li id="pinMatters"  ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab3HeaderText}" class="hideDocTabs"><a href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">{{vm.matterDashboardConfigs.Tab3HeaderText}} ({{vm.pinMatterCount}})</a></li>
+                    <li id="myMatters"  ng-click="vm.hideTabs($event)" ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab1HeaderText}" class="hideDocTabs"><a class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.matterDashboardConfigs.Tab1HeaderText}} ({{vm.myMatterCount}})</a><a ng-show="vm.lazyloaderdashboard" href="#MyMatters" data-toggle="tab" ng-click="vm.myMatters()">{{vm.matterDashboardConfigs.Tab1HeaderText}} ({{vm.myMatterCount}})</a></li>
+                    <li id="allMatters" ng-click="vm.hideTabs($event)" ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab2HeaderText}" class="cursor hideDocTabs"><a class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.matterDashboardConfigs.Tab2HeaderText}} ({{vm.allMatterCount}})</a><a ng-show="vm.lazyloaderdashboard" data-toggle="tab" ng-click="vm.search()">{{vm.matterDashboardConfigs.Tab2HeaderText}} ({{vm.allMatterCount}})</a></li>
+                    <li id="pinMatters" ng-click="vm.hideTabs($event)" ng-class="{'active':vm.selectedTab==vm.matterDashboardConfigs.Tab3HeaderText}" class="hideDocTabs"><a class="noCursor" ng-show="!vm.lazyloaderdashboard">{{vm.matterDashboardConfigs.Tab3HeaderText}} ({{vm.pinMatterCount}})</a><a ng-show="vm.lazyloaderdashboard" href="#PinnedMatters" data-toggle="tab" ng-click="vm.getMatterPinned()">{{vm.matterDashboardConfigs.Tab3HeaderText}} ({{vm.pinMatterCount}})</a></li>
                 </ul>
             </div>
             <span class="showDocDashboard displayMatterTabs" ng-click="vm.showDocTabs($event)">...</span>
@@ -354,7 +354,9 @@
                             <input ng-show="duplicatefile.append==true" type='button' data-operation='append' title='{{vm.matterDashboardConfigs.Button3AppendDateTitle}}' value="{{vm.matterDashboardConfigs.Button3AppendDateText}}" ng-click="vm.localOverWriteDocument(duplicatefile,'append')" />
                             <input ng-show="duplicatefile.cancel=='True'" title="{{vm.matterDashboardConfigs.Button4CancelUploadTitle}}" id="overWriteNo"
                                    ng-click="vm.localOverWriteDocument(duplicatefile,'ignore');" type="button" value="{{vm.matterDashboardConfigs.Button4CancelUploadText}}" data-operation="ignore">
-                            <div ng-show="duplicatefile.contentCheck=='contentCheck'" class='notificationCC'>
+                            <input ng-show="duplicatefile.ok=='True'" title="{{vm.matterConfigContent.Button5OkTitle}}" id="ok"
+                                   ng-click="vm.localOverWriteDocument(duplicatefile,'ok');" type="button" value="OK" data-operation="ignore">
+                             <div ng-show="duplicatefile.contentCheck=='contentCheck'" class='notificationCC'>
                                 <img src="../Images/loadingcirclests16.gif" alt="" />{{vm.matterDashboardConfigs.Image1ContentCheckText}}  <input id='cancelCC' type='button' value='Cancel' ng-click='vm.abortContentCheck(duplicatefile,true)' />
                             </div>
                         </div>
@@ -376,7 +378,7 @@
                     </div>
                     <div class="row margin0">
                         <div class="col-sm-10 pad0">
-                            <div class="attachmentHeader marginBottom15">{{vm.matterDashboardConfigs.AttachmentPopupHeaderText}}</div>
+                            <div class="attachmentHeader marginBottom15 fontSize875em">{{vm.matterDashboardConfigs.AttachmentPopupHeaderText}}</div>
                         </div>
 
                     </div>
@@ -505,7 +507,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row margin0 marginTop15">
+                        <div class="row margin0 marginTop15 fontSize875em">
                             <div class="pull-left"><img src="../../images/information-blue.png" /> {{vm.matterDashboardConfigs.AttachmentPopupFooterImageCapetion}}</div>
                         </div>
                     </div>

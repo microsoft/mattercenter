@@ -802,6 +802,11 @@
                                 e.currentTarget.src = "../images/pin-666.png";
                                 e.currentTarget.title = "pin"
                             }
+                            if (vm.pinMatterCount == 0) {
+                                vm.divuigrid = false;
+                                vm.nodata = true;
+                                vm.displaypagination = false;
+                            }
                         }
                         //vm.lazyloaderdashboard = true;
                     });
@@ -1448,28 +1453,43 @@
                                     vm.uploadedFiles.push(response.data[i]);
                                     tempFile.push(response.data[i]);
                                     vm.oUploadGlobal.successBanner = (tempFile.length == sourceFiles.length) ? true : false;
-
+                                    vm.ducplicateSourceFile = vm.ducplicateSourceFile.filter(function (item) {
+                                        return item.fileName !== response.data[i].fileName;
+                                    });
                                 } else {
-                                    vm.IsDupliacteDocument = true;
-                                    if (response.data[i].value.split("|")[1]) {
-                                        response.data[i].contentCheck = response.data[i].value.split("|")[1];
-                                        response.data[i].saveLatestVersion = "True";
-                                        response.data[i].cancel = "True";
-                                        response.data[i].append = vm.overwriteConfiguration(response.data[i].fileName);
-                                        response.data[i].value = response.data[i].value.split("|")[0];
-                                        vm.ducplicateSourceFile.push(response.data[i]);
-                                        vm.oUploadGlobal.arrFiles.push(vm.files[i]);
-                                        vm.oUploadGlobal.successBanner = false;
-                                    }
-                                    else {
-                                        var file = $filter("filter")(vm.ducplicateSourceFile, response.data[i].fileName);
-                                        file[0].value = file[0].value + "<br/><br/>" + response.data[i].value;
-                                        file[0].saveLatestVersion = "True";
-                                        file[0].cancel = "True";
-                                        file[0].contentCheck = "False";
+                                    if (response.data[i].code == "DuplicateDocument" || response.data[i].code == "IdenticalContent") {
+                                        vm.IsDupliacteDocument = true;
+                                        if (response.data[i].value.split("|")[1]) {
+                                            response.data[i].contentCheck = response.data[i].value.split("|")[1];
+                                            response.data[i].saveLatestVersion = "True";
+                                            response.data[i].cancel = "True";
+                                            response.data[i].append = vm.overwriteConfiguration(response.data[i].fileName);
+                                            response.data[i].value = response.data[i].value.split("|")[0];
+                                            response.data[i].fileType = "remotefile";
+                                            vm.ducplicateSourceFile.push(response.data[i]);
+                                            vm.oUploadGlobal.arrFiles.push(vm.files[i]);
+                                            vm.oUploadGlobal.successBanner = false;
+                                        }
+                                        else {
+                                            var file = $filter("filter")(vm.ducplicateSourceFile, response.data[i].fileName);
+                                            if (file.length > 0) {
+                                                file[0].value = file[0].value + "<br/><br/>" + response.data[i].value;
+                                                file[0].saveLatestVersion = "True";
+                                                file[0].cancel = "True";
+                                                file[0].contentCheck = "False";
+                                            }
 
+                                        }
+                                    }
+
+                                    else {
+                                        vm.IsDupliacteDocument = true;
+                                        response.data[i].ok = "True";
+                                        response.data[i].value = "The file <b >" + response.data[i].fileName + " </b> is failed to upload";
+                                        vm.ducplicateSourceFile.push(response.data[i]);
                                     }
                                 }
+
                             }
 
                         }
@@ -2020,7 +2040,7 @@
                 jsonMatterSearchRequest.SearchObject.Filters.ToDate = enddate;
                 jsonMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 get(jsonMatterSearchRequest, function (response) {
-                    vm.lazyloaderdashboard = true;
+                    //vm.lazyloaderdashboard = true;
                     if (response == "" || response.length == 0) {
                         vm.matterGridOptions.data = [];
                         jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
@@ -2233,7 +2253,25 @@
             }
             //#endregion
           
-
+            //#region For removing the active class from the tabs that are not selected
+            vm.hideTabs = function ($event) {
+                if (!vm.lazyloaderdashboard) {
+                    if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
+                        angular.element('#allMatters').removeClass("active");
+                        angular.element('#myMatters').addClass("active");
+                        angular.element('#pinMatters').removeClass("active");
+                    } else if (vm.selectedTab == vm.matterDashboardConfigs.Tab2HeaderText) {
+                        angular.element('#allMatters').addClass("active");
+                        angular.element('#myMatters').removeClass("active");
+                        angular.element('#pinMatters').removeClass("active");
+                    } else {
+                        angular.element('#allMatters').removeClass("active");
+                        angular.element('#myMatters').removeClass("active");
+                        angular.element('#pinMatters').addClass("active");
+                    }
+                }
+            }
+            //#endregion
         }
     ]);
 
