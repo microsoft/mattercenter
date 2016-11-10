@@ -18,12 +18,14 @@
         $rootScope.bodyclass = "bodymain";
         $rootScope.displayOverflow = "";
         cm.oSiteUsers = [];
+        cm.oSiteUserNames = [];
         cm.invalidUserCheck = false;
         cm.configsUri = configs.uri;
         cm.showRoles = true;
         var siteCollectionPath = "";
 	cm.getExternalUserNotification = true;
-        cm.currentExternalUser = {};
+	cm.currentExternalUser = {};
+	cm.createContent = uiconfigs.CreateMatter;
 
         function getParameterByName(name) {
             "use strict";
@@ -38,9 +40,9 @@
         cm.isEdit = getParameterByName("IsEdit");
 
         if (cm.clientUrl === "" && cm.matterName === "") {
-            cm.matterName = "test project for outlook";
-            cm.clientUrl = cm.configsUri.SPOsiteURL + "/teams/celapcdts";
-            cm.isEdit = "true";
+            cm.matterName = "";
+           // cm.clientUrl = cm.configsUri.SPOsiteURL + "/teams/pcpreprod";
+           // cm.isEdit = "true";
         }
 
         //#region Service API Call
@@ -205,6 +207,9 @@
                     if (-1 == cm.oSiteUsers.indexOf(userEmails[i][0])) {
                         cm.oSiteUsers.push(userEmails[i][0]);
                     }
+                    if (-1 == cm.oSiteUserNames.indexOf(userNames[i][0])) {
+                        cm.oSiteUserNames.push(userNames[i][0]);
+                    }
                     angular.forEach(cm.assignRoles, function (role) {
                         if (role.name == roles[i]) {
                             assignedTeam.assignedRole = role;
@@ -329,7 +334,10 @@
                             else {
                                 cm.notificationPopUpBlock = false;
                                 angular.forEach(cm.assignPermissionTeams, function (team) {
-                                    var userEmail = getUserName(team.assignedUser , false)
+                                    var userEmail = getUserName(team.assignedUser, false);
+                                    userEmail = cleanArray(userEmail);
+                                    var userAliasNames = getUserName(team.assignedUser, true);
+                                    userAliasNames = cleanArray(userAliasNames);
                                     for (var i = 0; i < userEmail.length; i++) {
                                         if (userEmail[i] == email) {
                                             cm.textInputUser = team;
@@ -354,6 +362,9 @@
                                             if (-1 == cm.oSiteUsers.indexOf(email)) {
                                                 cm.oSiteUsers.push(email);
                                             }
+                                            if (-1 == cm.oSiteUserNames.indexOf(userAliasNames[i])) {
+                                                cm.oSiteUserNames.push(userAliasNames[i]);
+                                            }
                                         }
                                     }
                                 });
@@ -369,7 +380,8 @@
                         var userEmail = getUserName(team.assignedUser , false)
                         for (var i = 0; i < userEmail.length; i++) {
                             if (userEmail[i] == email) {
-                                cm.errTextMsg = "Please enter a valid email address.";
+                                cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers3
+                               // cm.errTextMsg = "Please enter a valid email address.";
                                 cm.errorBorder = "";
                                 cm.errorStatus = true;
                                 cm.errorPopUpBlock = true;
@@ -622,7 +634,8 @@
 
                         }
                         else {
-                            cm.errTextMsg = "Please provide at least one permission on this  matter. ";
+                            cm.errTextMsg = cm.createContent.ErrorMessageEntityPermission;
+                           // cm.errTextMsg = "Please provide at least one permission on this  matter. ";
                             cm.errorBorder = "";
                             cm.errorPopUpBlock = true;
                             return false;
@@ -630,13 +643,15 @@
                     }
                     else {
                         cm.errorPopUpBlock = true;
-                        cm.errTextMsg = "Enter at least one role for this matter.";
+                        cm.errTextMsg = cm.createContent.ErrorMessageEntityTeamRole1;
+                       // cm.errTextMsg = "Enter at least one role for this matter.";
                         cm.errorBorder = "";
                         return false;
                     }
                 }
                 else {
-                    cm.errTextMsg = cm.assignPermissionTeams[iCount].assignedRole.name + " cannot be empty.";
+                    cm.errTextMsg = cm.createContent.ErrorMessageTeamMember1;
+                   // cm.errTextMsg = cm.assignPermissionTeams[iCount].assignedRole.name + " cannot be empty.";
                     cm.errorBorder = "";
                     showErrorNotificationAssignTeams(cm.errTextMsg, cm.assignPermissionTeams[iCount].assigneTeamRowNumber, "user");
                     cm.errorPopUpBlock = true;
@@ -649,17 +664,19 @@
                     return true;
                 }
                 else {
-                    cm.errTextMsg = "Please provide at least one user who has Full Control permission on this  matter.";
-                    cm.errorBorder = "permUser1";
-                    showErrorNotificationAssignTeams(cm.errTextMsg, 1, "perm");
+                    cm.errTextMsg = cm.createContent.ErrorMessageEntityTeamPermission2;
+                   // cm.errTextMsg = "Please provide at least one user who has Full Control permission on this  matter.";
+                    cm.errorBorder = "permUser" + cm.assignPermissionTeams[0].assigneTeamRowNumber;
+                    showErrorNotificationAssignTeams(cm.errTextMsg, cm.assignPermissionTeams[0].assigneTeamRowNumber, "perm");
                     cm.errorPopUpBlock = true;
                     return false;
                 }
             }
             else {
-                cm.errTextMsg = "Enter at least one Responsible Attorney for this matter.";
-                cm.errorBorder = "roleUser1";
-                showErrorNotificationAssignTeams(cm.errTextMsg, 1, "role");
+                cm.errTextMsg = cm.createContent.ErrorMessageEntityTeamRole2;
+               // cm.errTextMsg = "Enter at least one Responsible Attorney for this matter.";
+                cm.errorBorder = "roleUser" + cm.assignPermissionTeams[0].assigneTeamRowNumber;
+                showErrorNotificationAssignTeams(cm.errTextMsg, cm.assignPermissionTeams[0].assigneTeamRowNumber, "role");
                 cm.errorPopUpBlock = true;
                 return false;
             }
@@ -705,7 +722,9 @@
                     if ($label.assignedAllUserNamesAndEmails && $label.assignedAllUserNamesAndEmails.indexOf(';') > -1) {
                         $label.assignedUser = $item.name + '(' + $item.email + ');';
                         if ($label.assignedAllUserNamesAndEmails.indexOf($item.name) == -1) {
-
+                            if ($label.assignedAllUserNamesAndEmails.indexOf($item.email) > -1) {
+                                $label.assignedAllUserNamesAndEmails = $label.assignedAllUserNamesAndEmails.replace($item.email + ";", "");
+                            }
                             $label.assignedAllUserNamesAndEmails = $label.assignedAllUserNamesAndEmails + $label.assignedUser;
                             $label.assignedUser = $label.assignedAllUserNamesAndEmails;
                         } else {
@@ -722,6 +741,9 @@
 
                 if (-1 == cm.oSiteUsers.indexOf($item.email)) {
                     cm.oSiteUsers.push($item.email);
+                }
+                if (-1 == cm.oSiteUserNames.indexOf($item.name)) {
+                    cm.oSiteUserNames.push($item.name);
                 }
                 $label.userConfirmation = false;
                 cm.checkUserExists($label);
@@ -906,6 +928,8 @@
                     if (team.assignedUser && team.assignedUser != "") {//For loop                                           
                        var usersEmails = getUserName(team.assignedUser, false);
                        usersEmails = cleanArray(usersEmails);
+                       var usersAliasNames = getUserName(team.assignedUser, true);
+                       usersAliasNames = cleanArray(usersAliasNames);
                        if (usersEmails.length !== team.teamUsers.length) {
                            cm.checkUserExists(team);
                            keepGoing = false;
@@ -916,9 +940,10 @@
                                    if (keepGoing) {
                                        if (teamUser.userName == usersEmails[j]) {
                                            if (teamUser.userExsists) {
-                                               if (-1 == cm.oSiteUsers.indexOf(usersEmails[j])) {
+                                               if (-1 == cm.oSiteUsers.indexOf(usersEmails[j]) || -1 == cm.oSiteUserNames.indexOf(usersAliasNames[j])) {
                                                    //  cm.blockedUserName.trim()
-                                                   cm.errTextMsg = "Please enter valid team members.";
+                                                   cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
+                                                  // cm.errTextMsg = "Please enter valid team members.";
                                                    cm.errorBorder = "";
                                                    cm.errorPopUpBlock = true;
                                                    showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
@@ -930,7 +955,8 @@
                                                    blockedUserEmail = cleanArray(blockedUserEmail);
                                                    for (var i = 0; i < blockedUserEmail.length; i++) {
                                                        if (usersEmails[j] == blockedUserEmail[i]) {
-                                                           cm.errTextMsg = "Please enter individual who is not conflicted.";
+                                                           cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers2;
+                                                            //"Please enter individual who is not conflicted.";
                                                            cm.errorBorder = "";
                                                            cm.errorPopUpBlock = true;
                                                            showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
@@ -963,7 +989,7 @@
                        }
                     }
                     else {
-                        showErrorNotificationAssignTeams(team.assignedRole.name + " cannot be empty", team.assigneTeamRowNumber, "user")
+                        showErrorNotificationAssignTeams(cm.createContent.ErrorMessageTeamMember1, team.assigneTeamRowNumber, "user")
                         cm.errorBorder = "txtUser" + team.assigneTeamRowNumber;
                         keepGoing = false;
                         return false;
@@ -1080,15 +1106,16 @@
                     }
 
                     updateMatterPermissions(updatedMatterUsers, function (response) {
-                        console.log(response);
+                        if (!response.isError) {                         
 
-
-                        cm.popupContainerBackground = "hide";
-                        //                           cm.errTextMsg = "Error in updating  matter: Incorrect inputs.";
-                        //                           showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
-                        //                           cm.errorBorder = "";
-                        //                           cm.errorPopUpBlock = true;
-                        //                           cm.popupContainerBackground = "hide";
+                            cm.popupContainerBackground = "hide";
+                        } else {
+                            //                           cm.errTextMsg = "Error in updating  matter: Incorrect inputs.";
+                            //                           showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
+                            //                           cm.errorBorder = "";
+                            //                           cm.errorPopUpBlock = true;
+                            //                           cm.popupContainerBackground = "hide";
+                        }
                     });
 
                 }

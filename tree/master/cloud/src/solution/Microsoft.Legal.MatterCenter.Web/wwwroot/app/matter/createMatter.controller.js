@@ -1468,8 +1468,10 @@
                     if (value == "team" || value == "blockuser") {
                         if ($label.assignedAllUserNamesAndEmails && $label.assignedAllUserNamesAndEmails.indexOf(';') > -1) {
                             $label.assignedUser = $item.name + '(' + $item.email + ');';
-                            if ($label.assignedAllUserNamesAndEmails.indexOf($item.name) == -1) {
-                              
+                            if ($label.assignedAllUserNamesAndEmails.indexOf($item.name) == -1 ) {
+                                if ($label.assignedAllUserNamesAndEmails.indexOf($item.email) > -1) {
+                                    $label.assignedAllUserNamesAndEmails = $label.assignedAllUserNamesAndEmails.replace($item.email + ";", "");
+                                }
                                 $label.assignedAllUserNamesAndEmails = $label.assignedAllUserNamesAndEmails + $label.assignedUser;
                                 $label.assignedUser = $label.assignedAllUserNamesAndEmails;
                             } else {
