@@ -339,13 +339,18 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     matterDataList.Add(matterData);
                 }
                 searchResultsVM.MatterDataList = matterDataList;
+
+                searchResultsVM.SearchResults = null;
+                if (searchRequestVM.SearchObject.IsUnique && searchResultsVM.MatterDataList != null && !string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.UniqueColumnName))
+                {
+                    searchResultsVM.MatterDataList = getUniqueResults(searchRequestVM, searchResultsVM);
+                }
+                return searchResultsVM;
             }
-            searchResultsVM.SearchResults = null;
-            if (searchRequestVM.SearchObject.IsUnique && searchResultsVM.MatterDataList != null && !string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.UniqueColumnName))
+            else
             {
-                searchResultsVM.MatterDataList = getUniqueResults(searchRequestVM, searchResultsVM);
+                return searchResultsVM;
             }
-            return searchResultsVM;
         }
 
 
