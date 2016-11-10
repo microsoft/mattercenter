@@ -193,7 +193,7 @@ oGlobalConstants.Go_To_OneNote = "GoToOneNote";
 oGlobalConstants.sAppName = "ProvisionDMSMatter";
 oGlobalConstants.sSendMailListName = "SendMail";
 oGlobalConstants.sEffectivePermissionUrl = "/_api/Web/lists/getbytitle('{0}')/EffectiveBasePermissions";
-oGlobalConstants.matterCenterMatterList = "MatterCenterMatters";
+oGlobalConstants.matterCenterMatterList = "ProvisionMatterList";
 // Declare the element for pin
 var oElement = null;
 //window.location.pathname.split('/').pop().replace('.aspx', '')
@@ -208,7 +208,7 @@ $(document).ready(function () {
 	
 
     "use strict";
-    displayHeaderAndFooterContent();
+    
     clientUrl = _spPageContextInfo.webServerRelativeUrl + "/";
     LogEvent(appInsightsMatterLandingText + appInsightsOperations.PageLoad);
     /* Make a call to display content on the page */
@@ -424,6 +424,13 @@ function displayContent() {
 
    $.getScript( url, function() {
    		$.getScript( configJSUrl, function() {
+   			displayHeaderAndFooterContent(configs.global.isBackwardCompatible);
+			if(configs.global.isBackwardCompatible){
+   				oGlobalConstants.sListName = "UserPinnedProject"
+   			}
+   			else{
+   				oGlobalConstants.sListName = "UserPinnedMatter"
+   			}
 		    /* Remove the hierarchy div if it already exists */
 		    var hierarchyDiv = $("#documentLibraryTitle");
 		    if (hierarchyDiv) {
@@ -900,11 +907,18 @@ function processXML(xml, iFlag, oPropertiesList) {
                     			if (!window.location.origin) {
 								  window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
 								}
-		                    	var queryStringParameters = "section=1&teamname="+ teamName  + "&practicegroup=" + practiceGroup + "&mattertype=" + matterType ;
-		                    	var teamUrl1 = window.location.origin+"/sitepages/mattercenterhome.aspx?"+queryStringParameters
+		                    	var queryStringParameters = "section=1&teamname="+ teamName.trim()  + "&practicegroup=" + practiceGroup.trim() + "&mattertype=" + matterType.trim() ;
+		                    	var teamUrl ='' 
+		                    	if(!configs.global.isBackwardCompatible){
+		                    		teamUrl = window.location.origin+"/sitepages/mattercenterhome.aspx?"+queryStringParameters;
+		                    	}
+		                    	else{
+		                    		teamUrl = configs.global.repositoryUrl+"/sitepages/mattercenterhome.aspx?"+queryStringParameters;
+		                    	}
+		                    	
 		                    	$(".matterDetails").append(oMatterLandingHtmlConstants.matterInformationClientHtml
 		                    					.replace("@@PropertyName", clientColumnName)
-		                    					.replace(/@@PropertyValue/g, teamName).replace("@@matterDetailClass", oMatterDetailClasses[oPropertiesList[iPropertyIterator]]).replace("@@TeamUrl", teamUrl1))
+		                    					.replace(/@@PropertyValue/g, teamName).replace("@@matterDetailClass", oMatterDetailClasses[oPropertiesList[iPropertyIterator]]).replace("@@TeamUrl", teamUrl))
 		                    					;
                     	}
                     }
@@ -949,6 +963,13 @@ function processXML(xml, iFlag, oPropertiesList) {
         }
     }
 }
+
+/* Encodes the html value */
+function htmlEncode(value) {
+    "use strict";
+    return $("<div/>").text(value).html();
+}
+
 
 /* Get the unique items from the list */
 function unique(list) {
@@ -1005,6 +1026,10 @@ function getUserData() {
             });
             arrUsersIds = unique($.map(arrUsersIds, function (item) { return item.trim() !== "" ? item.trim() : null; }));
             oGlobalConstants.iTeamMembersCount = arrUsersIds.length;
+            if(configs.global.isBackwardCompatible){
+            	$(".teamSection").css('cursor', 'default');
+			}
+
             $(".teamSection .userNumber").text("(" + oGlobalConstants.iTeamMembersCount + ")");
             $(".teamFlyoutData").find(".loadingIcon").addClass("hide");
             $.each(arrUsersIds, function (key, value) {
@@ -1494,9 +1519,18 @@ function getPinnedObject() {
             getMatterName() + "\", \n\t \"HideUpload\": \"";
     }
     else if(configs.global.isBackwardCompatible){
-    	var pcGroup = oMatterDetails.LPCPracticeGroup.trim().replace(/;\s*$/, "");
-    	var areaOfLaw = oMatterDetails.TeamName.trim().replace(/;\s*$/, "");
-    	var subAreaOfLaw = oMatterDetails.ProjectType.trim().replace(/;\s*$/, "");
+    	var pcGroup = "";
+    	
+    	if(oMatterDetails.LPCPracticeGroup){
+    		pcGroup = oMatterDetails.LPCPracticeGroup.trim().replace(/;\s*$/, "");
+    	}
+    	
+    	var subAreaOfLaw = "";
+    	if(oMatterDetails.ProjectType){
+    		subAreaOfLaw = oMatterDetails.ProjectType.trim().replace(/;\s*$/, "");
+    	}
+    	
+    	var areaOfLaw = oMatterDetails.TeamName.trim().replace(/;\s*$/, "");    	
     	sPinnedObject = "\"" + oMatterDetails.MatterUrl + "\": {\n\t \"MatterName\": \"" +
             oMatterDetails.ProjectName + "\", \n\t \"MatterDescription\": \"" +
             oMatterDetails.Description + "\", \n\t \"MatterCreatedDate\": \"" +

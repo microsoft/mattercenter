@@ -354,7 +354,9 @@
                             <input ng-show="duplicatefile.append==true" type='button' data-operation='append' title='{{vm.matterDashboardConfigs.Button3AppendDateTitle}}' value="{{vm.matterDashboardConfigs.Button3AppendDateText}}" ng-click="vm.localOverWriteDocument(duplicatefile,'append')" />
                             <input ng-show="duplicatefile.cancel=='True'" title="{{vm.matterDashboardConfigs.Button4CancelUploadTitle}}" id="overWriteNo"
                                    ng-click="vm.localOverWriteDocument(duplicatefile,'ignore');" type="button" value="{{vm.matterDashboardConfigs.Button4CancelUploadText}}" data-operation="ignore">
-                            <div ng-show="duplicatefile.contentCheck=='contentCheck'" class='notificationCC'>
+                            <input ng-show="duplicatefile.ok=='True'" title="{{vm.matterConfigContent.Button5OkTitle}}" id="ok"
+                                   ng-click="vm.localOverWriteDocument(duplicatefile,'ok');" type="button" value="OK" data-operation="ignore">
+                             <div ng-show="duplicatefile.contentCheck=='contentCheck'" class='notificationCC'>
                                 <img src="../Images/loadingcirclests16.gif" alt="" />{{vm.matterDashboardConfigs.Image1ContentCheckText}}  <input id='cancelCC' type='button' value='Cancel' ng-click='vm.abortContentCheck(duplicatefile,true)' />
                             </div>
                         </div>
