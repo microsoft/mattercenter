@@ -69,97 +69,203 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                     if (matterInformation1 != null)
                     {
                         if (matterInformation1.Status.ToLower() == "pending")
-                        {                        
-                            //De Serialize the matter information
-                            MatterInformationVM originalMatter = JsonConvert.DeserializeObject<MatterInformationVM>(matterInformation1.SerializeMatter);
-                            Matter matter = originalMatter.Matter;
-                            MatterDetails matterDetails = originalMatter.MatterDetails;
-                            Client client = originalMatter.Client;
-
-                            string matterMailBody, blockUserNames;
-                            // Generate Mail Subject
-                            string matterMailSubject = string.Format(CultureInfo.InvariantCulture, mailSubject,
-                                matter.Id, matter.Name, originalMatter.MatterCreator);
-
-                            // Step 1: Create Matter Information
-                            string defaultContentType = string.Format(CultureInfo.InvariantCulture,
-                                defaultHtmlChunk, matter.DefaultContentType);
-                            string matterType = string.Join(";", matter.ContentTypes.ToArray()).TrimEnd(';').Replace(matter.DefaultContentType, defaultContentType);
-                            if(matterType==string.Empty)
+                        {
+                            if (configuration["General:IsBackwardCompatible"].ToString().ToLower() == "false")
                             {
-                                matterType = defaultContentType;
-                            }
-                            // Step 2: Create Team Information
-                            string secureMatter = ServiceConstants.FALSE.ToUpperInvariant() == matter.Conflict.SecureMatter.ToUpperInvariant() ?
-                                ServiceConstants.NO : ServiceConstants.YES;
-                            string mailBodyTeamInformation = string.Empty;
-                            mailBodyTeamInformation = TeamMembersPermissionInformation(matterDetails, mailBodyTeamInformation);
-
-                            string oneNotePath = string.Concat(client.Url, ServiceConstants.FORWARD_SLASH,
-                                    matter.MatterGuid, oneNoteLibrarySuffix,
-                                            ServiceConstants.FORWARD_SLASH, matter.MatterGuid, ServiceConstants.FORWARD_SLASH, matter.MatterGuid);
-
-                            if (originalMatter.IsConflictCheck)
-                            {
-                                string conflictIdentified = ServiceConstants.FALSE.ToUpperInvariant() == matter.Conflict.Identified.ToUpperInvariant() ?
-                                                ServiceConstants.NO : ServiceConstants.YES;
-                                blockUserNames = string.Join(";", matter.BlockUserNames.ToArray()).Trim().TrimEnd(';');
-
-                                blockUserNames = !String.IsNullOrEmpty(blockUserNames) ? string.Format(CultureInfo.InvariantCulture,
-                            "<div>{0}: {1}</div>", "Conflicted User", blockUserNames) : string.Empty;
-                                matterMailBody = string.Format(CultureInfo.InvariantCulture,
-                                    matterMailBodyMatterInformation, client.Name, client.Id,
-                                    matter.Name, matter.Id, matter.Description, matterType) + string.Format(CultureInfo.InvariantCulture,
-                                    matterMailBodyConflictCheck, ServiceConstants.YES, matter.Conflict.CheckBy,
-                                    Convert.ToDateTime(matter.Conflict.CheckOn, CultureInfo.InvariantCulture).ToString(matterCenterDateFormat, CultureInfo.InvariantCulture),
-                                    conflictIdentified) + string.Format(CultureInfo.InvariantCulture,
-                                    matterMailBodyTeamMembers, secureMatter, mailBodyTeamInformation,
-                                    blockUserNames, client.Url, oneNotePath, matter.Name, originalMatter.MatterLocation, matter.Name);
-
+                                SentEmailNotificationForCreatedMatters(matterInformation1, service, log, configuration);
                             }
                             else
                             {
-                                blockUserNames = string.Empty;
-                                matterMailBody = string.Format(CultureInfo.InvariantCulture, matterMailBodyMatterInformation,
-                                    client.Name, client.Id, matter.Name, matter.Id,
-                                    matter.Description, matterType) + string.Format(CultureInfo.InvariantCulture, matterMailBodyTeamMembers, secureMatter,
-                                    mailBodyTeamInformation, blockUserNames, client.Url, oneNotePath, matter.Name, originalMatter.MatterLocation, matter.Name);
-                            } 
-
-                            EmailMessage email = new EmailMessage(service);
-                            foreach(IList<string> userNames  in matter.AssignUserEmails)
-                            {
-                                foreach(string userName in userNames)
-                                {
-                                    if(!string.IsNullOrWhiteSpace(userName))
-                                    {
-                                        using (var ctx = new ClientContext(originalMatter.Client.Url))
-                                        {
-                                            SecureString password = Utility.GetEncryptedPassword(configuration["General:AdminPassword"]);
-                                            ctx.Credentials = new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);
-                                            if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, userName, null, log))
-                                            {
-                                                email.ToRecipients.Add(userName);
-                                            }
-                                        }
-                                    }
-                                }
-                            }                            
-                            email.From = new EmailAddress(adminUserName);
-                            email.Subject = matterMailSubject;
-                            email.Body = matterMailBody;
-                            email.Send();
-                            Utility.UpdateTableStorageEntity(originalMatter, log, configuration["Data:DefaultConnection:AzureStorageConnectionString"],
-                                            configuration["Settings:MatterRequests"], "Accepted");
+                                SentEmailNotificationForCreatedIsBackwardCompatibleMatters(matterInformation1, service, log, configuration);
+                            }
                         }
                     }
                 }
             }
         }
 
+        private static void SentEmailNotificationForCreatedIsBackwardCompatibleMatters(MatterInformationVM matterInformation1, ExchangeService service, TextWriter log, IConfigurationRoot configuration)
+        {
+            
+            string mailSubject = configuration.GetSection("Mail").GetSection("MatterMailSubject").Value;
+            string defaultHtmlChunk = configuration.GetSection("Mail").GetSection("MatterMailDefaultContentTypeHtmlChunk").Value;
+            string oneNoteLibrarySuffix = configuration.GetSection("Matter").GetSection("OneNoteLibrarySuffix").Value;
+            string matterMailBodyMatterInformation = configuration.GetSection("Mail").GetSection("MatterMailBodyMatterInformation").Value;
+            string matterMailBodyConflictCheck = configuration.GetSection("Mail").GetSection("MatterMailBodyConflictCheck").Value;
+            string matterCenterDateFormat = configuration.GetSection("Mail").GetSection("MatterCenterDateFormat").Value;
+            string matterMailBodyTeamMembers = configuration.GetSection("Mail").GetSection("MatterMailBodyTeamMembers").Value;
+            ///For isbackward compatability true
+            MatterInformationVM originalMatter = JsonConvert.DeserializeObject<MatterInformationVM>(matterInformation1.SerializeMatter);
+            Matter matter = originalMatter.Matter;
+            MatterDetails matterDetails = originalMatter.MatterDetails;
+            Client client = originalMatter.Client;
+            string practiceGroupColumnName = configuration["ContentTypes:ManagedColumns:ColumnName1"].ToString();
+            string areaOfLawColumnName = configuration["ContentTypes:ManagedColumns:ColumnName2"].ToString();
+            string matterMailBody;
+            string practiceGroupValue = originalMatter.MatterDetails.ManagedColumnTerms[practiceGroupColumnName].TermName;
+            string areaOfLawValue = originalMatter.MatterDetails.ManagedColumnTerms[areaOfLawColumnName].TermName;
+
+            // Generate Mail Subject
+            string matterMailSubject = string.Format(CultureInfo.InvariantCulture, mailSubject,
+                matter.Id, matter.Name, originalMatter.MatterCreator);
+
+            // Step 1: Create Matter Information
+            string defaultContentType = string.Format(CultureInfo.InvariantCulture,
+                defaultHtmlChunk, matter.DefaultContentType);
+            string matterType = string.Join(";", matter.ContentTypes.ToArray()).TrimEnd(';').Replace(matter.DefaultContentType, defaultContentType);
+            if (matterType == string.Empty)
+            {
+                matterType = defaultContentType;
+            }
+            // Step 2: Create Team Information
+            string secureMatter = ServiceConstants.FALSE.ToUpperInvariant() == matter.Conflict.SecureMatter.ToUpperInvariant() ?
+                ServiceConstants.NO : ServiceConstants.YES;
+            string mailBodyTeamInformation = string.Empty;
+            mailBodyTeamInformation = TeamMembersPermissionInformation(matterDetails, mailBodyTeamInformation);
+
+            string oneNotePath = string.Concat(client.Url, ServiceConstants.FORWARD_SLASH,
+                    matter.MatterGuid, oneNoteLibrarySuffix,
+                            ServiceConstants.FORWARD_SLASH, matter.Name, ServiceConstants.FORWARD_SLASH, matter.MatterGuid);
+            string conflictIdentified = ServiceConstants.FALSE.ToUpperInvariant() == matter.Conflict.Identified.ToUpperInvariant() ?
+                            ServiceConstants.NO : ServiceConstants.YES;
+            matterMailBody = string.Format(CultureInfo.InvariantCulture,
+                matterMailBodyMatterInformation,
+                practiceGroupValue,
+                areaOfLawValue,
+                 matter.Name,
+                matter.Description,
+                matter.Name + " OneNote",
+                matterType,
+               originalMatter.MatterCreator,
+            string.Format("{0:MMM dd, yyyy}", DateTime.Now),
+            originalMatter.MatterLocation,
+                client.Url, oneNotePath,
+                configuration["General:SiteURL"].ToString());
+
+            EmailMessage email = new EmailMessage(service);
+            foreach (IList<string> userNames in matter.AssignUserEmails)
+            {
+                foreach (string userName in userNames)
+                {
+                    if (!string.IsNullOrWhiteSpace(userName))
+                    {
+                        using (var ctx = new ClientContext(originalMatter.Client.Url))
+                        {
+                            SecureString password = Utility.GetEncryptedPassword(configuration["General:AdminPassword"]);
+                            ctx.Credentials = new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);
+                            if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, userName, null, log))
+                            {
+                                email.ToRecipients.Add(userName);
+                            }
+                        }
+                    }
+                }
+            }
+            string adminUserName = configuration["General:AdminUserName"];
+            email.From = new EmailAddress(adminUserName);
+            email.Subject = matterMailSubject;
+            email.Body = matterMailBody;
+            email.Send();
+            log.WriteLine($"connection string. {configuration["General:CloudStorageConnectionString"]}");
+            Utility.UpdateTableStorageEntity(originalMatter, log, configuration["General:CloudStorageConnectionString"],
+                            configuration["Settings:MatterRequests"], "Accepted");
+        }
+
+
+        private static void SentEmailNotificationForCreatedMatters(MatterInformationVM matterInformation1, ExchangeService service, TextWriter log, IConfigurationRoot configuration)
+        {            
+            string mailSubject = configuration.GetSection("Mail").GetSection("MatterMailSubject").Value;
+            string defaultHtmlChunk = configuration.GetSection("Mail").GetSection("MatterMailDefaultContentTypeHtmlChunk").Value;
+            string oneNoteLibrarySuffix = configuration.GetSection("Matter").GetSection("OneNoteLibrarySuffix").Value;
+            string matterMailBodyMatterInformation = configuration.GetSection("Mail").GetSection("MatterMailBodyMatterInformation").Value;
+            string matterMailBodyConflictCheck = configuration.GetSection("Mail").GetSection("MatterMailBodyConflictCheck").Value;
+            string matterCenterDateFormat = configuration.GetSection("Mail").GetSection("MatterCenterDateFormat").Value;
+            string matterMailBodyTeamMembers = configuration.GetSection("Mail").GetSection("MatterMailBodyTeamMembers").Value;
+            //De Serialize the matter information
+            MatterInformationVM originalMatter = JsonConvert.DeserializeObject<MatterInformationVM>(matterInformation1.SerializeMatter);
+            Matter matter = originalMatter.Matter;
+            MatterDetails matterDetails = originalMatter.MatterDetails;
+            Client client = originalMatter.Client;
+
+            string matterMailBody, blockUserNames;
+            // Generate Mail Subject
+            string matterMailSubject = string.Format(CultureInfo.InvariantCulture, mailSubject,
+                matter.Id, matter.Name, originalMatter.MatterCreator);
+
+            // Step 1: Create Matter Information
+            string defaultContentType = string.Format(CultureInfo.InvariantCulture,
+                defaultHtmlChunk, matter.DefaultContentType);
+            string matterType = string.Join(";", matter.ContentTypes.ToArray()).TrimEnd(';').Replace(matter.DefaultContentType, defaultContentType);
+            if (matterType == string.Empty)
+            {
+                matterType = defaultContentType;
+            }
+            // Step 2: Create Team Information
+            string secureMatter = ServiceConstants.FALSE.ToUpperInvariant() == matter.Conflict.SecureMatter.ToUpperInvariant() ?
+                ServiceConstants.NO : ServiceConstants.YES;
+            string mailBodyTeamInformation = string.Empty;
+            mailBodyTeamInformation = TeamMembersPermissionInformation(matterDetails, mailBodyTeamInformation);
+
+            string oneNotePath = string.Concat(client.Url, ServiceConstants.FORWARD_SLASH,
+                    matter.MatterGuid, oneNoteLibrarySuffix,
+                            ServiceConstants.FORWARD_SLASH, matter.MatterGuid, ServiceConstants.FORWARD_SLASH, matter.MatterGuid);
+
+            if (originalMatter.IsConflictCheck)
+            {
+                string conflictIdentified = ServiceConstants.FALSE.ToUpperInvariant() == matter.Conflict.Identified.ToUpperInvariant() ?
+                                ServiceConstants.NO : ServiceConstants.YES;
+                blockUserNames = string.Join(";", matter.BlockUserNames.ToArray()).Trim().TrimEnd(';');
+
+                blockUserNames = !String.IsNullOrEmpty(blockUserNames) ? string.Format(CultureInfo.InvariantCulture,
+            "<div>{0}: {1}</div>", "Conflicted User", blockUserNames) : string.Empty;
+                matterMailBody = string.Format(CultureInfo.InvariantCulture,
+                    matterMailBodyMatterInformation, client.Name, client.Id,
+                    matter.Name, matter.Id, matter.Description, matterType) + string.Format(CultureInfo.InvariantCulture,
+                    matterMailBodyConflictCheck, ServiceConstants.YES, matter.Conflict.CheckBy,
+                    Convert.ToDateTime(matter.Conflict.CheckOn, CultureInfo.InvariantCulture).ToString(matterCenterDateFormat, CultureInfo.InvariantCulture),
+                    conflictIdentified) + string.Format(CultureInfo.InvariantCulture,
+                    matterMailBodyTeamMembers, secureMatter, mailBodyTeamInformation,
+                    blockUserNames, client.Url, oneNotePath, matter.Name, originalMatter.MatterLocation, matter.Name);
+
+            }
+            else
+            {
+                blockUserNames = string.Empty;
+                matterMailBody = string.Format(CultureInfo.InvariantCulture, matterMailBodyMatterInformation,
+                    client.Name, client.Id, matter.Name, matter.Id,
+                    matter.Description, matterType) + string.Format(CultureInfo.InvariantCulture, matterMailBodyTeamMembers, secureMatter,
+                    mailBodyTeamInformation, blockUserNames, client.Url, oneNotePath, matter.Name, originalMatter.MatterLocation, matter.Name);
+            }
+
+            EmailMessage email = new EmailMessage(service);
+            foreach (IList<string> userNames in matter.AssignUserEmails)
+            {
+                foreach (string userName in userNames)
+                {
+                    if (!string.IsNullOrWhiteSpace(userName))
+                    {
+                        using (var ctx = new ClientContext(originalMatter.Client.Url))
+                        {
+                            SecureString password = Utility.GetEncryptedPassword(configuration["General:AdminPassword"]);
+                            ctx.Credentials = new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);
+                            if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, userName, null, log))
+                            {
+                                email.ToRecipients.Add(userName);
+                            }
+                        }
+                    }
+                }
+            }
+            email.From = new EmailAddress(configuration["General:AdminUserName"]);            
+            email.Subject = matterMailSubject;
+            email.Body = matterMailBody;
+            email.Send();
+            Utility.UpdateTableStorageEntity(originalMatter, log, configuration["General:CloudStorageConnectionString"],
+                            configuration["Settings:MatterRequests"], "Accepted");
+        }
+
+
         
-
-
 
         /// <summary>
         /// Provides the team members and their respective permission details.
@@ -326,7 +432,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                         }
                                         log.WriteLine($"The matter permissions has been updated for the user {email}");
                                         log.WriteLine($"Updating the matter status to Accepted in Azure Table Storage");
-                                        Utility.UpdateTableStorageEntity(originalMatter, log, configuration["Data:DefaultConnection:AzureStorageConnectionString"], 
+                                        Utility.UpdateTableStorageEntity(originalMatter, log, configuration["General:CloudStorageConnectionString"], 
                                             configuration["Settings:TableStorageForExternalRequests"], "Accepted");
                                     }
                                 }

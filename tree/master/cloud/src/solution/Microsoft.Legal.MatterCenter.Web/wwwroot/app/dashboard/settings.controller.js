@@ -139,7 +139,7 @@
             vm.taxonomydata = [];
             vm.getTaxonomyData = function () {
                 vm.popupContainerBackground = "Show";
-                vm.lazyloader = false;
+                $timeout(function () { vm.lazyloader = false; }, 10);
                 getTaxonomyDetails(optionsForGroup, function (response) {
                     if (response != "") {
                         vm.clientlist = true;
@@ -338,7 +338,7 @@
                         dMatterTypes = vm.configurations.MatterTypes ? vm.configurations.MatterTypes : "";
                         var arrDMatterTypes = [];
                         if (dMatterTypes) {
-                            arrDMatterTypes= dMatterTypes.split('$|$');
+                            arrDMatterTypes = dMatterTypes.split('$|$');
                         }
                         dPrimaryMatterType = vm.configurations.DefaultMatterType ? vm.configurations.DefaultMatterType : "";
                         vm.selectedDocumentTypeLawTerms = [];
@@ -608,7 +608,7 @@
                     vm.matterdesc = "No";
                 }
                 vm.showmatterconfiguration = "DateTime"
-                if (data.MatterIdType !== null && data.MatterIdType!=='undefined') {
+                if (data.MatterIdType !== null && data.MatterIdType !== 'undefined') {
                     vm.showmatterconfiguration = data.MatterIdType
                 }
             }
@@ -692,12 +692,11 @@
                     }
                 }
                 angular.forEach(arrUserNames, function (user) {
-                    if(user != '')
-                    {
+                    if (user != '') {
                         arrTempUserNames.push(user)
                     }
                 });
-               
+
                 return arrTempUserNames;  //arrUserNames.filter(v=>v != '');
             }
 

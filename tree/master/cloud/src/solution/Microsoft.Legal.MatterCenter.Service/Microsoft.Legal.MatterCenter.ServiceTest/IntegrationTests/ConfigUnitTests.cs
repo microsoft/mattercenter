@@ -76,7 +76,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
             var logTableMoq = new Moq.Mock<IOptions<LogTables>>();
 
-            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, uiConfigsMoq.Object);
+            ConfigRepository configRepository = new ConfigRepository(null, generalSettingsMoq.Object, uiConfigsMoq.Object);
 
             generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
@@ -121,7 +121,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
             var logTableMoq = new Moq.Mock<IOptions<LogTables>>();
 
-            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, uiConfigsMoq.Object);
+            ConfigRepository configRepository = new ConfigRepository(null, generalSettingsMoq.Object, uiConfigsMoq.Object);
 
             generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
@@ -162,7 +162,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
             var logTableMoq = new Moq.Mock<IOptions<LogTables>>();
 
-            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, uiConfigsMoq.Object);
+            ConfigRepository configRepository = new ConfigRepository(null, generalSettingsMoq.Object, uiConfigsMoq.Object);
 
             generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
@@ -201,7 +201,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
 
             var logTableMoq = new Moq.Mock<IOptions<LogTables>>();
 
-            ConfigRepository configRepository = new ConfigRepository(generalSettingsMoq.Object, uiConfigsMoq.Object);
+            ConfigRepository configRepository = new ConfigRepository(null, generalSettingsMoq.Object, uiConfigsMoq.Object);
 
             generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
@@ -249,7 +249,7 @@ namespace Microsoft.Legal.MatterCenter.ServiceTest
             m.SetupAllProperties();
 
 
-            ConfigRepository configRepository = new ConfigRepository(m.Object, l.Object);
+            ConfigRepository configRepository = new ConfigRepository(null, m.Object, l.Object);
             var response = configRepository.GetConfigEntities("");
 
         }

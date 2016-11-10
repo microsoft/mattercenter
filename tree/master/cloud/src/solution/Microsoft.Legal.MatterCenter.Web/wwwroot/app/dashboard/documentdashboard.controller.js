@@ -564,6 +564,7 @@
                 vm.displaypagination = false;
                 vm.documentname = 'All Documents'
                 vm.documentid = 1;
+                vm.nodata = false;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.responseNull = false;
@@ -577,6 +578,7 @@
                         finalSearchText = '("' + vm.selected + '*" OR FileName:"' + vm.selected + '*" OR dlcDocIdOWSText:"' + vm.selected + '*" OR MCDocumentClientName:"' + vm.selected + '*")';
                     }
                 }
+                vm.selectedTab = vm.documentDashboardConfigs.Tab2HeaderText;
                 documentRequest.SearchObject.Filters.FilterByMe = 0;
                 vm.pagenumber = 1;
                 documentRequest.SearchObject.PageNumber = vm.pagenumber;
@@ -695,7 +697,7 @@
                     //vm.displaypagination = true;
                     if (response == "" || (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText && response.allDocumentCounts == 0) ||
                         (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText && response.myDocumentCounts == 0) ||
-                        (vm.selectedTabInfo == vm.documentDashboardConfigs.Tab3HeaderText && response.pinnedDocumentCounts == 0)) {
+                        (vm.selectedTab == vm.documentDashboardConfigs.Tab3HeaderText && response.pinnedDocumentCounts == 0)) {
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = false;
                         vm.nodata = true;
@@ -1421,11 +1423,17 @@
                 vm.nodata = false;
                 var clientArray = [];
                 var author = "";
+                var areaOfLaw = "";
                 var startdate = "";
                 var enddate = "";
                 vm.tabClicked = 'All Documents'
                 if (vm.selectedClients != "" && vm.selectedClients != undefined) {
-                    clientArray = vm.selectedClients.split(',');
+                    if (!vm.globalSettings.isBackwardCompatible) {
+                        clientArray = vm.selectedClients.split(',');
+                    }
+                    else {
+                        areaOfLaw = vm.selectedClients;
+                    }
                 }
                 if (vm.startdate != "" && vm.startdate != undefined) {
                     startdate = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
@@ -1434,8 +1442,10 @@
                     enddate = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
                 }
                 if (vm.selectedAuthor != "" && vm.selectedAuthor != undefined) {
-                    author = vm.selectedAuthor;
+                    author = vm.selectedAuthor + "*";
                 }
+                
+                documentRequest.SearchObject.Filters.AreaOfLaw = areaOfLaw;
                 documentRequest.SearchObject.Filters.ClientsList = clientArray;
                 documentRequest.SearchObject.Filters.DocumentAuthor = author;
                 documentRequest.SearchObject.Filters.FromDate = startdate;
@@ -1598,6 +1608,7 @@
             }
             //#endregion
 
+            //#region to set the dynamic width for the pagination
             vm.setWidthtoPagination = function () {
                 var txt = vm.fromtopage;
                 if (txt.length <= 5) {
@@ -1608,6 +1619,15 @@
                     angular.element('.docFromToPageWidth').css("min-width", "84px");
                 }
             }
+            //#endregion
+
+            angular.element('#mainDivContainer').bind('click', function (event) {
+                // Check if we have not clicked on the search box
+                if (!($(event.target).parents().andSelf().is('.dropdown-menu'))) {
+                    // Hide/collapse your search box, autocomplete or whatever you need to do
+                    $('.dropdown-menu').hide('');
+                }
+            });
         }
     ]);
 }

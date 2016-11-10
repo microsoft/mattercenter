@@ -204,7 +204,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                             string documentURL = generalSettings.SiteURL + currentAssets[1];
                             string documentName = currentAssets[2];
 
-                            documentUrl = string.Concat(documentUrl, string.Format(CultureInfo.InvariantCulture, "'{0} ) {1} : <a href='{2}'>{2} </a><br/>" , ++index, documentName, documentURL));
+                            documentUrl = string.Concat(documentUrl, string.Format(CultureInfo.InvariantCulture, "{0} ) {1} : <a href='{2}'>{2} </a><br/>" , ++index, documentName, documentURL));
                         }
                     }
                     documentUrl = string.Format(CultureInfo.InvariantCulture, "<div style='font-family:Calibri;font-size:12pt'>{0}</div>", documentUrl);

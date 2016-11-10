@@ -109,10 +109,10 @@
                 $rootScope.dispinner = true;
                 $event.stopPropagation();
                 if ($rootScope.dispcontextualhelpinner) {
-                    vm.lazyloaderhelp = false;
+                    //vm.lazyloaderhelp = false;
                     angular.element('.zindex6').css('z-index', '2');
                     $rootScope.contextualhelp = true;
-                    vm.help('');
+                    //vm.help('');
                     $rootScope.dispcontextualhelpinner = false;
                 } else {
                     $rootScope.contextualhelp = false;
@@ -142,7 +142,9 @@
             vm.getUserProfilePicture();
 
             //#region Help
-            vm.help = function () {
+            $rootScope.help = function () {
+                vm.helpData = [];
+                vm.lazyloaderhelp = false;
                 var helpRequestModel = {
                     Client:
                     {

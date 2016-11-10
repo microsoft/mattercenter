@@ -40,7 +40,7 @@
                                          title="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" /><div title="{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}" class="inlineValues">{{vm.documentDashboardConfigs.Image2EmailAttachmentLinkText}}</div>
                                 </div>
                             </div>
-                            <div class="popUpBody popUpFloatLeft popUpScrollXHidden">
+                            <div class="popUpBody popUpFloatLeft popUpScrollXHidden mailContentPopUpBody">
                                 <ul class="emailDocumentNames">
                                     <li ng-repeat="element in vm.cartelements">
                                         <div class="row">
@@ -48,7 +48,7 @@
                                                 <span><img id="document-{{$index}}" style="display:none" src="../Images/loadingcirclests16.gif"></span>
                                             </div>
                                             <div class="col-xs-12 col-sm-8">
-                                                <span class="paddingRight20"><input type="checkbox" ng-model="element.mailCartSelected" /></span>{{element.documentName}}.{{element.documentExtension}}
+                                                <span class="paddingRight20 floatLeft"><input type="checkbox" ng-model="element.mailCartSelected" /></span><div title="{{element.documentName}}.{{element.documentExtension}}" class="cartFileTxtLabel">{{element.documentName}}.{{element.documentExtension}}</div> 
                                             </div>
                                             <div class="col-xs-12 col-sm-1"><img src="../Images/icon-delete.png" class="" title="{{vm.documentDashboardConfigs.Image3EmailRemovalAttachmentLinkText}}" ng-click="vm.removeAttachment(element)"></div>
                                         </div>
@@ -91,7 +91,7 @@
                      src="../Images/upward-advanced-search-29x29-666.png">
             </div>
             <div class="col-xs-12">
-                <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+                <!--<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>-->
                 <!--<div ng-show="noResults">
                     <i class="glyphicon glyphicon-remove"></i> No Results Found
                 </div>-->
@@ -145,7 +145,7 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-2 pull-left pad15">{{vm.documentDashboardConfigs.AdvSearchLabel2Text}}</div>
                         <div class="col-xs-12 col-sm-7 pull-left pad10" id="documentAuthorDiv">
-                            <input type="text" placeholder="{{vm.documentDashboardConfigs.AdvSearchTextbox2PlaceholderText}}" uib-typeahead="documentDataList.name for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.authortypeheadselect($item, $model)' typeahead-no-results="noResults" ng-model="vm.selectedAuthor" class="form-control">
+                            <input type="text" placeholder="{{vm.documentDashboardConfigs.AdvSearchTextbox2PlaceholderText}}"  ng-model="vm.selectedAuthor" class="form-control">
                         </div>
                         <div class="col-xs-12 hide">
                             <i ng-show="vm.loadLocation" class="glyphicon glyphicon-refresh"></i>

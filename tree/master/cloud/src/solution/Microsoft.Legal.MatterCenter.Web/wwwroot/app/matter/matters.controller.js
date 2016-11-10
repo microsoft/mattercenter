@@ -33,6 +33,8 @@
             $rootScope.displayOverflow = "";
             //This value is for displaying the help
             $rootScope.pageIndex = "1";
+            //To load the Contextual help data
+            $rootScope.help();
             //#region Onload show ui grid and hide error div
             //start
             vm.divuigrid = true;
@@ -1413,11 +1415,15 @@
                             if (vm.modstartdate != "") {
                                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modstartdate, "yyyy-MM-ddT00:00:00") + "Z";
                             }
+                        } else {
+                            searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                         }
                         if (vm.modenddate != undefined) {
                             if (vm.modenddate != "") {
                                 searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modenddate, "yyyy-MM-ddT23:59:59") + "Z";
                             }
+                        } else {
+                            searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
                         }
                         vm.moddatefilter = true;
                     }
@@ -1426,13 +1432,23 @@
                             if (vm.startDate != "") {
                                 searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = $filter('date')(vm.startDate, "yyyy-MM-ddT00:00:00") + "Z";
                             }
+                        } else {
+                            searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = "";
                         }
                         if (vm.endDate != undefined) {
                             if (vm.endDate != "") {
                                 searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = $filter('date')(vm.endDate, "yyyy-MM-ddT23:59:59") + "Z";
                             }
+                        } else {
+                            searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = "";
                         }
                         vm.opendatefilter = true;
+                    }
+                    if ((vm.modstartdate == undefined && vm.modenddate == undefined) || (vm.modstartdate == "" && vm.modenddate == "") || (vm.modstartdate == undefined && vm.modenddate == "") || (vm.modstartdate == undefined && vm.modenddate == "")) {
+                        vm.moddatefilter = false;
+                    }
+                    if ((vm.startDate == undefined && vm.endDate == undefined) || (vm.startDate == "" && vm.endDate == "") || (vm.startDate == undefined && vm.endDate == "") || (vm.startDate == "" && vm.endDate == undefined)) {
+                        vm.opendatefilter = false;
                     }
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     searchRequest.SearchObject.Sort.Direction = 1;
@@ -2445,7 +2461,7 @@
                 }
             }
             //#endregion
-
+            vm.cleaseAllColumnTextFilters = false;
             //#region for closing all the dropdowns
             vm.closealldrops = function () {
                 vm.mattersdrop = false;
@@ -2454,6 +2470,7 @@
                 vm.matterdateheader = true;
                 angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
                 angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
+                vm.cleaseAllColumnTextFilters = true;
             }
 
             //#endregion
@@ -2770,7 +2787,7 @@
             //#region for opening view matters url in new window
             vm.viewMatterDetails = function (url, guid) {
                 var viewmatterurl = url + '/SitePages/' + guid + '.aspx';
-                window.open(viewmatterurl, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
+                window.open(viewmatterurl, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
             }
             //#endregion
 

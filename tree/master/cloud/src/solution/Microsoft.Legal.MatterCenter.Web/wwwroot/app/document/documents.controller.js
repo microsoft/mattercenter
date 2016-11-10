@@ -22,6 +22,8 @@
         vm.documentsdrop = false;
         vm.docdropinner = true;
         $rootScope.pageIndex = "2";
+        //To load the Contextual help data
+        $rootScope.help();
         $rootScope.bodyclass = "bodymain";
         $rootScope.displayOverflow = "";
         $rootScope.profileClass = "";
@@ -576,7 +578,18 @@
         vm.searchDocument = function (val) {
             var finalSearchText = "";
             if (val != "") {
-                finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":" + val + "* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":" + val + "*)"
+                //finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":" + val + "* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":" + val + "*)"
+                if (val.indexOf("(") == 0 && val.indexOf(")") == val.length - 1) {
+                    finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":\"" + val + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + val + "*\")";
+                }
+                else if (val.lastIndexOf("(") > 0 && val.lastIndexOf(")") == val.length - 1) {
+                    var documentName = val.substring(0, val.lastIndexOf("(") - 1);
+                    var documentID = val.substring(val.lastIndexOf("("), val.lastIndexOf(")") + 1);
+                    finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ":\"" + documentName.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + documentID.trim() + "*\")";
+                }
+                else {
+                    finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":\"" + val.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + val.trim() + "*\")";
+                }
             }
             var searchDocumentRequest = {
                 Client: {
@@ -652,16 +665,29 @@
             if (vm.selected != "") {
                 if (-1 !== vm.selected.indexOf(":")) {
                     finalSearchText = commonFunctions.searchFilter(vm.selected);
-                } else if (-1 !== vm.selected.indexOf("(")) {
-                    searchToText = vm.selected.replace("(", ",");
-                    searchToText = searchToText.replace(")", "");
-                    var firstText = searchToText.split(',')[0];
-                    var secondText = searchToText.split(',')[1];
-                    var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':' + firstText.trim() + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + firstText.trim() + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + firstText.trim() + '*)';
+                }
+                else if (vm.selected.indexOf("(") == 0 && vm.selected.indexOf(")") == vm.selected.length - 1) {
+                    finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':"' + vm.selected.trim() + '*")';
+                }
+                else if (vm.selected.lastIndexOf("(") > 0 && vm.selected.lastIndexOf(")") == vm.selected.length - 1) {
+                    var documentName = vm.selected.substring(0, vm.selected.lastIndexOf("(") - 1);
+                    var documentID = vm.selected.substring(vm.selected.lastIndexOf("("), vm.selected.lastIndexOf(")") + 1);
+                    finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ":\"" + documentName.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + documentID.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":\"" + vm.selected.trim() + "*\")";
                 }
                 else {
-                    finalSearchText = '(' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyFileName + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + vm.selected + '*)';
+                    finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":\"" + vm.selected.trim() + "*\")"
                 }
+
+                //else if (-1 !== vm.selected.indexOf("(")) {
+                //        searchToText = vm.selected.replace("(", ",");
+                //        searchToText = searchToText.replace(")", "");
+                //        var firstText = searchToText.split(',')[0];
+                //        var secondText = searchToText.split(',')[1];
+                //        var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':' + firstText.trim() + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + firstText.trim() + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + firstText.trim() + '*)';
+                //    }
+                //else {
+                //        finalSearchText = '(' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyFileName + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':' + vm.selected + '* OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':' + vm.selected + '*)';
+                //}
             }
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
             searchRequest.SearchObject.SearchTerm = finalSearchText;
@@ -879,11 +905,15 @@
                         if (vm.modStartDate != "") {
                             searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modStartDate, "yyyy-MM-ddT00:00:00") + "Z";
                         }
+                    } else {
+                        searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                     }
                     if (vm.modEndDate != undefined) {
                         if (vm.modEndDate != "") {
                             searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modEndDate, "yyyy-MM-ddT23:59:59") + "Z";
                         }
+                    } else {
+                        searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
                     }
                     vm.moddatefilter = true;
                 }
@@ -892,16 +922,26 @@
                         if (vm.startDate != "") {
                             searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = $filter('date')(vm.startDate, "yyyy-MM-ddT00:00:00") + "Z";
                         }
+                    } else {
+                        searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
                     }
                     if (vm.endDate != undefined) {
                         if (vm.endDate != "") {
                             searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = $filter('date')(vm.endDate, "yyyy-MM-ddT23:59:59") + "Z";
                         }
+                    } else {
+                        searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
                     }
                     vm.createddatefilter = true;
                 }
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                 searchRequest.SearchObject.Sort.Direction = 1;
+                if ((vm.modStartDate == undefined && vm.modEndDate == undefined) || (vm.modStartDate == "" && vm.modEndDate == "") || (vm.modStartDate == undefined && vm.modEndDate == "") || (vm.modStartDate == undefined && vm.modEndDate == "")) {
+                    vm.moddatefilter = false;
+                }
+                if ((vm.startDate == undefined && vm.endDate == undefined) || (vm.startDate == "" && vm.endDate == "") || (vm.startDate == undefined && vm.endDate == "") || (vm.startDate == "" && vm.endDate == undefined)) {
+                    vm.createddatefilter = false;
+                }
                 if (vm.documentid === 3) {
                     searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinnedDocuments(searchRequest, function (response) {
@@ -1520,12 +1560,13 @@
                             } else {
                                 vm.gridOptions.data = response;
                                 vm.divuigrid = true;
+                                vm.lazyloader = true;
                                 if (!$scope.$$phase) {
                                     $scope.$apply();
                                 }
                             }
                             //$timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
-                            vm.lazyloader = true;
+                            
                         });
                     }
                 });
@@ -1756,11 +1797,17 @@
             var searchToText = '';
             var finalSearchText = "";
             if (selected != "") {
-                searchToText = selected.replace("(", ",")
-                searchToText = searchToText.replace(")", "")
-                var firstText = searchToText.split(',')[0]
-                var secondText = searchToText.split(',')[1]
-                var finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':"' + firstText.trim() + '" OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + firstText.trim() + '"OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':"' + firstText.trim() + '")';
+                if (selected.lastIndexOf("(") > 0 && selected.lastIndexOf(")") == selected.length - 1) {
+                    var documentName = selected.substring(0, selected.lastIndexOf("(") - 1);
+                    var documentID = selected.substring(selected.lastIndexOf("("), selected.lastIndexOf(")") + 1);
+                    finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ":\"" + documentName.trim() + "\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + documentID.trim() + "\")";
+                }
+                else if (selected.indexOf("(") == 0 && selected.indexOf(")") == selected.length - 1) {
+                    finalSearchText = '(' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + selected.trim() + '")';
+                }
+                else {
+                    finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":\"" + selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + selected.trim() + "*\")";
+                }
             }
             if (vm.documentid == 2) {
                 searchRequest.SearchObject.Filters.FilterByMe = 1;
@@ -1849,7 +1896,7 @@
             if (vm.assetsuccess) {
                 $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500');
             } else {
-                $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500'); }, 1500);
+                $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500'); }, 1500);
             }
         }
 
@@ -1931,7 +1978,7 @@
 
         //#region for opening view documents url in new window
         vm.viewDocumentMatter = function (url) {
-            window.open(url, 'viewmatterwindow', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500')
+            window.open(url, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500')
         }
         //#endregion
 
