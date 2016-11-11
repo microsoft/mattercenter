@@ -201,6 +201,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user click on column name to sort the document in Ascending order")]
         public void WhenUserClickOnColumnNameToSortTheDocumentInAscendingOrder()
         {
+            common.GetLogin(webDriver, URL);
             Thread.Sleep(3000);
             webDriver.FindElement(By.CssSelector("div.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
             Thread.Sleep(7000);
@@ -209,6 +210,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"it should sort the document in ascending order")]
         public void ThenItShouldSortTheDocumentInAscendingOrder()
         {
+            Thread.Sleep(3000);
             int toalElement = 0, documentCount = 0;
             char[] delimiters = new char[] { '\r', '\n' };
 
@@ -230,20 +232,22 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                 }
             }
             var tempDocumentList = new List<string>();
+            var sortedList = new List<string>();
             foreach (var documentName in documentlist)
             {
                 if (!string.IsNullOrWhiteSpace(documentName))
                 {
                     tempDocumentList.Add(documentName);
+                    sortedList.Add(documentName);
                     sortedDocuments += "'" + documentName + "',";
                 }
             }
             sortedDocuments.TrimEnd(',');
             sortedDocuments += "]";
-            var data = scriptExecutor.ExecuteScript("var arr = " + sortedDocuments + ".sort();return arr");
-            foreach (string element in (IEnumerable)data)
+            sortedList.Sort();
+            for (int i=0; i<sortedList.Count;i++)
             {
-                if (string.Equals(element.Trim(), tempDocumentList[documentCount].Trim(), StringComparison.OrdinalIgnoreCase))
+                if (tempDocumentList[i] == sortedList[i])
                 {
                     toalElement++;
                 }
