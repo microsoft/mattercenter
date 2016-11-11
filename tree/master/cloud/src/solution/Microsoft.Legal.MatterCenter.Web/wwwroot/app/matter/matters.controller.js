@@ -112,6 +112,20 @@
 
             //#endregion
 
+            //#region for clearing all sorts 
+            vm.clearAllFiltersofSort = function () {
+                angular.element('[id^="asc"]').hide();
+                angular.element('[id^="desc"]').hide();
+                vm.MatterNameSort = undefined;
+                vm.ClientSort = undefined;
+                vm.ClientIDSort = undefined;
+                vm.ModiFiedTimeSort = undefined;
+                vm.ResAttoSort = undefined;
+                vm.SubAreaSort = undefined;
+                vm.OpenDateSort = undefined;
+            }
+            //#endregion
+
             //For setting dynamic height to the grid
             vm.getTableHeight = function () {
                 return {
@@ -1225,7 +1239,9 @@
 
             //#region for setting the mattername in dropdown
             vm.SetMatters = function (id, name) {
+                vm.pinnedorunpinned = false;
                 vm.clearAllFilter();
+                vm.clearAllFiltersofSort();
                 vm.mattername = name;
                 vm.GetMatters(id);
                 vm.matterid = id;
@@ -1358,7 +1374,7 @@
                 }
                 if (vm.matterid === 3) {
                     searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
-                    getPinnedMatters(searchRequest, function (response) {    
+                    getPinnedMatters(searchRequest, function (response) {
                         if (response == "") {
                             if (bool) {
                                 vm.gridOptions.data = response;
@@ -1445,8 +1461,7 @@
                 }
             }
             //#endregion
-            vm.SetPreviousFilterVlaues = function ()
-            {
+            vm.SetPreviousFilterVlaues = function () {
                 if (vm.previousMatterIdValue != '') {
                     searchRequest.SearchObject.Filters.ProjectID = vm.previousMatterIdValue;
                     vm.previousMatterIdValue = '';
@@ -1790,31 +1805,41 @@
             vm.ddlMatters = vm.Matters[1];
             //#endregion  
 
+            vm.pinnedorunpinned = false;
             //#region Hits when the Dropdown changes 
             //Start 
             vm.GetMatters = function (id) {
-                vm.selected = "";
-                vm.searchTerm = "";
-                vm.searchClientTerm = "";
-                vm.startDate = "";
-                vm.endDate = "";
-                //vm.sortexp = "";
-                //vm.sortby = "";
-                vm.lazyloader = false;
-                vm.divuigrid = false;
-                vm.gridOptions.data = [];
-                var pinnedMattersRequest = {
-                    Url: configs.global.repositoryUrl
+                if (!vm.pinnedorunpinned) {
+                    vm.selected = "";
+                    vm.searchTerm = "";
+                    vm.searchClientTerm = "";
+                    vm.startDate = "";
+                    vm.endDate = "";
+                    //vm.sortexp = "";
+                    //vm.sortby = "";
+                    vm.lazyloader = false;
+                    vm.divuigrid = false;
+                    vm.gridOptions.data = [];
+                    var pinnedMattersRequest = {
+                        Url: configs.global.repositoryUrl
+                    }
+                    vm.clearAllFiltersofSort();
                 }
                 if (id == 1) {
-                    vm.pagenumber = 1;
-                    vm.responseNull = false;
-                    searchRequest.SearchObject.PageNumber = 1;
-                    searchRequest.SearchObject.SearchTerm = "";
-                    searchRequest.SearchObject.Filters.FilterByMe = 0;
-                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
-                    searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
-                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                    if (!vm.pinnedorunpinned) {
+                        vm.pagenumber = 1;
+                        vm.responseNull = false;
+                        searchRequest.SearchObject.PageNumber = 1;
+                        searchRequest.SearchObject.SearchTerm = "";
+                        searchRequest.SearchObject.Filters.FilterByMe = 0;
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
+                        searchRequest.SearchObject.Sort.ByColumn = "MatterName";
+                        searchRequest.SearchObject.Sort.Direction = 0;
+                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                        vm.sortby = "asc";
+                        vm.sortexp = "matterName";
+                        vm.MatterNameSort = "desc";
+                    }
                     get(searchRequest, function (response) {
                         if (response == "" || response.length == 0) {
                             vm.gridOptions.data = response;
@@ -1858,14 +1883,22 @@
                 } else if (id == 2) {
                     vm.lazyloader = false;
                     vm.divuigrid = false;
-                    vm.pagenumber = 1;
-                    vm.responseNull = false;
-                    searchRequest.SearchObject.PageNumber = 1;
-                    searchRequest.SearchObject.SearchTerm = "";
-                    searchRequest.SearchObject.Filters.FilterByMe = 1;
-                    searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
-                    searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
-                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                    if (!vm.pinnedorunpinned) {
+                        vm.pagenumber = 1;
+                        vm.responseNull = false;
+                        searchRequest.SearchObject.PageNumber = 1;
+                        searchRequest.SearchObject.SearchTerm = "";
+                        searchRequest.SearchObject.Filters.FilterByMe = 1;
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                        searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
+                        searchRequest.SearchObject.Sort.Direction = 1;
+                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                        if (!vm.globalSettings.isBackwardCompatible) {
+                            vm.sortby = "asc";
+                            vm.sortexp = "matterModifiedDate";
+                            vm.ModiFiedTimeSort = "asc";
+                        }
+                    }
                     get(searchRequest, function (response) {
                         if (response == "" || response.length == 0) {
                             vm.gridOptions.data = response;
@@ -1900,19 +1933,24 @@
                                 vm.lazyloader = true;
                                 vm.divuigrid = true;
                                 vm.nodata = false;
-                                $interval(function () { vm.showSortExp(); }, 2000, 3);
+                                if (!vm.globalSettings.isBackwardCompatible) {
+                                    $interval(function () { vm.showSortExp(); }, 2000, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
+                                }
                             });
                         }
                     });
                 } else if (id == 3) {
                     vm.lazyloader = false;
                     vm.divuigrid = false;
-                    var pinnedMattersRequest = {
-                        Url: configs.global.repositoryUrl
+                    if (!vm.pinnedorunpinned) {
+                        var pinnedMattersRequest = {
+                            Url: configs.global.repositoryUrl
+                        }
+                        searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
+                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
+                        searchRequest.SearchObject.Sort.Direction = 1;
+                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     }
-                    searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
-                    searchRequest.SearchObject.Sort.ByProperty = "MatterModifiedDate";
-                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinnedMatters(searchRequest, function (response) {
                         if (response == "" || response.length == 0) {
                             vm.gridOptions.data = response;
@@ -1931,7 +1969,7 @@
                             vm.lazyloader = true;
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            $interval(function () { vm.showSortExp(); }, 1000, 3);
+                            //$interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                         searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     });
@@ -1948,6 +1986,7 @@
             //#region Written for unpinning the matter 
             //Start 
             vm.UnpinMatter = function (data) {
+                vm.pinnedorunpinned = true;
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 var alldata = data.entity;
@@ -1961,7 +2000,7 @@
                 }
                 UnpinMatters(unpinRequest, function (response) {
                     if (response.isMatterUnPinned) {
-                        $timeout(function () { vm.SetMatters(vm.matterid, vm.mattername); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
+                        $timeout(function () { vm.GetMatters(vm.matterid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
                         //alert("Success");
                     }
                 });
@@ -1972,6 +2011,7 @@
             //#region Written for pinning the matter 
             //Start 
             vm.PinMatter = function (data) {
+                vm.pinnedorunpinned = true;
                 vm.lazyloader = false;
                 vm.divuigrid = false;
                 var alldata = data.entity;
@@ -1999,7 +2039,7 @@
                 }
                 PinMatters(pinRequest, function (response) {
                     if (response.isMatterPinned) {
-                        $timeout(function () { vm.SetMatters(vm.matterid, vm.mattername); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
+                        $timeout(function () { vm.GetMatters(vm.matterid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
                         //alert("Success");
                     }
                 });
@@ -2216,9 +2256,9 @@
                 }
             }
 
-            vm.sortby = "desc";
-            vm.sortexp = "matterModifiedDate";
-            $interval(function () { vm.showSortExp(); }, 3000, 3);
+            //vm.sortby = "desc";
+            //vm.sortexp = "matterModifiedDate";
+            //$interval(function () { vm.showSortExp(); }, 3000, 3);
 
             $scope.sortChanged = function (grid, sortColumns) {
                 $timeout(function () { vm.matterdateheader = true; vm.lazyloader = false; }, 1);
@@ -2554,7 +2594,7 @@
                 }
             }
             //#endregion
-            vm.cleaseAllColumnTextFilters = false;
+
             //#region for closing all the dropdowns
             vm.closealldrops = function () {
                 vm.mattersdrop = false;
@@ -2563,7 +2603,6 @@
                 vm.matterdateheader = true;
                 angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
                 angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
-                vm.cleaseAllColumnTextFilters = true;
             }
 
             //#endregion
