@@ -546,7 +546,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        documentDataList = (documentDataList.Where(d => d.DocumentName.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        documentDataList = (documentDataList.Where(d => d.DocumentName.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         foreach (var dt in documentDataList)
                         {
                            dt.DocumentName = dt.DocumentName + "." + dt.DocumentExtension;
@@ -565,7 +565,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        documentDataList = (documentDataList.Where(d => d.DocumentClient.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        documentDataList = (documentDataList.Where(d => d.DocumentClient.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = documentDataList.Select(o => o.DocumentClient).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -579,7 +579,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        documentDataList = (documentDataList.Where(d => d.DocumentOwner.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        documentDataList = (documentDataList.Where(d => d.DocumentOwner.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = documentDataList.Select(o => o.DocumentOwner).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -593,7 +593,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        documentDataList = (documentDataList.Where(d => d.DocumentCheckoutUser.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        documentDataList = (documentDataList.Where(d => d.DocumentCheckoutUser.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = documentDataList.Select(o => o.DocumentCheckoutUser).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -607,7 +607,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        documentDataList = (documentDataList.Where(d => d.DocumentPracticeGroup.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        documentDataList = (documentDataList.Where(d => d.DocumentPracticeGroup.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = documentDataList.Select(o => o.DocumentPracticeGroup).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -621,7 +621,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        documentDataList = (documentDataList.Where(d => d.DocumentMatterName.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        documentDataList = (documentDataList.Where(d => d.DocumentMatterName.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = documentDataList.Select(o => o.DocumentMatterName).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -787,7 +787,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        matterDataList = (matterDataList.Where(d => d.MatterName.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        matterDataList = (matterDataList.Where(d => d.MatterName.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterName).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -801,7 +801,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        matterDataList = (matterDataList.Where(d => d.MatterClient.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        matterDataList = (matterDataList.Where(d => d.MatterClient.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterClient).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -815,7 +815,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        matterDataList = (matterDataList.Where(d => d.MatterPracticeGroup.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        matterDataList = (matterDataList.Where(d => d.MatterPracticeGroup.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterPracticeGroup).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -829,7 +829,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        matterDataList = (matterDataList.Where(d => d.MatterResponsibleAttorney.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        matterDataList = (matterDataList.Where(d => d.MatterResponsibleAttorney.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterResponsibleAttorney).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -843,7 +843,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        matterDataList = (matterDataList.Where(d => d.MatterAreaOfLaw.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        matterDataList = (matterDataList.Where(d => d.MatterAreaOfLaw.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterAreaOfLaw).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -857,7 +857,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        matterDataList = (matterDataList.Where(d => d.MatterSubAreaOfLaw.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        matterDataList = (matterDataList.Where(d => d.MatterSubAreaOfLaw.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterSubAreaOfLaw).Distinct().ToList();
                         foreach (var dt in data1)
                         {
@@ -871,7 +871,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
                     if (!string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.FilterValue))
                     {
-                        matterDataList = (matterDataList.Where(d => d.MatterID.Contains(searchRequestVM.SearchObject.FilterValue))).ToList();
+                        matterDataList = (matterDataList.Where(d => d.MatterID.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()))).ToList();
                         var data1 = matterDataList.Select(o => o.MatterID).Distinct().ToList();
                         foreach (var dt in data1)
                         {
