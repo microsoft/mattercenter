@@ -2527,6 +2527,8 @@
 
             angular.element($window).bind('resize', function () {
                 angular.element('#mattergrid .ui-grid').css('height', $window.innerHeight - 115);
+                angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
+                angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
                 if ($window.innerWidth < 360) {
                     angular.element('#mattergrid .ui-grid-viewport').addClass('viewport');
                     angular.element('#mattergrid .ui-grid-viewport').removeClass('viewportlg');

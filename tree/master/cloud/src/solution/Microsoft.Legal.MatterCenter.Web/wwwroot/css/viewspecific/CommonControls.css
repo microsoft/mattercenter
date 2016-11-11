@@ -538,7 +538,7 @@
 
 #filterResultsContainer .ms-Label, #filterResultsContainer .filterValueLabels, #filterResultsContainer .filterFlyOutNoResults {
     font-family: "Segoe UI Web Semilight", "Segoe UI Semilight", "Segoe WP Semilight", "Segoe UI", "Segoe WP", Tahoma, Arial, sans-serif;
-    width: 220px;
+    width: 215px;
     white-space: nowrap;
     overflow: hidden;
     -o-text-overflow: ellipsis;

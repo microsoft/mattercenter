@@ -6,11 +6,11 @@
     <div class="row {{$root.profileClass}} topheader">
         <div class="col-xs-10 AppHeader">
             <div class="AppSwitcherContainer" ng-click="vm.menuClick()">
-                <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuCaptionTitle}}" />
+                <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImageOpenTitle}}" title="{{vm.header.MenuImage1Title}}" />
                 <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImageCloseTitle}}" title="{{vm.header.CloseTitle}}" />
                 <div class="MenuCaption"><span>{{vm.header.MenuImage1Caption}}</span></div>
             </div>
-            <div class="AppMenuFlyout ms-shadow" ng-class="{'height155':vm.canLoginUserCreateMatter,'height200':!vm.canLoginUserCreateMatter}">
+            <div class="homeAppMenuFlyout ms-shadow" ng-show="$root.appMenuFlyOut" ng-class="{'height155':vm.canLoginUserCreateMatter,'height200':!vm.canLoginUserCreateMatter}">
                 <div class="AppMenuFlyoutPriLinks">
                     <a ui-sref='mc.navigation()' class="AppFlyoutLinks HomeLink" title="{{vm.header.Menu1Option1Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option1Text}}</span></a>
                     <a ui-sref='mc.matters()' class="AppFlyoutLinks MatterSitesLink" title="{{vm.header.Menu1Option2Title}}"><span class="AppFlyoutLinksText">{{vm.header.Menu1Option2Text}}</span></a>
@@ -32,7 +32,7 @@
                 <img class="ContextualHelpLogo" src="Images/MC_Help_Icon.png" alt="{{vm.header.ContextualHelpAltText}}" title="{{vm.header.ContextualHelpImageTitle}}" ng-click="$root.dispContextualHelp($event)" />
                 <div data-class="ms-u-slideLeftIn40" class="ContextualHelp ms-u-slideLeftIn40" ng-show="$root.contextualhelp" ng-click="$event.stopPropagation();">
                     <div class="ContextualHelpFlyout">
-                        <img class="closeContextualHelpFlyout" title="{{vm.header.CloseTitle}}" alt="{{vm.header.ContextualHelpFlyoutAltText}}" ng-click="$root.dispContextualHelp($event)" src="Images/contextual_help_close_icon.png" />
+                        <img class="homeCloseContextualHelpFlyout" title="{{vm.header.CloseTitle}}" alt="{{vm.header.ContextualHelpFlyoutAltText}}" ng-click="$root.dispContextualHelp($event)" src="Images/contextual_help_close_icon.png" />
                         <div class="ContextualHelpHeader" title="{{vm.header.ContextualHelpHeader}}">{{vm.header.ContextualHelpHeader}}</div>
                         <div class="contextualHelpSections">
                             <div class="ContextualHelpSubSection" id="popularSearchesSection" ng-repeat="helpData in vm.helpData">
