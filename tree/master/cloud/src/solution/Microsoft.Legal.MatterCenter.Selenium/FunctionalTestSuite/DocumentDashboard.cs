@@ -237,12 +237,13 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [Then(@"all records should be sorted in ascending order on document dashboard")]
         public void ThenAllRecordsShouldBeSortedInAscendingOrderOnDocumentDashboard()
         {
-            int totalDocument = 0, documentCount = 0, counter = 0; ;
+            int totalDocument = 0, counter = 0; ;
             char[] delimiters = new char[] { '\r', '\n' };
 
             long length = (long)scriptExecutor.ExecuteScript("var links = $('.ui-grid-canvas .ui-grid-row ').length;return links");
             string sortedDocument = "[", duplicateDocuments = null;
             string[] documentList = new string[length];
+            
 
             for (int documentCounter = 0; documentCounter < length; documentCounter++)
             {
@@ -261,25 +262,26 @@ namespace Microsoft.Legal.MatterCenter.Selenium
                 }
             }
             var tempDocumentList = new List<string>();
+            var sortedList = new List<string>();
             foreach (var document in documentList)
             {
                 if (!string.IsNullOrWhiteSpace(document))
                 {
                     tempDocumentList.Add(document);
+                    sortedList.Add(document);
                     sortedDocument += "'" + document + "',";
                 }
             }
             sortedDocument.TrimEnd(',');
             sortedDocument += "]";
-            documentCount = 0;
-            var sortedDocumentList = scriptExecutor.ExecuteScript("var oDocumentList = " + sortedDocument + ".sort();return oDocumentList");
-            foreach (string element in (IEnumerable)sortedDocumentList)
+            sortedList.Sort();
+
+            for (int i = 0; i < sortedList.Count ; i++)
             {
-                if (string.Equals(element.Trim(), tempDocumentList[documentCount].Trim(), StringComparison.OrdinalIgnoreCase))
+                if (documentList[i] == sortedList[i] )
                 {
                     totalDocument++;
                 }
-                documentCount++;
             }
             Thread.Sleep(2000);
             Assert.IsTrue(totalDocument >= 0);
@@ -335,6 +337,8 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user sorts data in ascending order on document dashboard")]
         public void WhenUserSortsDataInAscendingOrderOnDocumentDashboard()
         {
+            common.GetLogin(webDriver, URL);
+            Thread.Sleep(1000);
             scriptExecutor.ExecuteScript("$('.nav-tabs a')[2].click()");
             Thread.Sleep(3000);
             scriptExecutor.ExecuteScript("$('.col-xs-4 img').click()");

@@ -67,7 +67,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             Thread.Sleep(2000);
             scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
             Thread.Sleep(7000);
-            repeatedMatterError = (string)scriptExecutor.ExecuteScript("var text = $('.errTextMatterName')[0].innerText; return text;");
+            repeatedMatterError = (string)scriptExecutor.ExecuteScript("var text = $('#errText')[0].innerText; return text;");
             Assert.IsTrue(repeatedMatterError.ToLower(CultureInfo.CurrentCulture).Contains("matter is already created"));
             errorCount++;
             Thread.Sleep(2000);
@@ -132,68 +132,109 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user submits blank forms on assign permissions")]
         public void WhenUserSubmitsBlankFormsOnAssignPermissions()
         {
-            errorCount = 0;
-            string conflictError = string.Empty, conflictDateError = string.Empty, conflictReviewError = string.Empty, userCError = string.Empty, attorneyError = string.Empty;
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.XPath("//main/div/div/div[2]")).Click();
-            Thread.Sleep(2000);
-            scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
-            Thread.Sleep(2000);
-            conflictError = (string)scriptExecutor.ExecuteScript("var text = $('.errTextMatterCCheck')[0].innerText; return text;");
-            Assert.IsTrue(conflictError.ToLower(CultureInfo.CurrentCulture).Contains("a confilct check must be completed"));
-            errorCount++;
-            webDriver.FindElement(By.Id("chkConflictCheck")).Click();
+            bool present;
             try
             {
-                scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
-                Thread.Sleep(2000);
-                conflictDateError = (string)scriptExecutor.ExecuteScript("var text = $('.popUpFloatRight')[0].innerText; return text;");
-                Assert.IsTrue(conflictDateError.ToLower(CultureInfo.CurrentCulture).Contains("enter the date"));
-                errorCount++;
-                scriptExecutor.ExecuteScript("$('.calendar').val('09/14/2016').trigger('change')");
-                Thread.Sleep(2000);
-                scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
-                Thread.Sleep(2000);
-                conflictReviewError = (string)scriptExecutor.ExecuteScript("var text = $('.popUpFloatRight')[0].innerText; return text;");
-                Assert.IsTrue(conflictReviewError.ToLower(CultureInfo.CurrentCulture).Contains("enter the conflict reviewers"));
-                errorCount++;
-                webDriver.FindElement(By.Id("txtConflictCheckBy")).Click();
-                webDriver.FindElement(By.Id("txtConflictCheckBy")).Clear();
-                webDriver.FindElement(By.Id("txtConflictCheckBy")).SendKeys(ConfigurationManager.AppSettings["AttorneyUser"]);
-                Thread.Sleep(1000);
-
-                webDriver.FindElement(By.XPath("//*[contains(@id,'typeahead-10')]")).Click();
-                Thread.Sleep(3000);
-                scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
-                Thread.Sleep(2000);
-                userCError = (string)scriptExecutor.ExecuteScript("var text = $('.popUpFloatRight')[0].innerText; return text;");
-                Assert.IsTrue(userCError.ToLower(CultureInfo.CurrentCulture).Contains("enter users"));
-                errorCount++;
-                webDriver.FindElement(By.Id("txtBlockUser")).Click();
-                webDriver.FindElement(By.Id("txtBlockUser")).Clear();
-                webDriver.FindElement(By.Id("txtBlockUser")).SendKeys(ConfigurationManager.AppSettings["AttorneyUser"]);
-                Thread.Sleep(1000);
-                webDriver.FindElement(By.XPath("//*[contains(@id,'typeahead-14')]")).Click();
-                Thread.Sleep(2000);
-                scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
-                Thread.Sleep(2000);
-                attorneyError = (string)scriptExecutor.ExecuteScript("var text = $('.popUpFloatRight')[0].innerText; return text;");
-                Assert.IsTrue(attorneyError.ToLower(CultureInfo.CurrentCulture).Contains("attorney cannot be empty"));
-                errorCount++;
-                webDriver.FindElement(By.Id("chkConflictCheck")).Click();
+                webDriver.FindElement(By.Id("conflictCheck"));
+                present = true;
             }
-            catch (Exception e)
+            catch (NoSuchElementException e)
             {
-                Console.Write(e.Message);
-                webDriver.FindElement(By.Id("chkConflictCheck")).Click();
+                present = false;
             }
+
+            if (present)
+            {
+                errorCount = 0;
+                string conflictError = string.Empty, conflictDateError = string.Empty, conflictReviewError = string.Empty, userCError = string.Empty, attorneyError = string.Empty;
+                Thread.Sleep(2000);
+                webDriver.FindElement(By.XPath("//main/div/div/div[2]")).Click();
+                Thread.Sleep(2000);
+                scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
+                Thread.Sleep(2000);
+                conflictError = (string)scriptExecutor.ExecuteScript("var text = $('.errTextMatterCCheck')[0].innerText; return text;");
+                Assert.IsTrue(conflictError.ToLower(CultureInfo.CurrentCulture).Contains("a confilct check must be completed"));
+                errorCount++;
+                webDriver.FindElement(By.Id("chkConflictCheck")).Click();
+                try
+                {
+                    scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
+                    Thread.Sleep(2000);
+                    conflictDateError = (string)scriptExecutor.ExecuteScript("var text = $('.popUpFloatRight')[0].innerText; return text;");
+                    Assert.IsTrue(conflictDateError.ToLower(CultureInfo.CurrentCulture).Contains("enter the date"));
+                    errorCount++;
+                    scriptExecutor.ExecuteScript("$('.calendar').val('09/14/2016').trigger('change')");
+                    Thread.Sleep(2000);
+                    scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
+                    Thread.Sleep(2000);
+                    conflictReviewError = (string)scriptExecutor.ExecuteScript("var text = $('.popUpFloatRight')[0].innerText; return text;");
+                    Assert.IsTrue(conflictReviewError.ToLower(CultureInfo.CurrentCulture).Contains("enter the conflict reviewers"));
+                    errorCount++;
+                    webDriver.FindElement(By.Id("txtConflictCheckBy")).Click();
+                    webDriver.FindElement(By.Id("txtConflictCheckBy")).Clear();
+                    webDriver.FindElement(By.Id("txtConflictCheckBy")).SendKeys(ConfigurationManager.AppSettings["AttorneyUser"]);
+                    Thread.Sleep(1000);
+
+                    webDriver.FindElement(By.XPath("//*[contains(@id,'typeahead-10')]")).Click();
+                    Thread.Sleep(3000);
+                    scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
+                    Thread.Sleep(2000);
+                    userCError = (string)scriptExecutor.ExecuteScript("var text = $('.popUpFloatRight')[0].innerText; return text;");
+                    Assert.IsTrue(userCError.ToLower(CultureInfo.CurrentCulture).Contains("enter users"));
+                    errorCount++;
+                    webDriver.FindElement(By.Id("txtBlockUser")).Click();
+                    webDriver.FindElement(By.Id("txtBlockUser")).Clear();
+                    webDriver.FindElement(By.Id("txtBlockUser")).SendKeys(ConfigurationManager.AppSettings["AttorneyUser"]);
+                    Thread.Sleep(1000);
+                    webDriver.FindElement(By.XPath("//*[contains(@id,'typeahead-14')]")).Click();
+                    Thread.Sleep(2000);
+                    scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
+                    Thread.Sleep(2000);
+                    attorneyError = (string)scriptExecutor.ExecuteScript("var text = $('.popUpFloatRight')[0].innerText; return text;");
+                    Assert.IsTrue(attorneyError.ToLower(CultureInfo.CurrentCulture).Contains("attorney cannot be empty"));
+                    errorCount++;
+                    webDriver.FindElement(By.Id("chkConflictCheck")).Click();
+                }
+                catch (Exception e)
+                {
+                    Console.Write(e.Message);
+                    webDriver.FindElement(By.Id("chkConflictCheck")).Click();
+                }
+            }
+            else
+            {
+                errorCount = 0;
+                string teamMember = string.Empty, responsibleAttorney = string.Empty, conflictReviewError = string.Empty, userCError = string.Empty, attorneyError = string.Empty;
+                Thread.Sleep(2000);
+                webDriver.FindElement(By.XPath("//main/div/div/div[2]")).Click();
+                Thread.Sleep(2000);
+                scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
+                Thread.Sleep(2000);
+                teamMember = (string)scriptExecutor.ExecuteScript("var text = $('#errText')[0].innerText; return text;");
+                Assert.IsTrue(teamMember.ToLower(CultureInfo.CurrentCulture).Contains("team member cannot be empty"));
+                errorCount++;
+                Thread.Sleep(2000);
+                webDriver.FindElement(By.Id("txtUser1")).Click();
+                webDriver.FindElement(By.Id("txtUser1")).Clear();
+                webDriver.FindElement(By.Id("txtUser1")).SendKeys(ConfigurationManager.AppSettings["AttorneyName"]);
+                webDriver.FindElement(By.Id("txtUser1")).SendKeys(Keys.ArrowDown);
+                Thread.Sleep(1000);
+                webDriver.FindElement(By.Id("txtUser1")).SendKeys(Keys.Enter);
+                Thread.Sleep(2000);
+                scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
+                Thread.Sleep(2000);
+                responsibleAttorney = (string)scriptExecutor.ExecuteScript("var text = $('#errText')[0].innerText; return text;");
+                Assert.IsTrue(responsibleAttorney.ToLower(CultureInfo.CurrentCulture).Contains("enter at least one responsible attorney"));
+                errorCount++;
+            }
+
 
         }
 
         [Then(@"it should not navigate to third step")]
         public void ThenItShouldNotNavigateToThirdStep()
         {
-            if (errorCount >= 3)
+            if (errorCount >= 2)
             {
                 Assert.IsTrue(true);
             }
@@ -206,37 +247,71 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user selects permission for current matter")]
         public void WhenUserSelectsPermissionForCurrentMatter()
         {
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.XPath("//main/div/div/div[2]")).Click();
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.Id("txtConflictCheckBy")).Click();
-            webDriver.FindElement(By.Id("txtConflictCheckBy")).Clear();
-            webDriver.FindElement(By.Id("txtConflictCheckBy")).SendKeys(ConfigurationManager.AppSettings["AttorneyUser"]);
-            Thread.Sleep(1000);
-            webDriver.FindElement(By.XPath("//*[contains(@id,'typeahead-10')]")).Click();
-            Thread.Sleep(3000);
-            webDriver.FindElement(By.Id("txtUser1")).Click();
-            webDriver.FindElement(By.Id("txtUser1")).Clear();
-            webDriver.FindElement(By.Id("txtUser1")).SendKeys(ConfigurationManager.AppSettings["AttorneyName"]);
-            webDriver.FindElement(By.Id("txtUser1")).SendKeys(Keys.ArrowDown);
-            Thread.Sleep(1000);
-            webDriver.FindElement(By.Id("txtUser1")).SendKeys(Keys.Enter);
-            Thread.Sleep(2000);
-            scriptExecutor.ExecuteScript("$('.calendar').val('09/14/2016').trigger('change')");
-            Thread.Sleep(2000);
-            webDriver.FindElement(By.Id("roleUser1")).Click();
-            new SelectElement(webDriver.FindElement(By.Id("roleUser1"))).SelectByText(ConfigurationManager.AppSettings["Role"]);
-            webDriver.FindElement(By.Id("chkConflictCheck")).Click();
-            webDriver.FindElement(By.Id("txtBlockUser")).Click();
-            webDriver.FindElement(By.Id("txtBlockUser")).Clear();
-            webDriver.FindElement(By.Id("txtBlockUser")).SendKeys(ConfigurationManager.AppSettings["AttorneyUser"]);
-            Thread.Sleep(1000);
-            webDriver.FindElement(By.XPath("//*[contains(@id,'typeahead-14')]")).Click();
-            Thread.Sleep(2000);
-            new SelectElement(webDriver.FindElement(By.Id("permUser1"))).SelectByText(ConfigurationManager.AppSettings["PermissionLevel"]);
-            Thread.Sleep(3000);
-            scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev').click();");
-            Thread.Sleep(3000);
+            bool present;
+            try
+            {
+                webDriver.FindElement(By.Id("conflictCheck"));
+                present = true;
+            }
+            catch (NoSuchElementException e)
+            {
+                present = false;
+            }
+
+            if (present)
+            {
+                Thread.Sleep(2000);
+                webDriver.FindElement(By.XPath("//main/div/div/div[2]")).Click();
+                Thread.Sleep(2000);
+                webDriver.FindElement(By.Id("txtConflictCheckBy")).Click();
+                webDriver.FindElement(By.Id("txtConflictCheckBy")).Clear();
+                webDriver.FindElement(By.Id("txtConflictCheckBy")).SendKeys(ConfigurationManager.AppSettings["AttorneyUser"]);
+                Thread.Sleep(1000);
+                webDriver.FindElement(By.XPath("//*[contains(@id,'typeahead-10')]")).Click();
+                Thread.Sleep(3000);
+                webDriver.FindElement(By.Id("txtUser1")).Click();
+                webDriver.FindElement(By.Id("txtUser1")).Clear();
+                webDriver.FindElement(By.Id("txtUser1")).SendKeys(ConfigurationManager.AppSettings["AttorneyName"]);
+                webDriver.FindElement(By.Id("txtUser1")).SendKeys(Keys.ArrowDown);
+                Thread.Sleep(1000);
+                webDriver.FindElement(By.Id("txtUser1")).SendKeys(Keys.Enter);
+                Thread.Sleep(2000);
+                scriptExecutor.ExecuteScript("$('.calendar').val('09/14/2016').trigger('change')");
+                Thread.Sleep(2000);
+                webDriver.FindElement(By.Id("roleUser1")).Click();
+                new SelectElement(webDriver.FindElement(By.Id("roleUser1"))).SelectByText(ConfigurationManager.AppSettings["Role"]);
+                webDriver.FindElement(By.Id("chkConflictCheck")).Click();
+                webDriver.FindElement(By.Id("txtBlockUser")).Click();
+                webDriver.FindElement(By.Id("txtBlockUser")).Clear();
+                webDriver.FindElement(By.Id("txtBlockUser")).SendKeys(ConfigurationManager.AppSettings["AttorneyUser"]);
+                Thread.Sleep(1000);
+                webDriver.FindElement(By.XPath("//*[contains(@id,'typeahead-14')]")).Click();
+                Thread.Sleep(2000);
+                new SelectElement(webDriver.FindElement(By.Id("permUser1"))).SelectByText(ConfigurationManager.AppSettings["PermissionLevel"]);
+                Thread.Sleep(3000);
+                scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev').click();");
+                Thread.Sleep(3000);
+            }
+            else
+            {
+                Thread.Sleep(2000);
+                webDriver.FindElement(By.XPath("//main/div/div/div[2]")).Click();
+                Thread.Sleep(2000);
+                webDriver.FindElement(By.Id("txtUser1")).Click();
+                webDriver.FindElement(By.Id("txtUser1")).Clear();
+                webDriver.FindElement(By.Id("txtUser1")).SendKeys(ConfigurationManager.AppSettings["AttorneyName"]);
+                webDriver.FindElement(By.Id("txtUser1")).SendKeys(Keys.ArrowDown);
+                Thread.Sleep(1000);
+                webDriver.FindElement(By.Id("txtUser1")).SendKeys(Keys.Enter);
+                Thread.Sleep(2000);
+                webDriver.FindElement(By.Id("roleUser1")).Click();
+                new SelectElement(webDriver.FindElement(By.Id("roleUser1"))).SelectByText(ConfigurationManager.AppSettings["Role"]);
+                Thread.Sleep(1000);
+                new SelectElement(webDriver.FindElement(By.Id("permUser1"))).SelectByText(ConfigurationManager.AppSettings["PermissionLevel"]);
+                Thread.Sleep(3000);
+                scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev').click();");
+                Thread.Sleep(3000);
+            }
         }
 
         [Then(@"it should navigate to third step")]

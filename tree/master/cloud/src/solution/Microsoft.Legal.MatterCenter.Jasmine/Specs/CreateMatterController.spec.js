@@ -42,7 +42,7 @@ describe("CreateMatter Controller test suite", function () {
             expect(vm.errorPopUpBlock).toBeUndefined();
         });
     });
-    
+
     describe("Verification of getMatterGUID function", function () {
         it("It should return the GUID for matter with length of 32 alphanumeric characters", function () {
             expect(vm.matterGUID.length).toBe(oTestConfiguration.nGUIDLength);
@@ -403,4 +403,14 @@ describe("CreateMatter Controller test suite", function () {
         });
 
     });
+
+    describe('Verification of selectMatterType   function', function () {
+        it('It should select Matter type', function () {
+            vm.selectMatterType("value");
+            expect(vm.popupContainer).toBe("Show");
+            expect(vm.popupContainerBackground).toBe("Show");
+            expect(vm.successBanner).toBe(false);
+        });
+    });
+
 });
