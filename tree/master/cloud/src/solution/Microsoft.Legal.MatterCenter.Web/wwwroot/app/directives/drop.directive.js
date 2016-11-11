@@ -13,18 +13,18 @@ matterMain.directive('droppable', function () {
             el.addEventListener('dragover', function(e){
                 e.dataTransfer.dropEffect = 'move'
                 if (e.preventDefault) e.preventDefault();
-                if (this.nodeName != "LI") {
-                    this.classList.add('folderDragOver');
-                }
-                return false;
+                //if (this.nodeName != "LI") {
+                //    this.classList.add('folderDragOver');
+                //}
+                //return false;
             }, false);
 
 
             el.addEventListener('dragenter', function (e) {
-                if (this.nodeName != "LI") {
+                //if (this.nodeName != "LI") {
                     this.classList.add('folderDragOver');
                     return false;
-                }
+                //}
             }, false);
 
             el.addEventListener('dragleave', function(e){
