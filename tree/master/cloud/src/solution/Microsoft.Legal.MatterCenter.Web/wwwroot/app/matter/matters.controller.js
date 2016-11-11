@@ -1101,27 +1101,27 @@
                     }
                     else if (vm.searchexp == vm.configSearchContent.ManagedPropertyClientName && !vm.globalSettings.isBackwardCompatible) {
                         searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyClientName
-                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyClientName + ":" + vm.clientSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyClientName + ":" + val + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
                     else if (vm.searchexp == vm.configSearchContent.ManagedPropertyPracticeGroup) {
                         searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyPracticeGroup
-                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyPracticeGroup + ":" + vm.practiceGroupSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyPracticeGroup + ":" + val + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
                     else if (vm.searchexp == vm.configSearchContent.ManagedPropertyResponsibleAttorney) {
                         searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyResponsibleAttorney
-                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + ":" + vm.attorneySearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + ":" + val + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
                     else if (vm.searchexp == vm.configSearchContent.ManagedPropertySubAreaOfLaw) {
                         searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertySubAreaOfLaw
-                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + ":" + vm.subAreaOfLawSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertySubAreaOfLaw + ":" + val + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
                     else if (vm.searchexp == vm.configSearchContent.ManagedPropertyAreaOfLaw) {
                         searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyAreaOfLaw
-                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyAreaOfLaw + ":" + vm.areaOfLawSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyAreaOfLaw + ":" + val + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
                     else if (vm.searchexp == vm.configSearchContent.ManagedPropertyMatterId) {
                         searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyMatterId;
-                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyMatterId + ":" + vm.projectIDSearchTerm + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
+                        vm.mattersearch("" + vm.configSearchContent.ManagedPropertyMatterId + ":" + val + "*(" + vm.configSearchContent.ManagedPropertyMatterName + ":* OR " + vm.configSearchContent.ManagedPropertyMatterId + ":* OR " + vm.configSearchContent.ManagedPropertyClientName + ":*)", vm.searchexp, false);
                     }
                 }
             }
@@ -1312,6 +1312,7 @@
                     }
                 } else {
                     searchRequest.SearchObject.ItemsPerPage = 50;
+                    searchRequest.SearchObject.SearchTerm = term;
                     if (property == "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "") {
                         searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "";
                         searchRequest.SearchObject.Sort.Direction = 0;
@@ -1375,6 +1376,7 @@
                 if (vm.matterid === 3) {
                     searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
                     getPinnedMatters(searchRequest, function (response) {
+                        searchRequest.SearchObject.SearchTerm = '';
                         if (response == "") {
                             if (bool) {
                                 vm.gridOptions.data = response;
@@ -1419,6 +1421,7 @@
                 } else {
                     searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     get(searchRequest, function (response) {
+                        searchRequest.SearchObject.SearchTerm = '';
                         if (response == "") {
                             if (bool) {
                                 vm.gridOptions.data = response;
@@ -2261,7 +2264,7 @@
             //$interval(function () { vm.showSortExp(); }, 3000, 3);
 
             $scope.sortChanged = function (grid, sortColumns) {
-                $timeout(function () { vm.matterdateheader = true; vm.lazyloader = false; }, 1);
+                $timeout(function () { vm.matterdateheader = true; vm.matterheader = true; vm.lazyloader = false; }, 1);
                 vm.divuigrid = false;
                 vm.responseNull = false;
                 //searchRequest.SearchObject.SearchTerm = "";
