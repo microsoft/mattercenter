@@ -203,15 +203,18 @@ describe("SettingsController test suite", function () {
         });
     });
 
-    //describe("Verification of removeFromDocumentTemplate function", function () {
-    //    it("It should remove document from document template", function () {
-    //        vm.removeDTItem = true;
-    //        debugger;
-    //        vm.removeFromDocumentTemplate();
-    //        expect(vm.popupContainer).toBe("Show");
-
-    //    });
-    //});
+    describe("Verification of removeFromDocumentTemplate function", function () {
+        it("It should remove document from document template", function () {
+            vm.removeDTItem = true;
+            vm.taxonomyHierarchyLevels = 2;
+            vm.activeDocumentTypeLawTerm = { termName: "Family" };
+            vm.levelTwoList = documentTemplateTypeLawTerm;
+            vm.removeFromDocumentTemplate();
+            expect(vm.removeDTItem).toBe(false);
+            expect(vm.primaryMatterType).toBe(false);
+            expect(vm.activeDocumentTypeLawTerm).toBe(null);
+        });
+    });
 
     describe("Verification of selectDocumentTemplateTypeLawTerm function", function () {
         it("It should select document template type for law term", function () {
@@ -289,12 +292,22 @@ describe("SettingsController test suite", function () {
         });
     });
 
-    describe('Verification of selectLevelFourItem   function', function () {
+    describe('Verification of selectLevelFourItem function', function () {
         it('It should check the levelFourItem', function () {
             var oLevel = { level5: ['level5'] };
             vm.taxonomyHierarchyLevels = 5;
             vm.selectLevelFourItem(oLevel);
             expect(vm.activeLevelFiveItem).toBe(vm.levelFiveList[0]);
+        });
+        ;
+    });
+
+    describe('Verification of addToDocumentTemplate function', function () {
+        it('It should check whether document template is added or not', function () {
+            vm.taxonomyHierarchyLevels = 6;
+            vm.addToDocumentTemplate();
+            expect(vm.isThisNewDocTemplate).not.toBeNull();
+            expect(vm.selectedHighestLevelItem).not.toBeNull();
         });
 
     });
