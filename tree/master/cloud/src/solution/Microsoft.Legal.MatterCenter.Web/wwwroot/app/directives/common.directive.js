@@ -97,7 +97,7 @@
     }
 
     'use strict';
-    function matterflyout($compile, $templateCache) {
+    function matterflyout($compile, $templateCache, $rootScope) {
         return {
             restrict: 'A',
             scope: {
@@ -105,6 +105,8 @@
             },
             link: function (scope, element, attrs) {
                 $(element).click(function (e) {
+                    $rootScope.dispcontextualhelpinner = true;
+                    $rootScope.contextualhelp = false;
                     var obj = "";
                     obj = eval('(' + attrs.details + ')');
                     if (obj.matterSubAreaOfLaw == "") {
@@ -204,12 +206,14 @@
     };
 
     'use strict';
-    function documentflyout($http, $compile, $templateCache) {
+    function documentflyout($http, $compile, $templateCache, $rootScope) {
         return {
             restrict: 'A',
             scope: { loader: '=' },
             link: function (scope, element, attrs) {
                 $(element).click(function (e) {
+                    $rootScope.dispcontextualhelpinner = true;
+                    $rootScope.contextualhelp = false;
                     var obj = "";
                     obj = eval('(' + attrs.details + ')');
                     if (obj.documentMatter == "") {
@@ -367,6 +371,7 @@
 
                 $(element).on("click", function (e) {
                     e.stopPropagation();
+                    $('.dropdown').removeClass("open");
                     $timeout(function () {
                         if (element.find('.ng-isolate-scope').html() != "<!-- ngIf: shown -->") {
                             element.find('.ui-grid-icon-menu').removeClass('showExpandIcon');
@@ -478,8 +483,8 @@
     app.directive('datefilter', [datefilter]);
     app.directive("toggletab", [toggletab]);
     app.directive('infopopover', [infopopover]);
-    app.directive('matterflyout', ['$compile', '$templateCache', matterflyout]);
-    app.directive('documentflyout', ['$http', '$compile', '$templateCache', documentflyout]);
+    app.directive('matterflyout', ['$compile', '$templateCache', '$rootScope', matterflyout]);
+    app.directive('documentflyout', ['$http', '$compile', '$templateCache', '$rootScope', documentflyout]);
     app.directive('fallbacksrc', [fallbacksrc]);
     app.directive('myEnter', [myEnter]);
     app.directive('uiGridMenuButton', ['$window', '$timeout', uiGridMenuButton]);

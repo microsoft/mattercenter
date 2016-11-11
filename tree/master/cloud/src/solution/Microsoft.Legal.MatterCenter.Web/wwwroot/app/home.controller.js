@@ -21,6 +21,8 @@
             vm.lazyloaderhelp = true;
             $rootScope.setAuthenticatedUserContext();
             $rootScope.displayOverflow = "";
+            $rootScope.appMenuFlyOut = false;
+            $rootScope.flagAppMenuFlyOut = true;
             vm.helpData = [];
 
             //Callback function for help 
@@ -105,6 +107,8 @@
             //#region for displaying contextual help 
             //This event is going to fire when the user clicks on the help icon using the mouse
             $rootScope.dispContextualHelp = function ($event) {
+                angular.element('.popcontent').css('display', 'none');
+                angular.element('.dropdown').removeClass("open");
                 $rootScope.displayinfo = false;
                 $rootScope.dispinner = true;
                 $event.stopPropagation();
@@ -233,21 +237,30 @@
 
 
             vm.menuClick = function () {
-                var oAppMenuFlyout = $(".AppMenuFlyout");
-                if (!(oAppMenuFlyout.is(":visible"))) {
-                    //// Display the close icon and close the fly out
+                if ($rootScope.flagAppMenuFlyOut) {
+                    $rootScope.appMenuFlyOut = true;
+                    $rootScope.flagAppMenuFlyOut = false;
                     $(".OpenSwitcher").addClass("hide");
                     $(".CloseSwitcher").removeClass("hide");
                     $(".MenuCaption").addClass("hideMenuCaption");
                     $(".topheader").css("z-index", "8");
-                    oAppMenuFlyout.slideDown();
                 } else {
-                    oAppMenuFlyout.slideUp();
+                    $rootScope.appMenuFlyOut = false;
+                    $rootScope.flagAppMenuFlyOut = true;
                     $(".topheader").css("z-index", "4");
                     $(".CloseSwitcher").addClass("hide");
                     $(".OpenSwitcher").removeClass("hide");
                     $(".MenuCaption").removeClass("hideMenuCaption");
                 }
+                //var oAppMenuFlyout = $(".AppMenuFlyout");
+                //if (!(oAppMenuFlyout.is(":visible"))) {
+                //    //// Display the close icon and close the fly out
+                    
+                //    //oAppMenuFlyout.slideDown();
+                //} else {
+                //    //oAppMenuFlyout.slideUp();
+                    
+                //}
             }
 
             vm.canLoginUserCreateMatter = false;
