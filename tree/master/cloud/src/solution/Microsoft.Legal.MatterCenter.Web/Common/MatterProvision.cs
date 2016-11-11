@@ -343,7 +343,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 searchResultsVM.SearchResults = null;
                 if (searchRequestVM.SearchObject.IsUnique && searchResultsVM.MatterDataList != null && !string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.UniqueColumnName))
                 {
-                    searchResultsVM.MatterDataList = getUniqueResults(searchRequestVM, searchResultsVM);
+                    searchResultsVM.MatterDataList = GetUniqueResults(searchRequestVM, searchResultsVM);
                 }
                 return searchResultsVM;
             }
@@ -360,11 +360,11 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="searchRequestVM"></param>
         /// <param name="searchResultsVM"></param>
         /// <returns></returns>
-        public dynamic getUniqueResults(SearchRequestVM searchRequestVM, dynamic searchResultsVM)
+        public dynamic GetUniqueResults(SearchRequestVM searchRequestVM, dynamic searchResultsVM)
         {
             dynamic matterDataList1 = new List<dynamic>();
             var colList = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter");
-            string UniqueColumnName = getuniqueColumnName(searchRequestVM.SearchObject.UniqueColumnName.ToLower().Trim());
+            string UniqueColumnName = GetUniqueColumnName(searchRequestVM.SearchObject.UniqueColumnName.ToLower().Trim());
 
             if (!string.IsNullOrWhiteSpace(UniqueColumnName)) 
             {
@@ -449,7 +449,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// to get column name 
         /// </summary>
         /// <returns></returns>
-        public string getuniqueColumnName(string uniueColumnName)
+        public string GetUniqueColumnName(string uniueColumnName)
         {
             var docColumnSesction = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter");
             

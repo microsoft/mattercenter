@@ -518,14 +518,17 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     documentDataList.Add(documentData);
                 }
                 searchResultsVM.DocumentDataList = documentDataList;
-                
-            }
-            searchResultsVM.SearchResults = null;
-            if (searchRequestVM.SearchObject.IsUnique && searchResultsVM.DocumentDataList != null && !string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.UniqueColumnName))
+                searchResultsVM.SearchResults = null;
+                if (searchRequestVM.SearchObject.IsUnique && searchResultsVM.DocumentDataList != null && !string.IsNullOrWhiteSpace(searchRequestVM.SearchObject.UniqueColumnName))
+                {
+                    searchResultsVM.DocumentDataList = GetUniqueResults(searchRequestVM, searchResultsVM);
+                }
+                return searchResultsVM;
+            }         
+            else
             {
-                searchResultsVM.DocumentDataList = getUniqueResults(searchRequestVM, searchResultsVM);
+                return searchResultsVM;
             }
-            return searchResultsVM;
         }
 
         /// <summary>
@@ -534,18 +537,18 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="searchRequestVM"></param>
         /// <param name="searchResultsVM"></param>
         /// <returns></returns>
-        public dynamic getUniqueResults(SearchRequestVM searchRequestVM, dynamic searchResultsVM)
+        public dynamic GetUniqueResults(SearchRequestVM searchRequestVM, dynamic searchResultsVM)
         {
            dynamic documentDataList1 = new List<dynamic>();
 
            var colList = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument");
 
-           string UniqueColumnName = getuniqueColumnName(searchRequestVM.SearchObject.UniqueColumnName.ToLower().Trim());
+           string UniqueColumnName = GetUniqueColumnName(searchRequestVM.SearchObject.UniqueColumnName.ToLower().Trim());
             if (!string.IsNullOrWhiteSpace(UniqueColumnName))
             {
                 if (UniqueColumnName.Equals(colList.GetSection("documentName").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentName.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentName.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     foreach (var dt in data)
                     {
                         dt.documentName = dt.documentName + "." + dt.documentExtension;
@@ -562,7 +565,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else if (UniqueColumnName.Equals(colList.GetSection("documentMatterName").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentMatterName.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentMatterName.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.documentMatterName).Distinct();
                     foreach (var dt in data)
                     {
@@ -574,7 +577,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else if (UniqueColumnName.Equals(colList.GetSection("documentPracticeGroup").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentPracticeGroup.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentPracticeGroup.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.documentPracticeGroup).Distinct();
                     foreach (var dt in data)
                     {
@@ -586,7 +589,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else if (UniqueColumnName.Equals(colList.GetSection("documentOwner").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentOwner.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentOwner.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.documentOwner).Distinct();
                     foreach (var dt in data)
                     {
@@ -598,7 +601,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else if (UniqueColumnName.Equals(colList.GetSection("documentCheckoutUser").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentCheckoutUser.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentCheckoutUser.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.documentCheckoutUser).Distinct();
                     foreach (var dt in data)
                     {
@@ -610,7 +613,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 }
                 else if (UniqueColumnName.Equals(colList.GetSection("documentClient").Key))
                 {
-                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentClient.Contains(searchRequestVM.SearchObject.FilterValue));
+                    var data = ((IEnumerable<dynamic>)searchResultsVM.DocumentDataList).Where(d => d.documentClient.ToLower().Contains(searchRequestVM.SearchObject.FilterValue.ToLower()));
                     data = data.Select(o => o.documentClient).Distinct();
                     foreach (var dt in data)
                     {
@@ -629,7 +632,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// to get column name 
         /// </summary>
         /// <returns></returns>
-        public string getuniqueColumnName(string uniueColumnName)
+        public string GetUniqueColumnName(string uniueColumnName)
         {
             var docColumnSesction = configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument");
 
