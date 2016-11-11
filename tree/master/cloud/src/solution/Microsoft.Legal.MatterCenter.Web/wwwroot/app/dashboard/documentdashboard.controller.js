@@ -556,7 +556,9 @@
 
 
             vm.selected = "";
+            vm.searchClicked = false;
             vm.search = function () {
+                vm.searchClicked = true;
                 angular.element('#allDocuments').addClass("active");
                 angular.element('#myDocuments').removeClass("active");
                 angular.element('#pinDocuments').removeClass("active");
@@ -569,27 +571,29 @@
                 vm.divuigrid = false;
                 vm.responseNull = false;
                 vm.tabClicked = "All Documents"
+                vm.selectedTab = vm.documentDashboardConfigs.Tab2HeaderText;
                 var searchToText = '';
                 var finalSearchText = '';
-                    if (vm.selected != "") {
-                        if (-1 !== vm.selected.indexOf(":")) {
-                                finalSearchText = commonFunctions.searchFilter(vm.selected);
-                        }
-                        else if (vm.selected.indexOf("(") == 0 && vm.selected.indexOf(")") == vm.selected.length - 1) {
-                            finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':"' + vm.selected.trim() + '*")';
-                        }
-                        else if (vm.selected.lastIndexOf("(") > 0 && vm.selected.lastIndexOf(")") == vm.selected.length - 1) {
-                            var documentName = vm.selected.substring(0, vm.selected.lastIndexOf("(") - 1);
-                            var documentID = vm.selected.substring(vm.selected.lastIndexOf("("), vm.selected.lastIndexOf(")") + 1);
-                            finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ":\"" + documentName.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + documentID.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":\"" + vm.selected.trim() + "*\")";
-                        }
-                        else {
-                            finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":\"" + vm.selected.trim() + "*\")"
-                        }
-                     }
+                if (vm.selected != "") {
+                    if (-1 !== vm.selected.indexOf(":")) {
+                        finalSearchText = commonFunctions.searchFilter(vm.selected);
+                    }
+                    else if (vm.selected.indexOf("(") == 0 && vm.selected.indexOf(")") == vm.selected.length - 1) {
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyDocumentId + ':"' + vm.selected.trim() + '*" OR ' + vm.configSearchContent.ManagedPropertyDocumentClientName + ':"' + vm.selected.trim() + '*")';
+                    }
+                    else if (vm.selected.lastIndexOf("(") > 0 && vm.selected.lastIndexOf(")") == vm.selected.length - 1) {
+                        var documentName = vm.selected.substring(0, vm.selected.lastIndexOf("(") - 1);
+                        var documentID = vm.selected.substring(vm.selected.lastIndexOf("("), vm.selected.lastIndexOf(")") + 1);
+                        finalSearchText = '(' + vm.configSearchContent.ManagedPropertyFileName + ":\"" + documentName.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + documentID.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":\"" + vm.selected.trim() + "*\")";
+                    }
+                    else {
+                        finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":\"" + vm.selected.trim() + "*\")"
+                    }
+                }
                 vm.selectedTab = vm.documentDashboardConfigs.Tab2HeaderText;
                 documentRequest.SearchObject.Filters.FilterByMe = 0;
                 vm.pagenumber = 1;
+                vm.sortbytext = vm.documentDashboardConfigs.DropDownOptionText;
                 documentRequest.SearchObject.PageNumber = vm.pagenumber;
                 documentRequest.SearchObject.SearchTerm = finalSearchText;
                 documentRequest.SearchObject.Sort.ByProperty = "FileName";
@@ -605,7 +609,7 @@
                 });
             }
 
-          
+
             //#region request object
             vm.searchDocument = function (val) {
                 var searchUserRequest = {
@@ -623,6 +627,30 @@
 
 
             vm.searchDocumentFile = function (val) {
+                var searchDocumentRequest = {
+                    Client: {
+                        //ToDo: Need to read from config.js
+                        Url: configs.global.repositoryUrl
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: gridOptions.paginationPageSize,
+                        SearchTerm: "",
+                        Filters: {
+                            ClientsList: [],
+                            FromDate: "",
+                            ToDate: "",
+                            DocumentAuthor: "",
+                            FilterByMe: 0
+                        },
+                        Sort:
+                          {
+                              ByProperty: "LastModifiedTime",
+                              Direction: 1,
+                              ByColumn: ""
+                          }
+                    }
+                }
                 var finalSearchText = "";
                 if (val != "") {
                     if (val.indexOf("(") == 0 && val.indexOf(")") == val.length - 1) {
@@ -638,22 +666,31 @@
                     }
                 }
                 vm.pagenumber = 1;
-                documentRequest.SearchObject.PageNumber = vm.pagenumber;
-                documentRequest.SearchObject.SearchTerm = finalSearchText;
-                documentRequest.SearchObject.Sort.ByProperty = "FileName";
-                documentRequest.SearchObject.Sort.Direction = 0;
-                return documentDashBoardResource.get(documentRequest).$promise;
+                searchDocumentRequest.SearchObject.PageNumber = vm.pagenumber;
+                searchDocumentRequest.SearchObject.SearchTerm = finalSearchText;
+                searchDocumentRequest.SearchObject.Sort.ByProperty = "FileName";
+                searchDocumentRequest.SearchObject.Sort.Direction = 0;
+                return documentDashBoardResource.get(searchDocumentRequest).$promise;
             }
 
             //#region
             vm.typeheadselect = function (index, selected) {
+                vm.searchClicked = true;
                 angular.element('#allDocuments').addClass("active");
                 angular.element('#myDocuments').removeClass("active");
                 angular.element('#pinDocuments').removeClass("active");
+                vm.pagenumber = 1;
+                vm.displaypagination = false;
                 vm.documentname = 'All Documents'
                 vm.documentid = 1;
+                vm.nodata = false;
+                vm.lazyloaderdashboard = false;
+                vm.divuigrid = false;
+                vm.responseNull = false;
+                vm.tabClicked = "All Documents"
+                vm.selectedTab = vm.documentDashboardConfigs.Tab2HeaderText;
                 var searchToText = '';
-                var finalSearchText = "";
+                var finalSearchText = '';
                 if (selected != "") {
                     if (selected.lastIndexOf("(") > 0 && selected.lastIndexOf(")") == selected.length - 1) {
                         var documentName = selected.substring(0, selected.lastIndexOf("(") - 1);
@@ -668,6 +705,8 @@
                     }
                 }
                 vm.pagenumber = 1;
+                vm.sortbytext = vm.documentDashboardConfigs.DropDownOptionText;
+                documentRequest.SearchObject.Sort.ByProperty = "";
                 documentRequest.SearchObject.PageNumber = 1;
                 documentRequest.SearchObject.Filters.FilterByMe = 0;
                 documentRequest.SearchObject.SearchTerm = finalSearchText;
@@ -691,8 +730,10 @@
                 vm.displaypagination = false;
                 getDocumentCounts(documentRequest, function (response) {
                     vm.allDocumentCount = response.allDocumentCounts;
-                    vm.myDocumentCount = response.myDocumentCounts;
-                    vm.pinDocumentCount = response.pinnedDocumentCounts;
+                    if (!vm.searchClicked) {
+                        vm.myDocumentCount = response.myDocumentCounts;
+                        vm.pinDocumentCount = response.pinnedDocumentCounts;
+                    }
 
                     if (vm.tabClicked.toLowerCase() == vm.documentDashboardConfigs.Tab1HeaderText.toLowerCase()) {
                         vm.totalrecords = response.myDocumentCounts;
@@ -703,16 +744,18 @@
                     if (vm.tabClicked.toLowerCase() == vm.documentDashboardConfigs.Tab3HeaderText.toLowerCase()) {
                         vm.totalrecords = response.pinnedDocumentCounts;
                     }
-
+                    if (vm.searchClicked) {
+                        vm.totalrecords = response.allDocumentCounts;
+                    }
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
 
-                    if (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText) {
+                    if (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText && !vm.searchClicked) {
                         vm.selectedTabInfo = vm.documentDashboardConfigs.Tab1HeaderText + " (" + response.myDocumentCounts + ")";
                     } else if (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText) {
                         vm.selectedTabInfo = vm.documentDashboardConfigs.Tab2HeaderText + " (" + response.allDocumentCounts + ")";
-                    } else {
+                    } else if (vm.selectedTab == vm.documentDashboardConfigs.Tab3HeaderText && !vm.searchClicked) {
                         vm.selectedTabInfo = vm.documentDashboardConfigs.Tab3HeaderText + " (" + response.pinnedDocumentCounts + ")";
                     }
                     if (!$scope.$$phase) {
@@ -721,8 +764,8 @@
                     vm.pagination();
                     //vm.displaypagination = true;
                     if (response == "" || (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText && response.allDocumentCounts == 0) ||
-                        (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText && response.myDocumentCounts == 0) ||
-                        (vm.selectedTab == vm.documentDashboardConfigs.Tab3HeaderText && response.pinnedDocumentCounts == 0)) {
+                        (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText && response.myDocumentCounts == 0 && !vm.searchClicked) ||
+                        (vm.selectedTab == vm.documentDashboardConfigs.Tab3HeaderText && response.pinnedDocumentCounts == 0 && !vm.searchClickedtype)) {
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = false;
                         vm.nodata = true;
@@ -794,6 +837,7 @@
 
             //#region function to get the documents which are pinned by user
             vm.getPinnedDocuments = function () {
+                vm.searchClicked = false;
                 vm.documentGridOptions.data = [];
                 vm.tabClicked = "Pinned Documents";
                 vm.selectedTab = vm.documentDashboardConfigs.Tab3HeaderText;
@@ -803,6 +847,7 @@
                 vm.divuigrid = false;
                 vm.nodata = false;
                 vm.selectedClients = "";
+                vm.selected = "";
                 angular.element("input[name='clients']:checkbox").attr('checked', false);
                 vm.selectedAuthor = "";
                 vm.startdate = "";
@@ -849,6 +894,8 @@
 
             //#region function to get the documents based on login user
             vm.getMyDocuments = function () {
+                vm.selected = "";
+                vm.searchClicked = false;
                 vm.documentGridOptions.data = [];
                 vm.tabClicked = "My Documents";
                 vm.selectedTab = vm.documentDashboardConfigs.Tab1HeaderText;
@@ -857,12 +904,18 @@
                 vm.displaypagination = false;
                 vm.divuigrid = false;
                 vm.nodata = false;
+                documentRequest.SearchObject.Filters.ClientsList = [];
+                documentRequest.SearchObject.Filters.DocumentAuthor = "";
+                documentRequest.SearchObject.Filters.FromDate = "";
+                documentRequest.SearchObject.Filters.ToDate = "";
                 documentRequest.SearchObject.PageNumber = 1;
                 documentRequest.SearchObject.Filters.FilterByMe = 1;
                 documentRequest.SearchObject.Sort.ByProperty = "MCModifiedDate";
                 documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 documentRequest.SearchObject.ItemsPerPage = gridOptions.paginationPageSize;
                 documentRequest.SearchObject.SearchTerm = "";
+                vm.startdate = "";
+                vm.enddate = "";
                 get(documentRequest, function (response) {
                     if (response == "" || response.length == 0) {
                         vm.getDocumentCounts();
@@ -1444,6 +1497,7 @@
                 angular.element('#allDocuments').addClass("active");
                 angular.element('#myDocuments').removeClass("active");
                 angular.element('#pinDocuments').removeClass("active");
+                vm.searchClicked = true;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.searchdrop = false;
@@ -1456,7 +1510,8 @@
                 var areaOfLaw = "";
                 var startdate = "";
                 var enddate = "";
-                vm.tabClicked = 'All Documents'
+                vm.tabClicked = 'All Documents';
+                vm.selectedTab = vm.documentDashboardConfigs.Tab2HeaderText;
                 if (vm.selectedClients != "" && vm.selectedClients != undefined) {
                     if (!vm.globalSettings.isBackwardCompatible) {
                         clientArray = vm.selectedClients.split(',');
@@ -1474,7 +1529,12 @@
                 if (vm.selectedAuthor != "" && vm.selectedAuthor != undefined) {
                     author = vm.selectedAuthor;
                 }
-
+                if (vm.selected == "") {
+                    documentRequest.SearchObject.SearchTerm = "";
+                }
+                documentRequest.SearchObject.Filters.FilterByMe = 0;
+                vm.sortbytext = vm.documentDashboardConfigs.DropDownOptionText;
+                documentRequest.SearchObject.Sort.ByProperty = "";
                 documentRequest.SearchObject.Filters.AreaOfLaw = areaOfLaw;
                 documentRequest.SearchObject.Filters.ClientsList = clientArray;
                 documentRequest.SearchObject.Filters.DocumentAuthor = author;
@@ -1484,15 +1544,15 @@
                 get(documentRequest, function (response) {
                     if (response == "" || response.length == 0) {
                         vm.errorMessage = response.message;
-                        documentRequest.SearchObject.Sort.ByProperty = "";
-                        documentRequest.SearchObject.Sort.Direction = 1;
-                        documentRequest.SearchObject.Sort.ByColumn = "";
+                        //documentRequest.SearchObject.Sort.ByProperty = "";
+                        //documentRequest.SearchObject.Sort.Direction = 1;
+                        //documentRequest.SearchObject.Sort.ByColumn = "";
                         vm.getDocumentCounts();
                     } else {
                         vm.documentGridOptions.data = response;
-                        documentRequest.SearchObject.Sort.ByProperty = "";
-                        documentRequest.SearchObject.Sort.Direction = 1;
-                        documentRequest.SearchObject.Sort.ByColumn = "";
+                        //documentRequest.SearchObject.Sort.ByProperty = "";
+                        //documentRequest.SearchObject.Sort.Direction = 1;
+                        //documentRequest.SearchObject.Sort.ByColumn = "";
                         vm.getDocumentCounts();
                         if (!$scope.$$phase) {
                             $scope.$apply();

@@ -1400,6 +1400,7 @@
                                     $scope.$apply();
                                 }
                             }
+                            vm.divuigrid = true;
                             $timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
                             if (!vm.globalSettings.isBackwardCompatible) {
                                 $interval(function () { vm.showSortExp(); }, 3000, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
@@ -1903,6 +1904,8 @@
 
         angular.element($window).bind('resize', function () {
             angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 93);
+            angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
+            angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
             if ($window.innerWidth < 380) {
                 angular.element('#documentgrid .ui-grid-viewport').addClass('viewport');
                 angular.element('#documentgrid .ui-grid-viewport').removeClass('viewportlg');
