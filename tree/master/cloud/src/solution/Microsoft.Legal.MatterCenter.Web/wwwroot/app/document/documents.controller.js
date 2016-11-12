@@ -1078,54 +1078,55 @@
 
         vm.clearAllFilter = function () {
 
+            vm.documentfilter = false;
+            vm.searchTerm = '';
+            searchRequest.SearchObject.Filters.Name = '';
+            
+            vm.clientfilter = false;
+            vm.clientSearchTerm = '';
+            searchRequest.SearchObject.Filters.ClientName = '';            
+
+            vm.projectNamefilter = false;
+            vm.projectSearchTerm = '';
+            searchRequest.SearchObject.Filters.ProjectName = '';
+           
+            vm.checkoutfilter = false;
+            vm.checkedSearchTerm = '';
+            searchRequest.SearchObject.Filters.DocumentCheckoutUsers = '';
+            
+            vm.authorfilter = false;
+            vm.authorSearchTerm = '';
+            searchRequest.SearchObject.Filters.DocumentAuthor = '';
+            
+            vm.practiceGroupfilter = false;
+            vm.practiceGroupSearchTerm = '';
+            searchRequest.SearchObject.Filters.PracticeGroup = '';
+            
+            vm.moddatefilter = false;
+            vm.modStartDate = '';
+            vm.modEndDate = '';            
+            searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = '';
+            searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = '';
+           
             vm.documentheader = true;
             vm.documentdateheader = true;
-            vm.nodata = false;
-            vm.pagenumber = 1;
-            searchRequest.SearchObject.PageNumber = vm.pagenumber;
-            vm.searchTerm = "";
 
-            searchRequest.SearchObject.SearchTerm = "";
-            searchRequest.SearchObject.Filters.Name = "";
-            searchRequest.SearchObject.Sort.ByProperty = "LastModifiedTime";
-            vm.documentfilter = false;
-
-            vm.clientSearchTerm = "";
-            searchRequest.SearchObject.Filters.ClientName = "";
-            vm.clientfilter = false;
-
-            vm.projectSearchTerm = "";
-            searchRequest.SearchObject.Filters.ProjectName = "";
-            vm.projectNamefilter = false;
-
-
-            vm.checkedSearchTerm = "";
-            searchRequest.SearchObject.Filters.DocumentCheckoutUsers = "";
-            vm.checkoutfilter = false;
-
-            vm.authorSearchTerm = ""
-            searchRequest.SearchObject.Filters.DocumentAuthor = "";
-            vm.authorfilter = false;
-
-            vm.practiceGroupSearchTerm = ""
-            searchRequest.SearchObject.Filters.PracticeGroup = "";
-            vm.practiceGroupfilter = false;
-
-            searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
-            searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
-            vm.modStartDate = "";
-            vm.modEndDate = "";
-            vm.moddatefilter = false;
-
-            searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
-            searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
-            vm.startDate = "";
-            vm.endDate = "";
             vm.createddatefilter = false;
+            vm.startDate = '';
+            vm.endDate = '';
+            searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = '';
+            searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = '';
 
             searchRequest.SearchObject.FilterValue = '';
             searchRequest.SearchObject.IsUnique = false;
             searchRequest.SearchObject.UniqueColumnName = '';
+
+            vm.previousDocFileNameValue = '';
+            vm.previousDocClientNameValue = '';
+            vm.previousDocMatterNameValue = '';
+            vm.previousDocPracticeGroupValue = '';
+            vm.previousDocAuthorValue = '';
+            vm.previousDocCheckOutUserValue = '';
         }
 
         //#endregion
@@ -1415,10 +1416,10 @@
                     var pinnedMattersRequest = {
                         Url: configs.global.repositoryUrl
                     }
-                    searchRequest.SearchObject.Sort.ByColumn = "documentModifiedDate";
-                    searchRequest.SearchObject.Sort.ByProperty = vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime;
-                    searchRequest.SearchObject.Sort.Direction = 1;
-                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
+                    searchRequest.SearchObject.Sort.ByColumn = '';
+                    searchRequest.SearchObject.Sort.ByProperty = '';
+                    searchRequest.SearchObject.Sort.Direction = 0;
+                    searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 }
                 getPinnedDocuments(searchRequest, function (response) {
                     if (response == "") {
@@ -1739,10 +1740,46 @@
             $interval(function () { vm.showSortExp(); }, 1500, 3);
         }
 
+        vm.clearFilterValuesOnSorting = function () {
+            if (vm.documentfilter == false && vm.clientfilter == false && vm.projectNamefilter == false &&
+                vm.checkoutfilter == false && vm.authorfilter == false && vm.practiceGroupfilter == false &&
+                vm.moddatefilter == false && vm.createddatefilter == false) {
+                vm.clearAllFilter();
+            }
+            else {
+                if (vm.documentfilter == false) {
+                    vm.searchTerm = '';
+                }
+                if (vm.clientfilter == false) {
+                    vm.clientSearchTerm = '';
+                }
+                if (vm.projectNamefilter == false) {
+                    vm.projectSearchTerm = '';
+                }
+                if (vm.checkoutfilter == false) {
+                    vm.checkedSearchTerm = '';
+                }
+                if (vm.authorfilter == false) {
+                    vm.authorSearchTerm = '';
+                }
+                if (vm.practiceGroupfilter == false) {
+                    vm.practiceGroupSearchTerm = '';
+                }
+                if (vm.moddatefilter == false) {
+                    vm.modStartDate = '';
+                    vm.modEndDate = '';
+                }
+                if (vm.createddatefilter == false) {
+                    vm.startDate = '';
+                    vm.endDate = '';
+                }
+            }
+        }
 
         $scope.sortChangedDocument = function (grid, sortColumns) {
             vm.responseNull = false;
             //vm.clearAllFiltersofSort();
+            vm.clearFilterValuesOnSorting();
             $timeout(function () { vm.documentdateheader = true; vm.documentheader = true; }, 1);
             $scope.gridApi.infiniteScroll.resetScroll();
             if (sortColumns.length != 0) {
@@ -2046,6 +2083,8 @@
             var left = dimensions.left - 224;
             angular.element('.documentheader').css({ 'top': top, 'left': left });
             angular.element('.documentheaderdates').css({ 'top': top, 'left': left });
+
+            vm.clearFilterValuesOnSorting();
             //Document
             if (name === vm.documentConfigContent.GridColumn1Header) {
                 vm.searchexp = "" + vm.configSearchContent.ManagedPropertyFileName + "";
