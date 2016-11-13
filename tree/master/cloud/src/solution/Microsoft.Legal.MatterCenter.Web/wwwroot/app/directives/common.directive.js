@@ -240,7 +240,7 @@
                                      <img id="FlyoutPopupLoading" ng-if="!loader" title="Loading" src="../Images/WindowsLoadingFast.GIF" alt="Loading">\
                                    <div class="FlyoutBoxContent flyoutwidth" style="height:270px">\
                                       <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
-                                           <div>\
+                                           <div ng-if="loader" >\
                                        <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
                                       <div class="FlyoutContent">\
                                           <div class="ms-Callout-content FlyoutHeadingText" title="' + obj.documentName + '">  ' + obj.documentName + ' </div>\
