@@ -1588,67 +1588,54 @@
 
             vm.clearAllFilter = function () {
 
+                vm.matterfilter = false;
+                vm.searchTerm = '';
+                searchRequest.SearchObject.Filters.Name = '';
+
+                vm.clientfilter = false;
+                vm.clientSearchTerm = '';
+                searchRequest.SearchObject.Filters.ClientName = '';
+              
+                vm.attorneyfilter = false;
+                vm.attorneySearchTerm = '';
+                searchRequest.SearchObject.Filters.ResponsibleAttorneys = '';
+
+                vm.practiceGroupfilter = false;
+                vm.practiceGroupSearchTerm = '';
+                searchRequest.SearchObject.Filters.PracticeGroup = "";
+                
+                vm.areafilter = false;
+                vm.areaoflawfilter = false;
+                vm.areaSearchTerm = '';
+                vm.areaOfLawSearchTerm = '';
+                searchRequest.SearchObject.Filters.AreaOfLaw = '';
+
+                vm.subareafilter = false;
+                vm.subAreaOfLawSearchTerm = '';
+                searchRequest.SearchObject.Filters.SubareaOfLaw = '';
+
+                vm.projectIDfilter = false;
+                vm.projectIDSearchTerm = '';
+                searchRequest.SearchObject.Filters.ProjectID = '';
+
                 vm.matterdateheader = true;
                 vm.matterheader = true;
-                vm.lazyloader = false;
-                vm.divuigrid = false;
-                vm.nodata = false;
-                vm.responseNull = false;
-                vm.pagenumber = 1;
-                searchRequest.SearchObject.SearchTerm = '';
-                searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
-                searchRequest.SearchObject.PageNumber = vm.pagenumber;
-                searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
-                searchRequest.SearchObject.Sort.Direction = 1;
 
-                searchRequest.SearchObject.Filters.ResponsibleAttorneys = "";
-                vm.attorneyfilter = false;
-
+                vm.moddatefilter = false;
+                vm.modstartdate = '';
+                vm.modenddate = '';
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = '';
+                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = '';
+                
+                vm.opendatefilter = false;
+                vm.startDate = '';
+                vm.endDate = '';
+                searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = '';
+                searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = '';
+               
                 searchRequest.SearchObject.FilterValue = '';
                 searchRequest.SearchObject.IsUnique = false;
                 searchRequest.SearchObject.UniqueColumnName = '';
-
-                vm.areaSearchTerm = "";
-                searchRequest.SearchObject.Filters.SubareaOfLaw = "";
-                vm.areafilter = false;
-
-                vm.projectIDSearchTerm = "";
-                searchRequest.SearchObject.Filters.ProjectID = "";
-                vm.projectIDfilter = false;
-
-                searchRequest.SearchObject.SearchTerm = "";
-                searchRequest.SearchObject.Filters.Name = "";
-                vm.matterfilter = false;
-
-                vm.clientSearchTerm = ""
-                searchRequest.SearchObject.Filters.ClientName = "";
-                vm.clientfilter = false;
-                vm.areaoflawfilter = false;
-
-                vm.practiceGroupSearchTerm = ""
-                searchRequest.SearchObject.Filters.PracticeGroup = "";
-                vm.practiceGroupfilter = false;
-
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
-                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
-                vm.modstartdate = "";
-                vm.modenddate = "";
-                vm.moddatefilter = false;
-
-                searchRequest.SearchObject.Filters.SubareaOfLaw = "";
-                vm.subAreaOfLawSearchTerm = "";
-                vm.subareafilter = false;
-
-                searchRequest.SearchObject.Filters.AreaOfLaw = "";
-                vm.areaOfLawSearchTerm = "";
-                vm.areaoflawfilter = false;
-                vm.areafilter = false;
-
-                searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = "";
-                searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = "";
-                vm.startDate = "";
-                vm.endDate = "";
-                vm.opendatefilter = false;
 
                 vm.previousMatterNameValue = '';
                 vm.previousClientNameValue = '';
@@ -1949,10 +1936,10 @@
                         var pinnedMattersRequest = {
                             Url: configs.global.repositoryUrl
                         }
-                        searchRequest.SearchObject.Sort.ByColumn = "MatterModifiedDate";
-                        searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
-                        searchRequest.SearchObject.Sort.Direction = 1;
-                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
+                        searchRequest.SearchObject.Sort.ByColumn = '';
+                        searchRequest.SearchObject.Sort.ByProperty = '';
+                        searchRequest.SearchObject.Sort.Direction = 0;
+                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     }
                     getPinnedMatters(searchRequest, function (response) {
                         if (response == "" || response.length == 0) {
@@ -2259,6 +2246,58 @@
                 }
             }
 
+            vm.clearFilterValuesOnSorting = function()
+            {
+                if(vm.matterfilter  == false && vm.clientfilter == false && vm.areafilter == false &&
+                    vm.areaoflawfilter == false && vm.subareafilter == false && vm.attorneyfilter == false &&
+                    vm.practiceGroupfilter == false && vm.projectIDfilter == false && vm.moddatefilter == false
+                     && vm.opendatefilter == false)
+                {
+                    vm.clearAllFilter();
+                }
+                else{
+                        if (vm.matterfilter == false)
+                        {
+                            vm.searchTerm = '';
+                        }
+                        if (vm.clientfilter == false)
+                        {
+                            vm.clientSearchTerm = '';
+                        }
+                        if (vm.areafilter == false)
+                        {
+                            vm.areaSearchTerm = '';
+                        }
+                        if (vm.areaoflawfilter == false)
+                        {
+                            vm.areaOfLawSearchTerm = '';
+                        }
+                        if (vm.subareafilter == false)
+                        {
+                            vm.subAreaOfLawSearchTerm = '';
+                        }
+                        if (vm.attorneyfilter == false)
+                        {
+                            vm.attorneySearchTerm = '';
+                        }
+                        if (vm.practiceGroupfilter == false)
+                        {
+                            vm.practiceGroupSearchTerm = '';
+                        }
+                        if (vm.projectIDfilter == false) {
+                            vm.projectIDSearchTerm = '';
+                        }
+                        if (vm.moddatefilter == false) {
+                            vm.modstartdate = '';
+                            vm.modenddate = '';
+                        }
+                        if (vm.opendatefilter == false) {
+                            vm.startDate = '';
+                            vm.endDate = '';
+                        }
+                }
+            }
+
             //vm.sortby = "desc";
             //vm.sortexp = "matterModifiedDate";
             //$interval(function () { vm.showSortExp(); }, 3000, 3);
@@ -2268,6 +2307,7 @@
                 vm.divuigrid = false;
                 vm.responseNull = false;
                 //searchRequest.SearchObject.SearchTerm = "";
+                vm.clearFilterValuesOnSorting();
                 if (sortColumns.length != 0 && sortColumns[0] != undefined) {
                     if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
                         if (sortColumns[0].sort != undefined) {
@@ -2816,6 +2856,9 @@
                 angular.element('.matterheaderdates').css({
                     'top': top, 'left': left
                 });
+
+                vm.clearFilterValuesOnSorting();
+
                 if (name === vm.matterConfigContent.GridColumn1Header) {
                     vm.searchexp = "" + vm.configSearchContent.ManagedPropertyMatterName + "";
                     vm.filtername = vm.matterConfigContent.GridColumn1Header;
