@@ -1527,7 +1527,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 else
                                 {
                                     //// Matter already exists
-                                    userpinnedDocumentCollection.Remove(userPinnedDetails.URL);
+                                    userpinnedDocumentCollection.Remove(WebUtility.HtmlEncode(userPinnedDetails.URL));
                                     string updatedDocument = JsonConvert.SerializeObject(userpinnedDocumentCollection, Newtonsoft.Json.Formatting.Indented);
 
                                     ////We are maintaining single list item entry for user

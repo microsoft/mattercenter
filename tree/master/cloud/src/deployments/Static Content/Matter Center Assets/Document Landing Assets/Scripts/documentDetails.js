@@ -45,7 +45,7 @@ var oDocumentLandingObject = (function () {
         sModifiedDate: "",
         sCheckOutUserPinned: "",
         sDocumentAJAXCallURL: "",
-        sEmailSubject: "Matter Center Document(s)",
+        sEmailSubject: configs.global.isBackwardCompatible!=true?"Matter Center Document(s)":"Project Center Document(s)",
         sSendToOneDriveTitle: "Send To OneDrive",
         sDocumentAJAXParameters: "/_api/web/getFileByServerRelativeUrl('{0}')/{1}",
         sTitleAJAXParameters: "/_api/web/lists/GetByTitle('{0}')/RootFolder/{1}",
@@ -946,8 +946,13 @@ var oDocumentLandingObject = (function () {
             },
             success: function (oData) {
                 oDocumentLanding.sFormDigest = oData.d.GetContextWebInformation.FormDigestValue;
-                var sURL = oDocumentLanding.sDocumentAJAXCallURL + oDocumentLanding.sOWAAJAXParameters.replace("{0}", oDocumentLanding.sDocumentListItemId.replace("{", "").replace("}", "")).replace("{1}", oDocumentLanding.sDocumentItemId).replace("{2}", sAction);
-                oCommonFunctions.getData(sURL, sSuccessFunction, oCommonFunctions.getOWAUrlFailure, "POST");
+                
+                if( oDocumentLanding.sDocumentItemId!="")
+                {
+                	var sURL = oDocumentLanding.sDocumentAJAXCallURL + oDocumentLanding.sOWAAJAXParameters.replace("{0}", oDocumentLanding.sDocumentListItemId.replace("{", "").replace("}", "")).replace("{1}", oDocumentLanding.sDocumentItemId).replace("{2}", sAction);
+                	oCommonFunctions.getData(sURL, sSuccessFunction, oCommonFunctions.getOWAUrlFailure, "POST");
+                }
+                
             },
             error: oCommonFunctions.getOWAUrlFailure
         });
@@ -1032,6 +1037,10 @@ var oDocumentLandingObject = (function () {
             $("#fileSizeValue").text(oDocumentLanding.iSize).attr("title", oDocumentLanding.iSize);
             if (_spPageContextInfo.userLoginName.toUpperCase() !== oDocumentLanding.sCheckOutUserEmail.toUpperCase()) {
                 $("#checkInDocument").addClass("hide");
+            }
+            else{
+            	$("#checkInDocument").removeClass("hide");
+
             }
             ProcessImn(); //// Refresh the lync status of user
         }
@@ -1236,7 +1245,8 @@ var oDocumentLandingObject = (function () {
 
  oCommonFunctions.applyConfigSettings = function () {
  
- 
+    $(".iconText .mainText")[0].innerHTML =  uiconfigs.DocumentDetails.MenuImageUpperCaption;
+	$(".iconText .subText")[0].innerHTML =  uiconfigs.DocumentDetails.MenuImageLowerCaption
 	$("#tabTitle").html(uiconfigs.DocumentDetails.Label1TabTitleText);
 	$("#collapseMessageDetails").html(uiconfigs.DocumentDetails.Link1ErrorDetailsCaptionText);
 	$("#gotoAllDocuments").attr("title",uiconfigs.DocumentDetails.Link2AllDocumentText);
@@ -1264,8 +1274,16 @@ var oDocumentLandingObject = (function () {
 	}
 	$("#Section1Column3").html(uiconfigs.DocumentDetails.Label5Section2Column3Text+ ":");
 	$("#Section1Column3").attr("title",uiconfigs.DocumentDetails.Label5Section2Column3Text);
-	$("#Section1Column4").html(uiconfigs.DocumentDetails.Label6Section2Column4Text+ ":");
-	$("#Section1Column4").attr("title",uiconfigs.DocumentDetails.Label6Section2Column4Text);
+	if(configs.search.Schema.toLowerCase()==='mattercenter'){
+		$("#Section1Column4").html(uiconfigs.DocumentDetails.Label6Section2Column4Text+ ":");
+		$("#Section1Column4").attr("title",uiconfigs.DocumentDetails.Label6Section2Column4Text);
+		
+	}
+	else{
+		$("#Section1Column2").hide();
+		$("#clientValue").hide();
+		$("#clientMatterIdValue").hide();		
+	}
 	$("#Section1Column5").html(uiconfigs.DocumentDetails.Label7Section2Column5Text+ ":");
 	$("#Section1Column5").attr("title",uiconfigs.DocumentDetails.Label7Section2Column5Text);
 	$("#Section1Column6").html(uiconfigs.DocumentDetails.Label8Section2Column6Text+ ":");
@@ -1288,7 +1306,7 @@ var oDocumentLandingObject = (function () {
 	$("#Section1Column14").attr("title",uiconfigs.DocumentDetails.Label16Section2Column14Text);
  
   
-	$("#Section2Header").html(uiconfigs.DocumentDetails.Label17Section2HeaderText);
+	$("#versionHistoryTitle").html(uiconfigs.DocumentDetails.Label17Section2HeaderText);
 	$("#Section2Column1").html(uiconfigs.DocumentDetails.Label18Section2Column1Text);
 	$("#Section2Column2").html(uiconfigs.DocumentDetails.Label19Section2Column2Text);
 	$("#Section2Column3").html(uiconfigs.DocumentDetails.Label20Section2Column3Text);
@@ -1316,7 +1334,7 @@ var oDocumentLandingObject = (function () {
     /* Function to be executed once DOM loaded completely */
     $(document).ready(function () {
         $("title").text(oGlobalConstants.sPageTitle);
-        displayHeaderAndFooterContent();
+        displayHeaderAndFooterContent(configs.global.isBackwardCompatible);
         oDocumentLanding.sClientRelativeUrl = oCommonFunctions.getParameterByName("client");
         oDocumentLanding.sDocumentParentListId = oCommonFunctions.getParameterByName("listguid");
         oDocumentLanding.sDocumentGUID = oCommonFunctions.getParameterByName("docguid");
