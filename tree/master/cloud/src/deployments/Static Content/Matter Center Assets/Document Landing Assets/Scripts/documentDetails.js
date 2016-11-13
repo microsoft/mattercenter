@@ -1038,6 +1038,10 @@ var oDocumentLandingObject = (function () {
             if (_spPageContextInfo.userLoginName.toUpperCase() !== oDocumentLanding.sCheckOutUserEmail.toUpperCase()) {
                 $("#checkInDocument").addClass("hide");
             }
+            else{
+            	$("#checkInDocument").removeClass("hide");
+
+            }
             ProcessImn(); //// Refresh the lync status of user
         }
     };
