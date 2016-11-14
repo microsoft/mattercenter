@@ -444,6 +444,12 @@ namespace Microsoft.Legal.MatterCenter.Web
                             jw.WritePropertyName(key.Key);
                             jw.WriteValue(key.Value);
                         }
+                        //Assuming that all the keys for the matter property bag keys will start with "StampedProperty"
+                        if (key.Key.ToString().ToLower().StartsWith("specialcharacterexpression"))
+                        {
+                            jw.WritePropertyName(key.Key);
+                            jw.WriteValue(key.Value);
+                        }
                     }
                 jw.WriteEndObject();
 

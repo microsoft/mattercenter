@@ -3,16 +3,17 @@
 
 /* Common chunk for header and footer section */
 var oCommonHtmlChunk = {
-    "headerSectionHtml": "<div class=\"popupBackground hide\"></div><div id=\"menu\"><img src=\"@@HamburgerIcon\" title=\"View links\" /></div><div class=\"searchZone\"><a id=\"mcIcon\" href = \"@@DashboardLink\" title = \"Matter Center Home\" target=\"_self\"><img src='@@MCIcon' title='Matter Center' alt= 'Matter Center'/></a><div class=\"iconText\"><div class=\"mainText\">Matter Center</div><div class=\"subText\">for Office 365</div></div><div class=\"userIcon\"><img src=\"@@TeamMembersIcon\" title=\"Team Members\" /></div><div class=\"searchBox\"><input id=\"searchText\" type=\"text\" placeholder=\"Search SharePoint\"/><img class=\"searchIcon\" src=\"@@SearchIcon\" alt=\"\"/></div></div><div class=\"closeIcon hide\"><img src=\"@@CloseIcon\" title=\"Close\" /></div><div class=\"menuFlyout\"><div class=\"menuFlyoutColumn\"><a id=\"matterLink\" href=\"@@MattersLink\"class=\"flyoutColumnData\" target=\"_self\" title = \"Matters\"> Matters</a><a id=\"documentLink\" href=\"@@DocumentsLink\"class=\"flyoutColumnData\" target=\"_self\" title = \"Documents\"> Documents</a><a id=\"settingsLink\" href=\"@@SettingsLink\"class=\"flyoutColumnData\" target=\"_self\" title = \"Settings\">Settings</a></div></div><div class=\"selectedUserIcon hide\"><img src=\"@@TeamMembersIcon\" title=\"Team Members\" /></div><div class=\"teamFlyout hide\"><div class=\"teamFlyoutHeader\"><div class=\"teamSection selectedSection\">TEAM<span class=\"userNumber\">(0)</span> </div><div class=\"blockedUserSection\">CONFLICTED<span class=\"userNumber\">(0)</span> </div></div><div class=\"teamFlyoutData\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div><div class=\"blockedFlyoutData hide\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div></div>",
+    "headerSectionHtml": "<div class=\"popupBackground hide\"></div><div id=\"menu\"><img src=\"@@HamburgerIcon\" title=\"View links\" /></div><div class=\"searchZone\"><a id=\"mcIcon\" href = \"@@DashboardLink\" title = \"Matter Center Home\" target=\"_self\"><img src='@@MCIcon' title='Matter Center' alt= 'Matter Center'/></a><div class=\"iconText\"><div class=\"mainText\"></div><div class=\"subText\"></div></div><div class=\"userIcon\"><img src=\"@@TeamMembersIcon\" title=\"Team Members\" /></div><div class=\"searchBox\"><input id=\"searchText\" type=\"text\" placeholder=\"Search SharePoint\"/><img class=\"searchIcon\" src=\"@@SearchIcon\" alt=\"\"/></div></div><div class=\"closeIcon hide\"><img src=\"@@CloseIcon\" title=\"Close\" /></div><div class=\"menuFlyout\"><div class=\"menuFlyoutColumn\"><a id=\"matterLink\" href=\"@@MattersLink\"class=\"flyoutColumnData\" target=\"_self\" title = \"Matters\"> Matters</a><a id=\"documentLink\" href=\"@@DocumentsLink\"class=\"flyoutColumnData\" target=\"_self\" title = \"Documents\"> Documents</a><a id=\"settingsLink\" href=\"@@SettingsLink\"class=\"flyoutColumnData\" target=\"_self\" title = \"Settings\">Settings</a></div></div><div class=\"selectedUserIcon hide\"><img src=\"@@TeamMembersIcon\" title=\"Team Members\" /></div><div class=\"teamFlyout hide\"><div class=\"teamFlyoutHeader\"><div class=\"teamSection selectedSection\">TEAM<span class=\"userNumber\">(0)</span> </div><div class=\"blockedUserSection\">CONFLICTED<span class=\"userNumber\">(0)</span> </div></div><div class=\"teamFlyoutData\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div><div class=\"blockedFlyoutData hide\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div></div>",
+    "headerSectionHtmlBackwardCompatible": "<div class=\"popupBackground hide\"></div><div id=\"menu\"><img src=\"@@HamburgerIcon\" title=\"View links\" /></div><div class=\"searchZone\"><a id=\"mcIcon\" href = \"@@DashboardLink\" title = \"Project Center Home\" target=\"_self\"><img src='@@MCIcon' title='Project Center' alt= 'Project Center'/></a><div class=\"iconText\"><div class=\"mainText\"></div><div class=\"subText\"></div></div><div class=\"userIcon\"><img src=\"@@TeamMembersIcon\" title=\"Team Members\" /></div><div class=\"searchBox\"><input id=\"searchText\" type=\"text\" placeholder=\"Search SharePoint\"/><img class=\"searchIcon\" src=\"@@SearchIcon\" alt=\"\"/></div></div><div class=\"closeIcon hide\"><img src=\"@@CloseIcon\" title=\"Close\" /></div><div class=\"menuFlyout\"><div class=\"menuFlyoutColumn\"><a id=\"matterLink\" href=\"@@MattersLink\"class=\"flyoutColumnData\" target=\"_self\" title = \"Matters\"> Matters</a><a id=\"documentLink\" href=\"@@DocumentsLink\"class=\"flyoutColumnData\" target=\"_self\" title = \"Documents\"> Documents</a><a id=\"settingsLink\" href=\"@@SettingsLink\"class=\"flyoutColumnData\" target=\"_self\" title = \"Settings\">Settings</a></div></div><div class=\"selectedUserIcon hide\"><img src=\"@@TeamMembersIcon\" title=\"Team Members\" /></div><div class=\"teamFlyout hide\"><div class=\"teamFlyoutHeader\"><div class=\"teamSection selectedSection\">TEAM<span class=\"userNumber\">(0)</span> </div><div class=\"blockedUserSection\">CONFLICTED<span class=\"userNumber\">(0)</span> </div></div><div class=\"teamFlyoutData\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div><div class=\"blockedFlyoutData hide\"><img class=\"loadingIcon\" src=\"@@LoadingImage\" alt=\"Loading\"/></div></div>",
     "footerSectionHtml": "<div id=\"footerContainer\"><div class=\"footerLogo\"><a target=\"_self\" href=\"@@FooterLink\" id=\"footerLogoLink\"><img src=\"@@MicrosoftLogo\" alt=\"Microsoft\" title =\"Microsoft\"/></a></div><section class=\"footerLink\"><a id=\"feedbackSupport\" href=\"@@Feedback\" target =\"_self\" class=\"linkText\" title=\"Feedback & Support\">Feedback & Support</a><a id=\"privacyLink\" href=\"@@Privacy\" target =\"_self\" class=\"linkText\" title=\"Privacy & Cookies\">Privacy & Cookies</a> <a id=\"termsOfUse\" href=\"@@Terms\" class=\"linkText\" target =\"_self\"title=\"Terms of Use\">Terms of Use</a><span> &copy; @@Year Microsoft</span></section></div>"
 };
 
 /* Footer links for the page */
 var oFooterLinks = {
-    "feedback": "[[[Feedback link]]]",
-    "termsOfUse": "[[[Terms of use link]]]",
-    "privacy": "[[[Privacy link]]]",
-    "searchPageURL": "[[[Search Page]]]?k=@@searchText",
+    "feedback": "[Enter URL for Support, e.g. mailto:support@supportsite.com]",
+    "termsOfUse": "[Enter URL for Terms of use, e.g. termofuse.supportsite.com]",
+    "privacy": "[Enter URL for Privacy terms, e.g. privacy.supportsite.com]",
+    "searchPageURL": "/search/Pages/results.aspx?k=@@searchText",
     "dashboardDocumentsQueryString": "?section=2",
     "matterDocumentsQueryString": "?section=1",
     "dashboard": "[[[Tenant Web Dashboard Url]]]",
@@ -54,12 +55,18 @@ var oGlobalConstants = {
 };
 
 /* Attaches all the content on the page */
-function displayHeaderAndFooterContent() {
+function displayHeaderAndFooterContent(isBackwardCompatible) {
     "use strict";
-    var sAssetsLocation = oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation;
+    var sAssetsLocation = "../"+ oCommonLinks.oMatterCenterAssetsLocation;
     /* Set the header html text */
-    var sHeaderText = oCommonHtmlChunk.headerSectionHtml.replace("@@SearchIcon", sAssetsLocation + oCommonAssets.searchIcon).replace(/@@LoadingImage/g, sAssetsLocation + oCommonAssets.loadingImage).replace("@@HamburgerIcon", sAssetsLocation + oCommonAssets.hamburgerIcon).replace("@@CloseIcon", sAssetsLocation + oCommonAssets.closeIcon).replace(/@@TeamMembersIcon/g, sAssetsLocation + oCommonAssets.userListIcon).replace("@@MCIcon", sAssetsLocation + oCommonAssets.matterCenterIcon).replace("@@SettingsLink", oFooterLinks.settingsPage).replace("@@DashboardLink", oFooterLinks.dashboard).replace("@@DocumentsLink", oFooterLinks.dashboard + oFooterLinks.dashboardDocumentsQueryString).replace("@@MattersLink", oFooterLinks.dashboard + oFooterLinks.matterDocumentsQueryString);
-    $("#matterCenterHeader").html(sHeaderText);
+    var sHeaderText = '';
+    if(isBackwardCompatible){
+    	sHeaderText = oCommonHtmlChunk.headerSectionHtmlBackwardCompatible.replace("@@SearchIcon", sAssetsLocation + oCommonAssets.searchIcon).replace(/@@LoadingImage/g, sAssetsLocation + oCommonAssets.loadingImage).replace("@@HamburgerIcon", sAssetsLocation + oCommonAssets.hamburgerIcon).replace("@@CloseIcon", sAssetsLocation + oCommonAssets.closeIcon).replace(/@@TeamMembersIcon/g, sAssetsLocation + oCommonAssets.userListIcon).replace("@@MCIcon", sAssetsLocation + oCommonAssets.matterCenterIcon).replace("@@SettingsLink", oFooterLinks.settingsPage).replace("@@DashboardLink", oFooterLinks.dashboard).replace("@@DocumentsLink", oFooterLinks.dashboard + oFooterLinks.dashboardDocumentsQueryString).replace("@@MattersLink", oFooterLinks.dashboard + oFooterLinks.matterDocumentsQueryString);
+    }
+    else{    
+    	sHeaderText = oCommonHtmlChunk.headerSectionHtml.replace("@@SearchIcon", sAssetsLocation + oCommonAssets.searchIcon).replace(/@@LoadingImage/g, sAssetsLocation + oCommonAssets.loadingImage).replace("@@HamburgerIcon", sAssetsLocation + oCommonAssets.hamburgerIcon).replace("@@CloseIcon", sAssetsLocation + oCommonAssets.closeIcon).replace(/@@TeamMembersIcon/g, sAssetsLocation + oCommonAssets.userListIcon).replace("@@MCIcon", sAssetsLocation + oCommonAssets.matterCenterIcon).replace("@@SettingsLink", oFooterLinks.settingsPage).replace("@@DashboardLink", oFooterLinks.dashboard).replace("@@DocumentsLink", oFooterLinks.dashboard + oFooterLinks.dashboardDocumentsQueryString).replace("@@MattersLink", oFooterLinks.dashboard + oFooterLinks.matterDocumentsQueryString);
+ 	}
+	$("#matterCenterHeader").html(sHeaderText);
 
     /* Set the rss panel html text */
     var sFooterText = oCommonHtmlChunk.footerSectionHtml.replace("@@Year", (new Date).getFullYear());
@@ -133,6 +140,13 @@ function getCurrentUserTitle() {
         }));
     }
 }
+
+
+function EscapeSingleQuotes(sProjectName) {
+    "use strict";
+    return sProjectName.replace(/'/g, "''");
+}
+
 
 /* Extract the login name of the user */
 function getUserLoginName(sEmailId) {

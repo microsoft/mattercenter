@@ -359,12 +359,6 @@
                                             if (isRowPresent.length == 0) {
                                                 team.teamUsers.push(userDetails);
                                             }
-                                            if (-1 == cm.oSiteUsers.indexOf(email)) {
-                                                cm.oSiteUsers.push(email);
-                                            }
-                                            if (-1 == cm.oSiteUserNames.indexOf(userAliasNames[i])) {
-                                                cm.oSiteUserNames.push(userAliasNames[i]);
-                                            }
                                         }
                                     }
                                 });

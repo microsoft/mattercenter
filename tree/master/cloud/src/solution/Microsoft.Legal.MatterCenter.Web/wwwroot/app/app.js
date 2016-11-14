@@ -191,6 +191,8 @@ angular.module('matterMain', [
                 if (event.target.className == "AppSwitcher OpenSwitcher" || event.target.className == "AppSwitcher OpenSwitcher hide" || event.target.className == "AppHeaderProfilePict") {
 
                 } else {
+                    //$rootScope.appMenuFlyOut = false;
+                    //$rootScope.flagAppMenuFlyOut = true;
                     $(".AppMenuFlyout").slideUp();
                     $(".topheader").css("z-index", "4");
                     $(".CloseSwitcher").addClass("hide");

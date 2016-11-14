@@ -588,10 +588,10 @@ textarea {
     max-height: 151px;
 }
 
-.AppMenuFlyout {
+.homeAppMenuFlyout {
     position: absolute;
     z-index: 101;
-    display: none;
+    /*display: none;*/
     width: 250px;
     height: 200px !important;
     box-sizing: border-box;
@@ -1513,12 +1513,27 @@ textarea {
     margin: 0 !important;
 }
 
-#PersonaPictureDetails div {
+.PersonaPictureDetails div {
     max-width: 274px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.noCursor{
-    cursor:not-allowed;
+.noCursor {
+    cursor: not-allowed;
+}
+
+.homeCloseContextualHelpFlyout {
+    position: absolute;
+    float: right;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    color: #666;
+    font-size: 15px;
+}
+
+
+#mainselect .dropdown-menu {
+    min-width: 148px;
 }

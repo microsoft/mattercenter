@@ -825,7 +825,7 @@ input#sdBannerDropDown {
 .AppMenuFlyout {
     position: absolute;
     z-index: 101;
-    display: none;
+    /*display: none;*/
     width: 250px;
     height: 155px;
     box-sizing: border-box;

@@ -97,7 +97,7 @@
     }
 
     'use strict';
-    function matterflyout($compile, $templateCache) {
+    function matterflyout($compile, $templateCache, $rootScope) {
         return {
             restrict: 'A',
             scope: {
@@ -105,6 +105,8 @@
             },
             link: function (scope, element, attrs) {
                 $(element).click(function (e) {
+                    $rootScope.dispcontextualhelpinner = true;
+                    $rootScope.contextualhelp = false;
                     var obj = "";
                     obj = eval('(' + attrs.details + ')');
                     if (obj.matterSubAreaOfLaw == "") {
@@ -204,12 +206,14 @@
     };
 
     'use strict';
-    function documentflyout($http, $compile, $templateCache) {
+    function documentflyout($http, $compile, $templateCache, $rootScope) {
         return {
             restrict: 'A',
             scope: { loader: '=' },
             link: function (scope, element, attrs) {
                 $(element).click(function (e) {
+                    $rootScope.dispcontextualhelpinner = true;
+                    $rootScope.contextualhelp = false;
                     var obj = "";
                     obj = eval('(' + attrs.details + ')');
                     if (obj.documentMatter == "") {
@@ -236,7 +240,7 @@
                                      <img id="FlyoutPopupLoading" ng-if="!loader" title="Loading" src="../Images/WindowsLoadingFast.GIF" alt="Loading">\
                                    <div class="FlyoutBoxContent flyoutwidth" style="height:270px">\
                                       <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
-                                           <div>\
+                                           <div ng-if="loader" >\
                                        <div class="flyoutToparrow visible-xs" style="top: -8px;"></div>\
                                       <div class="FlyoutContent">\
                                           <div class="ms-Callout-content FlyoutHeadingText" title="' + obj.documentName + '">  ' + obj.documentName + ' </div>\
@@ -367,6 +371,7 @@
 
                 $(element).on("click", function (e) {
                     e.stopPropagation();
+                    $('.dropdown').removeClass("open");
                     $timeout(function () {
                         if (element.find('.ng-isolate-scope').html() != "<!-- ngIf: shown -->") {
                             element.find('.ui-grid-icon-menu').removeClass('showExpandIcon');
@@ -478,8 +483,8 @@
     app.directive('datefilter', [datefilter]);
     app.directive("toggletab", [toggletab]);
     app.directive('infopopover', [infopopover]);
-    app.directive('matterflyout', ['$compile', '$templateCache', matterflyout]);
-    app.directive('documentflyout', ['$http', '$compile', '$templateCache', documentflyout]);
+    app.directive('matterflyout', ['$compile', '$templateCache', '$rootScope', matterflyout]);
+    app.directive('documentflyout', ['$http', '$compile', '$templateCache', '$rootScope', documentflyout]);
     app.directive('fallbacksrc', [fallbacksrc]);
     app.directive('myEnter', [myEnter]);
     app.directive('uiGridMenuButton', ['$window', '$timeout', uiGridMenuButton]);

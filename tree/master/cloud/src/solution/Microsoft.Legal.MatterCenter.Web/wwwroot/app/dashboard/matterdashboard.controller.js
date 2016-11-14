@@ -197,7 +197,7 @@
                 displayName: '',
                 width: '50',
                 cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img title={{row.entity.pinType}} ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
-                enableColumnMenu: false, 
+                enableColumnMenu: false,
                 position: 75
             });
             columnDefs1.push({
@@ -380,8 +380,10 @@
                 vm.displaypagination = false;
                 getMatterCounts(jsonMatterSearchRequest, function (response) {
                     vm.allMatterCount = response.allMatterCounts;
-                    vm.myMatterCount = response.myMatterCounts;
-                    vm.pinMatterCount = response.pinnedMatterCounts;
+                    if (!vm.searchClicked) {
+                        vm.myMatterCount = response.myMatterCounts;
+                        vm.pinMatterCount = response.pinnedMatterCounts;
+                    }
                     if (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText) {
                         vm.totalrecords = response.myMatterCounts;
                     } else if (vm.selectedTab == vm.matterDashboardConfigs.Tab2HeaderText) {
@@ -389,15 +391,18 @@
                     } else {
                         vm.totalrecords = response.pinnedMatterCounts
                     }
+                    if (vm.searchClicked) {
+                        vm.totalrecords = response.allMatterCounts;
+                    }
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
                     //vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + vm.myMatterCount + ")";
-                    if (vm.tabClicked.toLowerCase() == vm.matterDashboardConfigs.Tab1HeaderText.toLowerCase()) {
+                    if (vm.tabClicked.toLowerCase() == vm.matterDashboardConfigs.Tab1HeaderText.toLowerCase() && !vm.searchClicked) {
                         vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + response.myMatterCounts + ")";
                     } else if (vm.tabClicked.toLowerCase() == vm.matterDashboardConfigs.Tab2HeaderText.toLowerCase()) {
                         vm.selectedTabInfo = vm.matterDashboardConfigs.Tab2HeaderText + " (" + response.allMatterCounts + ")";
-                    } else {
+                    } else if (vm.tabClicked.toLowerCase() == vm.matterDashboardConfigs.Tab3HeaderText.toLowerCase() && !vm.searchClicked) {
                         vm.selectedTabInfo = vm.matterDashboardConfigs.Tab3HeaderText + " (" + response.pinnedMatterCounts + ")";
                     }
                     if (!$scope.$$phase) {
@@ -406,8 +411,8 @@
                     vm.pagination();
                     if (response == "" ||
                             (vm.selectedTab == vm.matterDashboardConfigs.Tab2HeaderText && response.allMatterCounts == 0) ||
-                            (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText && response.myMatterCounts == 0) ||
-                            (vm.selectedTab == vm.matterDashboardConfigs.Tab3HeaderText && response.pinnedMatterCounts == 0)) {
+                            (vm.selectedTab == vm.matterDashboardConfigs.Tab1HeaderText && response.myMatterCounts == 0 && !vm.searchClicked) ||
+                            (vm.selectedTab == vm.matterDashboardConfigs.Tab3HeaderText && response.pinnedMatterCounts == 0 && !vm.searchClicked)) {
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = false;
                         vm.nodata = true;
@@ -422,6 +427,7 @@
 
             //#region This api will get all matters which are pinned and this will be invoked when the user clicks on "Pinned Matters Tab"
             vm.getMatterPinned = function () {
+                vm.searchClicked = false;
                 vm.matterGridOptions.data = [];
                 vm.tabClicked = "Pinned Matters";
                 vm.selectedTab = vm.matterDashboardConfigs.Tab3HeaderText;
@@ -433,6 +439,7 @@
                 vm.selectedClients = "";
                 vm.startdate = "";
                 vm.enddate = "";
+                vm.searchText = "";
                 angular.element("input[name='practiceGroup']:checkbox").prop('checked', false);
                 angular.element("input[name='clients']:checkbox").prop('checked', false);
                 angular.element("input[name='areaofLaw']:checkbox").prop('checked', false);
@@ -492,6 +499,33 @@
 
             //#regionThis search function will be used when the user enters some text in the search text box and presses search button
             vm.searchMatters = function (val) {
+                var searchMattersSearchRequest = {
+                    Client: {
+                        Url: configs.global.repositoryUrl
+                    },
+                    SearchObject: {
+                        PageNumber: 1,
+                        ItemsPerPage: gridOptions.paginationPageSize,
+                        SearchTerm: '',
+                        Filters: {
+                            ClientsList: [""],
+                            PGList: [""],
+                            AOLList: [""],
+                            FromDate: "",
+                            ToDate: "",
+                            FilterByMe: 0,
+                            PracticeGroup: "",
+                            AreaOfLaw: "",
+                            SubareaOfLaw: ""
+                        },
+                        Sort: {
+                            ByProperty: 'LastModifiedTime',
+                            Direction: 1,
+                            ByColumn: "",
+                            SortAndFilterPinnedData: false
+                        }
+                    }
+                };
                 var finalSearchText = "";
                 if (val != "") {
                     if (val.indexOf("(") == 0 && val.indexOf(")") == val.length - 1) {
@@ -507,21 +541,31 @@
                     }
                 }
                 vm.pagenumber = 1;
-                jsonMatterSearchRequest.SearchObject.PageNumber = vm.pagenumber;
-                jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
-                jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
-                return matterDashBoardResource.get(jsonMatterSearchRequest).$promise;
+                searchMattersSearchRequest.SearchObject.PageNumber = vm.pagenumber;
+                searchMattersSearchRequest.SearchObject.SearchTerm = finalSearchText;
+                searchMattersSearchRequest.SearchObject.Sort.Direction = 1;
+                return matterDashBoardResource.get(searchMattersSearchRequest).$promise;
             }
             //#endregion
 
             //#region
             vm.typeheadselect = function (index, selected) {
+                vm.searchClicked = true;
+                vm.lazyloaderdashboard = false;
+                vm.displaypagination = false;
+                vm.divuigrid = false;
+                vm.nodata = false;
+                vm.matterid = 1;
+                vm.mattername = "All Matters";
                 angular.element('#allMatters').addClass("active");
                 angular.element('#myMatters').removeClass("active");
                 angular.element('#pinMatters').removeClass("active");
+                vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
+                vm.pagenumber = 1;
+                vm.sortbytext = vm.matterDashboardConfigs.DropDownOptionText;
                 var searchToText = '';
                 var finalSearchText = '';
-                vm.displaypagination = false;
+                vm.tabClicked = vm.matterDashboardConfigs.Tab2HeaderText;
                 if (selected != "") {
 
                     if (selected.lastIndexOf("(") > 0 && selected.lastIndexOf(")") == selected.length - 1) {
@@ -548,7 +592,9 @@
 
             //#region for searching matters when entering text in serach box
             vm.searchText = "";
+            vm.searchClicked = false;
             vm.searchByTerm = function () {
+                vm.searchClicked = true;
                 vm.lazyloaderdashboard = false;
                 vm.displaypagination = false;
                 vm.divuigrid = false;
@@ -559,7 +605,9 @@
                 angular.element('#myMatters').removeClass("active");
                 angular.element('#pinMatters').removeClass("active");
                 vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
+                vm.tabClicked == vm.matterDashboardConfigs.Tab2HeaderText;
                 vm.pagenumber = 1;
+                vm.sortbytext = vm.matterDashboardConfigs.DropDownOptionText;
                 var searchToText = '';
                 var finalSearchText = '';
                 if (vm.searchText != "") {
@@ -590,6 +638,8 @@
 
 
             vm.myMatters = function () {
+                vm.searchText = "";
+                vm.searchClicked = false;
                 vm.matterGridOptions.data = [];
                 vm.tabClicked = "My Matters";
                 vm.selectedTab = vm.matterDashboardConfigs.Tab1HeaderText;
@@ -612,6 +662,12 @@
                         finalSearchText = commonFunctions.searchFilter(vm.searchText);
                     }
                 }
+                jsonMatterSearchRequest.SearchObject.Filters.ClientsList = [];
+                jsonMatterSearchRequest.SearchObject.Filters.PracticeGroup = "";
+                jsonMatterSearchRequest.SearchObject.Filters.AreaOfLaw = "";
+                jsonMatterSearchRequest.SearchObject.Filters.SubareaOfLaw = "";
+                jsonMatterSearchRequest.SearchObject.Filters.FromDate = "";
+                jsonMatterSearchRequest.SearchObject.Filters.ToDate = "";
                 jsonMatterSearchRequest.SearchObject.SearchTerm = finalSearchText;
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 1;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
@@ -1507,7 +1563,7 @@
 
             //Call search api on page load
             //$interval(function () { vm.getMatterCounts(); }, 800, 3);
-            
+
 
 
             //#region For Sorting by Alphebatical or Created date
@@ -1988,6 +2044,7 @@
                 angular.element('#allMatters').addClass("active");
                 angular.element('#myMatters').removeClass("active");
                 angular.element('#pinMatters').removeClass("active");
+                vm.searchClicked = true;
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
                 vm.displaypagination = false;
@@ -2031,6 +2088,9 @@
                 if (vm.enddate != "" && vm.enddate != undefined) {
                     enddate = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
                 }
+                if (vm.selected == "") {
+                    jsonMatterSearchRequest.SearchObject.SearchTerm = "";
+                }
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.Filters.ClientsList = clientArray;
                 //jsonMatterSearchRequest.SearchObject.Filters.PGList = pglistArray;
@@ -2064,17 +2124,17 @@
                                     });
                                 });
                                 vm.matterGridOptions.data = response;
-                                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
-                                jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
-                                jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
+                                //jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
+                                //jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
+                                //jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
                                 vm.getMatterCounts();
 
                             }
                             else {
                                 vm.matterGridOptions.data = response;
-                                jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
-                                jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
-                                jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
+                                //jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
+                                //jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
+                                //jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
                                 vm.getMatterCounts();
                             }
                             $interval(function () { vm.setPaginationHeight() }, 500, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
@@ -2234,7 +2294,7 @@
                 else {
                     angular.element('.jsonGridFooter').css("top", height + 180);
                 }
-                
+
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
@@ -2252,7 +2312,7 @@
                 }
             }
             //#endregion
-          
+
             //#region For removing the active class from the tabs that are not selected
             vm.hideTabs = function ($event) {
                 if (!vm.lazyloaderdashboard) {
