@@ -129,7 +129,7 @@
             //For setting dynamic height to the grid
             vm.getTableHeight = function () {
                 return {
-                    height: ($window.innerHeight - 100) + "px"
+                    height: ($window.innerHeight - 95) + "px"
                 };
             };
 
@@ -2566,7 +2566,7 @@
             //#region setting the grid options when window is resized
 
             angular.element($window).bind('resize', function () {
-                angular.element('#mattergrid .ui-grid').css('height', $window.innerHeight - 115);
+                angular.element('#mattergrid .ui-grid').css('height', $window.innerHeight - 90);
                 angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
                 angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
                 if ($window.innerWidth < 360) {
