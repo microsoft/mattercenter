@@ -67,6 +67,8 @@
             $rootScope.dispPersonal = function ($event) {
                 $event.stopPropagation();
                 $rootScope.contextualhelp = false;
+                angular.element('.popcontent').css('display', 'none');
+                angular.element('.dropdown').removeClass("open");
                 $rootScope.dispcontextualhelpinner = true;
                 if ($rootScope.dispinner) {
                     $rootScope.displayinfo = true;

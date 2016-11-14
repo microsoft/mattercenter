@@ -150,7 +150,7 @@
             }
             else {
                 return {
-                    height: ($window.innerHeight - 110) + "px"
+                    height: ($window.innerHeight - 95) + "px"
                 }
             }
         };
