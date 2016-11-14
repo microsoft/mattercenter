@@ -254,7 +254,10 @@
 .errTextMatterName {
     min-height: 55px;
     top: 14px !important;
-    left: 24px;
+    left: 24px;    
+}
+.errTextMatterNameWidth{
+    width:400px !important;
 }
 
 .errPopUpMatterClient {
@@ -537,6 +540,9 @@
         min-height: 55px;
         top: 14px !important;
         left: 24px;
+    }
+    .errTextMatterNameWidth{
+        width:400px !important;
     }
 
     .errPopUpMatterClient {
@@ -1200,8 +1206,9 @@
 }
 
 .manageUsers {
-    max-height: 400px;
+    max-height: 500px;
     overflow: auto;
+    min-height:500px;
 }
 
 .segoUIFont {
