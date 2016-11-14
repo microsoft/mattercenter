@@ -62,8 +62,7 @@
                 cm.levelFiveList = [];
                 cm.createContent.Tab1Textbox5Label = cm.createContent.Tab1Textbox5LabelForLevel5;
             }
-
-
+            var specialCharactersRegExp = configs.matter;
             //var managedColumns = { }
             //   for (var i = 0; i < cm.taxonomyHierarchyLevels; i++) {
             //       var columnName = configs.contentTypes.managedColumns["ColumnName" +(i +1)];
@@ -1034,7 +1033,8 @@
             cm.checkValidMatterName = function () {
                 oPageOneState.oValidMatterName = undefined;
                 var bInValid = false;
-                var RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
+                // var RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
+                var RegularExpression = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterTitle);
                 var sCurrMatterName = cm.matterName.trim();
                 if (null !== sCurrMatterName && "" !== sCurrMatterName) {
                     var arrValidMatch = sCurrMatterName.match(RegularExpression);
@@ -3177,14 +3177,15 @@
                 if (iCurrPage == 1) {
 
                     var windowWidth = GetWidth();
-                    var RegularExpression;
+                    var RegularExpressionForMatterName, RegularExpressionForMatterID;
                     if (undefined !== cm.selectedClientName && null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
                         if ("" !== cm.clientId.trim() && null !== cm.clientId) {
                             var bInValid = false;
-                            RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
+                            // RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
+                            RegularExpressionForMatterName = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterTitle);
                             var sCurrMatterName = cm.matterName.trim();
                             if (null !== sCurrMatterName && "" !== sCurrMatterName) {
-                                var arrValidMatch = sCurrMatterName.match(RegularExpression);
+                                var arrValidMatch = sCurrMatterName.match(RegularExpressionForMatterName);
                                 if (null === arrValidMatch || arrValidMatch[0] !== sCurrMatterName) {
                                     bInValid = false;
                                 } else {
@@ -3200,9 +3201,10 @@
                                         bInValid = false;
                                         // if (cm.matterId && "" !== cm.matterId.trim() && null != cm.matterId) {
                                         var sCurrentMatterId = cm.matterId;
+                                        RegularExpressionForMatterID = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterId);
                                         if (undefined !== sCurrentMatterId && null !== sCurrentMatterId && "" !== sCurrentMatterId) {
                                             sCurrentMatterId = sCurrentMatterId.trim();
-                                            var arrValidMatch = sCurrentMatterId.match(RegularExpression);
+                                            var arrValidMatch = sCurrentMatterId.match(RegularExpressionForMatterID);
                                             if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterId) {
                                                 bInValid = false;
                                             } else {
@@ -3219,26 +3221,15 @@
                                         if (bInValid) {
                                             if (cm.isMatterDescriptionMandatory) {
                                                 var sCurrentMatterDesc = cm.matterDescription;
-                                                if (undefined !== sCurrentMatterDesc && null !== sCurrentMatterDesc && "" !== sCurrentMatterDesc) {
-                                                    sCurrentMatterDesc = sCurrentMatterDesc.trim(); bInValid = false;
-                                                    var arrValidMatch = sCurrentMatterDesc.match(RegularExpression);
-                                                    if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterDesc) {
-                                                        bInValid = false;
-                                                    } else {
-                                                        bInValid = true;
-                                                    }
-                                                }
-                                                else {
-                                                    cm.errTextMsg = cm.createContent.ErrorMessageEntityDescription;
-                                                        //"Enter a description for this matter.";
-
-                                                    showErrorNotification("matterdescription");
-                                                    cm.errorBorder = "matterdescription";
-                                                    cm.errorPopUpBlock = true; return false;
-                                                }
+                                                bInValid= matterDescriptionValidation(sCurrentMatterDesc);
                                             }
-                                            else {                                                
-                                                bInValid = true;
+                                            else {
+                                                if (cm.matterDescription != "") {
+                                                    var sCurrentMatterDesc = cm.matterDescription;
+                                                    bInValid = matterDescriptionValidation(sCurrentMatterDesc);
+                                                } else {
+                                                    bInValid = true;
+                                                }
                                             }
 
                                             // if (cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
@@ -3297,7 +3288,7 @@
                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityNameSpecialCharacters;
                                     //"Please enter a valid Matter name which contains only alphanumeric characters and spaces";
                                 cm.errorBorder = "mattername";
-                                showErrorNotification("mattername");
+                                showErrorNotification("mattername");                               
                                 cm.errorPopUpBlock = true; return false;
                             }
 
@@ -3387,6 +3378,28 @@
 
             }
 
+            function matterDescriptionValidation(sCurrentMatterDesc) {
+                var bInValid = false;
+                if (undefined !== sCurrentMatterDesc && null !== sCurrentMatterDesc && "" !== sCurrentMatterDesc) {
+                   var RegularExpressionForMatterDescription = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterDescription);
+                    sCurrentMatterDesc = sCurrentMatterDesc.trim(); bInValid = false;
+                    var arrValidMatch = sCurrentMatterDesc.match(RegularExpressionForMatterDescription);
+                    if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterDesc) {
+                        bInValid = false;
+                    } else {
+                        bInValid = true;
+                    }
+                    return bInValid;
+                }
+                else {
+                    cm.errTextMsg = cm.createContent.ErrorMessageEntityDescription;
+                    //"Enter a description for this matter.";
+                    showErrorNotification("matterdescription");
+                    cm.errorBorder = "matterdescription";
+                    cm.errorPopUpBlock = true; return false;
+                }
+            }
+
 
             function showErrorNotification(errorCase) {
                 if (errorCase && errorCase != "") {
@@ -3410,7 +3423,9 @@
                             else {
                                 matterErrorEle.classList.add("errPopUpMatterNameWithOutMatterID");
                             }
-
+                            if (cm.errTextMsg == cm.createContent.ErrorMessageEntityNameSpecialCharacters) {
+                                matterErrorTextEle.classList.add("errTextMatterNameWidth");
+                            }
                             matterErrorTrinageleBlockEle.classList.add("errTringleBlockMatterName");
                             matterErrorTrinagleBorderEle.classList.add("errTringleBorderBlockMatterName");
                             matterErrorTextEle.classList.add("errTextMatterName");

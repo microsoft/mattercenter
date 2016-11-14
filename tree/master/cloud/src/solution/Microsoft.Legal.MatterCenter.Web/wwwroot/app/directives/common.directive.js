@@ -407,10 +407,12 @@
 
 
     'use strict'
-    function dropdown() {
+    function dropdown($rootScope) {
         return {
             restrict: 'AE',
             link: function (scope, element, attrs) {
+                $rootScope.displayinfo = false;
+                $rootScope.dispinner = true;
                 $(element).click(function (e) {
                     var obj = e.target.getBoundingClientRect();
                     if (obj.top > 450) {
@@ -490,7 +492,7 @@
     app.directive('uiGridMenuButton', ['$window', '$timeout', uiGridMenuButton]);
     //Adding Window
     app.directive('uiGridViewport', ['$window', uiGridViewport]);
-    app.directive('dropdown', [dropdown]);
+    app.directive('dropdown', ['$rootScope', dropdown]);
     app.directive('assignteamkeydown', [assignTeamKeyDown]);
 })();
 
