@@ -36,6 +36,16 @@ textarea {
 }
 
 
+@media (max-width: 450px) {
+    .PersonalInfoFlyout {
+        display: none !important;
+    }
+
+    #ProfileSwitcher {
+        display: none !important;
+    }
+}
+
 @media (max-width: 320px) {
     .width25 {
         width: 5% !important;
@@ -59,6 +69,17 @@ textarea {
 @media(max-width:347px) {
     .width25 {
         width: 5% !important;
+    }
+}
+
+@media screen and (max-width: 767px) and (min-width: 351px) {
+    .flyoutwidth {
+        width: 290px !important;
+    }
+}
+@media screen and (max-width: 350px)  {
+    .flyoutwidth {
+        width: 238px !important;
     }
 }
 
@@ -358,9 +379,9 @@ textarea {
         left: 27px !important;
     }
 
-    .flyoutwidth {
+    /*.flyoutwidth {
         width: 290px !important;
-    }
+    }*/
 
     .mainSearch {
         float: right;
@@ -1536,4 +1557,8 @@ textarea {
 
 #mainselect .dropdown-menu {
     min-width: 148px;
+}
+
+#mattersGrid .ui-grid-cell-contents, #Documents .ui-grid-cell-contents{
+    cursor:default;
 }

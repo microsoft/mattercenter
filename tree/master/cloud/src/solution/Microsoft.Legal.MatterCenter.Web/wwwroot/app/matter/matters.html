@@ -58,7 +58,7 @@
                         <button type="button" class="btn btn-default" data-toggle="dropdown" ng-click="vm.showmatterdrop($event)"><span class="caret"></span></button>
                     </div>
                 </div>
-                <ul class="col-xs-12 mattersdrop" ng-if="vm.mattersdrop">
+                <ul class="col-xs-12 mattersdrop" ng-show="vm.mattersdrop">
                     <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item1}" ng-click="vm.SetMatters(1,vm.matterConfigContent.Dropdown1Item1)">{{vm.matterConfigContent.Dropdown1Item1}}</li>
                     <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item2}" ng-click="vm.SetMatters(2,vm.matterConfigContent.Dropdown1Item2)">{{vm.matterConfigContent.Dropdown1Item2}}</li>
                     <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.mattername==vm.matterConfigContent.Dropdown1Item3}" ng-click="vm.SetMatters(3,vm.matterConfigContent.Dropdown1Item3)">{{vm.matterConfigContent.Dropdown1Item3}}</li>
