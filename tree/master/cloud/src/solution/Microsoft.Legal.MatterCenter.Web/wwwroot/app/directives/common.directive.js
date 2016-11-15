@@ -107,6 +107,14 @@
                 $(element).click(function (e) {
                     $rootScope.dispcontextualhelpinner = true;
                     $rootScope.contextualhelp = false;
+                    $rootScope.displayinfo = false;
+                    $rootScope.dispinner = true;
+                    $rootScope.appMenuFlyOut = false;
+                    $rootScope.flagAppMenuFlyOut = true;
+                    $(".topheader").css("z-index", "4");
+                    $(".CloseSwitcher").addClass("hide");
+                    $(".OpenSwitcher").removeClass("hide");
+                    $(".MenuCaption").removeClass("hideMenuCaption");
                     var obj = "";
                     obj = eval('(' + attrs.details + ')');
                     if (obj.matterSubAreaOfLaw == "") {
@@ -214,6 +222,14 @@
                 $(element).click(function (e) {
                     $rootScope.dispcontextualhelpinner = true;
                     $rootScope.contextualhelp = false;
+                    $rootScope.displayinfo = false;
+                    $rootScope.dispinner = true;
+                    $rootScope.appMenuFlyOut = false;
+                    $rootScope.flagAppMenuFlyOut = true;
+                    $(".topheader").css("z-index", "4");
+                    $(".CloseSwitcher").addClass("hide");
+                    $(".OpenSwitcher").removeClass("hide");
+                    $(".MenuCaption").removeClass("hideMenuCaption");
                     var obj = "";
                     obj = eval('(' + attrs.details + ')');
                     if (obj.documentMatter == "") {

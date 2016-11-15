@@ -964,7 +964,7 @@
                             documentClient: currentRowData.documentClient,
                             documentClientId: currentRowData.documentClientId,
                             documentClientUrl: currentRowData.documentClientUrl,
-                            documentMatter: currentRowData.documentMatter,
+                            documentMatter: currentRowData.documentMatterName,
                             documentMatterId: currentRowData.documentMatterId,
                             documentOwner: currentRowData.documentOwner,
                             documentUrl: currentRowData.documentUrl,

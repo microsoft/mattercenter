@@ -70,12 +70,19 @@
                 angular.element('.popcontent').css('display', 'none');
                 angular.element('.dropdown').removeClass("open");
                 $rootScope.dispcontextualhelpinner = true;
+                angular.element('.mattersdrop').addClass('ng-hide');
                 if ($rootScope.dispinner) {
+                    if ($rootScope.pageIndex == 4 && $window.innerWidth < 675) {
+                        angular.element('.zindex6').css('z-index', '2');
+                    }
                     $rootScope.displayinfo = true;
                     $rootScope.dispinner = false;
                 } else {
                     $rootScope.displayinfo = false;
                     $rootScope.dispinner = true;
+                    if ($rootScope.pageIndex == 4 && $window.innerWidth < 675) {
+                        angular.element('.zindex6').css('z-index', '6');
+                    }
                 }
             }
 
@@ -111,6 +118,10 @@
             $rootScope.dispContextualHelp = function ($event) {
                 angular.element('.popcontent').css('display', 'none');
                 angular.element('.dropdown').removeClass("open");
+                vm.mattersdrop = false;
+                vm.mattersdropinner = false;
+                vm.documentsdrop = false;
+                vm.docdropinner = true;
                 $rootScope.displayinfo = false;
                 $rootScope.dispinner = true;
                 $event.stopPropagation();
@@ -239,6 +250,8 @@
 
 
             vm.menuClick = function () {
+                angular.element('.popcontent').css('display', 'none');
+                angular.element('.dropdown').removeClass("open");
                 if ($rootScope.flagAppMenuFlyOut) {
                     $rootScope.appMenuFlyOut = true;
                     $rootScope.flagAppMenuFlyOut = false;
@@ -257,11 +270,11 @@
                 //var oAppMenuFlyout = $(".AppMenuFlyout");
                 //if (!(oAppMenuFlyout.is(":visible"))) {
                 //    //// Display the close icon and close the fly out
-                    
+
                 //    //oAppMenuFlyout.slideDown();
                 //} else {
                 //    //oAppMenuFlyout.slideUp();
-                    
+
                 //}
             }
 

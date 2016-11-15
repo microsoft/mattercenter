@@ -247,10 +247,10 @@
             </div>
             <div class="col-xs-12 mainsort docSortbyWidth">
                 <div class="col-xs-offset-8 col-xs-4 docsortby">
-                    <div class="pad0 docSortbyText">
+                    <div class="pad0 docSortbyText" ng-click="vm.showsortby($event)">
                         <span>{{vm.documentDashboardConfigs.LabelSortByText}} </span>
                         <span>{{vm.sortbytext}}</span>
-                        <img alt="{{vm.documentDashboardConfigs.LabelSortByTitle}}" class="" ng-click="vm.showsortby($event)" title="{{vm.documentDashboardConfigs.LabelSortByTitle}}" src="../Images/icon-combobox.png" />
+                        <img alt="{{vm.documentDashboardConfigs.LabelSortByTitle}}" class="" title="{{vm.documentDashboardConfigs.LabelSortByTitle}}" src="../Images/icon-combobox.png" />
                     </div>
                     <div class="docExportIcon" ng-if="vm.center!='mattercenter'">
                         <span class="img-xls" ng-click="vm.export()" ng-show="vm.lazyloaderdashboard">

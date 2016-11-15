@@ -1595,7 +1595,7 @@
                 vm.clientfilter = false;
                 vm.clientSearchTerm = '';
                 searchRequest.SearchObject.Filters.ClientName = '';
-              
+
                 vm.attorneyfilter = false;
                 vm.attorneySearchTerm = '';
                 searchRequest.SearchObject.Filters.ResponsibleAttorneys = '';
@@ -1603,7 +1603,7 @@
                 vm.practiceGroupfilter = false;
                 vm.practiceGroupSearchTerm = '';
                 searchRequest.SearchObject.Filters.PracticeGroup = "";
-                
+
                 vm.areafilter = false;
                 vm.areaoflawfilter = false;
                 vm.areaSearchTerm = '';
@@ -1626,13 +1626,13 @@
                 vm.modenddate = '';
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = '';
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = '';
-                
+
                 vm.opendatefilter = false;
                 vm.startDate = '';
                 vm.endDate = '';
                 searchRequest.SearchObject.Filters.DateFilters.OpenDateFrom = '';
                 searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = '';
-               
+
                 searchRequest.SearchObject.FilterValue = '';
                 searchRequest.SearchObject.IsUnique = false;
                 searchRequest.SearchObject.UniqueColumnName = '';
@@ -2210,10 +2210,10 @@
                 }
                 else {
                     get(searchRequest, function (response) {
-                        //  vm.lazyloader = true;
+                          vm.lazyloader = true;
                         if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
-                            vm.divuigrid = false;
+                            vm.divuigrid = true;
                             vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
@@ -2246,55 +2246,46 @@
                 }
             }
 
-            vm.clearFilterValuesOnSorting = function()
-            {
-                if(vm.matterfilter  == false && vm.clientfilter == false && vm.areafilter == false &&
+            vm.clearFilterValuesOnSorting = function () {
+                if (vm.matterfilter == false && vm.clientfilter == false && vm.areafilter == false &&
                     vm.areaoflawfilter == false && vm.subareafilter == false && vm.attorneyfilter == false &&
                     vm.practiceGroupfilter == false && vm.projectIDfilter == false && vm.moddatefilter == false
-                     && vm.opendatefilter == false)
-                {
+                     && vm.opendatefilter == false) {
                     vm.clearAllFilter();
                 }
-                else{
-                        if (vm.matterfilter == false)
-                        {
-                            vm.searchTerm = '';
-                        }
-                        if (vm.clientfilter == false)
-                        {
-                            vm.clientSearchTerm = '';
-                        }
-                        if (vm.areafilter == false)
-                        {
-                            vm.areaSearchTerm = '';
-                        }
-                        if (vm.areaoflawfilter == false)
-                        {
-                            vm.areaOfLawSearchTerm = '';
-                        }
-                        if (vm.subareafilter == false)
-                        {
-                            vm.subAreaOfLawSearchTerm = '';
-                        }
-                        if (vm.attorneyfilter == false)
-                        {
-                            vm.attorneySearchTerm = '';
-                        }
-                        if (vm.practiceGroupfilter == false)
-                        {
-                            vm.practiceGroupSearchTerm = '';
-                        }
-                        if (vm.projectIDfilter == false) {
-                            vm.projectIDSearchTerm = '';
-                        }
-                        if (vm.moddatefilter == false) {
-                            vm.modstartdate = '';
-                            vm.modenddate = '';
-                        }
-                        if (vm.opendatefilter == false) {
-                            vm.startDate = '';
-                            vm.endDate = '';
-                        }
+                else {
+                    if (vm.matterfilter == false) {
+                        vm.searchTerm = '';
+                    }
+                    if (vm.clientfilter == false) {
+                        vm.clientSearchTerm = '';
+                    }
+                    if (vm.areafilter == false) {
+                        vm.areaSearchTerm = '';
+                    }
+                    if (vm.areaoflawfilter == false) {
+                        vm.areaOfLawSearchTerm = '';
+                    }
+                    if (vm.subareafilter == false) {
+                        vm.subAreaOfLawSearchTerm = '';
+                    }
+                    if (vm.attorneyfilter == false) {
+                        vm.attorneySearchTerm = '';
+                    }
+                    if (vm.practiceGroupfilter == false) {
+                        vm.practiceGroupSearchTerm = '';
+                    }
+                    if (vm.projectIDfilter == false) {
+                        vm.projectIDSearchTerm = '';
+                    }
+                    if (vm.moddatefilter == false) {
+                        vm.modstartdate = '';
+                        vm.modenddate = '';
+                    }
+                    if (vm.opendatefilter == false) {
+                        vm.startDate = '';
+                        vm.endDate = '';
+                    }
                 }
             }
 
@@ -2630,6 +2621,11 @@
             //#region for showing the matters dropdown in resposive 
             vm.showmatterdrop = function ($event) {
                 $event.stopPropagation();
+                //angular.element('.zindex6').css('z-index', '6');
+                $rootScope.displayinfo = false;
+                $rootScope.dispinner = true;
+                $rootScope.contextualhelp = false;
+                $rootScope.dispcontextualhelpinner = true;
                 if (vm.mattersdropinner) {
                     vm.mattersdrop = true;
                     vm.mattersdropinner = false;
@@ -2642,6 +2638,7 @@
 
             //#region for closing all the dropdowns
             vm.closealldrops = function () {
+                angular.element('.zindex6').css('z-index', '6');
                 vm.mattersdrop = false;
                 vm.mattersdropinner = true;
                 vm.matterheader = true;
