@@ -487,9 +487,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         }
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentId.ToLower())
                         {
-                            ServiceUtility.AddProperty(documentData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("docId").Key,
-                                searchResult[key].ToString());
+                            if (searchResult[key] != null)
+                            {
+                                ServiceUtility.AddProperty(documentData,
+                                    configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("docId").Key,
+                                    searchResult[key].ToString());
+                            }
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyPracticeGroup.ToString().ToLower())
