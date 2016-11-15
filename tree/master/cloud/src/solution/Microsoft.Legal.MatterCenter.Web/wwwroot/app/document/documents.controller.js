@@ -70,6 +70,10 @@
         //#region for showing the matters dropdown in resposive 
         vm.showdocdrop = function ($event) {
             $event.stopPropagation();
+            $rootScope.displayinfo = false;
+            $rootScope.dispinner = true;
+            $rootScope.contextualhelp = false;
+            $rootScope.dispcontextualhelpinner = true;
             if (vm.docdropinner) {
                 vm.documentsdrop = true;
                 vm.docdropinner = false;
@@ -700,7 +704,7 @@
                 }
                 else {
                     finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + vm.selected.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":\"" + vm.selected.trim() + "*\")"
-                }               
+                }
             }
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
             searchRequest.SearchObject.SearchTerm = finalSearchText;
@@ -1081,33 +1085,33 @@
             vm.documentfilter = false;
             vm.searchTerm = '';
             searchRequest.SearchObject.Filters.Name = '';
-            
+
             vm.clientfilter = false;
             vm.clientSearchTerm = '';
-            searchRequest.SearchObject.Filters.ClientName = '';            
+            searchRequest.SearchObject.Filters.ClientName = '';
 
             vm.projectNamefilter = false;
             vm.projectSearchTerm = '';
             searchRequest.SearchObject.Filters.ProjectName = '';
-           
+
             vm.checkoutfilter = false;
             vm.checkedSearchTerm = '';
             searchRequest.SearchObject.Filters.DocumentCheckoutUsers = '';
-            
+
             vm.authorfilter = false;
             vm.authorSearchTerm = '';
             searchRequest.SearchObject.Filters.DocumentAuthor = '';
-            
+
             vm.practiceGroupfilter = false;
             vm.practiceGroupSearchTerm = '';
             searchRequest.SearchObject.Filters.PracticeGroup = '';
-            
+
             vm.moddatefilter = false;
             vm.modStartDate = '';
-            vm.modEndDate = '';            
+            vm.modEndDate = '';
             searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = '';
             searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = '';
-           
+
             vm.documentheader = true;
             vm.documentdateheader = true;
 
@@ -1733,7 +1737,7 @@
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.Sort.ByProperty = byproperty;
             searchRequest.SearchObject.Sort.Direction = direction;
-            searchRequest.SearchObject.Sort.ByColumn = bycolumn;     
+            searchRequest.SearchObject.Sort.ByColumn = bycolumn;
             vm.FilterByType();
             vm.sortby = sortby;
             vm.sortexp = sortexp;
