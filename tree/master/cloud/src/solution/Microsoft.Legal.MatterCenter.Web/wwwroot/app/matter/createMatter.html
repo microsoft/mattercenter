@@ -141,7 +141,7 @@
                     <div ng-show="conflictUserResults">
                         <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
                     </div>
-                  
+
                     <div class="gutter"></div>
                     <!--<input class="mediumSmall hasDatepicker" id="txtConflictCheckDate" style="border: 1px solid rgb(200, 200, 200); border-image: none;"   required="" type="text" placeholder="mm/dd/yyyy" pattern="([1-9]|0[1-9]|1[012])[-/.]([1-9]|0[1-9]|[12][0-9]|3[01])[-/.]\d{4}" value="">-->
                     <!--<input type="text" class="form-control" datepicker-popup="mm\dd\yyyy" style="width:150px;" placeholder="mm/dd/yyyy" ng-model="cm.conflictDate" />-->
@@ -185,10 +185,10 @@
                         <div class="gutter">
                             <i ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh pull-left loadingGlyphiconBlockUser"></i>
                         </div>
-                         <div ng-show="blockUserResults">
+                        <div ng-show="blockUserResults">
                             <i class="glyphicon glyphicon-remove"></i> {{cm.createContent.Tab2NoSearchResultText}}
                         </div>
-                      
+
                         <div class="gutter"></div>
                         <div class="large clear" id="areaBlockUser"></div>
                     </section>
@@ -212,7 +212,7 @@
                 <div data-ng-repeat="assignTeam in cm.assignPermissionTeams" class="assignTeam">
                     <div class="row{{$index}} assignNewPerm">
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' assignteamkeydown confirm="false" uservalue="" ng-disabled="assignTeam.disable" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocationsTeam' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}"  typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
+                        <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' assignteamkeydown confirm="false" uservalue="" ng-disabled="assignTeam.disable" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocationsTeam' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
                         <!--<div ng-show='teamAssingnResults'>
                             <i class="glyphicon glyphicon-remove"></i> No Results Found
                         </div>-->
@@ -222,14 +222,14 @@
                         <div class="gutter"></div>
                         <div class="addNewMember" ng-show="cm.showRoles">
                             <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth ">
-                                <select id='roleUser{{assignTeam.assigneTeamRowNumber}}'  ng-disabled="assignTeam.disable" ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
+                                <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' ng-disabled="assignTeam.disable" ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
                             </div>
                         </div>
                         <div class="gutter"></div>
                         <div>
                             <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1">
                                 <div class="mediumSmallRole roleWidth floatContentLeft ddlRoleAssignDiv">
-                                    <select id='permUser{{assignTeam.assigneTeamRowNumber}}'  ng-disabled="assignTeam.disable" ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
+                                    <select id='permUser{{assignTeam.assigneTeamRowNumber}}' ng-disabled="assignTeam.disable" ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
                                 </div>
                             </div>
                         </div>
@@ -279,12 +279,12 @@
                     <img id="loadingImageCreate" ng-show="cm.createBtnDisabled" src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
                 </div>
             </div>
-           
+
         </section>
         <div id="space"></div>
         <div class="row ">
             <div class="col-xs-5">
-                <button class="buttonPrev pull-right marginTop10"  ng-class="{'btnHover' : cm.prevButtonDisabled=== false}" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
+                <button class="buttonPrev pull-right marginTop10" ng-class="{'btnHover' : cm.prevButtonDisabled=== false}" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
             </div>
             <div class="col-xs-6">
                 <button class="buttonPrev pull-left marginTop10" ng-class="{'btnHover' : cm.nextButtonDisabled=== false}" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
@@ -326,7 +326,7 @@
                         <div class="popUpCommonContent popUpMD" id="popupAOLContent">
                             <div class='popUpMDContent ' style="padding:0px !important;" ng-repeat="levelTwoItem in cm.levelTwoList |  filter: {termName: cm.searchLevelTwoText}">
                                 <div ng-class="{popUpSelected : cm.activeLevelTwoItem === levelTwoItem}" ng-click='cm.selectLevelTwoItem(levelTwoItem)' data-value='{{$index}}' documents='' data-foldernamesaol='{{levelTwoItem.folderNames}}' data-areaoflaw-id='{{levelTwoItem.id}}'>
-                                    {{levelTwoItem.termName}}
+                                    <span title="{{levelTwoItem.termName}}" class="pull-left contentTypeWidth"> {{levelTwoItem.termName}}</span>
                                     <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelTwoItem === levelTwoItem}" ng-show="cm.taxonomyHierarchyLevels>2"></i>
                                 </div>
                             </div>
@@ -335,16 +335,14 @@
                 </div>
                 <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " id="divSAOL" style="width:28%;" ng-show="cm.taxonomyHierarchyLevels>=3">
                     <!--<label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft">Sub Area of Law (select matter type)</label>-->
-                    <span style="margin-bottom:5px;">
-                        {{cm.createContent.ColumnName3}}
-                    </span>
+                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName3}}</span>
                     <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=3">
                         <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px; margin-top:5px;">
                             <input class="popUpMDTextArea clear" ng-model="cm.searchLeveThreeText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                             <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
                                 <div class="popUpSALContent " ng-repeat='levelThreeItem in cm.levelThreeList  | filter: {termName: cm.searchLeveThreeText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((cm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='cm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
-                                        {{levelThreeItem.termName}}
+                                        <span title="{{levelThreeItem.termName}}" class="pull-left contentTypeWidth">{{levelThreeItem.termName}}</span>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelThreeItem === levelThreeItem}" ng-show="cm.taxonomyHierarchyLevels>3" class=""></i>
 
                                     </div>
@@ -357,16 +355,14 @@
 
                 <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " id="divSAOL1" style="width:28%;" ng-show="cm.taxonomyHierarchyLevels>=4">
 
-                    <span style="margin-bottom:5px;">
-                        {{cm.createContent.ColumnName4}}
-                    </span>
+                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName4}}</span>
                     <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4">
                         <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px; margin-top:5px;">
                             <input class="popUpMDTextArea clear" ng-model="cm.searchLevelFourText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                             <div class="popUpCommonContent popUpSAL" id="popupSAOLContent1">
                                 <div class="popUpSALContent " ng-repeat='levelFourItem in cm.levelFourList  | filter: {termName: cm.searchLevelFourText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((cm.activeLevelFourItem === levelFourItem) && ((levelFourItem.state==undefined) ||( levelFourItem.state && levelFourItem.state=='enable' ))) , disableBlock:(levelFourItem.state && levelFourItem.state=='disable')}" ng-click='cm.selectLevelFourItem(levelFourItem)' data-state='{{levelFourItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFourItem.id}}' data-display-name='{{levelFourItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFourItem.folderNames}}' data-associated-document-template='{{levelFourItem.documentTemplateNames}}' data-document-template='{{levelFourItem.documentTemplates}}'>
-                                        {{levelFourItem.termName}}
+                                        <span title="{{levelFourItem.termName}}" class="pull-left contentTypeWidth">{{levelFourItem.termName}}</span>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFourItem === levelFourItem}" ng-show="cm.taxonomyHierarchyLevels>4" class=""></i>
 
                                     </div>
@@ -378,16 +374,14 @@
 
                 <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " id="divSAOL1" style="width:28%;" ng-show="cm.taxonomyHierarchyLevels>=5">
 
-                    <span style="margin-bottom:5px;">
-                        {{cm.createContent.ColumnName5}}
-                    </span>
+                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName5}}</span>
                     <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4">
                         <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px; margin-top:5px;">
                             <input class="popUpMDTextArea clear" ng-model="cm.searchLevelFiveText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                             <div class="popUpCommonContent popUpSAL" id="popupSAOLContent2">
                                 <div class="popUpSALContent " ng-repeat='levelFiveItem in cm.levelFiveList  | filter: {termName: cm.searchLevelFiveText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((cm.activeLevelFiveItem === levelFourItem) && ((levelFiveItem.state==undefined) ||( levelFiveItem.state && levelFiveItem.state=='enable' ))) , disableBlock:(levelFiveItem.state && levelFiveItem.state=='disable')}" ng-click='cm.selectLevelFourItem(levelFiveItem)' data-state='{{levelFiveItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFiveItem.id}}' data-display-name='{{levelFiveItem.termName}}' data-isnofolderstructurepresent='{{levelFiveItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFiveItem.folderNames}}' data-associated-document-template='{{levelFiveItem.documentTemplateNames}}' data-document-template='{{levelFiveItem.documentTemplates}}'>
-                                        {{levelFiveItem.termName}}
+                                        <span title="{{levelFiveItem.termName}}" class="pull-left contentTypeWidth">{{levelFiveItem.termName}}</span>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFiveItem === levelFiveItem}" ng-show="cm.taxonomyHierarchyLevels>5" class=""></i>
 
                                     </div>
@@ -461,7 +455,7 @@
                         <div class="popUpCommonContent popUpCommonContentLevel4 popUpMD" id="popupAOLContent">
                             <div class='popUpMDContent ' style="padding:0px !important;" ng-repeat="levelTwoItem in cm.levelTwoList |  filter: {termName: cm.searchLevelTwoText}">
                                 <div ng-class="{popUpSelected : cm.activeLevelTwoItem === levelTwoItem}" ng-click='cm.selectLevelTwoItem(levelTwoItem)' data-value='{{$index}}' documents='' data-foldernamesaol='{{levelTwoItem.folderNames}}' data-areaoflaw-id='{{levelTwoItem.id}}'>
-                                    {{levelTwoItem.termName}}
+                                    <span  title="{{levelTwoItem.termName}}" class="pull-left contentTypeWidth">{{levelTwoItem.termName}}</span>
                                     <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelTwoItem === levelTwoItem}" ng-show="cm.taxonomyHierarchyLevels>2"></i>
                                 </div>
                             </div>
@@ -469,16 +463,14 @@
                     </div>
                 </div>
                 <div class="popMarginRight popUpFloatLeft " id="divSAOL" style="width:225px;" ng-show="cm.taxonomyHierarchyLevels>=3">
-                    <span style="margin-bottom:5px;">
-                        {{cm.createContent.ColumnName3}}
-                    </span>
+                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName3}}</span>
                     <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=3">
                         <div class="popUpFloatLeft popUpBorder popUpBorderLevel4" id="popupSAOLBorder" style="height:213px;width:207px; margin-top:5px;">
                             <input class="popUpMDTextArea clear" ng-model="cm.searchLeveThreeText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                             <div class="popUpCommonContent popUpCommonContentLevel4 popUpSAL" id="popupSAOLContent">
                                 <div class="popUpSALContent " ng-repeat='levelThreeItem in cm.levelThreeList  | filter: {termName: cm.searchLeveThreeText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((cm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='cm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
-                                        {{levelThreeItem.termName}}
+                                        <span title="{{levelThreeItem.termName}}" class="pull-left contentTypeWidth">{{levelThreeItem.termName}}</span>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelThreeItem === levelThreeItem}" ng-show="cm.taxonomyHierarchyLevels>3" class=""></i>
 
                                     </div>
@@ -491,16 +483,14 @@
 
                 <div class="popMarginRight popUpFloatLeft " id="divSAOL1" style="width:225px;" ng-show="cm.taxonomyHierarchyLevels>=4">
 
-                    <span style="margin-bottom:5px;">
-                        {{cm.createContent.ColumnName4}}
-                    </span>
+                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName4}}</span>
                     <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4">
                         <div class="popUpFloatLeft popUpBorder popUpBorderLevel4" id="popupSAOLBorder1" style="height:213px;width:207px; margin-top:5px;">
                             <input class="popUpMDTextArea clear" ng-model="cm.searchLevelFourText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                             <div class="popUpCommonContent popUpCommonContentLevel4 popUpSAL" id="popupSAOLContent1">
                                 <div class="popUpSALContent " ng-repeat='levelFourItem in cm.levelFourList  | filter: {termName: cm.searchLevelFourText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((cm.activeLevelFourItem === levelFourItem) && ((levelFourItem.state==undefined) ||( levelFourItem.state && levelFourItem.state=='enable' ))) , disableBlock:(levelFourItem.state && levelFourItem.state=='disable')}" ng-click='cm.selectLevelFourItem(levelFourItem)' data-state='{{levelFourItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFourItem.id}}' data-display-name='{{levelFourItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFourItem.folderNames}}' data-associated-document-template='{{levelFourItem.documentTemplateNames}}' data-document-template='{{levelFourItem.documentTemplates}}'>
-                                        {{levelFourItem.termName}}
+                                        <span title="{{levelFourItem.termName}}" class="pull-left contentTypeWidth">{{levelFourItem.termName}}</span>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFourItem === levelFourItem}" ng-show="cm.taxonomyHierarchyLevels>4" class=""></i>
 
                                     </div>
@@ -512,16 +502,14 @@
 
                 <div class="popMarginRight popUpFloatLeft " id="divSAOL2" style="width:225px;" ng-show="cm.taxonomyHierarchyLevels>=5">
 
-                    <span style="margin-bottom:5px;">
-                        {{cm.createContent.ColumnName5}}
-                    </span>
+                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName5}}</span>
                     <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4">
                         <div class="popUpFloatLeft popUpBorder popUpBorderLevel4" id="popupSAOLBorder2" style="height:213px;width:207px; margin-top:5px;">
                             <input class="popUpMDTextArea clear" ng-model="cm.searchLevelFiveText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                             <div class="popUpCommonContent popUpCommonContentLevel4 popUpSAL" id="popupSAOLContent2">
                                 <div class="popUpSALContent " ng-repeat='levelFiveItem in cm.levelFiveList  | filter: {termName: cm.searchLevelFiveText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((cm.activeLevelFiveItem === levelFourItem) && ((levelFiveItem.state==undefined) ||( levelFiveItem.state && levelFiveItem.state=='enable' ))) , disableBlock:(levelFiveItem.state && levelFiveItem.state=='disable')}" ng-click='cm.selectLevelFourItem(levelFiveItem)' data-state='{{levelFiveItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFiveItem.id}}' data-display-name='{{levelFiveItem.termName}}' data-isnofolderstructurepresent='{{levelFiveItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFiveItem.folderNames}}' data-associated-document-template='{{levelFiveItem.documentTemplateNames}}' data-document-template='{{levelFiveItem.documentTemplates}}'>
-                                        {{levelFiveItem.termName}}
+                                        <span title="{{levelFiveItem.termName}}" class="pull-left contentTypeWidth">{{levelFiveItem.termName}}</span>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFiveItem === levelFiveItem}" ng-show="cm.taxonomyHierarchyLevels>5" class=""></i>
 
                                     </div>
@@ -595,7 +583,7 @@
                         <div class="popUpCommonContent popUpMD" id="popupAOLContent">
                             <div class='popUpMDContent ' style="padding:0px !important;" ng-repeat="levelTwoItem in cm.levelTwoList |  filter: {termName: cm.searchLevelTwoText}">
                                 <div ng-class="{popUpSelected : cm.activeLevelTwoItem === levelTwoItem}" ng-click='cm.selectLevelTwoItem(levelTwoItem)' data-value='{{$index}}' documents='' data-foldernamesaol='{{levelTwoItem.folderNames}}' data-areaoflaw-id='{{levelTwoItem.id}}'>
-                                    {{levelTwoItem.termName}}
+                                    <span  title="{{levelTwoItem.termName}}" class="pull-left contentTypeWidth">{{levelTwoItem.termName}}</span>
                                     <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelTwoItem === levelTwoItem}" ng-show="cm.taxonomyHierarchyLevels>2"></i>
                                 </div>
                             </div>
@@ -603,16 +591,14 @@
                     </div>
                 </div>
                 <div class="popMarginRight popUpFloatLeft " id="divSAOL" style="width:225px;" ng-show="cm.taxonomyHierarchyLevels>=3">
-                    <span style="margin-bottom:5px;">
-                        {{cm.createContent.ColumnName3}}
-                    </span>
+                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName3}}</span>
                     <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=3">
                         <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder" style="height:213px;width:207px; margin-top:5px;">
                             <input class="popUpMDTextArea clear" ng-model="cm.searchLeveThreeText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                             <div class="popUpCommonContent popUpSAL" id="popupSAOLContent">
                                 <div class="popUpSALContent " ng-repeat='levelThreeItem in cm.levelThreeList  | filter: {termName: cm.searchLeveThreeText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((cm.activeLevelThreeItem === levelThreeItem) && ((levelThreeItem.state==undefined) ||( levelThreeItem.state && levelThreeItem.state=='enable' ))) , disableBlock:(levelThreeItem.state && levelThreeItem.state=='disable')}" ng-click='cm.selectLevelThreeItem(levelThreeItem)' data-state='{{levelThreeItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelThreeItem.id}}' data-display-name='{{levelThreeItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelThreeItem.folderNames}}' data-associated-document-template='{{levelThreeItem.documentTemplateNames}}' data-document-template='{{levelThreeItem.documentTemplates}}'>
-                                        {{levelThreeItem.termName}}
+                                        <span title="{{levelThreeItem.termName}}"  class="pull-left contentTypeWidth">{{levelThreeItem.termName}}</span>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelThreeItem === levelThreeItem}" ng-show="cm.taxonomyHierarchyLevels>3" class=""></i>
 
                                     </div>
@@ -625,16 +611,14 @@
 
                 <div class="popMarginRight popUpFloatLeft " id="divSAOL1" style="width:225px;" ng-show="cm.taxonomyHierarchyLevels>=4">
 
-                    <span style="margin-bottom:5px;">
-                        {{cm.createContent.ColumnName4}}
-                    </span>
+                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName4}}</span>
                     <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4">
                         <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder1" style="height:213px;width:207px; margin-top:5px;">
                             <input class="popUpMDTextArea clear" ng-model="cm.searchLevelFourText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                             <div class="popUpCommonContent popUpSAL" id="popupSAOLContent1">
                                 <div class="popUpSALContent " ng-repeat='levelFourItem in cm.levelFourList  | filter: {termName: cm.searchLevelFourText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((cm.activeLevelFourItem === levelFourItem) && ((levelFourItem.state==undefined) ||( levelFourItem.state && levelFourItem.state=='enable' ))) , disableBlock:(levelFourItem.state && levelFourItem.state=='disable')}" ng-click='cm.selectLevelFourItem(levelFourItem)' data-state='{{levelFourItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFourItem.id}}' data-display-name='{{levelFourItem.termName}}' data-isnofolderstructurepresent='{{levelThreeItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFourItem.folderNames}}' data-associated-document-template='{{levelFourItem.documentTemplateNames}}' data-document-template='{{levelFourItem.documentTemplates}}'>
-                                        {{levelFourItem.termName}}
+                                        <span title="{{levelFourItem.termName}}" class="pull-left contentTypeWidth">{{levelFourItem.termName}}</span>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFourItem === levelFourItem}" ng-show="cm.taxonomyHierarchyLevels>4" class=""></i>
 
                                     </div>
@@ -646,16 +630,14 @@
 
                 <div class="popMarginRight popUpFloatLeft " id="divSAOL2" style="width:225px;" ng-show="cm.taxonomyHierarchyLevels>=5">
 
-                    <span style="margin-bottom:5px;">
-                        {{cm.createContent.ColumnName5}}
-                    </span>
+                    <span style="margin-bottom:5px;">{{cm.createContent.ColumnName5}}</span>
                     <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=4">
                         <div class="popUpFloatLeft popUpBorder" id="popupSAOLBorder2" style="height:213px;width:207px; margin-top:5px;">
                             <input class="popUpMDTextArea clear" ng-model="cm.searchLevelFiveText" style="border: 1px solid rgb(200, 200, 200); border-image: none;width:185px;" spellcheck="true" type="text" placeholder="Search by typing">
                             <div class="popUpCommonContent popUpSAL" id="popupSAOLContent2">
                                 <div class="popUpSALContent " ng-repeat='levelFiveItem in cm.levelFiveList  | filter: {termName: cm.searchLevelFiveText}' style="padding:0px !important;">
                                     <div ng-class="{popUpSelected : ((cm.activeLevelFiveItem === levelFiveItem) && ((levelFiveItem.state==undefined) ||( levelFiveItem.state && levelFiveItem.state=='enable' ))) , disableBlock:(levelFiveItem.state && levelFiveItem.state=='disable')}" ng-click='cm.selectLevelFiveItem(levelFiveItem)' data-state='{{levelFiveItem.state}}' data-value='{{$index}}' data-subareaoflaw-id='{{levelFiveItem.id}}' data-display-name='{{levelFiveItem.termName}}' data-isnofolderstructurepresent='{{levelFiveItem.isNoFolderStructurePresent}}' data-foldernamessal='{{levelFiveItem.folderNames}}' data-associated-document-template='{{levelFiveItem.documentTemplateNames}}' data-document-template='{{levelFiveItem.documentTemplates}}'>
-                                        {{levelFiveItem.termName}}
+                                        <span title="{{levelFiveItem.termName}}" class="pull-left contentTypeWidth">{{levelFiveItem.termName}}</span>
                                         <i ng-class="{'glyphicon glyphicon-chevron-right pull-right' : cm.activeLevelFiveItem === levelFiveItem}" ng-show="cm.taxonomyHierarchyLevels>5" class=""></i>
 
                                     </div>

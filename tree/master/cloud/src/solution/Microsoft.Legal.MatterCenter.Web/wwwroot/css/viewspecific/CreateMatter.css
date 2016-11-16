@@ -787,7 +787,7 @@
     left: 0;
     top: 52px;
     width: 100%;
-    z-index: 1;
+    z-index: 10;
     pointer-events: visible;
 }
 
@@ -1549,6 +1549,10 @@ left: -17px;
 }
 .fontSize875em{
        font-size: 0.875em;
+}
+
+.contentTypeWidth{
+    max-width:90%; min-width:90%;overflow:hidden; text-overflow:ellipsis;
 }
 
 

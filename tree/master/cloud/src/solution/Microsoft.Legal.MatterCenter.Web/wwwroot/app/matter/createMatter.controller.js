@@ -15,6 +15,8 @@
             cm.blockedUserName = undefined;
             cm.defaultConfilctCheck = false;
             cm.createContent = uiconfigs.CreateMatter;
+            cm.canCreateMatterPermission = false;
+            cm.errPermissionMessage = "";
             //cm.createMatterTaxonomyColumnNames = configs.contentTypes.managedColumns;
             cm.header = uiconfigs.Header;
             cm.chkConfilctCheck = undefined;
@@ -102,7 +104,8 @@
                 oSiteUsers: [],
                 oSiteUserNames: [],
                 isClientMappedWithHierachy: false,
-                ConflictRadioCheck: false,               
+                ConflictRadioCheck: false,
+                CanCreateMatterPermission:false,
                 oEmailRegexp: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             }
 
@@ -540,12 +543,15 @@
                     getDefaultMatterConfigurations(siteCollectionPath, function (result) {
                         if (result.isError) {
                             cm.errTextMsg = result.value;
+                            cm.errPermissionMessage = result.value;
                             cm.errorBorder = "client";
                             showErrorNotification("client");
                             cm.errorPopUpBlock = true;
+                            cm.canCreateMatterPermission = false;
 
                         }
                         else {
+                            cm.canCreateMatterPermission = true; cm.errPermissionMessage = "";
                             var dMatterAreaOfLaw = "", dMatterPracticeGroup = "", dMatterSubAreOfLaw = "", dMatterTypes = "", dPrimaryMatterType = "", dMatterUsers = "", dMatterUserEmails = "", dMatterPermissions = "", dMatterRoles = "";
                             cm.conflictUsers.assignedUser = "";
                             cm.conflictUsers.assignedAllUserNamesAndEmails = "";
@@ -614,7 +620,7 @@
                             //   dMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup?defaultMatterConfig.MatterPracticeGroup: "";
                             //   dMatterSubAreOfLaw = defaultMatterConfig.?: "";
                             dMatterTypes = defaultMatterConfig.MatterTypes ? defaultMatterConfig.MatterTypes : "";
-                            cm.showRoles = defaultMatterConfig.ShowRole!=undefined ? defaultMatterConfig.ShowRole : true;
+                            cm.showRoles = defaultMatterConfig.ShowRole != undefined ? defaultMatterConfig.ShowRole : (cm.isBackwardCompatible ? false : true);
                             cm.showMatterId = defaultMatterConfig.ShowMatterId != undefined ? defaultMatterConfig.ShowMatterId : true;
                             cm.matterIdType = defaultMatterConfig.MatterIdType ? defaultMatterConfig.MatterIdType : "Custom";
                             setMatterId(cm.matterIdType);
@@ -1753,6 +1759,7 @@
                     cm.showMatterId = oPageData.showMatterId;
                     cm.matterIdType = oPageData.matterIdType;
                     cm.conflictRadioCheck = oPageData.conflictRadioCheck;
+                    cm.canCreateMatterPermission = oPageData.CanCreateMatterPermission;
                     //  cm.areaOfLawTerms = [];
                     //  cm.subAreaOfLawTerms = [];
                     //  cm.documentTypeLawTerms = [];
@@ -3086,6 +3093,7 @@
                 oPageOneState.MatterDescription = cm.matterDescription.trim();
                 oPageOneState.oSiteUsers = cm.oSiteUsers;
                 oPageOneState.oSiteUserNames = cm.oSiteUserNames;
+                oPageOneState.CanCreateMatterPermission = cm.canCreateMatterPermission;
                 //  oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
                 //   oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
                 oPageOneState.matterGUID = cm.matterGUID;
@@ -3179,123 +3187,132 @@
                     var windowWidth = GetWidth();
                     var RegularExpressionForMatterName, RegularExpressionForMatterID;
                     if (undefined !== cm.selectedClientName && null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
-                        if ("" !== cm.clientId.trim() && null !== cm.clientId) {
-                            var bInValid = false;
-                            // RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
-                            RegularExpressionForMatterName = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterTitle);
-                            var sCurrMatterName = cm.matterName.trim();
-                            if (null !== sCurrMatterName && "" !== sCurrMatterName) {
-                                var arrValidMatch = sCurrMatterName.match(RegularExpressionForMatterName);
-                                if (null === arrValidMatch || arrValidMatch[0] !== sCurrMatterName) {
-                                    bInValid = false;
-                                } else {
-                                    bInValid = true;
-                                }
-                            }
-                            if (bInValid) {
-                                //  var matVal = cm.checkValidMatterName();
-                                oPageOneState.isNextClick = true;
-                                if (undefined !== oPageOneState.oValidMatterName) {
-                                    if (oPageOneState.oValidMatterName) {
-                                        //  RegularExpression = new RegExp(oMatterProvisionConstants.Special_Character_Expression_Matter_Id);
+                        if (cm.canCreateMatterPermission) {
+                            if ("" !== cm.clientId.trim() && null !== cm.clientId) {
+                                var bInValid = false;
+                                // RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
+                                RegularExpressionForMatterName = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterTitle);
+                                var sCurrMatterName = cm.matterName.trim();
+                                if (null !== sCurrMatterName && "" !== sCurrMatterName) {
+                                    var arrValidMatch = sCurrMatterName.match(RegularExpressionForMatterName);
+                                    if (null === arrValidMatch || arrValidMatch[0] !== sCurrMatterName) {
                                         bInValid = false;
-                                        // if (cm.matterId && "" !== cm.matterId.trim() && null != cm.matterId) {
-                                        var sCurrentMatterId = cm.matterId;
-                                        RegularExpressionForMatterID = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterId);
-                                        if (undefined !== sCurrentMatterId && null !== sCurrentMatterId && "" !== sCurrentMatterId) {
-                                            sCurrentMatterId = sCurrentMatterId.trim();
-                                            var arrValidMatch = sCurrentMatterId.match(RegularExpressionForMatterID);
-                                            if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterId) {
-                                                bInValid = false;
-                                            } else {
-                                                bInValid = true;
-                                            }
-                                        }
-                                        else {
-                                            cm.errTextMsg = cm.createContent.ErrorMessageEntityId1;
-                                                //"Enter a matter ID.";
-                                            cm.errorBorder = "matterid";
-                                            showErrorNotification("matterid");
-                                            cm.errorPopUpBlock = true; return false;
-                                        }
-                                        if (bInValid) {
-                                            if (cm.isMatterDescriptionMandatory) {
-                                                var sCurrentMatterDesc = cm.matterDescription;
-                                                bInValid= matterDescriptionValidation(sCurrentMatterDesc);
-                                            }
-                                            else {
-                                                if (cm.matterDescription != "") {
-                                                    var sCurrentMatterDesc = cm.matterDescription;
-                                                    bInValid = matterDescriptionValidation(sCurrentMatterDesc);
+                                    } else {
+                                        bInValid = true;
+                                    }
+                                }
+                                if (bInValid) {
+                                    //  var matVal = cm.checkValidMatterName();
+                                    oPageOneState.isNextClick = true;
+                                    if (undefined !== oPageOneState.oValidMatterName) {
+                                        if (oPageOneState.oValidMatterName) {
+                                            //  RegularExpression = new RegExp(oMatterProvisionConstants.Special_Character_Expression_Matter_Id);
+                                            bInValid = false;
+                                            // if (cm.matterId && "" !== cm.matterId.trim() && null != cm.matterId) {
+                                            var sCurrentMatterId = cm.matterId;
+                                            RegularExpressionForMatterID = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterId);
+                                            if (undefined !== sCurrentMatterId && null !== sCurrentMatterId && "" !== sCurrentMatterId) {
+                                                sCurrentMatterId = sCurrentMatterId.trim();
+                                                var arrValidMatch = sCurrentMatterId.match(RegularExpressionForMatterID);
+                                                if (null === arrValidMatch || arrValidMatch[0] !== sCurrentMatterId) {
+                                                    bInValid = false;
                                                 } else {
                                                     bInValid = true;
                                                 }
                                             }
-
-                                            // if (cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
+                                            else {
+                                                cm.errTextMsg = cm.createContent.ErrorMessageEntityId1;
+                                                //"Enter a matter ID.";
+                                                cm.errorBorder = "matterid";
+                                                showErrorNotification("matterid");
+                                                cm.errorPopUpBlock = true; return false;
+                                            }
                                             if (bInValid) {
-                                                if (cm.selectedDocumentTypeLawTerms.length > 0) {
-                                                    storeMatterDataToLocalStorageFirstPage();
-                                                    return true;
+                                                if (cm.isMatterDescriptionMandatory) {
+                                                    var sCurrentMatterDesc = cm.matterDescription;
+                                                    bInValid= matterDescriptionValidation(sCurrentMatterDesc);
                                                 }
                                                 else {
-                                                    cm.errTextMsg = cm.createContent.ErrorMessageSelectType;
+                                                    if (cm.matterDescription != "") {
+                                                        var sCurrentMatterDesc = cm.matterDescription;
+                                                        bInValid = matterDescriptionValidation(sCurrentMatterDesc);
+                                                    } else {
+                                                        bInValid = true;
+                                                    }
+                                                }
+
+                                                // if (cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
+                                                if (bInValid) {
+                                                    if (cm.selectedDocumentTypeLawTerms.length > 0) {
+                                                        storeMatterDataToLocalStorageFirstPage();
+                                                        return true;
+                                                    }
+                                                    else {
+                                                        cm.errTextMsg = cm.createContent.ErrorMessageSelectType;
                                                         //"Select matter type by area of law for this matter";
-                                                    cm.errorBorder = ""; showErrorNotification("selecttemp");
+                                                        cm.errorBorder = ""; showErrorNotification("selecttemp");
+                                                        cm.errorPopUpBlock = true; return false;
+                                                    }
+                                                }
+                                                else {
+                                                    // alert("Enter a description for this matter");
+                                                    cm.errTextMsg = cm.createContent.ErrorMessageSpecialCharacters;
+                                                    //"Please enter a valid text which contains only alphanumeric characters, spaces & hyphen";
+                                                    //  cm.errTextMsg = "Enter a description for this matter.";
+                                                    //   cm.errorPopUpBlock = "matterDescription";
+                                                    showErrorNotification("matterdescription");
+                                                    cm.errorBorder = "matterdescription";
                                                     cm.errorPopUpBlock = true; return false;
+
                                                 }
                                             }
                                             else {
-                                                // alert("Enter a description for this matter");
                                                 cm.errTextMsg = cm.createContent.ErrorMessageSpecialCharacters;
-                                                    //"Please enter a valid text which contains only alphanumeric characters, spaces & hyphen";
-                                                //  cm.errTextMsg = "Enter a description for this matter.";
-                                                //   cm.errorPopUpBlock = "matterDescription";
-                                                showErrorNotification("matterdescription");
-                                                cm.errorBorder = "matterdescription";
+                                                //"Please enter a valid text which contains only alphanumeric characters, spaces & hyphen.";
+                                                cm.errorBorder = "matterid";
+                                                showErrorNotification("matterid");
                                                 cm.errorPopUpBlock = true; return false;
-
                                             }
+
                                         }
                                         else {
-                                            cm.errTextMsg = cm.createContent.ErrorMessageSpecialCharacters;
-                                                //"Please enter a valid text which contains only alphanumeric characters, spaces & hyphen.";
-                                            cm.errorBorder = "matterid";
-                                            showErrorNotification("matterid");
+                                            cm.errTextMsg = cm.createContent.ErrorMessageEntityLibraryCreated;
+                                            //"Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
+                                            cm.errorBorder = "mattername";
+                                            showErrorNotification("mattername");
+                                            //var matterErrorEle = document.getElementById("errorBlock");
+                                            //var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
+                                            //var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
+                                            //var matterErrorTextEle = document.getElementById("errText");
+                                            //matterErrorEle.className = 'errPopUpMatterName';
+                                            //matterErrorTrinageleBlockEle.className = 'errTringleBlockMatterName';
+                                            //matterErrorTrinagleBorderEle.className = 'errTringleBorderBlockMatterName';
+                                            //matterErrorTextEle.className = "errTextMatterName";
                                             cm.errorPopUpBlock = true; return false;
                                         }
+                                    }
 
-                                    }
-                                    else {
-                                        cm.errTextMsg = cm.createContent.ErrorMessageEntityLibraryCreated;
-                                            //"Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
-                                        cm.errorBorder = "mattername";
-                                        showErrorNotification("mattername");
-                                        //var matterErrorEle = document.getElementById("errorBlock");
-                                        //var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
-                                        //var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
-                                        //var matterErrorTextEle = document.getElementById("errText");
-                                        //matterErrorEle.className = 'errPopUpMatterName';
-                                        //matterErrorTrinageleBlockEle.className = 'errTringleBlockMatterName';
-                                        //matterErrorTrinagleBorderEle.className = 'errTringleBorderBlockMatterName';
-                                        //matterErrorTextEle.className = "errTextMatterName";
-                                        cm.errorPopUpBlock = true; return false;
-                                    }
+                                }
+                                else {
+                                    cm.errTextMsg = cm.createContent.ErrorMessageEntityNameSpecialCharacters;
+                                    //"Please enter a valid Matter name which contains only alphanumeric characters and spaces";
+                                    cm.errorBorder = "mattername";
+                                    showErrorNotification("mattername");
+                                    cm.errorPopUpBlock = true; return false;
                                 }
 
                             }
                             else {
-                                cm.errTextMsg = cm.createContent.ErrorMessageEntityNameSpecialCharacters;
-                                    //"Please enter a valid Matter name which contains only alphanumeric characters and spaces";
-                                cm.errorBorder = "mattername";
-                                showErrorNotification("mattername");                               
+                                cm.errTextMsg = cm.createContent.ErrorMessageEntityId2;
+                                //"Selected  client for this matter clientId is null ";
+                                showErrorNotification("client");
+                                cm.errorBorder = "client";
                                 cm.errorPopUpBlock = true; return false;
                             }
-
                         }
                         else {
-                            cm.errTextMsg = cm.createContent.ErrorMessageEntityId2;
-                                //"Selected  client for this matter clientId is null ";
+                            cm.errTextMsg = cm.errPermissionMessage;
+                            //"Selected  client for this matter clientId is null ";
                             showErrorNotification("client");
                             cm.errorBorder = "client";
                             cm.errorPopUpBlock = true; return false;
