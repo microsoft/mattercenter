@@ -1837,7 +1837,7 @@
                             vm.divuigrid = true;
                             vm.nodata = true;
                         } else {
-                            searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
+                            searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                             getPinnedMatters(searchRequest, function (pinnedResponse) {
                                 if (pinnedResponse && pinnedResponse.length > 0) {
                                     angular.forEach(pinnedResponse, function (pinobj) {
@@ -1896,7 +1896,7 @@
                             vm.divuigrid = true;
                             vm.nodata = true;
                         } else {
-                            searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
+                            searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                             getPinnedMatters(searchRequest, function (pinnedResponse) {
                                 if (pinnedResponse && pinnedResponse.length > 0) {
                                     angular.forEach(pinnedResponse, function (pinobj) {

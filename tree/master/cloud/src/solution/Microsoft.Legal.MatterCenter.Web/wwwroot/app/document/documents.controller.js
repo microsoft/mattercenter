@@ -34,6 +34,7 @@
         vm.previousDocPracticeGroupValue = '';
         vm.previousDocAuthorValue = '';
         vm.previousDocCheckOutUserValue = '';
+        vm.assetsuccess = false;
         // Onload show ui grid and hide error div
         //start
         vm.divuigrid = false;
@@ -1319,7 +1320,7 @@
                         //searchRequest.SearchObject.SearchTerm = "";
                         //searchRequest.SearchObject.Filters.FilterByMe = 0;
                         //searchRequest.SearchObject.Sort.ByColumn = "documentName";
-                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
+                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                         getPinnedDocuments(searchRequest, function (pinresponse) {
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
@@ -1379,7 +1380,7 @@
                         }
                         //vm.divuigrid = true;
                         //vm.nodata = false;
-                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
+                        searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                         getPinnedDocuments(searchRequest, function (pinresponse) {
                             if (pinresponse.length > 0) {
                                 angular.forEach(pinresponse, function (pinobj) {
@@ -2050,7 +2051,7 @@
         //};
 
 
-        vm.assetsuccess = false;
+        
         vm.getDocumentAssets = function (row) {
             vm.assetsuccess = false;
             var Client = {

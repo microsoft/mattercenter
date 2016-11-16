@@ -787,7 +787,7 @@
     left: 0;
     top: 52px;
     width: 100%;
-    z-index: 1001;
+    z-index: 1;
     pointer-events: visible;
 }
 
