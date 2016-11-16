@@ -22,6 +22,7 @@
         cm.invalidUserCheck = false;
         cm.configsUri = configs.uri;
         cm.showRoles = true;
+        cm.isBackwardCompatible = configs.global.isBackwardCompatible;
         var siteCollectionPath = "";
 	cm.getExternalUserNotification = true;
 	cm.currentExternalUser = {};
@@ -155,7 +156,8 @@
             }
             else {
                 var defaultMatterConfig = JSON.parse(result.code);
-                cm.showRoles = defaultMatterConfig.ShowRole;
+               // cm.showRoles = defaultMatterConfig.ShowRole;
+                cm.showRoles = defaultMatterConfig.ShowRole != undefined ? defaultMatterConfig.ShowRole : (cm.isBackwardCompatible ? false : true);
             }
         });
 
