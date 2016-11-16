@@ -847,7 +847,7 @@
                     }
                     unpinMatter(unpinRequest, function (response) {
                         if (response.isMatterUnPinned) {
-
+                            
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) - 1;
                             if (vm.tabClicked.toLowerCase().indexOf("pinned") >= 0) {
                                 e.currentTarget.src = "../images/unpin-666.png";
@@ -859,7 +859,7 @@
                                 e.currentTarget.title = "pin"
                             }
                             if (vm.pinMatterCount == 0) {
-                                vm.divuigrid = false;
+                                //vm.divuigrid = false;
                                 vm.nodata = true;
                                 vm.displaypagination = false;
                             }

@@ -253,7 +253,7 @@
 
                     var actualcontent = "";
                     actualcontent = '<div class="" ng-click="stopEvent($event)">\
-                                     <img id="FlyoutPopupLoading" ng-if="!loader" title="Loading" src="../Images/WindowsLoadingFast.GIF" alt="Loading">\
+                                     <img id="FlyoutPopupLoading" ng-show="!loader" title="Loading" src="../Images/WindowsLoadingFast.GIF" alt="Loading">\
                                    <div class="FlyoutBoxContent flyoutwidth" style="height:270px">\
                                       <div class="flyoutLeftarrow hidden-xs" style="top: 11px;left: -9px;"></div>\
                                            <div ng-if="loader" >\

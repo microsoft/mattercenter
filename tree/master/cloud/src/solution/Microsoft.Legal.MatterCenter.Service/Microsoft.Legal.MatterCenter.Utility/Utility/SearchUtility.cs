@@ -1,6 +1,7 @@
 ﻿using Microsoft.Legal.MatterCenter.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace Microsoft.Legal.MatterCenter.Utility
@@ -30,6 +31,54 @@ namespace Microsoft.Legal.MatterCenter.Utility
                     }
                 }
                 searchDetails.AOLList = encodedAOLList;
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchDetails.AreaOfLaw))
+            {
+                
+                var areaList = searchDetails.AreaOfLaw.Split(',').ToList();
+                IList<string> encodedAOLList = new List<string>();
+                foreach (string aolList in areaList)
+                {
+                    if (!string.IsNullOrWhiteSpace(aolList))
+                    {
+                        //aolList = aolList.Replace("&", "&#65286;");
+                        encodedAOLList.Add(aolList.Replace("＆", "&#65286;"));
+                    }
+                }
+                searchDetails.AreaOfLaw = string.Join(",", encodedAOLList);
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchDetails.PracticeGroup))
+            {
+
+                var pgList = searchDetails.PracticeGroup.Split(',').ToList();
+                IList<string> encodedPGList = new List<string>();
+                foreach (string pg in pgList)
+                {
+                    if (!string.IsNullOrWhiteSpace(pg))
+                    {
+                        //aolList = aolList.Replace("&", "&#65286;");
+                        encodedPGList.Add(pg.Replace("＆", "&#65286;"));
+                    }
+                }
+                searchDetails.PracticeGroup = string.Join(",", encodedPGList);
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchDetails.SubareaOfLaw))
+            {
+
+                var solList = searchDetails.SubareaOfLaw.Split(',').ToList();
+                IList<string> encodedSOLList = new List<string>();
+                foreach (string sol in solList)
+                {
+                    if (!string.IsNullOrWhiteSpace(sol))
+                    {
+                        //aolList = aolList.Replace("&", "&#65286;");
+                        encodedSOLList.Add(sol.Replace("＆", "&#65286;"));
+                    }
+                }
+                searchDetails.SubareaOfLaw = string.Join(",", encodedSOLList);
             }
 
             if (searchDetails.PGList != null)

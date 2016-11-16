@@ -1499,6 +1499,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 else
                                 {
                                     ////Matter already exists
+                                    userpinnedMatterCollection.Remove(WebUtility.HtmlEncode(userPinnedDetails.UserPinnedMatterData.MatterName));
                                     userpinnedMatterCollection.Remove(userPinnedDetails.UserPinnedMatterData.MatterName);
                                     string updatedMatter = JsonConvert.SerializeObject(userpinnedMatterCollection, Formatting.Indented);
                                     ////We are maintaining single list item entry for user
@@ -1528,6 +1529,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 {
                                     //// Matter already exists
                                     userpinnedDocumentCollection.Remove(WebUtility.HtmlEncode(userPinnedDetails.URL));
+                                    userpinnedDocumentCollection.Remove(userPinnedDetails.URL);
                                     string updatedDocument = JsonConvert.SerializeObject(userpinnedDocumentCollection, Newtonsoft.Json.Formatting.Indented);
 
                                     ////We are maintaining single list item entry for user
