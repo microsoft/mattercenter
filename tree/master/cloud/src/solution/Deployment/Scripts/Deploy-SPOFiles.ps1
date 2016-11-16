@@ -8,44 +8,6 @@ Add-Type -TypeDefinition @"
 	}
 "@
 
-# Get the current directory of the script
-Function ScriptRoot {Split-Path $MyInvocation.ScriptName}
-$ScriptDirectory = (ScriptRoot)
-
-# Get the parent directory of the script
-Function Get-ParentDirectory {Split-Path -Parent(Split-Path $MyInvocation.ScriptName)}
-$ParentDirectory = (Get-ParentDirectory)
-
-
-#----------------------------------------------
-# Include Common functions script
-#----------------------------------------------
-
-Show-Message -Message "Adding common library functions" -Type ([MessageType]::Warning)
-"$ScriptDirectory\LibraryFunctions.ps1"
-Show-Message -Message "Added common library functions" -Type ([MessageType]::Success)
-
-
-#Create Log folder if not exist
-$LogFolder = "$ScriptDirectory\Logs"
-If (-not (Test-Path -Path $LogFolder -PathType Container))
-{ 
-	New-Item -Path $LogFolder -ItemType directory -Force 
-}
-
-# Set error log file path
-$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt" 
-
-if (!(Test-Path "$ErrorLogFile"))
-{
-	New-Item -path "$ErrorLogFile" -type "file" -value ""	  
-}
-
-# Set log file path
-$LogFile = "$ScriptDirectory\Logs\Log.txt"
-
-
-
 # Function to display message on console
 Function Show-Message([string] $Message, [string] $Type, [bool] $Newline = $true)
 {
@@ -87,6 +49,42 @@ Function Show-Message([string] $Message, [string] $Type, [bool] $Newline = $true
 		($Message) | Out-File $LogFile -Append
 	}
 }
+
+# Get the current directory of the script
+Function ScriptRoot {Split-Path $MyInvocation.ScriptName}
+$ScriptDirectory = (ScriptRoot)
+
+# Get the parent directory of the script
+Function Get-ParentDirectory {Split-Path -Parent(Split-Path $MyInvocation.ScriptName)}
+$ParentDirectory = (Get-ParentDirectory)
+
+
+#----------------------------------------------
+# Include Common functions script
+#----------------------------------------------
+
+Show-Message -Message "Adding common library functions" -Type ([MessageType]::Warning)
+."$ScriptDirectory\LibraryFunctions.ps1"
+Show-Message -Message "Added common library functions" -Type ([MessageType]::Success)
+
+
+#Create Log folder if not exist
+$LogFolder = "$ScriptDirectory\Logs"
+If (-not (Test-Path -Path $LogFolder -PathType Container))
+{ 
+	New-Item -Path $LogFolder -ItemType directory -Force 
+}
+
+# Set error log file path
+$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt" 
+
+if (!(Test-Path "$ErrorLogFile"))
+{
+	New-Item -path "$ErrorLogFile" -type "file" -value ""	  
+}
+
+# Set log file path
+$LogFile = "$ScriptDirectory\Logs\Log.txt"
 
 
 Function Deploy-SPOFiles
