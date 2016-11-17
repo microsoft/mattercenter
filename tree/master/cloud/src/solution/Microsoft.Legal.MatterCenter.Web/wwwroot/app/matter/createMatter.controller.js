@@ -551,6 +551,8 @@
 
                         }
                         else {
+                            localStorage.removeItem("oPageOneData");
+                            localStorage.removeItem("oPageTwoData");
                             cm.canCreateMatterPermission = true; cm.errPermissionMessage = "";
                             var dMatterAreaOfLaw = "", dMatterPracticeGroup = "", dMatterSubAreOfLaw = "", dMatterTypes = "", dPrimaryMatterType = "", dMatterUsers = "", dMatterUserEmails = "", dMatterPermissions = "", dMatterRoles = "";
                             cm.conflictUsers.assignedUser = "";
@@ -1876,7 +1878,7 @@
 
                 var width = GetWidth();
                 var x = 0, y = 0;
-                if (width > 734) {
+                if (width >= 860) {
                     y = temp.offsetTop - 50, x = temp.offsetLeft + 85;
                 }
                 else {
@@ -3186,7 +3188,7 @@
 
                     var windowWidth = GetWidth();
                     var RegularExpressionForMatterName, RegularExpressionForMatterID;
-                    if (undefined !== cm.selectedClientName && null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {
+                    if (undefined !== cm.selectedClientName && null !== cm.selectedClientName && "" !== cm.selectedClientName.trim()) {                       
                         if (cm.canCreateMatterPermission) {
                             if ("" !== cm.clientId.trim() && null !== cm.clientId) {
                                 var bInValid = false;

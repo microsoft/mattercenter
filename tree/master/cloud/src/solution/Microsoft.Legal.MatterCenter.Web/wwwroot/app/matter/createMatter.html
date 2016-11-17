@@ -282,12 +282,12 @@
 
         </section>
         <div id="space"></div>
-        <div class="row ">
+        <div class="row clearBothSide ">
             <div class="col-xs-5">
-                <button class="buttonPrev pull-right marginTop10" ng-class="{'btnHover' : cm.prevButtonDisabled=== false}" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
+                <button class="buttonPrev pull-right marginTop10" ng-class="{'btnHover' : cm.prevButtonDisabled=== false}" ng-hide="cm.prevButtonDisabled" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
             </div>
             <div class="col-xs-6">
-                <button class="buttonPrev pull-left marginTop10" ng-class="{'btnHover' : cm.nextButtonDisabled=== false}" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
+                <button class="buttonPrev pull-left marginTop10" ng-class="{'btnHover' : cm.nextButtonDisabled=== false}" ng-hide="cm.nextButtonDisabled" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
             </div>
         </div>
     </div>
@@ -333,7 +333,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft " id="divSAOL" style="width:28%;" ng-show="cm.taxonomyHierarchyLevels>=3">
+                <div class="popUpSubAreaOfLaw popUpBodyBlocks popUpMarginRight popUpFloatLeft solDivWidth" id="divSAOL" style="width:28%;" ng-show="cm.taxonomyHierarchyLevels>=3">
                     <!--<label title="Sub Area of Law (select templates)" class="popUpBodyHeader popUpFloatLeft">Sub Area of Law (select matter type)</label>-->
                     <span style="margin-bottom:5px;">{{cm.createContent.ColumnName3}}</span>
                     <div class="segoUIFont" ng-show="cm.taxonomyHierarchyLevels>=3">
