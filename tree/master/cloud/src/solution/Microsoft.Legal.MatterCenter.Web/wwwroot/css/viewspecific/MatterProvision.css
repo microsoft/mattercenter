@@ -585,7 +585,7 @@ h1.specificName {
 }
 
 .popDT {
-    height: 213px !important;
+    height: 205px !important;
 }
 
 .errText {
@@ -941,7 +941,7 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
     width: 286px !important;
 }
 
-@media all and (min-width:850px) {
+@media all and (min-width:860px) {
     .SavePopUpEntries {
         margin-top: -29px;
     }
@@ -1115,21 +1115,21 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
     }
 }
 
-@media all and (min-width:850px) {
+@media all and (min-width:860px) {
     .popUpContainer {
         margin: auto !important;
     }
 }
 
 
-@media (min-width:850px) and (max-width: 1066px) {
+@media (min-width:860px) and (max-width: 1066px) {
     .popUpContainerLevel4 {
         margin: 50px auto 50px auto !important;
         height: 1046px !important;
     }
 }
 
-@media (min-width:850px) and (max-width: 1316px) {
+@media (min-width:860px) and (max-width: 1316px) {
     .popUpContainerLevel5 {
         margin: 50px auto 50px auto !important;
         height: 1550px !important;
@@ -1355,7 +1355,7 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
     margin-left: 2px;
 }
 
-@media (max-width: 734px) {
+@media (max-width: 860px) {
     .container {
         position: relative;
         width: calc(100% + 10px);
@@ -1526,7 +1526,7 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
     }
 
     #popupAOLContent, #popupSAOLContent {
-        height: 116px;
+        height: 110px;
     }
 
     #divSAOL {
@@ -1587,8 +1587,8 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
 
 
     .medium, .mediumSmall, #txtConflictCheckDate {
-        min-width: 276px !important;
-        max-width: 276px !important;
+        min-width: 285px  !important;
+        max-width: 285px  !important;
     }
 
     #conflictCheckBy, #checkedPerformedOn {
