@@ -155,7 +155,7 @@
             }
             else {
                 return {
-                    height: ($window.innerHeight - 95) + "px"
+                    height: ($window.innerHeight - 100) + "px"
                 }
             }
         };
@@ -243,6 +243,7 @@
 
         vm.gridOptions = {
             infiniteScrollDown: true,
+            //infiniteScrollPercentage: 50,
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 1,
             enableGridMenu: true,
@@ -362,11 +363,11 @@
                         vm.toggleCheckerAll(vm.checker);
                     }
                 });
+                return promise.promise;
             } else {
                 vm.lazyloader = true;
-                $scope.gridApi.infiniteScroll.dataLoaded();
+                // $scope.gridApi.infiniteScroll.dataLoaded();
             }
-            return promise.promise;
         }
         //#endregion
 
@@ -2051,7 +2052,7 @@
         //};
 
 
-        
+
         vm.getDocumentAssets = function (row) {
             vm.assetsuccess = false;
             var Client = {
