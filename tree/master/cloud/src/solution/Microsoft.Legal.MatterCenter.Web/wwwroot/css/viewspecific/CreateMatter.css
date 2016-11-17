@@ -500,7 +500,7 @@
 .errTringleBlockCAttorny{left:50px;right:56px;}
 .errTringleBorderCAttorny{left:50px;right:55px;}
 .errTextMatterCAttorny {min-height: 40px;top: 17px !important;left: 24px;width:100%}*/
-@media (min-width: 0px) and (max-width: 734px) {
+@media (min-width: 0px) and (max-width: 860px) {
     .labelRoles {
         margin-left: 0px !important;
         width: 140px;
@@ -807,7 +807,7 @@
     }
 }
 
-@media (min-width: 0px) and (max-width: 734px) {
+@media (min-width: 0px) and (max-width: 860px) {
     #HeaderPlaceHolder {
         min-width: 250px;
     }
@@ -833,7 +833,7 @@
 }
 }*/
 
-@media (min-width: 734px) {
+@media (min-width: 860px) {
     .createCol {
         width: 60%;
     }
@@ -843,7 +843,7 @@
     overflow: visible;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 860px) {
     .popUpContainer {
         min-height: 760px;
         max-width: 317px;
@@ -864,7 +864,7 @@
     }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 860px) {
     #infoImg {
         vertical-align: top;
         margin-top: 20px;
@@ -1002,7 +1002,7 @@
     }
 }
 
-@media (min-width: 0px) and (max-width: 850px) {
+@media (min-width: 0px) and (max-width: 860px) {
     .popUpContainer {
         min-height: 780px;
         max-width: 277px;
@@ -1313,9 +1313,9 @@
     margin-top: 6px;
 }
 
-@media (min-width: 734px) and (max-width: 767px) {
+@media (min-width: 734px) and (max-width: 860px) {
     .createMatterHeaderWidth {
-        width: 28% !important;
+        width: 65% !important;
     }
 
     .matterContent {
@@ -1323,7 +1323,7 @@
     }
 }
 
-@media (max-width: 734px) {
+@media (max-width: 860px) {
     .matterContent {
         margin-top: 82px !important;
     }
@@ -1412,9 +1412,10 @@ left: -17px;
     margin-left: 10px;
 }
 
-@media (max-width: 850px) {
+@media (max-width: 861px) {
     .addOrRemoveBtnMargin {
         margin-left: 10% !important;
+        margin-top: 7% !important;
     }
 
     .addOrRemoveLabelMarginTop {
@@ -1456,7 +1457,7 @@ left: -17px;
 }
 
 
-@media (min-width: 851px) and (max-width: 1300px) {
+@media (min-width: 861px) and (max-width: 1300px) {
     .iconForwardLevel3 {
         transform: none !important;
         -ms-transform: none !important;
@@ -1512,7 +1513,7 @@ left: -17px;
         max-width: 292px;
     min-width: 292px;
 }
-@media (max-width: 734px) {
+@media (max-width: 860px) {
     .sectionContent .dropdown-menu li {
         min-width: 276px !important;
         max-width: 276px !important;
@@ -1553,6 +1554,15 @@ left: -17px;
 
 .contentTypeWidth{
     max-width:90%; min-width:90%;overflow:hidden; text-overflow:ellipsis;
+}
+.clearBothSide{
+    clear:both;
+}
+
+@media (min-width: 0px) and (max-width: 860px) {
+    .solDivWidth{
+        width:100% !important;
+    }
 }
 
 
