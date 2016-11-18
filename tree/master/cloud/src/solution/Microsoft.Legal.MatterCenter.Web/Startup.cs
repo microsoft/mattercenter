@@ -583,14 +583,7 @@ namespace Microsoft.Legal.MatterCenter.Web
                      jw.WriteEndObject();
             jw.WriteEndObject();            
 
-            jw.WritePropertyName("uploadMessages");
-                jw.WriteStartObject();
-                foreach (var key in uploadMessagesSection)
-                {                
-                    jw.WritePropertyName(key.Key);
-                    jw.WriteValue(key.Value);               
-                }
-                jw.WriteEndObject();
+            
             jw.WriteEndObject();
             configWriter.Write(sb.ToString());            
             configWriter.Dispose();
