@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="lib/angular-ui-grid/ui-grid.min.css">
-    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/site.css" />
     <link href="css/viewspecific/jsongridwebdashboard.css" rel="stylesheet" />
     <link href="css/viewspecific/listview.css" rel="stylesheet" />
@@ -29,31 +29,33 @@
     <link href="css/viewspecific/commoncontrols.css" rel="stylesheet" />
     <link href="css/viewspecific/creatematter.css" rel="stylesheet" />
     <script src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
-    <script src="lib/jquery/dist/jquery.js"></script>
-    <script src="lib/jquery-validation/dist/jquery.validate.js"></script>
-    <script src="lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-    <script src="lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="lib/angular/angular.js"></script>
-    <script src="lib/angular-route/angular-route.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular-touch.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.2/angular-animate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.1/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.6/jquery.validate.unobtrusive.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!--<script src="lib/angular/angular.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+    <!--<script src="lib/angular-route/angular-route.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs/1.5.8/angular-route.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.2/angular-ui-router.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-touch.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
     <!--<script src="lib/bootstrap/dist/js/bootstrap-tooltip.js"></script>
     <script src="lib/bootstrap/dist/js/bootstrap-popover.js"></script>-->
-    <script src="lib/angular-resource/angular-resource.js"></script>
-    <script src="lib/angular-sanitize/angular-sanitize.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-resource/1.5.8/angular-resource.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.8/angular-sanitize.js"></script>
     <script src="lib/adal-angular/dist/adal.min.js"></script>
     <script src="lib/adal-angular/dist/adal-angular.min.js"></script>
     <script src="lib/angular-ui-grid/ui-grid.min.js"></script>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>-->
-    <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.2.0/ui-bootstrap-tpls.js"></script>
     <script src="js/site.js" asp-append-version="true"></script>
     <script src="js/jquery.table2excel.js"></script>
-    <script src="lib/angulartics/dist/angulartics.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angulartics/1.3.0/angulartics.min.js"></script>
     <script src="js/angulartics-azure.js"></script>
-    <script src="lib/angular-aria/angular-aria.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-aria.js"></script>
 </head>
-<body ng-app="matterMain"  menuclose class="{{$root.bodyclass}} overflowxAuto" id="matterMain">
+<body ng-app="matterMain" menuclose class="{{$root.bodyclass}} overflowxAuto" id="matterMain">
     <div ui-view="mainView" style=""></div>
     <script src="app/app.js"></script>
     <script src="app/config.js"></script>
@@ -99,17 +101,16 @@
         });
         window.appInsights = appInsights;
 
-        if (typeof Office.context.mailbox != 'undefined')
-        {
+        if (typeof Office.context.mailbox != 'undefined') {
             configs.appInsights.appType = 'Outlook';
         }
-        else if (typeof Office.context.document != 'undefined')
-        {
+        else if (typeof Office.context.document != 'undefined') {
             configs.appInsights.appType = 'Word';
         }
         else {
             configs.appInsights.appType = 'Browser';
-        } 
+        }
     </script>
 </body>
 </html>
+
