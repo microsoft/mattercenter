@@ -1,7 +1,7 @@
 ﻿var uiconfigs =
 {
   "Home": {
-    "MatterCenterSupportLinkText": "Matter Center Aisling Support",
+    "MatterCenterSupportLinkText": "Matter Center Support",
     "MatterCenterSupportLink": "mailto:support@supportsite.com",
     "HelpRequesURL": "https://msmatter.sharepoint.com/sites/catalog",
     "Change": "mailto:aisling@supportsite.com",
