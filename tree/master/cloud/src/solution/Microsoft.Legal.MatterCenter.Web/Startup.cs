@@ -384,6 +384,7 @@ namespace Microsoft.Legal.MatterCenter.Web
 
             var generalSettingsSection = Configuration.GetSection("General");
             var matterSettingsSection = Configuration.GetSection("Matter").GetChildren();
+            var uploadMessagesSection = Configuration.GetSection("uploadMessages").GetChildren();
             var taxonomySettingsSection = Configuration.GetSection("Taxonomy");
             var searchSettingsSection = Configuration.GetSection("Search").GetChildren();
             var contentTypeSettingsSection = Configuration.GetSection("ContentTypes").GetSection("ManagedColumns").GetChildren();
@@ -580,33 +581,15 @@ namespace Microsoft.Legal.MatterCenter.Web
                             jw.WriteValue(key.Value);
                         }
                      jw.WriteEndObject();
-            jw.WriteEndObject();
+            jw.WriteEndObject();            
 
             jw.WritePropertyName("uploadMessages");
                 jw.WriteStartObject();
-                    jw.WritePropertyName("maxAttachedMessage");
-                    jw.WriteValue("Do not select more than five documents to attach at one time.");
-                    jw.WritePropertyName("attachSuccessMessage");
-                    jw.WriteValue("Documents successfully attached.");
-                    jw.WritePropertyName("attachFailureMessage");
-                    jw.WriteValue("One or more of your selected documents failed to attach:");
-                    jw.WritePropertyName("attachButtonText");
-                    jw.WriteValue("Attach Documents");
-                    jw.WritePropertyName("overwrite_Config_Property");
-                    jw.WriteValue("Email Only");
-                    jw.WritePropertyName("upload_Append_Button");
-                    jw.WriteValue("Append date to file name and save");
-                    jw.WritePropertyName("upload_Append_Button_Tooltip");
-                    jw.WriteValue("The file will be saved as new, separate document with the current date and time added to the end of the file name.");
-                    jw.WritePropertyName("content_Check_Abort");
-                    jw.WriteValue("Content check has been aborted.");
-                    jw.WritePropertyName("uploadImageDocumentIcon");
-                    jw.WriteValue("/_layouts/15/images/ic{0}.gif");
-                    jw.WritePropertyName("uploadPNGIconExtensions");
-                    jw.WriteValue("pdf");
-                    jw.WritePropertyName("attachInProgressMessage");
-                    jw.WriteValue("");
-
+                foreach (var key in uploadMessagesSection)
+                {                
+                    jw.WritePropertyName(key.Key);
+                    jw.WriteValue(key.Value);               
+                }
                 jw.WriteEndObject();
             jw.WriteEndObject();
             configWriter.Write(sb.ToString());            
