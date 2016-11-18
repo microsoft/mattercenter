@@ -14,7 +14,6 @@
         vm.navigationContent = uiconfigs.Navigation;
         vm.header = uiconfigs.Header;
         vm.documentConfigContent = uiconfigs.Documents;
-        vm.uploadMessages = uiconfigs.uploadMessages;
         vm.configSearchContent = configs.search;
         vm.globalSettings = configs.global;
         //#end region
@@ -123,7 +122,7 @@
         vm.selectedRows = [];
         vm.showAttachmentProgress = false;
         vm.showAttachment = false;
-        vm.attachButtonText = vm.uploadMessages.attachButtonText;
+        vm.attachButtonText = configs.uploadMessages.attachButtonText;
         vm.showPopUpHolder = false;
         vm.showErrorAttachmentInfo = false;
         vm.showFailedAtachments = false;
@@ -297,7 +296,7 @@
                 else {
                     vm.enableAttachment = false;
                     if (vm.selectedRows.length > 5) {
-                        vm.warningMessageText = vm.uploadMessages.maxAttachedMessage;
+                        vm.warningMessageText = configs.uploadMessages.maxAttachedMessage;
                         vm.showErrorAttachmentInfo = true;
                     }
                 }
@@ -417,7 +416,8 @@
                 vm.showFailedAtachmentsBlock = false;
                 vm.failedFiles = [];
                 vm.showPopUpHolder = true;
-                vm.attachedProgressPopUp = true;               
+                vm.attachedProgressPopUp = true;
+                vm.attachInProgressMessage = configs.uploadMessages.attachInProgressMessage.replace("{0}", 1);
                 angular.forEach(vm.selectedRows, function (selRow) {
                     var docUrl = selRow.documentOWAUrl;
                     if (selRow.documentOWAUrl.indexOf("WopiFrame.aspx") > 0) {
@@ -475,7 +475,7 @@
             if (vm.showFailedAtachments) {
                 vm.showSuccessAttachments = false;
                 vm.showFailedAtachmentsBlock = true;
-                vm.failedHeaderMessage = vm.uploadMessages.attachFailureMessage;
+                vm.failedHeaderMessage = configs.uploadMessages.attachFailureMessage;
             } else {
                 vm.showFailedAtachmentsBlock = false;
                 vm.showSuccessAttachments = true;
@@ -2158,9 +2158,7 @@
             window.open(url, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500')
         }
         //#endregion
-        $rootScope.$on('disableOverlay', function (event, data) {
-            vm.lazyloader = true;
-        });
+
         //#region for clearing all the column filter search textboxes 
         vm.clearAllFilterForSearch = function () {
             vm.searchTerm = "";

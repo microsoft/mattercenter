@@ -656,10 +656,14 @@
                                 setDefaultTaxonomyHierarchyLevelFive(arrDMatterTypes, dPrimaryMatterType);
                             }
 
-                            cm.selectedConflictCheckUser = ""; cm.blockedUserName = ""; cm.conflictDate = "";                           
-                            cm.assignPermissionTeams = [];                           
+                            cm.selectedConflictCheckUser = ""; cm.blockedUserName = ""; cm.conflictDate = "";
+                            //     cm.assignPermissionTeams
+                            // cm.assignPermissionTeams.splice(0, 1);
+                            cm.assignPermissionTeams = [];
+                            // cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
+                            if (cm.isBackwardCompatible) {
                                 addLoggedinUserToTeam();
-                          
+                            }
                             for (var aCount = 0; aCount < arrDMatterUsers.length; aCount++) {
                                 var assignPermTeam = {};
                                 if ("" !== arrDMatterUsers[aCount]) {
@@ -3940,7 +3944,7 @@
 
 
             function addLoggedinUserToTeam() {
-                
+                if (cm.isBackwardCompatible) {
                     var team = {};
                     team.assigneTeamRowNumber = cm.assignPermissionTeams.length + 1;
                     team.assignedUser = adalService.userInfo.profile.name + '(' + adalService.userInfo.userName + ');';
@@ -3979,7 +3983,7 @@
                     });
                     cm.assignPermissionTeams.push(team);
 
-                
+                }
             }
 
 
