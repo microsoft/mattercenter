@@ -432,8 +432,10 @@ namespace Microsoft.Legal.MatterCenter.Web
                     jw.WritePropertyName("isBackwardCompatible");
                     jw.WriteValue(bool.Parse(generalSettingsSection["IsBackwardCompatible"]));
                     jw.WritePropertyName("isClientMappedWithHierachy");
-                    jw.WriteValue(bool.Parse(generalSettingsSection["isClientMappedWithHierachy"]));
-            jw.WriteEndObject();
+                    jw.WriteValue(bool.Parse(generalSettingsSection["IsClientMappedWithHierachy"]));
+                    jw.WritePropertyName("overwriteDupliacteFileNameWithDateTimeFor");
+                    jw.WriteValue(generalSettingsSection["OverwriteDupliacteFileNameWithDateTimeFor"]);
+                jw.WriteEndObject();
 
             jw.WritePropertyName("matter");
                 jw.WriteStartObject();

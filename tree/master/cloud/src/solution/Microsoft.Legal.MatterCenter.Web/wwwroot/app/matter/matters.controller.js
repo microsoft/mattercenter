@@ -15,6 +15,7 @@
             //#region dynamic contents
             vm.navigationContent = uiconfigs.Navigation;
             vm.configSearchContent = configs.search;
+
             vm.matterConfigContent = uiconfigs.Matters;
             vm.uploadMessages = uiconfigs.uploadMessages;
             vm.configsUri = configs.uri;
@@ -633,7 +634,7 @@
                         vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
                         vm.IsNonIdenticalContent = false;
 
-                        var selectedOverwriteConfiguration = vm.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                        var selectedOverwriteConfiguration = vm.globalSettings.overwriteDupliacteFileNameWithDateTimeFor.trim().toLocaleUpperCase(),
                         bAppendEnabled = false,
                         fileExtension = "undefined" !== typeof source && source.title ? source.title.trim().substring(source.title.trim().lastIndexOf(".") + 1) : "";
                         var isEmail = droppedAttachedFile.isEmail ? true : (1 === parseInt(droppedAttachedFile.attachmentType) || "eml" === fileExtension) ? true : false;
@@ -736,7 +737,7 @@
 
                         vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
                         vm.IsNonIdenticalContent = false;
-                        var selectedOverwriteConfiguration = vm.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                        var selectedOverwriteConfiguration = vm.globalSettings.overwriteDupliacteFileNameWithDateTimeFor.trim().toLocaleUpperCase(),
                         bAppendEnabled = false,
                         fileExtension = "undefined" !== typeof source && source.title ? source.title.trim().substring(source.title.trim().lastIndexOf(".") + 1) : "";
                         var isEmail = droppedAttachedFile.isEmail ? true : (1 === parseInt(droppedAttachedFile.attachmentType) || "eml" === fileExtension) ? true : false;
@@ -2784,7 +2785,7 @@
             // Function to configure time stamp
             vm.overwriteConfiguration = function (fileName) {
                 // Update the content as per the logic.
-                var selectedOverwriteConfiguration = vm.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                var selectedOverwriteConfiguration = vm.globalSettings.overwriteDupliacteFileNameWithDateTimeFor.trim().toLocaleUpperCase(),
                     fileExtension = fileName.trim().substring(fileName.trim().lastIndexOf(".") + 1),
                     bAppendEnabled = false;
 

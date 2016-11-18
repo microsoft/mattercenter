@@ -1998,7 +1998,7 @@
             // Function to configure time stamp
             vm.overwriteConfiguration = function (fileName) {
                 // Update the content as per the logic.
-                var selectedOverwriteConfiguration = vm.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                var selectedOverwriteConfiguration = vm.globalSettings.overwriteDupliacteFileNameWithDateTimeFor.trim().toLocaleUpperCase(),
                     fileExtension = fileName.trim().substring(fileName.trim().lastIndexOf(".") + 1),
                     bAppendEnabled = false;
 
