@@ -977,6 +977,7 @@
                             documentParentUrl: currentRowData.documentParentUrl,
                             documentID: currentRowData.documentID,
                             documentIconUrl: currentRowData.documentIconUrl,
+                            documentPracticeGroup: currentRowData.documentPracticeGroup,
                             pinType: 'unpin'
                         }
                     }

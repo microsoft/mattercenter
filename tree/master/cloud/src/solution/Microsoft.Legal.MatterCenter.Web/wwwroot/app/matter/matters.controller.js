@@ -15,7 +15,9 @@
             //#region dynamic contents
             vm.navigationContent = uiconfigs.Navigation;
             vm.configSearchContent = configs.search;
+
             vm.matterConfigContent = uiconfigs.Matters;
+            vm.uploadMessages = uiconfigs.uploadMessages;
             vm.configsUri = configs.uri;
             vm.globalSettings = configs.global;
             vm.header = uiconfigs.Header;
@@ -632,7 +634,7 @@
                         vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
                         vm.IsNonIdenticalContent = false;
 
-                        var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                        var selectedOverwriteConfiguration = vm.globalSettings.overwriteDupliacteFileNameWithDateTimeFor.trim().toLocaleUpperCase(),
                         bAppendEnabled = false,
                         fileExtension = "undefined" !== typeof source && source.title ? source.title.trim().substring(source.title.trim().lastIndexOf(".") + 1) : "";
                         var isEmail = droppedAttachedFile.isEmail ? true : (1 === parseInt(droppedAttachedFile.attachmentType) || "eml" === fileExtension) ? true : false;
@@ -735,7 +737,7 @@
 
                         vm.IsDupliacteDocument = true; //ToDo:Set it to false on mail upload dialog open
                         vm.IsNonIdenticalContent = false;
-                        var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                        var selectedOverwriteConfiguration = vm.globalSettings.overwriteDupliacteFileNameWithDateTimeFor.trim().toLocaleUpperCase(),
                         bAppendEnabled = false,
                         fileExtension = "undefined" !== typeof source && source.title ? source.title.trim().substring(source.title.trim().lastIndexOf(".") + 1) : "";
                         var isEmail = droppedAttachedFile.isEmail ? true : (1 === parseInt(droppedAttachedFile.attachmentType) || "eml" === fileExtension) ? true : false;
@@ -931,9 +933,9 @@
             }
 
             vm.getIconSource = function (sExtension) {
-                var uploadImageDocumentIcon = configs.uri.SPOsiteURL + configs.uploadMessages.uploadImageDocumentIcon;
+                var uploadImageDocumentIcon = configs.uri.SPOsiteURL + vm.uploadMessages.uploadImageDocumentIcon;
                 var iconSrc = uploadImageDocumentIcon.replace("{0}", sExtension);
-                iconSrc = (-1 < configs.uploadMessages.uploadPNGIconExtensions.indexOf(sExtension)) ?
+                iconSrc = (-1 < vm.uploadMessages.uploadPNGIconExtensions.indexOf(sExtension)) ?
                                 iconSrc.substring(0, uploadImageDocumentIcon.lastIndexOf(".") + 1) + "png" : iconSrc;
                 return iconSrc;
             }
@@ -1862,8 +1864,9 @@
                                     }
                                 }
                             });
+                            vm.nodata = false;
                         }
-                        vm.nodata = false;
+                       
                         $timeout(function () {
                             vm.lazyloader = true;
                             vm.divuigrid = true;
@@ -2782,7 +2785,7 @@
             // Function to configure time stamp
             vm.overwriteConfiguration = function (fileName) {
                 // Update the content as per the logic.
-                var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                var selectedOverwriteConfiguration = vm.globalSettings.overwriteDupliacteFileNameWithDateTimeFor.trim().toLocaleUpperCase(),
                     fileExtension = fileName.trim().substring(fileName.trim().lastIndexOf(".") + 1),
                     bAppendEnabled = false;
 
@@ -2817,9 +2820,8 @@
                 }
                 file.contentCheck = null;
                 file.saveLatestVersion = "True";
-                file.value = file.value + "<br/><div>" + configs.uploadMessages.content_Check_Abort + "</div>";
+                file.value = file.value + "<br/><div>" + vm.uploadMessages.content_Check_Abort + "</div>";
                 file.cancel = "True";
-
             }
 
             vm.closeSuccessBanner = function () {
@@ -2970,7 +2972,7 @@
 
 
             $rootScope.$on('disableOverlay', function (event, data) {
-                vm.lazyloader = false;
+                vm.lazyloader = true;
             });
 
             vm.clearFiltersForSearch = function () {
