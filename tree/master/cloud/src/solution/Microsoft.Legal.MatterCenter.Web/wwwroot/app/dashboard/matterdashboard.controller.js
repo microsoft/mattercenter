@@ -24,6 +24,7 @@
             vm.configSearchContent = configs.search;
             vm.center = configs.search.Schema.toLowerCase();
             vm.matterDashboardConfigs = uiconfigs.MatterDashboard;
+            vm.uploadMessages = uiconfigs.uploadMessages;
             vm.matterConfigContent = uiconfigs.Matters;
             vm.globalSettings = configs.global;
             sortPropertyForAllMatters = configs.search.ManagedPropertyMatterName;
@@ -1997,7 +1998,7 @@
             // Function to configure time stamp
             vm.overwriteConfiguration = function (fileName) {
                 // Update the content as per the logic.
-                var selectedOverwriteConfiguration = configs.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
+                var selectedOverwriteConfiguration = vm.uploadMessages.overwrite_Config_Property.trim().toLocaleUpperCase(),
                     fileExtension = fileName.trim().substring(fileName.trim().lastIndexOf(".") + 1),
                     bAppendEnabled = false;
 
@@ -2029,7 +2030,7 @@
                 }
                 file.contentCheck = null;
                 file.saveLatestVersion = "True";
-                file.value = file.value + "<br/><div>" + configs.uploadMessages.content_Check_Abort + "</div>";
+                file.value = file.value + "<br/><div>" + vm.uploadMessages.content_Check_Abort + "</div>";
                 file.cancel = "True";
 
             }

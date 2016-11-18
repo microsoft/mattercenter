@@ -1698,7 +1698,7 @@
                 }
             }
             //#endregion
-
+          
             //#region to set the dynamic width for the pagination
             vm.setWidthtoPagination = function () {
                 var txt = vm.fromtopage;
