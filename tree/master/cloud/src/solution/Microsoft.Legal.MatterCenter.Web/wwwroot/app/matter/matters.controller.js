@@ -570,6 +570,9 @@
                                             response.data[i].append = vm.overwriteConfiguration(response.data[i].fileName);
                                             response.data[i].value = response.data[i].value.split("|")[0];
                                             response.data[i].fileType = "remotefile";
+                                            if (response.data[i].value.split("|")[1]) {
+                                                response.data[i].userCancelledContentCheckPerform = false;
+                                            }
                                             vm.ducplicateSourceFile.push(response.data[i]);
                                             vm.oUploadGlobal.arrFiles.push(vm.files[i]);
                                             vm.oUploadGlobal.successBanner = false;
@@ -577,7 +580,9 @@
                                         else {
                                             var file = $filter("filter")(vm.ducplicateSourceFile, response.data[i].fileName);
                                             if (file.length > 0) {
-                                                file[0].value = file[0].value + "<br/><br/>" + response.data[i].value;
+                                                if (!file[0].userCancelledContentCheckPerform) {
+                                                    file[0].value = file[0].value + "<br/><br/>" + response.data[i].value;
+                                                } 
                                                 file[0].saveLatestVersion = "True";
                                                 file[0].cancel = "True";
                                                 file[0].contentCheck = "False";
@@ -2815,8 +2820,9 @@
             vm.abortContentCheck = function (file, isLocalUpload) {
                 "use strict";
                 if (isLocalUpload) {
-                    vm.oUploadGlobal.canceler.resolve();
-                    vm.oUploadGlobal.canceler = $q.defer();
+                   // vm.oUploadGlobal.canceler.resolve();
+                    // vm.oUploadGlobal.canceler = $q.defer();
+                    file.userCancelledContentCheckPerform = true;
                 }
                 file.contentCheck = null;
                 file.saveLatestVersion = "True";
