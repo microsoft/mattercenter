@@ -212,6 +212,7 @@
                 //paginationPageSizes: [10, 50, 100],
                 //paginationPageSize: 10,
                 infiniteScrollDown: true,
+                infiniteScrollRowsFromEnd: 10,
                 enableHorizontalScrollbar: 0,
                 enableVerticalScrollbar: 1,
                 enableGridMenu: true,

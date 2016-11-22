@@ -245,6 +245,7 @@
         vm.gridOptions = {
             infiniteScrollDown: true,
             //infiniteScrollPercentage: 50,
+            infiniteScrollRowsFromEnd: 10,
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 1,
             enableGridMenu: true,
@@ -276,7 +277,7 @@
                 $scope.gridApi.core.on.sortChanged($scope, $scope.sortChangedDocument);
                 $scope.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
                 $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFuncScroll);
-                gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
+                $scope.gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
                 //vm.setColumns();
             }
         };
