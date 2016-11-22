@@ -2819,9 +2819,7 @@
             }
             vm.abortContentCheck = function (file, isLocalUpload) {
                 "use strict";
-                if (isLocalUpload) {
-                   // vm.oUploadGlobal.canceler.resolve();
-                    // vm.oUploadGlobal.canceler = $q.defer();
+                if (isLocalUpload) {                   
                     file.userCancelledContentCheckPerform = true;
                 }
                 file.contentCheck = null;
