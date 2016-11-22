@@ -212,6 +212,7 @@
                 //paginationPageSizes: [10, 50, 100],
                 //paginationPageSize: 10,
                 infiniteScrollDown: true,
+                infiniteScrollRowsFromEnd: 10,
                 enableHorizontalScrollbar: 0,
                 enableVerticalScrollbar: 1,
                 enableGridMenu: true,
@@ -2819,9 +2820,7 @@
             }
             vm.abortContentCheck = function (file, isLocalUpload) {
                 "use strict";
-                if (isLocalUpload) {
-                   // vm.oUploadGlobal.canceler.resolve();
-                    // vm.oUploadGlobal.canceler = $q.defer();
+                if (isLocalUpload) {                   
                     file.userCancelledContentCheckPerform = true;
                 }
                 file.contentCheck = null;
