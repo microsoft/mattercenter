@@ -32,5 +32,9 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/matter/saveconfigurations'
                   }),
+                  'isLoginUserOwner': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/user/isowner'
+                  }),
               });
       }]);
