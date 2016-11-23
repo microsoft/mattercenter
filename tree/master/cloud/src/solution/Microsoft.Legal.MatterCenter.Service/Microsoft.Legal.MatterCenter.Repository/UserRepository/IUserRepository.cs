@@ -62,5 +62,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="email"></param>
         /// <returns>bool</returns>
         bool CheckUserPresentInMatterCenter(Client client);
+
+
+        /// <summary>
+        ///  This method will check whether login user is part of owner group or not
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        bool IsLoginUserOwner(Client client);
     }
 }

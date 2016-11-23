@@ -8,7 +8,7 @@
             vm.popupContainer = "hide";
             vm.selectedDocumentTypeLawTerms = [];
             vm.createMatterTaxonomyColumnNames = configs.contentTypes.managedColumns;
-            console.log(vm.createMatterTaxonomyColumnNames);
+            vm.showDenyMessage = '';
             vm.createContent = uiconfigs.CreateMatter;
             vm.taxonomyHierarchyLevels = configs.taxonomy.levels;
             vm.selectedDocumentTypeLawTerms = [];
@@ -16,9 +16,10 @@
             vm.primaryMatterType = vm.errorPopUp = false;
             vm.removeDTItem = false;
             $rootScope.displayOverflow = "display";
-
+            vm.isClientMappedWithHierachy = configs.global.isClientMappedWithHierachy;
             vm.taxonomyHierarchyLevels = parseInt(vm.taxonomyHierarchyLevels);
             if (vm.taxonomyHierarchyLevels >= 2) {
+                vm.parentLevelOneList = [];
                 vm.levelOneList = [];
                 vm.levelTwoList = [];
             }
@@ -31,6 +32,18 @@
             if (vm.taxonomyHierarchyLevels >= 5) {
                 vm.levelFiveList = [];
             }
+
+
+            //#region API to check whether the current login user is owner or not
+            function isLoginUserOwner(optionsForClientUrl, callback) {
+                api({
+                    resource: 'settingsResource',
+                    method: 'isLoginUserOwner',
+                    data: optionsForClientUrl,
+                    success: callback
+                });
+            }
+
             //#region API to get the client taxonomy 
             function getTaxonomyDetails(optionsForClientGroup, callback) {
                 api({
@@ -98,11 +111,17 @@
             vm.settingsConfigs = uiconfigs.Settings;
             vm.assignPermissions = [];
             vm.successmessage = false;
+            vm.canAccessSettingsPage = true;
             //#endregion
 
             //#region for hiding the client details on load
             vm.showClientDetails = false;
             //#endregion
+
+            var optionsForClientUrl = {                
+                    Url: configs.global.repositoryUrl                
+            };
+
 
             //#region requestobject for getting the taxonomy data
             var optionsForGroup = {
@@ -136,6 +155,39 @@
                 }
             }
 
+
+            vm.isLoginUserOwner = function () {
+                $timeout(function () { vm.lazyloader = false; }, 10);
+                
+                isLoginUserOwner(optionsForClientUrl, function (response) {
+                    if (response != null) {                        
+                        vm.canAccessSettingsPage = response.isLoginUserOwner;
+
+                        if (vm.canAccessSettingsPage) {
+                            //#region for calling the functions on page load
+                            vm.getTaxonomyData();
+                            vm.getRolesData();
+                            vm.getPermissionsData();
+                            angular.element('#matterCenterHeader').addClass('showCommonContent');
+                            angular.element('#footer').addClass('showCommonContent');
+                            //#endregion
+                        }
+                        else {
+                            vm.showDenyMessage = vm.settingsConfigs.DenySupportMailMessage
+                            angular.element('#matterCenterHeader').removeClass('commonContent');
+                            angular.element('#matterCenterHeader').addClass('hideCommonContent');
+                            angular.element('#footer').removeClass('commonContent');
+                            angular.element('#footer').addClass('hideCommonContent');
+                            
+                        }
+                        vm.lazyloader = true;
+                        vm.popupContainerBackground = "hide";
+                    }
+                })
+            }
+
+            vm.isLoginUserOwner();
+
             vm.taxonomydata = [];
             vm.getTaxonomyData = function () {
                 vm.popupContainerBackground = "Show";
@@ -152,7 +204,8 @@
 
                             } else {
                                 vm.levelOneList = response.level1;
-                                vm.selectedLevelOneItem = response.level1[0];
+                                vm.parentLevelOneList = response;
+                                vm.selectedLevelOneItem = response.level1[0];                               
                                 getTaxonomyHierarchy(response);
                                 vm.lazyloader = true;
                                 vm.popupContainerBackground = "hide";
@@ -236,11 +289,7 @@
             }
             //#endregion
 
-            //#region for calling the functions on page load
-            vm.getTaxonomyData();
-            vm.getRolesData();
-            vm.getPermissionsData();
-            //#endregion
+            
 
 
             //#region for getting the users based on search values
@@ -266,9 +315,12 @@
                 siteCollectionPath = url;
                 vm.clienturl = url;
                 vm.modifiedDate = '0';
+                if (vm.isClientMappedWithHierachy) {
+                    getClientsPracticeGroup(vm.selected);
+                }
                 getDefaultConfigurations(siteCollectionPath, function (response) {
                     if (response != "" && !response.isError) {
-                        vm.configurations = JSON.parse(response.code);
+                        vm.configurations = JSON.parse(response.code);                        
                         vm.setClientData(vm.configurations);
                         vm.showrole = vm.configurations.ShowRole != null ? (vm.configurations.ShowRole == true ? "Yes" : "No") : "No";
                         vm.showmatterid = vm.configurations.ShowMatterId != null ? (vm.configurations.ShowMatterId == true ? "Yes" : "No") : "No";;
@@ -276,90 +328,12 @@
                         vm.lazyloader = true;
                         vm.clientlist = false;
                         vm.showClientDetails = true;
-                        var arrDMatterUsers = [];
-                        var arrDMatterUserEmails = [];
-                        var arrDMatterRoles = [];
-                        var arrDMatterPermissions = [];
-                        if (vm.configurations.MatterUsers != "") {
-                            arrDMatterUsers = vm.configurations.MatterUsers.split('$|$');
+                        if (vm.configurations.DefaultMatterName != undefined) {
+                            setNonBackwardCompatabilityClientData(response);
+                        } else {
+                            setBackwardCompatabilityClientData(response);
                         }
-                        if (vm.configurations.MatterUserEmails != "") {
-                            arrDMatterUserEmails = vm.configurations.MatterUserEmails.split('$|$');
-                        }
-                        if (vm.configurations.MatterRoles != "") {
-                            arrDMatterRoles = vm.configurations.MatterRoles.split('$|$');
-                        }
-                        if (vm.configurations.MatterPermissions != "") {
-                            arrDMatterPermissions = vm.configurations.MatterPermissions.split('$|$');
-                        }
-                        vm.assignPermissionTeams = [];
-                        // vm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
-
-                        for (var aCount = 0; aCount < arrDMatterUsers.length; aCount++) {
-                            var assignPermTeam = {};
-                            if ("" !== arrDMatterUsers[aCount]) {
-                                arrDMatterUsers[aCount] = arrDMatterUsers[aCount].replace(/\;$/, '');
-                                arrDMatterUserEmails[aCount] = arrDMatterUserEmails[aCount].replace(/\;$/, '');
-                                assignPermTeam.assignedUser = arrDMatterUsers[aCount] + "(" + arrDMatterUserEmails[aCount] + ")";
-                            }
-                            else {
-                                assignPermTeam.assignedUser = "";
-                                assignPermTeam.assignedRole = vm.assignRoles[0];
-                                assignPermTeam.assignedPermission = vm.assignPermissions[0];
-                            }
-
-
-                            //vm.assignRoles   vm.assignPermissions 
-                            //assignedRole  assignedPermission
-                            angular.forEach(vm.assignRoles, function (assignRole) {
-                                if (arrDMatterRoles[aCount] == assignRole.name) {
-                                    assignPermTeam.assignedRole = assignRole;
-                                }
-                            });
-                            angular.forEach(vm.assignPermissions, function (assignPermission) {
-                                if (arrDMatterPermissions[aCount] == assignPermission.name) {
-                                    assignPermTeam.assignedPermission = assignPermission;
-                                }
-                            });
-                            assignPermTeam.assigneTeamRowNumber = aCount + 1;
-
-                            vm.assignPermissionTeams.push(assignPermTeam);
-
-                        }
-                        var arrDMatterAreaOfLaw = [];
-                        var dMatterTypes = "", dPrimaryMatterType = "";
-                        var arrDMatterPracticeGroup = [];
-                        if (vm.configurations.MatterAreaofLaw != "") {
-                            arrDMatterAreaOfLaw = vm.configurations.MatterAreaofLaw.split('$|$');
-                        }
-                        if (vm.configurations.MatterPracticeGroup != "") {
-                            arrDMatterPracticeGroup = vm.configurations.MatterPracticeGroup.split('$|$');
-                        }
-                        dMatterTypes = vm.configurations.MatterTypes ? vm.configurations.MatterTypes : "";
-                        var arrDMatterTypes = [];
-                        if (dMatterTypes) {
-                            arrDMatterTypes = dMatterTypes.split('$|$');
-                        }
-                        dPrimaryMatterType = vm.configurations.DefaultMatterType ? vm.configurations.DefaultMatterType : "";
-                        vm.selectedDocumentTypeLawTerms = [];
-                        vm.documentTypeLawTerms = [];
-                        if (vm.taxonomyHierarchyLevels == 2) {
-                            setDefaultTaxonomyHierarchyLeveTwo(arrDMatterTypes, dPrimaryMatterType);
-                        }
-                        if (vm.taxonomyHierarchyLevels == 3) {
-                            setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType);
-                        }
-                        if (vm.taxonomyHierarchyLevels == 4) {
-                            setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes, dPrimaryMatterType);
-                        }
-                        if (vm.taxonomyHierarchyLevels == 5) {
-                            setDefaultTaxonomyHierarchyLevelFive(arrDMatterTypes, dPrimaryMatterType);
-                        }
-
-                        if (vm.modifiedDate === response.value)
-                            vm.cacheItemModifiedDate = vm.modifiedDate;
-                        else
-                            vm.cacheItemModifiedDate = response.value;
+                      
                     } else {
                         vm.nodata = true;
                         vm.lazyloader = true;
@@ -404,6 +378,7 @@
                 });
 
             }
+//
             function setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType) {
                 angular.forEach(vm.levelOneList, function (levelOneTerm) {
                     angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
@@ -565,8 +540,8 @@
 
             //#region for setting the selected client values to ng-models
             vm.setClientData = function (data) {
-                vm.mattername = data.DefaultMatterName;
-                vm.matterid = data.DefaultMatterId;
+                vm.mattername = data.DefaultMatterName != undefined ? data.DefaultMatterName : data.DefaultProjectName!=undefined?data.DefaultProjectName:"";
+                vm.matterid = data.DefaultMatterId != undefined ? data.DefaultMatterId :"";               
                 if (data.IsRestrictedAccessSelected) {
                     vm.assignteam = "Yes";
                 } else {
@@ -592,23 +567,23 @@
                 } else {
                     vm.tasks = "No";
                 }
-                if (data.IsMatterDescriptionMandatory) {
+                if (data.IsMatterDescriptionMandatory != undefined && data.IsMatterDescriptionMandatory) {
                     vm.matterdesc = "Yes";
                 } else {
-                    vm.matterdesc = "No";
+                    if (data.IsProjectDescriptionMandatory != undefined && data.IsProjectDescriptionMandatory) {
+                        vm.matterdesc = "Yes";
+                    } else {
+                        vm.matterdesc = "No";
+                    }
                 }
                 if (data.IsConflictCheck) {
                     vm.conflict = "Yes";
                 } else {
                     vm.conflict = "No";
                 }
-                if (data.IsMatterDescriptionMandatory) {
-                    vm.matterdesc = "Yes";
-                } else {
-                    vm.matterdesc = "No";
-                }
+              
                 vm.showmatterconfiguration = "DateTime"
-                if (data.MatterIdType !== null && data.MatterIdType !== 'undefined') {
+                if (data.MatterIdType !== undefined && data.MatterIdType !== null) {
                     vm.showmatterconfiguration = data.MatterIdType
                 }
             }
@@ -1130,6 +1105,224 @@
                 vm.activeLevelFiveItem = levelFiveItem;
             }
 
+
+            ///setting data for backwardcompatibility true
+            function setBackwardCompatabilityClientData(data) {
+                var arrDMatterUsers = [];
+                var arrDMatterUserEmails = [];
+                var arrDMatterRoles = [];
+                var arrDMatterPermissions = [];
+               
+                if (vm.configurations.ProjectUsers != undefined && vm.configurations.ProjectUsers != "") {
+                    arrDMatterUsers = vm.configurations.ProjectUsers.split('$|$');
+                }
+                
+                if (vm.configurations.ProjectUserEmails != undefined && vm.configurations.ProjectUserEmails != "") {
+                    arrDMatterUserEmails = vm.configurations.ProjectUserEmails.split('$|$');
+                }
+                if (vm.configurations.MatterRoles != undefined && vm.configurations.MatterRoles != "") {
+                    arrDMatterRoles = vm.configurations.MatterRoles.split('$|$');
+                }
+              
+                if (vm.configurations.ProjectPermissions != undefined && vm.configurations.ProjectPermissions != "") {
+                    arrDMatterPermissions = vm.configurations.ProjectPermissions.split('$|$');
+                }
+                vm.assignPermissionTeams = [];
+                // vm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
+
+                for (var aCount = 0; aCount < arrDMatterUsers.length; aCount++) {
+                    var assignPermTeam = {};
+                    if ("" !== arrDMatterUsers[aCount]) {
+                        arrDMatterUsers[aCount] = arrDMatterUsers[aCount].replace(/\;$/, '');
+                        arrDMatterUserEmails[aCount] = arrDMatterUserEmails[aCount].replace(/\;$/, '');
+                        assignPermTeam.assignedUser = arrDMatterUsers[aCount] + "(" + arrDMatterUserEmails[aCount] + ")";
+                    }
+                    else {
+                        assignPermTeam.assignedUser = "";
+                        assignPermTeam.assignedRole = vm.assignRoles[0];
+                        assignPermTeam.assignedPermission = vm.assignPermissions[0];
+                    }
+
+
+                    //vm.assignRoles   vm.assignPermissions 
+                    //assignedRole  assignedPermission
+                    angular.forEach(vm.assignRoles, function (assignRole) {                        
+                        if (arrDMatterRoles[aCount] == assignRole.name) {
+                            assignPermTeam.assignedRole = assignRole;
+                        }
+                    });
+                   
+                    angular.forEach(vm.assignPermissions, function (assignPermission) {
+                        if (arrDMatterPermissions[aCount] == assignPermission.name) {
+                            assignPermTeam.assignedPermission = assignPermission;
+                        }
+                    });
+                    if (assignPermTeam.assignedRole == undefined) {
+                        assignPermTeam.assignedRole = vm.assignRoles[0];
+                    }
+                    if (assignPermTeam.assignedPermission == undefined) {
+                        assignPermTeam.assignedPermission = vm.assignPermissions[0];
+                    }
+                    assignPermTeam.assigneTeamRowNumber = aCount + 1;
+
+                    vm.assignPermissionTeams.push(assignPermTeam);
+
+                }
+                var arrDMatterAreaOfLaw = [];
+                var dMatterTypes = "", dPrimaryMatterType = "";
+                var arrDMatterPracticeGroup = [];
+               // if (vm.configurations.MatterAreaofLaw!=undefined && vm.configurations.MatterAreaofLaw != "") {
+                arrDMatterAreaOfLaw = vm.selected;
+              //  }
+               
+                if (vm.configurations.ProjectPracticeGroup != "") {
+                    arrDMatterPracticeGroup = vm.configurations.ProjectPracticeGroup.split('$|$');
+                }
+                dMatterTypes = vm.configurations.ProjectTypes ? vm.configurations.ProjectTypes : "";
+                var arrDMatterTypes = [];
+                if (dMatterTypes) {
+                    arrDMatterTypes = dMatterTypes.split('$|$');
+                }
+                dPrimaryMatterType = vm.configurations.DefaultProjectType ? vm.configurations.DefaultProjectType : "";
+                vm.selectedDocumentTypeLawTerms = [];
+                vm.documentTypeLawTerms = [];
+                if (vm.taxonomyHierarchyLevels == 2) {
+                    setDefaultTaxonomyHierarchyLeveTwo(arrDMatterTypes, dPrimaryMatterType);
+                }
+                if (vm.taxonomyHierarchyLevels == 3) {
+                    setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType);
+                }
+                if (vm.taxonomyHierarchyLevels == 4) {
+                    setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes, dPrimaryMatterType);
+                }
+                if (vm.taxonomyHierarchyLevels == 5) {
+                    setDefaultTaxonomyHierarchyLevelFive(arrDMatterTypes, dPrimaryMatterType);
+                }
+
+                if (vm.modifiedDate === data.value)
+                    vm.cacheItemModifiedDate = vm.modifiedDate;
+                else
+                    vm.cacheItemModifiedDate = data.value;
+            }
+            ///setting data for backwardcompatibility false
+            function setNonBackwardCompatabilityClientData(data) {
+                var arrDMatterUsers = [];
+                var arrDMatterUserEmails = [];
+                var arrDMatterRoles = [];
+                var arrDMatterPermissions = [];
+                if (vm.configurations.MatterUsers != undefined && vm.configurations.MatterUsers != "") {
+                    arrDMatterUsers = vm.configurations.MatterUsers.split('$|$');
+                }
+              
+                if (vm.configurations.MatterUserEmails != undefined && vm.configurations.MatterUserEmails != "") {
+                    arrDMatterUserEmails = vm.configurations.MatterUserEmails.split('$|$');
+                }
+               
+                if (vm.configurations.MatterRoles != undefined && vm.configurations.MatterRoles != "") {
+                    arrDMatterRoles = vm.configurations.MatterRoles.split('$|$');
+                }
+
+                if (vm.configurations.MatterPermissions != undefined && vm.configurations.MatterPermissions != "") {
+                    arrDMatterPermissions = vm.configurations.MatterPermissions.split('$|$');
+                }
+                
+                vm.assignPermissionTeams = [];              
+
+                for (var aCount = 0; aCount < arrDMatterUsers.length; aCount++) {
+                    var assignPermTeam = {};
+                    if ("" !== arrDMatterUsers[aCount]) {
+                        arrDMatterUsers[aCount] = arrDMatterUsers[aCount].replace(/\;$/, '');
+                        arrDMatterUserEmails[aCount] = arrDMatterUserEmails[aCount].replace(/\;$/, '');
+                        assignPermTeam.assignedUser = arrDMatterUsers[aCount] + "(" + arrDMatterUserEmails[aCount] + ")";
+                    }
+                    else {
+                        assignPermTeam.assignedUser = "";
+                        assignPermTeam.assignedRole = vm.assignRoles[0];
+                        assignPermTeam.assignedPermission = vm.assignPermissions[0];
+                    }
+                   
+                    angular.forEach(vm.assignRoles, function (assignRole) {
+                        if (arrDMatterRoles[aCount] == assignRole.name) {
+                            assignPermTeam.assignedRole = assignRole;
+                        }
+                    });
+                    angular.forEach(vm.assignPermissions, function (assignPermission) {
+                        if (arrDMatterPermissions[aCount] == assignPermission.name) {
+                            assignPermTeam.assignedPermission = assignPermission;
+                        }
+                    });
+                    assignPermTeam.assigneTeamRowNumber = aCount + 1;
+
+                    vm.assignPermissionTeams.push(assignPermTeam);
+
+                }
+                var arrDMatterAreaOfLaw = [];
+                var dMatterTypes = "", dPrimaryMatterType = "";
+                var arrDMatterPracticeGroup = [];
+                if (vm.configurations.MatterAreaofLaw != "") {
+                    arrDMatterAreaOfLaw = vm.configurations.MatterAreaofLaw.split('$|$');
+                }
+                if (vm.configurations.MatterPracticeGroup != "") {
+                    arrDMatterPracticeGroup = vm.configurations.MatterPracticeGroup.split('$|$');
+                }
+                
+                dMatterTypes = vm.configurations.MatterTypes ? vm.configurations.MatterTypes : "";
+                var arrDMatterTypes = [];
+                if (dMatterTypes) {
+                    arrDMatterTypes = dMatterTypes.split('$|$');
+                }
+                dPrimaryMatterType = vm.configurations.DefaultMatterType ? vm.configurations.DefaultMatterType : "";
+                vm.selectedDocumentTypeLawTerms = [];
+                vm.documentTypeLawTerms = [];
+                if (vm.taxonomyHierarchyLevels == 2) {
+                    setDefaultTaxonomyHierarchyLeveTwo(arrDMatterTypes, dPrimaryMatterType);
+                }
+                if (vm.taxonomyHierarchyLevels == 3) {
+                    setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType);
+                }
+                if (vm.taxonomyHierarchyLevels == 4) {
+                    setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes, dPrimaryMatterType);
+                }
+                if (vm.taxonomyHierarchyLevels == 5) {
+                    setDefaultTaxonomyHierarchyLevelFive(arrDMatterTypes, dPrimaryMatterType);
+                }
+
+                if (vm.modifiedDate === data.value)
+                    vm.cacheItemModifiedDate = vm.modifiedDate;
+                else
+                    vm.cacheItemModifiedDate = data.value;
+            }
+
+
+
+            //function to filter practice groups
+            function getClientsPracticeGroup(clientName) {
+                if (clientName && clientName != null && clientName != "") {
+                    var levelOneList = [];
+                    var pgTermList = vm.parentLevelOneList.level1;
+
+                    angular.forEach(pgTermList, function (pgTerm) {
+                        if (pgTerm.level2) {
+                            angular.forEach(pgTerm.level2, function (levelTwoTerm) {
+                                if (levelTwoTerm.termName === clientName) {
+                                    levelOneList.push(pgTerm);
+
+                                }
+                            });
+                        }
+                    });
+                    vm.levelOneList = levelOneList;
+                    var data = {};
+                    data.name = vm.parentLevelOneList.name;
+                    data.levels = vm.parentLevelOneList.levels;
+                    data.level1 = levelOneList;
+                    vm.selectedLevelOneItem = vm.levelOneList[0];
+                    getTaxonomyHierarchy(data);
+
+                    // if(pgList.)
+                }
+
+            }
 
         }]);
     app.filter('getAssociatedDocumentTemplatesCount', function () {
