@@ -24,6 +24,7 @@
         cm.showRoles = true;
         cm.isBackwardCompatible = configs.global.isBackwardCompatible;
         var siteCollectionPath = "";
+         cm.oEmailRegExpr = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	cm.getExternalUserNotification = true;
 	cm.currentExternalUser = {};
 	cm.createContent = uiconfigs.CreateMatter;
@@ -41,9 +42,9 @@
         cm.isEdit = getParameterByName("IsEdit");
 
         if (cm.clientUrl === "" && cm.matterName === "") {
-            cm.matterName = "";
-           // cm.clientUrl = cm.configsUri.SPOsiteURL + "/teams/pcpreprod";
-           // cm.isEdit = "true";
+                    cm.matterName = "";
+            // cm.clientUrl = cm.configsUri.SPOsiteURL + "/teams/pcpreprod";
+            // cm.isEdit = "true";
         }
 
         //#region Service API Call
@@ -262,7 +263,7 @@
         //arrPermissions = getAssignedUserPermissions();
         //#endregion
         function validateEmail(email) {
-            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            var re = new RegExp(cm.oEmailRegExpr);
             return re.test(email);
         }
 
@@ -500,8 +501,8 @@
         //#region Utilty functions
 
         var getUserName = function (sUserEmails, bIsName) {
-            "use strict";
-            var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp("^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$");
+            "use strict";           
+            var arrUserNames = [], sEmail = "", oEmailRegex = new RegExp(cm.oEmailRegExpr);
             if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
                 arrUserNames = sUserEmails.split(";");
                 for (var iIterator = 0; iIterator < arrUserNames.length - 1; iIterator++) {

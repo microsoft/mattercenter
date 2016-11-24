@@ -144,5 +144,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             return userDetails.CheckUserPresentInMatterCenter(client.Url, client.Name);
         }
+
+        /// <summary>
+        /// This method will check whether login user is part of owner group or not
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        public bool IsLoginUserOwner(Client client)=> userDetails.IsLoginUserOwner(client);
+        
     }
 }

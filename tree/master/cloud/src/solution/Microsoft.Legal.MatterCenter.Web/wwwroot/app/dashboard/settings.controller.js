@@ -8,7 +8,7 @@
             vm.popupContainer = "hide";
             vm.selectedDocumentTypeLawTerms = [];
             vm.createMatterTaxonomyColumnNames = configs.contentTypes.managedColumns;
-            
+            vm.showDenyMessage = '';
             vm.createContent = uiconfigs.CreateMatter;
             vm.taxonomyHierarchyLevels = configs.taxonomy.levels;
             vm.selectedDocumentTypeLawTerms = [];
@@ -32,6 +32,18 @@
             if (vm.taxonomyHierarchyLevels >= 5) {
                 vm.levelFiveList = [];
             }
+
+
+            //#region API to check whether the current login user is owner or not
+            function isLoginUserOwner(optionsForClientUrl, callback) {
+                api({
+                    resource: 'settingsResource',
+                    method: 'isLoginUserOwner',
+                    data: optionsForClientUrl,
+                    success: callback
+                });
+            }
+
             //#region API to get the client taxonomy 
             function getTaxonomyDetails(optionsForClientGroup, callback) {
                 api({
@@ -99,11 +111,17 @@
             vm.settingsConfigs = uiconfigs.Settings;
             vm.assignPermissions = [];
             vm.successmessage = false;
+            vm.canAccessSettingsPage = true;
             //#endregion
 
             //#region for hiding the client details on load
             vm.showClientDetails = false;
             //#endregion
+
+            var optionsForClientUrl = {                
+                    Url: configs.global.repositoryUrl                
+            };
+
 
             //#region requestobject for getting the taxonomy data
             var optionsForGroup = {
@@ -136,6 +154,39 @@
                     DocumentTemplatesName: configs.taxonomy.subAreaOfLawDocumentContentTypeProperty,
                 }
             }
+
+
+            vm.isLoginUserOwner = function () {
+                $timeout(function () { vm.lazyloader = false; }, 10);
+                
+                isLoginUserOwner(optionsForClientUrl, function (response) {
+                    if (response != null) {                        
+                        vm.canAccessSettingsPage = response.isLoginUserOwner;
+
+                        if (vm.canAccessSettingsPage) {
+                            //#region for calling the functions on page load
+                            vm.getTaxonomyData();
+                            vm.getRolesData();
+                            vm.getPermissionsData();
+                            angular.element('#matterCenterHeader').addClass('showCommonContent');
+                            angular.element('#footer').addClass('showCommonContent');
+                            //#endregion
+                        }
+                        else {
+                            vm.showDenyMessage = vm.settingsConfigs.DenySupportMailMessage
+                            angular.element('#matterCenterHeader').removeClass('commonContent');
+                            angular.element('#matterCenterHeader').addClass('hideCommonContent');
+                            angular.element('#footer').removeClass('commonContent');
+                            angular.element('#footer').addClass('hideCommonContent');
+                            
+                        }
+                        vm.lazyloader = true;
+                        vm.popupContainerBackground = "hide";
+                    }
+                })
+            }
+
+            vm.isLoginUserOwner();
 
             vm.taxonomydata = [];
             vm.getTaxonomyData = function () {
@@ -238,11 +289,7 @@
             }
             //#endregion
 
-            //#region for calling the functions on page load
-            vm.getTaxonomyData();
-            vm.getRolesData();
-            vm.getPermissionsData();
-            //#endregion
+            
 
 
             //#region for getting the users based on search values

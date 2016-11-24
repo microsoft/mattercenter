@@ -150,7 +150,7 @@
       "kind": "web",
       "name": "[variables('components_AppInsights_name')]",
       "apiVersion": "2014-04-01",
-      "location": "Central US",
+      "location": "South Central US",
       "properties": {
         "ApplicationId": "[variables('components_AppInsights_name')]"
       },
