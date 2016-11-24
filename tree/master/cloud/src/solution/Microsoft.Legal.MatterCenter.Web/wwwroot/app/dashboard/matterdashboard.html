@@ -235,13 +235,15 @@
                                     <div class='input-group'>
                                         <input type='text' placeholder='{{vm.matterDashboardConfigs.AdvSearchTextbox5PlaceholderText}}' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
-                                               ng-model='vm.startdate'
+                                               ng-model='vm.startDate'
                                                is-open='vm.openedStartDate'
+                                               ng-keydown="vm.changeOnCreateDate($event)"
+                                               ng-blur="vm.changeOnCreateDate($event)"
                                                datepicker-options='vm.dateOptions'
                                                ng-required='true' close-text='Close'
                                                alt-input-formats='altInputFormats'/>
                                         <span class='input-group-btn'>
-                                            <button type='button' class='btn btn-default' ng-click='vm.openStartDate()' ><i class='glyphicon glyphicon-calendar'></i></button>
+                                            <button type='button' class='btn btn-default' ng-click='vm.openStartDate($event)' ><i class='glyphicon glyphicon-calendar'></i></button>
                                         </span>
                                     </div>
                                 </div>
@@ -249,13 +251,15 @@
                                     <div class='input-group'>
                                         <input type='text' placeholder='{{vm.matterDashboardConfigs.AdvSearchTextbox6PlaceholderText}}' class='calendar form-control'
                                                uib-datepicker-popup='MM/dd/yyyy'
-                                               ng-model='vm.enddate'
+                                               ng-model='vm.endDate'
                                                is-open='vm.openedEndDate'
-                                               datepicker-options='vm.enddateOptions'
+                                               ng-keydown="vm.changeOnCreateDate($event)"
+                                               ng-blur="vm.changeOnCreateDate($event)"
+                                               datepicker-options='vm.endDateOptions'
                                                ng-required='true' close-text='Close'
                                                alt-input-formats='altInputFormats' />
                                         <span class='input-group-btn'>
-                                            <button type='button' class='btn btn-default' ng-click='vm.openEndDate()' ><i class='glyphicon glyphicon-calendar'></i></button>
+                                            <button type='button' class='btn btn-default' ng-click='vm.openEndDate($event)' ><i class='glyphicon glyphicon-calendar'></i></button>
                                         </span>
                                     </div>
                                 </div>
