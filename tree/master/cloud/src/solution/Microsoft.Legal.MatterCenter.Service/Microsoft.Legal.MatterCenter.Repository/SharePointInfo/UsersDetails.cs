@@ -425,5 +425,31 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 throw;
             }
         }
+
+
+        /// <summary>
+        /// This method will check if the current login user is part of site owners group or not
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        public bool IsLoginUserOwner(Client client)
+        {
+            try
+            {
+                using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
+                {
+                    UserCollection siteOwners = clientContext.Web.AssociatedOwnerGroup.Users;
+                    clientContext.Load(siteOwners, owners => owners.Include(owner => owner.Title));
+                    clientContext.Load(clientContext.Web.CurrentUser);
+                    clientContext.ExecuteQuery();
+                    return siteOwners.Any(owners => owners.Title.Equals(clientContext.Web.CurrentUser.Title));
+                }
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
     }
 }

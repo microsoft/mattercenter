@@ -302,5 +302,50 @@ namespace Microsoft.Legal.MatterCenter.Web
                 throw;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        [HttpPost("isowner")]
+        [Produces(typeof(bool))]
+        [SwaggerOperation("is-owner")]
+        [SwaggerResponse(HttpStatusCode.OK,
+            Description = "Checks whether the login user is part of site owners group",
+            Type = typeof(bool))]
+        [SwaggerResponseRemoveDefaults]
+        public IActionResult IsLoginUserOwner([FromBody]Client client)
+        {
+            try
+            {
+
+                #region Error Checking                
+                GenericResponseVM genericResponse = null;
+
+                if (client == null && string.IsNullOrWhiteSpace(client.Url))
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Value = errorSettings.MessageNoInputs,
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                }
+                #endregion
+                bool isLoginUserOwner = userRepositoy.IsLoginUserOwner(client);
+                var loginUserPartOfOwnerGroup = new
+                {
+                    IsLoginUserOwner = isLoginUserOwner
+                };
+                return matterCenterServiceFunctions.ServiceResponse(loginUserPartOfOwnerGroup, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
     }
 }

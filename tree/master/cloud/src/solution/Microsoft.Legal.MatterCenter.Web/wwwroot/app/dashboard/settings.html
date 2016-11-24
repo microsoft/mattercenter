@@ -1,5 +1,13 @@
 ﻿<style>
     .commonContent {
+        display: none !important;
+    }
+
+    .hideCommonContent {
+        display: none !important;
+    }
+
+    .showCommonContent {
         display: block !important;
     }
 
@@ -10,7 +18,13 @@
     }
 </style>
 <div id="mainDivContainer" ng-click="vm.closealldrops()">
-    <div id="contentDiv" class="pad0">
+
+    <div id="accessDeniedDiv" ng-show="!vm.canAccessSettingsPage">
+        You do not have permission to access this page. If you feel you need to access this page, kindly contact your support <a href="{{vm.showDenyMessage}}">team</a> to grant you access.
+        
+    </div>
+
+    <div id="contentDiv" class="pad0" ng-if="vm.canAccessSettingsPage">
         <div ng-if="vm.clientlist">
             <div class="defaultFontStyle clientName" id="settingName">{{vm.settingsConfigs.Label1HeaderText}}</div>
             <div class="defaultFontStyle contentDescription clientDescription">{{vm.settingsConfigs.Label2Text}}</div>

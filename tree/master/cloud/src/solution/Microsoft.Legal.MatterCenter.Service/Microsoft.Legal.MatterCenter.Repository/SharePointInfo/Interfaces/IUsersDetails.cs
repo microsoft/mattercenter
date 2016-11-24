@@ -32,6 +32,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
         Task<Users> GetUserProfilePicture(Client client);
         bool CheckUserPresentInMatterCenter(string clientUrl, string email);
         bool CheckUserPresentInMatterCenter(ClientContext clientContext, string email);
-        //bool CheckUserPermissionsInGroup(Client client, string groupName);
+        /// <summary>
+        ///  This method will check whether login user is part of owner group or not
+        /// </summary>
+        /// <param name="client"></param>
+        /// <returns></returns>
+        bool IsLoginUserOwner(Client client);
     }
 }
