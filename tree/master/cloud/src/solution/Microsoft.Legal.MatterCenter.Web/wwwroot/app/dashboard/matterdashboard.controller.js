@@ -438,8 +438,8 @@
                 vm.selectedAOLs = "";
                 vm.selectedSubAOLs = "";
                 vm.selectedClients = "";
-                vm.startdate = "";
-                vm.enddate = "";
+                vm.startDate = "";
+                vm.endDate = "";
                 vm.searchText = "";
                 angular.element("input[name='practiceGroup']:checkbox").prop('checked', false);
                 angular.element("input[name='clients']:checkbox").prop('checked', false);
@@ -907,17 +907,20 @@
                 formatYear: 'yy',
                 maxDate: new Date()
             };
-            vm.enddateOptions = {
+            vm.endDateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             }
-            $scope.$watch('vm.startdate', function (newval, oldval) {
-                vm.enddateOptions.minDate = newval;
+            $scope.$watch('vm.startDate', function (newval, oldval) {
+                vm.endDateOptions.minDate = newval;
             });
             vm.openStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
+                }
+                if (vm.endDate !== '' && vm.endDate !== undefined) {
+                    vm.dateOptions.maxDate = vm.endDate;
                 }
                 vm.openedStartDate = vm.openedStartDate ? false : true;
                 vm.openedEndDate = false;
@@ -932,6 +935,50 @@
             };
             vm.openedStartDate = false;
             vm.openedEndDate = false;
+
+            vm.changeOnCreateDate = function ($event) {
+                if ($event.keyCode == '13' || $event.keyCode == '9') {
+
+                    var modelValue = $event.target.attributes['ng-model'].value;
+
+                    if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test($event.target.value)) {
+                        if (modelValue == 'vm.startDate') {
+                            vm.startDate = new Date();
+                            $event.target.value = vm.startDate;
+                        } else {
+                            vm.endDate = new Date();
+                            $event.target.value = vm.endDate;
+                        }
+                    }
+                    else {
+                        var parts = $event.target.value.split("/");
+                        var day = parseInt(parts[1], 10);
+                        var month = parseInt(parts[0], 10);
+                        var year = parseInt(parts[2], 10);
+                        var isInvalid = new Date(year, month - 1, day) > new Date();
+                        if (modelValue == 'vm.startDate') {
+                            isInvalid = new Date(year, month - 1, day) > vm.dateOptions.maxDate;
+                        }
+                        if (isInvalid && modelValue == 'vm.startDate') {
+                            if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
+                                vm.startDate = new Date(year, month - 1, day);
+                                vm.endDate = vm.startDate;
+                                vm.dateOptions.maxDate = vm.startDate;
+                            }
+                            else if (new Date(year, month - 1, day) > new Date() && vm.dateOptions.maxDate <= new Date()) {
+                                vm.startDate = vm.dateOptions.maxDate;
+                                $event.target.value = vm.startDate;
+                            } else {
+                                vm.startDate = new Date();
+                                $event.target.value = vm.startDate;
+                            }
+                        } else if (isInvalid && modelValue == 'vm.endDate') {
+                            vm.endDate = new Date();
+                            $event.target.value = vm.endDate;
+                        }
+                    }
+                }
+            };
             //#endregion
 
             //#region showing and hiding client dropdown
@@ -2087,11 +2134,11 @@
                 else {
                     jsonMatterSearchRequest.SearchObject.Filters.SubareaOfLaw = "";
                 }
-                if (vm.startdate != "" && vm.startdate != undefined) {
-                    startdate = $filter('date')(vm.startdate, "yyyy-MM-ddT00:00:00") + "Z";
+                if (vm.startDate != "" && vm.startDate != undefined) {
+                    startdate = $filter('date')(vm.startDate, "yyyy-MM-ddT00:00:00") + "Z";
                 }
-                if (vm.enddate != "" && vm.enddate != undefined) {
-                    enddate = $filter('date')(vm.enddate, "yyyy-MM-ddT23:59:59") + "Z";
+                if (vm.endDate != "" && vm.endDate != undefined) {
+                    enddate = $filter('date')(vm.endDate, "yyyy-MM-ddT23:59:59") + "Z";
                 }
                 if (vm.selected == "") {
                     jsonMatterSearchRequest.SearchObject.SearchTerm = "";

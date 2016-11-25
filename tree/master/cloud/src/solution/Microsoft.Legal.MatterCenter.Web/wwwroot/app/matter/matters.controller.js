@@ -583,7 +583,7 @@
                                             if (file.length > 0) {
                                                 if (!file[0].userCancelledContentCheckPerform) {
                                                     file[0].value = file[0].value + "<br/><br/>" + response.data[i].value;
-                                                } 
+                                                }
                                                 file[0].saveLatestVersion = "True";
                                                 file[0].cancel = "True";
                                                 file[0].contentCheck = "False";
@@ -1506,23 +1506,23 @@
             //#region Code for filtering ModifiedDate
             //start
             vm.FilterModifiedDate = function (name) {
-                if (vm.startDate != "" || vm.endDate != "" || vm.modstartdate != "" || vm.modenddate != "") {
+                if (vm.startDate != "" || vm.endDate != "" || vm.modStartDate != "" || vm.modStartDate != "") {
                     vm.matterdateheader = false;
                     vm.lazyloader = false;
                     vm.divuigrid = false;
                     searchRequest.SearchObject.PageNumber = 1;
                     searchRequest.SearchObject.SearchTerm = "";
                     if (name == "Modified Date") {
-                        if (vm.modstartdate != undefined) {
-                            if (vm.modstartdate != "") {
-                                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modstartdate, "yyyy-MM-ddT00:00:00") + "Z";
+                        if (vm.modStartDate != undefined) {
+                            if (vm.modStartDate != "") {
+                                searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = $filter('date')(vm.modStartDate, "yyyy-MM-ddT00:00:00") + "Z";
                             }
                         } else {
                             searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                         }
-                        if (vm.modenddate != undefined) {
-                            if (vm.modenddate != "") {
-                                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modenddate, "yyyy-MM-ddT23:59:59") + "Z";
+                        if (vm.modEndDate != undefined) {
+                            if (vm.modEndDate != "") {
+                                searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = $filter('date')(vm.modEndDate, "yyyy-MM-ddT23:59:59") + "Z";
                             }
                         } else {
                             searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
@@ -1546,7 +1546,7 @@
                         }
                         vm.opendatefilter = true;
                     }
-                    if ((vm.modstartdate == undefined && vm.modenddate == undefined) || (vm.modstartdate == "" && vm.modenddate == "") || (vm.modstartdate == undefined && vm.modenddate == "") || (vm.modstartdate == undefined && vm.modenddate == "")) {
+                    if ((vm.modStartDate == undefined && vm.modEndDate == undefined) || (vm.modStartDate == "" && vm.modEndDate == "") || (vm.modStartDate == undefined && vm.modEndDate == "") || (vm.modStartDate == undefined && vm.modEndDate == "")) {
                         vm.moddatefilter = false;
                     }
                     if ((vm.startDate == undefined && vm.endDate == undefined) || (vm.startDate == "" && vm.endDate == "") || (vm.startDate == undefined && vm.endDate == "") || (vm.startDate == "" && vm.endDate == undefined)) {
@@ -1630,8 +1630,8 @@
                 vm.matterheader = true;
 
                 vm.moddatefilter = false;
-                vm.modstartdate = '';
-                vm.modenddate = '';
+                vm.modStartDate = '';
+                vm.modEndDate = '';
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = '';
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = '';
 
@@ -1682,6 +1682,7 @@
                         searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = "";
                         vm.startDate = "";
                         vm.endDate = "";
+                        vm.dateOptions.maxDate = new Date();
                         vm.opendatefilter = false;
                     }
                 }
@@ -1724,8 +1725,9 @@
                     if (!vm.globalSettings.isBackwardCompatible) {
                         searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                         searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
-                        vm.modstartdate = "";
-                        vm.modenddate = "";
+                        vm.modStartDate = "";
+                        vm.modEndDate = "";
+                        vm.modateOptions.maxDate = new Date();
                         vm.moddatefilter = false;
                     } else {
                         searchRequest.SearchObject.Filters.SubareaOfLaw = "";
@@ -1756,6 +1758,7 @@
                     searchRequest.SearchObject.Filters.DateFilters.OpenDateTo = "";
                     vm.startDate = "";
                     vm.endDate = "";
+                    vm.dateOptions.maxDate = new Date();
                     vm.opendatefilter = false;
                 }
                 if (vm.matterid === 3) {
@@ -1872,7 +1875,7 @@
                             });
                             vm.nodata = false;
                         }
-                       
+
                         $timeout(function () {
                             vm.lazyloader = true;
                             vm.divuigrid = true;
@@ -2098,26 +2101,71 @@
 
             //#region Angular Datepicker Starts here
             //Start for modified date 
-            vm.moddateOptions = {
+            vm.modDateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             };
 
 
-            vm.modenddateOptions = {
+            vm.modEndDateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             }
 
-            $scope.$watch('vm.modstartdate', function (newval, oldval) {
-                vm.modenddateOptions.minDate = newval;
+            $scope.$watch('vm.modStartDate', function (newval, oldval) {
+                vm.modEndDateOptions.minDate = newval;
             });
 
+            vm.changeOnModifiedDate = function ($event) {
+                if ($event.keyCode == '13' || $event.keyCode == '9') {
+
+                    var modelValue = $event.target.attributes['ng-model'].value;
+
+                    if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test($event.target.value)) {
+                        if (modelValue == 'vm.modStartDate') {
+                            vm.modStartDate = new Date();
+                            $event.target.value = vm.modStartDate;
+                        } else {
+                            vm.modEndDate = new Date();
+                            $event.target.value = vm.modEndDate;
+                        }
+                    }
+                    else {
+                        var parts = $event.target.value.split("/");
+                        var day = parseInt(parts[1], 10);
+                        var month = parseInt(parts[0], 10);
+                        var year = parseInt(parts[2], 10);
+                        var isInvalid = new Date(year, month - 1, day) > new Date();
+                        if (modelValue == 'vm.modStartDate') {
+                            isInvalid = new Date(year, month - 1, day) > vm.modDateOptions.maxDate;
+                        }
+                        if (isInvalid && modelValue == 'vm.modStartDate') {
+                            if (new Date(year, month - 1, day) > vm.modDateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
+                                vm.modStartDate = new Date(year, month - 1, day);
+                                vm.modEndDate = vm.modStartDate;
+                                vm.modDateOptions.maxDate = vm.modStartDate;
+                            } else if (new Date(year, month - 1, day) > new Date() && vm.modDateOptions.maxDate <= new Date()) {
+                                vm.modStartDate = vm.modDateOptions.maxDate;
+                                $event.target.value = vm.modStartDate;
+                            } else {
+                                vm.modStartDate = new Date();
+                                $event.target.value = vm.modStartDate;
+                            }
+                        } else if (isInvalid && modelValue == 'vm.modEndDate') {
+                            vm.modEndDate = new Date();
+                            $event.target.value = vm.modEndDate;
+                        }
+                    }
+                }
+            };
 
             vm.modStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
+                }
+                if (vm.modEndDate !== '' && vm.modEndDate !== undefined) {
+                    vm.modDateOptions.maxDate = vm.modEndDate;
                 }
                 this.modifiedStartDate = true;
             };
@@ -2126,11 +2174,11 @@
                     $event.preventDefault();
                     $event.stopPropagation();
                 }
-                this.modifiedenddate = true;
+                this.modifiedEndDate = true;
             };
 
             vm.modifiedStartDate = false;
-            vm.modifiedenddate = false;
+            vm.modifiedEndDate = false;
 
             vm.disabled = function (date, mode) {
                 return (mode === 'day' && (date.getDay() != 0));
@@ -2145,14 +2193,58 @@
                 maxDate: new Date()
             };
 
+            vm.changeOnCreateDate = function ($event) {
+                if ($event.keyCode == '13'|| $event.keyCode == '9') {
 
-            vm.enddateOptions = {
+                    var modelValue = $event.target.attributes['ng-model'].value;
+
+                    if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test($event.target.value)) {
+                        if (modelValue == 'vm.startDate') {
+                            vm.startDate = new Date();
+                            $event.target.value = vm.startDate;
+                        } else {
+                            vm.endDate = new Date();
+                            $event.target.value = vm.endDate;
+                        }
+                    }
+                    else {
+                        var parts = $event.target.value.split("/");
+                        var day = parseInt(parts[1], 10);
+                        var month = parseInt(parts[0], 10);
+                        var year = parseInt(parts[2], 10);
+                        var isInvalid = new Date(year, month - 1, day) > new Date();
+                        if (modelValue == 'vm.startDate') {
+                            isInvalid = new Date(year, month - 1, day) > vm.dateOptions.maxDate;
+                        }
+                        if (isInvalid && modelValue == 'vm.startDate') {
+                            if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
+                                vm.startDate = new Date(year, month - 1, day);
+                                vm.endDate = vm.startDate;
+                                vm.dateOptions.maxDate = vm.startDate;
+                            }
+                            else if (new Date(year, month - 1, day) > new Date() && vm.dateOptions.maxDate <= new Date()) {
+                                vm.startDate = vm.dateOptions.maxDate;
+                                $event.target.value = vm.startDate;
+                            } else {
+                                vm.startDate = new Date();
+                                $event.target.value = vm.startDate;
+                            }
+
+                        } else if (isInvalid && modelValue == 'vm.endDate') {
+                            vm.endDate = new Date();
+                            $event.target.value = vm.endDate;
+                        }
+                    }
+                }
+            };
+
+            vm.endDateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
             }
 
             $scope.$watch('vm.startDate', function (newval, oldval) {
-                vm.enddateOptions.minDate = newval;
+                vm.endDateOptions.minDate = newval;
             });
 
 
@@ -2160,6 +2252,9 @@
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
+                }
+                if (vm.endDate !== '' && vm.endDate !== undefined) {
+                    vm.dateOptions.maxDate = vm.endDate;
                 }
                 this.openedStartDate = true;
             };
@@ -2219,7 +2314,7 @@
                 }
                 else {
                     get(searchRequest, function (response) {
-                          vm.lazyloader = true;
+                        vm.lazyloader = true;
                         if (response == "" || response.errorCode == "500") {
                             vm.gridOptions.data = response;
                             vm.divuigrid = true;
@@ -2288,12 +2383,14 @@
                         vm.projectIDSearchTerm = '';
                     }
                     if (vm.moddatefilter == false) {
-                        vm.modstartdate = '';
-                        vm.modenddate = '';
+                        vm.modStartDate = '';
+                        vm.modEndDate = '';
+                        vm.modDateOptions.maxDate = new Date();
                     }
                     if (vm.opendatefilter == false) {
                         vm.startDate = '';
                         vm.endDate = '';
+                        vm.dateOptions.maxDate = new Date();
                     }
                 }
             }
@@ -2820,7 +2917,7 @@
             }
             vm.abortContentCheck = function (file, isLocalUpload) {
                 "use strict";
-                if (isLocalUpload) {                   
+                if (isLocalUpload) {
                     file.userCancelledContentCheckPerform = true;
                 }
                 file.contentCheck = null;
@@ -2907,6 +3004,8 @@
                 if (name === vm.matterConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible) {
                     vm.filtername = vm.matterConfigContent.GridColumn4Header;
                 }
+                vm.dateOptions.maxDate = new Date();
+                vm.modDateOptions.maxDate = new Date();
                 $timeout(function () {
                     if (name == vm.matterConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible
                         || name == vm.matterConfigContent.GridColumn7Header && !vm.globalSettings.isBackwardCompatible
@@ -3008,8 +3107,8 @@
                 vm.practiceGroupfilter = false;
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
-                vm.modstartdate = "";
-                vm.modenddate = "";
+                vm.modStartDate = "";
+                vm.modEndDate = "";
                 vm.moddatefilter = false;
                 vm.subAreaOfLawSearchTerm = "";
                 vm.subareafilter = false;
