@@ -2159,7 +2159,7 @@
                 }
             };
 
-            vm.modStartDate = function ($event) {
+            vm.openModStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
@@ -2169,7 +2169,7 @@
                 }
                 this.modifiedStartDate = true;
             };
-            vm.modEndDate = function ($event) {
+            vm.openModEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
                     $event.stopPropagation();
