@@ -1568,18 +1568,18 @@
         });
 
 
-        vm.modStartDateClick = function ($event) {
+        vm.openModStartDate = function ($event) {
             if ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
             }
 
-            if (vm.modenddate !== '' && vm.modenddate !== undefined) {
-                vm.modDateOptions.maxDate = vm.modenddate;
+            if (vm.modEndDate !== '' && vm.modEndDate !== undefined) {
+                vm.modDateOptions.maxDate = vm.modEndDate;
             }
             this.modifiedStartDate = true;
         };
-        vm.modEndDateClick = function ($event) {
+        vm.openModEndDate = function ($event) {
             if ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
