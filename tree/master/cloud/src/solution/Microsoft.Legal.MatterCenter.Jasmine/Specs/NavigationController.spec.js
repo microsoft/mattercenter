@@ -27,7 +27,7 @@ describe("Navigation Controller test suite", function () {
 
     beforeEach(inject(function ($controller, $rootScope) {
         rootScope = $rootScope.$new();
-        vm = $controller("navigationController as vm", { $scope: $scope, $state: $state, $stateParams: $stateParams, api: mockapi, $rootScope: rootScope });
+        vm = $controller("navigationController as vm", { $scope: $scope, $state: $state, $stateParams: $stateParams, api: mockapi, $rootScope: rootData });
     }));
 
     describe("Verification of canCreateMatter function", function () {
