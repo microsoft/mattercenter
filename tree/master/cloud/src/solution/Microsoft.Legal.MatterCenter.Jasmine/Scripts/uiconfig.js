@@ -119,7 +119,9 @@
         "GridColumn3Header": "Author",
         "GridColumn4Header": "Modified Date",
         "GridColumn5Header": "Document ID",
-        "GridColumn6Header": "Version"
+        "GridColumn6Header": "Version",
+        "GridColumn7Header": "Created Date",
+        "GridColumn8Header": "Matter Name"
     },
     "Documents": {
         "EllipsisLink4Text": "Unpin this Document",
@@ -262,6 +264,9 @@
         "GridColumn3Header": "Client.Matter ID",
         "GridColumn4Header": "Modified Date",
         "GridColumn5Header": "Responsible attorney",
+        "GridColumn6Header": "Version",
+        "GridColumn7Header": "Created Date",
+        "GridColumn8Header": "Practice Group",
         "AdvSearchLabel1InternalFuncParamText": "client",
         "AdvSearchLabel2InternalFuncParamText": "level1",
         "AdvSearchLabel3InternalFuncParamText": "level2"
@@ -423,5 +428,21 @@
         "Radio2Option2ValueText": "DateTime",
         "Label33Section2Text": "Your changes have been saved. Go back to ",
         "Label34Section2Text": "Clients"
+    },
+    "Admin": {
+        "Link2Text": "Update labels for details page in sharepoint site",
+        "Link1Text": "Update labels for matter center"
+    },
+    "uploadMessages": {
+        "maxAttachedMessage": "Do not select more than five documents to attach at one time.",
+        "attachFailureMessage": "One or more of your selected documents failed to attach:",
+        "attachButtonText": "MyUpload",
+        "overwrite_Config_Property": "Email Only",
+        "upload_Append_Button": "Append date to file name and save",
+        "upload_Append_Button_Tooltip": "The file will be saved as new, separate document with the current date and time added to the end of the file name.",
+        "content_Check_Abort": "Content check has been aborted.",
+        "uploadImageDocumentIcon": "/_layouts/15/images/ic{0}.gif",
+        "uploadPNGIconExtensions": "pdf"
     }
+
 };

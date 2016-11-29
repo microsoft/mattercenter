@@ -11,13 +11,10 @@ angular.module('matterMain', [
   'ngSanitize',
   'ngAnimate',
   'ui.grid.infiniteScroll'
-  //,'angulartics',
-  //'angulartics.azure'
 ])
 .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'adalAuthenticationServiceProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, adalProvider) {
 
-        // For any unmatched url, send to /route1...
         $urlRouterProvider.otherwise(function ($injector, $location) {
             var $state = $injector.get("$state");
             $state.go("mc.navigation");
@@ -120,7 +117,6 @@ angular.module('matterMain', [
              tenant: configs.uri.tenant,
              clientId: configs.ADAL.clientId,
              extraQueryParameter: 'nux=1',
-             //cacheLocation: 'localStorage', // enable this for IE, as sessionStorage does not work for localhost.
          }, $httpProvider);
 
 
@@ -148,20 +144,12 @@ angular.module('matterMain', [
         }
     }
 })
-//.run(function ($rootScope, $analytics) {
-//    $rootScope.setAuthenticatedUserContext = function () {
-//        appInsights.setAuthenticatedUserContext(configs.ADAL.authUserEmail);
-        
-//    };
 
 .run(function ($rootScope) {
     $rootScope.logEvent = function (eventName) {
-
         var appType = configs.appInsights.appType;
-        //var appType = 'test';
         eventName = appType + "/" + eventName;
         appInsights.trackEvent(eventName);
         appInsights.setAuthenticatedUserContext(configs.ADAL.authUserEmail)
     };
-
 });

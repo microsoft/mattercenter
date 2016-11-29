@@ -28,7 +28,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
 
     beforeEach(module('ui.router'));
     beforeEach(module('ui.bootstrap'));
-    
+
     beforeEach(inject(function ($controller, $rootScope) {
         rootScope = $rootScope.$new();
         vm = $controller('MatterDashBoardController as vm', { $scope: $scope, $state: $state, $stateParams: $stateParams, matterDashBoardResource: mockMatterDashBoardResource, api: mockapi, $rootScope: rootScope, $http: $http, $location: $location, $q: $q });
@@ -60,15 +60,6 @@ describe("MatterDashBoard Controller test suite for service call", function () {
         });
 
     });
-
-    //// **************** This Method is returning the value instead of setting in object in latest build ****************
-
-    ////describe('Verification of searchMatters function', function () {
-    ////    it('It should get searchMatters', function () {
-    ////        vm.searchMatters("test");
-    ////        expect(vm.pagenumber).toBe(1);
-    ////    });
-    ////});
 
     describe("Verification of myMatters function", function () {
         it("It should get all the matters", function () {
@@ -112,7 +103,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
         });
     });
 
-   describe("Verification of FilterByType function", function () {
+    describe("Verification of FilterByType function", function () {
         it("It should filter all the data by type", function () {
             vm.FilterByType();
             expect(vm.totalrecords).toBeGreaterThan(0);
@@ -120,14 +111,6 @@ describe("MatterDashBoard Controller test suite for service call", function () {
             expect(vm.lazyloader).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.divuigrid).toBe(true);
-            expect(vm.lazyloaderdashboard).toBe(true);
-        });
-    });
-
-    describe("Verification of sortyby function", function () {
-        it("It should sort all the data", function () {
-            var sortexp = "AlphabeticalUp";
-            vm.sortby(sortexp, "Searchkeyword");
             expect(vm.lazyloaderdashboard).toBe(true);
         });
     });
@@ -302,18 +285,17 @@ describe("MatterDashBoard Controller test suite for service call", function () {
     });
 
     describe("Verification of pinorunpin function", function () {
-        it("It should be added in pinned list and removed from pinned list", function () {     
+        it("It should be added in pinned list and removed from pinned list", function () {
             var count = vm.pinMatterCount;
             count = count + 1;
             event.currentTarget.src = "../images/pin-666.png";
             vm.pinorunpin(event, oTestConfiguration.oMatterObject);
             expect(count).toBeGreaterThan(0);
             expect(vm.lazyloaderdashboard).toBe(true);
-
         });
     });
 
-    describe("Verification of typeheadslect function", function () {
+    describe("Verification of typeheadselect function", function () {
         it("This should select the typehead", function () {
             vm.typeheadselect("test", "");
             expect(vm.displaypagination).toBe(true);
@@ -322,8 +304,8 @@ describe("MatterDashBoard Controller test suite for service call", function () {
             expect(vm.lazyloaderdashboard).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.allMatterCount).toBeGreaterThan(0);
-            expect(vm.myMatterCount).toBeGreaterThan(0);
-            expect(vm.pinMatterCount).toBeGreaterThan(0);
+            expect(vm.myMatterCount).toBe(0);
+            expect(vm.pinMatterCount).toBe(0);
             expect(vm.totalrecords).toBeGreaterThan(0);
         });
     });
@@ -340,14 +322,14 @@ describe("MatterDashBoard Controller test suite for service call", function () {
             expect(vm.totalrecords).toBeGreaterThan(0);
             expect(vm.matterGridOptions).toBeDefined();
             expect(vm.allMatterCount).toBeGreaterThan(0);
-            expect(vm.myMatterCount).toBeGreaterThan(0);
-            expect(vm.pinMatterCount).toBeGreaterThan(0);
+            expect(vm.myMatterCount).toBe(0);
+            expect(vm.pinMatterCount).toBe(0);
             expect(vm.totalrecords).toBeGreaterThan(0);
         });
     });
 
     describe("Verification of getSearchResults function", function () {
-        it("This should get the search result", function () {
+        it("This should get the search results", function () {
             vm.getSearchResults();
             expect(vm.lazyloaderdashboard).toBe(true);
             expect(vm.matterGridOptions).toBeDefined();
@@ -356,17 +338,16 @@ describe("MatterDashBoard Controller test suite for service call", function () {
             expect(vm.totalrecords).toBeGreaterThan(0);
             expect(vm.nodata).toBe(false);
             expect(vm.allMatterCount).toBeGreaterThan(0);
-            expect(vm.myMatterCount).toBeGreaterThan(0);
+            expect(vm.myMatterCount).toBe(0);
             expect(vm.pinMatterCount).toBeGreaterThan(0);
             expect(vm.totalrecords).toBeGreaterThan(0);
         });
     });
 
     describe("Verification of export function", function () {
-        it("This should export the data in spreadsheet", function () {
+        it("This should export the data to a spreadsheet", function () {
             vm.export();
             expect(vm.exportDate).toBeDefined();
         });
     });
-
 });
