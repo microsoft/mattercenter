@@ -15,7 +15,6 @@ describe("MatterUsers Controller test suite", function () {
     "use strict";
     var mockapi = function (matterResource) {
         getData(matterResource, mockMatterResource);
-
     };
 
     beforeEach(module("matterMain"));
@@ -35,7 +34,6 @@ describe("MatterUsers Controller test suite", function () {
         rootScope = $rootScope.$new();
         vm = $controller("MatterUsersController as vm", { $scope: $scope, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResource, api: mockapi, $rootScope: rootScope, $location: $location });
     }));
-
 
     describe("Verification of CheckPopUp function", function () {
         it("It should check error pop up", function () {
@@ -57,7 +55,7 @@ describe("MatterUsers Controller test suite", function () {
         it("It should remove the assign permission", function () {
             vm.assignPermissionTeams = "MatterCenter";
             vm.assignPermissionTeams = {
-                "splice":function (index, data) { vm.assignPermissionTeams = true; }
+                "splice": function (index, data) { vm.assignPermissionTeams = true; }
             }
             vm.removeAssignPermissionsRow(3);
             expect(vm.assignPermissionTeams).toBeDefined();
@@ -70,7 +68,7 @@ describe("MatterUsers Controller test suite", function () {
             vm.assignPermissionTeams = {
                 "push": function (data) { vm.assignPermissionTeams = data; }
             }
-            vm.assignRoles = ["test"],["test"];
+            vm.assignRoles = ["test"], ["test"];
             vm.assignPermissions = ["test"], ["test"];
             vm.addNewAssignPermissions();
             expect(vm.assignPermissionTeams).toBeDefined();
@@ -85,13 +83,13 @@ describe("MatterUsers Controller test suite", function () {
             expect(vm.notificationPopUpBlock).toBe(false);
             expect(vm.notificationBorder).toBe("");
         });
+
         it("It should not confirm the user", function () {
             vm.textInputUser = { "assignedUser": null };
             vm.confirmUser(false);
             expect(vm.notificationPopUpBlock).toBe(false);
             expect(vm.notificationBorder).toBe("");
             expect(vm.textInputUser.assignedUser).toBe("");
-
         });
 
     });
@@ -101,6 +99,7 @@ describe("MatterUsers Controller test suite", function () {
             vm.checkUserExists(oEnvironmentConfiguration.loggedInUserEmail, event);
             expect(vm.notificationPopUpBlock).toBe(false);
         });
+
         it("It should not check if UserExists", function () {
             vm.assignPermissionTeams = [{ "team": { "assignedUser": oEnvironmentConfiguration.loggedInUserEmail } }];
             vm.checkUserExists("maquser@test.onmicrosoft.com", event);
@@ -120,21 +119,21 @@ describe("MatterUsers Controller test suite", function () {
         });
 
         it("It should return the blocked user", function () {
-            vm.oSiteUsers = { 
+            vm.oSiteUsers = {
                 "indexOf": function ($itemdata) { return 1; }
-                };
+            };
             vm.onSelect(item, $model, $label, "team", "on-blurr", event, item.name);
             expect(vm.typehead).toBe(false);
             expect(vm.notificationPopUpBlock).toBe(false);
         });
     });
 
-    describe("Verification of confirmUser function", function () {    
+    describe("Verification of confirmUser function", function () {
         it("It should confirm the list of users", function () {
             vm.textInputUser = {};
             vm.confirmUser(true);
             expect(vm.notificationPopUpBlock).toBe(false);
-            expect(vm.textInputUser.userConfirmation).toBe(true);       
+            expect(vm.textInputUser.userConfirmation).toBe(true);
         });
 
         it("It should not confirm the list of users", function () {
@@ -146,5 +145,4 @@ describe("MatterUsers Controller test suite", function () {
             expect(vm.textInputUser.assignedUser).toBe("");
         });
     });
-
-   });
+});

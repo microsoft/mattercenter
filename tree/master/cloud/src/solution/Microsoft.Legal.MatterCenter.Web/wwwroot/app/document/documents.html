@@ -184,11 +184,13 @@
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.startDate'
                        is-open='vm.openedStartDate'
+                       ng-keydown="vm.changeOnCreateDate($event)"
+                      ng-blur="vm.changeOnCreateDate($event)"
                        datepicker-options='vm.dateOptions'
                        ng-required='true' close-text='Close'
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.openStartDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default' ng-click='vm.openStartDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
             <div class='input-group' style='margin-top:5px'>
@@ -196,11 +198,13 @@
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.endDate'
                        is-open='vm.openedEndDate'
-                       datepicker-options='vm.enddateOptions'
+                       ng-keydown="vm.changeOnCreateDate($event)"
+                       ng-blur="vm.changeOnCreateDate($event)"
+                       datepicker-options='vm.endDateOptions'
                        ng-required='true' close-text='Close'
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.openEndDate()'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default' ng-click='vm.openEndDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
         </div>
@@ -210,11 +214,13 @@
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.modStartDate'
                        is-open='vm.modifiedStartDate'
-                       datepicker-options='vm.moddateOptions'
+                       ng-keydown="vm.changeOnModifiedDate($event)"
+                       ng-blur="vm.changeOnModifiedDate($event)"
+                       datepicker-options='vm.modDateOptions'
                        ng-required='true' close-text='Close'
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.modStartDateClick()'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default' ng-click='vm.openModStartDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
             <div class='input-group' style='margin-top:5px'>
@@ -222,11 +228,13 @@
                        uib-datepicker-popup='MM/dd/yyyy'
                        ng-model='vm.modEndDate'
                        is-open='vm.modifiedEndDate'
-                       datepicker-options='vm.modenddateOptions'
+                       ng-keydown="vm.changeOnModifiedDate($event)"
+                       ng-blur="vm.changeOnModifiedDate($event)"
+                       datepicker-options='vm.modEndDateOptions'
                        ng-required='true' close-text='Close'
                        alt-input-formats='altInputFormats' />
                 <span class='input-group-btn'>
-                    <button type='button' class='btn btn-default' ng-click='vm.modEndDateClick()'><i class='glyphicon glyphicon-calendar'></i></button>
+                    <button type='button' class='btn btn-default' ng-click='vm.openModEndDate($event)'><i class='glyphicon glyphicon-calendar'></i></button>
                 </span>
             </div>
         </div>

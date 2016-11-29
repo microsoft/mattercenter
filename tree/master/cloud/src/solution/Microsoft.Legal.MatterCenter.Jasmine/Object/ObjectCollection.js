@@ -1,13 +1,14 @@
 ﻿var vm, matterResource, $filter, $window, $watch, $http, $stateParams;
-var $rootScope = { logEvent: function () { }, setAuthenticatedUserContext: function () { } };
-var rootScope = { logEvent: function () { } };
-var rootData = { logEvent: function () { }, setAuthenticatedUserContext: function () { } };
+var $rootScope = { logEvent: function () { }, setAuthenticatedUserContext: function () { }, breadcrumb: false };
+var rootScope = { logEvent: function () { } , breadcrumb:false};
+var rootData = { logEvent: function () { }, setAuthenticatedUserContext: function () { }, help: function () { return 1 }, $on: function () { return false } };
 var $model = {};
 var $label = { "assignedUser": oEnvironmentConfiguration.loggedInUserEmail };
 var $item = {
     email: "",
     name: "No results found"
 };
+var vm = { uploadMessages: { attachButtonText: "attach" } };
 var $state = { go: function () { }, current: { "name": "" } };
 var $interval = { go: function () { } };
 var $animate = { enabled: function () { } };
@@ -23,13 +24,26 @@ var $location = {
     }
 };
 
+var row = {
+    "entity":
+        {
+            "documentUrl": { replace: function (data, test) { return data; } },
+            "documentMatterUrl": { replace: function (data, test) { return data; } },
+            "documentClientUrl": "",
+            "documentParentUrl": "/Forms/AllItems.aspx",
+            "documentName": "test",
+            "documentExtension": ".xslx"
+        }
+};
+
 var adalService = {
     "userInfo": {
         "userName": oEnvironmentConfiguration.loggedInUserEmail,
         "profile": {
             "given_name": "MAQ",
             "family_name": oEnvironmentConfiguration.tenantUrl,
-            "oid": 786
+            "oid": 786,
+            "name": "MAQ"
         },
         "isAuthenticated": true
     },
@@ -56,6 +70,11 @@ var mockMatterDashBoardResource = {
     'getFolderHierarchy': '/api/v1/matter/getfolderhierarchy',
     'getMatterCounts': '/api/v1/matter/getmattercounts',
     'getDefaultMatterConfigurations': '/api/v1/matter/getconfigurations'
+};
+
+var mockAdminResource = {
+    'Get': '/api/v1/config/Get',
+    'getconfigsforspo': '/api/v1/config/getconfigsforspo'
 };
 
 var mockMatterResource = {
@@ -89,6 +108,26 @@ var mockHomeResource = {
     'getHelp': '/api/v1/shared/help',
     'getUserProfilePicture': '/api/v1/user/getuserprofilepicture',
     'canCreateMatter': '/api/v1/matter/cancreate'
+};
+
+var matterDataForPin = {
+    entity: {
+        matterName: "test",
+        matterDescription: "test",
+        matterCreatedDate: "test",
+        matterUrl: "test",
+        matterPracticeGroup: "test",
+        matterAreaOfLaw: "test",
+        matterSubAreaOfLaw: "test",
+        matterClientUrl: "test",
+        matterClient: "test",
+        matterClientId: "test",
+        hideUpload: "test",
+        matterID: "test",
+        matterResponsibleAttorney: "test",
+        matterModifiedDate: "test",
+        matterGuid: "test"
+    }
 };
 
 var mockDocumentDashBoardResource = {

@@ -1196,6 +1196,8 @@
                 vm.startDate = "";
                 vm.endDate = "";
                 vm.createddatefilter = false;
+                vm.modDateOptions.maxDate = new Date();
+                vm.dateOptions.maxDate = new Date();
             }
             else if (!vm.globalSettings.isBackwardCompatible && property == vm.documentConfigContent.GridColumn4Header) {
                 searchRequest.SearchObject.Filters.DateFilters.ModifiedFromDate = "";
@@ -1203,12 +1205,14 @@
                 vm.modStartDate = "";
                 vm.modEndDate = "";
                 vm.moddatefilter = false;
+                vm.modDateOptions.maxDate = new Date();
             } else if (!vm.globalSettings.isBackwardCompatible && property == vm.documentConfigContent.GridColumn8Header) {
                 searchRequest.SearchObject.Filters.DateFilters.CreatedFromDate = "";
                 searchRequest.SearchObject.Filters.DateFilters.CreatedToDate = "";
                 vm.startDate = "";
                 vm.endDate = "";
                 vm.createddatefilter = false;
+                vm.dateOptions.maxDate = new Date();
             }
             if (vm.documentid === 3) {
                 searchRequest.SearchObject.Sort.SortAndFilterPinnedData = true;
@@ -1548,30 +1552,34 @@
         //#region  For datepickers in modifiedheadertemplate
         //Angular Datepicker Starts here
         //Start for modified date 
-        vm.moddateOptions = {
+        vm.modDateOptions = {
             formatYear: 'yy',
             maxDate: new Date()
         };
 
 
-        vm.modenddateOptions = {
+        vm.modEndDateOptions = {
             formatYear: 'yy',
             maxDate: new Date()
         }
 
         $scope.$watch('vm.modStartDate', function (newval, oldval) {
-            vm.modenddateOptions.minDate = newval;
+            vm.modEndDateOptions.minDate = newval;
         });
 
 
-        vm.modStartDateClick = function ($event) {
+        vm.openModStartDate = function ($event) {
             if ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
             }
+
+            if (vm.modEndDate !== '' && vm.modEndDate !== undefined) {
+                vm.modDateOptions.maxDate = vm.modEndDate;
+            }
             this.modifiedStartDate = true;
         };
-        vm.modEndDateClick = function ($event) {
+        vm.openModEndDate = function ($event) {
             if ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
@@ -1581,6 +1589,50 @@
 
         vm.modifiedStartDate = false;
         vm.modifiedEndDate = false;
+
+        vm.changeOnModifiedDate = function ($event) {
+            if ($event.keyCode == '13' || $event.keyCode == '9') {
+
+                var modelValue = $event.target.attributes['ng-model'].value;
+
+                if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test($event.target.value)) {
+                    if (modelValue == 'vm.modStartDate') {
+                        vm.modStartDate = new Date();
+                        $event.target.value = vm.modStartDate;
+                    } else {
+                        vm.modEndDate = new Date();
+                        $event.target.value = vm.modEndDate;
+                    }
+                }
+                else {
+                    var parts = $event.target.value.split("/");
+                    var day = parseInt(parts[1], 10);
+                    var month = parseInt(parts[0], 10);
+                    var year = parseInt(parts[2], 10);
+                    var isInvalid = new Date(year, month - 1, day) > new Date();
+                    if (modelValue == 'vm.modStartDate') {
+                        isInvalid = new Date(year, month - 1, day) > vm.modDateOptions.maxDate;
+                    }
+                    if (isInvalid && modelValue == 'vm.modStartDate') {
+                        if (new Date(year, month - 1, day) > vm.modDateOptions.maxDate && new Date(year, month - 1, day) <= new Date())
+                        {
+                            vm.modStartDate = new Date(year, month - 1, day);
+                            vm.modEndDate = vm.modStartDate;
+                            vm.modDateOptions.maxDate = vm.modStartDate;
+                        } else if (new Date(year, month - 1, day) > new Date() && vm.modDateOptions.maxDate <= new Date()) {
+                            vm.modStartDate = vm.modDateOptions.maxDate;
+                            $event.target.value = vm.modStartDate;
+                        } else {
+                            vm.modStartDate = new Date();
+                            $event.target.value = vm.modStartDate;
+                        }
+                    } else if (isInvalid && modelValue == 'vm.modEndDate') {
+                        vm.modEndDate = new Date();
+                        $event.target.value = vm.modEndDate;
+                    }
+                }
+            }
+        };
 
         vm.disabled = function (date, mode) {
             return (mode === 'day' && (date.getDay() != 0));
@@ -1596,13 +1648,13 @@
         };
 
 
-        vm.enddateOptions = {
+        vm.endDateOptions = {
             formatYear: 'yy',
             maxDate: new Date()
         }
 
         $scope.$watch('vm.startDate', function (newval, oldval) {
-            vm.enddateOptions.minDate = newval;
+            vm.endDateOptions.minDate = newval;
         });
 
 
@@ -1610,6 +1662,9 @@
             if ($event) {
                 $event.preventDefault();
                 $event.stopPropagation();
+            }
+            if (vm.endDate !== '' && vm.endDate !== undefined) {
+                vm.dateOptions.maxDate = vm.endDate;
             }
             this.openedStartDate = true;
         };
@@ -1619,6 +1674,52 @@
                 $event.stopPropagation();
             }
             this.openedEndDate = true;
+        };
+
+        vm.changeOnCreateDate = function ($event) {
+            if ($event.keyCode == '13' || $event.keyCode == '9') {
+
+                var modelValue = $event.target.attributes['ng-model'].value;
+
+                if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test($event.target.value)) {
+                    if (modelValue == 'vm.startDate') {
+                        vm.startDate = new Date();
+                        $event.target.value = vm.startDate;
+                    } else {
+                        vm.endDate = new Date();
+                        $event.target.value = vm.endDate;
+                    }
+                }
+                else {
+                    var parts = $event.target.value.split("/");
+                    var day = parseInt(parts[1], 10);
+                    var month = parseInt(parts[0], 10);
+                    var year = parseInt(parts[2], 10);
+                    var isInvalid = new Date(year, month - 1, day) > new Date();
+                    if (modelValue == 'vm.startDate') {
+                        isInvalid = new Date(year, month - 1, day) > vm.dateOptions.maxDate;
+                    }
+                    if (isInvalid && modelValue == 'vm.startDate') {
+                        if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date())
+                        {
+                            vm.startDate = new Date(year, month - 1, day);
+                            vm.endDate = vm.startDate;
+                            vm.dateOptions.maxDate = vm.startDate;
+                        }
+                        else if (new Date(year, month - 1, day) > new Date() && vm.dateOptions.maxDate <= new Date()) {
+                            vm.startDate = vm.dateOptions.maxDate;
+                            $event.target.value = vm.startDate;
+                        } else {
+                            vm.startDate = new Date();
+                            $event.target.value = vm.startDate;
+                        }
+
+                    } else if (isInvalid && modelValue == 'vm.endDate') {
+                        vm.endDate = new Date();
+                        $event.target.value = vm.endDate;
+                    }
+                }
+            }
         };
 
         vm.openedStartDate = false;
@@ -2139,6 +2240,8 @@
             if (name == vm.documentConfigContent.GridColumn8Header) {
                 vm.filtername = vm.documentConfigContent.GridColumn8Header;
             }
+            vm.dateOptions.maxDate = new Date();
+            vm.modDateOptions.maxDate = new Date();
             $timeout(function () {
                 if (name == vm.documentConfigContent.GridColumn5Header && vm.globalSettings.isBackwardCompatible || name == vm.documentConfigContent.GridColumn8Header || name == vm.documentConfigContent.GridColumn4Header && !vm.globalSettings.isBackwardCompatible) {
                     vm.documentdateheader = false;

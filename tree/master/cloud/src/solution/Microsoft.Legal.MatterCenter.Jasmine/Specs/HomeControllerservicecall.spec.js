@@ -41,14 +41,6 @@ describe("Home Controller test suite for service call", function () {
         });
     });
 
-    describe("Verification of help function", function () {
-        it("It should set help", function () {
-            vm.help();
-            expect(vm.helpData.length).toBeGreaterThan(0);
-            expect(vm.helpData).toBeDefined();
-        });
-    });
-
     describe("Verification of signOut function", function () {
         it("It should signOut", function () {
             vm.signOut();
@@ -82,7 +74,6 @@ describe("Home Controller test suite for service call", function () {
             expect(vm.canLoginUserCreateMatter).toBeDefined();
         });
     });
-
 });
 
 
