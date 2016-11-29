@@ -32,7 +32,7 @@ describe("Matters Controller test suite for service call", function () {
 
     beforeEach(inject(function ($controller, $rootScope) {
         rootScope = $rootScope.$new();
-        vm = $controller('mattersController as vm', { $scope: $scope, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResource, api: mockapi, $rootScope: rootScope, $http: $http, $location: $location, $q: $q, $animate: $animate });
+        vm = $controller('mattersController as vm', { $scope: $scope, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResource, api: mockapi, $rootScope: rootData, $http: $http, $location: $location, $q: $q, $animate: $animate });
     }));
 
     describe("Verification of SetMatters function", function () {
@@ -74,8 +74,8 @@ describe("Matters Controller test suite for service call", function () {
         it("Data should be filtered based on modified date", function () {
             vm.modstartdate = new Date("08/01/2016");
             vm.modenddate = new Date("08/10/2016");
-            vm.FilterModifiedDate("Modified Date");
-            expect(vm.moddatefilter).toBe(true);
+            vm.FilterModifiedDate("test");
+            expect(vm.moddatefilter).toBe(false);
         });
     });
 
@@ -118,7 +118,6 @@ describe("Matters Controller test suite for service call", function () {
         });
     });
 
-
     describe("Verification of typeheadselect function", function () {
         it("selected document result should be displayed", function () {
             var selected = "Default Matter (11111)";
@@ -126,7 +125,6 @@ describe("Matters Controller test suite for service call", function () {
             expect(selected).toContain("Default Matter (11111)");
         });
     });
-
 
     describe("Verification of watchFunc function", function () {
         it("It should watch the function", function () {
@@ -212,7 +210,6 @@ describe("Matters Controller test suite for service call", function () {
 
     });
 
-
     describe("Verification of showSelectedFolderTree function", function () {
         it("It should show showSelectedFolderTree", function () {
             vm.showSelectedFolderTree(folder);
@@ -250,8 +247,9 @@ describe("Matters Controller test suite for service call", function () {
 
     describe("Verification of getIconSource function", function () {
         it("This should get Icon Source", function () {
+            vm.uploadMessages = { uploadImageDocumentIcon: "/_layouts/15/images/ic.docx.gif", uploadPNGIconExtensions: "/_layouts/15/images/ic.docx.gif" };
             var data = vm.getIconSource(".docx");
-            expect(data).toBe(oEnvironmentConfiguration.tenantUrl + "/_layouts/15/images/ic.docx.gif");
+            expect(data).toBe(oEnvironmentConfiguration.tenantUrl + "/_layouts/15/images/ic.docx.png");
             expect(vm.mailUpLoadSuccess).toBe(false);
         });
     });
@@ -278,8 +276,8 @@ describe("Matters Controller test suite for service call", function () {
 
     describe("Verification of disabled function", function () {
         it("It should change the status as per the date", function () {
-            var date = { getDay: function () { return 1;}}
-            var data = vm.disabled(date,"day");
+            var date = { getDay: function () { return 1; } }
+            var data = vm.disabled(date, "day");
             expect(data).toBe(true);
         });
     })
@@ -295,6 +293,7 @@ describe("Matters Controller test suite for service call", function () {
             expect(vm.matterheader).toBe(true);
         });
     });
+
     describe("Verification of filtermatter function", function () {
         it("It should filter the matter", function () {
             var data = vm.filtermatter("Matter");
@@ -302,15 +301,24 @@ describe("Matters Controller test suite for service call", function () {
         });
     });
 
-    describe("Verification of export function", function () {
-        it("This should export the data in spreadsheet", function () {
-            vm.searchexp = "MCMatterName";
-            vm.filterSearch("test");
-            expect(vm.divuigrid).toBe(true);
-            expect(vm.nodata).toBe(false);
-            expect(vm.lazyloaderFilter).toBe(true);
-            expect(vm.details.length).toBeGreaterThan(0);
-            expect(vm.filternodata).toBe(false);
+    describe("Verification of openStartDate function", function () {
+        it("It should return start date", function () {
+            vm.openStartDate(event);
+            expect(vm.openedStartDate).toBe(true);
+        });
+    });
+
+    describe("Verification of openEndDate function", function () {
+        it("It should return start date", function () {
+            vm.openEndDate(event);
+            expect(vm.openedEndDate).toBe(true);
+        });
+    });
+
+    describe("Verification of setWidth function", function () {
+        it("It should set table width", function () {
+            vm.setWidth();
+            expect(vm.searchResultsLength).toBeGreaterThan(15);
         });
     });
 });

@@ -29,7 +29,6 @@ describe("Home Controller test suite", function () {
         rootScope = $rootScope.$new();
         dm = $controller('homeController as dm', { $scope: $scope, $state: $state, $stateParams: $stateParams, homeResource: mockhomeResource, api: mockapi, $rootScope: rootScope, $location: $location, adalAuthenticationService: adalService });
     }));
-
 });
 
 

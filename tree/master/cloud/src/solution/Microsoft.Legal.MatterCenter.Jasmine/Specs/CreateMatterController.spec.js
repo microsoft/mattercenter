@@ -1,5 +1,5 @@
 ﻿/// <reference path="../References.js" />
-/// <disable>JS2074, JS3058, </disable>
+/// <disable>JS2074, JS3058 </disable>
 //// ***********************************************************************
 // Author           : MAQ USER
 // Created          : 31-08-2016
@@ -28,8 +28,7 @@ describe("CreateMatter Controller test suite", function () {
     beforeEach(module("ui.bootstrap"));
 
     beforeEach(inject(function ($controller, $injector, $rootScope) {
-        rootScope = $rootScope.$new();
-        vm = $controller("createMatterController as vm", { $scope: $scope, $rootScope: rootScope, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResourceService, api: mockapi, adalAuthenticationService: mockadalAuthenticationService });
+        vm = $controller("createMatterController as vm", { $scope: $scope, $rootScope: rootData, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResourceService, api: mockapi, adalAuthenticationService: mockadalAuthenticationService });
     }));
 
     describe("Verification of clearpopup function", function () {
@@ -72,63 +71,6 @@ describe("CreateMatter Controller test suite", function () {
             expect(vm.popupContainer).toBe("hide");
         });
     });
-
-    //// ***********This method is commented/ not present in latest microsoft build ***********
-
-    //// describe("Verification of getSelectedPracticeGroupValue function", function () {
-    ////    it("It should return the selected PracticeGroup Value for all AOL and SAOL terms)", function () {
-    ////        vm.selectedPracticeGroup = selectedPracticeGroup;
-    ////        vm.getSelectedPracticeGroupValue();
-    ////        expect(vm.areaOfLawTerms).not.toBe(null);
-    ////        expect(vm.subAreaOfLawTerms).not.toBe(null);
-    ////        expect(vm.activeSubAOLTerm.termName).toBe(oTestConfiguration.sActiveSubAreaOfLawTerm);
-    ////        expect(vm.activeAOLTerm.folderNames).toBe(oTestConfiguration.sFolderNames);
-    ////        expect(vm.errorPopUp).toBe(false);
-    ////    });
-
-    ////    it("It should return the null value for selected PracticeGroup for AOL and SAOL terms", function () {
-    ////        vm.selectedPracticeGroup = null;
-    ////        vm.getSelectedPracticeGroupValue();
-    ////        expect(vm.areaOfLawTerms).toBe(null);
-    ////        expect(vm.subAreaOfLawTerms).toBe(null);
-    ////    });
-    ////});
-
-    //// ***********This method is commented/ not present in latest microsoft build ***********
-
-    ////describe("Verification of selectAreaOfLawTerm function", function () {
-    ////    it("It should return the sub area of law term on selection of area of law term", function () {
-    ////        vm.selectAreaOfLawTerm(selectedPracticeGroup.areaTerms[0]);
-    ////        expect(vm.subAreaOfLawTerms).not.toBe(null);
-    ////        expect(vm.activeSubAOLTerm.termName).toBe(oTestConfiguration.sActiveSubAreaOfLawTerm);
-    ////        expect(vm.errorPopUp).toBe(false);
-    ////        expect(vm.activeAOLTerm).toBe(selectedPracticeGroup.areaTerms[0]);
-    ////    });
-
-    ////    it("It should defined sub area of law term on selection of area of law term", function () {
-    ////        vm.selectAreaOfLawTerm(selectedPracticeGroup.areaTerms[0]);
-    ////        expect(vm.subAreaOfLawTerms).not.toBeUndefined();
-    ////        expect(vm.activeSubAOLTerm).not.toBeUndefined();
-    ////        expect(vm.errorPopUp).not.toBeUndefined();
-    ////        expect(vm.activeAOLTerm).not.toBeUndefined();
-    ////    });
-    ////});
-
-    //// ***********This method is commented/ not present in latest microsoft build ***********
-
-    ////describe("Verification of selectSubAreaOfLawTerm function", function () {
-    ////    it("It should return the sub area of law items", function () {
-    ////        vm.selectSubAreaOfLawTerm(selectedPracticeGroup.areaTerms[0].subareaTerms[0]);
-    ////        expect(vm.activeSubAOLTerm).toBe(selectedPracticeGroup.areaTerms[0].subareaTerms[0]);
-    ////        expect(vm.errorPopUp).toBe(false);
-    ////    });
-
-    ////    it("It should not return undefined value for sub area of law items", function () {
-    ////        vm.selectSubAreaOfLawTerm(selectedPracticeGroup.areaTerms[0].subareaTerms[0]);
-    ////        expect(vm.activeSubAOLTerm).not.toBeUndefined();
-    ////        expect(vm.errorPopUp).not.toBeUndefined();
-    ////    });
-    ////});
 
     describe("Verification of selectDocumentTemplateTypeLawTerm function", function () {
         it("It should not return null value for the document template type term", function () {
@@ -181,7 +123,6 @@ describe("CreateMatter Controller test suite", function () {
     });
 
     describe("Verification of onSelect function", function () {
-
         it("It should return the conflicted user", function () {
             vm.onSelect(item, $model, $label, "conflictcheckuser", "on-blurr", event, item.name);
             expect(vm.oSiteUsers).toBeDefined();
@@ -191,7 +132,6 @@ describe("CreateMatter Controller test suite", function () {
         it("It should return the blocked user", function () {
             vm.onSelect(item, $model, $label, "blockuser", "on-blurr", event, item.name);
             expect(vm.oSiteUsers).toBeDefined();
-            //expect(vm.blockedUserName).toBe(oEnvironmentConfiguration.loggedInUserName + "(" + oEnvironmentConfiguration.loggedInUserEmail + ")");
         });
 
         it("It should return the team member", function () {
@@ -207,26 +147,6 @@ describe("CreateMatter Controller test suite", function () {
             expect(vm.user).toBe(oEnvironmentConfiguration.loggedInUserName);
         });
     });
-
-    //// **************** New Angular version is introduced in latest build ****************
-
-    ////describe("Verification of saveDocumentTemplates function", function () {
-    ////    it("It should return the saved document Templates", function () {
-    ////        vm.primaryMatterType = true;
-    ////        vm.activeDocumentTypeLawTerm = documentTemplateTypeLawTerm;
-    ////        vm.documentTypeLawTerms = subareaTerms;
-    ////        vm.saveDocumentTemplates();
-    ////        expect(vm.selectedDocumentTypeLawTerms).toBe(vm.documentTypeLawTerms);
-    ////        expect(vm.popupContainerBackground).toBe("hide");
-    ////        expect(vm.popupContainer).toBe("hide");
-    ////    });
-
-    ////    it("It should not return saved document Templates and should prompt error popup", function () {
-    ////        vm.primaryMatterType = false;
-    ////        vm.saveDocumentTemplates();
-    ////        expect(vm.errorPopUp).toBe(true);
-    ////    });
-    ////});
 
     describe("Verification of open1 function", function () {
         it("It should open the date picker", function () {
@@ -257,7 +177,6 @@ describe("CreateMatter Controller test suite", function () {
 
     describe("Verification of removeAssignPermissionsRow function", function () {
         it("It should return the remaining users", function () {
-
             //Math.Random() function is used to randomize the length
             vm.assignPermissionTeams.length = Math.floor(Math.random() * 5) + 2;
             var rows = vm.assignPermissionTeams.length;
@@ -401,16 +320,35 @@ describe("CreateMatter Controller test suite", function () {
             vm.selectLevelFourItem(oLevel);
             expect(vm.activeLevelFiveItem).toBe(vm.levelFiveList[0]);
         });
-
     });
 
-    describe('Verification of selectMatterType   function', function () {
-        it('It should select Matter type', function () {
-            vm.selectMatterType("value");
-            expect(vm.popupContainer).toBe("Show");
-            expect(vm.popupContainerBackground).toBe("Show");
-            expect(vm.successBanner).toBe(false);
+    describe('Verification of selectLevelFiveItem function', function () {
+        it('It should check the levelFiveItem', function () {
+            var oLevelFive = { level5: ['level5'] };
+            vm.selectLevelFiveItem(oLevelFive);
+            expect(vm.activeLevelFiveItem).toBe(oLevelFive);
         });
     });
 
+    describe("Verification of checkValidMatterName function", function () {
+        it("It Should return true for new matter", function () {
+            vm.matterName = oTestConfiguration.sValidMatterName;
+            vm.clientUrl = oTestConfiguration.sValidMatterClientURL;
+            vm.checkValidMatterName();
+            expect(vm.errorPopUpBlock).not.toBe(null);
+        });
+    });
+
+    describe("Verification of saveDocumentTemplates function", function () {
+        it("It Should save document template", function () {
+            vm.documentTypeLawTerms = { object1: {id:1}};
+            vm.primaryMatterType = true;
+            vm.activeDocumentTypeLawTerm = { id: 1 };
+            vm.saveDocumentTemplates();
+            expect(vm.popupContainerBackground).toBe("hide");
+            expect(vm.popupContainer).toBe("hide");
+            expect(vm.selectedDocumentTypeLawTerms).toBeDefined();
+            expect(vm.errorPopUp).toBe(false);
+        });
+    });
 });

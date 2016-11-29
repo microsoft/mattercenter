@@ -37,8 +37,8 @@ describe("SettingsController test suite", function () {
         vm = $controller("SettingsController as vm", { $scope: $scope, $state: $state, $stateParams: $stateParams, settingsResource: mockSettingsResource, api: mockapi, $rootScope: rootScope, $http: $http, $location: $location, $q: $q });
     }));
 
-    describe("Verification of canCreateMatter function", function () {
-        it("It should create matter", function () {
+    describe("Verification of getTaxonomyData function", function () {
+        it("It should get taxanomy data", function () {
             vm.getTaxonomyData();
             expect(vm.taxonomydata).toBeDefined();
             expect(vm.clientlist).toBe(true);
@@ -49,8 +49,7 @@ describe("SettingsController test suite", function () {
 
     describe("Verification of getRolesData function", function () {
         it("It should get data related to all roles", function () {
-            vm.getTaxonomyData();
-            expect(vm.assignRoles).toBeDefined();
+            vm.getRolesData();
             expect(vm.clientlist).toBe(true);
             expect(vm.nodata).toBe(false);
             expect(vm.lazyloader).toBe(true);
@@ -170,10 +169,10 @@ describe("SettingsController test suite", function () {
             expect(vm.lazyloader).toBe(true);
             expect(vm.selected).toBe("Test");
             expect(vm.clienturl).toBe(oTestConfiguration.sValidMatterClientURL);
-            expect(vm.nodata).toBe(false);
+            expect(vm.nodata).toBe(true);
             expect(vm.lazyloader).toBe(true);
-            expect(vm.clientlist).toBe(false);
-            expect(vm.showClientDetails).toBe(true);
+            expect(vm.clientlist).toBe(true);
+            expect(vm.showClientDetails).toBe(false);
         });
     });
 
@@ -190,7 +189,6 @@ describe("SettingsController test suite", function () {
             vm.selectMatterTypePopUpClose();
             expect(vm.popupContainerBackground).toBe("hide");
             expect(vm.popupContainer).toBe("hide");
-
         });
     });
 
@@ -199,7 +197,6 @@ describe("SettingsController test suite", function () {
             vm.selectMatterType();
             expect(vm.popupContainerBackground).toBe("Show");
             expect(vm.popupContainer).toBe("Show");
-
         });
     });
 
@@ -223,7 +220,6 @@ describe("SettingsController test suite", function () {
             expect(vm.removeDTItem).toBe(true);
             expect(vm.primaryMatterType).toBe(true);
             expect(vm.activeDocumentTypeLawTerm).toBe("AreaOfLaw");
-
         });
     });
 
@@ -236,14 +232,20 @@ describe("SettingsController test suite", function () {
             expect(vm.errorPopUp).toBe(false);
             expect(vm.popupContainerBackground).toBe("hide");
             expect(vm.popupContainer).toBe("hide");
-
-
         });
 
         it("It should not save document templates", function () {
             vm.saveDocumentTemplates();
             expect(vm.errorPopUp).toBe(true);
+        });
+    });
 
+    describe('Verification of addToDocumentTemplate function', function () {
+        it('It should check whether document template is added or not', function () {
+            vm.taxonomyHierarchyLevels = 6;
+            vm.addToDocumentTemplate();
+            expect(vm.isThisNewDocTemplate).not.toBeNull();
+            expect(vm.selectedHighestLevelItem).not.toBeNull();
         });
     });
 
@@ -292,24 +294,20 @@ describe("SettingsController test suite", function () {
         });
     });
 
-    describe('Verification of selectLevelFourItem function', function () {
+    describe('Verification of selectLevelFourItem   function', function () {
         it('It should check the levelFourItem', function () {
             var oLevel = { level5: ['level5'] };
             vm.taxonomyHierarchyLevels = 5;
             vm.selectLevelFourItem(oLevel);
             expect(vm.activeLevelFiveItem).toBe(vm.levelFiveList[0]);
         });
-        ;
     });
 
-    describe('Verification of addToDocumentTemplate function', function () {
-        it('It should check whether document template is added or not', function () {
-            vm.taxonomyHierarchyLevels = 6;
-            vm.addToDocumentTemplate();
-            expect(vm.isThisNewDocTemplate).not.toBeNull();
-            expect(vm.selectedHighestLevelItem).not.toBeNull();
+    describe('Verification of selectLevelFiveItem function', function () {
+        it('It should check the levelFiveItem', function () {
+            var oLevelFive = { level5: ['level5'] };
+            vm.selectLevelFiveItem(oLevelFive);
+            expect(vm.activeLevelFiveItem).toBe(oLevelFive);
         });
-
     });
-
 });

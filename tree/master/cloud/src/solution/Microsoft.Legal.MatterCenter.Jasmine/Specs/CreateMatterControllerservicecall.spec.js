@@ -29,39 +29,32 @@ describe("CreateMatter Controller test suite for service call", function () {
 
     beforeEach(module("ui.router"));
     beforeEach(module("ui.bootstrap"));
-    
+
     beforeEach(inject(function ($controller, $injector, $rootScope) {
-        rootScope = $rootScope.$new();
-        vm = $controller("createMatterController as vm", { $scope: $scope, $rootScope: rootScope, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResourceService, api: mockapi, adalAuthenticationService: mockadalAuthenticationService });
+        vm = $controller("createMatterController as vm", { $scope: $scope, $rootScope: rootData, $state: $state, $stateParams: $stateParams, matterResource: mockMatterResourceService, api: mockapi, adalAuthenticationService: mockadalAuthenticationService });
     }));
-
-    describe("Verification of Check valid matter function", function () {
-        it("It Should return true for new matter", function () {
-            vm.matterName = oTestConfiguration.sValidMatterName;
-            vm.clientUrl = oTestConfiguration.sValidMatterClientURL;
-            vm.checkValidMatterName();
-            expect(vm.errorPopUpBlock).toBe(false);
-        });
-    });
-
-    //// **************** This function is removed in latest build of Microsoft ****************
-
-    ////describe("Verification of selectMatterType function", function () {
-    ////    it("It should successfully get Practice Group, Area of law and SubArea of law", function () {
-    ////        vm.selectMatterType();
-    ////        expect(vm.popupContainerBackground).toBe("Show");
-    ////        expect(vm.popupContainer).toBe("Show");
-    ////    });
-    ////});
 
     describe("Verification of getSelectedClientValue function", function () {
         it("It should successfully get data from matter configuration list", function () {
             vm.getSelectedClientValue(oTestConfiguration.oClientObj);
-            expect(vm.secureMatterCheck).toBe(true);
-            expect(vm.includeCalendar).toBe(true);
-            expect(vm.includeEmail).toBe(true);
-            expect(vm.isMatterDescriptionMandatory).toBe(true);
-            expect(vm.includeTasks).toBe(true);
+            expect(vm.clientId).toBe(16761);
+            expect(vm.selectedClientName).toBe("Microsoft");
+            expect(vm.clientUrl).toBe("https://MySharePoint.sharepoint.com/sites/microsoft");
+            expect(vm.canCreateMatterPermission).toBe(false);
+            expect(vm.errPermissionMessage).toBeDefined();
+            expect(vm.errTextMsg).toBeDefined();
+            expect(vm.errorBorder).toBe("client");
+            expect(vm.errorPopUpBlock).toBe(true);
+            expect(vm.popupContainerBackground).toBe("hide");
+        });
+    });
+
+    describe("Verification of checkValidMatterName function", function () {
+        it("It Should return true for new matter", function () {
+            vm.matterName = oTestConfiguration.sValidMatterName;
+            vm.clientUrl = oTestConfiguration.sValidMatterClientURL;
+            vm.checkValidMatterName();
+            expect(vm.errorPopUpBlock).not.toBe(null);
         });
     });
 });
