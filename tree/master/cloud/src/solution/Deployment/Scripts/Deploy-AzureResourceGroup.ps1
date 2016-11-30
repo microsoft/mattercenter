@@ -50,6 +50,9 @@ $indexOfSPO = $CentralRepositoryUrl.IndexOf(".com")
 $SiteURL = $CentralRepositoryUrl.Substring(0, $indexOfSPO + 4)
 
 $Redis_cache_name = $WebAppName+"RedisCache"
+
+
+
 $autoscalesettings_name = $WebAppName+"ScaleSettings"
 $components_AppInsights_name = $WebAppName+"AppInsights"
 if($WebAppName.Length -gt 24)
@@ -168,6 +171,12 @@ $creds = Get-Credential -Message "Enter credentials for connecting to Azure"
 
 Write-Output "Getting the storage key to write to key vault..."
 $StorageAccountKey = Get-AzureRmStorageAccountKey -Name $storageAccount_name -ResourceGroupName $ResourceGroupName
+
+#Write-Output "Getting the Redis connection string"
+#$RedisCacheName = (Get-AzureRmRedisCache -Name $Redis_cache_name -ResourceGroupName $ResourceGroupName )[0].HostName
+#$RedisCachePort = (Get-AzureRmRedisCache -Name $Redis_cache_name -ResourceGroupName $ResourceGroupName )[0].Port
+#$RedisCacheKey = (Get-AzureRmRedisCacheKey -Name $Redis_cache_name -ResourceGroupName $ResourceGroupName ).PrimaryKey
+#$redisConnString = [string]::format("{0}:{1},password={2},ssl=True,abortConnect=False", $RedisCacheName, $RedisCachePort,  $RedisCacheKey)
 
 
 # Set helper utilities folder path
