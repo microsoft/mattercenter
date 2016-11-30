@@ -268,7 +268,7 @@
     {
         "code": "{\"DefaultMatterName\":\"testing\",\"DefaultMatterId\":\"MC\",\"DefaultMatterType\":\"Copyright\",\"MatterTypes\":\"Copyright$|$Patent\",\"MatterUsers\":\"SaiKiran Gudala;\",\"MatterUserEmails\":\"SaiG@MSmatter.onmicrosoft.com;\",\"MatterRoles\":\"Responsible Attorney\",\"MatterPermissions\":\"Full Control\",\"IsCalendarSelected\":true,\"IsEmailOptionSelected\":true,\"IsRSSSelected\":true,\"IsRestrictedAccessSelected\":false,\"IsConflictCheck\":true,\"IsMatterDescriptionMandatory\":true,\"MatterPracticeGroup\":\"Litigation$|$Litigation\",\"MatterAreaofLaw\":\"Intellectual Property$|$Intellectual Property\",\"IsContentCheck\":true,\"IsTaskSelected\":true}",
         "value": "10/20/2016 06:23:44",
-        "isError": false,
+        "isError": true,
         "description": null
     },
     "user/userexists":
@@ -3186,7 +3186,7 @@
     "matter/getconfigurations": {
         "code": "{\"DefaultMatterName\":\"testing\",\"DefaultMatterId\":\"MC\",\"DefaultMatterType\":\"Copyright\",\"MatterTypes\":\"Copyright$|$Patent\",\"MatterUsers\":\"SaiKiran Gudala;\",\"MatterUserEmails\":\"SaiG@MSmatter.onmicrosoft.com;\",\"MatterRoles\":\"Responsible Attorney\",\"MatterPermissions\":\"Full Control\",\"IsCalendarSelected\":true,\"IsEmailOptionSelected\":true,\"IsRSSSelected\":true,\"IsRestrictedAccessSelected\":false,\"IsConflictCheck\":true,\"IsMatterDescriptionMandatory\":true,\"MatterPracticeGroup\":\"Litigation$|$Litigation\",\"MatterAreaofLaw\":\"Intellectual Property$|$Intellectual Property\",\"IsContentCheck\":true,\"IsTaskSelected\":true}",
         "value": "10/20/2016 06:23:44",
-        "isError": false,
+        "isError": true,
         "description": null
     },
     "matter/getfolderhierarchy": {
@@ -3299,5 +3299,7 @@
             "url": null
         }
     },
-    "matter/saveconfigurations": "true|$|10\/24\/2016 06:59:12"
+    "matter/saveconfigurations": "true|$|10\/24\/2016 06:59:12",
+    "config/Get": { "isError": false },
+    "config/getconfigsforspo": { "isError": false },
 }

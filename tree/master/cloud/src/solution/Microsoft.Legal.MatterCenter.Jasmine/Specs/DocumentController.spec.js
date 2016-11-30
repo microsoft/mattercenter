@@ -28,8 +28,7 @@ describe("documents Controller test suite", function () {
     beforeEach(module("ui.bootstrap"));
 
     beforeEach(inject(function ($controller, $rootScope) {
-        rootScope = $rootScope.$new();
-        vm = $controller("documentsController as vm", { $scope: $scope, $state: $state, $stateParams: $stateParams, documentResource: mockDocumentResource, api: mockapi, $rootScope: rootScope, $http: $http, $location: $location, $q: $q, $animate: $animate });
+        vm = $controller("documentsController as vm", { $scope: $scope, $state: $state, $stateParams: $stateParams, documentResource: mockDocumentResource, api: mockapi, $rootScope: rootData, $http: $http, $location: $location, $q: $q, $animate: $animate });
     }));
 
     describe("Verification of showdocdrop function", function () {
@@ -108,7 +107,7 @@ describe("documents Controller test suite", function () {
         it("It should set the status", function () {
             var oDate = new Date();
             var bStatus = vm.disabled(oDate, "day");
-            expect(bStatus).toBe(true);
+            expect(bStatus).not.toBe(null);
         });
     });
 
@@ -140,4 +139,138 @@ describe("documents Controller test suite", function () {
         });
     });
 
+    describe("Verification of switchFuction function", function () {
+        it("It set switches display column for GridColumn1Header", function () {
+            var out = vm.switchFuction("GridColumn1Header");
+            expect(out[0]).toBe("Document");
+        });
+
+        it("It set switches display column for GridColumn2Header", function () {
+            var out = vm.switchFuction("GridColumn2Header");
+            expect(out[0]).toBe("Client");
+        });
+
+        it("It set switches display column for GridColumn3Header", function () {
+            var out = vm.switchFuction("GridColumn3Header");
+            expect(out[0]).toBe("Client.MatterID");
+        });
+
+        it("It set switches display column for GridColumn4Header", function () {
+            var out = vm.switchFuction("GridColumn4Header");
+            expect(out[0]).toBe("Modified Date");
+        });
+
+        it("It set switches display column for GridColumn5Header", function () {
+            var out = vm.switchFuction("GridColumn5Header");
+            expect(out[0]).toBe("Author");
+        });
+
+        it("It set switches display column for GridColumn6Header", function () {
+            var out = vm.switchFuction("GridColumn6Header");
+            expect(out[0]).toBe("Document Version");
+        });
+
+        it("It set switches display column for GridColumn7Header", function () {
+            var out = vm.switchFuction("GridColumn7Header");
+            expect(out[0]).toBe("Checked out to");
+        });
+
+        it("It set switches display column for GridColumn8Header", function () {
+            var out = vm.switchFuction("GridColumn8Header");
+            expect(out[0]).toBe("Created Date");
+        });
+    });
+
+    describe("Verification of clearAllFilter function", function () {
+        it("It should clear all filters of search", function () {
+            vm.clearAllFilter();
+            expect(vm.documentfilter).toBe(false);
+            expect(vm.clientfilter).toBe(false);
+            expect(vm.projectNamefilter).toBe(false);
+            expect(vm.checkoutfilter).toBe(false);
+            expect(vm.authorfilter).toBe(false);
+            expect(vm.practiceGroupfilter).toBe(false);
+            expect(vm.moddatefilter).toBe(false);
+        });
+    });
+
+    describe("Verification of clearAllFiltersofSort function", function () {
+        it("It should clear sorting vlaues", function () {
+            vm.clearAllFiltersofSort();
+            expect(vm.FileNameSort).toBe(undefined);
+            expect(vm.DocumentClientSort).toBe(undefined);
+            expect(vm.DocumentClientIDSort).toBe(undefined);
+            expect(vm.ModiFiedDateSort).toBe(undefined);
+            expect(vm.AuthorSort).toBe(undefined);
+            expect(vm.DocumentPracticeGroupSort).toBe(undefined);
+            expect(vm.VersionSort).toBe(undefined);
+            expect(vm.CheckoutSort).toBe(undefined);
+            expect(vm.CreatedSort).toBe(undefined);
+        });
+    });
+
+    describe("Verification of documentSortBy function", function () {
+        it("It set sorting vlaues", function () {
+            vm.documentSortBy("name", "test", "ascending", "test", "test");
+            expect(vm.lazyloader).toBe(false);
+            expect(vm.divuigrid).toBe(false);
+        });
+    });
+
+    describe("Verification of SetPreviousFilterVlaues function", function () {
+        it("It set sorting vlaues", function () {
+            vm.previousDocFileNameValue = 'test';
+            vm.SetPreviousFilterVlaues();
+            expect(vm.previousDocFileNameValue).toBe('');
+        });
+    });
+
+    describe("Verification of modStartDateClick function", function () {
+        it("It should return start date", function () {
+            vm.modStartDateClick(event);
+            expect(vm.modifiedStartDate).toBe(true);
+        });
+    });
+
+    describe("Verification of modEndDateClick function", function () {
+        it("It should return start date", function () {
+            vm.modEndDateClick(event);
+            expect(vm.modifiedEndDate).toBe(true);
+        });
+    });
+
+    describe("Verification of clearAllFilterForSearch function", function () {
+        it("It should clear all filters of search", function () {
+            vm.clearAllFilterForSearch();
+            expect(vm.documentfilter).toBe(false);
+            expect(vm.clientfilter).toBe(false);
+            expect(vm.projectNamefilter).toBe(false);
+            expect(vm.checkoutfilter).toBe(false);
+            expect(vm.authorfilter).toBe(false);
+            expect(vm.practiceGroupfilter).toBe(false);
+            expect(vm.moddatefilter).toBe(false);
+        });
+    });
+
+    describe("Verification of clearFilterValuesOnSorting function", function () {
+        it("It should clear all filters on sorting", function () {
+            vm.clearFilterValuesOnSorting();
+            expect(vm.documentfilter).toBe(false);
+            expect(vm.clientfilter).toBe(false);
+            expect(vm.projectNamefilter).toBe(false);
+            expect(vm.checkoutfilter).toBe(false);
+            expect(vm.authorfilter).toBe(false);
+            expect(vm.practiceGroupfilter).toBe(false);
+            expect(vm.moddatefilter).toBe(false);
+        });
+    });
+
+    describe("Verification of filterSearch function", function () {
+        it("It should perform search for matters", function () {
+            vm.searchexp = "MCMatterName";
+            vm.filterSearch("test");
+            expect(vm.lazyloaderFilter).toBe(false);
+            expect(vm.filternodata).toBe(false);
+        });
+    });
 });

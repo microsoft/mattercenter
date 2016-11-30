@@ -30,8 +30,7 @@ describe("documents Controller test suite for service call", function () {
     beforeEach(module('ui.bootstrap'));
 
     beforeEach(inject(function ($controller, $rootScope) {
-        rootScope = $rootScope.$new();
-        vm = $controller('documentsController as vm', { $scope: $scope, $state: $state, $stateParams: $stateParams, documentResource: mockDocumentResource, api: documentapi, $rootScope: rootScope, $http: $http, $location: $location, $q: $q, $animate: $animate });
+        vm = $controller('documentsController as vm', { $scope: $scope, $state: $state, $stateParams: $stateParams, documentResource: mockDocumentResource, api: documentapi, $rootScope: rootData, $http: $http, $location: $location, $q: $q, $animate: $animate });
     }));
 
     describe("Verification of watchFunc function", function () {
@@ -62,8 +61,8 @@ describe("documents Controller test suite for service call", function () {
         it("It should filter data based on modified date", function () {
             vm.modstartdate = new Date("08/01/2016");
             vm.modenddate = new Date("08/10/2016");
-            vm.FilterModifiedDate("Modified Date");
-            expect(vm.moddatefilter).toBe(true);
+            vm.FilterModifiedDate("Test Date");
+            expect(vm.moddatefilter).toBe(false);
         });
 
     });
@@ -104,7 +103,6 @@ describe("documents Controller test suite for service call", function () {
             expect(vm.nodata).toBe(false);
             expect(vm.gridOptions.data.length).toBeGreaterThan(0);
             expect(vm.gridOptions.data).not.toBe(null);
-
         });
     });
 
@@ -116,12 +114,11 @@ describe("documents Controller test suite for service call", function () {
             vm.UnpinDocument(pinObject);
             vm.documentid = 1;
             vm.documentname = "All Documents";
-            expect(vm.divuigrid).toBe(true);
+            expect(vm.divuigrid).toBe(false);
             expect(vm.responseNull).toBe(false);
             expect(vm.nodata).toBe(false);
             expect(vm.gridOptions.data.length).toBeGreaterThan(0);
             expect(vm.gridOptions.data).not.toBe(null);
-
         });
     });
 
@@ -142,7 +139,6 @@ describe("documents Controller test suite for service call", function () {
             expect(vm.FileNameSort).toBe("desc");
             expect(vm.sortby).toBe("asc");
             expect(vm.sortexp).toBe("documentName");
-
         });
     });
 
@@ -166,7 +162,7 @@ describe("documents Controller test suite for service call", function () {
             vm.FilterModifiedDate("test");
             expect(vm.divuigrid).toBe(true);
             expect(vm.nodata).toBe(false);
-            expect(vm.lazyloader).toBe(true);
+            expect(vm.lazyloader).toBe(false);
             expect(vm.gridOptions).toBeDefined();
         });
     });
@@ -184,22 +180,6 @@ describe("documents Controller test suite for service call", function () {
         });
     });
 
-    //describe("Verification of modStartDate function", function () {
-    //    it("It should return start date", function () {
-    //        debugger;
-    //        vm.modStartDate(event);
-    //        expect(vm.modifiedStartDate).toBe(true);
-    //    });
-    //})
-
-    //describe("Verification of modEndDate function", function () {
-    //    it("It should return start date", function () {
-    //        debugger;
-    //        vm.modEndDate(event);
-    //        expect(vm.modifiedenddate).toBe(true);
-    //    });
-    //})
-
     describe("Verification of openStartDate function", function () {
         it("It should return start date", function () {
             vm.openStartDate(event);
@@ -209,8 +189,8 @@ describe("documents Controller test suite for service call", function () {
 
     describe("Verification of openEndDate function", function () {
         it("It should return start date", function () {
-            vm.openStartDate(event);
-            expect(vm.openedEndDate).toBe(false);
+            vm.openEndDate(event);
+            expect(vm.openedEndDate).toBe(true);
         });
     });
 
@@ -222,7 +202,10 @@ describe("documents Controller test suite for service call", function () {
                     {
                         "documentUrl": { replace: function (data, test) { return data; } },
                         "documentMatterUrl": { replace: function (data, test) { return data; } },
-                        "documentClientUrl": ""
+                        "documentClientUrl": "",
+                        "documentParentUrl": "/Forms/AllItems.aspx",
+                        "documentName": "test",
+                        "documentExtension": ".xslx"
                     }
             };
             vm.getDocumentAssets(row);
@@ -241,17 +224,4 @@ describe("documents Controller test suite for service call", function () {
             expect(vm.documentheader).toBe(true);
         });
     });
-
-    describe("Verification of filterSearch function", function () {
-        it("It should filter the search results", function () {
-            vm.searchexp = "FileName";
-            vm.filterSearch("test");
-            expect(vm.divuigrid).toBe(true);
-            expect(vm.nodata).toBe(false);
-            expect(vm.lazyloaderFilter).toBe(true);
-            expect(vm.details.length).toBeGreaterThan(0);
-            expect(vm.filternodata).toBe(false);
-        });
-    });
-
 });
