@@ -13,7 +13,7 @@
 
 describe("DocumentDashboard Controller test suite", function () {
     "use strict";
-   
+
     beforeEach(module("matterMain"));
     beforeEach(module("matterMain", function ($provide) {
         $provide.factory("documentDashBoardResource", ["$resource", "auth", mockDocumentDashBoardResource]);
@@ -33,7 +33,7 @@ describe("DocumentDashboard Controller test suite", function () {
     }));
 
     describe("Verification of closealldrops function", function () {
-        it("It should close all dropdowns on click of page", function () {
+        it("It should close all dropdowns on click on page", function () {
             vm.closealldrops(event);
             expect(vm.searchdrop).toBe(false);
             expect(vm.downwarddrop).toBe(true);
@@ -63,6 +63,7 @@ describe("DocumentDashboard Controller test suite", function () {
             expect(vm.documentsCheckedCount).toBe(0);
             expect(vm.cartelements).toBeDefined();
         });
+
         it("It should disable toggle to check all documents", function () {
             vm.documentsCheckedCount = 2;
             vm.gridApi = {};
@@ -74,7 +75,7 @@ describe("DocumentDashboard Controller test suite", function () {
     });
 
     describe("Verification of removeAttachment function", function () {
-        it("It should add an elements to the cart", function () {
+        it("It should add elements to the cart", function () {
             vm.cartelements = obj;
             vm.documentsCheckedCount = 3;
             vm.gridApi = {};
@@ -84,6 +85,7 @@ describe("DocumentDashboard Controller test suite", function () {
             expect(vm.cartelements.length).toBe(1);
             expect(vm.documentsCheckedCount).toBe(2);
         });
+
         it("It should remove all the elements from the cart", function () {
             vm.cartelements = {};
             vm.cartelements.length = 0;
@@ -104,6 +106,7 @@ describe("DocumentDashboard Controller test suite", function () {
             expect(vm.cartelements.length).toBeDefined();
             expect(vm.documentsCheckedCount).toBe(1);
         });
+
         it("It should deselect the documents inside grid ", function () {
             vm.documentGridOptions.data = obj;
             vm.documentsCheckedCount = 3;
@@ -138,6 +141,7 @@ describe("DocumentDashboard Controller test suite", function () {
             expect(vm.sortbydrop).toBe(true);
             expect(vm.sortbydropvisible).toBe(true);
         });
+
         it("It should hide show sortby dropdown box", function () {
             vm.sortbydropvisible = true;
             vm.showsortby(event);
@@ -153,6 +157,7 @@ describe("DocumentDashboard Controller test suite", function () {
             expect(vm.fromtopage).toBe("1 - 0");
             expect(vm.displaypagination).toBe(false);
         });
+
         it("It should display pagination on the page", function () {
             vm.totalrecords = 16;
             vm.pagination();
@@ -161,30 +166,93 @@ describe("DocumentDashboard Controller test suite", function () {
         });
     });
 
-    describe("Verification of showDocTabs function", function () {
-        it("It should display document tabs", function () {
-            vm.showInnerNav = true;
-            vm.showDocTabs(event);
-            expect(vm.showNavTab).toBe(true);
-            expect(vm.showInnerNav).toBe(false);
+    describe("Verification of collapseDateControls function", function () {
+        it("It should collapse date controls", function () {
+            vm.collapseDateControls();
+            expect(vm.openedStartDate).toBe(false);
+            expect(vm.openedEndDate).toBe(false);
         });
     });
 
-    //This methods are not available on current published build
+    describe("Verification of authortypeheadselect function", function () {
+        it("It should select author", function () {
+            var index = { name: "MAQ" };
+            vm.authortypeheadselect(index, "test");
+            expect(vm.selectedAuthor).toBe("MAQ");
+        });
+    });
 
-    //describe("Verification of collapseDateControls function", function () {
-    //    it("It should collapse date controls", function () {
-    //        vm.collapseDateControls();
-    //        expect(vm.openedStartDate).toBe(false);
-    //        expect(vm.openedEndDate).toBe(false);
-    //    });     
-    //});
+    describe("Verification of showDocTabs function", function () {
+        it("It should show document tab", function () {
+            vm.showInnerNav = true;
+            vm.showDocTabs(event);
+            expect(vm.showInnerNav).toBe(false);
+            expect(vm.showNavTab).toBe(true);
+        });
+    });
 
-    //describe("Verification of displayColumn function", function () {
-    //    it("It should switch the displayed column", function () {
-    //        var sHeaderName = vm.switchFuction("GridColumn6Header");
-    //        expect(sHeaderName).toBe(false);        
-    //    });     
-    //});
+    describe("Verification of showSelectedTabs function", function () {
+        it("It should show selected tab", function () {
+            vm.showSelectedTabs("Pinned documents", 5);
+            expect(vm.selectedTab).toBe("Pinned documents");
+            expect(vm.selectedTabInfo).toBe("Pinned documents (5)");
+        });
+    });
 
+    describe("Verification of sortExpression function", function () {
+        it("It shouls set sorting vlaues", function () {
+            vm.sortExpression("name", "test", "ascending");
+            expect(vm.lazyloaderdashboard).toBe(false);
+            expect(vm.divuigrid).toBe(false);
+            expect(vm.nodata).toBe(false);
+            expect(vm.displaypagination).toBe(false);
+        });
+    });
+
+    describe("Verification of switchFuction function", function () {
+        it("It set switches display column for GridColumn1Header", function () {
+            var out = vm.switchFuction("GridColumn1Header");
+            expect(out).toBe("Document");
+        });
+
+        it("It set switches display column for GridColumn2Header", function () {
+            var out = vm.switchFuction("GridColumn2Header");
+            expect(out).toBe("Client");
+        });
+
+        it("It set switches display column for GridColumn3Header", function () {
+            var out = vm.switchFuction("GridColumn3Header");
+            expect(out).toBe("Author");
+        });
+
+        it("It set switches display column for GridColumn4Header", function () {
+            var out = vm.switchFuction("GridColumn4Header");
+            expect(out).toBe("Modified Date");
+        });
+
+        it("It set switches display column for GridColumn5Header", function () {
+            var out = vm.switchFuction("GridColumn5Header");
+            expect(out).toBe("Document ID");
+        });
+
+        it("It set switches display column for GridColumn6Header", function () {
+            var out = vm.switchFuction("GridColumn6Header");
+            expect(out).toBe("Version");
+        });
+
+        it("It set switches display column for GridColumn7Header", function () {
+            var out = vm.switchFuction("GridColumn7Header");
+            expect(out).toBe("Created Date");
+        });
+
+        it("It set switches display column for GridColumn8Header", function () {
+            var out = vm.switchFuction("GridColumn8Header");
+            expect(out).toBe("Matter Name");
+        });
+
+        it("It set switches display column for default", function () {
+            var out = vm.switchFuction("test");
+            expect(out).toBe("");
+        });
+    });
 });

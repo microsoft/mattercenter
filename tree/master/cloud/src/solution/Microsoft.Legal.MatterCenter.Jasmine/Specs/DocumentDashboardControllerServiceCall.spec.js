@@ -49,14 +49,21 @@ describe("DocumentDashboard Controller test suite for service call", function ()
             vm.getPinnedDocuments();
             expect(vm.documentGridOptions.data).not.toBe(null);
             expect(vm.documentGridOptions.data.length).toBeGreaterThan(1);
-            expect(vm.totalrecords).toBeGreaterThan(1);
+            expect(vm.totalrecords).not.toBe(null);
             expect(vm.lazyloaderdashboard).toBe(true);
             expect(vm.divuigrid).toBe(true);
         });
     });
 
+    describe("Verification of export function", function () {
+        it("It should set export vlaues", function () {
+            vm.export();
+            expect(vm.exportDate).toBeDefined();
+        });
+    });
+
     describe("Verification of getMyDocuments function", function () {
-        it("It should return the My documents", function () {
+        it("It should return My documents", function () {
             vm.getMyDocuments();
             expect(vm.lazyloaderdashboard).toBe(true);
             expect(vm.displaypagination).toBe(true);
@@ -89,7 +96,6 @@ describe("DocumentDashboard Controller test suite for service call", function ()
             expect(vm.clientdrop).toBe(true);
             expect(vm.clientdropvisible).toBe(true);
             expect(vm.lazyloaderdocumentclient).toBe(true);
-
         });
 
         it("It should not show clientdrop", function () {
@@ -98,7 +104,6 @@ describe("DocumentDashboard Controller test suite for service call", function ()
             expect(vm.clientdrop).toBe(false);
             expect(vm.clientdropvisible).toBe(false);
             expect(vm.lazyloaderdocumentclient).toBe(true);
-
         });
     });
 
@@ -190,16 +195,6 @@ describe("DocumentDashboard Controller test suite for service call", function ()
         });
     });
 
-    //// **************** This function return the value instead of setting in object ****************
-
-    //This function return the value instead of setting in object
-    //describe('Verification of searchDocumentFile function', function () {
-    //    it('It should search a file in the document', function () {
-    //        vm.searchDocumentFile("test");
-    //        expect(vm.pagenumber).toBe(1)
-    //    });
-    //});
-
     describe('Verification of typeheadselect function', function () {
         it('It should select a typehead ', function () {
             vm.typeheadselect("test", "");
@@ -214,7 +209,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     });
 
     describe("Verification of filterSearchCancel function", function () {
-        it("It should trigger when the user clicks on 'Cancel' button in the filter panel", function () {
+        it("It should be triggered when the user clicks on 'Cancel' button in the filter panel", function () {
             vm.filterSearchCancel("client");
             expect(vm.clientdrop).toBe(false);
             expect(vm.clientdropvisible).toBe(false);
@@ -237,7 +232,6 @@ describe("DocumentDashboard Controller test suite for service call", function ()
 
     describe("Verification of openStartDate function", function () {
         it("It should return start date", function () {
-           
             vm.openStartDate(event);
             expect(vm.openedStartDate).toBe(true);
         });
@@ -245,23 +239,14 @@ describe("DocumentDashboard Controller test suite for service call", function ()
 
     describe("Verification of openEndDate function", function () {
         it("It should return start date", function () {
-
-            vm.openStartDate(event);
-            expect(vm.openedEndDate).toBe(false);
+            vm.openEndDate(event);
+            expect(vm.openedEndDate).toBe(true);
         });
     })
 
-    describe('Verification of getDocumentAssets   function', function () {
-    it('It should get all the documents asset', function () {
+    describe('Verification of getDocumentAssets function', function () {
+        it('It should get all the documents asset', function () {
             var data;
-            var row = {
-                "entity":
-                    {
-                        "documentUrl": { replace: function (data, test) { return data; } },
-                        "documentMatterUrl": { replace: function (data, test) { return data; } },
-                        "documentClientUrl": ""
-                    }
-            };
             vm.getDocumentAssets(row);
             expect(vm.searchdrop).toBe(false);
             expect(vm.downwarddrop).toBe(true);
@@ -274,7 +259,7 @@ describe("DocumentDashboard Controller test suite for service call", function ()
     });
 
     describe("Verification of getSearchResults function", function () {
-        it("This should get the search result", function () {
+        it("This should get the search results", function () {
             vm.getSearchResults();
             expect(vm.lazyloaderdashboard).toBe(true);
             expect(vm.documentGridOptions).toBeDefined();
