@@ -25,5 +25,9 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// Gets or sets the email of user or security group
         /// </summary>
         public string PrincipalType { get; set; }
+        public string SPUserID { get; set; }
+        public string IsBlocked { get; set; }
+        public string SIPAddress { get; set; }
+        public string AccountName { get; set; }
     }
 }

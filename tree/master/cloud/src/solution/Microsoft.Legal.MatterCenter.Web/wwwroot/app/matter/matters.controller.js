@@ -48,6 +48,9 @@
             //start
             vm.divuigrid = true;
             //vm.nodata = false;
+            vm.dropDownMenu = false;
+            vm.dropDownMenuLoader = true;
+            vm.urlExists = false;
             vm.filternodata = false;
             vm.matterid = 2;
 
@@ -348,6 +351,36 @@
                     method: 'UnpinMatters',
                     data: options,
                     success: callback
+                });
+            }
+
+            //Callback function for Onenote Url Exists 
+            function OneNoteUrlExists(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'oneNoteUrlExists',
+                    data: options,
+                    success: callback
+                });
+            }
+           
+
+            vm.checkUrlExists = function (data) {
+                vm.urlExists = false;
+                vm.dropDownMenuLoader = false;
+                vm.dropDownMenu = false;
+                var clientUrl = data.matterClientUrl.replace(vm.configsUri.SPOsiteURL, "")
+                var oneNoteUrl = clientUrl + "/" + data.matterGuid + "_OneNote/" + data.matterName + "/" + data.matterGuid + ".onetoc2";
+                var matterInformatiuonVM = {
+                    Client: {
+                        Url: data.matterClientUrl
+                    },
+                    RequestedUrl: oneNoteUrl
+                }
+                OneNoteUrlExists(matterInformatiuonVM, function (response) {
+                    vm.urlExists = response.oneNoteUrlExists
+                    vm.dropDownMenuLoader = true;
+                    vm.dropDownMenu = true;                        
                 });
             }
 
@@ -2194,7 +2227,7 @@
             };
 
             vm.changeOnCreateDate = function ($event) {
-                if ($event.keyCode == '13'|| $event.keyCode == '9') {
+                if ($event.keyCode == '13' || $event.keyCode == '9') {
 
                     var modelValue = $event.target.attributes['ng-model'].value;
 
@@ -3120,6 +3153,8 @@
             angular.element('#menuitem-1').dblclick(function (e) {
                 e.preventDefault();
             });
+
+            
         }]);
     app.filter('unique', function () {
         return function (collection, keyname) {

@@ -1271,9 +1271,57 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
+        
         #region Private Methods
 
 
+
+        /// <summary>
+        /// Checks if the requested page exists or not.
+        /// </summary>
+        /// <param name="requestedUrl">URL of the page, for which check is to be performed</param>
+        /// <param name="clientContext">ClientContext for SharePoint</param>
+        /// <returns>true or false string based upon the existence of the page, referred in requestedUrl</returns>
+        public bool PageExists(Client client, string requestedUrl)
+        {
+            bool pageExists = false;
+            try
+            {
+                using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
+                {
+                    if (IsFileExists(clientContext, requestedUrl))
+                    {
+                        pageExists = true;
+                    }
+                }
+            }            
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+            return pageExists;
+        }
+
+
+        /// <summary>
+        /// Checks the file at the specified location and return the file existence status.
+        /// </summary>
+        /// <param name="clientContext">Client Context</param>
+        /// <param name="pageUrl">File URL</param>
+        /// <returns>Success flag</returns>
+        public static bool IsFileExists(ClientContext clientContext, string pageUrl)
+        {
+            bool success = false;
+            if (null != clientContext && !string.IsNullOrWhiteSpace(pageUrl))
+            {
+                File clientFile = clientContext.Web.GetFileByServerRelativeUrl(pageUrl);
+                clientContext.Load(clientFile, cf => cf.Exists);
+                clientContext.ExecuteQuery();
+                success = clientFile.Exists;
+            }
+            return success;
+        }
 
         private static string UppercaseFirst(string s)
         {
