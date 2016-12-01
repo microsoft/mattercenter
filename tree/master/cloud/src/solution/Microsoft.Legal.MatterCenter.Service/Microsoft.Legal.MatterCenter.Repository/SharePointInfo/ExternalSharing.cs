@@ -110,17 +110,17 @@ namespace Microsoft.Legal.MatterCenter.Repository
             var clientUrl = $"{matterInformation.Client.Url}";
             try
             {
-                string roleId = "";
+                string roleId = "";                
                 switch (permission.ToLower())
                 {
-                    case "full control":
-                        roleId = "1073741829";
+                    case "full control":                        
+                        roleId = ((int)SPORoleIdMapping.FullControl).ToString();
                         break;
-                    case "contribute":
-                        roleId = "1073741827";
+                    case "contribute":                        
+                        roleId = ((int)SPORoleIdMapping.Contribute).ToString();
                         break;
-                    case "read":
-                        roleId = "1073741826";
+                    case "read":                        
+                        roleId = ((int)SPORoleIdMapping.Read).ToString();
                         break;
                 }               
 
