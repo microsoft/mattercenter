@@ -11,6 +11,8 @@
             vm.showDenyMessage = '';
             vm.createContent = uiconfigs.CreateMatter;
             vm.taxonomyHierarchyLevels = configs.taxonomy.levels;
+            vm.global = configs.global;
+            vm.uri = configs.uri;
             vm.selectedDocumentTypeLawTerms = [];
             vm.documentTypeLawTerms = [];
             vm.primaryMatterType = vm.errorPopUp = false;
@@ -118,8 +120,10 @@
             vm.showClientDetails = false;
             //#endregion
 
+
+            
             var optionsForClientUrl = {                
-                    Url: configs.global.repositoryUrl                
+                Url: configs.global.isBackwardCompatible ? configs.global.repositoryUrl : configs.uri.SPOsiteURL
             };
 
 

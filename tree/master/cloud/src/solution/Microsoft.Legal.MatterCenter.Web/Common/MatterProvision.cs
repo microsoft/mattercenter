@@ -496,6 +496,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
         public GenericResponseVM UpdateMatter(MatterInformationVM matterInformation)
         {
+
             var matter = matterInformation.Matter;
             var matterDetails = matterInformation.MatterDetails;
             var client = matterInformation.Client;
@@ -527,16 +528,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
             catch (Exception ex)
             {
-                MatterRevertList matterRevertListObject = new MatterRevertList()
-                {
-                    MatterLibrary = matter.Name,
-                    MatterOneNoteLibrary = matter.Name + matterSettings.OneNoteLibrarySuffix,
-                    MatterCalendar = matter.Name + matterSettings.CalendarNameSuffix,
-                    MatterTask = matter.Name + matterSettings.TaskNameSuffix,
-                    MatterSitePages = matterSettings.MatterLandingPageRepositoryName
-                };
-                matterRepositoy.RevertMatterUpdates(client, matter, clientContext, matterRevertListObject, loggedInUserName,
-                    userPermissionOnLibrary, listItemId, isEditMode);
+                throw;
             }
             return null;
         }
