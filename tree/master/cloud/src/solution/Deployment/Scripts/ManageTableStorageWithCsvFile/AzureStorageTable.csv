@@ -71,7 +71,7 @@ MatterCenterConfig,RowKey069,CreateMatter,Tab1Textbox4PlaceholderText,Enter a br
 MatterCenterConfig,RowKey070,CreateMatter,Tab1Textbox5Label,Matter Type (click Select to define the practice group and area of law)
 MatterCenterConfig,RowKey071,CreateMatter,Tab1DrpDownLevel1DefaultSelectOption,Select a practice group
 MatterCenterConfig,RowKey072,CreateMatter,Tab1TermsSelectionSearchPlaceHolderText,Search by typing
-MatterCenterConfig,RowKey073,CreateMatter,Tab1LabelFinalTypeText,MatterType
+MatterCenterConfig,RowKey073,CreateMatter,Tab1LabelFinalTypeText,Matter Type
 MatterCenterConfig,RowKey074,CreateMatter,Tab1LabelPrimaryTypeText,Please select primary matter type
 MatterCenterConfig,RowKey075,CreateMatter,Tab1LabelPrimaryTypeBeforeSaveText,Please select primary matter type before you save.
 MatterCenterConfig,RowKey076,CreateMatter,Tab1ButtonSaveSelectiponText,Save Selections
@@ -158,6 +158,10 @@ MatterCenterConfig,RowKey168,Documents,EllipsisLink2Text,View Matter Details
 MatterCenterConfig,RowKey169,Documents,EllipsisLink3Text,Pin this Document
 MatterCenterConfig,RowKey170,Documents,FlyoutButton1Text,Open document
 MatterCenterConfig,RowKey171,Documents,FlyoutButton2Text,View document details
+MatterCenterConfig,RowKey172,Documents,ECBMenu1Title,View this document
+MatterCenterConfig,RowKey173,Documents,ECBMenu2Title,Go to this document's matter details
+MatterCenterConfig,RowKey174,Documents,ECBMenu3Title,Add this document to Pinned Documents
+MatterCenterConfig,RowKey175,Documents,ECBMenu4Title,Remove this document from Pinned Documents
 MatterCenterConfig,RowKey181,Header,MenuImage1Title,Matter center menu
 MatterCenterConfig,RowKey182,Header,MenuImage1Caption,menu
 MatterCenterConfig,RowKey183,Header,MenuImage1OpenTitle,Open App Switcher
@@ -168,11 +172,11 @@ MatterCenterConfig,RowKey187,Header,Menu1Option3Title,Search Documents
 MatterCenterConfig,RowKey188,Header,Menu1Option1Text,Home
 MatterCenterConfig,RowKey189,Header,Menu1Option2Text,Matters
 MatterCenterConfig,RowKey190,Header,Menu1Option3Text,Documents
-MatterCenterConfig,RowKey191,Header,ContextualHelpImageTitle,Matter center help
+MatterCenterConfig,RowKey191,Header,ContextualHelpImageTitle,Matter Center help
 MatterCenterConfig,RowKey192,Header,ContextualHelpHeader,Matter Center For Outlook
 MatterCenterConfig,RowKey193,Header,ContextualHelpNoLinkText,There are no help links available.
 MatterCenterConfig,RowKey194,Header,ContextualHelpFooterLink1Label,Matter Center Aisling Support
-MatterCenterConfig,RowKey195,Header,LogoImageTitle,Matter center home
+MatterCenterConfig,RowKey195,Header,LogoImageTitle,Matter Center home
 MatterCenterConfig,RowKey196,Header,ContextualHelpLabel1,Get to know this view
 MatterCenterConfig,RowKey197,Header,ContextualHelpLabel2,How do I get Project Center on my device?
 MatterCenterConfig,RowKey198,Header,MatterCenterSupportLink,mailto:support@supportsite.com
@@ -211,8 +215,7 @@ MatterCenterConfig,RowKey239,MatterDashboard,AdvSearchLabel2Text,Practice Group
 MatterCenterConfig,RowKey240,MatterDashboard,AdvSearchTextbox2PlaceholderText,Enter or select a practice group
 MatterCenterConfig,RowKey241,MatterDashboard,AdvSearchLabel3Text,Area of Law
 MatterCenterConfig,RowKey242,MatterDashboard,AdvSearchTextbox3PlaceholderText,Enter or select an area of law
-MatterCenterConfig,RowKey243,MatterDashboard,AdvSearchLabel4Text,Date
-MatterCenterConfig,RowKey244,MatterDashboard,AdvSearchTextbox4PlaceholderText,From
+MatterCenterConfig,RowKey243,MatterDashboard,AdvSearchLabel4Text,Sub Area of Law
 MatterCenterConfig,RowKey245,MatterDashboard,AdvSearchTextbox5PlaceholderText,To
 MatterCenterConfig,RowKey246,MatterDashboard,AdvSearchButtonSearchText,Search
 MatterCenterConfig,RowKey247,MatterDashboard,Tab1HeaderText,My matters
@@ -249,8 +252,8 @@ MatterCenterConfig,RowKey277,MatterDashboard,AttachmentEmptyText,No files upload
 MatterCenterConfig,RowKey278,MatterDashboard,AttachmentPopupFooterImageCapetion,You can also drag and drop files from your desktop.
 MatterCenterConfig,RowKey279,MatterDashboard,MattersPreLoadingMsgText,Please wait while the Matters load.
 MatterCenterConfig,RowKey280,MatterDashboard,GridColumn1Header,Matter
-MatterCenterConfig,RowKey281,MatterDashboard,GridColumn2Header,Client
-MatterCenterConfig,RowKey282,MatterDashboard,GridColumn3Header,Client.Matter ID
+MatterCenterConfig,RowKey281,MatterDashboard,GridColumn2Header,Client.Matter ID
+MatterCenterConfig,RowKey282,MatterDashboard,GridColumn3Header,Client
 MatterCenterConfig,RowKey283,MatterDashboard,GridColumn4Header,Modified Date
 MatterCenterConfig,RowKey284,MatterDashboard,GridColumn5Header,Responsible attorney
 MatterCenterConfig,RowKey285,MatterDashboard,AdvSearchLabel1InternalFuncParamText,client
@@ -319,11 +322,16 @@ MatterCenterConfig,RowKey355,Matters,AttachmentPopupFooterImageCapetion,You can 
 MatterCenterConfig,RowKey356,Matters,AttachmentPopupHeaderItem1Text,Items
 MatterCenterConfig,RowKey357,Matters,AttachmentPopupHeaderItem2Text,Folders
 MatterCenterConfig,RowKey358,Matters,AttachmentPopupHeaderText,Upload to a matter
+MatterCenterConfig,RowKey359,Matters,ECBMenu1Title,Upload documents to this matter
+MatterCenterConfig,RowKey360,Matters,ECBMenu2Title,Go to this matter's details
+MatterCenterConfig,RowKey361,Matters,ECBMenu3Title,Go to this matter's OneNote
+MatterCenterConfig,RowKey362,Matters,ECBMenu4Title,Add this matter to Pinned Matters
+MatterCenterConfig,RowKey363,Matters,ECBMenu5Title,Remove this matter from Pinned Matters
 MatterCenterConfig,RowKey371,Navigation,MenuItem1LinkTitle,Home
 MatterCenterConfig,RowKey372,Navigation,MenuItem1LinkTitle,Search matters
 MatterCenterConfig,RowKey373,Navigation,MenuItem1LinkTitle,Search documents
 MatterCenterConfig,RowKey374,Navigation,NameTitle,Matter
-MatterCenterConfig,RowKey375,Navigation,HeaderBarLink1Title,Learn more about matter center
+MatterCenterConfig,RowKey375,Navigation,HeaderBarLink1Title,Learn more about Matter Center
 MatterCenterConfig,RowKey376,Navigation,HeaderBarLink2Title,Remove this section
 MatterCenterConfig,RowKey377,Navigation,MenuImageOpenTitle,Open App Switcher
 MatterCenterConfig,RowKey378,Navigation,MenuImageCloseTitle,Close App Switcher
@@ -334,12 +342,12 @@ MatterCenterConfig,RowKey382,Navigation,Image2Title,Search documents
 MatterCenterConfig,RowKey383,Navigation,HelpRequesURL,https://msmatter.sharepoint.com/sites/catalog
 MatterCenterConfig,RowKey384,Navigation,FooterLabel,Questions? Contact
 MatterCenterConfig,RowKey385,Navigation,MenuImageCaption,menu
-MatterCenterConfig,RowKey386,Navigation,MenuImageTitle,Matter center menu
+MatterCenterConfig,RowKey386,Navigation,MenuImageTitle,Matter Center menu
 MatterCenterConfig,RowKey387,Navigation,MenuItem1LinkText,Home
 MatterCenterConfig,RowKey388,Navigation,MenuItem2LinkText,Matters
 MatterCenterConfig,RowKey389,Navigation,MenuItem3LinkText,Documents
-MatterCenterConfig,RowKey390,Navigation,LogoImageTitle,Matter center home
-MatterCenterConfig,RowKey391,Navigation,ContextualHelpImageTitle,Matter center help
+MatterCenterConfig,RowKey390,Navigation,LogoImageTitle,Matter Center home
+MatterCenterConfig,RowKey391,Navigation,ContextualHelpImageTitle,Matter Center help
 MatterCenterConfig,RowKey392,Navigation,ContextualHelpLabel1,Get to know this view
 MatterCenterConfig,RowKey393,Navigation,ContextualHelpLink1Text,Home in Outlook and Word
 MatterCenterConfig,RowKey394,Navigation,ContextualHelpLink1URL,https://microsoft.sharepoint.com/teams/celapcconfig/Shared%20Documents/CELA%20Project%20Center%20End%20User%20Guide_24.pdf#Home_in_Outlook_and_Word 
@@ -438,7 +446,7 @@ MatterCenterConfig,RowKey514,DocumentDetails,Label13Section2Column11Text,Sub are
 MatterCenterConfig,RowKey515,DocumentDetails,Label14Section2Column12Text,File type
 MatterCenterConfig,RowKey516,DocumentDetails,Label15Section2Column13Text,File size
 MatterCenterConfig,RowKey517,DocumentDetails,Label16Section2Column14Text,File access
-MatterCenterConfig,RowKey518,DocumentDetails,Label17Section2HeaderText,Version history
+MatterCenterConfig,RowKey518,DocumentDetails,Label17Section2HeaderText,Version History
 MatterCenterConfig,RowKey519,DocumentDetails,Label18Section2Column1Text,Version
 MatterCenterConfig,RowKey520,DocumentDetails,Label19Section2Column2Text,Modified
 MatterCenterConfig,RowKey521,DocumentDetails,Label20Section2Column3Text,Modified By
@@ -505,7 +513,7 @@ MatterCenterConfig,RowKey603,Documents,FlyoutMenuColumn9DisplayName,DisplayColum
 MatterCenterConfig,RowKey604,Documents,FlyoutMenuColumn10DisplayName,DisplayColumn10Name
 MatterCenterConfig,RowKey606,CreateMatter,LabelSuccessEntityCreation,Matter is successfully created. You can find recently created matter over
 MatterCenterConfig,RowKey607,CreateMatter,LabelEntityCreationSuccessMsgText3,Step 3/3: Updating metadata of matter library and sharing matter with the users... 
-MatterCenterConfig,RowKey608,CreateMatter,LabelEntityCreationSuccessMsgText2,"Step 2/3: Assigning permissions to matter library and OneNote library,associating Content Types, creating view and matter landing page..."
+MatterCenterConfig,RowKey608,CreateMatter,LabelEntityCreationSuccessMsgText2,"Step 2/3: Assigning permissions to matter library and OneNote library, associating Content Types, creating view and matter landing page..."
 MatterCenterConfig,RowKey609,CreateMatter,LabelEntityCreationSuccessMsgText1,Step 1/3: Creating matter library and OneNote library...
 MatterCenterConfig,RowKey610,CreateMatter,ErrorMessageEntityLibraryCreated,Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.
 MatterCenterConfig,RowKey611,CreateMatter,ErrorMessageEntityDescription,Enter a description for this matter.
@@ -536,7 +544,7 @@ MatterCenterConfig,RowKey640,CreateMatter,ErrorMessageEntityCreation1, Error in 
 MatterCenterConfig,RowKey641,CreateMatter,ErrorMessageEntityId1,Enter a matter ID.
 MatterCenterConfig,RowKey642,CreateMatter,ErrorMessageSelectType,Select matter type by area of law for this matter
 MatterCenterConfig,RowKey643,CreateMatter,ErrorMessageSpecialCharacters,"Please enter a valid text which contains only alphanumeric characters, spaces & hyphen"
-MatterCenterConfig,RowKey644,CreateMatter,ErrorMessageEntityNameSpecialCharacters,Please enter a valid Matter name which contains only alphanumeric characters and spaces
+MatterCenterConfig,RowKey644,CreateMatter,ErrorMessageEntityNameSpecialCharacters,"Your matter name includes a character that is not allowed. The name can only contain letters,numbers, spaces, hyphens, underscores, apostrophes, and parentheses; do not use any other characters."
 MatterCenterConfig,RowKey645,CreateMatter,ErrorMessageEntityId2,Selected  client for this matter clientId is null 
 MatterCenterConfig,RowKey646,CreateMatter,ErrorMessageEntityTeamOrClient1,Select a client for this matter
 MatterCenterConfig,RowKey647,CreateMatter,ErrorMessageEntityDate,Enter the date on which the conflict check was performed 
@@ -547,10 +555,9 @@ MatterCenterConfig,RowKey651,MatterLanding,EmailContent,"To: MatterCenter Suppor
 MatterCenterConfig,RowKey652,CreateMatter,Tab1Textbox5LabelForLevel3,"Matter Type (click Add to define the practice group, area of law and sub area of law)"
 MatterCenterConfig,RowKey653,CreateMatter,Tab1Textbox5LabelForLevel4,"Matter Type (click Add to define the practice group, area of law, sub area of law and sub area of law1)"
 MatterCenterConfig,RowKey654,CreateMatter,Tab1Textbox5LabelForLevel5,"Matter Type (click Add to define the practice group, area of law, sub area of law, sub area of law1 and sub area of law2)"
-MatterCenterConfig,RowKey660,MatterDashboard,AdvSearchTextbox4PlaceholderText,Enter or select project type
+MatterCenterConfig,RowKey660,MatterDashboard,AdvSearchTextbox4PlaceholderText,Enter or select Sub Areaof Law
 MatterCenterConfig,RowKey661,MatterDashboard,AdvSearchTextbox5PlaceholderText,From
 MatterCenterConfig,RowKey662,MatterDashboard,AdvSearchTextbox6PlaceholderText,To
-MatterCenterConfig,RowKey663,MatterDashboard,AdvSearchLabel3Text,Team Name
 MatterCenterConfig,RowKey664,MatterDashboard,AdvSearchLabel4InternalFuncParamText,level3
 MatterCenterConfig,RowKey665,MatterDashboard,AdvSearchLabel5Text,Date
 MatterCenterConfig,RowKey666,MatterDashboard,GridColumn6Header,Matter ID
@@ -558,7 +565,32 @@ MatterCenterConfig,RowKey667,CreateMatter,ErrorMessageAOLSelection,Select matter
 MatterCenterConfig,RowKey668,Header,FooterMenuOption1Value,"[Enter URL for Feedback and Support, e.g. mailto:support@supportsite.com]"
 MatterCenterConfig,RowKey669,Header,FooterMenuOption2Value,"[Enter URL for Privacy terms, e.g. privacy.supportsite.com]"
 MatterCenterConfig,RowKey670,Header,FooterMenuOption3Value,"[Enter URL for Privacy terms, e.g. privacy.supportsite.com]"
+MatterCenterConfig,RowKey671,CreateMatter,ErrorMessagePrimaryMatterType,Please select primary matter type
+MatterCenterConfig,RowKey672,CreateMatter,LabelAddOrRemoveTypes,Add/Remove Types
+MatterCenterConfig,RowKey673,CreateMatter,ColumnName1,Practice Group
+MatterCenterConfig,RowKey674,CreateMatter,ColumnName2,Area of Law
+MatterCenterConfig,RowKey675,CreateMatter,ColumnName3,Sub Area of Law
+MatterCenterConfig,RowKey676,CreateMatter,ColumnName4,Sub Area of Law1
+MatterCenterConfig,RowKey677,CreateMatter,ColumnName5,Sub Area of Law2
 MatterCenterConfig,RowKey678,DocumentDetails,MenuImageUpperCaption,Matter Center
 MatterCenterConfig,RowKey679,DocumentDetails,MenuImageLowerCaption,for office 365
 MatterCenterConfig,RowKey680,CreateMatter,Tab1TextBoxMatterNameTitle,Matter Name
 MatterCenterConfig,RowKey681,CreateMatter,Tab1TextBoxMatterIDTitle,Matter ID
+MatterCenterConfig,RowKey691,uploadMessages,maxAttachedMessage,Do not select more than five documents to attach at one time.
+MatterCenterConfig,RowKey692,uploadMessages,attachFailureMessage,One or more of your selected documents failed to attach:
+MatterCenterConfig,RowKey693,uploadMessages,attachButtonText,Attach Documents
+MatterCenterConfig,RowKey694,uploadMessages,overwrite_Config_Property,Email Only
+MatterCenterConfig,RowKey695,uploadMessages,upload_Append_Button,Append date to file name and save
+MatterCenterConfig,RowKey696,uploadMessages,upload_Append_Button_Tooltip,"The file will be saved as new, separate document with the current date and time added to the end of the file name."
+MatterCenterConfig,RowKey697,uploadMessages,content_Check_Abort,Content check has been aborted.
+MatterCenterConfig,RowKey698,uploadMessages,uploadImageDocumentIcon,/_layouts/15/images/ic{0}.gif
+MatterCenterConfig,RowKey699,uploadMessages,uploadPNGIconExtensions,pdf
+MatterCenterConfig,RowKey700,Settings,DenySupportMailMessage,mailto:lcaweb2@microsoft.com?subject=CELA Project Center Feedback and Support request
+MatterCenterConfig,RowKey701,MatterUsers,SearchUsersURL,https://msmatter.sharepoint.com/sites/client
+MatterCenterConfig,RowKey702,MatterUsers,StampedPropertiesURL,https://msmatter.sharepoint.com/sites/microsoft
+MatterCenterConfig,RowKey703,MatterUsers,Add,test
+MatterCenterConfig,RowKey704,Home,MatterCenterSupportLinkText,Matter Center Support
+MatterCenterConfig,RowKey705,Home,MatterCenterSupportLink,mailto:support@supportsite.com
+MatterCenterConfig,RowKey706,Home,HelpRequesURL,https://msmatter.sharepoint.com/sites/catalog
+MatterCenterConfig,RowKey708,Home,ContextualHelpHeader,Matter Center For Outlook
+MatterCenterConfig,RowKey709,Home,ContextualHelpBottomText,Questions? Contact 

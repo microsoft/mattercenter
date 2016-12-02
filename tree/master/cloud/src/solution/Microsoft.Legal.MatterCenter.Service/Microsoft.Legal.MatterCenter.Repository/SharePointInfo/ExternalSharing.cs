@@ -2,16 +2,12 @@
 using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.SharePoint.Client;
-using Microsoft.SharePoint.Client.Sharing;
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Azure;
+
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using System.Globalization;
-using Microsoft.SharePoint.ApplicationPages.ClientPickerQuery;
-using Microsoft.SharePoint.Client.Utilities;
+using System.Reflection;
 namespace Microsoft.Legal.MatterCenter.Repository
 {
     public class ExternalSharing:IExternalSharing
@@ -22,10 +18,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private MatterSettings matterSettings;
         private LogTables logTables;
         private IUsersDetails userDetails;
+        private ICustomLogger customLogger;
         public ExternalSharing(ISPOAuthorization spoAuthorization, IOptions<ListNames> listNames, 
             IOptions<GeneralSettings> generalSettings, 
             IOptions<MatterSettings> matterSettings, 
-            IOptions<LogTables> logTables, IUsersDetails userDetails)
+            IOptions<LogTables> logTables, IUsersDetails userDetails, ICustomLogger customLogger)
         {
             this.spoAuthorization = spoAuthorization;
             this.listNames = listNames.Value;
@@ -33,6 +30,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.matterSettings = matterSettings.Value;
             this.logTables = logTables.Value;
             this.userDetails = userDetails;
+            this.customLogger = customLogger;
+
         }
         /// <summary>
         /// This method will store the external sharing request in a list called "MatterCenterExternalRequests"
@@ -110,35 +109,60 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             var clientUrl = $"{matterInformation.Client.Url}";
             try
-            {                
-                var users = new List<UserRoleAssignment>();
-                UserRoleAssignment userRole = new UserRoleAssignment();
-                userRole.UserId = externalEmail;
+            {
+                string roleId = "";                
                 switch (permission.ToLower())
                 {
-                    case "full control":
-                        userRole.Role = SharePoint.Client.Sharing.Role.Owner;
+                    case "full control":                        
+                        roleId = ((int)SPORoleIdMapping.FullControl).ToString();
                         break;
-                    case "contribute":
-                        userRole.Role = SharePoint.Client.Sharing.Role.Edit;
+                    case "contribute":                        
+                        roleId = ((int)SPORoleIdMapping.Contribute).ToString();
                         break;
-                    case "read":
-                        userRole.Role = SharePoint.Client.Sharing.Role.View;
+                    case "read":                        
+                        roleId = ((int)SPORoleIdMapping.Read).ToString();
                         break;
-                }
-                users.Add(userRole);                
-                #region Doc Sharing API
-                //Need to use MatterGuid instead of Id
+                }               
+
+                PeoplePickerUser peoplePickerUser = new PeoplePickerUser();
+                peoplePickerUser.Key = externalEmail;
+                peoplePickerUser.Description = externalEmail;
+                peoplePickerUser.DisplayText = externalEmail;
+                peoplePickerUser.EntityType = "";
+                peoplePickerUser.ProviderDisplayName = "";
+                peoplePickerUser.ProviderName = "";
+                peoplePickerUser.IsResolved = true;
+
+                EntityData entityData = new EntityData();
+                entityData.SPUserID = externalEmail;
+                entityData.Email = externalEmail;
+                entityData.IsBlocked = "False";
+                entityData.PrincipalType = "UNVALIDATED_EMAIL_ADDRESS";
+                entityData.AccountName = externalEmail;
+                entityData.SIPAddress = externalEmail;
+                peoplePickerUser.EntityData = entityData;
+
+                string peoplePicker = Newtonsoft.Json.JsonConvert.SerializeObject(peoplePickerUser);
+                peoplePicker = $"[{peoplePicker}]";
+                string roleValue = $"role:{roleId}";
+
+                bool sendEmail = true;
+                
+                bool includeAnonymousLinkInEmail = false;
+                bool propagateAcl = false;
+                bool useSimplifiedRoles = true;
                 string matterLandingPageUrl = $"{clientUrl}/sitepages/{matterInformation.Matter.MatterGuid + ServiceConstants.ASPX_EXTENSION}";
-                string catalogSiteAssetsLibraryUrl = $"{generalSettings.CentralRepositoryUrl}/SitePages/home.aspx";
+                string url = matterLandingPageUrl;
+                string emailBody = $"The following information has been shared with you {matterInformation.Matter.Name}";
+                string emailSubject = $"The following information has been shared with you {matterInformation.Matter.Name}";
+                #region Doc Sharing API                
+                SharingResult sharingResult = null;                
                 using (var clientContext = spoAuthorization.GetClientContext(clientUrl))
                 {
-                    //Send notification to the matter landing page url with permission the user has selected
-                    IList<UserSharingResult> matterLandingPageResult = DocumentSharingManager.UpdateDocumentSharingInfo(clientContext,
-                    matterLandingPageUrl,
-                    users, true, true, true, "The following matter page has been shared with you", true, true);
+                    sharingResult = Web.ShareObject(clientContext, url, peoplePicker, roleValue, 0, propagateAcl, sendEmail, includeAnonymousLinkInEmail, emailSubject, emailBody, useSimplifiedRoles);                    
+                    clientContext.Load(sharingResult);
                     clientContext.ExecuteQuery();
-                }                
+                }                                
                 return null;
                 #endregion
             }
