@@ -13,7 +13,10 @@
             <a class='btn-link dropdown-toggle ms-Icon ms-Icon--ellipsis ellipsis UiGrid-a' type='button' ng-click="grid.appScope.vm.checkUrlExists(row.entity)" dropdown data-toggle='dropdown'></a>
             <ul class='dropdown-menu'>
                 <div ng-if="grid.appScope.vm.dropDownMenu">
-                    <li class='ms-ContextualMenu-item' ng-click='grid.appScope.vm.Openuploadmodal()'><a class='ECBItem ms-ContextualMenu-link upload' title={{grid.appScope.vm.matterConfigContent.ECBMenu1Title}}>{{grid.appScope.vm.matterConfigContent.EllipsisLink1Text}}</a></li>
+                    <li class='ms-ContextualMenu-item'>
+                        <a ng-if="!grid.appScope.vm.hideUpload" class="ECBItem ms-ContextualMenu-link upload is-disabled" title={{grid.appScope.vm.matterConfigContent.ECBMenu1Title}} disabled="disabled">{{grid.appScope.vm.matterConfigContent.EllipsisLink1Text}}</a>
+                        <a ng-if="grid.appScope.vm.hideUpload" ng-click='grid.appScope.vm.Openuploadmodal()' class='ECBItem ms-ContextualMenu-link upload' title={{grid.appScope.vm.matterConfigContent.ECBMenu1Title}}>{{grid.appScope.vm.matterConfigContent.EllipsisLink1Text}}</a>
+                    </li>
                     <li class='ms-ContextualMenu-item'><a title={{grid.appScope.vm.matterConfigContent.ECBMenu2Title}} href="" class='ECBItem ms-ContextualMenu-link upload' ng-click="grid.appScope.vm.viewMatterDetails(row.entity.matterClientUrl,row.entity.matterGuid)"> {{grid.appScope.vm.matterConfigContent.EllipsisLink2Text}}</a></li>
                     <li class='ms-ContextualMenu-item'>
                         <a ng-if="!grid.appScope.vm.urlExists" class="ECBItem ms-ContextualMenu-link gotoOneNote is-disabled" title={{grid.appScope.vm.matterConfigContent.ECBMenu3Title}} disabled="disabled">{{grid.appScope.vm.matterConfigContent.EllipsisLink3Text}}</a>

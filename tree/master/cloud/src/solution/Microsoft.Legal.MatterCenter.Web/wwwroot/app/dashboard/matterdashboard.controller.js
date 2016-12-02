@@ -1,8 +1,8 @@
 ﻿(function () {
     'use strict;'
     var app = angular.module("matterMain");
-    app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$q', '$filter', 'commonFunctions', '$window',
-        function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http, $q, $filter, commonFunctions, $window) {
+    app.controller('MatterDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$q', '$filter', 'commonFunctions', '$window', 'adalAuthenticationService',
+        function matterDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, matterDashBoardResource, $rootScope, uiGridConstants, $location, $http, $q, $filter, commonFunctions, $window, adalService) {
             var vm = this;
             vm.selectedRow = {
                 matterClientUrl: '',
@@ -192,7 +192,7 @@
                 }
 
             });
-
+            vm.loginUser = adalService.userInfo.userName;
             columnDefs1.push({
                 field: 'pin',
                 displayName: '',
@@ -205,7 +205,7 @@
                 field: 'upload',
                 displayName: '',
                 width: '60',
-                cellTemplate: '<div class="ui-grid-cell-contents pad0"><img title="upload" src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>',
+                cellTemplate: '<div class="ui-grid-cell-contents pad0" showupload loginuser="' + vm.loginUser + '" hideupload={{row.entity.hideUpload}}><img title="upload" class="hideUploadImg" src="../Images/upload-666.png"/><img title="upload" class="showUploadImg" src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>',
                 enableColumnMenu: false,
                 position: 76
             });
