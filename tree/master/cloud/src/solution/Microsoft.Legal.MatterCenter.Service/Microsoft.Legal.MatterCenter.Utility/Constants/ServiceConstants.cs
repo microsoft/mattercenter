@@ -12,6 +12,14 @@
 
 namespace Microsoft.Legal.MatterCenter.Utility
 {
+
+    public enum SPORoleIdMapping
+    {
+        FullControl=1073741829,
+        Contribute= 1073741827,
+        Read= 1073741826
+    }
+
     /// <summary>
     /// All the constants that are used in matter center will be defined here
     /// </summary>

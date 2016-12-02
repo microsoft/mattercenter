@@ -130,6 +130,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user clicks on column picker icon")]
         public void WhenUserClicksOnColumnPickerIcon()
         {
+            common.GetLogin(webDriver, URL);
             Thread.Sleep(4000);
             scriptExecutor.ExecuteScript("$('.ui-grid-menu-button .ui-grid-icon-container').click()");
         }
@@ -372,6 +373,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
         [When(@"user clicks on column name to sort the matter in ascending order")]
         public void WhenUserClicksOnColumnNameToSortTheMatterInAscendingOrder()
         {
+            common.GetLogin(webDriver, URL);
             webDriver.FindElement(By.CssSelector("div.ui-grid-cell-contents.ui-grid-header-cell-primary-focus")).Click();
             Thread.Sleep(2000);
         }

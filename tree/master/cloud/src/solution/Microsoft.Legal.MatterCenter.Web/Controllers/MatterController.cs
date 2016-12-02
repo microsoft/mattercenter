@@ -774,18 +774,11 @@ namespace Microsoft.Legal.MatterCenter.Service
 
                 #endregion
 
+                
+
             }
             catch (Exception ex)
-            {
-                MatterRevertList matterRevertListObject = new MatterRevertList()
-                {
-                    MatterLibrary = matterInformation.Matter.Name,
-                    MatterOneNoteLibrary = matterInformation.Matter.Name + matterSettings.OneNoteLibrarySuffix,
-                    MatterCalendar = matterInformation.Matter.Name + matterSettings.CalendarNameSuffix,
-                    MatterTask = matterInformation.Matter.Name + matterSettings.TaskNameSuffix,
-                    MatterSitePages = matterSettings.MatterLandingPageRepositoryName
-                };
-                //editFunctions.RevertMatterUpdates(client, matter, matterRevertListObject, loggedInUserName, userPermissionOnLibrary, listItemId, isEditMode);
+            {                
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 var errorResponse = customLogger.GenerateErrorResponse(ex);
                 return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
@@ -1213,6 +1206,47 @@ namespace Microsoft.Legal.MatterCenter.Service
             }
         }
 
+        /// <summary>
+        /// This method will check whether one note url exists for a selected matter or not
+        /// </summary>
+        /// <param name="matterInformation"></param>
+        /// <returns></returns>
+        [HttpPost("onenoteurlexists")]
+        [Produces(typeof(GenericResponseVM))]
+        [SwaggerOperation("onenoteurlexists")]
+        [SwaggerResponse(HttpStatusCode.OK,
+            Description = "This method will check whether one note url exists for a selected matter or not",
+            Type = typeof(GenericResponseVM))]
+        [SwaggerResponseRemoveDefaults]
+        public IActionResult OneNoteUrlExists([FromBody]MatterInformationVM matterInformation)
+        {
+            GenericResponseVM genericResponse = null;
+            try
+            {
+                if (matterInformation == null && matterInformation.Client == null && string.IsNullOrWhiteSpace(matterInformation.RequestedUrl))
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
+                }
+                bool oneNoteUrlExists = matterRepositoy.OneNoteUrlExists(matterInformation);
+                var oneNoteExists = new
+                {
+                    OneNoteUrlExists = oneNoteUrlExists
+                };
+                return matterCenterServiceFunctions.ServiceResponse(oneNoteExists, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                var errResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
+            }            
+        }
         #endregion
     }
 }

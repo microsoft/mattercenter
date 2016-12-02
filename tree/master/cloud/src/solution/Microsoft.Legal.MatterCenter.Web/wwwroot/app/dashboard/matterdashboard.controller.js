@@ -955,12 +955,12 @@
                         var day = parseInt(parts[1], 10);
                         var month = parseInt(parts[0], 10);
                         var year = parseInt(parts[2], 10);
-                        var isInvalid = new Date(year, month - 1, day) > new Date();
                         if (modelValue == 'vm.startDate') {
-                            isInvalid = new Date(year, month - 1, day) > vm.dateOptions.maxDate;
-                        }
-                        if (isInvalid && modelValue == 'vm.startDate') {
-                            if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
+                            if (vm.endDate !== '' && new Date(year, month - 1, day) > vm.endDate) {
+                                vm.startDate = vm.endDate;
+                                vm.dateOptions.maxDate = vm.startDate;
+                            }
+                            else if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
                                 vm.startDate = new Date(year, month - 1, day);
                                 vm.endDate = vm.startDate;
                                 vm.dateOptions.maxDate = vm.startDate;
@@ -968,11 +968,12 @@
                             else if (new Date(year, month - 1, day) > new Date() && vm.dateOptions.maxDate <= new Date()) {
                                 vm.startDate = vm.dateOptions.maxDate;
                                 $event.target.value = vm.startDate;
-                            } else {
+                            } else if (new Date(year, month - 1, day) > new Date()) {
                                 vm.startDate = new Date();
+                                vm.dateOptions.maxDate = vm.startDate;
                                 $event.target.value = vm.startDate;
                             }
-                        } else if (isInvalid && modelValue == 'vm.endDate') {
+                        } else if (modelValue == 'vm.endDate' && new Date(year, month - 1, day) > new Date()) {
                             vm.endDate = new Date();
                             $event.target.value = vm.endDate;
                         }
