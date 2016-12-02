@@ -124,7 +124,7 @@ function Create-KeyVaultSecrets
 
 	$secret = Set-AzureKeyVaultSecret -VaultName $VaultName -Name 'General-CloudStorageConnectionString' -SecretValue $secretvalue
 
-	$secretvalue = ConvertTo-SecureString $redisConnString  -AsPlainText -Force
+	$secretvalue = ConvertTo-SecureString $RedisCacheHostName  -AsPlainText -Force
 
 	$secret = Set-AzureKeyVaultSecret -VaultName $VaultName -Name 'General-RedisCacheHostName' -SecretValue $secretvalue
 
