@@ -41,7 +41,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         bool UpdatePermission(ClientContext clientContext, Matter matter, List<string> users, string loggedInUserTitle, bool isListItem, string listName, int matterLandingPageId, bool isEditMode);
         bool UpdateMatterStampedProperties(ClientContext clientContext, MatterDetails matterDetails, Matter matter, PropertyValues matterStampedProperties, bool isEditMode);
         void AssignRemoveFullControl(ClientContext clientContext, Matter matter, string loggedInUser, int listItemId, List<string> listExists, bool assignFullControl, bool hasFullPermission);
-        bool RevertMatterUpdates(Client client, Matter matter, ClientContext clientContext, MatterRevertList matterRevertListObject, string loggedInUserTitle, IEnumerable<RoleAssignment> oldUserPermissions, int matterLandingPageId, bool isEditMode);
+        bool RevertMatterUpdates(Client client, Matter matter, MatterRevertList matterRevertListObject, bool isEditMode, IEnumerable<RoleAssignment> userPermissionOnLibrary);
         void SetPropertBagValuesForList(ClientContext clientContext, PropertyValues props, string matterName, Dictionary<string, string> propertyList);
         bool AddItem(ClientContext clientContext, List list, IList<string> columns, IList<object> values);
         GenericResponseVM DeleteMatter(Client client, Matter matter);
@@ -76,5 +76,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="matterConfigurations"></param>
         /// <returns></returns>
         GenericResponseVM SaveConfigurations(ClientContext clientContext, MatterConfigurations matterConfigurations);
+
+        bool OneNoteUrlExists(MatterInformationVM matterInformation);
     }
 }

@@ -113,6 +113,10 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/user/userexists'
                   }),
+                  'oneNoteUrlExists': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/onenoteurlexists'
+                  }),
               });
       }]);
 

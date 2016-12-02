@@ -67,15 +67,18 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             Thread.Sleep(2000);
             scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
             Thread.Sleep(7000);
-            repeatedMatterError = (string)scriptExecutor.ExecuteScript("var text = $('#errText')[0].innerText; return text;");
-            Assert.IsTrue(repeatedMatterError.ToLower(CultureInfo.CurrentCulture).Contains("matter is already created"));
+            repeatedMatterError = (string)scriptExecutor.ExecuteScript("var text = $('.errTextMatterName')[0].innerText; return text;");
+            if (repeatedMatterError.ToLower(CultureInfo.CurrentCulture).Contains("matter is already created") || repeatedMatterError.ToLower(CultureInfo.CurrentCulture).Contains("your matter name includes a character that is not allowed"))
+            {
+                Assert.IsTrue(true);
+            }
             errorCount++;
             Thread.Sleep(2000);
             webDriver.FindElement(By.Id("txtMatterName")).Clear();
             Thread.Sleep(1000);
             scriptExecutor.ExecuteScript("$('.col-xs-6 .buttonPrev')[0].click();");
             noMatterNameError = (string)scriptExecutor.ExecuteScript("var text = $('.popUpFloatRight')[0].innerText; return text;");
-            Assert.IsTrue(noMatterNameError.ToLower(CultureInfo.CurrentCulture).Contains("please enter a valid matter name"));
+            Assert.IsTrue(noMatterNameError.ToLower(CultureInfo.CurrentCulture).Contains("your matter name includes a character that is not allowed"));
             errorCount++;
 
         }

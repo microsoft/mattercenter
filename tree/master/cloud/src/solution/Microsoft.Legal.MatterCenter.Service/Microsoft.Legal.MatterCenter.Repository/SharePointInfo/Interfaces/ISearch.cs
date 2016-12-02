@@ -18,5 +18,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         List<RoleDefinition> GetWebRoleDefinitions(Client client);
         IList<PeoplePickerUser> SearchUsers(SearchRequestVM searchRequestVM);
         GenericResponseVM GetConfigurations(string siteCollectionUrl, string listName);
+        bool PageExists(Client client, string requestedUrl);
     }
 }

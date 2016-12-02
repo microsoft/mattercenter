@@ -214,7 +214,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 // Update matter metadata
                 result = UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode);
                 if (result)
-                {
+                {                    
                     return genericResponse;
                 }
             }
@@ -228,8 +228,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     MatterTask = matter.Name + matterSettings.TaskNameSuffix,
                     MatterSitePages = matterSettings.MatterLandingPageRepositoryName
                 };
-                RevertMatterUpdates(client, matter, clientContext, matterRevertListObject, loggedInUserName,
-                    userPermissionOnLibrary, listItemId, isEditMode);
+                RevertMatterUpdates(client, matter, matterRevertListObject, isEditMode, userPermissionOnLibrary);
             }
             return ServiceUtility.GenericResponse("9999999", "Error in updating matter information");
         }
@@ -1079,8 +1078,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         finalMatterCenterUserEmails = string.Join("$|$", finalMatterCenterUserEmailsArray);
                         finalMatterPermissions = string.Join("$|$", finalMatterPermissionsArray);
                         finalMatterRoles = string.Join("$|$", finalMatterRolesArray);
-                        finalResponsibleAttorneysEmail = string.Join("$|$", finalResponsibleAttorneysEmailArray);
-                        finalResponsibleAttorneys = string.Join("$|$", finalResponsibleAttorneysUsersArray);
+                        finalResponsibleAttorneysEmail = string.Join(";", finalResponsibleAttorneysEmailArray);
+                        finalResponsibleAttorneys = string.Join(";", finalResponsibleAttorneysUsersArray);
                     }
                     #endregion
 
@@ -1312,13 +1311,20 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="matterLandingPageId">List item id</param>
         /// <param name="isEditMode">Add/ Edit mode</param>
         /// <returns>Status of operation</returns>
-        public bool RevertMatterUpdates(Client client, Matter matter, ClientContext clientContext, 
-            MatterRevertList matterRevertListObject, string loggedInUserTitle, IEnumerable<RoleAssignment> oldUserPermissions, 
-            int matterLandingPageId, bool isEditMode)
+        public bool RevertMatterUpdates(Client client, Matter matter, MatterRevertList matterRevertListObject, bool isEditMode, IEnumerable<RoleAssignment> oldUserPermissionOnLibrary
+            )
         {
             bool result = false;
             try
             {
+                var clientContext = spoAuthorization.GetClientContext(client.Url);
+                string loggedInUserTitle = userRepositoy.GetLoggedInUserDetails(clientContext).Email;
+
+                string originalMatterName = GetMatterName(clientContext, matter.Name);
+                int listItemId = RetrieveItemId(clientContext, matterSettings.MatterLandingPageRepositoryName, originalMatterName);             
+
+                
+
                 if (null != client && null != matter && null != clientContext && null != matterRevertListObject)
                 {
                     List<string> users = new List<string>();
@@ -1343,12 +1349,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                     if (null != matterRevertListObject.MatterSitePages)
                     {
-                        RemoveSpecificUsers(clientContext, users, loggedInUserTitle, true, matterRevertListObject.MatterSitePages, matterLandingPageId);
+                        RemoveSpecificUsers(clientContext, users, loggedInUserTitle, true, matterRevertListObject.MatterSitePages, listItemId);
                     }
 
                     if (isEditMode)
                     {
-                        Matter matterRevertUserPermission = PrepareUserPermission(oldUserPermissions);
+                        Matter matterRevertUserPermission = PrepareUserPermission(oldUserPermissionOnLibrary);
                         if (null != matterRevertListObject.MatterLibrary)
                         {
                             result = spList.SetPermission(clientContext, matterRevertUserPermission.AssignUserNames, matterRevertUserPermission.Permissions, matterRevertListObject.MatterLibrary);
@@ -1365,9 +1371,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         {
                             result = spList.SetPermission(clientContext, matterRevertUserPermission.AssignUserNames, matterRevertUserPermission.Permissions, matterRevertListObject.MatterTask);
                         }
-                        if (null != matterRevertListObject.MatterSitePages && 0 <= matterLandingPageId)
+                        if (null != matterRevertListObject.MatterSitePages && 0 <= listItemId)
                         {
-                            result = spList.SetItemPermission(clientContext, matterRevertUserPermission.AssignUserNames, matterSettings.MatterLandingPageRepositoryName, matterLandingPageId, matterRevertUserPermission.Permissions);
+                            result = spList.SetItemPermission(clientContext, matterRevertUserPermission.AssignUserNames, matterSettings.MatterLandingPageRepositoryName, listItemId, matterRevertUserPermission.Permissions);
                         }
                     }
                 }
@@ -1519,15 +1525,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return currentUsers;
         }
 
-        public bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName)
-        {
-            return spList.SetPermission(clientContext, assignUserName, permissions, listName);
-        }
-
-
-        public GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation)
-        {
-            return extrnalSharing.ShareMatter(matterInformation);
-        }
+        public bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName) => spList.SetPermission(clientContext, assignUserName, permissions, listName);
+        
+        public GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation)=> extrnalSharing.ShareMatter(matterInformation);
+        
+        public bool OneNoteUrlExists(MatterInformationVM matterInformation)=> search.PageExists(matterInformation.Client, matterInformation.RequestedUrl);
+        
     }
 }

@@ -48,6 +48,9 @@
             //start
             vm.divuigrid = true;
             //vm.nodata = false;
+            vm.dropDownMenu = false;
+            vm.dropDownMenuLoader = true;
+            vm.urlExists = false;
             vm.filternodata = false;
             vm.matterid = 2;
 
@@ -348,6 +351,36 @@
                     method: 'UnpinMatters',
                     data: options,
                     success: callback
+                });
+            }
+
+            //Callback function for Onenote Url Exists 
+            function OneNoteUrlExists(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'oneNoteUrlExists',
+                    data: options,
+                    success: callback
+                });
+            }
+           
+
+            vm.checkUrlExists = function (data) {
+                vm.urlExists = false;
+                vm.dropDownMenuLoader = false;
+                vm.dropDownMenu = false;
+                var clientUrl = data.matterClientUrl.replace(vm.configsUri.SPOsiteURL, "")
+                var oneNoteUrl = clientUrl + "/" + data.matterGuid + "_OneNote/" + data.matterName + "/" + data.matterGuid + ".onetoc2";
+                var matterInformatiuonVM = {
+                    Client: {
+                        Url: data.matterClientUrl
+                    },
+                    RequestedUrl: oneNoteUrl
+                }
+                OneNoteUrlExists(matterInformatiuonVM, function (response) {
+                    vm.urlExists = response.oneNoteUrlExists
+                    vm.dropDownMenuLoader = true;
+                    vm.dropDownMenu = true;                        
                 });
             }
 
@@ -2135,23 +2168,26 @@
                         var day = parseInt(parts[1], 10);
                         var month = parseInt(parts[0], 10);
                         var year = parseInt(parts[2], 10);
-                        var isInvalid = new Date(year, month - 1, day) > new Date();
+                       
                         if (modelValue == 'vm.modStartDate') {
-                            isInvalid = new Date(year, month - 1, day) > vm.modDateOptions.maxDate;
-                        }
-                        if (isInvalid && modelValue == 'vm.modStartDate') {
-                            if (new Date(year, month - 1, day) > vm.modDateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
+                            if (vm.modEndDate !== '' && new Date(year, month - 1, day) > vm.modEndDate)
+                            {
+                                vm.modStartDate = vm.modEndDate;
+                                vm.modDateOptions.maxDate = vm.modStartDate;
+                            }
+                            else if (new Date(year, month - 1, day) > vm.modDateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
                                 vm.modStartDate = new Date(year, month - 1, day);
                                 vm.modEndDate = vm.modStartDate;
                                 vm.modDateOptions.maxDate = vm.modStartDate;
                             } else if (new Date(year, month - 1, day) > new Date() && vm.modDateOptions.maxDate <= new Date()) {
                                 vm.modStartDate = vm.modDateOptions.maxDate;
                                 $event.target.value = vm.modStartDate;
-                            } else {
+                            } else if (new Date(year, month - 1, day) > new Date()) {
                                 vm.modStartDate = new Date();
+                                vm.modDateOptions.maxDate = vm.modStartDate;
                                 $event.target.value = vm.modStartDate;
                             }
-                        } else if (isInvalid && modelValue == 'vm.modEndDate') {
+                        } else if (modelValue == 'vm.modEndDate' && new Date(year, month - 1, day) > new Date()) {
                             vm.modEndDate = new Date();
                             $event.target.value = vm.modEndDate;
                         }
@@ -2194,7 +2230,7 @@
             };
 
             vm.changeOnCreateDate = function ($event) {
-                if ($event.keyCode == '13'|| $event.keyCode == '9') {
+                if ($event.keyCode == '13' || $event.keyCode == '9') {
 
                     var modelValue = $event.target.attributes['ng-model'].value;
 
@@ -2212,12 +2248,12 @@
                         var day = parseInt(parts[1], 10);
                         var month = parseInt(parts[0], 10);
                         var year = parseInt(parts[2], 10);
-                        var isInvalid = new Date(year, month - 1, day) > new Date();
                         if (modelValue == 'vm.startDate') {
-                            isInvalid = new Date(year, month - 1, day) > vm.dateOptions.maxDate;
-                        }
-                        if (isInvalid && modelValue == 'vm.startDate') {
-                            if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
+                            if (vm.endDate !== '' && new Date(year, month - 1, day) > vm.endDate) {
+                                vm.startDate = vm.endDate;
+                                vm.dateOptions.maxDate = vm.startDate;
+                            }
+                            else if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
                                 vm.startDate = new Date(year, month - 1, day);
                                 vm.endDate = vm.startDate;
                                 vm.dateOptions.maxDate = vm.startDate;
@@ -2225,12 +2261,13 @@
                             else if (new Date(year, month - 1, day) > new Date() && vm.dateOptions.maxDate <= new Date()) {
                                 vm.startDate = vm.dateOptions.maxDate;
                                 $event.target.value = vm.startDate;
-                            } else {
+                            } else if (new Date(year, month - 1, day) > new Date()) {
                                 vm.startDate = new Date();
+                                vm.dateOptions.maxDate = vm.startDate;
                                 $event.target.value = vm.startDate;
                             }
 
-                        } else if (isInvalid && modelValue == 'vm.endDate') {
+                        } else if (modelValue == 'vm.endDate' && new Date(year, month - 1, day) > new Date()) {
                             vm.endDate = new Date();
                             $event.target.value = vm.endDate;
                         }
@@ -3120,6 +3157,8 @@
             angular.element('#menuitem-1').dblclick(function (e) {
                 e.preventDefault();
             });
+
+            
         }]);
     app.filter('unique', function () {
         return function (collection, keyname) {

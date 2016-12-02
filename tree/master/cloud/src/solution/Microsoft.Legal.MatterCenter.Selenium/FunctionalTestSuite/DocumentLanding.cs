@@ -207,7 +207,7 @@ namespace Microsoft.Legal.MatterCenter.Selenium
             Assert.IsTrue(checkMicrosoftLogo.Contains("Microsoft"));
             Assert.IsTrue(checkFeedbackAndSupport.Contains("Feedback & Support"));
             Assert.IsTrue(checkPrivacyAndCookies.Contains("privacy"));
-            Assert.IsTrue(checkTermsOfUse.Contains("termofuse"));
+            Assert.IsTrue(checkTermsOfUse.Contains("intellectualproperty"));
             Assert.IsTrue(checkMicrosoft.Contains("2016 Microsoft"));
         }
 

@@ -77,7 +77,8 @@ textarea {
         width: 290px !important;
     }
 }
-@media screen and (max-width: 350px)  {
+
+@media screen and (max-width: 350px) {
     .flyoutwidth {
         width: 238px !important;
     }
@@ -800,7 +801,7 @@ textarea {
     top: 54px;
 }*/
 
-.dropdown-menu .ms-ContextualMenu-item a:hover {
+.dropdown-menu .ms-ContextualMenu-item a:hover:not(.is-disabled) {
     background-color: #cde6f7 !important;
     color: #333 !important;
     font-family: "Segoe UI Semibold","Segoe UI Web Semibold" !important;
@@ -1498,6 +1499,9 @@ textarea {
     max-width: 165px !important;
 }
 
+#matcoltemp .ms-ContextualMenu-link {
+    max-width: 178px !important;
+}
 
 #InfoImg img {
     cursor: default;
@@ -1559,6 +1563,15 @@ textarea {
     min-width: 148px;
 }
 
-#mattersGrid .ui-grid-cell-contents, #Documents .ui-grid-cell-contents{
-    cursor:default;
+#mattersGrid .ui-grid-cell-contents, #Documents .ui-grid-cell-contents {
+    cursor: default;
+}
+
+#matcoltemp ul {
+    margin: 0;
+    padding: 0;
+    min-height: 156px !important;
+    max-width: 180px !important;
+    min-width: 180px !important;
+    max-height: 156px !important;
 }

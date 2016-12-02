@@ -141,14 +141,14 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         {
 
             string tempUserEmail = userEmail;
-            if (!userEmail.Contains(configuration["General:Tenant"].ToString()))
-               // i: 0#.f|membership|venkatmuppa3_outlook.com#ext#@msmattercela.onmicrosoft.com
+            if (!userEmail.ToLower().Contains($"{configuration["General:TenantName"].ToString().ToLower()}.onmicrosoft.com"))               
             {
+                // i: 0#.f|membership|xyz_outlook.com#ext#@tenantname.onmicrosoft.com
                 tempUserEmail = userEmail.Replace("@", "_");
-                tempUserEmail = $"i:0#.f|membership|{tempUserEmail}#EXT#@{configuration["General:Tenant"].ToString()}";
+                tempUserEmail = $"i:0#.f|membership|{tempUserEmail}#EXT#@{configuration["General:TenantName"].ToString()}.onmicrosoft.com";
             }
             GroupCollection groupCollection = catalogContext.Web.SiteGroups;
-            Group group = groupCollection.GetByName("Matter Center Users");
+            Group group = groupCollection.GetByName(configuration["General:MatterUsersGroup"].ToString());
 
             UserCreationInformation userInfo = new UserCreationInformation();
             userInfo.LoginName = tempUserEmail;
