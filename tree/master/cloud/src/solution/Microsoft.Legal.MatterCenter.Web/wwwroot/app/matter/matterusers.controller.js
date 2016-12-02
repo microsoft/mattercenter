@@ -42,9 +42,8 @@
         cm.isEdit = getParameterByName("IsEdit");
 
         if (cm.clientUrl === "" && cm.matterName === "") {
-            cm.matterName = "testing dfsgds dfvds vd";
-             cm.clientUrl = cm.configsUri.SPOsiteURL + "/sites/microsoft";
-             cm.isEdit = "true";
+            cm.matterName = "";
+          
         }
 
         //#region Service API Call
