@@ -3,8 +3,8 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache', '$q', '$filter', 'commonFunctions', '$animate',
-        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache, $q, $filter, commonFunctions, $animate) {
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache', '$q', '$filter', 'commonFunctions', '$animate','adalAuthenticationService',
+        function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache, $q, $filter, commonFunctions, $animate, adalService) {
             var vm = this;
             vm.selected = '';
             vm.selectedRow = {
@@ -40,6 +40,7 @@
             $rootScope.bodyclass = "bodymain";
             $rootScope.profileClass = "";
             $rootScope.displayOverflow = "";
+            vm.hideUpload = true;
             //This value is for displaying the help
             $rootScope.pageIndex = "1";
             //To load the Contextual help data
@@ -366,6 +367,8 @@
            
 
             vm.checkUrlExists = function (data) {
+                var loginUser = adalService.userInfo.userName.toLowerCase();
+                vm.hideUpload = true;
                 vm.urlExists = false;
                 vm.dropDownMenuLoader = false;
                 vm.dropDownMenu = false;
@@ -378,6 +381,9 @@
                     RequestedUrl: oneNoteUrl
                 }
                 OneNoteUrlExists(matterInformatiuonVM, function (response) {
+                    if (data.hideUpload.toLowerCase().indexOf(loginUser) > -1) {
+                        vm.hideUpload = false;
+                    }
                     vm.urlExists = response.oneNoteUrlExists
                     vm.dropDownMenuLoader = true;
                     vm.dropDownMenu = true;                        
