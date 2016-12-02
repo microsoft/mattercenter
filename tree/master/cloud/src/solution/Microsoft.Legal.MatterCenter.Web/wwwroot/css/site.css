@@ -1575,3 +1575,8 @@ textarea {
     min-width: 180px !important;
     max-height: 156px !important;
 }
+
+.hideUploadImg {
+    opacity: 0.45;
+    cursor: default;
+}

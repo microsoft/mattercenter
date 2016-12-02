@@ -42,9 +42,8 @@
         cm.isEdit = getParameterByName("IsEdit");
 
         if (cm.clientUrl === "" && cm.matterName === "") {
-                    cm.matterName = "";
-            // cm.clientUrl = cm.configsUri.SPOsiteURL + "/teams/pcpreprod";
-            // cm.isEdit = "true";
+            cm.matterName = "";
+          
         }
 
         //#region Service API Call
@@ -351,6 +350,12 @@
                                             cm.currentExternalUser.userIndex = i;
                                             cm.confirmUser(true);
                                             team.assignedUser = team.assignedAllUserNamesAndEmails;
+                                            if (-1 == cm.oSiteUsers.indexOf(userAliasNames[i])) {
+                                                cm.oSiteUsers.push(userAliasNames[i]);
+                                            }
+                                            if (-1 == cm.oSiteUserNames.indexOf(userEmail[i])) {
+                                                cm.oSiteUserNames.push(userEmail[i]);
+                                            }
                                             var userDetails = {};
                                             userDetails.userName = userEmail[i];
                                             userDetails.userExsists = team.userExsists;
