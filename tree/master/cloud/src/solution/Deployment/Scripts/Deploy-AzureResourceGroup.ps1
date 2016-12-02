@@ -170,10 +170,10 @@ Write-Output "Getting the storage key to write to key vault..."
 $StorageAccountKey = Get-AzureRmStorageAccountKey -Name $storageAccount_name -ResourceGroupName $ResourceGroupName
 
 #Write-Output "Getting the Redis connection string"
-#$RedisCacheName = (Get-AzureRmRedisCache -Name $Redis_cache_name -ResourceGroupName $ResourceGroupName )[0].HostName
-#$RedisCachePort = (Get-AzureRmRedisCache -Name $Redis_cache_name -ResourceGroupName $ResourceGroupName )[0].Port
-#$RedisCacheKey = (Get-AzureRmRedisCacheKey -Name $Redis_cache_name -ResourceGroupName $ResourceGroupName ).PrimaryKey
-#$redisConnString = [string]::format("{0}:{1},password={2},ssl=True,abortConnect=False", $RedisCacheName, $RedisCachePort,  $RedisCacheKey)
+$RedisCacheName = (Get-AzureRmRedisCache -Name $Redis_cache_name -ResourceGroupName $ResourceGroupName )[0].HostName
+$RedisCachePort = (Get-AzureRmRedisCache -Name $Redis_cache_name -ResourceGroupName $ResourceGroupName )[0].Port
+$RedisCacheKey = (Get-AzureRmRedisCacheKey -Name $Redis_cache_name -ResourceGroupName $ResourceGroupName ).PrimaryKey
+$redisConnString = [string]::format("{0}:{1},password={2},ssl=True,abortConnect=False", $RedisCacheName, $RedisCachePort,  $RedisCacheKey)
 
 
 # Set helper utilities folder path

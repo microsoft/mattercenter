@@ -180,7 +180,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
             string filePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + ConstantStrings.BACKSLASH + ConfigurationManager.AppSettings["filename"];
             string configSheet = ConfigurationManager.AppSettings["manifestSheetname"];
             Dictionary<string, string> ConfigDetails = ExcelOperations.ReadFromExcel(filePath, configSheet);
-            string url = ConfigDetails[ConfigurationManager.AppSettings["CatalogSiteUrlKey"]].TrimEnd(ConstantStrings.FRONTSLASH);
+            string url = ConfigDetails[ConfigurationManager.AppSettings["TenantSiteUrlKey"]].TrimEnd(ConstantStrings.FRONTSLASH);
             string resultSourceID = null;
 
             try
