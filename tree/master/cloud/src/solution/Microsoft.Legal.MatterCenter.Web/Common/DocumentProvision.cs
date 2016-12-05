@@ -367,11 +367,14 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyFileName.ToString().ToLower())
                         {
-
-                            string fileNameWithOutExt = System.IO.Path.GetFileNameWithoutExtension(searchResult[key].ToString());
-                            ServiceUtility.AddProperty(documentData,
-                                configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentName").Key,
-                                fileNameWithOutExt);
+                            if (searchResult[key] != null &&  (searchResult[key].ToString()!=string.Empty))
+                            {
+                                string fileNameWithOutExt = System.IO.Path.GetFileNameWithoutExtension(searchResult[key].ToString());
+                                ServiceUtility.AddProperty(documentData,
+                                    configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentName").Key,
+                                    fileNameWithOutExt);
+                            }
+                                
                         }
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyDocumentClientId.ToString().ToLower())
@@ -422,9 +425,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                         //-------------------------
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyCreated.ToString().ToLower())
                         {
-                            ServiceUtility.AddProperty(documentData,
+                            if (searchResult[key] != null && (searchResult[key].ToString() != string.Empty))
+                            {
+                                ServiceUtility.AddProperty(documentData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForDocument").GetSection("documentCreatedDate").Key,
                                 searchResult[key].ToString());
+                            }
                         }
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyFileExtension.ToString().ToLower())
                         {
@@ -709,7 +715,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             }
             return genericResponse;
 
-        }
+        }        
 
         private Dictionary<string, string> ContinueUpload(IFormFile uploadedFile, string fileExtension)
         {

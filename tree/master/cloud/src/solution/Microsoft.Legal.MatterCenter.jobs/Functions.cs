@@ -34,11 +34,11 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         /// </summary>
         /// <param name="timerInfo"></param>
         /// <param name="matterInformationVM"></param>
-        public static void ProcessMatter([TimerTrigger("00:00:05", RunOnStartup = true)]TimerInfo timerInfo, 
+        public static void ProcessMatter([TimerTrigger("00:00:05", RunOnStartup = true)]TimerInfo timerInfo,
             [Table("MatterRequests")] IQueryable<MatterInformationVM> matterInformationVM, TextWriter log)
-        {       
+        {
             var query = from p in matterInformationVM select p;
-            if(query.ToList().Count() > 0)
+            if (query.ToList().Count() > 0)
             {
                 var builder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
@@ -168,7 +168,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             email.Send();
             log.WriteLine($"connection string. {configuration["General:CloudStorageConnectionString"]}");
             Utility.UpdateTableStorageEntity(originalMatter, log, configuration["General:CloudStorageConnectionString"],
-                            configuration["Settings:MatterRequests"], "Accepted");
+                            configuration["Settings:MatterRequests"], "Accepted", "Status");
         }
 
 
@@ -261,7 +261,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             email.Body = matterMailBody;
             email.Send();
             Utility.UpdateTableStorageEntity(originalMatter, log, configuration["General:CloudStorageConnectionString"],
-                            configuration["Settings:MatterRequests"], "Accepted");
+                            configuration["Settings:MatterRequests"], "Accepted", "Status");
         }
 
 
@@ -420,7 +420,12 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                         log.WriteLine($"The user {email} has been present in the system and he has accepted the invitation and providing permssions to  matter {originalMatter.Matter.Name} from the user {email}");
                                         UpdateMatter umd = new UpdateMatter();
                                         //Update all matter related lists and libraries permissions for external users
-                                        umd.UpdateUserPermissionsForMatter(originalMatter, configuration, password);
+                                        if (originalMatter.MatterUpdateStatus.ToLower() == "pending")
+                                        {
+                                            umd.UpdateUserPermissionsForMatter(originalMatter, configuration, password);
+                                            Utility.UpdateTableStorageEntity(originalMatter, log, configuration["General:CloudStorageConnectionString"],
+                                                configuration["Settings:TableStorageForExternalRequests"], "Accepted", "MatterUpdateStatus");
+                                        }
 
                                         //Update permissions for external users in Catalog Site Collection
                                         using (var catalogContext = new ClientContext(configuration["General:CentralRepositoryUrl"]))
@@ -433,7 +438,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                         log.WriteLine($"The matter permissions has been updated for the user {email}");
                                         log.WriteLine($"Updating the matter status to Accepted in Azure Table Storage");
                                         Utility.UpdateTableStorageEntity(originalMatter, log, configuration["General:CloudStorageConnectionString"], 
-                                            configuration["Settings:TableStorageForExternalRequests"], "Accepted");
+                                            configuration["Settings:TableStorageForExternalRequests"], "Accepted", "Status");
                                     }
                                 }
                             }

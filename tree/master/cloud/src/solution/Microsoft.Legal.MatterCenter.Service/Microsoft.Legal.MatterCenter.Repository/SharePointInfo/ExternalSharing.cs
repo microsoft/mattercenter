@@ -89,6 +89,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 matterInformation.PartitionKey = matterInformation.Matter.Name;
                 matterInformation.RowKey = $"{Guid.NewGuid().ToString()}${matterInformation.Matter.Id}";
                 matterInformation.Status = "Pending";
+                matterInformation.MatterUpdateStatus = "Pending";
                 string matterInformationObject = Newtonsoft.Json.JsonConvert.SerializeObject(matterInformation);
                 matterInformation.SerializeMatter = matterInformationObject;                
                 TableOperation insertOperation = TableOperation.Insert(matterInformation);
