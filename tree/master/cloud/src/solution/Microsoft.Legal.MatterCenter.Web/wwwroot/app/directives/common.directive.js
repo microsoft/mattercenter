@@ -412,7 +412,7 @@
             restrict: 'AE',
             link: function (scope, element, attrs) {
                 $(element).scroll(function (e) {
-                    if ($window.innerHeight > 442) {
+                    if ($window.innerHeight > 615) {
                         $('.popcontent').css('display', 'none');
                         $('.dropdown').removeClass("open");
                     }
@@ -495,6 +495,26 @@
         return arrUserNames;
     }
 
+    'use strict';
+    function showupload() {
+        return {
+            restrict: 'AE',
+            link: function (scope, element, attrs) {
+                var loginuser = attrs.loginuser.toLowerCase();
+                //var hideUpload = "matteradmin@msmatter.onmicrosoft.com";
+                var hideUpload = attrs.hideupload;
+                if (hideUpload.toLowerCase().indexOf(loginuser) > -1) {
+                    $(element).find('.showUploadImg').remove();
+                    $(element).find('.hideUploadImg').css("display", "block");
+                } else {
+                    $(element).find('.hideUploadImg').remove();
+                    $(element).find('.showUploadImg').css("display", "block");
+                }
+
+            }
+        }
+    }
+
     var app = angular.module('matterMain');
     app.directive('onload', ['$timeout', onload]);
     app.directive('showbreadcrumb', [showbreadcrumb]);
@@ -510,6 +530,7 @@
     app.directive('uiGridViewport', ['$window', uiGridViewport]);
     app.directive('dropdown', ['$rootScope', dropdown]);
     app.directive('assignteamkeydown', [assignTeamKeyDown]);
+    app.directive('showupload', [showupload]);
 })();
 
 
