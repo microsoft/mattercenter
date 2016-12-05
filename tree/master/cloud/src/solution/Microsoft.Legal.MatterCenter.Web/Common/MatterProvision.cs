@@ -330,9 +330,12 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
                         if (key.ToString().ToLower() == searchSettings.ManagedPropertyLastModifiedTime.ToLower())
                         {
-                            ServiceUtility.AddProperty(matterData,
+                            if (searchResult[key] != null && (searchResult[key].ToString() != string.Empty))
+                            {
+                                ServiceUtility.AddProperty(matterData,
                                 configuration.GetSection("Search").GetSection("SearchColumnsUIPickerForMatter").GetSection("matterModifiedDate").Key,
                                 searchResult[key].ToString());
+                            }
                         }
                         ServiceUtility.AddProperty(matterData,"PinType","Pin");
                     }

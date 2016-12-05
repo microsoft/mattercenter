@@ -332,13 +332,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     {
                         //Check has been made to check whether the user is present in the system as part of external sharing implementation
                         if (!string.IsNullOrWhiteSpace(userName) && userdetails.CheckUserPresentInMatterCenter(clientContext, userName))
-                        { 
-                            Principal teamMemberPrincipal = clientContext.Web.EnsureUser(userName.Trim());
-                            clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title);
-                            teamMemberPrincipalCollection.Add(teamMemberPrincipal);
-                        }else
                         {
-                            itemsToRemoveUsers.Add(userAtLocation);                           
+                            Principal teamMemberPrincipal = clientContext.Web.EnsureUser(userName.Trim());
+                            clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title, teamMemberPrincipalProperties => teamMemberPrincipalProperties.LoginName);
+                            teamMemberPrincipalCollection.Add(teamMemberPrincipal);
+                        }
+                        else
+                        {
+                            itemsToRemoveUsers.Add(userAtLocation);
                         }
                         userAtLocation++;
                     }
@@ -359,7 +360,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         //// Check whether the name entered by the user and the name resolved by SharePoint is same.
                         foreach (string teamMember in userNameList)
                         {
-                            if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[iCount].Title.Trim(), StringComparison.OrdinalIgnoreCase))
+                            if (!string.Equals(teamMember.Trim(), teamMemberPrincipalCollection[iCount].Title.Trim(), StringComparison.OrdinalIgnoreCase) &&
+                                !teamMemberPrincipalCollection[iCount].LoginName.ToString().ToLower().Trim().Contains(teamMember.ToLower().Replace("@", "_").Trim()))
                             {
                                 genericResponse = new GenericResponseVM();
                                 //result = string.Format(CultureInfo.InvariantCulture, ConstantStrings.ServiceResponse, ServiceConstantStrings.IncorrectTeamMembersCode, ServiceConstantStrings.IncorrectTeamMembersMessage + ConstantStrings.DOLLAR + ConstantStrings.Pipe + ConstantStrings.DOLLAR + userId[iCounter]);
