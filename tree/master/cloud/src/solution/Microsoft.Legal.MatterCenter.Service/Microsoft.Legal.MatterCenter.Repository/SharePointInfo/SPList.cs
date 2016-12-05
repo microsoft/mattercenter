@@ -47,6 +47,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private ICustomLogger customLogger;
         private LogTables logTables;
         private MailSettings mailSettings;
+        private GeneralSettings generalSettings;
         private IHostingEnvironment hostingEnvironment;
         private ErrorSettings errorSettings;
         private IUsersDetails userDetails;        
@@ -64,7 +65,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             IOptions<ContentTypesConfig> contentTypesConfig,
             ICustomLogger customLogger, 
             IOptions<LogTables> logTables, 
-            IOptions<MailSettings> mailSettings,           
+            IOptions<MailSettings> mailSettings,
+            IOptions<GeneralSettings> generalSettings,
             IHostingEnvironment hostingEnvironment, 
             IUsersDetails userDetails)
         {
@@ -77,6 +79,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.hostingEnvironment = hostingEnvironment;
             this.errorSettings = errorSettings.Value;
             this.userDetails = userDetails;
+            this.generalSettings = generalSettings.Value;
         }
 
 
@@ -1129,6 +1132,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 RoleDefinition roleDefinition = clientContext.Web.RoleDefinitions.GetByName(roleName);
                                 foreach (string user in userName)
                                 {
+                                    string tempUser = "";
                                     //check whether is present in the organization before giving permissiosn to him
                                     if (!string.IsNullOrWhiteSpace(user) && 
                                         userDetails.CheckUserPresentInMatterCenter(clientContext, user))
@@ -1136,7 +1140,20 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                         if (!string.IsNullOrWhiteSpace(user))
                                         {
                                             /////get the user object
-                                            Principal userPrincipal = clientContext.Web.EnsureUser(user.Trim());
+                                            Principal teamMemberPrincipal = clientContext.Web.EnsureUser(user.Trim());
+                                            clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title, 
+                                                teamMemberPrincipalProperties => teamMemberPrincipalProperties.LoginName);
+                                            clientContext.ExecuteQuery();
+                                            Principal userPrincipal = null;
+                                            if (teamMemberPrincipal.LoginName.ToString().ToLower().Trim().Contains(user.ToLower().Replace("@", "_").Trim()))
+                                            {
+                                                tempUser = $"{user.ToLower().Replace("@", "_")}#ext#@{generalSettings.Tenant}";
+                                                userPrincipal = clientContext.Web.EnsureUser(tempUser.Trim());
+                                            }
+                                            else
+                                            {
+                                                userPrincipal = clientContext.Web.EnsureUser(user.Trim());
+                                            }
                                             /////create the role definition binding collection
                                             RoleDefinitionBindingCollection roleDefinitionBindingCollection = new RoleDefinitionBindingCollection(clientRuntimeContext);
                                             /////add the role definition to the collection

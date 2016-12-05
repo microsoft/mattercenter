@@ -15,7 +15,8 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         /// for which the user has accepted the invitation
         /// </summary>
         /// <param name="externalSharingRequest"></param>
-        public static void UpdateTableStorageEntity(MatterInformationVM matterInformation, TextWriter log, string connection, string tableName, string status)
+        public static void UpdateTableStorageEntity(MatterInformationVM matterInformation, TextWriter log, string connection, 
+            string tableName, string status, string statusColumnName)
         {
             try
             {
@@ -33,7 +34,14 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                 MatterInformationVM updateEntity = (MatterInformationVM)retrievedResult.Result;
                 if (updateEntity != null)
                 {
-                    updateEntity.Status = status;
+                    if(statusColumnName=="Status")
+                    {
+                        updateEntity.Status = status;
+                    }                        
+                    if (statusColumnName == "MatterUpdateStatus")
+                    {
+                        updateEntity.MatterUpdateStatus = status;
+                    }                        
                     TableOperation updateOperation = TableOperation.Replace(updateEntity);
                     table.Execute(updateOperation);
                     log.WriteLine($"Updated the matter status to Accepted in Azure Table Storage");
