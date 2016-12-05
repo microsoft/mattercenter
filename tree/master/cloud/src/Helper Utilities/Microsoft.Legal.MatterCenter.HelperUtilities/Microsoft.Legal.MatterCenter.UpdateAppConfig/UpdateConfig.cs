@@ -125,7 +125,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                 // 4. Upload Search Configuration to SharePoint, Import search configuration For creating Result Source at Catalog Level
                 string configSheet = ConfigurationManager.AppSettings["manifestSheetname"];
                 Dictionary<string, string> configDetails = ExcelOperations.ReadFromExcel(filePath, configSheet);
-                string url = configDetails[ConfigurationManager.AppSettings["CatalogSiteUrlKey"]].TrimEnd();
+                string url = configDetails[ConfigurationManager.AppSettings["TenantSiteUrlKey"]].TrimEnd();
                 using (ClientContext clientContext = ConfigureSharePointContext.ConfigureClientContext(url, login, password))
                 {
                     ClientRuntimeContext context = clientContext;
@@ -180,7 +180,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
             string filePath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + ConstantStrings.BACKSLASH + ConfigurationManager.AppSettings["filename"];
             string configSheet = ConfigurationManager.AppSettings["manifestSheetname"];
             Dictionary<string, string> ConfigDetails = ExcelOperations.ReadFromExcel(filePath, configSheet);
-            string url = ConfigDetails[ConfigurationManager.AppSettings["CatalogSiteUrlKey"]].TrimEnd(ConstantStrings.FRONTSLASH);
+            string url = ConfigDetails[ConfigurationManager.AppSettings["TenantSiteUrlKey"]].TrimEnd(ConstantStrings.FRONTSLASH);
             string resultSourceID = null;
 
             try

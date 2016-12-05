@@ -2056,7 +2056,8 @@
                                 else {
                                     cm.notificationPopUpBlock = false;
                                     angular.forEach(cm.assignPermissionTeams, function (team) {
-                                        var userEmail = getUserName(team.assignedUser+";", false);
+                                         var userEmail = getUserName(team.assignedUser+ ";", false);
+                                        var userNames = getUserName(team.assignedUser + ";", true);
                                         for (var i = 0; i < userEmail.length; i++) {
                                             if (userEmail[i] == email) {
                                                 cm.textInputUser = team;
@@ -2067,6 +2068,12 @@
                                                 cm.currentExternalUser.userIndex = i;
                                                 cm.confirmUser(true);
                                                 team.assignedUser = team.assignedAllUserNamesAndEmails;
+                                                if (-1 == cm.oSiteUsers.indexOf(userNames[i])) {
+                                                    cm.oSiteUsers.push(userNames[i]);
+                                                }
+                                                if (-1 == cm.oSiteUserNames.indexOf(userEmail[i])) {
+                                                    cm.oSiteUserNames.push(userEmail[i]);
+                                                }
                                                 var userDetails = {};
                                                 userDetails.userName = userEmail[i];
                                                 userDetails.userExsists = team.userExsists;
