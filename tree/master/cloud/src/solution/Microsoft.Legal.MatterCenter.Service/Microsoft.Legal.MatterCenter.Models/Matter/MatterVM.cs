@@ -13,5 +13,6 @@ namespace Microsoft.Legal.MatterCenter.Models
         public IList<string> UserIds { get; set; }
         public string SerializeMatter { get; set; }
         public string Status { get; set; }
+        public string MatterUpdateStatus { get; set; }
     }
 }

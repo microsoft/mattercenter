@@ -430,10 +430,16 @@
                 $rootScope.displayinfo = false;
                 $rootScope.dispinner = true;
                 $(element).click(function (e) {
+                    var windowHeight = window.innerHeight;
                     var obj = e.target.getBoundingClientRect();
+                    if (windowHeight >= 322 && windowHeight <= 637 && obj.top > 273) {
+                        $(this).parent().addClass('dropup');
+                    }
+                   
                     if (obj.top > 450) {
                         $(this).parent().addClass('dropup');
                     }
+
                 });
             }
         }
