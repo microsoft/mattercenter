@@ -1564,6 +1564,11 @@ left: -17px;
         width:100% !important;
     }
 }
+.loadMatterUsersGlyphicon{
+        top: 11px;
+    right: 15px;
+    position: absolute;
+}
 
 
 
