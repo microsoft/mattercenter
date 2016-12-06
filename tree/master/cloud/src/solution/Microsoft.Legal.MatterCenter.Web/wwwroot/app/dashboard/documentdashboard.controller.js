@@ -37,7 +37,7 @@
             vm.showNavTab = false;
             vm.showInnerNav = true;
             vm.selectedTab = vm.documentDashboardConfigs.Tab1HeaderText;
-
+            vm.popupContainer = true;
             //#endregion
 
             //#region Variable to show document count
@@ -952,6 +952,7 @@
 
             //#region This function will pin or unpin the document based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
+                vm.popupContainer = false;
                 if (e.currentTarget.src.toLowerCase().indexOf("images/pin-666.png") > 0) {
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var pinRequest = {
@@ -987,6 +988,7 @@
                             e.currentTarget.title = "unpin";
                             vm.pinDocumentCount = parseInt(vm.pinDocumentCount, 10) + 1;
                         }
+                        vm.popupContainer = true;
                     });
                 }
                 else if (e.currentTarget.src.toLowerCase().indexOf("images/unpin-666.png") > 0) {
@@ -1017,6 +1019,7 @@
                                 vm.displaypagination = false;
                             }
                         }
+                        vm.popupContainer = true;
                     });
                 }
             }
@@ -1125,7 +1128,7 @@
                         var day = parseInt(parts[1], 10);
                         var month = parseInt(parts[0], 10);
                         var year = parseInt(parts[2], 10);
-                        
+
                         if (modelValue == 'vm.startDate') {
                             if (vm.endDate !== '' && new Date(year, month - 1, day) > vm.endDate) {
                                 vm.startDate = vm.endDate;

@@ -25,10 +25,9 @@
         cm.isBackwardCompatible = configs.global.isBackwardCompatible;
         var siteCollectionPath = "";
          cm.oEmailRegExpr = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	cm.getExternalUserNotification = true;
-	cm.currentExternalUser = {};
-	cm.createContent = uiconfigs.CreateMatter;
-
+	    cm.getExternalUserNotification = true;
+	    cm.currentExternalUser = {};
+	    cm.createContent = uiconfigs.CreateMatter;
         function getParameterByName(name) {
             "use strict";
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -42,8 +41,7 @@
         cm.isEdit = getParameterByName("IsEdit");
 
         if (cm.clientUrl === "" && cm.matterName === "") {
-            cm.matterName = "";
-          
+            cm.matterName = ""; 
         }
 
         //#region Service API Call
@@ -106,7 +104,8 @@
 
         //#region
         cm.searchUsers = function (val) {
-
+            $("[uib-typeahead-popup].dropdown-menu").css("display", "block");
+            cm.typehead = true;
             if (val && val != null && val != "") {
                 if (val.indexOf(';') > -1) {
                     var res = val.split(";");
@@ -772,8 +771,14 @@
                     $label.assignedAllUserNamesAndEmails = userEmailTxt;
                     $label.teamUsers = exsistingTeams;
                 }
-                if (fucnValue == "on-blurr" && typeheadelelen == 0 && noresults) {
-                    cm.checkUserExists($label, $event);
+                if (fucnValue == "on-blurr") {
+                    if (typeheadelelen == 0 && noresults) {
+                        cm.checkUserExists($label, $event);
+                    } else if (typeheadelelen >= 1 && !noresults) {
+                        cm.checkUserExists($label, $event);
+                        $("[uib-typeahead-popup].dropdown-menu").css("display", "none");
+                        // $("[uib-typeahead-popup].dropdown-menu").show();
+                    }
                 }
                 if (!noresults) {                   
                     if (value == "team") {
@@ -860,7 +865,8 @@
         }
 
         function showNotificatoinMessages(teamRowNumber) {
-            var temp = document.getElementById('txtUser' + teamRowNumber);
+            var temp = angular.element('#txtUser' +  teamRowNumber).parent().position();
+                //document.getElementById('txtUser' + teamRowNumber);
             var notificationEle = document.getElementById("notificationBlock");
             var notificationTrinageleBlockEle = document.getElementById("notificatoinTrinagleBlock");
             var notificationTrinagleBorderEle = document.getElementById("notificationTrinagleBroderBlock");
@@ -885,7 +891,7 @@
             var width = GetWidth();
             var x = 0, y = 0;
             if (width > 734) {
-                y = temp.offsetTop + 53, x = temp.offsetLeft + 70;
+                y = temp.top -108, x = temp.left + 70;
             }
             else {
                 y = temp.offsetTop, x = temp.offsetLeft;
