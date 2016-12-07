@@ -828,10 +828,7 @@ function processXML(xml, iFlag, oPropertiesList) {
     oPinPropertiesList = [configs.matter.StampedPropertyMatterName, 
     					configs.contentTypes.managedStampedColumns.ColumnName1, 
     					configs.contentTypes.managedStampedColumns.ColumnName2,
-    					configs.contentTypes.managedStampedColumns.ColumnName3,
-    					"AreaOfLaw", 
-    					"PracticeGroup", 
-    					"SubAreaOfLaw", 
+    					configs.contentTypes.managedStampedColumns.ColumnName3,    					
     					configs.matter.StampedPropertyResponsibleAttorney,
     					configs.matter.StampedPropertyResponsibleAttorney, 
     					configs.matter.StampedPropertyTeamMembers, 
@@ -1010,10 +1007,20 @@ function getUserData() {
         else {
             arrTeamMembers = trimEndChar(htmlDecode(oPinProperties.TeamMembers.trim()), ";").split(";");
         }
-        if (oPinProperties.ResponsibleAttorneyEmail) {
-            arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorneyEmail.trim()), ";").split(";");
-        } else if (oPinProperties.ResponsibleAttorney) {
-            arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorney.trim()), ";").split(";");
+        
+        if(oPinProperties.ResponsibleAttorneyEmail.indexOf('$|$')>0){
+        	if (oPinProperties.ResponsibleAttorneyEmail) {
+            	arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorneyEmail.trim()), ";").split("$|$");
+	        } else if (oPinProperties.ResponsibleAttorney) {
+	            arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorney.trim()), ";").split("$|$");
+	        }
+        }
+        else{
+        	if (oPinProperties.ResponsibleAttorneyEmail) {
+            	arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorneyEmail.trim()), ";").split(";");
+	        } else if (oPinProperties.ResponsibleAttorney) {
+	            arrResponsibleAttorney = trimEndChar(htmlDecode(oPinProperties.ResponsibleAttorney.trim()), ";").split(";");
+	        }
         }
         arrUserNames = $.merge(arrTeamMembers, arrResponsibleAttorney);
         if (oPinProperties.BlockedUsers && trimEndChar(htmlDecode(oPinProperties.BlockedUsers.trim()), ";").length > 0) {
