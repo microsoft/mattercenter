@@ -274,7 +274,7 @@ var oDocumentLandingObject = (function () {
                 oDocumentLanding.sCurrentDocumentRelativeUrl = oCurrentDocument.get_item("FileRef"); /* Document relative URL */
                 oDocumentLanding.sCurrentDocumentRelativeUrl = oCommonFunctions.replaceAll(oDocumentLanding.sCurrentDocumentRelativeUrl, "$", "$$$$");
                 oDocumentLanding.sCurrentDocumentDownloadUrl = encodeURIComponent(oDocumentLanding.sCurrentDocumentRelativeUrl); /*Set document download URL*/
-                oDocumentLanding.sCurrentDocumentRelativeUrl = oDocumentLanding.sCurrentDocumentRelativeUrl.replace("'", "''"); /*Handling documents with apostrophe in its URL*/
+                oDocumentLanding.sCurrentDocumentRelativeUrl = oDocumentLanding.sCurrentDocumentRelativeUrl.replace(/'/g, "''"); /*Handling documents with apostrophe in its URL*/
                 /* Get the current version details of the document */
                 oDocumentLanding.oCurrenVersionDetails.sCurrentVersionNumber = oCurrentDocument.get_item("_UIVersionString"); /* Document version number */
                 oDocumentLanding.oCurrenVersionDetails.sCurrentModifiedDate = oCurrentDocument.get_item("Modified"); /* Document modified date */
@@ -533,7 +533,7 @@ var oDocumentLandingObject = (function () {
 
     /* Function to check if document is already pinned */
     oCommonFunctions.checkAlreadyPinned = function (sDocumentDetails) {
-        var iPresent = sDocumentDetails.indexOf(oDocumentLanding.sCurrentDocumentUrl.toLowerCase());
+        var iPresent = sDocumentDetails.toLowerCase().indexOf(oDocumentLanding.sCurrentDocumentUrl.toLowerCase());
         if (0 > iPresent) {
             oCommonFunctions.setTextForPinOperation(oGlobalConstants.sOperationPin);
         } else {

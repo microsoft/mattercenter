@@ -155,7 +155,17 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                             ctx.Credentials = new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);
                             if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, userName, null, log))
                             {
-                                email.ToRecipients.Add(userName);
+                                if (userName.ToLower().IndexOf("#ext") > 0)
+                                {
+                                    string tempUserName = userName.ToLower();
+                                    tempUserName = tempUserName.Replace("#ext", "$").Split('$')[0];
+                                    tempUserName = ReplaceLastOccurrence(tempUserName, "_", "@");
+                                    email.ToRecipients.Add(tempUserName);
+                                }
+                                else
+                                {
+                                    email.ToRecipients.Add(userName);
+                                }
                             }
                         }
                     }
@@ -250,7 +260,17 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                             ctx.Credentials = new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);
                             if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, userName, null, log))
                             {
-                                email.ToRecipients.Add(userName);
+                                if(userName.ToLower().IndexOf("#ext")>0)
+                                {
+                                    string tempUserName = userName.ToLower();
+                                    tempUserName = tempUserName.Replace("#ext", "$").Split('$')[0];
+                                    tempUserName = ReplaceLastOccurrence(tempUserName, "_", "@");
+                                    email.ToRecipients.Add(tempUserName);
+                                }
+                                else
+                                {
+                                    email.ToRecipients.Add(userName);
+                                }                                
                             }
                         }
                     }
@@ -264,8 +284,15 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                             configuration["Settings:MatterRequests"], "Accepted", "Status");
         }
 
+        public static string ReplaceLastOccurrence(string Source, string Find, string Replace)
+        {
+            int Place = Source.LastIndexOf(Find);
+            string result = Source.Remove(Place, Find.Length).Insert(Place, Replace);
+            return result;
+        }
 
-        
+
+
 
         /// <summary>
         /// Provides the team members and their respective permission details.
