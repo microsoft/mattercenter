@@ -172,7 +172,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).ReadOnlyField = true;
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).SetShowInDisplayForm(true);
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).Update();
-                if(configuration.GetSection("General")["IsBackwardCompatible"].ToString()=="false")
+                if(configuration.GetSection("General")["IsBackwardCompatible"].ToString().ToLower()=="false")
                 {
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).ReadOnlyField = true;
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).SetShowInDisplayForm(true);
