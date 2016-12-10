@@ -139,19 +139,16 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         public void AssignPermissionToCatalogLists(string listName, ClientContext catalogContext, string userEmail, 
             string role, IConfigurationRoot configuration)
         {
-
-            string tempUserEmail = userEmail;
-            if (!userEmail.ToLower().Contains(configuration["General:Tenant"].ToString().ToLower()))            
-            {
-                // i: 0#.f|membership|xyz_outlook.com#ext#@tenantname.onmicrosoft.com
-                tempUserEmail = userEmail.Replace("@", "_");
-                tempUserEmail = $"i:0#.f|membership|{tempUserEmail}#EXT#@{configuration["General:Tenant"].ToString()}";
-            }
+            string tempUserEmail = userEmail;            
             GroupCollection groupCollection = catalogContext.Web.SiteGroups;
             Group group = groupCollection.GetByName(configuration["General:MatterUsersGroup"].ToString());
+            Principal teamMemberPrincipal = catalogContext.Web.EnsureUser(userEmail.Trim());
+            catalogContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title,
+                                                teamMemberPrincipalProperties => teamMemberPrincipalProperties.LoginName);
+            catalogContext.ExecuteQuery();           
 
             UserCreationInformation userInfo = new UserCreationInformation();
-            userInfo.LoginName = tempUserEmail;
+            userInfo.LoginName = teamMemberPrincipal.LoginName;
             userInfo.Email = userEmail;
             group.Users.Add(userInfo);
             catalogContext.ExecuteQuery();

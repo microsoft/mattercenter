@@ -47,6 +47,7 @@
             vm.sortbytext = vm.tabClicked == "All Matters" ? vm.matterDashboardConfigs.DropDownOptionText : vm.matterDashboardConfigs.DrpDownOption1Text;
             vm.showNavTab = false;
             vm.showInnerNav = true;
+            vm.popupContainer = true;
             vm.selectedTab = vm.matterDashboardConfigs.Tab1HeaderText;
 
             //#endregion
@@ -801,7 +802,7 @@
 
             //This function will pin or unpin the matter based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
-                //vm.lazyloaderdashboard = false;
+                vm.popupContainer = false;
                 if (e.currentTarget.src.toLowerCase().indexOf("images/pin-666.png") > 0) {
                     e.currentTarget.src = "../Images/loadingGreen.gif";
                     var pinRequest = {
@@ -833,7 +834,7 @@
                             e.currentTarget.title = "unpin"
                             vm.pinMatterCount = parseInt(vm.pinMatterCount, 10) + 1;
                         }
-                        //vm.lazyloaderdashboard = true;
+                        vm.popupContainer = true;
                     });
                 }
                 else if (e.currentTarget.src.toLowerCase().indexOf("images/unpin-666.png") > 0) {
@@ -865,7 +866,7 @@
                                 vm.displaypagination = false;
                             }
                         }
-                        //vm.lazyloaderdashboard = true;
+                        vm.popupContainer = true;
                     });
                 }
 

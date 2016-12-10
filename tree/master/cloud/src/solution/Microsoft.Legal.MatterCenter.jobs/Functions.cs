@@ -155,7 +155,17 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                             ctx.Credentials = new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);
                             if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, userName, null, log))
                             {
-                                email.ToRecipients.Add(userName);
+                                if (userName.ToLower().IndexOf("#ext") > 0)
+                                {
+                                    string tempUserName = userName.ToLower();
+                                    tempUserName = tempUserName.Replace("#ext", "$").Split('$')[0];
+                                    tempUserName = ReplaceLastOccurrence(tempUserName, "_", "@");
+                                    email.ToRecipients.Add(tempUserName);
+                                }
+                                else
+                                {
+                                    email.ToRecipients.Add(userName);
+                                }
                             }
                         }
                     }
@@ -250,7 +260,17 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                             ctx.Credentials = new SharePointOnlineCredentials(configuration["General:AdminUserName"], password);
                             if (CheckUserPresentInMatterCenter(ctx, originalMatter.Client.Url, userName, null, log))
                             {
-                                email.ToRecipients.Add(userName);
+                                if(userName.ToLower().IndexOf("#ext")>0)
+                                {
+                                    string tempUserName = userName.ToLower();
+                                    tempUserName = tempUserName.Replace("#ext", "$").Split('$')[0];
+                                    tempUserName = ReplaceLastOccurrence(tempUserName, "_", "@");
+                                    email.ToRecipients.Add(tempUserName);
+                                }
+                                else
+                                {
+                                    email.ToRecipients.Add(userName);
+                                }                                
                             }
                         }
                     }
@@ -264,8 +284,15 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                             configuration["Settings:MatterRequests"], "Accepted", "Status");
         }
 
+        public static string ReplaceLastOccurrence(string Source, string Find, string Replace)
+        {
+            int Place = Source.LastIndexOf(Find);
+            string result = Source.Remove(Place, Find.Length).Insert(Place, Replace);
+            return result;
+        }
 
-        
+
+
 
         /// <summary>
         /// Provides the team members and their respective permission details.
@@ -323,7 +350,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                             MatterInformationVM originalMatter = Newtonsoft.Json.JsonConvert.DeserializeObject<MatterInformationVM>(serializedMatter);
                             log.WriteLine($"Checking the matter name {originalMatter.Matter.Name} has been acceped by the user or not");
                             //Read all external access requests records from azure table storge
-                            GetExternalAccessRequestsFromSPO(originalMatter, log, configuration);
+                            GetExternalAccessRequestsFromSPO(matterInformation, originalMatter, log, configuration);
                         }
                     }
                 }
@@ -375,7 +402,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
         /// <param name="originalMatter"></param>
         /// <param name="log"></param>
         /// <param name="configuration"></param>
-        private static void GetExternalAccessRequestsFromSPO(MatterInformationVM originalMatter, 
+        private static void GetExternalAccessRequestsFromSPO(MatterInformationVM azureTableMatterInformationVMRow, MatterInformationVM originalMatter, 
             TextWriter log, 
             IConfigurationRoot configuration)
         {
@@ -420,7 +447,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
                                         log.WriteLine($"The user {email} has been present in the system and he has accepted the invitation and providing permssions to  matter {originalMatter.Matter.Name} from the user {email}");
                                         UpdateMatter umd = new UpdateMatter();
                                         //Update all matter related lists and libraries permissions for external users
-                                        if (originalMatter.MatterUpdateStatus.ToLower() == "pending")
+                                        if (azureTableMatterInformationVMRow.MatterUpdateStatus.ToLower() == "pending")
                                         {
                                             umd.UpdateUserPermissionsForMatter(originalMatter, configuration, password);
                                             Utility.UpdateTableStorageEntity(originalMatter, log, configuration["General:CloudStorageConnectionString"],
