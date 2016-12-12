@@ -604,7 +604,7 @@
             //#region for adding more users to assign permissions
             vm.addNewAssignPermissions = function () {
                 var newItemNo = vm.assignPermissionTeams.length + 1;
-                vm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': vm.assignRoles[0], 'assignedPermission': vm.assignPermissions[0] });
+                vm.assignPermissionTeams.push({'assignedUser': '', 'assigneTeamRowNumber': newItemNo, 'assignedRole': vm.assignRoles[0], 'assignedPermission': vm.assignPermissions[0] });
             };
             //#endregion
 
@@ -854,8 +854,7 @@
 
             vm.selectMatterTypePopUpClose = function () {
                 if (vm.popupContainer == "Show") {
-                    vm.popupContainerBackground = "hide";
-                    vm.popupContainer = "hide";
+                    vm.saveDocumentTemplates();                 
                 }
             }
 
@@ -868,6 +867,7 @@
             vm.addToDocumentTemplate = function () {
                 var isThisNewDocTemplate = true;
                 var selectedHighestLevelItem = null;
+                vm.primaryMatterType = false;
                 switch (vm.taxonomyHierarchyLevels) {
                     case 2:
                         selectedHighestLevelItem = vm.activeLevelTwoItem;
@@ -1010,7 +1010,12 @@
                     vm.selectedDocumentTypeLawTerms = vm.documentTypeLawTerms;
                 }
                 else {
-                    vm.errorPopUp = true;
+                    if (vm.documentTypeLawTerms.length > 0) {
+                        vm.errorPopUp = true;
+                    } else {
+                        vm.popupContainerBackground = "hide";
+                        vm.popupContainer = "hide";
+                    }
                 }
             }
 
@@ -1172,6 +1177,9 @@
                     vm.assignPermissionTeams.push(assignPermTeam);
 
                 }
+                if (vm.assignPermissionTeams.length==0) {
+                    vm.addNewAssignPermissions();
+                }
                 var arrDMatterAreaOfLaw = [];
                 var dMatterTypes = "", dPrimaryMatterType = "";
                 var arrDMatterPracticeGroup = [];
@@ -1188,6 +1196,7 @@
                     arrDMatterTypes = dMatterTypes.split('$|$');
                 }
                 dPrimaryMatterType = vm.configurations.DefaultProjectType ? vm.configurations.DefaultProjectType : "";
+                vm.primaryMatterType = dPrimaryMatterType != "" ? true : false;
                 vm.selectedDocumentTypeLawTerms = [];
                 vm.documentTypeLawTerms = [];
                 if (vm.taxonomyHierarchyLevels == 2) {
@@ -1260,6 +1269,9 @@
                     vm.assignPermissionTeams.push(assignPermTeam);
 
                 }
+                if (vm.assignPermissionTeams.length == 0) {
+                    vm.addNewAssignPermissions();
+                }
                 var arrDMatterAreaOfLaw = [];
                 var dMatterTypes = "", dPrimaryMatterType = "";
                 var arrDMatterPracticeGroup = [];
@@ -1276,6 +1288,7 @@
                     arrDMatterTypes = dMatterTypes.split('$|$');
                 }
                 dPrimaryMatterType = vm.configurations.DefaultMatterType ? vm.configurations.DefaultMatterType : "";
+                vm.primaryMatterType = dPrimaryMatterType != "" ? true : false;
                 vm.selectedDocumentTypeLawTerms = [];
                 vm.documentTypeLawTerms = [];
                 if (vm.taxonomyHierarchyLevels == 2) {
