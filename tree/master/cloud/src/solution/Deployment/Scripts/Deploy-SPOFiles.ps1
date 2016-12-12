@@ -11,6 +11,10 @@ Add-Type -TypeDefinition @"
 # Function to display message on console
 Function Show-Message([string] $Message, [string] $Type, [bool] $Newline = $true)
 {
+
+	# Set log file path
+$LogFile = "$ScriptDirectory\Logs\Log.txt"
+
 	$timestamp = Get-Date -Format G
 	$Message = $timestamp + " - " + $Message
 	switch ($Type)
@@ -102,20 +106,20 @@ Function Deploy-SPOFiles
 	
 	cd $HelperPath
 	
-	#---------------------------------------------------------------------
-	# Upload files required for Matter landing page to SharePoint library
-	#---------------------------------------------------------------------
-	Show-Message -Message "Upload files to SharePoint Library"
-	[Environment]::CurrentDirectory = Get-Location
-	& "$HelperPath\Microsoft.Legal.MatterCenter.UploadFile.exe" "true" $UserName $Password $WebSiteName $global:appInsightsId
+	##---------------------------------------------------------------------
+	## Upload files required for Matter landing page to SharePoint library
+	##---------------------------------------------------------------------
+	#Show-Message -Message "Upload files to SharePoint Library"
+	#[Environment]::CurrentDirectory = Get-Location
+	#& "$HelperPath\Microsoft.Legal.MatterCenter.UploadFile.exe" "true" $UserName $Password $WebSiteName $global:appInsightsId
 
-	If ((Get-Content $ErrorLogFile) -ne $Null) {
-		Show-Message -Message "Uploading files to SharePoint Library failed" -Type ([MessageType]::Failure)    
-		return
-	}
-	else {
-		Show-Message -Message "Completed uploading files to SharePoint library" -Type ([MessageType]::Success)
-	}
+	#If ((Get-Content $ErrorLogFile) -ne $Null) {
+	#	Show-Message -Message "Uploading files to SharePoint Library failed" -Type ([MessageType]::Failure)    
+	#	return
+	#}
+	#else {
+	#	Show-Message -Message "Completed uploading files to SharePoint library" -Type ([MessageType]::Success)
+	#}
     
     #---------------------------------------------------------------------
     # Provisioning Web Dashboard page(s) on SharePoint library
@@ -159,18 +163,18 @@ cd $PSScriptRoot
 #----------------------------------------------
 # Add Apps to SharePoint and Office
 #----------------------------------------------
-#Show-Message -Message "Step : Add and install apps to SharePoint and Office"
-#. "$ScriptDirectory\AppInstall.ps1" -IsDeploy: $false
-#. "$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $true
-#. "$ScriptDirectory\AppInstall.ps1" -IsDeploy: $true
+Show-Message -Message "Step : Add and install apps to SharePoint and Office"
+."$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $true 
+
+
     
-#If ((Get-Content $ErrorLogFile) -ne $Null) {
-#	Show-Message -Message "Adding and installing apps to SharePoint and Office failed" -Type ([MessageType]::Failure)
-#    return
-#}
-#else {
-#	Show-Message -Message "Completed adding and installing apps to SharePoint and Office" -Type ([MessageType]::Success)
-#}
+If ((Get-Content $ErrorLogFile) -ne $Null) {
+	Show-Message -Message "Adding and installing apps to SharePoint and Office failed" -Type ([MessageType]::Failure)
+    return
+}
+else {
+	Show-Message -Message "Completed adding and installing apps to SharePoint and Office" -Type ([MessageType]::Success)
+}
 
 
 #----------------------------------------------
@@ -187,3 +191,4 @@ If ((Get-Content $ErrorLogFile) -ne $Null) {
 else {
 	Show-Message -Message "Completed adding apps to Exchange" -Type ([MessageType]::Success)
 }
+
