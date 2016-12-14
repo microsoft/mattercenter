@@ -202,7 +202,7 @@ MatterCenterConfig,RowKey226,MatterDashboard,LinkImageLoadingTitle,Matter Center
 MatterCenterConfig,RowKey227,MatterDashboard,ImageLoadingAltText,Matter Center
 MatterCenterConfig,RowKey228,MatterDashboard,ImageCloseTitle,Close
 MatterCenterConfig,RowKey229,MatterDashboard,AttachmentLoadingText,Loading...
-MatterCenterConfig,RowKey230,MatterDashboard,SearchTextboxPlaceholderText,"Search by document name, document ID, or keyword"
+MatterCenterConfig,RowKey230,MatterDashboard,SearchTextboxPlaceholderText,"Search by ID, or matter or client name"
 MatterCenterConfig,RowKey231,MatterDashboard,ImageAdvanceSearchAltText,Drop Down
 MatterCenterConfig,RowKey232,MatterDashboard,ImageAdvanceSearchTitle,Advanced search
 MatterCenterConfig,RowKey233,MatterDashboard,AdvSearchLabel1Text,Clients

@@ -1,8 +1,8 @@
 ﻿(function () {
     'use strict;'
     var app = angular.module("matterMain");
-    app.controller('SettingsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'settingsResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$q', '$filter', 'commonFunctions',
-        function settingsController($scope, $state, $interval, $stateParams, api, $timeout, settingsResource, $rootScope, uiGridConstants, $location, $http, $q, $filter, commonFunctions) {
+    app.controller('SettingsController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'settingsResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$q', '$filter', 'commonFunctions', '$window',
+        function settingsController($scope, $state, $interval, $stateParams, api, $timeout, settingsResource, $rootScope, uiGridConstants, $location, $http, $q, $filter, commonFunctions, $window) {
             var vm = this;
             vm.popupContainerBackground = "hide";
             vm.popupContainer = "hide";
@@ -120,9 +120,18 @@
             vm.showClientDetails = false;
             //#endregion
 
+            //#region To set the  dynamic height to content
+            vm.setContentHeight = function () {
+                var headerHeight = angular.element("#matterCenterHeader").height();
+                var footerHeight = angular.element("#footer").height();
+                var screenHeight = $window.screen.availHeight;
+                var minContentHeight = (screenHeight) - (headerHeight + footerHeight);
+                angular.element("#contentDiv").css("min-height", minContentHeight);
+            }
 
-            
-            var optionsForClientUrl = {                
+            //#endregion
+
+            var optionsForClientUrl = {
                 Url: configs.global.isBackwardCompatible ? configs.global.repositoryUrl : configs.uri.SPOsiteURL
             };
 
@@ -162,9 +171,9 @@
 
             vm.isLoginUserOwner = function () {
                 $timeout(function () { vm.lazyloader = false; }, 10);
-                
+
                 isLoginUserOwner(optionsForClientUrl, function (response) {
-                    if (response != null) {                        
+                    if (response != null) {
                         vm.canAccessSettingsPage = response.isLoginUserOwner;
 
                         if (vm.canAccessSettingsPage) {
@@ -182,7 +191,7 @@
                             angular.element('#matterCenterHeader').addClass('hideCommonContent');
                             angular.element('#footer').removeClass('commonContent');
                             angular.element('#footer').addClass('hideCommonContent');
-                            
+
                         }
                         vm.lazyloader = true;
                         vm.popupContainerBackground = "hide";
@@ -209,7 +218,7 @@
                             } else {
                                 vm.levelOneList = response.level1;
                                 vm.parentLevelOneList = response;
-                                vm.selectedLevelOneItem = response.level1[0];                               
+                                vm.selectedLevelOneItem = response.level1[0];
                                 getTaxonomyHierarchy(response);
                                 vm.lazyloader = true;
                                 vm.popupContainerBackground = "hide";
@@ -293,7 +302,7 @@
             }
             //#endregion
 
-            
+
 
 
             //#region for getting the users based on search values
@@ -324,7 +333,7 @@
                 }
                 getDefaultConfigurations(siteCollectionPath, function (response) {
                     if (response != "" && !response.isError) {
-                        vm.configurations = JSON.parse(response.code);                        
+                        vm.configurations = JSON.parse(response.code);
                         vm.setClientData(vm.configurations);
                         vm.showrole = vm.configurations.ShowRole != null ? (vm.configurations.ShowRole == true ? "Yes" : "No") : "No";
                         vm.showmatterid = vm.configurations.ShowMatterId != null ? (vm.configurations.ShowMatterId == true ? "Yes" : "No") : "No";;
@@ -337,7 +346,7 @@
                         } else {
                             setBackwardCompatabilityClientData(response);
                         }
-                      
+
                     } else {
                         vm.nodata = true;
                         vm.lazyloader = true;
@@ -382,7 +391,7 @@
                 });
 
             }
-//
+            //
             function setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType) {
                 angular.forEach(vm.levelOneList, function (levelOneTerm) {
                     angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
@@ -544,8 +553,8 @@
 
             //#region for setting the selected client values to ng-models
             vm.setClientData = function (data) {
-                vm.mattername = data.DefaultMatterName != undefined ? data.DefaultMatterName : data.DefaultProjectName!=undefined?data.DefaultProjectName:"";
-                vm.matterid = data.DefaultMatterId != undefined ? data.DefaultMatterId :"";               
+                vm.mattername = data.DefaultMatterName != undefined ? data.DefaultMatterName : data.DefaultProjectName != undefined ? data.DefaultProjectName : "";
+                vm.matterid = data.DefaultMatterId != undefined ? data.DefaultMatterId : "";
                 if (data.IsRestrictedAccessSelected) {
                     vm.assignteam = "Yes";
                 } else {
@@ -585,7 +594,7 @@
                 } else {
                     vm.conflict = "No";
                 }
-              
+
                 vm.showmatterconfiguration = "DateTime"
                 if (data.MatterIdType !== undefined && data.MatterIdType !== null) {
                     vm.showmatterconfiguration = data.MatterIdType
@@ -604,7 +613,7 @@
             //#region for adding more users to assign permissions
             vm.addNewAssignPermissions = function () {
                 var newItemNo = vm.assignPermissionTeams.length + 1;
-                vm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': vm.assignRoles[0], 'assignedPermission': vm.assignPermissions[0] });
+                vm.assignPermissionTeams.push({ 'assignedUser': '', 'assigneTeamRowNumber': newItemNo, 'assignedRole': vm.assignRoles[0], 'assignedPermission': vm.assignPermissions[0] });
             };
             //#endregion
 
@@ -854,8 +863,7 @@
 
             vm.selectMatterTypePopUpClose = function () {
                 if (vm.popupContainer == "Show") {
-                    vm.popupContainerBackground = "hide";
-                    vm.popupContainer = "hide";
+                    vm.saveDocumentTemplates();
                 }
             }
 
@@ -868,6 +876,7 @@
             vm.addToDocumentTemplate = function () {
                 var isThisNewDocTemplate = true;
                 var selectedHighestLevelItem = null;
+                vm.primaryMatterType = false;
                 switch (vm.taxonomyHierarchyLevels) {
                     case 2:
                         selectedHighestLevelItem = vm.activeLevelTwoItem;
@@ -1010,7 +1019,12 @@
                     vm.selectedDocumentTypeLawTerms = vm.documentTypeLawTerms;
                 }
                 else {
-                    vm.errorPopUp = true;
+                    if (vm.documentTypeLawTerms.length > 0) {
+                        vm.errorPopUp = true;
+                    } else {
+                        vm.popupContainerBackground = "hide";
+                        vm.popupContainer = "hide";
+                    }
                 }
             }
 
@@ -1116,18 +1130,18 @@
                 var arrDMatterUserEmails = [];
                 var arrDMatterRoles = [];
                 var arrDMatterPermissions = [];
-               
+
                 if (vm.configurations.ProjectUsers != undefined && vm.configurations.ProjectUsers != "") {
                     arrDMatterUsers = vm.configurations.ProjectUsers.split('$|$');
                 }
-                
+
                 if (vm.configurations.ProjectUserEmails != undefined && vm.configurations.ProjectUserEmails != "") {
                     arrDMatterUserEmails = vm.configurations.ProjectUserEmails.split('$|$');
                 }
                 if (vm.configurations.MatterRoles != undefined && vm.configurations.MatterRoles != "") {
                     arrDMatterRoles = vm.configurations.MatterRoles.split('$|$');
                 }
-              
+
                 if (vm.configurations.ProjectPermissions != undefined && vm.configurations.ProjectPermissions != "") {
                     arrDMatterPermissions = vm.configurations.ProjectPermissions.split('$|$');
                 }
@@ -1150,12 +1164,12 @@
 
                     //vm.assignRoles   vm.assignPermissions 
                     //assignedRole  assignedPermission
-                    angular.forEach(vm.assignRoles, function (assignRole) {                        
+                    angular.forEach(vm.assignRoles, function (assignRole) {
                         if (arrDMatterRoles[aCount] == assignRole.name) {
                             assignPermTeam.assignedRole = assignRole;
                         }
                     });
-                   
+
                     angular.forEach(vm.assignPermissions, function (assignPermission) {
                         if (arrDMatterPermissions[aCount] == assignPermission.name) {
                             assignPermTeam.assignedPermission = assignPermission;
@@ -1172,13 +1186,16 @@
                     vm.assignPermissionTeams.push(assignPermTeam);
 
                 }
+                if (vm.assignPermissionTeams.length == 0) {
+                    vm.addNewAssignPermissions();
+                }
                 var arrDMatterAreaOfLaw = [];
                 var dMatterTypes = "", dPrimaryMatterType = "";
                 var arrDMatterPracticeGroup = [];
-               // if (vm.configurations.MatterAreaofLaw!=undefined && vm.configurations.MatterAreaofLaw != "") {
+                // if (vm.configurations.MatterAreaofLaw!=undefined && vm.configurations.MatterAreaofLaw != "") {
                 arrDMatterAreaOfLaw = vm.selected;
-              //  }
-               
+                //  }
+
                 if (vm.configurations.ProjectPracticeGroup != "") {
                     arrDMatterPracticeGroup = vm.configurations.ProjectPracticeGroup.split('$|$');
                 }
@@ -1188,6 +1205,7 @@
                     arrDMatterTypes = dMatterTypes.split('$|$');
                 }
                 dPrimaryMatterType = vm.configurations.DefaultProjectType ? vm.configurations.DefaultProjectType : "";
+                vm.primaryMatterType = dPrimaryMatterType != "" ? true : false;
                 vm.selectedDocumentTypeLawTerms = [];
                 vm.documentTypeLawTerms = [];
                 if (vm.taxonomyHierarchyLevels == 2) {
@@ -1217,11 +1235,11 @@
                 if (vm.configurations.MatterUsers != undefined && vm.configurations.MatterUsers != "") {
                     arrDMatterUsers = vm.configurations.MatterUsers.split('$|$');
                 }
-              
+
                 if (vm.configurations.MatterUserEmails != undefined && vm.configurations.MatterUserEmails != "") {
                     arrDMatterUserEmails = vm.configurations.MatterUserEmails.split('$|$');
                 }
-               
+
                 if (vm.configurations.MatterRoles != undefined && vm.configurations.MatterRoles != "") {
                     arrDMatterRoles = vm.configurations.MatterRoles.split('$|$');
                 }
@@ -1229,8 +1247,8 @@
                 if (vm.configurations.MatterPermissions != undefined && vm.configurations.MatterPermissions != "") {
                     arrDMatterPermissions = vm.configurations.MatterPermissions.split('$|$');
                 }
-                
-                vm.assignPermissionTeams = [];              
+
+                vm.assignPermissionTeams = [];
 
                 for (var aCount = 0; aCount < arrDMatterUsers.length; aCount++) {
                     var assignPermTeam = {};
@@ -1244,7 +1262,7 @@
                         assignPermTeam.assignedRole = vm.assignRoles[0];
                         assignPermTeam.assignedPermission = vm.assignPermissions[0];
                     }
-                   
+
                     angular.forEach(vm.assignRoles, function (assignRole) {
                         if (arrDMatterRoles[aCount] == assignRole.name) {
                             assignPermTeam.assignedRole = assignRole;
@@ -1260,6 +1278,9 @@
                     vm.assignPermissionTeams.push(assignPermTeam);
 
                 }
+                if (vm.assignPermissionTeams.length == 0) {
+                    vm.addNewAssignPermissions();
+                }
                 var arrDMatterAreaOfLaw = [];
                 var dMatterTypes = "", dPrimaryMatterType = "";
                 var arrDMatterPracticeGroup = [];
@@ -1269,13 +1290,14 @@
                 if (vm.configurations.MatterPracticeGroup != "") {
                     arrDMatterPracticeGroup = vm.configurations.MatterPracticeGroup.split('$|$');
                 }
-                
+
                 dMatterTypes = vm.configurations.MatterTypes ? vm.configurations.MatterTypes : "";
                 var arrDMatterTypes = [];
                 if (dMatterTypes) {
                     arrDMatterTypes = dMatterTypes.split('$|$');
                 }
                 dPrimaryMatterType = vm.configurations.DefaultMatterType ? vm.configurations.DefaultMatterType : "";
+                vm.primaryMatterType = dPrimaryMatterType != "" ? true : false;
                 vm.selectedDocumentTypeLawTerms = [];
                 vm.documentTypeLawTerms = [];
                 if (vm.taxonomyHierarchyLevels == 2) {
@@ -1297,7 +1319,7 @@
                     vm.cacheItemModifiedDate = data.value;
             }
 
-
+            //$timeout(function () { vm.setContentHeight(); }, 500);
 
             //function to filter practice groups
             function getClientsPracticeGroup(clientName) {

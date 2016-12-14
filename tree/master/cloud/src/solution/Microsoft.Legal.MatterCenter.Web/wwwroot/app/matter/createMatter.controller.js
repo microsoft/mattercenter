@@ -522,8 +522,7 @@
             //function for closing the popup
             cm.selectMatterTypePopUpClose = function () {
                 if (cm.popupContainer == "Show") {
-                    cm.popupContainerBackground = "hide";
-                    cm.popupContainer = "hide";
+                    cm.saveDocumentTemplates();                
                 }
 
 
@@ -3763,6 +3762,7 @@
             cm.addToDocumentTemplate = function () {
                 var isThisNewDocTemplate = true;
                 var selectedHighestLevelItem = null;
+                cm.primaryMatterType = false;
                 switch (cm.taxonomyHierarchyLevels) {
                     case 2:
                         selectedHighestLevelItem = cm.activeLevelTwoItem;
