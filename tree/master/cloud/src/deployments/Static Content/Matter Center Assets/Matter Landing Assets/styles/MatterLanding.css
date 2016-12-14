@@ -441,7 +441,7 @@
 
 .teamFlyoutData, .blockedFlyoutData {
     margin-top: 65px;
-    max-height: 80%;
+    max-height: 90%;
     overflow: auto;
     padding-left: 10px;
 }
