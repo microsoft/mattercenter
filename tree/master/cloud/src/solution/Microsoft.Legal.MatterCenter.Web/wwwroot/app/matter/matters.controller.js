@@ -3,7 +3,7 @@
 
     var app = angular.module("matterMain");
 
-    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache', '$q', '$filter', 'commonFunctions', '$animate','adalAuthenticationService',
+    app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache', '$q', '$filter', 'commonFunctions', '$animate', 'adalAuthenticationService',
         function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache, $q, $filter, commonFunctions, $animate, adalService) {
             var vm = this;
             vm.selected = '';
@@ -364,7 +364,7 @@
                     success: callback
                 });
             }
-           
+
 
             vm.checkUrlExists = function (data) {
                 var loginUser = adalService.userInfo.userName.toLowerCase();
@@ -386,7 +386,7 @@
                     }
                     vm.urlExists = response.oneNoteUrlExists
                     vm.dropDownMenuLoader = true;
-                    vm.dropDownMenu = true;                        
+                    vm.dropDownMenu = true;
                 });
             }
 
@@ -1849,6 +1849,7 @@
             //#region Hits when the Dropdown changes 
             //Start 
             vm.GetMatters = function (id) {
+                vm.setWidth();
                 if (!vm.pinnedorunpinned) {
                     vm.selected = "";
                     vm.searchTerm = "";
@@ -2174,10 +2175,9 @@
                         var day = parseInt(parts[1], 10);
                         var month = parseInt(parts[0], 10);
                         var year = parseInt(parts[2], 10);
-                       
+
                         if (modelValue == 'vm.modStartDate') {
-                            if (vm.modEndDate !== '' && new Date(year, month - 1, day) > vm.modEndDate)
-                            {
+                            if (vm.modEndDate !== '' && new Date(year, month - 1, day) > vm.modEndDate) {
                                 vm.modStartDate = vm.modEndDate;
                                 vm.modDateOptions.maxDate = vm.modStartDate;
                             }
@@ -3164,7 +3164,7 @@
                 e.preventDefault();
             });
 
-            
+
         }]);
     app.filter('unique', function () {
         return function (collection, keyname) {

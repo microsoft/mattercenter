@@ -1092,7 +1092,7 @@ input#sdBannerDropDown {
     }
 
     .ContextualHelpContainer {
-        left:2%;
+        left: 2%;
     }
 }
 /* CSS for App Menu and Contextual Help in Word */
@@ -1273,6 +1273,8 @@ input#sdBannerDropDown {
     height: 87px;
     text-align: right;
     width: 100%;
+    position: static;
+    bottom: 0;
 }
 
 .footerContent {
