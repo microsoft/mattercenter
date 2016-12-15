@@ -149,7 +149,7 @@
 
         //For setting dynamic height to the grid
         vm.getTableHeight = function () {
-            if (vm.isOutlook) {
+            if (vm.isOutlook && vm.showAttachment) {
                 return {
                     height: ($window.innerHeight - 150) + "px"
                 };
@@ -1281,6 +1281,7 @@
         //Hits when the Dropdown changes 
         //Start 
         vm.GetDocuments = function (id) {
+            vm.setWidth();
             if (!vm.pinnedorunpinned) {
                 vm.selected = "";
                 vm.searchTerm = "";
@@ -2049,7 +2050,12 @@
         //#region setting the grid options when window is resized
 
         angular.element($window).bind('resize', function () {
-            angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 93);
+            if (vm.isOutlook && vm.showAttachment) {
+                angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 150);
+            }
+            else {
+                angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 93);
+            }
             angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
             angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
             if ($window.innerWidth < 380) {
