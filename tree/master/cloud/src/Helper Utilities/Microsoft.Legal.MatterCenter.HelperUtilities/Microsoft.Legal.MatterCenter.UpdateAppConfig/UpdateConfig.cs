@@ -323,7 +323,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                                 string appDomainTag = ConfigurationManager.AppSettings["appDomain"];
                                 XmlNodeList clientElement = doc.GetElementsByTagName(appDomainTag);
 
-                                if (null != clientElement && clientElement.Count > 0 && clientElement.Count == 4)
+                                if (null != clientElement && clientElement.Count > 0 )//&& clientElement.Count == 4)
                                 {
                                     int iAppDomain = 1;
                                     foreach (XmlNode appDomain in clientElement)
@@ -332,7 +332,13 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                                         {
                                             case 2:
                                                 appDomain.InnerText = excelInput[ConstantStrings.AZURE_UI_SITE_URL];
-                                                break;                                            
+                                                break;
+                                            case 3:
+                                                if (appDomain.InnerText.ToLower().Contains("sharepoint"))
+                                                {
+                                                    appDomain.InnerText = excelInput[ConstantStrings.TENANT_URL];
+                                                }
+                                                break;
                                             case 4:
                                                 appDomain.InnerText = excelInput[ConstantStrings.TENANT_URL];
                                                 break;

@@ -161,7 +161,7 @@ cd $PSScriptRoot
 
 
 #----------------------------------------------
-# Add Apps to SharePoint and Office
+# Add Apps to Office
 #----------------------------------------------
 Show-Message -Message "Step : Add and install apps to SharePoint and Office"
 ."$ScriptDirectory\DeployOfficeApp.ps1" -IsDeploy: $true 
@@ -169,11 +169,11 @@ Show-Message -Message "Step : Add and install apps to SharePoint and Office"
 
     
 If ((Get-Content $ErrorLogFile) -ne $Null) {
-	Show-Message -Message "Adding and installing apps to SharePoint and Office failed" -Type ([MessageType]::Failure)
+	Show-Message -Message "Adding and installing apps to  Office failed" -Type ([MessageType]::Failure)
     return
 }
 else {
-	Show-Message -Message "Completed adding and installing apps to SharePoint and Office" -Type ([MessageType]::Success)
+	Show-Message -Message "Completed adding and installing apps to Office" -Type ([MessageType]::Success)
 }
 
 

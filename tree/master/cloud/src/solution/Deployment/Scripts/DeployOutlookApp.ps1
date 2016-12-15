@@ -120,7 +120,7 @@ if($ExchangeCredential -eq $null) {
 
 $appDirectory = Join-Path $DeployPath "Exchange App\"
 $AppFiles = Get-ChildItem –Path $appDirectory # Get the .app files
-$AppNames = "Matter Center Beta" # App Names
+$AppNames = "Matter Center" # App Names
 $AppNames = $AppNames.Split(';')
 
 Show-Message -Message "Reading inputs from Excel..." -Type ( [MessageType]::Warning )
