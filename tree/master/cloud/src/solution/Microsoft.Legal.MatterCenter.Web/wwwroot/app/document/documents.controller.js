@@ -149,7 +149,7 @@
 
         //For setting dynamic height to the grid
         vm.getTableHeight = function () {
-            if (vm.isOutlook) {
+            if (vm.isOutlook && vm.showAttachment) {
                 return {
                     height: ($window.innerHeight - 150) + "px"
                 };
@@ -1281,6 +1281,7 @@
         //Hits when the Dropdown changes 
         //Start 
         vm.GetDocuments = function (id) {
+            vm.setWidth();
             if (!vm.pinnedorunpinned) {
                 vm.selected = "";
                 vm.searchTerm = "";
