@@ -1354,7 +1354,7 @@
                 } else {
                     vm.divuigrid = true;
                     vm.displaypagination = true;
-                    $interval(function () { vm.setPaginationHeight() }, 500, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
+                    $interval(function () { vm.setPaginationHeight() }, 500, vm.divuigrid);
                 }
                 //vm.setToptoPagination();
                 if (!$scope.$$phase) {
@@ -1412,7 +1412,7 @@
                                 vm.lazyloaderdashboard = true;
                                 vm.divuigrid = true;
                                 vm.displaypagination = true;
-                                $interval(function () { vm.setPaginationHeight() }, 300, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
+                                $interval(function () { vm.setPaginationHeight() }, 300, vm.divuigrid);
                             });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
@@ -1469,7 +1469,7 @@
                                     vm.lazyloaderdashboard = true;
                                 }
                                 vm.displaypagination = true;
-                                $interval(function () { vm.setPaginationHeight() }, 300, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
+                                $interval(function () { vm.setPaginationHeight() }, 300, vm.divuigrid);
                             });
                             if (!$scope.$$phase) {
                                 $scope.$apply();

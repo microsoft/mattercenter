@@ -112,7 +112,7 @@ namespace Microsoft.Legal.MatterCenter.Jobs
             // Step 1: Create Matter Information
             string defaultContentType = string.Format(CultureInfo.InvariantCulture,
                 defaultHtmlChunk, matter.DefaultContentType);
-            string matterType = string.Join(";", matter.ContentTypes.ToArray()).TrimEnd(';').Replace(matter.DefaultContentType, defaultContentType);
+            string matterType = defaultContentType;
             if (matterType == string.Empty)
             {
                 matterType = defaultContentType;
