@@ -2194,8 +2194,37 @@
             vm.filternodata = false;
             vm.details = [];
             var dimensions = $event.target.getBoundingClientRect();
-            var top = dimensions.top + 30;
-            var left = dimensions.left - 224;
+            var top = 0;
+            var left = 0;
+            if (dimensions.top == 0 && dimensions.left == 0) {
+                //Logic for touch devices
+                top = $event.clientY + 25;
+                left = $event.clientX - 165;
+                if ((name === vm.documentConfigContent.GridColumn1Header ||  name === vm.documentConfigContent.GridColumn8Header                      
+                        ||name == vm.documentConfigContent.GridColumn7Header) && !vm.globalSettings.isBackwardCompatible) {
+                    left = $event.clientX - 230;
+                }
+                if ((name === vm.documentConfigContent.GridColumn2Header || name === vm.documentConfigContent.GridColumn5Header) && 
+                    !vm.globalSettings.isBackwardCompatible) {
+                    left = $event.clientX - 110;
+                }
+                
+                if (name === vm.documentConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible){
+                    left = $event.clientX - 180;
+                }
+                if (name === vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible) {
+                    left = $event.clientX - 160;
+                }
+                if ((name === vm.documentConfigContent.GridColumn4Header || name == vm.documentConfigContent.GridColumn5Header) &&
+                    vm.globalSettings.isBackwardCompatible) {
+                    left = $event.clientX - 115;
+                } 
+            }
+            else {
+                //Logic if we use mouse
+                top = dimensions.top + 30;
+                left = dimensions.left - 224;
+            }
             angular.element('.documentheader').css({ 'top': top, 'left': left });
             angular.element('.documentheaderdates').css({ 'top': top, 'left': left });
 
