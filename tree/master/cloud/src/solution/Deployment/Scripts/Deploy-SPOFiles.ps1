@@ -11,10 +11,8 @@ Add-Type -TypeDefinition @"
 # Function to display message on console
 Function Show-Message([string] $Message, [string] $Type, [bool] $Newline = $true)
 {
-
 	# Set log file path
-$LogFile = "$ScriptDirectory\Logs\Log.txt"
-
+	$LogFile = "$ScriptDirectory\Logs\Log.txt"
 	$timestamp = Get-Date -Format G
 	$Message = $timestamp + " - " + $Message
 	switch ($Type)
@@ -53,6 +51,9 @@ $LogFile = "$ScriptDirectory\Logs\Log.txt"
 		($Message) | Out-File $LogFile -Append
 	}
 }
+
+# Set log file path
+$LogFile = "$ScriptDirectory\Logs\Log.txt"
 
 # Get the current directory of the script
 Function ScriptRoot {Split-Path $MyInvocation.ScriptName}

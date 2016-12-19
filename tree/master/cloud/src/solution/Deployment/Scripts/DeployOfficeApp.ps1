@@ -197,6 +197,7 @@ $RootPath = Split-Path(Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) -P
 $DeployPath = "$RootPath\deployments"
 $HelperPath = "$RootPath\deployments\scripts\Helper Utilities"
 $ExternalPath = "$RootPath\Helper Utilities\External"
+$DeployPath = "$RootPath\solution"
 
 #Set Excel file path, uncomment below line if you want to use this script separately
 #$ExcelFilePath = "$ParentDirectory\MCDeploymentConfig.xlsx"
@@ -212,7 +213,7 @@ $DocLibName = "Apps for Office"
 
 #Fetch the Folder containing the XML files for Office Apps
 
-$FolderPath = Join-Path $DeployPath "Office App"
+$FolderPath = Join-Path $DeployPath "Microsoft.Legal.MatterCenter_Office\Microsoft.Legal.MatterCenter_OfficeManifest"
 
 
 
