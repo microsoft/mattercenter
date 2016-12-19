@@ -836,7 +836,32 @@
             }
             //#endregion
 
-
+            vm.showMatterAsPinOrUnpin = function (response, searchRequest) {
+                getPinnedMatters(searchRequest, function (pinnedResponse) {
+                    if (pinnedResponse && pinnedResponse.length > 0) {
+                        angular.forEach(pinnedResponse, function (pinobj) {
+                            angular.forEach(response, function (res) {
+                                //Check if the pinned matter name is equal to search matter name
+                                if (pinobj.matterName == res.matterName) {
+                                    if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                        res.MatterInfo = "Unpin this matter";
+                                        res.ismatterdone = true;
+                                    }
+                                }
+                            });
+                        });
+                        vm.gridOptions.data = response;
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
+                    } else {
+                        vm.gridOptions.data = response;
+                        if (!$scope.$$phase) {
+                            $scope.$apply();
+                        }
+                    }
+                });
+            }
 
             vm.editAttachment = function (element, event) {
 
@@ -1273,7 +1298,7 @@
                         vm.nodata = true;
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
-                        vm.gridOptions.data = response;
+                        vm.showMatterAsPinOrUnpin(response, searchRequest);
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.lazyloader = true;
@@ -1282,6 +1307,8 @@
                 });
             }
             //#endregion
+
+
 
 
             //#region for setting the mattername in dropdown
@@ -1490,7 +1517,7 @@
                             vm.nodata = false;
                             vm.lazyloaderFilter = true;
                             if (bool) {
-                                vm.gridOptions.data = response;
+                                vm.showMatterAsPinOrUnpin(response, searchRequest);                                
                                 vm.details = [];
                                 if (!$scope.$$phase) {
                                     $scope.$apply();
@@ -2364,12 +2391,10 @@
                             vm.nodata = true;
                             $scope.errorMessage = response.message;
                         } else {
+                            vm.showMatterAsPinOrUnpin(response, searchRequest);
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            vm.gridOptions.data = response;
-                            if (!$scope.$$phase) {
-                                $scope.$apply();
-                            }
+                            
 
                         }
                     });
