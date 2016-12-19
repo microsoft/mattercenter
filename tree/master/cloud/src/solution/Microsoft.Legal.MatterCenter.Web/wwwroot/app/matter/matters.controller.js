@@ -2991,9 +2991,32 @@
             vm.openMatterHeader = function ($event, name) {
                 vm.filternodata = false;
                 vm.details = [];
+                var top = 0;
+                var left = 0;
                 var dimensions = $event.target.getBoundingClientRect();
-                var top = dimensions.top + 30;
-                var left = dimensions.left - 224;
+                if (dimensions.top == 0 && dimensions.left == 0) {
+                    //Logic for touch devices
+                    top = $event.clientY + 25;
+                    left = $event.clientX - 165;
+                    if (name === vm.matterConfigContent.GridColumn1Header || 
+                            (name === vm.matterConfigContent.GridColumn5Header && !vm.globalSettings.isBackwardCompatible) || 
+                            (name == vm.matterConfigContent.GridColumn7Header && !vm.globalSettings.isBackwardCompatible)) {
+                        left = $event.clientX - 230;
+                    }
+
+                    if ((name === vm.matterConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible) ||
+                            (name === vm.matterConfigContent.GridColumn4Header && vm.globalSettings.isBackwardCompatible)) {
+                        left = $event.clientX - 180;
+                    }
+                    if (name === vm.matterConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible) {
+                        left = $event.clientX - 175;
+                    }
+                }
+                else {
+                    //Logic if we use mouse
+                    top = dimensions.top + 30;
+                    left = dimensions.left - 224;
+                }
                 angular.element('.matterheader').css({
                     'top': top, 'left': left
                 });
