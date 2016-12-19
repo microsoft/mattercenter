@@ -418,7 +418,7 @@
                 vm.showFailedAtachmentsBlock = false;
                 vm.failedFiles = [];
                 vm.showPopUpHolder = true;
-                vm.attachedProgressPopUp = true;               
+                vm.attachedProgressPopUp = true;
                 angular.forEach(vm.selectedRows, function (selRow) {
                     var docUrl = selRow.documentOWAUrl;
                     if (selRow.documentOWAUrl.indexOf("WopiFrame.aspx") > 0) {
@@ -1615,8 +1615,7 @@
                             vm.modStartDate = vm.modEndDate;
                             vm.modDateOptions.maxDate = vm.modStartDate;
                         }
-                        else if (new Date(year, month - 1, day) > vm.modDateOptions.maxDate && new Date(year, month - 1, day) <= new Date())
-                        {
+                        else if (new Date(year, month - 1, day) > vm.modDateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
                             vm.modStartDate = new Date(year, month - 1, day);
                             vm.modEndDate = vm.modStartDate;
                             vm.modDateOptions.maxDate = vm.modStartDate;
@@ -1702,8 +1701,7 @@
                             vm.startDate = vm.endDate;
                             vm.dateOptions.maxDate = vm.startDate;
                         }
-                        else if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date())
-                        {
+                        else if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
                             vm.startDate = new Date(year, month - 1, day);
                             vm.endDate = vm.startDate;
                             vm.dateOptions.maxDate = vm.startDate;
