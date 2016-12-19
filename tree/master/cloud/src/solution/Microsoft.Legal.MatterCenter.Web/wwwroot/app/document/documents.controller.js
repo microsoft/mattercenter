@@ -418,7 +418,7 @@
                 vm.showFailedAtachmentsBlock = false;
                 vm.failedFiles = [];
                 vm.showPopUpHolder = true;
-                vm.attachedProgressPopUp = true;
+                vm.attachedProgressPopUp = true;               
                 angular.forEach(vm.selectedRows, function (selRow) {
                     var docUrl = selRow.documentOWAUrl;
                     if (selRow.documentOWAUrl.indexOf("WopiFrame.aspx") > 0) {
@@ -1615,7 +1615,8 @@
                             vm.modStartDate = vm.modEndDate;
                             vm.modDateOptions.maxDate = vm.modStartDate;
                         }
-                        else if (new Date(year, month - 1, day) > vm.modDateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
+                        else if (new Date(year, month - 1, day) > vm.modDateOptions.maxDate && new Date(year, month - 1, day) <= new Date())
+                        {
                             vm.modStartDate = new Date(year, month - 1, day);
                             vm.modEndDate = vm.modStartDate;
                             vm.modDateOptions.maxDate = vm.modStartDate;
@@ -1701,7 +1702,8 @@
                             vm.startDate = vm.endDate;
                             vm.dateOptions.maxDate = vm.startDate;
                         }
-                        else if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
+                        else if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date())
+                        {
                             vm.startDate = new Date(year, month - 1, day);
                             vm.endDate = vm.startDate;
                             vm.dateOptions.maxDate = vm.startDate;
@@ -2198,16 +2200,16 @@
                 //Logic for touch devices
                 top = $event.clientY + 25;
                 left = $event.clientX - 165;
-                if ((name === vm.documentConfigContent.GridColumn1Header || name === vm.documentConfigContent.GridColumn8Header
-                        || name == vm.documentConfigContent.GridColumn7Header) && !vm.globalSettings.isBackwardCompatible) {
+                if ((name === vm.documentConfigContent.GridColumn1Header ||  name === vm.documentConfigContent.GridColumn8Header                      
+                        ||name == vm.documentConfigContent.GridColumn7Header) && !vm.globalSettings.isBackwardCompatible) {
                     left = $event.clientX - 230;
                 }
-                if ((name === vm.documentConfigContent.GridColumn2Header || name === vm.documentConfigContent.GridColumn5Header) &&
+                if ((name === vm.documentConfigContent.GridColumn2Header || name === vm.documentConfigContent.GridColumn5Header) && 
                     !vm.globalSettings.isBackwardCompatible) {
                     left = $event.clientX - 110;
                 }
-
-                if (name === vm.documentConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible) {
+                
+                if (name === vm.documentConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible){
                     left = $event.clientX - 180;
                 }
                 if (name === vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible) {
@@ -2216,7 +2218,7 @@
                 if ((name === vm.documentConfigContent.GridColumn4Header || name == vm.documentConfigContent.GridColumn5Header) &&
                     vm.globalSettings.isBackwardCompatible) {
                     left = $event.clientX - 115;
-                }
+                } 
             }
             else {
                 //Logic if we use mouse
