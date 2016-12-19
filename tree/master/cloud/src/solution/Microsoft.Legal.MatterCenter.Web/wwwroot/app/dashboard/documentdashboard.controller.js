@@ -603,8 +603,25 @@
                         vm.getDocumentCounts();
                         vm.documentGridOptions.data = response;
                     } else {
-                        vm.getDocumentCounts();
-                        vm.documentGridOptions.data = response;
+                        documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                        getPinDocuments(documentRequest, function (pinnedResponse) {
+                            if (pinnedResponse && pinnedResponse.length > 0) {
+                                vm.pinDocumentCount = pinnedResponse.length;
+                                angular.forEach(pinnedResponse, function (pinobj) {
+                                    angular.forEach(response, function (res) {
+                                        if (pinobj.documentName == res.documentName) {
+                                            if (res.isDocumentDone == undefined && !res.isDocumentDone) {
+                                                res.isDocumentDone = true;
+                                                res.pinType = "unpin"
+                                            }
+                                        }
+                                    });
+                                });
+
+                            }
+                            vm.documentGridOptions.data = response;
+                            vm.getDocumentCounts();
+                        });
                     }
                 });
             }
@@ -816,19 +833,9 @@
                                     }
                                 });
                             });
-                            vm.documentGridOptions.data = response;
-                            vm.getDocumentCounts();
                         }
-                        else {
-                            vm.documentGridOptions.data = response;
-                            vm.getDocumentCounts();
-                            //vm.allDocumentCount = response.length;                            
-                            //vm.totalrecords = vm.allDocumentCount;
-                            //vm.pagination();
-                        }
-                        //vm.lazyloaderdashboard = true;
-                        //vm.divuigrid = true;
-
+                        vm.documentGridOptions.data = response;
+                        vm.getDocumentCounts();
                     });
 
                 });
@@ -1251,8 +1258,24 @@
                             vm.getDocumentCounts();
 
                         } else {
-                            vm.documentGridOptions.data = response;
-                            vm.getDocumentCounts();
+                            getPinDocuments(documentRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    vm.pinDocumentCount = pinnedResponse.length;
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            if (pinobj.documentName == res.documentName) {
+                                                if (res.isDocumentDone == undefined && !res.isDocumentDone) {
+                                                    res.isDocumentDone = true;
+                                                    res.pinType = "unpin"
+                                                }
+                                            }
+                                        });
+                                    });
+
+                                }
+                                vm.documentGridOptions.data = response;
+                                vm.getDocumentCounts();
+                            });
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }

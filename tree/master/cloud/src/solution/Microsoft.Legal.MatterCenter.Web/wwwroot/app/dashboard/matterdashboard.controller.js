@@ -631,8 +631,31 @@
                     if (response == "" || response.length == 0) {
                         vm.getMatterCounts();
                     } else {
-                        vm.getMatterCounts();
-                        vm.matterGridOptions.data = response;
+                        //vm.getMatterCounts();
+                        //vm.matterGridOptions.data = response;
+                        getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                            if (pinnedResponse && pinnedResponse.length > 0) {
+                                vm.Pinnedobj = pinnedResponse;
+                                vm.pinMatterCount = vm.Pinnedobj.length
+                                angular.forEach(pinnedResponse, function (pinobj) {
+                                    angular.forEach(response, function (res) {
+                                        //Check if the pinned matter name is equal to search matter name
+                                        if (pinobj.matterName == res.matterName) {
+                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                res.ismatterdone = true;
+                                                res.pinType = "unpin"
+                                            }
+                                        }
+                                    });
+                                });
+                            }
+                            else {
+                                vm.pinMatterCount = 0;
+                            }
+                            vm.selectedTabCount = vm.myMatterCount;
+                            vm.matterGridOptions.data = response;
+                            vm.getMatterCounts();
+                        });
                     }
                 });
             }
@@ -1667,11 +1690,34 @@
                             vm.getMatterCounts();
                             $scope.errorMessage = response.message;
                         } else {
-                            vm.matterGridOptions.data = response;
-                            vm.getMatterCounts();
-                            if (!$scope.$$phase) {
-                                $scope.$apply();
-                            }
+                            //vm.matterGridOptions.data = response;
+                            //vm.getMatterCounts();
+                            //if (!$scope.$$phase) {
+                            //    $scope.$apply();
+                            //}
+                            getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                                if (pinnedResponse && pinnedResponse.length > 0) {
+                                    vm.Pinnedobj = pinnedResponse;
+                                    vm.pinMatterCount = vm.Pinnedobj.length
+                                    angular.forEach(pinnedResponse, function (pinobj) {
+                                        angular.forEach(response, function (res) {
+                                            //Check if the pinned matter name is equal to search matter name
+                                            if (pinobj.matterName == res.matterName) {
+                                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                                    res.ismatterdone = true;
+                                                    res.pinType = "unpin"
+                                                }
+                                            }
+                                        });
+                                    });                                    
+                                }
+                                else {
+                                    vm.pinMatterCount = 0;
+                                }
+                                vm.selectedTabCount = vm.myMatterCount;
+                                vm.matterGridOptions.data = response;
+                                vm.getMatterCounts();
+                            });
                         }
                     });
                 }

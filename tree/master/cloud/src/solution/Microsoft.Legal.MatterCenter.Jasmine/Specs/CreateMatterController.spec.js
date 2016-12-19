@@ -56,21 +56,21 @@ describe("CreateMatter Controller test suite", function () {
         });
     });
 
-    describe("Verification of selectMatterTypePopUpClose function", function () {
-        it("It should hide popupContainerBackground and popupContainer", function () {
-            vm.popupContainer = "Show";
-            vm.selectMatterTypePopUpClose();
-            expect(vm.popupContainerBackground).toBe("hide");
-            expect(vm.popupContainer).toBe("hide");
-        });
+    //describe("Verification of selectMatterTypePopUpClose function", function () {
+    //    it("It should hide popupContainerBackground and popupContainer", function () {
+    //        vm.popupContainer = "Show";
+    //        //vm.selectMatterTypePopUpClose();
+    //        expect(vm.popupContainerBackground).toBe("hide");
+    //        expect(vm.popupContainer).toBe("hide");
+    //    });
 
-        it("It should show popupContainerBackground and should hide popupContainer", function () {
-            vm.popupContainer = "hide";
-            vm.selectMatterTypePopUpClose();
-            expect(vm.popupContainerBackground).toBe("Show");
-            expect(vm.popupContainer).toBe("hide");
-        });
-    });
+    //    it("It should show popupContainerBackground and should hide popupContainer", function () {
+    //        vm.popupContainer = "hide";
+    //        vm.selectMatterTypePopUpClose();
+    //        expect(vm.popupContainerBackground).toBe("Show");
+    //        expect(vm.popupContainer).toBe("hide");
+    //    });
+    //});
 
     describe("Verification of selectDocumentTemplateTypeLawTerm function", function () {
         it("It should not return null value for the document template type term", function () {
