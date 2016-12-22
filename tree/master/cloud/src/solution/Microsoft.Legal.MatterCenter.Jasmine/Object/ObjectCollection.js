@@ -184,7 +184,8 @@ var mockSettingsResource = {
     'getPermissionLevels': '/api/v1/user/getpermissionlevels',
     'getUsers': '/api/v1/user/getusers',
     'getDefaultConfigurations': '/api/v1/matter/getconfigurations',
-    'saveConfigurations': '/api/v1/matter/saveconfigurations'
+    'saveConfigurations': '/api/v1/matter/saveconfigurations',
+    'isLoginUserOwner': '/api/v1/user/isowner'
 };
 
 var selectedPracticeGroup = {

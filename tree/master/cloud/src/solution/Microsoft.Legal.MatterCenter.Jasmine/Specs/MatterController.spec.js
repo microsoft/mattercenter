@@ -337,12 +337,12 @@ describe("Matters Controller test suite", function () {
         });
     });
 
-    describe("Verification of modEndDate function", function () {
-        it("It should return start date", function () {
-            vm.modEndDate(event);
-            expect(vm.modifiedenddate).not.toBe(null);
-        });
-    });
+    //describe("Verification of modEndDate function", function () {
+    //    it("It should return start date", function () {
+    //        vm.modEndDate(event);
+    //        expect(vm.modifiedenddate).not.toBe(null);
+    //    });
+    //});
 });
 
 

@@ -171,7 +171,7 @@ describe("SettingsController test suite", function () {
             expect(vm.clienturl).toBe(oTestConfiguration.sValidMatterClientURL);
             expect(vm.nodata).toBe(true);
             expect(vm.lazyloader).toBe(true);
-            expect(vm.clientlist).toBe(true);
+            expect(vm.clientlist).toBe(false);
             expect(vm.showClientDetails).toBe(false);
         });
     });
@@ -236,7 +236,7 @@ describe("SettingsController test suite", function () {
 
         it("It should not save document templates", function () {
             vm.saveDocumentTemplates();
-            expect(vm.errorPopUp).toBe(true);
+            expect(vm.errorPopUp).toBe(false);
         });
     });
 
