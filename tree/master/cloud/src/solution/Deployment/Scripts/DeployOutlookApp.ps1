@@ -118,9 +118,9 @@ if($ExchangeCredential -eq $null) {
 	$ExchangeCredential = Get-Credential -Message "Enter credentials to access Exchange server."
 }
 
-$appDirectory = Join-Path $DeployPath "Exchange App\"
+$appDirectory = Join-Path $DeployPath "Microsoft.Legal.MatterCenter_Outlook\Microsoft.Legal.MatterCenter_OutlookManifest\"
 $AppFiles = Get-ChildItem –Path $appDirectory # Get the .app files
-$AppNames = "Matter Center Beta" # App Names
+$AppNames = "Matter Center" # App Names
 $AppNames = $AppNames.Split(';')
 
 Show-Message -Message "Reading inputs from Excel..." -Type ( [MessageType]::Warning )

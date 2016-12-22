@@ -82,6 +82,11 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
         public const string BACKSLASH = "\\";
 
         /// <summary>
+        /// Defining constant string variable XML_OUTLOOK
+        /// </summary>
+        public const string XML_FILE_PATH = "\\solution";
+
+        /// <summary>
         /// Defining constant string variable XML_OFFICE
         /// </summary>
         public const string XML_OFFICE = "Office";
@@ -89,7 +94,18 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
         /// <summary>
         /// Defining constant string variable XML_OUTLOOK
         /// </summary>
-        public const string XML_OUTLOOK = "Exchange";
+        public const string XML_OUTLOOK = "Outlook";
+
+        /// <summary>
+        /// Defining constant string variable XML_OUTLOOK
+        /// </summary>
+        public const string XML_DIR = "solution";
+
+        /// <summary>
+        /// Defining constant string variable XML_OUTLOOK
+        /// </summary>
+        public const string XML_MANIFEST = "Manifest";
+
 
         /// <summary>
         /// Defining constant string variable PAGES

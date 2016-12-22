@@ -303,7 +303,8 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
             {
                 try
                 {
-                    DirectoryInfo directoryInfo = new DirectoryInfo(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName);
+                    DirectoryInfo directoryInfo = new DirectoryInfo(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName + ConstantStrings.XML_FILE_PATH);
+
                     Console.WriteLine(directoryInfo.FullName);
                     DirectoryInfo[] directory = directoryInfo.GetDirectories();
 
@@ -311,38 +312,45 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                     {
                         if (dir.Name.Contains(ConstantStrings.XML_OFFICE) || dir.Name.Contains(ConstantStrings.XML_OUTLOOK))
                         {
-                            List<FileInfo> manifestFile = dir.GetFiles(ConstantStrings.XML_EXTENSION).ToList();
-                            if (manifestFile.Count > 0)
-                            {
-                                Console.WriteLine("Updating " + manifestFile[0].Name + " file");
-                                string inputXMLFile = manifestFile[0].DirectoryName + ConstantStrings.BACKSLASH + manifestFile[0].Name;
-                                XmlDocument doc = UpdateManifest(inputXMLFile, excelInput, "sourceLocation", "defaultValue", "UISiteURL", false);
-                                doc.Save(inputXMLFile);
-                                doc = UpdateManifest(inputXMLFile, excelInput, "iconUrl", "defaultValue", "UISiteURL", false);
-                                // Update App Domains
-                                string appDomainTag = ConfigurationManager.AppSettings["appDomain"];
-                                XmlNodeList clientElement = doc.GetElementsByTagName(appDomainTag);
 
-                                if (null != clientElement && clientElement.Count > 0 && clientElement.Count == 4)
+                            Console.WriteLine(dir.FullName);
+                            DirectoryInfo[] directories = dir.GetDirectories();
+                            foreach (DirectoryInfo dire in directories)
+                            {
+                                if (dire.Name.Contains(ConstantStrings.XML_MANIFEST))
                                 {
-                                    int iAppDomain = 1;
-                                    foreach (XmlNode appDomain in clientElement)
+                                    Console.WriteLine(dir.FullName);
+                                    List<FileInfo> manifestFile = dire.GetFiles(ConstantStrings.XML_EXTENSION).ToList();
+
+                                    if (manifestFile.Count > 0)
                                     {
-                                        switch (iAppDomain)
+                                        Console.WriteLine("Updating " + manifestFile[0].Name + " file");
+                                        string inputXMLFile = manifestFile[0].DirectoryName + ConstantStrings.BACKSLASH + manifestFile[0].Name;
+                                        XmlDocument doc = UpdateManifest(inputXMLFile, excelInput, "sourceLocation", "defaultValue", "UISiteURL", false);
+                                        doc.Save(inputXMLFile);
+                                        doc = UpdateManifest(inputXMLFile, excelInput, "iconUrl", "defaultValue", "UISiteURL", false);
+                                        // Update App Domains
+                                        string appDomainTag = ConfigurationManager.AppSettings["appDomain"];
+                                        XmlNodeList clientElement = doc.GetElementsByTagName(appDomainTag);
+
+                                        if (null != clientElement && clientElement.Count > 0)
                                         {
-                                            case 2:
-                                                appDomain.InnerText = excelInput[ConstantStrings.AZURE_UI_SITE_URL];
-                                                break;                                            
-                                            case 4:
-                                                appDomain.InnerText = excelInput[ConstantStrings.TENANT_URL];
-                                                break;
+                                            foreach (XmlNode appDomain in clientElement)
+                                            {
+                                                if (appDomain.InnerText.ToLower().Contains("siteurl"))
+                                                {
+                                                    appDomain.InnerText = excelInput[ConstantStrings.AZURE_UI_SITE_URL];
+                                                }
+                                                else if (appDomain.InnerText.ToLower().Contains("tenanturl"))
+                                                {
+                                                    appDomain.InnerText = excelInput[ConstantStrings.TENANT_URL];
+                                                }
+                                            }
+                                            doc.Save(inputXMLFile);
+                                            Console.WriteLine("Successfully updated " + manifestFile[0].Name + " file");
                                         }
-                                        iAppDomain++;
                                     }
                                 }
-
-                                doc.Save(inputXMLFile);
-                                Console.WriteLine("Successfully updated " + manifestFile[0].Name + " file");
                             }
                         }
                     }
