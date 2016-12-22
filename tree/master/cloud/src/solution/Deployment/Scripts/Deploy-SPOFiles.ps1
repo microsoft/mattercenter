@@ -110,17 +110,17 @@ Function Deploy-SPOFiles
 	##---------------------------------------------------------------------
 	## Upload files required for Matter landing page to SharePoint library
 	##---------------------------------------------------------------------
-	#Show-Message -Message "Upload files to SharePoint Library"
-	#[Environment]::CurrentDirectory = Get-Location
-	#& "$HelperPath\Microsoft.Legal.MatterCenter.UploadFile.exe" "true" $UserName $Password $WebSiteName $global:appInsightsId
+	Show-Message -Message "Upload files to SharePoint Library"
+	[Environment]::CurrentDirectory = Get-Location
+	& "$HelperPath\Microsoft.Legal.MatterCenter.UploadFile.exe" "true" $UserName $Password $WebSiteName $global:appInsightsId
 
-	#If ((Get-Content $ErrorLogFile) -ne $Null) {
-	#	Show-Message -Message "Uploading files to SharePoint Library failed" -Type ([MessageType]::Failure)    
-	#	return
-	#}
-	#else {
-	#	Show-Message -Message "Completed uploading files to SharePoint library" -Type ([MessageType]::Success)
-	#}
+	If ((Get-Content $ErrorLogFile) -ne $Null) {
+		Show-Message -Message "Uploading files to SharePoint Library failed" -Type ([MessageType]::Failure)    
+		return
+	}
+	else {
+		Show-Message -Message "Completed uploading files to SharePoint library" -Type ([MessageType]::Success)
+	}
     
     #---------------------------------------------------------------------
     # Provisioning Web Dashboard page(s) on SharePoint library

@@ -201,7 +201,7 @@ $DeployPath = "$RootPath\solution"
 
 #Set Excel file path, uncomment below line if you want to use this script separately
 #$ExcelFilePath = "$ParentDirectory\MCDeploymentConfig.xlsx"
-#$ExcelFilePath = "C:\Repos\mattercenter2\tree\master\cloud\src\deployments\deployments\MCDeploymentConfig.xlsx"
+
     
 # Set log file path, uncomment below line if you want to use this script separately
 #$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt"
