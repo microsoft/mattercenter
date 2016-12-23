@@ -128,6 +128,7 @@ param
     try
     {
 		Show-Message -Message "Fetching Client Context" -Type ( [MessageType]::Warning )
+		$Assembly = [Reflection.Assembly]::LoadFile(“$ExternalPath\Microsoft.SharePoint.Client.dll”)
         $context = New-Object Microsoft.SharePoint.Client.ClientContext($webUrl)
 
         if($SPCredential -eq $null)
@@ -191,22 +192,40 @@ $ScriptDirectory = (ScriptRoot)
 Function Get-ParentDirectory {Split-Path -Parent(Split-Path $MyInvocation.ScriptName)}
 $ParentDirectory = (Get-ParentDirectory)
 
+# Set  folder paths
+$RootPath = Split-Path(Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) -Parent
+$DeployPath = "$RootPath\deployments"
+$HelperPath = "$RootPath\deployments\scripts\Helper Utilities"
+$ExternalPath = "$RootPath\Helper Utilities\External"
+$DeployPath = "$RootPath\solution"
+
 #Set Excel file path, uncomment below line if you want to use this script separately
 #$ExcelFilePath = "$ParentDirectory\MCDeploymentConfig.xlsx"
+
     
 # Set log file path, uncomment below line if you want to use this script separately
 #$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt"
+# Set error log file path
+$ErrorLogFile = "$ScriptDirectory\Logs\ErrorLog.txt" 
 
 #App Catalog URL for Office Apps
 $DocLibName = "Apps for Office"
 
 #Fetch the Folder containing the XML files for Office Apps
-$FolderPath = Join-Path $DeployPath "Office App"
+
+$FolderPath = Join-Path $DeployPath "Microsoft.Legal.MatterCenter_Office\Microsoft.Legal.MatterCenter_OfficeManifest"
+
+
 
 #Fetch the Catalog URL from the Excel File
 Show-Message -Message "Fetching the Catalog URL from the Configuration File" -Type ( [MessageType]::Warning )
 $ExcelValues = Read-FromExcel $ExcelFilePath "Config" ("CatalogSiteURL") $ErrorLogFile
-$ExcelValues = $ExcelValues.Split(";")
+
+if($ExcelValues -is [system.string]){
+        $ExcelValues = $ExcelValues.Split(";")
+}
+												
+
 if($ExcelValues.length -le 0)
 {
     Write-Log $ErrorLogFile "Error reading values from Excel file. Aborting!"
