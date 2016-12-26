@@ -554,6 +554,27 @@
 
             //#endregion
 
+            vm.showMatterAsPinOrUnpin = function (response, searchRequest) {
+                documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                getPinDocuments(searchRequest, function (pinnedResponse) {
+                    if (pinnedResponse && pinnedResponse.length > 0) {
+                        vm.pinDocumentCount = pinnedResponse.length;
+                        angular.forEach(pinnedResponse, function (pinobj) {
+                            angular.forEach(response, function (res) {
+                                if (pinobj.documentName == res.documentName) {
+                                    if (res.isDocumentDone == undefined && !res.isDocumentDone) {
+                                        res.isDocumentDone = true;
+                                        res.pinType = "unpin"
+                                    }
+                                }
+                            });
+                        });
+
+                    }
+                    vm.documentGridOptions.data = response;
+                    vm.getDocumentCounts();
+                });
+            }
 
             vm.selected = "";
             vm.searchClicked = false;
@@ -603,8 +624,9 @@
                         vm.getDocumentCounts();
                         vm.documentGridOptions.data = response;
                     } else {
-                        vm.getDocumentCounts();
-                        vm.documentGridOptions.data = response;
+                        //vm.getDocumentCounts();
+                        //vm.documentGridOptions.data = response;
+                        vm.showMatterAsPinOrUnpin(response, documentRequest);
                     }
                 });
             }
@@ -802,35 +824,7 @@
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not
-                    documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
-                    getPinDocuments(documentRequest, function (pinnedResponse) {
-                        if (pinnedResponse && pinnedResponse.length > 0) {
-                            vm.pinDocumentCount = pinnedResponse.length;
-                            angular.forEach(pinnedResponse, function (pinobj) {
-                                angular.forEach(response, function (res) {
-                                    if (pinobj.documentName == res.documentName) {
-                                        if (res.isDocumentDone == undefined && !res.isDocumentDone) {
-                                            res.isDocumentDone = true;
-                                            res.pinType = "unpin"
-                                        }
-                                    }
-                                });
-                            });
-                            vm.documentGridOptions.data = response;
-                            vm.getDocumentCounts();
-                        }
-                        else {
-                            vm.documentGridOptions.data = response;
-                            vm.getDocumentCounts();
-                            //vm.allDocumentCount = response.length;                            
-                            //vm.totalrecords = vm.allDocumentCount;
-                            //vm.pagination();
-                        }
-                        //vm.lazyloaderdashboard = true;
-                        //vm.divuigrid = true;
-
-                    });
-
+                    vm.showMatterAsPinOrUnpin(response, documentRequest);
                 });
             }
             //#endregion
@@ -1251,8 +1245,7 @@
                             vm.getDocumentCounts();
 
                         } else {
-                            vm.documentGridOptions.data = response;
-                            vm.getDocumentCounts();
+                            vm.showMatterAsPinOrUnpin(response, documentRequest);
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1602,11 +1595,7 @@
                         //documentRequest.SearchObject.Sort.ByColumn = "";
                         vm.getDocumentCounts();
                     } else {
-                        vm.documentGridOptions.data = response;
-                        //documentRequest.SearchObject.Sort.ByProperty = "";
-                        //documentRequest.SearchObject.Sort.Direction = 1;
-                        //documentRequest.SearchObject.Sort.ByColumn = "";
-                        vm.getDocumentCounts();
+                        vm.showMatterAsPinOrUnpin(response, documentRequest);
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
