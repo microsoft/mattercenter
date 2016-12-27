@@ -1371,11 +1371,11 @@
     top: 8px;
 }
 .loadingGlyphiconBlockUser {
-    left: -17px;
+    left: -19px;
     top: 8px;
 }
 .loadingGlyphiconCCheck{
-left: -17px;
+left: -19px;
     top: 31px;
 }
 
@@ -1569,7 +1569,12 @@ left: -17px;
     right: 15px;
     position: absolute;
 }
-
+.gly-spin {
+    -webkit-animation: spin 2s infinite linear;
+    -moz-animation: spin 2s infinite linear;
+    -o-animation: spin 2s infinite linear;
+    animation: spin 2s infinite linear;
+}
 
 
 

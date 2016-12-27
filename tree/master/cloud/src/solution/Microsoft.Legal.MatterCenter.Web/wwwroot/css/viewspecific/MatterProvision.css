@@ -1355,6 +1355,15 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
     margin-left: 2px;
 }
 
+.loadGlyphIconSettings{
+       left: -35px;
+    top: 11px;
+}
+#SettingsPermissions .dropdown-menu li {
+        max-width: 295px;
+    min-width: 295px;
+}
+
 @media (max-width: 860px) {
     .container {
         position: relative;
@@ -1594,7 +1603,14 @@ _::-moz-svg-foreign-content, :root .ddlRoleAssignList, :root .ddlPermAssignList 
     #conflictCheckBy, #checkedPerformedOn {
         margin-bottom: 50px;
     }
-
+.mediumPermissions {
+        min-width: 295px !important;
+        max-width: 295px !important;
+    } 
+.loadGlyphIconSettings{
+    left: -15px;
+    top: 11px;
+}
     #txtConflictCheckBy {
         position: absolute;
         left: 0;

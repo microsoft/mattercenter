@@ -665,7 +665,8 @@
 
             var getUserName = function (sUserEmails, bIsName) {
                 "use strict";
-                var arrUserNames = [], arrTempUserNames = [], sEmail = "", oEmailRegex = new RegExp("^[\\s]*\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*[\\s]*$");
+               var oEmailRegexp= /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+               var arrUserNames = [], arrTempUserNames = [], sEmail = "", oEmailRegex = new RegExp(oEmailRegexp);
                 if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
                     arrUserNames = sUserEmails.split(";");
                     for (var iIterator = 0; iIterator < arrUserNames.length - 1; iIterator++) {

@@ -35,11 +35,11 @@
 
     <div class="row margin0 marginTop10 matterUsersSection" data-ng-repeat="assignTeam in cm.assignPermissionTeams">
         <div class="col-xs-4">
-            <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' assignteamkeydown confirm="false" uservalue="" class="form-control matterTxtInputCtrl" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" spellcheck="true" type="text" placeholder="Enter and select names" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
+            <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' assignteamkeydown confirm="false" uservalue="" class="form-control matterTxtInputCtrl" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" typeahead-min-length='3' uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" spellcheck="true" type="text" placeholder="Enter and select names" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
             <div ng-show='teamAssingnResults'>
                 <i class="glyphicon glyphicon-remove"></i> No Results Found
-            </div>            
-                <i ng-show='loadingLocations' class="glyphicon glyphicon-refresh pull-right loadMatterUsersGlyphicon"></i> 
+            </div>
+            <img ng-show="loadingLocations" class="glyphicon glyphicon-refresh loadMatterUsersGlyphicon gly-spin pull-right" src="../../images/loadingcirclests16.gif" />
           
         </div>
         <div class="col-xs-3" ng-show="cm.showRoles">
