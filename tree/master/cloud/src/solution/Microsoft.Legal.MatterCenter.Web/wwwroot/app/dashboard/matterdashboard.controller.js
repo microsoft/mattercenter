@@ -375,6 +375,33 @@
                 }
             };
 
+            vm.showMatterAsPinOrUnpin = function (response, searchRequest) {
+                jsonMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
+                getPinnedMatters(jsonMatterSearchRequest, function (pinnedResponse) {
+                    if (pinnedResponse && pinnedResponse.length > 0) {
+                        vm.Pinnedobj = pinnedResponse;
+                        vm.pinMatterCount = vm.Pinnedobj.length
+                        angular.forEach(pinnedResponse, function (pinobj) {
+                            angular.forEach(response, function (res) {
+                                //Check if the pinned matter name is equal to search matter name
+                                if (pinobj.matterName == res.matterName) {
+                                    if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                        res.ismatterdone = true;
+                                        res.pinType = "unpin"
+                                    }
+                                }
+                            });
+                        });
+                    }
+                    else {
+                        vm.pinMatterCount = 0;
+                    }
+                    vm.matterGridOptions.data = response;
+                    vm.getMatterCounts();
+                });
+
+            }
+
             //#reion This function will get counts for all matters, my matters and pinned matters
             vm.getMatterCounts = function () {
                 vm.lazyloaderdashboard = false;
@@ -631,8 +658,7 @@
                     if (response == "" || response.length == 0) {
                         vm.getMatterCounts();
                     } else {
-                        vm.getMatterCounts();
-                        vm.matterGridOptions.data = response;
+                        vm.showMatterAsPinOrUnpin(response, jsonMatterSearchRequest);
                     }
                 });
             }
@@ -1667,8 +1693,7 @@
                             vm.getMatterCounts();
                             $scope.errorMessage = response.message;
                         } else {
-                            vm.matterGridOptions.data = response;
-                            vm.getMatterCounts();
+                            vm.showMatterAsPinOrUnpin(response, jsonMatterSearchRequest);
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -2185,11 +2210,7 @@
 
                             }
                             else {
-                                vm.matterGridOptions.data = response;
-                                //jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
-                                //jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
-                                //jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
-                                vm.getMatterCounts();
+                                vm.showMatterAsPinOrUnpin(response, jsonMatterSearchRequest);
                             }
                             $interval(function () { vm.setPaginationHeight() }, 500, angular.element(".ui-grid-canvas").css('visibility') != 'hidden');
                         });
