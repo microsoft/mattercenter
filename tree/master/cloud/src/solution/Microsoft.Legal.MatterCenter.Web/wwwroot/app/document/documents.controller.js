@@ -286,6 +286,35 @@
 
         };
 
+        vm.showDocumentAsPinOrUnpin = function (searchRequest, response) {
+            getPinnedDocuments(searchRequest, function (pinresponse) {
+                if (pinresponse.length > 0) {
+                    angular.forEach(pinresponse, function (pinobj) {
+                        angular.forEach(response, function (res) {
+                            var pinnedUrl = pinobj.documentParentUrl + "/" + pinobj.documentName
+                            var searchDocumentUrl = res.documentParentUrl + "/" + res.documentName
+                            if (pinnedUrl == searchDocumentUrl) {
+                                if (res.ismatterdone == undefined && !res.ismatterdone) {
+                                    res.MatterInfo = "Unpin this matter";
+                                    res.ismatterdone = true;
+                                }
+                            }
+                        });
+                    });
+                    vm.gridOptions.data = response;
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                } else {
+                    vm.gridOptions.data = response;
+                    if (!$scope.$$phase) {
+                        $scope.$apply();
+                    }
+                }
+                $timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
+                $interval(function () { vm.showSortExp(); }, 2500, 3);
+            });
+        }
 
         function isOpenedInOutlook() {
             //If the app is opened in outlook, then the below validation is going to be applied
@@ -721,10 +750,11 @@
                     vm.nodata = true;
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
+                    vm.showDocumentAsPinOrUnpin(searchRequest, response);
                     //vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
-                    vm.gridOptions.data = response;
+                    
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 }
@@ -937,7 +967,7 @@
                         //vm.nodata = false;
                         vm.lazyloaderFilter = true;
                         if (bool) {
-                            vm.gridOptions.data = response;
+                            vm.showDocumentAsPinOrUnpin(searchRequest, response)
                             vm.details = [];
                             vm.lazyloader = true;
                             if (!$scope.$$phase) {
@@ -1328,33 +1358,7 @@
                         //searchRequest.SearchObject.Filters.FilterByMe = 0;
                         //searchRequest.SearchObject.Sort.ByColumn = "documentName";
                         searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
-                        getPinnedDocuments(searchRequest, function (pinresponse) {
-                            if (pinresponse.length > 0) {
-                                angular.forEach(pinresponse, function (pinobj) {
-                                    angular.forEach(response, function (res) {
-                                        var pinnedUrl = pinobj.documentParentUrl + "/" + pinobj.documentName
-                                        var searchDocumentUrl = res.documentParentUrl + "/" + res.documentName
-                                        if (pinnedUrl == searchDocumentUrl) {
-                                            if (res.ismatterdone == undefined && !res.ismatterdone) {
-                                                res.MatterInfo = "Unpin this matter";
-                                                res.ismatterdone = true;
-                                            }
-                                        }
-                                    });
-                                });
-                                vm.gridOptions.data = response;
-                                if (!$scope.$$phase) {
-                                    $scope.$apply();
-                                }
-                            } else {
-                                vm.gridOptions.data = response;
-                                if (!$scope.$$phase) {
-                                    $scope.$apply();
-                                }
-                            }
-                            $timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
-                            $interval(function () { vm.showSortExp(); }, 2500, 3);
-                        });
+                        vm.showDocumentAsPinOrUnpin(searchRequest, response)
                     }
                 });
 
@@ -2056,6 +2060,7 @@
             else {
                 angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 93);
             }
+
             angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
             angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
             if ($window.innerWidth < 380) {

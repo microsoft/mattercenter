@@ -9,8 +9,9 @@
   <Description DefaultValue="Matter Center Beta App allows you to search Matters, Documents and create Matter for particular Client"/>
   <IconUrl DefaultValue="https://matterwebapp.azurewebsites.net/Images/64x64-logo.png" />
   <AppDomains>
+    <AppDomain>siteurl</AppDomain>
+    <AppDomain>tenanturl</AppDomain>
     <AppDomain>https://login.microsoftonline.com/</AppDomain>
-    <AppDomain>https://matterwebapp.azurewebsites.net</AppDomain>
     <AppDomain>https://cdnjs.cloudflare.com/</AppDomain>
     <AppDomain>https://appsforoffice.microsoft.com/</AppDomain>
     
