@@ -554,7 +554,7 @@
 
             //#endregion
 
-            vm.showMatterAsPinOrUnpin = function (response, searchRequest) {
+            vm.showDocumentAsPinOrUnpin  = function (response, searchRequest) {
                 documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 getPinDocuments(searchRequest, function (pinnedResponse) {
                     if (pinnedResponse && pinnedResponse.length > 0) {
@@ -624,9 +624,7 @@
                         vm.getDocumentCounts();
                         vm.documentGridOptions.data = response;
                     } else {
-                        //vm.getDocumentCounts();
-                        //vm.documentGridOptions.data = response;
-                        vm.showMatterAsPinOrUnpin(response, documentRequest);
+                        vm.showDocumentAsPinOrUnpin(response, documentRequest);
                     }
                 });
             }
@@ -824,7 +822,7 @@
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not
-                    vm.showMatterAsPinOrUnpin(response, documentRequest);
+                    vm.showDocumentAsPinOrUnpin(response, documentRequest);
                 });
             }
             //#endregion
@@ -1245,7 +1243,7 @@
                             vm.getDocumentCounts();
 
                         } else {
-                            vm.showMatterAsPinOrUnpin(response, documentRequest);
+                            vm.showDocumentAsPinOrUnpin(response, documentRequest);
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1595,7 +1593,7 @@
                         //documentRequest.SearchObject.Sort.ByColumn = "";
                         vm.getDocumentCounts();
                     } else {
-                        vm.showMatterAsPinOrUnpin(response, documentRequest);
+                        vm.showDocumentAsPinOrUnpin(response, documentRequest);
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
