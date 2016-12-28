@@ -84,7 +84,6 @@
                 vm.matterType = $location.search().mattertype;
                 vm.selectedSubAOLs = vm.matterType;
             }
-
             //#endregion
 
             //#region closing all dropdowns on click of page
@@ -119,16 +118,8 @@
                 vm.subAolDropVisible = false;
                 vm.subAoldrop = false;
                 isOpen = false;
-                //if (vm.openedStartDate == true) {
-                //    vm.openedStartDate = false;
-                //}
-                //if (vm.openedEndDate == true) {
-                //    vm.openedEndDate = false;
-                //}
-
             }
             //#endregion
-
 
             var gridOptions = {
                 paginationPageSize: 30,
@@ -215,9 +206,7 @@
                     return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
                 }
             }
-
             columnDefs1.sort(getSortFunction("position"));
-
 
             //#region Matter Grid functionality
             vm.matterGridOptions = {
@@ -345,7 +334,6 @@
                 });
             }
 
-
             //SearchRequest Object that will be filled up for different search requirements
             var jsonMatterSearchRequest = {
                 Client: {
@@ -426,7 +414,6 @@
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
-                    //vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + vm.myMatterCount + ")";
                     if (vm.tabClicked.toLowerCase() == vm.matterDashboardConfigs.Tab1HeaderText.toLowerCase() && !vm.searchClicked) {
                         vm.selectedTabInfo = vm.matterDashboardConfigs.Tab1HeaderText + " (" + response.myMatterCounts + ")";
                     } else if (vm.tabClicked.toLowerCase() == vm.matterDashboardConfigs.Tab2HeaderText.toLowerCase()) {
@@ -525,7 +512,6 @@
             }
             //#endregion
 
-
             //#regionThis search function will be used when the user enters some text in the search text box and presses search button
             vm.searchMatters = function (val) {
                 var searchMattersSearchRequest = {
@@ -616,7 +602,6 @@
                 jsonMatterSearchRequest.SearchObject.Sort.Direction = 0;
                 vm.FilterByType();
             }
-
             //#endregion
 
             //#region for searching matters when entering text in serach box
@@ -680,12 +665,11 @@
                 var finalSearchText = '';
                 if (vm.searchText != "") {
                     if (vm.searchText.indexOf("(") > -1) {
-                        searchToText = vm.searchText.replace("(", ",")
-                        searchToText = searchToText.replace(")", "")
-                        var firstText = searchToText.split(',')[0]
-                        var secondText = searchToText.split(',')[1]
-                        var finalSearchText = '(' + configs.search.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + configs.search.ManagedPropertyMatterId + ':"' + secondText.trim() + '")'
-                        //var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")'
+                        searchToText = vm.searchText.replace("(", ",");
+                        searchToText = searchToText.replace(")", "");
+                        var firstText = searchToText.split(',')[0];
+                        var secondText = searchToText.split(',')[1];
+                        var finalSearchText = '(' + configs.search.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + configs.search.ManagedPropertyMatterId + ':"' + secondText.trim() + '")';
                     } else {
                         finalSearchText = commonFunctions.searchFilter(vm.searchText);
                     }
@@ -750,19 +734,7 @@
                 vm.nodata = false;
                 var searchToText = '';
                 var finalSearchText = '';
-                //if (vm.searchText != "") {
-                //    if (vm.searchText.indexOf("(") > -1) {
-                //        searchToText = vm.searchText.replace("(", ",")
-                //        searchToText = searchToText.replace(")", "")
-                //        var firstText = searchToText.split(',')[0]
-                //        var secondText = searchToText.split(',')[1]
-                //        var finalSearchText = '(' + configs.search.ManagedPropertyMatterName + ':"' + firstText.trim() + '" AND ' + configs.search.ManagedPropertyMatterId + ':"' + secondText.trim() + '")'
-                //        //var finalSearchText = '(MCMatterName:"' + firstText.trim() + '" AND MCMatterID:"' + secondText.trim() + '")';
-                //    } else {
-                //        finalSearchText = commonFunctions.searchFilter(vm.searchText);
-                //    }
-                //}
-
+               
                 if (vm.searchText != "") {
 
                     if (vm.searchText.indexOf("(") == 0 && vm.searchText.indexOf(")") == vm.searchText.length - 1) {
@@ -825,7 +797,6 @@
                 });
             }
 
-
             //This function will pin or unpin the matter based on the image button clicked
             vm.pinorunpin = function (e, currentRowData) {
                 vm.popupContainer = false;
@@ -887,7 +858,6 @@
                                 e.currentTarget.title = "pin"
                             }
                             if (vm.pinMatterCount == 0) {
-                                //vm.divuigrid = false;
                                 vm.nodata = true;
                                 vm.displaypagination = false;
                             }
@@ -895,7 +865,6 @@
                         vm.popupContainer = true;
                     });
                 }
-
             }
 
             //#endregion 
@@ -1165,7 +1134,6 @@
                                 if (vm.selectedAOLs !== undefined && vm.selectedAOLs.length > 0) {
                                     vm.customSelection(vm.matterDashboardConfigs.AdvSearchLabel3InternalFuncParamText);
                                 }
-
                             });
                         }
                         else {
@@ -1200,7 +1168,6 @@
                             vm.aoldropvisible = true;
                         }
                     }
-
 
                     vm.clientdrop = false;
                     vm.clientdropvisible = false;
@@ -1509,8 +1476,7 @@
                     vm.selectedRow.matterClientUrl = matterUrl;
                     vm.selectedRow.matterGuid = matterGUID;
                 }
-
-
+                
                 vm.allAttachmentDetails = [];
                 var matterData = {
                     MatterName: vm.selectedRow.matterName,
@@ -1531,9 +1497,7 @@
                                     arr[i].children = children;
                                     arr[i].active = parent == null ? true : false;
                                 }
-
                                 parentList.push(arr[i]);
-
                             }
                         }
                         return parentList
@@ -1543,11 +1507,6 @@
                     if (vm.foldersList[0] !== null) { vm.showSelectedFolderTree(vm.foldersList[0]); }
 
                     jQuery('#UploadMatterModal').modal("show");
-                    //Initialize Officejs library                     
-                    //Office.initialize = function (reason) {
-                    //     vm.initOutlook();
-                    //};
-                    //vm.initOutlook();
                     vm.lazyloader = true;
                 });
             }
@@ -1557,7 +1516,6 @@
             vm.handleDesktopDrop = function (targetDropUrl, sourceFiles, isOverwrite) {
                 vm.oUploadGlobal.successBanner = false;
                 vm.isLoadingFromDesktopStarted = true;
-                // vm.files = sourceFiles.files;
                 var fd = new FormData();
                 fd.append('targetDropUrl', targetDropUrl);
                 fd.append('folderUrl', targetDropUrl)
@@ -1618,7 +1576,6 @@
 
                                         }
                                     }
-
                                     else {
                                         vm.IsDupliacteDocument = true;
                                         response.data[i].ok = "True";
@@ -1642,11 +1599,7 @@
             vm.uploadedFiles = [];
             //#endregion
 
-            //Call search api on page load
-            //$interval(function () { vm.getMatterCounts(); }, 800, 3);
-
-
-
+          
             //#region For Sorting by Alphebatical or Created date
 
             vm.FilterByType = function () {
@@ -1675,7 +1628,6 @@
                             vm.totalrecords = vm.pinMatterCount;
                             vm.selectedTabCount = vm.pinMatterCount;
                             vm.pagination();
-                            //vm.getMatterCounts();
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1701,7 +1653,6 @@
                     });
                 }
             }
-
 
             vm.sortExpression = function (byProperty, byColumn, sortDirection) {
                 jsonMatterSearchRequest.SearchObject.Sort.ByProperty = byProperty;
@@ -1748,11 +1699,9 @@
                     }
                 }
             }
-
             //#endregion
 
             //#region Pagination
-
             vm.first = 1;
             vm.last = gridOptions.paginationPageSize;
             vm.total = 0;
@@ -1945,9 +1894,7 @@
                 vm.clientdrop = true;
                 vm.clientdropvisible = true;
             }
-
             //endregion
-
 
             //#region upload desktop files functionality starts
             vm.oUploadGlobal = {
@@ -1979,7 +1926,6 @@
                 $rootScope.foldercontent = false;
 
             }
-
             //#region To getContentCheckConfigurations
             //start
 
@@ -1998,13 +1944,10 @@
                     if (!response.isError) {
                         var defaultMatterConfig = JSON.parse(response.code);
                         vm.oUploadGlobal.bAllowContentCheck = defaultMatterConfig.IsContentCheck;
-
                     } else {
                         vm.oUploadGlobal.bAllowContentCheck = false;
                     }
-
                 });
-
             }
 
             //#region To expand and collapse the folder tree structure in upload
@@ -2029,10 +1972,8 @@
                             }
                         });
                     }
-
                 }
                 setActiveItem(folder);
-
             }
             //#endRegion
             //#region To do contentcheck or save as latestversion
@@ -2060,12 +2001,7 @@
                             nOperation = "3";
                             break;
                     }
-                    // uploadFile(oUploadGlobal.sClientRelativeUrl, oUploadGlobal.sFolderUrl, nOperation);
-
-                    vm.handleDesktopDrop(vm.clientRelativeUrl, vm.files, nOperation);
-
-
-
+                    vm.handleDesktopDrop(vm.clientRelativeUrl, vm.files, nOperation);                    
                 } else {
                     duplicateFile.cancel = "False";
                     if (vm.ducplicateSourceFile.length > 0) {
@@ -2099,7 +2035,6 @@
                 file.contentCheck = "contentCheck";
                 file.saveLatestVersion = "False";
                 file.cancel = "False";
-
             }
             vm.abortContentCheck = function (file, isLocalUpload) {
                 "use strict";
@@ -2110,7 +2045,6 @@
                 file.saveLatestVersion = "True";
                 file.value = file.value + "<br/><div>" + vm.uploadMessages.content_Check_Abort + "</div>";
                 file.cancel = "True";
-
             }
 
             vm.closeSuccessBanner = function () {
@@ -2172,14 +2106,11 @@
                 }
                 jsonMatterSearchRequest.SearchObject.Filters.FilterByMe = 0;
                 jsonMatterSearchRequest.SearchObject.Filters.ClientsList = clientArray;
-                //jsonMatterSearchRequest.SearchObject.Filters.PGList = pglistArray;
-                //jsonMatterSearchRequest.SearchObject.Filters.AOLList = aolListarray;
                 jsonMatterSearchRequest.SearchObject.PageNumber = 1;
                 jsonMatterSearchRequest.SearchObject.Filters.FromDate = startdate;
                 jsonMatterSearchRequest.SearchObject.Filters.ToDate = enddate;
                 jsonMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 get(jsonMatterSearchRequest, function (response) {
-                    //vm.lazyloaderdashboard = true;
                     if (response == "" || response.length == 0) {
                         vm.matterGridOptions.data = [];
                         jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
@@ -2203,11 +2134,7 @@
                                     });
                                 });
                                 vm.matterGridOptions.data = response;
-                                //jsonMatterSearchRequest.SearchObject.Sort.ByProperty = "";
-                                //jsonMatterSearchRequest.SearchObject.Sort.Direction = 1;
-                                //jsonMatterSearchRequest.SearchObject.Sort.ByColumn = "";
                                 vm.getMatterCounts();
-
                             }
                             else {
                                 vm.showMatterAsPinOrUnpin(response, jsonMatterSearchRequest);
@@ -2231,7 +2158,6 @@
             }
             //#region Exporting to Excel Test
             vm.export = function () {
-                //vm.lazyloaderdashboard = false;
                 var exportMatterSearchRequest = {
                     Client: {
                         Url: configs.global.repositoryUrl
@@ -2258,20 +2184,16 @@
                     exportMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     get(exportMatterSearchRequest, function (response) {
                         if (response == "" || response.length == 0) {
-                            //vm.lazyloaderdashboard = true;
                         } else {
                             vm.exportDate = response;
 
                             $timeout(function () {
                                 $("#exportable").table2excel({
-                                    // exclude CSS class
                                     exclude: ".noExl",
                                     name: "Matters",
                                     filename: "Matters" //do not include extension
                                 });
-
                             }, 1000);
-
                         }
                     });
                 } else {
@@ -2287,7 +2209,6 @@
 
                             $timeout(function () {
                                 $("#exportable").table2excel({
-                                    // exclude CSS class
                                     exclude: ".noExl",
                                     name: "Matters",
                                     filename: "Matters" //do not include extension
@@ -2331,9 +2252,7 @@
             //#endregion
 
             //#region To display modal up in center of the screen...
-            //Start 
-
-
+            //Start
             vm.reposition = function () {
                 var modal = $(this)
 
@@ -2369,7 +2288,6 @@
                 else {
                     angular.element('.jsonGridFooter').css("top", height + 180);
                 }
-
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
@@ -2425,5 +2343,4 @@
             return filteredresult;
         };
     })
-
 })();

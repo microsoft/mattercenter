@@ -35,7 +35,6 @@
                 vm.levelFiveList = [];
             }
 
-
             //#region API to check whether the current login user is owner or not
             function isLoginUserOwner(optionsForClientUrl, callback) {
                 api({
@@ -128,13 +127,11 @@
                 var minContentHeight = (screenHeight) - (headerHeight + footerHeight);
                 angular.element("#contentDiv").css("min-height", minContentHeight);
             }
-
             //#endregion
 
             var optionsForClientUrl = {
                 Url: configs.global.isBackwardCompatible ? configs.global.repositoryUrl : configs.uri.SPOsiteURL
             };
-
 
             //#region requestobject for getting the taxonomy data
             var optionsForGroup = {
@@ -153,11 +150,9 @@
             vm.nodata = false;
             vm.lazyloader = false;
             //#region function for getting the client details
-            //input parameters building here for all the api's
             var optionsForPracticeGroup = new Object;
             optionsForPracticeGroup = {
                 Client: {
-
                     Url: configs.global.repositoryUrl
                 },
                 TermStoreDetails: {
@@ -167,7 +162,6 @@
                     DocumentTemplatesName: configs.taxonomy.subAreaOfLawDocumentContentTypeProperty,
                 }
             }
-
 
             vm.isLoginUserOwner = function () {
                 $timeout(function () { vm.lazyloader = false; }, 10);
@@ -191,7 +185,6 @@
                             angular.element('#matterCenterHeader').addClass('hideCommonContent');
                             angular.element('#footer').removeClass('commonContent');
                             angular.element('#footer').addClass('hideCommonContent');
-
                         }
                         vm.lazyloader = true;
                         vm.popupContainerBackground = "hide";
@@ -200,7 +193,6 @@
             }
 
             vm.isLoginUserOwner();
-
             vm.taxonomydata = [];
             vm.getTaxonomyData = function () {
                 vm.popupContainerBackground = "Show";
@@ -254,7 +246,6 @@
                 }
             }
 
-
             //#region setting the request object for getting roles and permission levels
             var rolesRequest = new Object;
             rolesRequest = {
@@ -301,9 +292,6 @@
                 });
             }
             //#endregion
-
-
-
 
             //#region for getting the users based on search values
             vm.searchUsers = function (val) {
@@ -359,11 +347,8 @@
             function setDefaultTaxonomyHierarchyLeveTwo(arrDMatterTypes, dPrimaryMatterType) {
                 angular.forEach(vm.levelOneList, function (levelOneTerm) {
                     angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
-
                         for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
-
                             if (levelTwoTerm.termName == arrDMatterTypes[iCount]) {
-                                //  vm.selectedDocumentTypeLawTerms = 
                                 var documentType = levelTwoTerm;
                                 documentType.levelOneFolderNames = levelOneTerm.folderNames;
                                 documentType.levelOneTermId = levelOneTerm.id;
@@ -375,7 +360,6 @@
                                     documentType.levelTwoTermName = levelTwoTerm.termName;
                                     documentType.termChainName = documentType.termChainName + ">" + documentType.levelTwoTermName;
                                 }
-
                                 vm.documentTypeLawTerms.push(documentType);
                                 documentType.primaryMatterType = false;
                                 if (levelTwoTerm.termName == dPrimaryMatterType) {
@@ -384,24 +368,18 @@
                                 }
                                 vm.selectedDocumentTypeLawTerms.push(documentType);
                             }
-
                         }
                     });
-
                 });
-
             }
             //
             function setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType) {
                 angular.forEach(vm.levelOneList, function (levelOneTerm) {
                     angular.forEach(levelOneTerm.level2, function (levelTwoTerm) {
-
                         angular.forEach(levelTwoTerm.level3, function (levelThreeTerm) {
-
                             for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
 
                                 if (levelThreeTerm.termName == arrDMatterTypes[iCount]) {
-                                    //  vm.selectedDocumentTypeLawTerms = 
                                     var documentType = levelThreeTerm;
                                     documentType.levelOneFolderNames = levelOneTerm.folderNames;
                                     documentType.levelOneTermId = levelOneTerm.id;
@@ -427,15 +405,9 @@
                                     }
                                     vm.selectedDocumentTypeLawTerms.push(documentType);
                                 }
-
                             }
                         });
-
                     });
-
-
-
-
                 });
             }
             function setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes, dPrimaryMatterType) {
@@ -447,7 +419,6 @@
                                 for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
 
                                     if (levelFourTerm.termName == arrDMatterTypes[iCount]) {
-                                        //  vm.selectedDocumentTypeLawTerms = 
                                         var documentType = levelFourTerm;
                                         documentType.levelOneFolderNames = levelOneTerm.folderNames;
                                         documentType.levelOneTermId = levelOneTerm.id;
@@ -480,10 +451,8 @@
                                         }
                                         vm.selectedDocumentTypeLawTerms.push(documentType);
                                     }
-
                                 }
                             });
-
                         });
                     });
                 });
@@ -498,7 +467,6 @@
                                     for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
 
                                         if (levelFiveTerm.termName == arrDMatterTypes[iCount]) {
-                                            //  vm.selectedDocumentTypeLawTerms = 
                                             var documentType = levelFiveTerm;
                                             documentType.levelOneFolderNames = levelOneTerm.folderNames;
                                             documentType.levelOneTermId = levelOneTerm.id;
@@ -528,8 +496,6 @@
                                                 documentType.levelFiveTermName = levelFiveTerm.termName;
                                                 documentType.termChainName = documentType.termChainName + ">" + documentType.levelFiveTermName;
                                             }
-
-
                                             vm.documentTypeLawTerms.push(documentType);
                                             documentType.primaryMatterType = false;
                                             if (levelFiveTerm.termName == dPrimaryMatterType) {
@@ -538,16 +504,11 @@
                                             }
                                             vm.selectedDocumentTypeLawTerms.push(documentType);
                                         }
-
                                     }
                                 });
-
                             });
-
                         });
                     });
-
-
                 });
             }
 
@@ -627,15 +588,12 @@
             };
             //#endregion
 
-
             //#region for selecting the typehead values into the input with additional changes
             vm.onSelect = function ($item, $model, $label, value, fucnValue, $event) {
                 if ($item && $item.name !== "No results found") {
                     if (value == "team") {
                         $label.assignedUser = $item.name + '(' + $item.email + ')';
                     }
-                }
-                else {
                 }
             }
             //#endregion
@@ -657,7 +615,6 @@
                         oSelectedDocuments.defaultMatterType = singleTerm.termName;
                     }
                 });
-
                 return oSelectedDocuments;
             }
 
@@ -686,7 +643,7 @@
                     }
                 });
 
-                return arrTempUserNames;  //arrUserNames.filter(v=>v != '');
+                return arrTempUserNames;
             }
 
             function getArrAssignedUserNamesAndEmails() {
@@ -735,7 +692,6 @@
                 return arrPermissions;
             }
             //#endregion
-
 
             //#region for saving the settings
             vm.saveSettings = function () {
@@ -798,8 +754,6 @@
                     if (i === 3) { managedColumns[columnName].TermName = sLevel4List; }
                     if (i === 4) { managedColumns[columnName].TermName = sLevel5List; }
                 }
-                //var date = new Date();
-                //var modifiedDate = date.getMonth() + '/' + date.getDate() + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
                 var settingsRequest = {
                     DefaultMatterName: vm.mattername,
                     DefaultMatterId: vm.matterid,
@@ -849,7 +803,6 @@
                 vm.showmatterid == 'Yes';
                 vm.showmatterconfiguration = vm.settingsConfigs.Radio2Option1Text;
             }
-
             //#endegion
 
             //#region to get bool values
@@ -861,7 +814,6 @@
                 return boolvalue;
             }
 
-
             vm.selectMatterTypePopUpClose = function () {
                 if (vm.popupContainer == "Show") {
                     vm.saveDocumentTemplates();
@@ -872,7 +824,6 @@
                 vm.popupContainer = "Show";
                 vm.popupContainerBackground = "Show";
             }
-
 
             vm.addToDocumentTemplate = function () {
                 var isThisNewDocTemplate = true;
@@ -935,17 +886,10 @@
                             documentType.termChainName = documentType.termChainName + ">" + documentType.levelFiveTermName;
                         }
                         vm.documentTypeLawTerms.push(documentType);
-                        vm.activeDocumentTypeLawTerm = null;
-                        //   console.log("doc");
-                        //   console.log(vm.documentTypeLawTerms)
-                        //vm.primaryMatterType = true; alert(vm.primaryMatterType);
-                        //  vm.activeSubAOLTerm = null;
+                        vm.activeDocumentTypeLawTerm = null;                        
                     }
                 }
             }
-
-
-
 
             function makeDisableSelectedItemInColumn(levelList, selectedItem) {
                 angular.forEach(levelList, function (levelListItem) {
@@ -955,6 +899,7 @@
 
                 });
             }
+
             function makeEnableSelectedItemInColumn(selectedItem) {
                 var levelList = [];
                 if (vm.taxonomyHierarchyLevels == 2) {
@@ -979,7 +924,6 @@
             }
 
             vm.removeFromDocumentTemplate = function () {
-                //  alert(vm.activeDocumentTypeLawTerm);
                 if (vm.removeDTItem) {
                     var index = vm.documentTypeLawTerms.indexOf(vm.activeDocumentTypeLawTerm);
                     makeEnableSelectedItemInColumn(vm.activeDocumentTypeLawTerm);
@@ -988,18 +932,15 @@
                     vm.primaryMatterType = false;
                     vm.activeDocumentTypeLawTerm = null;
                 }
-
             }
 
             vm.selectDocumentTemplateTypeLawTerm = function (documentTemplateTypeLawTerm) {
-                // alert(documentTemplateTypeLawTerm);
                 if (documentTemplateTypeLawTerm != null) {
                     vm.errorPopUp = false;;
                     vm.removeDTItem = true;
                     vm.activeDocumentTypeLawTerm = documentTemplateTypeLawTerm;
                     vm.primaryMatterType = true;
                 }
-
             }
 
             vm.saveDocumentTemplates = function () {
@@ -1008,7 +949,6 @@
                     vm.errorPopUp = false;
                     angular.forEach(vm.documentTypeLawTerms, function (term) {
                         var primaryType = false;
-                        //For loop
                         if (vm.activeDocumentTypeLawTerm.id == term.id) {// this line will check whether the data is existing or not
                             primaryType = true;
                         }
@@ -1016,7 +956,6 @@
                         vm.popupContainerBackground = "hide";
                         vm.popupContainer = "hide";
                     });
-
                     vm.selectedDocumentTypeLawTerms = vm.documentTypeLawTerms;
                 }
                 else {
@@ -1032,8 +971,6 @@
             vm.documentTypeLawTerms = [];
             vm.getSelectedLevelOne = function () {
                 if (vm.selectedLevelOneItem != null) {
-                    // vm.levelTwoList = vm.selectedLevelOneItem.level2;                  
-                    //   vm.levelThreeList = vm.selectedLevelOneItem.level2[0].level3;
                     if (vm.taxonomyHierarchyLevels >= 2) {
                         vm.levelTwoList = [];
                         vm.levelTwoList = vm.selectedLevelOneItem.level2;
@@ -1054,7 +991,6 @@
                         vm.levelFiveList = vm.levelFourList[0].level5;
                         vm.activeLevelFiveItem = (vm.levelFiveList && vm.levelFiveList[0] != undefined) ? vm.levelFiveList[0] : [];
                     }
-
                     vm.errorPopUp = false;
                 } else {
                     vm.levelTwoList = vm.levelThreeList = null;
@@ -1072,7 +1008,6 @@
                         vm.levelFiveList = null;
                     }
                 }
-
             }
 
             // function to get the subAOL items on selection of AOLTerm
@@ -1091,8 +1026,6 @@
                     vm.levelFiveList = vm.levelFourList[0] != undefined && vm.levelFourList[0].level5 ? vm.levelFourList[0].level5 : [];
                     vm.activeLevelFiveItem = vm.levelFourList[0] != undefined ? vm.levelFiveList[0] : [];
                 }
-
-
             }
             //function to for seclection of subAOL items 
             vm.selectLevelThreeItem = function (levelThreeItem) {
@@ -1106,9 +1039,7 @@
                     vm.levelFiveList = (vm.levelFourList != undefined && vm.levelFourList[0] != undefined && vm.levelFourList[0].level5) ? vm.levelFourList[0].level5 : [];
                     vm.activeLevelFiveItem = (vm.levelFourList != undefined && vm.levelFourList[0] != undefined) ? vm.levelFiveList[0] : [];
                 }
-
             }
-
 
             vm.selectLevelFourItem = function (levelFourItem) {
                 vm.errorPopUp = false;
@@ -1124,8 +1055,6 @@
                 vm.activeLevelFiveItem = levelFiveItem;
             }
 
-
-            ///setting data for backwardcompatibility true
             function setBackwardCompatabilityClientData(data) {
                 var arrDMatterUsers = [];
                 var arrDMatterUserEmails = [];
@@ -1147,8 +1076,6 @@
                     arrDMatterPermissions = vm.configurations.ProjectPermissions.split('$|$');
                 }
                 vm.assignPermissionTeams = [];
-                // vm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
-
                 for (var aCount = 0; aCount < arrDMatterUsers.length; aCount++) {
                     var assignPermTeam = {};
                     if ("" !== arrDMatterUsers[aCount]) {
@@ -1161,10 +1088,6 @@
                         assignPermTeam.assignedRole = vm.assignRoles[0];
                         assignPermTeam.assignedPermission = vm.assignPermissions[0];
                     }
-
-
-                    //vm.assignRoles   vm.assignPermissions 
-                    //assignedRole  assignedPermission
                     angular.forEach(vm.assignRoles, function (assignRole) {
                         if (arrDMatterRoles[aCount] == assignRole.name) {
                             assignPermTeam.assignedRole = assignRole;
@@ -1193,9 +1116,7 @@
                 var arrDMatterAreaOfLaw = [];
                 var dMatterTypes = "", dPrimaryMatterType = "";
                 var arrDMatterPracticeGroup = [];
-                // if (vm.configurations.MatterAreaofLaw!=undefined && vm.configurations.MatterAreaofLaw != "") {
                 arrDMatterAreaOfLaw = vm.selected;
-                //  }
 
                 if (vm.configurations.ProjectPracticeGroup != "") {
                     arrDMatterPracticeGroup = vm.configurations.ProjectPracticeGroup.split('$|$');
@@ -1320,8 +1241,6 @@
                     vm.cacheItemModifiedDate = data.value;
             }
 
-            //$timeout(function () { vm.setContentHeight(); }, 500);
-
             //function to filter practice groups
             function getClientsPracticeGroup(clientName) {
                 if (clientName && clientName != null && clientName != "") {
@@ -1333,7 +1252,6 @@
                             angular.forEach(pgTerm.level2, function (levelTwoTerm) {
                                 if (levelTwoTerm.termName === clientName) {
                                     levelOneList.push(pgTerm);
-
                                 }
                             });
                         }
@@ -1345,16 +1263,11 @@
                     data.level1 = levelOneList;
                     vm.selectedLevelOneItem = vm.levelOneList[0];
                     getTaxonomyHierarchy(data);
-
-                    // if(pgList.)
                 }
-
             }
-
         }]);
     app.filter('getAssociatedDocumentTemplatesCount', function () {
         return function (input, splitChar) {
-
             return input.split(splitChar).length;;
         }
     });

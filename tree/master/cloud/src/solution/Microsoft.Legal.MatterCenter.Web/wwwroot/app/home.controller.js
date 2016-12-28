@@ -126,10 +126,8 @@
                 $rootScope.dispinner = true;
                 $event.stopPropagation();
                 if ($rootScope.dispcontextualhelpinner) {
-                    //vm.lazyloaderhelp = false;
                     angular.element('.zindex6').css('z-index', '2');
                     $rootScope.contextualhelp = true;
-                    //vm.help('');
                     $rootScope.dispcontextualhelpinner = false;
                 } else {
                     $rootScope.contextualhelp = false;
@@ -194,7 +192,6 @@
                 vm.showHeaderFlyout = true;
                 vm.showHeaderBackground = true;
             }
-
             //#endregion
 
             //#region navigating to the url based on menu click
@@ -227,7 +224,6 @@
                     else {
                         $window.top.parent.location.href = configs.global.repositoryUrl + "/SitePages/" + data + ".aspx";
                     }
-
                 }
             }
 
@@ -247,8 +243,6 @@
             vm.currentyear = date.getFullYear();
             //#endregion
 
-
-
             vm.menuClick = function () {
                 angular.element('.popcontent').css('display', 'none');
                 angular.element('.dropdown').removeClass("open");
@@ -267,15 +261,6 @@
                     $(".OpenSwitcher").removeClass("hide");
                     $(".MenuCaption").removeClass("hideMenuCaption");
                 }
-                //var oAppMenuFlyout = $(".AppMenuFlyout");
-                //if (!(oAppMenuFlyout.is(":visible"))) {
-                //    //// Display the close icon and close the fly out
-
-                //    //oAppMenuFlyout.slideDown();
-                //} else {
-                //    //oAppMenuFlyout.slideUp();
-
-                //}
             }
 
             vm.canLoginUserCreateMatter = false;
@@ -306,7 +291,4 @@
             }
         }
     });
-
-
-
 })();

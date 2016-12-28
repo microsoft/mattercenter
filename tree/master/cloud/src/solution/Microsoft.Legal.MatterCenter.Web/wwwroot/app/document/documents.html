@@ -10,13 +10,7 @@
     <div class="row">
         <div class="row" id="mainmenu">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
-                <!--<div class="col-xs-8 col-sm-3" ng-click="vm.menuClick()">
-                    <img class="AppSwitcher OpenSwitcher" src="Images/hamburger30x30.png" alt="{{vm.header.MenuImage1OpenTitle}}" title="{{vm.header.MenuImage1Title}}" />
-                    <img class="AppSwitcher CloseSwitcher hide" src="Images/MC_Navigation_Close.png" alt="{{vm.header.MenuImage1CloseTitle}}" title="{{vm.header.CloseTitle}}" />
-                    <span class="MenuCaption">{{vm.header.MenuImage1Caption}}</span>
-                </div>-->
                 <div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-sm-9 col-md-9 col-lg-9 hidden-xs pad0" id="mainselect">
-                    <!--<select class="form-control" ng-model="vm.ddlMatters"  ng-options="matter.Name for matter in vm.Matters" ng-change="vm.GetMatters(vm.ddlMatters.Id)"></select>-->
                     <div class="input-group-btn zindex6">
                         <button type="button" class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
                             <span class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.documentname}}</span>
@@ -35,13 +29,8 @@
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="docsearchmatter">
                     <input type="text" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + ' (' + documentDataList.docId + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
-                    <!--<span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>-->
                 </div>
-                <div class="col-xs-12">
-                    <!--<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>-->
-                    <!--<div ng-show="noResults">
-                        <i class="glyphicon glyphicon-remove"></i> No Results Found
-                    </div>-->
+                <div class="col-xs-12">     
                 </div>
             </div>
             <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth">
@@ -59,10 +48,7 @@
                     <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
                 </ul>
                 <div class="col-xs-12">
-                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-                    <!--<div ng-show="noResults">
-                        <i class="glyphicon glyphicon-remove"></i> No Results Found
-                    </div>-->
+                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>                
                 </div>
             </div>
         </div>
@@ -118,8 +104,7 @@
                 </div>
             </div>
         </div>
-        <!--<div class="col-sm-12 noResultsText" ng-show="vm.nodata" ng-bind-html="vm.documentConfigContent.NoDataSearchText">
-        </div>-->
+      
         <div ng-if="vm.isOutlook && vm.showAttachment">
             <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
                     id="attachDocuments" ng-click="vm.sendDocumentAsAttachment()">

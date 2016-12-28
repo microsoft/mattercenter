@@ -4,23 +4,15 @@
     }
 </style>
 <!---->
-<div id="HomeContainer" class="marleft10">
-    <!--    <div class="row"> -->
-    <!--     <div class="col-xs-12"> -->
+<div id="HomeContainer" class="marleft10"> 
     <header class="WelcomeBar ms-bg-color-neutralLighterAlt" ng-class="{ 'RemoveWelcomeBar': vm.welcomeheader}">
         <span class="ms-font-s" ng-hide="vm.welcomeheader">
             {{vm.navigationContent.HeaderBarLabel}}
             <a class="LearnMoreLink" ng-href="{{vm.navigationContent.HeaderBarLink1URL}}" target="_blank" title="{{vm.navigationContent.HeaderBarLink1Title}}">{{vm.navigationContent.HeaderBarLink1Text}}</a> or <a class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">{{vm.navigationContent.HeaderBarLink2Text}}</a>
         </span>
-    </header>
-    <!--     </div> -->
-    <!--   </div> -->
-    <div class="LinkContainer">
-        <!--      <div class="row"> -->
-        <!--     <div class="col-xs-12 col-md-6"> -->
-        <div class="LeftLinkContainer">
-            <!--     <div class="row"> -->
-            <!--  <div class="col-xs-6"> -->
+    </header>   
+    <div class="LinkContainer">      
+        <div class="LeftLinkContainer">          
             <div class="MattersContainer" title="{{vm.navigationContent.Image1Title}}">
                 <a ui-sref='mc.matters()'>
                     <figure>
@@ -28,9 +20,7 @@
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image1Caption}}</figcaption>
                     </figure>
                 </a>
-            </div>
-            <!--   </div> -->
-            <!-- <div class="col-xs-6"> -->
+            </div>           
             <div class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
                 <a ui-sref='mc.documents()'>
                     <figure>
@@ -38,10 +28,7 @@
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image2Caption}}</figcaption>
                     </figure>
                 </a>
-            </div>
-            <!-- </div> -->
-            <!--    </div> -->
-            <!--  </div> -->
+            </div>           
         </div>
         <!--   <div class="col-xs-12 col-md-6"> -->
         <div class="RightLinkContainer">
@@ -70,7 +57,6 @@
                 </a>
             </div>
         </div>
-        <!--     </div> -->
     </div>
 </div>
 <div class="marleft10 padbtm15" title="Write an email to Support">

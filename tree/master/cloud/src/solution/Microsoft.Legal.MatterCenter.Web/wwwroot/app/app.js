@@ -155,7 +155,6 @@ angular.module('matterMain', [
                     }
                     $rootScope.$broadcast('disableOverlay', "text");
                     //Adding to error list
-                    //$rootScope.errorList.push(rejection.data);
                     angular.element('#myErrorModal').modal("show");
                     $rootScope.exceptionObj = rejection.data;
                     //It has to return the rejection, simple reject call doesn't work
@@ -165,8 +164,6 @@ angular.module('matterMain', [
         });
 
         //#endregion
-
-
         $locationProvider.html5Mode({
             enabled: false,
             requireBase: false
@@ -180,7 +177,6 @@ angular.module('matterMain', [
              extraQueryParameter: 'nux=1',
              //cacheLocation: 'localStorage', // enable this for IE, as sessionStorage does not work for localhost.
          }, $httpProvider);
-
 
     }])
 .directive('menuclose', function ($rootScope, $timeout) {
@@ -213,7 +209,6 @@ angular.module('matterMain', [
 .run(function ($rootScope, $analytics) {
     $rootScope.setAuthenticatedUserContext = function () {
         appInsights.setAuthenticatedUserContext(configs.ADAL.authUserEmail);
-
     };
 })
 ;
