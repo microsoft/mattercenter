@@ -402,7 +402,7 @@
 
             }
 
-            //#reion This function will get counts for all matters, my matters and pinned matters
+            //#region This function will get counts for all matters, my matters and pinned matters
             vm.getMatterCounts = function () {
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
