@@ -53,11 +53,7 @@
                 <img title="{{vm.matterDashboardConfigs.ImageAdvanceSearchTitle}}" style="display: inline;" type='button' ng-if="vm.downwarddrop" ng-click="vm.showupward($event)" data-toggle='dropdown' alt="{{vm.matterDashboardConfigs.ImageAdvanceSearchAltText}}" src="../Images/downward-advanced-search-29x29-666.png">
                 <img title="{{vm.matterDashboardConfigs.ImageAdvanceSearchTitle}}" id="filterSearchDown" ng-if="vm.upwarddrop" ng-click="vm.showdownward($event)" alt="{{vm.matterDashboardConfigs.ImageAdvanceSearchAltText}}" src="../Images/upward-advanced-search-29x29-666.png">
             </div>
-            <div class="col-xs-12">
-                <!--<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>-->
-                <!--<div ng-show="noResults">
-                    <i class="glyphicon glyphicon-remove"></i> No Results Found
-                </div>-->
+            <div class="col-xs-12">              
             </div>
             <div class="col-xs-9 dashboarddrop" ng-click='vm.hideinnerdrop($event)' ng-show="vm.searchdrop" id="dashboardDrop">
                 <div class="col-xs-12 dashboarddropinner">
@@ -467,8 +463,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--Content end for showing the files which are uploaded from desktop-->
-                                <!--<div ng-if="vm.allAttachmentDetails.length==0" class="noFilesUploaded">No files uploaded</div>-->
+                                <!--Content end for showing the files which are uploaded from desktop-->                            
                             </div>
                             <div class="col-sm-3 folderContent">
                                 <div id="breadcrumb" class="breadcrumb" ng-hide="breadcrumb">
@@ -492,21 +487,7 @@
 
                                     <ul>
                                         <li ng-repeat="child in vm.foldersList" ng-class='child.parentURL?"childNode":"parentNode"' data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" droppable drop="handleDrop()" folder="child" ng-include="'folderTree'" style="display: inline-block; width: 90%; padding:0;">
-
                                         </li>
-
-                                        <!--<li ng-repeat="folder in vm.foldersList">
-                                            <ul ng-repeat="child in folder.children">
-                                                <li ng-if="child.parentURL" data-client="" data-foldername="{{child.url}}" data-parentname="{{child.parentURL}}" class="childNode"
-                                                    style="display: inline-block; width: 90%; padding:0;">
-                                                    <div class="treeNodes" title="Documents" droppable drop="handleDrop()" folder="folder" id="folder{{$index}}">
-                                                        <img class="folderIcon" src="{{vm.configsUri.SPOsiteURL}}/_layouts/15/images/folder.gif" align="center" alt="Documents"
-                                                             data-foldername="{{folder.url}}" data-parentname="{{folder.parentURL}}">
-                                                        {{folder.name}}
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>-->
                                     </ul>
                                 </div>
                             </div>
@@ -577,6 +558,5 @@
                 </tr>
             </tbody>
         </table>
-
     </div>
 </div>

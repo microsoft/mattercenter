@@ -74,8 +74,6 @@
                 $event.stopPropagation();
                 vm.clientdrop = false;
                 vm.clientdropvisible = false;
-
-                //vm.collapseDateControls();
             }
 
             vm.collapseDateControls = function () {
@@ -190,34 +188,12 @@
                 multiSelect: gridOptions.multiSelect,
                 enableFiltering: gridOptions.enableFiltering,
                 columnDefs: columnDefs1,
-                //[
-                //    { field: 'checker', displayName: 'checked', width: '2%', cellTemplate: '/app/dashboard/cellCheckboxTemplate.html', headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html', enableColumnMenu: false },
-                //    { field: 'documentIconUrl', displayName: 'Icon', width: '2%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="{{row.entity.documentIconUrl}}"/></div>', headerCellTemplate: '<div class="ui-grid-cell-contents"><img class="docTypeIconHeader" id="docTypeIcon" style="padding:0" alt="Document type icon" src="' + configs.uri.SPOsiteURL + '/_layouts/15/images/generaldocument.png"></div>', enableColumnMenu: false },
-                //    { field: 'documentName', displayName: vm.documentDashboardConfigs.GridColumn1Header, width: '20%', cellTemplate: '/app/dashboard/DocumentDashboardCellTemplate.html', enableColumnMenu: false },
-                //    { field: 'documentClientId', displayName: vm.documentDashboardConfigs.GridColumn2Header, width: '15%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>', enableColumnMenu: false },
-                //    { field: 'documentOwner', displayName: vm.documentDashboardConfigs.GridColumn3Header, width: '14%', enableColumnMenu: false },
-                //    { field: 'documentModifiedDate', displayName: vm.documentDashboardConfigs.GridColumn4Header, width: '20%', enableColumnMenu: false },
-                //    { field: 'documentID', displayName: vm.documentDashboardConfigs.GridColumn5Header, width: '10%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentID==""?"NA":row.entity.documentID}}</div>', enableColumnMenu: false },
-                //    { field: 'documentVersion', displayName: vm.documentDashboardConfigs.GridColumn6Header, width: '6%', enableColumnMenu: false },
-                //    { field: 'pin', width: '5%', displayName: '', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false }
-                //],
+               
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
                     $scope.gridApi = gridApi;
                     //Set the selected row of the grid to selectedRow property of the controller
-                    gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                        // vm.selectedRow = row.entity
-                        //vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
-                        //var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.documentCreatedDate);
-                        //if (isRowPresent.length > 0) {
-                        //    row.entity.checker = true;
-                        //    vm.toggleChecker(true, row.entity);
-                        //}
-                        //else {
-                        //    vm.checker = false;
-                        //    row.entity.checker = false;
-                        //    vm.toggleChecker(false, row.entity);
-                        //}
+                    gridApi.selection.on.rowSelectionChanged($scope, function (row) {                      
                     });
                 }
             }
@@ -234,8 +210,6 @@
                 }
             };
             //#endregion
-
-
 
             //#region Cart functionality
             vm.cartelements = [];
@@ -363,7 +337,6 @@
                         if (window.navigator.msSaveOrOpenBlob) {
                             window.navigator.msSaveOrOpenBlob(blob, fileName);
                         } else {
-                            //window.navigator.msSaveOrOpenBlob(blob, "temp.eml");
                             var element = window.document.createElement("a");
                             element.href = window.URL.createObjectURL(blob);
                             element.download = fileName;
@@ -371,11 +344,6 @@
                             element.click();
                             document.body.removeChild(element);
                         }
-
-
-
-
-
                         //Once we get the response, stop the progress
                         angular.forEach(vm.cartelements, function (document) {
                             angular.element("#document-" + i).css("display", "none");
@@ -409,8 +377,6 @@
                 }
                 return sOrignalString;
             }
-
-
             //#endregion
 
             //#region api call to get document information
@@ -480,7 +446,6 @@
                     success: callback
                 });
             }
-
 
             //Callback function for unpin 
             function UnpinDocuments(options, callback) {
@@ -624,13 +589,10 @@
                         vm.getDocumentCounts();
                         vm.documentGridOptions.data = response;
                     } else {
-                        //vm.getDocumentCounts();
-                        //vm.documentGridOptions.data = response;
                         vm.showMatterAsPinOrUnpin(response, documentRequest);
                     }
                 });
             }
-
 
             //#region request object
             vm.searchDocument = function (val) {
@@ -735,7 +697,6 @@
                 documentRequest.SearchObject.Sort.Direction = 0;
                 vm.FilterByType();
             }
-
             //#endregion
 
             //#region
@@ -784,7 +745,6 @@
                         $scope.$apply();
                     }
                     vm.pagination();
-                    //vm.displaypagination = true;
                     if (response == "" || (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText && response.allDocumentCounts == 0) ||
                         (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText && response.myDocumentCounts == 0 && !vm.searchClicked) ||
                         (vm.selectedTab == vm.documentDashboardConfigs.Tab3HeaderText && response.pinnedDocumentCounts == 0 && !vm.searchClickedtype)) {
@@ -799,9 +759,6 @@
                 });
             }
             //#endregion
-
-
-
 
             //#region function to get the documents based on search term
             vm.getDocuments = function () {
@@ -941,7 +898,6 @@
             }
             //#endregion
 
-            //$timeout(vm.getDocumentCounts(), 800);
             $timeout(function () { vm.getMyDocuments() }, 500);
 
             //#region This function will pin or unpin the document based on the image button clicked
@@ -1029,7 +985,6 @@
                 }
             }
             //#endregion
-
 
             //#region Closing and Opening searchbar dropdowns
             vm.showupward = function ($event) {
@@ -1311,7 +1266,6 @@
                     }
                 }
             }
-
             //#endregion
 
             //#region Pagination
@@ -1349,7 +1303,6 @@
                     vm.displaypagination = true;
                     $interval(function () { vm.setPaginationHeight() }, 500, vm.divuigrid);
                 }
-                //vm.setToptoPagination();
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
@@ -1365,9 +1318,7 @@
                     vm.last = vm.last + gridOptions.paginationPageSize;
                     vm.total = vm.totalrecords - gridOptions.paginationPageSize;
                     if (vm.last > vm.totalrecords) {
-                        //vm.last = vm.totalrecords;
                         vm.fromtopage = vm.first + " - " + vm.totalrecords;
-                        //vm.setToptoPagination();
                     } else {
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
@@ -1478,20 +1429,7 @@
             };
 
             //#endregion
-
-            //#region for setting the top to the pagination
-            //vm.setToptoPagination = function () {
-            //    var totalRows = vm.last - vm.first;
-            //    var calcTop = (totalRows * 30) + 100;
-            //    angular.element(".jsonGridFooter").css("top", calcTop);
-            //    if (!$scope.$$phase) {
-            //        $scope.$apply();
-            //    }
-            //}
-
-            //$timeout(function () { vm.setToptoPagination(); }, 800);
-            //#endregion
-
+            
             //#region This event is going to fire when the user clicks on "OK" button in the filter panel
             vm.filterSearchOK = function (type) {
                 if (type === vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText) {
@@ -1590,9 +1528,6 @@
                 get(documentRequest, function (response) {
                     if (response == "" || response.length == 0) {
                         vm.errorMessage = response.message;
-                        //documentRequest.SearchObject.Sort.ByProperty = "";
-                        //documentRequest.SearchObject.Sort.Direction = 1;
-                        //documentRequest.SearchObject.Sort.ByColumn = "";
                         vm.getDocumentCounts();
                     } else {
                         vm.showMatterAsPinOrUnpin(response, documentRequest);
@@ -1602,7 +1537,6 @@
                     }
                 });
             }
-
 
             //#region showing the hidden tabs in responsive
             vm.showDocTabs = function ($event) {
@@ -1615,7 +1549,6 @@
 
             vm.showSelectedTabs = function (name, count) {
                 vm.selectedTab = name;
-                //vm.selectedTabCount = count;
                 vm.selectedTabInfo = vm.selectedTab + " (" + count + ")";
                 if (name == vm.documentDashboardConfigs.Tab1HeaderText) {
                     vm.getMyDocuments();
@@ -1630,7 +1563,6 @@
 
             //#region Exporting to Excel Test
             vm.export = function () {
-                //vm.lazyloaderdashboard = false;
                 var exportMatterSearchRequest = {
                     Client: {
                         //ToDo: Need to read from config.js
@@ -1659,7 +1591,6 @@
                     exportMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     get(exportMatterSearchRequest, function (response) {
                         if (response == "" || response.length == 0) {
-                            //vm.lazyloaderdashboard = true;
                         } else {
                             vm.exportDate = response;
 
@@ -1696,14 +1627,10 @@
                     });
                 }
             }
-
             //#endregion
-
 
             //#region To display modal up in center of the screen...
             //Start 
-
-
             vm.reposition = function () {
                 var modal = $(this)
 
@@ -1783,7 +1710,4 @@
             //#endregion
         }
     ]);
-}
-
-
-)();
+})();

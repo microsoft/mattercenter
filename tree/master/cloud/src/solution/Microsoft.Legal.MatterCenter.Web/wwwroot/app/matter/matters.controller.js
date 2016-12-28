@@ -93,7 +93,6 @@
             vm.opendateDropDown = false;
             //End
             Office.initialize = function (reason) {
-                // vm.initOutlook();
             };
             $scope.initOfficeLibrary = function () {
 
@@ -213,8 +212,6 @@
             //#region Setting the options for grid
 
             vm.gridOptions = {
-                //paginationPageSizes: [10, 50, 100],
-                //paginationPageSize: 10,
                 infiniteScrollDown: true,
                 infiniteScrollRowsFromEnd: 10,
                 enableHorizontalScrollbar: 0,
@@ -233,7 +230,6 @@
                         $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
                     });
                     gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                        //vm.selectedRow = row.entity
                         vm.selectedRow.matterName = row.entity.matterName
                         vm.selectedRow.matterClientUrl = row.entity.matterClientUrl
                         vm.selectedRow.matterGuid = row.entity.matterGuid
@@ -249,14 +245,7 @@
 
             //#endregion
 
-            vm.watchFuncscroll = function () {
-                //var element = 0;
-                ////var topelement = angular.element('.ui-grid-viewport').scrollTop();
-                //angular.element('.popcontent').css("display","none");
-                //if (!$scope.$$phase) {
-                //    $scope.$apply();
-                //}
-            }
+            vm.watchFuncscroll = function () { }
 
             //#region for setting the classes for ui-grid based on size
             vm.setColumns = function () {
@@ -323,7 +312,6 @@
                 });
             }
 
-
             function getPinnedMatters(options, callback) {
                 api({
                     resource: 'matterResource',
@@ -332,7 +320,6 @@
                     success: callback
                 });
             }
-
 
             //Callback function for pin 
             function PinMatters(options, callback) {
@@ -343,7 +330,6 @@
                     success: callback
                 });
             }
-
 
             //Callback function for unpin 
             function UnpinMatters(options, callback) {
@@ -450,15 +436,10 @@
                     if (vm.foldersList[0] !== null) { vm.showSelectedFolderTree(vm.foldersList[0]); }
 
                     jQuery('#UploadMatterModal').modal("show");
-                    //Initialize Officejs library                     
-                    //Office.initialize = function (reason) {
-                    //     vm.initOutlook();
-                    //};
                     vm.initOutlook();
                     vm.lazyloader = true;
                 });
             }
-
             //#region drop method will handle the file upload scenario for both email and attachment
 
             //Helper method which will handle mail or doc upload. This method will be called from inside vm.handleDrop
@@ -569,7 +550,6 @@
             vm.handleDesktopDrop = function (targetDropUrl, sourceFiles, isOverwrite) {
                 vm.oUploadGlobal.successBanner = false;
                 vm.isLoadingFromDesktopStarted = true;
-                // vm.files = sourceFiles.files;
                 var fd = new FormData();
                 fd.append('targetDropUrl', targetDropUrl);
                 fd.append('folderUrl', targetDropUrl)
@@ -670,8 +650,7 @@
                         vm.mailUploadedFile = subject;
                         vm.mailUploadedFolder = vm.targetDrop.name;
                         vm.isLoadingFromDesktopStarted = false;
-                        droppedAttachedFile.uploadSuccess = true;
-                        //removeDraggableDirective();
+                        droppedAttachedFile.uploadSuccess = true; 
                         vm.oUploadGlobal.successBanner = droppedAttachedFile.uploadSuccess ? true : false;
                     }
                         //If the mail upload is not success
@@ -727,7 +706,6 @@
                         break;
                 }
                 return bAppendEnabled;
-
             }
 
             ////Call Web API method for upload mail
@@ -739,7 +717,6 @@
                     success: callback
                 });
             }
-
             //#endregion
 
             //#region Call back function when attachment gets uploaded
@@ -773,9 +750,6 @@
                         droppedAttachedFile.uploadSuccess = true;
                         console.log(droppedAttachedFile.counter);
                         vm.oUploadGlobal.successBanner = droppedAttachedFile.uploadSuccess ? true : false;
-
-                        //removeDraggableDirective();
-
                     }
                         //If the attachment upload is not success
                     else if (response.code === "DuplicateDocument") {
@@ -826,7 +800,6 @@
             //Remove the draggable directive after successful file upload
             function removeDraggableDirective() {
                 var divElement = angular.element(jQuery("#" + vm.sourceFile.id));
-                //divElement.removeAttr("draggable");
             }
 
             //Remove the draggable directive after successful file upload
@@ -864,7 +837,6 @@
             }
 
             vm.editAttachment = function (element, event) {
-
                 //ToDo: Use Angular data binding functionality
                 var editIcon = $("#" + event.target.id);
                 var rowIndex = event.target.id.charAt(0);
@@ -917,15 +889,12 @@
                             thisAttachment.attr("title", attachmentText);
                         }
                     }
-                    //ToDo:$(".errorPopUp").addClass("hide");
-
                 }
                 else {
                     vm.oUploadGlobal.regularInvalidCharacter.lastIndex = 0;
                     //ToDo:showErrorNotification(thisAttachmentText, "Invalid character");
                 }
             }
-
             //#region  Methods for Error Notifications Dialogs
 
             //Methods for over writing the document
@@ -952,7 +921,6 @@
                 vm.showLoading = false;
                 jQuery('#overWriteNo').hide();
             }
-
             //#endregion
 
 
@@ -962,7 +930,6 @@
                 vm.oUploadGlobal.successBanner = false;
                 vm.isLoadingFromDesktopStarted = false;
             }
-
 
             vm.oUploadGlobal = {
                 regularInvalidCharacter: new RegExp("[\*\?\|\\\t/:\"\"'<>#{}%~&]", "g"),
@@ -997,8 +964,6 @@
                     vm.mailUploadedFolder = null;;
                     vm.loadingAttachments = false;
                     $scope.$apply();
-                } else {
-                    //showNotification(oFindMatterConstants.Fail_Attachment_Token, "failNotification");
                 }
             }
 
@@ -1017,8 +982,6 @@
                 }
                 return oFindMatterConstants.No_Subject_Mail;
             }
-
-
 
             vm.initOutlook = function () {
 
@@ -1056,8 +1019,6 @@
                 individualAttachment.attachmentId = Office.context.mailbox.item.itemId;
                 individualAttachment.counter = nIDCounter;
                 console.log("mailSubject");
-                //var mailSubject = checkEmptyorWhitespace(Office.context.mailbox.item.subject);
-                //mailSubject = mailSubject.replace(oUploadGlobal.regularExtraSpace, "").replace(oUploadGlobal.regularInvalidCharacter, "").replace(oUploadGlobal.regularInvalidRule, ".").replace(oUploadGlobal.regularStartEnd, "");
                 mailSubject = vm.checkEmptyorWhitespace(Office.context.mailbox.item.subject);
                 console.log(mailSubject);
                 mailSubject = mailSubject.replace(vm.oUploadGlobal.regularExtraSpace, "")
@@ -1092,11 +1053,6 @@
                     var sContentType = vm.attachments[attachment].hasOwnProperty("contentType") ? vm.attachments[attachment].contentType : "";
                     var sExtension = -1 < attachmentName.lastIndexOf(".") ? attachmentName.substring(attachmentName.lastIndexOf(".") + 1) : 1 === parseInt(attachmentType) ? "msg" : "";
                     var iconSrc = vm.getIconSource(sExtension);
-                    //if (-1 < sContentType.indexOf(configs.Upload.ImageContentType)) {
-                    //}
-                    //else{
-
-                    //}
                     individualAttachment.contentType = sContentType;
                     individualAttachment.attachmentId = vm.attachments[attachment].id;
                     individualAttachment.counter = nIDCounter;
@@ -1111,10 +1067,7 @@
                     individualAttachment.size = vm.attachments[attachment].size;
                     individualAttachment.attachmentType = attachmentType;
                     vm.allAttachmentDetails.push(individualAttachment);
-
                 }
-
-
             }
             //#endregion
 
@@ -1288,8 +1241,6 @@
                     }
                 }
                 searchRequest.SearchObject.SearchTerm = finalSearchText;
-                //searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
-                //searchRequest.SearchObject.Sort.Direction = 1;
                 get(searchRequest, function (response) {
                     if (response == "" || response.errorCode == "500" || response.lenth == 0) {
                         vm.gridOptions.data = response;
@@ -1307,9 +1258,6 @@
                 });
             }
             //#endregion
-
-
-
 
             //#region for setting the mattername in dropdown
             vm.SetMatters = function (id, name) {
@@ -1334,7 +1282,6 @@
                     vm.matterheader = true;
                     vm.divuigrid = false;
                     vm.lazyloader = false;
-                    //searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
                     if (property == "" + vm.configSearchContent.ManagedPropertyResponsibleAttorney + "") {
                         vm.attorneySearchTerm = term;
@@ -1530,7 +1477,6 @@
                                 searchRequest.SearchObject.UniqueColumnName = '';
                                 vm.SetPreviousFilterVlaues();
                             }
-                            //searchRequest.SearchObject.SearchTerm = "";
                             searchRequest.SearchObject.Sort.ByProperty = "";
                             $interval(function () { vm.showSortExp(); }, 2000, 3);
                         }
@@ -1766,7 +1712,6 @@
                 }
                 else if (property == vm.matterConfigContent.GridColumn1Header) {
                     vm.searchTerm = "";
-                    //searchRequest.SearchObject.SearchTerm = "";
                     searchRequest.SearchObject.Filters.Name = "";
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
                     vm.matterfilter = false;
@@ -1793,7 +1738,7 @@
                         searchRequest.SearchObject.Filters.DateFilters.ModifiedToDate = "";
                         vm.modStartDate = "";
                         vm.modEndDate = "";
-                        vm.modateOptions.maxDate = new Date();
+                        vm.modDateOptions.maxDate = new Date();
                         vm.moddatefilter = false;
                     } else {
                         searchRequest.SearchObject.Filters.SubareaOfLaw = "";
@@ -1883,8 +1828,6 @@
                     vm.searchClientTerm = "";
                     vm.startDate = "";
                     vm.endDate = "";
-                    //vm.sortexp = "";
-                    //vm.sortby = "";
                     vm.lazyloader = false;
                     vm.divuigrid = false;
                     vm.gridOptions.data = [];
@@ -2038,7 +1981,6 @@
                             vm.lazyloader = true;
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            //$interval(function () { vm.showSortExp(); }, 1000, 3);
                         }
                         searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     });
@@ -2050,8 +1992,7 @@
             //#region To run GetMatters function on page load 
             vm.SetMatters(vm.matterid, vm.mattername);
             //End 
-
-
+            
             //#region Written for unpinning the matter 
             //Start 
             vm.UnpinMatter = function (data) {
@@ -2070,7 +2011,6 @@
                 UnpinMatters(unpinRequest, function (response) {
                     if (response.isMatterUnPinned) {
                         $timeout(function () { vm.GetMatters(vm.matterid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
-                        //alert("Success");
                     }
                 });
             }
@@ -2109,16 +2049,13 @@
                 PinMatters(pinRequest, function (response) {
                     if (response.isMatterPinned) {
                         $timeout(function () { vm.GetMatters(vm.matterid); $interval(function () { vm.showSortExp(); }, 5000, 3); }, 500);
-                        //alert("Success");
                     }
                 });
             }
             //#endregion
 
-
             //#region To display modal up in center of the screen...
             //Start 
-
 
             vm.reposition = function () {
                 var modal = $(this)
@@ -2163,7 +2100,6 @@
             vm.hideBreadCrumb = function () {
                 $rootScope.breadcrumb = true;
                 $rootScope.foldercontent = false;
-
             }
 
             //#region Angular Datepicker Starts here
@@ -2172,7 +2108,6 @@
                 formatYear: 'yy',
                 maxDate: new Date()
             };
-
 
             vm.modEndDateOptions = {
                 formatYear: 'yy',
@@ -2252,9 +2187,7 @@
             vm.disabled = function (date, mode) {
                 return (mode === 'day' && (date.getDay() != 0));
             };
-
             //End
-
 
             //Start for open date options
             vm.dateOptions = {
@@ -2343,8 +2276,6 @@
                 return (mode === 'day' && (date.getDay() != 0));
             };
 
-
-
             //#endregion
 
             //#region Custom Sorting functionality
@@ -2394,8 +2325,6 @@
                             vm.showMatterAsPinOrUnpin(response, searchRequest);
                             vm.divuigrid = true;
                             vm.nodata = false;
-                            
-
                         }
                     });
                 }
@@ -2462,16 +2391,11 @@
                     }
                 }
             }
-
-            //vm.sortby = "desc";
-            //vm.sortexp = "matterModifiedDate";
-            //$interval(function () { vm.showSortExp(); }, 3000, 3);
-
+            
             $scope.sortChanged = function (grid, sortColumns) {
                 $timeout(function () { vm.matterdateheader = true; vm.matterheader = true; vm.lazyloader = false; }, 1);
                 vm.divuigrid = false;
                 vm.responseNull = false;
-                //searchRequest.SearchObject.SearchTerm = "";
                 vm.clearFilterValuesOnSorting();
                 if (sortColumns.length != 0 && sortColumns[0] != undefined) {
                     if (sortColumns[0].name == vm.gridOptions.columnDefs[0].name) {
@@ -2743,13 +2667,6 @@
                     angular.element('#mattergrid .ui-grid-viewport').addClass('viewportlg');
                     angular.element('.ui-grid-menu-mid').css('height', $window.innerHeight - 300 + 'px !important');
                 }
-                //if (vm.nodata && $window.innerHeight < 375) {
-                //    angular.element('#mattergrid .ui-grid-viewport').removeClass('viewportlg');
-                //    angular.element('#mattergrid .ui-grid-viewport').css("overflow-x","hidden!important");
-                //} else {
-                //    angular.element('#mattergrid .ui-grid-viewport').css("overflow-x", "auto!important");
-                //    angular.element('#mattergrid .ui-grid-viewport').addClass('viewportlg');
-                //}
             });
 
             //#endregion
@@ -2789,13 +2706,11 @@
                 searchRequest.SearchObject.Sort.Direction = 0;
                 vm.FilterByType();
             }
-
             //#endregion
 
             //#region for showing the matters dropdown in resposive 
             vm.showmatterdrop = function ($event) {
                 $event.stopPropagation();
-                //angular.element('.zindex6').css('z-index', '6');
                 $rootScope.displayinfo = false;
                 $rootScope.dispinner = true;
                 $rootScope.contextualhelp = false;
@@ -2820,7 +2735,6 @@
                 angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
                 angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
             }
-
             //#endregion
 
             //#region To getContentCheckConfigurations
@@ -2844,9 +2758,7 @@
                     } else {
                         vm.oUploadGlobal.bAllowContentCheck = false;
                     }
-
                 });
-
             }
             //#region To expand and collapse the folder tree structure in upload
             vm.showSelectedFolderTree = function (folder) {
@@ -2903,12 +2815,7 @@
                                 nOperation = "3";
                                 break;
                         }
-                        // uploadFile(oUploadGlobal.sClientRelativeUrl, oUploadGlobal.sFolderUrl, nOperation);
-
                         vm.handleDesktopDrop(vm.clientRelativeUrl, vm.files, nOperation);
-
-
-
                     } else {
                         duplicateFile.cancel = "False";
                         if (vm.ducplicateSourceFile.length > 0) {
@@ -2922,7 +2829,6 @@
                     var draggedFile = $filter("filter")(vm.allAttachmentDetails, vm.sourceFile.attachmentId)[0];
                     if ("contentCheck" === sOperation) {
                         mailOrDocUpload(vm.targetDrop, vm.sourceFile, false, true, draggedFile);
-
 
                     } else if ("overwrite" === sOperation) {
 
@@ -3005,8 +2911,6 @@
 
                 }
             }
-
-
             //#region For displaying and setting the position of the filters name wise
             vm.matterheader = true;
             vm.matterdateheader = true;
@@ -3211,8 +3115,6 @@
             angular.element('#menuitem-1').dblclick(function (e) {
                 e.preventDefault();
             });
-
-
         }]);
     app.filter('unique', function () {
         return function (collection, keyname) {
