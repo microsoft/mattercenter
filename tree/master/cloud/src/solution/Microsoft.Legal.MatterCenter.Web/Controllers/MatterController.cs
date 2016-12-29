@@ -519,7 +519,7 @@ namespace Microsoft.Legal.MatterCenter.Service
 
                 var canLoginUserCreateMatter = new
                 {
-                    CanCreateMatter = true
+                    CanCreateMatter = canCreateMatter
                 };
 
                 return matterCenterServiceFunctions.ServiceResponse(canLoginUserCreateMatter, (int)HttpStatusCode.OK);
