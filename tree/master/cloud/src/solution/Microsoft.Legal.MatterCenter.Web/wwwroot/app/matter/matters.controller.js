@@ -5,6 +5,7 @@
 
     app.controller('mattersController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'matterResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$window', '$parse', '$templateCache', '$q', '$filter', 'commonFunctions', '$animate', 'adalAuthenticationService',
         function ($scope, $state, $interval, $stateParams, api, $timeout, matterResource, $rootScope, uiGridConstants, $location, $http, $window, $parse, $templateCache, $q, $filter, commonFunctions, $animate, adalService) {
+            //#region For declaring variables.
             var vm = this;
             vm.selected = '';
             vm.selectedRow = {
@@ -12,7 +13,7 @@
                 matterName: '',
                 matterGuid: ''
             };
-            //#region dynamic contents
+            //Variables for dynamic contents
             vm.navigationContent = uiconfigs.Navigation;
             vm.configSearchContent = configs.search;
 
@@ -29,10 +30,10 @@
             vm.previousSubAreaOfLawValue = '';
             vm.previousAreaOfLawValue = '';
             vm.previousMatterIdValue = '';
-            //#region for setting the dynamic width to grid
+            //setting the dynamic width to grid
             var screenHeight = 0;
             vm.searchResultsLength = 0;
-            //#end region
+           
             vm.mattername = "" + vm.matterConfigContent.Dropdown1Item2 + "";
             vm.sortname = "";
             vm.mattersdrop = false;
@@ -57,16 +58,12 @@
 
             vm.sortby = "desc";
             vm.sortexp = "matterModifiedDate";
-            //#endregion
-
-            //#region To hide lazyloader on load
-            //start
+            
+            //To hide lazyloader on load
             vm.lazyloader = true;
             vm.lazyloaderFilter = true;
-            //#endregion
 
-            //#region scopes for displaying and hiding filter icons
-            //start
+            //Scopes for displaying and hiding filter icons           
             vm.matterfilter = false;
             vm.moddatefilter = false;
             vm.opendatefilter = false;
@@ -78,10 +75,8 @@
             vm.practiceGroupfilter = false;
             vm.projectIDfilter = false;
             vm.showfiltericon = vm.configSearchContent.ManagedPropertyLastModifiedTime;
-            //end
 
-            //#region Assigning scopes for Dropdowns in headers
-            //Start
+            //Assigning scopes for Dropdowns in headers
             vm.matterDropDowm = false;
             vm.clientDropDowm = false;
             vm.modifieddateDropDowm = false;
@@ -91,14 +86,15 @@
             vm.practiceGroupDropDown = false;
             vm.projectIDDropDown = false;
             vm.opendateDropDown = false;
-            //End
+
+            //#endregion Declaring Variables.
+
             Office.initialize = function (reason) {
             };
             $scope.initOfficeLibrary = function () {
-
             };
 
-            //#region for setting the dynamic width to grid
+            //#region For setting the dynamic width to grid
             vm.setWidth = function () {
                 var width = $window.innerWidth;
                 angular.element(".ui-grid-viewport").css('max-width', width);
@@ -112,12 +108,10 @@
                     vm.searchResultsLength = 55;
                 }
             };
-
             vm.setWidth();
-
             //#endregion
 
-            //#region for clearing all sorts 
+            //#region For clearing all sorts 
             vm.clearAllFiltersofSort = function () {
                 angular.element('[id^="asc"]').hide();
                 angular.element('[id^="desc"]').hide();
@@ -131,13 +125,15 @@
             }
             //#endregion
 
-            //For setting dynamic height to the grid
+            //#region For setting dynamic height to the grid
             vm.getTableHeight = function () {
                 return {
                     height: ($window.innerHeight - 95) + "px"
                 };
             };
+            //#endregion
 
+            //#region To get the column header name
             vm.switchFuction = function (columnName) {
                 var displayColumn = [];
                 switch (columnName) {
@@ -180,9 +176,12 @@
                 }
                 return displayColumn;
             };
+            //#endregion
 
             $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
 
+            //#region To get the column schema and populate in column collection for grid with sorting of column display
+            //Declaring column collection object.
             var columnDefs1 = [];
             angular.forEach(configs.search.searchColumnsUIPickerForMatter, function (value, key) {
                 if (value.displayInUI == true && value.position != -1) {
@@ -202,6 +201,8 @@
                     });
                 }
             });
+
+            //Sorting the column as per appsetting columns defination.
             function getSortFunction(fieldName) {
                 return function (col1, col2) {
                     return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
@@ -209,8 +210,9 @@
             }
             columnDefs1.sort(getSortFunction("position"));
 
-            //#region Setting the options for grid
+            //#endregion
 
+            //#region Setting the options for grid and declaration of grid object
             vm.gridOptions = {
                 infiniteScrollDown: true,
                 infiniteScrollRowsFromEnd: 10,
@@ -242,12 +244,11 @@
                     vm.setColumns();
                 }
             };
-
             //#endregion
 
             vm.watchFuncscroll = function () { }
 
-            //#region for setting the classes for ui-grid based on size
+            //#region For setting the classes for ui-grid based on size
             vm.setColumns = function () {
                 if ($window.innerWidth < 360) {
                     $interval(function () {
@@ -263,9 +264,7 @@
             }
             //#endregion
 
-
-            //#region functionality for infinite scroll
-            //start
+            //#region Functionality for infinite scroll 
             vm.pagenumber = 1;
             vm.responseNull = false;
             vm.watchFunc = function () {
@@ -298,9 +297,6 @@
             }
             //#endregion
 
-
-            //#endregion
-
             //#region Setting the api calls 
             //search api call 
             function get(options, callback) {
@@ -312,6 +308,7 @@
                 });
             }
 
+            //Api call for pin matter
             function getPinnedMatters(options, callback) {
                 api({
                     resource: 'matterResource',
@@ -331,7 +328,7 @@
                 });
             }
 
-            //Callback function for unpin 
+            //Callback function for unpin
             function UnpinMatters(options, callback) {
                 api({
                     resource: 'matterResource',
@@ -341,7 +338,7 @@
                 });
             }
 
-            //Callback function for Onenote Url Exists 
+            //Callback function for Onenote Url Exists
             function OneNoteUrlExists(options, callback) {
                 api({
                     resource: 'matterResource',
@@ -351,7 +348,7 @@
                 });
             }
 
-
+            //#region Functionality to check does URL exist in system.
             vm.checkUrlExists = function (data) {
                 var loginUser = adalService.userInfo.userName.toLowerCase();
                 vm.hideUpload = true;
@@ -375,7 +372,7 @@
                     vm.dropDownMenu = true;
                 });
             }
-
+            //#endregion
 
             //#region Code for Upload functionality
             vm.docUpLoadSuccess = false;
@@ -384,7 +381,8 @@
             vm.IsDupliacteDocument = false;
             vm.IsNonIdenticalContent = false;
             vm.showLoading = false;
-            //Callback function for folder hierarchy 
+
+            //Callback function for folder hierarchy
             function getFolderHierarchy(options, callback) {
                 api({
                     resource: 'matterResource',
@@ -393,7 +391,7 @@
                     success: callback
                 });
             }
-
+            //#region Functionality to get folder hirarcy.
             vm.getFolderHierarchy = function (matterName, matterUrl, matterGUID) {
 
                 if ((matterName && matterName !== "") && (matterUrl && matterUrl !== "") && (matterGUID && matterGUID !== "")) {
@@ -440,8 +438,9 @@
                     vm.lazyloader = true;
                 });
             }
-            //#region drop method will handle the file upload scenario for both email and attachment
+            //#endregion
 
+            //#region Drop method will handle the file upload scenario for both email and attachment
             //Helper method which will handle mail or doc upload. This method will be called from inside vm.handleDrop
             function mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck, draggedFile, sOperation) {
                 vm.isLoadingFromDesktopStarted = true;
@@ -531,8 +530,9 @@
                     vm.uploadAttachment(attachmentRequestVM, draggedFile);
                 }
             }
+            //#endregion
 
-            //This function will handle the files that has been dragged from the outlook
+            //#region functionality to handle the files that has been dragged from the outlook
             vm.handleOutlookDrop = function (targetDrop, sourceFile) {
                 vm.oUploadGlobal.successBanner = false;
                 vm.targetDrop = targetDrop;
@@ -544,8 +544,9 @@
                 var draggedFile = $filter("filter")(vm.allAttachmentDetails, sourceFile.attachmentId)[0];
                 mailOrDocUpload(targetDrop, sourceFile, isOverwrite, performContentCheck, draggedFile);
             }
+            //#endregion
 
-            //This function will handle the files that has been dragged from the user desktop
+            //#region functionality will handle the files that has been dragged from the user desktop
             vm.ducplicateSourceFile = [];
             vm.handleDesktopDrop = function (targetDropUrl, sourceFiles, isOverwrite) {
                 vm.oUploadGlobal.successBanner = false;
@@ -630,12 +631,9 @@
 
             }
             vm.uploadedFiles = [];
-
             //#endregion
 
-            //#region Mail Upload Methods
-
-            //Call back function when the mail gets uploaded
+            //#region functionality to handle when mail gets uploaded
             vm.uploadEmail = function (attachmentRequestVM, droppedAttachedFile) {
                 uploadEmail(attachmentRequestVM, function (response) {
                     vm.showLoading = false;
@@ -690,8 +688,9 @@
                     vm.isLoadingFromDesktopStarted = false;
                 });
             }
+            //#endregion
 
-
+            //#region functionality to handle when mail gets uploaded
             function attachmentEmailOverwriteConfiguration(selectedOverwriteConfiguration, isEmail) {
                 var bAppendEnabled = false;
                 switch (selectedOverwriteConfiguration) {
@@ -708,7 +707,7 @@
                 return bAppendEnabled;
             }
 
-            ////Call Web API method for upload mail
+            //Call Web API method for upload mail
             function uploadEmail(attachmentRequestVM, callback) {
                 api({
                     resource: 'matterResource',
@@ -809,6 +808,8 @@
             }
             //#endregion
 
+
+            //#region Functionality to display matter as pin or unpin.
             vm.showMatterAsPinOrUnpin = function (response, searchRequest) {
                 getPinnedMatters(searchRequest, function (pinnedResponse) {
                     if (pinnedResponse && pinnedResponse.length > 0) {
@@ -835,7 +836,9 @@
                     }
                 });
             }
+            //#endregion
 
+            //#region Functionality to edit attached files.
             vm.editAttachment = function (element, event) {
                 //ToDo: Use Angular data binding functionality
                 var editIcon = $("#" + event.target.id);
@@ -858,7 +861,9 @@
                     thisAttachmentText.val(attachmentText);
                 }
             }
+            //#endregion
 
+            //#region Functionality to save attached files.
             vm.saveAttachment = function (element, event) {
                 //ToDo: Use Angular data binding functionality
                 var saveIcon = $("#" + event.target.id);
@@ -895,6 +900,8 @@
                     //ToDo:showErrorNotification(thisAttachmentText, "Invalid character");
                 }
             }
+            //#endregion
+
             //#region  Methods for Error Notifications Dialogs
 
             //Methods for over writing the document
@@ -921,9 +928,11 @@
                 vm.showLoading = false;
                 jQuery('#overWriteNo').hide();
             }
+
             //#endregion
 
 
+            //#region open upload model popu.
             vm.Openuploadmodal = function (matterName, matterUrl, matterGUID) {
                 vm.lazyloader = false;
                 vm.getFolderHierarchy(matterName, matterUrl, matterGUID);
@@ -954,6 +963,9 @@
                 successBanner: false
             };
 
+            //#endregion
+
+            //Callback function for attachment token upload.
             vm.attachmentTokenCallbackEmailClient = function (asyncResult, userContext) {
                 "use strict";
                 if (asyncResult.status === "succeeded") {
@@ -967,6 +979,7 @@
                 }
             }
 
+            //Functionality to get icon source.
             vm.getIconSource = function (sExtension) {
                 var uploadImageDocumentIcon = configs.uri.SPOsiteURL + vm.uploadMessages.uploadImageDocumentIcon;
                 var iconSrc = uploadImageDocumentIcon.replace("{0}", sExtension);
@@ -975,6 +988,7 @@
                 return iconSrc;
             }
 
+            //Functionality to check white spaces in enter value.
             vm.checkEmptyorWhitespace = function (input) {
                 "use strict";
                 if (/\S/.test(input)) {
@@ -983,6 +997,7 @@
                 return oFindMatterConstants.No_Subject_Mail;
             }
 
+            //#region Functionality to initialize application in outlook.
             vm.initOutlook = function () {
 
                 vm.IsDupliacteDocument = false;
@@ -1008,8 +1023,9 @@
                     }
                 }
             }
+            //#endregion
 
-
+            //#region Functionality to create mail popup to user.
             vm.createMailPopup = function () {
                 var sImageChunk = "", nIDCounter = 0;
                 var attachmentName = "", mailSubject = "", sAttachmentFileName = "", bHasEML = false, attachmentType = "", sContentType = "", sExtension = "", iconSrc = "";
@@ -1071,7 +1087,7 @@
             }
             //#endregion
 
-            //#region Request object for the GetMattersMethod
+            //#region Declaraing object for search request.
             var searchRequest = {
                 Client: {
                     Url: configs.global.repositoryUrl
@@ -1113,8 +1129,9 @@
                             }
                 }
             }
-
             //#endregion
+
+            //#region Create filter text with different managed properties.
             vm.filterSearch = function (val) {
                 if (val.length > 3) {
 
@@ -1150,6 +1167,7 @@
                     }
                 }
             }
+            //#endregion
 
             //#region For filtering the grid when clicked on search button
             vm.searchMatter = function (val) {
@@ -1207,7 +1225,9 @@
                 }
                 return matterResource.get(searchMatterRequest).$promise;
             }
+            //#endregion
 
+            //#region Functionality to global level search
             vm.search = function () {
                 vm.clearFiltersForSearch();
                 vm.lazyloader = false;
@@ -1268,14 +1288,13 @@
                 vm.GetMatters(id);
                 vm.matterid = id;
             }
-
             //#endregion
-            //#region for searching matter by property and searchterm
+
+            //#region Functionality to search matter by property and searchterm
             vm.mattersearch = function (term, property, bool) {
                 vm.lazyloaderFilter = false;
                 vm.filternodata = false;
                 searchRequest.SearchObject.PageNumber = 1;
-                //searchRequest.SearchObject.SearchTerm = term;
                 searchRequest.SearchObject.Sort.ByProperty = property;
                 searchRequest.SearchObject.Sort.Direction = 0;
                 if (bool) {
@@ -1484,6 +1503,8 @@
                 }
             }
             //#endregion
+
+            //#region Functionality to set previous values for multiple filter functionality.
             vm.SetPreviousFilterVlaues = function () {
                 if (vm.previousMatterIdValue != '') {
                     searchRequest.SearchObject.Filters.ProjectID = vm.previousMatterIdValue;
@@ -1514,9 +1535,9 @@
                     vm.previousAreaOfLawValue = '';
                 }
             }
+            //#endregion
 
-            //#region Code for filtering ModifiedDate
-            //start
+            //#region Functionality to filter matters based on modifiedDate selection.
             vm.FilterModifiedDate = function (name) {
                 if (vm.startDate != "" || vm.endDate != "" || vm.modStartDate != "" || vm.modStartDate != "") {
                     vm.matterdateheader = false;
@@ -1605,7 +1626,9 @@
                     vm.matterdateheader = true;
                 }
             }
+            //#endregion
 
+            //#region Functionality to clear all filters.
             vm.clearAllFilter = function () {
 
                 vm.matterfilter = false;
@@ -1665,10 +1688,9 @@
                 vm.previousAreaOfLawValue = '';
                 vm.previousMatterIdValue = '';
             }
-
             //#endregion
 
-            //#region clearing all filters
+            //#region Clear column level filter.
             vm.clearFilters = function (property) {
                 vm.matterdateheader = true;
                 vm.matterheader = true;
@@ -1677,7 +1699,6 @@
                 vm.nodata = false;
                 vm.responseNull = false;
                 vm.pagenumber = 1;
-                //searchRequest.SearchObject.SearchTerm = '';
                 searchRequest.SearchObject.ItemsPerPage = vm.searchResultsLength;
                 searchRequest.SearchObject.PageNumber = vm.pagenumber;
                 searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyLastModifiedTime + "";
@@ -1808,18 +1829,15 @@
                     });
                 }
             }
-
             //#endregion
 
             //#region Code written for displaying types in dropdown 
-            //Start 
             vm.Matters = [{ Id: 1, Name: "" + vm.matterConfigContent.Dropdown1Item1 + "" }, { Id: 2, Name: "" + vm.matterConfigContent.Dropdown1Item2 + "" }, { Id: 3, Name: "" + vm.matterConfigContent.Dropdown1Item3 + "" }];
             vm.ddlMatters = vm.Matters[1];
             //#endregion  
 
             vm.pinnedorunpinned = false;
-            //#region Hits when the Dropdown changes 
-            //Start 
+            //#region Functionality to populate grid on selection of option for matter type dropdown changes
             vm.GetMatters = function (id) {
                 vm.setWidth();
                 if (!vm.pinnedorunpinned) {
@@ -1986,15 +2004,13 @@
                     });
                 }
             }
-            //#endregion 
+            //#endregion
 
-
-            //#region To run GetMatters function on page load 
+            //#region To run GetMatters function on page load
             vm.SetMatters(vm.matterid, vm.mattername);
             //End 
             
             //#region Written for unpinning the matter 
-            //Start 
             vm.UnpinMatter = function (data) {
                 vm.pinnedorunpinned = true;
                 vm.lazyloader = false;
@@ -2014,11 +2030,9 @@
                     }
                 });
             }
-            //End 
+            //#endregion
 
-
-            //#region Written for pinning the matter 
-            //Start 
+            //#region Functionality for pinning the matter.
             vm.PinMatter = function (data) {
                 vm.pinnedorunpinned = true;
                 vm.lazyloader = false;
@@ -2054,9 +2068,7 @@
             }
             //#endregion
 
-            //#region To display modal up in center of the screen...
-            //Start 
-
+            //#region To display modal up in center of the screen..
             vm.reposition = function () {
                 var modal = $(this)
 
@@ -2066,7 +2078,7 @@
                 // or four works better for larger screens. 
                 dialog.css("margin-top", Math.max(0, (jQuery(window).height() - dialog.height()) / 2));
             }
-            // Reposition when a modal is shown 
+            // Reposition when a modal is shown
             jQuery('.modal').on('show.bs.modal', vm.reposition);
             // Reposition when the window is resized 
             jQuery(window).on('resize', function () {
@@ -2102,8 +2114,7 @@
                 $rootScope.foldercontent = false;
             }
 
-            //#region Angular Datepicker Starts here
-            //Start for modified date 
+            //#region For declaring modifiedstartdate and modifiedenddate variable.
             vm.modDateOptions = {
                 formatYear: 'yy',
                 maxDate: new Date()
@@ -2117,7 +2128,9 @@
             $scope.$watch('vm.modStartDate', function (newval, oldval) {
                 vm.modEndDateOptions.minDate = newval;
             });
+            //#endregion
 
+            //#region Functionality to get results on change modified date.
             vm.changeOnModifiedDate = function ($event) {
                 if ($event.keyCode == '13' || $event.keyCode == '9') {
 
@@ -2162,7 +2175,9 @@
                     }
                 }
             };
+            //#endregion
 
+            //#region Functionality to open modified start date selection template.
             vm.openModStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
@@ -2173,6 +2188,9 @@
                 }
                 this.modifiedStartDate = true;
             };
+            //#endregion
+
+            //#region Functionality to open modified end date selection template.
             vm.openModEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
@@ -2180,6 +2198,7 @@
                 }
                 this.modifiedEndDate = true;
             };
+            //#endregion
 
             vm.modifiedStartDate = false;
             vm.modifiedEndDate = false;
@@ -2187,7 +2206,6 @@
             vm.disabled = function (date, mode) {
                 return (mode === 'day' && (date.getDay() != 0));
             };
-            //End
 
             //Start for open date options
             vm.dateOptions = {
@@ -2195,6 +2213,7 @@
                 maxDate: new Date()
             };
 
+            //#region Functionality to get result as per selection of created date.
             vm.changeOnCreateDate = function ($event) {
                 if ($event.keyCode == '13' || $event.keyCode == '9') {
 
@@ -2250,7 +2269,7 @@
                 vm.endDateOptions.minDate = newval;
             });
 
-
+            //#region Functionality to open start date selection template.
             vm.openStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
@@ -2261,6 +2280,8 @@
                 }
                 this.openedStartDate = true;
             };
+            //#endregion
+            //#region Functionality to open end date selection template.
             vm.openEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
@@ -2268,6 +2289,7 @@
                 }
                 this.openedEndDate = true;
             };
+            //#endregion
 
             vm.openedStartDate = false;
             vm.openedEndDate = false;
@@ -2275,12 +2297,9 @@
             vm.disabled = function (date, mode) {
                 return (mode === 'day' && (date.getDay() != 0));
             };
-
             //#endregion
 
-            //#region Custom Sorting functionality
-            //Start
-
+            //#region Functionality to do filter on option selected for my and pinned or all documnets
             vm.FilterByType = function () {
                 vm.lazyloader = true;
                 if (vm.matterid == 3) {
@@ -2329,7 +2348,9 @@
                     });
                 }
             }
+            //#endregion
 
+            //#region Custom Sorting functionality
             vm.sortby = "desc";
             vm.sortexp = "matterModifiedDate";
             vm.showSortExp = function () {
@@ -2346,7 +2367,9 @@
                     $scope.$apply();
                 }
             }
+            //#endregion
 
+            //#region Functionality to clear filter value on sorting.
             vm.clearFilterValuesOnSorting = function () {
                 if (vm.matterfilter == false && vm.clientfilter == false && vm.areafilter == false &&
                     vm.areaoflawfilter == false && vm.subareafilter == false && vm.attorneyfilter == false &&
@@ -2391,7 +2414,9 @@
                     }
                 }
             }
-            
+            //#endregion
+
+            //#region Functionality to get correct sort order for grid as per column selection.
             $scope.sortChanged = function (grid, sortColumns) {
                 $timeout(function () { vm.matterdateheader = true; vm.matterheader = true; vm.lazyloader = false; }, 1);
                 vm.divuigrid = false;
@@ -2652,8 +2677,7 @@
             }
             //#endregion
 
-            //#region setting the grid options when window is resized
-
+            //#region Setting the grid options when window is resized
             angular.element($window).bind('resize', function () {
                 angular.element('#mattergrid .ui-grid').css('height', $window.innerHeight - 90);
                 angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
@@ -2668,10 +2692,9 @@
                     angular.element('.ui-grid-menu-mid').css('height', $window.innerHeight - 300 + 'px !important');
                 }
             });
-
             //#endregion
 
-            //#region
+            //#region Functionality to get suggestions as user type search value.
             vm.typeheadselect = function (index, selected) {
                 vm.clearFiltersForSearch();
                 vm.lazyloader = false;
@@ -2708,7 +2731,7 @@
             }
             //#endregion
 
-            //#region for showing the matters dropdown in resposive 
+            //#region For showing the matters dropdown in resposive 
             vm.showmatterdrop = function ($event) {
                 $event.stopPropagation();
                 $rootScope.displayinfo = false;
@@ -2725,7 +2748,7 @@
             }
             //#endregion
 
-            //#region for closing all the dropdowns
+            //#region For closing all the dropdowns
             vm.closealldrops = function () {
                 angular.element('.zindex6').css('z-index', '6');
                 vm.mattersdrop = false;
@@ -2737,9 +2760,7 @@
             }
             //#endregion
 
-            //#region To getContentCheckConfigurations
-            //start
-
+            //#region Api call to get content check configurations
             function getContentCheckConfigurations(options, callback) {
                 api({
                     resource: 'matterResource',
@@ -2748,6 +2769,8 @@
                     success: callback
                 });
             }
+            //#endregion
+            //#region Functionality to get content check configurations
             vm.getContentCheckConfigurations = function (siteCollectionPath) {
                 siteCollectionPath = JSON.stringify(siteCollectionPath);
                 getContentCheckConfigurations(siteCollectionPath, function (response) {
@@ -2760,6 +2783,8 @@
                     }
                 });
             }
+            //#endregion
+
             //#region To expand and collapse the folder tree structure in upload
             vm.showSelectedFolderTree = function (folder) {
                 function setActiveItem(item) {
@@ -2789,6 +2814,7 @@
                 setActiveItem(folder);
             }
             //#endRegion
+
             //#region To do contentcheck or save as latestversion
             vm.localOverWriteDocument = function (duplicateFile, sOperation) {
                 if (duplicateFile.fileType == "remotefile") {
@@ -2858,8 +2884,9 @@
                     });
                 }
             }
+            //#endRegion
 
-            // Function to configure time stamp
+            //#region Function to configure time stamp
             vm.overwriteConfiguration = function (fileName) {
                 // Update the content as per the logic.
                 var selectedOverwriteConfiguration = vm.globalSettings.overwriteDupliacteFileNameWithDateTimeFor.trim().toLocaleUpperCase(),
@@ -2879,7 +2906,9 @@
                 }
                 return bAppendEnabled;
             }
+            //#endRegion
 
+            //#region Fnctionality to send notification to check content.
             vm.contentCheckNotification = function (file, isLocalUpload) {
                 file.contentCheck = "contentCheck";
                 file.saveLatestVersion = "False";
@@ -2887,8 +2916,10 @@
                 if (file.append) {
                     file.append = false;
                 }
-
             }
+            //#endRegion
+
+            //#region Fnctionality to abort content check of files.
             vm.abortContentCheck = function (file, isLocalUpload) {
                 "use strict";
                 if (isLocalUpload) {
@@ -2899,6 +2930,7 @@
                 file.value = file.value + "<br/><div>" + vm.uploadMessages.content_Check_Abort + "</div>";
                 file.cancel = "True";
             }
+            //#endRegion
 
             vm.closeSuccessBanner = function () {
                 vm.oUploadGlobal.successBanner = false;
@@ -2911,6 +2943,7 @@
 
                 }
             }
+
             //#region For displaying and setting the position of the filters name wise
             vm.matterheader = true;
             vm.matterdateheader = true;
@@ -3018,8 +3051,7 @@
             }
             //#endregion
 
-            //#region filtering the values as per the name
-            //start
+            //#region Filtering the values as per the matter name
             vm.filtermatter = function (value) {
                 var searchTerm = "";
                 if (vm.filtername == vm.matterConfigContent.GridColumn1Header) {
@@ -3058,22 +3090,20 @@
                 });
                 return arrelements.toString();
             }
-
-            //end
             //#endregion
 
-            //#region for opening view matters url in new window
+            //#region For opening view matters url in new window
             vm.viewMatterDetails = function (url, guid) {
                 var viewmatterurl = url + '/SitePages/' + guid + '.aspx';
                 window.open(viewmatterurl, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=650,height=500')
             }
             //#endregion
 
-
             $rootScope.$on('disableOverlay', function (event, data) {
                 vm.lazyloader = true;
             });
 
+            //#region For clearing search on filter.
             vm.clearFiltersForSearch = function () {
                 vm.attorneySearchTerm = "";
                 searchRequest.SearchObject.Filters.ResponsibleAttorneys = "";
@@ -3111,11 +3141,13 @@
                 vm.areaOfLawSearchTerm = "";
                 vm.ProjectID = false;
             }
-
+            //#endregion
             angular.element('#menuitem-1').dblclick(function (e) {
                 e.preventDefault();
             });
         }]);
+
+    //#region For adding custom filter 
     app.filter('unique', function () {
         return function (collection, keyname) {
             var output = [],
@@ -3131,5 +3163,6 @@
             return output;
         };
     });
+    //#endregion
 })();
 
