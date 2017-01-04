@@ -137,10 +137,10 @@
                     <div class="col-xs-12 pad0">
                         <div class="row margin0 marginTop10">
                             <div class="assignNewPerm">
-                                <div class="settingsLabelTeam">{{vm.settingsConfigs.Label15DefaultValue4Text}}</div>
+                                <div style="min-width:295px;max-width:295px;float:left;margin-right:32px">{{vm.settingsConfigs.Label15DefaultValue4Text}}</div>
                                 <div class="addNewMember pull-left">
                                     <div class="mediumSmallRole  floatContentLeft ddlRoleAssignDiv roleWidth">{{vm.settingsConfigs.Label16DefaultValue4Text}}</div>
-                                    <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1 ddlPermissionLbl" >{{vm.settingsConfigs.Label17DefaultValue4Text}}</div>
+                                    <div class="mediumSmallPermission  floatContentLeft ddlPermAssignDiv1 ddlPermissionLbl" style="margin-left:5px" >{{vm.settingsConfigs.Label17DefaultValue4Text}}</div>
                                     <div class="close customClose"></div>
                                 </div>
                             </div>
@@ -148,7 +148,7 @@
                         <div class="row margin0 marginTop10" data-ng-repeat="assignTeam in vm.assignPermissionTeams">
                             <div class="row1 assignNewPerm" id="SettingsPermissions">
                                 <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
-                                <input  id='txtUser{{assignTeam.assigneTeamRowNumber}}' class="form-control mediumPermissions clear inputAssignPerm ui-autocomplete-input inputTxtTeamUserInSettings" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" ng-model="assignTeam.assignedUser" uib-typeahead="users.name + ' ('+ users.email + ')' for users in vm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='vm.onSelect($item, $model, assignTeam,"team","",$event)' spellcheck="true" type="text" placeholder="{{vm.settingsConfigs.Textbox1DefaultValue4PlaceholdertText}}" autocomplete="off" typeahead-min-length='3'>
+                                <input style="min-width:295px;max-width:295px;margin-bottom: 10px;float:left;margin-right:12px;padding: 6px 15px 6px 12px;"  id='txtUser{{assignTeam.assigneTeamRowNumber}}' class="form-control mediumPermissions clear inputAssignPerm ui-autocomplete-input" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" ng-model="assignTeam.assignedUser" uib-typeahead="users.name + ' ('+ users.email + ')' for users in vm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='vm.onSelect($item, $model, assignTeam,"team","",$event)' spellcheck="true" type="text" placeholder="{{vm.settingsConfigs.Textbox1DefaultValue4PlaceholdertText}}" autocomplete="off" typeahead-min-length='3'>
                                 <div ng-show='teamAssingnResults'>
                                     <i class="glyphicon glyphicon-remove"></i> {{vm.settingsConfigs.Label18DefaultValue4NoResultsFoundText}}
                                 </div>

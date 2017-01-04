@@ -463,6 +463,8 @@
                         else {
                             localStorage.removeItem("oPageOneData");
                             localStorage.removeItem("oPageTwoData");
+                            cm.chkConfilctCheck = false;
+                            cm.matterDescription = "";
                             cm.canCreateMatterPermission = true; cm.errPermissionMessage = "";
                             var dMatterAreaOfLaw = "", dMatterPracticeGroup = "", dMatterSubAreOfLaw = "", dMatterTypes = "", dPrimaryMatterType = "", dMatterUsers = "", dMatterUserEmails = "", dMatterPermissions = "", dMatterRoles = "";
                             cm.conflictUsers.assignedUser = "";
@@ -2577,6 +2579,7 @@
                 cm.assignPermissions = [];
                 cm.secureMatterCheck = true;
                 cm.conflictRadioCheck = false;
+                cm.chkConfilctCheck = false;
                 localStorage.iLivePage = 1;
                 cm.createButton = "Create";
                 localStorage.removeItem("oPageOneData");
