@@ -81,11 +81,10 @@ In addition to the priorities list, we bring Matter Center to GitHub with a weal
 We have already pushed these ideas to [UserVoice](http://mattercenter.uservoice.com) as well as to the [Issues list](https://github.com/Microsoft/mattercenter/issues). We encourage you to look to these two places.  
 
 #Committers
-There are currently three (3) [committers](https://github.com/Microsoft/mattercenter/graphs/contributors):
+There are currently the following [committers](https://github.com/Microsoft/mattercenter/graphs/contributors):
  
 1. Amitabh Mukherjee, [Amitabh.Mukherjee@microsoft.com](mailto:amitabhm@microsoft.com)
 2. Wilson Reddy Gajarla, [wilg@microsoft.com](mailto:wilg@microsoft.com)
-3. Sunnykumar Mistry, [v-sumist@microsoft.com] (mailto:v-sumist@microsoft.com) 
 
 Additional committers will be added later based on interest and deep technical involvement with the project.
 

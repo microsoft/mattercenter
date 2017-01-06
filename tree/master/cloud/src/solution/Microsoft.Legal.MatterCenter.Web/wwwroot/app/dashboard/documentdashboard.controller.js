@@ -3,6 +3,7 @@
     var app = angular.module("matterMain");
     app.controller('DocumentDashBoardController', ['$scope', '$state', '$interval', '$stateParams', 'api', '$timeout', 'documentDashBoardResource', '$rootScope', 'uiGridConstants', '$location', '$http', 'commonFunctions', '$window', '$filter',
         function documentDashBoardController($scope, $state, $interval, $stateParams, api, $timeout, documentDashBoardResource, $rootScope, uiGridConstants, $location, $http, commonFunctions, $window, $filter) {
+            //#region For declaring variables.
             var vm = this;
             vm.selected = undefined;
             vm.selectedAuthor = undefined;
@@ -41,7 +42,6 @@
             //#endregion
 
             //#region Variable to show document count
-
             vm.allDocumentCount = 0;
             vm.myDocumentCount = 0;
             vm.pinDocumentCount = 0;
@@ -49,7 +49,9 @@
             vm.selectedDocuments = [];
             //#endregion
 
-            //#region closing all dropdowns on click of page
+            //#endregion Declaring Variables.
+
+            //#region Closing all dropdowns on click of page
             vm.closealldrops = function ($event) {
                 if ($event !== null) {
                     $event.stopPropagation();
@@ -69,13 +71,11 @@
             }
             //#endregion
 
-            //#region closing and hiding innerdropdowns of search box
+            //#region Closing and hiding innerdropdowns of search box
             vm.hideinnerdashboarddrop = function ($event) {
                 $event.stopPropagation();
                 vm.clientdrop = false;
                 vm.clientdropvisible = false;
-
-                //vm.collapseDateControls();
             }
 
             vm.collapseDateControls = function () {
@@ -86,6 +86,7 @@
             }
             //#endregion
 
+            //#region Declaration of GridObject with properties to display.
             var gridOptions = {
                 paginationPageSize: 30,
                 enableGridMenu: false,
@@ -96,7 +97,9 @@
                 enableColumnMenus: false,
                 enableFiltering: false
             }
+            //#endregion
 
+            //#region To get the column header name
             vm.switchFuction = function (columnName) {
                 var displayColumn;
                 switch (columnName) {
@@ -131,8 +134,9 @@
 
                 return displayColumn;
             };
-            //#region Document 
+            //#endregion
 
+            //#region To get the column schema and populate in column collection for grid with sorting of column display
             var columnDefs1 = [];
             columnDefs1.push({
                 field: 'checker',
@@ -160,7 +164,9 @@
                     });
                 }
             });
-
+            //Declaring column collection object. 
+            // Collection requires as columns defination will be read through appsettings files and - 
+            // - number of columns is dynemic (not fixed) and reduced code redundancy and easy to read and understand.
             columnDefs1.push({
                 field: 'pin',
                 width: '6%',
@@ -169,14 +175,17 @@
                 enableColumnMenu: false,
                 position: 75
             });
+
+            //Sorting the column as per appsetting columns defination.
             function getSortFunction(fieldName) {
                 return function (col1, col2) {
                     return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
                 }
             }
             columnDefs1.sort(getSortFunction("position"));
+            //#endregion
 
-            //#region Document Grid Functionality
+            //#region Document Grid Option object declaration.
             vm.documentGridOptions = {
                 enableHorizontalScrollbar: 0,
                 enableVerticalScrollbar: 0,
@@ -190,37 +199,16 @@
                 multiSelect: gridOptions.multiSelect,
                 enableFiltering: gridOptions.enableFiltering,
                 columnDefs: columnDefs1,
-                //[
-                //    { field: 'checker', displayName: 'checked', width: '2%', cellTemplate: '/app/dashboard/cellCheckboxTemplate.html', headerCellTemplate: '/app/dashboard/headerCheckboxTemplate.html', enableColumnMenu: false },
-                //    { field: 'documentIconUrl', displayName: 'Icon', width: '2%', cellTemplate: '<div class="ui-grid-cell-contents"><img src="{{row.entity.documentIconUrl}}"/></div>', headerCellTemplate: '<div class="ui-grid-cell-contents"><img class="docTypeIconHeader" id="docTypeIcon" style="padding:0" alt="Document type icon" src="' + configs.uri.SPOsiteURL + '/_layouts/15/images/generaldocument.png"></div>', enableColumnMenu: false },
-                //    { field: 'documentName', displayName: vm.documentDashboardConfigs.GridColumn1Header, width: '20%', cellTemplate: '/app/dashboard/DocumentDashboardCellTemplate.html', enableColumnMenu: false },
-                //    { field: 'documentClientId', displayName: vm.documentDashboardConfigs.GridColumn2Header, width: '15%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentClientId}}</div>', enableColumnMenu: false },
-                //    { field: 'documentOwner', displayName: vm.documentDashboardConfigs.GridColumn3Header, width: '14%', enableColumnMenu: false },
-                //    { field: 'documentModifiedDate', displayName: vm.documentDashboardConfigs.GridColumn4Header, width: '20%', enableColumnMenu: false },
-                //    { field: 'documentID', displayName: vm.documentDashboardConfigs.GridColumn5Header, width: '10%', cellTemplate: '<div class="ui-grid-cell-contents" >{{row.entity.documentID==""?"NA":row.entity.documentID}}</div>', enableColumnMenu: false },
-                //    { field: 'documentVersion', displayName: vm.documentDashboardConfigs.GridColumn6Header, width: '6%', enableColumnMenu: false },
-                //    { field: 'pin', width: '5%', displayName: '', cellTemplate: '<div class="ui-grid-cell-contents pad0"><img src="../Images/{{row.entity.pinType}}-666.png" ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>', enableColumnMenu: false }
-                //],
+
                 onRegisterApi: function (gridApi) {
                     vm.gridApi = gridApi;
                     $scope.gridApi = gridApi;
                     //Set the selected row of the grid to selectedRow property of the controller
                     gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                        // vm.selectedRow = row.entity
-                        //vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
-                        //var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.documentCreatedDate);
-                        //if (isRowPresent.length > 0) {
-                        //    row.entity.checker = true;
-                        //    vm.toggleChecker(true, row.entity);
-                        //}
-                        //else {
-                        //    vm.checker = false;
-                        //    row.entity.checker = false;
-                        //    vm.toggleChecker(false, row.entity);
-                        //}
                     });
                 }
             }
+            //#endregion
 
             //#region for client taxonomy
             var optionsForClientGroup = {
@@ -235,11 +223,10 @@
             };
             //#endregion
 
-
-
             //#region Cart functionality
+
             vm.cartelements = [];
-            //function to toggle check all 
+            //#region Functionality to check all checkboxes inside grid
             vm.toggleChecker = function (checked, rowinfo) {
                 vm.documentsCheckedCount = 0;
                 allChecked = false;
@@ -256,8 +243,9 @@
                 }
                 $("#chkAllDocCheckBox").prop('checked', allChecked);
             };
+            //#endregion
 
-            //Removing elements from cart
+            //#region Functionality to removing  attachemnt and elements from cart
             vm.removeAttachment = function (obj) {
                 var index = 0
 
@@ -287,8 +275,9 @@
                     jQuery('#UploadMatterModal').modal("hide");
                 }
             }
+            //#endregion
 
-            //function to check all checkboxes inside grid
+            //#region Functionality to check all checkboxes inside grid
             vm.toggleCheckerAll = function (checked) {
                 vm.cartelements = [];
                 vm.documentsCheckedCount = 0;
@@ -301,7 +290,9 @@
                     }
                 }
             };
+            //#endregion
 
+            //#region Functionality to show mail cart model
             vm.showMailCartModal = function () {
                 if (vm.documentsCheckedCount > 0) {
                     angular.element('#UploadMatterModal').modal("show");
@@ -312,8 +303,10 @@
                     vm.isDisplayMessage = false;
                 }
             }
+            //#endregion
 
-            //Event is going to fire when the user clicks on "Email as attachment" or "Email as link" in the modal window
+            //#region Event is going to fire when the user clicks on "Email as attachment" or "Email as link" in the modal window
+            //Event suffice requirement of downloading attached files and open it directly in outlook. (Outlook client needs to be installed)
             vm.downloadEmailAsAttachment = function (downloadAttachmentsAsEmail) {
                 //Get all the documents which are checked
                 var i = 0;
@@ -363,7 +356,6 @@
                         if (window.navigator.msSaveOrOpenBlob) {
                             window.navigator.msSaveOrOpenBlob(blob, fileName);
                         } else {
-                            //window.navigator.msSaveOrOpenBlob(blob, "temp.eml");
                             var element = window.document.createElement("a");
                             element.href = window.URL.createObjectURL(blob);
                             element.download = fileName;
@@ -371,11 +363,6 @@
                             element.click();
                             document.body.removeChild(element);
                         }
-
-
-
-
-
                         //Once we get the response, stop the progress
                         angular.forEach(vm.cartelements, function (document) {
                             angular.element("#document-" + i).css("display", "none");
@@ -401,7 +388,9 @@
                     vm.displayMessage = "Please select document."
                 }
             }
+            //#endregion
 
+            //#regionFunction to take care triming end characters.
             function trimEndChar(sOrignalString, sCharToTrim) {
                 "use strict";
                 if (sOrignalString && sCharToTrim === sOrignalString.substr(-1)) {
@@ -409,11 +398,10 @@
                 }
                 return sOrignalString;
             }
+            //#endregion Cart functionality
 
+            //#region API calls to get document information
 
-            //#endregion
-
-            //#region api call to get document information
             //api call to get all documents
             function get(options, callback) {
                 api({
@@ -424,6 +412,7 @@
                 });
             }
 
+            //API call to get document count.
             function getDocumentCounts(options, callback) {
                 api({
                     resource: 'documentDashBoardResource',
@@ -433,6 +422,7 @@
                 });
             }
 
+            //API call to get download attachment as stream in outlook.
             function downloadAttachmentsAsStream(options, callback) {
                 api({
                     resource: 'documentDashBoardResource',
@@ -442,6 +432,7 @@
                 });
             }
 
+            //API call to get download attachment 
             function downloadAttachments(options, callback) {
                 api({
                     resource: 'documentDashBoardResource',
@@ -451,7 +442,7 @@
                 });
             }
 
-            //api call to get all pinned documents
+            //API call to get all pinned documents
             function getPinDocuments(options, callback) {
                 api({
                     resource: 'documentDashBoardResource',
@@ -461,7 +452,7 @@
                 });
             }
 
-            //api call to get documents of the current logged in user
+            //API call to get documents of the current logged in user
             function myDocuments(options, callback) {
                 api({
                     resource: 'documentDashBoardResource',
@@ -481,7 +472,6 @@
                 });
             }
 
-
             //Callback function for unpin 
             function UnpinDocuments(options, callback) {
                 api({
@@ -492,6 +482,7 @@
                 });
             }
 
+            //Callback function to get texonomy details for clients.
             function getTaxonomyDetailsForClient(optionsForClientGroup, callback) {
                 api({
                     resource: 'documentDashBoardResource',
@@ -501,9 +492,9 @@
                 });
             }
 
-            //#endregion
+            //#endregion API calls to get document information
 
-            //Callback function for document assets 
+            //#region Callback function for document assets 
             function GetAssets(options, callbackOnSuccess, callbackOnError) {
                 api({
                     resource: 'documentDashBoardResource',
@@ -515,7 +506,7 @@
             }
             //#endregion
 
-            //Callback function for document assets 
+            //#region Callback function for document assets 
             function getUsers(optionsForUsers, callback) {
                 api({
                     resource: 'documentDashBoardResource',
@@ -526,7 +517,7 @@
             }
             //#endregion
 
-            //#region request object
+            //#region Declaring request object
             var documentRequest = {
                 Client: {
                     //ToDo: Need to read from config.js
@@ -551,10 +542,10 @@
                       }
                 }
             }
-
             //#endregion
 
-            vm.showMatterAsPinOrUnpin = function (response, searchRequest) {
+            //#region Functionality to showing documents as Pin or Unpin.
+            vm.showDocumentAsPinOrUnpin = function (response, searchRequest) {
                 documentRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                 getPinDocuments(searchRequest, function (pinnedResponse) {
                     if (pinnedResponse && pinnedResponse.length > 0) {
@@ -575,9 +566,11 @@
                     vm.getDocumentCounts();
                 });
             }
+            //#endregion
 
             vm.selected = "";
             vm.searchClicked = false;
+            //#region Search functionality at global level.
             vm.search = function () {
                 vm.searchClicked = true;
                 angular.element('#allDocuments').addClass("active");
@@ -624,15 +617,13 @@
                         vm.getDocumentCounts();
                         vm.documentGridOptions.data = response;
                     } else {
-                        //vm.getDocumentCounts();
-                        //vm.documentGridOptions.data = response;
-                        vm.showMatterAsPinOrUnpin(response, documentRequest);
+                        vm.showDocumentAsPinOrUnpin(response, documentRequest);
                     }
                 });
             }
+            //#endregion
 
-
-            //#region request object
+            //#region Request for search documents object
             vm.searchDocument = function (val) {
                 var searchUserRequest = {
                     Client: {
@@ -647,7 +638,7 @@
             }
             //#endregion
 
-
+            //#region  Searching document files
             vm.searchDocumentFile = function (val) {
                 var searchDocumentRequest = {
                     Client: {
@@ -694,8 +685,9 @@
                 searchDocumentRequest.SearchObject.Sort.Direction = 0;
                 return documentDashBoardResource.get(searchDocumentRequest).$promise;
             }
+            //#endregion
 
-            //#region
+            //#region Functionality to get suggestions as user type search value.
             vm.typeheadselect = function (index, selected) {
                 vm.searchClicked = true;
                 angular.element('#allDocuments').addClass("active");
@@ -736,13 +728,9 @@
                 vm.FilterByType();
             }
 
-            //#endregion
-
-            //#region
             vm.authortypeheadselect = function (index, selected) {
                 vm.selectedAuthor = index.name;
             }
-
             //#endregion
 
             //#reion This function will get counts for all matters, my matters and pinned matters
@@ -784,7 +772,6 @@
                         $scope.$apply();
                     }
                     vm.pagination();
-                    //vm.displaypagination = true;
                     if (response == "" || (vm.selectedTab == vm.documentDashboardConfigs.Tab2HeaderText && response.allDocumentCounts == 0) ||
                         (vm.selectedTab == vm.documentDashboardConfigs.Tab1HeaderText && response.myDocumentCounts == 0 && !vm.searchClicked) ||
                         (vm.selectedTab == vm.documentDashboardConfigs.Tab3HeaderText && response.pinnedDocumentCounts == 0 && !vm.searchClickedtype)) {
@@ -800,10 +787,7 @@
             }
             //#endregion
 
-
-
-
-            //#region function to get the documents based on search term
+            //#region Function to get the documents based on search term
             vm.getDocuments = function () {
                 vm.documentGridOptions.data = [];
                 vm.tabClicked = "All Documents";
@@ -824,12 +808,12 @@
                 documentRequest.SearchObject.SearchTerm = "";
                 get(documentRequest, function (response) {
                     //We need to call pinned api to determine whether a matter is pinned or not
-                    vm.showMatterAsPinOrUnpin(response, documentRequest);
+                    vm.showDocumentAsPinOrUnpin(response, documentRequest);
                 });
             }
             //#endregion
 
-            //#region function to get the documents which are pinned by user
+            //#region Function to get the documents which are pinned by user
             vm.getPinnedDocuments = function () {
                 vm.searchClicked = false;
                 vm.documentGridOptions.data = [];
@@ -886,7 +870,7 @@
             }
             //#endregion    	   
 
-            //#region function to get the documents based on login user
+            //#region Function to get the documents based on login user
             vm.getMyDocuments = function () {
                 vm.selected = "";
                 vm.searchClicked = false;
@@ -941,7 +925,6 @@
             }
             //#endregion
 
-            //$timeout(vm.getDocumentCounts(), 800);
             $timeout(function () { vm.getMyDocuments() }, 500);
 
             //#region This function will pin or unpin the document based on the image button clicked
@@ -1030,7 +1013,6 @@
             }
             //#endregion
 
-
             //#region Closing and Opening searchbar dropdowns
             vm.showupward = function ($event) {
                 $event.stopPropagation();
@@ -1060,14 +1042,12 @@
             }
             //#endregion
 
-            //#region Angular Datepicker Starts here
-            //Start
+            //#region For declaring startdate and enddate variable.
             vm.dateOptions = {
 
                 formatYear: 'yy',
                 maxDate: new Date()
             };
-
 
             vm.endDateOptions = {
                 formatYear: 'yy',
@@ -1077,8 +1057,9 @@
             $scope.$watch('vm.startDate', function (newval, oldval) {
                 vm.endDateOptions.minDate = newval;
             });
+            //#endregion
 
-
+            //#region Functionality to open start date selection template.
             vm.openStartDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
@@ -1091,6 +1072,9 @@
                 vm.openedEndDate = false;
 
             };
+            //#endregion
+
+            //#region Functionality to open end date selection template.
             vm.openEndDate = function ($event) {
                 if ($event) {
                     $event.preventDefault();
@@ -1099,10 +1083,11 @@
                 vm.openedEndDate = vm.openedEndDate ? false : true;
                 vm.openedStartDate = false;
             };
-
+            //#endregion
             vm.openedStartDate = false;
             vm.openedEndDate = false;
 
+            //#region Functionality to get result as per selection of created date.
             vm.changeOnCreateDate = function ($event) {
                 if ($event.keyCode == '13' || $event.keyCode == '9') {
 
@@ -1150,7 +1135,7 @@
             };
             //#endregion
 
-            //#region showing and hiding client dropdown
+            //#region Showing and hiding client dropdown
             vm.showclientdrop = function ($event) {
                 $event.stopPropagation();
                 if (!vm.clientdropvisible) {
@@ -1181,6 +1166,8 @@
                     vm.lazyloaderdocumentclient = true;
                 }
             }
+            //#endregion
+
             //#Region : Function handle the keyup events in advanced search to check and unchecked user selection.
             vm.customSelection = function (type) {
                 if (type !== undefined && type === vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText) {
@@ -1196,6 +1183,7 @@
                 }
             }
             //#endRegion
+
             //#region This event is going to fire when the user clicks on "Cancel" button in the filter panel
             vm.filterSearchCancel = function (type) {
                 if (vm.selectedClientsForCancel !== undefined && vm.selectedClientsForCancel.toString().length > 0) {
@@ -1212,9 +1200,7 @@
             }
             //#endregion
 
-
             //#region For Sorting by Alphebatical or Created date
-
             vm.FilterByType = function () {
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -1245,7 +1231,7 @@
                             vm.getDocumentCounts();
 
                         } else {
-                            vm.showMatterAsPinOrUnpin(response, documentRequest);
+                            vm.showDocumentAsPinOrUnpin(response, documentRequest);
                             if (!$scope.$$phase) {
                                 $scope.$apply();
                             }
@@ -1253,7 +1239,9 @@
                     });
                 }
             }
+            //#endregion
 
+            //#region For Sorting by column name and ascending and desending direction
             vm.sortExpression = function (byProperty, byColumn, sortDirection) {
                 documentRequest.SearchObject.Sort.ByProperty = byProperty;
                 documentRequest.SearchObject.Sort.Direction = sortDirection;
@@ -1311,11 +1299,10 @@
                     }
                 }
             }
-
             //#endregion
 
-            //#region Pagination
 
+            //Declaring variables for pagination
             vm.first = 1;
             vm.last = gridOptions.paginationPageSize;
             vm.total = 0;
@@ -1323,6 +1310,7 @@
             vm.fromtopage = vm.first + " - " + vm.last;
             vm.displaypagination = false;
 
+            //#region Functionality to implement pagination in grid.
             vm.pagination = function () {
                 vm.divuigrid = false;
                 vm.first = 1;
@@ -1349,12 +1337,13 @@
                     vm.displaypagination = true;
                     $interval(function () { vm.setPaginationHeight() }, 500, vm.divuigrid);
                 }
-                //vm.setToptoPagination();
                 if (!$scope.$$phase) {
                     $scope.$apply();
                 }
             };
+            //#endregion
 
+            //#region Functionality to get records on next page in grid.
             vm.next = function () {
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -1365,9 +1354,7 @@
                     vm.last = vm.last + gridOptions.paginationPageSize;
                     vm.total = vm.totalrecords - gridOptions.paginationPageSize;
                     if (vm.last > vm.totalrecords) {
-                        //vm.last = vm.totalrecords;
                         vm.fromtopage = vm.first + " - " + vm.totalrecords;
-                        //vm.setToptoPagination();
                     } else {
                         vm.fromtopage = vm.first + " - " + vm.last;
                     }
@@ -1418,7 +1405,9 @@
                     }
                 }
             };
+            //#endregion
 
+            //#region Functionality to get records on previous page in grid.
             vm.prev = function () {
                 vm.lazyloaderdashboard = false;
                 vm.divuigrid = false;
@@ -1476,20 +1465,6 @@
                     }
                 }
             };
-
-            //#endregion
-
-            //#region for setting the top to the pagination
-            //vm.setToptoPagination = function () {
-            //    var totalRows = vm.last - vm.first;
-            //    var calcTop = (totalRows * 30) + 100;
-            //    angular.element(".jsonGridFooter").css("top", calcTop);
-            //    if (!$scope.$$phase) {
-            //        $scope.$apply();
-            //    }
-            //}
-
-            //$timeout(function () { vm.setToptoPagination(); }, 800);
             //#endregion
 
             //#region This event is going to fire when the user clicks on "OK" button in the filter panel
@@ -1509,7 +1484,7 @@
             }
             //#endregion
 
-            //#region calling the document assets api
+            //#region Calling the document assets api
             vm.assetsuccess = false;
             vm.getDocumentAssets = function (row) {
                 vm.assetsuccess = false;
@@ -1531,6 +1506,7 @@
             }
             //#endregion
 
+            //#region get document URL
             vm.gotoDocumentUrl = function (url) {
                 if (vm.assetsuccess) {
                     $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, "_parent");
@@ -1539,6 +1515,7 @@
                 }
             }
 
+            //#region Functionality to implement search result.
             vm.getSearchResults = function () {
                 angular.element('#allDocuments').addClass("active");
                 angular.element('#myDocuments').removeClass("active");
@@ -1590,21 +1567,18 @@
                 get(documentRequest, function (response) {
                     if (response == "" || response.length == 0) {
                         vm.errorMessage = response.message;
-                        //documentRequest.SearchObject.Sort.ByProperty = "";
-                        //documentRequest.SearchObject.Sort.Direction = 1;
-                        //documentRequest.SearchObject.Sort.ByColumn = "";
                         vm.getDocumentCounts();
                     } else {
-                        vm.showMatterAsPinOrUnpin(response, documentRequest);
+                        vm.showDocumentAsPinOrUnpin(response, documentRequest);
                         if (!$scope.$$phase) {
                             $scope.$apply();
                         }
                     }
                 });
             }
+            //#endregion
 
-
-            //#region showing the hidden tabs in responsive
+            //#region Showing hidden tabs in responsive
             vm.showDocTabs = function ($event) {
                 $event.stopPropagation();
                 if (vm.showInnerNav) {
@@ -1612,10 +1586,11 @@
                     vm.showInnerNav = false;
                 }
             }
+            //#endregion
 
+            //#region To show selected tab
             vm.showSelectedTabs = function (name, count) {
                 vm.selectedTab = name;
-                //vm.selectedTabCount = count;
                 vm.selectedTabInfo = vm.selectedTab + " (" + count + ")";
                 if (name == vm.documentDashboardConfigs.Tab1HeaderText) {
                     vm.getMyDocuments();
@@ -1630,7 +1605,6 @@
 
             //#region Exporting to Excel Test
             vm.export = function () {
-                //vm.lazyloaderdashboard = false;
                 var exportMatterSearchRequest = {
                     Client: {
                         //ToDo: Need to read from config.js
@@ -1659,7 +1633,6 @@
                     exportMatterSearchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                     get(exportMatterSearchRequest, function (response) {
                         if (response == "" || response.length == 0) {
-                            //vm.lazyloaderdashboard = true;
                         } else {
                             vm.exportDate = response;
 
@@ -1696,14 +1669,9 @@
                     });
                 }
             }
-
             //#endregion
 
-
-            //#region To display modal up in center of the screen...
-            //Start 
-
-
+            //#region To display modal up in center of the screen..
             vm.reposition = function () {
                 var modal = $(this)
 
@@ -1713,16 +1681,20 @@
                 // or four works better for larger screens. 
                 dialog.css("margin-top", Math.max(0, (screen.height - dialog.height()) / 4));
             }
+
             // Reposition when a modal is shown 
             jQuery('.modal').on('show.bs.modal', vm.reposition);
+
             // Reposition when the window is resized 
             jQuery(window).on('resize', function () {
                 jQuery('.modal:visible').each(vm.reposition);
             });
 
             $timeout(vm.reposition(), 100);
-            //#endregion 
 
+            //Angular element resize function.
+            // When we minimize the window and window innerwidth is less than 867, it keeps open current active tab and -
+            // other two tabs (like My Document, Pinned Documents) will be open on clicking ellipsis(...)
             angular.element($window).bind('resize', function () {
                 if ($window.innerWidth > 867) {
                     vm.showNavTab = false;
@@ -1753,6 +1725,7 @@
             }
             //#endregion
 
+            //Binding click event to div
             angular.element('#mainDivContainer').bind('click', function (event) {
                 // Check if we have not clicked on the search box
                 if (!($(event.target).parents().andSelf().is('.dropdown-menu'))) {
@@ -1783,7 +1756,4 @@
             //#endregion
         }
     ]);
-}
-
-
-)();
+})();

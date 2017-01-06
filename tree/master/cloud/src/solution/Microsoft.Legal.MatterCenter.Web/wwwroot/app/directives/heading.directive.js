@@ -11,9 +11,7 @@
             },
             template: '<div>'
                         + '<div class="brand">'
-                           // + 'TEALS'
-                            + '<img src="../../images/TEALS_logo.png"/>'
-                           // + '<small> - computer science in every high school</small>'
+                        + '<img src="../../images/TEALS_logo.png"/>'
                         + '</div>'
                         + '<div class="pull-right user-name">'
                         + '<div style="display:inline-block">{{employeeNames}}</div>'

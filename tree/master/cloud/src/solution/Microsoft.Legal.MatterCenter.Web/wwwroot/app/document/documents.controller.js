@@ -8,26 +8,29 @@
         'documentResource', '$rootScope', 'uiGridConstants', '$location', '$http', '$templateCache', '$window', '$q', '$filter', 'commonFunctions', '$animate',
     function ($scope, $state, $interval, $stateParams, api, $timeout,
         documentResource, $rootScope, uiGridConstants, $location, $http, $templateCache, $window, $q, $filter, commonFunctions, $animate) {
+        //#region For declaring variables.
         var vm = this;
         vm.selected = undefined;
-        //#region dynamic content
+        //#region Variables for dynamic content
         vm.navigationContent = uiconfigs.Navigation;
         vm.header = uiconfigs.Header;
         vm.documentConfigContent = uiconfigs.Documents;
         vm.uploadMessages = uiconfigs.uploadMessages;
         vm.configSearchContent = configs.search;
         vm.globalSettings = configs.global;
-        //#end region
+        //#endregion
         vm.documentname = 'My Documents'
         vm.documentid = 2;
         vm.documentsdrop = false;
         vm.docdropinner = true;
         $rootScope.pageIndex = "2";
+
         //To load the Contextual help data
         $rootScope.help();
         $rootScope.bodyclass = "bodymain";
         $rootScope.displayOverflow = "";
         $rootScope.profileClass = "";
+
         //To get all results on filtered column for filter.
         vm.previousDocFileNameValue = '';
         vm.previousDocClientNameValue = '';
@@ -36,7 +39,7 @@
         vm.previousDocAuthorValue = '';
         vm.previousDocCheckOutUserValue = '';
         vm.assetsuccess = false;
-        // Onload show ui grid and hide error div
+        //Onload show ui grid and hide error div
         //start
         vm.divuigrid = false;
         vm.nodata = false;
@@ -46,18 +49,14 @@
         vm.sortby = "desc";
         vm.sortexp = "documentName"
         //end
-        //#region for checking whether the app is opened in outlook
+        //#region For checking whether the app is opened in outlook
         var isAppOpenedInOutlook = $location.absUrl();
         if (isAppOpenedInOutlook.indexOf("Outlook") > -1) {
-
             vm.isOutlook = true;
-            //  vm.isOutlookAsAttachment(vm.isOutlook);
-            // }
         }
         //#endregion
 
-        //#region scopes for displaying and hiding filter icons
-        //start
+        //#region Variables for displaying and hiding filter icons
         vm.documentfilter = false;
         vm.moddatefilter = false;
         vm.createddatefilter = false;
@@ -67,7 +66,9 @@
         vm.practiceGroupfilter = false;
         vm.checkoutfilter = false;
         vm.pinnedorunpinned = false;
-        //end
+        //#endregion
+
+        //#endregion Declaring Variables.
 
         //#region for showing the matters dropdown in resposive 
         vm.showdocdrop = function ($event) {
@@ -100,7 +101,6 @@
             vm.CheckoutSort = undefined;
             vm.CreatedSort = undefined;
         }
-
         //#endregion
 
         //#region for closing all the dropdowns
@@ -112,13 +112,11 @@
             angular.element('.ui-grid-icon-menu').addClass('showExpandIcon');
             angular.element('.ui-grid-icon-menu').removeClass('closeColumnPicker');
         }
-
         //#endregion
 
-        //to hide lazyloader on load
-        //start
+        //To hide lazyloader on load
         vm.lazyloader = true;
-        //end        
+        //end
         vm.bAttachDocumentFailed = false;
         vm.selectedRows = [];
         vm.showAttachmentProgress = false;
@@ -133,8 +131,7 @@
         vm.enableAttachment = false;
         vm.asyncCallCompleted = 0;
 
-        //#region Grid Cell/Header Templates
-        //Start
+        //#region Variables for Grid Cell/Header Templates
         vm.documentDropDown = false;
         vm.clientDropDown = false;
         vm.modifieddateDropDown = false;
@@ -143,11 +140,9 @@
         vm.projectNameDropDown = false;
         vm.CheckDropDown = false;
         vm.createddateDropDown = false;
-        //End
+        //#endregion
 
-
-
-        //For setting dynamic height to the grid
+        //#region For setting dynamic height to the grid
         vm.getTableHeight = function () {
             if (vm.isOutlook && vm.showAttachment) {
                 return {
@@ -160,7 +155,9 @@
                 }
             }
         };
+        //#endregion
 
+        //#region To get the column header name
         vm.switchFuction = function (columnName) {
             var displayColumn = [];
             switch (columnName) {
@@ -203,8 +200,14 @@
             }
             return displayColumn;
         };
+        //#endregion
 
+        //#region To get the column schema and populate in column collection for grid with sorting of column display
         $templateCache.put('coldefheadertemplate.html', "<div><div role='button' class='ui-grid-cell-contents ui-grid-header-cell-primary-focus' col-index='renderIndex'><span class='ui-grid-header-cell-label ng-binding' title='Click to sort by'>{{ col.colDef.displayName }}<span id='asc{{col.colDef.field}}' style='float:right;display:none' class='padl10px'>↑</span><span id='desc{{col.colDef.field}}' style='float:right;display:none' class='padlf10'>↓</span></span></div></div>");
+
+        //Declaring column collection object.
+        // Collection requires as columns defination will be read through appsettings files and - 
+        // - number of columns is dynemic (not fixed) and reduced code redundancy and easy to read and understand.
         var columnDefs1 = [];
         columnDefs1.push({
             field: 'checker',
@@ -235,6 +238,7 @@
             }
         });
 
+        //Sorting the column as per appsetting columns defination.
         function getSortFunction(fieldName) {
             return function (col1, col2) {
                 return parseInt(col1[fieldName]) - parseInt(col2[fieldName]);
@@ -242,9 +246,11 @@
         }
         columnDefs1.sort(getSortFunction("position"));
 
+        //#endregion
+
+        //#region Declaration of GridObject with properties to display.
         vm.gridOptions = {
             infiniteScrollDown: true,
-            //infiniteScrollPercentage: 50,
             infiniteScrollRowsFromEnd: 10,
             enableHorizontalScrollbar: 0,
             enableVerticalScrollbar: 1,
@@ -261,7 +267,6 @@
                     $scope.columnChanged = { name: changedColumn.colDef.name, visible: changedColumn.colDef.visible };
                 });
                 gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                    //vm.selectedRow = row.entity
                     vm.selectedRows = $scope.gridApi.selection.getSelectedRows();
                     var isRowPresent = $filter("filter")(vm.selectedRows, row.entity.docGuid);
                     if (isRowPresent.length > 0) {
@@ -278,14 +283,12 @@
                 $scope.sortChangedDocument($scope.gridApi.grid, [vm.gridOptions.columnDefs[1]]);
                 $scope.$watch('gridApi.grid.isScrollingVertically', vm.watchFuncScroll);
                 $scope.gridApi.infiniteScroll.on.needLoadMoreData($scope, vm.watchFunc);
-                //vm.setColumns();
             }
         };
+        //#endregion
+        vm.watchFuncScroll = function () { };
 
-        vm.watchFuncScroll = function () {
-
-        };
-
+        //#region Logic to decide the documnent state pin or unpin
         vm.showDocumentAsPinOrUnpin = function (searchRequest, response) {
             getPinnedDocuments(searchRequest, function (pinresponse) {
                 if (pinresponse.length > 0) {
@@ -315,7 +318,9 @@
                 $interval(function () { vm.showSortExp(); }, 2500, 3);
             });
         }
+        //#endregion
 
+        //#region  Functionality to decide is application is opened in outlook or not.
         function isOpenedInOutlook() {
             //If the app is opened in outlook, then the below validation is going to be applied
             if (vm.isOutlook && vm.showAttachment) {
@@ -333,8 +338,8 @@
                 }
             }
         }
-
-        //#region for setting the classes for ui-grid based on size
+        //#endregion
+        //#region For setting the classes for ui-grid based on size
         vm.setColumns = function () {
             if ($window.innerWidth < 380) {
                 $interval(function () {
@@ -366,7 +371,6 @@
         };
 
         vm.setWidth();
-
         //#endregion
 
         //#region functionality for infinite scroll
@@ -397,7 +401,6 @@
                 return promise.promise;
             } else {
                 vm.lazyloader = true;
-                // $scope.gridApi.infiniteScroll.dataLoaded();
             }
         }
         //#endregion
@@ -406,15 +409,10 @@
         //#region Code for attaching documents in compose more
         Office.initialize = function (reason) {
         }
-        //vm.isOutlook = true;
-        //vm.appType=$location.search().AppType;
-        // vm.isOutlook ? vm.isOutlookAsAttachment(vm.isOutlook) : "";
         vm.isOutlookAsAttachment = function (isOutlook) {
             if (isOutlook) {
-                //Office.initialize = function (reason) {
                 if (Office && Office.context && Office.context.mailbox && Office.context.mailbox.item) {
                     vm.showErrorAttachmentInfo = false;
-                    //vm.showFailedAtachments = false;
                     vm.failedFiles = [];
                     vm.asyncCallCompleted = 0;
                     var oCurrentEmailItem = Office.context.mailbox.item.get_data();
@@ -430,13 +428,14 @@
                         if (typeof (sEmailCreatedTime) === "undefined" && typeof (sEmailModifiedTime) === "undefined") {
                             vm.showAttachment = true;
                             vm.enableAttachment = false;
-                            // vm.gridOptions.columnDefs.splice(1, 7);
                         }
                     }
                 }
             }
         }
-        // };
+        //#endregion
+
+        //#region Functionality to send document as mail attachment or not while application is opened in outlook.
         vm.errorAttachDocument = false;
         vm.sendDocumentAsAttachment = function () {
             if (vm.selectedRows && vm.selectedRows.length <= 5) {
@@ -447,7 +446,7 @@
                 vm.showFailedAtachmentsBlock = false;
                 vm.failedFiles = [];
                 vm.showPopUpHolder = true;
-                vm.attachedProgressPopUp = true;               
+                vm.attachedProgressPopUp = true;
                 angular.forEach(vm.selectedRows, function (selRow) {
                     var docUrl = selRow.documentOWAUrl;
                     if (selRow.documentOWAUrl.indexOf("WopiFrame.aspx") > 0) {
@@ -470,9 +469,9 @@
                 vm.enableAttachment = false;
             }
         }
+        //#endregion
 
-
-        /* Send asynchronous calls to send each document as attachment */
+        //#region Send asynchronous calls to send each document as attachment 
         function sendAttachmentAsync(sDocumentPath, sDocumentName) {
             Office.context.mailbox.item.addFileAttachmentAsync(sDocumentPath, sDocumentName, {
                 asyncContext: {
@@ -487,12 +486,10 @@
                     vm.showFailedAtachments = true;
                 }
 
-                //  vm.asyncCallBeforeCompleted = vm.asyncCallCompleted;
                 $scope.$apply();
                 if (vm.asyncCallCompleted === vm.selectedRows.length) {
                     vm.showAttachmentProgress = false;
                     notifyAttachmentResult();
-                    //vm.asyncCallCompleted = 0;
                 } else {
                     vm.asyncCallCompleted = vm.asyncCallCompleted + 1;
                 }
@@ -500,7 +497,9 @@
 
             });
         }
+        //#endregion
 
+        //#region Notify is attachement is successful or not
         function notifyAttachmentResult() {
             if (vm.showFailedAtachments) {
                 vm.showSuccessAttachments = false;
@@ -514,6 +513,9 @@
             }
             vm.showPopUpHolder = true;
         }
+        //#endregion
+
+        //#region Functionality to open the 
         function trimEndChar(sOrignalString, sCharToTrim) {
             "use strict";
             if (sOrignalString && sCharToTrim === sOrignalString.substr(-1)) {
@@ -521,18 +523,18 @@
             }
             return sOrignalString;
         }
+        //#endregion
 
+        //#region Close the notification.
         vm.closeNotification = function () {
             vm.showPopUpHolder = false;
             vm.showSuccessAttachments = false;
         }
-
-
         //#endregion
 
-
         //#region Api Calls
-        //search api call 
+
+        //Search api call 
         function get(options, callback) {
             api({
                 resource: 'documentResource',
@@ -542,7 +544,7 @@
             });
         }
 
-
+        //Get pinned docs api call 
         function getPinnedDocuments(options, callback) {
             api({
                 resource: 'documentResource',
@@ -551,7 +553,6 @@
                 success: callback
             });
         }
-
 
         //Callback function for pin 
         function pinDocuments(options, callback) {
@@ -562,7 +563,6 @@
                 success: callback
             });
         }
-
 
         //Callback function for unpin 
         function UnpinDocuments(options, callback) {
@@ -575,7 +575,6 @@
         }
         //#endregion
 
-
         //Callback function for document assets 
         function GetAssets(options, callback) {
             api({
@@ -587,9 +586,7 @@
         }
         //#endregion
 
-
         //#region methods for getting,filtering,pin,unpin documents
-
         //SearchRequest Object
         var searchRequest = {
             Client: {
@@ -635,10 +632,10 @@
             }
         };
 
+        //#region functionality  to prepare search text as per search value. 
         vm.searchDocument = function (val) {
             var finalSearchText = "";
             if (val != "") {
-                //finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":" + val + "* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":" + val + "*)"
                 if (val.indexOf("(") == 0 && val.indexOf(")") == val.length - 1) {
                     finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":\"" + val + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + val + "*\")";
                 }
@@ -651,6 +648,8 @@
                     finalSearchText = "(" + vm.configSearchContent.ManagedPropertyFileName + ":\"" + val.trim() + "*\" OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":\"" + val.trim() + "*\")";
                 }
             }
+            //#endregion
+            //#region Search document object declaration for pro 
             var searchDocumentRequest = {
                 Client: {
                     Url: configs.global.repositoryUrl
@@ -703,7 +702,9 @@
             }
             return documentResource.get(searchDocumentRequest).$promise;
         }
+        //#endregion
 
+        //#region Search functionality at global level.
         vm.search = function () {
             vm.clearAllFilterForSearch();
             vm.pagenumber = 1;
@@ -740,27 +741,25 @@
             }
             searchRequest.SearchObject.PageNumber = vm.pagenumber;
             searchRequest.SearchObject.SearchTerm = finalSearchText;
-            //searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyFileName + "";
-            //searchRequest.SearchObject.Sort.Direction = 0;
             get(searchRequest, function (response) {
                 if (response == "") {
                     vm.gridOptions.data = response;
                     vm.lazyloader = true;
-                    //vm.divuigrid = true;
                     vm.nodata = true;
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 } else {
                     vm.showDocumentAsPinOrUnpin(searchRequest, response);
-                    //vm.divuigrid = true;
                     vm.nodata = false;
                     vm.lazyloader = true;
-                    
+
                     searchRequest.SearchObject.Sort.ByProperty = "" + vm.configSearchContent.ManagedPropertyDocumentLastModifiedTime + "";
                     $interval(function () { vm.showSortExp(); }, 2000, 3);
                 }
             });
         }
+        //#endregion
 
+        //#region Search functionality at Column level.
         vm.filterSearch = function (val) {
             if (val.length > 3) {
 
@@ -793,24 +792,21 @@
                     searchRequest.SearchObject.UniqueColumnName = vm.configSearchContent.ManagedPropertyDocumentCheckOutUser;
                     vm.documentsearch("" + vm.configSearchContent.ManagedPropertyDocumentCheckOutUser + ":" + val + "*(* OR " + vm.configSearchContent.ManagedPropertyFileName + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentId + ":* OR " + vm.configSearchContent.ManagedPropertyDocumentClientName + ":*)", vm.searchexp, false)
                 }
-
             }
         }
+        //#endregion
 
-        //#region for searching matter by property and searchterm
+        //#region for searching document by property and searchterm
         vm.documentsearch = function (term, property, bool) {
             vm.lazyloaderFilter = false;
             vm.responseNull = false;
             searchRequest.SearchObject.PageNumber = 1;
             vm.filternodata = false;
-            //searchRequest.SearchObject.SearchTerm = term;
             searchRequest.SearchObject.Sort.ByProperty = property;
             searchRequest.SearchObject.Sort.Direction = 1;
             if (bool) {
                 vm.documentheader = true;
-                //vm.divuigrid = false;
                 vm.lazyloader = false;
-                //searchRequest.SearchObject.SearchTerm = "";
                 searchRequest.SearchObject.Sort.Direction = 1;
                 if (property == "" + vm.configSearchContent.ManagedPropertyFileName + "") {
                     vm.searchTerm = term;
@@ -907,7 +903,6 @@
                             vm.lazyloader = true;
                         } else {
                             vm.details = response;
-                            //vm.nodata = false;
                             vm.filternodata = true;
                             searchRequest.SearchObject.IsUnique = false;
                             searchRequest.SearchObject.FilterValue = '';
@@ -936,7 +931,6 @@
                             searchRequest.SearchObject.UniqueColumnName = '';
                             vm.SetPreviousFilterVlaues();
                         }
-                        //searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Sort.ByProperty = "";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
@@ -952,7 +946,6 @@
                             vm.lazyloader = true;
                         } else {
                             vm.details = response;
-                            //vm.nodata = false;
                             vm.filternodata = true;
                             searchRequest.SearchObject.IsUnique = false;
                             searchRequest.SearchObject.FilterValue = '';
@@ -964,7 +957,6 @@
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     } else {
                         vm.divuigrid = true;
-                        //vm.nodata = false;
                         vm.lazyloaderFilter = true;
                         if (bool) {
                             vm.showDocumentAsPinOrUnpin(searchRequest, response)
@@ -981,7 +973,6 @@
                             searchRequest.SearchObject.UniqueColumnName = '';
                             vm.SetPreviousFilterVlaues();
                         }
-                        //searchRequest.SearchObject.SearchTerm = "";
                         searchRequest.SearchObject.Sort.ByProperty = "";
                         $interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
@@ -990,6 +981,7 @@
         }
         //#endregion
 
+        //#region Functionality to implement multiple filters.
         vm.SetPreviousFilterVlaues = function () {
             if (vm.previousDocFileNameValue != '') {
                 searchRequest.SearchObject.Filters.Name = vm.previousDocFileNameValue;
@@ -1020,15 +1012,15 @@
                 vm.previousDocCheckOutUserValue = '';
             }
         }
-
+        //#endregion
         //Code for filtering ModifiedDate
         //start
+        //#region Functionality to filter at column level on modified date column.
         vm.FilterModifiedDate = function (name) {
             if (vm.startDate != "" || vm.endDate != "" || vm.modStartDate != "" || vm.modEndDate != "") {
                 vm.documentdateheader = false;
                 vm.lazyloader = false;
                 vm.gridOptions.data = [];
-                //vm.divuigrid = false;
                 searchRequest.SearchObject.PageNumber = 1;
                 searchRequest.SearchObject.SearchTerm = "";
                 if (name == "Modified Date") {
@@ -1096,11 +1088,9 @@
                         if (response == "") {
                             vm.gridOptions.data = response;
                             vm.lazyloader = true;
-                            //vm.divuigrid = true;
                             vm.nodata = true;
                             $interval(function () { vm.showSortExp(); }, 2000, 3);
                         } else {
-                            //vm.divuigrid = true;
                             vm.nodata = false;
                             vm.lazyloader = true;
                             vm.gridOptions.data = response;
@@ -1112,7 +1102,9 @@
                 vm.documentdateheader = true;
             }
         }
+        //#endregion
 
+        //#region Functionality to clear all filters
         vm.clearAllFilter = function () {
 
             vm.documentfilter = false;
@@ -1168,7 +1160,7 @@
 
         //#endregion
 
-        //#region clearing all filters
+        //#region Functionality to clear column level filter
         vm.clearFilters = function (property) {
             vm.documentheader = true;
             vm.documentdateheader = true;
@@ -1280,7 +1272,6 @@
                 });
             }
         }
-
         //#endregion
 
 
@@ -1294,6 +1285,7 @@
             Url: configs.global.repositoryUrl
         }
 
+        //#region Functionality to get results bases of "All,My,Pinned" document selection in dropdown
         //#region for setting the document name in dropdown
         vm.SetDocuments = function (id, name) {
             vm.pinnedorunpinned = false;
@@ -1303,13 +1295,9 @@
             vm.documentid = id;
             vm.GetDocuments(id);
         }
-
         //#endregion
-
-
         //#region changing the grid based on the dropdown change 
         //Hits when the Dropdown changes 
-        //Start 
         vm.GetDocuments = function (id) {
             vm.setWidth();
             if (!vm.pinnedorunpinned) {
@@ -1319,13 +1307,11 @@
                 vm.startDate = "";
                 vm.endDate = "";
                 vm.lazyloader = false;
-                //vm.divuigrid = false;
                 vm.nodata = false;
                 vm.gridOptions.data = [];
                 vm.clearAllFiltersofSort();
             }
             if (id == 1) {
-                //vm.divuigrid = false;
                 searchRequest.SearchObject.PageNumber = 1;
                 if (!vm.pinnedorunpinned) {
                     vm.responseNull = false;
@@ -1342,9 +1328,7 @@
                     if (response == "") {
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
-                        //vm.divuigrid = true;
                         vm.nodata = true;
-
                     } else {
                         if (vm.isOutlook) {
                             vm.isOutlookAsAttachment(vm.isOutlook);
@@ -1352,11 +1336,6 @@
                         vm.divuigrid = true;
                         vm.nodata = false;
                         vm.responseNull = false;
-                        //vm.pagenumber = 1;
-                        //searchRequest.SearchObject.PageNumber = 1;
-                        //searchRequest.SearchObject.SearchTerm = "";
-                        //searchRequest.SearchObject.Filters.FilterByMe = 0;
-                        //searchRequest.SearchObject.Sort.ByColumn = "documentName";
                         searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                         vm.showDocumentAsPinOrUnpin(searchRequest, response)
                     }
@@ -1389,8 +1368,6 @@
                         if (vm.isOutlook) {
                             vm.isOutlookAsAttachment(vm.isOutlook);
                         }
-                        //vm.divuigrid = true;
-                        //vm.nodata = false;
                         searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
                         getPinnedDocuments(searchRequest, function (pinresponse) {
                             if (pinresponse.length > 0) {
@@ -1427,7 +1404,6 @@
                 });
             } else if (id == 3) {
                 vm.lazyloader = false;
-                //vm.divuigrid = false;
                 if (!vm.pinnedorunpinned) {
                     var pinnedMattersRequest = {
                         Url: configs.global.repositoryUrl
@@ -1441,13 +1417,11 @@
                     if (response == "") {
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
-                        //vm.divuigrid = true;
                         vm.nodata = true;
                     } else {
                         if (vm.isOutlook) {
                             vm.isOutlookAsAttachment(vm.isOutlook);
                         }
-                        //vm.divuigrid = true;
                         vm.nodata = false;
                         angular.forEach(response, function (res) {
                             if (res.ismatterdone == undefined && !res.ismatterdone) {
@@ -1457,20 +1431,18 @@
                         });
                         vm.gridOptions.data = response;
                         vm.lazyloader = true;
-                        //$interval(function () { vm.showSortExp(); }, 2000, 3);
                     }
                 });
             }
         }
-        //End 
-
+        //#endregion
+        //#endregion Functionality for dropdown option changed.
 
         //To run GetDocuments function on page load 
         vm.SetDocuments(vm.documentid, vm.documentname);
-        //End 
+        //End
 
-
-        //#region For pin and unpin the matter
+        //#region For pin and unpin the document
         //Written for unpinning the matter 
         //Start 
         vm.UnpinDocument = function (data) {
@@ -1493,7 +1465,6 @@
             });
         }
         //End 
-
 
         //Written for pinning the matter 
         //Start 
@@ -1535,9 +1506,9 @@
                 }
             });
         }
-        //#endregion 
+        //#endregion
 
-
+        //#region  To get results on selection of menu control options.
         vm.menuClick = function () {
             var oAppMenuFlyout = $(".AppMenuFlyout");
             if (!(oAppMenuFlyout.is(":visible"))) {
@@ -1553,15 +1524,13 @@
                 $(".MenuCaption").removeClass("hideMenuCaption");
             }
         }
+        //#endregion
 
-        //#region  For datepickers in modifiedheadertemplate
-        //Angular Datepicker Starts here
-        //Start for modified date 
+        //#region For declaring modifiedstartdate and modifiedenddate variable.
         vm.modDateOptions = {
             formatYear: 'yy',
             maxDate: new Date()
         };
-
 
         vm.modEndDateOptions = {
             formatYear: 'yy',
@@ -1571,8 +1540,7 @@
         $scope.$watch('vm.modStartDate', function (newval, oldval) {
             vm.modEndDateOptions.minDate = newval;
         });
-
-
+        //#region Functionality to open modified start date selection template.
         vm.openModStartDate = function ($event) {
             if ($event) {
                 $event.preventDefault();
@@ -1584,6 +1552,8 @@
             }
             this.modifiedStartDate = true;
         };
+        //#endregion
+        //#region Functionality to open modified end date selection template.
         vm.openModEndDate = function ($event) {
             if ($event) {
                 $event.preventDefault();
@@ -1594,7 +1564,9 @@
 
         vm.modifiedStartDate = false;
         vm.modifiedEndDate = false;
+        //#endregion
 
+        //#region Functionality to get results on change modified date.
         vm.changeOnModifiedDate = function ($event) {
             if ($event.keyCode == '13' || $event.keyCode == '9') {
 
@@ -1619,8 +1591,7 @@
                             vm.modStartDate = vm.modEndDate;
                             vm.modDateOptions.maxDate = vm.modStartDate;
                         }
-                        else if (new Date(year, month - 1, day) > vm.modDateOptions.maxDate && new Date(year, month - 1, day) <= new Date())
-                        {
+                        else if (new Date(year, month - 1, day) > vm.modDateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
                             vm.modStartDate = new Date(year, month - 1, day);
                             vm.modEndDate = vm.modStartDate;
                             vm.modDateOptions.maxDate = vm.modStartDate;
@@ -1643,16 +1614,16 @@
         vm.disabled = function (date, mode) {
             return (mode === 'day' && (date.getDay() != 0));
         };
-
         //End
+        //#endregion
 
 
+        //#region For declaring startdate and enddate variable.
         //Start
         vm.dateOptions = {
             formatYear: 'yy',
             maxDate: new Date()
         };
-
 
         vm.endDateOptions = {
             formatYear: 'yy',
@@ -1663,7 +1634,7 @@
             vm.endDateOptions.minDate = newval;
         });
 
-
+        //#region Functionality to open start date selection template.
         vm.openStartDate = function ($event) {
             if ($event) {
                 $event.preventDefault();
@@ -1674,6 +1645,8 @@
             }
             this.openedStartDate = true;
         };
+        //#endregion
+        //#region Functionality to open end date selection template.
         vm.openEndDate = function ($event) {
             if ($event) {
                 $event.preventDefault();
@@ -1681,7 +1654,9 @@
             }
             this.openedEndDate = true;
         };
+        //#endregion
 
+        //#region Functionality to get result as per selection of created date.
         vm.changeOnCreateDate = function ($event) {
             if ($event.keyCode == '13' || $event.keyCode == '9') {
 
@@ -1706,8 +1681,7 @@
                             vm.startDate = vm.endDate;
                             vm.dateOptions.maxDate = vm.startDate;
                         }
-                        else if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date())
-                        {
+                        else if (new Date(year, month - 1, day) > vm.dateOptions.maxDate && new Date(year, month - 1, day) <= new Date()) {
                             vm.startDate = new Date(year, month - 1, day);
                             vm.endDate = vm.startDate;
                             vm.dateOptions.maxDate = vm.startDate;
@@ -1734,14 +1708,9 @@
         vm.disabled = function (date, mode) {
             return (mode === 'day' && (date.getDay() != 0));
         };
-
-
-
         //#endregion
 
-        //#region Custom Sorting functionality
-        //Start
-
+        //#region Functionality to do filter on option selected for my and pinned or all documnets
         vm.FilterByType = function () {
             if (vm.documentid == 3) {
                 var pinnedDocumentsRequest = {
@@ -1766,9 +1735,6 @@
                             }
                         });
                         vm.gridOptions.data = response;
-                        //if (!$scope.$$phase) {
-                        //    $scope.$apply();
-                        //}
                         vm.lazyloader = true;
                     }
                     searchRequest.SearchObject.Sort.SortAndFilterPinnedData = false;
@@ -1808,19 +1774,14 @@
                                     $scope.$apply();
                                 }
                             }
-                            //$timeout(function () { vm.lazyloader = true; }, 800, angular.element(".ui-grid-row").css('visibility') != 'hidden');
-
                         });
                     }
                 });
             }
         }
-
-        //vm.sortby = "desc";
-        //vm.sortexp = "documentName";
+        //#endregion
+        //#region Custom Sorting functionality
         vm.showSortExp = function () {
-            //angular.element('[id^="asc"]').hide();
-            //angular.element('[id^="desc"]').hide();
             if (vm.sortby == "asc") {
                 angular.element("#desc" + vm.sortexp).css("display", "none");
             } else {
@@ -1830,19 +1791,15 @@
             if (elm != undefined) {
                 elm.css("display", "block");
             }
-            //$timeout(function () { vm.divuigrid = true; }, 800, true);
             vm.divuigrid = true;
             if (!$scope.$$phase) {
                 $scope.$apply();
             }
         }
+        //#endregion
 
-
-        //$interval(function () { vm.showSortExp(); }, 2500, 3);
-
-        //#region for sorting in ascending
+        //#region for sorting in direction selected by user
         vm.documentSortBy = function (byproperty, direction, bycolumn, sortexp, sortby) {
-            //vm.lazyloader = true;
             vm.pagenumber = 1;
             searchRequest.SearchObject.PageNumber = 1;
             searchRequest.SearchObject.Sort.ByProperty = byproperty;
@@ -1853,7 +1810,9 @@
             vm.sortexp = sortexp;
             $interval(function () { vm.showSortExp(); }, 1500, 3);
         }
+        //#endregion
 
+        //#region Functionality to clear filter value on sorting.
         vm.clearFilterValuesOnSorting = function () {
             if (vm.documentfilter == false && vm.clientfilter == false && vm.projectNamefilter == false &&
                 vm.checkoutfilter == false && vm.authorfilter == false && vm.practiceGroupfilter == false &&
@@ -1889,10 +1848,11 @@
                 }
             }
         }
+        //#endregion
 
+        //#region Functionality to get correct sort order for grid as per column selection.
         $scope.sortChangedDocument = function (grid, sortColumns) {
             vm.responseNull = false;
-            //vm.clearAllFiltersofSort();
             vm.clearFilterValuesOnSorting();
             $timeout(function () { vm.documentdateheader = true; vm.documentheader = true; }, 1);
             $scope.gridApi.infiniteScroll.resetScroll();
@@ -2050,9 +2010,7 @@
         }
         //#endregion
 
-
         //#region setting the grid options when window is resized
-
         angular.element($window).bind('resize', function () {
             if (vm.isOutlook && vm.showAttachment) {
                 angular.element('#documentgrid .ui-grid').css('height', $window.innerHeight - 150);
@@ -2071,10 +2029,9 @@
                 angular.element('#documentgrid .ui-grid-viewport').addClass('viewportlg');
             }
         });
-
         //#endregion
 
-        //#region
+        //#region Functionality to get suggestions as user type search value.
         vm.typeheadselect = function (index, selected) {
             vm.clearAllFilterForSearch();
             vm.lazyloader = false;
@@ -2107,15 +2064,13 @@
             vm.FilterByType();
             vm.lazyloader = true;
         }
-
         //#endregion
 
-        //function to check all checkboxes inside grid
+        //#region Functionality to check all checkboxes inside grid
         vm.toggleCheckerAll = function (checked) {
             for (var i = 0; i < vm.gridOptions.data.length; i++) {
                 vm.gridOptions.data[i].checker = checked;
                 if (checked) {
-                    //    vm.cartelements.push(vm.documentGridOptions.data[i]);
                     vm.documentsCheckedCount = vm.gridOptions.data.length;
                     vm.selectedRows = vm.gridOptions.data;
 
@@ -2137,36 +2092,9 @@
             $scope.$apply();
 
         };
+        //#endregion
 
-        //vm.toggleChecker = function (checked, rowinfo) {
-        //    console.log(checked);
-        //    console.log(rowinfo);
-        //    $scope.gridApi.selection.selectRow(rowinfo);
-        //}
-
-        //vm.toggleChecker = function (checked, rowinfo) {
-        //    if (checked) {
-        //        if (vm.documentsCheckedCount >= 0) {
-        //            vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) + 1;
-        //        }
-        //       // vm.cartelements.push(rowinfo);
-        //    }
-        //    else {
-        //        vm.documentsCheckedCount = parseInt(vm.documentsCheckedCount, 10) - 1
-        //        var rows = vm.gridApi.core.getVisibleRows(vm.gridApi.grid),
-        //            allChecked = true;
-        //        for (var r = 0; r < rows.length; r++) {
-        //            if (rows[r].entity.checker !== true) {
-        //                allChecked = false;
-        //                break;
-        //            }
-        //        }
-        //        $("#chkAllDocCheckBox").prop('checked', allChecked);
-        //    }
-        //};
-
-
-
+        //#region Functionality to get document assets.
         vm.getDocumentAssets = function (row) {
             vm.assetsuccess = false;
             var Client = {
@@ -2180,7 +2108,9 @@
                 vm.assetsuccess = true;
             });
         }
+        //#endregion
 
+        //#region Functionality to get document URL.
         vm.gotoDocumentUrl = function (url) {
             if (vm.assetsuccess) {
                 $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500');
@@ -2188,6 +2118,7 @@
                 $timeout(function () { $window.open(configs.global.repositoryUrl + "/SitePages/documentDetails.aspx?client=" + url.replace(configs.uri.SPOsiteURL, "") + "&listguid=" + vm.listguid + "&docguid=" + vm.docguid, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500'); }, 1500);
             }
         }
+        //#endregion
 
         //#region For displaying and setting the position of the filters name wise
         vm.documentheader = true;
@@ -2205,16 +2136,16 @@
                 //Logic for touch devices
                 top = $event.clientY + 25;
                 left = $event.clientX - 165;
-                if ((name === vm.documentConfigContent.GridColumn1Header ||  name === vm.documentConfigContent.GridColumn8Header                      
-                        ||name == vm.documentConfigContent.GridColumn7Header) && !vm.globalSettings.isBackwardCompatible) {
+                if ((name === vm.documentConfigContent.GridColumn1Header || name === vm.documentConfigContent.GridColumn8Header
+                        || name == vm.documentConfigContent.GridColumn7Header) && !vm.globalSettings.isBackwardCompatible) {
                     left = $event.clientX - 230;
                 }
-                if ((name === vm.documentConfigContent.GridColumn2Header || name === vm.documentConfigContent.GridColumn5Header) && 
+                if ((name === vm.documentConfigContent.GridColumn2Header || name === vm.documentConfigContent.GridColumn5Header) &&
                     !vm.globalSettings.isBackwardCompatible) {
                     left = $event.clientX - 110;
                 }
-                
-                if (name === vm.documentConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible){
+
+                if (name === vm.documentConfigContent.GridColumn2Header && vm.globalSettings.isBackwardCompatible) {
                     left = $event.clientX - 180;
                 }
                 if (name === vm.documentConfigContent.GridColumn6Header && vm.globalSettings.isBackwardCompatible) {
@@ -2223,7 +2154,7 @@
                 if ((name === vm.documentConfigContent.GridColumn4Header || name == vm.documentConfigContent.GridColumn5Header) &&
                     vm.globalSettings.isBackwardCompatible) {
                     left = $event.clientX - 115;
-                } 
+                }
             }
             else {
                 //Logic if we use mouse
@@ -2298,7 +2229,7 @@
         }
         //#endregion
 
-        //#region for opening view documents url in new window
+        //#region For opening view documents url in new window
         vm.viewDocumentMatter = function (url) {
             window.open(url, 'viewmatterwindow', 'toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500')
         }
@@ -2306,7 +2237,7 @@
         $rootScope.$on('disableOverlay', function (event, data) {
             vm.lazyloader = true;
         });
-        //#region for clearing all the column filter search textboxes 
+        //#region For clearing all the column filter search textboxes 
         vm.clearAllFilterForSearch = function () {
             vm.searchTerm = "";
             searchRequest.SearchObject.SearchTerm = "";
@@ -2342,6 +2273,7 @@
 
     }]);
 
+    //#region For adding custom filter 
     app.filter('unique', function () {
         return function (collection, keyname) {
             var output = [],
@@ -2357,5 +2289,5 @@
             return output;
         };
     });
-
+    //#endregion
 })();

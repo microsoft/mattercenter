@@ -17,7 +17,6 @@
             cm.createContent = uiconfigs.CreateMatter;
             cm.canCreateMatterPermission = false;
             cm.errPermissionMessage = "";
-            //cm.createMatterTaxonomyColumnNames = configs.contentTypes.managedColumns;
             cm.header = uiconfigs.Header;
             cm.chkConfilctCheck = undefined;
             cm.conflictRadioCheck = false;
@@ -65,15 +64,6 @@
                 cm.createContent.Tab1Textbox5Label = cm.createContent.Tab1Textbox5LabelForLevel5;
             }
             var specialCharactersRegExp = configs.matter;
-            //var managedColumns = { }
-            //   for (var i = 0; i < cm.taxonomyHierarchyLevels; i++) {
-            //       var columnName = configs.contentTypes.managedColumns["ColumnName" +(i +1)];
-            //       managedColumns[columnName] = {};
-
-            //   }
-
-            //   console.log(managedColumns);
-
             var w = angular.element($window);
 
             w.bind('resize', function () {
@@ -89,8 +79,6 @@
                 MatterDescription: "",
                 ContentTypes: [],
                 matterMandatory: "",
-                //  oAreaOfLawTerms: [],
-                // oSubAreaOfLawTerms: [],
                 oSelectedDocumentTypeLawTerms: [],
                 oValidMatterName: undefined,
                 isNextClick: false,
@@ -127,13 +115,7 @@
             cm.matterId = "";
             cm.matterDescription = "";
             cm.clientNameList = [];
-            //cm.areaOfLawTerms = [];
-            //cm.subAreaOfLawTerms = [];
-            //cm.documentTypeLawTerms = [];
             cm.selectedDocumentTypeLawTerms = [];
-            //cm.activeAOLTerm = null;
-            //cm.activeSubAOLTerm = null;
-            //cm.activeDocumentTypeLawTerm = null;
             cm.popupContainerBackground = "Show";
             cm.popupContainer = "hide";
             cm.sectionName = "snOpenMatter";
@@ -144,7 +126,6 @@
             cm.assignPermissionTeams = [{ assignedUser: '', assignedAllUserNamesAndEmails: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1, userConfirmation: false, teamUsers: [] }];
             cm.conflictUsers = { assignedUser: '', assignedAllUserNamesAndEmails: '', teamUsers: [] }
             cm.blockedUserName = cm.conflictUsers.assignedUser;
-        //    cm.userAddedMorePeopleToTeamList = [{ teamRowNumber: 1,  }];
             cm.assignRoles = [];
             cm.assignPermissions = [];
             cm.secureMatterCheck = true;
@@ -172,16 +153,12 @@
 
             getMatterGUID();
 
-
             var optionsForClientGroup = new Object;
             var optionsForPracticeGroup = new Object;
             var optionsForCheckMatterName = new Object;
-            // var optionsForUsers = new Object;
             var siteCollectionPath = "";
 
             ////API calling functions
-
-
             function getTaxonomyDetailsForClient(optionsForClientGroup, callback) {
                 api({
                     resource: 'matterResource',
@@ -189,7 +166,6 @@
                     data: optionsForClientGroup,
                     success: callback
                 });
-
             }
 
             function getDefaultMatterConfigurations(siteCollectionPath, callback) {
@@ -255,7 +231,6 @@
                 });
             }
 
-
             function assignContentTypeMetadata(options, callback) {
                 api({
                     resource: 'matterResource',
@@ -264,7 +239,6 @@
                     success: callback
                 });
             }
-
 
             function assignUserPermissionsAPI(options, callback) {
                 api({
@@ -301,8 +275,6 @@
                     success: callback
                 });
             }
-
-
 
             optionsForClientGroup = {
                 Client: {
@@ -361,24 +333,17 @@
                         SearchTerm: val
                     }
                 };
-                //if (matterResource.getUsers(searchUserRequest).$promise)
-                //console.log(matterResource.getUsers(searchUserRequest).$promise.$$state.value);
                 return matterResource.getUsers(searchUserRequest).$promise;
             }
 
             var optionsForRoles = new Object;
             optionsForRoles = {
-
                 Url: configs.global.repositoryUrl
-
             }
-
             var optionsForPermissionLevels = new Object;
             optionsForPermissionLevels = {
-
                 Url: configs.global.repositoryUrl
             }
-
 
             function getTaxonomyHierarchy(data) {
                 var levelsDefined = data.levels;
@@ -407,15 +372,12 @@
                 getTaxonomyDetailsForClient(optionsForClientGroup, function (response) {
 
                     cm.clientNameList = response.clientTerms;
-                    // jQuery('#myModal').modal('show');
-                    // optionsForPracticeGroup.Client.Url=cm.clientUrl;
                     getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
                       
                         if (response.isError !== undefined && response.isError) {
                             showApiErrorMessages(response);
                         }
                         else {
-                            // cm.pracitceGroupList = response.pgTerms;
                             cm.levelOneList = response.level1;
                             cm.parentLevelOneList = response;
                             cm.selectedLevelOneItem = response.level1[0];
@@ -430,102 +392,52 @@
                             getRoles(optionsForRoles, function (response) {
                                 cm.assignRoles = response;
 
-                                angular.forEach(cm.assignPermissionTeams, function (team) { //For loop
-                                    //  term.assignedRole = term.assignedRole.name;
+                                angular.forEach(cm.assignPermissionTeams, function (team) { 
                                     if ("" !== team.assignedRole) {
                                         angular.forEach(cm.assignRoles, function (role) {
                                             if (role.id == team.assignedRole.id) {
                                                 team.assignedRole = role;
-
                                             }
                                         });
                                     }
                                     else {
                                         team.assignedRole = cm.assignRoles[0];
-
                                     }
                                 });
 
                                 getPermissionLevels(optionsForPermissionLevels, function (response) {
-
-                                    //console.log("Permission Levels");
-                                    //console.log(response);
                                     cm.assignPermissions = response;
-                                    angular.forEach(cm.assignPermissionTeams, function (team) { //For loop
-                                        //  term.assignedRole = term.assignedRole.name;
+                                    angular.forEach(cm.assignPermissionTeams, function (team) { 
                                         if ("" !== team.assignedPermission) {
                                             angular.forEach(cm.assignPermissions, function (permission) {
                                                 if (permission.id == team.assignedPermission.id) {
                                                     team.assignedPermission = permission;
-
                                                 }
                                             });
                                         }
                                         else {
                                             team.assignedPermission = cm.assignPermissions[0];
-
                                         }
-
                                         cm.popupContainerBackground = "hide";
                                     });
-
                                 });
-
                             });
                         }
-
                     });
                 });
             }
 
             getTaxonomyData();
-
-            //cm.popupContainerBackground = "Show";
-            //cm.popupContainer = "Show";
-
-            //calls this function when selectType button clicks
-            //cm.selectMatterType = function (value) {
-            //    //cm.popupContainerBackground = "Show";
-            //    //cm.popupContainer = "Show";
-            //}
             cm.selectMatterType = function (value) {
                 cm.popupContainer = "Show";
                 cm.popupContainerBackground = "Show";
                 cm.successBanner = false;
             }
-            //calls this function when selectType button clicks
-            //cm.selectMatterType = function (value) {
-
-            //    cm.popupContainerBackground = "Show";
-
-            //    if (cm.levelOneList == null) {
-            //        getTaxonomyDetailsForPractice(optionsForPracticeGroup, function (response) {
-            //            cm.levelOneList = response.level1;
-            //            cm.popupContainer = "Show";
-            //            cm.popupContainerBackground = "Show";
-            //        });
-            //    }
-            //    else {
-            //        cm.popupContainer = "Show";
-            //        cm.popupContainerBackground = "Show";
-            //    }
-            //    if (cm.levelOneList[0]) {
-            //        cm.selectedLevelOne = cm.levelOneList[0];
-            //        cm.areaOfLawTerms = cm.levelOneList[0].level2;
-            //        cm.subAreaOfLawTerms = cm.levelOneList[0].level2[0].level3;
-            //        cm.activeAOLTerm = cm.levelOneList[0].level2[0];
-            //        cm.activeSubAOLTerm = cm.levelOneList[0].level2[0].level3[0];
-
-            //    }
-            //}
-
             //function for closing the popup
             cm.selectMatterTypePopUpClose = function () {
                 if (cm.popupContainer == "Show") {
                     cm.saveDocumentTemplates();                
                 }
-
-
             }
             //function to get the clientId from ClientName dropdown
             cm.getSelectedClientValue = function (client) {
@@ -547,11 +459,12 @@
                             showErrorNotification("client");
                             cm.errorPopUpBlock = true;
                             cm.canCreateMatterPermission = false;
-
                         }
                         else {
                             localStorage.removeItem("oPageOneData");
                             localStorage.removeItem("oPageTwoData");
+                            cm.chkConfilctCheck = false;
+                            cm.matterDescription = "";
                             cm.canCreateMatterPermission = true; cm.errPermissionMessage = "";
                             var dMatterAreaOfLaw = "", dMatterPracticeGroup = "", dMatterSubAreOfLaw = "", dMatterTypes = "", dPrimaryMatterType = "", dMatterUsers = "", dMatterUserEmails = "", dMatterPermissions = "", dMatterRoles = "";
                             cm.conflictUsers.assignedUser = "";
@@ -565,9 +478,6 @@
                             if (defaultMatterConfig.IsRestrictedAccessSelected) {
                                 cm.secureMatterCheck = defaultMatterConfig.IsRestrictedAccessSelected;
                             }
-                            //else {
-                            //    cm.secureMatterCheck = defaultMatterConfig.IsRestrictedAccessSelected;
-                            //}
                             if (defaultMatterConfig.IsCalendarSelected) {
                                 cm.includeCalendar = defaultMatterConfig.IsCalendarSelected;
                             }
@@ -604,9 +514,6 @@
                             else {
                                 cm.isMatterDescriptionMandatory = defaultMatterConfig.IsMatterDescriptionMandatory?defaultMatterConfig.IsMatterDescriptionMandatory:false;
                             }
-                            // if (defaultMatterConfig.IsContentCheck) {
-                            // cm.secureMatterCheck = "True";
-                            // }
                             if (defaultMatterConfig.IsTaskSelected) {
                                 cm.includeTasks = defaultMatterConfig.IsTaskSelected;
                             }
@@ -617,9 +524,6 @@
                             var arrDMatterPracticeGroup = [], arrDMatterUsers = [], arrDMatterUserEmails = [], arrDMatterPermissions = [], arrDMatterRoles = [];
                             arrDMatterAreaOfLaw = defaultMatterConfig.MatterAreaofLaw?defaultMatterConfig.MatterAreaofLaw.split('$|$'):[];
                             arrDMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup ? defaultMatterConfig.MatterPracticeGroup.split('$|$') : [];
-                            //     dMatterAreaOfLaw = defaultMatterConfig.MatterAreaofLaw ? defaultMatterConfig.MatterAreaofLaw : "";
-                            //   dMatterPracticeGroup = defaultMatterConfig.MatterPracticeGroup?defaultMatterConfig.MatterPracticeGroup: "";
-                            //   dMatterSubAreOfLaw = defaultMatterConfig.?: "";
                             dMatterTypes = defaultMatterConfig.MatterTypes ? defaultMatterConfig.MatterTypes : "";
                             cm.showRoles = defaultMatterConfig.ShowRole != undefined ? defaultMatterConfig.ShowRole : (cm.isBackwardCompatible ? false : true);
                             cm.showMatterId = defaultMatterConfig.ShowMatterId != undefined ? defaultMatterConfig.ShowMatterId : true;
@@ -636,7 +540,6 @@
                             arrDMatterPermissions = dMatterPermissions.split('$|$');
                             dMatterRoles = defaultMatterConfig.MatterRoles ? defaultMatterConfig.MatterRoles : "";
                             arrDMatterRoles = dMatterRoles.split('$|$');
-                            //cm.selectMatterType();
                             cm.popupContainer = "hide";
 
                             getMatterGUID();
@@ -681,8 +584,6 @@
                                     if (isRowPresent.length == 0) {
                                         assignPermTeam.teamUsers.push(userDetails);
                                     }
-                                    //cm.assignRoles   cm.assignPermissions 
-                                    //assignedRole  assignedPermission
                                     angular.forEach(cm.assignRoles, function (assignRole) {
                                         if (arrDMatterRoles[aCount] == assignRole.name) {
                                             assignPermTeam.assignedRole = assignRole;
@@ -704,14 +605,7 @@
                                 assignPermTeam.userConfirmation = true;
                                 assignPermTeam.userExsists = true;
                                 cm.assignPermissionTeams.push(assignPermTeam);
-                                //if (assignPermTeam.assignedUser != "") {
-                                //    cm.checkUserExists(assignPermTeam);
-                                //}
                             }
-
-
-
-
                         }
                         cm.popupContainerBackground = "hide";
                     });
@@ -728,7 +622,6 @@
                     cm.matterIdType = "Custom";
                     cm.clientId = "";
                     cm.selectedClientName = undefined;
-
                 }
             }
 
@@ -763,7 +656,6 @@
                         for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
 
                             if (levelTwoTerm.termName == arrDMatterTypes[iCount]) {
-                                //  cm.selectedDocumentTypeLawTerms = 
                                 var documentType = levelTwoTerm;
                                 documentType.levelOneFolderNames = levelOneTerm.folderNames;
                                 documentType.levelOneTermId = levelOneTerm.id;
@@ -775,7 +667,6 @@
                                     documentType.levelTwoTermName = levelTwoTerm.termName;
                                     documentType.termChainName = documentType.termChainName + ">" + documentType.levelTwoTermName;
                                 }
-
                                 cm.documentTypeLawTerms.push(documentType);
                                 documentType.primaryMatterType = false;
                                 if (levelTwoTerm.termName == dPrimaryMatterType) {
@@ -784,12 +675,9 @@
                                 }
                                 cm.selectedDocumentTypeLawTerms.push(documentType);
                             }
-
                         }
                     });
-
                 });
-
             }
             function setDefaultTaxonomyHierarchyLevelThree(arrDMatterTypes, dPrimaryMatterType) {
                 angular.forEach(cm.levelOneList, function (levelOneTerm) {
@@ -800,7 +688,6 @@
                             for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
 
                                 if (levelThreeTerm.termName == arrDMatterTypes[iCount]) {
-                                    //  cm.selectedDocumentTypeLawTerms = 
                                     var documentType = levelThreeTerm;
                                     documentType.levelOneFolderNames = levelOneTerm.folderNames;
                                     documentType.levelOneTermId = levelOneTerm.id;
@@ -826,15 +713,9 @@
                                     }
                                     cm.selectedDocumentTypeLawTerms.push(documentType);
                                 }
-
                             }
                         });
-
                     });
-
-
-
-
                 });
             }
             function setDefaultTaxonomyHierarchyLevelFour(arrDMatterTypes, dPrimaryMatterType) {
@@ -846,7 +727,6 @@
                                 for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
 
                                     if (levelFourTerm.termName == arrDMatterTypes[iCount]) {
-                                        //  cm.selectedDocumentTypeLawTerms = 
                                         var documentType = levelFourTerm;
                                         documentType.levelOneFolderNames = levelOneTerm.folderNames;
                                         documentType.levelOneTermId = levelOneTerm.id;
@@ -879,10 +759,8 @@
                                         }
                                         cm.selectedDocumentTypeLawTerms.push(documentType);
                                     }
-
                                 }
                             });
-
                         });
                     });
                 });
@@ -897,7 +775,6 @@
                                     for (var iCount = 0; iCount < arrDMatterTypes.length; iCount++) {
 
                                         if (levelFiveTerm.termName == arrDMatterTypes[iCount]) {
-                                            //  cm.selectedDocumentTypeLawTerms = 
                                             var documentType = levelFiveTerm;
                                             documentType.levelOneFolderNames = levelOneTerm.folderNames;
                                             documentType.levelOneTermId = levelOneTerm.id;
@@ -927,8 +804,6 @@
                                                 documentType.levelFiveTermName = levelFiveTerm.termName;
                                                 documentType.termChainName = documentType.termChainName + ">" + documentType.levelFiveTermName;
                                             }
-
-
                                             cm.documentTypeLawTerms.push(documentType);
                                             documentType.primaryMatterType = false;
                                             if (levelFiveTerm.termName == dPrimaryMatterType) {
@@ -937,106 +812,17 @@
                                             }
                                             cm.selectedDocumentTypeLawTerms.push(documentType);
                                         }
-
                                     }
                                 });
-
                             });
-
                         });
                     });
-
-
                 });
             }
 
-            //function to get the all AOL and SAOL terms
-            //cm.getSelectedPracticeGroupValue = function () {
-
-
-            //    if (cm.selectedLevelOne != null) {
-            //        cm.levelTwoList = cm.selectedLevelOne.level2;
-            //        cm.levelThreeList = cm.selectedLevelOne.level2[0].level3[0];
-            //      //  cm.activeSubAOLTerm = cm.selectedLevelOne.level2[0].level3[0];
-            //       // cm.activeAOLTerm = cm.selectedLevelOne.level2[0];
-            //        cm.errorPopUp = false;
-            //    } else {
-            //       // cm.areaOfLawTerms = cm.subAreaOfLawTerms = null;
-
-            //    }
-
-            //}
-
-            //function to get the subAOL items on selection of AOLTerm
-            //cm.selectAreaOfLawTerm = function (areaOfLawTerm) {
-            //    cm.errorPopUp = false;
-            //    cm.activeAOLTerm = areaOfLawTerm;
-            //  //  cm.subAreaOfLawTerms = areaOfLawTerm.subareaTerms;
-            //   // cm.activeSubAOLTerm = areaOfLawTerm.subareaTerms[0];
-
-            //}
-            ////function to for seclection of subAOL items 
-            //cm.selectSubAreaOfLawTerm = function (subAreaOfLawTerm) {
-            //    cm.errorPopUp = false;
-            //  //  cm.activeSubAOLTerm = subAreaOfLawTerm;
-
-            //}
-
-            //cm.selectDocumentTemplateTypeLawTerm = function (documentTemplateTypeLawTerm) {
-            //    // alert(documentTemplateTypeLawTerm);
-            //    if (documentTemplateTypeLawTerm != null) {
-            //        cm.errorPopUp = false;;
-            //        cm.removeDTItem = true;
-            //        cm.activeDocumentTypeLawTerm = documentTemplateTypeLawTerm;
-            //        cm.primaryMatterType = true;
-            //    }
-
-            //}
-
-            //cm.addToDocumentTemplate = function () {
-            //    var isThisNewDocTemplate = true;
-            //    if (cm.activeSubAOLTerm != null) {
-            //        angular.forEach(cm.documentTypeLawTerms, function (term) { //For loop
-            //            if (cm.activeSubAOLTerm.id == term.id) {// this line will check whether the data is existing or not
-            //                isThisNewDocTemplate = false;
-            //            }
-            //        });
-            //        if (isThisNewDocTemplate) {                        
-            //            var documentType = cm.activeSubAOLTerm;
-            //            documentType.foldernamespg = cm.selectedLevelOne.folderNames;
-            //            documentType.practicegroupId = cm.selectedLevelOne.id;
-            //            documentType.foldernamesaol = cm.activeAOLTerm.folderNames;
-            //            documentType.areaoflawId = cm.activeAOLTerm.id;
-            //            documentType.areaoflaw = cm.activeAOLTerm.termName;
-            //            documentType.practicegroup = cm.selectedLevelOne.termName;
-
-
-
-            //            cm.documentTypeLawTerms.push(documentType);
-            //            cm.activeDocumentTypeLawTerm = null;
-            //            //   console.log("doc");
-            //            //   console.log(cm.documentTypeLawTerms)
-            //            //cm.primaryMatterType = true; alert(cm.primaryMatterType);
-            //            //  cm.activeSubAOLTerm = null;
-            //        }
-            //    }
-            //}
-
-            //cm.removeFromDocumentTemplate = function () {
-            //    //  alert(cm.activeDocumentTypeLawTerm);
-            //    if (cm.removeDTItem) {
-            //        var index = cm.documentTypeLawTerms.indexOf(cm.activeDocumentTypeLawTerm);
-            //        cm.documentTypeLawTerms.splice(index, 1);
-            //        cm.removeDTItem = false;
-            //        cm.primaryMatterType = false;
-            //        cm.activeDocumentTypeLawTerm = null;
-            //    }
-
-            //}
             cm.checkValidMatterName = function () {
                 oPageOneState.oValidMatterName = undefined;
                 var bInValid = false;
-                // var RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
                 var RegularExpression = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterTitle);
                 var sCurrMatterName = cm.matterName.trim();
                 if (null !== sCurrMatterName && "" !== sCurrMatterName) {
@@ -1070,15 +856,9 @@
                             }
                             return true;
                         }
-
                     });
                 }
-
             }
-
-
-
-
 
             cm.navigateToSecondSection = function (sectionName) {
                 cm.errorPopUpBlock = false;
@@ -1096,10 +876,7 @@
                     }
                 }
                 else if (sectionName == "snCreateAndShare" && cm.iCurrentPage !== 3) {
-
-                    if (validateCurrentPage(cm.iCurrentPage)) {
-
-                       
+                    if (validateCurrentPage(cm.iCurrentPage)) {                       
                         if (cm.iCurrentPage == 2) {
                             callCheckSecurityGroupExists("snCreateAndShare");
                         } else {
@@ -1108,9 +885,7 @@
                             localStorage.iLivePage = 3;
                             makePrevOrNextButton();
                     }
-
                     }
-
                 }
                 else if (sectionName == "snOpenMatter" && cm.iCurrentPage !== 1) {
                     cm.iCurrentPage = 1; cm.sectionName = sectionName;
@@ -1158,14 +933,12 @@
                                 if (cm.assignPermissionTeams[iCount].assignedPermission.name == "Full Control") {
                                     fullControl++;
                                 }
-
                             }
                             else {
                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityPermission;
                                     //"Please provide at least one permission on this  matter. ";
                                 cm.errorBorder = "";
                                 cm.errorPopUpBlock = true;
-
                                 return false;
                             }
                         }
@@ -1179,7 +952,6 @@
                     }
                     else {
                         cm.errTextMsg = cm.createContent.ErrorMessageTeamMember1;
-                        // cm.assignPermissionTeams[iCount].assignedRole.name + " cannot be empty.";
                         cm.errorBorder = "";
                         showErrorNotificationAssignTeams(cm.errTextMsg, cm.assignPermissionTeams[iCount].assigneTeamRowNumber, "user");
                         cm.errorPopUpBlock = true;
@@ -1227,7 +999,6 @@
                                 showNotificatoinMessages(team.assigneTeamRowNumber);
                                 cm.notificationPopUpBlock = true;
                             }
-
                         }
                         validUsers = (userVal == "false") ? false : true;
                         if (!validUsers) {
@@ -1237,7 +1008,6 @@
                 });
                 return validUsers;
             }
-
 
             function validateUsers() {
                 var keepGoing = true;
@@ -1266,7 +1036,6 @@
                 if (cm.selectedConflictCheckUser && "" !== cm.selectedConflictCheckUser) {
                     username = getUserName(cm.selectedConflictCheckUser + ";", false);
                     if (-1 == cm.oSiteUsers.indexOf(username[0])) {
-                        //  cm.blockedUserName.trim()
                         cm.errTextMsg = cm.createContent.ErrorMessageConflictUser;
                             //"Enter the conflict reviewers name (for auditing purposes).";
                         cm.errorBorder = "ccheckuser";
@@ -1276,7 +1045,6 @@
                     }
                     username = getUserName(cm.selectedConflictCheckUser + ";", true);
                     if (-1 == cm.oSiteUserNames.indexOf(username[0])) {
-                        //  cm.blockedUserName.trim()
                         cm.errTextMsg = cm.createContent.ErrorMessageConflictUser;
                         //"Enter the conflict reviewers name (for auditing purposes).";
                         cm.errorBorder = "ccheckuser";
@@ -1290,7 +1058,6 @@
                     username=cleanArray(username);
                     for (var i = 0; i < username.length; i++) {
                         if (-1 == cm.oSiteUsers.indexOf(username[i])) {
-                            //  cm.blockedUserName.trim()
                             cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                             //"Please enter valid team members.";
                             //"Enter users that are conflicted with this matter.";
@@ -1304,7 +1071,6 @@
                     username = cleanArray(username);
                     for (var i = 0; i < username.length; i++) {
                         if (-1 == cm.oSiteUserNames.indexOf(username[i])) {
-                            //  cm.blockedUserName.trim()
                             cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                             //"Please enter valid team members.";
                             //"Enter users that are conflicted with this matter.";
@@ -1334,7 +1100,6 @@
                                             if (teamUser.userName == usersEmails[j]) {
                                                 if (teamUser.userExsists) {
                                                     if (-1 == cm.oSiteUsers.indexOf(usersEmails[j])) {
-                                                        //  cm.blockedUserName.trim()
                                                         cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                                                         //"Please enter valid team members.";
                                                         cm.errorBorder = "";
@@ -1344,7 +1109,6 @@
                                                         return false;
                                                     }
                                                     if (-1 == cm.oSiteUserNames.indexOf(userAliasNames[j])) {
-                                                        //  cm.blockedUserName.trim()
                                                         cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                                                         //"Please enter valid team members.";
                                                         cm.errorBorder = "";
@@ -1379,11 +1143,9 @@
                                                             showNotificatoinMessages(team.assigneTeamRowNumber);
                                                             cm.notificationPopUpBlock = true;
                                                         }
-                                                        //cm.checkUserExists(team);
-                                                        //if (!cm.invalidUserCheck) {
                                                         keepGoing = false;
                                                         return false;
-                                                        //}
+                                                     
                                                     }
                                                 }
                                             }
@@ -1427,11 +1189,8 @@
                             }
                         }
                     }
-
                 }
             }
-
-
 
             cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
 
@@ -1465,9 +1224,7 @@
                     if (value == "conflictcheckuser") {
                         cm.selectedConflictCheckUser = $item.name + '(' + $item.email + ')';
                     }
-                    //if (value == "blockuser") {
-                    //    cm.blockedUserName = $item.name + '(' + $item.email + ')';
-                    //}
+
                     if (value == "team" || value == "blockuser") {
                         if ($label.assignedAllUserNamesAndEmails && $label.assignedAllUserNamesAndEmails.indexOf(';') > -1) {
                             $label.assignedUser = $item.name + '(' + $item.email + ');';
@@ -1498,7 +1255,6 @@
                         $label.userConfirmation = false;
                         cm.checkUserExists($label);
                     }
-
                 }
                 else {
                     if (fucnValue == "on-blurr") {
@@ -1531,7 +1287,6 @@
                         }else if(typeheadelelen >=1 && !noresults){
                             cm.checkUserExists($label, $event);
                             $("[uib-typeahead-popup].dropdown-menu").css("display", "none");
-                           // $("[uib-typeahead-popup].dropdown-menu").show();
                         }
                     }
                     if (!noresults) {
@@ -1547,14 +1302,10 @@
                         if (value == "team") {
                             $label.assignedUser = "";
                             $label.assignedUser = cm.user;
-                        }
-                      
+                        }                      
                     }
                 }
-            }
-
-
-          
+            }          
 
             function getArrAssignedUserNamesAndEmails() {
                 cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
@@ -1564,16 +1315,12 @@
                     cm.arrAssignedUserEmails.push(getUserName(team.assignedUser , false));
                     cm.userIDs.push("txtUser" + count++);
                 });
-
             }
 
-
             var callCheckSecurityGroupExists = function (sectionName) {
-                //console.log(cm.assignPermissionTeams);
                 getArrAssignedUserNamesAndEmails();                
                 var optionsForSecurityGroupCheck = {
                     Client: {
-
                         Url: cm.clientUrl
                     },
                     Matter: {
@@ -1587,15 +1334,8 @@
                     },
                     UserIds: cm.userIDs
                 }
-                //optionsForSecurityGroupCheck.Matter.Name=cm.matterName.trim();
-                //optionsForSecurityGroupCheck.Matter.AssignUserNames = cm.arrAssignedUserName;
-                //optionsForSecurityGroupCheck.Matter.AssignUserEmails = cm.arrAssignedUserEmails;
-                //optionsForSecurityGroupCheck.Matter.BlockUserNames = (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "";
-                // var value = getUserName("Venkat M (venkatm@MSmatter.onmicrosoft.com);", true);
-                // console.log(optionsForSecurityGroupCheck);
 
                 checkSecurityGroupExists(optionsForSecurityGroupCheck, function (response) {
-                    // console.log(response);  
                     var rowNumber = undefined;
                     if (response.isError) {
                         if (response.value){
@@ -1622,7 +1362,6 @@
                         cm.sectionName = sectionName;
                         makePrevOrNextButton();
                     }
-
                 });
             }
             var getUserName = function (sUserEmails, bIsName) {
@@ -1644,30 +1383,6 @@
                 return arrUserNames;
             }
 
-            //cm.saveDocumentTemplates = function () {
-
-            //    if (cm.primaryMatterType) {
-            //        cm.errorPopUp = false;
-            //        angular.forEach(cm.documentTypeLawTerms, function (term) {
-            //            var primaryType = false;
-            //            //For loop
-            //            if (cm.activeDocumentTypeLawTerm.id == term.id) {// this line will check whether the data is existing or not
-            //                primaryType = true;
-            //            }
-            //            term.primaryMatterType = primaryType;
-            //            cm.popupContainerBackground = "hide";
-            //            cm.popupContainer = "hide";
-
-
-            //        });
-
-            //        cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;
-            //    }
-            //    else {
-            //        cm.errorPopUp = true;
-            //    }
-            //}
-
             cm.dateOptions = {
 
                 formatYear: 'yy',
@@ -1687,14 +1402,6 @@
             cm.opened = false;
             cm.conflictDate = $filter('date')(cm.conflictDate, 'MM/dd/yyyy');
 
-
-            //cm.$watch('cm.conflictCheckDate', function ()
-            //{
-            //    var val = 'MM\dd\yyyy';
-            //    cm.conflictDate = $filter('date')(new Date(), val);
-            //}, true);
-
-
             function convert(str) {
                 var date = new Date(str),
                     mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -1702,9 +1409,6 @@
                 return [mnth, day, date.getFullYear(), ].join("/");
             }
 
-            //$scope.SelectModal= function(){
-            //   // jQuery('#myModal').modal('show');
-            //}
             cm.secureMatterRadioEnabled = true;
             cm.conflictRadioCheckValue = true;
             cm.conflictRadioChange = function (value) {
@@ -1719,7 +1423,6 @@
                 }
             }
 
-
             cm.addNewAssignPermissions = function () {
                 var newItemNo = cm.assignPermissionTeams[cm.assignPermissionTeams.length - 1].assigneTeamRowNumber+1;
                 cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo, 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0] });
@@ -1728,14 +1431,10 @@
             cm.removeAssignPermissionsRow = function (index) {
                 var remainingRows = cm.assignPermissionTeams.length;
                 if (1 < remainingRows) {
-
                     cm.assignPermissionTeams.splice(index, 1);
-                    //  console.log(cm.assignPermissionTeams);
-                    //  console.log(cm.assignPermissionTeams.length);
                 }
                 cm.notificationPopUpBlock = false;
-                cm.notificationBorder = "";
-                
+                cm.notificationBorder = "";                
             };
 
             if (localStorage.getItem("iLivePage")) {
@@ -1757,13 +1456,7 @@
                     cm.matterIdType = oPageData.matterIdType;
                     cm.conflictRadioCheck = oPageData.conflictRadioCheck;
                     cm.canCreateMatterPermission = oPageData.CanCreateMatterPermission;
-                    //  cm.areaOfLawTerms = [];
-                    //  cm.subAreaOfLawTerms = [];
-                    //  cm.documentTypeLawTerms = [];
                     cm.selectedDocumentTypeLawTerms = [];
-                    // cm.activeAOLTerm = null;
-                    // cm.activeSubAOLTerm = null;
-                    //  cm.activeDocumentTypeLawTerm = oPageData.oSelectedDocumentTypeLawTerms;
                     cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms = oPageData.oSelectedDocumentTypeLawTerms;
                     cm.popupContainerBackground = "Show";
                     cm.popupContainer = "hide";
@@ -1773,8 +1466,6 @@
                     cm.primaryMatterType = cm.errorPopUp = false;
                     cm.matterGUID = oPageData.matterGUID;
                     cm.iCurrentPage = 2;
-                   // cm.isBackwardCompatible = oPageData.isBackwardCompatible;
-                   // cm.isClientMappedWithHierachy = oPageData.isClientMappedWithHierachy
                     cm.includeRssFeeds = (localStorage.getItem("IsRSSSelected") === "true");
                     cm.includeEmail = (localStorage.getItem("IsEmailOptionSelected") === "true");
                     cm.includeCalendar = (localStorage.getItem("IsCalendarSelected") === "true");
@@ -1787,10 +1478,6 @@
                     }
                     oPageOneState.oValidMatterName = oPageData.oValidMatterName;
                     cm.nextButtonDisabled = false; cm.prevButtonDisabled = false;
-                    // cm.navigateToSecondSection("");
-                    // cm.navigateToSecondSection("snConflictCheck");
-
-
                 }
                 if (localStorage.getItem("iLivePage") == 3) {
                     cm.iCurrentPage = 1;
@@ -1818,10 +1505,7 @@
                     }
 
                     cm.sectionName = "snCreateAndShare";
-
-
                 }
-
             }
 
             cm.createAndNotify = function (value) {
@@ -1889,9 +1573,6 @@
                 document.getElementsByTagName('head')[0].appendChild(notifcationTringleBlockCAttorny);
                 document.getElementsByTagName('head')[0].appendChild(notifcationTringleBorderCAttorny);
                 document.getElementsByTagName('head')[0].appendChild(notifcationTextMatterCAttorny);
-                // cm.errTextMsg = errorMsg;
-
-                //  cm.errorPopUpBlock = true;
                 notificationEle.classList.add("notifcationPopUpCAttorny");
                 notificationTrinageleBlockEle.classList.add("notifcationTringleBlockCAttorny");
                 notificationTrinagleBorderEle.classList.add("notifcationTringleBorderCAttorny");
@@ -2022,8 +1703,7 @@
                                         for (var i = 0; i < userEmail.length; i++) {
                                             if (userEmail[i] == email && team.assigneTeamRowNumber == teamDetails.assigneTeamRowNumber) {                                               
                                                 team.userExsists = response.isUserExistsInSite;
-                                                team.userConfirmation = false;
-                                               // team.assignedAllUserNamesAndEmails = email + ";";                                            
+                                                team.userConfirmation = false;                                        
                                                 var userDetails = {};
                                                 userDetails.userName = userEmail[i];
                                                 userDetails.userExsists = team.userExsists;
@@ -2035,7 +1715,6 @@
                                                 if (isRowPresent.length == 0) {
                                                     team.teamUsers.push(userDetails);
                                                 }
-                                              //  cm.userAddedMorePeopleToTeamList.push(assignMultiTeam);
                                                 if (cm.iCurrentPage == 2 && cm.getExternalUserNotification) {
                                                     cm.textInputUser = team;
                                                     cm.currentExternalUser.userName = userEmail[i];
@@ -2109,7 +1788,6 @@
                                     return false;
                                 }
                             }
-
                         });
                         cm.invalidUserCheck = false;
 
@@ -2119,15 +1797,9 @@
                     var userMailIdTerm = getUserName(userMailId + ";", false);
                     userMailIdTerm = cleanArray(userMailIdTerm);
                     for(var  i=0;i<userMailIdTerm.length;i++){
-                        //var pattern = /\(([^)]+)\)/, matches = userMailIdTerm[i].match(pattern);
-                        //if (matches && matches.length > 0) {
-                        //    userMailIdTerm[i] = matches[1];
-                        //} else {
-                            userMailIdTerm[i] = userMailIdTerm[i];
-                       // }
+                            userMailIdTerm[i] = userMailIdTerm[i];                     
                         validate(userMailIdTerm[i]);
                     }
-
                 }
             }
 
@@ -2315,20 +1987,7 @@
                         DefaultContentType: defaultContentType,
                         MatterGuid: matterGUID
                     },
-                    //PracticeGroupTerm: {
-                    //    TermName: sPracticeGroupName,
-                    //    Id: sPracticeGroupId
-                    //},
-                    //AreaTerm: {
-                    //    TermName: sAreaOfLawName,
-                    //    Id: sAreaOfLawId
-                    //},
-                    //SubareaTerm: {
-                    //    TermName: sSubareaOfLawName,
-                    //    Id: sSubareaOfLawId
-                    //},
                     ManagedColumnTerms: managedColumns
-
                 }
 
                 console.log("options for optionsForAssignContentTypeMetadata matter");
@@ -2342,9 +2001,6 @@
                     (3 === parseInt(cm.iShowSuccessMessage, 10)) ? stampProperties() : "";
 
                 });
-
-
-
             }
 
             function assignPermission() {
@@ -2378,12 +2034,8 @@
                     console.log(response);
                     cm.iShowSuccessMessage++;
                     (3 === parseInt(cm.iShowSuccessMessage, 10)) ? stampProperties() : "";
-
-
                 });
-
             }
-
 
             function createMatterLandingPage() {
                 var matterGUID = cm.matterGUID;
@@ -2434,13 +2086,8 @@
                     console.log(response);
                     cm.iShowSuccessMessage++;
                     (3 === parseInt(cm.iShowSuccessMessage, 10)) ? stampProperties() : "";
-
-
                 });
-
             }
-
-
 
             function stampProperties() {
                 //  alert();
@@ -2460,7 +2107,6 @@
                 contentTypes = getDefaultContentTypeValues("contenttypes");
                 defaultContentType = getDefaultContentTypeValues("defaultcontenttype");
                 var arrUserNames = [], arrUserEmails = [], arrTeamMembers = [];
-                // var sPracticeGroupList = "", sAreaOfLawList = "", sSubAreaOfLawList = "";
                 var oMatterProvisionFlags = {};
                 var sLevel1List = "", sLevel2List = "", sLevel3List = "", sLevel4List = "", sLevel5List = "";
 
@@ -2468,10 +2114,8 @@
                 var oDocumentTemplates = cm.selectedDocumentTypeLawTerms;
                 var subAreaofLaw = "", roleInformation = {}, arrReadOnlyUsers = [];
 
-
                 var User_Upload_Permissions = "Read";
                 angular.forEach(cm.assignPermissionTeams, function (item) {
-                    //    arrPermissions.push($.trim($(this).val()));
                     if (item.assignedPermission.name.toLowerCase() === User_Upload_Permissions.toLowerCase()) {
                         arrReadOnlyUsers.push(getUserName(item.assignedUser.trim() , false).join(";"));
                     }
@@ -2480,7 +2124,6 @@
 
                 validateTeamAssigmentRole();
                 angular.forEach(cm.assignPermissionTeams, function (item) {
-                    // var sCurrElementID = $(this).attr("id");
                     if (1 <= cm.assignPermissionTeams.length) {
                         if ("" !== item.assignedRole && "" !== item.assignedPermission) {
                             if (-1 !== cm.oMandatoryRoleNames.indexOf(item.assignedRole.name)) {
@@ -2488,59 +2131,29 @@
                                 sResponsibleAttorneyEmail.push(getUserName(item.assignedUser + ";", false).join(";"));
                             }
                         }
-                        // sCurrElementID = sCurrElementID.trim().split("txtAssign")[1];
-                        // var sCurrRole = $("#ddlRoleAssign" + sCurrElementID), sCurrPermission = $("#txtAssign" + sCurrElementID);
-                        //if (sCurrRole && sCurrPermission) {
-                        //if (-1 !== $.inArray(sCurrRole.val(), serviceConstants.oMandatoryRoleNames)) {
-                        //    sResponsibleAttorney.push(oCommonObject.getUserName($.trim($(this).val()), true).join(";"));
-                        //    sResponsibleAttorneyEmail.push(oCommonObject.getUserName($.trim($(this).val()), false).join(";"));
-                        //}
-                        // }
                     }
                 });
 
-
-                //angular.forEach(oDocumentTemplates, function (item) {
-                //    if (-1 === subAreaofLaw.indexOf(item.termName)) {
-                //        subAreaofLaw += item.termName + "; ";
-                //        if (item.primaryMatterType) {
-                //            defaultContentType = item.termName;
-                //        }
-                //    }
-                //});
-
                 angular.forEach(cm.assignPermissionTeams, function (item) {
-                    //  var sCurrElementID = $(this).attr("id");
                     if ("" !== item.assignedRole && "" !== item.assignedPermission) {
-                        //  sCurrElementID = sCurrElementID.trim().split("txtAssign")[1];
-                        //   var sCurrRole = $("#ddlRoleAssign" + sCurrElementID), sCurrPermission = $("#txtAssign" + sCurrElementID);
-                        //  if (sCurrRole && sCurrPermission) {
                         if (roleInformation.hasOwnProperty(item.assignedRole.name)) {
-                            // This role is already present. append the new role with semicolon separated value
-                            //   roleInformation[sCurrRole.val()] = roleInformation[sCurrRole.val()] + sCurrPermission.val();
+                            // This role is already present. append the new role with semicolon separated value                           
                             roleInformation[item.assignedRole.name] = roleInformation[item.assignedRole.name] + ";" + item.assignedUser;
                         } else {
                             // Add this role to the object
                             roleInformation[item.assignedRole.name] = item.assignedUser;
                         }
-
-                        // }
                     }
                 });
-                //angular.forEach(roleInformation, function (key, item) {
-                //    roleInformation[key] = item.trim();
-                //});
                 angular.forEach(cm.assignPermissionTeams, function (item) {
                     arrUserNames.push(getUserName(item.assignedUser.trim() + ";", true));
                     arrUserEmails.push(getUserName(item.assignedUser.trim() + ";", false));
                     arrTeamMembers.push(getUserName(item.assignedUser.trim() + ";", true).join(";"));
                 });
-               // contentTypes = subAreaofLaw.trim().split(";");
                 angular.forEach(oDocumentTemplates, function (item) {
                     arrDocumentTemplatesCount.push(item.documentTemplateNames.split(";").length.toString());
                 });
                 arrDocumentTemplatesCount.reverse();
-
 
                 oMatterProvisionFlags = {
                     "MatterLandingFlag": cm.bMatterLandingPage,
@@ -2587,7 +2200,6 @@
                     if (i === 4) { managedColumns[columnName].TermName = sLevel5List; }
                 }
 
-
                 var optionsForStampMatterDetails = {
                     Client: {
                         Id: cm.clientId,
@@ -2615,9 +2227,6 @@
                         MatterGuid: matterGUID
                     },
                     MatterDetails: {
-                        //PracticeGroup: sPracticeGroupList,
-                        //AreaOfLaw: sAreaOfLawList,
-                        //SubareaOfLaw: subAreaofLaw,
                         ResponsibleAttorney: sResponsibleAttorney.join(";").replace(/;;/g, ";"),
                         ResponsibleAttorneyEmail: sResponsibleAttorneyEmail.join(";").replace(/;;/g, ";"),
                         UploadBlockedUsers: arrReadOnlyUsers,
@@ -2643,63 +2252,9 @@
 
                     cm.navigateToSecondSection(cm.sectionName);
                     cm.popupContainerBackground = "Show";
-
-                    //  updateMatterMetadata();
-
                 });
-
-                // updateMatterMetadata();
-
             }
-
-            //function updateMatterMetadata() {
-            //    var matterGUID = cm.matterGUID;
-            //    var arrPermissions = [];
-            //    arrPermissions = getAssignedUserPermissions();
-            //    var sCheckByUserEmail = (undefined !== cm.selectedConflictCheckUser && null !== cm.selectedConflictCheckUser) ? getUserName(cm.selectedConflictCheckUser.trim() + ";", false) : "";
-            //    var sCheckBy = getUserEmail(sCheckByUserEmail);
-            //    var optionsForMatterMetadata = {
-            //        Client: {
-            //            Id: cm.clientId,
-            //            Name: "Microsoft",
-            //            Url: 
-            //        },
-            //        MatterConfigurations: {
-
-            //            IsConflictCheck: cm.chkConfilctCheck,
-            //            IsMatterDescriptionMandatory: true,
-            //            IsCalendarSelected: cm.includeCalendar,
-            //            IsTaskSelected: cm.includeTasks,
-            //            IsRSSSelected: cm.includeRssFeeds
-            //        },
-            //        Matter: {
-            //            Name: cm.matterName.trim(),
-            //            Id: cm.matterId,
-            //            Description: cm.matterDescription,
-            //            Conflict: {
-            //                Identified: cm.conflictRadioCheck,
-            //                CheckBy: sCheckBy,
-            //                CheckOn: cm.conflictDate,
-            //                SecureMatter: "True"
-            //            },
-            //            AssignUserNames: cm.arrAssignedUserName,
-            //            AssignUserEmails: cm.arrAssignedUserEmails,
-            //            BlockUserNames: (undefined !== cm.blockedUserName && null !== cm.blockedUserName) ? getUserName(cm.blockedUserName.trim() + ";", false) : "",
-            //            Permissions: arrPermissions,
-            //            MatterGuid: matterGUID
-            //        }
-            //    }
-
-            //    updateMatterMetadataAPI(optionsForMatterMetadata, function (response) {
-            //        console.log("updateMatterMetadataAPI Success");
-            //        console.log(response);
-
-            //        console.log("Grand Success");
-
-            //    });
-
-            //}
-
+            
             function validateTeamAssigmentRole() {
                 var oAssignList = cm.assignPermissionTeams
             , iExpectedCount = 0, iActualCount = 0, iIterator = 0, iLength = cm.assignRoles.length;
@@ -2737,7 +2292,6 @@
                 return bIsFullControl;
             }
 
-
             function retrieveFolderStructure() {
                 "use strict";
                 var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrFolderStructure = [];
@@ -2750,10 +2304,8 @@
                             if (arrContentTypes[nCount].isNoFolderStructurePresent && "false" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
                                 // If the folder at the specific level is not present then move to the parent level
                                 arrFolderStructure = arrContentTypes[nCount].folderNames && "" !== arrContentTypes[nCount].folderNames ? arrContentTypes[nCount].folderNames.split(";") : arrContentTypes[nCount].foldernamesaol && "" !== arrContentTypes[nCount].foldernamesaol ? arrContentTypes[nCount].foldernamesaol.split(";") : arrContentTypes[nCount].foldernamespg && "" !== arrContentTypes[nCount].foldernamespg ? arrContentTypes[nCount].foldernamespg.split(";") : [];
-                            }
-                            
+                            }                            
                         }
-
                     }
                 }
                 return arrFolderStructure;
@@ -2958,57 +2510,8 @@
                         break;
 
                 }
-
                 return returnedValue;
-
-
             }
-
-            //function getContentTypes(value) {
-            //    "use strict";
-            //    var oPageOneData = JSON.parse(localStorage.oPageOneData), nCount = 0, nLength, arrContentTypes, arrContents = [],defaultContentType="";
-            //    if (oPageOneData && oPageOneData.oSelectedDocumentTypeLawTerms) {
-            //        arrContentTypes = oPageOneData.oSelectedDocumentTypeLawTerms;
-            //        nLength = arrContentTypes.length;
-            //        for (nCount = 0; nCount < nLength; nCount++) {
-            //          //  if (arrContentTypes[nCount].primaryMatterType === true || 0 === nCount) {
-            //                // Check if the isNoFolderStructurePresent flag is set to true
-            //               // if (arrContentTypes[nCount].isNoFolderStructurePresent && "false" === arrContentTypes[nCount].isNoFolderStructurePresent.toLowerCase()) {
-
-            //            // If the folder at the specific level is not present then move to the parent level
-            //            if("contenttypes"==value){
-            //                arrContents.push(arrContentTypes[nCount].termName);
-
-            //                var arrAssociatedDocumentTemplates=arrContentTypes[nCount].documentTemplateNames.split(";");
-            //                for(var iIterator = 0; iIterator < arrAssociatedDocumentTemplates.length; iIterator++){
-            //                    if(-1==arrContents.indexOf(arrAssociatedDocumentTemplates[iIterator])){
-            //                        arrContents.push(arrAssociatedDocumentTemplates[iIterator]);
-            //                    }
-            //                }
-            //            }
-            //            if ("defaultcontenttype"==value ) {
-            //                if (arrContentTypes[nCount].primaryMatterType === true) {
-            //                    defaultContentType = arrContentTypes[nCount].termName;
-            //                }
-            //            }
-            //               // }
-            //           // }
-
-            //        }
-            //    }
-            //    if (value == "defaultcontenttype") {
-            //        return defaultContentType;
-            //    } else {
-            //        return arrContents;
-            //    }
-            //}
-
-            //  var contentTypes = getContentType("contentTypes");
-            // var  defaultContentType = getContentType("defaultcontenttype");
-            //   console.log("----");
-            ////   var obj = retrieveFolderStructure();
-            //   console.log(contentTypes);
-            //   console.log(defaultContentType);
 
             function getAssignedUserRoles() {
                 "use strict";
@@ -3057,13 +2560,8 @@
                 cm.matterId = "";
                 cm.matterDescription = "";
                 cm.clientNameList = [];
-                //cm.areaOfLawTerms = [];
-                //  cm.subAreaOfLawTerms = [];
                 cm.documentTypeLawTerms = [];
                 cm.selectedDocumentTypeLawTerms = [];
-                //  cm.activeAOLTerm = null;
-                // cm.activeSubAOLTerm = null;
-                // cm.activeDocumentTypeLawTerm = null;
                 cm.popupContainerBackground = "Show";
                 cm.popupContainer = "hide";
                 cm.createBtnDisabled = false;
@@ -3081,6 +2579,7 @@
                 cm.assignPermissions = [];
                 cm.secureMatterCheck = true;
                 cm.conflictRadioCheck = false;
+                cm.chkConfilctCheck = false;
                 localStorage.iLivePage = 1;
                 cm.createButton = "Create";
                 localStorage.removeItem("oPageOneData");
@@ -3098,8 +2597,6 @@
                 oPageOneState.oSiteUsers = cm.oSiteUsers;
                 oPageOneState.oSiteUserNames = cm.oSiteUserNames;
                 oPageOneState.CanCreateMatterPermission = cm.canCreateMatterPermission;
-                //  oPageOneState.oAreaOfLawTerms = cm.areaOfLawTerms;
-                //   oPageOneState.oSubAreaOfLawTerms = cm.subAreaOfLawTerms;
                 oPageOneState.matterGUID = cm.matterGUID;
                 oPageOneState.oSelectedDocumentTypeLawTerms = cm.selectedDocumentTypeLawTerms;
                 oPageOneState.showRoles = cm.showRoles;
@@ -3107,20 +2604,6 @@
                 oPageOneState.matterIdType = cm.matterIdType;
                 oPageOneState.conflictRadioCheck = cm.conflictRadioCheck;
                 oPageOneState.AssignPermissionTeams = cm.assignPermissionTeams;
-                //oPageOneState.isBackwardCompatible = cm.isBackwardCompatible;
-                //oPageOneState.isClientMappedWithHierachy = cm.isClientMappedWithHierachy;
-                //  oPageOneState.chkConflictCheck = cm.chkConfilctCheck;
-                //  oPageOneState.oValidMatterName = oPageOneState.oValidMatterName;
-
-                //oPageOneState.oDefaultSecureMatterCheck = cm.secureMatterCheck;
-                //oPageOneState.oDefaultInculdeCalendar = cm.includeCalendar;
-                //oPageOneState.oDefaultIncludeEmail = cm.includeEmail;
-                //oPageOneState.oDefaultRssFeeds = cm.includeRssFeeds;
-                //oPageOneState.oDefaultIsTaskSelected = cm.includeTasks;
-                //oPageTwoState.oDefaultIsConflictCheck = cm.chkConfilctCheck;
-                //oPageTwoState.oDefaultIsMatterDescriptionMandatory = cm.isMatterDescriptionMandatory;
-
-                //oPageOneState.oSectionName = cm.sectionName;
                 localStorage.setItem('oPageOneData', JSON.stringify(oPageOneState));
                 localStorage.setItem('IsCalendarSelected', cm.includeCalendar);
                 localStorage.setItem('IsRestrictedAccessSelected', cm.secureMatterCheck);
@@ -3130,10 +2613,7 @@
                 localStorage.setItem('IsConflictCheck', cm.defaultConfilctCheck);
                 localStorage.setItem('IsMatterDescriptionMandatory', cm.isMatterDescriptionMandatory);
                 localStorage.setItem('IsTaskSelected', cm.includeTasks);
-
-                //cm.sectionName = sectionName;
                 localStorage.iLivePage = 2;
-
             }
 
             function storeMatterDataToLocalStorageSecondPage() {
@@ -3159,7 +2639,6 @@
                     cm.navigateToSecondSection("snCreateAndShare");
                     $event.stopPropagation();
                 }
-
             }
 
             cm.PreviousClick = function ($event) {
@@ -3171,18 +2650,15 @@
                     cm.navigateToSecondSection("snConflictCheck");
                     $event.stopPropagation();
                 }
-
             }
 
 
             cm.CheckPopUp = function (e) {
-                //  e.stopPropagation();
                 if (!cm.errorStatus) {
                     cm.errorPopUpBlock = false;
                     cm.errorBorder = "";
                 }
                 cm.errorStatus = false;
-
             }
 
             function validateCurrentPage(iCurrPage) {
@@ -3194,7 +2670,6 @@
                         if (cm.canCreateMatterPermission) {
                             if ("" !== cm.clientId.trim() && null !== cm.clientId) {
                                 var bInValid = false;
-                                // RegularExpression = new RegExp(oPageOneState.specialCharacterExpressionMatter);
                                 RegularExpressionForMatterName = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterTitle);
                                 var sCurrMatterName = cm.matterName.trim();
                                 if (null !== sCurrMatterName && "" !== sCurrMatterName) {
@@ -3206,13 +2681,10 @@
                                     }
                                 }
                                 if (bInValid) {
-                                    //  var matVal = cm.checkValidMatterName();
                                     oPageOneState.isNextClick = true;
                                     if (undefined !== oPageOneState.oValidMatterName) {
                                         if (oPageOneState.oValidMatterName) {
-                                            //  RegularExpression = new RegExp(oMatterProvisionConstants.Special_Character_Expression_Matter_Id);
                                             bInValid = false;
-                                            // if (cm.matterId && "" !== cm.matterId.trim() && null != cm.matterId) {
                                             var sCurrentMatterId = cm.matterId;
                                             RegularExpressionForMatterID = new RegExp(specialCharactersRegExp.SpecialCharacterExpressionMatterId);
                                             if (undefined !== sCurrentMatterId && null !== sCurrentMatterId && "" !== sCurrentMatterId) {
@@ -3244,8 +2716,6 @@
                                                         bInValid = true;
                                                     }
                                                 }
-
-                                                // if (cm.matterDescription && "" !== cm.matterDescription.trim() && null !== cm.matterDescription) {
                                                 if (bInValid) {
                                                     if (cm.selectedDocumentTypeLawTerms.length > 0) {
                                                         storeMatterDataToLocalStorageFirstPage();
@@ -3262,12 +2732,9 @@
                                                     // alert("Enter a description for this matter");
                                                     cm.errTextMsg = cm.createContent.ErrorMessageSpecialCharacters;
                                                     //"Please enter a valid text which contains only alphanumeric characters, spaces & hyphen";
-                                                    //  cm.errTextMsg = "Enter a description for this matter.";
-                                                    //   cm.errorPopUpBlock = "matterDescription";
                                                     showErrorNotification("matterdescription");
                                                     cm.errorBorder = "matterdescription";
                                                     cm.errorPopUpBlock = true; return false;
-
                                                 }
                                             }
                                             else {
@@ -3277,25 +2744,15 @@
                                                 showErrorNotification("matterid");
                                                 cm.errorPopUpBlock = true; return false;
                                             }
-
                                         }
                                         else {
                                             cm.errTextMsg = cm.createContent.ErrorMessageEntityLibraryCreated;
                                             //"Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
                                             cm.errorBorder = "mattername";
                                             showErrorNotification("mattername");
-                                            //var matterErrorEle = document.getElementById("errorBlock");
-                                            //var matterErrorTrinageleBlockEle = document.getElementById("errTrinagleBlock");
-                                            //var matterErrorTrinagleBorderEle = document.getElementById("errTrinagleBroderBlock");
-                                            //var matterErrorTextEle = document.getElementById("errText");
-                                            //matterErrorEle.className = 'errPopUpMatterName';
-                                            //matterErrorTrinageleBlockEle.className = 'errTringleBlockMatterName';
-                                            //matterErrorTrinagleBorderEle.className = 'errTringleBorderBlockMatterName';
-                                            //matterErrorTextEle.className = "errTextMatterName";
                                             cm.errorPopUpBlock = true; return false;
                                         }
                                     }
-
                                 }
                                 else {
                                     cm.errTextMsg = cm.createContent.ErrorMessageEntityNameSpecialCharacters;
@@ -3304,7 +2761,6 @@
                                     showErrorNotification("mattername");
                                     cm.errorPopUpBlock = true; return false;
                                 }
-
                             }
                             else {
                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityId2;
@@ -3330,7 +2786,6 @@
                         cm.errorPopUpBlock = true;
                         return false;
                     }
-
                 }
                 else if (iCurrPage == 2) {
                     cm.blockedUserName = cm.conflictUsers.assignedUser;
@@ -3338,7 +2793,6 @@
                         if (undefined !== cm.chkConfilctCheck && true == cm.chkConfilctCheck) {
 
                             if (undefined !== cm.conflictDate && null !== cm.conflictDate && "" != cm.conflictDate) {
-                                // cm.conflictDate = new Date();
                                 
                                 var validUsers = validateUsers();
                                 var checkUserDExists = false;
@@ -3350,7 +2804,6 @@
                                             cm.popupContainerBackground = "Show";
                                             storeMatterDataToLocalStorageSecondPage();
                                             return true;
-                                            // cm.sectionName = sectionName;
                                         }
                                     }
                                 }
@@ -3362,18 +2815,13 @@
                                 cm.errorBorder = "cdate"; showErrorNotification("cdate");
                                 cm.errorPopUpBlock = true; return false;
                             }
-                            // callCheckSecurityGroupExists();
-                            // console.log(getAssignedUserRoles());
                         }
                         else {
-                            //  cm.sectionName = sectionName;
                             cm.errTextMsg = cm.createContent.ErrorMessageEntityConflictCheck;
                                 //"A confilct check must be completed prior to provisioning this matter ";
                             cm.errorBorder = "";
                             showErrorNotification("conflictcheck");
                             cm.errorPopUpBlock = true;
-
-
                         }
                     } else {
                         var validUsers = validateUsers();
@@ -3389,14 +2837,11 @@
                                 }
                             }
                         }
-
                     }
-
                 }
                 else if (iCurrPage == 3) {
                     return true;
                 }
-
             }
 
             function matterDescriptionValidation(sCurrentMatterDesc) {
@@ -3420,7 +2865,6 @@
                     cm.errorPopUpBlock = true; return false;
                 }
             }
-
 
             function showErrorNotification(errorCase) {
                 if (errorCase && errorCase != "") {
@@ -3528,9 +2972,7 @@
                             matterErrorTextEle.classList.add("errTextMatterCreate");
                             break;
                     }
-
                 }
-
             }
 
             function showErrorNotificationAssignTeams(errorMsg, teamRowNumber, type) {
@@ -3590,16 +3032,8 @@
                 document.getElementsByTagName('head')[0].appendChild(errPopUpCAttorny);
                 document.getElementsByTagName('head')[0].appendChild(errTringleBlockCAttorny);
                 document.getElementsByTagName('head')[0].appendChild(errTringleBorderCAttorny);
-                document.getElementsByTagName('head')[0].appendChild(errTextMatterCAttorny);               
-
-                //matterErrorEle.style.top = te.offsetTop-26 + "px";
-                //matterErrorEle.style.left = te.offsetLeft + 45 + "px";
-                //matterErrorTrinageleBlockEle.style.left = 50 + "px";
-                //matterErrorTrinagleBorderEle.style.left = 50 + "px";
-                //matterErrorTextEle.style.top = 12 + "px";
-                //  console.log(te.offsetTop);
+                document.getElementsByTagName('head')[0].appendChild(errTextMatterCAttorny);   
                 cm.errTextMsg = errorMsg;
-
                 cm.errorPopUpBlock = true;
                 matterErrorEle.classList.add("errPopUpCAttorny");
                 matterErrorTrinageleBlockEle.classList.add("errTringleBlockCAttorny");
@@ -3649,13 +3083,6 @@
                     angular.element('.checkuser').each(function (e) {
                         var emaillength = 1;
                         var confirmed = this.attributes.confirm.value;
-                        //if (confirmed == "false") {
-                        //    angular.element(this).css('border-color', 'red');
-                        //    return false;
-                        //} else {
-                        //    angular.element(this).css('border-color', '#ccc');
-                        //    return true;
-                        //}
                         emaillength++;
                     });
                 }
@@ -3667,8 +3094,6 @@
             cm.documentTypeLawTerms = [];
             cm.getSelectedLevelOne = function () {
                 if (cm.selectedLevelOneItem != null) {
-                    // cm.levelTwoList = cm.selectedLevelOneItem.level2;                  
-                    //   cm.levelThreeList = cm.selectedLevelOneItem.level2[0].level3;
                     if (cm.taxonomyHierarchyLevels >= 2) {
                         cm.levelTwoList = [];
                         cm.levelTwoList = cm.selectedLevelOneItem.level2;
@@ -3707,7 +3132,6 @@
                         cm.levelFiveList = null;
                     }
                 }
-
             }
 
             // function to get the subAOL items on selection of AOLTerm
@@ -3726,8 +3150,6 @@
                     cm.levelFiveList = cm.levelFourList[0] != undefined && cm.levelFourList[0].level5 ? cm.levelFourList[0].level5 : [];
                     cm.activeLevelFiveItem = cm.levelFourList[0] != undefined ? cm.levelFiveList[0] : [];
                 }
-
-
             }
             //function to for seclection of subAOL items 
             cm.selectLevelThreeItem = function (levelThreeItem) {
@@ -3741,10 +3163,8 @@
                     cm.levelFiveList = (cm.levelFourList != undefined && cm.levelFourList[0] != undefined && cm.levelFourList[0].level5) ? cm.levelFourList[0].level5 : [];
                     cm.activeLevelFiveItem = (cm.levelFourList != undefined && cm.levelFourList[0] != undefined) ? cm.levelFiveList[0] : [];
                 }
-
             }
-
-
+            
             cm.selectLevelFourItem = function (levelFourItem) {
                 cm.errorPopUp = false;
                 cm.activeLevelFourItem = levelFourItem;
@@ -3752,7 +3172,6 @@
                     cm.levelFiveList = cm.activeLevelFourItem.level5;
                     cm.activeLevelFiveItem = cm.levelFiveList[0];
                 }
-
             }
             cm.selectLevelFiveItem = function (levelFiveItem) {
                 cm.errorPopUp = false;
@@ -3821,15 +3240,9 @@
                         }
                         cm.documentTypeLawTerms.push(documentType);
                         cm.activeDocumentTypeLawTerm = null;
-                        //   console.log("doc");
-                        //   console.log(cm.documentTypeLawTerms)
-                        //cm.primaryMatterType = true; alert(cm.primaryMatterType);
-                        //  cm.activeSubAOLTerm = null;
                     }
                 }
             }
-
-
 
             function makeDisableSelectedItemInColumn(levelList, selectedItem) {
                 angular.forEach(levelList, function (levelListItem) {
@@ -3858,12 +3271,10 @@
                     if (levelListItem.termName == selectedItem.termName) {
                         levelListItem.state = "enable";
                     }
-
                 });
             }
 
             cm.removeFromDocumentTemplate = function () {
-                //  alert(cm.activeDocumentTypeLawTerm);
                 if (cm.removeDTItem) {
                     var index = cm.documentTypeLawTerms.indexOf(cm.activeDocumentTypeLawTerm);
                     makeEnableSelectedItemInColumn(cm.activeDocumentTypeLawTerm);
@@ -3872,18 +3283,15 @@
                     cm.primaryMatterType = false;
                     cm.activeDocumentTypeLawTerm = null;
                 }
-
             }
 
             cm.selectDocumentTemplateTypeLawTerm = function (documentTemplateTypeLawTerm) {
-                // alert(documentTemplateTypeLawTerm);
                 if (documentTemplateTypeLawTerm != null) {
                     cm.errorPopUp = false;;
                     cm.removeDTItem = true;
                     cm.activeDocumentTypeLawTerm = documentTemplateTypeLawTerm;
                     cm.primaryMatterType = true;
                 }
-
             }
 
             cm.saveDocumentTemplates = function () {
@@ -3892,7 +3300,6 @@
                     cm.errorPopUp = false;
                     angular.forEach(cm.documentTypeLawTerms, function (term) {
                         var primaryType = false;
-                        //For loop
                         if (cm.activeDocumentTypeLawTerm.id == term.id) {// this line will check whether the data is existing or not
                             primaryType = true;
                         }
@@ -3900,7 +3307,6 @@
                         cm.popupContainerBackground = "hide";
                         cm.popupContainer = "hide";
                         angular.element('#myModal').modal("hide");
-
                     });
 
                     cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;
@@ -3909,8 +3315,6 @@
                     cm.errorPopUp = true;
                 }
             }
-
-
             //#endregion
 
 
@@ -3938,10 +3342,7 @@
                     data.level1 = levelOneList;
                     cm.selectedLevelOneItem = cm.levelOneList[0];
                     getTaxonomyHierarchy(data);
-
-                   // if(pgList.)
                 }
-
             }
             //#endregion
 
@@ -3984,12 +3385,8 @@
                             team.assignedPermission = assignPermission;
                         }
                     });
-                    cm.assignPermissionTeams.push(team);
-
-                
+                    cm.assignPermissionTeams.push(team);                
             }
-
-
 
             $rootScope.$on('disableOverlay', function (event, data) {
                 cm.popupContainerBackground = "hide";               
@@ -4016,7 +3413,5 @@
 
             }
         }
-
-
     });
 })();

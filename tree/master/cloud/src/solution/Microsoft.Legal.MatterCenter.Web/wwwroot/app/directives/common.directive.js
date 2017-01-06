@@ -63,7 +63,6 @@
         }
     }
 
-
     'use strict';
     function toggletab() {
         return {
@@ -74,7 +73,6 @@
                     $(this).tab('show')
                 })
             }
-
         }
     }
 
@@ -208,7 +206,6 @@
                 } else {
                     $scope.wordTextDisplay = false;
                 }
-
             }
         }
     };
@@ -328,7 +325,6 @@
                 $scope.stopEvent = function ($event) {
                     $event.stopPropagation();
                 };
-
             }
         }
     };
@@ -469,9 +465,6 @@
                         scope.$parent.cm.errorBorder = "";
                     });
                 } else {
-                    // var txtUserEmails = scope.assignTeam.assignedUser;
-                    //var userEmails= txtUserEmails.split(";");
-                    // scope.assignTeam.assignedAllUserNamesAndEmails = scope.assignTeam.assignedUser;
                     if (event.which === 186) {
                         scope.assignTeam.assignedAllUserNamesAndEmails = scope.assignTeam.assignedUser + ";";
                     }
@@ -507,7 +500,6 @@
             restrict: 'AE',
             link: function (scope, element, attrs) {
                 var loginuser = attrs.loginuser.toLowerCase();
-                //var hideUpload = "matteradmin@msmatter.onmicrosoft.com";
                 var hideUpload = attrs.hideupload;
                 if (hideUpload.toLowerCase().indexOf(loginuser) > -1) {
                     $(element).find('.showUploadImg').remove();

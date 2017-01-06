@@ -43,7 +43,6 @@
         if (cm.clientUrl === "" && cm.matterName === "") {
             cm.matterName = ""; 
         }
-
         //#region Service API Call
         //API call to get roles that are configured in the system
         function getRoles(options, callback) {
@@ -155,7 +154,6 @@
             }
             else {
                 var defaultMatterConfig = JSON.parse(result.code);
-               // cm.showRoles = defaultMatterConfig.ShowRole;
                 cm.showRoles = defaultMatterConfig.ShowRole != undefined ? defaultMatterConfig.ShowRole : (cm.isBackwardCompatible ? false : true);
             }
         });
@@ -182,7 +180,6 @@
 
         getMatterUsers();
         cm.CheckPopUp = function (e) {
-            //  e.stopPropagation();
             if (!cm.errorStatus) {
                 cm.errorPopUpBlock = false;
                 cm.errorBorder = "";
@@ -204,7 +201,6 @@
                     var assignedTeam = {};
                     assignedTeam.assignedUser = userNames[i][0] + "(" + userEmails[i][0] + ");";
                     assignedTeam.userExsists = true; assignedTeam.userConfirmation = true;
-                    // assignedTeam.assignedRole = roles[i];
                     if (-1 == cm.oSiteUsers.indexOf(userEmails[i][0])) {
                         cm.oSiteUsers.push(userEmails[i][0]);
                     }
@@ -232,7 +228,6 @@
                     assignedTeam.teamUsers.push(teamuser);
                     assignedTeam.userConfirmation = true;
                     cm.assignPermissionTeams.push(assignedTeam);
-
                 }
             }
 
@@ -252,13 +247,6 @@
             cm.assignPermissionTeams.push({ 'assigneTeamRowNumber': newItemNo,'assignedAllUserNamesAndEmails':'', 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0], 'userConfirmation': false, 'teamUsers': [] });
         };
 
-        //getPermissionsAndRoles();
-
-        //var arrRoles = [];
-        //arrRoles = getAssignedUserRoles();
-
-        //var arrPermissions = [];
-        //arrPermissions = getAssignedUserPermissions();
         //#endregion
         function validateEmail(email) {
             var re = new RegExp(cm.oEmailRegExpr);
@@ -369,7 +357,6 @@
                                         }
                                     }
                                 });
-
                             }
                             cm.popupContainerBackground = "hide";
                         });
@@ -402,12 +389,7 @@
                 var userMailIdTerm = getUserName(userMailId + ";", false);
                 userMailIdTerm = cleanArray(userMailIdTerm);
                 for (var i = 0; i < userMailIdTerm.length; i++) {
-                    //var pattern = /\(([^)]+)\)/, matches = userMailIdTerm[i].match(pattern);
-                    //if (matches && matches.length > 0) {
-                    //    userMailIdTerm[i] = matches[1];
-                    //} else {
                     userMailIdTerm[i] = userMailIdTerm[i];
-                    // }
                     validate(userMailIdTerm[i]);
                 }
 
@@ -423,7 +405,6 @@
             }
             return newArray;
         }
-
 
         function showErrorNotificationAssignTeams(errorMsg, teamRowNumber, type) {
             var fieldType = "";
@@ -472,15 +453,6 @@
             else {
                 y = temp.offsetTop, x = temp.offsetLeft;
             }
-            //if (width > 734) {
-            //    console.log(posEle.x);
-            //    console.log(posEle.y);
-            //    y = temp.offsetTop-9 , x = temp.offsetLeft +405;
-            //}
-            //else {
-            //    y = temp.offsetTop + 57, x = temp.offsetLeft + 10;
-            //}
-
 
             errPopUpCAttorny.innerHTML = ".errPopUpCAttorny{top:" + y + "px;left:" + x + "px;}";
             errTringleBlockCAttorny.innerHTML = "{min-height: 40px;top: 17px !important;left: 24px;width:100%}";
@@ -490,18 +462,13 @@
             document.getElementsByTagName('head')[0].appendChild(errTringleBlockCAttorny);
             document.getElementsByTagName('head')[0].appendChild(errTringleBorderCAttorny);
             document.getElementsByTagName('head')[0].appendChild(errTextMatterCAttorny);
-
-
             cm.errTextMsg = errorMsg;
-
             cm.errorPopUpBlock = true;
             matterErrorEle.classList.add("errPopUpCAttorny");
             matterErrorTrinageleBlockEle.classList.add("errTringleBlockCAttorny");
             matterErrorTrinagleBorderEle.classList.add("errTringleBorderCAttorny");
             matterErrorTextEle.classList.add("errTextMatterCAttorny");
         }
-
-
         //#region Utilty functions
 
         var getUserName = function (sUserEmails, bIsName) {
@@ -683,7 +650,6 @@
             }
         }
 
-
         //setting the team  roles to default i.e responsible attrony when showRole is false from default settings.
         function assignDefaultRolesToTeamMembers() {
             if (!cm.showRoles) {
@@ -700,7 +666,6 @@
                         }
                     }
                 }
-
             }
         }
 
@@ -719,7 +684,6 @@
             }
             if ($item && $item.name !== "No results found") {
                 if (value == "team") {
-                   // $label.assignedUser = $item.name + '(' + $item.email + ');';
                     if ($label.assignedAllUserNamesAndEmails && $label.assignedAllUserNamesAndEmails.indexOf(';') > -1) {
                         $label.assignedUser = $item.name + '(' + $item.email + ');';
                         if ($label.assignedAllUserNamesAndEmails.indexOf($item.name) == -1) {
@@ -777,7 +741,6 @@
                     } else if (typeheadelelen >= 1 && !noresults) {
                         cm.checkUserExists($label, $event);
                         $("[uib-typeahead-popup].dropdown-menu").css("display", "none");
-                        // $("[uib-typeahead-popup].dropdown-menu").show();
                     }
                 }
                 if (!noresults) {                   
@@ -852,8 +815,7 @@
                                                 showNotificatoinMessages(team.assigneTeamRowNumber);
                                                 cm.notificationPopUpBlock = true;
                                                 keepGoing = false;
-                                                return false;
-                                            
+                                                return false;                                            
                                         }
                                     }
                                 }
@@ -866,7 +828,6 @@
 
         function showNotificatoinMessages(teamRowNumber) {
             var temp = angular.element('#txtUser' +  teamRowNumber).parent().position();
-                //document.getElementById('txtUser' + teamRowNumber);
             var notificationEle = document.getElementById("notificationBlock");
             var notificationTrinageleBlockEle = document.getElementById("notificatoinTrinagleBlock");
             var notificationTrinagleBorderEle = document.getElementById("notificationTrinagleBroderBlock");
@@ -949,7 +910,6 @@
                                        if (teamUser.userName == usersEmails[j]) {
                                            if (teamUser.userExsists) {
                                                if (-1 == cm.oSiteUsers.indexOf(usersEmails[j]) || -1 == cm.oSiteUserNames.indexOf(usersAliasNames[j])) {
-                                                   //  cm.blockedUserName.trim()
                                                    cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                                                   // cm.errTextMsg = "Please enter valid team members.";
                                                    cm.errorBorder = "";
@@ -982,12 +942,8 @@
 
                                                    showNotificatoinMessages(team.assigneTeamRowNumber);
                                                    cm.notificationPopUpBlock = true;
-
-                                                   //cm.checkUserExists(team);
-                                                   //if (!cm.invalidUserCheck) {
                                                    keepGoing = false;
                                                    return false;
-                                                   //}
                                                }
                                            }
                                        }
@@ -1011,9 +967,6 @@
                 return false;
             }
         }
-
-
-
 
         cm.UpdateMatter = function ($event) {
             cm.popupContainerBackground = "Show";
@@ -1117,15 +1070,8 @@
                         if (!response.isError) {                         
 
                             cm.popupContainerBackground = "hide";
-                        } else {
-                            //                           cm.errTextMsg = "Error in updating  matter: Incorrect inputs.";
-                            //                           showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
-                            //                           cm.errorBorder = "";
-                            //                           cm.errorPopUpBlock = true;
-                            //                           cm.popupContainerBackground = "hide";
                         }
                     });
-
                 }
                 else {
                     cm.popupContainerBackground = "hide";
@@ -1170,6 +1116,4 @@
         });
         //#endregion
     }]);
-
-
 })();
