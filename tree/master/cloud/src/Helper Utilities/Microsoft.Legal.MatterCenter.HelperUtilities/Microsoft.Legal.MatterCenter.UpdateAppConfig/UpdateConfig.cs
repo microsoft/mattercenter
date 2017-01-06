@@ -131,6 +131,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                     ClientRuntimeContext context = clientContext;
                     SearchConfigurationPortability searchConfigPortability = new SearchConfigurationPortability(context);
                     SearchObjectOwner owner = new SearchObjectOwner(context, SearchObjectLevel.SPSite);
+                    RevertSearchConfig(clientContext, searchConfigPortability, resultSourceXml, owner, errorPath);
                     searchConfigPortability.ImportSearchConfiguration(owner, resultSourceXml.ToString());
                     context.ExecuteQuery();
                     Console.WriteLine("Imported search configuration and created result source.");
@@ -154,6 +155,27 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
             }
         }
 
+
+        /// <summary>
+        /// A method to delete a searchConfig, if it exists
+        /// </summary>
+        /// <param name="clientContext">Client context</param>
+     
+        /// <param name="errorFilePath">File path for logging error</param>
+        private static void RevertSearchConfig(ClientContext clientContext, SearchConfigurationPortability searchConfigs, XDocument resultSourceXml, SearchObjectOwner owner, string errorFilePath)
+        {
+            try
+            {
+                Console.WriteLine("Deleting a SerchConfig if it exists");    
+                //Deletes if already exist, not error if it does not       
+                searchConfigs.DeleteSearchConfiguration(owner, resultSourceXml.ToString());
+                clientContext.ExecuteQuery();
+            }
+            catch (Exception exception)
+            {
+                ErrorLogger.LogErrorToTextFile(errorFilePath, "Message: " + exception.Message + "\nStacktrace: " + exception.StackTrace);
+            }
+        }
         /// <summary>
         /// Get result source from Search Configuration
         /// </summary>
