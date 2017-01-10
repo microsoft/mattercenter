@@ -292,7 +292,7 @@ if($IsValid -eq $true)
 	    
 	If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Updating Search Configuration failed" -Type ([MessageType]::Failure)
-	    RevertAll $ScriptDirectory 3		#Revert from step 3 to 1
+	    RevertAll $ScriptDirectory 4		#Revert from step 3 to 1
 	    return
 	}
 	else {

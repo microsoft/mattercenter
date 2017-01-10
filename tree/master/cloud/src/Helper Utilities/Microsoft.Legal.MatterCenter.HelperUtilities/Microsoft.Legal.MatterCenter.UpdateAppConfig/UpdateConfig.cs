@@ -74,7 +74,7 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
         /// <param name="filePath">path of the configuration Excel</param>
         /// <param name="login">Login detail</param>
         /// <param name="password">Password</param>
-        public static void UpdateSearchConfig(string filePath, string login, string password)
+        public static void UpdateSearchConfig(bool revert,string filePath, string login, string password)
         {
             // 1. Read Configuration Excel and form Search Term            
             string clientSheetName = ConfigurationManager.AppSettings["manifestSheetname"], xmlQueryTemplate = ConfigurationManager.AppSettings["XMLNodeQueryTemplate"];
@@ -132,6 +132,12 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                     SearchConfigurationPortability searchConfigPortability = new SearchConfigurationPortability(context);
                     SearchObjectOwner owner = new SearchObjectOwner(context, SearchObjectLevel.SPSite);
                     RevertSearchConfig(clientContext, searchConfigPortability, resultSourceXml, owner, errorPath);
+                    //Add search configuration 
+                    if (!revert)
+                    {
+                        searchConfigPortability.ImportSearchConfiguration(owner, resultSourceXml.ToString());
+                        context.ExecuteQuery();
+                    }
                     searchConfigPortability.ImportSearchConfiguration(owner, resultSourceXml.ToString());
                     context.ExecuteQuery();
                     Console.WriteLine("Imported search configuration and created result source.");
@@ -144,8 +150,12 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                     ClientRuntimeContext context = clientContext;
                     SearchConfigurationPortability searchConfigPortability = new SearchConfigurationPortability(context);
                     SearchObjectOwner owner = new SearchObjectOwner(context, SearchObjectLevel.SPSiteSubscription);
-                    searchConfigPortability.ImportSearchConfiguration(owner, managedPropertyXml.ToString());
-                    context.ExecuteQuery();
+                    RevertSearchConfig(clientContext, searchConfigPortability, managedPropertyXml, owner, errorPath);
+                    if (!revert)
+                    {
+                        searchConfigPortability.ImportSearchConfiguration(owner, managedPropertyXml.ToString());
+                        context.ExecuteQuery();
+                    }
                     Console.WriteLine("Imported search configuration and created search schema.");
                 }
             }
@@ -869,7 +879,8 @@ namespace Microsoft.Legal.MatterCenter.UpdateAppConfig
                         else if (3 == operation)    // For updating search configuration xml
                         {
                             #region Update search configuration file
-                            UpdateSearchConfig(filePath, username, password);
+                            bool revertConfig = Convert.ToBoolean(args[3].ToUpperInvariant(), CultureInfo.InvariantCulture);
+                            UpdateSearchConfig(revertConfig, filePath, username, password);
                             #endregion
                         }
                         else if (4 == operation)
