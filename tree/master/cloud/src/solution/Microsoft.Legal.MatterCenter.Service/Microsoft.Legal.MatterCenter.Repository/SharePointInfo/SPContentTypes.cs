@@ -13,6 +13,16 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
+    public static class ContentTypeExtensions
+    {
+        public static ContentType GetByName(this ContentTypeCollection cts, string name)
+        {
+            var ctx = cts.Context;
+            ctx.Load(cts);
+            ctx.ExecuteQuery();
+            return Enumerable.FirstOrDefault(cts, ct => ct.Name == name);
+        }
+    }
     public class SPContentTypes:ISPContentTypes
     {
 
@@ -89,6 +99,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 Web web = clientContext.Web;
                 List matterList = web.Lists.GetByTitle(matter.Name);
                 SetFieldValues(clientContext, contentTypeCollection, matterList, matterMetadata);
+                //SetMatterExtraProperties(clientContext, matterMetadata, matterList);
                 clientContext.ExecuteQuery();
                 SetDefaultContentType(clientContext, matterList, client, matter);
                 string[] viewColumnList = contentTypesConfig.ViewColumnList.Split(new string[] { ServiceConstants.SEMICOLON }, StringSplitOptions.RemoveEmptyEntries).Select(listEntry => listEntry.Trim()).ToArray();
@@ -104,6 +115,22 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 throw;
             }
         }
+
+    
+        public FieldCollection GetFieldsInContentType(ClientContext clientContext, string conentTypeName)
+        {
+            //// Get the content type using ID: 0x01003D7B5A54BF843D4381F54AB9D229F98A - is the ID of the "Custom" content Type
+            ContentType ct = clientContext.Web.ContentTypes.GetByName(conentTypeName);
+
+            //// Gets a value that specifies the collection of fields for the content type
+            FieldCollection fieldColl = ct.Fields;
+
+            clientContext.Load(fieldColl);
+            clientContext.ExecuteQuery();
+            return fieldColl;
+        }
+
+        
 
         /// <summary>
         /// Sets the default content type based on user selection for the new matter that is getting created
@@ -169,18 +196,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 matterMetadata = GetWSSId(clientContext, matterMetadata, fields);
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).DefaultValue = matterMetadata.Client.Id;
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).ReadOnlyField = true;
+                //fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).ReadOnlyField = true;
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).SetShowInDisplayForm(true);
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).Update();
                 if(configuration.GetSection("General")["IsBackwardCompatible"].ToString().ToLower()=="false")
                 {
-                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).ReadOnlyField = true;
+                    //fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).ReadOnlyField = true;
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).SetShowInDisplayForm(true);
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).DefaultValue = matterMetadata.Client.Name;
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).Update();
                 }    
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).DefaultValue = matterMetadata.Matter.Id;
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).ReadOnlyField = true;
+                //fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).ReadOnlyField = true;
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).SetShowInDisplayForm(true);
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).Update();
                 fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).DefaultValue = matterMetadata.Matter.Name;
@@ -203,6 +230,27 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 managedColumn.Id);
                     fields.GetByInternalNameOrTitle(columnName).Update();
                 }
+
+
+                MatterExtraProperties matterExtraProperties = matterMetadata.MatterExtraProperties;                ;
+               
+               
+
+                foreach (var extraField in matterExtraProperties.Fields)
+                {
+                    if (extraField.Type == "Text")
+                    {
+                        fields.GetByInternalNameOrTitle(extraField.FieldName).DefaultValue = extraField.FieldValue;
+                        fields.GetByInternalNameOrTitle(extraField.FieldName).SetShowInDisplayForm(true);
+                        fields.GetByInternalNameOrTitle(extraField.FieldName).Update();
+                    }
+                    else
+                    { 
+                        fields.GetByInternalNameOrTitle(extraField.FieldName).DefaultValue = extraField.FieldValue;                       
+                        fields.GetByInternalNameOrTitle(extraField.FieldName).Update();
+                    }
+                }
+                
             }
         }
 
@@ -245,7 +293,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="contentTypeCollection">Collection of content types</param>
         /// <param name="matterList">List containing matters</param>
         /// <returns>Content types in Field Collection object</returns>
-        internal static FieldCollection GetContentType(ClientContext clientContext, IList<ContentType> contentTypeCollection, List matterList)
+        private static FieldCollection GetContentType(ClientContext clientContext, IList<ContentType> contentTypeCollection, List matterList)
         {
             foreach (ContentType contenttype in contentTypeCollection)
             {

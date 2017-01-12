@@ -476,6 +476,9 @@ namespace Microsoft.Legal.MatterCenter.Web
                     jw.WritePropertyName("subAreaOfLawDocumentContentTypeProperty");
                     jw.WriteValue(taxonomySettingsSection["SubAreaOfLawDocumentTemplates"]);
 
+                    jw.WritePropertyName("matterProvisionExtraPropertiesContentType");
+                    jw.WriteValue(taxonomySettingsSection["MatterProvisionExtraPropertiesContentType"]);
+
                 jw.WriteEndObject();
 
             jw.WritePropertyName("search");

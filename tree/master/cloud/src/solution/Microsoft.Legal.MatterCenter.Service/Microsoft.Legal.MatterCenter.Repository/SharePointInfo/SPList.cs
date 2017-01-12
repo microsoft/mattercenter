@@ -31,6 +31,8 @@ using System.Text.RegularExpressions;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using System.Net;
+using Microsoft.Legal.MatterCenter.Repository.Extensions;
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -50,7 +52,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private GeneralSettings generalSettings;
         private IHostingEnvironment hostingEnvironment;
         private ErrorSettings errorSettings;
-        private IUsersDetails userDetails;        
+        private IUsersDetails userDetails;
+        private TaxonomySettings taxonomySettings;
+        private ContentTypesConfig contentTypesConfig;
         #endregion
 
         /// <summary>
@@ -67,6 +71,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             IOptions<LogTables> logTables, 
             IOptions<MailSettings> mailSettings,
             IOptions<GeneralSettings> generalSettings,
+            IOptions<TaxonomySettings> taxonomySettings,
             IHostingEnvironment hostingEnvironment, 
             IUsersDetails userDetails)
         {
@@ -78,8 +83,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.mailSettings = mailSettings.Value;
             this.hostingEnvironment = hostingEnvironment;
             this.errorSettings = errorSettings.Value;
+            this.taxonomySettings = taxonomySettings.Value;
             this.userDetails = userDetails;
             this.generalSettings = generalSettings.Value;
+            this.contentTypesConfig = contentTypesConfig.Value;
         }
 
 
@@ -785,13 +792,66 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 listItem[mailSettings.SearchEmailSentDate] = null;
                             }
                             listItem[mailSettings.SearchEmailOriginalName] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME]) ? mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME] : string.Empty;
-                            listItem.Update();
-                            clientContext.ExecuteQuery();
-                            listItem.RefreshLoad();
+                            //When the document gets uploaded, the document content type ("Additional Matter Properties")
+                            FieldCollection fields = GetMatterExtraDefaultSiteColumns(clientContext, selectedList);
+                            string contentTypeName = taxonomySettings.AdditionalMatterPropertiesContentTypeName;
+                            FieldCollection contentTypeFields = contentTypeName.GetFieldsInContentType(clientContext);
+                            if (fields != null)
+                            {
+                                foreach (var field in fields)
+                                {
+                                    foreach (var contentTypeField in contentTypeFields)
+                                    {
+                                        if (field.InternalName == contentTypeField.InternalName)
+                                        {
+                                            if (field.Group == contentTypesConfig.OneDriveContentTypeGroup)
+                                            {
+                                                listItem[field.InternalName] = field.DefaultValue;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        listItem.Update();
+                        clientContext.ExecuteQuery();
+                        listItem.RefreshLoad();
+
                     }
                 }
             }
+        }
+        /// <summary>
+        /// This method will get all the List columns of the selected list.
+        /// </summary>
+        /// <param name="clientContext"></param>
+        /// <param name="selectedList"></param>
+        /// <returns></returns>
+        private FieldCollection GetMatterExtraDefaultSiteColumns(ClientContext clientContext, List selectedList)
+        {
+            FieldCollection fields = selectedList.Fields;
+            clientContext.Load(fields);
+            clientContext.ExecuteQuery();          
+            return fields;
+        }
+      
+
+        /// <summary>
+        /// Checks if the property exists in property bag. Returns the value for the property from property bag.
+        /// </summary>
+        /// <param name="stampedPropertyValues">Dictionary object containing matter property bag key/value pairs</param>
+        /// <param name="key">Key to check in dictionary</param>
+        /// <returns>Property bag value for </returns>
+        internal string GetStampPropertyValue(Dictionary<string, object> stampedPropertyValues, string key)
+        {
+            string result = string.Empty;
+            if (stampedPropertyValues.ContainsKey(key))
+            {
+                result = WebUtility.HtmlDecode(Convert.ToString(stampedPropertyValues[key], CultureInfo.InvariantCulture));
+            }
+
+            // This is just to check for null value in key, if exists
+            return (!string.IsNullOrWhiteSpace(result)) ? result : string.Empty;
         }
 
         /// <summary>
