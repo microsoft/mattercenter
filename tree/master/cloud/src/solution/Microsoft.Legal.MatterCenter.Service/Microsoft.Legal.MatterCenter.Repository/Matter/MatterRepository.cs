@@ -1601,6 +1601,28 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                
                             jw.WriteEndArray();
                     }
+                    else if (field.TypeAsString == "MultiChoice")
+                    {
+                        jw.WritePropertyName("type");
+                        jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldMultiChoice)field).TypeAsString));
+                        List<string> options = GetChoiceFieldValues(clientContext, field);
+                        jw.WritePropertyName("values");
+                        jw.WriteStartArray();
+                        int optionCounter = 1;
+
+                        foreach (string option in options)
+                        {
+                            jw.WriteStartObject();
+                            jw.WritePropertyName("choiceId");
+                            jw.WriteValue(optionCounter);
+                            jw.WritePropertyName("choiceValue");
+                            jw.WriteValue(option);
+                            optionCounter++;
+                            jw.WriteEndObject();
+                        }
+
+                        jw.WriteEndArray();
+                    }
                     else
                     {
                         jw.WritePropertyName("type");

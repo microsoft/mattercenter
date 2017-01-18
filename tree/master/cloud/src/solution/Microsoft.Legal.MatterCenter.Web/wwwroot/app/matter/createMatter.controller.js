@@ -908,6 +908,7 @@
                     makePrevOrNextButton();
                 }
                 else {
+                    cm.iCurrentPage = 4;
                     cm.sectionName = sectionName;
                     makePrevOrNextButton();
                 }
@@ -926,6 +927,10 @@
                     case 3:
                         cm.prevButtonDisabled = false;
                         cm.nextButtonDisabled = true;
+                        break;
+                    default:
+                        cm.prevButtonDisabled = false;
+                        cm.nextButtonDisabled = false;
                         break;
                 }
             }
@@ -2871,6 +2876,9 @@
                 else if (iCurrPage == 3) {
                     return true;
                 }
+                else {
+                    return true;
+                }
             }
 
             function matterDescriptionValidation(sCurrentMatterDesc) {
@@ -3445,9 +3453,11 @@
                         getmatterprovisionextraproperties(optionsForGetmatterprovisionextraproperties, function (result) {
                             console.log(result);
                             cm.inputs = result.Fields;
-                            for (var i = 0; i < cm.inputs.length; i++) {
+                            var z = 0;
+                            for (var i = 1; i <= cm.inputs.length; i++) {
                                 var order = (i % 2 == 0) ? 2 : 1;
-                                cm.inputs[i].columnPosition = order;
+                                cm.inputs[z].columnPosition = order;
+                                z++;
                             }
                             console.log(cm.inputs);
                         });
@@ -3469,6 +3479,8 @@
                     field.FieldName = input.fieldInternalName;
                     field.Type = input.type;
                     if (input.type == "Dropdown") {
+                        field.FieldValue = input.value.choiceValue
+                    }else if (input.type == "Dropdown") {
                         field.FieldValue = input.value.choiceValue
                     } else {
                         field.FieldValue = input.value;

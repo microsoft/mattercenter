@@ -546,8 +546,8 @@
                         case 'datetime':
                             el.append(' <input id="' + scope.input.fieldName + '" class="directiveFormFields" type="text" class="calendar form-control " uib-datepicker-popup="MM/dd/yyyy" data-ng-model="input.value"  is-open="opened" placeholder="mm/dd/yyyy"  data-ng-model="" datepicker-options="dateOptions" ng-required="true" close-text="Close" readonly  ng-click="open1()"  />')
                             break;
-                        case 'comboboxmultiple':
-                            el.append('<select  id="' + scope.input.fieldName + '" class="multiSelectHeight directiveFormFields" style="height:100px;" multiple ng-model="input.value" ng-options="x.choiceValue for x in in input.values track by x.choiceId"> <option value="-1" label="- Select -"></option></select>')
+                        case 'multichoice':
+                            el.append('<select  id="' + scope.input.fieldName + '" class="multiSelectHeight directiveFormFields" style="height:100px;" multiple ng-model="input.value" ng-options="x.choiceValue for x  in input.values "> <option value="" label="- Select -"></option></select>')
                             break;
                     }
                     $compile(el)(scope);
@@ -576,6 +576,76 @@
         }
     }
 
+
+
+
+
+    'use strict';
+    function extramatterpropertiefiledsinsettings($compile) {
+
+        return {
+            restrict: 'A',
+            replace: true,
+            link: function (scope, element, attrs) {
+                var el = angular.element('<div></div>');
+                var htmlTxt =   '<div class="col-xs-12 pad0 marginTop10">\
+                     <div class="col-xs-12 col-sm-5 pad0">\
+                         <div class="row margin0">\
+                             <div class="col-xs-12 defaultFontStyle displayInline pad0">'+
+                               scope.input.name
+                             +'</div>\
+                             <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">\
+                             </div>\
+                         </div>\
+                     </div>\
+                     <div class="col-xs-12 col-sm-3 pad0 marginTop7">\
+                         <div class="col-xs-12 defaultFontStyle displayInline pad0">\
+                             Make this field display in UI?\
+                         </div>\
+                         <span class="marginRight10"> <input type="radio" ng-model="input.displayInUI" name="ui_' + scope.input.fieldInternalName + '" value="true" /> Yes</span>\
+                         <span>\
+                             <input type="radio" name="ui_' + scope.input.fieldInternalName + '" value="false" ng-model="input.displayInUI" /> No\
+                         </span>\
+                     </div>\
+                     <div class="col-xs-12 col-sm-3 pad0 marginTop7" ng-show="input.displayInUI==\'true\'">\
+                         <div class="col-xs-12 defaultFontStyle displayInline pad0">\
+                             Make this field required?\
+                         </div>\
+                         <span class="marginRight10"> <input type="radio" ng-model="input.mandatory" name="req_' + scope.input.fieldInternalName + '" value="true" /> Yes</span>\
+                         <span>\
+                             <input type="radio" name="req_' + scope.input.fieldInternalName + '" value="false" ng-model="input.mandatory" />No \
+                         </span>\
+                     </div>\
+                 </div>'
+                el.append(htmlTxt);
+                    $compile(el)(scope);
+                    element.append(el);
+                
+            },
+            controller: function ($scope) {
+                $scope.open1 = function ($event) {
+                    if ($event) {
+                        $event.preventDefault();
+                        $event.stopPropagation();
+                    }
+                    $scope.opened = $scope.opened ? false : true;
+                };
+                $scope.dateOptions = {
+
+                    formatYear: 'yy',
+                    //maxDate: new Date(),
+                    // minDate: new Date(),
+                    startingDay: 1
+                };
+
+                $scope.opened = false;
+
+            }
+        }
+    }
+
+
+
     var app = angular.module('matterMain');
     app.directive('onload', ['$timeout', onload]);
     app.directive('showbreadcrumb', [showbreadcrumb]);
@@ -593,6 +663,7 @@
     app.directive('assignteamkeydown', [assignTeamKeyDown]);
     app.directive('showupload', [showupload]);
     app.directive('demodirective', ['$compile', demodirective]);
+    app.directive('extramatterpropertiefiledsinsettings', ['$compile', extramatterpropertiefiledsinsettings]);
 })();
 
 
