@@ -305,7 +305,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
             expect(vm.nodata).toBe(false);
             expect(vm.allMatterCount).toBeGreaterThan(0);
             expect(vm.myMatterCount).toBe(0);
-            expect(vm.pinMatterCount).toBe(0);
+            expect(vm.pinMatterCount).toBeGreaterThan(0);
             expect(vm.totalrecords).toBeGreaterThan(0);
         });
     });
@@ -323,7 +323,7 @@ describe("MatterDashBoard Controller test suite for service call", function () {
             expect(vm.matterGridOptions).toBeDefined();
             expect(vm.allMatterCount).toBeGreaterThan(0);
             expect(vm.myMatterCount).toBe(0);
-            expect(vm.pinMatterCount).toBe(0);
+            expect(vm.pinMatterCount).toBeGreaterThan(0);
             expect(vm.totalrecords).toBeGreaterThan(0);
         });
     });

@@ -336,13 +336,4 @@ describe("Matters Controller test suite", function () {
             expect(vm.divuigrid).toBe(false);
         });
     });
-
-    describe("Verification of modEndDate function", function () {
-        it("It should return start date", function () {
-            vm.modEndDate(event);
-            expect(vm.modifiedenddate).not.toBe(null);
-        });
-    });
 });
-
-
