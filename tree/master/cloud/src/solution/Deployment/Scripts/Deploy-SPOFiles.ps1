@@ -52,12 +52,14 @@ Function Show-Message([string] $Message, [string] $Type, [bool] $Newline = $true
 	}
 }
 
-# Set log file path
-$LogFile = "$ScriptDirectory\Logs\Log.txt"
-
 # Get the current directory of the script
 Function ScriptRoot {Split-Path $MyInvocation.ScriptName}
 $ScriptDirectory = (ScriptRoot)
+
+
+# Set log file path
+$LogFile = "$ScriptDirectory\Logs\Log.txt"
+
 
 # Get the parent directory of the script
 Function Get-ParentDirectory {Split-Path -Parent(Split-Path $MyInvocation.ScriptName)}
