@@ -74,6 +74,22 @@ Show-Message -Message "Adding common library functions" -Type ([MessageType]::Wa
 Show-Message -Message "Added common library functions" -Type ([MessageType]::Success)
 
 #----------------------------------------------
+# Reverting step 4
+#----------------------------------------------
+if (4 -le $Checkpoint)
+{
+    Show-Message -Message ""
+    Show-Message -Message "Deleting Search Configs and Managed Properties"
+    try {
+        & "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "3" $Username $Password "false"
+       
+    }
+    catch {        
+        Write-Log $RevertLogFile "Could not delete SearchConfig"
+    }
+}
+
+#----------------------------------------------
 # Reverting step 3
 #----------------------------------------------
 if (3 -le $Checkpoint)
