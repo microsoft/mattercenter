@@ -3302,4 +3302,5 @@
     "matter/saveconfigurations": "true|$|10\/24\/2016 06:59:12",
     "config/Get": { "isError": false },
     "config/getconfigsforspo": { "isError": false },
+    "user/isowner": { "isLoginUserOwner": true }
 }

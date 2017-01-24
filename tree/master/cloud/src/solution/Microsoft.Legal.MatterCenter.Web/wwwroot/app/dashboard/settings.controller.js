@@ -192,7 +192,7 @@
                 })
             }
 
-            vm.isLoginUserOwner();
+
             vm.taxonomydata = [];
             vm.getTaxonomyData = function () {
                 vm.popupContainerBackground = "Show";
@@ -622,8 +622,8 @@
 
             var getUserName = function (sUserEmails, bIsName) {
                 "use strict";
-               var oEmailRegexp= /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-               var arrUserNames = [], arrTempUserNames = [], sEmail = "", oEmailRegex = new RegExp(oEmailRegexp);
+                var oEmailRegexp= /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                var arrUserNames = [], arrTempUserNames = [], sEmail = "", oEmailRegex = new RegExp(oEmailRegexp);
                 if (sUserEmails && null !== sUserEmails && "" !== sUserEmails) {
                     arrUserNames = sUserEmails.split(";");
                     for (var iIterator = 0; iIterator < arrUserNames.length - 1; iIterator++) {
@@ -886,7 +886,7 @@
                             documentType.termChainName = documentType.termChainName + ">" + documentType.levelFiveTermName;
                         }
                         vm.documentTypeLawTerms.push(documentType);
-                        vm.activeDocumentTypeLawTerm = null;                        
+                        vm.activeDocumentTypeLawTerm = null;
                     }
                 }
             }
@@ -959,7 +959,7 @@
                     vm.selectedDocumentTypeLawTerms = vm.documentTypeLawTerms;
                 }
                 else {
-                    if (vm.documentTypeLawTerms.length > 0) {
+                    if (vm.documentTypeLawTerms.length >= 0) {
                         vm.errorPopUp = true;
                     } else {
                         vm.popupContainerBackground = "hide";
@@ -1265,6 +1265,8 @@
                     getTaxonomyHierarchy(data);
                 }
             }
+
+            vm.isLoginUserOwner();
         }]);
     app.filter('getAssociatedDocumentTemplatesCount', function () {
         return function (input, splitChar) {

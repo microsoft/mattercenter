@@ -165,13 +165,13 @@ describe("SettingsController test suite", function () {
 
     describe("Verification of showSelectedClient function", function () {
         it("It should show all the selected clients", function () {
+            vm.isClientMappedWithHierachy = false;
             vm.showSelectedClient("Test", oTestConfiguration.sValidMatterClientURL);
             expect(vm.lazyloader).toBe(true);
             expect(vm.selected).toBe("Test");
             expect(vm.clienturl).toBe(oTestConfiguration.sValidMatterClientURL);
             expect(vm.nodata).toBe(true);
             expect(vm.lazyloader).toBe(true);
-            expect(vm.clientlist).toBe(true);
             expect(vm.showClientDetails).toBe(false);
         });
     });
@@ -183,15 +183,7 @@ describe("SettingsController test suite", function () {
         });
     });
 
-    describe("Verification of selectMatterTypePopUpClose function", function () {
-        it("It should hide popup", function () {
-            vm.popupContainer = "Show";
-            vm.selectMatterTypePopUpClose();
-            expect(vm.popupContainerBackground).toBe("hide");
-            expect(vm.popupContainer).toBe("hide");
-        });
-    });
-
+    
     describe("Verification of selectMatterType function", function () {
         it("It should show Matter type popup", function () {
             vm.selectMatterType();

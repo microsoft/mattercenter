@@ -267,13 +267,7 @@ describe("Matters Controller test suite for service call", function () {
         });
     });
 
-    describe("Verification of modStartDate function", function () {
-        it("It should return start date", function () {
-            vm.modStartDate(event);
-            expect(vm.modifiedStartDate).toBe(true);
-        });
-    })
-
+    
     describe("Verification of disabled function", function () {
         it("It should change the status as per the date", function () {
             var date = { getDay: function () { return 1; } }

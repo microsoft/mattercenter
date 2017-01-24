@@ -2300,9 +2300,6 @@
             vm.openedStartDate = false;
             vm.openedEndDate = false;
 
-            vm.disabled = function (date, mode) {
-                return (mode === 'day' && (date.getDay() != 0));
-            };
             //#endregion
 
             //#region Functionality to do filter on option selected for my and pinned or all documnets
@@ -3171,4 +3168,3 @@
     });
     //#endregion
 })();
-
