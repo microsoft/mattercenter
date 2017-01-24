@@ -781,7 +781,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             try
             {
                 var client = matterMetadata.Client;
-                var matter = matterMetadata.Matter;
+                var matter = matterMetadata.Matter;              
                 ClientContext clientContext = null;
                 GenericResponseVM genericResponseVM = null;
                 using (clientContext = spoAuthorization.GetClientContext(client.Url))

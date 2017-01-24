@@ -1575,6 +1575,27 @@ left: -19px;
     -o-animation: spin 2s infinite linear;
     animation: spin 2s infinite linear;
 }
+.directiveFormFields{
+    width:180px;
+}
+.multiSelectHeight{
+    height:100px;
+}
+.directiveFormFieldsLableWidth{
+    width:180px;
+    overflow:hidden;
+}
+.loadGlyphIconSettings{
+       left: -35px;
+    top: 11px;
+}
+#SettingsPermissions .dropdown-menu li {
+        max-width: 295px;
+    min-width: 295px;
+}
+.settingsLabelTeam{
+    min-width:295px;max-width:295px;margin-bottom: 10px;float:left;margin-right:12px
+}
 
 
 

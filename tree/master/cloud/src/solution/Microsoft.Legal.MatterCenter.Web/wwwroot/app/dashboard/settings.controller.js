@@ -93,6 +93,15 @@
                     success: callback
                 });
             }
+            //API call to get matter extra properties 
+            function getmatterprovisionextraproperties(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getmatterprovisionextraproperties',
+                    data: options,
+                    success: callback
+                });
+            }
 
             //API call to save settings
             function saveConfigurations(options, callback) {
@@ -367,6 +376,7 @@
                                     vm.activeDocumentTypeLawTerm = levelTwoTerm;
                                 }
                                 vm.selectedDocumentTypeLawTerms.push(documentType);
+                                getAdditionalMatterProperties(documentType);
                             }
                         }
                     });
@@ -404,6 +414,7 @@
                                         vm.activeDocumentTypeLawTerm = levelThreeTerm;
                                     }
                                     vm.selectedDocumentTypeLawTerms.push(documentType);
+                                    getAdditionalMatterProperties(documentType);
                                 }
                             }
                         });
@@ -450,6 +461,7 @@
                                             vm.activeDocumentTypeLawTerm = levelFourTerm;
                                         }
                                         vm.selectedDocumentTypeLawTerms.push(documentType);
+                                        getAdditionalMatterProperties(documentType);
                                     }
                                 }
                             });
@@ -503,6 +515,7 @@
                                                 vm.activeDocumentTypeLawTerm = levelFiveTerm;
                                             }
                                             vm.selectedDocumentTypeLawTerms.push(documentType);
+                                            getAdditionalMatterProperties(documentType);
                                         }
                                     }
                                 });
@@ -754,6 +767,8 @@
                     if (i === 3) { managedColumns[columnName].TermName = sLevel4List; }
                     if (i === 4) { managedColumns[columnName].TermName = sLevel5List; }
                 }
+
+                var additionalFieldValues = getExtraMatterFieldValues();
                 var settingsRequest = {
                     DefaultMatterName: vm.mattername,
                     DefaultMatterId: vm.matterid,
@@ -951,6 +966,7 @@
                         var primaryType = false;
                         if (vm.activeDocumentTypeLawTerm.id == term.id) {// this line will check whether the data is existing or not
                             primaryType = true;
+                            getAdditionalMatterProperties(term);
                         }
                         term.primaryMatterType = primaryType;
                         vm.popupContainerBackground = "hide";
@@ -1264,6 +1280,45 @@
                     vm.selectedLevelOneItem = vm.levelOneList[0];
                     getTaxonomyHierarchy(data);
                 }
+            }
+            vm.extraMatterFields=[];
+            function getAdditionalMatterProperties(data) {
+                var additionalMatterPropSettingName = configs.taxonomy.matterProvisionExtraPropertiesContentType;
+                if (data[additionalMatterPropSettingName] && data[additionalMatterPropSettingName] != "") {
+                    var optionsForGetmatterprovisionextraproperties = {
+                        Client: {
+                            Url: vm.clienturl
+                        },
+                        MatterExtraProperties: {
+                            ContentTypeName: data[additionalMatterPropSettingName]
+                        }
+                    }
+                    getmatterprovisionextraproperties(optionsForGetmatterprovisionextraproperties, function (result) {
+                        console.log(result);
+                        vm.extraMatterFields = result.Fields;
+                        angular.forEach(vm.extraMatterFields, function (field) {
+                            field.displayInUI = "false";
+                            field.mandatory = "false";
+
+                        });
+                        console.log(vm.extraMatterFields);
+                    });
+                }
+            }
+
+            function getExtraMatterFieldValues() {
+                var Fields = [];
+               
+                angular.forEach(vm.extraMatterFields, function (input) {
+                    var field = { fieldName: "", displayInUI: "", mandatory: "" }
+                    field.fieldName = input.fieldInternalName;
+                    field.displayInUI = input.displayInUI;
+                    field.mandatory = input.mandatory;
+                    if (-1 == Fields.indexOf(field)) {
+                        Fields.push(field);
+                    }
+                });
+                return Fields;
             }
         }]);
     app.filter('getAssociatedDocumentTemplatesCount', function () {

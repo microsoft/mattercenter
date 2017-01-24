@@ -44,7 +44,9 @@
             cm.schema = configs.search.Schema;
             cm.isBackwardCompatible = configs.global.isBackwardCompatible;
             cm.isClientMappedWithHierachy = configs.global.isClientMappedWithHierachy;
-            cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);            
+            cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);
+            cm.createContent.TabNumber = 3;
+            cm.matterAdditionalFieldsContentTypeName = "";
             if (cm.taxonomyHierarchyLevels >= 2) {
                 cm.parentLevelOneList = [];
                 cm.levelOneList = [];
@@ -176,6 +178,17 @@
                     success: callback
                 });
             }
+
+
+            function getmatterprovisionextraproperties(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getmatterprovisionextraproperties',
+                    data: options,
+                    success: callback
+                });
+            }
+
 
 
             function getTaxonomyDetailsForPractice(optionsForPracticeGroup, callback) {
@@ -463,8 +476,6 @@
                         else {
                             localStorage.removeItem("oPageOneData");
                             localStorage.removeItem("oPageTwoData");
-                            cm.chkConfilctCheck = false;
-                            cm.matterDescription = "";
                             cm.canCreateMatterPermission = true; cm.errPermissionMessage = "";
                             var dMatterAreaOfLaw = "", dMatterPracticeGroup = "", dMatterSubAreOfLaw = "", dMatterTypes = "", dPrimaryMatterType = "", dMatterUsers = "", dMatterUserEmails = "", dMatterPermissions = "", dMatterRoles = "";
                             cm.conflictUsers.assignedUser = "";
@@ -674,6 +685,7 @@
                                     cm.activeDocumentTypeLawTerm = levelTwoTerm;
                                 }
                                 cm.selectedDocumentTypeLawTerms.push(documentType);
+                                getAdditionalMatterProperties(documentType);
                             }
                         }
                     });
@@ -712,6 +724,7 @@
                                         cm.activeDocumentTypeLawTerm = levelThreeTerm;
                                     }
                                     cm.selectedDocumentTypeLawTerms.push(documentType);
+                                    getAdditionalMatterProperties(documentType);
                                 }
                             }
                         });
@@ -758,6 +771,7 @@
                                             cm.activeDocumentTypeLawTerm = levelFourTerm;
                                         }
                                         cm.selectedDocumentTypeLawTerms.push(documentType);
+                                        getAdditionalMatterProperties(documentType);
                                     }
                                 }
                             });
@@ -811,6 +825,7 @@
                                                 cm.activeDocumentTypeLawTerm = levelFiveTerm;
                                             }
                                             cm.selectedDocumentTypeLawTerms.push(documentType);
+                                            getAdditionalMatterProperties(documentType);
                                         }
                                     }
                                 });
@@ -893,6 +908,7 @@
                     makePrevOrNextButton();
                 }
                 else {
+                    cm.iCurrentPage = 4;
                     cm.sectionName = sectionName;
                     makePrevOrNextButton();
                 }
@@ -911,6 +927,10 @@
                     case 3:
                         cm.prevButtonDisabled = false;
                         cm.nextButtonDisabled = true;
+                        break;
+                    default:
+                        cm.prevButtonDisabled = false;
+                        cm.nextButtonDisabled = false;
                         break;
                 }
             }
@@ -1973,6 +1993,7 @@
                     managedColumns[columnName] = { TermName: getDefaultContentTypeValues("level" + (i + 1) + "Name"), Id: getDefaultContentTypeValues("level" + (i + 1) + "Id") };
 
                 }
+                var additionalFields = getAdditionalMatterPropertiesFieldsData();
 
                 var optionsForAssignContentTypeMetadata = {
                     Client: {
@@ -1986,6 +2007,10 @@
                         ContentTypes: contentTypes,
                         DefaultContentType: defaultContentType,
                         MatterGuid: matterGUID
+                    },
+                    MatterExtraProperties: {
+                        ContentTypeName: cm.matterAdditionalFieldsContentTypeName,
+                        Fields: additionalFields
                     },
                     ManagedColumnTerms: managedColumns
                 }
@@ -2200,12 +2225,14 @@
                     if (i === 4) { managedColumns[columnName].TermName = sLevel5List; }
                 }
 
+              
+
                 var optionsForStampMatterDetails = {
                     Client: {
                         Id: cm.clientId,
                         Name: cm.selectedClientName,
                         Url: cm.clientUrl
-                    },
+                    },                   
                     Matter: {
                         Name: cm.matterName.trim(),
                         Id: cm.matterId.trim(),
@@ -2324,6 +2351,14 @@
                                 if ("contenttypes" == contentTypeValue) {
                                     if (-1 == arrContents.indexOf(arrContentTypes[nCount].documentTemplates)) {
                                         arrContents.push(arrContentTypes[nCount].documentTemplates);
+                                        var additionalMatterPropSettingName = configs.taxonomy.matterProvisionExtraPropertiesContentType;
+                                        var temp = arrContentTypes[nCount];
+                                        if (temp[additionalMatterPropSettingName] && temp[additionalMatterPropSettingName] != "") {
+                                            if (-1 == arrContents.indexOf(temp[additionalMatterPropSettingName])) {
+                                                arrContents.push(temp[additionalMatterPropSettingName]);
+                                                cm.matterAdditionalFieldsContentTypeName = temp[additionalMatterPropSettingName];
+                                            }
+                                        }
                                     }
 
                                     var arrAssociatedDocumentTemplates = arrContentTypes[nCount].documentTemplateNames.split(";");
@@ -2579,7 +2614,6 @@
                 cm.assignPermissions = [];
                 cm.secureMatterCheck = true;
                 cm.conflictRadioCheck = false;
-                cm.chkConfilctCheck = false;
                 localStorage.iLivePage = 1;
                 cm.createButton = "Create";
                 localStorage.removeItem("oPageOneData");
@@ -2840,6 +2874,9 @@
                     }
                 }
                 else if (iCurrPage == 3) {
+                    return true;
+                }
+                else {
                     return true;
                 }
             }
@@ -3302,6 +3339,7 @@
                         var primaryType = false;
                         if (cm.activeDocumentTypeLawTerm.id == term.id) {// this line will check whether the data is existing or not
                             primaryType = true;
+                            getAdditionalMatterProperties(term);
                         }
                         term.primaryMatterType = primaryType;
                         cm.popupContainerBackground = "hide";
@@ -3391,6 +3429,68 @@
             $rootScope.$on('disableOverlay', function (event, data) {
                 cm.popupContainerBackground = "hide";               
             });
+ 	    cm.inputs = [];
+            function getAdditionalMatterProperties(data) {
+                var additionalMatterPropSettingName = configs.taxonomy.matterProvisionExtraPropertiesContentType;
+                if (data[additionalMatterPropSettingName] && data[additionalMatterPropSettingName] != "") {
+                    cm.configurableSection = true;
+                    if (cm.configurableSection) {
+                        cm.createContent.Tab4Header = "Provide more inputs";
+                        cm.createContent.Tab4HeaderTitle = "";
+                        cm.matterAdditionalFieldsContentTypeName = "";
+                        cm.createContent.TabNumber = 4;
+                        if (cm.clientUrl == "") {
+                            cm.clientUrl = configs.global.repositoryUrl;
+                        }
+                        var optionsForGetmatterprovisionextraproperties = {
+                            Client: {
+                                Url: cm.clientUrl
+                            },
+                            MatterExtraProperties: {
+                                ContentTypeName: data[additionalMatterPropSettingName]
+                            }
+                        }
+                        getmatterprovisionextraproperties(optionsForGetmatterprovisionextraproperties, function (result) {
+                            console.log(result);
+                            cm.inputs = result.Fields;
+                            var z = 0;
+                            for (var i = 1; i <= cm.inputs.length; i++) {
+                                var order = (i % 2 == 0) ? 2 : 1;
+                                cm.inputs[z].columnPosition = order;
+                                z++;
+                            }
+                            console.log(cm.inputs);
+                        });
+                    }
+
+                } else {
+                    cm.configurableSection = false;
+                    cm.createContent.TabNumber = 3;
+                    cm.matterAdditionalFieldsContentTypeName = "";
+                }
+
+            }
+
+            function getAdditionalMatterPropertiesFieldsData() {
+                var Fields = [];
+
+                angular.forEach(cm.inputs, function (input) {
+                    var field = { FieldName: "", Type: "", FieldValue: "" }
+                    field.FieldName = input.fieldInternalName;
+                    field.Type = input.type;
+                    if (input.type == "Dropdown") {
+                        field.FieldValue = input.value.choiceValue
+                    }else if (input.type == "Dropdown") {
+                        field.FieldValue = input.value.choiceValue
+                    } else {
+                        field.FieldValue = input.value;
+                    }
+                    if (-1 == Fields.indexOf(field)) {
+                        Fields.push(field);
+                    }
+                });
+                return Fields;
+            }
         }]);
 
     app.filter('getAssociatedDocumentTemplatesCount', function () {

@@ -25,6 +25,9 @@ using System.Net;
 using Newtonsoft.Json;
 using System.Reflection;
 using Microsoft.SharePoint.Client.WebParts;
+using System.Text;
+using System.IO;
+using Microsoft.Legal.MatterCenter.Repository.Extensions;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -44,7 +47,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private IExternalSharing extrnalSharing;
         private IUserRepository userRepositoy;
         private GeneralSettings generalSettings;
-        
+        private TaxonomySettings taxonomySettings;
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
@@ -60,6 +63,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             ISPList spList, 
             IOptions<CamlQueries> camlQueries,
             IOptions<GeneralSettings> generalSettings,
+            IOptions<TaxonomySettings> taxonomySettings,
             IUsersDetails userdetails, 
             IOptions<ErrorSettings> errorSettings,
             
@@ -76,6 +80,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spPage = spPage;
             this.errorSettings = errorSettings.Value;
             this.generalSettings = generalSettings.Value;
+            this.taxonomySettings = taxonomySettings.Value;
             this.spContentTypes = spContentTypes;
             this.extrnalSharing = extrnalSharing;
             this.userRepositoy = userRepositoy;
@@ -1532,6 +1537,134 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation)=> extrnalSharing.ShareMatter(matterInformation);
         
         public bool OneNoteUrlExists(MatterInformationVM matterInformation)=> search.PageExists(matterInformation.Client, matterInformation.RequestedUrl);
-        
+        /// <summary>
+        /// This method will get all the Field columns of the contenttype as the JSON object which is used to render the dynamic UI
+        /// </summary>
+        /// <param name="contentTypeName"></param>
+        /// <param name="client"></param>
+        /// <returns>Json</returns>
+        public string GetMatterProvisionExtraProperties(string contentTypeName, Client client)
+        {
+            var clientContext = spoAuthorization.GetClientContext(client.Url);
+            FieldCollection fieldCollection = contentTypeName.GetFieldsInContentType(clientContext);
+                //spContentTypes.GetFieldsInContentType(clientContext, contentTypeName);
+            StringBuilder sb = new StringBuilder();
+            JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
+            jw.Formatting = Formatting.Indented;
+            jw.WriteStartObject();
+            
+            jw.WritePropertyName("Fields");
+            jw.WriteStartArray();            
+            foreach (var field in fieldCollection)
+            {
+                if(field.Group=="_MatterCenter")
+                {                    
+                    jw.WriteStartObject();
+                    jw.WritePropertyName("name");  
+                    jw.WriteValue(field.Title);
+
+                    jw.WritePropertyName("fieldInternalName");
+                    jw.WriteValue(field.InternalName);
+
+                    jw.WritePropertyName("required");
+                    jw.WriteValue(field.Required);
+
+                    jw.WritePropertyName("displayInUI");
+                    jw.WriteValue("true");
+
+                    jw.WritePropertyName("originalType");
+                    jw.WriteValue(field.TypeAsString);
+                    jw.WritePropertyName("defaultValue");
+                    jw.WriteValue(field.DefaultValue);
+                    jw.WritePropertyName("description");
+                    jw.WriteValue(field.Description);
+
+                    if (field.TypeAsString=="Choice")
+                    {
+                        jw.WritePropertyName("type");
+                        jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldChoice)field).EditFormat));
+                        List<string>  options = GetChoiceFieldValues(clientContext, field);
+                            jw.WritePropertyName("values");
+                            jw.WriteStartArray();
+                                int optionCounter = 1;
+
+                                foreach (string option in options)
+                                {
+                                    jw.WriteStartObject();
+                                    jw.WritePropertyName("choiceId");
+                                    jw.WriteValue(optionCounter);
+                                    jw.WritePropertyName("choiceValue");
+                                    jw.WriteValue(option);
+                                    optionCounter++;
+                                    jw.WriteEndObject();
+                                }
+                               
+                            jw.WriteEndArray();
+                    }
+                    else if (field.TypeAsString == "MultiChoice")
+                    {
+                        jw.WritePropertyName("type");
+                        jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldMultiChoice)field).TypeAsString));
+                        List<string> options = GetChoiceFieldValues(clientContext, field);
+                        jw.WritePropertyName("values");
+                        jw.WriteStartArray();
+                        int optionCounter = 1;
+
+                        foreach (string option in options)
+                        {
+                            jw.WriteStartObject();
+                            jw.WritePropertyName("choiceId");
+                            jw.WriteValue(optionCounter);
+                            jw.WritePropertyName("choiceValue");
+                            jw.WriteValue(option);
+                            optionCounter++;
+                            jw.WriteEndObject();
+                        }
+
+                        jw.WriteEndArray();
+                    }
+                    else
+                    {
+                        jw.WritePropertyName("type");
+                        jw.WriteValue(Convert.ToString(field.TypeAsString));
+                    }
+                    jw.WriteEndObject();                    
+                }                
+            }
+            jw.WriteEndArray();
+            jw.WriteEndObject();
+            return sb.ToString();
+        }
+        /// <summary>
+        /// This method is to get the choice field values of choice data type
+        /// </summary>
+        /// <param name="clientContext"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        private static List<string> GetChoiceFieldValues(ClientContext clientContext,SharePoint.Client.Field fieldName)
+        {
+            List<string> fieldList = new List<string>();            
+            try
+            {
+                
+                FieldChoice fieldChoice = clientContext.CastTo<FieldChoice>(fieldName);
+                clientContext.Load(fieldChoice, f => f.Choices);
+                clientContext.ExecuteQuery();
+                foreach (string item in fieldChoice.Choices)
+                {
+                    fieldList.Add(item.ToString());
+                  
+                }
+               
+            }
+            catch (Exception ex)
+            {               
+                throw;
+            }
+           
+
+            return fieldList;
+        }
+
     }
 }

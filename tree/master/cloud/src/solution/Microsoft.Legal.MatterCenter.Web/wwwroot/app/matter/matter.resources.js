@@ -34,7 +34,7 @@ angular.module('matterMain')
                   }),
                   'getDefaultMatterConfigurations':auth.attachCSRF({  
                       method: 'POST',  
-                      url: '/api/v1/matter/getconfigurations'  
+                      url: '/api/v1/matter/getconfigurations'
                   }),
                   'getUsers': auth.attachCSRF({
                       method: 'POST',
@@ -116,6 +116,10 @@ angular.module('matterMain')
                   'oneNoteUrlExists': auth.attachCSRF({
                       method: 'POST',
                       url: '/api/v1/matter/onenoteurlexists'
+                  }),
+                  'getmatterprovisionextraproperties': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/getmatterprovisionextraproperties'
                   }),
               });
       }]);

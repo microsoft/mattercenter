@@ -25,6 +25,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Legal.MatterCenter.Web.Common;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 #endregion
 namespace Microsoft.Legal.MatterCenter.Service
 {
@@ -427,7 +428,8 @@ namespace Microsoft.Legal.MatterCenter.Service
                         IsError = true
                     };
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
-                }
+                }               
+
                 #endregion
                 GenericResponseVM genericResponseVM = await matterRepositoy.GetConfigurationsAsync(siteCollectionPath);
                 return matterCenterServiceFunctions.ServiceResponse(genericResponseVM, (int)HttpStatusCode.OK);
@@ -1247,6 +1249,52 @@ namespace Microsoft.Legal.MatterCenter.Service
                 return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
             }            
         }
+
+
+        /// <summary>
+        /// This method will check whether one note url exists for a selected matter or not
+        /// </summary>
+        /// <param name="matterMetadata"></param>
+        /// <returns></returns>
+        [HttpPost("getmatterprovisionextraproperties")]
+        [Produces(typeof(GenericResponseVM))]
+        [SwaggerOperation("onenoteurlexists")]
+        [SwaggerResponse(HttpStatusCode.OK,
+            Description = "This method will check whether one note url exists for a selected matter or not",
+            Type = typeof(GenericResponseVM))]
+        [SwaggerResponseRemoveDefaults]
+        public IActionResult GetMatterProvisionExtraProperties([FromBody]MatterMetadata matterMetadata)
+        {
+           
+            GenericResponseVM genericResponse = null;
+            try
+            {
+                if (matterMetadata == null && matterMetadata.MatterExtraProperties == null && 
+                    string.IsNullOrWhiteSpace(matterMetadata.MatterExtraProperties.ContentTypeName))
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
+                }
+
+                string matterExtraPropertiesString = matterRepositoy.GetMatterProvisionExtraProperties(matterMetadata.MatterExtraProperties.ContentTypeName, matterMetadata.Client);
+
+                
+               
+                return matterCenterServiceFunctions.ServiceResponse(matterExtraPropertiesString, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                var errResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
         #endregion
     }
 }
