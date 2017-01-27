@@ -224,21 +224,6 @@ describe("documents Controller test suite", function () {
             expect(vm.previousDocFileNameValue).toBe('');
         });
     });
-
-    describe("Verification of modStartDateClick function", function () {
-        it("It should return start date", function () {
-            vm.modStartDateClick(event);
-            expect(vm.modifiedStartDate).toBe(true);
-        });
-    });
-
-    describe("Verification of modEndDateClick function", function () {
-        it("It should return start date", function () {
-            vm.modEndDateClick(event);
-            expect(vm.modifiedEndDate).toBe(true);
-        });
-    });
-
     describe("Verification of clearAllFilterForSearch function", function () {
         it("It should clear all filters of search", function () {
             vm.clearAllFilterForSearch();

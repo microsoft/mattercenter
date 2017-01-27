@@ -1610,10 +1610,6 @@
                 }
             }
         };
-
-        vm.disabled = function (date, mode) {
-            return (mode === 'day' && (date.getDay() != 0));
-        };
         //End
         //#endregion
 
