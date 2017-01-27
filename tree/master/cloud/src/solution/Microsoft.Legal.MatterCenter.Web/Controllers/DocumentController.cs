@@ -29,6 +29,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using Microsoft.Net.Http.Headers;
 using System.Collections.Generic;
+using Microsoft.SharePoint.Client;
 #endregion
 
 
@@ -51,6 +52,7 @@ namespace Microsoft.Legal.MatterCenter.Web
         private LogTables logTables;
         private IDocumentProvision documentProvision;
         private GeneralSettings generalSettings;
+        private ISPOAuthorization spoAuthorization;
 
         /// <summary>
         /// DcouemtsController Constructor where all the required dependencies are injected
@@ -69,7 +71,8 @@ namespace Microsoft.Legal.MatterCenter.Web
             IMatterCenterServiceFunctions matterCenterServiceFunctions,
             IDocumentRepository documentRepositoy,
             ICustomLogger customLogger, IOptions<LogTables> logTables, IDocumentProvision documentProvision,
-            IOptions<GeneralSettings> generalSettings
+            IOptions<GeneralSettings> generalSettings,
+            ISPOAuthorization spoAuthorization
 
             )
         {
@@ -81,6 +84,7 @@ namespace Microsoft.Legal.MatterCenter.Web
             this.logTables = logTables.Value;
             this.documentProvision = documentProvision;
             this.generalSettings = generalSettings.Value;
+            this.spoAuthorization = spoAuthorization;
         }
 
         /// <summary>
@@ -171,7 +175,9 @@ namespace Microsoft.Legal.MatterCenter.Web
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion 
-                var searchResultsVM = await documentProvision.GetDocumentsAsync(searchRequestVM);
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
+                var searchResultsVM = await documentProvision.GetDocumentsAsync(searchRequestVM, clientContext);
                 return matterCenterServiceFunctions.ServiceResponse(searchResultsVM.DocumentDataList, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -214,8 +220,10 @@ namespace Microsoft.Legal.MatterCenter.Web
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
                 }
                 #endregion
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
                 //Get the documents which are pinned by the user
-                var pinResponseVM = await documentProvision.GetPinnedDocumentsAsync(searchRequestVM);  
+                var pinResponseVM = await documentProvision.GetPinnedDocumentsAsync(searchRequestVM, clientContext);  
                 //Return the response with proper http status code              
                 return matterCenterServiceFunctions.ServiceResponse(pinResponseVM.DocumentDataList, (int)HttpStatusCode.OK);
             }

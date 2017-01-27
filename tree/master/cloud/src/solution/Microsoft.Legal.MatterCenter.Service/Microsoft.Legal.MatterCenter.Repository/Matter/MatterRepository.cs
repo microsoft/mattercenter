@@ -484,9 +484,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        public async Task<SearchResponseVM> GetMattersAsync(SearchRequestVM searchRequestVM)
+        public async Task<SearchResponseVM> GetMattersAsync(SearchRequestVM searchRequestVM, ClientContext clientContext)
         {
-            return await Task.FromResult(search.GetMatters(searchRequestVM));
+            return await Task.FromResult(search.GetMatters(searchRequestVM, clientContext));
         }
 
         public bool AddItem(ClientContext clientContext, List list, IList<string> columns, IList<object> values)
@@ -499,10 +499,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        public async Task<SearchResponseVM> GetPinnedRecordsAsync(SearchRequestVM searchRequestVM)
+        public async Task<SearchResponseVM> GetPinnedRecordsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext)
         {
             return await Task.FromResult(search.GetPinnedData(searchRequestVM, listNames.UserPinnedMatterListName,
-                searchSettings.PinnedListColumnMatterDetails, false));
+                searchSettings.PinnedListColumnMatterDetails, false, clientContext));
         }
 
         public int CreateWebPartPage(ClientContext clientContext, string pageName, string layout, string masterpagelistName, string listName, string pageTitle)

@@ -16,6 +16,7 @@ using Microsoft.Exchange.WebServices.Data;
 using System.Reflection;
 using System.Dynamic;
 using Microsoft.Extensions.Configuration;
+using Microsoft.SharePoint.Client;
 
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {
@@ -32,6 +33,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private SearchSettings searchSettings;
         private IConfigurationRoot configuration;
         private IHttpContextAccessor httpContextAccessor;
+        private SPOAuthorization spoAuthorization;
         public DocumentProvision(IDocumentRepository docRepository, 
             IUserRepository userRepository, 
             IUploadHelperFunctions uploadHelperFunctions, 
@@ -41,7 +43,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             IOptions<SearchSettings> searchSettings,
             IConfigurationRoot configuration,
             IHttpContextAccessor httpContextAccessor,
-            IOptions<LogTables> logTables, IOptions<ErrorSettings> errorSettings)
+            SPOAuthorization spoAuthorization,
+        IOptions<LogTables> logTables, IOptions<ErrorSettings> errorSettings)
         {
             this.docRepository = docRepository;
             this.uploadHelperFunctions = uploadHelperFunctions;
@@ -54,6 +57,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             this.searchSettings = searchSettings.Value;
             this.configuration = configuration;
             this.httpContextAccessor = httpContextAccessor;
+            this.spoAuthorization = spoAuthorization;
         }
 
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
@@ -69,7 +73,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
                     ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
-                var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM);
+                ClientContext clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
+                var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM, clientContext);
                 return searchResultsVM.TotalRows;
             }
             catch (Exception ex)
@@ -93,7 +98,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
                     ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
-                var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM);
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
+                var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM, clientContext);
                 return searchResultsVM.TotalRows;
             }
             catch (Exception ex)
@@ -107,7 +114,9 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         {
             try
             {
-                var pinResponseVM = await docRepository.GetPinnedRecordsAsync(searchRequestVM);
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
+                var pinResponseVM = await docRepository.GetPinnedRecordsAsync(searchRequestVM, clientContext);
                 return pinResponseVM.TotalRows;
             }
             catch (Exception ex)
@@ -335,7 +344,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return genericResponse;
         }
 
-        public async Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM)
+        public async Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext)
         {
             var searchObject = searchRequestVM.SearchObject;
             // Encode all fields which are coming from js
@@ -344,7 +353,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
                 WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES, ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
-            var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM);
+            var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM,clientContext);
 
             if (searchResultsVM.TotalRows > 0)
             {                
@@ -682,11 +691,19 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        public async Task<SearchResponseVM> GetPinnedDocumentsAsync(SearchRequestVM searchRequestVM)
-        {         
+        public async Task<SearchResponseVM> GetPinnedDocumentsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext)
+        {
+            try
+            {
 
-            var searchResultsVM = await docRepository.GetPinnedRecordsAsync(searchRequestVM);    
-            return searchResultsVM;
+                var searchResultsVM = await docRepository.GetPinnedRecordsAsync(searchRequestVM, clientContext);
+                return searchResultsVM;
+            }
+            catch(Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
 
         public GenericResponseVM UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, 

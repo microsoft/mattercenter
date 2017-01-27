@@ -56,9 +56,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        public async Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM)
+        public async Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext)
         {
-            return await Task.FromResult(search.GetDocuments(searchRequestVM));
+            return await Task.FromResult(search.GetDocuments(searchRequestVM, clientContext));
         }
 
         /// <summary>
@@ -66,10 +66,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        public async Task<SearchResponseVM> GetPinnedRecordsAsync(SearchRequestVM searchRequestVM)
+        public async Task<SearchResponseVM> GetPinnedRecordsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext)
         {
             return await Task.FromResult(search.GetPinnedData(searchRequestVM, listNames.UserPinnedDocumentListName,
-                searchSettings.PinnedListColumnDocumentDetails, true));
+                searchSettings.PinnedListColumnDocumentDetails, true, clientContext));
         }
 
         public GenericResponseVM UploadDocument(string folderName, IFormFile uploadedFile, string fileName, 

@@ -64,7 +64,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM);
+        Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM, ClientContext clientContext);
 
         /// <summary>
         /// 
