@@ -288,7 +288,7 @@ if($IsValid -eq $true)
 	# Update search configuration file and upload to SharePoint
 	#----------------------------------------------
 	Show-Message -Message "Step 4: Update Search Configuration files and upload to SharePoint"
-	& "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "3" $Username $Password
+	& "$HelperPath\Microsoft.Legal.MatterCenter.UpdateAppConfig.exe" "3" $Username $Password "false"
 	    
 	If ((Get-Content $ErrorLogFile) -ne $Null) {
 		Show-Message -Message "Updating Search Configuration failed" -Type ([MessageType]::Failure)
