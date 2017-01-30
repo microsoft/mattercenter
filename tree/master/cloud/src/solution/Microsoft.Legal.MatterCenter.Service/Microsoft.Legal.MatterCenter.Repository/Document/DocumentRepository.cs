@@ -34,12 +34,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private CamlQueries camlQueries;
         private DocumentSettings documentSettings;
         private MailSettings mailSettings;
+        private ISPOAuthorization spoAuthorization;
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
         /// <param name="search"></param>
         public DocumentRepository(ISearch search, IOptions<SearchSettings> searchSettings, 
-            IOptions<ListNames> listNames, ISPList spList, IOptions<CamlQueries> camlQueries,  IOptions<DocumentSettings> documentSettings, IOptions<MailSettings> mailSettings)
+            IOptions<ListNames> listNames, ISPList spList, IOptions<CamlQueries> camlQueries,  IOptions<DocumentSettings> documentSettings, IOptions<MailSettings> mailSettings, ISPOAuthorization spoAuthorization)
         {
             this.search = search;            
             this.searchSettings = searchSettings.Value;
@@ -49,6 +50,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             
             this.documentSettings = documentSettings.Value;
             this.mailSettings = mailSettings.Value;
+            this.spoAuthorization = spoAuthorization;
         }
 
         /// <summary>

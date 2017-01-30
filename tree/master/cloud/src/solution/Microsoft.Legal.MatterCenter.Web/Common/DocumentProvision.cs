@@ -33,7 +33,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         private SearchSettings searchSettings;
         private IConfigurationRoot configuration;
         private IHttpContextAccessor httpContextAccessor;
-        private SPOAuthorization spoAuthorization;
+        private ISPOAuthorization spoAuthorization;
         public DocumentProvision(IDocumentRepository docRepository, 
             IUserRepository userRepository, 
             IUploadHelperFunctions uploadHelperFunctions, 
@@ -43,7 +43,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             IOptions<SearchSettings> searchSettings,
             IConfigurationRoot configuration,
             IHttpContextAccessor httpContextAccessor,
-            SPOAuthorization spoAuthorization,
+            ISPOAuthorization spoAuthorization,
         IOptions<LogTables> logTables, IOptions<ErrorSettings> errorSettings)
         {
             this.docRepository = docRepository;
@@ -73,7 +73,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
                     ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
-                ClientContext clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
                 var searchResultsVM = await docRepository.GetDocumentsAsync(searchRequestVM, clientContext);
                 return searchResultsVM.TotalRows;
             }
