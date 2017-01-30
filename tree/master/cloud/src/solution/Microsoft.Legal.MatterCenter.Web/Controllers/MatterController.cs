@@ -25,6 +25,7 @@ using Microsoft.Legal.MatterCenter.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Legal.MatterCenter.Web.Common;
 using System.Collections.Generic;
+using Microsoft.SharePoint.Client;
 #endregion
 namespace Microsoft.Legal.MatterCenter.Service
 {
@@ -45,6 +46,7 @@ namespace Microsoft.Legal.MatterCenter.Service
         private IValidationFunctions validationFunctions;
         private IEditFunctions editFunctions;
         private IMatterProvision matterProvision;
+        private ISPOAuthorization spoAuthorization;
         /// <summary>
         /// Constructor where all the required dependencies are injected
         /// </summary>
@@ -65,7 +67,8 @@ namespace Microsoft.Legal.MatterCenter.Service
             ICustomLogger customLogger, IOptions<LogTables> logTables,
             IValidationFunctions validationFunctions,
             IEditFunctions editFunctions,
-            IMatterProvision matterProvision
+            IMatterProvision matterProvision,
+            ISPOAuthorization spoAuthorization
             )
         {
             this.errorSettings = errorSettings.Value;
@@ -77,6 +80,7 @@ namespace Microsoft.Legal.MatterCenter.Service
             this.validationFunctions = validationFunctions;
             this.editFunctions = editFunctions;
             this.matterProvision = matterProvision;
+            this.spoAuthorization = spoAuthorization;
         }
 
         #region Pin and UnPin
@@ -111,7 +115,9 @@ namespace Microsoft.Legal.MatterCenter.Service
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
-                var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(searchRequestVM);                
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
+                var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(searchRequestVM, clientContext);                
                 return matterCenterServiceFunctions.ServiceResponse(pinResponseVM.MatterDataList, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -292,7 +298,9 @@ namespace Microsoft.Legal.MatterCenter.Service
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
-                var searchResultsVM = await matterProvision.GetMatters(searchRequestVM);
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
+                var searchResultsVM = await matterProvision.GetMatters(searchRequestVM, clientContext);
                 return matterCenterServiceFunctions.ServiceResponse(searchResultsVM.MatterDataList, (int)HttpStatusCode.OK);
             }
             catch (Exception ex)

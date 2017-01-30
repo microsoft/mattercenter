@@ -7,9 +7,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
 {
     public interface ISearch
     {
-        SearchResponseVM GetMatters(SearchRequestVM searchRequestVM);
-        SearchResponseVM GetDocuments(SearchRequestVM searchRequestVM);
-        SearchResponseVM GetPinnedData(SearchRequestVM searchRequestVM, string listName, string listColumnName, bool isShowDocument);
+        SearchResponseVM GetMatters(SearchRequestVM searchRequestVM, ClientContext clientContext);
+        SearchResponseVM GetDocuments(SearchRequestVM searchRequestVM, ClientContext clientContext);
+        SearchResponseVM GetPinnedData(SearchRequestVM searchRequestVM, string listName, string listColumnName, bool isShowDocument, ClientContext clientContext);
         bool PinMatter(PinRequestMatterVM pinRequestMatterVM);
         bool UnPinMatter(PinRequestMatterVM pinRequestMatterVM);
         bool PinDocument(PinRequestDocumentVM pinRequestDocumentVM);

@@ -25,7 +25,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
     /// </summary>
     public interface IMatterRepository: ICommonRepository
     {
-        Task<SearchResponseVM> GetMattersAsync(SearchRequestVM searchRequestVM);
+        Task<SearchResponseVM> GetMattersAsync(SearchRequestVM searchRequestVM, ClientContext clientContext);
         Task<List<FolderData>> GetFolderHierarchyAsync(MatterData matterData);
         
         Task<GenericResponseVM> GetConfigurationsAsync(string siteCollectionUrl);        

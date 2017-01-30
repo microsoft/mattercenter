@@ -85,15 +85,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        public SearchResponseVM GetMatters(SearchRequestVM searchRequestVM)
+        public SearchResponseVM GetMatters(SearchRequestVM searchRequestVM, ClientContext clientContext)
         {
             SearchResponseVM searchResponseVM = null;
             var client = searchRequestVM.Client;
             var searchObject = searchRequestVM.SearchObject;
             try
             {
-                clientContext = null;
-                clientContext = spoAuthorization.GetClientContext(client.Url);
+                //clientContext = null;
+                //clientContext = spoAuthorization.GetClientContext(client.Url);
                 KeywordQuery keywordQuery = new KeywordQuery(clientContext);
                 if (string.IsNullOrWhiteSpace(searchObject.SearchTerm))
                 {
@@ -164,7 +164,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     keywordQuery.BypassResultTypes = true;
                     searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, true, managedProperties);
                 }
-                clientContext.Dispose();
+               // clientContext.Dispose();
                 return searchResponseVM;
             }
             catch (Exception ex)
@@ -180,15 +180,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="searchRequestVM"></param>
         /// <returns></returns>
-        public SearchResponseVM GetDocuments(SearchRequestVM searchRequestVM)
+        public SearchResponseVM GetDocuments(SearchRequestVM searchRequestVM, ClientContext clientContext)
         {
             SearchResponseVM searchResponseVM = null;
             try
             {
                 var client = searchRequestVM.Client;
                 var searchObject = searchRequestVM.SearchObject;
-                clientContext = null;
-                clientContext = spoAuthorization.GetClientContext(client.Url);
+               // clientContext = null;
+               // clientContext = spoAuthorization.GetClientContext(client.Url);
                 KeywordQuery keywordQuery = new KeywordQuery(clientContext);
                 if (string.IsNullOrWhiteSpace(searchObject.SearchTerm))
                 {
@@ -246,7 +246,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     //managedProperties.Add("PCPrePodDocumentProjectType");
                     keywordQuery = AssignKeywordQueryValues(keywordQuery, managedProperties);
                     searchResponseVM = FillResultData(clientContext, keywordQuery, searchRequestVM, false, managedProperties);
-                    clientContext.Dispose();
+                  //  clientContext.Dispose();
                 }
             }
             catch (Exception ex)
@@ -266,7 +266,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="isShowDocument"></param>
         /// <returns></returns>
         public SearchResponseVM GetPinnedData(SearchRequestVM searchRequestVM, string listName,
-            string listColumnName, bool isShowDocument)
+            string listColumnName, bool isShowDocument, ClientContext clientContext)
         {
             ////Holds logged-in user alias
             string userAlias = string.Empty;
@@ -276,8 +276,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             string userPinnedDetails = string.Empty;
 
             SearchResponseVM searchResponse = new SearchResponseVM();
-            using (clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url))
-            {
+            //using (clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url))
+            //{
                 try
                 {
                     ////Get logged in user alias
@@ -452,7 +452,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                     throw;
                 }
-            }
+            //}
         }
 
         #region "GetPinnedDocumentFilteredData"

@@ -143,45 +143,75 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 
         public async Task<int> GetAllCounts(SearchRequestVM searchRequestVM)
         {
-            searchRequestVM.SearchObject.Filters.FilterByMe = 0;
-            var searchObject = searchRequestVM.SearchObject;
-            // Encode all fields which are coming from js
-            SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
-            // Encode Search Term
-            searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
-                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
-                ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+            try
+            {
+                searchRequestVM.SearchObject.Filters.FilterByMe = 0;
+                var searchObject = searchRequestVM.SearchObject;
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
+                // Encode all fields which are coming from js
+                SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
+                // Encode Search Term
+                searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
+                    WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
+                    ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
-            var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
-            return searchResultsVM.TotalRows;
+                var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM, clientContext);
+                return searchResultsVM.TotalRows;
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
 
         }
 
         public async Task<int> GetMyCounts(SearchRequestVM searchRequestVM)
         {
-            searchRequestVM.SearchObject.Filters.FilterByMe = 1;
-            var searchObject = searchRequestVM.SearchObject;
-            // Encode all fields which are coming from js
-            SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
-            // Encode Search Term
-            searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
-                WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
-                ServiceConstants.DOUBLE_QUOTE) : string.Empty;
+            try
+            {
+                searchRequestVM.SearchObject.Filters.FilterByMe = 1;
+                var searchObject = searchRequestVM.SearchObject;
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
+                // Encode all fields which are coming from js
+                SearchUtility.EncodeSearchDetails(searchObject.Filters, false);
+                // Encode Search Term
+                searchObject.SearchTerm = (searchObject.SearchTerm != null) ?
+                    WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
+                    ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
-            var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
-            return searchResultsVM.TotalRows;
+                var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM, clientContext);
+                return searchResultsVM.TotalRows;
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
         }
 
         public async Task<int> GetPinnedCounts(SearchRequestVM searchRequestVM)
         {
-            var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(searchRequestVM);
-            return pinResponseVM.TotalRows;
+            try
+            {
+                ClientContext clientContext = null;
+                clientContext = spoAuthorization.GetClientContext(searchRequestVM.Client.Url);
+                var pinResponseVM = await matterRepositoy.GetPinnedRecordsAsync(searchRequestVM,clientContext);
+                return pinResponseVM.TotalRows;
+            }
+            catch(Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;            
+            }
         }
 
 
         
 
-        public async Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM)
+        public async Task<SearchResponseVM> GetMatters(SearchRequestVM searchRequestVM, ClientContext clientContext)
         {
             var searchObject = searchRequestVM.SearchObject;
             // Encode all fields which are coming from js
@@ -191,7 +221,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                 WebUtility.HtmlEncode(searchObject.SearchTerm).Replace(ServiceConstants.ENCODED_DOUBLE_QUOTES,
                 ServiceConstants.DOUBLE_QUOTE) : string.Empty;
 
-            var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM);
+            var searchResultsVM = await matterRepositoy.GetMattersAsync(searchRequestVM, clientContext);
             if (searchResultsVM.TotalRows > 0)
             {                
 
