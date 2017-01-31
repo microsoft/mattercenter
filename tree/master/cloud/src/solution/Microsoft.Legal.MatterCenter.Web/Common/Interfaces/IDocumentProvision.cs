@@ -10,10 +10,10 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
 {
     public interface IDocumentProvision: ISharedProvision
     {
-        Task<SearchResponseVM> GetPinnedDocumentsAsync(SearchRequestVM searchRequestVM);
+        Task<SearchResponseVM> GetPinnedDocumentsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext);
         GenericResponseVM UploadAttachments(AttachmentRequestVM attachmentRequestVM);
         GenericResponseVM UploadEmails(AttachmentRequestVM attachmentRequest);
-        Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM);
+        Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext);
         GenericResponseVM UploadFiles(IFormFile uploadedFile, string fileExtension, string originalName, 
             string folderName, string fileName, string clientUrl, string folder, string documentLibraryName);
         Stream DownloadAttachments(MailAttachmentDetails mailAttachmentDetails);

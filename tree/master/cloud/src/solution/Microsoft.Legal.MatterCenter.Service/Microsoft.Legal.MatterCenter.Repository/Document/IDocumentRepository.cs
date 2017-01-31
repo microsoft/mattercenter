@@ -28,7 +28,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
     /// </summary>
     public interface IDocumentRepository:ICommonRepository
     {
-        Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM);
+        Task<SearchResponseVM> GetDocumentsAsync(SearchRequestVM searchRequestVM, ClientContext clientContext);
         Task<dynamic> GetDocumentAndClientGUIDAsync(Client client);
         void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties);
        
