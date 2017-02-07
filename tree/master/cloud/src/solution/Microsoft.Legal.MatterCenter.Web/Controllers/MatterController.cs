@@ -777,7 +777,14 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
                 else
                 {
-                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.NotModified);
+                    if (!genericResponse.IsError)
+                    {
+                        return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                    }
+                    else
+                    {
+                        return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.NotModified);
+                    }
                 }
 
                 #endregion

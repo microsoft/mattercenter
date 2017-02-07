@@ -1,6 +1,8 @@
 ﻿<div class="manageUsers" ng-click="cm.CheckPopUp(this)">
     <div class="popupContainerBackground " ng-class="cm.popupContainerBackground"></div>
-
+    <div class="notificationContainer successBanner" ng-if="cm.successBanner">
+        <div class="notification" showcreatesuccessbannermessage datanotification="{{cm.successMsg}}"></div><span class="closeNotification" ng-click="cm.closesuccessbanner()">x</span>
+    </div>
 
     <div id="errorBlock" class="errorPopUp" ng-show="cm.errorPopUpBlock">
         <div id="errTrinagleBlock" class="errTriangle popUpFloatLeft" ng-class="cm.errTrinagleBlock"></div>

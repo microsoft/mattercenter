@@ -178,43 +178,114 @@ namespace Microsoft.Legal.MatterCenter.Repository
             try
             {
                 clientContext = spoAuthorization.GetClientContext(matterInformation.Client.Url);
-                PropertyValues matterStampedProperties = GetStampedProperties(clientContext, matter.Name);
+
                 loggedInUserName = userRepositoy.GetLoggedInUserDetails(clientContext).Name;
-                
+
 
                 // Get matter library current permissions
                 userPermissionOnLibrary = FetchUserPermissionForLibrary(clientContext, matter.Name);
                 string originalMatterName = GetMatterName(clientContext, matter.Name);
                 listItemId = RetrieveItemId(clientContext, matterSettings.MatterLandingPageRepositoryName, originalMatterName);
-                List<string> usersToRemove = RetrieveMatterUsers(userPermissionOnLibrary);
+                List<string> usersToRemove = new List<string>();               
+                List<string> exsistingUsers = RetrieveMatterUsers(userPermissionOnLibrary);
+                foreach (IList<string> removedUsers in matterInformation.UsersNamesToRemove)
+                {
+                    foreach (var removedUser in removedUsers)
+                    {
+                        usersToRemove.Add(removedUser);
+                    }
+                }
+
+
+
                 bool hasFullPermission = CheckFullPermissionInAssignList(matter.AssignUserNames, matter.Permissions, loggedInUserName);
-                List<string> listExists = MatterAssociatedLists(clientContext, matter.Name);
-                AssignRemoveFullControl(clientContext, matter, loggedInUserName, listItemId, listExists, true, hasFullPermission);
+                List<string> listExists = new List<string>();
                 bool result = false;
-                if (listExists.Contains(matter.Name))
+                List<int> listNumbers = new List<int>();
+                if (matterInformation.MethodNumber == -1)
                 {
-                    result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name, -1, isEditMode);
+                    listExists = MatterAssociatedLists(clientContext, matter.Name);
+
+                    AssignRemoveFullControl(clientContext, matter, loggedInUserName, listItemId, listExists, true, hasFullPermission);
+                    if (listExists.Contains(matter.Name))
+                    {
+                        listNumbers.Add(0);
+                    }
+                    if (listExists.Contains(matter.Name + matterSettings.OneNoteLibrarySuffix))
+                    {
+                        listNumbers.Add(1);
+                    }
+                    if (listExists.Contains(matter.Name + matterSettings.CalendarNameSuffix))
+                    {
+                        listNumbers.Add(2);
+                    }
+                    if (listExists.Contains(matter.Name + matterSettings.TaskNameSuffix))
+                    {
+                        listNumbers.Add(3);
+                    }
+                    if (0 <= listItemId)
+                    {
+                        listNumbers.Add(4);
+                    }
+                    listNumbers.Add(5);
+                    result = true;
                 }
-                if (listExists.Contains(matter.Name + matterSettings.OneNoteLibrarySuffix))
+
+                if (matterInformation.MethodNumber == 0)
                 {
-                    result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + matterSettings.OneNoteLibrarySuffix, -1, isEditMode);
+                    
+                    //updating the users and their permissions to the matter.
+                        result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name, -1, isEditMode);
+                    
                 }
-                if (listExists.Contains(matter.Name + matterSettings.CalendarNameSuffix))
+                if (matterInformation.MethodNumber == 1)
+                {    //updating the users and their permissions to the matter onenotelibrary.
+                        result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + matterSettings.OneNoteLibrarySuffix, -1, isEditMode);                  
+                }
+
+                if (matterInformation.MethodNumber == 2)
                 {
+                    //updating the users and their permissions to the matter calender list.
                     result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + matterSettings.CalendarNameSuffix, -1, isEditMode);
+                    
                 }
-                if (listExists.Contains(matter.Name + matterSettings.TaskNameSuffix))
+                if (matterInformation.MethodNumber == 3)
                 {
+                    //updating the users and their permissions to the matter Task list.
                     result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + matterSettings.TaskNameSuffix, -1, isEditMode);
+                  
                 }
-                if (0 <= listItemId)
+                if (matterInformation.MethodNumber == 4)
                 {
-                    result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, true, matterSettings.MatterLandingPageRepositoryName, listItemId, isEditMode);
+                    //updating the users and their permissions to the matter specified list item.
+                    if (0 <= listItemId)
+                    {
+                        result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, true, matterSettings.MatterLandingPageRepositoryName, listItemId, isEditMode);
+                        result = result?false:true;
+                    }
                 }
-                // Update matter metadata
-                result = UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode);
+                if (matterInformation.MethodNumber == 5)
+                {
+                    // Update matter metadata
+                    isEditMode = false;
+                    PropertyValues matterStampedProperties = GetStampedProperties(clientContext, matter.Name);
+                    result = UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode, usersToRemove);
+                }
                 if (result)
-                {                    
+                {
+                    if (matterInformation.MethodNumber != 5)
+                    {
+                        matterInformation.Matter = null;
+                    }
+                    if (matterInformation.MethodNumber == -1)
+                    {
+                        genericResponse = new GenericResponseVM()
+                        {
+
+                            IsError = false,
+                            Description = string.Join(";", listNumbers)
+                        };
+                    }
                     return genericResponse;
                 }
             }
@@ -232,7 +303,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             return ServiceUtility.GenericResponse("9999999", "Error in updating matter information");
         }
-
+        
         /// <summary>
         /// Gets the display name of users having permission on library.
         /// </summary>
@@ -959,7 +1030,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         
 
         public bool UpdateMatterStampedProperties(ClientContext clientContext, MatterDetails matterDetails, 
-            Matter matter, PropertyValues matterStampedProperties, bool isEditMode)
+            Matter matter, PropertyValues matterStampedProperties, bool isEditMode, List<string> usersToRemove)
         {
             
             try
@@ -969,7 +1040,23 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     var index = 0;
                     List<string> arrRoles = new List<string>();
                     List<string> arrPermissions = new List<string>();
+                    string stampedUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterUsers);
+                    var stampedUserList = stampedUsers.Replace("$|$", "$").Split('$').ToList();
+                    string stampedUserEmails = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterUserEmails);
+                    var stampedUserEmailsList= stampedUserEmails.Replace("$|$", "$").Split('$').ToList();
+                    string stampedPermissions = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterPermissions);
+                    var stampedPermissionsList = stampedPermissions.Replace("$|$", "$").Split('$').ToList();
+                    string stampedRoles = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterRoles);
+                    var stampedRolesList = stampedRoles.Replace("$|$", "$").Split('$').ToList();
 
+                    string stampedTeamMembers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyTeamMembers);
+                    var stampedTeamMembersList = stampedTeamMembers.Replace(";", "$").Split('$').ToList();
+                    stampedTeamMembersList= stampedTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    string stampedBlockedUploadUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyBlockedUploadUsers);
+
+
+
+                    List<int> itemsToRemoveStampedUserProp = new List<int>();
                     foreach (IList<string> userNames in matter.AssignUserNames)
                     {
                         IList<string> userNamesListTemp = userNames.Where(user => !string.IsNullOrWhiteSpace(user)).ToList();
@@ -977,22 +1064,60 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         {
                             arrRoles.Add(matter.Roles[index]);
                             arrPermissions.Add(matter.Permissions[index]);
+                            if (stampedUserList.Contains(userTem))
+                            {
+                                itemsToRemoveStampedUserProp.Add(stampedUserList.IndexOf(userTem));
+                            }
                         }
+                        
                         index++;
                     }
+
                     matter.Roles = arrRoles;
                     matter.Permissions = arrPermissions;
                     Dictionary<string, string> propertyList = new Dictionary<string, string>();
 
+
                     // Get existing stamped properties
-                    string stampedUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterUsers);
-                    string stampedUserEmails = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterUserEmails);
-                    string stampedPermissions = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterPermissions);
-                    string stampedRoles = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterRoles);
+                    foreach (var userNameToRemove in usersToRemove)
+                    {
+                        if (stampedUserList.Contains(userNameToRemove))
+                        {
+                            itemsToRemoveStampedUserProp.Add(stampedUserList.IndexOf(userNameToRemove));
+                        }
+
+                    }
+
+                    if (itemsToRemoveStampedUserProp.Count > 0)
+                    {
+                        for (int i = 0; i < itemsToRemoveStampedUserProp.Count; i++)
+                        {
+                            stampedUserList[itemsToRemoveStampedUserProp[i]] = string.Empty;
+                            stampedUserEmailsList[itemsToRemoveStampedUserProp[i]] = string.Empty;
+                            stampedRolesList[itemsToRemoveStampedUserProp[i]] = string.Empty;
+                            stampedPermissionsList[itemsToRemoveStampedUserProp[i]] = string.Empty;
+                            stampedTeamMembersList[itemsToRemoveStampedUserProp[i]] = string.Empty;
+                        }
+                    }
+                   
+                    
+                    stampedUserList = stampedUserList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    stampedUsers = string.Join("$|$", stampedUserList);
+                    stampedUserEmailsList = stampedUserEmailsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    stampedUserEmails = string.Join("$|$", stampedUserEmailsList);
+                    stampedRolesList = stampedRolesList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    stampedRoles = string.Join("$|$", stampedRolesList);
+                    stampedPermissionsList = stampedPermissionsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    stampedPermissions = string.Join("$|$", stampedPermissionsList);
+                    stampedTeamMembersList = stampedTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    stampedTeamMembers = string.Join(";", stampedTeamMembersList);
+
                     string stampedResponsibleAttorneys = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyResponsibleAttorney);
+                       var stampedResponsibleAttorneysList = stampedResponsibleAttorneys.Split(';').ToList();
+                    stampedResponsibleAttorneysList = stampedResponsibleAttorneysList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                     string stampedResponsibleAttorneysEmail = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyResponsibleAttorneyEmail);
-                    string stampedTeamMembers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyTeamMembers);
-                    string stampedBlockedUploadUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyBlockedUploadUsers);
+                     var stampedResponsibleAttorneysEmailList = stampedResponsibleAttorneysEmail.Split(';').ToList();
+                    stampedResponsibleAttorneysEmailList = stampedResponsibleAttorneysEmailList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
                     string currentPermissions = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Permissions.Where(user => !string.IsNullOrWhiteSpace(user)));
                     string currentRoles = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Roles.Where(user => !string.IsNullOrWhiteSpace(user)));
@@ -1001,6 +1126,50 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     currentUsers= currentUsers.Replace(";", "$|$").ToString();
                     string currentUserEmails = spList.GetMatterAssignedUsersEmail(clientContext, matter);
                     currentUserEmails = currentUserEmails.Replace(";", "$|$").ToString();
+
+                    string currentResponsibleAttorneys = matterDetails.ResponsibleAttorney;
+                    var currentResponsibleAttorneysList= currentResponsibleAttorneys.Split(';').ToList();
+
+                    string currentResponsibleAttorneysEmail= matterDetails.ResponsibleAttorneyEmail;
+                    var currentResponsibleAttorneysEmailList = currentResponsibleAttorneysEmail.Split(';').ToList();
+
+                    List<int> itemsToRemoveStampedResponsibleAttroneyProp = new List<int>();
+                    foreach (var respAttroneyUser in currentResponsibleAttorneysList)
+                    {
+                        if (respAttroneyUser != "")
+                        {
+                            if (stampedResponsibleAttorneysList.Contains(respAttroneyUser))
+                            {
+                                itemsToRemoveStampedResponsibleAttroneyProp.Add(stampedResponsibleAttorneysList.IndexOf(respAttroneyUser));
+                            }
+                        }
+                    }
+                    foreach (var userNameToRemove in usersToRemove)
+                    {
+                        if (stampedResponsibleAttorneysList.Contains(userNameToRemove))
+                        {
+                            itemsToRemoveStampedResponsibleAttroneyProp.Add(stampedResponsibleAttorneysList.IndexOf(userNameToRemove));
+                        }
+
+                    }
+
+                    if (itemsToRemoveStampedResponsibleAttroneyProp.Count > 0)
+                    {
+                        for (int i = 0; i < itemsToRemoveStampedResponsibleAttroneyProp.Count; i++)
+                        {
+                            stampedResponsibleAttorneysList[itemsToRemoveStampedResponsibleAttroneyProp[i]]= string.Empty;
+                            stampedResponsibleAttorneysEmailList[itemsToRemoveStampedResponsibleAttroneyProp[i]] = string.Empty;
+                        }
+                    }
+
+                    stampedResponsibleAttorneysList = stampedResponsibleAttorneysList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    stampedResponsibleAttorneys = string.Join(";", stampedResponsibleAttorneysList);
+                    stampedResponsibleAttorneysEmailList = stampedResponsibleAttorneysEmailList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    stampedResponsibleAttorneysEmail = string.Join(";", stampedResponsibleAttorneysEmailList);
+
+
+
+
 
                     string finalMatterPermissions = string.IsNullOrWhiteSpace(stampedPermissions) || isEditMode ? currentPermissions : string.Concat(stampedPermissions, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentPermissions);
                     string finalMatterRoles = string.IsNullOrWhiteSpace(stampedRoles) || isEditMode ? currentRoles : string.Concat(stampedRoles, ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, currentRoles);
@@ -1532,6 +1701,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation)=> extrnalSharing.ShareMatter(matterInformation);
         
         public bool OneNoteUrlExists(MatterInformationVM matterInformation)=> search.PageExists(matterInformation.Client, matterInformation.RequestedUrl);
-        
+         
     }
 }

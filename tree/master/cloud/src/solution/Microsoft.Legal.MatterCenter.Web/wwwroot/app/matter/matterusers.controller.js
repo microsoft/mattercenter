@@ -1,8 +1,8 @@
 ﻿(function () {
     'use strict';
     var app = angular.module("matterMain");
-    app.controller('MatterUsersController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window', '$rootScope', '$location',
-    function ($scope, $state, $stateParams, api, matterResource, $filter, $window, $rootScope, $location) {
+    app.controller('MatterUsersController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window', '$rootScope', '$location','adalAuthenticationService',
+    function ($scope, $state, $stateParams, api, matterResource, $filter, $window, $rootScope, $location,adalService) {
         var cm = this;
         cm.arrAssignedUserName = [],
         cm.arrAssignedUserEmails = [],
@@ -13,6 +13,7 @@
         cm.notificationPopUpBlock = false;
         cm.sConflictScenario = "";
         cm.isEdit = "false";
+        cm.successBanner = false;
         cm.oMandatoryRoleNames = [];
         cm.popupContainerBackground = "Show";
         $rootScope.bodyclass = "bodymain";
@@ -29,6 +30,7 @@
         cm.getExternalUserNotification = true;
         cm.currentExternalUser = {};
         cm.createContent = uiconfigs.CreateMatter;
+        cm.isFullControlePresent = false;
         function getParameterByName(name) {
             "use strict";
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -36,13 +38,15 @@
                 results = regex.exec(decodeURIComponent($location.absUrl()));
             return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
         }
-
         cm.clientUrl = getParameterByName("clientUrl");
         cm.matterName = getParameterByName("matterName");
         cm.isEdit = getParameterByName("IsEdit");
+        cm.stampedMatterUsers=[];
 
         if (cm.clientUrl === "" && cm.matterName === "") {
             cm.matterName = "";
+            cm.clientUrl = "";
+           // cm.isEdit = true;
         }
         //#region Service API Call
         //API call to get roles that are configured in the system
@@ -289,12 +293,17 @@
                 assignedTeam.assignedAllUserNamesAndEmails = assignedTeam.assignedUser;
                 assignedTeam.teamUsers = [];
                 var teamuser = {};
-                teamuser.userName = assignedTeam.assignedUser;
+                teamuser.userName = userEmailValue;
                 teamuser.userExsists = true;
                 teamuser.userConfirmation = true;
                 assignedTeam.teamUsers.push(teamuser);
                 assignedTeam.userConfirmation = true;
                 cm.assignPermissionTeams.push(assignedTeam);
+                var userDetails = {};
+                userDetails.userName = userNameValue + "(" + userEmailValue + ");";
+                userDetails.userRole = roles[i];
+                userDetails.userPermission = permissions[i];
+                cm.stampedMatterUsers.push(userDetails);
             }
         }
 
@@ -604,12 +613,29 @@
 
         function getArrAssignedUserNamesAndEmails() {
             cm.arrAssignedUserName = [], cm.arrAssignedUserEmails = [], cm.userIDs = [];
+            cm.isUsersPresentInSystem = [];
             var count = 1;
             angular.forEach(cm.assignPermissionTeams, function (team) { //For loop
                 cm.arrAssignedUserName.push(getUserName(team.assignedUser + ";", true));
                 cm.arrAssignedUserEmails.push(getUserName(team.assignedUser + ";", false));
                 cm.userIDs.push("txtAssign" + count++);
+                cm.isUsersPresentInSystem.push(getUserNamesPresentInSystemData(team));
             });
+        }
+
+        function getUserNamesPresentInSystemData(team) {
+            var userNamesStatus = [];
+            var userEmails = getUserName(team.assignedUser, false);
+            userEmails = cleanArray(userEmails);
+            angular.forEach(userEmails, function (email) {
+               var userEmail = email ;
+                angular.forEach(team.teamUsers, function (teamUser) {
+                    if (teamUser.userName == userEmail) {
+                        userNamesStatus.push(teamUser.userExsists);
+                    }
+                });
+            });
+            return userNamesStatus;
         }
 
         function getAssignedUserRoles() {
@@ -694,6 +720,7 @@
 
             if (responsibleAttorny >= 1) {
                 if (fullControl >= 1) {
+                    cm.isFullControlePresent = true;
                     return true;
                 }
                 else {
@@ -1079,7 +1106,7 @@
                     validateTeamAssigmentRole();
                     getArrAssignedUserNamesAndEmails();
                     var arrRoles = getAssignedUserRoles();
-                    var arrPermissions = getAssignedUserPermissions();
+                    var arrPermissions = getAssignedUserPermissions();                   
                     angular.forEach(cm.assignPermissionTeams, function (item) {
                         if (1 <= cm.assignPermissionTeams.length) {
                             if ("" !== item.assignedRole && "" !== item.assignedPermission) {
@@ -1090,7 +1117,51 @@
                             }
                         }
                     });
+                    var updatedMatterUsersDetails = [];
+                    var newlyAddedMatterUsers = [];
+                    var usersToRemoveFromMatter = [];
+                    updatedMatterUsersDetails = getUpdatedMatterUserDetails();
+                 
+                    newlyAddedMatterUsers = getNewlyAddedMatterUserDetails(updatedMatterUsersDetails);
+                    angular.forEach(newlyAddedMatterUsers, function (newlyAddedUser) {                        
+                        updatedMatterUsersDetails.push(newlyAddedUser);                       
+                    });
+                    arrUserNames = []; arrUserEmails = []; arrTeamMembers = [];
+                    arrReadOnlyUsers = []; arrPermissions = []; arrRoles = [];
+                    sResponsibleAttorney = []; sResponsibleAttorneyEmail = [];
+                    if (updatedMatterUsersDetails.length > 0) {                       
+                        angular.forEach(updatedMatterUsersDetails, function (item) {
+                            arrUserNames.push(getUserName(item.assignedUser.trim() + ";", true));
+                            arrUserEmails.push(getUserName(item.assignedUser.trim() + ";", false));
+                            arrTeamMembers.push(getUserName(item.assignedUser.trim() + ";", true).join(";"));
+                            var User_Upload_Permissions = "Read";
+                            angular.forEach(updatedMatterUsersDetails, function (item) {
+                                if (item.assignedPermission.name.toLowerCase() === User_Upload_Permissions.toLowerCase()) {
+                                    arrReadOnlyUsers.push(getUserName(item.assignedRole.name.trim() + ";", false).join(";"), ";");
+                                }
+                            });
+                            arrPermissions.push(item.assignedPermission.name);
+                            arrRoles.push(item.assignedRole.name);
 
+                            if (-1 !== cm.oMandatoryRoleNames.indexOf(item.assignedRole.name)) {
+                                sResponsibleAttorney.push(getUserName(item.assignedUser + ";", true).join(";"));
+                                sResponsibleAttorneyEmail.push(getUserName(item.assignedUser + ";", false).join(";"));
+                            }
+
+                        });
+                    }                    
+                   
+                    console.log(updatedMatterUsersDetails);
+                    usersToRemoveFromMatter = getDeletedUserDetailsFromMatter();
+                    console.log("deleted");
+                    console.log(usersToRemoveFromMatter);
+                    var arrUsersToRemoveFromMatter = [];
+                    angular.forEach(usersToRemoveFromMatter, function (user) {
+                        var userNames = getUserName(user.userName.trim() + ";", true);
+                        userNames = cleanArray(userNames);
+                        arrUsersToRemoveFromMatter.push(userNames);
+                    });
+                   
                     var updatedMatterUsers = {
                         Client: {
                             Url: cm.clientUrl,
@@ -1103,6 +1174,7 @@
                             AssignUserNames: arrUserNames,
                             AssignUserEmails: arrUserEmails,
                             Permissions: arrPermissions,
+                            IsUsersExternal: cm.isUsersPresentInSystem,
                             Roles: arrRoles,
                             Conflict: {
                                 Identified: cm.sConflictScenario
@@ -1128,15 +1200,27 @@
                         EditMode: cm.isEdit,
                         UserIds: cm.userIDs,
                         SerializeMatter: "",
-                        Status: ""
+                        Status: "",
+                        UsersNamesToRemove: arrUsersToRemoveFromMatter,                        
+                        IsFullControlPresent: cm.isFullControlePresent,
+                        MethodNumber:-1
                     }
-
-                    updateMatterPermissions(updatedMatterUsers, function (response) {
-                        if (!response.isError) {
-
-                            cm.popupContainerBackground = "hide";
-                        }
-                    });
+                    if (arrUserNames.length > 0 || arrUsersToRemoveFromMatter.length > 0) {
+                       
+                        cm.successBanner = true;
+                        cm.successMsg = "Updating the user permissions to the "+ cm.matterName +" this is may take few minutes..";
+                        updateMatterPermissions(updatedMatterUsers, function (response) {
+                            if (!response.isError) {                            
+                               
+                                var listNumbers = response.description.split(';');
+                                cm.updateSuccessCallList = 0;
+                                    updatePermissionsOnMatterLists(updatedMatterUsers, listNumbers, listNumbers.length);                                                             
+                               
+                            }
+                        });
+                    } else {
+                        cm.popupContainerBackground = "hide";
+                    }
                 }
                 else {
                     cm.popupContainerBackground = "hide";
@@ -1146,6 +1230,47 @@
                 cm.popupContainerBackground = "hide";
             }
         }
+
+
+        cm.updateSuccessCallList = 0;
+        function updatePermissionsOnMatterLists(updateMatterDetails, listNumbers,listCount) {
+             if (cm.updateSuccessCallList == 0) {
+                 cm.successMsg = "Updating the user permissions to the " + cm.matterName + " list";
+            }
+            else if (cm.updateSuccessCallList == 1) {
+                cm.successMsg = "Updating the user permissions to the " + cm.matterName + " OneNoteLibrary";
+            }
+            else if (cm.updateSuccessCallList == 2) {
+                cm.successMsg = "Updating the user permissions to the " + cm.matterName + " Calendar";
+            }
+            else if (cm.updateSuccessCallList == 3) {
+                cm.successMsg = "Updating the user permissions to the " + cm.matterName + "Task";
+            }            
+            else if (cm.updateSuccessCallList == 4) {
+                cm.successMsg = "Updating the  "+ cm.matterName + " metadata.";
+            }
+            updateMatterDetails.MethodNumber = parseInt(listNumbers[cm.updateSuccessCallList]);
+            updateMatterPermissions(updateMatterDetails, function (response) {
+                if (!response.isError) {
+                    cm.updateSuccessCallList++;                   
+                    if (cm.updateSuccessCallList == listCount) {                       
+                        cm.successMsg = "Successfully updated the  permissions to the "+cm.matterName;                        
+                        cm.popupContainerBackground = "hide";
+                    } else {
+                        updatePermissionsOnMatterLists(updateMatterDetails, listNumbers, listCount);
+                    }
+                }
+
+            });
+
+        }
+
+
+        cm.closesuccessbanner = function () {
+            cm.successMsg = "";
+            cm.successBanner = false;
+        }
+
 
         function setTeamConfirmationValues() {
             angular.forEach(cm.assignPermissionTeams, function (team) {
@@ -1176,6 +1301,85 @@
             return validUsers;
         }
 
+        function getUpdatedMatterUserDetails() {
+            cm.isLoggedInUserPresent = false;         
+            var updatedUsers = [];
+            var loggedInUserName = adalService.userInfo.profile.name + '(' + adalService.userInfo.userName + ');';
+            angular.forEach(cm.assignPermissionTeams, function (team) {
+                var teamMember = team.assignedUser.split(";");
+                teamMember = cleanArray(teamMember);              
+                for(var i=0;i<teamMember.length;i++){
+                    teamMember[i] = teamMember[i] + ";";                   
+                angular.forEach(cm.stampedMatterUsers, function (stampUser) {
+                    if (stampUser.userName == teamMember[i]) {
+                        if (stampUser.userRole !== team.assignedRole.name || stampUser.userPermission !== team.assignedPermission.name) {                        
+                            updatedUsers.push(team);
+                            if (teamMember[i] == loggedInUserName) {
+                                cm.isLoggedInUserPresent = true;
+                            }
+                        }
+                    }
+                });
+                }
+            });
+            return updatedUsers;
+        }
+
+        cm.isLoggedInUserPresent = false;
+
+        function getNewlyAddedMatterUserDetails(updatedMatterUsersDetails) {
+            var newlyAddedUsers = [];
+            var tempTeam = {};
+            angular.forEach(cm.assignPermissionTeams, function (team) {
+                var teamMember = team.assignedUser.split(";");
+                teamMember = cleanArray(teamMember);
+                tempTeam = team;
+                var loggedInUserName = adalService.userInfo.profile.name + '(' + adalService.userInfo.userName + ');';
+                for (var i = 0; i < teamMember.length; i++) {
+                    teamMember[i] = teamMember[i] + ";";
+                    if (teamMember[i] == loggedInUserName) {
+                        tempTeam = null;
+                        tempTeam = team;
+                    }
+                    var result = $filter('filter')(cm.stampedMatterUsers, { userName: teamMember[i] });
+                    if (result.length == 0) {
+                        var userPresent = $filter("filter")(newlyAddedUsers, team.assignedUser);
+                        if (userPresent.length==0) {
+                            newlyAddedUsers.push(team);
+                        }
+                    }
+                }
+            });
+            var isUserPresentInNewlyAddList = $filter("filter")(newlyAddedUsers, tempTeam.assignedUser);
+            if (isUserPresentInNewlyAddList.length==0 && !cm.isLoggedInUserPresent) {
+                var isUserPresent = $filter("filter")(updatedMatterUsersDetails, tempTeam.assignedUser);
+                if (isUserPresent.length == 0) {
+                    newlyAddedUsers.push(tempTeam)
+                }
+            }
+            return newlyAddedUsers;
+        }
+        function getDeletedUserDetailsFromMatter() {
+            var removedUsers = [];
+            var isPresent = false;
+            angular.forEach(cm.stampedMatterUsers, function (stampUser) {
+                isPresent = false;
+                angular.forEach(cm.assignPermissionTeams, function (team) {
+                    var teamMember = team.assignedUser.split(";");
+                    teamMember = cleanArray(teamMember);
+                    for (var i = 0; i < teamMember.length; i++) {
+                        teamMember[i] = teamMember[i] + ";";
+                        if (stampUser.userName == teamMember[i]) {
+                            isPresent = true;
+                        }                   
+                    }
+                });
+                if (!isPresent) {
+                    removedUsers.push(stampUser);
+                }
+            });
+            return removedUsers;
+        }
         $rootScope.$on('disableOverlay', function (event, data) {
             cm.popupContainerBackground = "hide";
         });
