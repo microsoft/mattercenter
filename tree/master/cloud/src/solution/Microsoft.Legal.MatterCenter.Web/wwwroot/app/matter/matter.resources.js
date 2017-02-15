@@ -117,6 +117,10 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/matter/onenoteurlexists'
                   }),
+                  'getmatterprovisionextraproperties': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/getmatterprovisionextraproperties'
+                  }),
               });
       }]);
 

@@ -1255,6 +1255,47 @@ namespace Microsoft.Legal.MatterCenter.Service
                 return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
             }            
         }
+
+        /// <summary>
+        /// This method will check whether one note url exists for a selected matter or not
+        /// </summary>
+        /// <param name="matterMetadata"></param>
+        /// <returns></returns>
+        [HttpPost("getmatterprovisionextraproperties")]
+        [Produces(typeof(GenericResponseVM))]
+        [SwaggerOperation("onenoteurlexists")]
+        [SwaggerResponse(HttpStatusCode.OK,
+            Description = "This method will check whether one note url exists for a selected matter or not",
+            Type = typeof(GenericResponseVM))]
+        [SwaggerResponseRemoveDefaults]
+        public IActionResult GetMatterProvisionExtraProperties([FromBody]MatterMetadata matterMetadata)
+        {
+            GenericResponseVM genericResponse = null;
+            try
+            {
+                if (matterMetadata == null && matterMetadata.MatterExtraProperties == null &&
+                    string.IsNullOrWhiteSpace(matterMetadata.MatterExtraProperties.ContentTypeName))
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
+                }
+
+                string matterExtraProperties = matterRepositoy.GetMatterProvisionExtraProperties(matterMetadata.MatterExtraProperties.ContentTypeName, matterMetadata.Client);
+
+                return matterCenterServiceFunctions.ServiceResponse(matterExtraProperties, (int)HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                var errResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errResponse, (int)HttpStatusCode.InternalServerError);
+            }
+        }
         #endregion
     }
 }

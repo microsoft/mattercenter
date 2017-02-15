@@ -31,6 +31,9 @@ using System.Text.RegularExpressions;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using System.Net;
+using Microsoft.Legal.MatterCenter.Repository.Extensions;
+
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -38,7 +41,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
     /// <summary>
     /// This file provide methods to get/update information from/in SP lists
     /// </summary>
-    public class SPList:ISPList
+    public class SPList : ISPList
     {
         #region Properties
         private SearchSettings searchSettings;
@@ -50,7 +53,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private GeneralSettings generalSettings;
         private IHostingEnvironment hostingEnvironment;
         private ErrorSettings errorSettings;
-        private IUsersDetails userDetails;        
+        private IUsersDetails userDetails;
+        private TaxonomySettings taxonomySettings;
+        private ContentTypesConfig contentTypesConfig;
         #endregion
 
         /// <summary>
@@ -59,15 +64,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="spoAuthorization"></param>
         /// <param name="generalSettings"></param>
         public SPList(ISPOAuthorization spoAuthorization,
-            IOptions<CamlQueries> camlQueries, 
+            IOptions<CamlQueries> camlQueries,
             IOptions<ErrorSettings> errorSettings,
             IOptions<SearchSettings> searchSettings,
             IOptions<ContentTypesConfig> contentTypesConfig,
-            ICustomLogger customLogger, 
-            IOptions<LogTables> logTables, 
+            ICustomLogger customLogger,
+            IOptions<LogTables> logTables,
             IOptions<MailSettings> mailSettings,
             IOptions<GeneralSettings> generalSettings,
-            IHostingEnvironment hostingEnvironment, 
+            IOptions<TaxonomySettings> taxonomySettings,
+            IHostingEnvironment hostingEnvironment,
             IUsersDetails userDetails)
         {
             this.searchSettings = searchSettings.Value;
@@ -80,6 +86,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.errorSettings = errorSettings.Value;
             this.userDetails = userDetails;
             this.generalSettings = generalSettings.Value;
+            this.taxonomySettings = taxonomySettings.Value;
+            this.contentTypesConfig = contentTypesConfig.Value;
         }
 
 
@@ -147,7 +155,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 if (!string.IsNullOrWhiteSpace(listInfo.templateType))
                 {
                     string templateType = listInfo.templateType;
-                    clientContext.Load(listTemplates, item => item.Include(currentTemplate => currentTemplate.Name, currentTemplate => 
+                    clientContext.Load(listTemplates, item => item.Include(currentTemplate => currentTemplate.Name, currentTemplate =>
                             currentTemplate.ListTemplateTypeKind).Where(selectedTemplate => selectedTemplate.Name == templateType));
                     clientContext.ExecuteQuery();
                     if (null != listTemplates && 0 < listTemplates.Count)
@@ -186,17 +194,17 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return result;
         }
 
-        
+
 
         public Stream DownloadAttachments(string attachmentUrl)
-        {            
-            ClientContext clientContext;            
+        {
+            ClientContext clientContext;
             clientContext = spoAuthorization.GetClientContext(attachmentUrl.Split(Convert.ToChar(ServiceConstants.DOLLAR, CultureInfo.InvariantCulture))[0]);
             SharePoint.Client.File file = clientContext.Web.GetFileByServerRelativeUrl(attachmentUrl.Split(Convert.ToChar(ServiceConstants.DOLLAR, CultureInfo.InvariantCulture))[1]);
             ClientResult<System.IO.Stream> fileStream = file.OpenBinaryStream();
             ///// Load the Stream data for the file
             clientContext.Load(file);
-            clientContext.ExecuteQuery();  
+            clientContext.ExecuteQuery();
             return fileStream.Value;
         }
 
@@ -221,11 +229,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         genericResponse = DocumentUpload(folderPath, listResponse, clientContext, documentLibraryName, web, folderName, uploadFile);
                     }
                 }
-                if (genericResponse==null)
+                if (genericResponse == null)
                 {
                     SetUploadItemProperties(clientContext, documentLibraryName, fileName, folderPath, mailProperties);
                 }
-                
+
             }
             catch (Exception exception)
             {
@@ -247,7 +255,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="uploadFile">Object having file creation information</param>
         /// <returns>It returns true if upload is successful else false</returns>
         private GenericResponseVM DocumentUpload(string folderPath, IList<string> listResponse, ClientContext clientContext, string documentLibraryName, Web web, string folderName, FileCreationInformation uploadFile)
-        {            
+        {
             GenericResponseVM genericResponse = null;
             using (clientContext)
             {
@@ -260,10 +268,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     destionationFolder.Update();
                     web.Update();
                     clientContext.Load(fileToUpload);
-                    clientContext.ExecuteQuery();                    
+                    clientContext.ExecuteQuery();
                 }
                 else
-                {                   
+                {
                     genericResponse = new GenericResponseVM()
                     {
                         Code = errorSettings.FolderStructureModified,
@@ -313,7 +321,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle)
         {
             string returnValue = String.Empty;
-            if (null != clientContext && !string.IsNullOrWhiteSpace(clientAddressPath) && !string.IsNullOrWhiteSpace(oneNoteLocation) && 
+            if (null != clientContext && !string.IsNullOrWhiteSpace(clientAddressPath) && !string.IsNullOrWhiteSpace(oneNoteLocation) &&
                 !string.IsNullOrWhiteSpace(listName))
             {
                 Uri clientUrl = new Uri(clientAddressPath);
@@ -333,7 +341,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 ListItem oneNote = file.ListItemAllFields;
                 oneNote["Title"] = oneNoteTitle;
                 oneNote.Update();
-                returnValue = string.Concat(clientUrl.Scheme, ServiceConstants.COLON, ServiceConstants.FORWARD_SLASH, ServiceConstants.FORWARD_SLASH, 
+                returnValue = string.Concat(clientUrl.Scheme, ServiceConstants.COLON, ServiceConstants.FORWARD_SLASH, ServiceConstants.FORWARD_SLASH,
                     clientUrl.Authority, file.ServerRelativeUrl, ServiceConstants.WEB_STRING);
             }
             return returnValue;
@@ -390,7 +398,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return result;
         }
 
-        
+
 
 
         public bool AddItem(ClientContext clientContext, List list, IList<string> columns, IList<object> values)
@@ -486,7 +494,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="permission"></param>
         /// <returns>True or false</returns>
         public bool CheckPermissionOnList(string url, string listName, PermissionKind permission)
-        {           
+        {
             try
             {
                 ClientContext clientContext = spoAuthorization.GetClientContext(url);
@@ -496,7 +504,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
-            }            
+            }
         }
 
         /// <summary>
@@ -566,7 +574,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 ListItemCollection listItemCollection = null;
                 if (null != clientContext && !string.IsNullOrWhiteSpace(listName))
-                {                
+                {
                     CamlQuery query = new CamlQuery();
                     if (!string.IsNullOrWhiteSpace(camlQuery))
                     {
@@ -578,7 +586,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         listItemCollection = clientContext.Web.Lists.GetByTitle(listName).GetItems(CamlQuery.CreateAllItemsQuery());
                     }
                     clientContext.Load(listItemCollection);
-                    clientContext.ExecuteQuery();               
+                    clientContext.ExecuteQuery();
                 }
                 return listItemCollection;
             }
@@ -621,7 +629,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
-        public  void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile)
+        public void CreateFileInsideFolder(ClientContext clientContext, string folderPath, FileCreationInformation newFile)
         {
             Folder destinationFolder = clientContext.Web.GetFolderByServerRelativeUrl(folderPath);
             clientContext.Load(destinationFolder);
@@ -736,61 +744,144 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="mailProperties">The mail properties.</param>
         public void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties)
         {
-            ListItemCollection items = null;
-            ListItem listItem = null;
-            if (null != clientContext && !string.IsNullOrEmpty(documentLibraryName) && !string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(folderPath) && null != mailProperties)
+            try
             {
-                Web web = clientContext.Web;
-                ListCollection lists = web.Lists;
-                CamlQuery query = new CamlQuery();
-                List selectedList = lists.GetByTitle(documentLibraryName);
-                string serverRelativePath = folderPath +  ServiceConstants.FORWARD_SLASH + fileName;
-                query.ViewXml = string.Format(CultureInfo.InvariantCulture, camlQueries.GetAllFilesInFolderQuery, serverRelativePath);
-                items = selectedList.GetItems(query);
-                if (null != items)
+                ListItemCollection items = null;
+                ListItem listItem = null;
+                if (null != clientContext && !string.IsNullOrEmpty(documentLibraryName) && !string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(folderPath) && null != mailProperties)
                 {
-                    clientContext.Load(items, item => item.Include(currentItem => currentItem.DisplayName, currentItem => currentItem.File.Name).Where(currentItem => currentItem.File.Name == fileName));
-                    clientContext.ExecuteQuery();
-                    if (0 < items.Count)
+                    Web web = clientContext.Web;
+                    ListCollection lists = web.Lists;
+                    CamlQuery query = new CamlQuery();
+                    List selectedList = lists.GetByTitle(documentLibraryName);
+                    string serverRelativePath = folderPath + ServiceConstants.FORWARD_SLASH + fileName;
+                    query.ViewXml = string.Format(CultureInfo.InvariantCulture, camlQueries.GetAllFilesInFolderQuery, serverRelativePath);
+                    items = selectedList.GetItems(query);
+                    if (null != items)
                     {
-                        listItem = items[0];
-                        if (null != mailProperties)
+                        clientContext.Load(items, item => item.Include(currentItem => currentItem.DisplayName, currentItem => currentItem.File.Name).Where(currentItem => currentItem.File.Name == fileName));
+                        clientContext.ExecuteQuery();
+                        if (0 < items.Count)
                         {
-                            listItem[mailSettings.SearchEmailFrom] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENDER_KEY]) ? mailProperties[ServiceConstants.MAIL_SENDER_KEY].Trim() : string.Empty;
-                            if (!string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_RECEIVED_DATEKEY]))
+                            listItem = items[0];
+                            if (null != mailProperties)
                             {
-                                listItem[mailSettings.SearchEmailReceivedDate] = Convert.ToDateTime(mailProperties[ServiceConstants.MAIL_RECEIVED_DATEKEY].Trim(), CultureInfo.InvariantCulture).ToUniversalTime();
+                                listItem[mailSettings.SearchEmailFrom] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENDER_KEY]) ? mailProperties[ServiceConstants.MAIL_SENDER_KEY].Trim() : string.Empty;
+                                if (!string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_RECEIVED_DATEKEY]))
+                                {
+                                    listItem[mailSettings.SearchEmailReceivedDate] = Convert.ToDateTime(mailProperties[ServiceConstants.MAIL_RECEIVED_DATEKEY].Trim(), CultureInfo.InvariantCulture).ToUniversalTime();
+                                }
+                                else
+                                {
+                                    listItem[mailSettings.SearchEmailReceivedDate] = null;
+                                }
+                                listItem[mailSettings.SearchEmailCC] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CC_ADDRESS_KEY]) ? mailProperties[ServiceConstants.MAIL_CC_ADDRESS_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailAttachments] = (string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY]) || mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY].Equals(ServiceConstants.TRUE, StringComparison.OrdinalIgnoreCase)) ? mailProperties[ServiceConstants.MAIL_ATTACHMENT_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailFromMailbox] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY]) ? mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailSubject] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT]) ? mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailTo] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_RECEIVER_KEY]) ? mailProperties[ServiceConstants.MAIL_RECEIVER_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailImportance] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_IMPORTANCE_KEY]) ? mailProperties[ServiceConstants.MAIL_IMPORTANCE_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailSensitivity] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENSITIVITY_KEY]) ? mailProperties[ServiceConstants.MAIL_SENSITIVITY_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailHasAttachments] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY]) ? mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailConversationId] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CONVERSATIONID_KEY]) ? mailProperties[ServiceConstants.MAIL_CONVERSATIONID_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailConversationTopic] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY]) ? mailProperties[ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailCategories] = GetCategories(mailProperties[ServiceConstants.MAIL_CATEGORIES_KEY].Trim());
+                                if (!string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY]))
+                                {
+                                    listItem[mailSettings.SearchEmailSentDate] = Convert.ToDateTime(mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY].Trim(), CultureInfo.InvariantCulture).ToUniversalTime();
+                                }
+                                else
+                                {
+                                    listItem[mailSettings.SearchEmailSentDate] = null;
+                                }
+                                listItem[mailSettings.SearchEmailOriginalName] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME]) ? mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME] : string.Empty;
+                                //Get all the fields of the document library to which document is getting uploaded.
+                                FieldCollection fields = GetMatterExtraDefaultSiteColumns(clientContext, selectedList);
+                                string contentTypeName = taxonomySettings.AdditionalMatterPropertiesContentTypeName;
+                                //Get all site columns that are present in 'Additional Matter Properties' content type.
+                                FieldCollection contentTypeFields = contentTypeName.GetFieldsInContentType(clientContext);
+                                if (fields != null && contentTypeFields != null && contentTypeFields.Count > 0)
+                                {
+                                    foreach (var field in fields)
+                                    {
+                                        foreach (var contentTypeField in contentTypeFields)
+                                        {
+                                            //If document library field name is part of content type field name 
+                                            //then update default value of tht column name to the value 
+                                            //of that column name.
+                                            if (field.InternalName == contentTypeField.InternalName)
+                                            {
+                                                if (field.Group == contentTypesConfig.OneDriveContentTypeGroup)
+                                                {
+                                                    listItem[field.InternalName] = field.DefaultValue;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            else
-                            {
-                                listItem[mailSettings.SearchEmailReceivedDate] = null;
-                            }
-                            listItem[mailSettings.SearchEmailCC] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CC_ADDRESS_KEY]) ? mailProperties[ServiceConstants.MAIL_CC_ADDRESS_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailAttachments] = (string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY]) || mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY].Equals(ServiceConstants.TRUE, StringComparison.OrdinalIgnoreCase)) ? mailProperties[ServiceConstants.MAIL_ATTACHMENT_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailFromMailbox] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY]) ? mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailSubject] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT]) ? mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailTo] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_RECEIVER_KEY]) ? mailProperties[ServiceConstants.MAIL_RECEIVER_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailImportance] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_IMPORTANCE_KEY]) ? mailProperties[ServiceConstants.MAIL_IMPORTANCE_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailSensitivity] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENSITIVITY_KEY]) ? mailProperties[ServiceConstants.MAIL_SENSITIVITY_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailHasAttachments] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY]) ? mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailConversationId] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CONVERSATIONID_KEY]) ? mailProperties[ServiceConstants.MAIL_CONVERSATIONID_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailConversationTopic] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY]) ? mailProperties[ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailCategories] = GetCategories(mailProperties[ServiceConstants.MAIL_CATEGORIES_KEY].Trim());
-                            if (!string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY]))
-                            {
-                                listItem[mailSettings.SearchEmailSentDate] = Convert.ToDateTime(mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY].Trim(), CultureInfo.InvariantCulture).ToUniversalTime();
-                            }
-                            else
-                            {
-                                listItem[mailSettings.SearchEmailSentDate] = null;
-                            }
-                            listItem[mailSettings.SearchEmailOriginalName] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME]) ? mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME] : string.Empty;
                             listItem.Update();
                             clientContext.ExecuteQuery();
                             listItem.RefreshLoad();
                         }
                     }
                 }
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name,
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// This method will get all the List columns of the selected list.
+        /// </summary>
+        /// <param name="clientContext"></param>
+        /// <param name="selectedList"></param>
+        /// <returns></returns>
+        private FieldCollection GetMatterExtraDefaultSiteColumns(ClientContext clientContext, List selectedList)
+        {
+            try
+            {
+                FieldCollection fields = selectedList.Fields;
+                clientContext.Load(fields);
+                clientContext.ExecuteQuery();
+                return fields;
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name,
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Checks if the property exists in property bag. Returns the value for the property from property bag.
+        /// </summary>
+        /// <param name="stampedPropertyValues">Dictionary object containing matter property bag key/value pairs</param>
+        /// <param name="key">Key to check in dictionary</param>
+        /// <returns>Property bag value for </returns>
+        internal string GetStampPropertyValue(Dictionary<string, object> stampedPropertyValues, string key)
+        {
+            try
+            {
+                string result = string.Empty;
+                if (stampedPropertyValues.ContainsKey(key))
+                {
+                    result = WebUtility.HtmlDecode(Convert.ToString(stampedPropertyValues[key], CultureInfo.InvariantCulture));
+                }
+
+                // This is just to check for null value in key, if exists
+                return (!string.IsNullOrWhiteSpace(result)) ? result : string.Empty;
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name,
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
         }
 
@@ -821,7 +912,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public ListItemCollection GetData(Client client, string listName, string camlQuery = null)
         {
             try
-            { 
+            {
                 return GetData(client.Url, listName, camlQuery);
             }
             catch (Exception ex)
@@ -878,7 +969,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
-        
+
         /// <summary>
         /// Method which will give matter folder hierarchy
         /// </summary>
@@ -887,12 +978,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public List<FolderData> GetFolderHierarchy(MatterData matterData)
         {
             try
-            { 
+            {
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(matterData.MatterUrl))
                 {
                     List list = clientContext.Web.Lists.GetByTitle(matterData.MatterName);
                     clientContext.Load(list.RootFolder);
-                    ListItemCollection listItems = GetData(clientContext, matterData.MatterName, 
+                    ListItemCollection listItems = GetData(clientContext, matterData.MatterName,
                         string.Format(CultureInfo.InvariantCulture, camlQueries.AllFoldersQuery, matterData.MatterName));
                     List<FolderData> allFolders = new List<FolderData>();
                     allFolders = GetFolderAssignment(list, listItems, allFolders);
@@ -936,7 +1027,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                     allFolders.Add(folderData);
                 }
-                return allFolders;            
+                return allFolders;
             }
             catch (Exception ex)
             {
@@ -945,7 +1036,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
-        
+
 
         /// <summary>
         /// Function to check whether list is present or not.
@@ -956,7 +1047,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public List<string> Exists(Client client, ReadOnlyCollection<string> listsNames)
         {
             try
-            { 
+            {
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
                     List<string> existingLists = new List<string>();
@@ -989,10 +1080,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="listsNames">List name</param>
         /// <returns>Success flag</returns>
         public List<string> MatterAssociatedLists(ClientContext clientContext, ReadOnlyCollection<string> listsNames)
-        {            
+        {
             List<string> existingLists = new List<string>();
             try
-            { 
+            {
                 if (null != clientContext && null != listsNames)
                 {
                     //ToDo: Chec
@@ -1000,9 +1091,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     clientContext.Load(lists);
                     clientContext.ExecuteQuery();
                     existingLists = (from listName in listsNames
-                                        join item in lists
-                                        on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
-                                        select listName).ToList();
+                                     join item in lists
+                                     on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
+                                     select listName).ToList();
                 }
             }
             catch (Exception ex)
@@ -1015,7 +1106,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
         public PropertyValues GetListProperties(ClientContext clientContext, string libraryName)
         {
-            
+
             PropertyValues stampedProperties = null;
             try
             {
@@ -1045,29 +1136,29 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public string GetPropertyValueForList(ClientContext context, string matterName, string propertyList)
         {
             string value = string.Empty;
-            
-                if (!string.IsNullOrWhiteSpace(matterName) && null != propertyList)
+
+            if (!string.IsNullOrWhiteSpace(matterName) && null != propertyList)
+            {
+                ListCollection allLists = context.Web.Lists;
+                context.Load(allLists);
+                context.ExecuteQuery();
+                List list = allLists.Cast<List>().FirstOrDefault(item => item.Title.ToUpperInvariant().Equals(matterName.ToUpperInvariant()));
+                if (null != list)
                 {
-                    ListCollection allLists = context.Web.Lists;
-                    context.Load(allLists);
+                    var props = list.RootFolder.Properties;
+                    context.Load(props);
                     context.ExecuteQuery();
-                    List list = allLists.Cast<List>().FirstOrDefault(item => item.Title.ToUpperInvariant().Equals(matterName.ToUpperInvariant()));
-                    if (null != list)
+                    if (null != props)
                     {
-                        var props = list.RootFolder.Properties;
-                        context.Load(props);
-                        context.ExecuteQuery();
-                        if (null != props)
+                        if (props.FieldValues.ContainsKey(propertyList))
                         {
-                            if (props.FieldValues.ContainsKey(propertyList))
-                            {
-                                value = Convert.ToString(props.FieldValues[propertyList], CultureInfo.InvariantCulture);
-                            }
+                            value = Convert.ToString(props.FieldValues[propertyList], CultureInfo.InvariantCulture);
                         }
                     }
                 }
-                return value;
-            
+            }
+            return value;
+
         }
 
         /// <summary>
@@ -1084,12 +1175,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 if (null != clientContext && !string.IsNullOrWhiteSpace(libraryname))
                 {
                     List list = clientContext.Web.Lists.GetByTitle(libraryname);
-                    userPermissionCollection = clientContext.LoadQuery(list.RoleAssignments.Include(listRoleAssignment => 
-                        listRoleAssignment.PrincipalId, listRoleAssignment => listRoleAssignment.Member, 
-                        listRoleAssignment => listRoleAssignment.Member.Title, 
-                        listRoleAssignment => listRoleAssignment.Member.PrincipalType, 
-                        listRoleAssignment => listRoleAssignment.RoleDefinitionBindings.Include(userRoles => userRoles.BasePermissions, 
-                                                                                                userRoles => userRoles.Name, 
+                    userPermissionCollection = clientContext.LoadQuery(list.RoleAssignments.Include(listRoleAssignment =>
+                        listRoleAssignment.PrincipalId, listRoleAssignment => listRoleAssignment.Member,
+                        listRoleAssignment => listRoleAssignment.Member.Title,
+                        listRoleAssignment => listRoleAssignment.Member.PrincipalType,
+                        listRoleAssignment => listRoleAssignment.RoleDefinitionBindings.Include(userRoles => userRoles.BasePermissions,
+                                                                                                userRoles => userRoles.Name,
                                                                                                 userRoles => userRoles.Id)).Where(listUsers => (PrincipalType.User == listUsers.Member.PrincipalType) || (PrincipalType.SecurityGroup == listUsers.Member.PrincipalType)));
                     clientContext.ExecuteQuery();
                 }
@@ -1134,14 +1225,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 {
                                     string tempUser = "";
                                     //check whether is present in the organization before giving permissiosn to him
-                                    if (!string.IsNullOrWhiteSpace(user) && 
+                                    if (!string.IsNullOrWhiteSpace(user) &&
                                         userDetails.CheckUserPresentInMatterCenter(clientContext, user))
                                     {
                                         if (!string.IsNullOrWhiteSpace(user))
                                         {
                                             /////get the user object
                                             Principal teamMemberPrincipal = clientContext.Web.EnsureUser(user.Trim());
-                                            clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title, 
+                                            clientContext.Load(teamMemberPrincipal, teamMemberPrincipalProperties => teamMemberPrincipalProperties.Title,
                                                 teamMemberPrincipalProperties => teamMemberPrincipalProperties.LoginName);
                                             clientContext.ExecuteQuery();
                                             Principal userPrincipal = null;
@@ -1201,7 +1292,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     ListItem listItem = clientContext.Web.Lists.GetByTitle(listName).GetItemById(listItemId);
                     clientContext.Load(listItem, item => item.HasUniqueRoleAssignments);
                     clientContext.ExecuteQuery();
-                    if (listItem.HasUniqueRoleAssignments && null != permissions && 
+                    if (listItem.HasUniqueRoleAssignments && null != permissions &&
                         null != assignUserName && permissions.Count == assignUserName.Count)
                     {
                         int position = 0;
@@ -1214,7 +1305,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 foreach (string user in userName)
                                 {
 
-                                    if (!string.IsNullOrWhiteSpace(user) && 
+                                    if (!string.IsNullOrWhiteSpace(user) &&
                                         userDetails.CheckUserPresentInMatterCenter(clientContext, user))
                                     {
                                         /////get the user object
@@ -1258,7 +1349,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             if (null != collection && !string.IsNullOrWhiteSpace(cachedItemModifiedDate))
             {
                 // Verify if new item flag is true and no list item is present in the Matter Configuration list
-                if (String.Equals(Convert.ToString(errorModifiedDate, CultureInfo.InvariantCulture), cachedItemModifiedDate) && collection.Count.Equals(0)) 
+                if (String.Equals(Convert.ToString(errorModifiedDate, CultureInfo.InvariantCulture), cachedItemModifiedDate) && collection.Count.Equals(0))
                 {
                     response = true;
                 }
@@ -1290,7 +1381,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public void SetPropertBagValuesForList(ClientContext clientContext, PropertyValues props, string matterName, Dictionary<string, string> propertyList)
         {
             try
-            { 
+            {
                 if (null != clientContext && !string.IsNullOrWhiteSpace(matterName) && null != props && null != propertyList)
                 {
                     List list = clientContext.Web.Lists.GetByTitle(matterName);

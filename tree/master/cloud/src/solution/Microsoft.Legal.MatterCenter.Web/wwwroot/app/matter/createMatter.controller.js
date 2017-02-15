@@ -37,6 +37,7 @@
             cm.showMatterId = true;
             cm.matterIdType = "Custom";
             cm.currentExternalUser = {};
+            cm.addFieldReq = false;
             cm.getExternalUserNotification = true;
             $rootScope.displayOverflow = "";
             cm.nextButtonDisabled = false; cm.prevButtonDisabled = true;
@@ -44,7 +45,9 @@
             cm.schema = configs.search.Schema;
             cm.isBackwardCompatible = configs.global.isBackwardCompatible;
             cm.isClientMappedWithHierachy = configs.global.isClientMappedWithHierachy;
-            cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);            
+            cm.taxonomyHierarchyLevels = parseInt(cm.taxonomyHierarchyLevels);
+            cm.createContent.TabNumber = 3;
+            cm.matterAdditionalFieldsContentTypeName = "";
             if (cm.taxonomyHierarchyLevels >= 2) {
                 cm.parentLevelOneList = [];
                 cm.levelOneList = [];
@@ -177,6 +180,14 @@
                 });
             }
 
+            function getmatterprovisionextraproperties(options, callback) {
+                api({
+                    resource: 'matterResource',
+                    method: 'getmatterprovisionextraproperties',
+                    data: options,
+                    success: callback
+                });
+            }
 
             function getTaxonomyDetailsForPractice(optionsForPracticeGroup, callback) {
                 api({
@@ -447,6 +458,7 @@
                     cm.selectedClientName = client.name;
                     cm.clientUrl = client.url;
                     cm.popupContainerBackground = "Show";
+                    cm.inputs = [];
                     siteCollectionPath = cm.clientUrl;
                     if (cm.isClientMappedWithHierachy) {
                         getClientsPracticeGroup(cm.selectedClientName);
@@ -622,6 +634,7 @@
                     cm.matterIdType = "Custom";
                     cm.clientId = "";
                     cm.selectedClientName = undefined;
+                    cm.inputs = [];
                 }
             }
 
@@ -674,6 +687,7 @@
                                     cm.activeDocumentTypeLawTerm = levelTwoTerm;
                                 }
                                 cm.selectedDocumentTypeLawTerms.push(documentType);
+                                getAdditionalMatterProperties(documentType);
                             }
                         }
                     });
@@ -712,6 +726,7 @@
                                         cm.activeDocumentTypeLawTerm = levelThreeTerm;
                                     }
                                     cm.selectedDocumentTypeLawTerms.push(documentType);
+                                    getAdditionalMatterProperties(documentType);
                                 }
                             }
                         });
@@ -758,6 +773,7 @@
                                             cm.activeDocumentTypeLawTerm = levelFourTerm;
                                         }
                                         cm.selectedDocumentTypeLawTerms.push(documentType);
+                                        getAdditionalMatterProperties(documentType);
                                     }
                                 }
                             });
@@ -811,6 +827,7 @@
                                                 cm.activeDocumentTypeLawTerm = levelFiveTerm;
                                             }
                                             cm.selectedDocumentTypeLawTerms.push(documentType);
+                                            getAdditionalMatterProperties(documentType);
                                         }
                                     }
                                 });
@@ -875,7 +892,7 @@
                         makePrevOrNextButton();
                     }
                 }
-                else if (sectionName == "snCreateAndShare" && cm.iCurrentPage !== 3) {
+                else if (sectionName == "snCreateAndShare" && cm.iCurrentPage !== 3 && cm.inputs.length == 0) {
                     if (validateCurrentPage(cm.iCurrentPage)) {                       
                         if (cm.iCurrentPage == 2) {
                             callCheckSecurityGroupExists("snCreateAndShare");
@@ -887,12 +904,33 @@
                     }
                     }
                 }
+                else if (sectionName == "snConfigSection" && cm.iCurrentPage !== 3 && cm.inputs.length > 0) {
+                    if (validateCurrentPage(cm.iCurrentPage)) {
+                        cm.sectionName = sectionName;
+                        cm.iCurrentPage = 3;
+                        localStorage.iLivePage = 3;
+                        makePrevOrNextButton();
+                    }
+                }
+                else if (sectionName == "snCreateAndShare" && cm.iCurrentPage !== 4 && cm.inputs.length > 0) {
+                    if (validateCurrentPage(cm.iCurrentPage)) {
+                        if (cm.iCurrentPage == 3) {
+                            callCheckSecurityGroupExists("snCreateAndShare");
+                        } else {
+                            cm.sectionName = sectionName;
+                            cm.iCurrentPage = 4;
+                            localStorage.iLivePage = 4;
+                            makePrevOrNextButton();
+                        }
+                    }
+                }
                 else if (sectionName == "snOpenMatter" && cm.iCurrentPage !== 1) {
                     cm.iCurrentPage = 1; cm.sectionName = sectionName;
                     localStorage.iLivePage = 1;
                     makePrevOrNextButton();
                 }
                 else {
+                    cm.iCurrentPage = cm.inputs.length > 0 ? 4 : 3;
                     cm.sectionName = sectionName;
                     makePrevOrNextButton();
                 }
@@ -910,7 +948,20 @@
                         break;
                     case 3:
                         cm.prevButtonDisabled = false;
-                        cm.nextButtonDisabled = true;
+                        cm.nextButtonDisabled = true; cm.nextButtonDisabled = false;
+                        if (cm.inputs.length == 0) {
+                            cm.nextButtonDisabled = true;
+                        }
+                        break;
+                    case 4:
+                        if (cm.inputs.length > 0) {
+                            cm.prevButtonDisabled = false;
+                            cm.nextButtonDisabled = true;
+                        }
+                        break;
+                    default:
+                        cm.prevButtonDisabled = false;
+                        cm.nextButtonDisabled = false;
                         break;
                 }
             }
@@ -1358,7 +1409,7 @@
                         localStorage.iLivePage = 2;
                         makePrevOrNextButton();
                     } else {
-                        cm.iCurrentPage = 3; cm.popupContainerBackground = "hide";
+                        cm.iCurrentPage = cm.inputs.length > 0 ? 4 : 3; cm.popupContainerBackground = "hide";
                         cm.sectionName = sectionName;
                         makePrevOrNextButton();
                     }
@@ -1974,6 +2025,13 @@
 
                 }
 
+                var additionalFields = getAdditionalMatterPropertiesFieldsData();
+
+                var matterExtraPropertiesValues = {
+                    ContentTypeName: cm.matterAdditionalFieldsContentTypeName,
+                    Fields: additionalFields
+                }
+
                 var optionsForAssignContentTypeMetadata = {
                     Client: {
                         Id: cm.clientId,
@@ -1987,6 +2045,7 @@
                         DefaultContentType: defaultContentType,
                         MatterGuid: matterGUID
                     },
+                    MatterExtraProperties: matterExtraPropertiesValues,
                     ManagedColumnTerms: managedColumns
                 }
 
@@ -1995,7 +2054,7 @@
 
                 assignContentTypeMetadata(optionsForAssignContentTypeMetadata, function (response) {
 
-                    console.log(" assignContentTypeMetadataAPI Success");
+                    console.log("AssignContentTypeMetadataAPI Success");
                     console.log(response);
                     cm.iShowSuccessMessage++;
                     (3 === parseInt(cm.iShowSuccessMessage, 10)) ? stampProperties() : "";
@@ -2053,7 +2112,7 @@
                         Url: cm.clientUrl
                     },
                     MatterConfigurations: {
-
+                        AdditionalFieldValues: getAdditionalMatterPropertiesFieldsData(),
                         IsConflictCheck: cm.chkConfilctCheck,
                         IsMatterDescriptionMandatory: cm.isMatterDescriptionMandatory,
                         IsCalendarSelected: cm.includeCalendar,
@@ -2324,6 +2383,14 @@
                                 if ("contenttypes" == contentTypeValue) {
                                     if (-1 == arrContents.indexOf(arrContentTypes[nCount].documentTemplates)) {
                                         arrContents.push(arrContentTypes[nCount].documentTemplates);
+                                        var additionalMatterPropSettingName = configs.taxonomy.matterProvisionExtraPropertiesContentType;
+                                        var temp = arrContentTypes[nCount];
+                                        if (temp[additionalMatterPropSettingName] && temp[additionalMatterPropSettingName] != "") {
+                                            if (-1 == arrContents.indexOf(temp[additionalMatterPropSettingName])) {
+                                                arrContents.push(temp[additionalMatterPropSettingName]);
+                                                cm.matterAdditionalFieldsContentTypeName = temp[additionalMatterPropSettingName];
+                                            }
+                                        }
                                     }
 
                                     var arrAssociatedDocumentTemplates = arrContentTypes[nCount].documentTemplateNames.split(";");
@@ -2635,9 +2702,21 @@
                     cm.navigateToSecondSection("snConflictCheck");
                     $event.stopPropagation();
                 }
-                else if (cm.iCurrentPage == 2) {
-                    cm.navigateToSecondSection("snCreateAndShare");
-                    $event.stopPropagation();
+                if (cm.inputs.length > 0) {
+                    if (cm.iCurrentPage == 2) {
+                        cm.navigateToSecondSection("snConfigSection");
+                        $event.stopPropagation();
+                    }
+                    else if (cm.iCurrentPage == 3) {
+                        cm.navigateToSecondSection("snCreateAndShare");
+                        $event.stopPropagation();
+                    }
+                }
+                else {
+                    if (cm.iCurrentPage == 2) {
+                        cm.navigateToSecondSection("snCreateAndShare");
+                        $event.stopPropagation();
+                    }
                 }
             }
 
@@ -2648,6 +2727,10 @@
                 }
                 else if (cm.iCurrentPage == 3) {
                     cm.navigateToSecondSection("snConflictCheck");
+                    $event.stopPropagation();
+                }
+                else if (cm.iCurrentPage == 4) {
+                    cm.navigateToSecondSection("snConfigSection");
                     $event.stopPropagation();
                 }
             }
@@ -2803,6 +2886,7 @@
                                         if (attornyCheck) {
                                             cm.popupContainerBackground = "Show";
                                             storeMatterDataToLocalStorageSecondPage();
+                                            cm.popupContainerBackground = "hide";
                                             return true;
                                         }
                                     }
@@ -2833,13 +2917,34 @@
                                 if (attornyCheck) {
                                     cm.popupContainerBackground = "Show";
                                     storeMatterDataToLocalStorageSecondPage();
+                                    cm.popupContainerBackground = "hide";
                                     return true;
                                 }
                             }
                         }
                     }
                 }
-                else if (iCurrPage == 3) {
+                else if (iCurrPage == 3 && cm.inputs.length > 0) {
+
+                    cm.addFieldReq = false;
+                    angular.forEach(cm.inputs, function (val) {
+                        if (val.type.toLowerCase() != 'boolean' && val.displayInUI == "true" && (val.value == null || val.value == undefined)) {
+                            cm.addFieldReq = true;
+                        }
+                    });
+
+                    if (cm.addFieldReq) {
+                        return false;
+                    }
+                    return true;
+                }
+                else if (iCurrPage == 3 && cm.inputs.length == 0) {
+                    return true;
+                }
+                else if (iCurrPage == 4) {
+                    return true;
+                }
+                else {
                     return true;
                 }
             }
@@ -3302,6 +3407,7 @@
                         var primaryType = false;
                         if (cm.activeDocumentTypeLawTerm.id == term.id) {// this line will check whether the data is existing or not
                             primaryType = true;
+                            getAdditionalMatterProperties(term);
                         }
                         term.primaryMatterType = primaryType;
                         cm.popupContainerBackground = "hide";
@@ -3391,6 +3497,83 @@
             $rootScope.$on('disableOverlay', function (event, data) {
                 cm.popupContainerBackground = "hide";               
             });
+
+            cm.inputs = [];
+            function getAdditionalMatterProperties(data) {
+                var additionalMatterPropSettingName = configs.taxonomy.matterProvisionExtraPropertiesContentType;
+                if (data[additionalMatterPropSettingName] && data[additionalMatterPropSettingName] != "") {
+                    cm.configurableSection = true;
+                    if (cm.configurableSection) {
+                        cm.createContent.Tab4Header = "Provide more inputs";
+                        cm.createContent.Tab4HeaderTitle = "";
+                        cm.matterAdditionalFieldsContentTypeName = "";
+                        cm.createContent.TabNumber = 4;
+                        if (cm.clientUrl == "") {
+                            cm.clientUrl = configs.global.repositoryUrl;
+                        }
+                        var optionsForGetmatterprovisionextraproperties = {
+                            Client: {
+                                Url: cm.clientUrl
+                            },
+                            MatterExtraProperties: {
+                                ContentTypeName: data[additionalMatterPropSettingName]
+                            }
+                        }
+                        getmatterprovisionextraproperties(optionsForGetmatterprovisionextraproperties, function (result) {
+                            console.log(result);
+                            cm.inputs = result.Fields;
+                            var z = 0;
+                            for (var i = 1; i <= cm.inputs.length; i++) {
+                                var order = (i % 2 == 0) ? 2 : 1;
+                                cm.inputs[z].columnPosition = order;
+                                z++;
+                            }
+                            console.log(cm.inputs);
+                        });
+                    }
+
+                } else {
+                    cm.configurableSection = false;
+                    cm.createContent.TabNumber = 3;
+                    cm.matterAdditionalFieldsContentTypeName = "";
+                    cm.inputs = [];
+                }
+            }
+
+            function getAdditionalMatterPropertiesFieldsData() {
+                var Fields = [];
+
+                angular.forEach(cm.inputs, function (input) {
+                    var field = { FieldDisplayName: "", FieldName: "", Type: "", FieldValue: "", IsDisplayInUI: "true" }
+                    field.FieldDisplayName = input.name;
+                    field.FieldName = input.fieldInternalName;
+                    field.Type = input.type;
+                    field.IsDisplayInUI = input.displayInUI.toString();
+                    if (input.type == "Dropdown") {
+                        if (input.value.choiceValue == null || input.value.choiceValue == undefined) {
+                            input.value.choiceValue = "";
+                        }
+                        field.FieldValue = input.value.choiceValue
+                    } else if (input.type == "MultiChoice") {
+                        field.FieldValue = "";
+                        angular.forEach(input.value, function (val) {
+                            if (val.choiceValue == null || val.choiceValue == undefined) {
+                                val.choiceValue = "";
+                            }
+                            field.FieldValue += field.FieldValue == "" ? val.choiceValue : "," + val.choiceValue;
+                        });
+                    }else {
+                        if (input.value == null || input.value == undefined) {
+                            input.value = "";
+                        }
+                        field.FieldValue = input.value;
+                    }
+                    if (-1 == Fields.indexOf(field)) {
+                        Fields.push(field);
+                    }
+                });
+                return Fields;
+            }
         }]);
 
     app.filter('getAssociatedDocumentTemplatesCount', function () {

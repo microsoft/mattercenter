@@ -25,10 +25,13 @@ using System.Net;
 using Newtonsoft.Json;
 using System.Reflection;
 using Microsoft.SharePoint.Client.WebParts;
+using System.Text;
+using System.IO;
+using Microsoft.Legal.MatterCenter.Repository.Extensions;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
-    public class MatterRepository:IMatterRepository
+    public class MatterRepository : IMatterRepository
     {
         private ISearch search;
         private ISPList spList;
@@ -44,25 +47,30 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private IExternalSharing extrnalSharing;
         private IUserRepository userRepositoy;
         private GeneralSettings generalSettings;
-        
+        private ContentTypesConfig contentTypesSettings;
+        private ICustomLogger customLogger;
+        private LogTables logTables;
+
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
         /// <param name="search"></param>
-        public MatterRepository(ISearch search, 
-            IOptions<MatterSettings> matterSettings, 
-            IOptions<SearchSettings> searchSettings, 
-            IOptions<ListNames> listNames, 
-            ISPOAuthorization spoAuthorization, 
+        public MatterRepository(ISearch search,
+            IOptions<MatterSettings> matterSettings,
+            IOptions<SearchSettings> searchSettings,
+            IOptions<ListNames> listNames,
+            ISPOAuthorization spoAuthorization,
             ISPContentTypes spContentTypes,
-            IExternalSharing extrnalSharing, 
+            IExternalSharing extrnalSharing,
             IUserRepository userRepositoy,
-            ISPList spList, 
+            ISPList spList,
             IOptions<CamlQueries> camlQueries,
             IOptions<GeneralSettings> generalSettings,
-            IUsersDetails userdetails, 
+            IUsersDetails userdetails,
             IOptions<ErrorSettings> errorSettings,
-            
+            IOptions<ContentTypesConfig> contentTypesSettings,
+            ICustomLogger customLogger,
+            IOptions<LogTables> logTables,
             ISPPage spPage)
         {
             this.search = search;
@@ -75,10 +83,13 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spoAuthorization = spoAuthorization;
             this.spPage = spPage;
             this.errorSettings = errorSettings.Value;
+            this.customLogger = customLogger;
             this.generalSettings = generalSettings.Value;
             this.spContentTypes = spContentTypes;
             this.extrnalSharing = extrnalSharing;
+            this.logTables = logTables.Value;
             this.userRepositoy = userRepositoy;
+            this.contentTypesSettings = contentTypesSettings.Value;
         }
 
         /// <summary>
@@ -130,10 +141,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (genericResponse == null)
                 {
-                    clientContext.ExecuteQuery();                    
+                    clientContext.ExecuteQuery();
                 }
 
-                listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery, 
+                listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery,
                     searchSettings.ManagedPropertyTitle, searchSettings.MatterConfigurationTitleValue);
                 ListItem settingsItem = spList.GetData(clientContext, listNames.MatterConfigurationsList, listQuery).FirstOrDefault();
                 if (null != settingsItem)
@@ -180,7 +191,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 clientContext = spoAuthorization.GetClientContext(matterInformation.Client.Url);
                 PropertyValues matterStampedProperties = GetStampedProperties(clientContext, matter.Name);
                 loggedInUserName = userRepositoy.GetLoggedInUserDetails(clientContext).Name;
-                
+
 
                 // Get matter library current permissions
                 userPermissionOnLibrary = FetchUserPermissionForLibrary(clientContext, matter.Name);
@@ -214,7 +225,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 // Update matter metadata
                 result = UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode);
                 if (result)
-                {                    
+                {
                     return genericResponse;
                 }
             }
@@ -449,7 +460,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         Value = true.ToString()
                     };
                 };
-            }     
+            }
             catch (Exception exception)
             {
                 //result = Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
@@ -507,7 +518,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
         public int CreateWebPartPage(ClientContext clientContext, string pageName, string layout, string masterpagelistName, string listName, string pageTitle)
         {
-            return spPage.CreateWebPartPage(clientContext, pageName, layout, masterpagelistName, listName, pageTitle); 
+            return spPage.CreateWebPartPage(clientContext, pageName, layout, masterpagelistName, listName, pageTitle);
         }
 
         public bool SaveMatter(Client client, Matter matter, string matterListName, MatterConfigurations matterConfigurations, string matterSiteURL)
@@ -618,7 +629,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
             return returnFlag;
         }
-    
+
 
 
         public IList<string> RoleCheck(string url, string listName, string columnName)
@@ -627,7 +638,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 listNames.DMSRoleListName,
                 camlQueries.DMSRoleQuery);
             IList<string> roles = new List<string>();
-            roles = collListItem.AsEnumerable().Select(roleList => Convert.ToString(roleList[matterSettings.RoleListColumnRoleName], 
+            roles = collListItem.AsEnumerable().Select(roleList => Convert.ToString(roleList[matterSettings.RoleListColumnRoleName],
                 CultureInfo.InvariantCulture)).ToList();
             //if (matter.Roles.Except(roles).Count() > 0)
             //{
@@ -636,7 +647,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return roles;
         }
 
-        public GenericResponseVM  DeleteMatter(Client client, Matter matter)
+        public GenericResponseVM DeleteMatter(Client client, Matter matter)
         {
             GenericResponseVM genericResponse = null;
             using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
@@ -661,16 +672,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         genericResponse = ServiceUtility.GenericResponse(matterSettings.DeleteMatterCode, matterSettings.MatterNotPresent);
                     }
                     Uri clientUri = new Uri(client.Url);
-                    string matterLandingPageUrl = string.Concat(clientUri.AbsolutePath, ServiceConstants.FORWARD_SLASH, 
-                        matterSettings.MatterLandingPageRepositoryName.Replace(ServiceConstants.SPACE, string.Empty), 
+                    string matterLandingPageUrl = string.Concat(clientUri.AbsolutePath, ServiceConstants.FORWARD_SLASH,
+                        matterSettings.MatterLandingPageRepositoryName.Replace(ServiceConstants.SPACE, string.Empty),
                         ServiceConstants.FORWARD_SLASH, matter.MatterGuid, ServiceConstants.ASPX_EXTENSION);
                     spPage.Delete(clientContext, matterLandingPageUrl);
                     return ServiceUtility.GenericResponse("", "Matter deleted successfully");
                 }
                 else
-                {               
+                {
                     return ServiceUtility.GenericResponse(errorSettings.MatterLibraryExistsCode,
-                         errorSettings.ErrorDuplicateMatter + ServiceConstants.MATTER + ServiceConstants.DOLLAR + 
+                         errorSettings.ErrorDuplicateMatter + ServiceConstants.MATTER + ServiceConstants.DOLLAR +
                          MatterPrerequisiteCheck.LibraryExists);
                 }
             }
@@ -685,7 +696,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public async Task<bool> PinRecordAsync<T>(T pinRequestData)
         {
             PinRequestMatterVM pinRequestMatterVM = (PinRequestMatterVM)Convert.ChangeType(pinRequestData, typeof(PinRequestMatterVM));
-            var matterData = pinRequestMatterVM.MatterData;            
+            var matterData = pinRequestMatterVM.MatterData;
             matterData.MatterName = ServiceUtility.EncodeValues(matterData.MatterName);
             matterData.MatterDescription = ServiceUtility.EncodeValues(matterData.MatterDescription);
             matterData.MatterCreatedDate = ServiceUtility.EncodeValues(matterData.MatterCreatedDate);
@@ -728,12 +739,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return await Task.FromResult(spList.GetFolderHierarchy(matterData));
         }
 
-        
-
-        
-
-        
-
         public string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle)
         {
             return spList.AddOneNote(clientContext, clientAddressPath, oneNoteLocation, listName, oneNoteTitle);
@@ -761,7 +766,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return spList.GetListProperties(clientContext, libraryname);
         }
 
-        
+
 
         public IEnumerable<RoleAssignment> FetchUserPermissionForLibrary(ClientContext clientContext, string libraryname)
         {
@@ -771,7 +776,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public string GetMatterName(ClientContext clientContext, string matterName)
         {
             PropertyValues propertyValues = spList.GetListProperties(clientContext, matterName);
-            return propertyValues.FieldValues.ContainsKey(matterSettings.StampedPropertyMatterGUID) ? 
+            return propertyValues.FieldValues.ContainsKey(matterSettings.StampedPropertyMatterGUID) ?
                 WebUtility.HtmlDecode(Convert.ToString(propertyValues.FieldValues[matterSettings.StampedPropertyMatterGUID], CultureInfo.InvariantCulture)) : matterName;
         }
 
@@ -779,9 +784,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             int listItemId = -1;
             ListItemCollection listItemCollection = spList.GetData(clientContext, libraryName);
-            clientContext.Load(listItemCollection, listItemCollectionProperties => 
+            clientContext.Load(listItemCollection, listItemCollectionProperties =>
                                 listItemCollectionProperties.Include(
-                                    listItemProperties => listItemProperties.Id, 
+                                    listItemProperties => listItemProperties.Id,
                                     listItemProperties => listItemProperties.DisplayName));
             clientContext.ExecuteQuery();
 
@@ -789,7 +794,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
             if (null != listItem)
             {
-                listItemId =  listItem.Id;
+                listItemId = listItem.Id;
             }
             return listItemId;
         }
@@ -841,7 +846,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="matterLandingPageId">List item id</param>
         /// <param name="isEditMode">Add/ Edit mode</param>
         /// <returns></returns>
-        public bool UpdatePermission(ClientContext clientContext, Matter matter, List<string> users, 
+        public bool UpdatePermission(ClientContext clientContext, Matter matter, List<string> users,
             string loggedInUserTitle, bool isListItem, string listName, int matterLandingPageId, bool isEditMode)
         {
             bool result = false;
@@ -860,7 +865,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                     else
                     {
-                        result = spList.SetItemPermission(clientContext, matter.AssignUserNames, matterSettings.MatterLandingPageRepositoryName, 
+                        result = spList.SetItemPermission(clientContext, matter.AssignUserNames, matterSettings.MatterLandingPageRepositoryName,
                             matterLandingPageId, matter.Permissions);
                     }
                 }
@@ -882,7 +887,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="isListItem">ListItem or list</param>
         /// <param name="list">List object</param>
         /// <param name="matterLandingPageId">List item id</param>
-        private void RemoveSpecificUsers(ClientContext clientContext, List<string> usersToRemove, string loggedInUserTitle, 
+        private void RemoveSpecificUsers(ClientContext clientContext, List<string> usersToRemove, string loggedInUserTitle,
             bool isListItem, string listName, int matterLandingPageId)
         {
             try
@@ -901,10 +906,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         if (0 <= matterLandingPageId)
                         {
                             listItem = list.GetItemById(matterLandingPageId);
-                            clientContext.Load(listItem, listItemProperties => 
-                            listItemProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member, 
-                            roleAssignmentProperties => roleAssignmentProperties.Member.Title, 
-                            roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, 
+                            clientContext.Load(listItem, listItemProperties =>
+                            listItemProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member,
+                            roleAssignmentProperties => roleAssignmentProperties.Member.Title,
+                            roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name,
                                                                                                                 roleDef => roleDef.BasePermissions)));
                             clientContext.ExecuteQuery();
                             roleCollection = listItem.RoleAssignments;
@@ -912,10 +917,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                     else
                     {
-                        clientContext.Load(list, listProperties => 
-                        listProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member, 
-                        roleAssignmentProperties => roleAssignmentProperties.Member.Title, 
-                        roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, 
+                        clientContext.Load(list, listProperties =>
+                        listProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member,
+                        roleAssignmentProperties => roleAssignmentProperties.Member.Title,
+                        roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name,
                                                                                                             roleDef => roleDef.BasePermissions)));
                         clientContext.ExecuteQuery();
                         roleCollection = list.RoleAssignments;
@@ -932,7 +937,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 {
                                     // Removing permission for all the user except current user with full control
                                     // Add those users in list, then traverse the list and removing all users from that list
-                                    if (role.Member.Title == user && !((role.Member.Title == loggedInUserTitle) && (roleDef.Name == 
+                                    if (role.Member.Title == user && !((role.Member.Title == loggedInUserTitle) && (roleDef.Name ==
                                         matterSettings.EditMatterAllowedPermissionLevel)))
                                     {
                                         roleDefinationList.Add(roleDef);
@@ -956,12 +961,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
         }
 
-        
 
-        public bool UpdateMatterStampedProperties(ClientContext clientContext, MatterDetails matterDetails, 
+
+        public bool UpdateMatterStampedProperties(ClientContext clientContext, MatterDetails matterDetails,
             Matter matter, PropertyValues matterStampedProperties, bool isEditMode)
         {
-            
+
             try
             {
                 if (null != clientContext && null != matter && null != matterDetails && (0 < matterStampedProperties.FieldValues.Count))
@@ -998,7 +1003,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     string currentRoles = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Roles.Where(user => !string.IsNullOrWhiteSpace(user)));
                     string currentBlockedUploadUsers = string.Join(ServiceConstants.SEMICOLON, matterDetails.UploadBlockedUsers.Where(user => !string.IsNullOrWhiteSpace(user)));
                     string currentUsers = GetMatterAssignedUsers(matter);
-                    currentUsers= currentUsers.Replace(";", "$|$").ToString();
+                    currentUsers = currentUsers.Replace(";", "$|$").ToString();
                     string currentUserEmails = spList.GetMatterAssignedUsersEmail(clientContext, matter);
                     currentUserEmails = currentUserEmails.Replace(";", "$|$").ToString();
 
@@ -1020,8 +1025,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     var finalMatterRolesList = finalMatterRoles.Replace("$|$", "$").Split('$').ToList();
 
                     var finalMatterCenterUserEmailsString = finalMatterCenterUserEmails.Replace("$|$", ";");
-                    var finalMatterCenterUserEmailsList= finalMatterCenterUserEmailsString.Replace(";", "$").Split('$').ToList();
-                    finalMatterCenterUserEmailsList= finalMatterCenterUserEmailsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    var finalMatterCenterUserEmailsList = finalMatterCenterUserEmailsString.Replace(";", "$").Split('$').ToList();
+                    finalMatterCenterUserEmailsList = finalMatterCenterUserEmailsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
                     var finalResponsibleAttorneysEmailListString = finalResponsibleAttorneysEmail.Replace("$|$", ";");
                     var finalResponsibleAttorneysEmailList = finalResponsibleAttorneysEmailListString.Replace(";", "$").Split('$').ToList();
@@ -1031,14 +1036,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     var finalResponsibleAttorneysUsersList = finalResponsibleAttorneysUsersListString.Split('$').ToList();
                     finalResponsibleAttorneysUsersList = finalResponsibleAttorneysUsersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
-                    
+
                     #region Remove all the external users from the request object so that only internal users are added to the matter
                     //Once the external users accepted the invitation, those external users will be added to the matter by azure web app job
                     List<int> itemsToRemove = new List<int>();
 
-                    for(int i=0; i< finalMatterUsersList.Count; i++)
+                    for (int i = 0; i < finalMatterUsersList.Count; i++)
                     {
-                        if(userdetails.CheckUserPresentInMatterCenter(clientContext, finalMatterUsersList[i]) ==false)
+                        if (userdetails.CheckUserPresentInMatterCenter(clientContext, finalMatterUsersList[i]) == false)
                         {
                             itemsToRemove.Add(i);
                         }
@@ -1058,7 +1063,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 finalResponsibleAttorneysEmailList[itemsToRemove[i]] = string.Empty;
                                 finalResponsibleAttorneysUsersList[itemsToRemove[i]] = string.Empty;
                             }
-                                
+
                         }
                         finalMatterUsersList = finalMatterUsersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                         finalTeamMembersList = finalTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
@@ -1066,7 +1071,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         finalMatterRolesList = finalMatterRolesList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                         finalResponsibleAttorneysEmailList = finalResponsibleAttorneysEmailList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                         finalResponsibleAttorneysUsersList = finalResponsibleAttorneysUsersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-                        finalMatterCenterUserEmailsList= finalMatterCenterUserEmailsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                        finalMatterCenterUserEmailsList = finalMatterCenterUserEmailsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                         var finalMatterUsersArray = finalMatterUsersList.ToArray();
                         var finalTeamMembersArray = finalTeamMembersList.ToArray();
                         var finalMatterPermissionsArray = finalMatterPermissionsList.ToArray();
@@ -1092,7 +1097,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     propertyList.Add(matterSettings.StampedPropertyMatterCenterRoles, WebUtility.HtmlEncode(finalMatterRoles));
                     propertyList.Add(matterSettings.StampedPropertyMatterCenterPermissions, WebUtility.HtmlEncode(finalMatterPermissions));
                     propertyList.Add(matterSettings.StampedPropertyMatterCenterUsers, WebUtility.HtmlEncode(finalMatterCenterUsers));
-                    propertyList.Add(matterSettings.StampedPropertyMatterCenterUserEmails, WebUtility   .HtmlEncode(finalMatterCenterUserEmails));
+                    propertyList.Add(matterSettings.StampedPropertyMatterCenterUserEmails, WebUtility.HtmlEncode(finalMatterCenterUserEmails));
                     spList.SetPropertBagValuesForList(clientContext, matterStampedProperties, matter.Name, propertyList);
 
                     #region Update matter and matterdetails object to have only external users so that notification can be send to those external users
@@ -1168,7 +1173,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             matter.AssignUserEmails[x] = null;
                         }
                     }
-                    
+
 
                     //foreach (IList<string> userNames in matter.AssignUserNames)
                     //{
@@ -1179,7 +1184,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     //    }
                     //    l = l + 1;
                     //}
-                  //  finalTeamMembersList = matterDetails.TeamMembers.Replace(";", "$").Split('$').ToList();
+                    //  finalTeamMembersList = matterDetails.TeamMembers.Replace(";", "$").Split('$').ToList();
                     finalTeamMembersList = matterDetails.TeamMembers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                     if (itemsToRemove.Count > 0)
                     {
@@ -1231,7 +1236,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="listExists">List of existed list</param>
         /// <param name="listItemId">ID of the list</param>
         /// <param name="assignFullControl">Flag to determine Assign or Remove Permission</param>
-        public void AssignRemoveFullControl(ClientContext clientContext, Matter matter, string loggedInUser, 
+        public void AssignRemoveFullControl(ClientContext clientContext, Matter matter, string loggedInUser,
             int listItemId, List<string> listExists, bool assignFullControl, bool hasFullPermission)
         {
             IList<IList<string>> currentUser = new List<IList<string>>();
@@ -1323,9 +1328,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 string loggedInUserTitle = userRepositoy.GetLoggedInUserDetails(clientContext).Email;
 
                 string originalMatterName = GetMatterName(clientContext, matter.Name);
-                int listItemId = RetrieveItemId(clientContext, matterSettings.MatterLandingPageRepositoryName, originalMatterName);             
+                int listItemId = RetrieveItemId(clientContext, matterSettings.MatterLandingPageRepositoryName, originalMatterName);
 
-                
+
 
                 if (null != client && null != matter && null != clientContext && null != matterRevertListObject)
                 {
@@ -1444,9 +1449,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 if (0 <= matterLandingPageId)
                 {
                     listItem = list.GetItemById(matterLandingPageId);
-                    clientContext.Load(listItem, listProperties => listProperties.RoleAssignments.Include(roleAssignmentProperties => 
-                        roleAssignmentProperties.Member, 
-                        roleAssignmentProperties => roleAssignmentProperties.Member.Title, 
+                    clientContext.Load(listItem, listProperties => listProperties.RoleAssignments.Include(roleAssignmentProperties =>
+                        roleAssignmentProperties.Member,
+                        roleAssignmentProperties => roleAssignmentProperties.Member.Title,
                         roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, roleDef => roleDef.BasePermissions)));
                     clientContext.ExecuteQuery();
                     roleCollection = listItem.RoleAssignments;
@@ -1454,9 +1459,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             else
             {
-                clientContext.Load(list, listProperties => listProperties.RoleAssignments.Include(roleAssignmentProperties => 
-                    roleAssignmentProperties.Member, 
-                    roleAssignmentProperties => roleAssignmentProperties.Member.Title, 
+                clientContext.Load(list, listProperties => listProperties.RoleAssignments.Include(roleAssignmentProperties =>
+                    roleAssignmentProperties.Member,
+                    roleAssignmentProperties => roleAssignmentProperties.Member.Title,
                     roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, roleDef => roleDef.BasePermissions)));
                 clientContext.ExecuteQuery();
                 roleCollection = list.RoleAssignments;
@@ -1514,24 +1519,193 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns>Users that can be stamped</returns>
         private string GetMatterAssignedUsers(Matter matter)
         {
-            string currentUsers = string.Empty;
-            string separator = string.Empty;
-            if (null != matter && 0 < matter.AssignUserNames.Count)
+            try
             {
-                foreach (IList<string> userNames in matter.AssignUserNames)
+                string currentUsers = string.Empty;
+                string separator = string.Empty;
+                if (null != matter && 0 < matter.AssignUserNames.Count)
                 {
-                    currentUsers += separator + string.Join(ServiceConstants.SEMICOLON, userNames.Where(user => !string.IsNullOrWhiteSpace(user)));
-                    separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                    foreach (IList<string> userNames in matter.AssignUserNames)
+                    {
+                        currentUsers += separator + string.Join(ServiceConstants.SEMICOLON, userNames.Where(user => !string.IsNullOrWhiteSpace(user)));
+                        separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                    }
                 }
+                return currentUsers;
+            }catch(Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
-            return currentUsers;
         }
 
         public bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName) => spList.SetPermission(clientContext, assignUserName, permissions, listName);
-        
-        public GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation)=> extrnalSharing.ShareMatter(matterInformation);
-        
-        public bool OneNoteUrlExists(MatterInformationVM matterInformation)=> search.PageExists(matterInformation.Client, matterInformation.RequestedUrl);
-        
+
+        public GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation) => extrnalSharing.ShareMatter(matterInformation);
+
+        public bool OneNoteUrlExists(MatterInformationVM matterInformation) => search.PageExists(matterInformation.Client, matterInformation.RequestedUrl);
+
+        /// <summary>
+        /// This method will get all the Field columns of the content type as the JSON object which is used to render the dynamic UI.
+        /// </summary>
+        /// <param name="contentTypeName"></param>
+        /// <param name="client"></param>
+        /// <returns>Json</returns>
+        public string GetMatterProvisionExtraProperties(string contentTypeName, Client client)
+        {
+            try
+            {
+                var clientContext = spoAuthorization.GetClientContext(client.Url);
+                FieldCollection fieldCollection = contentTypeName.GetFieldsInContentType(clientContext);
+
+                //To get configuration settings...
+                var listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery,
+                        searchSettings.ManagedPropertyTitle, searchSettings.MatterConfigurationTitleValue);
+                ListItem settingsItem = spList.GetData(clientContext,
+                    listNames.MatterConfigurationsList, listQuery).FirstOrDefault();
+
+                Newtonsoft.Json.Linq.JObject settingConfig = (Newtonsoft.Json.Linq.JObject)
+                    JsonConvert.DeserializeObject(WebUtility.HtmlDecode(Convert.ToString(
+                        settingsItem.FieldValues["ConfigurationValue"])));
+
+                IList<MatterExtraFields> AddFields = new List<MatterExtraFields>();
+
+                if (settingConfig != null && settingConfig.GetValue("AdditionalFieldValues") != null)
+                {
+                    foreach (var objField in settingConfig.GetValue("AdditionalFieldValues"))
+                    {
+                        AddFields.Add(new MatterExtraFields
+                        {
+                            FieldName = objField["FieldName"].ToString(),
+                            IsDisplayInUI = String.IsNullOrWhiteSpace(objField["IsDisplayInUI"].ToString()) ? "false"
+                                             : objField["IsDisplayInUI"].ToString(),
+                            IsMandatory = String.IsNullOrWhiteSpace(objField["IsMandatory"].ToString()) ? "false"
+                                             : objField["IsMandatory"].ToString()
+                        });
+                    }
+                }
+
+                //spContentTypes.GetFieldsInContentType(clientContext, contentTypeName);
+                StringBuilder sb = new StringBuilder();
+                JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
+                jw.Formatting = Formatting.Indented;
+                jw.WriteStartObject();
+
+                jw.WritePropertyName("Fields");
+                jw.WriteStartArray();
+                foreach (var field in fieldCollection)
+                {
+                    if (field.Group == this.contentTypesSettings.OneDriveContentTypeGroup)
+                    {
+                        jw.WriteStartObject();
+                        jw.WritePropertyName("name");
+                        jw.WriteValue(field.Title);
+
+                        jw.WritePropertyName("fieldInternalName");
+                        jw.WriteValue(field.InternalName);
+
+                        jw.WritePropertyName("required");
+                        string isRequired = AddFields.Count > 0 ? AddFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsMandatory : field.Required.ToString();
+                        field.Required = string.IsNullOrWhiteSpace(isRequired) ? false : Convert.ToBoolean(isRequired);
+                        jw.WriteValue(field.Required);
+
+                        jw.WritePropertyName("displayInUI");
+                        string isDisplayInUI = AddFields.Count > 0 ? AddFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsDisplayInUI : "true";
+                        isDisplayInUI = string.IsNullOrWhiteSpace(isDisplayInUI) ? "false" : isDisplayInUI;
+                        jw.WriteValue(isDisplayInUI);
+
+                        jw.WritePropertyName("originalType");
+                        jw.WriteValue(field.TypeAsString);
+                        jw.WritePropertyName("defaultValue");
+                        jw.WriteValue(field.DefaultValue);
+                        jw.WritePropertyName("description");
+                        jw.WriteValue(field.Description);
+
+                        if (field.TypeAsString == "Choice")
+                        {
+                            jw.WritePropertyName("type");
+                            jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldChoice)field).EditFormat));
+                            List<string> options = GetChoiceFieldValues(clientContext, field);
+                            jw.WritePropertyName("values");
+                            jw.WriteStartArray();
+                            int optionCounter = 1;
+
+                            foreach (string option in options)
+                            {
+                                jw.WriteStartObject();
+                                jw.WritePropertyName("choiceId");
+                                jw.WriteValue(optionCounter);
+                                jw.WritePropertyName("choiceValue");
+                                jw.WriteValue(option);
+                                optionCounter++;
+                                jw.WriteEndObject();
+                            }
+                            jw.WriteEndArray();
+                        }
+                        else if (field.TypeAsString == "MultiChoice")
+                        {
+                            jw.WritePropertyName("type");
+                            jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldMultiChoice)field).TypeAsString));
+                            List<string> options = GetChoiceFieldValues(clientContext, field);
+                            jw.WritePropertyName("values");
+                            jw.WriteStartArray();
+                            int optionCounter = 1;
+
+                            foreach (string option in options)
+                            {
+                                jw.WriteStartObject();
+                                jw.WritePropertyName("choiceId");
+                                jw.WriteValue(optionCounter);
+                                jw.WritePropertyName("choiceValue");
+                                jw.WriteValue(option);
+                                optionCounter++;
+                                jw.WriteEndObject();
+                            }
+
+                            jw.WriteEndArray();
+                        }
+                        else
+                        {
+                            jw.WritePropertyName("type");
+                            jw.WriteValue(Convert.ToString(field.TypeAsString));
+                        }
+                        jw.WriteEndObject();
+                    }
+                }
+                jw.WriteEndArray();
+                jw.WriteEndObject();
+                return sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+        /// <summary>
+        /// This method is to get the choice field values of choice data type
+        /// </summary>
+        /// <param name="clientContext"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        private static List<string> GetChoiceFieldValues(ClientContext clientContext, SharePoint.Client.Field fieldName)
+        {
+            List<string> fieldList = new List<string>();
+            try
+            {
+                FieldChoice fieldChoice = clientContext.CastTo<FieldChoice>(fieldName);
+                clientContext.Load(fieldChoice, f => f.Choices);
+                clientContext.ExecuteQuery();
+                foreach (string item in fieldChoice.Choices)
+                {
+                    fieldList.Add(item.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return fieldList;
+        }
     }
 }

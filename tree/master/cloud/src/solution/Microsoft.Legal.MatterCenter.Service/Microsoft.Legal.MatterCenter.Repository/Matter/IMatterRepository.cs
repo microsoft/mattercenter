@@ -78,5 +78,6 @@ namespace Microsoft.Legal.MatterCenter.Repository
         GenericResponseVM SaveConfigurations(ClientContext clientContext, MatterConfigurations matterConfigurations);
 
         bool OneNoteUrlExists(MatterInformationVM matterInformation);
+        string GetMatterProvisionExtraProperties(string contentTypeName, Client client);
     }
 }
