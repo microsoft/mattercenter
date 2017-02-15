@@ -3504,8 +3504,6 @@
                 if (data[additionalMatterPropSettingName] && data[additionalMatterPropSettingName] != "") {
                     cm.configurableSection = true;
                     if (cm.configurableSection) {
-                        cm.createContent.Tab4Header = "Provide more inputs";
-                        cm.createContent.Tab4HeaderTitle = "";
                         cm.matterAdditionalFieldsContentTypeName = "";
                         cm.createContent.TabNumber = 4;
                         if (cm.clientUrl == "") {
