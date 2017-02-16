@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebTest Name="LoginHomePageLocal" Id="0e725a27-ffa7-45d3-bdda-87ba07960024" Owner="" Priority="0" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="" ResultsLocale="">
+  <Items>
+    <Request Method="GET" Guid="4c37f9bc-921f-42ae-9b77-0a8b24926abd" Version="1.1" Url="https://matterwebapp.azurewebsites.net/app/home.html" ThinkTime="0" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Pragma" Value="no-cache" />
+      </Headers>
+    </Request>
+    <Request Method="GET" Guid="1f9e0568-9c61-45f8-8422-d210de531bee" Version="1.1" Url="https://matterwebapp.azurewebsites.net/app/navigation.html" ThinkTime="0" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Request Method="POST" Guid="50c60598-0285-469f-87b1-03af807428b5" Version="1.1" Url="https://matterwebapp.azurewebsites.net/api/v1/user/getuserprofilepicture" ThinkTime="-19" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Origin" Value="https://matterwebapp.azurewebsites.net" />
+        <Header Name="Content-Type" Value="application/json" />
+      </Headers>
+      <StringHttpBody ContentType="application/json" InsertByteOrderMark="False">ewAiAFUAcgBsACIAOgAiAGgAdAB0AHAAcwA6AC8ALwBtAHMAbQBhAHQAdABlAHIALgBzAGgAYQByAGUAcABvAGkAbgB0AC4AYwBvAG0AIgB9AA==</StringHttpBody>
+    </Request>
+    <Request Method="POST" Guid="f14f925c-a720-4ad9-bd68-48ca514bc896" Version="1.1" Url="https://matterwebapp.azurewebsites.net/api/v1/matter/cancreate" ThinkTime="-28" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Origin" Value="https://matterwebapp.azurewebsites.net" />
+        <Header Name="Content-Type" Value="application/json" />
+      </Headers>
+      <StringHttpBody ContentType="application/json" InsertByteOrderMark="False">ewAiAFUAcgBsACIAOgAiAGgAdAB0AHAAcwA6AC8ALwBtAHMAbQBhAHQAdABlAHIALgBzAGgAYQByAGUAcABvAGkAbgB0AC4AYwBvAG0ALwBzAGkAdABlAHMALwBjAGEAdABhAGwAbwBnACIAfQA=</StringHttpBody>
+    </Request>
+    <Request Method="POST" Guid="93f19022-9ca0-4368-9265-29d1869a32bf" Version="1.1" Url="https://matterwebapp.azurewebsites.net/api/v1/shared/help" ThinkTime="-28" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Origin" Value="https://matterwebapp.azurewebsites.net" />
+        <Header Name="Content-Type" Value="application/json" />
+      </Headers>
+      <StringHttpBody ContentType="application/json" InsertByteOrderMark="False">ewAiAEMAbABpAGUAbgB0ACIAOgB7ACIAVQByAGwAIgA6ACIAaAB0AHQAcABzADoALwAvAG0AcwBtAGEAdAB0AGUAcgAuAHMAaABhAHIAZQBwAG8AaQBuAHQALgBjAG8AbQAvAHMAaQB0AGUAcwAvAGMAYQB0AGEAbABvAGcAIgB9ACwAIgBTAGUAbABlAGMAdABlAGQAUABhAGcAZQAiADoAIgAwACIAfQA=</StringHttpBody>
+    </Request>
+    <Request Method="POST" Guid="8deac50d-796a-476a-98e6-d753c5d22bdd" Version="1.1" Url="https://matterwebapp.azurewebsites.net/api/v1/matter/cancreate" ThinkTime="-28" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Origin" Value="https://matterwebapp.azurewebsites.net" />
+        <Header Name="Content-Type" Value="application/json" />
+      </Headers>
+      <StringHttpBody ContentType="application/json" InsertByteOrderMark="False">ewAiAFUAcgBsACIAOgAiAGgAdAB0AHAAcwA6AC8ALwBtAHMAbQBhAHQAdABlAHIALgBzAGgAYQByAGUAcABvAGkAbgB0AC4AYwBvAG0ALwBzAGkAdABlAHMALwBjAGEAdABhAGwAbwBnACIAfQA=</StringHttpBody>
+    </Request>
+    <Request Method="GET" Guid="02f585d7-2d7e-4941-9c2e-62a68da2366b" Version="1.1" Url="https://matterwebapp.azurewebsites.net/fabric-0.6.0/fonts/SegoeUI-Regular-final.woff" ThinkTime="-18" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Pragma" Value="no-cache" />
+        <Header Name="Origin" Value="https://matterwebapp.azurewebsites.net" />
+      </Headers>
+    </Request>
+    <Request Method="GET" Guid="9c47e4cd-8698-4d30-aed0-4ab028887506" Version="1.1" Url="https://matterwebapp.azurewebsites.net/fabric-0.6.0/fonts/SegoeUI-SemiLight-final.woff" ThinkTime="0" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Pragma" Value="no-cache" />
+        <Header Name="Origin" Value="https://matterwebapp.azurewebsites.net" />
+      </Headers>
+    </Request>
+  </Items>
+  <WebTestPlugins>
+    <WebTestPlugin Classname="JWTokenWebTestPlugin.JWTokenWebTestPlugin, AuthWebTestPlugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="JWTokenWebTestPlugin" Description="">
+      <RuleParameters>
+        <RuleParameter Name="ClientId" Value="" />
+        <RuleParameter Name="AppKey" Value="" />
+        <RuleParameter Name="TokenValue" Value="" />
+        <RuleParameter Name="Tenant" Value="" />
+        <RuleParameter Name="AadInstance" Value="" />
+        <RuleParameter Name="ToDoResourceId" Value="" />
+      </RuleParameters>
+    </WebTestPlugin>
+  </WebTestPlugins>
+</WebTest>

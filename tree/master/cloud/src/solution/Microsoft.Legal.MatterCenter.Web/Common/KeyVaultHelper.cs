@@ -5,6 +5,7 @@ using Microsoft.Azure.KeyVault;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.Azure.KeyVault;
 
 namespace Microsoft.Legal.MatterCenter.Web.Common
 {

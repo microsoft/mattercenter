@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebTest Name="LoginHomePage" Id="6e88e9e8-3a90-4dd6-9a08-2447310702f8" Owner="" Priority="0" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="matteradmin@msmatter.onmicrosoft.com" CredentialPassword="KWrsdZuj1Lic4dy4ffbLNg==" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="" ResultsLocale="">
+  <Items>
+    <Request Method="GET" Guid="8c8b0586-2105-4a84-a0d6-838818413e1b" Version="1.1" Url="https://matterwebapp.azurewebsites.net/" ThinkTime="0" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="If-Modified-Since" Value="Fri, 03 Feb 2017 19:42:42 GMT" />
+        <Header Name="If-None-Match" Value="&quot;1d27e55aef87b88&quot;" />
+      </Headers>
+    </Request>
+    <Request Method="GET" Guid="c18f0aa7-6523-4d3c-a689-d2f8b40ff634" Version="1.1" Url="https://login.microsoftonline.com/msmatter.onmicrosoft.com/oauth2/authorize" ThinkTime="4" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <QueryStringParameters>
+        <QueryStringParameter Name="response_type" Value="id_token" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="client_id" Value="b94f07df-c825-431f-b9c5-b9499e8e9ac1" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="redirect_uri" Value="https://matterwebapp.azurewebsites.net/" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="state" Value="214fddbd-713b-4cb6-8997-44131ed31cad" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="nux" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="client-request-id" Value="87a0f8a4-9baa-48f0-b982-26fdcbdbd07b" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="x-client-SKU" Value="Js" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="x-client-Ver" Value="1.0.12" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="nonce" Value="6768b091-38a1-4ee3-a4f5-bf40e557f8bc" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="77fcb16d-3c3e-4fd3-a773-4b1650b59102" Version="1.1" Url="https://login.microsoftonline.com/common/userrealm" ThinkTime="10" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+      </Headers>
+      <QueryStringParameters>
+        <QueryStringParameter Name="user" Value="matteradmin@msmatter.onmicrosoft.com" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="api-version" Value="2.1" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="stsRequest" Value="rQIIAY1QvU_bQBzNxSENUaUikCrGDClFrc653_lsnyN1cAXiQ61QUFnYfOe7JkWOXfuiSnSoxMLaOSyAmDIyUf6EdsmIysaEOrUbS6W66tiF5el9DO_pNetgExvoMwts6LZFwDTxY40lpy5mDmgsAumWwIJAcRVEEvL55tzZ3fHh5Ojn-peDpd_frqcfJ-hp35is6HY6SWSMyj8oEWWZHe2PclXyYmBUYQ-V6VwgNEXoFqFJte35HhckAOzwCDBTysER02WbZkS5rq-5kN-rj7bCkenTv5Dmg311858zttoUmI5jEWMfHIGZFB7mQeBjxsABFTsgo_jcWkyKf_PsdJgMZJ4WqTa2TJNLq-0y7REmfexFTGHGaYwFBYo9V2tNwStzcmWhaQ39qD1uoLnK4sNWZfkBsbqNRrNUlVblroZOZ8p3nmx8uq4mv8KT7YWVce918-tMJ1znz7nby97CMFGUisK84sZ_t7cdhqu9NfJmd7T5cmX1_dZOlr4gXfhcr1_O3vfSPw2" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="checkForMicrosoftAccount" Value="true" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="POST" Guid="c6e7e497-54b1-47ec-bcf7-fd217ebc6da8" Version="1.1" Url="https://login.microsoftonline.com/msmatter.onmicrosoft.com/login" ThinkTime="0" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Content-Type" Value="application/x-www-form-urlencoded" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHttpHeader, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="Token" DisplayName="Extract HTTP Header" Description="Extract the value of an HTTP header and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Header" Value="Location" />
+            <RuleParameter Name="Required" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <FormPostHttpBody>
+        <FormPostParameter Name="login" Value="matteradmin@msmatter.onmicrosoft.com" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="passwd" Value="P@$$word01" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ctx" Value="rQIIAY1QvU_bQBzNxSENUaUikCrGDClFrc653_lsnyN1cAXiQ61QUFnYfOe7JkWOXfuiSnSoxMLaOSyAmDIyUf6EdsmIysaEOrUbS6W66tiF5el9DO_pNetgExvoMwts6LZFwDTxY40lpy5mDmgsAumWwIJAcRVEEvL55tzZ3fHh5Ojn-peDpd_frqcfJ-hp35is6HY6SWSMyj8oEWWZHe2PclXyYmBUYQ-V6VwgNEXoFqFJte35HhckAOzwCDBTysER02WbZkS5rq-5kN-rj7bCkenTv5Dmg311858zttoUmI5jEWMfHIGZFB7mQeBjxsABFTsgo_jcWkyKf_PsdJgMZJ4WqTa2TJNLq-0y7REmfexFTGHGaYwFBYo9V2tNwStzcmWhaQ39qD1uoLnK4sNWZfkBsbqNRrNUlVblroZOZ8p3nmx8uq4mv8KT7YWVce918-tMJ1znz7nby97CMFGUisK84sZ_t7cdhqu9NfJmd7T5cmX1_dZOlr4gXfhcr1_O3vfSPw2" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="flowToken" Value="AQABAAEAAADRNYRQ3dhRSrm-4K-adpCJhsjxHs0EEUc_Slg_p8E208M0GDuMl-0XDmy-bRqTW5c7tFrAYO0OhzaeH9txb1rmMJw-YZehnw7m9McvCQO0WtbBr8xEPdh2YN9M69VsZ-DVdMMVNmBPnyetxiGwZz4Fm5_nvi7G4toTLsxQk_EI58bH_2GonAIRlyuhO3TdOf4V8xJ1ZRGoaFk4zdMOSQV0h0-xgDbqUpaFNIJb-QfuoLtL9qB0RWUmone1m3eGvUJ1Vt7hUrSIdmTuTdulrCIUieEr2IfWzK2uIqkgP1orsg1vAQdy2kMQjO7jSwFAIgstTsLLfEdYZo6GmkZX4C6v2GkV4CSKxQSeyU_J5sQzaU7ycq7aCa0f7oo8tdxHM1-g7PzsthwtLU5blLFFhGLc-AIt56VqQuRedqgQhjPZ7JPeaWqiO1fs56b1BAiNccUgAA" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="canary" Value="AH8+85Qpg1nme22bstL8t7jkRAAEQG0TZuJBDEqOUpo=0:1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="dssoToken" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n1" Value="106239" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n2" Value="106240" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n3" Value="106553" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n4" Value="106553" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n5" Value="106553" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n6" Value="106553" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n7" Value="106553" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n8" Value="NaN" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n9" Value="106553" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n10" Value="106554" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n11" Value="106556" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n12" Value="106573" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n13" Value="106556" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n14" Value="106707" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n15" Value="68" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n16" Value="106776" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n17" Value="106776" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n18" Value="106782" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n19" Value="179.4852056936311" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n20" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n21" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n22" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n23" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n24" Value="35.909785265736446" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n25" Value="2" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n26" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n27" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n28" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n29" Value="-1486422384668" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n30" Value="-1486422384668" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n31" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n32" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n33" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n34" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n35" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n36" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n37" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n38" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n39" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n40" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n41" Value="544.6172741937415" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n42" Value="500.5503923309436" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n43" Value="542.8895469077958" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="type" Value="11" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="LoginOptions" Value="2" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="NewUser" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="idsbho" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="PwdPad" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="sso" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="vv" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="uiver" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i12" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i13" Value="Firefox" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i14" Value="11.0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i15" Value="1600" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i16" Value="783" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i20" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="GET" Guid="145ba87f-5089-4be6-bcd8-a8ebf4c69940" Version="1.1" Url="https://login.microsoftonline.com/common/userrealm" ThinkTime="9" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="X-Requested-With" Value="XMLHttpRequest" />
+      </Headers>
+      <QueryStringParameters>
+        <QueryStringParameter Name="user" Value="matteradmin@msmatter.onmicrosoft.com" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="api-version" Value="2.1" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="stsRequest" Value="rQIIAY2QsWsUQRTGb24v5-UQEhQkZYqNEWX25s3O7s4eBNyQkChKuKCN3czsjDllb9fdOYRYCGnSpo6NBqsrrUz-hNhcKaZLJVbapRGyklIEmx_vfR987_F12-ARD-hdBzzouzJmhkSpwYrTADMfDJaxCmqwONZcx0JBeaM7__Hi_f7k3c_N473bv7-cTd9M0PKOtUXV7_UyYa0uX2spisITu-NS13M1tLryRtr2PiM0Reg7QpOmG0YhlyQG7HMBmGntY8FMfc0wooMgMlyqb825rWRsd-gf5OVwV5__pRw6LgVm0lSmOAJfYqZkiHkcR5gx8EGnPiiRfnIWsurqPS8fZUNV5lVurKfy7MRxA2ZCwlSEQ8E0ZpymWFKgOAyMMRTC2idfHXTuuFcRIs2Go_v_Cpy20I_WrQ6abyxcX2zcuUacfqfTrbfGYuOihY5m6hKXHrw9a2a_kg_bN9cOB4-7pzO9ZJPf48GgeA6jTFMqK_uI2-jFy-0kWR9skCfPxg9X19ZfbT0t8hXSh4N2-2T2f5u_BA2" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+        <QueryStringParameter Name="checkForMicrosoftAccount" Value="true" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="POST" Guid="ba0c3bbd-13a6-4deb-aac9-cf949b528524" Version="1.1" Url="https://login.microsoftonline.com/msmatter.onmicrosoft.com/login" ThinkTime="0" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Content-Type" Value="application/x-www-form-urlencoded" />
+      </Headers>
+      <FormPostHttpBody>
+        <FormPostParameter Name="login" Value="matteradmin@msmatter.onmicrosoft.com" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="passwd" Value="P@$$w0rd01" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ctx" Value="rQIIAY2QsWsUQRTGb24v5-UQEhQkZYqNEWX25s3O7s4eBNyQkChKuKCN3czsjDllb9fdOYRYCGnSpo6NBqsrrUz-hNhcKaZLJVbapRGyklIEmx_vfR987_F12-ARD-hdBzzouzJmhkSpwYrTADMfDJaxCmqwONZcx0JBeaM7__Hi_f7k3c_N473bv7-cTd9M0PKOtUXV7_UyYa0uX2spisITu-NS13M1tLryRtr2PiM0Reg7QpOmG0YhlyQG7HMBmGntY8FMfc0wooMgMlyqb825rWRsd-gf5OVwV5__pRw6LgVm0lSmOAJfYqZkiHkcR5gx8EGnPiiRfnIWsurqPS8fZUNV5lVurKfy7MRxA2ZCwlSEQ8E0ZpymWFKgOAyMMRTC2idfHXTuuFcRIs2Go_v_Cpy20I_WrQ6abyxcX2zcuUacfqfTrbfGYuOihY5m6hKXHrw9a2a_kg_bN9cOB4-7pzO9ZJPf48GgeA6jTFMqK_uI2-jFy-0kWR9skCfPxg9X19ZfbT0t8hXSh4N2-2T2f5u_BA2" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="flowToken" Value="AQABAAEAAADRNYRQ3dhRSrm-4K-adpCJgr_Rh6lHMjKWrWJBcn8-l32OzU29bQyk1LOHJ5Cq5i71D_INygmRqVCKti4_uvGIjCjIJIC2U5iOP1i5jrcHaf4WHIaGqm2wSDUOcvkVley42IZMCNwWAfRrWXL9IvsfDh6fIcnZUUCei1s0t06YY6Ex2Z0_rWFq0KxAAeKumswW-lwbdUtJsaOzyy9OWBAfJUfUQrBpXHpfL2Vf670O1FuG8h0pZA_NCG49DCGJeKaP63UG9JFgubLzvLN70n9DjgyNfjEiUoU-s-oMQ9FdB9FA29m3aoIPZ1_ijMsT9xbv5nbifKUYDNNpkZXAQ0ZSN0XVDkBf20Fap4JMP1qvXBDK9a_l5ysHOY387j6abduBpkCLirr7DD3xKyLcmWcH9gbkg3Kl-LFq8qoL8yHPvbpKnfSKYw4qi_zE_ybCckABSmws-66jS5EapqI3wwvRWUuqnUUUtmLsSoR30FFg7iAA" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="canary" Value="AH8+85Qpg1nme22bstL8t7jkRAAEQG0TZuJBDEqOUpo=4:1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="dssoToken" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n1" Value="110052" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n2" Value="-1486422288000" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n3" Value="-1486422288000" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n4" Value="110053" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n5" Value="110053" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n6" Value="110053" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n7" Value="110053" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n8" Value="NaN" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n9" Value="110053" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n10" Value="110064" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n11" Value="110456" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n12" Value="110460" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n13" Value="110456" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n14" Value="110557" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n15" Value="91" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n16" Value="110648" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n17" Value="110649" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n18" Value="110654" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n19" Value="146.7319439668961" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n20" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n21" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n22" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n23" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n24" Value="67.2671801951135" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n25" Value="2" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n26" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n27" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n28" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n29" Value="-1486422398537" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n30" Value="-1486422398537" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n31" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n32" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n33" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n34" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n35" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n36" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n37" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n38" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n39" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n40" Value="0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n41" Value="606.310395615336" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n42" Value="533.025250477691" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="n43" Value="602.0184473376748" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="type" Value="11" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="LoginOptions" Value="2" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="NewUser" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="idsbho" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="PwdPad" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="sso" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="vv" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="uiver" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i12" Value="1" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i13" Value="Firefox" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i14" Value="11.0" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i15" Value="1600" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i16" Value="783" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="i20" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="POST" Guid="8fa26cb4-8a10-4e06-84a3-78cfe120af45" Version="1.1" Url="https://matterwebapp.azurewebsites.net/api/v1/user/getuserprofilepicture" ThinkTime="-3" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Content-Type" Value="application/json" />
+        <Header Name="Authorization" Value="{{TokenValue}}" />
+      </Headers>
+      <StringHttpBody ContentType="application/json" InsertByteOrderMark="False">ewAiAFUAcgBsACIAOgAiAGgAdAB0AHAAcwA6AC8ALwBtAHMAbQBhAHQAdABlAHIALgBzAGgAYQByAGUAcABvAGkAbgB0AC4AYwBvAG0AIgB9AA==</StringHttpBody>
+    </Request>
+    <Request Method="POST" Guid="2e49ea8d-aa38-4c49-8126-ad8e907c9063" Version="1.1" Url="https://matterwebapp.azurewebsites.net/api/v1/matter/cancreate" ThinkTime="-2" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Content-Type" Value="application/json" />
+        <Header Name="Authorization" Value="{{TokenValue}}" />
+      </Headers>
+      <StringHttpBody ContentType="application/json" InsertByteOrderMark="False">ewAiAFUAcgBsACIAOgAiAGgAdAB0AHAAcwA6AC8ALwBtAHMAbQBhAHQAdABlAHIALgBzAGgAYQByAGUAcABvAGkAbgB0AC4AYwBvAG0ALwBzAGkAdABlAHMALwBjAGEAdABhAGwAbwBnACIAfQA=</StringHttpBody>
+    </Request>
+    <Request Method="POST" Guid="f1b569d1-6500-4941-be63-1bad4a801f48" Version="1.1" Url="https://matterwebapp.azurewebsites.net/api/v1/shared/help" ThinkTime="-1" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Content-Type" Value="application/json" />
+      </Headers>
+      <StringHttpBody ContentType="application/json" InsertByteOrderMark="False">ewAiAEMAbABpAGUAbgB0ACIAOgB7ACIAVQByAGwAIgA6ACIAaAB0AHQAcABzADoALwAvAG0AcwBtAGEAdAB0AGUAcgAuAHMAaABhAHIAZQBwAG8AaQBuAHQALgBjAG8AbQAvAHMAaQB0AGUAcwAvAGMAYQB0AGEAbABvAGcAIgB9ACwAIgBTAGUAbABlAGMAdABlAGQAUABhAGcAZQAiADoAIgAwACIAfQA=</StringHttpBody>
+    </Request>
+    <Request Method="POST" Guid="3ac1e94e-20e4-4efe-ae31-d92e453cb468" Version="1.1" Url="https://matterwebapp.azurewebsites.net/api/v1/matter/cancreate" ThinkTime="0" Timeout="60" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Content-Type" Value="application/json" />
+      </Headers>
+      <StringHttpBody ContentType="application/json" InsertByteOrderMark="False">ewAiAFUAcgBsACIAOgAiAGgAdAB0AHAAcwA6AC8ALwBtAHMAbQBhAHQAdABlAHIALgBzAGgAYQByAGUAcABvAGkAbgB0AC4AYwBvAG0ALwBzAGkAdABlAHMALwBjAGEAdABhAGwAbwBnACIAfQA=</StringHttpBody>
+    </Request>
+  </Items>
+  <ContextParameters>
+    <ContextParameter Name="TokenValue" Value="" />
+  </ContextParameters>
+  <WebTestPlugins>
+    <WebTestPlugin Classname="JWTokenWebTestPlugin.JWTokenWebTestPlugin, AuthWebTestPlugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="JWTokenWebTestPlugin" Description="">
+      <RuleParameters>
+        <RuleParameter Name="ClientId" Value="" />
+        <RuleParameter Name="AppKey" Value="" />
+        <RuleParameter Name="TokenValue" Value="" />
+        <RuleParameter Name="Tenant" Value="" />
+        <RuleParameter Name="AadInstance" Value="" />
+        <RuleParameter Name="ToDoResourceId" Value="" />
+      </RuleParameters>
+    </WebTestPlugin>
+  </WebTestPlugins>
+</WebTest>
