@@ -1564,117 +1564,120 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 ListItem settingsItem = spList.GetData(clientContext,
                     listNames.MatterConfigurationsList, listQuery).FirstOrDefault();
 
-                Newtonsoft.Json.Linq.JObject settingConfig = (Newtonsoft.Json.Linq.JObject)
-                    JsonConvert.DeserializeObject(WebUtility.HtmlDecode(Convert.ToString(
-                        settingsItem.FieldValues["ConfigurationValue"])));
+                IList<MatterExtraFields> addFields = new List<MatterExtraFields>();
 
-                IList<MatterExtraFields> AddFields = new List<MatterExtraFields>();
-
-                if (settingConfig != null && settingConfig.GetValue("AdditionalFieldValues") != null)
+                if (settingsItem != null)
                 {
-                    foreach (var objField in settingConfig.GetValue("AdditionalFieldValues"))
+                    Newtonsoft.Json.Linq.JObject settingConfig = (Newtonsoft.Json.Linq.JObject)
+                        JsonConvert.DeserializeObject(WebUtility.HtmlDecode(Convert.ToString(
+                            settingsItem.FieldValues["ConfigurationValue"])));
+
+                    if (settingConfig != null && settingConfig.GetValue("AdditionalFieldValues") != null)
                     {
-                        AddFields.Add(new MatterExtraFields
+                        foreach (var objField in settingConfig.GetValue("AdditionalFieldValues"))
                         {
-                            FieldName = objField["FieldName"].ToString(),
-                            IsDisplayInUI = String.IsNullOrWhiteSpace(objField["IsDisplayInUI"].ToString()) ? "false"
-                                             : objField["IsDisplayInUI"].ToString(),
-                            IsMandatory = String.IsNullOrWhiteSpace(objField["IsMandatory"].ToString()) ? "false"
-                                             : objField["IsMandatory"].ToString()
-                        });
+                            addFields.Add(new MatterExtraFields
+                            {
+                                FieldName = objField["FieldName"].ToString(),
+                                IsDisplayInUI = String.IsNullOrWhiteSpace(objField["IsDisplayInUI"].ToString()) ? "false"
+                                                 : objField["IsDisplayInUI"].ToString(),
+                                IsMandatory = String.IsNullOrWhiteSpace(objField["IsMandatory"].ToString()) ? "false"
+                                                 : objField["IsMandatory"].ToString()
+                            });
+                        }
                     }
                 }
 
-                //spContentTypes.GetFieldsInContentType(clientContext, contentTypeName);
-                StringBuilder sb = new StringBuilder();
-                JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
-                jw.Formatting = Formatting.Indented;
-                jw.WriteStartObject();
+                    //spContentTypes.GetFieldsInContentType(clientContext, contentTypeName);
+                    StringBuilder sb = new StringBuilder();
+                    JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
+                    jw.Formatting = Formatting.Indented;
+                    jw.WriteStartObject();
 
-                jw.WritePropertyName("Fields");
-                jw.WriteStartArray();
-                foreach (var field in fieldCollection)
-                {
-                    if (field.Group == this.contentTypesSettings.OneDriveContentTypeGroup)
+                    jw.WritePropertyName("Fields");
+                    jw.WriteStartArray();
+                    foreach (var field in fieldCollection)
                     {
-                        jw.WriteStartObject();
-                        jw.WritePropertyName("name");
-                        jw.WriteValue(field.Title);
-
-                        jw.WritePropertyName("fieldInternalName");
-                        jw.WriteValue(field.InternalName);
-
-                        jw.WritePropertyName("required");
-                        string isRequired = AddFields.Count > 0 ? AddFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsMandatory : field.Required.ToString();
-                        field.Required = string.IsNullOrWhiteSpace(isRequired) ? false : Convert.ToBoolean(isRequired);
-                        jw.WriteValue(field.Required);
-
-                        jw.WritePropertyName("displayInUI");
-                        string isDisplayInUI = AddFields.Count > 0 ? AddFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsDisplayInUI : "true";
-                        isDisplayInUI = string.IsNullOrWhiteSpace(isDisplayInUI) ? "false" : isDisplayInUI;
-                        jw.WriteValue(isDisplayInUI);
-
-                        jw.WritePropertyName("originalType");
-                        jw.WriteValue(field.TypeAsString);
-                        jw.WritePropertyName("defaultValue");
-                        jw.WriteValue(field.DefaultValue);
-                        jw.WritePropertyName("description");
-                        jw.WriteValue(field.Description);
-
-                        if (field.TypeAsString == "Choice")
+                        if (field.Group == this.contentTypesSettings.OneDriveContentTypeGroup)
                         {
-                            jw.WritePropertyName("type");
-                            jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldChoice)field).EditFormat));
-                            List<string> options = GetChoiceFieldValues(clientContext, field);
-                            jw.WritePropertyName("values");
-                            jw.WriteStartArray();
-                            int optionCounter = 1;
+                            jw.WriteStartObject();
+                            jw.WritePropertyName("name");
+                            jw.WriteValue(field.Title);
 
-                            foreach (string option in options)
+                            jw.WritePropertyName("fieldInternalName");
+                            jw.WriteValue(field.InternalName);
+
+                            jw.WritePropertyName("required");
+                            string isRequired = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsMandatory : field.Required.ToString();
+                            string required = string.IsNullOrWhiteSpace(isRequired) ? false.ToString() :isRequired.ToLower();
+                            jw.WriteValue(required);
+
+                            jw.WritePropertyName("displayInUI");
+                            string isDisplayInUI = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsDisplayInUI : "true";
+                            isDisplayInUI = string.IsNullOrWhiteSpace(isDisplayInUI) ? "false" : isDisplayInUI;
+                            jw.WriteValue(isDisplayInUI);
+
+                            jw.WritePropertyName("originalType");
+                            jw.WriteValue(field.TypeAsString);
+                            jw.WritePropertyName("defaultValue");
+                            jw.WriteValue(field.DefaultValue);
+                            jw.WritePropertyName("description");
+                            jw.WriteValue(field.Description);
+
+                            if (field.TypeAsString == "Choice")
                             {
-                                jw.WriteStartObject();
-                                jw.WritePropertyName("choiceId");
-                                jw.WriteValue(optionCounter);
-                                jw.WritePropertyName("choiceValue");
-                                jw.WriteValue(option);
-                                optionCounter++;
-                                jw.WriteEndObject();
-                            }
-                            jw.WriteEndArray();
-                        }
-                        else if (field.TypeAsString == "MultiChoice")
-                        {
-                            jw.WritePropertyName("type");
-                            jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldMultiChoice)field).TypeAsString));
-                            List<string> options = GetChoiceFieldValues(clientContext, field);
-                            jw.WritePropertyName("values");
-                            jw.WriteStartArray();
-                            int optionCounter = 1;
+                                jw.WritePropertyName("type");
+                                jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldChoice)field).EditFormat));
+                                List<string> options = GetChoiceFieldValues(clientContext, field);
+                                jw.WritePropertyName("values");
+                                jw.WriteStartArray();
+                                int optionCounter = 1;
 
-                            foreach (string option in options)
+                                foreach (string option in options)
+                                {
+                                    jw.WriteStartObject();
+                                    jw.WritePropertyName("choiceId");
+                                    jw.WriteValue(optionCounter);
+                                    jw.WritePropertyName("choiceValue");
+                                    jw.WriteValue(option);
+                                    optionCounter++;
+                                    jw.WriteEndObject();
+                                }
+                                jw.WriteEndArray();
+                            }
+                            else if (field.TypeAsString == "MultiChoice")
                             {
-                                jw.WriteStartObject();
-                                jw.WritePropertyName("choiceId");
-                                jw.WriteValue(optionCounter);
-                                jw.WritePropertyName("choiceValue");
-                                jw.WriteValue(option);
-                                optionCounter++;
-                                jw.WriteEndObject();
-                            }
+                                jw.WritePropertyName("type");
+                                jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldMultiChoice)field).TypeAsString));
+                                List<string> options = GetChoiceFieldValues(clientContext, field);
+                                jw.WritePropertyName("values");
+                                jw.WriteStartArray();
+                                int optionCounter = 1;
 
-                            jw.WriteEndArray();
+                                foreach (string option in options)
+                                {
+                                    jw.WriteStartObject();
+                                    jw.WritePropertyName("choiceId");
+                                    jw.WriteValue(optionCounter);
+                                    jw.WritePropertyName("choiceValue");
+                                    jw.WriteValue(option);
+                                    optionCounter++;
+                                    jw.WriteEndObject();
+                                }
+
+                                jw.WriteEndArray();
+                            }
+                            else
+                            {
+                                jw.WritePropertyName("type");
+                                jw.WriteValue(Convert.ToString(field.TypeAsString));
+                            }
+                            jw.WriteEndObject();
                         }
-                        else
-                        {
-                            jw.WritePropertyName("type");
-                            jw.WriteValue(Convert.ToString(field.TypeAsString));
-                        }
-                        jw.WriteEndObject();
                     }
-                }
-                jw.WriteEndArray();
-                jw.WriteEndObject();
-                return sb.ToString();
+                    jw.WriteEndArray();
+                    jw.WriteEndObject();
+                    return sb.ToString();             
             }
             catch (Exception ex)
             {

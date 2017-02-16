@@ -635,6 +635,8 @@
                     cm.clientId = "";
                     cm.selectedClientName = undefined;
                     cm.inputs = [];
+                    cm.configurableSection = false;
+                    cm.createContent.TabNumber = 3;
                 }
             }
 
