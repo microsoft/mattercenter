@@ -1,7 +1,7 @@
 ﻿using Microsoft.SharePoint.Client.Taxonomy;
 using System;
 using Microsoft.SharePoint.Client;
-
+using System.Linq;
 
 namespace Microsoft.Legal.MatterCenter.Repository.Extensions
 {
@@ -29,6 +29,20 @@ namespace Microsoft.Legal.MatterCenter.Repository.Extensions
                 return fieldColl;
             }
             return null;
+        }
+
+        /// <summary>
+        /// This method will return the content type for the string content type name passed.
+        /// </summary>
+        /// <param name="cts"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static ContentType GetByName(this ContentTypeCollection cts, string name)
+        {
+            var ctx = cts.Context;
+            ctx.Load(cts);
+            ctx.ExecuteQuery();
+            return Enumerable.FirstOrDefault(cts, ct => ct.Name == name);
         }
 
     }

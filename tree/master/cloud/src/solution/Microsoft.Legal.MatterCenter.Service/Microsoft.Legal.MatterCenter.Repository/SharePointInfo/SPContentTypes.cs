@@ -10,19 +10,10 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Legal.MatterCenter.Repository.Extensions;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
-    public static class ContentTypeExtensions
-    {
-        public static ContentType GetByName(this ContentTypeCollection cts, string name)
-        {
-            var ctx = cts.Context;
-            ctx.Load(cts);
-            ctx.ExecuteQuery();
-            return Enumerable.FirstOrDefault(cts, ct => ct.Name == name);
-        }
-    }
     public class SPContentTypes:ISPContentTypes
     {
 

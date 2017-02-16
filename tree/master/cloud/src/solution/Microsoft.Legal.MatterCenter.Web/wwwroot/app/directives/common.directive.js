@@ -525,7 +525,7 @@
                     var el = angular.element('<span  />');
                     if (scope.input.type.toLowerCase() == 'boolean') {
                         scope.input.required = false;
-                        el.append('<div style="padding-top:6px;float:left;"><span ng-show="' + scope.input.required + '" class="mandatory pull-left">*&nbsp;</span>' +
+                        el.append('<div class="directiveMatterExtraBoolLabel"><span ng-show="' + scope.input.required + '" class="mandatory pull-left">*&nbsp;</span>' +
                            '<span ng-hide="' + scope.input.required + '" class="pull-left">&nbsp;&nbsp;&nbsp;&nbsp;</span>' +
                            '<label class="directiveFormFieldsLableWidth" >{{input.name}}: </label></div>');
                     }
@@ -538,13 +538,13 @@
                     
                     switch (scope.input.type.toLowerCase()) {
                         case 'boolean':
-                            el.append('<div style="padding-left:60px;padding-bottom:13px;padding-top:8px;float:left;"><input id="' + scope.input.fieldInternalName + '"  type="checkbox" ng-model="input.value"/></div>');
+                            el.append('<div class="directiveMatterExtraBoolField"><input id="' + scope.input.fieldInternalName + '"  type="checkbox" ng-model="input.value"/></div>');
                             break;
                         case 'text':
                             if (scope.input.defaultValue != null && scope.input.defaultValue != undefined) {
                                 scope.input.value = scope.input.defaultValue;
                             }
-                            el.append('<div style="padding-right:190px;float:right;"><input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}"  required type="text" ng-model="input.value"/></div>');
+                            el.append('<div class="directiveMatterExtraFields"><input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}"  required type="text" ng-model="input.value"/></div>');
                             break;
                         case 'radiobuttons':
                             if (scope.input.defaultValue != null && scope.input.defaultValue != undefined) {
@@ -566,16 +566,16 @@
                                     radioButtontText += '<input name="radioGroup' + scope.input.values[i].fieldInternalName + '" type="radio"  ng-model="input.value" value="' + scope.input.values[i].choiceValue + '"><label id="">' + scope.input.values[i].choiceValue + ' </label>'
                                 }
                             }
-                            el.append('<div style="padding-right:190px;float:right;">' + radioButtontText + '</div>')
+                            el.append('<div class="directiveMatterExtraFields">' + radioButtontText + '</div>')
                             break;
                         case 'dropdown':
-                            el.append('<div style="padding-right:190px;float:right;"><select id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" required ng-model="input.value" ng-options=" x.choiceValue   for x in  input.values "> <option value="" label="- Select -"></option></select></div>')
+                            el.append('<div class="directiveMatterExtraFields"><select id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" required ng-model="input.value" ng-options=" x.choiceValue   for x in  input.values "> <option value="" label="- Select -"></option></select></div>')
                             break;
                         case 'datetime':
-                            el.append('<div style="padding-right:190px;float:right;"> <input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" required type="text" class="calendar form-control " uib-datepicker-popup="MM/dd/yyyy" data-ng-model="input.value"  is-open="opened" placeholder="mm/dd/yyyy"  data-ng-model="" datepicker-options="dateOptions" ng-required="true" close-text="Close" readonly  ng-click="open1()"  /> </div>')
+                            el.append('<div class="directiveMatterExtraFields"> <input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" required type="text" class="calendar form-control " uib-datepicker-popup="MM/dd/yyyy" data-ng-model="input.value"  is-open="opened" placeholder="mm/dd/yyyy"  data-ng-model="" datepicker-options="dateOptions" ng-required="true" close-text="Close" readonly  ng-click="open1()"  /> </div>')
                             break;
                         case 'multichoice':
-                            el.append('<div style="padding-right:190px;float:right;"><select  id="' + scope.input.fieldInternalName + '" class="multiSelectHeight directiveFormFields" required style="height:100px;" multiple ng-model="input.value" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" ng-options="x.choiceValue for x  in input.values "> <option value="" label="- Select -"></option></select></div>')
+                            el.append('<div class="directiveMatterExtraFields"><select  id="' + scope.input.fieldInternalName + '" class="multiSelectHeight directiveFormFields" required style="height:100px;" multiple ng-model="input.value" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" ng-options="x.choiceValue for x  in input.values "> <option value="" label="- Select -"></option></select></div>')
                             break;
                     }
 
@@ -619,22 +619,18 @@
                          </div>\
                      </div>\
                      <div class="col-xs-12 col-sm-3 pad0 marginTop7">\
-                         <div class="col-xs-12 defaultFontStyle displayInline pad0">\
-                             Make this field display in UI?\
-                         </div>\
-                         <span class="marginRight10"> <input type="radio" ng-model="input.displayInUI" name="ui_' + scope.input.fieldInternalName + '" Value="true" /> Yes</span>\
-                         <span>\
-                             <input type="radio" name="ui_' + scope.input.fieldInternalName + '" Value="false" ng-model="input.displayInUI" /> No\
-                         </span>\
+                         <div class="col-xs-12 defaultFontStyle displayInline pad0">'
+                           + scope.$parent.vm.settingsConfigs.LabelDirectiveDisplayInUI +
+                         '</div>\
+                         <span class="marginRight10"> <input type="radio" ng-model="input.displayInUI" name="ui_' + scope.input.fieldInternalName + '" Value="true" />' + scope.$parent.vm.settingsConfigs.Radio1Option1Text + '</span>\
+                         <span><input type="radio" name="ui_' + scope.input.fieldInternalName + '" Value="false" ng-model="input.displayInUI" />' + scope.$parent.vm.settingsConfigs.Radio1Option2Text + '</span>\
                      </div>\
                      <div class="col-xs-12 col-sm-3 pad0 marginTop7" ng-show="input.displayInUI==\'true\'">\
-                         <div class="col-xs-12 defaultFontStyle displayInline pad0">\
-                             Make this field required?\
-                         </div>\
-                         <span class="marginRight10"> <input type="radio" ng-model="input.required" name="req_' + scope.input.fieldInternalName + '" value="true" /> Yes</span>\
-                         <span>\
-                             <input type="radio" name="req_' + scope.input.fieldInternalName + '" value="false" ng-model="input.required" />No \
-                         </span>\
+                         <div class="col-xs-12 defaultFontStyle displayInline pad0">'
+                         + scope.$parent.vm.settingsConfigs.LabelDirectiveIsRequired +
+                         '</div>\
+                         <span class="marginRight10"> <input type="radio" ng-model="input.required" name="req_' + scope.input.fieldInternalName + '" value="true" />' + scope.$parent.vm.settingsConfigs.Radio1Option1Text + '</span>\
+                         <span><input type="radio" name="req_' + scope.input.fieldInternalName + '" value="false" ng-model="input.required" />' + scope.$parent.vm.settingsConfigs.Radio1Option2Text + '</span>\
                      </div>\
                  </div>'
                 el.append(htmlTxt);
