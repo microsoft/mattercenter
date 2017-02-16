@@ -207,15 +207,18 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     matterMetadata = GetWSSId(clientContext, matterMetadata, fields);
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).DefaultValue = matterMetadata.Client.Id;
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).SetShowInDisplayForm(true);
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).ReadOnlyField = true;
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).Update();
                     if(configuration.GetSection("General")["IsBackwardCompatible"].ToString().ToLower() == "false")
                     {
                         fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).SetShowInDisplayForm(true);
                         fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).DefaultValue = matterMetadata.Client.Name;
+                        fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).ReadOnlyField = true;
                         fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).Update();
                     }
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).DefaultValue = matterMetadata.Matter.Id;
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).SetShowInDisplayForm(true);
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).ReadOnlyField = true;
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).Update();
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).DefaultValue = matterMetadata.Matter.Name;
                     fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).ReadOnlyField = true;

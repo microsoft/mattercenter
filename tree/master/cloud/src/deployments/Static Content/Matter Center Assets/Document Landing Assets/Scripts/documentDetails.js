@@ -659,6 +659,12 @@ function getAllFieldsInContentType(contentTypeName,oData){
 	                	}
 	                	prpValue = oCommonFunctions.getDate(prpValue);
 					}
+					if (oField.get_typeAsString() == 'MultiChoice') {
+					    if (prpValue.split(";#").length > 0) {
+					        prpValue = prpValue + "-";
+					        prpValue = prpValue.replace(";#", "").replace(";#-", "").replace(/;#/g, ", ");
+					    }
+					}
 					if(prpValue != undefined)
 					{
 	    				var list1 = "<li><span class='propertyName ellipsis' style='width:210px;' title='" + oField.get_title() + "' id='Section3Column1'>" + oField.get_title() + ':</span>';
