@@ -11,6 +11,6 @@ namespace Microsoft.Legal.MatterCenter.Models
         public string RequestedUrl { get; set; }
         public IList<IList<string>> UsersNamesToRemove { get; set; }
         public bool IsFullControlPresent { get; set; }
-        public int MethodNumber { get; set; }
+        public string MatterAssociatedInfo { get; set; }
     }
 }

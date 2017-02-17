@@ -568,7 +568,20 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
             return genericResponse;
         }
 
-
+        public GenericResponseVM DeleteUserFromMatter(MatterInformationVM matterInformation)
+        {
+           
+            GenericResponseVM genericResponse = null;
+            try
+            {
+                genericResponse = matterRepositoy.DeleteUserFromMatter(matterInformation);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return genericResponse;
+        }
 
 
         public GenericResponseVM UpdateMatterMetadata(MatterMetdataVM matterMetadata)

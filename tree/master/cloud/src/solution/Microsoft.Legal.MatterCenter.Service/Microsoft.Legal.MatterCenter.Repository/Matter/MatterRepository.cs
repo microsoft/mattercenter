@@ -28,7 +28,7 @@ using Microsoft.SharePoint.Client.WebParts;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
-    public class MatterRepository:IMatterRepository
+    public class MatterRepository : IMatterRepository
     {
         private ISearch search;
         private ISPList spList;
@@ -44,25 +44,25 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private IExternalSharing extrnalSharing;
         private IUserRepository userRepositoy;
         private GeneralSettings generalSettings;
-        
+
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
         /// </summary>
         /// <param name="search"></param>
-        public MatterRepository(ISearch search, 
-            IOptions<MatterSettings> matterSettings, 
-            IOptions<SearchSettings> searchSettings, 
-            IOptions<ListNames> listNames, 
-            ISPOAuthorization spoAuthorization, 
+        public MatterRepository(ISearch search,
+            IOptions<MatterSettings> matterSettings,
+            IOptions<SearchSettings> searchSettings,
+            IOptions<ListNames> listNames,
+            ISPOAuthorization spoAuthorization,
             ISPContentTypes spContentTypes,
-            IExternalSharing extrnalSharing, 
+            IExternalSharing extrnalSharing,
             IUserRepository userRepositoy,
-            ISPList spList, 
+            ISPList spList,
             IOptions<CamlQueries> camlQueries,
             IOptions<GeneralSettings> generalSettings,
-            IUsersDetails userdetails, 
+            IUsersDetails userdetails,
             IOptions<ErrorSettings> errorSettings,
-            
+
             ISPPage spPage)
         {
             this.search = search;
@@ -130,10 +130,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 }
                 if (genericResponse == null)
                 {
-                    clientContext.ExecuteQuery();                    
+                    clientContext.ExecuteQuery();
                 }
 
-                listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery, 
+                listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery,
                     searchSettings.ManagedPropertyTitle, searchSettings.MatterConfigurationTitleValue);
                 ListItem settingsItem = spList.GetData(clientContext, listNames.MatterConfigurationsList, listQuery).FirstOrDefault();
                 if (null != settingsItem)
@@ -164,6 +164,77 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return spList.CheckPermissionOnList(client, matterSettings.SendMailListName, PermissionKind.EditListItems);
         }
 
+
+
+        public GenericResponseVM DeleteUserFromMatter(MatterInformationVM matterInformation)
+        {
+            var matter = matterInformation.Matter;
+            var matterDetails = matterInformation.MatterDetails;
+            var client = matterInformation.Client;
+
+            int listItemId = -1;
+            string loggedInUserName = "";
+            bool isEditMode = matterInformation.EditMode;
+            ClientContext clientContext = null;
+            IEnumerable<RoleAssignment> userPermissionOnLibrary = null;
+            GenericResponseVM genericResponse = null;
+            try
+            {
+                clientContext = spoAuthorization.GetClientContext(matterInformation.Client.Url);
+                PropertyValues matterStampedProperties = GetStampedProperties(clientContext, matter.Name);
+                loggedInUserName = userRepositoy.GetLoggedInUserDetails(clientContext).Name;
+                // Get matter library current permissions
+                userPermissionOnLibrary = FetchUserPermissionForLibrary(clientContext, matter.Name);
+                string originalMatterName = GetMatterName(clientContext, matter.Name);
+                string matterAssosicatedListName ="";
+                List<string> usersToRemove = new List<string>();
+                foreach (IList<string> removedUsers in matterInformation.UsersNamesToRemove)
+                {
+                    foreach (var removedUser in removedUsers)
+                    {
+                        usersToRemove.Add(removedUser);
+                    }
+                }
+                if (matterInformation.MatterAssociatedInfo == string.Empty)
+                {
+                    RemoveSpecificUsers(clientContext, usersToRemove, loggedInUserName, false, matter.Name, -1);
+                }
+                else
+                {
+
+
+                    if (matterInformation.MatterAssociatedInfo == UpdateMatterOperation.MatterPage.ToString())
+                    {
+                        listItemId = RetrieveItemId(clientContext, matterSettings.MatterLandingPageRepositoryName, originalMatterName);
+                        if (listItemId <= 0)
+                        {
+                            RemoveSpecificUsers(clientContext, usersToRemove, loggedInUserName, true, matterSettings.MatterLandingPageRepositoryName, listItemId);
+                        }
+                    }
+                    else if (matterInformation.MatterAssociatedInfo == UpdateMatterOperation.StampedProperties.ToString())
+                    {
+                        isEditMode = false;
+                        UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode, usersToRemove);
+                    }
+                    else
+                    {
+
+                        RemoveSpecificUsers(clientContext, usersToRemove, loggedInUserName, false, matter.Name + matterInformation.MatterAssociatedInfo, -1);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
+        }
+
+
+
+
+
         public GenericResponseVM UpdateMatter(MatterInformationVM matterInformation)
         {
             var matter = matterInformation.Matter;
@@ -180,13 +251,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 clientContext = spoAuthorization.GetClientContext(matterInformation.Client.Url);
 
                 loggedInUserName = userRepositoy.GetLoggedInUserDetails(clientContext).Name;
-
-
                 // Get matter library current permissions
                 userPermissionOnLibrary = FetchUserPermissionForLibrary(clientContext, matter.Name);
                 string originalMatterName = GetMatterName(clientContext, matter.Name);
                 listItemId = RetrieveItemId(clientContext, matterSettings.MatterLandingPageRepositoryName, originalMatterName);
-                List<string> usersToRemove = new List<string>();               
+                List<string> usersToRemove = new List<string>();
                 List<string> exsistingUsers = RetrieveMatterUsers(userPermissionOnLibrary);
                 foreach (IList<string> removedUsers in matterInformation.UsersNamesToRemove)
                 {
@@ -196,88 +265,75 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                 }
 
-
-
                 bool hasFullPermission = CheckFullPermissionInAssignList(matter.AssignUserNames, matter.Permissions, loggedInUserName);
                 List<string> listExists = new List<string>();
                 bool result = false;
-                List<int> listNumbers = new List<int>();
-                if (matterInformation.MethodNumber == -1)
+                List<string> listNumbers = new List<string>();
+                if (matterInformation.MatterAssociatedInfo == string.Empty)
                 {
                     listExists = MatterAssociatedLists(clientContext, matter.Name);
 
                     AssignRemoveFullControl(clientContext, matter, loggedInUserName, listItemId, listExists, true, hasFullPermission);
                     if (listExists.Contains(matter.Name))
                     {
-                        listNumbers.Add(0);
+                        listNumbers.Add(UpdateMatterOperation.MatterLibrary.ToString());
                     }
                     if (listExists.Contains(matter.Name + matterSettings.OneNoteLibrarySuffix))
                     {
-                        listNumbers.Add(1);
+                        listNumbers.Add(matterSettings.OneNoteLibrarySuffix);
                     }
                     if (listExists.Contains(matter.Name + matterSettings.CalendarNameSuffix))
                     {
-                        listNumbers.Add(2);
+                        listNumbers.Add(matterSettings.CalendarNameSuffix);
                     }
                     if (listExists.Contains(matter.Name + matterSettings.TaskNameSuffix))
                     {
-                        listNumbers.Add(3);
+                        listNumbers.Add(matterSettings.TaskNameSuffix);
                     }
                     if (0 <= listItemId)
                     {
-                        listNumbers.Add(4);
+                        listNumbers.Add(UpdateMatterOperation.MatterPage.ToString());
                     }
-                    listNumbers.Add(5);
                     result = true;
                 }
 
-                if (matterInformation.MethodNumber == 0)
-                {
-                    
-                    //updating the users and their permissions to the matter.
-                        result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name, -1, isEditMode);
-                    
-                }
-                if (matterInformation.MethodNumber == 1)
-                {    //updating the users and their permissions to the matter onenotelibrary.
-                        result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + matterSettings.OneNoteLibrarySuffix, -1, isEditMode);                  
-                }
 
-                if (matterInformation.MethodNumber == 2)
+                if (matterInformation.MatterAssociatedInfo.ToLower() == UpdateMatterOperation.MatterLibrary.ToString().ToLower())
                 {
-                    //updating the users and their permissions to the matter calender list.
-                    result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + matterSettings.CalendarNameSuffix, -1, isEditMode);
-                    
+                    //updating the users and their permissions to the matter.
+                    result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name, -1, isEditMode);
+
                 }
-                if (matterInformation.MethodNumber == 3)
+                else
                 {
-                    //updating the users and their permissions to the matter Task list.
-                    result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + matterSettings.TaskNameSuffix, -1, isEditMode);
-                  
-                }
-                if (matterInformation.MethodNumber == 4)
-                {
-                    //updating the users and their permissions to the matter specified list item.
-                    if (0 <= listItemId)
+                    if (matterInformation.MatterAssociatedInfo.ToLower() == UpdateMatterOperation.MatterPage.ToString().ToLower())
                     {
-                        result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, true, matterSettings.MatterLandingPageRepositoryName, listItemId, isEditMode);
-                        result = result?false:true;
+                        //updating the users and their permissions to the matter specified list item.
+                        if (0 <= listItemId)
+                        {
+                            result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, true, matterSettings.MatterLandingPageRepositoryName, listItemId, isEditMode);
+                            result = result ? false : true;
+                        }
                     }
-                }
-                if (matterInformation.MethodNumber == 5)
-                {
-                    // Update matter metadata
-                    isEditMode = false;
-                    PropertyValues matterStampedProperties = GetStampedProperties(clientContext, matter.Name);
-                    result = UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode, usersToRemove);
+                    else if (matterInformation.MatterAssociatedInfo.ToLower() == UpdateMatterOperation.StampedProperties.ToString().ToLower())
+                    {
+                        // Update matter metadata
+                        isEditMode = false;
+                        PropertyValues matterStampedProperties = GetStampedProperties(clientContext, matter.Name);
+                        result = UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode, usersToRemove);
+                    }
+                    else
+                    {
+                        result = UpdatePermission(clientContext, matter, usersToRemove, loggedInUserName, false, matter.Name + matterInformation.MatterAssociatedInfo, -1, isEditMode);
+                    }
                 }
                 if (result)
                 {
-                    if (matterInformation.MethodNumber != 5)
+                    if (matterInformation.MatterAssociatedInfo != UpdateMatterOperation.StampedProperties.ToString())
                     {
                         matterInformation.Matter = null;
                     }
-                    if (matterInformation.MethodNumber == -1)
+                    if (matterInformation.MatterAssociatedInfo == string.Empty)
                     {
                         genericResponse = new GenericResponseVM()
                         {
@@ -303,7 +359,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             return ServiceUtility.GenericResponse("9999999", "Error in updating matter information");
         }
-        
+
         /// <summary>
         /// Gets the display name of users having permission on library.
         /// </summary>
@@ -520,7 +576,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         Value = true.ToString()
                     };
                 };
-            }     
+            }
             catch (Exception exception)
             {
                 //result = Logger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, ServiceConstantStrings.LogTableName);
@@ -578,7 +634,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
         public int CreateWebPartPage(ClientContext clientContext, string pageName, string layout, string masterpagelistName, string listName, string pageTitle)
         {
-            return spPage.CreateWebPartPage(clientContext, pageName, layout, masterpagelistName, listName, pageTitle); 
+            return spPage.CreateWebPartPage(clientContext, pageName, layout, masterpagelistName, listName, pageTitle);
         }
 
         public bool SaveMatter(Client client, Matter matter, string matterListName, MatterConfigurations matterConfigurations, string matterSiteURL)
@@ -689,7 +745,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
             return returnFlag;
         }
-    
+
 
 
         public IList<string> RoleCheck(string url, string listName, string columnName)
@@ -698,7 +754,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 listNames.DMSRoleListName,
                 camlQueries.DMSRoleQuery);
             IList<string> roles = new List<string>();
-            roles = collListItem.AsEnumerable().Select(roleList => Convert.ToString(roleList[matterSettings.RoleListColumnRoleName], 
+            roles = collListItem.AsEnumerable().Select(roleList => Convert.ToString(roleList[matterSettings.RoleListColumnRoleName],
                 CultureInfo.InvariantCulture)).ToList();
             //if (matter.Roles.Except(roles).Count() > 0)
             //{
@@ -707,7 +763,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return roles;
         }
 
-        public GenericResponseVM  DeleteMatter(Client client, Matter matter)
+        public GenericResponseVM DeleteMatter(Client client, Matter matter)
         {
             GenericResponseVM genericResponse = null;
             using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
@@ -732,16 +788,16 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         genericResponse = ServiceUtility.GenericResponse(matterSettings.DeleteMatterCode, matterSettings.MatterNotPresent);
                     }
                     Uri clientUri = new Uri(client.Url);
-                    string matterLandingPageUrl = string.Concat(clientUri.AbsolutePath, ServiceConstants.FORWARD_SLASH, 
-                        matterSettings.MatterLandingPageRepositoryName.Replace(ServiceConstants.SPACE, string.Empty), 
+                    string matterLandingPageUrl = string.Concat(clientUri.AbsolutePath, ServiceConstants.FORWARD_SLASH,
+                        matterSettings.MatterLandingPageRepositoryName.Replace(ServiceConstants.SPACE, string.Empty),
                         ServiceConstants.FORWARD_SLASH, matter.MatterGuid, ServiceConstants.ASPX_EXTENSION);
                     spPage.Delete(clientContext, matterLandingPageUrl);
                     return ServiceUtility.GenericResponse("", "Matter deleted successfully");
                 }
                 else
-                {               
+                {
                     return ServiceUtility.GenericResponse(errorSettings.MatterLibraryExistsCode,
-                         errorSettings.ErrorDuplicateMatter + ServiceConstants.MATTER + ServiceConstants.DOLLAR + 
+                         errorSettings.ErrorDuplicateMatter + ServiceConstants.MATTER + ServiceConstants.DOLLAR +
                          MatterPrerequisiteCheck.LibraryExists);
                 }
             }
@@ -756,7 +812,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public async Task<bool> PinRecordAsync<T>(T pinRequestData)
         {
             PinRequestMatterVM pinRequestMatterVM = (PinRequestMatterVM)Convert.ChangeType(pinRequestData, typeof(PinRequestMatterVM));
-            var matterData = pinRequestMatterVM.MatterData;            
+            var matterData = pinRequestMatterVM.MatterData;
             matterData.MatterName = ServiceUtility.EncodeValues(matterData.MatterName);
             matterData.MatterDescription = ServiceUtility.EncodeValues(matterData.MatterDescription);
             matterData.MatterCreatedDate = ServiceUtility.EncodeValues(matterData.MatterCreatedDate);
@@ -799,11 +855,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return await Task.FromResult(spList.GetFolderHierarchy(matterData));
         }
 
-        
 
-        
 
-        
+
+
+
 
         public string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle)
         {
@@ -832,7 +888,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             return spList.GetListProperties(clientContext, libraryname);
         }
 
-        
+
 
         public IEnumerable<RoleAssignment> FetchUserPermissionForLibrary(ClientContext clientContext, string libraryname)
         {
@@ -842,7 +898,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         public string GetMatterName(ClientContext clientContext, string matterName)
         {
             PropertyValues propertyValues = spList.GetListProperties(clientContext, matterName);
-            return propertyValues.FieldValues.ContainsKey(matterSettings.StampedPropertyMatterGUID) ? 
+            return propertyValues.FieldValues.ContainsKey(matterSettings.StampedPropertyMatterGUID) ?
                 WebUtility.HtmlDecode(Convert.ToString(propertyValues.FieldValues[matterSettings.StampedPropertyMatterGUID], CultureInfo.InvariantCulture)) : matterName;
         }
 
@@ -850,9 +906,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             int listItemId = -1;
             ListItemCollection listItemCollection = spList.GetData(clientContext, libraryName);
-            clientContext.Load(listItemCollection, listItemCollectionProperties => 
+            clientContext.Load(listItemCollection, listItemCollectionProperties =>
                                 listItemCollectionProperties.Include(
-                                    listItemProperties => listItemProperties.Id, 
+                                    listItemProperties => listItemProperties.Id,
                                     listItemProperties => listItemProperties.DisplayName));
             clientContext.ExecuteQuery();
 
@@ -860,7 +916,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
             if (null != listItem)
             {
-                listItemId =  listItem.Id;
+                listItemId = listItem.Id;
             }
             return listItemId;
         }
@@ -912,7 +968,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="matterLandingPageId">List item id</param>
         /// <param name="isEditMode">Add/ Edit mode</param>
         /// <returns></returns>
-        public bool UpdatePermission(ClientContext clientContext, Matter matter, List<string> users, 
+        public bool UpdatePermission(ClientContext clientContext, Matter matter, List<string> users,
             string loggedInUserTitle, bool isListItem, string listName, int matterLandingPageId, bool isEditMode)
         {
             bool result = false;
@@ -927,11 +983,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     // Add permission
                     if (!isListItem)
                     {
-                        result = spList.SetPermission(clientContext, matter.AssignUserNames, matter.Permissions, listName);
+                        result = spList.SetPermission(clientContext, matter.AssignUserEmails, matter.Permissions, listName);
                     }
                     else
                     {
-                        result = spList.SetItemPermission(clientContext, matter.AssignUserNames, matterSettings.MatterLandingPageRepositoryName, 
+                        result = spList.SetItemPermission(clientContext, matter.AssignUserEmails, matterSettings.MatterLandingPageRepositoryName,
                             matterLandingPageId, matter.Permissions);
                     }
                 }
@@ -953,7 +1009,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="isListItem">ListItem or list</param>
         /// <param name="list">List object</param>
         /// <param name="matterLandingPageId">List item id</param>
-        private void RemoveSpecificUsers(ClientContext clientContext, List<string> usersToRemove, string loggedInUserTitle, 
+        private void RemoveSpecificUsers(ClientContext clientContext, List<string> usersToRemove, string loggedInUserTitle,
             bool isListItem, string listName, int matterLandingPageId)
         {
             try
@@ -972,10 +1028,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         if (0 <= matterLandingPageId)
                         {
                             listItem = list.GetItemById(matterLandingPageId);
-                            clientContext.Load(listItem, listItemProperties => 
-                            listItemProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member, 
-                            roleAssignmentProperties => roleAssignmentProperties.Member.Title, 
-                            roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, 
+                            clientContext.Load(listItem, listItemProperties =>
+                            listItemProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member,
+                            roleAssignmentProperties => roleAssignmentProperties.Member.Title,
+                            roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name,
                                                                                                                 roleDef => roleDef.BasePermissions)));
                             clientContext.ExecuteQuery();
                             roleCollection = listItem.RoleAssignments;
@@ -983,10 +1039,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                     else
                     {
-                        clientContext.Load(list, listProperties => 
-                        listProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member, 
-                        roleAssignmentProperties => roleAssignmentProperties.Member.Title, 
-                        roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, 
+                        clientContext.Load(list, listProperties =>
+                        listProperties.RoleAssignments.Include(roleAssignmentProperties => roleAssignmentProperties.Member,
+                        roleAssignmentProperties => roleAssignmentProperties.Member.Title,
+                        roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name,
                                                                                                             roleDef => roleDef.BasePermissions)));
                         clientContext.ExecuteQuery();
                         roleCollection = list.RoleAssignments;
@@ -1003,7 +1059,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 {
                                     // Removing permission for all the user except current user with full control
                                     // Add those users in list, then traverse the list and removing all users from that list
-                                    if (role.Member.Title == user && !((role.Member.Title == loggedInUserTitle) && (roleDef.Name == 
+                                    Principal principal = role.Member;
+                                    User currentListUser = (User)principal;
+                                    if (currentListUser.Email.ToLower() == user.ToLower() && !((role.Member.Title == loggedInUserTitle) && (roleDef.Name ==
                                         matterSettings.EditMatterAllowedPermissionLevel)))
                                     {
                                         roleDefinationList.Add(roleDef);
@@ -1027,12 +1085,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
         }
 
-        
 
-        public bool UpdateMatterStampedProperties(ClientContext clientContext, MatterDetails matterDetails, 
+
+        public bool UpdateMatterStampedProperties(ClientContext clientContext, MatterDetails matterDetails,
             Matter matter, PropertyValues matterStampedProperties, bool isEditMode, List<string> usersToRemove)
         {
-            
+
             try
             {
                 if (null != clientContext && null != matter && null != matterDetails && (0 < matterStampedProperties.FieldValues.Count))
@@ -1043,7 +1101,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     string stampedUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterUsers);
                     var stampedUserList = stampedUsers.Replace("$|$", "$").Split('$').ToList();
                     string stampedUserEmails = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterUserEmails);
-                    var stampedUserEmailsList= stampedUserEmails.Replace("$|$", "$").Split('$').ToList();
+                    var stampedUserEmailsList = stampedUserEmails.Replace("$|$", "$").Split('$').ToList();
                     string stampedPermissions = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterPermissions);
                     var stampedPermissionsList = stampedPermissions.Replace("$|$", "$").Split('$').ToList();
                     string stampedRoles = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyMatterCenterRoles);
@@ -1051,25 +1109,25 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
                     string stampedTeamMembers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyTeamMembers);
                     var stampedTeamMembersList = stampedTeamMembers.Replace(";", "$").Split('$').ToList();
-                    stampedTeamMembersList= stampedTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    stampedTeamMembersList = stampedTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                     string stampedBlockedUploadUsers = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyBlockedUploadUsers);
 
 
 
                     List<int> itemsToRemoveStampedUserProp = new List<int>();
-                    foreach (IList<string> userNames in matter.AssignUserNames)
+                    foreach (IList<string> userNames in matter.AssignUserEmails)
                     {
                         IList<string> userNamesListTemp = userNames.Where(user => !string.IsNullOrWhiteSpace(user)).ToList();
                         foreach (var userTem in userNamesListTemp)
                         {
                             arrRoles.Add(matter.Roles[index]);
                             arrPermissions.Add(matter.Permissions[index]);
-                            if (stampedUserList.Contains(userTem))
+                            if (stampedUserEmailsList.Contains(userTem))
                             {
-                                itemsToRemoveStampedUserProp.Add(stampedUserList.IndexOf(userTem));
+                                itemsToRemoveStampedUserProp.Add(stampedUserEmailsList.IndexOf(userTem));
                             }
                         }
-                        
+
                         index++;
                     }
 
@@ -1081,9 +1139,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     // Get existing stamped properties
                     foreach (var userNameToRemove in usersToRemove)
                     {
-                        if (stampedUserList.Contains(userNameToRemove))
+                        if (stampedUserEmailsList.Contains(userNameToRemove))
                         {
-                            itemsToRemoveStampedUserProp.Add(stampedUserList.IndexOf(userNameToRemove));
+                            itemsToRemoveStampedUserProp.Add(stampedUserEmailsList.IndexOf(userNameToRemove));
                         }
 
                     }
@@ -1099,8 +1157,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             stampedTeamMembersList[itemsToRemoveStampedUserProp[i]] = string.Empty;
                         }
                     }
-                   
-                    
+
+
                     stampedUserList = stampedUserList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                     stampedUsers = string.Join("$|$", stampedUserList);
                     stampedUserEmailsList = stampedUserEmailsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
@@ -1113,24 +1171,24 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     stampedTeamMembers = string.Join(";", stampedTeamMembersList);
 
                     string stampedResponsibleAttorneys = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyResponsibleAttorney);
-                       var stampedResponsibleAttorneysList = stampedResponsibleAttorneys.Split(';').ToList();
+                    var stampedResponsibleAttorneysList = stampedResponsibleAttorneys.Split(';').ToList();
                     stampedResponsibleAttorneysList = stampedResponsibleAttorneysList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                     string stampedResponsibleAttorneysEmail = GetStampPropertyValue(matterStampedProperties.FieldValues, matterSettings.StampedPropertyResponsibleAttorneyEmail);
-                     var stampedResponsibleAttorneysEmailList = stampedResponsibleAttorneysEmail.Split(';').ToList();
+                    var stampedResponsibleAttorneysEmailList = stampedResponsibleAttorneysEmail.Split(';').ToList();
                     stampedResponsibleAttorneysEmailList = stampedResponsibleAttorneysEmailList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
                     string currentPermissions = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Permissions.Where(user => !string.IsNullOrWhiteSpace(user)));
                     string currentRoles = string.Join(ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR, matter.Roles.Where(user => !string.IsNullOrWhiteSpace(user)));
                     string currentBlockedUploadUsers = string.Join(ServiceConstants.SEMICOLON, matterDetails.UploadBlockedUsers.Where(user => !string.IsNullOrWhiteSpace(user)));
                     string currentUsers = GetMatterAssignedUsers(matter);
-                    currentUsers= currentUsers.Replace(";", "$|$").ToString();
+                    currentUsers = currentUsers.Replace(";", "$|$").ToString();
                     string currentUserEmails = spList.GetMatterAssignedUsersEmail(clientContext, matter);
                     currentUserEmails = currentUserEmails.Replace(";", "$|$").ToString();
 
                     string currentResponsibleAttorneys = matterDetails.ResponsibleAttorney;
-                    var currentResponsibleAttorneysList= currentResponsibleAttorneys.Split(';').ToList();
+                    var currentResponsibleAttorneysList = currentResponsibleAttorneys.Split(';').ToList();
 
-                    string currentResponsibleAttorneysEmail= matterDetails.ResponsibleAttorneyEmail;
+                    string currentResponsibleAttorneysEmail = matterDetails.ResponsibleAttorneyEmail;
                     var currentResponsibleAttorneysEmailList = currentResponsibleAttorneysEmail.Split(';').ToList();
 
                     List<int> itemsToRemoveStampedResponsibleAttroneyProp = new List<int>();
@@ -1146,9 +1204,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                     foreach (var userNameToRemove in usersToRemove)
                     {
-                        if (stampedResponsibleAttorneysList.Contains(userNameToRemove))
+                        if (stampedResponsibleAttorneysEmailList.Contains(userNameToRemove))
                         {
-                            itemsToRemoveStampedResponsibleAttroneyProp.Add(stampedResponsibleAttorneysList.IndexOf(userNameToRemove));
+                            itemsToRemoveStampedResponsibleAttroneyProp.Add(stampedResponsibleAttorneysEmailList.IndexOf(userNameToRemove));
                         }
 
                     }
@@ -1157,7 +1215,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     {
                         for (int i = 0; i < itemsToRemoveStampedResponsibleAttroneyProp.Count; i++)
                         {
-                            stampedResponsibleAttorneysList[itemsToRemoveStampedResponsibleAttroneyProp[i]]= string.Empty;
+                            stampedResponsibleAttorneysList[itemsToRemoveStampedResponsibleAttroneyProp[i]] = string.Empty;
                             stampedResponsibleAttorneysEmailList[itemsToRemoveStampedResponsibleAttroneyProp[i]] = string.Empty;
                         }
                     }
@@ -1181,6 +1239,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     string finalResponsibleAttorneysEmail = string.IsNullOrWhiteSpace(stampedResponsibleAttorneysEmail) || isEditMode ? matterDetails.ResponsibleAttorneyEmail : string.Concat(stampedResponsibleAttorneysEmail, ServiceConstants.SEMICOLON, matterDetails.ResponsibleAttorneyEmail);
                     var finalMatterUsers = finalMatterCenterUsers.Replace("$|$", ";").ToString();
                     var finalMatterUsersList = finalMatterUsers.Replace(";", "$").Split('$').ToList();
+                    finalMatterUsersList = finalMatterUsersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+
 
                     var finalTeamMembersList = finalTeamMembers.Replace(";", "$").Split('$').ToList();
                     finalTeamMembersList = finalTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
@@ -1189,8 +1249,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     var finalMatterRolesList = finalMatterRoles.Replace("$|$", "$").Split('$').ToList();
 
                     var finalMatterCenterUserEmailsString = finalMatterCenterUserEmails.Replace("$|$", ";");
-                    var finalMatterCenterUserEmailsList= finalMatterCenterUserEmailsString.Replace(";", "$").Split('$').ToList();
-                    finalMatterCenterUserEmailsList= finalMatterCenterUserEmailsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    var finalMatterCenterUserEmailsList = finalMatterCenterUserEmailsString.Replace(";", "$").Split('$').ToList();
+                    finalMatterCenterUserEmailsList = finalMatterCenterUserEmailsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
                     var finalResponsibleAttorneysEmailListString = finalResponsibleAttorneysEmail.Replace("$|$", ";");
                     var finalResponsibleAttorneysEmailList = finalResponsibleAttorneysEmailListString.Replace(";", "$").Split('$').ToList();
@@ -1200,14 +1260,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     var finalResponsibleAttorneysUsersList = finalResponsibleAttorneysUsersListString.Split('$').ToList();
                     finalResponsibleAttorneysUsersList = finalResponsibleAttorneysUsersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
 
-                    
+
                     #region Remove all the external users from the request object so that only internal users are added to the matter
                     //Once the external users accepted the invitation, those external users will be added to the matter by azure web app job
                     List<int> itemsToRemove = new List<int>();
 
-                    for(int i=0; i< finalMatterUsersList.Count; i++)
+                    for (int i = 0; i < finalMatterUsersList.Count; i++)
                     {
-                        if(userdetails.CheckUserPresentInMatterCenter(clientContext, finalMatterUsersList[i]) ==false)
+                        if (userdetails.CheckUserPresentInMatterCenter(clientContext, finalMatterUsersList[i]) == false)
                         {
                             itemsToRemove.Add(i);
                         }
@@ -1227,7 +1287,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 finalResponsibleAttorneysEmailList[itemsToRemove[i]] = string.Empty;
                                 finalResponsibleAttorneysUsersList[itemsToRemove[i]] = string.Empty;
                             }
-                                
+
                         }
                         finalMatterUsersList = finalMatterUsersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                         finalTeamMembersList = finalTeamMembersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
@@ -1235,7 +1295,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         finalMatterRolesList = finalMatterRolesList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                         finalResponsibleAttorneysEmailList = finalResponsibleAttorneysEmailList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                         finalResponsibleAttorneysUsersList = finalResponsibleAttorneysUsersList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-                        finalMatterCenterUserEmailsList= finalMatterCenterUserEmailsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                        finalMatterCenterUserEmailsList = finalMatterCenterUserEmailsList.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                         var finalMatterUsersArray = finalMatterUsersList.ToArray();
                         var finalTeamMembersArray = finalTeamMembersList.ToArray();
                         var finalMatterPermissionsArray = finalMatterPermissionsList.ToArray();
@@ -1261,7 +1321,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     propertyList.Add(matterSettings.StampedPropertyMatterCenterRoles, WebUtility.HtmlEncode(finalMatterRoles));
                     propertyList.Add(matterSettings.StampedPropertyMatterCenterPermissions, WebUtility.HtmlEncode(finalMatterPermissions));
                     propertyList.Add(matterSettings.StampedPropertyMatterCenterUsers, WebUtility.HtmlEncode(finalMatterCenterUsers));
-                    propertyList.Add(matterSettings.StampedPropertyMatterCenterUserEmails, WebUtility   .HtmlEncode(finalMatterCenterUserEmails));
+                    propertyList.Add(matterSettings.StampedPropertyMatterCenterUserEmails, WebUtility.HtmlEncode(finalMatterCenterUserEmails));
                     spList.SetPropertBagValuesForList(clientContext, matterStampedProperties, matter.Name, propertyList);
 
                     #region Update matter and matterdetails object to have only external users so that notification can be send to those external users
@@ -1337,7 +1397,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             matter.AssignUserEmails[x] = null;
                         }
                     }
-                    
+
 
                     //foreach (IList<string> userNames in matter.AssignUserNames)
                     //{
@@ -1348,7 +1408,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     //    }
                     //    l = l + 1;
                     //}
-                  //  finalTeamMembersList = matterDetails.TeamMembers.Replace(";", "$").Split('$').ToList();
+                    //  finalTeamMembersList = matterDetails.TeamMembers.Replace(";", "$").Split('$').ToList();
                     finalTeamMembersList = matterDetails.TeamMembers.Split(';').Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
                     if (itemsToRemove.Count > 0)
                     {
@@ -1400,7 +1460,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="listExists">List of existed list</param>
         /// <param name="listItemId">ID of the list</param>
         /// <param name="assignFullControl">Flag to determine Assign or Remove Permission</param>
-        public void AssignRemoveFullControl(ClientContext clientContext, Matter matter, string loggedInUser, 
+        public void AssignRemoveFullControl(ClientContext clientContext, Matter matter, string loggedInUser,
             int listItemId, List<string> listExists, bool assignFullControl, bool hasFullPermission)
         {
             IList<IList<string>> currentUser = new List<IList<string>>();
@@ -1492,9 +1552,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 string loggedInUserTitle = userRepositoy.GetLoggedInUserDetails(clientContext).Email;
 
                 string originalMatterName = GetMatterName(clientContext, matter.Name);
-                int listItemId = RetrieveItemId(clientContext, matterSettings.MatterLandingPageRepositoryName, originalMatterName);             
+                int listItemId = RetrieveItemId(clientContext, matterSettings.MatterLandingPageRepositoryName, originalMatterName);
 
-                
+
 
                 if (null != client && null != matter && null != clientContext && null != matterRevertListObject)
                 {
@@ -1613,9 +1673,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 if (0 <= matterLandingPageId)
                 {
                     listItem = list.GetItemById(matterLandingPageId);
-                    clientContext.Load(listItem, listProperties => listProperties.RoleAssignments.Include(roleAssignmentProperties => 
-                        roleAssignmentProperties.Member, 
-                        roleAssignmentProperties => roleAssignmentProperties.Member.Title, 
+                    clientContext.Load(listItem, listProperties => listProperties.RoleAssignments.Include(roleAssignmentProperties =>
+                        roleAssignmentProperties.Member,
+                        roleAssignmentProperties => roleAssignmentProperties.Member.Title,
                         roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, roleDef => roleDef.BasePermissions)));
                     clientContext.ExecuteQuery();
                     roleCollection = listItem.RoleAssignments;
@@ -1623,9 +1683,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
             else
             {
-                clientContext.Load(list, listProperties => listProperties.RoleAssignments.Include(roleAssignmentProperties => 
-                    roleAssignmentProperties.Member, 
-                    roleAssignmentProperties => roleAssignmentProperties.Member.Title, 
+                clientContext.Load(list, listProperties => listProperties.RoleAssignments.Include(roleAssignmentProperties =>
+                    roleAssignmentProperties.Member,
+                    roleAssignmentProperties => roleAssignmentProperties.Member.Title,
                     roleAssignmentProperties => roleAssignmentProperties.RoleDefinitionBindings.Include(roleDef => roleDef.Name, roleDef => roleDef.BasePermissions)));
                 clientContext.ExecuteQuery();
                 roleCollection = list.RoleAssignments;
@@ -1697,10 +1757,11 @@ namespace Microsoft.Legal.MatterCenter.Repository
         }
 
         public bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName) => spList.SetPermission(clientContext, assignUserName, permissions, listName);
-        
-        public GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation)=> extrnalSharing.ShareMatter(matterInformation);
-        
-        public bool OneNoteUrlExists(MatterInformationVM matterInformation)=> search.PageExists(matterInformation.Client, matterInformation.RequestedUrl);
-         
+
+        public GenericResponseVM ShareMatterToExternalUser(MatterInformationVM matterInformation) => extrnalSharing.ShareMatter(matterInformation);
+
+        public bool OneNoteUrlExists(MatterInformationVM matterInformation) => search.PageExists(matterInformation.Client, matterInformation.RequestedUrl);
+
+    
     }
 }
