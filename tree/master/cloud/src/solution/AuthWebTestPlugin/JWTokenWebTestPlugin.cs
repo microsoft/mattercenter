@@ -156,7 +156,7 @@ namespace JWTokenWebTestPlugin
         //    }
         //    catch (Exception ex)
         //    {
-                
+
         //        throw;
         //    }
         //}
@@ -197,7 +197,7 @@ namespace JWTokenWebTestPlugin
         //    }
         //    catch (Exception ex)
         //    {
-              
+
         //        throw;
         //    }
         //}
@@ -210,7 +210,7 @@ namespace JWTokenWebTestPlugin
         /// <param name="targetUrl">URL of the target SharePoint site</param>
         /// <param name="accessToken">Access token to be used when calling the specified targetUrl</param>
         /// <returns>A ClientContext ready to call targetUrl with the specified access token</returns>
-      //  private ClientContext GetClientContextWithAccessToken(string targetUrl, string accessToken)
+        //  private ClientContext GetClientContextWithAccessToken(string targetUrl, string accessToken)
         //{
         //    try
         //    {
@@ -228,14 +228,14 @@ namespace JWTokenWebTestPlugin
         //    }
         //    catch (Exception ex)
         //    {
-            
+
         //        throw;
         //    }
         //}
 
 
 
-        private static UserAssertion GetUserAssertion()
+        private static async Task<UserAssertion> GetUserAssertion()
         {
 
             //TokenCache tokenCache = new TokenCache();
@@ -251,8 +251,11 @@ namespace JWTokenWebTestPlugin
             //}
 
 
+       
+
+
             string currentUser = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-        
+
             int posx = currentUser.LastIndexOf("\\");
             if ((posx > 0))
             {
@@ -261,7 +264,15 @@ namespace JWTokenWebTestPlugin
             }
 
             //var prop = Microsoft.AspNetCore.Http.Authentication.AuthenticationProperties;
-
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization =
+    new System.Net.Http.Headers.AuthenticationHeaderValue(
+        "Basic",
+        Convert.ToBase64String(
+            System.Text.ASCIIEncoding.ASCII.GetBytes(
+                string.Format("{0}:{1}", "yourusername", "yourpwd"))));
+            }
 
             var bootstrapContext = ClaimsPrincipal.Current.Identities.First().BootstrapContext as System.IdentityModel.Tokens.BootstrapContext;
             string userAccessToken = bootstrapContext.Token;
@@ -272,7 +283,7 @@ namespace JWTokenWebTestPlugin
 
 
 
-       
+
 
 
 
@@ -294,13 +305,13 @@ namespace JWTokenWebTestPlugin
             Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext authContext = new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(authority);
             ClientCredential clientCredential = new ClientCredential(ClientId, AppKey);
 
-            UserAssertion userAssertion = GetUserAssertion();
+            // UserAssertion userAssertion = GetUserAssertion();
 
             //var result = await authContext.AcquireTokenAsync(AADbaseUrl, clientCredential, userAssertion);
 
-            var result = authContext.AcquireTokenAsync(ToDoResourceId, clientCredential, userAssertion).GetAwaiter().GetResult();   //false - third party, true - first party
-                                                                                                                                    //task.Wait();
-                                                                                                                                    //var result = task.Result;
+            //       var result = authContext.AcquireTokenAsync(ToDoResourceId, clientCredential, userAssertion).GetAwaiter().GetResult();   //false - third party, true - first party
+            //task.Wait();
+            //var result = task.Result;
 
             //var result = authContext.AcquireToken("https://graph.windows.net", clientCredential);
             // result.AccessToken
@@ -312,9 +323,9 @@ namespace JWTokenWebTestPlugin
 
 
             //TokenValue = GetToken().GetAwaiter().GetResult();
-            e.WebTest.Context[TokenValue] = result.AccessToken;
+            //  e.WebTest.Context[TokenValue] = result.AccessToken;
 
-               // "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Il9VZ3FYR190TUxkdVNKMVQ4Y2FIeFU3Y090YyIsImtpZCI6Il9VZ3FYR190TUxkdVNKMVQ4Y2FIeFU3Y090YyJ9.eyJhdWQiOiJiOTRmMDdkZi1jODI1LTQzMWYtYjljNS1iOTQ5OWU4ZTlhYzEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQvIiwiaWF0IjoxNDg3MTc5Nzk1LCJuYmYiOjE0ODcxNzk3OTUsImV4cCI6MTQ4NzE4MzY5NSwiYW1yIjpbInB3ZCJdLCJmYW1pbHlfbmFtZSI6IkdhamFybGEiLCJnaXZlbl9uYW1lIjoiV2lsc29uIiwiaXBhZGRyIjoiMTMxLjEwNy4xNzQuMTgzIiwibmFtZSI6IldpbHNvbiBHYWphcmxhIiwibm9uY2UiOiIzMDJkNzFhOC02ODQ1LTRlNGEtYWJlNS00MTg3ZGNlOGM5NGEiLCJvaWQiOiI5MzNjZTFmZC0yNjkzLTRhYWUtYjdiYS0yYTBiNjhlNDEwMjkiLCJwbGF0ZiI6IjMiLCJzdWIiOiJrcWd5dExDUlFSVWNRTW9oUFhCRUJKSE9nTnZrNEVXS0FNMGEzVVloR3BRIiwidGlkIjoiM2M0NTYyY2EtMzlhNC00ZDhiLTkxZmYtNmQzZWVmYWI1YzFkIiwidW5pcXVlX25hbWUiOiJtYXR0ZXJhZG1pbkBNU21hdHRlci5vbm1pY3Jvc29mdC5jb20iLCJ1cG4iOiJtYXR0ZXJhZG1pbkBNU21hdHRlci5vbm1pY3Jvc29mdC5jb20iLCJ2ZXIiOiIxLjAifQ.FNUbU4MOgi2-NheyGoXowH3JP8fzU-intm4nn3g5fyr_XYOYHQbJM3QBT2JkOdKveC4JTFpyhmxN-e_44zP22XzdZDCBjYEF2eua75AT5CSOEQ4r4oiV0xE3wjsBiCO2TNHd_m2KTOm3-QfGR-6htBmkcvTjbMojmB_wC7n9JSNmRjWJwWEjbOLmI21HdBxNncK-AhFr-T2JfgkazfiuxLNIa9ujJV_oTzDIuwB3_6KuWH4YORl4YXoRjEDXDhlEY3jvOInRBAEwNpBysJD7CeUakyMwvYWfD_A97vO8Qnj4A1HigjcO3F6xYNFjqMk_L3RJEnw6H0rIGWDhSe2pHg";
+            // "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Il9VZ3FYR190TUxkdVNKMVQ4Y2FIeFU3Y090YyIsImtpZCI6Il9VZ3FYR190TUxkdVNKMVQ4Y2FIeFU3Y090YyJ9.eyJhdWQiOiJiOTRmMDdkZi1jODI1LTQzMWYtYjljNS1iOTQ5OWU4ZTlhYzEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQvIiwiaWF0IjoxNDg3MTc5Nzk1LCJuYmYiOjE0ODcxNzk3OTUsImV4cCI6MTQ4NzE4MzY5NSwiYW1yIjpbInB3ZCJdLCJmYW1pbHlfbmFtZSI6IkdhamFybGEiLCJnaXZlbl9uYW1lIjoiV2lsc29uIiwiaXBhZGRyIjoiMTMxLjEwNy4xNzQuMTgzIiwibmFtZSI6IldpbHNvbiBHYWphcmxhIiwibm9uY2UiOiIzMDJkNzFhOC02ODQ1LTRlNGEtYWJlNS00MTg3ZGNlOGM5NGEiLCJvaWQiOiI5MzNjZTFmZC0yNjkzLTRhYWUtYjdiYS0yYTBiNjhlNDEwMjkiLCJwbGF0ZiI6IjMiLCJzdWIiOiJrcWd5dExDUlFSVWNRTW9oUFhCRUJKSE9nTnZrNEVXS0FNMGEzVVloR3BRIiwidGlkIjoiM2M0NTYyY2EtMzlhNC00ZDhiLTkxZmYtNmQzZWVmYWI1YzFkIiwidW5pcXVlX25hbWUiOiJtYXR0ZXJhZG1pbkBNU21hdHRlci5vbm1pY3Jvc29mdC5jb20iLCJ1cG4iOiJtYXR0ZXJhZG1pbkBNU21hdHRlci5vbm1pY3Jvc29mdC5jb20iLCJ2ZXIiOiIxLjAifQ.FNUbU4MOgi2-NheyGoXowH3JP8fzU-intm4nn3g5fyr_XYOYHQbJM3QBT2JkOdKveC4JTFpyhmxN-e_44zP22XzdZDCBjYEF2eua75AT5CSOEQ4r4oiV0xE3wjsBiCO2TNHd_m2KTOm3-QfGR-6htBmkcvTjbMojmB_wC7n9JSNmRjWJwWEjbOLmI21HdBxNncK-AhFr-T2JfgkazfiuxLNIa9ujJV_oTzDIuwB3_6KuWH4YORl4YXoRjEDXDhlEY3jvOInRBAEwNpBysJD7CeUakyMwvYWfD_A97vO8Qnj4A1HigjcO3F6xYNFjqMk_L3RJEnw6H0rIGWDhSe2pHg";
 
             //GetADToken(ClientId, AppKey, AadInstance, Tenant, ToDoResourceId).GetAwaiter().GetResult();
 
@@ -327,8 +338,10 @@ namespace JWTokenWebTestPlugin
 
             // var header = new WebTestRequestHeader("Authorization", bearerToken);
 
-            //GetADToken(ClientId, AppKey, AadInstance, Tenant, ToDoResourceId).GetAwaiter().GetResult(); ;
+            //GetADToken(ClientId, AppKey, AadInstance, Tenant, ToDoResourceId).GetAwaiter().GetResult(); 
 
+
+            e.WebTest.Context[TokenValue] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Il9VZ3FYR190TUxkdVNKMVQ4Y2FIeFU3Y090YyIsImtpZCI6Il9VZ3FYR190TUxkdVNKMVQ4Y2FIeFU3Y090YyJ9.eyJhdWQiOiJiOTRmMDdkZi1jODI1LTQzMWYtYjljNS1iOTQ5OWU4ZTlhYzEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQvIiwiaWF0IjoxNDg3MjkzNDUyLCJuYmYiOjE0ODcyOTM0NTIsImV4cCI6MTQ4NzI5NzM1MiwiYW1yIjpbInB3ZCJdLCJmYW1pbHlfbmFtZSI6IkdhamFybGEiLCJnaXZlbl9uYW1lIjoiV2lsc29uIiwiaXBhZGRyIjoiMTMxLjEwNy4xNDcuODMiLCJuYW1lIjoiV2lsc29uIEdhamFybGEiLCJub25jZSI6ImRhNmQ2MTZiLTk0ZmItNDI3NS05NzFiLTM5OTUxMTc5OGZhNCIsIm9pZCI6IjkzM2NlMWZkLTI2OTMtNGFhZS1iN2JhLTJhMGI2OGU0MTAyOSIsInBsYXRmIjoiMyIsInN1YiI6ImtxZ3l0TENSUVJVY1FNb2hQWEJFQkpIT2dOdms0RVdLQU0wYTNVWWhHcFEiLCJ0aWQiOiIzYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQiLCJ1bmlxdWVfbmFtZSI6Im1hdHRlcmFkbWluQE1TbWF0dGVyLm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im1hdHRlcmFkbWluQE1TbWF0dGVyLm9ubWljcm9zb2Z0LmNvbSIsInZlciI6IjEuMCJ9.FnnrNFD3wDykhyiK27s7ivHzMZhaavaWzw4klMVwaEz_kKidokqmAlZbYKXVh1f_M_f312hogPGJwbdLEm9ft64fMsCreLiSyutdeXX_1sWOiPD5P2rQKSb8lPwPE-jBLF9uXkDjkDdKkZDJtbq51w3EU04FqibqixSyPSBb5W55NByznAjyzzPUN_eT7iUs5g9ULIDUoXN1mIiBw3-icL5dcssWM4WY_X4bGZxU--jqu5914pdhJTdIifLhO6esqvl314IvVqpG8BnLOdULhtkrR4_1x-v-5qhQ5WEkC1qmyjH0aoHljGvxU2SBq6wCSVPuddNw9dIFSUX6DfLS9w";
         }
 
         //public override void PreRequest(object sender, PreRequestEventArgs e)
@@ -400,7 +413,7 @@ namespace JWTokenWebTestPlugin
         //}
 
 
-            public async Task<String> GetToken()
+        public async Task<String> GetToken()
         {
             HttpResponseMessage response = new HttpResponseMessage();
             string token =  "";

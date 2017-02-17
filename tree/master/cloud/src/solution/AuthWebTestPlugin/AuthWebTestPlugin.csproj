@@ -375,12 +375,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="JWTokenWebTestPlugin.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="JWTTokenRequestTestPlugin.cs" />
     <Compile Include="KeyVaultHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
