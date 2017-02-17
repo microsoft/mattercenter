@@ -1,6 +1,8 @@
 ﻿<div class="manageUsers" ng-click="cm.CheckPopUp(this)">
     <div class="popupContainerBackground " ng-class="cm.popupContainerBackground"></div>
-
+    <div class="notificationContainer successBanner" ng-if="cm.successBanner">
+        <div class="notification" showcreatesuccessbannermessage datanotification="{{cm.successMsg}}"></div><span class="closeNotification" ng-click="cm.closesuccessbanner()">x</span>
+    </div>
 
     <div id="errorBlock" class="errorPopUp" ng-show="cm.errorPopUpBlock">
         <div id="errTrinagleBlock" class="errTriangle popUpFloatLeft" ng-class="cm.errTrinagleBlock"></div>
@@ -35,7 +37,7 @@
 
     <div class="row margin0 marginTop10 matterUsersSection" data-ng-repeat="assignTeam in cm.assignPermissionTeams">
         <div class="col-xs-4">
-            <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' assignteamkeydown confirm="false" uservalue="" class="form-control matterTxtInputCtrl" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" typeahead-min-length='3' uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" spellcheck="true" type="text" placeholder="Enter and select names" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
+            <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' assignteamkeydown confirm="false" uservalue="" ng-disabled="assignTeam.disable" class="form-control matterTxtInputCtrl" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' ng-change="cm.modifiedTeamDetails(assignTeam)" class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" typeahead-min-length='3' uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocations' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" spellcheck="true" type="text" placeholder="Enter and select names" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
             <div ng-show='teamAssingnResults'>
                 <i class="glyphicon glyphicon-remove"></i> No Results Found
             </div>
@@ -44,17 +46,19 @@
         </div>
         <div class="col-xs-3" ng-show="cm.showRoles">
 
-            <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' class="form-control" ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles '></select>
+            <select id='roleUser{{assignTeam.assigneTeamRowNumber}}' class="form-control" ng-disabled="assignTeam.disable" ng-class="{'errorBorder' :  (cm.errorBorder == 'roleUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedRole" ng-options='assignRole.name for assignRole in cm.assignRoles ' ng-change="cm.modifiedTeamDetails(assignTeam)"></select>
         </div>
         <div class="col-xs-3">
-            <select id='permUser{{assignTeam.assigneTeamRowNumber}}' class="form-control" ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions '></select>
+            <select id='permUser{{assignTeam.assigneTeamRowNumber}}' class="form-control" ng-disabled="assignTeam.disable" ng-class="{'errorBorder' :  (cm.errorBorder == 'permUser{{assignTeam.assigneTeamRowNumber}}')}" class="medium clear dropdownCustom roleWidth" ng-model="assignTeam.assignedPermission" ng-options='assignPermission.name for assignPermission in cm.assignPermissions ' ng-change="cm.modifiedTeamDetails(assignTeam)"></select>
 
 
         </div>
         <div class="col-xs-2">
-            <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="Delete" alt="Delete" src="../Images/icon-delete.png">
+            <img ng-model="assignTeam.assigneTeamRowNumber" ng-disabled="assignTeam.disable" ng-click="(cm.canDeleteTheUser && assignTeam.disable  )||cm.removeAssignPermissionsRow($index)" title="Delete the user" alt="Delete" src="../Images/icon-delete.png">
+            <img ng-model="assignTeam.assigneTeamRowNumber" ng-show="assignTeam.status=='add'" ng-click="cm.UpdateMatterUser($event,assignTeam)" title="Save the user to matter" alt="" src="../Images/save-666.png">
+            <img ng-model="assignTeam.assigneTeamRowNumber" ng-show="assignTeam.status=='success'" ng-click="" title="User assigned to the matter" alt="success" src="../Images/success-message.png">
+            <img ng-model="assignTeam.assigneTeamRowNumber" ng-show="assignTeam.status=='refresh'" ng-click="" title="refresh" alt="refresh" src="../Images/loadingcirclests16.gif">
         </div>
-
     </div>
 
 
@@ -63,19 +67,13 @@
         <div class="col-xs-3"></div>
         <div class="col-xs-3">
             <div id="addMoreLink" style="float:left;margin-top:10px;padding:0px;">
-                <a id="addMorePermissions" style="padding:0px;" ng-click="cm.addNewAssignPermissions()">Add More</a>
+                <a id="addMorePermissions" style="padding:0px;" ng-click="cm.addNewAssignPermissions()"><span class="glyphicon glyphicon-plus"></span> Add More</a>
             </div>
         </div>
         <div class="col-xs-2"></div>
     </div>
 
-    <div class="row margin0 marginTop10">
-        <div class="col-xs-4"></div>
-        <div class="col-xs-3"></div>
-        <div class="col-xs-3"><button class="button" type="button" id="btnSave" value="Save" ng-click="cm.UpdateMatter($event)">Save</button></div>
-        <div class="col-xs-2"></div>
-    </div>
-
+  
 
 </div>
 <div id="loadingImageContainer " class="loadingIconMatterUsers">

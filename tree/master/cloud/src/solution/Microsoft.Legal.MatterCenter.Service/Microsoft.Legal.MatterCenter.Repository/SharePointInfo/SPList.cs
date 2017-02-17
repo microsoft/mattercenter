@@ -996,13 +996,20 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 if (null != clientContext && null != listsNames)
                 {
                     //ToDo: Chec
-                    ListCollection lists = clientContext.Web.Lists;
-                    clientContext.Load(lists);
-                    clientContext.ExecuteQuery();
-                    existingLists = (from listName in listsNames
-                                        join item in lists
-                                        on listName.ToUpper(CultureInfo.InvariantCulture) equals item.Title.ToUpper(CultureInfo.InvariantCulture)
-                                        select listName).ToList();
+                   
+                    foreach (string listName in listsNames)
+                    {
+                        ListCollection listCollection = clientContext.Web.Lists;
+                        var lists= clientContext.LoadQuery(listCollection.Where(listTemp => listTemp.Title == listName));                      
+                        clientContext.ExecuteQuery();
+                        var list = lists.FirstOrDefault();
+                        if (list!=null)
+                        {
+                            existingLists.Add(listName);
+                        }                      
+
+                    }
+
                 }
             }
             catch (Exception ex)
