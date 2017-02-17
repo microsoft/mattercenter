@@ -476,10 +476,13 @@ namespace Microsoft.Legal.MatterCenter.Web
                     jw.WritePropertyName("subAreaOfLawDocumentContentTypeProperty");
                     jw.WriteValue(taxonomySettingsSection["SubAreaOfLawDocumentTemplates"]);
 
-                jw.WriteEndObject();
+                    jw.WritePropertyName("matterProvisionExtraPropertiesContentType");
+                    jw.WriteValue(taxonomySettingsSection["MatterProvisionExtraPropertiesContentType"]);
 
-            jw.WritePropertyName("search");
-                jw.WriteStartObject();
+                    jw.WriteEndObject();
+
+                    jw.WritePropertyName("search");
+                    jw.WriteStartObject();
                     jw.WritePropertyName("Schema");
                     jw.WriteValue(Configuration.GetSection("Search").GetSection("Schema").Value);
                     foreach (var key in searchSettingsSection)

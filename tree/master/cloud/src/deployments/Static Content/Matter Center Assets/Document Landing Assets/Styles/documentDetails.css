@@ -52,12 +52,12 @@
     width: 350px;
 }
 
-    #rightSection #metadataMainContainer #metadataProperties, #rightSection #metadataMainContainer #documentMetadata {
+    #rightSection #metadataMainContainer #metadataProperties,#metadatExtraProperties, #rightSection #metadataMainContainer #documentMetadata {
         margin: 0;
         padding: 0;
     }
 
-#metadataProperties li, #documentMetadata li {
+#metadataProperties li, #documentMetadata li,#metadatExtraProperties li  {
     margin-top: 1px;
 }
 
@@ -148,7 +148,7 @@
     width: 749px;
 }
 
-#gotoAllDocuments, #filePropertiesTitle, #versionHistoryTitle, #viewMoreFileProperties, #viewMoreVersions, .propertyValue, #documentMetadata {
+#gotoAllDocuments, #filePropertiesTitle, #versionHistoryTitle, #viewMoreFileProperties,#docExtraPropertiesTitle, #viewMoreVersions, .propertyValue, #documentMetadata {
     font-family: "Segoe UI";
 }
 
@@ -163,7 +163,7 @@
     margin-top: 3px;
 }
 
-#filePropertiesTitle, #versionHistoryTitle {
+#filePropertiesTitle, #versionHistoryTitle ,#docExtraPropertiesTitle {
     color: #333;
     font-size: 20px;
 }
@@ -203,13 +203,13 @@
     word-wrap: normal; /* For ellipsis to work on IE 10 */
 }
 
-.toggleFileSection, .toggleVersionSection {
+.toggleFileSection, .toggleVersionSection, .toggleExtraPropSection {
     cursor: pointer;
     margin-left: -8px;
     vertical-align: top;
 }
 
-#metadataVersion {
+#metadataVersion, #docExtraProperties {
     margin-top: 35px;
 }
 
@@ -245,6 +245,10 @@
 }
 
 #loadingVersion {
+    height: 100px;
+}
+
+#loadingExtraProperties {
     height: 100px;
 }
 

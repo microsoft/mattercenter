@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Legal.MatterCenter.Repository.Extensions;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -105,6 +106,31 @@ namespace Microsoft.Legal.MatterCenter.Repository
             }
         }
 
+    
+        public FieldCollection GetFieldsInContentType(ClientContext clientContext, string conentTypeName)
+        {
+            try
+            {
+                // Get the content type using ID: 0x01003D7B5A54BF843D4381F54AB9D229F98A - is the ID of the "Custom" content Type
+                ContentType ct = clientContext.Web.ContentTypes.GetByName(conentTypeName);
+
+                // Gets a value that specifies the collection of fields for the content type
+                FieldCollection fieldColl = ct.Fields;
+
+                clientContext.Load(fieldColl);
+                clientContext.ExecuteQuery();
+                return fieldColl;
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name,
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        
+
         /// <summary>
         /// Sets the default content type based on user selection for the new matter that is getting created
         /// </summary>
@@ -164,45 +190,71 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private void SetFieldValues(ClientContext clientContext, IList<ContentType> contentTypeCollection, List matterList, 
             MatterMetadata matterMetadata)
         {
-            FieldCollection fields = GetContentType(clientContext, contentTypeCollection, matterList);
-            if (null != fields)
+            try
             {
-                matterMetadata = GetWSSId(clientContext, matterMetadata, fields);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).DefaultValue = matterMetadata.Client.Id;
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).ReadOnlyField = true;
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).SetShowInDisplayForm(true);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).Update();
-                if(configuration.GetSection("General")["IsBackwardCompatible"].ToString().ToLower()=="false")
+                FieldCollection fields = GetContentType(clientContext, contentTypeCollection, matterList);
+                if (null != fields)
                 {
-                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).ReadOnlyField = true;
-                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).SetShowInDisplayForm(true);
-                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).DefaultValue = matterMetadata.Client.Name;
-                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).Update();
-                }    
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).DefaultValue = matterMetadata.Matter.Id;
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).ReadOnlyField = true;
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).SetShowInDisplayForm(true);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).Update();
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).DefaultValue = matterMetadata.Matter.Name;
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).ReadOnlyField = true;
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).SetShowInDisplayForm(true);
-                fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).Update();
+                    matterMetadata = GetWSSId(clientContext, matterMetadata, fields);
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).DefaultValue = matterMetadata.Client.Id;
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).SetShowInDisplayForm(true);
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).ReadOnlyField = true;
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientId).Update();
+                    if(configuration.GetSection("General")["IsBackwardCompatible"].ToString().ToLower() == "false")
+                    {
+                        fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).SetShowInDisplayForm(true);
+                        fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).DefaultValue = matterMetadata.Client.Name;
+                        fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).ReadOnlyField = true;
+                        fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnClientName).Update();
+                    }
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).DefaultValue = matterMetadata.Matter.Id;
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).SetShowInDisplayForm(true);
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).ReadOnlyField = true;
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterId).Update();
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).DefaultValue = matterMetadata.Matter.Name;
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).ReadOnlyField = true;
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).SetShowInDisplayForm(true);
+                    fields.GetByInternalNameOrTitle(contentTypesConfig.ContentTypeColumnMatterName).Update();
 
-                int levels = taxonomySettings.Levels;
-                //For the number of levels that are configured, get the configured column name and 
-                //update the wssid, termname and id for the managed field
-                for (int i = 1; i <= levels; i++)
-                {
-                    string columnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName" + i];
-                    fields.GetByInternalNameOrTitle(columnName).SetShowInDisplayForm(true);
-                    ManagedColumn managedColumn = matterMetadata.ManagedColumnTerms[columnName];
-                    fields.GetByInternalNameOrTitle(columnName).DefaultValue =
-                                string.Format(CultureInfo.InvariantCulture, ServiceConstants.MetadataDefaultValue,
-                                managedColumn.WssId,
-                                managedColumn.TermName,
-                                managedColumn.Id);
-                    fields.GetByInternalNameOrTitle(columnName).Update();
+                    int levels = taxonomySettings.Levels;
+                    //For the number of levels that are configured, get the configured column name and 
+                    //update the wssid, termname and id for the managed field
+                    for (int i = 1; i <= levels; i++)
+                    {
+                        string columnName = configuration.GetSection("ContentTypes").GetSection("ManagedColumns")["ColumnName" + i];
+                        fields.GetByInternalNameOrTitle(columnName).SetShowInDisplayForm(true);
+                        ManagedColumn managedColumn = matterMetadata.ManagedColumnTerms[columnName];
+                        fields.GetByInternalNameOrTitle(columnName).DefaultValue =
+                                    string.Format(CultureInfo.InvariantCulture, ServiceConstants.MetadataDefaultValue,
+                                    managedColumn.WssId,
+                                    managedColumn.TermName,
+                                    managedColumn.Id);
+                        fields.GetByInternalNameOrTitle(columnName).Update();
+                    }
+
+                    MatterExtraProperties matterExtraProperties = matterMetadata.MatterExtraProperties; ;
+
+                    foreach (var extraField in matterExtraProperties.Fields)
+                    {
+                        if (extraField.Type == "Text")
+                        {
+                            fields.GetByInternalNameOrTitle(extraField.FieldName).DefaultValue = extraField.FieldValue;
+                            fields.GetByInternalNameOrTitle(extraField.FieldName).SetShowInDisplayForm(true);
+                            fields.GetByInternalNameOrTitle(extraField.FieldName).Update();
+                        }
+                        else
+                        {
+                            fields.GetByInternalNameOrTitle(extraField.FieldName).DefaultValue = extraField.FieldValue;
+                            fields.GetByInternalNameOrTitle(extraField.FieldName).Update();
+                        }
+                    }
                 }
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name,
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
         }
 
@@ -245,7 +297,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="contentTypeCollection">Collection of content types</param>
         /// <param name="matterList">List containing matters</param>
         /// <returns>Content types in Field Collection object</returns>
-        internal static FieldCollection GetContentType(ClientContext clientContext, IList<ContentType> contentTypeCollection, List matterList)
+        private static FieldCollection GetContentType(ClientContext clientContext, IList<ContentType> contentTypeCollection, List matterList)
         {
             foreach (ContentType contenttype in contentTypeCollection)
             {

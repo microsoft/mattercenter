@@ -6,6 +6,8 @@ using Microsoft.Legal.MatterCenter.Utility;
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.WebParts;
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -30,7 +32,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// </summary>
         /// <param name="spoAuthorization"></param>
         /// <param name="generalSettings"></param>
-        public SPPage(ISPOAuthorization spoAuthorization, IOptions<GeneralSettings> generalSettings, 
+        public SPPage(ISPOAuthorization spoAuthorization, IOptions<GeneralSettings> generalSettings,
             IOptions<LogTables> logTables, ICustomLogger customLogger, ISPList spList, IOptions<MatterSettings> matterSettings)
         {
             this.generalSettings = generalSettings.Value;
@@ -101,7 +103,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="webParts">Array of web parts that should be added on Matter Landing Page</param>
         /// <param name="zones">Array of Zone IDs</param>
         /// <returns>Success flag</returns>
-        public bool AddWebPart(ClientContext clientContext, LimitedWebPartManager limitedWebPartManager, WebPartDefinition webPartDefinition, 
+        public bool AddWebPart(ClientContext clientContext, LimitedWebPartManager limitedWebPartManager, WebPartDefinition webPartDefinition,
             string[] webParts, string[] zones)
         {
             bool result = false;
@@ -140,9 +142,15 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="uri">To get URL segments</param>
         /// <param name="web">Web object of the current context</param>
         /// <returns>List of Web Parts</returns>
-        public string[] ConfigureXMLCodeOfWebParts(Client client, Matter matter, ClientContext clientContext, string pageName, Uri uri, 
+        public string[] ConfigureXMLCodeOfWebParts(Client client, Matter matter, ClientContext clientContext, string pageName, Uri uri,
             Web web, MatterConfigurations matterConfigurations)
         {
+
+            string matterExtraPropertiesValues = string.Empty;
+            if (matterConfigurations != null && matterConfigurations.AdditionalFieldValues != null)
+            {
+                matterExtraPropertiesValues = DisplayAllExtraMatterProperties(matterConfigurations.AdditionalFieldValues);
+            }
             string[] result = null;
             try
             {
@@ -151,8 +159,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 clientContext.ExecuteQuery();
 
                 ////Configure list View Web Part XML
-                string listViewWebPart = ConfigureListViewWebPart(sitePageLib, clientContext, pageName, client, matter, 
-                    string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", uri.AbsolutePath, ServiceConstants.FORWARD_SLASH, matter.Name, 
+                string listViewWebPart = ConfigureListViewWebPart(sitePageLib, clientContext, pageName, client, matter,
+                    string.Format(CultureInfo.InvariantCulture, "{0}{1}{2}{3}{4}", uri.AbsolutePath, ServiceConstants.FORWARD_SLASH, matter.Name,
                     ServiceConstants.FORWARD_SLASH, pageName));
                 string[] contentEditorSectionIds = matterSettings.MatterLandingPageSections.Split(Convert.ToChar(ServiceConstants.COMMA, CultureInfo.InvariantCulture));
 
@@ -160,8 +168,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 string contentEditorWebPartTasks = string.Empty;
                 if (matterConfigurations.IsTaskSelected)
                 {
-                    contentEditorWebPartTasks = string.Format(CultureInfo.InvariantCulture, ServiceConstants.CONTENT_EDITOR_WEB_PART, 
-                        string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_SECTION_CONTENT, 
+                    contentEditorWebPartTasks = string.Format(CultureInfo.InvariantCulture, ServiceConstants.CONTENT_EDITOR_WEB_PART,
+                        string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_SECTION_CONTENT,
                         contentEditorSectionIds[Convert.ToInt32(MatterLandingSection.TaskPanel, CultureInfo.InvariantCulture)]));
                 }
 
@@ -169,8 +177,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 if (matterConfigurations.IsRSSSelected)
                 {
                     rssFeedWebPart = string.Format(CultureInfo.InvariantCulture, ServiceConstants.RSS_FEED_WEB_PART, WebUtility.UrlEncode(matter.Name));
-                    rssTitleWebPart = string.Format(CultureInfo.InvariantCulture, ServiceConstants.CONTENT_EDITOR_WEB_PART, 
-                        string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_SECTION_CONTENT, 
+                    rssTitleWebPart = string.Format(CultureInfo.InvariantCulture, ServiceConstants.CONTENT_EDITOR_WEB_PART,
+                        string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_SECTION_CONTENT,
                         contentEditorSectionIds[Convert.ToInt32(MatterLandingSection.RSSTitlePanel, CultureInfo.InvariantCulture)]));
                 }
 
@@ -191,7 +199,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 string footerWebPartSection = string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_SECTION_CONTENT, contentEditorSectionIds[Convert.ToInt32(MatterLandingSection.FooterPanel, CultureInfo.InvariantCulture)]);
                 headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.STYLE_TAG, cssLink), headerWebPartSection);
                 headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.STYLE_TAG, commonCssLink), headerWebPartSection);
-                headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG_WITH_CONTENTS, string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_STAMP_PROPERTIES, matter.Name, matter.MatterGuid)), headerWebPartSection);
+                headerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG_WITH_CONTENTS, string.Format(CultureInfo.InvariantCulture, ServiceConstants.MATTER_LANDING_STAMP_PROPERTIES, matter.Name, matter.MatterGuid, matterExtraPropertiesValues)), headerWebPartSection);
                 footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG, jsLinkMatterLandingPage), footerWebPartSection);
                 footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG, jsLinkCommon), footerWebPartSection);
                 footerWebPartSection = string.Concat(string.Format(CultureInfo.InvariantCulture, ServiceConstants.SCRIPT_TAG, jsLinkJQuery), footerWebPartSection);
@@ -269,7 +277,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
             {
                 using (ClientContext clientContext = spoAuthorization.GetClientContext(client.Url))
                 {
-                    string[] requestedUrls = pageUrl.Split(new string[] { ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR }, 
+                    string[] requestedUrls = pageUrl.Split(new string[] { ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR },
                         StringSplitOptions.RemoveEmptyEntries);
                     if (1 < requestedUrls.Length)
                     {
@@ -288,8 +296,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     }
                 }
                 return pageExists;
-            }            
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
                 throw;
@@ -365,6 +373,53 @@ namespace Microsoft.Legal.MatterCenter.Repository
                     clientFile.DeleteObject();
                     clientContext.ExecuteQuery();
                 }
+            }
+        }
+
+        /// <summary>
+        /// This method return string collection of matter extra properties which is used in matter landing page.
+        /// </summary>
+        /// <param name="objValues"></param>
+        /// <returns></returns>
+        private string DisplayAllExtraMatterProperties(IList<MatterExtraFields> objValues)
+        {
+            try
+            {
+                StringBuilder sbr = new StringBuilder(string.Empty);
+                var totalCount = objValues.Count;
+                for (int i = 0; i < totalCount; i++)
+                {
+                    objValues[i].FieldValue = objValues[i].FieldValue == null ? "" : objValues[i].FieldValue;
+
+                    if (objValues[i].IsDisplayInUI == "true")
+                    {
+                        string fieldVal = objValues[i].FieldValue.Trim();
+
+                        if (objValues[i].Type.ToString().Trim().Equals("DateTime"))
+                        {
+                            DateTime date;
+                            bool isDateTime = DateTime.TryParse(fieldVal, out date);
+                            if (isDateTime)
+                            {
+                                fieldVal = String.Format("{0:MMMM yyyy, d}", date);
+                            }
+                            else
+                            {
+                                fieldVal = String.Format("{0:MMMM yyyy, d}", DateTime.Now);
+                            }
+                        }
+                        string concatedString = i == totalCount - 1 ? objValues[i].FieldDisplayName + ":" + fieldVal : objValues[i].FieldDisplayName + ":" + fieldVal + "|";
+                        sbr.AppendLine(concatedString.Trim());
+                    }
+                }
+                string strReturnValue = sbr.ToString();
+                strReturnValue = strReturnValue.Replace("\r\n", "");
+                return strReturnValue;
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
         }
     }

@@ -320,6 +320,12 @@
                         <span class="marginRight10" ng-if="vm.showmatterid=='Yes'"><input type="radio" ng-model="vm.showmatterconfiguration" name="showmatterconfiguration" value="{{vm.settingsConfigs.Radio2Option3Text}}" /> {{vm.settingsConfigs.Radio2Option3Text}}</span>
                     </div>
                 </div>
+                <!--We are displaying this section if Addition matter properties mapped to default contenet type texonomy hirarchey.-->
+                <div id="divExtraMatterProps" ng-hide="true" class="defaultSection col-xs-12 marginTop20">
+                    <div class="defaultFontStyle titleSection">{{vm.settingsConfigs.divExtraPropTitle}}</div>
+                    <div class="defaultFontStyle descriptionSection">{{vm.settingsConfigs.divExtraPropTitleDescription}}</div>
+                </div>
+                <div extramatterpropertiefiledsinsettings ng-repeat="input in vm.extraMatterFields"></div>
                 <div id="buttonSection col-xs-12 pad0">
                     <button class="button clear" type="button" id="saveButton" title="{{vm.settingsConfigs.ButtonSaveText}}" ng-click="vm.saveSettings()">{{vm.settingsConfigs.ButtonSaveText}}</button>
                     <button class="button" type="button" id="cancelButton" title="{{vm.settingsConfigs.ButtonCancelText}}" ng-click="vm.showSetting()">{{vm.settingsConfigs.ButtonCancelText}}</button>

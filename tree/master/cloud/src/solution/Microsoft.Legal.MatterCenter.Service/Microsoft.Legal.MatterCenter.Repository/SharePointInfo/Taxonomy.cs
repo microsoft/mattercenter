@@ -361,6 +361,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                 {
                                     childCustomProperties.Add(parentProperty.Key, parentProperty.Value);
                                 }
+                                else if (parentProperty.Key.Equals(taxonomySettings.MatterProvisionExtraPropertiesContentType, StringComparison.Ordinal))
+                                {
+                                    childCustomProperties.Add(parentProperty.Key, parentProperty.Value);
+                                }
                                 else
                                 {
                                     childCustomProperties.Add(parentProperty.Key, parentProperty.Value);
@@ -378,6 +382,12 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         //Add the custom properties to the subAreaTerms list collection
                         foreach (KeyValuePair<string, string> customProperty in childCustomProperties)
                         {
+                            if (customProperty.Key.Equals(taxonomySettings.MatterProvisionExtraPropertiesContentType, StringComparison.Ordinal))
+                            {
+                                jw.WritePropertyName("MatterProvisionExtraPropertiesContentType");
+                                jw.WriteValue(customProperty.Value);
+                            }
+
                             if (customProperty.Key.Equals(termStoreDetails.CustomPropertyName, StringComparison.Ordinal))
                             {
                                 jw.WritePropertyName("documentTemplates");
