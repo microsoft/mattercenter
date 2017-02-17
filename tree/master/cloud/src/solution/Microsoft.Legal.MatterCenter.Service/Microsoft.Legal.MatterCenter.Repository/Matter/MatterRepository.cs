@@ -195,7 +195,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                         usersToRemove.Add(removedUser);
                     }
                 }
-                if (matterInformation.MatterAssociatedInfo == string.Empty)
+                if (matterInformation.MatterAssociatedInfo.ToLower() == UpdateMatterOperation.MatterLibrary.ToString().ToLower())
                 {
                     RemoveSpecificUsers(clientContext, usersToRemove, loggedInUserName, false, matter.Name, -1);
                 }
@@ -203,7 +203,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                 {
 
 
-                    if (matterInformation.MatterAssociatedInfo == UpdateMatterOperation.MatterPage.ToString())
+                    if (matterInformation.MatterAssociatedInfo.ToLower() == UpdateMatterOperation.MatterPage.ToString().ToLower())
                     {
                         listItemId = RetrieveItemId(clientContext, matterSettings.MatterLandingPageRepositoryName, originalMatterName);
                         if (listItemId <= 0)
@@ -211,7 +211,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                             RemoveSpecificUsers(clientContext, usersToRemove, loggedInUserName, true, matterSettings.MatterLandingPageRepositoryName, listItemId);
                         }
                     }
-                    else if (matterInformation.MatterAssociatedInfo == UpdateMatterOperation.StampedProperties.ToString())
+                    else if (matterInformation.MatterAssociatedInfo.ToLower() == UpdateMatterOperation.StampedProperties.ToString().ToLower())
                     {
                         isEditMode = false;
                         UpdateMatterStampedProperties(clientContext, matterDetails, matter, matterStampedProperties, isEditMode, usersToRemove);
@@ -1061,7 +1061,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
                                     // Add those users in list, then traverse the list and removing all users from that list
                                     Principal principal = role.Member;
                                     User currentListUser = (User)principal;
-                                    if (currentListUser.Email.ToLower() == user.ToLower() && !((role.Member.Title == loggedInUserTitle) && (roleDef.Name ==
+                                    if (currentListUser.Email.ToLower() == user.ToLower() && !((role.Member.Title.ToLower() == loggedInUserTitle.ToLower()) && (roleDef.Name ==
                                         matterSettings.EditMatterAllowedPermissionLevel)))
                                     {
                                         roleDefinationList.Add(roleDef);

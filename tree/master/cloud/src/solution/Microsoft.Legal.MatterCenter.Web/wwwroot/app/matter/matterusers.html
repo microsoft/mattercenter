@@ -54,7 +54,7 @@
 
         </div>
         <div class="col-xs-2">
-            <img ng-model="assignTeam.assigneTeamRowNumber" ng-disabled="assignTeam.disable" ng-click="assignTeam.disable||cm.removeAssignPermissionsRow($index)" title="Delete the user" alt="Delete" src="../Images/icon-delete.png">
+            <img ng-model="assignTeam.assigneTeamRowNumber" ng-disabled="assignTeam.disable" ng-click="(cm.canDeleteTheUser && assignTeam.disable  )||cm.removeAssignPermissionsRow($index)" title="Delete the user" alt="Delete" src="../Images/icon-delete.png">
             <img ng-model="assignTeam.assigneTeamRowNumber" ng-show="assignTeam.status=='add'" ng-click="cm.UpdateMatterUser($event,assignTeam)" title="Save the user to matter" alt="" src="../Images/save-666.png">
             <img ng-model="assignTeam.assigneTeamRowNumber" ng-show="assignTeam.status=='success'" ng-click="" title="User assigned to the matter" alt="success" src="../Images/success-message.png">
             <img ng-model="assignTeam.assigneTeamRowNumber" ng-show="assignTeam.status=='refresh'" ng-click="" title="refresh" alt="refresh" src="../Images/loadingcirclests16.gif">

@@ -32,6 +32,7 @@
         cm.createContent = uiconfigs.CreateMatter;
         cm.isFullControlePresent = false;
         cm.matterList = null;
+        cm.canDeleteTheUser = true;
         function getParameterByName(name) {
             "use strict";
             name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -45,9 +46,9 @@
         cm.stampedMatterUsers=[];
 
         if (cm.clientUrl === "" && cm.matterName === "") {
-            cm.matterName = "";
-            cm.clientUrl = "";
-            //cm.isEdit = true;
+            cm.matterName = "Matter Ext Testing12V";
+            cm.clientUrl = "https://msmatter.sharepoint.com/sites/microsoft";
+            cm.isEdit = true;
         }
         //#region Service API Call
         //API call to get roles that are configured in the system
@@ -340,6 +341,7 @@
                         deletedUser.deleteSuccessCallList = 0;
                         deletedUser.status = "refresh";
                         deletedUser.index = index;
+                        deletedUser.disable = true;
                         var arrUsersToRemoveFromMatter = [];
                         var userNames = getUserName(deletedUser.assignedUser.trim() + ";", false);
                         userNames = cleanArray(userNames);
@@ -514,12 +516,11 @@
 
                         }
 
-                        for (var i = 0; i < cm.matterList.length; i++) {
-                            // cm.matterList.length
+                        for (var i = 0; i < cm.matterList.length; i++) {                            
                             var listName = cm.matterList[i].toLowerCase();
                             switch (listName.toLowerCase()) {
                                 case "matterlibrary":
-                                    deleteUserFromMatter(deletedUser.deleteUserForMatterList, function (resposne) {
+                                    deleteUserFromMatter(deletedUser.deleteUserForMatterList, function (response) {
                                         if (!response.isError) {
                                             deletedUser.deleteSuccessCallList++                                            
                                             if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
@@ -529,7 +530,7 @@
                                     });
                                     break;
                                 case "_onenote":
-                                    deleteUserFromMatter(deletedUser.deleteUserForMatterOneNote, function (resposne) {
+                                    deleteUserFromMatter(deletedUser.deleteUserForMatterOneNote, function (response) {
                                         if (!response.isError) {
                                             deletedUser.deleteSuccessCallList++
                                             if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
@@ -540,7 +541,7 @@
                                     });
                                     break;
                                 case "_task":
-                                    deleteUserFromMatter(deletedUser.deleteUserForMatterTask, function (resposne) {
+                                    deleteUserFromMatter(deletedUser.deleteUserForMatterTask, function (response) {
                                         if (!response.isError) {
                                             deletedUser.deleteSuccessCallList++
                                             if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
@@ -551,7 +552,7 @@
                                     });
                                     break;
                                 case "_calendar":
-                                    deleteUserFromMatter(deletedUser.deleteUserForMatterCalendar, function (resposne) {
+                                    deleteUserFromMatter(deletedUser.deleteUserForMatterCalendar, function (response) {
                                         if (!response.isError) {
                                             deletedUser.deleteSuccessCallList++
                                             if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
@@ -562,7 +563,7 @@
                                     });
                                     break;
                                 case "matterpage":
-                                    deleteUserFromMatter(deletedUser.deleteUserForMatterSpecifiedList, function (resposne) {
+                                    deleteUserFromMatter(deletedUser.deleteUserForMatterSpecifiedList, function (response) {
                                         if (!response.isError) {
                                             deletedUser.deleteSuccessCallList++
                                             if (deletedUser.deleteSuccessCallList == cm.matterList.length) {
@@ -589,7 +590,7 @@
 
 
         function DeleteUserFromMatterStampedProperties(deletedUser) {
-            deleteUserFromMatter(deletedUser.deleteUserForUpdateMatterStamped, function (resposne) {
+            deleteUserFromMatter(deletedUser.deleteUserForUpdateMatterStamped, function (response) {
                 if (!response.isError) {
                     cm.assignPermissionTeams.splice(deletedUser.index, 1);
                 }
@@ -1738,6 +1739,7 @@
                 if (attornyCheck) {
                     assignTeam.status = "";
                     assignTeam.disable = true;
+                    cm.canDeleteTheUser = true;
                     assignTeam.updatedMatterUsersForMatter = {};
                     assignTeam.updatedMatterUsersForOneNote = {};
                     assignTeam.updatedMatterUsersForCalender = {};
@@ -2058,6 +2060,8 @@
                             IsFullControlPresent: cm.isFullControlePresent,
                             MatterAssociatedInfo: "StampedProperties"
                         }
+
+
                         for (var i = 0; i < cm.matterList.length; i++) {
                             var listName = cm.matterList[i].toLowerCase();
                             switch (listName.toLowerCase()) {
@@ -2079,6 +2083,11 @@
                             }
                         }
 
+                    }
+                    else {
+                        assignTeam.disable = false;
+                        cm.canDeleteTheUser = false;
+                        assignTeam.status = "add";
                     }
                 }
             }
@@ -2153,7 +2162,8 @@
                     console.log("Done");                    
                     team.status = "success";
                     team.disable = false;
-                    assignedTeam.userAssignedToMatterStatus = true;
+                    cm.canDeleteTheUser = false;
+                    team.userAssignedToMatterStatus = true;
                     var userDetails = {};
                     userDetails.userName = team.assignedUser;
                     userDetails.userRole = team.assignedRole.name;                    
@@ -2238,7 +2248,11 @@
                         });
                     }
                 }
-                return true;
+                if (keepGoing) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
             else {
                 showErrorNotificationAssignTeams(cm.createContent.ErrorMessageTeamMember1, team.assigneTeamRowNumber, "user")
