@@ -718,7 +718,7 @@ namespace Microsoft.Legal.MatterCenter.Service
                     return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
                 }
                 #endregion
-
+                
                 #region Validations
                 GenericResponseVM validationResponse = validationFunctions.IsMatterValid(matterInformation, int.Parse(ServiceConstants.EditMatterPermission), null);
                 if (validationResponse != null)
@@ -777,7 +777,14 @@ namespace Microsoft.Legal.MatterCenter.Service
                 }
                 else
                 {
-                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.NotModified);
+                    if (!genericResponse.IsError)
+                    {
+                        return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.OK);
+                    }
+                    else
+                    {
+                        return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.NotModified);
+                    }
                 }
 
                 #endregion
@@ -1256,5 +1263,73 @@ namespace Microsoft.Legal.MatterCenter.Service
             }            
         }
         #endregion
+
+
+        /// <summary>
+        /// This method will delete the user from the matter document library and its associated lists
+        /// and from matter stamped proeprties
+        /// </summary>
+        /// <param name="matterInformation"></param>
+        /// <returns></returns>
+        [HttpPost("deleteuserfrommatter")]
+        [SwaggerOperation("deleteuserfrommatter")]
+        [SwaggerResponse(HttpStatusCode.OK,
+            Description = "Returns IActionResult of type of generic response which says whether the user has been deleted or not")]
+        [SwaggerResponseRemoveDefaults]
+        public IActionResult DeleteUserFromMatter([FromBody]MatterInformationVM matterInformation)
+        {
+            string editMatterValidation = string.Empty;
+            var matter = matterInformation.Matter;
+            var client = matterInformation.Client;
+            var userid = matterInformation.UserIds;
+            try
+            {
+
+                #region Error Checking                
+                GenericResponseVM genericResponse = null;
+                if (matterInformation.Client == null && matterInformation.Matter == null && matterInformation.MatterDetails == null)
+                {
+                    genericResponse = new GenericResponseVM()
+                    {
+                        Value = errorSettings.MessageNoInputs,
+                        Code = HttpStatusCode.BadRequest.ToString(),
+                        Description = $"No input data is passed to update the {errorSettings.Item}",
+                        IsError = true
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.BadRequest);
+                }
+                #endregion
+
+                #region Validations
+                GenericResponseVM validationResponse = null;
+                #endregion
+
+                #region Upadte Matter
+                genericResponse = matterProvision.DeleteUserFromMatter(matterInformation);
+                if (genericResponse == null)
+                {
+                    var result = new GenericResponseVM()
+                    {
+                        Code = "200",
+                        Value = "Update Success"
+                    };
+                    return matterCenterServiceFunctions.ServiceResponse(result, (int)HttpStatusCode.OK);
+                }
+                else
+                {
+                    return matterCenterServiceFunctions.ServiceResponse(genericResponse, (int)HttpStatusCode.NotModified);
+                }
+
+                #endregion
+
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                var errorResponse = customLogger.GenerateErrorResponse(ex);
+                return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.InternalServerError);
+            }
+        }
+
     }
 }

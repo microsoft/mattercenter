@@ -122,7 +122,8 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
                     }
                     if (matterInformation.Matter.Permissions != null)
                     {
-                        bool isFullControlPresent = ValidateFullControlPermission(matterInformation.Matter);
+                        bool isFullControlPresent = matterInformation.IsFullControlPresent? matterInformation.IsFullControlPresent: ValidateFullControlPermission(matterInformation.Matter);
+                            //ValidateFullControlPermission(matterInformation.Matter);
                         if (!isFullControlPresent)
                         {
                             return GenericResponse(errorSettings.IncorrectInputUserAccessCode, errorSettings.ErrorEditMatterMandatoryPermission);
