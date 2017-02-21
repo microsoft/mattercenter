@@ -114,5 +114,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Common
         /// <param name="matterConfigurations"></param>
         /// <returns></returns>
         GenericResponseVM SaveConfigurations(MatterConfigurations matterConfigurations);
+        GenericResponseVM DeleteUserFromMatter(MatterInformationVM matterInformation);
     }
 }

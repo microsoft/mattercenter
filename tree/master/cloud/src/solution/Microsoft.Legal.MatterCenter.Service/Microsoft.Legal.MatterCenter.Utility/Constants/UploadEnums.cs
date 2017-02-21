@@ -15,4 +15,11 @@ namespace Microsoft.Legal.MatterCenter.Utility
         FileAlreadyExists=7,
         UploadToFolder =8
     }
+
+    public enum UpdateMatterOperation
+    {
+        MatterLibrary,
+        MatterPage,
+        StampedProperties
+    }
 }
