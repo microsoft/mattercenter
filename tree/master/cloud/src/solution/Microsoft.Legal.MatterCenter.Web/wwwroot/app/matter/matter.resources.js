@@ -117,6 +117,11 @@ angular.module('matterMain')
                       method: 'POST',
                       url: '/api/v1/matter/onenoteurlexists'
                   }),
+                  //New api for deleting user from the matter
+                  'deleteUserFromMatter': auth.attachCSRF({
+                      method: 'POST',
+                      url: '/api/v1/matter/deleteuserfrommatter'
+                  }),
               });
       }]);
 
