@@ -1309,7 +1309,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         /// <summary>
         /// Matter landing stamp properties
         /// </summary>
-        public const string MATTER_LANDING_STAMP_PROPERTIES = "var documentLibraryName = \"{0}\", isNewMatterLandingPage = true, documentLibraryGUID=\"{1}\";";
+        public const string MATTER_LANDING_STAMP_PROPERTIES = "var documentLibraryName = \"{0}\", isNewMatterLandingPage = true, documentLibraryGUID=\"{1}\", matterExtraProperties=\"{2}\";";
         #endregion
 
 

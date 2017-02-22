@@ -25,6 +25,9 @@ using System.Net;
 using Newtonsoft.Json;
 using System.Reflection;
 using Microsoft.SharePoint.Client.WebParts;
+using System.Text;
+using System.IO;
+using Microsoft.Legal.MatterCenter.Repository.Extensions;
 
 namespace Microsoft.Legal.MatterCenter.Repository
 {
@@ -44,6 +47,10 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private IExternalSharing extrnalSharing;
         private IUserRepository userRepositoy;
         private GeneralSettings generalSettings;
+        //To get log error in spolog table.
+        private ContentTypesConfig contentTypesSettings;
+        private ICustomLogger customLogger;
+        private LogTables logTables;
 
         /// <summary>
         /// Constructory which will inject all the related dependencies related to matter
@@ -62,7 +69,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
             IOptions<GeneralSettings> generalSettings,
             IUsersDetails userdetails,
             IOptions<ErrorSettings> errorSettings,
-
+            IOptions<ContentTypesConfig> contentTypesSettings,
+            ICustomLogger customLogger,
+            IOptions<LogTables> logTables,
             ISPPage spPage)
         {
             this.search = search;
@@ -75,10 +84,14 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.spoAuthorization = spoAuthorization;
             this.spPage = spPage;
             this.errorSettings = errorSettings.Value;
+            this.customLogger = customLogger;
             this.generalSettings = generalSettings.Value;
             this.spContentTypes = spContentTypes;
             this.extrnalSharing = extrnalSharing;
+            this.logTables = logTables.Value;
             this.userRepositoy = userRepositoy;
+            //Contenttypesettings require to get the sitecolumn group like _MatterCenter to filter columns.
+            this.contentTypesSettings = contentTypesSettings.Value;
         }
 
         /// <summary>
@@ -870,13 +883,7 @@ namespace Microsoft.Legal.MatterCenter.Repository
         {
             return await Task.FromResult(spList.GetFolderHierarchy(matterData));
         }
-
-
-
-
-
-
-
+		
         public string AddOneNote(ClientContext clientContext, string clientAddressPath, string oneNoteLocation, string listName, string oneNoteTitle)
         {
             return spList.AddOneNote(clientContext, clientAddressPath, oneNoteLocation, listName, oneNoteTitle);
@@ -1753,17 +1760,24 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <returns>Users that can be stamped</returns>
         private string GetMatterAssignedUsers(Matter matter)
         {
-            string currentUsers = string.Empty;
-            string separator = string.Empty;
-            if (null != matter && 0 < matter.AssignUserNames.Count)
+            try
             {
-                foreach (IList<string> userNames in matter.AssignUserNames)
+                string currentUsers = string.Empty;
+                string separator = string.Empty;
+                if (null != matter && 0 < matter.AssignUserNames.Count)
                 {
-                    currentUsers += separator + string.Join(ServiceConstants.SEMICOLON, userNames.Where(user => !string.IsNullOrWhiteSpace(user)));
-                    separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                    foreach (IList<string> userNames in matter.AssignUserNames)
+                    {
+                        currentUsers += separator + string.Join(ServiceConstants.SEMICOLON, userNames.Where(user => !string.IsNullOrWhiteSpace(user)));
+                        separator = ServiceConstants.DOLLAR + ServiceConstants.PIPE + ServiceConstants.DOLLAR;
+                    }
                 }
+                return currentUsers;
+            }catch(Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
-            return currentUsers;
         }
 
         public bool SetPermission(ClientContext clientContext, IList<IList<string>> assignUserName, IList<string> permissions, string listName) => spList.SetPermission(clientContext, assignUserName, permissions, listName);
@@ -1772,6 +1786,170 @@ namespace Microsoft.Legal.MatterCenter.Repository
 
         public bool OneNoteUrlExists(MatterInformationVM matterInformation) => search.PageExists(matterInformation.Client, matterInformation.RequestedUrl);
 
-    
+        /// <summary>
+        /// This method will get all the Field columns of the content type as the JSON object which is used to render the dynamic UI.
+        /// </summary>
+        /// <param name="contentTypeName"></param>
+        /// <param name="client"></param>
+        /// <returns>Json</returns>
+        public string GetMatterProvisionExtraProperties(string contentTypeName, Client client)
+        {
+            try
+            {
+                var clientContext = spoAuthorization.GetClientContext(client.Url);
+                FieldCollection fieldCollection = contentTypeName.GetFieldsInContentType(clientContext);
+
+                //To get configuration settings...
+                var listQuery = string.Format(CultureInfo.InvariantCulture, camlQueries.MatterConfigurationsListQuery,
+                        searchSettings.ManagedPropertyTitle, searchSettings.MatterConfigurationTitleValue);
+                ListItem settingsItem = spList.GetData(clientContext,
+                    listNames.MatterConfigurationsList, listQuery).FirstOrDefault();
+
+                IList<MatterExtraFields> addFields = new List<MatterExtraFields>();
+
+                if (settingsItem != null)
+                {
+                    Newtonsoft.Json.Linq.JObject settingConfig = (Newtonsoft.Json.Linq.JObject)
+                        JsonConvert.DeserializeObject(WebUtility.HtmlDecode(Convert.ToString(
+                            settingsItem.FieldValues["ConfigurationValue"])));
+
+                    if (settingConfig != null && settingConfig.GetValue("AdditionalFieldValues") != null)
+                    {
+                        foreach (var objField in settingConfig.GetValue("AdditionalFieldValues"))
+                        {
+                            addFields.Add(new MatterExtraFields
+                            {
+                                FieldName = objField["FieldName"].ToString(),
+                                IsDisplayInUI = String.IsNullOrWhiteSpace(objField["IsDisplayInUI"].ToString()) ? "false"
+                                                 : objField["IsDisplayInUI"].ToString(),
+                                IsMandatory = String.IsNullOrWhiteSpace(objField["IsMandatory"].ToString()) ? "false"
+                                                 : objField["IsMandatory"].ToString()
+                            });
+                        }
+                    }
+                }
+
+                    //spContentTypes.GetFieldsInContentType(clientContext, contentTypeName);
+                    StringBuilder sb = new StringBuilder();
+                    JsonWriter jw = new JsonTextWriter(new StringWriter(sb));
+                    jw.Formatting = Formatting.Indented;
+                    jw.WriteStartObject();
+
+                    jw.WritePropertyName("Fields");
+                    jw.WriteStartArray();
+                    foreach (var field in fieldCollection)
+                    {
+                        if (field.Group == this.contentTypesSettings.OneDriveContentTypeGroup)
+                        {
+                            jw.WriteStartObject();
+                            jw.WritePropertyName("name");
+                            jw.WriteValue(field.Title);
+
+                            jw.WritePropertyName("fieldInternalName");
+                            jw.WriteValue(field.InternalName);
+
+                            jw.WritePropertyName("required");
+                            string isRequired = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsMandatory : field.Required.ToString();
+                            string required = string.IsNullOrWhiteSpace(isRequired) ? false.ToString() :isRequired.ToLower();
+                            jw.WriteValue(required);
+
+                            jw.WritePropertyName("displayInUI");
+                            string isDisplayInUI = addFields.Count > 0 ? addFields.Where(x => x.FieldName == field.InternalName).SingleOrDefault().IsDisplayInUI : "true";
+                            isDisplayInUI = string.IsNullOrWhiteSpace(isDisplayInUI) ? "false" : isDisplayInUI;
+                            jw.WriteValue(isDisplayInUI);
+
+                            jw.WritePropertyName("originalType");
+                            jw.WriteValue(field.TypeAsString);
+                            jw.WritePropertyName("defaultValue");
+                            jw.WriteValue(field.DefaultValue);
+                            jw.WritePropertyName("description");
+                            jw.WriteValue(field.Description);
+
+                            if (field.TypeAsString == "Choice")
+                            {
+                                jw.WritePropertyName("type");
+                                jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldChoice)field).EditFormat));
+                                List<string> options = GetChoiceFieldValues(clientContext, field);
+                                jw.WritePropertyName("values");
+                                jw.WriteStartArray();
+                                int optionCounter = 1;
+
+                                foreach (string option in options)
+                                {
+                                    jw.WriteStartObject();
+                                    jw.WritePropertyName("choiceId");
+                                    jw.WriteValue(optionCounter);
+                                    jw.WritePropertyName("choiceValue");
+                                    jw.WriteValue(option);
+                                    optionCounter++;
+                                    jw.WriteEndObject();
+                                }
+                                jw.WriteEndArray();
+                            }
+                            else if (field.TypeAsString == "MultiChoice")
+                            {
+                                jw.WritePropertyName("type");
+                                jw.WriteValue(Convert.ToString(((Microsoft.SharePoint.Client.FieldMultiChoice)field).TypeAsString));
+                                List<string> options = GetChoiceFieldValues(clientContext, field);
+                                jw.WritePropertyName("values");
+                                jw.WriteStartArray();
+                                int optionCounter = 1;
+
+                                foreach (string option in options)
+                                {
+                                    jw.WriteStartObject();
+                                    jw.WritePropertyName("choiceId");
+                                    jw.WriteValue(optionCounter);
+                                    jw.WritePropertyName("choiceValue");
+                                    jw.WriteValue(option);
+                                    optionCounter++;
+                                    jw.WriteEndObject();
+                                }
+
+                                jw.WriteEndArray();
+                            }
+                            else
+                            {
+                                jw.WritePropertyName("type");
+                                jw.WriteValue(Convert.ToString(field.TypeAsString));
+                            }
+                            jw.WriteEndObject();
+                        }
+                    }
+                    jw.WriteEndArray();
+                    jw.WriteEndObject();
+                    return sb.ToString();             
+            }
+            catch (Exception ex)
+            {
+                customLogger.LogError(ex, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+        /// <summary>
+        /// This method is to get the choice field values of choice data type
+        /// </summary>
+        /// <param name="clientContext"></param>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        private static List<string> GetChoiceFieldValues(ClientContext clientContext, SharePoint.Client.Field fieldName)
+        {
+            List<string> fieldList = new List<string>();
+            try
+            {
+                FieldChoice fieldChoice = clientContext.CastTo<FieldChoice>(fieldName);
+                clientContext.Load(fieldChoice, f => f.Choices);
+                clientContext.ExecuteQuery();
+                foreach (string item in fieldChoice.Choices)
+                {
+                    fieldList.Add(item.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return fieldList;
+        }
     }
 }
