@@ -19,6 +19,18 @@
     </Request>
   </Items>
   <ContextParameters>
-    <ContextParameter Name="TokenValue" Value="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Il9VZ3FYR190TUxkdVNKMVQ4Y2FIeFU3Y090YyIsImtpZCI6Il9VZ3FYR190TUxkdVNKMVQ4Y2FIeFU3Y090YyJ9.eyJhdWQiOiJiOTRmMDdkZi1jODI1LTQzMWYtYjljNS1iOTQ5OWU4ZTlhYzEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQvIiwiaWF0IjoxNDg3MTk2MjM0LCJuYmYiOjE0ODcxOTYyMzQsImV4cCI6MTQ4NzIwMDEzNCwiYW1yIjpbInB3ZCJdLCJmYW1pbHlfbmFtZSI6IkdhamFybGEiLCJnaXZlbl9uYW1lIjoiV2lsc29uIiwiaXBhZGRyIjoiMTMxLjEwNy4xNjAuODMiLCJuYW1lIjoiV2lsc29uIEdhamFybGEiLCJub25jZSI6ImU0MGIxNTFmLTY3N2UtNDA0My1hMTMxLTA2MjBhMDNiZmVhMSIsIm9pZCI6IjkzM2NlMWZkLTI2OTMtNGFhZS1iN2JhLTJhMGI2OGU0MTAyOSIsInBsYXRmIjoiMyIsInN1YiI6ImtxZ3l0TENSUVJVY1FNb2hQWEJFQkpIT2dOdms0RVdLQU0wYTNVWWhHcFEiLCJ0aWQiOiIzYzQ1NjJjYS0zOWE0LTRkOGItOTFmZi02ZDNlZWZhYjVjMWQiLCJ1bmlxdWVfbmFtZSI6Im1hdHRlcmFkbWluQE1TbWF0dGVyLm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6Im1hdHRlcmFkbWluQE1TbWF0dGVyLm9ubWljcm9zb2Z0LmNvbSIsInZlciI6IjEuMCJ9.geKVCDkGhJpAbbdZ7ZtHCEyxNvSI-7Pf_PKF4Ang0lmXFQ4kwCtPj8uemjsNQQywqH4dFYW-Q6TuvElrldfRCYhbS75ggxjtg-pQt-svjHETRVADTtlirSD0RppEL5VSfAFXa3K-6ZQSKIwgBYhMg8w8rXfh1Dww8j7KGyfJ7d7lMUBI4v691s7mwqUppBonHJx-tavodCLuWLltMIN-vAvt6cILzRTi_8I2NDZKZS52ZbCXTgyiVXS2VkCz-7CFRcmyLgGwRkknWP1qeUDyZ5Gb_dlzUXsNb2nNcyG6Rtm_U9wQUjdrO3Kmv-ezZfUsL5-RHFyCr7t3eb9YHielbg" />
+    <ContextParameter Name="TokenValue" Value="" />
   </ContextParameters>
+  <WebTestPlugins>
+    <WebTestPlugin Classname="JWTokenWebTestPlugin.JWTokenWebTestPlugin, AuthWebTestPlugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="JWTokenWebTestPlugin" Description="">
+      <RuleParameters>
+        <RuleParameter Name="ClientId" Value="" />
+        <RuleParameter Name="AppKey" Value="" />
+        <RuleParameter Name="TokenValue" Value="TokenValue" />
+        <RuleParameter Name="Tenant" Value="" />
+        <RuleParameter Name="AadInstance" Value="" />
+        <RuleParameter Name="ToDoResourceId" Value="" />
+      </RuleParameters>
+    </WebTestPlugin>
+  </WebTestPlugins>
 </WebTest>
