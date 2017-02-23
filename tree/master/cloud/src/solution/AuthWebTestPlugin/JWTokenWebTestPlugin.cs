@@ -1,30 +1,17 @@
 ﻿using Microsoft.VisualStudio.TestTools.WebTesting;
 using System;
-using System.IO;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Microsoft.Azure.KeyVault;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
-using System.Web.Hosting;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
-using Microsoft.SharePoint.Client;
-using Microsoft.Extensions.Options;
-using System.Net;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.TestHost;
-
 using System.Net.Http;
-using System.Security.Claims;
-using System.Linq;
-using System.IdentityModel;
 
 namespace JWTokenWebTestPlugin
 {
-
 
     public class AntiForgeryHelper
     {
@@ -73,6 +60,16 @@ namespace JWTokenWebTestPlugin
         [Description("ToDoResourceId")]
         public string ToDoResourceId { get; set; }
 
+        [DisplayName("UserName")]
+        [Description("UserName")]
+        public string UserName { get; set; }
+
+        [DisplayName("PassWord")]
+        [Description("PassWord")]
+        public string PassWord { get; set; }
+
+
+
         [DisplayName("ContextParamaterName")]
         [Description("ContextParamaterName")]
         public string ContextParamaterName { get; private set; }
@@ -115,14 +112,7 @@ namespace JWTokenWebTestPlugin
 
             KeyVaultHelper kv = new KeyVaultHelper(Configuration);
             KeyVaultHelper.GetCert(Configuration);
-            kv.GetKeyVaultSecretsCerticate();
-
-            //ClientId = Configuration["General:KeyVaultClientID"];
-            //AppKey = Configuration["General:appkey"];
-            //Tenant = Configuration["General:Tenant"];
-            //AadInstance = Configuration["General:AADInstance"];
-            //ToDoResourceId = Configuration["General:GraphUrl"];
-      
+            kv.GetKeyVaultSecretsCerticate();        
         }
 
 
@@ -135,15 +125,16 @@ namespace JWTokenWebTestPlugin
             Tenant = Configuration["General:Tenant"];
             AadInstance = Configuration["General:AADInstance"];
             ToDoResourceId = Configuration["General:SiteURL"];
-           
+            UserName = Configuration["General:AdminUserName"];
+            PassWord = Configuration["General:AdminPassword"];
+
             Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext authContext = new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext(authority);
             ClientCredential clientCredential = new ClientCredential(ClientId, AppKey);
+          
+            UserPasswordCredential user = new UserPasswordCredential(UserName, PassWord);
 
-            UserPasswordCredential user = new UserPasswordCredential("matteradmin@msmatter.onmicrosoft.com", "P@$$w0rd01");
-   
             var result = authContext.AcquireTokenAsync(ClientId, "12e2877a-b640-4d09-8e03-8ff0db4bfcd2", user).Result;
             e.WebTest.Context[TokenValue] = "Bearer " + result.AccessToken;
-
         }
 
       

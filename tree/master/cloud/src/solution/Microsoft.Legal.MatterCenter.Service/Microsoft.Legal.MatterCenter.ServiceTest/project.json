@@ -14,7 +14,8 @@
     "Microsoft.AspNet.WebApi.Client": "5.2.3",
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "Autofac": "4.0.0",
-    "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*"
+    "Microsoft.Legal.MatterCenter.Utility": "1.0.0-*",
+    "Microsoft.AspNet.WebApi.Core": "5.2.3"
   },
   "commands": {
     "test": "xunit.runner.dnx"

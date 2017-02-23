@@ -19,7 +19,7 @@
       <RuleParameters>
         <RuleParameter Name="ClientId" Value="" />
         <RuleParameter Name="AppKey" Value="" />
-        <RuleParameter Name="TokenValue" Value="" />
+        <RuleParameter Name="TokenValue" Value="TokenValue" />
         <RuleParameter Name="Tenant" Value="" />
         <RuleParameter Name="AadInstance" Value="" />
         <RuleParameter Name="ToDoResourceId" Value="" />

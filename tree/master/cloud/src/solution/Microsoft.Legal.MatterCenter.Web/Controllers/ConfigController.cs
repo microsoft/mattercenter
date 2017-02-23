@@ -101,11 +101,13 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                         Description = "No filter was passed"
                     };
                     return matterCenterServiceFunctions.ServiceResponse(errorResponse, (int)HttpStatusCode.OK);
+                   // return "error";
                 }
                 #endregion
                 var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
                 CreateConfig(configResultsVM, "uiconfig.js", false);
                 return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
+               // return "testing";
             }
             catch (Exception exception)
             {

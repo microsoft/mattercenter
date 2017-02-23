@@ -1,9 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.WebTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace Matter.legal.MatterCenter.Performance
@@ -34,12 +31,7 @@ namespace Matter.legal.MatterCenter.Performance
         
             Guid id = Guid.NewGuid();
             string newName = RandomString(15);
-            // name = body.Replace("TestngAislingmicrosoft Test46", newName);
-
-            //body = body.Replace("New Matter microsoft Test46", newName);
-            // guidChange = name.Replace("c62cc8b591debfabb3fc5fb2aa42c69a", id.ToString());
-            //JsonConvert.ToString(name);
-
+          
             var data = JObject.Parse(body);
 
             var tokenName = "Matter." + "Name";

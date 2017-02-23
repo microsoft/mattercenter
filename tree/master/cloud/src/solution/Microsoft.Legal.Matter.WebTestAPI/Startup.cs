@@ -21,7 +21,7 @@ using System.Globalization;
 using Microsoft.Legal.MatterCenter.Web.Common;
 
 using System.IO;
-using JMicrosoft.Legal.Matter.WebTestAPI;
+using Microsoft.Legal.Matter.WebTestAPI;
 #endregion
 
 
