@@ -6,9 +6,16 @@ using Microsoft.Legal.MatterCenter.Repository;
 using Microsoft.Extensions.Options;
 
 using Microsoft.Legal.MatterCenter.Utility;
+using Microsoft.Legal.MatterCenter.Web;
+
+using Moq;
 using Microsoft.Legal.MatterCenter.Web.Controllers;
+using Microsoft.WindowsAzure.Storage.Table;
+using System;
 using Microsoft.Legal.MatterCenter.Web.Common;
+using Microsoft.Extensions.Configuration;
 using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Legal.MatterCenter.ServiceTest
