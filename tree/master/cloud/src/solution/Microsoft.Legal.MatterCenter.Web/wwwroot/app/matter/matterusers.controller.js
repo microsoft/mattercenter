@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
     'use strict';
     var app = angular.module("matterMain");
     app.controller('MatterUsersController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window', '$rootScope', '$location','adalAuthenticationService',
@@ -335,10 +335,11 @@
         //Method to remove the user from the matter
         cm.removeAssignPermissionsRow = function (index) {
 
-            if (!cm.disableControls && validateAttornyUserRolesAndPermission1(cm.assignPermissionTeams[index], 'txtUser','delete')) {
+            if (!cm.disableControls && validateAttornyUserRolesAndPermission1(cm.assignPermissionTeams[index], 'txtUser', 'delete')) {
 
                 var attornyCheck = validateAttornyUserRolesAndPermissinsAfterRemoval(index);
                 if (attornyCheck) {
+                    cm.disableControls = true;
                     var remainingRows = cm.assignPermissionTeams.length;
                     if (1 < remainingRows) {
                         var usersToRemoveFromMatter = [];
@@ -608,6 +609,7 @@
                 if (!response.isError) {
                     cm.assignPermissionTeams.splice(deletedUser.index, 1);
                     cm.stampedMatterUsers.splice(deletedUser.index, 1);
+                    cm.disableControls = false;
                 }
             });
         }
@@ -616,10 +618,11 @@
         cm.addNewAssignPermissions = function () {
             var newItemNo = cm.assignPermissionTeams.length + 1;
             var status = cm.matterList ? "add" : "refresh";
-            cm.assignPermissionTeams.push({
-                'assigneTeamRowNumber': newItemNo, 'assignedAllUserNamesAndEmails': '', 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0], 'userConfirmation': false, 'teamUsers': [], 'status': status,'userAssignedToMatterStatus':false
-            });
-            console.log(cm.assignPermissionTeams);
+            if (status == 'add') {
+                cm.assignPermissionTeams.push({
+                    'assigneTeamRowNumber': newItemNo, 'assignedAllUserNamesAndEmails': '', 'assignedRole': cm.assignRoles[0], 'assignedPermission': cm.assignPermissions[0], 'userConfirmation': false, 'teamUsers': [], 'status': status, 'userAssignedToMatterStatus': false
+                });
+            }
         };
 
         //#endregion
