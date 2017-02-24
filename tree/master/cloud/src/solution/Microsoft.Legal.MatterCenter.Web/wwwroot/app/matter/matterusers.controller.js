@@ -54,8 +54,8 @@
         cm.stampedMatterUsers=[];
         if (cm.clientUrl === "" && cm.matterName === "") {
             //Sample data for unit testing from the client side
-            cm.matterName = "";
-            cm.clientUrl = "";
+            cm.matterName = "Matter 456723";
+            cm.clientUrl = "https://msmatter.sharepoint.com/sites/microsoft/";
             cm.isEdit = true;
         }
         //#region Service API Call
@@ -336,8 +336,10 @@
         cm.removeAssignPermissionsRow = function (index) {
             if (!cm.disableControls) {
                 cm.disableControls = true;
+                if (index <= cm.stampedMatterUsers.length - 1) {
+                   
                 if (validateAttornyUserRolesAndPermission1(cm.assignPermissionTeams[index], 'txtUser', 'delete')) {
-                    var attornyCheck = validateAttornyUserRolesAndPermissinsAfterRemoval(index);
+                    var attornyCheck = true; //validateAttornyUserRolesAndPermissinsAfterRemoval(index);
                     if (attornyCheck) {
                         var remainingRows = cm.assignPermissionTeams.length;
                         if (1 < remainingRows) {
@@ -604,6 +606,13 @@
                     }
                 }
                 else {
+                    cm.disableControls = false;
+                }
+
+                }
+                else
+                {
+                    cm.assignPermissionTeams.splice(index, 1);
                     cm.disableControls = false;
                 }
             }
@@ -992,20 +1001,26 @@
             var isValid = false;
             if (!cm.globalSettings.isBackwardCompatible) {                
                 for (var iCount = 0; iCount < cm.stampedMatterUsers.length; iCount++) {
-                    if (cm.stampedMatterUsers[iCount].userRole.toLowerCase() == "responsible attorney" && 
-                        cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == "full control")
+                    if (iCount != team.assigneTeamRowNumber - 1)
                     {
-                        if (mode == 'delete')
-                        {
-                            if (iCount != team.assigneTeamRowNumber - 1 && cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase() == "full control"
-                                && cm.assignPermissionTeams[iCount].assignedRole.name.toLowerCase() == "responsible attorney") {
-                                isValid = true;
-                            }
-                        }
-                        else if(cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase() == "full control"
-                        && cm.assignPermissionTeams[iCount].assignedRole.name.toLowerCase() == "responsible attorney" )
+                        var role = $filter('filter')(cm.assignRoles, { name: cm.stampedMatterUsers[iCount].userRole });
+                        var permission = $filter('filter')(cm.assignPermissions, { name: cm.stampedMatterUsers[iCount].userPermission });
+                        cm.assignPermissionTeams[iCount].assignedPermission = permission[0];
+                        cm.assignPermissionTeams[iCount].assignedRole = role[0];
+                        cm.assignPermissionTeams[iCount].status = "success";
+                        if (cm.stampedMatterUsers[iCount].userRole.toLowerCase() == "responsible attorney" &&
+                        cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == "full control")
                         {
                             isValid = true;
+                        }
+                    }
+                    else if (iCount == team.assigneTeamRowNumber - 1)
+                    {
+                        if (cm.stampedMatterUsers[iCount].userRole.toLowerCase() == cm.assignPermissionTeams[iCount].assignedRole.name.toLowerCase()
+                            && cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase())
+                        {
+                            cm.assignPermissionTeams[iCount].status = "success";
+                            team.status = "success";
                         }
                     }
                 }
@@ -1013,22 +1028,25 @@
             else
             {
                 for (var iCount = 0; iCount < cm.stampedMatterUsers.length; iCount++) {
-                    if (cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == "full control") {
-                        if (mode == 'delete') {
-                            if (iCount != team.assigneTeamRowNumber - 1 && iCount != team.assigneTeamRowNumber - 1 && cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase() == "full control")
-                            {
-                                isValid = true;
-                            }
-                        }
-                        else if (cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase() == "full control")
-                        {
+                    if (iCount != team.assigneTeamRowNumber - 1) {
+                        var permission = $filter('filter')(cm.assignPermissions, { name: cm.stampedMatterUsers[iCount].userPermission });
+                        cm.assignPermissionTeams[iCount].assignedPermission = permission[0];
+                        cm.assignPermissionTeams[iCount].status = "success";
+                        if (cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == "full control") {
                             isValid = true;
+                        }
+                    }
+                    else if (iCount == team.assigneTeamRowNumber - 1) {
+                        if (cm.stampedMatterUsers[iCount].userPermission.toLowerCase() == cm.assignPermissionTeams[iCount].assignedPermission.name.toLowerCase()) {
+                            cm.assignPermissionTeams[iCount].status = "success";
+                            team.status = "success";
                         }
                     }
                 }
             }
             if (team.teamUsers.length == 0) {
-                isvalid = false;
+                isValid = false;
+                drpChangeString = 'txtUser';
             }
             if (!isValid) {
                 cm.errTextMsg = cm.createContent.MsgMatterRoleAndPermission;
@@ -1804,32 +1822,15 @@
         });
 
         cm.modifiedTeamDetails = function (assignTeam, drpChangeString) {
-                var result = $filter('filter')(cm.stampedMatterUsers, { userName: assignTeam.assignedUser });
-                var isChangeValidate = validateAttornyUserRolesAndPermission1(assignTeam, drpChangeString, 'update');
-                
-                if (isChangeValidate) {
-                    var status = cm.matterList ? "add" : "refresh";
-                    assignTeam.status = status;
-                    if (result.length > 0) {
-                        if (!cm.globalSettings.isBackwardCompatible) {
-                            if (result[0].userName == assignTeam.assignedUser && result[0].userRole == assignTeam.assignedRole.name && result[0].userPermission == assignTeam.assignedPermission.name) {
-                                assignTeam.status = "success"
-                                return false;
-                            }
-                        }else
-                        {
-                            if (result[0].userName == assignTeam.assignedUser && result[0].userPermission == assignTeam.assignedPermission.name) {
-                                assignTeam.status = "success"
-                                return false;
-                            }
-                        }
-                    }
-                    //assignTeam.disable = false;
+            var result = $filter('filter')(cm.stampedMatterUsers, { userName: assignTeam.assignedUser });
+            var isChangeValidate = false;
+            var status = cm.matterList ? "add" : "refresh";
+            assignTeam.status = status;
+            isChangeValidate = validateAttornyUserRolesAndPermission1(assignTeam, drpChangeString, 'update');
+
+            if (isChangeValidate) {
+                    
                     return true;
-                    //} else {
-                    //    assignTeam.status = status;
-                    //    assignTeam.disable = false;
-                    //}
                 }
                 else {
                         return false;
@@ -1840,10 +1841,7 @@
            // if (assignTeam.assignedUser && assignTeam.assignedUser != "") {
 
                 var attornyCheck = true; //  validateAttornyUserRolesAndPermissions($event, assignTeam);
-                if (assignTeam.assigneTeamRowNumber > cm.stampedMatterUsers.length)
-                {
                     attornyCheck = validateAttornyUserRolesAndPermission1(assignTeam, 'txtUser', 'save');
-                }
 
                 if (attornyCheck) {
                     cm.disableControls = true;
@@ -2202,6 +2200,9 @@
                         assignTeam.status = "add";
                     }
                 }
+                else {
+                    cm.disableControls = false;
+                    }
            // }
         }
 
