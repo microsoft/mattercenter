@@ -54,8 +54,8 @@
         cm.stampedMatterUsers=[];
         if (cm.clientUrl === "" && cm.matterName === "") {
             //Sample data for unit testing from the client side
-            cm.matterName = "Matter 456723";
-            cm.clientUrl = "https://msmatter.sharepoint.com/sites/microsoft/";
+            cm.matterName = "";
+            cm.clientUrl = "";
             cm.isEdit = true;
         }
         //#region Service API Call
