@@ -107,7 +107,6 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                 var configResultsVM = await configRepository.GetConfigurationsAsync(filter);
                 CreateConfig(configResultsVM, "uiconfig.js", false);
                 return matterCenterServiceFunctions.ServiceResponse(configResultsVM, (int)HttpStatusCode.OK);
-               // return "testing";
             }
             catch (Exception exception)
             {
