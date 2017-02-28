@@ -53,11 +53,43 @@ describe("MatterUsers Controller test suite", function () {
 
     describe("Verification of removeAssignPermissionsRow function", function () {
         it("It should remove the assign permission", function () {
-            vm.assignPermissionTeams = "MatterCenter";
-            vm.assignPermissionTeams = {
-                "splice": function (index, data) { vm.assignPermissionTeams = true; }
-            }
-            vm.removeAssignPermissionsRow(3);
+            vm.assignPermissionTeams = [];
+            var team = {};
+            team.assigneTeamRowNumber = 1;
+            team.assignedAllUserNamesAndEmails = "";
+            team.assignedRole = {};
+            team.assignedPermission = {};
+            team.assignedRole.name = "Responsible Attorney";
+            team.assignedRole.mandatory = true;
+            team.assignedPermission.name = "Full Control";
+            team.assignedPermission.mandatory = true;
+            team.assignedUser = "MatterCenter1";
+            team.teamUsers = [];
+            team.status = "success";
+            team.teamUsers.push("MatterCenter1");
+            vm.assignPermissionTeams.push(team);
+            team = {};
+            team.assigneTeamRowNumber = 2;
+            team.assignedAllUserNamesAndEmails = "";
+            team.assignedRole = {};
+            team.assignedPermission = {};
+            team.assignedRole.name = "Responsible Attorney";
+            team.assignedRole.mandatory = true;
+            team.assignedPermission.name = "Full Control";
+            team.assignedPermission.mandatory = true;
+            team.teamUsers = [];
+            team.assignedUser = "MatterCenter2";
+            team.teamUsers.push("MatterCenter2");
+            team.status = "success";
+            vm.assignPermissionTeams.push(team);
+            var userDetails = {};
+            userDetails.userEmail = "MatterCenter1";
+            userDetails.userName = "MatterCenter1";
+            userDetails.userRole = "Responsible Attorney";
+            userDetails.userPermission = "Full Control";
+            vm.stampedMatterUsers = [];
+            vm.stampedMatterUsers.push(userDetails);
+            vm.removeAssignPermissionsRow(1);
             expect(vm.assignPermissionTeams).toBeDefined();
         });
     });
