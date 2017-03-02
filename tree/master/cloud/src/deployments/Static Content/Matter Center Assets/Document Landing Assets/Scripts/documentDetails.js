@@ -48,6 +48,7 @@ var oDocumentLandingObject = (function () {
         sEmailSubject: configs.global.isBackwardCompatible!=true?"Matter Center Document(s)":"Project Center Document(s)",
         sSendToOneDriveTitle: "Send To OneDrive",
         sDocumentAJAXParameters: "/_api/web/getFileByServerRelativeUrl('{0}')/{1}",
+        sDocumentAJAXParametersExtraPrp: "/_api/web/getFileByServerRelativeUrl('{0}')",
         sTitleAJAXParameters: "/_api/web/lists/GetByTitle('{0}')/RootFolder/{1}",
         sWOPIFrameURL: "/_layouts/15/WopiFrame.aspx?sourcedoc={0}&action=interactivepreview",
         sVisioWebAccessURL: "/_layouts/15/VisioWebAccess/VisioWebAccess.aspx?listguid={0}&itemid={1}&DefaultItemOpen=1",
@@ -599,6 +600,93 @@ var oDocumentLandingObject = (function () {
             }
         }
     };
+    
+    //To retrieve all site columns internal name and display name for matter extra properties.
+    oCommonFunctions.retrieveAdditionalMatterPropertyContentType = function (oData) {
+        // Wait for getCurrentUserTitle to complete
+        if (!oGlobalConstants.sUserLoginName) {
+            setTimeout(function () { oCommonFunctions.retrieveListItems(); }, 1000);
+        } else {
+            if (oGlobalConstants.sUserLoginName) {
+   				getallContentTypes(oData);
+   	        } else {
+                onQueryFailed(oGlobalConstants.sOperationPin);
+            }
+        }
+    };
+    
+    // To retrieve all content types so we can filter 'Additional Matter Properties' contenttype and get site columns internal name and display name for it
+    function getallContentTypes(oData) {
+		var clientContext = SP.ClientContext.get_current();
+		var oContentTypes = clientContext.get_web().get_availableContentTypes();
+		clientContext.load(oContentTypes);
+		clientContext.executeQueryAsync(
+			Function.createDelegate(this, function() {
+				var ctypesInfo = '';
+				var ctypesEnumerator = oContentTypes.getEnumerator();
+			
+				while (ctypesEnumerator.moveNext()) {
+					var ocontentType = ctypesEnumerator.get_current();
+					if(ocontentType.get_name() == uiconfigs.DocumentDetails.AdditionalContentTypeName)
+					{
+						getAllFieldsInContentType(ocontentType,oData);
+					}
+				}
+				console.log(ctypesInfo.toString());
+			}),
+			Function.createDelegate(this, function() {
+				console.log('failed');
+			})
+		);
+	};
+
+   // Purpose: To retrieve all site columns internal name and display name
+   // of specific content type and generating HTML to display Columns with its values.
+function getAllFieldsInContentType(contentTypeName,oData){
+    var isDispalyExtraProperties = false;
+	var clientContext = SP.ClientContext.get_current();
+	var oContentTypesFields= contentTypeName.get_fields();
+	clientContext.load(oContentTypesFields);
+	clientContext.executeQueryAsync(
+		Function.createDelegate(this, function() {
+			console.log('Its success');
+			var ctypesFieldsEnumerator = oContentTypesFields.getEnumerator();
+			while (ctypesFieldsEnumerator.moveNext()) {
+				var oField = ctypesFieldsEnumerator.get_current();
+				if(oField.get_group() == uiconfigs.DocumentDetails.SiteColumnGroupName)
+				{
+					var prpValue = oData.d[oField.get_internalName()];
+					if (prpValue != undefined && oField.get_typeAsString() == 'DateTime')
+					{
+						if (null === prpValue.match(/Z$/)) { //// If time created does not ends with Z i.e. zone information
+	                    	prpValue = prpValue + "Z";
+	                	}
+	                	prpValue = oCommonFunctions.getDate(prpValue);
+					}
+					if (oField.get_typeAsString() == 'MultiChoice') {
+					    if (prpValue.split(";#").length > 0) {
+					        prpValue = prpValue + "-";
+					        prpValue = prpValue.replace(";#", "").replace(";#-", "").replace(/;#/g, ", ");
+					    }
+					}
+					if(prpValue != undefined)
+					{
+	    				var list1 = "<li><span class='propertyName ellipsis' style='width:210px;' title='" + oField.get_title() + "' id='Section3Column1'>" + oField.get_title() + ':</span>';
+	    				var list =   list1 + "<span class='propertyValue ellipsis' style='width:100px;' title='" + prpValue  + "' id='extraPropVal1'>" + prpValue +"</span></li>";
+	    				$("#metadatExtraProperties").append(list);
+	    				isDispalyExtraProperties = true;
+    				}
+				}
+			}
+			$('#loadingExtraProperties').hide();
+			if (isDispalyExtraProperties == false) {
+			    $('#docExtraProperties').hide();
+			}
+		}),
+		Function.createDelegate(this, function() {
+			console.log('failed');
+	}));
+};
 
     /* Function to pin the document */
     oCommonFunctions.pinDocument = function () {
@@ -649,6 +737,8 @@ var oDocumentLandingObject = (function () {
             }
             oDocumentLanding.sFileTitle = oData.d.vti_x005f_title ? oData.d.vti_x005f_title : oGlobalConstants.sNotApplicable;
             oCommonFunctions.populateMetadata();
+            
+           oCommonFunctions.retrieveAdditionalMatterPropertyContentType(oData);
         }
     };
 
@@ -662,8 +752,9 @@ var oDocumentLandingObject = (function () {
     };
 
     /* Function to get the document properties */
+    //Changes done to get all data so we can reduce web api calls for two times
     oCommonFunctions.getDocumentProperties = function () {
-        var sURL = oDocumentLanding.sDocumentAJAXCallURL + oDocumentLanding.sDocumentAJAXParameters.replace("{0}", oDocumentLanding.sCurrentDocumentRelativeUrl).replace("{1}", "Properties?$Select=" + oSelectProperties.sDocumentProperties);
+        var sURL = oDocumentLanding.sDocumentAJAXCallURL + oDocumentLanding.sDocumentAJAXParameters.replace("{0}", oDocumentLanding.sCurrentDocumentRelativeUrl).replace("{1}", "Properties") ; //?$Select=" + oSelectProperties.sDocumentProperties);
         oCommonFunctions.getData(sURL, oCommonFunctions.getDocumentPropertiesSuccess, oCommonFunctions.getDocumentPropertiesFailure, "GET");
     };
 
@@ -988,22 +1079,31 @@ var oDocumentLandingObject = (function () {
             if (oElement.is(":visible")) {
                 oElement.slideUp();
                 //// Update the toggle image
-                if (iCurrentSection) {
+                if (iCurrentSection == 1) {
                     $(".toggleVersionSection").removeClass("hide");
                     $("#CloseVersionHistory").addClass("hide");
-                } else {
+                } else if (iCurrentSection == 0) {
                     $(".toggleFileSection").removeClass("hide");
                     $("#CloseFileProperties").addClass("hide");
                 }
+                else if (iCurrentSection == 2) {
+                    $(".toggleExtraPropSection").removeClass("hide");
+                    $("#CloseExtraProperties").addClass("hide");
+                }
+
             } else {
                 oElement.slideDown();
                 //// Update the toggle image
-                if (iCurrentSection) {
+                if (iCurrentSection == 1) {
                     $(".toggleVersionSection").removeClass("hide");
                     $("#OpenVersionHistory").addClass("hide");
-                } else {
+                } else if (iCurrentSection == 0) {
                     $(".toggleFileSection").removeClass("hide");
                     $("#OpenFileProperties").addClass("hide");
+                }
+                else if (iCurrentSection == 2) {
+                    $(".toggleExtraPropSection").removeClass("hide");
+                    $("#OpenExtraProperties").addClass("hide");
                 }
             }
         }
@@ -1168,6 +1268,11 @@ var oDocumentLandingObject = (function () {
             var oVersionProperties = $("#documentMetadataContainer");
             oCommonFunctions.toggleSection(oVersionProperties, 1);
         });
+        
+        $(".toggleExtraPropSection").click(function () {
+            var oExtraProperties = $("#documentExtraMetadataContainer");
+            oCommonFunctions.toggleSection(oExtraProperties, 2);
+        });
 
         $(".errorPopUpCloseIcon").on("click", function (event) {
             $(".errorPopUpHolder").addClass("hide");
@@ -1307,6 +1412,7 @@ var oDocumentLandingObject = (function () {
  
   
 	$("#versionHistoryTitle").html(uiconfigs.DocumentDetails.Label17Section2HeaderText);
+	$("#docExtraPropertiesTitle").html(uiconfigs.DocumentDetails.Label1Section3HeaderText);
 	$("#Section2Column1").html(uiconfigs.DocumentDetails.Label18Section2Column1Text);
 	$("#Section2Column2").html(uiconfigs.DocumentDetails.Label19Section2Column2Text);
 	$("#Section2Column3").html(uiconfigs.DocumentDetails.Label20Section2Column3Text);

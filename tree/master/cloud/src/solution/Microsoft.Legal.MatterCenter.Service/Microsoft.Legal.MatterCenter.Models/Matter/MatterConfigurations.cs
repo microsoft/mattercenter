@@ -232,7 +232,12 @@ namespace Microsoft.Legal.MatterCenter.Models
         /// <summary>
         /// Property to determine the matter type(Guid or DateTime of Custom
         /// </summary>
-        public string MatterIdType { get; set; } 
+        public string MatterIdType { get; set; }
+
+        /// <summary>
+        /// List of fields to assign fields object while creating matter at assign content type step
+        /// </summary>
+        public IList<MatterExtraFields> AdditionalFieldValues { get; set; }
     }
 
 

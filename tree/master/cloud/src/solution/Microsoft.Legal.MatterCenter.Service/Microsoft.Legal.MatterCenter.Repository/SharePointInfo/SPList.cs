@@ -31,6 +31,9 @@ using System.Text.RegularExpressions;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using System.Net;
+using Microsoft.Legal.MatterCenter.Repository.Extensions;
+
 #endregion
 
 namespace Microsoft.Legal.MatterCenter.Repository
@@ -50,7 +53,9 @@ namespace Microsoft.Legal.MatterCenter.Repository
         private GeneralSettings generalSettings;
         private IHostingEnvironment hostingEnvironment;
         private ErrorSettings errorSettings;
-        private IUsersDetails userDetails;        
+        private IUsersDetails userDetails;
+        private TaxonomySettings taxonomySettings;
+        private ContentTypesConfig contentTypesConfig;
         #endregion
 
         /// <summary>
@@ -67,7 +72,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             IOptions<LogTables> logTables, 
             IOptions<MailSettings> mailSettings,
             IOptions<GeneralSettings> generalSettings,
-            IHostingEnvironment hostingEnvironment, 
+            IOptions<TaxonomySettings> taxonomySettings,
+            IHostingEnvironment hostingEnvironment,
             IUsersDetails userDetails)
         {
             this.searchSettings = searchSettings.Value;
@@ -80,6 +86,8 @@ namespace Microsoft.Legal.MatterCenter.Repository
             this.errorSettings = errorSettings.Value;
             this.userDetails = userDetails;
             this.generalSettings = generalSettings.Value;
+            this.taxonomySettings = taxonomySettings.Value;
+            this.contentTypesConfig = contentTypesConfig.Value;
         }
 
 
@@ -736,61 +744,144 @@ namespace Microsoft.Legal.MatterCenter.Repository
         /// <param name="mailProperties">The mail properties.</param>
         public void SetUploadItemProperties(ClientContext clientContext, string documentLibraryName, string fileName, string folderPath, Dictionary<string, string> mailProperties)
         {
-            ListItemCollection items = null;
-            ListItem listItem = null;
-            if (null != clientContext && !string.IsNullOrEmpty(documentLibraryName) && !string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(folderPath) && null != mailProperties)
+            try
             {
-                Web web = clientContext.Web;
-                ListCollection lists = web.Lists;
-                CamlQuery query = new CamlQuery();
-                List selectedList = lists.GetByTitle(documentLibraryName);
-                string serverRelativePath = folderPath +  ServiceConstants.FORWARD_SLASH + fileName;
-                query.ViewXml = string.Format(CultureInfo.InvariantCulture, camlQueries.GetAllFilesInFolderQuery, serverRelativePath);
-                items = selectedList.GetItems(query);
-                if (null != items)
+                ListItemCollection items = null;
+                ListItem listItem = null;
+                if (null != clientContext && !string.IsNullOrEmpty(documentLibraryName) && !string.IsNullOrEmpty(fileName) && !string.IsNullOrEmpty(folderPath) && null != mailProperties)
                 {
-                    clientContext.Load(items, item => item.Include(currentItem => currentItem.DisplayName, currentItem => currentItem.File.Name).Where(currentItem => currentItem.File.Name == fileName));
-                    clientContext.ExecuteQuery();
-                    if (0 < items.Count)
+                    Web web = clientContext.Web;
+                    ListCollection lists = web.Lists;
+                    CamlQuery query = new CamlQuery();
+                    List selectedList = lists.GetByTitle(documentLibraryName);
+                    string serverRelativePath = folderPath + ServiceConstants.FORWARD_SLASH + fileName;
+                    query.ViewXml = string.Format(CultureInfo.InvariantCulture, camlQueries.GetAllFilesInFolderQuery, serverRelativePath);
+                    items = selectedList.GetItems(query);
+                    if (null != items)
                     {
-                        listItem = items[0];
-                        if (null != mailProperties)
+                        clientContext.Load(items, item => item.Include(currentItem => currentItem.DisplayName, currentItem => currentItem.File.Name).Where(currentItem => currentItem.File.Name == fileName));
+                        clientContext.ExecuteQuery();
+                        if (0 < items.Count)
                         {
-                            listItem[mailSettings.SearchEmailFrom] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENDER_KEY]) ? mailProperties[ServiceConstants.MAIL_SENDER_KEY].Trim() : string.Empty;
-                            if (!string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_RECEIVED_DATEKEY]))
+                            listItem = items[0];
+                            if (null != mailProperties)
                             {
-                                listItem[mailSettings.SearchEmailReceivedDate] = Convert.ToDateTime(mailProperties[ServiceConstants.MAIL_RECEIVED_DATEKEY].Trim(), CultureInfo.InvariantCulture).ToUniversalTime();
+                                listItem[mailSettings.SearchEmailFrom] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENDER_KEY]) ? mailProperties[ServiceConstants.MAIL_SENDER_KEY].Trim() : string.Empty;
+                                if (!string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_RECEIVED_DATEKEY]))
+                                {
+                                    listItem[mailSettings.SearchEmailReceivedDate] = Convert.ToDateTime(mailProperties[ServiceConstants.MAIL_RECEIVED_DATEKEY].Trim(), CultureInfo.InvariantCulture).ToUniversalTime();
+                                }
+                                else
+                                {
+                                    listItem[mailSettings.SearchEmailReceivedDate] = null;
+                                }
+                                listItem[mailSettings.SearchEmailCC] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CC_ADDRESS_KEY]) ? mailProperties[ServiceConstants.MAIL_CC_ADDRESS_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailAttachments] = (string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY]) || mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY].Equals(ServiceConstants.TRUE, StringComparison.OrdinalIgnoreCase)) ? mailProperties[ServiceConstants.MAIL_ATTACHMENT_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailFromMailbox] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY]) ? mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailSubject] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT]) ? mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailTo] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_RECEIVER_KEY]) ? mailProperties[ServiceConstants.MAIL_RECEIVER_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailImportance] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_IMPORTANCE_KEY]) ? mailProperties[ServiceConstants.MAIL_IMPORTANCE_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailSensitivity] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENSITIVITY_KEY]) ? mailProperties[ServiceConstants.MAIL_SENSITIVITY_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailHasAttachments] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY]) ? mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailConversationId] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CONVERSATIONID_KEY]) ? mailProperties[ServiceConstants.MAIL_CONVERSATIONID_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailConversationTopic] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY]) ? mailProperties[ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY].Trim() : string.Empty;
+                                listItem[mailSettings.SearchEmailCategories] = GetCategories(mailProperties[ServiceConstants.MAIL_CATEGORIES_KEY].Trim());
+                                if (!string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY]))
+                                {
+                                    listItem[mailSettings.SearchEmailSentDate] = Convert.ToDateTime(mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY].Trim(), CultureInfo.InvariantCulture).ToUniversalTime();
+                                }
+                                else
+                                {
+                                    listItem[mailSettings.SearchEmailSentDate] = null;
+                                }
+                                listItem[mailSettings.SearchEmailOriginalName] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME]) ? mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME] : string.Empty;
+                                //Get all the fields of the document library to which document is getting uploaded.
+                                FieldCollection fields = GetMatterExtraDefaultSiteColumns(clientContext, selectedList);
+                                string contentTypeName = taxonomySettings.AdditionalMatterPropertiesContentTypeName;
+                                //Get all site columns that are present in 'Additional Matter Properties' content type.
+                                FieldCollection contentTypeFields = contentTypeName.GetFieldsInContentType(clientContext);
+                                if (fields != null && contentTypeFields != null && contentTypeFields.Count > 0)
+                                {
+                                    foreach (var field in fields)
+                                    {
+                                        foreach (var contentTypeField in contentTypeFields)
+                                        {
+                                            //If document library field name is part of content type field name 
+                                            //then update default value of tht column name to the value 
+                                            //of that column name.
+                                            if (field.InternalName == contentTypeField.InternalName)
+                                            {
+                                                if (field.Group == contentTypesConfig.OneDriveContentTypeGroup)
+                                                {
+                                                    listItem[field.InternalName] = field.DefaultValue;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            else
-                            {
-                                listItem[mailSettings.SearchEmailReceivedDate] = null;
-                            }
-                            listItem[mailSettings.SearchEmailCC] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CC_ADDRESS_KEY]) ? mailProperties[ServiceConstants.MAIL_CC_ADDRESS_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailAttachments] = (string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY]) || mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY].Equals(ServiceConstants.TRUE, StringComparison.OrdinalIgnoreCase)) ? mailProperties[ServiceConstants.MAIL_ATTACHMENT_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailFromMailbox] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY]) ? mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_FROM_MAILBOX_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailSubject] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT]) ? mailProperties[ServiceConstants.MAIL_SEARCH_EMAIL_SUBJECT].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailTo] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_RECEIVER_KEY]) ? mailProperties[ServiceConstants.MAIL_RECEIVER_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailImportance] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_IMPORTANCE_KEY]) ? mailProperties[ServiceConstants.MAIL_IMPORTANCE_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailSensitivity] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENSITIVITY_KEY]) ? mailProperties[ServiceConstants.MAIL_SENSITIVITY_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailHasAttachments] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY]) ? mailProperties[ServiceConstants.MAIL_HAS_ATTACHMENTS_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailConversationId] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CONVERSATIONID_KEY]) ? mailProperties[ServiceConstants.MAIL_CONVERSATIONID_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailConversationTopic] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY]) ? mailProperties[ServiceConstants.MAIL_CONVERSATION_TOPIC_KEY].Trim() : string.Empty;
-                            listItem[mailSettings.SearchEmailCategories] = GetCategories(mailProperties[ServiceConstants.MAIL_CATEGORIES_KEY].Trim());
-                            if (!string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY]))
-                            {
-                                listItem[mailSettings.SearchEmailSentDate] = Convert.ToDateTime(mailProperties[ServiceConstants.MAIL_SENT_DATE_KEY].Trim(), CultureInfo.InvariantCulture).ToUniversalTime();
-                            }
-                            else
-                            {
-                                listItem[mailSettings.SearchEmailSentDate] = null;
-                            }
-                            listItem[mailSettings.SearchEmailOriginalName] = !string.IsNullOrWhiteSpace(mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME]) ? mailProperties[ServiceConstants.MAIL_ORIGINAL_NAME] : string.Empty;
                             listItem.Update();
                             clientContext.ExecuteQuery();
                             listItem.RefreshLoad();
                         }
                     }
                 }
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name,
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// This method will get all the List columns of the selected list.
+        /// </summary>
+        /// <param name="clientContext"></param>
+        /// <param name="selectedList"></param>
+        /// <returns></returns>
+        private FieldCollection GetMatterExtraDefaultSiteColumns(ClientContext clientContext, List selectedList)
+        {
+            try
+            {
+                FieldCollection fields = selectedList.Fields;
+                clientContext.Load(fields);
+                clientContext.ExecuteQuery();
+                return fields;
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name,
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Checks if the property exists in property bag. Returns the value for the property from property bag.
+        /// </summary>
+        /// <param name="stampedPropertyValues">Dictionary object containing matter property bag key/value pairs</param>
+        /// <param name="key">Key to check in dictionary</param>
+        /// <returns>Property bag value for </returns>
+        internal string GetStampPropertyValue(Dictionary<string, object> stampedPropertyValues, string key)
+        {
+            try
+            {
+                string result = string.Empty;
+                if (stampedPropertyValues.ContainsKey(key))
+                {
+                    result = WebUtility.HtmlDecode(Convert.ToString(stampedPropertyValues[key], CultureInfo.InvariantCulture));
+                }
+
+                // This is just to check for null value in key, if exists
+                return (!string.IsNullOrWhiteSpace(result)) ? result : string.Empty;
+            }
+            catch (Exception exception)
+            {
+                customLogger.LogError(exception, MethodBase.GetCurrentMethod().DeclaringType.Name,
+                    MethodBase.GetCurrentMethod().Name, logTables.SPOLogTable);
+                throw;
             }
         }
 

@@ -512,6 +512,173 @@
             }
         }
     }
+    //Directive to render matter extra properties with different data types and controls.
+    'use strict';
+    function matteradditionalfieldsdirective($compile) {
+
+        return {
+            restrict: 'A',
+            replace: true,
+            link: function (scope, element, attrs) {
+                var obj = "";
+                obj = eval('(' + attrs.colorder + ')');
+                if (scope.input.columnPosition == obj && scope.input.displayInUI == "true") {
+                    var el = angular.element('<span  />');
+                    if (scope.input.type.toLowerCase() == 'boolean') {
+                        scope.input.required = false;
+                        el.append('<div class="directiveMatterExtraBoolLabel"><span ng-show="' + scope.input.required + '" class="mandatory pull-left">*&nbsp;</span>' +
+                           '<span ng-hide="' + scope.input.required + '" class="pull-left">&nbsp;&nbsp;&nbsp;&nbsp;</span>' +
+                           '<label class="directiveFormFieldsLableWidth" >{{input.name}}: </label></div>');
+                    }
+                    else
+                    {
+                        el.append('<div><span ng-show="' + scope.input.required + '" class="mandatory pull-left">*&nbsp;</span>' +
+                           '<span ng-hide="' + scope.input.required + '" class="pull-left">&nbsp;&nbsp;&nbsp;&nbsp;</span>' +
+                           '<label class="directiveFormFieldsLableWidth" >{{input.name}}: </label></div>');
+                    }
+                    
+                    switch (scope.input.type.toLowerCase()) {
+                        case 'boolean':
+                            el.append('<div class="directiveMatterExtraBoolField"><input id="' + scope.input.fieldInternalName + '"  type="checkbox" ng-model="input.value"/></div>');
+                            break;
+                        case 'text':
+                            if (scope.input.defaultValue != null && scope.input.defaultValue != undefined) {
+                                scope.input.value = scope.input.defaultValue;
+                            }
+                            if (scope.input.required == "true") {
+                                el.append('<div class="directiveMatterExtraFields"><input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}"  required type="text" ng-model="input.value"/></div>');
+                            }
+                            else
+                            {
+                                el.append('<div class="directiveMatterExtraFields"><input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" type="text" ng-model="input.value"/></div>');
+                            }
+                            break;
+                        case 'radiobuttons':
+                            if (scope.input.defaultValue != null && scope.input.defaultValue != undefined) {
+                                scope.input.value = scope.input.defaultValue;
+                            }
+                            var radioButtontText = "";
+
+                            if (scope.input.required == "true") {
+                                if (scope.input.defaultValue == null || scope.input.defaultValue == undefined) {
+                                    scope.input.value = scope.input.values[0].choiceValue;
+                                }
+
+                                for (var i = 0; i < scope.input.values.length; i++) {
+                                    radioButtontText += '<input name="radioGroup' + scope.input.values[i].fieldInternalName + '" type="radio"  ng-model="input.value" value="' + scope.input.values[i].choiceValue + '"><label id="">' + scope.input.values[i].choiceValue + ' </label>'
+                                }
+                            }
+                            else {
+                                for (var i = 0; i < scope.input.values.length; i++) {
+                                    radioButtontText += '<input name="radioGroup' + scope.input.values[i].fieldInternalName + '" type="radio"  ng-model="input.value" value="' + scope.input.values[i].choiceValue + '"><label id="">' + scope.input.values[i].choiceValue + ' </label>'
+                                }
+                            }
+                            el.append('<div class="directiveMatterExtraFields">' + radioButtontText + '</div>')
+                            break;
+                        case 'dropdown':
+                            if (scope.input.required == "true") {
+                                el.append('<div class="directiveMatterExtraFields"><select id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" required ng-model="input.value" ng-options=" x.choiceValue   for x in  input.values "> <option value="" label="- Select -"></option></select></div>')
+                            }
+                            else
+                            {
+                                el.append('<div class="directiveMatterExtraFields"><select id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-model="input.value" ng-options=" x.choiceValue   for x in  input.values "> <option value="" label="- Select -"></option></select></div>')
+                            }
+                            break;
+                        case 'datetime':
+                            if (scope.input.required == "true") {
+                                el.append('<div class="directiveMatterExtraFields"> <input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" required type="text" class="calendar form-control " uib-datepicker-popup="MM/dd/yyyy" data-ng-model="input.value"  is-open="opened" placeholder="mm/dd/yyyy"  data-ng-model="" datepicker-options="dateOptions" ng-required="true" close-text="Close" readonly  ng-click="open1()"  /> </div>')
+                            }
+                            else
+                            {
+                                el.append('<div class="directiveMatterExtraFields"> <input id="' + scope.input.fieldInternalName + '" class="directiveFormFields" type="text" class="calendar form-control " uib-datepicker-popup="MM/dd/yyyy" data-ng-model="input.value"  is-open="opened" placeholder="mm/dd/yyyy"  data-ng-model="" datepicker-options="dateOptions" ng-required="true" close-text="Close" readonly  ng-click="open1()"  /> </div>')
+                            }
+                            break;
+                        case 'multichoice':
+                            if (scope.input.required == "true") {
+                                el.append('<div class="directiveMatterExtraFields"><select  id="' + scope.input.fieldInternalName + '" class="multiSelectHeight directiveFormFields" required style="height:100px;" multiple ng-model="input.value" ng-class="{errorBorder: (input.value == undefined && cm.addFieldReq == true)}" ng-options="x.choiceValue for x  in input.values "> <option value="" label="- Select -"></option></select></div>')
+                            }
+                            else {
+                                el.append('<div class="directiveMatterExtraFields"><select  id="' + scope.input.fieldInternalName + '" class="multiSelectHeight directiveFormFields" required style="height:100px;" multiple ng-model="input.value" ng-options="x.choiceValue for x  in input.values "> <option value="" label="- Select -"></option></select></div>')
+                            }
+                            break;
+                    }
+
+                    $compile(el)(scope);
+                    element.append(el);
+                }
+            },
+            controller: function ($scope) {
+                $scope.open1 = function ($event) {
+                    if ($event) {
+                        $event.preventDefault();
+                        $event.stopPropagation();
+                    }
+                    $scope.opened = $scope.opened ? false : true;
+                };
+                $scope.dateOptions = {
+
+                    formatYear: 'yy',
+                    startingDay: 1
+                };
+                $scope.opened = false;
+            }
+        }
+    }
+    //Directive to render matter extra properties to set the values for to show or hide field in UI and to make field mandatory.
+    'use strict';
+    function extramatterpropertiefiledsinsettings($compile) {
+        return {
+            restrict: 'A',
+            replace: true,
+            link: function (scope, element, attrs) {
+                var el = angular.element('<div></div>');
+                var htmlTxt = '<div class="col-xs-12 pad0 marginTop10">\
+                     <div class="col-xs-12 col-sm-5 pad0">\
+                         <div class="row margin0">\
+                             <div class="col-xs-12 defaultFontStyle displayInline pad0">'+
+                               scope.input.name
+                             + '</div>\
+                             <div class="col-xs-12 col-sm-11 defaultFontStyle contentDescription pad0 marginTop10">\
+                             </div>\
+                         </div>\
+                     </div>\
+                     <div class="col-xs-12 col-sm-3 pad0 marginTop7">\
+                         <div class="col-xs-12 defaultFontStyle displayInline pad0">'
+                           + scope.$parent.vm.settingsConfigs.LabelDirectiveDisplayInUI +
+                         '</div>\
+                         <span class="marginRight10"> <input type="radio" ng-model="input.displayInUI" name="ui_' + scope.input.fieldInternalName + '" Value="true" />' + scope.$parent.vm.settingsConfigs.Radio1Option1Text + '</span>\
+                         <span><input type="radio" name="ui_' + scope.input.fieldInternalName + '" Value="false" ng-model="input.displayInUI" />' + scope.$parent.vm.settingsConfigs.Radio1Option2Text + '</span>\
+                     </div>\
+                     <div class="col-xs-12 col-sm-3 pad0 marginTop7" ng-show="input.displayInUI==\'true\'">\
+                         <div class="col-xs-12 defaultFontStyle displayInline pad0">'
+                         + scope.$parent.vm.settingsConfigs.LabelDirectiveIsRequired +
+                         '</div>\
+                         <span class="marginRight10"> <input type="radio" ng-model="input.required" name="req_' + scope.input.fieldInternalName + '" value="true" />' + scope.$parent.vm.settingsConfigs.Radio1Option1Text + '</span>\
+                         <span><input type="radio" name="req_' + scope.input.fieldInternalName + '" value="false" ng-model="input.required" />' + scope.$parent.vm.settingsConfigs.Radio1Option2Text + '</span>\
+                     </div>\
+                 </div>'
+                el.append(htmlTxt);
+                $compile(el)(scope);
+                element.append(el);
+            },
+            controller: function ($scope) {
+                $scope.open1 = function ($event) {
+                    if ($event) {
+                        $event.preventDefault();
+                        $event.stopPropagation();
+                    }
+                    $scope.opened = $scope.opened ? false : true;
+                };
+                $scope.dateOptions = {
+
+                    formatYear: 'yy',
+                    startingDay: 1
+                };
+
+                $scope.opened = false;
+            }
+        }
+    }
 
     var app = angular.module('matterMain');
     app.directive('onload', ['$timeout', onload]);
@@ -529,6 +696,8 @@
     app.directive('dropdown', ['$rootScope', dropdown]);
     app.directive('assignteamkeydown', [assignTeamKeyDown]);
     app.directive('showupload', [showupload]);
+    app.directive('matteradditionalfieldsdirective', ['$compile', matteradditionalfieldsdirective]);
+    app.directive('extramatterpropertiefiledsinsettings', ['$compile', extramatterpropertiefiledsinsettings]);
 })();
 
 
