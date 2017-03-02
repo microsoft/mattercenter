@@ -136,6 +136,18 @@
         <Header Name="Pragma" Value="no-cache" />
         <Header Name="Authorization" Value="{{TokenValue}}" />
       </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Matter.legal.MatterCenter.Performance.JsonExtractionRule, Matter.legal.MatterCenter.Performance, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" VariableName="MatterName" DisplayName="JsonExtractionRule" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="Name" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Matter.legal.MatterCenter.Performance.JsonExtractionRule, Matter.legal.MatterCenter.Performance, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" VariableName=" MatterGUID" DisplayName="JsonExtractionRule" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="MatterGuid" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
       <RequestPlugins>
         <RequestPlugin Classname="Matter.legal.MatterCenter.Performance.MatterNameReplace, Matter.legal.MatterCenter.Performance, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="MatterNameReplace" Description="" />
       </RequestPlugins>
@@ -235,6 +247,8 @@
         <RuleParameter Name="Tenant" Value="" />
         <RuleParameter Name="AadInstance" Value="" />
         <RuleParameter Name="ToDoResourceId" Value="" />
+        <RuleParameter Name="UserName" Value="" />
+        <RuleParameter Name="PassWord" Value="" />
       </RuleParameters>
     </WebTestPlugin>
   </WebTestPlugins>
