@@ -66,7 +66,6 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LoginHomePageCoded.cs" />
     <Compile Include="MatterNameReplace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -88,9 +87,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="LoginHomePage.webtest" />
-    <None Include="LoinHimePPagecoded.webtest">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="MyDocuments.webtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

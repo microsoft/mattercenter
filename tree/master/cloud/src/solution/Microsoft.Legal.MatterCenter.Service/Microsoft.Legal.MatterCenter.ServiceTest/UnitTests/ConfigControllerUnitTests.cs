@@ -16,6 +16,8 @@ using System.Web.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Legal.MatterCenter.ServiceTest;
+using Microsoft.Legal.MatterCenter.Models;
+using System.Globalization;
 
 namespace Microsoft.Legal.MatterCenter.UnitTest
 {
@@ -67,7 +69,7 @@ namespace Microsoft.Legal.MatterCenter.UnitTest
             var uiConfigsMoq = new Moq.Mock<IOptions<UIConfigSettings>>();
             uiConfigsMoq.SetupGet(t => t.Value.MatterCenterConfiguration).Returns("MatterCenterConfiguration");
             uiConfigsMoq.SetupGet(p => p.Value.Partitionkey).Returns("MatterCenterConfig");
-            uiConfigsMoq.SetupGet(c => c.Value.ConfigGroup).Returns("ConfigGroup");
+            uiConfigsMoq.SetupGet(c => c.Value.ConfigGroup).Returns("Home");
             uiConfigsMoq.SetupGet(k => k.Value.Key).Returns("Key");
             uiConfigsMoq.SetupGet(v => v.Value.Value).Returns("Value");
 
@@ -79,7 +81,7 @@ namespace Microsoft.Legal.MatterCenter.UnitTest
             mockList.Add(new DynamicTableEntity("test2", "test2"));
 
             var mockRepository = new Moq.Mock<IConfigRepository>();
-            mockRepository.Setup(x => x.GetConfigurationsAsync("")).Returns
+            mockRepository.Setup(x => x.GetConfigurationsAsync("Home")).Returns
                 (Task.FromResult(mockList));
 
 
@@ -143,13 +145,21 @@ namespace Microsoft.Legal.MatterCenter.UnitTest
             mockRepository.Setup(x => x.GetConfigurationsAsync("")).Returns
                 (Task.FromResult(mockList));
 
+            var genericResponse = new GenericResponseVM
+            {
+                Code = System.Net.HttpStatusCode.OK.ToString(),
+                Value = "",
+                IsError = false
+
+            };
+
             generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
             errorSettingsMoq.SetupAllProperties();
 
             var matterCenterServiceFunctions = new MatterCenterServiceFunctions();
 
             ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, uiConfigsMoq.Object,
-                logTableMoq.Object, matterCenterServiceFunctions, configRepository, environmentMoq.Object);
+                logTableMoq.Object, matterCenterServiceFunctions, mockRepository.Object, environmentMoq.Object);
 
             
 
@@ -164,26 +174,27 @@ namespace Microsoft.Legal.MatterCenter.UnitTest
             //Assert
             Assert.NotNull(config);
             Assert.NotNull(config.Value);
-            Assert.Equal(config.Value, mockList);
+            Assert.Equal(genericResponse.ToString(), config.Value.ToString());
+      
         }
 
         [Fact]
         public void GetSubsetUIConfigs()
         {
-
+            //Arrange
             GeneralSettings genS = new GeneralSettings();
             genS.CloudStorageConnectionString = _fixture.Configuratuion.GetSection("General").GetSection("CloudStorageConnectionString").Value.ToString();
 
             //Need to Mock the injected services and setup any properties on these that the test requires
             var errorSettingsMoq = new Moq.Mock<IOptions<ErrorSettings>>();
+            errorSettingsMoq.SetupAllProperties();
 
             var generalSettingsMoq = new Moq.Mock<IOptions<GeneralSettings>>();
             generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns(genS.CloudStorageConnectionString);
+            generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
 
             var environmentMoq = new Moq.Mock<IHostingEnvironment>();
-            environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\mcfork\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
-
-            var matterCenterServiceFunctionsMoq = new Moq.Mock<IMatterCenterServiceFunctions>();
+            environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\mattercenter\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
 
             var uiConfigsMoq = new Moq.Mock<IOptions<UIConfigSettings>>();
             uiConfigsMoq.SetupGet(t => t.Value.MatterCenterConfiguration).Returns("MatterCenterConfiguration");
@@ -194,17 +205,103 @@ namespace Microsoft.Legal.MatterCenter.UnitTest
 
             var logTableMoq = new Moq.Mock<IOptions<LogTables>>();
 
-            ConfigRepository configRepository = new ConfigRepository(null, generalSettingsMoq.Object, uiConfigsMoq.Object);
+            //Setup Mock Repository data
+            List<DynamicTableEntity> mockList = new List<DynamicTableEntity>();
+            mockList.Add(new DynamicTableEntity("test", "test"));
+            mockList.Add(new DynamicTableEntity("test2", "test2"));
 
-            generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
-            errorSettingsMoq.SetupAllProperties();
+            var mockRepository = new Moq.Mock<IConfigRepository>();
+            mockRepository.Setup(x => x.GetConfigurationsAsync("")).Returns
+                (Task.FromResult(mockList));
 
-            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, uiConfigsMoq.Object, logTableMoq.Object, matterCenterServiceFunctionsMoq.Object, configRepository, environmentMoq.Object);
 
-            var result = controller.Get("Home");
+            // Need matterCenterServiceFunctions object to return the data from the API
+            var matterCenterServiceFunctions = new MatterCenterServiceFunctions();
 
-            Assert.True(result.Status > 0);
+            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, uiConfigsMoq.Object, logTableMoq.Object, matterCenterServiceFunctions, mockRepository.Object, environmentMoq.Object);
+
+
+            //Call API
+            var resultTask = controller.Get("Home");
+            resultTask.Wait();
+
+            //Get result and convert to ObjectResult to extract the data
+            var result = resultTask.Result;
+            var config = (ObjectResult)result;
+
+            //Assert
+            Assert.NotNull(config);
+            Assert.NotNull(config.Value);
+            Assert.Equal(config.Value, mockList);
         }
+
+        [Fact]
+        public void GetUIConfigsNullFilter()
+        {
+            //Arrange
+            GeneralSettings genS = new GeneralSettings();
+            genS.CloudStorageConnectionString = _fixture.Configuratuion.GetSection("General").GetSection("CloudStorageConnectionString").Value.ToString();
+
+            //Need to Mock the injected services and setup any properties on these that the test requires
+            var errorSettingsMoq = new Moq.Mock<IOptions<ErrorSettings>>();
+            errorSettingsMoq.SetupAllProperties();
+            errorSettingsMoq.SetupGet(e => e.Value.MessageNoInputs);
+
+            ErrorSettings errorSettings = new ErrorSettings();
+
+            ErrorResponse errorResponse = new ErrorResponse()
+            {
+                Message = errorSettings.MessageNoInputs,
+                ErrorCode = System.Net.HttpStatusCode.BadRequest.ToString(),
+                Description = "No filter was passed"
+            };
+
+            var generalSettingsMoq = new Moq.Mock<IOptions<GeneralSettings>>();
+            generalSettingsMoq.SetupGet(p => p.Value.CloudStorageConnectionString).Returns(genS.CloudStorageConnectionString);
+            generalSettingsMoq.SetupGet(g => g.Value).Returns(genS);
+
+            var environmentMoq = new Moq.Mock<IHostingEnvironment>();
+            environmentMoq.SetupGet(p => p.WebRootPath).Returns(@"C:\Repos\mattercenter\tree\master\cloud\\src\solution\Microsoft.Legal.MatterCenter.Web\wwwroot");
+
+            var uiConfigsMoq = new Moq.Mock<IOptions<UIConfigSettings>>();
+            uiConfigsMoq.SetupGet(t => t.Value.MatterCenterConfiguration).Returns("MatterCenterConfiguration");
+            uiConfigsMoq.SetupGet(p => p.Value.Partitionkey).Returns("MatterCenterConfig");
+            uiConfigsMoq.SetupGet(c => c.Value.ConfigGroup).Returns("ConfigGroup");
+            uiConfigsMoq.SetupGet(k => k.Value.Key).Returns("Key");
+            uiConfigsMoq.SetupGet(v => v.Value.Value).Returns("Value");
+
+            var logTableMoq = new Moq.Mock<IOptions<LogTables>>();
+
+            //Setup Mock Repository data
+            List<DynamicTableEntity> mockList = new List<DynamicTableEntity>();
+            mockList.Add(new DynamicTableEntity("test", "test"));
+            mockList.Add(new DynamicTableEntity("test2", "test2"));
+
+            var mockRepository = new Moq.Mock<IConfigRepository>();
+            mockRepository.Setup(x => x.GetConfigurationsAsync("")).Returns
+                (Task.FromResult(mockList));
+
+
+            // Need matterCenterServiceFunctions object to return the data from the API
+            var matterCenterServiceFunctions = new MatterCenterServiceFunctions();
+
+            ConfigController controller = new ConfigController(errorSettingsMoq.Object, generalSettingsMoq.Object, uiConfigsMoq.Object, logTableMoq.Object, matterCenterServiceFunctions, mockRepository.Object, environmentMoq.Object);
+
+
+            //Call API
+            var resultTask = controller.Get(null);
+            resultTask.Wait();
+
+            //Get result and convert to ObjectResult to extract the data
+            var result = resultTask.Result;
+            var config = (ObjectResult)result;
+
+            //Assert
+            Assert.NotNull(config);
+            Assert.NotNull(config.Value);
+           Assert.Equal(errorResponse.ToString(), config.Value.ToString());
+        }
+
 
         [Fact]
         public void InsertUpdateUIConfigs()

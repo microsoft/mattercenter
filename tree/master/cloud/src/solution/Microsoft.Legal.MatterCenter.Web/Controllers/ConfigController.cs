@@ -114,7 +114,7 @@ namespace Microsoft.Legal.MatterCenter.Web.Controllers
                 throw;
             }
         }
-
+          
 
         /// <summary>
         /// Returns all the entries for Configuring the UI for sharepoint online

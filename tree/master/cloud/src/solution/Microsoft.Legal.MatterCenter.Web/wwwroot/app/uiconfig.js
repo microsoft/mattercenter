@@ -1,4 +1,4 @@
-﻿var uiconfigs =
+var uiconfigs =
 {
     "Home": {
         "MatterCenterSupportLinkText": "Matter Center Support",

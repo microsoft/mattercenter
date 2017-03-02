@@ -23,7 +23,7 @@ namespace Microsoft.Legal.MatterCenter.Utility
         public string IncorrectInputClientUrlMessage { get; set; }
         public string AuthorizationLengthError { get; set; }
         public string NoBearerStringPresent { get; set; }
-        public string MessageNoInputs { get; set; }
+        public virtual string MessageNoInputs { get; set; }
         public string MessageNoResult { get; set; }
         public string PeoplePickerNoResults { get; set; }
         public string Item { get; set; }

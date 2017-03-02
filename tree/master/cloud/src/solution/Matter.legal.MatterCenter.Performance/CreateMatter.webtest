@@ -136,18 +136,6 @@
         <Header Name="Pragma" Value="no-cache" />
         <Header Name="Authorization" Value="{{TokenValue}}" />
       </Headers>
-      <ExtractionRules>
-        <ExtractionRule Classname="JsonExtractionRule, Matter.legal.MatterCenter.Performance, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" VariableName="MatterGUID" DisplayName="JSON Extraction Rule" Description="Extracts the specified JSON value from an object.">
-          <RuleParameters>
-            <RuleParameter Name="Name" Value="MatterGuid" />
-          </RuleParameters>
-        </ExtractionRule>
-        <ExtractionRule Classname="JsonExtractionRule, Matter.legal.MatterCenter.Performance, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" VariableName="MatterName" DisplayName="JSON Extraction Rule" Description="Extracts the specified JSON value from an object.">
-          <RuleParameters>
-            <RuleParameter Name="Name" Value="Name" />
-          </RuleParameters>
-        </ExtractionRule>
-      </ExtractionRules>
       <RequestPlugins>
         <RequestPlugin Classname="Matter.legal.MatterCenter.Performance.MatterNameReplace, Matter.legal.MatterCenter.Performance, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="MatterNameReplace" Description="" />
       </RequestPlugins>
@@ -236,7 +224,7 @@
     <ContextParameter Name="TokenValue" Value="" />
     <ContextParameter Name="MatterName" Value="" />
     <ContextParameter Name="MatterGUID" Value="" />
-    <ContextParameter Name="WebServer1" Value="https://matterwebapp.azurewebsites.net" />
+    <ContextParameter Name="WebServer1" Value="https://localhost:44324" />
   </ContextParameters>
   <WebTestPlugins>
     <WebTestPlugin Classname="JWTokenWebTestPlugin.JWTokenWebTestPlugin, AuthWebTestPlugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="JWTokenWebTestPlugin" Description="">

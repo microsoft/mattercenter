@@ -116,7 +116,7 @@
                     <a id="" ng-class="{'errorBorder' :  (cm.errorBorder == 'selectType')}" ng-click="cm.selectMatterType()" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span> {{cm.createContent.LabelAddOrRemoveTypes}}</a>
                 </div>
                 <div class="loadingLookUp hide">
-                    <img id="loadingLookupImage" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" src="../Images/WindowsLoadingFast.GIF">
+                    <img id="loadingLookupImage" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" src="/../../Images/WindowsLoadingFast.GIF">
                 </div>
             </div>
         </section>
@@ -129,7 +129,7 @@
                     </label>
                     <label class="contentLabel medium clear" id="conflictCheckBy"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab2Textbox1Label}}</label>
                     <div class="gutter">
-                      <img ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh loadingGlyphiconCCheck gly-spin pull-left" src="../../images/loadingcirclests16.gif" />
+                      <img ng-show="conflictloadingLocations" class="glyphicon glyphicon-refresh loadingGlyphiconCCheck gly-spin pull-left" src="/../../images/loadingcirclests16.gif" />
                     </div>
                     <div class="gutter"></div>
                     <div class="gutter"></div>
@@ -183,7 +183,7 @@
                         <span class="ui-helper-hidden-accessible" role="status" aria-live="polite"></span>
                         <input class="medium clear ui-autocomplete-input" id="txtBlockUser" ng-class="{'errorBorder' :  (cm.errorBorder == 'cblockuser')}" ng-model="cm.conflictUsers.assignedUser"    ng-blur='cm.onSelect($item, $model, cm.conflictUsers,"blockuser","on-blurr",$event,cm.conflictUsers.assignedUser)' uib-typeahead="users.name    for users in cm.searchUsers($viewValue)" typeahead-loading="blockLoadingLocations" typeahead-no-results="blockUserResults" typeahead-on-select='cm.onSelect($item, $model, cm.conflictUsers,"blockuser","",$event,cm.conflictUsers.assignedUser)' class="form-control" style="border: 1px solid rgb(200, 200, 200); border-image: none;" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox2PlaceHolder}}" typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" typeahead-min-length='3' autocomplete="off">
                         <div class="gutter">
-                           <img ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh loadingGlyphiconBlockUser gly-spin pull-left" src="../../images/loadingcirclests16.gif" />
+                           <img ng-show="blockLoadingLocations" class="glyphicon glyphicon-refresh loadingGlyphiconBlockUser gly-spin pull-left" src="/../../images/loadingcirclests16.gif" />
                         </div>
                         <div ng-show="blockUserResults">
                             <i class="glyphicon glyphicon-remove gly-spin"></i> {{cm.createContent.Tab2NoSearchResultText}}
@@ -215,7 +215,7 @@
                         <input id='txtUser{{assignTeam.assigneTeamRowNumber}}' assignteamkeydown confirm="false" uservalue="" ng-disabled="assignTeam.disable" ng-focus="cm.checkAssign('txtUser'+(assignTeam.assigneTeamRowNumber-1))" ng-class="{'errorBorder' :  (cm.errorBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}') ,'notificationBorder' :  (cm.notificationBorder == 'txtUser{{assignTeam.assigneTeamRowNumber}}')}" ng-blur='cm.onSelect($item, $model, assignTeam,"teamuser","on-blurr",$event,assignTeam.assignedUser)' class="medium clear inputAssignPerm ui-autocomplete-input commonspace" ng-model="assignTeam.assignedUser" uib-typeahead="users.name  for users in cm.searchUsers($viewValue)" typeahead-loading='loadingLocationsTeam' typeahead-no-results='teamAssingnResults' typeahead-on-select='cm.onSelect($item, $model, assignTeam,"team","",$event,assignTeam.assignedUser)' class="form-control" id="txtAssign1" spellcheck="true" type="text" placeholder="{{cm.createContent.Tab2Textbox3PlaceHolder}}" typeahead-min-length='3' typeahead-template-url="../app/matter/MatterTemplates/typeahead-peoplesearch.html" autocomplete="off">
                        
                         <div class="gutter">
-                         <img ng-show="loadingLocationsTeam" class="glyphicon glyphicon-refresh loadingGlyphicon gly-spin pull-left" src="../../images/loadingcirclests16.gif" />
+                         <img ng-show="loadingLocationsTeam" class="glyphicon glyphicon-refresh loadingGlyphicon gly-spin pull-left" src="/../../images/loadingcirclests16.gif" />
                         </div>
                         <div class="gutter"></div>
                         <div class="addNewMember" ng-show="cm.showRoles">
@@ -233,10 +233,10 @@
                         </div>
                         <div class="gutter"></div>
                         <div class="customClose" ng-if="assignTeam.disable==true">
-                            <img ng-model="assignTeam.assigneTeamRowNumber"  title="{{cm.createContent.ButtonDeleteText}}" alt="{{cm.createContent.ButtonDeleteText}}" style="cursor:default; opacity:0.6 !important" src="../Images/icon-delete.png">
+                            <img ng-model="assignTeam.assigneTeamRowNumber"  title="{{cm.createContent.ButtonDeleteText}}" alt="{{cm.createContent.ButtonDeleteText}}" style="cursor:default; opacity:0.6 !important" src="/../../Images/icon-delete.png">
                         </div>
                         <div class="close customClose" ng-if="assignTeam.disable==undefined">
-                            <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="{{cm.createContent.ButtonDeleteText}}" alt="{{cm.createContent.ButtonDeleteText}}" src="../Images/icon-delete.png">
+                            <img ng-model="assignTeam.assigneTeamRowNumber" ng-click="cm.removeAssignPermissionsRow($index)" title="{{cm.createContent.ButtonDeleteText}}" alt="{{cm.createContent.ButtonDeleteText}}" src="/../../Images/icon-delete.png">
                         </div>
                     </div>
                 </div>
@@ -274,7 +274,7 @@
                 </div>
                 <button class="button clear" type="button" id="btnCreateMatter" ng-click='cm.createMatterButton($event)' ng-disabled="cm.createBtnDisabled" value="Create">{{cm.createButton}}</button>
                 <div class="creatematerLoadingBtn">
-                    <img id="loadingImageCreate" ng-show="cm.createBtnDisabled" src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
+                    <img id="loadingImageCreate" ng-show="cm.createBtnDisabled" src="/../../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}">
                 </div>
             </div>
 
@@ -299,7 +299,7 @@
 
 
     <div class="popUpContainer popUpContainerLevel3" ng-class="cm.popupContainer" ng-show="cm.taxonomyHierarchyLevels==3||cm.taxonomyHierarchyLevels==2" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
-        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
+        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="/../../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
         <div class="alignCenter">
             <div class="popUpHeader">
                 <div title="Select a {{cm.createContent.ColumnName1}}" class="popUpFloatLeft">Select a {{cm.createContent.ColumnName1}}</div>
@@ -392,10 +392,10 @@
 
                 <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popUpBodyBlocksLevel3" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs addOrRemoveBtnMargin" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward iconForwardLevel3" style="margin:0px;" alt="Left" src="../Images/forward_666.png"><div ng-click="cm.addToDocumentTemplate()" class="addOrRemoveLabelMarginTop" style="float:right;">add</div>
+                        <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward iconForwardLevel3" style="margin:0px;" alt="Left" src="/../../Images/forward_666.png"><div ng-click="cm.addToDocumentTemplate()" class="addOrRemoveLabelMarginTop" style="float:right;">add</div>
                     </div>
                     <div class="popUpRightClick popUpPosAbs addOrRemoveBtnMargin customRemoveBtnMargin" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack iconBackLevel3" alt="Right" src="../Images/back-666.png"> <div class="addOrRemoveLabelMarginTop addOrRemoveLabelMarginLeftLevel3 removeMarginLevel4" ng-click="cm.removeFromDocumentTemplate()" style="float:left;">
+                        <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack iconBackLevel3" alt="Right" src="/../../Images/back-666.png"> <div class="addOrRemoveLabelMarginTop addOrRemoveLabelMarginLeftLevel3 removeMarginLevel4" ng-click="cm.removeFromDocumentTemplate()" style="float:left;">
                             remove
                         </div>
                     </div>
@@ -421,7 +421,7 @@
 
 
                 <div id="defaultMessageDiv" class="">
-                    <img id="infoImg" alt="info" src="../Images/information-blue.png">
+                    <img id="infoImg" alt="info" src="/../../Images/information-blue.png">
                     <span id="defaultMessage" class="defaultMessageLevel3">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
                 <button ng-click="cm.saveDocumentTemplates()" class="SavePopUpEntries saveDocButtonLevel3" type="button">{{cm.createContent.Tab1ButtonSaveSelectiponText}}</button>
@@ -429,7 +429,7 @@
         </div>
     </div>
     <div class="popUpContainer popUpPadding popUpContainerLevel4 popUpContainerTaxLevel4" ng-show="cm.taxonomyHierarchyLevels==4" ng-class="cm.popupContainer" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
-        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
+        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="/../../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
         <div class="AlignCenterLevel4">
             <div class="popUpHeader">
                 <div title="Select a {{cm.createContent.ColumnName1}}" class="popUpFloatLeft">Select a {{cm.createContent.ColumnName1}}</div>
@@ -520,10 +520,10 @@
 
                 <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popUpBodyBlocksLevel4" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs addOrRemoveBtnMargin addOrRemoveBtnMarginLevel4 popAddLevel4" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward iconForwardLevel4" style="margin:0px;" alt="Left" src="../Images/forward_666.png"><div class="addOrRemoveLabelMarginTop removeMargin" ng-click="cm.addToDocumentTemplate()" style="float:right;">add</div>
+                        <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward iconForwardLevel4" style="margin:0px;" alt="Left" src="/../../Images/forward_666.png"><div class="addOrRemoveLabelMarginTop removeMargin" ng-click="cm.addToDocumentTemplate()" style="float:right;">add</div>
                     </div>
                     <div class="popUpRightClick popUpPosAbs addOrRemoveBtnMargin addOrRemoveBtnMarginLevel4 popRemoveLevel4 customRemoveBtnMargin" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack iconBackLevel4" alt="Right" src="../Images/back-666.png"> <div ng-click="cm.removeFromDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin removeMarginLevel4" style="float:left;">
+                        <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack iconBackLevel4" alt="Right" src="/../../Images/back-666.png"> <div ng-click="cm.removeFromDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin removeMarginLevel4" style="float:left;">
                             remove
                         </div>
                     </div>
@@ -548,7 +548,7 @@
 
 
                 <div id="defaultMessageDiv" class="defaultMessageDivLevel4">
-                    <img id="infoImg" class="infoImgLevel4" alt="info" src="../Images/information-blue.png">
+                    <img id="infoImg" class="infoImgLevel4" alt="info" src="/../../Images/information-blue.png">
                     <span id="defaultMessage" class="defaultMessageLevel4">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
 
@@ -557,7 +557,7 @@
         </div>
     </div>
     <div class="popUpContainer popUpContainerLevel5 popUpPadding popUpContainerTaxLevel5" ng-show="cm.taxonomyHierarchyLevels==5" ng-class="cm.popupContainer" style="bottom:0px; color:#333;font-size:0.87em;left:0px;position:absolute;right:0px;top:0px;width:100%;height:400px;z-index:1000; padding:15px;">
-        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
+        <img title="Close" class="popUpCloseIcon popUpFloatRight" alt="Close" src="/../../Images/close-666.png" ng-click='cm.selectMatterTypePopUpClose()'>
         <div class="matterAlignCenter">
             <div class="popUpHeader">
                 <div title="Select a {{cm.createContent.ColumnName1}}" class="popUpFloatLeft">Select a {{cm.createContent.ColumnName1}}</div>
@@ -648,10 +648,10 @@
 
                 <div class="popUpMoveItem popUpBodyBlocks popUpMarginRight popUpFloatLeft popAddRemove" style="position:relative;margin-top:0px;" id="navigate">
                     <div class="popUpLeftClick popUpPosAbs addOrRemoveBtnMargin addMarginTop popAddWidth" style="bottom:60%; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward iconForwardLevel5" style="margin:0px;" alt="Left" src="../Images/forward_666.png"><div ng-click="cm.addToDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin" style="float:right;">add</div>
+                        <img title="Add" ng-click="cm.addToDocumentTemplate()" class="iconForward iconForwardLevel5" style="margin:0px;" alt="Left" src="/../../Images/forward_666.png"><div ng-click="cm.addToDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin" style="float:right;">add</div>
                     </div>
                     <div class="popUpRightClick popUpPosAbs addOrRemoveBtnMargin customRemoveBtnMargin popRemoveWidth" style="bottom:40%;margin-top:10px; margin-left:-4px;cursor:pointer;position:relative;">
-                        <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack iconBackLevel5" alt="Right" src="../Images/back-666.png"> <div ng-click="cm.removeFromDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin" style="float:left;">
+                        <img ng-click="cm.removeFromDocumentTemplate()" title="Remove" class="iconBack iconBackLevel5" alt="Right" src="/../../Images/back-666.png"> <div ng-click="cm.removeFromDocumentTemplate()" class="addOrRemoveLabelMarginTop removeMargin" style="float:left;">
                             remove
                         </div>
                     </div>
@@ -676,7 +676,7 @@
 
 
                 <div id="defaultMessageDiv" class="defaultMessage defaultMessageLevel5">
-                    <img id="infoImg" class="infoImg" alt="info" src="../Images/information-blue.png">
+                    <img id="infoImg" class="infoImg" alt="info" src="/../../Images/information-blue.png">
                     <span id="defaultMessage" class="spanDefaultMessage spanDefaultMessageLevel5">{{cm.createContent.Tab1LabelPrimaryTypeBeforeSaveText}} </span>
                 </div>
 
@@ -689,6 +689,6 @@
 </div>
 <div id="loadingImageContainer">
     <div class="lazyLoading" ng-class="cm.popupContainerBackground">
-        <img src="../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" title="{{cm.createContent.Tab1ImageLoadingAltText}}" />
+        <img src="/../../Images/WindowsLoadingFast.GIF" alt="{{cm.createContent.Tab1ImageLoadingAltText}}" title="{{cm.createContent.Tab1ImageLoadingAltText}}" />
     </div>
 </div>
