@@ -498,7 +498,7 @@ function displayContent() {
 		    /* Set the task panel html text */
 		    var sTaskPanelText = oMatterLandingHtmlConstants.taskSectionHtml;
 		    var taskUrl = listUrl + getMatterName() + libraryNameSuffix.taskSuffix;		    
-		    $.get(calendarUrl).done(function () {
+   		    $.get(taskUrl).done(function () {
 			  	sTaskPanelText = sTaskPanelText.replace("@@LoadingImage", oCommonLinks.sCatalogSite + oCommonLinks.oMatterCenterAssetsLocation + oCommonAssets.loadingImage);
 			    sTaskPanelText = sTaskPanelText.replace("@@TaskLink", taskUrl);
 			    sTaskPanelText = sTaskPanelText.replace("title='Task'> Task </div>", "title='" + uiconfigs.MatterLanding.Label14TaskeTitleText + "'> "+ uiconfigs.MatterLanding.Label14TaskeTitleText+" </div>");
