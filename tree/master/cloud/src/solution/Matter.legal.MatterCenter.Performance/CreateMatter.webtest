@@ -236,7 +236,7 @@
     <ContextParameter Name="TokenValue" Value="" />
     <ContextParameter Name="MatterName" Value="" />
     <ContextParameter Name="MatterGUID" Value="" />
-    <ContextParameter Name="WebServer1" Value="https://localhost:44324" />
+    <ContextParameter Name="WebServer1" Value="https://matterwebapp.azurewebsites.net" />
   </ContextParameters>
   <WebTestPlugins>
     <WebTestPlugin Classname="JWTokenWebTestPlugin.JWTokenWebTestPlugin, AuthWebTestPlugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="JWTokenWebTestPlugin" Description="">
