@@ -21,7 +21,7 @@ using System.Globalization;
 
 namespace Microsoft.Legal.MatterCenter.UnitTest
 {
-    public class ConfigUnitTests : IClassFixture<CompositionRootFixture>
+    public class ConfigContollerUnitTests : IClassFixture<CompositionRootFixture>
     {
 
 

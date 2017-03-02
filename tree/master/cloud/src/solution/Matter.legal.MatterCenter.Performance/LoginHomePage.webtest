@@ -69,7 +69,7 @@
   </Items>
   <ContextParameters>
     <ContextParameter Name="TokenValue" Value="" />
-    <ContextParameter Name="WebServer1" Value="https://localhost:44324" />
+    <ContextParameter Name="WebServer1" Value="https://matterwebapp.azurewebsites.net" />
     <ContextParameter Name="Doc" Value="" />
   </ContextParameters>
   <WebTestPlugins>
