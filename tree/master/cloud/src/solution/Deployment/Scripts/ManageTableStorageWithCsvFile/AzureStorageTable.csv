@@ -1,4 +1,4 @@
-"PartitionKey","RowKey","ConfigGroup","Key","Value"
+PartitionKey,RowKey,ConfigGroup,Key,Value
 MatterCenterConfig,RowKey001,CreateMatter,Tab1HeaderTitle,Step 1: Select a client and provide basic information for your new matter.
 MatterCenterConfig,RowKey002,CreateMatter,Tab2HeaderTitle,Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter.
 MatterCenterConfig,RowKey003,CreateMatter,Tab3HeaderTitle,"Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team."
@@ -473,7 +473,7 @@ MatterCenterConfig,RowKey545,MatterLanding,ErrMsg6ForPinUnpinMatters,Error while
 MatterCenterConfig,RowKey546,MatterLanding,ErrMsg7MatterInformation,Error while trying to retrieve matter information
 MatterCenterConfig,RowKey547,MatterLanding,ErrMsg8MatterDescription,Error while trying to retrieve matter description
 MatterCenterConfig,RowKey548,MatterLanding,ErrMsg9NoPinUnpinMatter,Error while trying to pin/unpin matter
-MatterCenterConfig,RowKey549,MatterLanding,Label1MenuText,Project Name
+MatterCenterConfig,RowKey549,MatterLanding,Label1MenuText,Matter Name
 MatterCenterConfig,RowKey550,MatterLanding,Label9Section1Text,Matter Id
 MatterCenterConfig,RowKey551,MatterLanding,Label10Section1Text,Client Id
 MatterCenterConfig,RowKey552,MatterLanding,Label11Section1Text,Description
@@ -563,11 +563,11 @@ MatterCenterConfig,RowKey665,MatterDashboard,AdvSearchLabel5Text,Date
 MatterCenterConfig,RowKey666,MatterDashboard,GridColumn6Header,Matter ID
 MatterCenterConfig,RowKey667,CreateMatter,ErrorMessageAOLSelection,Select matter type for this matter.
 MatterCenterConfig,RowKey668,Header,FooterMenuOption1Value,"[Enter URL for Feedback and Support, e.g. mailto:support@supportsite.com]"
-MatterCenterConfig,RowKey669,Header,FooterMenuOption2Value,"[Enter URL for Privacy terms, e.g. privacy.supportsite.com]"
+MatterCenterConfig,RowKey669,Header,FooterMenuOption2Value,https://privacy.microsoft.com/en-us/privacystatement
 MatterCenterConfig,RowKey670,Header,FooterMenuOption3Value,"[Enter URL for Privacy terms, e.g. privacy.supportsite.com]"
 MatterCenterConfig,RowKey671,CreateMatter,ErrorMessagePrimaryMatterType,Please select primary matter type
 MatterCenterConfig,RowKey672,CreateMatter,LabelAddOrRemoveTypes,Add/Remove Types
-MatterCenterConfig,RowKey673,CreateMatter,ColumnName1,Practice Group
+MatterCenterConfig,RowKey673,CreateMatter,ColumnName1,Practice Group From PG
 MatterCenterConfig,RowKey674,CreateMatter,ColumnName2,Area of Law
 MatterCenterConfig,RowKey675,CreateMatter,ColumnName3,Sub Area of Law
 MatterCenterConfig,RowKey676,CreateMatter,ColumnName4,Sub Area of Law1
@@ -589,8 +589,25 @@ MatterCenterConfig,RowKey700,Settings,DenySupportMailMessage,mailto:lcaweb2@micr
 MatterCenterConfig,RowKey701,MatterUsers,SearchUsersURL,https://msmatter.sharepoint.com/sites/client
 MatterCenterConfig,RowKey702,MatterUsers,StampedPropertiesURL,https://msmatter.sharepoint.com/sites/microsoft
 MatterCenterConfig,RowKey703,MatterUsers,Add,test
-MatterCenterConfig,RowKey704,Home,MatterCenterSupportLinkText,Matter Center Support
+MatterCenterConfig,RowKey704,Home,MatterCenterSupportLinkText,Matter Center Aisling Support
 MatterCenterConfig,RowKey705,Home,MatterCenterSupportLink,mailto:support@supportsite.com
 MatterCenterConfig,RowKey706,Home,HelpRequesURL,https://msmatter.sharepoint.com/sites/catalog
 MatterCenterConfig,RowKey708,Home,ContextualHelpHeader,Matter Center For Outlook
 MatterCenterConfig,RowKey709,Home,ContextualHelpBottomText,Questions? Contact 
+MatterCenterConfig,RowKey711,Settings,divExtraPropTitle,Additonal Matter Properties
+MatterCenterConfig,RowKey712,Settings,divExtraPropTitleDescription,These settings will enable property features while matter is created.
+MatterCenterConfig,RowKey713,MatterLanding,Label3Tab3HeaderText,Matter Properties
+MatterCenterConfig,RowKey714,DocumentDetails,AdditionalContentTypeName,Additional Matter Properties
+MatterCenterConfig,RowKey715,DocumentDetails,SiteColumnGroupName,_MatterCenter
+MatterCenterConfig,RowKey716,DocumentDetails,Label1Section3HeaderText,Extra Properties
+MatterCenterConfig,RowKey717,CreateMatter,Tab4Header,Provide More Inputs
+MatterCenterConfig,RowKey718,CreateMatter,Tab4HeaderTitle,Provide extra fields value.
+MatterCenterConfig,RowKey719,Settings,LabelDirectiveDisplayInUI,Make this field display in UI?
+MatterCenterConfig,RowKey720,Settings,LabelDirectiveIsRequired,Make this field required?
+MatterCenterConfig,RowKey721,CreateMatter,MsgMatterRoleAndPermission,Please save at least one user who has full control permission with responsible attorney role on this matter.
+MatterCenterConfig,RowKey722,CreateMatter,TitleAddRemoveType,Opens in an overlay
+MatterCenterConfig,RowKey723,CreateMatter,ConflictYesRadioButtonTitle,Yes radio button for Is Conflict Identified?
+MatterCenterConfig,RowKey724,CreateMatter,ConflictNoRadioButtonTitle,No radio button for Is Conflict Identified?
+MatterCenterConfig,RowKey725,CreateMatter,SecuredYesRadioButtonTitle,Yes radio button to make this matter secured only to the assigned team?
+MatterCenterConfig,RowKey726,CreateMatter,SecuredNoRadioButtonTitle,No radio button to make this matter secured only to the assigned team?
+MatterCenterConfig,be527366-b014-4a58-b969-67cde85c9ac1,Home,Change,mailto:aisling@supportsite.com
