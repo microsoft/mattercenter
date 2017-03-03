@@ -129,11 +129,11 @@
                                 <div class="row">
                                     <div class="col-xs-3">
                                         <br />
-                                        <div class="filterOkButton"><div class="dashboardSearch" ng-click="vm.filterSearchOK(vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText)">{{vm.documentDashboardConfigs.AdvSearchbuttonOkText}}</div></div>
+                                        <div class="filterOkButton"><button class="dashboardSearch" role="button" tabindex="0" ng-click="vm.filterSearchOK(vm.documentDashboardConfigs.AdvSearchLabel1FunctionParameterText)">{{vm.documentDashboardConfigs.AdvSearchbuttonOkText}}</button></div>
                                     </div>
                                     <div class="col-xs-3">
                                         <br />
-                                        <div class="filterOkButton" ng-click="vm.filterSearchCancel()"><div class="dashboardSearch">{{vm.documentDashboardConfigs.AdvSearchbuttonCancelText}}</div></div>
+                                        <div class="filterOkButton" ><button role="button" tabindex="0" ng-click="vm.filterSearchCancel()" class="dashboardSearch">{{vm.documentDashboardConfigs.AdvSearchbuttonCancelText}}</button></div>
                                     </div>
                                 </div>
                             </div>
@@ -193,9 +193,9 @@
                             </div>
                         </div>
                         <div class="col-xs-5 col-sm-3 pad15">
-                            <div id="filterAdvancedSearch" class="dashboardSearch" ng-click="vm.getSearchResults()">
+                            <button id="filterAdvancedSearch" class="dashboardSearch" role="button" tabindex="0" ng-click="vm.getSearchResults()">
                                 {{vm.documentDashboardConfigs.AdvSearchButtonSearchText}}
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>

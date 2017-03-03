@@ -156,7 +156,7 @@
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">URL:</div><br/>\
                                           <input type="text" value="' + matterUrl + '"><br/>\
                                        </div>\<a id="viewMatters" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" ng-click="redirectViewMatters(\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton1Text + '</a><br/>\
-                                          <a ng-if="!wordTextDisplay" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content"  id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
+                                          <a ng-if="!wordTextDisplay" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" href="" id="uploadToMatter" ng-click="openUpload(\'' + obj.matterName + '\',\'' + obj.matterClientUrl + '\',\'' + obj.matterGuid + '\')" type="button">' + scope.$parent.$parent.$parent.grid.appScope.vm.matterConfigContent.FlyoutButton2Text + '</a>\
                                       </div>\
                                 </div>';
 
@@ -291,7 +291,7 @@
                                           <div class="ms-font-m FlyoutContent" datefilter title="' + obj.documentCreatedDate + '" date=' + obj.documentCreatedDate + '>' + obj.documentCreatedDate + '</div>\
                                        </div>\
                                        <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" style="width:190px;padding-left: 12.5%;" href="' + obj.documentUrl + '" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton1Text + '</a>\
-                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" ng-show="loader" style="width:190px" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
+                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" ng-show="loader" href="" style="width:190px" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
                                       </div>\
                                     </div>\
                                 </div>';
