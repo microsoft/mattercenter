@@ -1130,7 +1130,7 @@
 
 .buttonPrev {
     background-color: rgb(230,230,230); /* Green */
-    border: none;
+    border-color: rgb(230,230,230);
     color: rgb(77,77,77);
     width: 100px;
     height: 30px;
