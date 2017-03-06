@@ -4,8 +4,13 @@
         width: 100%;
     }
 </style>
+
+<head>
+    <title>{{vm.navigationContent.Image2Title}}</title>
+</head>
+
 <!--<div class="container-fluid">   -->
-<div ng-click="vm.closealldrops()" >
+<div ng-click="vm.closealldrops()">
     <!--ng-class="{'mainMatter':vm.lazyloader}"-->
     <div class="row">
         <div class="row" id="mainmenu">
@@ -30,7 +35,7 @@
                     <input type="text" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + ' (' + documentDataList.docId + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
-                <div class="col-xs-12">     
+                <div class="col-xs-12">
                 </div>
             </div>
             <div id="searchBarHolder" class="col-xs-5 hidden-md hidden-lg hidden-sm pad0 searchwidth">
@@ -48,7 +53,7 @@
                     <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
                 </ul>
                 <div class="col-xs-12">
-                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>                
+                    <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
                 </div>
             </div>
         </div>
@@ -104,7 +109,7 @@
                 </div>
             </div>
         </div>
-      
+
         <div ng-if="vm.isOutlook && vm.showAttachment">
             <button ng-disabled="!vm.enableAttachment" class="ms-Button ms-Button--primary ms-Callout-content"
                     id="attachDocuments" ng-click="vm.sendDocumentAsAttachment()">
@@ -118,7 +123,7 @@
             <img src="../Images/WindowsLoadingFast.GIF" alt="{{vm.documentConfigContent.AttachmentLoadingText}}" title="{{vm.documentConfigContent.AttachmentLoadingText}}" />
         </div>
     </div>
-    <div class="popupContainerBackground"  ng-hide="vm.lazyloader"></div>
+    <div class="popupContainerBackground" ng-hide="vm.lazyloader"></div>
     <onload sortdetails="{{vm.sortexp}}"></onload>
     <div class="documentheader flyoutWrapper" style="position: absolute;top: 128px;background: #fff;z-index: 5;left: 10px;border: 1px solid #ccc;background-color: white;" ng-click='$event.stopPropagation();' ng-hide="vm.documentheader">
         <div class='input-group'>
@@ -170,7 +175,7 @@
                        ng-model='vm.startDate'
                        is-open='vm.openedStartDate'
                        ng-keydown="vm.changeOnCreateDate($event)"
-                      ng-blur="vm.changeOnCreateDate($event)"
+                       ng-blur="vm.changeOnCreateDate($event)"
                        datepicker-options='vm.dateOptions'
                        ng-required='true' close-text='Close'
                        alt-input-formats='altInputFormats' />

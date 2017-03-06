@@ -16,7 +16,6 @@
             //#region Variables for dynamic contents
             vm.navigationContent = uiconfigs.Navigation;
             vm.configSearchContent = configs.search;
-
             vm.matterConfigContent = uiconfigs.Matters;
             vm.uploadMessages = uiconfigs.uploadMessages;
             vm.configsUri = configs.uri;

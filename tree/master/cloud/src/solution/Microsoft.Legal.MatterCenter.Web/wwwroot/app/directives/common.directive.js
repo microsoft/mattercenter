@@ -290,8 +290,8 @@
                                           <div class="fontWeight600 ms-font-m FlyoutContentHeading">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutMenuColumn7DisplayName + ':</div>\
                                           <div class="ms-font-m FlyoutContent" datefilter title="' + obj.documentCreatedDate + '" date=' + obj.documentCreatedDate + '>' + obj.documentCreatedDate + '</div>\
                                        </div>\
-                                       <a class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" style="width:190px;padding-left: 12.5%;" href="' + obj.documentUrl + '" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton1Text + '</a>\
-                                       <a id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" ng-show="loader" style="width:190px" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
+                                       <a tabindex="0" role="button" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" id="viewMatters" style="width:190px;padding-left: 12.5%;" href="' + obj.documentUrl + '" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton1Text + '</a>\
+                                       <a tabindex="0" role="button" id="uploadToMatter" class="ms-Button-label ms-Button ms-Button--primary ms-Callout-content" ng-show="loader" style="width:190px" ng-click="gotoUrl(\'' + obj.documentClientUrl + '\')" target="_blank">' + scope.$parent.$parent.$parent.grid.appScope.vm.documentConfigContent.FlyoutButton2Text + '</a>\
                                       </div>\
                                     </div>\
                                 </div>';
