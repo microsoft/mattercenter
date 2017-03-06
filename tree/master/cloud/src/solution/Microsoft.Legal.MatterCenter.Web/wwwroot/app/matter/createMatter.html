@@ -3,8 +3,16 @@
         position: absolute !important;
         width: 100%;
     }
+
+    #divCreateMatter div:focus, #divCreateMatter button:focus, #divHeader div:focus {
+        outline:dotted 3px !important;
+    }
+
+    #divCreateMatter #divContent:focus, .sectionContent:focus {
+        outline: none !important;
+    }
 </style>
-<div class="row">
+<div class="row" id="divHeader">
     <div class="col-xs-10 col-sm-8 col-md-6 col-lg-10" style="margin-left: 45px;margin-top: 1px;height: 58px;">
         <div class="col-xs-10 col-sm-4 col-md-4 col-lg-2 zindex6 createMatterHeaderWidth" style="cursor: pointer;font-size: 1.125em;line-height:40px; padding: 0 11px 0 13px;text-decoration: none !important;" title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' data-section-num="1" data-section-name="snOpenMatter">1  {{cm.createContent.Tab1Header}}</div>
         <div class="col-xs-10 col-sm-4 col-md-4 col-lg-2 zindex6 pad0 createMatterHeaderWidth matterMarginLeft" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2  {{cm.createContent.Tab2Header}}</div>
@@ -67,8 +75,8 @@
     </div>
 </div>
 <input type="hidden" id="requestvalidator" name="requestvalidator" runat="server" />
-<div resize class="matterContent" style="margin:0%;">
-    <div class="content" ng-click="cm.CheckPopUp(this)">
+<div resize class="matterContent" style="margin:0%;" id="divCreateMatter">
+    <div class="content" ng-click="cm.CheckPopUp(this)" id="divContent">
         <!-- Open matter section -->
         <section class="sectionStep" id="snOpenMatter" ng-show='cm.sectionName=="snOpenMatter"' style="display: block;">
             <div class="sectionContent">
@@ -333,7 +341,7 @@
                 <div class="popUpPracticeGroup clear">
                     <div class="popUpPGDiv">
 
-                        <select class="dropdownLevelOne clear custPracticeGroup " ng-model='cm.selectedLevelOneItem' ng-change='cm.getSelectedLevelOne()' ng-options='levelOneItem.termName for levelOneItem in cm.levelOneList'>
+                        <select class="dropdownLevelOne clear custPracticeGroup " id="selectPG" ng-model='cm.selectedLevelOneItem' ng-change='cm.getSelectedLevelOne()' ng-options='levelOneItem.termName for levelOneItem in cm.levelOneList'>
                             <option value="" label="- {{cm.createContent.Tab1DrpDownLevel1DefaultSelectOption}} -"></option>
                         </select>
                     </div>
