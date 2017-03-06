@@ -1401,6 +1401,10 @@ textarea {
     outline: none !important;
 }
 
+#matterCenterHeader div :focus {
+    outline: dotted !important;
+}
+
 .mainsort {
     position: absolute;
     top: 0px;
@@ -1579,4 +1583,8 @@ textarea {
 .hideUploadImg {
     opacity: 0.45;
     cursor: default;
+}
+
+#viewMatters:focus,#uploadToMatter:focus{
+    outline:dotted 3px!important;
 }

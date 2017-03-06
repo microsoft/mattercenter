@@ -2,33 +2,37 @@
     #HeaderPlaceHolder {
         display: block !important;
     }
+
+    /*#divLeftLinkContainer div :focus {
+        border-style: dotted !important;
+    }*/
 </style>
 <!---->
-<div id="HomeContainer" class="marleft10"> 
+<div id="HomeContainer" class="marleft10">
     <header class="WelcomeBar ms-bg-color-neutralLighterAlt" ng-class="{ 'RemoveWelcomeBar': vm.welcomeheader}">
         <span class="ms-font-s" ng-hide="vm.welcomeheader">
             {{vm.navigationContent.HeaderBarLabel}}
             <a class="LearnMoreLink" ng-href="{{vm.navigationContent.HeaderBarLink1URL}}" target="_blank" title="{{vm.navigationContent.HeaderBarLink1Title}}">{{vm.navigationContent.HeaderBarLink1Text}}</a> or <a class="DismissLink" ng-click="vm.welcomeheader=true" title="Remove this section">{{vm.navigationContent.HeaderBarLink2Text}}</a>
         </span>
-    </header>   
-    <div class="LinkContainer">      
-        <div class="LeftLinkContainer">          
+    </header>
+    <div class="LinkContainer">
+        <div class="LeftLinkContainer" id="divLeftLinkContainer">
             <div class="MattersContainer" title="{{vm.navigationContent.Image1Title}}">
-                <a ui-sref='mc.matters()'>
+                <a id="ancLink1" ui-sref='mc.matters()'>
                     <figure>
                         <img src="Images/MC_Matters.png" alt="{{vm.navigationContent.Image1Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image1Caption}}</figcaption>
                     </figure>
                 </a>
-            </div>           
+            </div>
             <div class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
-                <a ui-sref='mc.documents()'>
+                <a id="ancLink2" ui-sref='mc.documents()'>
                     <figure>
                         <img src="Images/MC_Documents.png" alt="{{vm.navigationContent.Image2Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image2Caption}}</figcaption>
                     </figure>
                 </a>
-            </div>           
+            </div>
         </div>
         <!--   <div class="col-xs-12 col-md-6"> -->
         <div class="RightLinkContainer">
