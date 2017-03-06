@@ -198,7 +198,7 @@
             vm.loginUser = adalService.userInfo.userName;
             columnDefs1.push({
                 field: 'pin',
-                displayName: '',
+                displayName: 'Pin',                
                 width: '50',
                 cellTemplate: '<div class="ui-grid-cell-contents pad0" ><img title={{row.entity.pinType}} ng-src="../Images/{{row.entity.pinType}}-666.png"  ng-click="grid.appScope.vm.pinorunpin($event, row.entity)"/></div>',
                 enableColumnMenu: false,
@@ -207,7 +207,7 @@
             //Declaring column collection object.
             columnDefs1.push({
                 field: 'upload',
-                displayName: '',
+                displayName: 'Upload',
                 width: '60',
                 cellTemplate: '<div class="ui-grid-cell-contents pad0" showupload loginuser="' + vm.loginUser + '" hideupload={{row.entity.hideUpload}}><img title="upload" class="hideUploadImg" src="../Images/upload-666.png"/><img title="upload" class="showUploadImg" src="../Images/upload-666.png" ng-click="grid.appScope.vm.Openuploadmodal(row.entity.matterName,row.entity.matterClientUrl,row.entity.matterGuid)"/></div>',
                 enableColumnMenu: false,

@@ -1580,3 +1580,9 @@ textarea {
     opacity: 0.45;
     cursor: default;
 }
+
+input[type=checkbox]:focus,.upperSubText:focus, .lowerSubText:focus, input[type=radio]:focus,a.ms-Button:focus, button:focus, li:focus{
+    outline:dotted 3px;
+}
+
+

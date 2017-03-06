@@ -2,8 +2,8 @@
     'use strict';
 
     var app = angular.module("matterMain");
-    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window', '$rootScope', 'adalAuthenticationService',
-        function ($scope, $state, $stateParams, api, matterResource, $filter, $window, $rootScope, adalService) {
+    app.controller('createMatterController', ['$scope', '$state', '$stateParams', 'api', 'matterResource', '$filter', '$window', '$rootScope', 'adalAuthenticationService', '$timeout',
+        function ($scope, $state, $stateParams, api, matterResource, $filter, $window, $rootScope, adalService,$timeout) {
             ///All Variables
             var cm = this;
             $rootScope.pageIndex = "4";
@@ -134,6 +134,7 @@
             cm.secureMatterCheck = true;
             cm.conflictRadioCheck = false;
             cm.includeTasks = false;
+	        cm.errorPopUpBlock = false;
 
             ///* Function to generate 32 bit GUID */
             function get_GUID() {
@@ -444,6 +445,7 @@
                 cm.popupContainer = "Show";
                 cm.popupContainerBackground = "Show";
                 cm.successBanner = false;
+		         $timeout(function () { angular.element("#selectPG").focus(); }, 200);
             }
             //function for closing the popup
             cm.selectMatterTypePopUpClose = function () {
