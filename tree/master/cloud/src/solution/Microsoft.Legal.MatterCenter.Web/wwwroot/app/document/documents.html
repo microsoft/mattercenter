@@ -13,27 +13,27 @@
 <div ng-click="vm.closealldrops()" >
     <!--ng-class="{'mainMatter':vm.lazyloader}"-->
     <div class="row">
-        <div class="row" id="mainmenu">
+        <div class="row" tabindex="0" id="mainmenu">
             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 pad0">
                 <div class="col-sm-offset-3 col-md-offset-3 col-lg-offset-3 col-sm-9 col-md-9 col-lg-9 hidden-xs pad0" id="mainselect">
                     <div class="input-group-btn zindex6">
-                        <button type="button" class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
+                        <div tabindex="0" role="combobox" type="button" class="btn btn-default dropdown-toggle col-sm-12 col-md-12 col-lg-12 dpbtn" data-toggle="dropdown">
                             <span class="col-sm-12 col-md-12 text-left pad0 ms-font-weight-semilight">{{vm.documentname}}</span>
                             <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
-                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}" ng-click="vm.SetDocuments(1,vm.documentConfigContent.Dropdown1Item1)">{{vm.documentConfigContent.Dropdown1Item1}}</li>
-                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}" ng-click="vm.SetDocuments(2,vm.documentConfigContent.Dropdown1Item2)">{{vm.documentConfigContent.Dropdown1Item2}}</li>
-                            <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
+                        </div>
+                        <ul tabindex="-1" class="dropdown-menu pull-right col-sm-12 col-md-12 col-lg-12">
+                            <li role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item1}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}" ng-click="vm.SetDocuments(1,vm.documentConfigContent.Dropdown1Item1)">{{vm.documentConfigContent.Dropdown1Item1}}</li>
+                            <li role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item2}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}" ng-click="vm.SetDocuments(2,vm.documentConfigContent.Dropdown1Item2)">{{vm.documentConfigContent.Dropdown1Item2}}</li>
+                            <li role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item3}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
                         </ul>
                     </div>
 
                 </div>
             </div>
-            <div class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
+            <div tabindex="0" class="col-sm-5 col-md-4 col-lg-4 hidden-xs">
                 <div class="input-group col-xs-10 col-sm-12 zindex6" id="docsearchmatter">
-                    <input type="text" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + ' (' + documentDataList.docId + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
-                    <span class="input-group-addon cursor" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
+                    <input type="text" tabindex="0"  role="textbox" aria-label="{{vm.documentConfigContent.SearchPlaceholderText}}" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + ' (' + documentDataList.docId + ')' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
+                    <span class="input-group-addon cursor" tabindex="0"  role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" id="basic-addon1" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
                 <div class="col-xs-12">     
                 </div>
@@ -42,15 +42,15 @@
                 <div class="input-group col-xs-12 zindex6">
                     <input type="text" ng-model="vm.selected" my-enter="vm.search()" ng-disabled="!vm.lazyloader" placeholder="{{vm.documentConfigContent.SearchPlaceholderText}}" uib-typeahead="documentDataList.documentName + '.'+ documentDataList.documentExtension + '' for documentDataList in vm.searchDocument($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select='vm.typeheadselect($item, $model)' typeahead-no-results="noResults" class="form-control">
                     <div class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></button>
+                        <button tabindex="0"  role="button" aria-label="{{vm.documentConfigContent.AriaLabelSearchDocumentButton}}" class="btn btn-default" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+                        <div tabindex="0" role="combobox" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="vm.showdocdrop($event)"><span class="caret"></span></div>
                     </div>
                     <span class="hidden-xs padl10px" style="float:left"> <a href="https://msmatter-my.sharepoint.com/_layouts/15/me.aspx" target="_blank"> <img title="Search in Delve" src="../../Images/delve.png" /></a></span>
                 </div>
-                <ul class="col-xs-12 mattersdrop" ng-show="vm.documentsdrop">
-                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}" ng-click="vm.SetDocuments(1,vm.documentConfigContent.Dropdown1Item1)">{{vm.documentConfigContent.Dropdown1Item1}}</li>
-                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}" ng-click="vm.SetDocuments(2,vm.documentConfigContent.Dropdown1Item2)">{{vm.documentConfigContent.Dropdown1Item2}}</li>
-                    <li class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
+                <ul tabindex="-1" class="col-xs-12 mattersdrop" ng-show="vm.documentsdrop">
+                    <li role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item1}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item1}" ng-click="vm.SetDocuments(1,vm.documentConfigContent.Dropdown1Item1)">{{vm.documentConfigContent.Dropdown1Item1}}</li>
+                    <li role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item2}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item2}" ng-click="vm.SetDocuments(2,vm.documentConfigContent.Dropdown1Item2)">{{vm.documentConfigContent.Dropdown1Item2}}</li>
+                    <li role="listitem" aria-label="{{vm.documentConfigContent.AriaLabelDropdown1Item3}}" class="searchPanelDropdown ms-font-weight-semilight" ng-class="{'dpselected':vm.documentname==vm.documentConfigContent.Dropdown1Item3}" ng-click="vm.SetDocuments(3,vm.documentConfigContent.Dropdown1Item3)">{{vm.documentConfigContent.Dropdown1Item3}}</li>
                 </ul>
                 <div class="col-xs-12">
                     <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>                
@@ -64,8 +64,8 @@
         <div class="warningMessageText" title="{{vm.warningMessageText}}"> {{vm.warningMessageText}}</div>
     </div>
     <div class="row title">
-        <div class="col-sm-12" id="gridViewPageHeaderContainer">
-            <span role="heading" class="add-margin-bottom">{{vm.documentname}}</span>
+        <div tabindex="0" class="col-sm-12" id="gridViewPageHeaderContainer">
+            <span aria-label="{{vm.documentname}}" role="heading" class="add-margin-bottom">{{vm.documentname}}</span>
         </div>
     </div>
     <div class="row">
