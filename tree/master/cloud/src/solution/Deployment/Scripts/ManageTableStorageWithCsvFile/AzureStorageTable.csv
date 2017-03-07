@@ -1,4 +1,5 @@
-PartitionKey,RowKey,ConfigGroup,Key,Value
+"PartitionKey","RowKey","ConfigGroup","Key","Value"
+MatterCenterConfig,RowKey728,CreateMatter,AriaLabelTeamUserName,Enter and select name for assign team
 MatterCenterConfig,RowKey001,CreateMatter,Tab1HeaderTitle,Step 1: Select a client and provide basic information for your new matter.
 MatterCenterConfig,RowKey002,CreateMatter,Tab2HeaderTitle,Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter.
 MatterCenterConfig,RowKey003,CreateMatter,Tab3HeaderTitle,"Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team."
@@ -610,4 +611,23 @@ MatterCenterConfig,RowKey723,CreateMatter,ConflictYesRadioButtonTitle,Yes radio 
 MatterCenterConfig,RowKey724,CreateMatter,ConflictNoRadioButtonTitle,No radio button for Is Conflict Identified?
 MatterCenterConfig,RowKey725,CreateMatter,SecuredYesRadioButtonTitle,Yes radio button to make this matter secured only to the assigned team?
 MatterCenterConfig,RowKey726,CreateMatter,SecuredNoRadioButtonTitle,No radio button to make this matter secured only to the assigned team?
+MatterCenterConfig,RowKey727,CreateMatter,AriaLabelConflictedCheckDate,Select conflict check conducted date
+MatterCenterConfig,RowKey729,CreateMatter,AriaLabelTeamRoleCombo,Assign team role combo box
+MatterCenterConfig,RowKey730,CreateMatter,AriaLabelTeamPermissionCombo,Assign team permission level combo box
+MatterCenterConfig,RowKey731,CreateMatter,AriaLabelDeleteButton1,Delete button to remove team member from assigned team
+MatterCenterConfig,RowKey732,CreateMatter,AriaLabelCloseButton,Close mattertype dialogue box
+MatterCenterConfig,RowKey733,CreateMatter,AriaLabelAddTypeButton,Add to mattertype list
+MatterCenterConfig,RowKey734,CreateMatter,AriaLabelRemoveTypeButton,Remove from mattertype list
+MatterCenterConfig,RowKey735,CreateMatter,AriaLabelInfoTypeButton,Info before saving matter type
+MatterCenterConfig,RowKey736,CreateMatter,AriaLabelAddMoreUser,Add more user in assign team for this matter
+MatterCenterConfig,RowKey737,CreateMatter,LinkAddMoreUserTitle,Add More Name
+MatterCenterConfig,RowKey738,CreateMatter,AriaLabelConflictCheckBox,Select check box for conflict identified. Checkbox required
+MatterCenterConfig,RowKey739,Matters,AriaLabelDropdown1Item1,Combobox list item 1 - All Matters
+MatterCenterConfig,RowKey740,Matters,AriaLabelDropdown1Item2,Combobox list item 2 - My Matters
+MatterCenterConfig,RowKey741,Matters,AriaLabelDropdown1Item3,Combobox list item 3 - Pinned Matters
+MatterCenterConfig,RowKey742,Matters,AriaLabelSearchMatterButton,Click button to search matter
+MatterCenterConfig,RowKey743,Documents,AriaLabelDropdown1Item1,Combobox list item 1 - All Documents
+MatterCenterConfig,RowKey744,Documents,AriaLabelDropdown1Item2,Combobox list item 2 - My Documents
+MatterCenterConfig,RowKey745,Documents,AriaLabelDropdown1Item3,Combobox list item 3 - Pinned Documents
+MatterCenterConfig,RowKey746,Documents,AriaLabelSearchDocumentButton,Click button to search document
 MatterCenterConfig,be527366-b014-4a58-b969-67cde85c9ac1,Home,Change,mailto:aisling@supportsite.com
