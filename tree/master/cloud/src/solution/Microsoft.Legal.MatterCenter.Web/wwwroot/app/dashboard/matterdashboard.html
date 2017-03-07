@@ -318,7 +318,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="mattersGrid">
                         <div class="col-xs-12 pad0 padtop5" ng-if="vm.divuigrid">
-                            <div class="" id="grid1" ui-grid="vm.matterGridOptions" ui-grid-exporter ui-grid-selection ui-grid-auto-resize></div>
+                            <div class="" id="grid1" ui-grid="vm.matterGridOptions" role="grid" tabindex="0" aria-sort="ascending" ui-grid-exporter ui-grid-selection ui-grid-auto-resize></div>
                         </div>
                         <div class="col-xs-12 pad0 padtop5 text-center" ng-if="vm.nodata">
                             {{vm.matterDashboardConfigs.NoSearchResultMsgText}}
