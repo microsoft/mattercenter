@@ -472,7 +472,7 @@
                             cm.errPermissionMessage = result.value;
                             cm.errorBorder = "client";
                             showErrorNotification("client");
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             cm.canCreateMatterPermission = false;
                         }
                         else {
@@ -866,7 +866,7 @@
                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityLibraryCreated;
                                         //"Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
                                 cm.errorBorder = "mattername"; showErrorNotification("mattername");
-                                cm.errorPopUpBlock = true;
+                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                 oPageOneState.oValidMatterName = false;
                             }
                             return false;
@@ -995,12 +995,12 @@
                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityPermission;
                                     //"Please provide at least one permission on this  matter. ";
                                 cm.errorBorder = "";
-                                cm.errorPopUpBlock = true;
+                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                 return false;
                             }
                         }
                         else {
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             cm.errTextMsg = cm.createContent.ErrorMessageEntityTeamRole1;
                                 //"Enter at least one role for this matter.";
                             cm.errorBorder = "";
@@ -1011,7 +1011,7 @@
                         cm.errTextMsg = cm.createContent.ErrorMessageTeamMember1;
                         cm.errorBorder = "";
                         showErrorNotificationAssignTeams(cm.errTextMsg, cm.assignPermissionTeams[iCount].assigneTeamRowNumber, "user");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                 }             
@@ -1024,7 +1024,7 @@
                             //"Please provide at least one user who has Full Control permission on this  matter.";
                         cm.errorBorder = "permUser" + teamRowNumber;
                         showErrorNotificationAssignTeams(cm.errTextMsg, teamRowNumber, "perm");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                 }
@@ -1033,7 +1033,7 @@
                         //"Enter at least one Responsible Attorney for this matter.";
                     cm.errorBorder = "roleUser" + teamRowNumber;
                     showErrorNotificationAssignTeams(cm.errTextMsg, teamRowNumber, "role");
-                    cm.errorPopUpBlock = true;
+                    cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                     return false;
                 }
             }
@@ -1075,7 +1075,7 @@
                         //"Enter the conflict reviewers name (for auditing purposes).";
                         cm.errorBorder = "ccheckuser";
                         showErrorNotification("ccheckuser");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                     if (cm.conflictRadioCheck) {
@@ -1084,7 +1084,7 @@
                             //"Enter users that are conflicted with this matter.";
                             cm.errorBorder = "cblockuser";
                             showErrorNotification("cblockuser");
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             return false;
                         }
                     }
@@ -1097,7 +1097,7 @@
                             //"Enter the conflict reviewers name (for auditing purposes).";
                         cm.errorBorder = "ccheckuser";
                         showErrorNotification("ccheckuser");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                     username = getUserName(cm.selectedConflictCheckUser + ";", true);
@@ -1106,7 +1106,7 @@
                         //"Enter the conflict reviewers name (for auditing purposes).";
                         cm.errorBorder = "ccheckuser";
                         showErrorNotification("ccheckuser");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                 }
@@ -1120,7 +1120,7 @@
                             //"Enter users that are conflicted with this matter.";
                             cm.errorBorder = "cblockuser";
                             showErrorNotification("cblockuser");
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             return false;
                         }
                     }
@@ -1133,7 +1133,7 @@
                             //"Enter users that are conflicted with this matter.";
                             cm.errorBorder = "cblockuser";
                             showErrorNotification("cblockuser");
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             return false;
                         }
                     }
@@ -1160,7 +1160,7 @@
                                                         cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                                                         //"Please enter valid team members.";
                                                         cm.errorBorder = "";
-                                                        cm.errorPopUpBlock = true;
+                                                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                                         showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
                                                         cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
                                                         return false;
@@ -1169,7 +1169,7 @@
                                                         cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers1;
                                                         //"Please enter valid team members.";
                                                         cm.errorBorder = "";
-                                                        cm.errorPopUpBlock = true;
+                                                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                                         showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
                                                         cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
                                                         return false;
@@ -1183,7 +1183,7 @@
                                                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityUsers2;
                                                                 //"Please enter individual who is not conflicted.";
                                                                 cm.errorBorder = "";
-                                                                cm.errorPopUpBlock = true;
+                                                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                                                 showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
                                                                 cm.errorBorder = "txtUser" + team.assigneTeamRowNumber; keepGoing = false;
                                                                 return false;
@@ -1405,7 +1405,7 @@
                         }
                         cm.errorBorder = "";
                         cm.errorStatus = true;
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         
                         cm.errorBorder = "txtUser" + rowNumber;
                         showErrorNotificationAssignTeams(cm.errTextMsg, rowNumber, "securityuser")
@@ -1837,7 +1837,7 @@
                                  //   "Please enter a valid email address.";
                                     cm.errorBorder = "";
                                     cm.errorStatus = true;
-                                    cm.errorPopUpBlock = true;
+                                    cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                                     showErrorNotificationAssignTeams(cm.errTextMsg, team.assigneTeamRowNumber, "user")
                                     team.userConfirmation = false;
                                     angular.element('#txtUser' + team.assigneTeamRowNumber).attr('confirm', "false");
@@ -1929,7 +1929,7 @@
                                 //"Error in creation of matter: Incorrect inputs.";
                             showErrorNotificationAssignTeams(cm.errTextMsg, "", "btnCreateMatter");
                             cm.errorBorder = "";
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                             cm.popupContainerBackground = "hide";
                             $event.stopPropagation(); cm.createBtnDisabled = false; cm.successBanner = false;
                             bValid = false;
@@ -2792,7 +2792,7 @@
                                                 //"Enter a matter ID.";
                                                 cm.errorBorder = "matterid";
                                                 showErrorNotification("matterid");
-                                                cm.errorPopUpBlock = true; return false;
+                                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                             }
                                             if (bInValid) {
                                                 if (cm.isMatterDescriptionMandatory) {
@@ -2816,7 +2816,7 @@
                                                         cm.errTextMsg = cm.createContent.ErrorMessageSelectType;
                                                         //"Select matter type by area of law for this matter";
                                                         cm.errorBorder = ""; showErrorNotification("selecttemp");
-                                                        cm.errorPopUpBlock = true; return false;
+                                                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                                     }
                                                 }
                                                 else {
@@ -2825,7 +2825,7 @@
                                                     //"Please enter a valid text which contains only alphanumeric characters, spaces & hyphen";
                                                     showErrorNotification("matterdescription");
                                                     cm.errorBorder = "matterdescription";
-                                                    cm.errorPopUpBlock = true; return false;
+                                                    cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                                 }
                                             }
                                             else {
@@ -2833,7 +2833,7 @@
                                                 //"Please enter a valid text which contains only alphanumeric characters, spaces & hyphen.";
                                                 cm.errorBorder = "matterid";
                                                 showErrorNotification("matterid");
-                                                cm.errorPopUpBlock = true; return false;
+                                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                             }
                                         }
                                         else {
@@ -2841,7 +2841,7 @@
                                             //"Matter library for this Matter is already created. Kindly delete the library or please enter a different Matter name.";
                                             cm.errorBorder = "mattername";
                                             showErrorNotification("mattername");
-                                            cm.errorPopUpBlock = true; return false;
+                                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                         }
                                     }
                                 }
@@ -2850,7 +2850,7 @@
                                     //"Please enter a valid Matter name which contains only alphanumeric characters and spaces";
                                     cm.errorBorder = "mattername";
                                     showErrorNotification("mattername");
-                                    cm.errorPopUpBlock = true; return false;
+                                    cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                                 }
                             }
                             else {
@@ -2858,7 +2858,7 @@
                                 //"Selected  client for this matter clientId is null ";
                                 showErrorNotification("client");
                                 cm.errorBorder = "client";
-                                cm.errorPopUpBlock = true; return false;
+                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                             }
                         }
                         else {
@@ -2866,7 +2866,7 @@
                             //"Selected  client for this matter clientId is null ";
                             showErrorNotification("client");
                             cm.errorBorder = "client";
-                            cm.errorPopUpBlock = true; return false;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                         }
                     }
                     else {
@@ -2874,7 +2874,7 @@
                             //"Select a client for this matter ";
                         cm.errorBorder = "client";
                         showErrorNotification("client");
-                        cm.errorPopUpBlock = true;
+                        cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         return false;
                     }
                 }
@@ -2905,7 +2905,7 @@
                                 cm.errTextMsg = cm.createContent.ErrorMessageEntityDate;
                                     //"Enter the date on which the conflict check was performed ";
                                 cm.errorBorder = "cdate"; showErrorNotification("cdate");
-                                cm.errorPopUpBlock = true; return false;
+                                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                             }
                         }
                         else {
@@ -2913,7 +2913,7 @@
                                 //"A confilct check must be completed prior to provisioning this matter ";
                             cm.errorBorder = "";
                             showErrorNotification("conflictcheck");
-                            cm.errorPopUpBlock = true;
+                            cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                         }
                     } else {
                         var validUsers = validateUsers();
@@ -2975,7 +2975,7 @@
                     //"Enter a description for this matter.";
                     showErrorNotification("matterdescription");
                     cm.errorBorder = "matterdescription";
-                    cm.errorPopUpBlock = true; return false;
+                    cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500); return false;
                 }
             }
 
@@ -3147,7 +3147,7 @@
                 document.getElementsByTagName('head')[0].appendChild(errTringleBorderCAttorny);
                 document.getElementsByTagName('head')[0].appendChild(errTextMatterCAttorny);   
                 cm.errTextMsg = errorMsg;
-                cm.errorPopUpBlock = true;
+                cm.errorPopUpBlock = true; $timeout(function(){angular.element('#errorBlock').focus();},500);
                 matterErrorEle.classList.add("errPopUpCAttorny");
                 matterErrorTrinageleBlockEle.classList.add("errTringleBlockCAttorny");
                 matterErrorTrinagleBorderEle.classList.add("errTringleBorderCAttorny");
@@ -3426,7 +3426,7 @@
                     cm.selectedDocumentTypeLawTerms = cm.documentTypeLawTerms;
                 }
                 else {
-                    cm.errorPopUp = true;
+                    cm.errorPopUp = true; $timeout(function(){angular.element('#errorPopUpMatterTypeBlock').focus();},500);
                 }
             }
             //#endregion
