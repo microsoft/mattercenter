@@ -125,7 +125,7 @@
             cm.removeDTItem = false;
             cm.primaryMatterType = cm.errorPopUp = false;
             cm.matterGUID = "";
-            cm.iCurrentPage = 1;
+            cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500);
             cm.assignPermissionTeams = [{ assignedUser: '', assignedAllUserNamesAndEmails: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1, userConfirmation: false, teamUsers: [] }];
             cm.conflictUsers = { assignedUser: '', assignedAllUserNamesAndEmails: '', teamUsers: [] }
             cm.blockedUserName = cm.conflictUsers.assignedUser;
@@ -626,7 +626,7 @@
                     });
                 }
                 else {
-                    localStorage.iLivePage = cm.iCurrentPage = 1;
+                    localStorage.iLivePage = cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500);
                     cm.matterName = "";
                     cm.matterId = "";
                     cm.matterDescription = "";
@@ -893,7 +893,7 @@
                     if (validateCurrentPage(cm.iCurrentPage)) {
                         cm.sectionName = sectionName;
                         oPageOneState.isNextClick = false;
-                        cm.iCurrentPage = 2;
+                        cm.iCurrentPage = 2;$timeout(function(){angular.element('#divTab2').focus();},500);
                         localStorage.iLivePage = 2;
                         makePrevOrNextButton();
                     }
@@ -904,7 +904,7 @@
                             callCheckSecurityGroupExists("snCreateAndShare");
                         } else {
                             cm.sectionName = sectionName;
-                            cm.iCurrentPage = 3;
+                            cm.iCurrentPage = 3;$timeout(function(){angular.element('#divTab3').focus();},500);
                             localStorage.iLivePage = 3;
                             makePrevOrNextButton();
                     }
@@ -913,7 +913,7 @@
                 else if (sectionName == "snConfigSection" && cm.iCurrentPage !== 3 && cm.inputs.length > 0) {
                     if (validateCurrentPage(cm.iCurrentPage)) {
                         cm.sectionName = sectionName;
-                        cm.iCurrentPage = 3;
+                        cm.iCurrentPage = 3;$timeout(function(){angular.element('#divTab3').focus();},500);
                         localStorage.iLivePage = 3;
                         makePrevOrNextButton();
                     }
@@ -924,14 +924,14 @@
                             callCheckSecurityGroupExists("snCreateAndShare");
                         } else {
                             cm.sectionName = sectionName;
-                            cm.iCurrentPage = 4;
+                            cm.iCurrentPage = 4;$timeout(function(){angular.element('#divTab4').focus();},500);
                             localStorage.iLivePage = 4;
                             makePrevOrNextButton();
                         }
                     }
                 }
                 else if (sectionName == "snOpenMatter" && cm.iCurrentPage !== 1) {
-                    cm.iCurrentPage = 1; cm.sectionName = sectionName;
+                    cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500); cm.sectionName = sectionName;
                     localStorage.iLivePage = 1;
                     makePrevOrNextButton();
                 }
@@ -1411,7 +1411,7 @@
                         showErrorNotificationAssignTeams(cm.errTextMsg, rowNumber, "securityuser")
                         cm.popupContainerBackground = "hide";
                         cm.sectionName = "snConflictCheck";
-                        cm.iCurrentPage = 2;
+                        cm.iCurrentPage = 2;$timeout(function(){angular.element('#divTab2').focus();},500);
                         localStorage.iLivePage = 2;
                         makePrevOrNextButton();
                     } else {
@@ -1491,7 +1491,7 @@
                     cm.assignPermissionTeams.splice(index, 1);
                 }
                 cm.notificationPopUpBlock = false;
-                cm.notificationBorder = "";                
+                cm.notificationBorder = "";
             };
 
             if (localStorage.getItem("iLivePage")) {
@@ -1522,7 +1522,7 @@
                     cm.removeDTItem = false;
                     cm.primaryMatterType = cm.errorPopUp = false;
                     cm.matterGUID = oPageData.matterGUID;
-                    cm.iCurrentPage = 2;
+                    cm.iCurrentPage = 2;$timeout(function(){angular.element('#divTab2').focus();},500);
                     cm.includeRssFeeds = (localStorage.getItem("IsRSSSelected") === "true");
                     cm.includeEmail = (localStorage.getItem("IsEmailOptionSelected") === "true");
                     cm.includeCalendar = (localStorage.getItem("IsCalendarSelected") === "true");
@@ -1537,7 +1537,7 @@
                     cm.nextButtonDisabled = false; cm.prevButtonDisabled = false;
                 }
                 if (localStorage.getItem("iLivePage") == 3) {
-                    cm.iCurrentPage = 1;
+                    cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500);
                     var oPageData = JSON.parse(localStorage.getItem("oPageTwoData"));
                     if (oPageData && oPageData !== null) {
                         cm.chkConfilctCheck = oPageData.ChkConfilctCheck;
@@ -1555,7 +1555,7 @@
                         cm.oSiteUsers = oPageData.oSiteUsers;
                         cm.oSiteUserNames = oPageData.oSiteUserNames;
                         cm.nextButtonDisabled = true;
-                        cm.iCurrentPage = 3;
+                        cm.iCurrentPage = 3;$timeout(function(){angular.element('#divTab3').focus();},500);
                     }
                     if (cm.includeEmail) {
                         cm.createButton = "Create and Notify";
@@ -1886,7 +1886,7 @@
                     isPageValid = validateCurrentPage(2);
                 } else {
                     cm.sectionName = "snOpenMatter";
-                    cm.iCurrentPage = 1; makePrevOrNextButton();
+                    cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500); makePrevOrNextButton();
                 }
 
                 if (isPageValid) {                   
@@ -1998,7 +1998,7 @@
                 }
                 else {
                     cm.sectionName = "snConflictCheck";
-                    cm.iCurrentPage = 2;
+                    cm.iCurrentPage = 2;$timeout(function(){angular.element('#divTab2').focus();},500);
                     makePrevOrNextButton();
                 }
             }
@@ -2643,7 +2643,7 @@
                 cm.removeDTItem = false;
                 cm.primaryMatterType = cm.errorPopUp = false;
                 cm.matterGUID = "";
-                cm.iCurrentPage = 1;
+                cm.iCurrentPage = 1;$timeout(function(){angular.element('#divTab1').focus();},500);
                 cm.assignPermissionTeams = [{ assignedUser: '', assignedRole: '', assignedPermission: '', assigneTeamRowNumber: 1 }];
                 cm.conflictUsers.assignedUser = '';
                 cm.conflictUsers.assignedAllUserNamesAndEmails = "";
@@ -3584,6 +3584,9 @@
                 });
                 return Fields;
             }
+
+            angular.element("#conflictCheck ul li a").prop("tabindex", "0");
+
         }]);
 
     app.filter('getAssociatedDocumentTemplatesCount', function () {
