@@ -461,6 +461,7 @@
                         vm.lazyloaderdashboard = true;
                         vm.divuigrid = true;
                         vm.nodata = false;
+                        $timeout(function () { angular.element("#grid1").focus(); }, 1000);
                     }
                 });
             }
