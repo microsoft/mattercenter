@@ -468,6 +468,7 @@
 
             //#region This api will get all matters which are pinned and this will be invoked when the user clicks on "Pinned Matters Tab"
             vm.getMatterPinned = function () {
+                $timeout(function () { angular.element('#divLoading').focus(); }, 1000);
                 vm.searchClicked = false;
                 vm.matterGridOptions.data = [];
                 vm.tabClicked = "Pinned Matters";
@@ -676,6 +677,7 @@
 
             //#region Functionality to get mymatters records in grid.
             vm.myMatters = function () {
+                $timeout(function () { angular.element('#divLoading').focus(); }, 1000);
                 vm.searchText = "";
                 vm.searchClicked = false;
                 vm.matterGridOptions.data = [];
@@ -750,6 +752,7 @@
 
             //#region This search function will be used for binding search results to the grid
             vm.search = function (isMy) {
+                $timeout(function () { angular.element('#divLoading').focus(); }, 1000);
                 vm.matterGridOptions.data = [];
                 vm.tabClicked = "All Matters";
                 vm.selectedTab = vm.matterDashboardConfigs.Tab2HeaderText;
