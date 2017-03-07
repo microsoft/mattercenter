@@ -5,6 +5,9 @@
 </style>
 <script type="text/ng-template" id="colHeaderCheckBox.html">
 </script>
+<head>
+    <title>MatterDashboard - {{vm.selectedTab}}</title>
+</head>
 <div class="popupWait hide"></div>
 <div class="loadingImage hide" id="popupWaitLoadingImage">
     <a title="{{vm.matterDashboardConfigs.LinkImageLoadingTitle}}" id="mcIcon" href="" target="_parent">
@@ -509,7 +512,7 @@
     <div class="popupContainerBackground" ng-hide="vm.popupContainer"></div>
 
     <div style="position:absolute;top:28%;left:41%">
-        <div class="row text-center" style="" ng-hide="vm.lazyloaderdashboard">
+        <div class="row text-center" id="divLoading" style="" ng-hide="vm.lazyloaderdashboard" tabindex="0" aria-label="{{vm.matterDashboardConfigs.MattersPreLoadingMsgText}}">
             {{vm.matterDashboardConfigs.MattersPreLoadingMsgText}}
         </div>
     </div>

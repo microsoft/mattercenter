@@ -3,8 +3,7 @@
         position: absolute !important;
         width: 100%;
     }
-
-    #divCreateMatter div:focus, #divCreateMatter button:focus, #divHeader div:focus {
+    #divHeader .focusBorder:focus{
         outline:dotted 3px !important;
     }
 
@@ -14,11 +13,11 @@
 </style>
 <div class="row" id="divHeader">
     <div class="col-xs-10 col-sm-8 col-md-6 col-lg-10" style="margin-left: 45px;margin-top: 1px;height: 58px;">
-        <div class="col-xs-10 col-sm-4 col-md-4 col-lg-2 zindex6 createMatterHeaderWidth" style="cursor: pointer;font-size: 1.125em;line-height:40px; padding: 0 11px 0 13px;text-decoration: none !important;" title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' data-section-num="1" data-section-name="snOpenMatter">1  {{cm.createContent.Tab1Header}}</div>
-        <div class="col-xs-10 col-sm-4 col-md-4 col-lg-2 zindex6 pad0 createMatterHeaderWidth matterMarginLeft" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2  {{cm.createContent.Tab2Header}}</div>
+        <div aria-label="{{cm.createContent.Tab1HeaderTitle}}"  tabindex="0" class="col-xs-10 col-sm-4 col-md-4 col-lg-2 zindex6 createMatterHeaderWidth focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px; padding: 0 11px 0 13px;text-decoration: none !important;" title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' data-section-num="1" data-section-name="snOpenMatter">1  {{cm.createContent.Tab1Header}}</div>
+        <div aria-label="{{cm.createContent.Tab2HeaderTitle}}"  tabindex="0" class="col-xs-10 col-sm-4 col-md-4 col-lg-2 zindex6 pad0 createMatterHeaderWidth matterMarginLeft focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2  {{cm.createContent.Tab2Header}}</div>
         <!-- add new div to show matter extra field properties -->
-        <div ng-show="cm.configurableSection" class="col-xs-12 col-sm-4 col-md-4 col-lg-2 zindex6 pad0 createMatterHeaderWidth matterMarginLeft" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConfigSection")' title="{{cm.createContent.Tab4HeaderTitle}}" data-section-num="4" ng-class='{menuTextSelected:cm.sectionName=="snConfigSection"}' data-section-name="snConfigSection">3 {{cm.createContent.Tab4Header}}</div>
-        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-3 zindex6 pad0 createMatterHeaderWidth matterMarginLeft" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">{{cm.createContent.TabNumber}} {{cm.createContent.Tab3Header}}</div>
+        <div aria-label="{{cm.createContent.Tab4HeaderTitle}}"  tabindex="0" ng-show="cm.configurableSection" class="col-xs-12 col-sm-4 col-md-4 col-lg-2 zindex6 pad0 createMatterHeaderWidth matterMarginLeft focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snConfigSection")' title="{{cm.createContent.Tab4HeaderTitle}}" data-section-num="4" ng-class='{menuTextSelected:cm.sectionName=="snConfigSection"}' data-section-name="snConfigSection">3 {{cm.createContent.Tab4Header}}</div>
+        <div aria-label="{{cm.createContent.Tab3HeaderTitle}}"  tabindex="0" class="col-xs-12 col-sm-4 col-md-4 col-lg-3 zindex6 pad0 createMatterHeaderWidth matterMarginLeft focusBorder" style="cursor: pointer;font-size: 1.125em;line-height:40px;padding: 0 11px 0 13px;text-decoration: none !important;" ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">{{cm.createContent.TabNumber}} {{cm.createContent.Tab3Header}}</div>
         <!--<div><span title="{{cm.createContent.Tab1HeaderTitle}}" ng-click='cm.navigateToSecondSection("snOpenMatter")' ng-class='{menuTextSelected:cm.sectionName=="snOpenMatter"}' class="menuText zindex6" data-section-num="1" data-section-name="snOpenMatter">1 {{cm.createContent.Tab1Header}}</span></div>
         <div><span ng-click='cm.navigateToSecondSection("snConflictCheck")' title="{{cm.createContent.Tab2HeaderTitle}}" class="menuText zindex6" ng-class='{menuTextSelected:cm.sectionName=="snConflictCheck"}' data-section-num="2" data-section-name="snConflictCheck">2 {{cm.createContent.Tab2Header}}</span></div>
         <div><span ng-click='cm.navigateToSecondSection("snCreateAndShare")' title="{{cm.createContent.Tab3HeaderTitle}}" class="menuText zindex6" data-section-num="3" ng-class='{menuTextSelected:cm.sectionName=="snCreateAndShare"}' data-section-name="snCreateAndShare">3 {{cm.createContent.Tab3Header}}</span></div>-->
@@ -53,7 +52,7 @@
     <div class="notificationContainer successBanner" ng-if="cm.successBanner">
         <div class="notification" showcreatesuccessbannermessage datanotification="{{cm.successMsg}}"></div><span class="closeNotification" ng-click="cm.closesuccessbanner()">x</span>
     </div>
-    <div id="errorBlock" class="errorPopUp" ng-show="cm.errorPopUpBlock">
+    <div id="errorBlock" role="alert" aria-live="assertive" class="errorPopUp" ng-show="cm.errorPopUpBlock">
         <div id="errTrinagleBlock" class="errTriangle popUpFloatLeft" ng-class="cm.errTrinagleBlock"></div>
         <div id="errTrinagleBroderBlock" class="errTriangleBorder popUpFloatLeft" ng-class="cm.errTrinagleBroderBlock"></div>
         <div id="errText" class="errText popUpFloatRight"> {{cm.errTextMsg}}</div>
@@ -317,10 +316,10 @@
         <div id="space"></div>
         <div class="row clearBothSide ">
             <div class="col-xs-5">
-                <button tabindex="0" class="buttonPrev pull-right marginTop10" ng-class="{'btnHover' : cm.prevButtonDisabled=== false}" ng-hide="cm.prevButtonDisabled" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
+                <button tabindex="0" aria-label="Previous" class="buttonPrev pull-right marginTop10" ng-class="{'btnHover' : cm.prevButtonDisabled=== false}" ng-hide="cm.prevButtonDisabled" ng-disabled="cm.prevButtonDisabled" ng-click="cm.PreviousClick($event)">{{cm.createContent.ButtonPreviousText}}</button>
             </div>
             <div class="col-xs-6">
-                <button tabindex="0" class="buttonPrev pull-left marginTop10" ng-class="{'btnHover' : cm.nextButtonDisabled=== false}" ng-hide="cm.nextButtonDisabled" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
+                <button tabindex="0" aria-label="Next" class="buttonPrev pull-left marginTop10" ng-class="{'btnHover' : cm.nextButtonDisabled=== false}" ng-hide="cm.nextButtonDisabled" ng-disabled="cm.nextButtonDisabled" ng-click='cm.NextClick($event)'>{{cm.createContent.ButtonNextText}}</button>
             </div>
         </div>
     </div>
@@ -439,7 +438,7 @@
 
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType" id="divDocTemplate">
-                    <div class="errorPopUpArea  " ng-show='cm.errorPopUp' style="">
+                    <div class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
                         <div tabindex="0" class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 23px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">{{cm.createContent.ErrorMessagePrimaryMatterType}}</span></div>
@@ -567,7 +566,7 @@
 
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType matterTypeLevel4" id="divDocTemplate" style="width:225px;">
-                    <div class="errorPopUpArea  " ng-show='cm.errorPopUp' style="">
+                    <div class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
                         <div class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 22px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">{{cm.createContent.ErrorMessagePrimaryMatterType}}</span></div>
@@ -695,7 +694,7 @@
 
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType matterType" id="divDocTemplate" style="width:225px;">
-                    <div class="errorPopUpArea  " ng-show='cm.errorPopUp' style="">
+                    <div class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
                         <div class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 22px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">{{cm.createContent.ErrorMessagePrimaryMatterType}}</span></div>
