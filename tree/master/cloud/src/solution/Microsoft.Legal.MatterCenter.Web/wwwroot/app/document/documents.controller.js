@@ -115,6 +115,38 @@
         }
         //#endregion
 
+        //#region to announce document type to Jaws tool.
+        vm.getDocumentName = function (docExtension)
+        {
+            var docName = '';
+            switch (docExtension) {
+                case 'docx':
+                    docName = 'Word document';
+                    break;
+                case 'eml':
+                    docName ='Email document';
+                    break;
+                case 'xls':
+                    docName ='Excel document';
+                    break;
+                case 'txt':
+                    docName = 'Text document';
+                    break;
+                case 'pdf':
+                    docName = 'PDF document';
+                    break;
+                case 'zip':
+                    docName = 'Zip file document';
+                    break;
+                default:
+                    docName = docExtension
+                    break;
+            }
+
+            return docName;
+        }
+        //#endregion
+
         //To hide lazyloader on load
         vm.lazyloader = true;
         //end

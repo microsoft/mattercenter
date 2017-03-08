@@ -1,5 +1,4 @@
 "PartitionKey","RowKey","ConfigGroup","Key","Value"
-MatterCenterConfig,RowKey728,CreateMatter,AriaLabelTeamUserName,Enter and select name for assign team
 MatterCenterConfig,RowKey001,CreateMatter,Tab1HeaderTitle,Step 1: Select a client and provide basic information for your new matter.
 MatterCenterConfig,RowKey002,CreateMatter,Tab2HeaderTitle,Step 2: Confirm that a conflict check was conducted and specify who should be conflicted from or given access to this matter.
 MatterCenterConfig,RowKey003,CreateMatter,Tab3HeaderTitle,"Step 3: When you've entered all relevant information for your new matter, create the matter and notify your team."
@@ -612,6 +611,7 @@ MatterCenterConfig,RowKey724,CreateMatter,ConflictNoRadioButtonTitle,No radio bu
 MatterCenterConfig,RowKey725,CreateMatter,SecuredYesRadioButtonTitle,Yes radio button to make this matter secured only to the assigned team?
 MatterCenterConfig,RowKey726,CreateMatter,SecuredNoRadioButtonTitle,No radio button to make this matter secured only to the assigned team?
 MatterCenterConfig,RowKey727,CreateMatter,AriaLabelConflictedCheckDate,Select conflict check conducted date
+MatterCenterConfig,RowKey728,CreateMatter,AriaLabelTeamUserName,Enter and select name for assign team
 MatterCenterConfig,RowKey729,CreateMatter,AriaLabelTeamRoleCombo,Assign team role combo box
 MatterCenterConfig,RowKey730,CreateMatter,AriaLabelTeamPermissionCombo,Assign team permission level combo box
 MatterCenterConfig,RowKey731,CreateMatter,AriaLabelDeleteButton1,Delete button to remove team member from assigned team
@@ -630,4 +630,7 @@ MatterCenterConfig,RowKey743,Documents,AriaLabelDropdown1Item1,Combobox list ite
 MatterCenterConfig,RowKey744,Documents,AriaLabelDropdown1Item2,Combobox list item 2 - My Documents
 MatterCenterConfig,RowKey745,Documents,AriaLabelDropdown1Item3,Combobox list item 3 - Pinned Documents
 MatterCenterConfig,RowKey746,Documents,AriaLabelSearchDocumentButton,Click button to search document
+MatterCenterConfig,RowKey747,Header,AriaLabelOpenMenu,Press enter or spacebar to open menu options
+MatterCenterConfig,RowKey748,Header,AriaLabelCloseMenu,Press enter or spacebar to close menu options
+MatterCenterConfig,RowKey749,Navigation,AiraLabalSearchClick,Click to search
 MatterCenterConfig,be527366-b014-4a58-b969-67cde85c9ac1,Home,Change,mailto:aisling@supportsite.com
