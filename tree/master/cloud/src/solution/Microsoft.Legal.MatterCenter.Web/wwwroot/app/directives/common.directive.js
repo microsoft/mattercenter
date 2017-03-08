@@ -688,6 +688,28 @@
         }
     }
 
+
+    //Directive for escape key
+    'use strict';
+    function ngEsc() {
+        return {
+            restrict: 'A',
+            replace: true,
+            link: function (scope, element, attrs) {
+                element.bind("keydown keypress keyup", function (event) {
+                    if (event.which === 27) {
+                        scope.$apply(function () {
+                            scope.$eval(attrs.ngEsc);
+                        });
+
+                        event.preventDefault();
+                    }
+                });
+            }
+        }
+    }
+
+
     var app = angular.module('matterMain');
     app.directive('onload', ['$timeout', onload]);
     app.directive('showbreadcrumb', [showbreadcrumb]);
@@ -698,6 +720,7 @@
     app.directive('documentflyout', ['$http', '$compile', '$templateCache', '$rootScope', documentflyout]);
     app.directive('fallbacksrc', [fallbacksrc]);
     app.directive('myEnter', [myEnter]);
+    app.directive('ngEsc', [ngEsc]);
     app.directive('uiGridMenuButton', ['$window', '$timeout', uiGridMenuButton]);
     //Adding Window
     app.directive('uiGridViewport', ['$window', uiGridViewport]);
