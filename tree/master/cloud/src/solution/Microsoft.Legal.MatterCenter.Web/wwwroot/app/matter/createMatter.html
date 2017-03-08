@@ -52,7 +52,7 @@
     <div class="notificationContainer successBanner" ng-if="cm.successBanner">
         <div class="notification" showcreatesuccessbannermessage datanotification="{{cm.successMsg}}"></div><span class="closeNotification" ng-click="cm.closesuccessbanner()">x</span>
     </div>
-    <div id="errorBlock" role="alert" aria-live="assertive" class="errorPopUp" ng-show="cm.errorPopUpBlock">
+    <div id="errorBlock" tabindex="0" role="alert" aria-live="assertive" class="errorPopUp" ng-show="cm.errorPopUpBlock">
         <div id="errTrinagleBlock" class="errTriangle popUpFloatLeft" ng-class="cm.errTrinagleBlock"></div>
         <div id="errTrinagleBroderBlock" class="errTriangleBorder popUpFloatLeft" ng-class="cm.errTrinagleBroderBlock"></div>
         <div id="errText" class="errText popUpFloatRight"> {{cm.errTextMsg}}</div>
@@ -96,7 +96,7 @@
                 <div class="gutter"></div>
                 <input title="{{cm.createContent.Tab1Textbox3Label}}" class="small" id="txtMatterId" ng-show="cm.showMatterId" ng-disabled="cm.matterIdType!='Custom'" ng-model="cm.matterId" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterid')}" style="border: 1px solid rgb(200, 200, 200); border-image: none;" required="" type="text" maxlength="75" placeholder="{{cm.createContent.Tab1Textbox3PlaceholderText}}" value="">
                 <label class="contentLabel large clear"><span class="mandatory description" ng-show="cm.isMatterDescriptionMandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox4Label}}</label>
-                <textarea title="{{cm.createContent.Tab1Textbox4Label}}" class="large clear" id="txtMatterDesc" ng-model="cm.matterDescription" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterdescription')}" spellcheck="true" maxlength="255" placeholder="{{cm.createContent.Tab1Textbox4PlaceholderText}}" rows="2" cols="400"></textarea>
+                <textarea title="{{cm.createContent.Tab1Textbox4Label}}" class="large clear" id="txtMatterDesc" aria-required="true" ng-model="cm.matterDescription" ng-class="{'errorBorder' :  (cm.errorBorder == 'matterdescription')}" spellcheck="true" maxlength="255" placeholder="{{cm.createContent.Tab1Textbox4PlaceholderText}}" rows="2" cols="400"></textarea>
                 <label class="contentLabel large clear customDivCreate"><span class="mandatory">*&nbsp;</span>{{cm.createContent.Tab1Textbox5Label}}</label>
                 <div class="large" id="documentTemplates">
                     <div ng-class='{popUpSelected : selectedDocumentTypeLawTerm.primaryMatterType ==true}' class="docuTemplates" ng-repeat='selectedDocumentTypeLawTerm in cm.selectedDocumentTypeLawTerms' style=""
@@ -438,7 +438,7 @@
 
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType" id="divDocTemplate">
-                    <div class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
+                    <div tabindex="0" class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
                         <div tabindex="0" class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 23px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">{{cm.createContent.ErrorMessagePrimaryMatterType}}</span></div>
@@ -566,7 +566,7 @@
 
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType matterTypeLevel4" id="divDocTemplate" style="width:225px;">
-                    <div class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
+                    <div tabindex="0" class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
                         <div class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 22px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">{{cm.createContent.ErrorMessagePrimaryMatterType}}</span></div>
@@ -694,7 +694,7 @@
 
                 </div>
                 <div class="popUpDocumentTemplates popUpBodyBlocks popUpFloatLeft customMatterType matterType" id="divDocTemplate" style="width:225px;">
-                    <div class="errorPopUpArea" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
+                    <div class="errorPopUpArea" tabindex="0" id="errorPopUpMatterTypeBlock" role="alert" aria-live="assertive" ng-show='cm.errorPopUp' style="">
                         <div class="errTriangleArea popUpFloatLeft"></div>
                         <div class="errTriangleBorderArea popUpFloatLeft"></div>
                         <div class="errTextArea popUpFloatRight errTextAreaLevel4" style="margin:12px 22px 0px 0px;color:red;"><span class="selectDefaultContentTypeMessage selectDefaultContentTypeMessageLevel4" style="visibility: visible;">{{cm.createContent.ErrorMessagePrimaryMatterType}}</span></div>
