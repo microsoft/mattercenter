@@ -16,7 +16,7 @@
             <div class="MattersContainer" title="{{vm.navigationContent.Image1Title}}">
                 <a ui-sref='mc.matters()'>
                     <figure>
-                        <img src="Images/MC_Matters.png" alt="{{vm.navigationContent.Image1Title}}" />
+                        <img aria-label="{{vm.navigationContent.AiraLabalSearchClick}}" src="Images/MC_Matters.png" alt="{{vm.navigationContent.Image1Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image1Caption}}</figcaption>
                     </figure>
                 </a>
@@ -24,7 +24,7 @@
             <div class="DocumentsContainer" title="{{vm.navigationContent.Image2Title}}">
                 <a ui-sref='mc.documents()'>
                     <figure>
-                        <img src="Images/MC_Documents.png" alt="{{vm.navigationContent.Image2Title}}" />
+                        <img aria-label="{{vm.navigationContent.AiraLabalSearchClick}}" src="Images/MC_Documents.png" alt="{{vm.navigationContent.Image2Title}}" />
                         <figcaption class="FigureCaption">{{vm.navigationContent.Image2Caption}}</figcaption>
                     </figure>
                 </a>
@@ -63,8 +63,8 @@
     <span class="ms-font-m ms-font-weight-semilight"><span ng-bind-html="vm.navigationContent.FooterLabel"></span> <a href="{{vm.navigationContent.FooterLink1URL}}" title="{{vm.navigationContent.FooterLink1Title}}" class="emailLink">{{vm.navigationContent.FooterLink1Text}}</a></span>
 </div>
 <div id="HeaderPlaceHolderContent">
-    <span class="AppLogoContainer hide" title="{{vm.header.LogoImageTitle}}">
-        <img class="AppLogo" src="Images/MC_Logo.png" alt="{{vm.header.LogoImageTitle}}" />
+    <span class="AppLogoContainer hide" >
+        <img class="AppLogo" src="Images/MC_Logo.png"  />
     </span>
 </div>
 
